@@ -5,49 +5,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-11-19 14:59+0000\n"
-"PO-Revision-Date: 2016-08-10 04:42+0000\n"
-"Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
+"PO-Revision-Date: 2017-12-03 16:14+0000\n"
+"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-activity/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
 msgid "archivist"
-msgstr ""
+msgstr "archiviste"
 
 #. Default: "Cancel"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_cancel"
-msgstr ""
+msgstr "annuler"
 
 #. Default: "Reset"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_reset"
-msgstr ""
+msgstr "rétablir les valeurs par défaut"
 
 #. Default: "Save"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_save"
-msgstr ""
+msgstr "sauvegarder"
 
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py
 msgid "column_Actor"
-msgstr "Acteur"
+msgstr "acteur"
 
 #. Default: "Kind"
 #: ./opengever/activity/browser/listing.py
 msgid "column_kind"
-msgstr "Type"
+msgstr "type"
 
 #. Default: "Title"
 #: ./opengever/activity/browser/listing.py
@@ -62,37 +63,37 @@ msgstr "Créé"
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
-msgstr ""
+msgstr "un transfert à été ajouté"
 
 #. Default: "Forwarding accepted"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-accept"
-msgstr ""
+msgstr "transfert accepté"
 
 #. Default: "Forwarding assigned to dossier"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-assign-to-dossier"
-msgstr ""
+msgstr "transfert assigné à un dossier"
 
 #. Default: "Forwarding closed"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-close"
-msgstr ""
+msgstr "transfert terminé"
 
 #. Default: "Forwarding reassigned"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-reassign"
-msgstr ""
+msgstr "transfert réassigné"
 
 #. Default: "Forwarding reassigned and refused"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-reassign-refused"
-msgstr ""
+msgstr "transfert réassigné et refusé"
 
 #. Default: "Forwarding refused"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-refuse"
-msgstr ""
+msgstr "transfert refusé"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -102,12 +103,12 @@ msgstr "Notifications"
 #. Default: "Activity"
 #: ./opengever/activity/browser/settings.py
 msgid "label_activity"
-msgstr ""
+msgstr "activité"
 
 #. Default: "Badge"
 #: ./opengever/activity/browser/settings.py
 msgid "label_badge"
-msgstr ""
+msgstr "message GEVER"
 
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
@@ -117,12 +118,12 @@ msgstr "Détails:"
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
-msgstr ""
+msgstr "e-mail"
 
 #. Default: "Notification settings"
 #: ./opengever/activity/browser/templates/settings.pt
 msgid "label_notification_settings"
-msgstr ""
+msgstr "paramètres de notification"
 
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -137,12 +138,12 @@ msgstr "Un problème a apparu pendant la création de la notification. La notifi
 #. Default: "Records Manager"
 #: ./opengever/activity/roles.py
 msgid "records_manager"
-msgstr ""
+msgstr "Manager records"
 
 #. Default: "Watcher"
 #: ./opengever/activity/roles.py
 msgid "regular_watcher"
-msgstr ""
+msgstr "surveillant"
 
 #. Default: "GEVER Task"
 #: ./opengever/activity/mail.py
@@ -152,94 +153,94 @@ msgstr "Tâche GEVER"
 #. Default: "Task added"
 #: ./opengever/activity/__init__.py
 msgid "task-added"
-msgstr ""
+msgstr "tâche ajoutée"
 
 #. Default: "Task commented"
 #: ./opengever/activity/__init__.py
 msgid "task-commented"
-msgstr ""
+msgstr "tâche commentée"
 
 #. Default: "Task reopend"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-cancelled-open"
-msgstr ""
+msgstr "tâche rouverte"
 
 #. Default: "Task delegated"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-delegate"
-msgstr ""
+msgstr "tâche déléguée"
 
 #. Default: "Task resolved"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-in-progress-resolved"
-msgstr ""
+msgstr "tâche effectuée"
 
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr ""
+msgstr "tâche close"
 
 #. Default: "Task deadline modified"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-modify-deadline"
-msgstr ""
+msgstr "le délai attribué à la tâche a été modifié"
 
 #. Default: "Task cancelled"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-cancelled"
-msgstr ""
+msgstr "tâches annulées"
 
 #. Default: "Task accepted"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-in-progress"
-msgstr ""
+msgstr "tâche acceptée"
 
 #. Default: "Task rejected"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-rejected"
-msgstr ""
+msgstr "tâche refusée"
 
 #. Default: "Task resolved"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-resolved"
-msgstr ""
+msgstr "tâche traitée"
 
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-tested-and-closed"
-msgstr ""
+msgstr "tâche close"
 
 #. Default: "Task reassign"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-reassign"
-msgstr ""
+msgstr "tâche réassignée"
 
 #. Default: "Task reopened"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-rejected-open"
-msgstr ""
+msgstr "tâche rouverte"
 
 #. Default: "Task revision wanted"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-in-progress"
-msgstr ""
+msgstr "révision de la tâche requise"
 
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-tested-and-closed"
-msgstr ""
+msgstr "tâche close"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
 msgid "task_issuer"
-msgstr ""
+msgstr "mandant"
 
 #. Default: "Task former responsible"
 #: ./opengever/activity/roles.py
 msgid "task_old_responsible"
-msgstr ""
+msgstr "Mandant précédent"
 
 #. Default: "Task responsible"
 #: ./opengever/activity/roles.py
 msgid "task_responsible"
-msgstr ""
+msgstr "mandataire"
