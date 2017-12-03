@@ -238,7 +238,7 @@ msgstr "mandant"
 #. Default: "Task former responsible"
 #: ./opengever/activity/roles.py
 msgid "task_old_responsible"
-msgstr "Mandant précédent"
+msgstr "Mandataire précédent"
 
 #. Default: "Task responsible"
 #: ./opengever/activity/roles.py
