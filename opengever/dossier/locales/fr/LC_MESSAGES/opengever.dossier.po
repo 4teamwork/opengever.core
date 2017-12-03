@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-11-16 20:06+0000\n"
-"PO-Revision-Date: 2017-09-03 09:00+0000\n"
+"PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-dossier/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/dossier/move_items.py
 msgid "${copied_items} Elements were moved successfully"
@@ -272,6 +273,8 @@ msgstr "Créer un dossier d'affaire à partir du modèle"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_dossier_manager"
 msgstr ""
+"Choisissez un utilisateur ou un groupe pouvant modifier ou enlever la "
+"protection d'un dossier ayant été protégé. Normalement c'est vous-même."
 
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -282,11 +285,16 @@ msgstr "En activant cette option les mots-clés définis seront présélectionn�
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_reading"
 msgstr ""
+"Choisissez les utilisateurs ou groupes obtenant accès en lecture seule au "
+"dossier."
 
 #. Default: "Choose users and groups which have readable and writing access to the dossier"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_reading_and_writing"
 msgstr ""
+"Choisissez les utilisateurs ou groupes obtenant accès en lecture et écriture "
+"au dossier. Les utilisateurs de ce groupe seront autorisés à traiter le "
+"dossier, ainsi qu'à créer et modifier des contenus."
 
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -300,6 +308,10 @@ msgstr "Documents"
 #: ./opengever/dossier/browser/forms.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr ""
+"Les autorisations actuelles ne correspondent pas aux paramètres de "
+"protection du dossier. En enregistrant ce formulaire, les autorisations "
+"locales actuelles seront écrasées par les paramètres de protection du "
+"dossier."
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py
@@ -330,7 +342,7 @@ msgstr "Classeur"
 #. Default: "Protect"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "fieldset_protect"
-msgstr ""
+msgstr "Protéger"
 
 #. Default: "Action"
 #: ./opengever/dossier/archive.py
@@ -467,7 +479,7 @@ msgstr "Adresse"
 #. Default: "Protected Objects"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_blocked_local_roles"
-msgstr ""
+msgstr "objets protégés"
 
 #. Default: "by ${author}"
 #: ./opengever/dossier/project_templates/byline.pt
@@ -531,7 +543,7 @@ msgstr "Documents"
 #. Default: "Dossier manager"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_dossier_manager"
-msgstr ""
+msgstr "administrateur du dossier"
 
 #. Default: "Create Dossier note"
 #: ./opengever/dossier/viewlets/templates/note.pt
@@ -682,12 +694,12 @@ msgstr "Propositions"
 #. Default: "Reading"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_reading"
-msgstr ""
+msgstr "lecture"
 
 #. Default: "Reading and writing"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_reading_and_writing"
-msgstr ""
+msgstr "lecture et écriture"
 
 #. Default: "Recipient"
 #: ./opengever/dossier/templatefolder/form.py
