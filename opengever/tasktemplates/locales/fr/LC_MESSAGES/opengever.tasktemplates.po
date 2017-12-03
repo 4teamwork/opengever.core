@@ -2,19 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-10-02 12:52+0000\n"
-"PO-Revision-Date: 2016-09-20 21:23+0000\n"
+"PO-Revision-Date: 2017-12-03 11:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tasktemplates/fr/>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-tasktemplates/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.7-dev\n"
 
 msgid "Description"
 msgstr "Description"
@@ -61,7 +62,9 @@ msgstr "Délai en jours à partir de la date de début de la tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_issuer"
-msgstr "Choix du client. Vous pouvez aussi choisir les utilisateurs interactifs \"responsables\" ou \"collaborateurs\"."
+msgstr ""
+"Choix du mandant. Vous pouvez aussi choisir les utilisateurs interactifs \""
+"responsables\" ou \"collaborateurs\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_preselected"
@@ -77,11 +80,11 @@ msgstr "Choix du client du mandataire ou choisissez \"utilisateur interactif\"."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_task_type"
-msgstr "Choix le type de tâche."
+msgstr "Choisir le type de tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_text"
-msgstr "Saisie d'une  instruction de travail détaillée ou d'un commentaire."
+msgstr "Saisie d'une instruction de travail détaillée ou d'un commentaire."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_title"
@@ -117,13 +120,13 @@ msgstr "Délai en jours"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_issuer"
-msgstr "Mandataire"
+msgstr "Mandant"
 
 #. Default: "Preselect"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_preselected"
-msgstr "Préséléctionné"
+msgstr "Présélectionné"
 
 #. Default: "Related documents"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -133,7 +136,7 @@ msgstr "Renvois"
 #. Default: "Responsible Client"
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_resonsible_client"
-msgstr "Mandataire du client"
+msgstr "Client responsable"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -183,7 +186,7 @@ msgstr "Sélectionner le processus standard"
 #. Default: "Tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_tasktemplates"
-msgstr "Modèles de tâches"
+msgstr "Modèle de tâches"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -227,4 +230,3 @@ msgstr "Oui"
 #: ./opengever/tasktemplates/browser/form.pt
 msgid "select tasks"
 msgstr "Choix des tâches"
-
