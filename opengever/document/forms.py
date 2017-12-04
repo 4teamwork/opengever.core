@@ -105,4 +105,5 @@ class DocumentFileUploadForm(DefaultEditForm):
     def render(self):
         if self.render_form:
             return super(DocumentFileUploadForm, self).render()
+        self.request.response.setHeader('content-type', 'text/plain')
         return None
