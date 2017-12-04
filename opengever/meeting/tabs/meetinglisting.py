@@ -55,10 +55,15 @@ class MeetingListingTab(BaseListingTab):
     columns = (
         {'column': 'committee_id',
          'column_title': _(u'column_title', default=u'Title'),
-         'transform': lambda item, value: item.get_link()},
+         'transform': lambda item, value: item.get_link(),
+         'sortable': False,
+         'groupable': False,
+         'width': 300},
 
         {'column': 'workflow_state',
          'column_title': _(u'column_state', default=u'State'),
+         'sortable': False,
+         'groupable': False,
          'transform': translated_state},
 
         {'column': 'location',
@@ -71,17 +76,21 @@ class MeetingListingTab(BaseListingTab):
         {'column': 'start_time',
          'column_title': _(u'column_from', default=u'From'),
          'transform': lambda item, value: item.get_start_time(),
-         'sortable': False},
+         'sortable': False,
+         'groupable': False},
 
         {'column': 'end_time',
          'column_title': _(u'column_to', default=u'To'),
          'transform': lambda item, value: item.get_end_time(),
-         'sortable': False},
+         'sortable': False,
+         'groupable': False},
 
         {'column': 'dossier',
          'column_title': _(u'dossier', default=u'Dossier'),
          'transform': dossier_link_or_title,
-         'sortable': False},
+         'sortable': False,
+         'groupable': False,
+         'width': 300},
     )
 
     def get_base_query(self):
