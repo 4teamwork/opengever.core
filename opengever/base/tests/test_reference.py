@@ -63,7 +63,8 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
         IReferenceNumberPrefix(repo_2_4_7).set_number(dossier, number=u'8')
 
         self.subdossier = create(Builder('dossier').within(dossier))
-        IReferenceNumberPrefix(dossier).set_number(self.subdossier, number=u'2')
+        IReferenceNumberPrefix(dossier).set_number(
+            self.subdossier, number=u'2')
 
     def test_returns_full_number_for_the_context(self):
         self.assertEquals(
@@ -106,13 +107,16 @@ class TestReferenceNumberAdapter(FunctionalTestCase):
             IReferenceNumber(self.subdossier).get_number())
 
 
-class TestDottedFormatter(FunctionalTestCase):
+class TestDottedFormatterBase(FunctionalTestCase):
 
     def setUp(self):
-        super(TestDottedFormatter, self).setUp()
+        super(TestDottedFormatterBase, self).setUp()
 
         self.formatter = queryAdapter(
             self.portal, IReferenceNumberFormatter, name='dotted')
+
+
+class TestDottedFormatter(TestDottedFormatterBase):
 
     def test_separate_repositories_with_a_dot(self):
         numbers = {'repository': [u'5', u'7', u'3', u'2'], }
@@ -159,13 +163,16 @@ class TestDottedFormatter(FunctionalTestCase):
             self.formatter.list_to_string([[1, 4, 5], [452, 4], [135]]))
 
 
-class TestGroupedbyThreeFormatter(FunctionalTestCase):
+class TestGroupedbyThreeFormatterBase(FunctionalTestCase):
 
     def setUp(self):
-        super(TestGroupedbyThreeFormatter, self).setUp()
+        super(TestGroupedbyThreeFormatterBase, self).setUp()
 
         self.formatter = queryAdapter(
             self.portal, IReferenceNumberFormatter, name='grouped_by_three')
+
+
+class TestGroupedbyThreeFormatter(TestGroupedbyThreeFormatterBase):
 
     def test_group_repositories_by_three_and_seperate_with_a_dot(self):
         numbers = {'repository': [u'5', u'7', u'3', u'2'], }
@@ -217,14 +224,17 @@ class TestGroupedbyThreeFormatter(FunctionalTestCase):
             self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4], [135]]))
 
 
-class TestNoClientIDGroupedbyThreeFormatter(FunctionalTestCase):
+class TestNoClientIDGroupedbyThreeFormatterBase(FunctionalTestCase):
 
     def setUp(self):
-        super(TestNoClientIDGroupedbyThreeFormatter, self).setUp()
+        super(TestNoClientIDGroupedbyThreeFormatterBase, self).setUp()
 
         self.formatter = queryAdapter(
             self.portal, IReferenceNumberFormatter,
             name='no_client_id_grouped_by_three')
+
+
+class TestNoClientIDGroupedbyThreeFormatter(TestNoClientIDGroupedbyThreeFormatterBase):
 
     def test_group_repositories_by_three_and_seperate_with_a_dot(self):
         numbers = {'repository': [u'5', u'7', u'3', u'2'], }
@@ -274,8 +284,7 @@ class TestNoClientIDGroupedbyThreeFormatter(FunctionalTestCase):
             self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4], [135]]))
 
 
-
-class TestDottedFormatSorter(TestDottedFormatter):
+class TestDottedFormatSorter(TestDottedFormatterBase):
 
     def test_orders_standalone_repofolders_correctly(self):
         expected = ['OG 1.9.9',
@@ -350,7 +359,7 @@ class TestDottedFormatSorter(TestDottedFormatter):
         self.assertEquals(expected, actual)
 
 
-class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatter):
+class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatterBase):
 
     def test_orders_standalone_repofolders_correctly(self):
         # Zero-padded
@@ -462,7 +471,7 @@ class TestGroupedbyThreeFormatSorter(TestGroupedbyThreeFormatter):
         self.assertEquals(expected, actual)
 
 
-class TestNoClientIDGBTSorter(TestNoClientIDGroupedbyThreeFormatter):
+class TestNoClientIDGBTSorter(TestNoClientIDGroupedbyThreeFormatterBase):
 
     def test_orders_standalone_repofolders_correctly(self):
         # Zero-padded
