@@ -159,9 +159,9 @@ class OpengeverContentFixture(object):
             .having(title_de=u'Ordnungssystem',
                     title_fr=u'Syst\xe8me de classement')))
         self.root.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ('Reader', 'Contributor', 'Editor'))
+                                       ['Reader', 'Contributor', 'Editor'])
         self.root.manage_setLocalRoles(self.secretariat_user.getId(),
-                                       ('Reviewer', 'Publisher'))
+                                       ['Reviewer', 'Publisher'])
         self.root.reindexObjectSecurity()
 
         self.repofolder0 = self.register('branch_repofolder', create(
@@ -171,7 +171,7 @@ class OpengeverContentFixture(object):
                     description=u'Alles zum Thema F\xfchrung.')))
 
         self.repofolder0.manage_setLocalRoles(self.dossier_manager.getId(),
-                                              ('DossierManager', ))
+                                              ['DossierManager'])
 
         self.repofolder0.reindexObjectSecurity()
 
@@ -193,9 +193,9 @@ class OpengeverContentFixture(object):
             .having(id='kontakte')))
 
         self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id, ('Reader',))
+            self.org_unit.users_group_id, ['Reader'])
         self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id, ('Reader', 'Contributor', 'Editor'))
+            self.org_unit.users_group_id, ['Reader', 'Contributor', 'Editor'])
         self.contactfolder.reindexObjectSecurity()
 
         self.hanspeter_duerr = self.register('hanspeter_duerr', create(
@@ -224,9 +224,9 @@ class OpengeverContentFixture(object):
             .titled(u'Vorlagen')
             .having(id='vorlagen')))
         templates.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ('Reader', ))
+                                       ['Reader'])
         templates.manage_setLocalRoles(self.administrator.getId(),
-                                       ('Reader', 'Contributor', 'Editor'))
+                                       ['Reader', 'Contributor', 'Editor'])
         templates.reindexObjectSecurity()
 
         self.sablon_template = self.register('sablon_template', create(
@@ -287,11 +287,11 @@ class OpengeverContentFixture(object):
                 )
             ))
         self.committee_container.manage_setLocalRoles(
-            self.committee_responsible.getId(), ('MeetingUser',))
+            self.committee_responsible.getId(), ['MeetingUser'])
         self.committee_container.manage_setLocalRoles(
-            self.meeting_user.getId(), ('MeetingUser',))
+            self.meeting_user.getId(), ['MeetingUser'])
         self.committee_container.manage_setLocalRoles(
-            self.administrator.getId(), ('CommitteeAdministrator',))
+            self.administrator.getId(), ['CommitteeAdministrator'])
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
@@ -302,7 +302,7 @@ class OpengeverContentFixture(object):
                           self.committee_responsible]))
         self.register_raw('committee_id', self.committee.load_model().committee_id)
         self.committee.manage_setLocalRoles(
-            self.meeting_user.getId(), ('CommitteeMember',))
+            self.meeting_user.getId(), ['CommitteeMember'])
 
         self.committee_president = self.create_committee_membership(
             self.committee,
@@ -359,7 +359,7 @@ class OpengeverContentFixture(object):
         self.register_raw('empty_committee_id',
                           self.empty_committee.load_model().committee_id)
         self.empty_committee.manage_setLocalRoles(
-            self.meeting_user.getId(), ('CommitteeMember',))
+            self.meeting_user.getId(), ['CommitteeMember'])
         self.empty_committee.reindexObjectSecurity()
 
     @staticuid()
@@ -375,7 +375,7 @@ class OpengeverContentFixture(object):
             .titled(u'Dokument im Eingangsk\xf6rbli')
             .with_asset_file('text.txt')))
         self.inbox.manage_setLocalRoles(
-            self.secretariat_user.getId(), ('Contributor', 'Editor', 'Reader'))
+            self.secretariat_user.getId(), ['Contributor', 'Editor', 'Reader'])
         self.inbox.reindexObjectSecurity()
 
     @staticuid()
@@ -409,7 +409,9 @@ class OpengeverContentFixture(object):
         ))
 
         self.private_folder.manage_setLocalRoles(
-            self.regular_user.getId(), ('Publisher', 'Contributor', 'Reader', 'Owner', 'Reviewer', 'Editor'))
+            self.regular_user.getId(),
+            ['Publisher', 'Contributor', 'Reader', 'Owner', 'Reviewer',
+             'Editor'])
         self.private_folder.reindexObjectSecurity()
 
     @staticuid()

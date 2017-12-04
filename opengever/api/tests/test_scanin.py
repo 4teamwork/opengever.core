@@ -14,13 +14,13 @@ class TestScanIn(IntegrationTestCase):
     def create_single_inbox(self):
         inbox = create(Builder('inbox').titled(u'Inbox'))
         inbox.manage_setLocalRoles(self.regular_user.getId(),
-                                   ('Reader', 'Contributor', 'Editor'))
+                                   ['Reader', 'Contributor', 'Editor'])
         return inbox
 
     def create_org_unit_inbox(self):
         container = create(Builder('inbox_container').titled(u'Inboxes'))
         container.manage_setLocalRoles(self.regular_user.getId(),
-                                       ('Reader', 'Contributor', 'Editor'))
+                                       ['Reader', 'Contributor', 'Editor'])
         return create(Builder('inbox')
                       .titled(u'Inbox')
                       .within(container)
