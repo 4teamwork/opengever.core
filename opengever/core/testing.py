@@ -7,8 +7,6 @@ from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import FTWIntegrationTesting
-from ftw.testing import FTWIntegrationTesting
-from ftw.testing import TransactionInterceptor
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
@@ -28,27 +26,21 @@ from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import IntegrationTesting
 from plone.app.testing import logout
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.protect.auto import safeWrite
 from plone.testing import z2
-from plone.transformchain.interfaces import ITransform
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from unittest import TestCase
-from zope.component import getGlobalSiteManager
-from zope.component import getMultiAdapter
 from zope.component import getSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
 from zope.sqlalchemy import datamanager
 from zope.sqlalchemy.datamanager import mark_changed
-from ZPublisher.interfaces import IPubAfterTraversal
 import logging
 import os
 import sys
