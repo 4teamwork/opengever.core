@@ -19,35 +19,30 @@ from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
+from opengever.testing import IntegrationTestCase
 
 
-class TestBumblebeeIntegrationWithDisabledFeature(FunctionalTestCase):
+class TestBumblebeeIntegrationWithDisabledFeature(IntegrationTestCase):
     """Test integration of ftw.bumblebee."""
 
-    def setUp(self):
-        super(TestBumblebeeIntegrationWithDisabledFeature, self).setUp()
-
-        self.document = create(Builder('document')
-                               .attach_file_containing(
-                                   bumblebee_asset('example.docx').bytes(),
-                                   u'example.docx'))
-
     def test_bumblebee_checksum_is_calculated_for_opengever_docs(self):
+        self.login(self.dossier_responsible)
+
         self.assertEquals(
             DOCX_CHECKSUM,
             IBumblebeeDocument(self.document).get_checksum())
 
     def test_opengever_documents_have_a_primary_field(self):
+        self.login(self.dossier_responsible)
+
         fieldinfo = IPrimaryFieldInfo(self.document)
         self.assertEqual('file', fieldinfo.fieldname)
 
     @browsing
     def test_document_preview_is_hidden(self, browser):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
+        self.login(self.dossier_responsible, browser)
 
-        browser.login().visit(document, view='tabbedview_view-overview')
-
+        browser.visit(self.document, view='tabbedview_view-overview')
         self.assertEqual(0, len(browser.css('.documentPreview')))
 
 
