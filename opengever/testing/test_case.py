@@ -168,10 +168,10 @@ class FunctionalTestCase(TestCase):
     Journal assert helpers
     """
 
-    def assert_journal_entry(self, obj, type, title, entry=-1):
+    def assert_journal_entry(self, obj, action_type, title, entry=-1):
         entry = get_journal_entry(obj, entry)
         action = entry.get('action')
-        self.assertEquals(type, action.get('type'))
+        self.assertEquals(action_type, action.get('type'))
         self.assertEquals(title, translate(action.get('title')))
 
     """
