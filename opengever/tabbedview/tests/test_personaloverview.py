@@ -169,7 +169,9 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         self.assertEquals(
             [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-             u'Vertragsentwurf \xdcberpr\xfcfen'],
+             u'Vertragsentwurf \xdcberpr\xfcfen',
+             u'Programm \xdcberpr\xfcfen',
+             u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
@@ -177,7 +179,9 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         browser.open(view='tabbedview_view-myissuedtasks')
         self.assertEquals(
-            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Programm \xdcberpr\xfcfen',
+             u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
@@ -188,7 +192,8 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         self.assertEquals(
             [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-             u'Vertragsentwurf \xdcberpr\xfcfen'],
+             u'Vertragsentwurf \xdcberpr\xfcfen', u'Programm \xdcberpr\xfcfen',
+             u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
@@ -196,7 +201,8 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         browser.open(view='tabbedview_view-alltasks')
         self.assertEquals(
-            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Programm \xdcberpr\xfcfen', u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
@@ -207,7 +213,9 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         self.assertEquals(
             [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-             u'Vertragsentwurf \xdcberpr\xfcfen'],
+             u'Vertragsentwurf \xdcberpr\xfcfen',
+             u'Programm \xdcberpr\xfcfen',
+             u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )
 
@@ -220,6 +228,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
         browser.open(view='tabbedview_view-allissuedtasks')
         self.assertEquals(
-            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+             u'Programm \xdcberpr\xfcfen', u'H\xf6rsaal reservieren'],
             [row.get('Title') for row in browser.css('.listing').first.dicts()]
         )

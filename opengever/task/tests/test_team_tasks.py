@@ -27,7 +27,7 @@ class TestTeamTasks(IntegrationTestCase):
         form.find_widget('Responsible').fill('team:1')
         browser.find('Save').click()
 
-        task = self.dossier.get('task-3')
+        task = self.dossier.get('task-5')
 
         self.assertEquals('Team Task', task.title)
         self.assertEquals('team:1', task.responsible)
@@ -72,7 +72,7 @@ class TestTeamTasks(IntegrationTestCase):
         browser.find('Save').click()
         create_session().flush()
 
-        task = self.dossier.get('task-3')
+        task = self.dossier.get('task-5')
 
         center = notification_center()
         # Assign watchers to a local variable in order to avoid having
@@ -167,9 +167,9 @@ class TestTeamTasks(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         ra_admin_unit = create(Builder('admin_unit')
-                                 .having(title=u'Ratskanzlei',
-                                         unit_id=u'rk',
-                                         public_url='http://nohost/plone'))
+                                .having(title=u'Ratskanzlei',
+                                        unit_id=u'rk',
+                                        public_url='http://nohost/plone'))
 
         create(Builder('org_unit')
                .id('rk')

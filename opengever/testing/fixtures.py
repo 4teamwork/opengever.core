@@ -574,13 +574,29 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_meetings(self):
-        meeting_dossier = self.register('meeting_dossier', create(
+        self.meeting_dossier = self.register('meeting_dossier', create(
             Builder('meeting_dossier').within(self.repofolder00)
             .titled(u'Sitzungsdossier 9/2017')
             .having(start=date(2016, 9, 12),
-                    relatedDossier=[self.dossier],
                     keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
                     responsible=self.committee_responsible.getId())))
+
+        create(Builder('contact_participation')
+               .for_contact(self.meier_ag)
+               .for_dossier(self.meeting_dossier)
+               .with_roles(['final-drawing']))
+
+        create(Builder('contact_participation')
+               .for_contact(self.josef_buehler)
+               .for_dossier(self.meeting_dossier)
+               .with_roles(['final-drawing', 'participation']))
+
+        self.meeting_document = self.register('meeting_document', create(
+            Builder('document').within(self.meeting_dossier)
+            .titled(u'Programm')
+            .having(document_date=datetime(2016, 12, 1),
+                    document_author=TEST_USER_ID)))
+
         self.meeting = create(
             Builder('meeting')
             .having(title=u'9. Sitzung der Rechnungspr\xfcfungskommission',
@@ -592,10 +608,31 @@ class OpengeverContentFixture(object):
                     secretary=self.committee_secretary,
                     participants=[self.committee_participant_1,
                                   self.committee_participant_2])
-            .link_with(meeting_dossier))
+            .link_with(self.meeting_dossier))
         create_session().flush()  # trigger id generation, part of path
         self.register_path(
             'meeting', self.meeting.physical_path.encode('utf-8'))
+
+        meeting_task = self.register('meeting_task', create(
+            Builder('task').within(self.meeting_dossier)
+            .titled(u'Programm \xdcberpr\xfcfen')
+            .having(responsible=self.dossier_responsible.getId(),
+                    responsible_client=self.org_unit.id(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-in-progress')
+            .relate_to(self.meeting_document)))
+
+        self.register('meeting_subtask', create(
+            Builder('task').within(meeting_task)
+            .titled(u'H\xf6rsaal reservieren')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.dossier_responsible.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-resolved')
+            .relate_to(self.meeting_document)))
 
         decided_meeting_dossier = self.register(
             'decided_meeting_dossier', create(
@@ -603,6 +640,7 @@ class OpengeverContentFixture(object):
                 .titled(u'Sitzungsdossier 8/2017')
                 .having(start=date(2016, 8, 17),
                         responsible=self.committee_responsible.getId())))
+
         self.decided_meeting = create(
             Builder('meeting')
             .having(title=u'8. Sitzung der Rechnungspr\xfcfungskommission',
@@ -629,7 +667,9 @@ class OpengeverContentFixture(object):
                 Builder('meeting_dossier').within(self.repofolder00)
                 .titled(u'Sitzungsdossier 7/2017')
                 .having(start=date(2016, 7, 17),
-                        responsible=self.committee_responsible.getId())))
+                        responsible=self.committee_responsible.getId(),
+                        relatedDossier=[self.dossier, self.meeting_dossier])))
+
         self.closed_meeting = create(
             Builder('meeting')
             .having(title=u'7. Sitzung der Rechnungspr\xfcfungskommission',
