@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Allow to add proposal documents to tasks. [tarnap]
+- Improve Office Connector testing. [Rotonen]
 
 
 2017.7.2 (2017-12-01)

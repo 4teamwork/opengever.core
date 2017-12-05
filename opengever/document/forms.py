@@ -14,6 +14,10 @@ from zope.event import notify
 
 
 class DocumentAddForm(add.DefaultAddForm):
+    """Provide a file upload form for Documents.
+
+    Nullifies uploaded file on a validation error.
+    """
 
     # hackishly tell validator to nullify uploaded file on validation
     # errors for this add form.
@@ -21,6 +25,8 @@ class DocumentAddForm(add.DefaultAddForm):
 
 
 class DocumentAddView(add.DefaultAddView):
+    """Provide a registerable view for the Document file upload form."""
+
     form = DocumentAddForm
 
 
@@ -40,9 +46,13 @@ class DocumentEditForm(DefaultEditForm):
         if not manager:
             return
 
-        filefields = [g.fields.get('file') for g in self.groups
-                      if 'file' in g.fields]
-        if len(filefields) > 0:
+        filefields = [
+            g.fields.get('file')
+            for g in self.groups
+            if 'file' in g.fields
+            ]
+
+        if filefields > 0:
             file_field = filefields[0]
 
             current_user_id = getSecurityManager().getUser().getId()
@@ -95,4 +105,5 @@ class DocumentFileUploadForm(DefaultEditForm):
     def render(self):
         if self.render_form:
             return super(DocumentFileUploadForm, self).render()
+        self.request.response.setHeader('content-type', 'text/plain')
         return None
