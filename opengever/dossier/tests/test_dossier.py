@@ -188,18 +188,13 @@ class TestDossier(IntegrationTestCase):
         self.assertIn(self.archive_dossier.title, search_result.text)
 
 
-class TestMeetingFeatureTypes(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestMeetingFeatureTypes, self).setUp()
-        self.dossier = create(Builder('dossier'))
+class TestMeetingFeatureTypes(IntegrationTestCase):
 
     def test_meeting_feature_enabled_addable_types(self):
-        self.grant('Contributor')
+        self.activate_feature("meeting")
+        self.login(self.regular_user)
         self.assertItemsEqual(
             ['opengever.document.document', 'ftw.mail.mail',
              'opengever.dossier.businesscasedossier', 'opengever.task.task',
              'opengever.meeting.proposal'],
-            [fti.id for fti in self.dossier.allowedContentTypes()])
+            [fti.id for fti in self.meeting_dossier.allowedContentTypes()])
