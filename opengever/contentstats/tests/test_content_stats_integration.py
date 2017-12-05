@@ -178,11 +178,10 @@ class TestContentStatsIntegration(IntegrationTestCase):
             IStatsProvider, name='file_mimetypes')
 
         self.assertEqual({
-            '': 1,
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 11,
             'message/rfc822': 2,
-            'text/plain': 1},
+            'text/plain': 2},
             stats_provider.get_raw_stats())
 
     @browsing
@@ -193,11 +192,10 @@ class TestContentStatsIntegration(IntegrationTestCase):
         table = browser.css('#content-stats-file_mimetypes').first
 
         self.assertEquals([
-            ['', '', '1'],
             ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
             ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '11'],
             ['', 'message/rfc822', '2'],
-            ['', 'text/plain', '1']],
+            ['', 'text/plain', '2']],
             table.lists())
 
     @browsing

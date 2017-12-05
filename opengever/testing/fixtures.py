@@ -595,7 +595,8 @@ class OpengeverContentFixture(object):
             Builder('document').within(self.meeting_dossier)
             .titled(u'Programm')
             .having(document_date=datetime(2016, 12, 1),
-                    document_author=TEST_USER_ID)))
+                    document_author=TEST_USER_ID)
+            .with_asset_file('text.txt')))
 
         self.meeting = create(
             Builder('meeting')
