@@ -34,8 +34,15 @@
     <browser:page
         name="ploneform-render-widget"
         for="z3c.form.interfaces.IWidget"
-        layer=".interfaces.IPloneFormLayer"
+        layer="z3c.form.interfaces.IFormLayer"
         class="opengever.base.widgets.GeverRenderWidget"
+        permission="zope.Public"
+        />
+    <browser:page
+        name="ploneform-render-widget"
+        for="z3c.form.interfaces.ISingleCheckBoxWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        class=".templates.RenderSingleCheckboxWidget"
         permission="zope.Public"
         />
   </configure>
