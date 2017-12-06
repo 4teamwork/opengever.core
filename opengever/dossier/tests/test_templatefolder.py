@@ -179,7 +179,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
         # The reason for that is a wrong widget renderer adapter lookup because
         # of the stacked globalregistry (see plone.testing.zca: pushGlobalRegistry
         # for more information).
-        self.assertEqual([u'Template', u'Title', u'', u'Edit after creation'],
+        self.assertEqual([u'Template', u'Title', u'Edit after creation'],
                          browser.css('#form label').text)
 
     @browsing

@@ -161,55 +161,38 @@ class TestDossierTemplate(IntegrationTestCase):
 
     @browsing
     def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):
+        self.maxDiff = None
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
 
-        # browser.css('').text will return the text of the current node an all
-        # its child-nodes. The help-text is in the same node as the field-title.
-        # This means, that we get the title and the helptext if we use .text.
-        #
-        # The .raw_text will return only the text of the current node but
-        # unnormalized. So we have to do it manually.
-        # Two empty labels are introduced by the plone default single checkbox
-        # widget.
         self.assertEqual([
-            u'Title help Recommendation for the title. Will be displayed as a'
-            u' help text if you create a dossier from template',
+            u'Title help',
             u'Title',
             u'Description',
             u'Keywords',
-            u'The defined keywords will be preselected for new dossies from template.',
             u'Predefined Keywords',
-            u'The user can choose only from the defined keywords in a new dossier '
-            u'from template. It also prevents the user for creating new keywords',
             u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
-            filter(lambda text: bool(text),
-                   browser.css('#content fieldset label').text)
+            browser.css('#content fieldset label').text
         )
 
     @browsing
     def test_show_only_whitelisted_schema_fields_in_edit_form(self, browser):
+        self.maxDiff = None
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")
-
         self.assertEqual([
-            u'Title help Recommendation for the title. Will be displayed as a'
-            u' help text if you create a dossier from template',
+            u'Title help',
             u'Title',
             u'Description',
             u'Keywords',
-            u'The defined keywords will be preselected for new dossies from template.',
             u'Predefined Keywords',
-            u'The user can choose only from the defined keywords in a new dossier '
-            u'from template. It also prevents the user for creating new keywords',
             u'Restrict Keywords',
             u'Comments',
             u'filing prefix'],
-            filter(lambda text: bool(text),
-                   browser.css('#content fieldset label').text)
+            browser.css('#content fieldset label').text
         )
 
     @browsing
