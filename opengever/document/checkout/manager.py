@@ -313,6 +313,7 @@ class CheckinCheckoutManager(object):
         # List of all users that hold a lock on the document
         if lockable and lockable.locked():
             return True
+
         return False
 
     def clear_locks(self):

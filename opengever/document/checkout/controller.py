@@ -13,8 +13,11 @@ class CheckinCheckoutController(BrowserView):
         """
         if self.context.digitally_available:
 
-            manager = queryMultiAdapter((self.context, self.request),
-                                        ICheckinCheckoutManager)
+            manager = queryMultiAdapter(
+                (self.context, self.request),
+                ICheckinCheckoutManager,
+                )
+
             if manager:
                 return manager.is_checkout_allowed()
 
@@ -23,19 +26,25 @@ class CheckinCheckoutController(BrowserView):
     def is_checkin_allowed(self):
         """Checks whether checkin is allowed or not.
         """
-        manager = queryMultiAdapter((self.context, self.request),
-                                    ICheckinCheckoutManager)
+        manager = queryMultiAdapter(
+            (self.context, self.request),
+            ICheckinCheckoutManager,
+            )
+
         if manager:
             return manager.is_checkin_allowed()
-        else:
-            return False
+
+        return False
 
     def is_cancel_allowed(self):
         """Checks whether cancelling a checkout is allowed or not.
         """
-        manager = queryMultiAdapter((self.context, self.request),
-                                    ICheckinCheckoutManager)
+        manager = queryMultiAdapter(
+            (self.context, self.request),
+            ICheckinCheckoutManager,
+            )
+
         if manager:
             return manager.is_cancel_allowed()
-        else:
-            return False
+
+        return False

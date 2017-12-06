@@ -34,7 +34,9 @@ class ActionButtonRendererMixin(object):
             return False
 
         return api.user.has_permission(
-                'Modify portal content', obj=self.context)
+            'Modify portal content',
+            obj=self.context,
+            )
 
     def is_versioned(self):
         return self.request.get('version_id') is not None
@@ -49,7 +51,6 @@ class ActionButtonRendererMixin(object):
         """PDF Preview link is only available for documents and
         opengever.pdfconverter is installed.
         """
-
         if self.is_preview_supported():
             return IDocumentSchema.providedBy(self.context)
         return False

@@ -68,7 +68,6 @@ class BaseDocumentMixin(object):
 
         This may return a "proposal" or a "submitted proposal".
         """
-
         parent = aq_parent(aq_inner(self))
         if IProposal.providedBy(parent):
             return parent
