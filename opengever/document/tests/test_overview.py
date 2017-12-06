@@ -432,6 +432,31 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             archival_file_row.css('td span')[1].text,
             )
 
+    @browsing
+    def test_checkin_without_comment_action_button_not_rendered_for_locked_documents(self, browser):  # noqa
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        lockable = IRefreshableLockable(self.document)
+        lockable.lock()
+
+        # Tabbedview gets in the way of the redirect so we'll have to revisit
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        file_actions = [
+            'Checkout and edit',
+            'Checkin with comment',
+            'Download copy',
+            'PDF Preview',
+            ]
+
+        self.assertEquals(
+            file_actions,
+            browser.css('.file-action-buttons a').text,
+            )
+
 
 class TestDocumentOverviewWithMeeting(IntegrationTestCase):
 
