@@ -516,6 +516,7 @@ Objects
     - self.branch_repofolder
       - self.leaf_repofolder
         - self.archive_dossier
+          - self.archive_document
         - self.closed_meeting_dossier
         - self.decided_meeting_dossier
         - self.dossier
