@@ -1,10 +1,10 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.dossier.tests.test_dossier_byline import TestDossierByline
+from opengever.dossier.tests import test_dossier_byline
 
 
-class TestMeetingDossierByline(TestDossierByline):
+class TestMeetingDossierByline(test_dossier_byline.TestDossierByline):
 
     def create_dossier(self):
         return create(Builder('meeting_dossier')
