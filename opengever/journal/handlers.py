@@ -1,4 +1,3 @@
-from zope.container.interfaces import IContainerModifiedEvent
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
@@ -17,12 +16,13 @@ from opengever.sharing.browser.sharing import ROLE_MAPPING
 from opengever.tabbedview.helper import readable_ogds_author
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
+from plone import api
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.annotation.interfaces import IAnnotations
-from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -50,10 +50,9 @@ def propper_string(value):
 def journal_entry_factory(context, action, title,
                           visible=True, comment='', actor=None,
                           documents=None):
-    portal_state = getMultiAdapter(
-        (context, getRequest()), name=u'plone_portal_state')
     if actor is None:
-        actor = portal_state.member().getId()
+        actor = api.user.get_current().getId()
+
     comment = comment == '' and get_change_note(getRequest(), '') or comment
     title = propper_string(title)
     action = propper_string(action)
