@@ -32,9 +32,6 @@ class TestJournalTab(FunctionalTestCase):
             expected = [
                 ['Time', 'Title', 'Changed by', 'Comments', 'References'],
                 ['12.08.2016 00:00',
-                 'Dossier modified: dossier-1',
-                 'Test User (test_user_1_)', '', ''],
-                ['12.08.2016 00:00',
                  u'Document added: Anfrage M\xfcller',
                  'Test User (test_user_1_)', '', ''],
                 ['12.08.2016 00:00',

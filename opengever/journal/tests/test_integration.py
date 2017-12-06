@@ -229,7 +229,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Task added',
             action_title='Task added: %s' % task.title_or_id(),
-            check_entry=-2, )
+            check_entry=-1, )
 
         # Modified-Event
         notify(ObjectModifiedEvent(task))
@@ -313,7 +313,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             dossier,
             action_type='Document added',
             action_title='Document added: %s' % mail.title_or_id(),
-            check_entry=-2)
+            check_entry=-1)
 
         self.check_annotation(
             mail,
@@ -406,7 +406,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             self.check_annotation(parent,
                                   action_type=action_type,
                                   action_title=action_title,
-                                  check_entry=-2, )
+                                  check_entry=-1, )
 
     def check_document_modified(self, obj, parent, mode):
         """ Check the journal after modifying a document

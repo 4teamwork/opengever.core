@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
+from zope.container.interfaces import IContainerModifiedEvent
 
 
 class LocalRolesSetter(object):
@@ -109,4 +110,7 @@ def set_roles_after_adding(context, event):
 
 
 def set_roles_after_modifying(context, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     LocalRolesSetter(context)(event)

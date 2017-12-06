@@ -1,3 +1,4 @@
+from zope.container.interfaces import IContainerModifiedEvent
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
@@ -208,7 +209,8 @@ DOSSIER_MODIIFED_ACTION = 'Dossier modified'
 
 
 def dossier_modified(context, event):
-    if ILocalrolesModifiedEvent.providedBy(event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
         return
 
     title = _(
@@ -572,6 +574,9 @@ TASK_MODIIFED_ACTION = 'Task modified'
 
 
 def task_modified(context, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     title = _(
         u'label_task_modified',
         default=u'Task modified: ${title}',

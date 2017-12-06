@@ -12,6 +12,7 @@ from plone.registry.interfaces import IRegistry
 from plone.supermodel import model
 from zope import schema
 from zope.component import getUtility
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
@@ -95,7 +96,8 @@ alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
 def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
         return
 
     restricted_fields = [
