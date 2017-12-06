@@ -4,9 +4,11 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from ftw.mail.mail import IMail
 from functools import wraps
+from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
@@ -45,7 +47,7 @@ FEATURE_FLAGS = {
     'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
     'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
-}
+    }
 
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
@@ -393,6 +395,35 @@ class IntegrationTestCase(TestCase):
             expected_roles, current_roles,
             "The user '{}' should have the roles {!r} on context {!r}. "
             "But he has {}".format(userid, expected_roles, context, current_roles))
+
+    def assert_submitted_document_created(self, proposal, document,
+                                       submitted_version=0):
+        portal = api.portal.get()
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal,
+            document,
+            )
+
+        submitted_document = portal.restrictedTraverse(
+            submitted_document_model.submitted_physical_path.encode('utf-8'),
+            )
+
+        self.assertIsNotNone(submitted_document_model)
+
+        self.assertEqual(
+            Oguid.for_object(submitted_document),
+            submitted_document_model.submitted_oguid,
+            )
+
+        self.assertEqual(
+            submitted_version,
+            submitted_document_model.submitted_version,
+            )
+
+        self.assertEqual(
+            proposal.load_model(),
+            submitted_document_model.proposal,
+            )
 
     def brain_to_object(self, brain):
         """Return the object of a brain.
