@@ -25,12 +25,15 @@ class ActionButtonRendererMixin(object):
 
         return True
 
+    def is_locked(self):
+        return IRefreshableLockable(self.context).locked()
+
     def is_edit_metadata_available(self):
         # XXX object orient me, the object should know some of this stuff
         if self.is_checked_out_by_another_user():
             return False
 
-        if IRefreshableLockable(self.context).locked():
+        if self.is_locked():
             return False
 
         return api.user.has_permission(
