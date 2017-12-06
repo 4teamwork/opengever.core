@@ -2,9 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.mail.behaviors import ISendableDocsContainer
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from Products.CMFCore.utils import getToolByName
 from zExceptions import Unauthorized
