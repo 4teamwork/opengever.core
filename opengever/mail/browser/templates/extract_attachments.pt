@@ -51,8 +51,10 @@
               </div>
               <br />
               <p i18n:domain="opengever.tabbedview" >
-                  <span i18n:translate="Choose:">Choose</span>:
-                  <a i18n:translate="all" href="#" id="all">All</a>
+                  <span i18n:translate="Choose">Choose</span>
+                  <a href="#" id="all">
+                    <span i18n:translate="label_tabbedview_filter_all"/>
+                    (<span tal:replace="view/get_number_of_attachments"></span>)</a>,
                   <a i18n:translate="none" href="#" id="none">None</a>
               </p>
 

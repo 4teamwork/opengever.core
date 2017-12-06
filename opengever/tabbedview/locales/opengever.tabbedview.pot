@@ -24,7 +24,7 @@ msgstr ""
 msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
 
-msgid "Choose:"
+msgid "Choose"
 msgstr ""
 
 msgid "Creator"
