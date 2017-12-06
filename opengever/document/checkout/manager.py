@@ -48,34 +48,28 @@ class CheckinCheckoutManager(object):
     def is_file_upload_allowed(self):
         return self.is_checked_out_by_current_user() and not self.is_locked()
 
+    def is_checkoutable(self):
+        return bool(not self.get_checked_out_by() and not self.is_locked())
+
+    def is_checkout_permitted(self):
+        return bool(
+            self.check_permission('opengever.document: Checkout')
+            and self.check_permission('Modify portal content')
+            )
+
+    def is_not_trashed(self):
+        return bool(not ITrashed.providedBy(self.context))
+
     def is_checkout_allowed(self):
         """Checks whether checkout is allowed for the current user on the
         adapted document.
         """
-        # is it already checked out?
-        if self.get_checked_out_by():
-            return False
-
-        # does a user hold a lock?
-        if self.is_locked():
-            return False
-
-        # is it versionable?
-        if not self.versioner.is_versionable():
-            return False
-
-        # does the user have the necessary permission?
-        if not self.check_permission('opengever.document: Checkout'):
-            return False
-
-        if not self.check_permission('Modify portal content'):
-            return False
-
-        # is it not trashed
-        if ITrashed.providedBy(self.context):
-            return False
-
-        return True
+        return bool(
+            self.is_checkoutable()
+            and self.versioner.is_versionable()
+            and self.is_checkout_permitted()
+            and self.is_not_trashed()
+            )
 
     def checkout(self):
         """Checkout the adapted document.
@@ -129,10 +123,8 @@ class CheckinCheckoutManager(object):
         # a manager?
         is_manager = self.check_permission('Manage portal')
         current_user_id = getSecurityManager().getUser().getId()
-        if self.get_checked_out_by() == current_user_id or is_manager:
-            return True
-        else:
-            return False
+
+        return bool(self.get_checked_out_by() == current_user_id or is_manager)
 
     def checkin(self, comment=''):
         """Checkin the adapted document, using the `comment` for the
@@ -187,10 +179,8 @@ class CheckinCheckoutManager(object):
         # a manager?
         is_manager = self.check_permission('Manage portal')
         current_user_id = getSecurityManager().getUser().getId()
-        if self.get_checked_out_by() == current_user_id or is_manager:
-            return True
-        else:
-            return False
+
+        return bool(self.get_checked_out_by() == current_user_id or is_manager)
 
     def cancel(self):
         """Cancel the current checkout."""
