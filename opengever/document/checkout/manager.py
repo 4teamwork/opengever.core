@@ -272,6 +272,8 @@ class CheckinCheckoutManager(object):
         reverting.
         """
         if not force and not self.is_revert_allowed():
+            # Avoid plone.protect unnecessarily jumping in
+            self.request.response.setHeader('content-type', 'text/plain')
             raise Unauthorized()
 
         version = self.versioner.retrieve_version(version_id)
