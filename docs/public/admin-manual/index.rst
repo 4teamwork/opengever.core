@@ -16,6 +16,7 @@ Power-User und Administratoren von OneGov GEVER.
    aussonderung.rst
    rollenmanager.rst
    berechtigungoe.rst
+   forcecheckin.rst
    adminansicht.rst
    standardablauferstellen.rst
    docproperties/index.rst
