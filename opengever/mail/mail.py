@@ -24,7 +24,7 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.namedfile import field
-from plone.namedfile.interfaces import HAVE_BLOBS
+from plone.namedfile import NamedBlobFile
 from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
@@ -45,12 +45,6 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import os
 import re
-
-
-if HAVE_BLOBS:
-    from plone.namedfile import NamedBlobFile as NamedFile
-else:
-    from plone.namedfile import NamedFile
 
 
 MESSAGE_SOURCE_DRAG_DROP_UPLOAD = 'upload'
@@ -260,7 +254,7 @@ class OGMail(Mail, BaseDocumentMixin):
 
         # set the new message file
         msg = remove_attachments(self.msg, positions)
-        self.message = NamedFile(
+        self.message = NamedBlobFile(
             data=msg.as_string(),
             contentType=self.message.contentType,
             filename=self.message.filename)
