@@ -1,13 +1,10 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from ftw.testbrowser import browsing
 
+class DossierIdsTestCase(IntegrationTestCase):
 
-class DossierIdsTestCase(FunctionalTestCase):
-
-    def test_dossier_id_format(self):
-        dossier1 = create(Builder("dossier"))
-        dossier2 = create(Builder("dossier"))
-
-        self.assertEquals("dossier-1", dossier1.id)
-        self.assertEquals("dossier-2", dossier2.id)
+    @browsing
+    def test_dossier_id_format(self, browser):
+        self.login(self.regular_user)
+        self.assertEquals("dossier-1", self.dossier.id)
+        self.assertEquals("dossier-2", self.subdossier.id)
