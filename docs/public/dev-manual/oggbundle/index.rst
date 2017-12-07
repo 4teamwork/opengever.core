@@ -4,7 +4,7 @@
 Spezifikation OGGBundle
 =======================
 
-Diese Dokument beschreibt die Spezifikation der Datenschnittstelle zur Migration eines Mandanten aus dem OS-Laufwerk in den zugehörigen GEVER-Mandanten.
+Dieses Dokument beschreibt die Spezifikation der Datenschnittstelle zur Migration eines Mandanten aus dem OS-Laufwerk in den zugehörigen GEVER-Mandanten.
 
 Changelog:
 
@@ -213,7 +213,7 @@ Berechtigungen werden an einen oder mehrere “Principals” vergeben, dies ents
 Setzen von Werten
 -----------------
 
-Defaultwerte werden nur nur gesetzt, falls die entsprechenden Attribute im gelieferten JSON nicht vorhanden sind.
+Defaultwerte werden nur gesetzt, falls die entsprechenden Attribute im gelieferten JSON nicht vorhanden sind.
 
 Setzen des Workflow-Status
 --------------------------
