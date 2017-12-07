@@ -52,7 +52,7 @@ class DebugDocxCompose(BrowserView):
         sablon = Sablon(template).process(
             self.operations.get_meeting_data(self.meeting).as_json())
         generator.add_file(
-            '000_protocol_header_template.docx', StringIO(sablon.file_data))
+            u'000_protocol_header_template.docx', StringIO(sablon.file_data))
 
     def add_suffix_sablon(self, index, generator):
         template = self.meeting.get_protocol_suffix_template()
@@ -62,7 +62,7 @@ class DebugDocxCompose(BrowserView):
         sablon = Sablon(template).process(
             self.operations.get_meeting_data(self.meeting).as_json())
         generator.add_file(
-            '{:03d}_protocol_suffix_template.docx'.format(index + 1),
+            u'{:03d}_protocol_suffix_template.docx'.format(index + 1),
             StringIO(sablon.file_data))
 
     def add_agenda_item(self, index, agenda_item, generator):
@@ -80,7 +80,7 @@ class DebugDocxCompose(BrowserView):
         sablon = Sablon(template).process(
             ProtocolData(self.meeting, [agenda_item]).as_json())
 
-        filename = '{:03d}_paragraph_{}.docx'.format(
+        filename = u'{:03d}_paragraph_{}.docx'.format(
             index, safe_unicode(agenda_item.title))
         generator.add_file(filename, StringIO(sablon.file_data))
 
