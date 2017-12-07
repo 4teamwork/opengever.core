@@ -8,6 +8,7 @@ Changelog
 - Implement workspace module basics [raphael-s]
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
+- SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
 
 
 2017.7.2 (2017-12-01)
