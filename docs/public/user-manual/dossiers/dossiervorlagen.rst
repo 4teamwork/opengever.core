@@ -44,6 +44,12 @@ Dossiervorlage von allen OneGov GEVER-Benutzern des Mandanten eingesetzt werden.
 (Insofern keine Einschränkung definiert wurde. Siehe dazu Abschnitt
 "Einschränkung der Dossiervorlage".)
 
+
+.. note::
+   - Wird bei der Dossiervorlage eine Titelhilfe definiert, dann wird beim Hinzufügen der Dossiervorlage der Titel NICHT übernommen.
+   - Wird bei der Dossiervorlage KEINE Titelhilfe definiert, dann wird der Dossiertitel beim Hinzufügen der Dossiervorlage verwendet.
+
+
 |img-dossiervorlagen-3|
 
 Einsatz Dossiervorlage
