@@ -3,14 +3,14 @@ Sitzung durchführen
 -------------------
 Unter dem Reiter «Teilnehmende» sind die dem Gremium zugewiesenen Mitglieder
 aufgeführt. An der Sitzung können die abwesenden Mitglieder entsprechend
-vermerkt werden (ankreuzen). Ebenfalls kann die Rolle Protokollführung und
+vermerkt werden (ankreuzen). Ebenfalls kann die Rollen Protokollführung und
 Vorsitz hinterlegt werden.
 
 |img-spvupdate-24|
 
-Die protokollführende Person kann die Notizen direkt im Antragsdokument machen.
-Mit «in Word bearbeiten» wird das Dokument ausgechecked und somit direkt
-bearbeitbar gemacht. Sofern erwünscht, können alle Anträge zu Beginn der
+Der Beschlusstext sowie allfällige Diskussionen werden im Antragsdokument
+protokolliert. Mit «in Word bearbeiten» wird das Dokument ausgechecked und somit
+direkt bearbeitbar gemacht. Sofern erwünscht, können alle Anträge zu Beginn der
 Sitzung geöffnet bzw. ausgechecked werden. Wie gewohnt, müssen auch in der SPV
 alle Dokumente nach Abschluss der Bearbeitung wieder eingechecked werden.
 

@@ -3,8 +3,8 @@ Sitzungsunterlagen aufbereiten
 ------------------------------
 Sie haben jederzeit die Möglichkeit die Inhalte aus der SPV in eine ZIP-Datei
 zu exportieren (einzelne Geschäfte inkl. Anhänge). Diese können Sie den
-Behördenmitgliedern via Email , Teamraum oder andere Collaborationplattform zur
-Verfügung stellen.
+Behördenmitgliedern via Email, Teamraum oder einer anderen
+Collaborationplattform zur Verfügung stellen.
 
 |img-spvupdate-32|
 

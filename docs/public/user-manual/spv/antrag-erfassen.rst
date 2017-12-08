@@ -22,7 +22,8 @@ bzw. ausgewählt.
 |img-spvupdate-10|
 
 Wenn die Option «Nach dem Hinzufügen bearbeiten» angewählt bleibt
-(Standardeinstellung), kann das Antragsdokument direkt bearbeitet werden.
+(Standardeinstellung), wird das Dokument zur weiteren Bearbeitung in Word
+geöffnet.
 
 |img-spvupdate-11|
 
@@ -45,8 +46,8 @@ Nun wird der Antrag traktandiert über «Einreichen». Der Status des Antrags
 |img-spvupdate-15|
 
 Mit diesem Vorgehen werden die ordentlichen, vorgängig bekannten Geschäfte für
-die betreffende Sitzung traktandiert oder storniert. Merke: ausgecheckte
-Dokumente können nicht eingereicht werden.
+die betreffende Sitzung traktandiert oder storniert. Merke: Vor dem Einreichen
+alle Dokumente einchecken.
 
 Wenn alle vorgängig bekannten Anträge traktandiert sind, wird die Sitzung im
 Bereich «Sitzungen» weiterbearbeitet. Konkret liegen drei eingereichte Anträge
@@ -55,9 +56,8 @@ für den Gemeinderat Musterhausen vor.
 |img-spvupdate-16|
 
 Die anstehende Sitzung muss nun geöffnet und die Traktanden hinzugefügt werden.
-Eingereichte Anträge werden nicht von Beginn an auf eine konkrete Sitzung
-traktandiert, sondern mit der Aktion «einreichen» vorerst dem zuständigen
-Gremium zugewiesen. Die eingereichten Anträge werden in der konkreten Sitzung
+Eingereichte Anträge werden nicht automatisch auf eine konkrete Sitzung
+traktandiert. Die eingereichten Anträge werden in der konkreten Sitzung
 traktandiert.
 
 |img-spvupdate-17|
@@ -68,7 +68,7 @@ nicht mehr ersichtlich.
 |img-spvupdate-18|
 
 Anträge, welche nicht den Vorgaben entsprechen können zurückgewiesen werden.
-Sie können die Rückweisung in eine separaten Feld kommentieren.
+Sie können die Rückweisung in einem separaten Feld kommentieren.
 
 |img-spvupdate-19|
 

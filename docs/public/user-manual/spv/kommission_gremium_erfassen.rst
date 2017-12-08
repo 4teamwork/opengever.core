@@ -7,20 +7,19 @@ Kommission / Gremium erfassen
 
 Eine neue Kommission kann im Bereich *Sitzungen* erstellt werden.
 
-1. Pro Kommission kann eine eigene Berechtigungsgruppe festgelegt werden, die
+1. Pro Kommission muss eine eigene Berechtigungsgruppe festgelegt werden, die
    diese Kommission verwaltet und einsehen kann.
 
 2. Zusätzlich muss auch eine Ablageposition im Ordnungssystem definiert werden.
    Dort wird dann automatisch ein neues Sitzungsdossier erstellt, in welches
    alle Sitzungsunterlagen und -protokolle abgelegt werden.
 
-3. Je nach Berechtigungsvergabe dürfen nur ausgewählte Benutzer , deren
-   Mitglieder und die dazugehörigen Vorlagen hinzufügen und bearbeiten.
+3. Je nach Berechtigungsvergabe dürfen nur ausgewählte Benutzer die Mitglieder und die dazugehörigen Vorlagen hinzufügen und bearbeiten.
 
 |img-spvupdate-1|
 
-Mitlieder erfassen und Gremium zuweisen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Mitglieder erfassen und Gremium zuweisen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unter *Sitzungen*, Reiter Mitglieder können entsprechend berechtigte
 Mitarbeitende neue Mitglieder hinzufügen. Beachten Sie bitte, dass diese
@@ -28,7 +27,7 @@ Mitglieder keine direkte Verlinkung zu den Kontakten in OneGov GEVER aufweisen.
 
 |img-spvupdate-2|
 
-Wenn alle notwendigen Mitglieder erfasst sind, welchseln Sie innerhalb des
+Wenn alle notwendigen Mitglieder erfasst sind, wechseln Sie innerhalb des
 Bereichs Sitzungen in das Gremium und weisen dem betroffenen Gremium die soeben
 erfassten Gremiumsmitglieder zu (Mitgliedschaft hinzufügen). Vergeben Sie den
 ständigen Mitgliedern die entsprechenden Rollen. Legen Sie dazu die
