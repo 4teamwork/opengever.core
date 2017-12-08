@@ -96,13 +96,6 @@ class TestJournalListingLaTeXView(FunctionalTestCase):
                                 'title': u'label_document_added'},
                      'comments': '',
                      'actor': 'test_user_1_',
-                     'time': expected_date},
-
-                    {'action': {'visible': False,
-                                'type': 'Dossier modified',
-                                'title': u'label_dossier_modified'},
-                     'comments': '',
-                     'actor': 'test_user_1_',
                      'time': expected_date}]
 
         self.assertEquals(expected, dossierjournal.get_journal_data())

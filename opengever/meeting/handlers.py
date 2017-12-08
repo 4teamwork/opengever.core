@@ -11,6 +11,7 @@ from opengever.meeting.model import SubmittedDocument
 from plone import api
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 from zope.intid.interfaces import IIntIds
 
@@ -83,6 +84,9 @@ def sync_moved_proposal(obj, event):
 
 
 def sync_proposal(obj, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     ProposalSqlSyncer(obj, event).sync()
 
 

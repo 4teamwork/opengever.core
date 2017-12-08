@@ -10,6 +10,7 @@ Changelog
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
 
+- Ignore ContainerModifiedEvents on ObjectModified event handlers. [phgross]
 
 2017.7.2 (2017-12-01)
 ---------------------

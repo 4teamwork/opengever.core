@@ -10,6 +10,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.memoize import ram
 from plone.supermodel import model
 from zope import schema
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.interface import provider
@@ -118,7 +119,8 @@ class IClassificationSettings(Interface):
 
 
 def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
         return
 
     restricted_fields = [
