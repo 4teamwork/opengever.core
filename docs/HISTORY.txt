@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.7.3 (unreleased)
+2017.8.0 (unreleased)
 ---------------------
 
 - Implement workspace module basics [raphael-s]
@@ -10,7 +10,12 @@ Changelog
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
 
+
+2017.7.3 (2017-12-08)
+---------------------
+
 - Ignore ContainerModifiedEvents on ObjectModified event handlers. [phgross]
+
 
 2017.7.2 (2017-12-01)
 ---------------------
