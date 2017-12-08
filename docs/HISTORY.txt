@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.7.3 (unreleased)
+2017.7.3 (2017-12-08)
 ---------------------
 
 - Ignore ContainerModifiedEvents on ObjectModified event handlers. [phgross]
