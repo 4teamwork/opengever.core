@@ -4,8 +4,7 @@ Dossier schützen
 Einleitung
 ----------
 In diesem Kapitel wird beschrieben, wie die übergeordnet definierten
-Berechtigungen eines Dossiers übersteuert werden können. Konkret können so die
-übergeordneten Berechtigungen übersteuert werden.
+Berechtigungen eines Dossiers übersteuert werden können.
 
 Im Tab „Info“ ist in der Spalte "Dossier verwalten" ersichtlich, welche Personen
 und Gruppen dazu berechtigt sind Dossier zu schützen resp. die Berechtigungen
