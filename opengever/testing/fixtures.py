@@ -7,6 +7,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
+from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from functools import wraps
@@ -449,7 +450,9 @@ class OpengeverContentFixture(object):
                     document_type='contract',
                     receipt_date=datetime(2010, 1, 3),
                     delivery_date=datetime(2010, 1, 3))
-            .with_asset_file('vertragsentwurf.docx')))
+            .attach_file_containing(
+                    bumblebee_asset('example.docx').bytes(),
+                    u'vertragsentwurf.docx')))
 
         task = self.register('task', create(
             Builder('task').within(self.dossier)

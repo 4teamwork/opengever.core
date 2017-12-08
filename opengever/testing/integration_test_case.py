@@ -433,6 +433,11 @@ class IntegrationTestCase(TestCase):
         """
         return self.get_checkout_manager(document).checkout()
 
+    def checkin_document(self, document):
+        """Checkin the given document.
+        """
+        return self.get_checkout_manager(document).checkin()
+
     def get_checkout_manager(self, document):
         """Returns the checkin checkout manager for a document.
         """

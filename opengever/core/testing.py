@@ -7,14 +7,13 @@ from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import FTWIntegrationTesting
-from ftw.testing import FTWIntegrationTesting
-from ftw.testing import TransactionInterceptor
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from ftw.testing.quickinstaller import snapshots
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base import pdfconverter
 from opengever.base.model import create_session
 from opengever.base.pdfconverter import pdfconverter_available_lock
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.core import sqlite_testing
 from opengever.core.cached_testing import CACHE_GEVER_FIXTURE
@@ -28,27 +27,21 @@ from opengever.private import enable_opengever_private
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import IntegrationTesting
 from plone.app.testing import logout
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
-from plone.protect.auto import safeWrite
 from plone.testing import z2
-from plone.transformchain.interfaces import ITransform
 from Products.CMFCore.utils import getToolByName
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from unittest import TestCase
-from zope.component import getGlobalSiteManager
-from zope.component import getMultiAdapter
 from zope.component import getSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
 from zope.sqlalchemy import datamanager
 from zope.sqlalchemy.datamanager import mark_changed
-from ZPublisher.interfaces import IPubAfterTraversal
 import logging
 import os
 import sys
@@ -447,6 +440,20 @@ class ContentFixtureLayer(OpengeverFixture):
         if 'sqlite' in datamanager.NO_SAVEPOINT_SUPPORT:
             datamanager.NO_SAVEPOINT_SUPPORT.remove('sqlite')
 
+        # register bumblebee task queue
+        self.bumblebee_queue = BumblebeeTestTaskQueue()
+        sm = getSiteManager()
+        sm.registerUtility(
+            self.bumblebee_queue, provided=ITaskQueue, name='test-queue')
+
+        # provide bumblebee config by default and only deactivate bumblebee
+        # with the feature flag.
+        os.environ.pop('BUMBLEBEE_DEACTIVATE', None)
+        os.environ['BUMBLEBEE_APP_ID'] = 'local'
+        os.environ['BUMBLEBEE_SECRET'] = 'secret'
+        os.environ['BUMBLEBEE_INTERNAL_PLONE_URL'] = 'http://nohost/plone'
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee'
+
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
         session.current_session.session = create_session()
@@ -470,12 +477,23 @@ class ContentFixtureLayer(OpengeverFixture):
             self['fixture_lookup_table'] = (
                 DB_CACHE_MANAGER.data['fixture_lookup_table'])
 
+        # bumblebee should only be turned on on-demand with the feature flag.
+        # if this assertion fails a profile in the fixture enables bumblebee,
+        # or if was left on by mistake after fixture setup.
+        assert not is_bumblebee_feature_enabled()
+
     def installOpengeverProfiles(self, portal):
         if not DB_CACHE_MANAGER.is_loaded_from_cache(CACHE_GEVER_INSTALLATION):
             super(ContentFixtureLayer, self).installOpengeverProfiles(portal)
             DB_CACHE_MANAGER.dump_to_cache(self['zodbDB'], CACHE_GEVER_INSTALLATION)
         else:
             DB_CACHE_MANAGER.apply_cache_fixes(CACHE_GEVER_INSTALLATION)
+
+    def testTearDown(self):
+        super(ContentFixtureLayer, self).testTearDown()
+
+        # clear bumblebee queue after each test
+        self.bumblebee_queue.reset()
 
     def tearDown(self):
         sqlite_testing.model.Session.close_all()
