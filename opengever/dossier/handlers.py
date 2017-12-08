@@ -11,6 +11,7 @@ from opengever.globalindex.handlers.task import TaskSqlSyncer
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from zope.component import getAdapter
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 
 
@@ -83,7 +84,8 @@ def reindex_contained_objects(dossier, event):
     index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
-    if ILocalrolesModifiedEvent.providedBy(event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
         return
 
     catalog = api.portal.get_tool('portal_catalog')
@@ -102,7 +104,8 @@ def reindex_containing_dossier(dossier, event):
     """Reindex the containging_dossier index for all the contained obects,
     when the title has changed.
     """
-    if ILocalrolesModifiedEvent.providedBy(event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
         return
 
     if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):

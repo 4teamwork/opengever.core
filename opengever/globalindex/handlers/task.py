@@ -3,6 +3,7 @@ from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
+from zope.container.interfaces import IContainerModifiedEvent
 import logging
 
 
@@ -40,4 +41,7 @@ class TaskSqlSyncer(SqlSyncer):
 def sync_task(obj, event):
     """Index the given task in opengever.globalindex.
     """
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     TaskSqlSyncer(obj, event).sync()

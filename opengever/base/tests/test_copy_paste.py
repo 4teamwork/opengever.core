@@ -206,12 +206,10 @@ class TestCopyPaste(FunctionalTestCase):
         self.assertNotIn(u'Object cut: copy of Testdokum\xe4nt', titles,
                          '"Object cut" unexpectedly journalized')
 
-        self.assertEqual(['Dossier modified: dossier-2',
-                          'Dossier added: dossier-1',
+        self.assertEqual([u'Dossier added: dossier-1',
                           u'Document added: copy of Testdokum\xe4nt',
-                          'Dossier modified: dossier-1',
                           u'Document added: Testdokum\xe4nt',
-                          'Dossier added: dossier-1'], titles)
+                          u'Dossier added: dossier-1'], titles)
 
     @browsing
     def test_pasting_dossiers_into_a_branch_node_redirects_back_and_shows_statusmessage(self, browser):

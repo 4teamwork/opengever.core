@@ -1,3 +1,4 @@
+from zope.container.interfaces import IContainerModifiedEvent
 from Acquisition import aq_parent, aq_inner
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.repository import _
@@ -85,6 +86,9 @@ def saveReferenceNumberPrefix(obj, event):
 
     If necessary, set_number() creates a collision free prefix.
     """
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     parent = aq_parent(aq_inner(obj))
 
     # Mark the reference number as issued in the parent's annotations

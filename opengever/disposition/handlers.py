@@ -3,6 +3,7 @@ from opengever.disposition.activities import DispositionStateChangedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.interfaces import IHistoryStorage
 from plone import api
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 
 
@@ -40,6 +41,9 @@ def disposition_added(context, event):
 
 
 def disposition_modified(context, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
     # Skip modified events during dossier destruction
     if IDuringDossierDestruction.providedBy(context.REQUEST):
         return
