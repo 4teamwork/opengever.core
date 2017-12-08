@@ -3,8 +3,8 @@ Force Check-In
 
 Der Administrator-Rolle ist es vorbehalten, ausgecheckte Dokumente via Force
 Check-In wieder in OneGov GEVER einzuchecken. Administratoren haben automatisch
-auch bei ausgecheckten Dokumenten die Aktion „Einchecken“ oben rechts zur
-Verfügen, was einem normalen Benutzer verwehrt bleibt.
+auch bei von anderen Benutzern ausgecheckten Dokumenten die Aktion „Einchecken“
+oben rechts zur Verfügung, was einem normalen Benutzer verwehrt bleibt.
 
 Benutzer 1 checkt ein Dokument aus:
 
