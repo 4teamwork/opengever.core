@@ -5,7 +5,7 @@ Changelog
 2017.7.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Bump ftw.recipe.deployment version.
 
 
 2017.7.3 (2017-12-08)
