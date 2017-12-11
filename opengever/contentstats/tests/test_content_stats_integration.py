@@ -1,16 +1,20 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.contentstats.interfaces import IStatsKeyFilter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import IntegrationTestCase
+from opengever.testing import FunctionalTestCase
+from opengever.mail.tests import MAIL_DATA
+from plone.app.testing import SITE_OWNER_NAME
 from plone import api
+import transaction
 from zope.component import getMultiAdapter
 
 
-class TestContentStatsIntegration(IntegrationTestCase):
+class TestContentStatsIntegration(FunctionalTestCase):
 
     def test_portal_types_filter(self):
-        self.login(self.regular_user)
         flt = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsKeyFilter, name='portal_types')
@@ -63,7 +67,6 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertTrue(flt.keep('opengever.doesnt.exist.just.yet'))
 
     def test_review_states_filter(self):
-        self.login(self.regular_user)
         flt = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsKeyFilter, name='review_states')
@@ -155,67 +158,105 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'explicit assertions for the following workflow states:\n'
             '%r' % (all_possible_workflow_states - covered_states))
 
-    def test_checked_out_docs_stats_provider(self):
-        self.login(self.regular_user)
+
+class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestContentStatsIntegrationWithFixture, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.subdossier = create(Builder('dossier').within(self.dossier))
+
+        self.doc1 = create(Builder('document').within(self.dossier)
+                           .titled(u'Feedback zum Vertragsentwurf')
+                           .attach_file_containing('Feedback text', u'vertr\xe4g sentwurf.docx'))
+
+        self.doc2 = create(Builder('document').within(self.subdossier)
+                           .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
+                           .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx'))
+
+        self.inbox = create(
+            Builder('inbox')
+            .titled(u'Eingangsk\xf6rbli')
+            .having(id='eingangskorb'))
+
+        self.doc3 = create(Builder('document').within(self.inbox)
+                           .titled(u'Dokument im Eingangsk\xf6rbli')
+                           .with_asset_file('text.txt'))
+
+        self.mail_eml = create(Builder("mail")
+                               .with_message(MAIL_DATA)
+                               .within(self.dossier))
+
+    @browsing
+    def test_providers(self, browser):
+        self._test_checked_out_docs_stats_provider(browser)
+        self._test_file_mimetypes_provider(browser)
+        self._test_file_mimetypes_provider_in_view(browser)
+        self._test_checked_out_docs_stats_provider_in_view(browser)
+
+    def _test_checked_out_docs_stats_provider(self, browser):
+        browser.login(SITE_OWNER_NAME)
         stats_provider = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='checked_out_docs')
 
-        self.assertEqual({'checked_out': 0, 'checked_in': 18},
+        self.assertEqual({'checked_out': 0, 'checked_in': 4},
                          stats_provider.get_raw_stats())
 
         # Check out a document
-        getMultiAdapter((self.document, self.document.REQUEST),
+        getMultiAdapter((self.doc1, self.request),
                         ICheckinCheckoutManager).checkout()
 
-        self.assertEqual({'checked_out': 1, 'checked_in': 17},
+        self.assertEqual({'checked_out': 1, 'checked_in': 3},
                          stats_provider.get_raw_stats())
 
-    def test_file_mimetypes_provider(self):
-        self.login(self.regular_user)
+    def _test_file_mimetypes_provider(self, browser):
+        browser.login()
+
         stats_provider = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='file_mimetypes')
 
         self.assertEqual({
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 11,
-            'message/rfc822': 2,
-            'text/plain': 2},
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 1,
+            'message/rfc822': 1,
+            'text/plain': 1},
             stats_provider.get_raw_stats())
 
-    @browsing
-    def test_file_mimetypes_provider_in_view(self, browser):
-        self.login(self.manager, browser)
-
+    def _test_file_mimetypes_provider_in_view(self, browser):
+        browser.login(SITE_OWNER_NAME)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-file_mimetypes').first
 
         self.assertEquals([
             ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
-            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '11'],
-            ['', 'message/rfc822', '2'],
-            ['', 'text/plain', '2']],
+            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '1'],
+            ['', 'message/rfc822', '1'],
+            ['', 'text/plain', '1']],
             table.lists())
 
-    @browsing
-    def test_checked_out_docs_stats_provider_in_view(self, browser):
-        self.login(self.manager, browser)
-
+    def _test_checked_out_docs_stats_provider_in_view(self, browser):
+        browser.login(SITE_OWNER_NAME)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '18'], ['', 'checked_out', '0']],
+            [['', 'checked_in', '4'], ['', 'checked_out', '0']],
             table.lists())
 
         # Check out a document
-        getMultiAdapter((self.document, self.document.REQUEST),
-                        ICheckinCheckoutManager).checkout()
+        manager = getMultiAdapter(
+            (self.doc1, self.request), ICheckinCheckoutManager)
+        manager.checkout()
+        transaction.commit()
 
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
 
         self.assertEquals(
-            [['', 'checked_in', '17'], ['', 'checked_out', '1']],
+            [['', 'checked_in', '3'], ['', 'checked_out', '1']],
             table.lists())
+
+        manager.checkin()
+        transaction.commit()
