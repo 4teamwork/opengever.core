@@ -505,6 +505,6 @@ class IntegrationTestCase(TestCase):
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getIndexDataForRID(rid).get('allowedRolesAndUsers')
 
-    def get_selected_paths(self, *objects):
+    def make_path_param(self, *objects):
         return {
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}

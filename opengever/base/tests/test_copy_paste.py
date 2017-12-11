@@ -22,7 +22,7 @@ class TestCopyItems(IntegrationTestCase):
     def test_redirects_back_and_show_statusmessage_if_copy_success(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        data = self.get_selected_paths(self.document, self.mail)
+        data = self.make_path_param(self.document, self.mail)
         browser.open(self.dossier, data=data, view='copy_items')
 
         self.assertEqual(self.dossier.absolute_url(), browser.url)
@@ -89,7 +89,7 @@ class TestCopyPaste(IntegrationTestCase):
     def test_creates_objects_with_correct_id_format(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        data = self.get_selected_paths(self.document)
+        data = self.make_path_param(self.document)
         browser.open(self.empty_dossier, view="copy_items", data=data)
         browser.css('#contentActionMenus a#paste').first.click()
 
@@ -101,7 +101,7 @@ class TestCopyPaste(IntegrationTestCase):
     def test_pasting_handles_multiple_items_in_clipboard(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        data = self.get_selected_paths(self.document, self.taskdocument)
+        data = self.make_path_param(self.document, self.taskdocument)
         browser.open(self.empty_dossier, view="copy_items", data=data)
         browser.css('#contentActionMenus a#paste').first.click()
         self.assertEquals(2, len(self.empty_dossier.getFolderContents()))
@@ -112,7 +112,7 @@ class TestCopyPaste(IntegrationTestCase):
 
         browser.open(
             self.dossier, view="copy_items",
-            data=self.get_selected_paths(self.document))
+            data=self.make_path_param(self.document))
         browser.open(self.empty_dossier)
         browser.css('#contentActionMenus a#paste').first.click()
 
@@ -126,7 +126,7 @@ class TestCopyPaste(IntegrationTestCase):
 
         browser.open(
             self.empty_repofolder, view="copy_items",
-            data=self.get_selected_paths(self.empty_dossier))
+            data=self.make_path_param(self.empty_dossier))
         browser.css('#contentActionMenus a#paste').first.click()
 
         self.assertEqual(["Objects from clipboard successfully pasted."],
@@ -141,7 +141,7 @@ class TestCopyPaste(IntegrationTestCase):
 
         browser.open(
             self.leaf_repofolder, view="copy_items",
-            data=self.get_selected_paths(self.empty_dossier))
+            data=self.make_path_param(self.empty_dossier))
         browser.css('#contentActionMenus a#paste').first.click()
 
         self.assertEqual(["Objects from clipboard successfully pasted."],
@@ -160,7 +160,7 @@ class TestCopyPaste(IntegrationTestCase):
         create(Builder('document').within(self.empty_dossier))
 
         browser.open(self.empty_repofolder, view="copy_items",
-                     data=self.get_selected_paths(self.empty_dossier))
+                     data=self.make_path_param(self.empty_dossier))
         browser.css('#contentActionMenus a#paste').first.click()
 
         copy = self.empty_repofolder.objectValues()[0]
@@ -180,7 +180,7 @@ class TestCopyPaste(IntegrationTestCase):
 
         browser.open(
             self.leaf_repofolder,
-            data=self.get_selected_paths(self.dossier), view="copy_items")
+            data=self.make_path_param(self.dossier), view="copy_items")
 
         browser.open(self.branch_repofolder)
         browser.click_on('Paste')
@@ -196,7 +196,7 @@ class TestCopyPaste(IntegrationTestCase):
 
         browser.open(
             self.dossier, view="copy_items",
-            data=self.get_selected_paths(self.document))
+            data=self.make_path_param(self.document))
 
         browser.open(self.private_dossier, view='paste_clipboard')
         self.assertEqual(
