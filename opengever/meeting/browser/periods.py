@@ -33,13 +33,13 @@ class IPeriodModel(model.Schema):
 
     form.widget(date_from=DatePickerFieldWidget)
     date_from = schema.Date(
-        description=_('label_date_from', default='Start date'),
+        title=_('label_date_from', default='Start date'),
         required=True,
     )
 
     form.widget(date_to=DatePickerFieldWidget)
     date_to = schema.Date(
-        description=_('label_date_to', default='End date'),
+        title=_('label_date_to', default='End date'),
         required=True,
     )
 
