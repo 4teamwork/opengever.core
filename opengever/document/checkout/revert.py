@@ -6,8 +6,8 @@ from zope.component import getMultiAdapter
 
 
 class RevertFileToVersion(BrowserView):
-    """Reverts the file of a document to a specific version.
-    """
+    """Reverts the file of a document to a specific version."""
+
     def __call__(self):
         version_id = self.request.get('version_id')
 
@@ -19,7 +19,7 @@ class RevertFileToVersion(BrowserView):
         # create a status message
         msg = _(u'Reverted file to version ${version_id}.',
                 mapping=dict(version_id=version_id))
-        IStatusMessage(self.request).addStatusMessage(msg, type='info')
+        IStatusMessage(self.request).addStatusMessage(msg)
 
         # redirect back to file view
         return self.request.RESPONSE.redirect(self.context.absolute_url())
