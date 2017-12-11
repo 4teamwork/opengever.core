@@ -348,7 +348,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         # fill and submit checkin form
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
+            'Journal Comment':
             'Checkinerino'
             })
         browser.css('#form-buttons-button_checkin').first.click()
@@ -378,8 +378,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         # fill and submit checkin form
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
-            'Checkini'
+            'Journal Comment': 'Checkini'
             })
         browser.css('#form-buttons-button_checkin').first.click()
 
