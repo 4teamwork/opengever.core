@@ -534,6 +534,9 @@ Objects
           - self.word_proposal
         - self.empty_dossier
         - self.meeting_dossier
+          - self.meeting_document
+          - self.meeting_task
+            - self.meeting_subtask
     - self.empty_repofolder
   - self.templates
     - self.dossiertemplate

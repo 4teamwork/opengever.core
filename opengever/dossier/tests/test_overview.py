@@ -17,20 +17,49 @@ import json
 
 class TestOverview(IntegrationTestCase):
 
+    @property
+    def tested_dossier(self):
+        return self.dossier
+
+    @property
+    def tested_document(self):
+        return self.document
+
+    @property
+    def tested_task(self):
+        return self.task
+
+    @property
+    def tested_subtask(self):
+        return self.subtask
+
+    @property
+    def participants(self):
+        return [u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                u'Ziegler Robert (robert.ziegler)']
+
+    @property
+    def task_titles(self):
+        return [u'Vertragsentwurf \xdcberpr\xfcfen',
+                u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen']
+
+    @IntegrationTestCase.clock
     @browsing
     def test_description_box_is_web_intelligent_formatted_and_xss_safe(self, browser):
         self.login(self.regular_user, browser)
 
         description = u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/'
-        IOpenGeverBase(self.dossier).description = description
+        IOpenGeverBase(self.tested_dossier).description = description
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertEqual('Anfrage:\n\n\nhttp://www.example.org/',
                          browser.css('#descriptionBox span').first.text)
 
         description = u'<img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
-        IOpenGeverBase(self.dossier).description = description
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        IOpenGeverBase(self.tested_dossier).description = description
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertEqual(
             u'&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
             browser.css('#descriptionBox span').first.innerHTML)
@@ -64,38 +93,40 @@ class TestOverview(IntegrationTestCase):
         create(Builder('globalindex_task').having(
             title=u'Task X', int_id=12345, admin_unit_id='foo',
             issuing_org_unit='foo', sequence_number=4, assigned_org_unit='bar',
-            physical_path=self.task.get_sql_object().physical_path,
+            physical_path=self.tested_task.get_sql_object().physical_path,
             modified=date(2011, 1, 1)))
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            [u'Vertragsentwurf \xdcberpr\xfcfen',
-             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'],
+            self.task_titles,
             browser.css('#newest_tasksBox li:not(.moreLink) a').text)
 
     @browsing
     def test_task_box_items_are_filtered_by_pending_state(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state(
+            'task-state-tested-and-closed', self.tested_subtask)
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            [u'Vertragsentwurf \xdcberpr\xfcfen'],
+            self.task_titles[:-1],
             browser.css('#newest_tasksBox li:not(.moreLink) a').text)
 
     @browsing
     def test_participant_labels_are_displayed(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        handler = IParticipationAware(self.dossier)
+        handler = IParticipationAware(self.tested_dossier)
         participation = handler.create_participation(
             contact='kathi.barfuss', roles=['regard'])
         handler.append_participiation(participation)
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertListEqual(
-            [u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-             u'Ziegler Robert (robert.ziegler)'],
+            self.participants,
             browser.css('#participantsBox li:not(.moreLink) a').text)
 
     @browsing
@@ -103,7 +134,8 @@ class TestOverview(IntegrationTestCase):
         toggle_feature(IContactSettings, enabled=True)
 
         self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertEqual(
             [u'B\xfchler Josef', 'Meier AG'],
             browser.css('#participationsBox li:not(.moreLink) a').text)
@@ -111,27 +143,34 @@ class TestOverview(IntegrationTestCase):
     @browsing
     def test_task_link_is_safe_html_transformed(self, browser):
         self.login(self.regular_user, browser=browser)
+        test_title = u"Foo <script>alert('foo')</script>"
+        test_title_safe = 'Foo &lt;script&gt;alert(\'foo\')&lt;/script&gt'
+        self.tested_task.get_sql_object().title = test_title
 
-        self.task.get_sql_object().title = u"Foo <script>alert('foo')</script>"
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
 
         self.assertEquals(
             [],
             browser.css('span.contenttype-opengever-task-task script'))
         node = browser.css('span.contenttype-opengever-task-task').first
         self.assertEquals(
-            '<span class="contenttype-opengever-task-task">Foo &lt;script&gt;alert(\'foo\')&lt;/script&gt;</span>',
+            '<span class="contenttype-opengever-task-task">' +
+            test_title_safe + ';</span>',
             tostring(node.node))
 
     @browsing
     def test_documents_in_overview_are_linked(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
 
-        link = browser.css('#newest_documentsBox li:not(.moreLink) a.document_link')[-1]
-        self.assertEquals(self.document.title, link.text)
-        self.assertEqual(self.document.absolute_url(), link.get('href'))
+        link = browser.css(
+            '#newest_documentsBox li:not(.moreLink) a.document_link')[-1]
+        self.assertEquals(self.tested_document.title, link.text)
+        self.assertEqual(
+            self.tested_document.absolute_url(), link.get('href'))
 
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
@@ -154,41 +193,44 @@ class TestOverview(IntegrationTestCase):
     def test_references_box_lists_regular_references(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.meeting_dossier, view='tabbedview_view-overview')
+        browser.open(self.closed_meeting_dossier,
+                     view='tabbedview_view-overview')
 
         references = browser.css('#referencesBox a')
-        self.assertEquals([self.dossier.title], references.text)
-        self.assertEquals([self.dossier.absolute_url()],
-                          [link.get('href') for link in references])
+        self.assertIn(self.tested_dossier.title, references.text)
+        self.assertIn(self.tested_dossier.absolute_url(),
+                      [link.get('href') for link in references])
 
     @browsing
     def test_references_box_lists_back_references(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         references = browser.css('#referencesBox a')
-        self.assertEquals(['Sitzungsdossier 9/2017'], references.text)
-        self.assertEquals([self.meeting_dossier.absolute_url()],
+        self.assertEquals([self.closed_meeting_dossier.title],
+                          references.text)
+        self.assertEquals([self.closed_meeting_dossier.absolute_url()],
                           [link.get('href') for link in references])
 
     @browsing
     def test_removed_back_refs_are_no_longer_listed(self, browser):
         self.login(self.manager, browser=browser)
-
-        api.content.delete(obj=self.meeting_dossier)
-
+        api.content.delete(obj=self.closed_meeting_dossier)
         self.login(self.regular_user, browser=browser)
-
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         references = browser.css('#referencesBox a')
         self.assertEquals([], references.text)
 
     @browsing
     def test_shows_comments_web_intelligent_formatted(self, browser):
         self.login(self.regular_user, browser=browser)
-        IDossier(self.dossier).comments = u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/'
+        IDossier(self.tested_dossier
+                 ).comments = u'Anfrage:\r\n\r\n\r\nhttp://www.example.org/'
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
 
         self.assertEquals('Anfrage:\n\n\nhttp://www.example.org/',
                           browser.css('#commentsBox span').first.text)
@@ -199,9 +241,10 @@ class TestOverview(IntegrationTestCase):
     def test_comments_box_is_xss_safe(self, browser):
         self.login(self.regular_user, browser=browser)
         comment = '<img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
-        IDossier(self.dossier).comments = comment
+        IDossier(self.tested_dossier).comments = comment
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
 
         self.assertEquals(
             u'&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
@@ -210,9 +253,10 @@ class TestOverview(IntegrationTestCase):
     @browsing
     def test_dossier_show_comments_editlink_without_modify_rights(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.tested_dossier)
 
-        browser.open(self.dossier)
+        browser.open(self.tested_dossier)
 
         self.assertEqual('Show Note', browser.css('.editNoteLink').first.text)
 
@@ -220,7 +264,7 @@ class TestOverview(IntegrationTestCase):
     def test_dossier_editlink_for_comments(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.dossier)
+        browser.open(self.tested_dossier)
 
         # There are both labels (show/hide by css/js)
         self.assertEquals(['Edit Note', 'Add Note'],
@@ -230,7 +274,7 @@ class TestOverview(IntegrationTestCase):
     def test_dossier_show_comments_editlink_on_maindossier_only(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.dossier)
+        browser.open(self.tested_dossier)
         comment = browser.css('.editNoteLink')
         self.assertTrue(comment,
                         'Expect the edit comment link in dossier byline')
@@ -244,7 +288,7 @@ class TestOverview(IntegrationTestCase):
     def test_dossier_comments_editlink_data(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(self.dossier)
+        browser.open(self.tested_dossier)
         link = browser.css('.editNoteWrapper').first
 
         # No comments
@@ -253,9 +297,9 @@ class TestOverview(IntegrationTestCase):
         self.assertEquals('Add Note', link.css('.add .linkLabel').first.text)
 
         # With comments
-        IDossier(self.dossier).comments = u'This is a comment'
+        IDossier(self.tested_dossier).comments = u'This is a comment'
 
-        browser.open(self.dossier)
+        browser.open(self.tested_dossier)
         link = browser.css('.editNoteWrapper').first
         self.assertEquals(
             str(u'This is a comment'), link.attrib['data-notecache'])
@@ -266,7 +310,7 @@ class TestOverview(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         payload = '{"comments": "New comment http://example.org"}'
-        browser.open(self.dossier, view='save_comments',
+        browser.open(self.tested_dossier, view='save_comments',
                      data={'data': payload, '_authenticator': createToken()})
 
         self.assertEquals(
@@ -275,10 +319,10 @@ class TestOverview(IntegrationTestCase):
             browser.json)
 
         self.assertEquals("New comment http://example.org",
-                          IDossier(self.dossier).comments)
+                          IDossier(self.tested_dossier).comments)
 
         result = self.portal.portal_catalog({'SearchableText': 'New comment'})
-        self.assertEquals(self.dossier, result[0].getObject())
+        self.assertEquals(self.tested_dossier, result[0].getObject())
 
     @browsing
     def test_dossier_save_comments_endpoint_with_invalid_key_raises_KeyError(self, browser):
@@ -287,15 +331,16 @@ class TestOverview(IntegrationTestCase):
         browser.exception_bubbling = True
         with self.assertRaises(KeyError):
             payload = '{"invalidkey": "New comment"}'
-            browser.login().visit(self.dossier, view='save_comments',
+            browser.login().visit(self.tested_dossier, view='save_comments',
                                   data={'data': payload})
 
     @browsing
     def test_keywords_are_listed_on_overview(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        IDossier(self.dossier).keywords = u'secret', u'special'
+        IDossier(self.tested_dossier).keywords = u'secret', u'special'
 
-        browser.open(self.dossier, view='tabbedview_view-overview')
+        browser.open(self.tested_dossier,
+                     view='tabbedview_view-overview')
         self.assertEquals([u'secret', u'special'],
                           browser.css('#keywordsBox li span').text)

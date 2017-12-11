@@ -50,6 +50,18 @@ class TestWordAgendaItem(IntegrationTestCase):
 
     @browsing
     def test_cant_create_adhoc_when_no_access_to_meeting_dossier(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting, view='agenda_items/schedule_text',
+                     data={'title': u'Fail',
+                           '_authenticator': createToken()})
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Information',
+                 u'message': u'Text successfully added.',
+                 u'messageClass': u'info'}],
+             u'proceed': True},
+            browser.json)
+
         with self.login(self.administrator):
             # Let committee_responsible have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True
