@@ -2,7 +2,6 @@
 """A concurrent wrapper for timing xmltestrunner tests for opengever.core."""
 from __future__ import print_function
 from argparse import ArgumentParser
-from copy import copy
 from fnmatch import fnmatch
 from logging import DEBUG
 from logging import Formatter
@@ -173,7 +172,7 @@ def run_tests(test_run_params):
 
     # ZServer tests will be run separately of everything else per layer
     # separation
-    env = copy(environ)
+    env = environ.copy()
     env['ZSERVER_PORT'] = env.get('PORT1', '55000')
 
     start = time()
