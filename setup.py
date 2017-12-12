@@ -185,9 +185,6 @@ setup(name='opengever.core',
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
       import = opengever.bundle.console:import_oggbundle
 
-      [izug.basetheme]
-      version = opengever.core
-
       [console_scripts]
       create-policy = opengever.policytemplates.cli:main
       pyxbgen = opengever.disposition.ech0160.pyxbgen:main
