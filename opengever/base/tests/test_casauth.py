@@ -1,12 +1,14 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_cluster_base_url
 from opengever.base.casauth import get_gever_portal_url
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import applyProfile
 
 
-class TestClusterBaseURL(FunctionalTestCase):
+class TestClusterBaseURL(IntegrationTestCase):
 
     def test_is_equal_to_public_url_for_single_admin_unit_setup(self):
         admin_unit = get_current_admin_unit()
@@ -19,6 +21,11 @@ class TestClusterBaseURL(FunctionalTestCase):
             'http://lab.onegovgever.ch/', get_cluster_base_url())
 
     def test_is_different_from_public_url_for_multi_admin_unit_setup(self):
+        create(Builder('admin_unit')
+               .having(title=u'Ratzskanzlei',
+                       unit_id=u'rk',
+                       public_url='http://dev.onegovgever.ch/rk'))
+
         admin_unit = get_current_admin_unit()
         # For setups with multiple admin units, an admin unit's public_url
         # ends with the admin unit ID
@@ -30,7 +37,7 @@ class TestClusterBaseURL(FunctionalTestCase):
             'http://dev.onegovgever.ch/', get_cluster_base_url())
 
 
-class TestCASServerURL(FunctionalTestCase):
+class TestCASServerURL(IntegrationTestCase):
 
     def test_cas_plugin_server_url_is_based_on_public_url(self):
         get_current_admin_unit().public_url = 'http://example.com/foobar'
@@ -51,7 +58,7 @@ class TestCASServerURL(FunctionalTestCase):
         self.assertEquals('http://example.com/portal', get_cas_server_url())
 
 
-class TestGEVERPortalURL(FunctionalTestCase):
+class TestGEVERPortalURL(IntegrationTestCase):
 
     def test_gever_portal_url_is_based_on_cluster_url(self):
         # Cluster base URL is equal to admin unit's public_url *for now*

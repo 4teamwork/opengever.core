@@ -504,3 +504,7 @@ class IntegrationTestCase(TestCase):
         catalog = api.portal.get_tool('portal_catalog')
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getIndexDataForRID(rid).get('allowedRolesAndUsers')
+
+    def make_path_param(self, *objects):
+        return {
+            'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
