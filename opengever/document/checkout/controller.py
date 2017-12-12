@@ -48,3 +48,15 @@ class CheckinCheckoutController(BrowserView):
             return manager.is_cancel_allowed()
 
         return False
+
+    def is_locked(self):
+        """Check if the document is locked."""
+        manager = queryMultiAdapter(
+            (self.context, self.request),
+            ICheckinCheckoutManager,
+            )
+
+        if manager:
+            return manager.is_locked()
+
+        return False
