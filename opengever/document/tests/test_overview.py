@@ -457,6 +457,33 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             browser.css('.file-action-buttons a').text,
             )
 
+    @browsing
+    def test_checkin_without_comment_portal_action_not_rendered_for_locked_documents(self, browser):  # noqa
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        lockable = IRefreshableLockable(self.document)
+        lockable.lock()
+
+        browser.open(self.document)
+
+        document_portal_actions = [
+            'Edit metadata',
+            'Cancel Checkout',
+            u'Actions \u25bc',
+            'Copy Item',
+            'Properties',
+            u'Checkin \u25bc',
+            'with comment',
+            ]
+
+        self.assertEquals(
+            document_portal_actions,
+            browser.css('#edit-bar a').text
+            )
+
 
 class TestDocumentOverviewWithMeeting(IntegrationTestCase):
 
