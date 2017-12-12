@@ -132,11 +132,11 @@ class TestCommittee(IntegrationTestCase):
              self.group_field_name: 'committee_rpk_group'})
         browser.css('#form-buttons-save').first.click()
 
-        self.assertEqual('You cannot add dossiers in the selected repository '
-                         'folder. Either you do not have the privileges or '
-                         'the repository folder contains another repository '
-                         'folder.',
-                         dexterity.erroneous_fields()['fuhrung'][0])
+        self.assertEqual(
+            'You cannot add dossiers in the selected repository folder. '
+            'Either you do not have the privileges or the repository folder '
+            'contains another repository folder.',
+            dexterity.erroneous_fields()['Linked repository folder'][0])
 
     @browsing
     def test_committee_can_be_created_in_browser(self, browser):

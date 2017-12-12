@@ -28,7 +28,6 @@ from plone.protect import createToken
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
-
 import jwt
 import transaction
 
@@ -349,7 +348,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         # fill and submit checkin form
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
+            'Journal Comment':
             'Checkinerino'
             })
         browser.css('#form-buttons-button_checkin').first.click()
@@ -361,7 +360,7 @@ class TestCheckinViews(FunctionalTestCase):
         # check last history entry to verify the checkin
         repository_tool = getToolByName(self.document, 'portal_repository')
         history = repository_tool.getHistory(self.document)
-        last_entry = repository_tool.retrieve(self.document, len(history)-1)
+        last_entry = repository_tool.retrieve(self.document, len(history) - 1)
         self.assertEquals('Checkinerino', last_entry.comment)
 
     @browsing
@@ -379,8 +378,7 @@ class TestCheckinViews(FunctionalTestCase):
 
         # fill and submit checkin form
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
-            'Checkini'
+            'Journal Comment': 'Checkini'
             })
         browser.css('#form-buttons-button_checkin').first.click()
 
@@ -394,7 +392,7 @@ class TestCheckinViews(FunctionalTestCase):
         # check last history entry to verify the checkin
         repository_tool = getToolByName(document2, 'portal_repository')
         history = repository_tool.getHistory(document2)
-        last_entry = repository_tool.retrieve(document2, len(history)-1)
+        last_entry = repository_tool.retrieve(document2, len(history) - 1)
         self.assertEquals('Checkini', last_entry.comment)
 
     @browsing
@@ -410,7 +408,7 @@ class TestCheckinViews(FunctionalTestCase):
         # check last history entry to verify the checkin
         repository_tool = getToolByName(self.document, 'portal_repository')
         history = repository_tool.getHistory(self.document)
-        last_entry = repository_tool.retrieve(self.document, len(history)-1)
+        last_entry = repository_tool.retrieve(self.document, len(history) - 1)
         self.assertEquals(None, last_entry.comment)
 
     @browsing
@@ -436,7 +434,7 @@ class TestCheckinViews(FunctionalTestCase):
         # check last history entry to verify the checkin
         repository_tool = getToolByName(document2, 'portal_repository')
         history = repository_tool.getHistory(document2)
-        last_entry = repository_tool.retrieve(document2, len(history)-1)
+        last_entry = repository_tool.retrieve(document2, len(history) - 1)
         self.assertEquals(None, last_entry.comment)
 
     @browsing
