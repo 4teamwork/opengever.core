@@ -399,6 +399,12 @@
                     "items": {
                         "type": "string"
                     }
+                },
+                "manage_dossiers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

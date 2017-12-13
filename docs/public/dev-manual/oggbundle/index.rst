@@ -206,6 +206,8 @@ Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
 
 -  ``reactivate`` (Dossiers reaktivieren)
 
+-  ``manage_dossiers`` (Dossiers verwalten)
+
 Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden.
 
 Berechtigungen werden an einen oder mehrere “Principals” vergeben, dies entspricht einem Benutzer oder einer Gruppe.

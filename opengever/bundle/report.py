@@ -170,6 +170,7 @@ class DataCollector(object):
                 ('add', False),
                 ('close', False),
                 ('reactivate', False),
+                ('manage_dossiers', False),
                 ('blocked_inheritance', None),
             ])
             for rolename in roles:

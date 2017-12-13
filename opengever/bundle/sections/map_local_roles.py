@@ -12,6 +12,7 @@ ROLE_NAME_MAPPING = {
     'edit': 'Editor',
     'close': 'Reviewer',
     'reactivate': 'Publisher',
+    'manage_dossiers': 'DossierManager',
 }
 
 # Inverted mapping of the above
@@ -59,7 +60,7 @@ class MapLocalRolesSection(object):
                 # from {role: principals} to {principal: roles}
                 roles_by_principal = {}
                 for role_shortname, role in ROLE_NAME_MAPPING.items():
-                    principals = rolemap[role_shortname]
+                    principals = rolemap.get(role_shortname, [])
                     for principal in principals:
                         if principal not in roles_by_principal:
                             roles_by_principal[principal] = []

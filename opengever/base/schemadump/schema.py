@@ -363,6 +363,10 @@ class OGGBundleJSONSchemaBuilder(object):
         subschema.add_property('edit', string_array)
         subschema.add_property('close', string_array)
         subschema.add_property('reactivate', string_array)
+
+        if self.portal_type in ['opengever.repository.repositoryroot',
+                                'opengever.repository.repositoryfolder']:
+            subschema.add_property('manage_dossiers', string_array)
         return subschema
 
     def _add_file_properties(self):

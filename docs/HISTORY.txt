@@ -39,6 +39,7 @@ Changelog
 2017.7.0 (2017-11-28)
 ---------------------
 
+- Extend OGGBundle with the DossierManager role. [elioschmutz]
 - OGDS sync: handle multivalued group titles. [phgross]
 - Increase group title length. [phgross]
 - Fix bux when accepting a multi admin unit team task with option participate. [phgross]
