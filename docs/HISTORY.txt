@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Fix plonesite removal. [phgross]
 - Bump ftw.bumblebee to skip checksum calculation for unsupported mimetypes. [deiferni]
 - Implement workspace module basics [raphael-s]
 - Allow to add proposal documents to tasks. [tarnap]

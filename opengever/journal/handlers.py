@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.events.events import JournalEntryEvent
 from OFS.interfaces import IObjectWillBeAddedEvent
+from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.oguid import Oguid
@@ -30,6 +31,7 @@ from zope.i18nmessageid import MessageFactory
 from zope.i18nmessageid.message import Message
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 
 
 pmf = MessageFactory('plone')
@@ -707,6 +709,10 @@ def object_moved(context, event):
     if IObjectAddedEvent.providedBy(event):
         return
 
+    # Ignore object removals
+    if IObjectRemovedEvent.providedBy(event):
+        return
+
     # Skip automatically renamed objects during copy & paste process.
     if ICopyPasteRequestLayer.providedBy(getRequest()):
         return
@@ -726,6 +732,10 @@ OBJECT_WILL_BE_MOVED_EVENT = 'Object cut'
 
 def object_will_be_moved(context, event):
     if IObjectWillBeAddedEvent.providedBy(event):
+        return
+
+    # Ignore object removals
+    if IObjectWillBeRemovedEvent.providedBy(event):
         return
 
     # Skip automatically renamed objects during copy & paste process.
