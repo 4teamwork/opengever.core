@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
@@ -345,6 +346,47 @@ class TestCheckinViews(FunctionalTestCase):
 
         # open checkin form
         browser.css('#checkin_with_comment').first.click()
+
+        # fill and submit checkin form
+        browser.fill({
+            'Journal Comment':
+            'Checkinerino'
+            })
+        browser.css('#form-buttons-button_checkin').first.click()
+
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        self.assertEquals(None, manager.get_checked_out_by())
+
+        # check last history entry to verify the checkin
+        repository_tool = getToolByName(self.document, 'portal_repository')
+        history = repository_tool.getHistory(self.document)
+        last_entry = repository_tool.retrieve(self.document, len(history) - 1)
+        self.assertEquals('Checkinerino', last_entry.comment)
+
+    @browsing
+    def test_single_locked_checkin_with_comment(self, browser):
+        # Lock document
+        IRefreshableLockable(self.document).lock()
+        transaction.commit()
+
+        browser.login().open(self.document)
+
+        # open checkin form
+        browser.css('#checkin_with_comment').first.click()
+
+        assert_message(
+            ' '.join((
+                'This document is currently being worked on.',
+                'When you check it in manually you will lose the changes.',
+                'Please allow for the process to be finished first.',
+                ))
+            )
+
+        self.assertIn(
+            'Checkin anyway',
+            browser.css('#form-buttons-button_checkin')[0].outerHTML
+            )
 
         # fill and submit checkin form
         browser.fill({

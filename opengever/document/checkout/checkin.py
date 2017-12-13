@@ -4,6 +4,7 @@ from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
+from plone.locking.interfaces import IRefreshableLockable
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -101,6 +102,32 @@ class CheckinContextCommentForm(form.Form):
 
     def __init__(self, context, request):
         super(CheckinContextCommentForm, self).__init__(context, request)
+        self.locked = IRefreshableLockable(self.context).locked()
+        if self.locked:
+            # Add a warning onto a locked document checkin view
+            msg = _(
+                u'label_warn_checkout_locked',
+                default=u' '.join((
+                    'This document is currently being worked on.',
+                    'When you check it in manually you will lose the changes.',
+                    'Please allow for the process to be finished first.'
+                    )),
+                )
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'warning')
+
+            # Swap the button label out on a locked document
+            for form_button in self.buttons.items():
+                if form_button[0] == 'button_checkin':
+                    button_payload = form_button[1]
+                    button_payload.title = _(
+                        u'button_checkin_anyway',
+                        default=u'Checkin anyway'
+                        )
+                    form_button = (
+                        'button_checkin_anyway',
+                        button_payload,
+                        )
+
         self.checkin_controller = CheckinController(self.request)
 
     @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'))
