@@ -471,7 +471,6 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         document_portal_actions = [
             'Edit metadata',
-            'Cancel Checkout',
             u'Actions \u25bc',
             'Copy Item',
             'Properties',

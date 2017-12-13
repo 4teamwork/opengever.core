@@ -397,6 +397,11 @@ class TestCheckinViews(IntegrationTestCase):
             browser.css('#form-buttons-button_checkin')[0].outerHTML
             )
 
+        self.assertNotIn(
+            'Cancel Checkout',
+            browser.css('.contentViews a').text
+            )
+
         # fill and submit checkin form
         journal_comment = u'Checkinerino'
         browser.fill({
