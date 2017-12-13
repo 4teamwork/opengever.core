@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bump ftw.bumblebee to skip checksum calculation for unsupported mimetypes. [deiferni]
+- Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
 - Implement workspace module basics [raphael-s]
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]

@@ -240,7 +240,8 @@ class DossierAddFormView(WizzardWrappedAddForm):
 
     @property
     def typename(self):
-        return self.request.get('dossier_type')
+        return self.request.get(
+            'dossier_type', 'opengever.dossier.businesscasedossier')
 
     def _create_form_class(self, parent_form_class, steptitle):
         class WrappedForm(AcceptWizardNewDossierFormMixin, parent_form_class):
