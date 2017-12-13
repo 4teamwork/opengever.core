@@ -37,6 +37,14 @@
       <role name="Manager" />
     </permission>
 
+    <permission name="CMFEditions: Save new version" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Reviewer" />
+    </permission>
+
     <!--migrated from opengever/base/profiles/default/rolemap.xml-->
     <permission name="Remove GEVER content" acquire="True">
       <role name="Manager" />
