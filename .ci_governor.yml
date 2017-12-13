@@ -1,0 +1,4 @@
+---
+job_template: python
+weight:
+  test-plone-4.3.x.cfg: 5
