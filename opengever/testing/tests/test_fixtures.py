@@ -24,7 +24,12 @@ class TestTestingFixture(IntegrationTestCase):
     def test_repository_root_has_static_intid(self):
         self.login(self.regular_user)
         self.assertEquals(1008013300,
-                getUtility(IIntIds).getId(self.repository_root))
+                          getUtility(IIntIds).getId(self.repository_root))
+
+    def test_dossier_has_static_intid(self):
+        self.login(self.regular_user)
+        self.assertEquals(1014013300,
+                          getUtility(IIntIds).getId(self.dossier))
 
     def test_repository_root_has_static_uuid(self):
         self.login(self.regular_user)

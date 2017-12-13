@@ -7,6 +7,9 @@ from opengever.document.versioner import Versioner
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
+from zope.component import getUtility
+from zope.component.hooks import getSite
+from zope.intid.interfaces import IIntIds
 import pytz
 import transaction
 
@@ -19,9 +22,25 @@ def time_based_intids():
     """To ensure predictable IntIds in tests, this context manager patches
     the IntIds utility so that IntIds are created based on the current time
     """
-    # register intid utility
-    yield
-    # deregister intid utility
+    original_intids = getUtility(IIntIds)
+
+    class TimeBasedIntIds(type(original_intids)):
+
+        def __init__(self):
+            self.__dict__ = original_intids.__dict__
+
+        def _generateId(self):
+            intid = int(datetime.now(pytz.UTC).strftime('10%H%M%S00'))
+            while intid in self.refs:
+                intid += 1
+            return intid
+
+    patched_intids = TimeBasedIntIds()
+    getSite().getSiteManager().registerUtility(patched_intids, IIntIds)
+    try:
+        yield
+    finally:
+        getSite().getSiteManager().registerUtility(original_intids, IIntIds)
 
 
 def localized_datetime(*args, **kwargs):
