@@ -332,13 +332,3 @@ class TestProtectDossier(IntegrationTestCase):
 
         self.assertEqual(1, len(json.loads(view()).get('messages')))
 
-    def assert_local_roles(self, excpected_roles, username, context):
-        current_roles = []
-        for participant, roles in context.get_local_roles():
-            if participant == username:
-                current_roles = roles
-
-        self.assertItemsEqual(
-            excpected_roles, current_roles,
-            "The user '{}' should have the roles {} on context {}. "
-            "But he have {}".format(username, excpected_roles, context, current_roles))
