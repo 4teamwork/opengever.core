@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-11 17:30+0000\n"
+"POT-Creation-Date: 2017-12-13 17:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,6 +227,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Unlock unused repository prefixes."
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.workspace.xml
+#: ./opengever/core/upgrades/20171213174551_add_workspace_content_type/types/opengever.workspace.workspace.xml
+msgid "Workspace"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.root.xml

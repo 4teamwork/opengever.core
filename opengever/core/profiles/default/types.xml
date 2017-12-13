@@ -65,6 +65,7 @@
   <object name="opengever.disposition.disposition" meta_type="Dexterity FTI" />
 
   <object name="opengever.workspace.root" meta_type="Dexterity FTI" />
+  <object name="opengever.workspace.workspace" meta_type="Dexterity FTI" />
 
   <!--migrated from opengever/policy/base/profiles/default/types.xml-->
   <object name="Plone Site" meta_type="Factory-based Type Information with dynamic views" />

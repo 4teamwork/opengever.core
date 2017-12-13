@@ -563,3 +563,10 @@ class WorkspaceRootBuilder(DexterityBuilder):
 
 
 builder_registry.register('workspace_root', WorkspaceRootBuilder)
+
+
+class WorkspaceBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.workspace'
+
+
+builder_registry.register('workspace', WorkspaceBuilder)

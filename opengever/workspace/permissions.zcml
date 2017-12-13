@@ -1,7 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    i18n_domain="opengever.dossier">
+    i18n_domain="opengever.workspace">
 
-  <permission id="opengever.workspace.AddWorkspace" title="opengever.workspace: Add WorkspaceRoot" />
+  <permission id="opengever.workspace.AddWorkspaceRoot" title="opengever.workspace: Add WorkspaceRoot" />
+
+  <permission id="opengever.workspace.AddWorkspace" title="opengever.workspace: Add Workspace" />
 
 </configure>

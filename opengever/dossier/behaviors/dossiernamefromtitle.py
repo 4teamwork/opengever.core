@@ -1,4 +1,5 @@
 from opengever.base.interfaces import ISequenceNumber
+from opengever.workspace.interfaces import IWorkspace
 from plone.app.content.interfaces import INameFromTitle
 from zope.component import getUtility
 from zope.interface import implements
@@ -17,8 +18,6 @@ class DossierNameFromTitle(object):
 
     implements(IDossierNameFromTitle)
 
-    format = u'dossier-%i'
-
     def __init__(self, context):
         self.context = context
 
@@ -26,3 +25,16 @@ class DossierNameFromTitle(object):
     def title(self):
         seq_number = getUtility(ISequenceNumber).get_number(self.context)
         return self.format % seq_number
+
+    @property
+    def format(self):
+        """ Since the workspace content type provides IDossierMarker, we cant
+            create a new interface to provide INameFromTitle for workspaces.
+            Plone cant decide which one to use if we register another interface
+            prividing the same thing, so it decides to use none of them.
+            To work around this, we can simply check if the content type is
+            a workspace in here to decide which format to use.
+        """
+        if IWorkspace.providedBy(self.context):
+            return u'workspace-%i'
+        return u'dossier-%i'
