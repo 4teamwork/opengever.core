@@ -177,4 +177,8 @@
     </type>
   </bindings>
 
+  <bindings>
+    <type type_id="opengever.workspace.root" />
+  </bindings>
+
 </object>

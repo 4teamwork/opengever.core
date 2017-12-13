@@ -215,6 +215,11 @@
     </permission>
 
 
+    <permission name="opengever.workspace: Add WorkspaceRoot" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+
     <!--migrated from opengever/policy/base/profiles/default/rolemap.xml-->
     <permission name="plone.restapi: Use REST API" acquire="True">
       <role name="Manager" />

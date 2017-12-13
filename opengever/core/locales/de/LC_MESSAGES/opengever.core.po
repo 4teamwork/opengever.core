@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-12-11 17:30+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -231,6 +231,10 @@ msgstr "Amtswechsler umschalten"
 msgid "Unlock unused repository prefixes."
 msgstr "Freigabe von ungebrauchten Aktenzeichen Prefixen."
 
+#: ./opengever/core/profiles/default/types/opengever.workspace.root.xml
+msgid "WorkspaceRoot"
+msgstr "Teamräume"
+
 #: ./opengever/core/profiles/default/types/opengever.inbox.yearfolder.xml
 msgid "YearFolder"
 msgstr "Jahresordner"
@@ -264,4 +268,3 @@ msgstr "Mit Kommentar"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "without comment"
 msgstr "Ohne Kommentar"
-

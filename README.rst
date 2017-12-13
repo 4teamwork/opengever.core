@@ -545,6 +545,7 @@ Objects
     - self.sablon_template
     - self.tasktemplatefolder
       - self.tasktemplate
+  - self.workspace_root
 
 .. </fixture:objects>
 

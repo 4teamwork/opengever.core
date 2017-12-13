@@ -53,6 +53,7 @@ class OpengeverContentFixture(object):
                 with self.features('meeting'):
                     self.create_committees()
                 self.create_inbox()
+                self.create_workspace_root()
 
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
@@ -849,6 +850,12 @@ class OpengeverContentFixture(object):
             .having(repository_folder=repository_folder,
                     group_id=group_id))
         return committee
+
+    def create_workspace_root(self):
+        self.workspace_root = self.register('workspace_root', create(
+            Builder('workspace_root').having(id=u'workspaces',
+                                             title_de=u'Teamr\xe4ume',
+                                             title_fr=u'Espace partag\xe9')))
 
     @contextmanager
     def login(self, user):

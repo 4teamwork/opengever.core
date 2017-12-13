@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2017-12-11 17:30+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -226,6 +226,10 @@ msgstr "commuter l'agent public"
 msgid "Unlock unused repository prefixes."
 msgstr "Déblocage de préfixes de référence inutilisés."
 
+#: ./opengever/core/profiles/default/types/opengever.workspace.root.xml
+msgid "WorkspaceRoot"
+msgstr "Espace partagé"
+
 #: ./opengever/core/profiles/default/types/opengever.inbox.yearfolder.xml
 msgid "YearFolder"
 msgstr "Classeur pour l'année"
@@ -259,4 +263,3 @@ msgstr "Avec commentaire"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "without comment"
 msgstr "Sans commentaire"
-

@@ -206,4 +206,11 @@
                    "
       />
 
+  <!-- Should be ignored, permission is only granted to manager on site root -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.workspace: Add WorkspaceRoot,
+                   "
+      />
+
 </configure>

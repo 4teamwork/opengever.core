@@ -556,3 +556,10 @@ class ProposalTemplateBuilder(DocumentBuilder):
 
 
 builder_registry.register('proposaltemplate', ProposalTemplateBuilder)
+
+
+class WorkspaceRootBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.root'
+
+
+builder_registry.register('workspace_root', WorkspaceRootBuilder)

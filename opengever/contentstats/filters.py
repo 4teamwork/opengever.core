@@ -19,6 +19,7 @@ OG_TYPES_BLACKLIST = [
     'opengever.meeting.committeecontainer',
     'opengever.private.root',
     'opengever.repository.repositoryroot',
+    'opengever.workspace.root',
 ]
 
 
