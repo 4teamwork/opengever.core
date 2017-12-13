@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from datetime import datetime
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
@@ -11,6 +12,16 @@ import transaction
 
 
 DEFAULT_TZ = pytz.timezone('Europe/Zurich')
+
+
+@contextmanager
+def time_based_intids():
+    """To ensure predictable IntIds in tests, this context manager patches
+    the IntIds utility so that IntIds are created based on the current time
+    """
+    # register intid utility
+    yield
+    # deregister intid utility
 
 
 def localized_datetime(*args, **kwargs):

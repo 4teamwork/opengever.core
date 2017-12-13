@@ -17,6 +17,7 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import assets
+from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
 from operator import methodcaller
 from plone import api
@@ -709,7 +710,8 @@ class OpengeverContentFixture(object):
         with freeze(datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)) as clock:
             with ticking_creator(clock, minutes=2):
                 with self.ticking_proposal_history(clock, seconds=1):
-                    yield
+                    with time_based_intids():
+                        yield
 
     @contextmanager
     def ticking_proposal_history(self, clock, **forward):
