@@ -4,12 +4,7 @@ Dossier schützen
 Einleitung
 ----------
 In diesem Kapitel wird beschrieben, wie die übergeordnet definierten
-Berechtigungen eines Dossiers übersteuert werden können. Dies wurde im Zug des
-`OGIP 23 - Berechtigung für grosse OE (Ordnungs-Einheit) <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip/ogip-23-onegov-gever-berechtigung-fur-grosse-oe.docx>`_ umgesetzt.
-
-Konkret können so die übergeordneten Berechtigungen übersteuert werden.
-
-|img-berechtigungoe-1|
+Berechtigungen eines Dossiers übersteuert werden können.
 
 Im Tab „Info“ ist in der Spalte "Dossier verwalten" ersichtlich, welche Personen
 und Gruppen dazu berechtigt sind Dossier zu schützen resp. die Berechtigungen
@@ -45,6 +40,14 @@ Auf der Maske unter „Schützen“ können folgende Anpassungen gemacht werden.
 Werden keine Namen in den Feldern eingetragen, bleibt die Berechtigung wie bis
 anhin. Ansonsten gilt nach dem Speichern die neu gesetzte Berechtigung.
 
+Tipp
+----
+Beim Berechtigungs-Vorgang können auch ganze Gruppen ausgewählt werden. Wird
+dann auf den Gruppennamen geklickt, erscheint eine Auflistung, welche Benutzer
+in dieser Gruppe enthalten sind.
+
+|img-berechtigungoe-7|
+
 Hinweise
 --------
 Sobald die bestehenden Berechtigungen mit der in diesem Kapitel beschriebenen
@@ -64,6 +67,9 @@ Person zugewiesen, wird ihr wie gewohnt die Berechtigung automatisch gegeben.
 .. |img-berechtigungoe-3| image:: img/media/img-berechtigungoe-3.png
 .. |img-berechtigungoe-4| image:: img/media/img-berechtigungoe-4.png
 .. |img-berechtigungoe-5| image:: img/media/img-berechtigungoe-5.png
+.. |img-berechtigungoe-6| image:: img/media/img-berechtigungoe-6.png
+.. |img-berechtigungoe-7| image:: img/media/img-berechtigungoe-7.png
+
 
 
 .. disqus::
