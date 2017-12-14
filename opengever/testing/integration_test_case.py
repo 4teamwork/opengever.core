@@ -379,11 +379,15 @@ class IntegrationTestCase(TestCase):
                 obj,
                 msg or ''))
 
-    def assert_journal_entry(self, obj, action_type, title, entry=-1):
+    def assert_journal_entry(self, obj, action_type, title, comment=None, entry=-1):  # noqa
         entry = get_journal_entry(obj, entry)
         action = entry.get('action')
+
         self.assertEquals(action_type, action.get('type'))
         self.assertEquals(title, translate(action.get('title')))
+
+        if comment is not None:
+            self.assertEquals(comment, entry.get('comments'))
 
     def assert_local_roles(self, expected_roles, user, context):
         if hasattr(user, 'getId'):
