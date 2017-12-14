@@ -1,6 +1,6 @@
 
-Kommission / Gremium und seine Mitglieder
------------------------------------------
+Kommission / Gremium mit seinen Mitgliedern und Sitzungen
+---------------------------------------------------------
 
 Kommission / Gremium erfassen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,6 +54,31 @@ automatisch zugewiesen.
 
 |img-spvupdate-7|
 
+Sitzung erstellen
+~~~~~~~~~~~~~~~~~
+Um eine neue Sitzung zu erstellen gehen Sie auf das entsprechende Gremium (in
+diesem Fall Musterhausen).
+
+|img-spvupdate-36|
+
+Innerhalb des gewünschten Gremiums können Sie wie gewohnt mittels "Hinzufügen"
+und dann "Sitzung" eine neue Sitzung erstellen.
+
+|img-spvupdate-37|
+
+Danach erscheint die Eingabemaske fürs Sitzungsdossier - eingeteilt in zwei
+Tabs: Im ersten Tab können Sie Sitzungs-Titel sowie Datum (Start/Ende) eingeben.
+
+|img-spvupdate-38|
+
+Im zweiten Tab können Sie dann die Beschreibung und weitere Metadaten eingeben.
+
+|img-spvupdate-39|
+
+Nach dem Speichervorgang erscheint die Sitzung neu auch in der Sitzungsübersicht.
+
+|img-spvupdate-40|
+
 .. |img-spvupdate-1| image:: ../img/media/img-spvupdate-1.png
 .. |img-spvupdate-2| image:: ../img/media/img-spvupdate-2.png
 .. |img-spvupdate-3| image:: ../img/media/img-spvupdate-3.png
@@ -61,6 +86,11 @@ automatisch zugewiesen.
 .. |img-spvupdate-5| image:: ../img/media/img-spvupdate-5.png
 .. |img-spvupdate-6| image:: ../img/media/img-spvupdate-6.png
 .. |img-spvupdate-7| image:: ../img/media/img-spvupdate-7.png
+.. |img-spvupdate-36| image:: ../img/media/img-spvupdate-36.png
+.. |img-spvupdate-37| image:: ../img/media/img-spvupdate-37.png
+.. |img-spvupdate-38| image:: ../img/media/img-spvupdate-38.png
+.. |img-spvupdate-39| image:: ../img/media/img-spvupdate-39.png
+.. |img-spvupdate-40| image:: ../img/media/img-spvupdate-40.png
 
 
 

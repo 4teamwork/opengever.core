@@ -29,9 +29,17 @@ Nr. 3).
 
 |img-spvupdate-26|
 
+.. note::
+    Schliessen Sie die Traktanden erst in der Nachbearbeitung definitiv ab.
+    Sobald ein Traktandum abgeschlossen wird, kann die Traktandenliste nicht
+    mehr verändert werden.
+    |img-spvupdate-33|
+
+
 .. |img-spvupdate-24| image:: ../img/media/img-spvupdate-24.png
 .. |img-spvupdate-25| image:: ../img/media/img-spvupdate-25.png
 .. |img-spvupdate-26| image:: ../img/media/img-spvupdate-26.png
+.. |img-spvupdate-33| image:: ../img/media/img-spvupdate-33.png
 
 
 .. disqus::
