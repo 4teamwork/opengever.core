@@ -54,3 +54,15 @@ class TestDelegateTaskForm(IntegrationTestCase):
         self.assertEqual('fa', subtask.responsible_client)
         self.assertEqual('task-state-open', api.content.get_state(subtask))
 
+    @browsing
+    def test_issuer_is_prefilled_with_current_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, view='delegate_recipients')
+
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill('fa:robert.ziegler')
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual(
+            self.regular_user.getId(), browser.find('Issuer').value)

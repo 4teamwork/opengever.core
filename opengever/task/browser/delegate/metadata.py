@@ -4,6 +4,7 @@ from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import create_subtasks
+from plone import api
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
@@ -12,7 +13,6 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
-from zope.component import getMultiAdapter
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
@@ -93,15 +93,9 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
         url = self.context.absolute_url()
         return self.request.RESPONSE.redirect(url)
 
-    def update(self):
-        # put default value for issuer into request
-        portal_state = getMultiAdapter((self.context, self.request),
-                                       name=u"plone_portal_state")
-        member = portal_state.member()
-        if not self.request.get('form.widgets.issuer', None):
-            self.request.set('form.widgets.issuer', [member.getId()])
-
-        super(UpdateMetadataForm, self).update()
+    def updateWidgets(self):
+        super(UpdateMetadataForm, self).updateWidgets()
+        self.widgets['issuer'].value = [api.user.get_current().getId()]
 
 
 class UpdateMetadataStepView(FormWrapper):
