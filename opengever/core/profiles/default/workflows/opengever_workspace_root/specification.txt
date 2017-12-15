@@ -1,0 +1,34 @@
+[Workspace root workflow]
+Role mapping:
+  workspaces user => WorkspacesUser
+  workspaces creator => WorkspacesCreator
+  admin => Administrator
+  systems administrator => Manager
+
+workspaces user role description:
+  Anyone who uses the workspace module is a workspace user.
+  Workspace users can see the workspace root.
+
+workspaces creator role description:
+  Workspaces creators are allowed to create new workspaces.
+
+Visible roles:
+  workspaces user
+  workspaces creator
+
+
+General:
+  An admin can always perform the same actions as a workspaces user.
+  An admin can always perform the same actions as a workspaces creator.
+
+  A systems administrator can always add.
+  A systems administrator can always view.
+  A systems administrator can always edit.
+  A systems administrator can always manage security.
+  A systems administrator can always use the developer tools.
+
+
+Initial Status: Active
+Status Active:
+  A workspaces user can view.
+  A workspaces creator can add.

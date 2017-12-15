@@ -13,6 +13,9 @@
   <lawgiver:role name="Publisher" />
   <lawgiver:role name="DossierManager" />
 
+  <lawgiver:role name="WorkspacesUser" />
+  <lawgiver:role name="WorkspacesCreator" />
+
   <!--
       When inventing new action groups, please add a translation in
       opengever/core/locales/ftw.lawgiver.pot
@@ -47,6 +50,7 @@
                    opengever.private: Add private dossier,
                    opengever.task: Add task comment,
                    opengever.task: Add task,
+                   opengever.workspace: Add Workspace,
                    "
       />
 
@@ -201,9 +205,36 @@
   <lawgiver:ignore
       permissions="
                    opengever.workspace: Add WorkspaceRoot,
-                   opengever.workspace: Add Workspace,
                    opengever.workspace: Add WorkspaceFolder,
                    "
       />
+
+
+  <lawgiver:workflow name="opengever_committeecontainer_workflow">
+    <lawgiver:ignore
+        permissions="Sharing page: Delegate WorkspacesCreator role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     opengever.workspace: Add Workspace" />
+  </lawgiver:workflow>
+
+
+  <lawgiver:workflow name="opengever_committee_workflow">
+    <lawgiver:ignore
+        permissions="Sharing page: Delegate WorkspacesCreator role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     opengever.workspace: Add Workspace" />
+  </lawgiver:workflow>
+
+
+  <lawgiver:workflow name="opengever_workspace_root">
+    <lawgiver:ignore
+        permissions="Sharing page: Delegate CommitteeAdministrator role,
+                     Sharing page: Delegate CommitteeMember role,
+                     Sharing page: Delegate CommitteeResponsible role,
+                     Sharing page: Delegate MeetingUser role" />
+    <lawgiver:map_permissions
+        action_group="add"
+        permissions="opengever.workspace: Add Workspace" />
+  </lawgiver:workflow>
 
 </configure>

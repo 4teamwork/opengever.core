@@ -11,6 +11,8 @@
     <role name="Records Manager" />
     <role name="Role Manager" />
     <role name="DossierManager" />
+    <role name="WorkspacesUser" />
+    <role name="WorkspacesCreator" />
   </roles>
   <permissions>
 
@@ -31,6 +33,13 @@
       <role name="Manager" />
       <role name="Role Manager" />
     </permission>
+
+    <permission name="Sharing page: Delegate CommitteeAdministrator role" acquire="False" />
+    <permission name="Sharing page: Delegate CommitteeMember role" acquire="False" />
+    <permission name="Sharing page: Delegate CommitteeResponsible role" acquire="False" />
+    <permission name="Sharing page: Delegate MeetingUser role" acquire="False" />
+    <permission name="Sharing page: Delegate WorkspacesCreator role" acquire="False" />
+    <permission name="Sharing page: Delegate WorkspacesUser role" acquire="False" />
 
     <permission name="opengever.sharing: List Protected Objects" acquire="False">
       <role name="Administrator" />

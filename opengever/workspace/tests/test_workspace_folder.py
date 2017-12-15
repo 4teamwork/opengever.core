@@ -24,8 +24,10 @@ class TestWorkspaceFolder(IntegrationTestCase):
         assert_no_error_messages(browser)
 
     def test_sequence_number(self):
+        self.login(self.manager)
         self.assertEquals(
             1, getUtility(ISequenceNumber).get_number(self.workspace_folder))
 
     def test_workspace_generated_ids(self):
+        self.login(self.manager)
         self.assertEquals('folder-1', self.workspace_folder.getId())

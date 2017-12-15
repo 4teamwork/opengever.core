@@ -21,6 +21,7 @@
   <object name="opengever_tasktemplate_workflow" meta_type="Workflow" />
   <object name="opengever_tasktemplatefolder_workflow" meta_type="Workflow" />
   <object name="opengever_templatefolder_workflow" meta_type="Workflow" />
+  <object name="opengever_workspace_root" meta_type="Workflow" />
 
   <bindings>
 
@@ -132,9 +133,13 @@
       <bound-workflow workflow_id="opengever_tasktemplatefolder_workflow" />
     </type>
 
-    <type type_id="opengever.workspace.root" />
+    <type type_id="opengever.workspace.root">
+      <bound-workflow workflow_id="opengever_workspace_root" />
+    </type>
+
     <type type_id="opengever.workspace.workspace" />
     <type type_id="opengever.workspace.folder" />
+
   </bindings>
 
 </object>
