@@ -1,12 +1,8 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
-from plone.app.testing import TEST_USER_ID
-import datetime
+from plone import api
 
 
 class TestDelegateTaskToInbox(IntegrationTestCase):
@@ -33,26 +29,28 @@ class TestDelegateTaskToInbox(IntegrationTestCase):
                          statusmessages.info_messages())
 
 
-class TestDelegateTaskForm(FunctionalTestCase):
+class TestDelegateTaskForm(IntegrationTestCase):
 
     @browsing
-    def test_delegate(self, browser):
-        task = create(Builder('task')
-                      .titled(u'A Task')
-                      .having(issuer=TEST_USER_ID,
-                              deadline=datetime.date(2013, 1, 1))
-                      .in_state('task-state-in-progress'))
+    def test_delegate_creates_subtask(self, browser):
+        self.login(self.regular_user, browser=browser)
 
-        # pre-fill responsibles
-        selected_user = '{}:{}'.format(self.org_unit.id(), self.user.userid)
-        browser.login().visit(task, view='delegate_recipients')
+        browser.open(self.task, view='delegate_recipients')
 
+        # step 1
         form = browser.find_form_by_field('Responsibles')
-        form.find_widget('Responsibles').fill(selected_user)
+        form.find_widget('Responsibles').fill('fa:robert.ziegler')
+        browser.css('#form-buttons-save').first.click()
 
-        browser.css('#form-buttons-save').first.click()  # can't use submit()
+        # step 2
+        browser.css('#form-buttons-save').first.click()
 
-        form = browser.find_form_by_field('Issuer')
-        form.find_widget('Issuer').fill(self.user.userid)
+        self.assertEqual(['1 subtasks were create.'],
+                         statusmessages.info_messages())
 
-        browser.css('#form-buttons-save').first.click()  # can't use submit()
+        subtask = self.task.objectValues()[-1]
+        self.assertEqual(self.task.title, subtask.title)
+        self.assertEqual('robert.ziegler', subtask.responsible)
+        self.assertEqual('fa', subtask.responsible_client)
+        self.assertEqual('task-state-open', api.content.get_state(subtask))
+
