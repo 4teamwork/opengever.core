@@ -57,6 +57,26 @@ msgstr ""
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr ""
 
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--active"
+msgstr ""
+
+#. Default: "Inactive"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--inactive"
+msgstr ""
+
+#. Default: "deactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--deactivate--active_inactive"
+msgstr ""
+
+#. Default: "reactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--reactivate--inactive_active"
+msgstr ""
+
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
@@ -80,6 +100,11 @@ msgstr ""
 #. Default: "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--STATUS--active"
 msgstr ""
 
 #. Default: "reactivate"

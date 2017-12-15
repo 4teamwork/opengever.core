@@ -57,6 +57,26 @@ msgstr "A committe member is part of a committee and can view the committee data
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--active"
+msgstr "Active"
+
+#. Default: "Inactive"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--inactive"
+msgstr "Inactive"
+
+#. Default: "deactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--deactivate--active_inactive"
+msgstr "deactivate"
+
+#. Default: "reactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--reactivate--inactive_active"
+msgstr "reactivate"
+
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
@@ -81,6 +101,11 @@ msgstr "The committee admin is responsible for creating and managing committees 
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
 msgstr "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--STATUS--active"
+msgstr "Active"
 
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
