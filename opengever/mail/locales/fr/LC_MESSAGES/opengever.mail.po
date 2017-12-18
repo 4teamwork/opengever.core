@@ -26,7 +26,7 @@ msgstr "Pas d'adresse e-mail"
 
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "Save attachments"
-msgstr "Sauvegarder les appendices"
+msgstr "Sauvegarder les pièces jointes"
 
 #: ./opengever/mail/browser/send_document.py
 msgid "Sent mail filed as '${title}'."
@@ -73,7 +73,7 @@ msgstr "Vous n'avez sélectionné aucune appendice."
 #. Default: "This mail has no attachments to extract."
 #: ./opengever/mail/browser/extract_attachments.py
 msgid "error_no_attachments_to_extract"
-msgstr "Cet e-mail n'a pas d'annexe à extraire."
+msgstr "Cet e-mail n'a pas de pièce jointe à extraire."
 
 #. Default: "Extern receiver"
 #: ./opengever/mail/browser/send_document.py
@@ -93,12 +93,12 @@ msgstr "Envoyer les documents par e-mail"
 #. Default: "Select the attachments that should be saved. From every selected attachment a document in the parent dossier will be created."
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "help_attachments_to_save"
-msgstr "Sélectionner les annexes à extraire. De chaque appendice sélectionnée un document sera créé dans le dossier maître."
+msgstr "Sélectionner les pièces jointes à extraire. De chaque pièce jointe sélectionnée un document sera créé dans le dossier maître."
 
 #. Default: "Select which attachments should be deleted."
 #: ./opengever/mail/browser/templates/extract_attachments.pt
 msgid "help_delete_action"
-msgstr "Sélectionnez les annexes à effacer."
+msgstr "Sélectionnez les pièces jointes à effacer."
 
 #. Default: "email addresses of the receivers. Enter manually the addresses, one per each line."
 #: ./opengever/mail/browser/send_document.py
@@ -220,7 +220,7 @@ msgstr "Aperçu"
 #. Default: "Save attachments"
 #: ./opengever/mail/browser/templates/attachments.pt
 msgid "label_save_attachments"
-msgstr "Sauvegarder les appendices"
+msgstr "Sauvegarder les pièces jointes"
 
 #. Default: "see attachment"
 #: ./opengever/mail/browser/send_document.py
