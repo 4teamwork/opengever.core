@@ -1,4 +1,5 @@
 from opengever.meeting import is_meeting_feature_enabled
+from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
 
 
@@ -55,18 +56,19 @@ class ModelProxyEditForm(object):
         if self.request.method != 'GET':
             return
 
-        prefix = 'form.widgets.'
         values = self.get_edit_values(self.fields.keys())
 
         for fieldname, value in values.items():
-            self.request[prefix + fieldname] = value
+            widget = self.widgets[fieldname]
+            value = IDataConverter(widget).toWidgetValue(value)
+            widget.value = value
 
     def get_edit_values(self, keys):
         return self.context.get_edit_values(keys)
 
     def updateWidgets(self):
-        self.inject_initial_data()
         super(ModelProxyEditForm, self).updateWidgets()
+        self.inject_initial_data()
 
     def partition_data(self, data):
         obj_data, model_data = self.content_type.partition_data(data)
