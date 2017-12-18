@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Fix plonesite removal. [phgross]
 - Bump ftw.bumblebee to skip checksum calculation for unsupported mimetypes. [deiferni]
 - Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
 - OGIP 17: Add workspace root content type [raphael-s]
