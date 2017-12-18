@@ -9,6 +9,7 @@ Changelog
 - Fix pre-filling committee group id in edit form. [deiferni]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]
 - OGIP 17: Add workspace content type [raphael-s]
+- Fix active field in the team edit form. [phgross]
 - Bump ftw.bumblebee to skip checksum calculation for unsupported mimetypes. [deiferni]
 - Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
 - OGIP 17: Add workspace root content type [raphael-s]
