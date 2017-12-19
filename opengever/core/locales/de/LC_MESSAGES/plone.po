@@ -61,6 +61,26 @@ msgstr "Ein Gremien-Mitglied ist Teil eines Gremiums und kann Inhalte wie Sitzun
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
 msgstr "Die Gremien-Verantwortliche Person ist zuständig für ein Kommitee. Sie erstellt, traktandiert und protokolliert Sitzungen und kann das Gremium konfigurieren und deaktivieren. Diese Rolle wird vom System automatisch vergeben."
 
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--active"
+msgstr "Aktiv"
+
+#. Default: "Inactive"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--STATUS--inactive"
+msgstr "Inaktiv"
+
+#. Default: "deactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--deactivate--active_inactive"
+msgstr "deaktivieren"
+
+#. Default: "reactivate"
+#: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
+msgid "opengever_committee_workflow--TRANSITION--reactivate--inactive_active"
+msgstr "reaktivieren"
+
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
@@ -86,8 +106,12 @@ msgstr "Ein/e Gremien-AdministratorIn ist verantwortlich für das erstellen und 
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
 msgstr "Alle Personen, die mit dem Sitzungsmodul arbeiten, werden als SitzungsbenutzerIn bezeichnet. Dadurch sehen sie den Reiter «Sitzungen». Um auf die verschiedenen Gremien zugreifen zu können sind pro Gremium weitere Rollen zu vergeben."
 
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
+msgid "opengever_committeecontainer_workflow--STATUS--active"
+msgstr "Aktiv"
+
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
 msgstr "reaktivieren"
-

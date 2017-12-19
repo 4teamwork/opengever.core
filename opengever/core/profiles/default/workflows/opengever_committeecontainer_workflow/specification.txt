@@ -24,7 +24,6 @@ General:
   A manager can always edit.
   A manager can always manage security.
   A manager can always use the developer tools.
-  A manager can always use the REST API.
 
 
 Initial Status: Active

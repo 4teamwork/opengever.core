@@ -104,15 +104,6 @@
       />
 
 
-  <lawgiver:map_permissions
-      action_group="use the REST API"
-      permissions="
-                   plone.restapi: Access Plone vocabularies,
-                   plone.restapi: Use REST API,
-                   "
-      />
-
-
   <!-- The "ftw.keywordwidget: Add new term" permission is checked on the
        dossier add form (repository folder context) as well as on the dossier
        edit form (dossier context).
