@@ -5,6 +5,8 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 
 
 class TestTestingFixture(IntegrationTestCase):
@@ -18,6 +20,16 @@ class TestTestingFixture(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertEquals(DateTime('2016/08/31 09:01:33 GMT+2'),
                           self.repository_root.created())
+
+    def test_repository_root_has_static_intid(self):
+        self.login(self.regular_user)
+        self.assertEquals(1008013300,
+                          getUtility(IIntIds).getId(self.repository_root))
+
+    def test_dossier_has_static_intid(self):
+        self.login(self.regular_user)
+        self.assertEquals(1014013300,
+                          getUtility(IIntIds).getId(self.dossier))
 
     def test_repository_root_has_static_uuid(self):
         self.login(self.regular_user)
