@@ -27,6 +27,7 @@ class ISelectRecipientsSchema(Schema):
             default=u'Select one or more responsibles. For each selected '
             u'responsible a subtask will be created and assigned.'),
         required=True,
+        missing_value=[],
         value_type=schema.Choice(
             source=AllUsersInboxesAndTeamsSourceBinder()))
 

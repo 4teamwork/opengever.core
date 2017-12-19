@@ -66,3 +66,14 @@ class TestDelegateTaskForm(IntegrationTestCase):
 
         self.assertEqual(
             self.regular_user.getId(), browser.find('Issuer').value)
+
+    @browsing
+    def test_responsible_is_required(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, view='delegate_recipients')
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual(
+            ['Required input is missing.'],
+            browser.css('#formfield-form-widgets-responsibles .error').text)

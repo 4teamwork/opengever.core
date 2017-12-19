@@ -12,6 +12,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.interfaces import IDataConverter
 from zope import schema
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
@@ -95,7 +96,9 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
 
     def updateWidgets(self):
         super(UpdateMetadataForm, self).updateWidgets()
-        self.widgets['issuer'].value = [api.user.get_current().getId()]
+        widget = self.widgets['issuer']
+        value = api.user.get_current().getId()
+        widget.value = IDataConverter(widget).toWidgetValue(value)
 
 
 class UpdateMetadataStepView(FormWrapper):
