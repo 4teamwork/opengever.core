@@ -5,13 +5,22 @@ Changelog
 2017.7.5 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix pre-filling committee group id in edit form. [deiferni]
 
 
 2017.7.4 (2017-12-09)
 ---------------------
 
 - Bump ftw.recipe.deployment version.
+- Fix plonesite removal. [phgross]
+- Bump ftw.bumblebee to skip checksum calculation for unsupported mimetypes. [deiferni]
+- Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
+- OGIP 17: Add workspace root content type [raphael-s]
+- Fix force-checkin for administrators. [phgross]
+- Implement workspace module basics [raphael-s]
+- Allow to add proposal documents to tasks. [tarnap]
+- Improve Office Connector testing. [Rotonen]
+- SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
 
 
 2017.7.3 (2017-12-08)
