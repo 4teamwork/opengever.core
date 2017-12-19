@@ -632,14 +632,6 @@ class Proposal(ProposalBase):
             self.get_repository_folder_title(language))
         return super(Proposal, self).update_model(data)
 
-    def get_edit_values(self, fieldnames):
-        values = super(Proposal, self).get_edit_values(fieldnames)
-        committee = values.pop('committee', None)
-        if committee:
-            committee = str(committee.committee_id)
-            values['committee'] = committee
-        return values
-
     def sync_model(self, proposal_model=None):
         proposal_model = proposal_model or self.load_model()
 

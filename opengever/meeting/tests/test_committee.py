@@ -217,6 +217,9 @@ class TestCommittee(IntegrationTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(u'A c\xf6mmittee', model.title)
 
+        browser.open(self.committee, view='edit')
+        self.assertEqual('committee_ver_group', browser.find('Group').value)
+
 
 class TestCommitteeWorkflow(IntegrationTestCase):
 

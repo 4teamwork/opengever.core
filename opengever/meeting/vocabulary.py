@@ -21,7 +21,7 @@ class CommitteeVocabulary(object):
     def __call__(self, context):
         return SimpleVocabulary([
             SimpleTerm(value=committee,
-                       token=committee.committee_id,
+                       token=str(committee.committee_id),
                        title=committee.title)
             for committee in self.get_committees()
         ])
