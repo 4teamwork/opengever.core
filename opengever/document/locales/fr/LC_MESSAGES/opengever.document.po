@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-27 13:45+0000\n"
+"POT-Creation-Date: 2018-01-29 09:52+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -177,7 +177,7 @@ msgstr "Vous étes en train de télécharger une copie du document ${filename}."
 msgid "error_file_and_preserved_as_paper"
 msgstr "Vous n'avez pas sélectionné un fichier ni conservé un document en version papier. Merci de corriger cela."
 
-#. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
+#. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire, utilisez l'adresse E-Mail ${mailaddress}  ou glissez-le dans le dossier (Drag'n'Drop)."
@@ -328,6 +328,11 @@ msgstr "Avec check-out"
 #: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
 msgstr "Commentaire de l'historique"
+
+#. Default: "Checkout"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_checkout"
+msgstr "Faire le check-out"
 
 #. Default: "Checkout and edit"
 #: ./opengever/document/browser/templates/macros.pt
@@ -552,6 +557,11 @@ msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne 
 #: ./opengever/document/browser/templates/macros.pt
 msgid "no_file"
 msgstr "Aucun fichier trouvé"
+
+#. Default: "Office connector unsupported type"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "oc_unsupported_message"
+msgstr "Ce format de document n'est pas supporté par Office Connector et ne peut donc pas être directement édité."
 
 #. Default: "Following documents are checked out:"
 #: ./opengever/document/browser/templates/logout_overlay.pt
