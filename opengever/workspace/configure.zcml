@@ -10,4 +10,6 @@
   <include package=".browser" />
   <include package=".behaviors" />
 
+  <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
+
 </configure>
