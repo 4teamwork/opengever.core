@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-20 15:12+0000\n"
+"POT-Creation-Date: 2017-12-20 18:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,11 @@ msgstr ""
 msgid "label_documents"
 msgstr ""
 
+#. Default: "Responsible"
+#: ./opengever/workspace/browser/tabs.py
+msgid "label_dossier_responsible"
+msgstr ""
+
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_journal"
@@ -29,12 +34,27 @@ msgstr ""
 msgid "label_overview"
 msgstr ""
 
+#. Default: "Reference Number"
+#: ./opengever/workspace/browser/tabs.py
+msgid "label_reference"
+msgstr ""
+
 #. Default: "Tasks"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_tasks"
 msgstr ""
 
+#. Default: "Title"
+#: ./opengever/workspace/browser/tabs.py
+msgid "label_title"
+msgstr ""
+
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_trash"
+msgstr ""
+
+#. Default: "Workspaces"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_workspaces"
 msgstr ""

@@ -2,7 +2,7 @@ from ftw.table import helper
 from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import readable_ogds_author
-from opengever.tabbedview import _
+from opengever.workspace import _
 
 
 class Workspaces(Dossiers):
