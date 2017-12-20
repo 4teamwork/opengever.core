@@ -340,7 +340,7 @@ msgstr "Es ist nicht erlaubt Objekte dieses Typs einzufügen."
 #. Default: "Selected objects successfully copied."
 #: ./opengever/base/browser/copy_items.py
 msgid "msg_successfuly_copied"
-msgstr "Die selektierten Objekte wurden kopiert."
+msgstr "Die selektierten Objekte wurden in die Zwischenablage kopiert."
 
 #. Default: "Objects from clipboard successfully pasted."
 #: ./opengever/base/browser/paste.py
