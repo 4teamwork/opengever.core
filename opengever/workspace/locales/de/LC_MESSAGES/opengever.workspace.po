@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-11 16:16+0000\n"
+"POT-Creation-Date: 2017-12-20 15:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,3 +13,28 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#. Default: "Documents"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_documents"
+msgstr "Dokumente"
+
+#. Default: "Journal"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_journal"
+msgstr "Journal"
+
+#. Default: "Overview"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_overview"
+msgstr "Übersicht"
+
+#. Default: "Tasks"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_tasks"
+msgstr "Aufgaben"
+
+#. Default: "Trash"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_trash"
+msgstr "Papierkorb"

@@ -1,4 +1,4 @@
-from opengever.dossier import _
+from opengever.workspace import _
 from opengever.tabbedview import GeverTabbedView
 
 
