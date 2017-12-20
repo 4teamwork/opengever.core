@@ -201,6 +201,7 @@
   <lawgiver:ignore
       permissions="
                    opengever.workspace: Add WorkspaceRoot,
+                   opengever.workspace: Add Workspace,
                    "
       />
 
