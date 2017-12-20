@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-16 14:27+0000\n"
+"POT-Creation-Date: 2017-12-20 08:22+0000\n"
 "PO-Revision-Date: 2017-10-16 16:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "Date du document:"
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Dossier:"
 msgstr "Dossier:"
+
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "File:"
+msgstr "Fichier:"
 
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Reference number:"

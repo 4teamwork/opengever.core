@@ -96,6 +96,9 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
         """Return the filesize in KB."""
         return self.get_file().getSize() / 1024 if self.has_file() else None
 
+    def get_filename(self):
+        return self.get_file().filename if self.has_file() else None
+
     def get_checkout_url(self):
         if not self.has_file() or not self._is_checkout_and_edit_available():
             return None

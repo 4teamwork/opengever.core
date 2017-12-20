@@ -1,6 +1,5 @@
 <aside class="sidebar"
-       i18n:domain="opengever.bumblebee"
-       tal:define="file_size view/overlay/get_file_size">
+       i18n:domain="opengever.bumblebee">
   <main>
     <table class="metadata" tal:attributes="data-mimetype string:${view/overlay/get_mime_type_css_class}">
       <tr>
@@ -20,6 +19,15 @@
       <tr>
         <td class="title" i18n:translate="">Reference number:</td>
         <td class="value" tal:content="view/overlay/get_reference_number"></td>
+      </tr>
+      <tr>
+        <td class="title" i18n:translate="">File:</td>
+        <td class="value">
+          <span tal:replace="view/overlay/get_filename"/>
+          <span span class="discreet">
+            — <span tal:replace="view/overlay/get_file_size"/> KB
+          </span>
+        </td>
       </tr>
       <tr tal:condition="view/overlay/get_description">
         <td class="title" i18n:translate="">Description:</td>
