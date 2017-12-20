@@ -136,7 +136,7 @@ class DocPropertyProvider(object):
         If a namespace (NS) has been configured prefixes keys with that
         namespace.
         """
-        if not value:
+        if value is None:
             return
         key = '.'.join(self.NS + (name,))
         properties[key] = value
@@ -187,11 +187,15 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         return self._as_datetime(
             IDocumentMetadata(self.context).delivery_date)
 
+    def get_document_version(self):
+        return IDocumentMetadata(self.context).get_current_version_id(missing_as_zero=True)
+
     def get_properties(self):
         """Return document properties.
 
         XXX Also contains deprecated properties that will go away eventually.
         """
+
         reference_number = self.get_reference_number()
         sequence_number = str(self.get_sequence_number())
 
@@ -207,6 +211,7 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         self._add_property(properties, 'document_type', self.get_document_type_label())
         self._add_property(properties, 'reception_date', self.get_reception_date())
         self._add_property(properties, 'delivery_date', self.get_delivery_date())
+        self._add_property(properties, 'version_number', self.get_document_version())
 
         return properties
 

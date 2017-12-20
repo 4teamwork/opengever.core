@@ -69,6 +69,7 @@ EXPECTED_DOCUMENT_PROPERTIES = {
     'ogg.document.document_type': u'Contract',
     'ogg.document.reception_date': datetime(2010, 1, 3),
     'ogg.document.delivery_date': datetime(2010, 1, 3),
+    'ogg.document.version_number': 0,
 }
 
 

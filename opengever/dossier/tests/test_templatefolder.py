@@ -59,6 +59,7 @@ class TestDocumentWithTemplateForm(FunctionalTestCase):
          'ogg.document.reference_number': 'Client1 / 1 / 4',
          'ogg.document.sequence_number': '4',
          'ogg.document.title': 'Test Docx',
+         'ogg.document.version_number': 0,
          'ogg.dossier.reference_number': 'Client1 / 1',
          'ogg.dossier.sequence_number': '1',
          'ogg.dossier.title': 'My Dossier',

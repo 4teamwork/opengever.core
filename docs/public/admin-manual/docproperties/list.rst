@@ -47,6 +47,7 @@ Doc-Properties Dokument:
 - ``ogg.document.document_type`` - Dokumenttyp des Dokuments
 - ``ogg.document.reception_date``
 - ``ogg.document.delivery_date``
+- ``ogg.document.version_number``
 
 Neu kann beim Erstellen eines Dokumentes ab Vorlage ein Empfänger angegeben werden. Dies setzt jedoch voraus, dass das neue SQL-basierte Kontaktmodul verwendet wird. Von diesem Empfänger werden die folgenden Doc-Properties geschrieben:
 
