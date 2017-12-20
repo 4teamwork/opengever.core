@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add filename and filesize in bumblebee overlay. [njohner]
+- OGIP 17: Add workspace folder content type [raphael-s]
 - Fix plonesite removal. [phgross]
 - Fix pre-filling committee group id in edit form. [deiferni]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]

@@ -548,6 +548,7 @@ Objects
       - self.tasktemplate
   - self.workspace_root
     - self.workspace
+      - self.workspace_folder
 
 .. </fixture:objects>
 

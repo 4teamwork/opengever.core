@@ -77,7 +77,7 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(18):
             with self.login(self.administrator):
-                self.create_workspace()
+                self.create_workspace_folder_and_workspace()
 
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
@@ -873,11 +873,16 @@ class OpengeverContentFixture(object):
                                              title_de=u'Teamr\xe4ume',
                                              title_fr=u'Espace partag\xe9')))
 
-    def create_workspace(self):
+    def create_workspace_folder_and_workspace(self):
         self.workspace = self.register('workspace', create(
             Builder('workspace').having(title_de=u'Teamraum',
                                         title_fr=u'Espace partag\xe9')
                                 .within(self.workspace_root)))
+
+        self.workspace_folder = self.register('workspace_folder', create(
+            Builder('workspace folder').having(title_de=u'WS F\xc3lder',
+                                               title_fr=u'WS fichi\xe9r')
+                                       .within(self.workspace)))
 
     @contextmanager
     def login(self, user):

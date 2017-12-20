@@ -6,4 +6,6 @@
 
   <permission id="opengever.workspace.AddWorkspace" title="opengever.workspace: Add Workspace" />
 
+  <permission id="opengever.workspace.AddWorkspaceFolder" title="opengever.workspace: Add WorkspaceFolder" />
+
 </configure>

@@ -202,6 +202,7 @@
       permissions="
                    opengever.workspace: Add WorkspaceRoot,
                    opengever.workspace: Add Workspace,
+                   opengever.workspace: Add WorkspaceFolder,
                    "
       />
 
