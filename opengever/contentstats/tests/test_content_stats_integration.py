@@ -94,6 +94,7 @@ class TestContentStatsIntegration(FunctionalTestCase):
             'mail-state-removed',
             'opengever_committee_workflow--STATUS--active',
             'opengever_committee_workflow--STATUS--inactive',
+            'opengever_workspace--STATUS--active',
             'proposal-state-active',
             'proposal-state-submitted',
             'repositoryfolder-state-active',

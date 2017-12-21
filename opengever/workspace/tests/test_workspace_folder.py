@@ -12,7 +12,7 @@ class TestWorkspaceFolder(IntegrationTestCase):
     @skip('Currently broken because we merged conflicting pull requests :-(')
     @browsing
     def test_workspacefolder_is_addable_in_workspacefolder(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.workspace_member, browser)
         browser.visit(self.workspace_folder)
         factoriesmenu.add('WorkspaceFolder')
 
@@ -24,10 +24,10 @@ class TestWorkspaceFolder(IntegrationTestCase):
         assert_no_error_messages(browser)
 
     def test_sequence_number(self):
-        self.login(self.manager)
+        self.login(self.workspace_guest)
         self.assertEquals(
             1, getUtility(ISequenceNumber).get_number(self.workspace_folder))
 
     def test_workspace_generated_ids(self):
-        self.login(self.manager)
+        self.login(self.workspace_guest)
         self.assertEquals('folder-1', self.workspace_folder.getId())

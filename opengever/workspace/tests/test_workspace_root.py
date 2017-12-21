@@ -1,10 +1,11 @@
-from ftw.builder import Builder
-from ftw.builder import create
+from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from opengever.testing.pages import globalnav
+from zExceptions import Unauthorized
 
 
 class TestWorkspaceRoot(IntegrationTestCase):
@@ -20,38 +21,56 @@ class TestWorkspaceRoot(IntegrationTestCase):
         self.assertEquals(u'Teamr\xe4ume', plone.first_heading())
 
     @browsing
-    def test_workspaces_user_is_required_to_see_root(self, browser):
-        """The role WorkspacesUser is required for accessing the workspaces root.
-        """
-        with self.login(self.manager):
-            workspace_user = create(Builder('user').with_roles('WorkspacesUser'))
-
-        workspace_root_title = 'workspaces'
-        with self.login(workspace_user, browser):
-            browser.open()
-            self.assertIn(workspace_root_title, browser.css('#portal-globalnav li').text)
-
-        with self.login(self.regular_user, browser):
-            browser.open()
-            self.assertNotIn(workspace_root_title, browser.css('#portal-globalnav li').text)
+    def test_workspace_admin_permissions(self, browser):
+        self.login(self.workspace_admin, browser)
+        self.assert_root_access(True)
+        self.assert_workspace_addable(True)
 
     @browsing
-    def test_workspaces_creator_is_required_to_add_workspaces(self, browser):
-        """The role WorkspacesCreator is required for adding new workspaces in the root.
-        """
-        with self.login(self.manager):
-            workspace_user = create(
-                Builder('user').named('Workspaces', 'User')
-                .with_roles('WorkspacesUser', on=self.workspace_root))
-            workspace_creator = create(
-                Builder('user').named('Workspaces', 'Creator')
-                .with_roles('WorkspacesUser', 'WorkspacesCreator', on=self.workspace_root))
+    def test_workspace_owner_permissions(self, browser):
+        self.login(self.workspace_owner, browser)
+        self.assert_root_access(True)
+        self.assert_workspace_addable(True)
 
-        with self.login(workspace_creator, browser):
+    @browsing
+    def test_workspace_member_permissions(self, browser):
+        self.login(self.workspace_member, browser)
+        self.assert_root_access(True)
+        self.assert_workspace_addable(False)
+
+    @browsing
+    def test_workspace_guest_permissions(self, browser):
+        self.login(self.workspace_guest, browser)
+        self.assert_root_access(True)
+        self.assert_workspace_addable(False)
+
+    @browsing
+    def test_regular_user_permissions(self, browser):
+        self.login(self.regular_user, browser)
+        self.assert_root_access(False)
+
+    @browsing
+    def test_dossier_responsible_permissions(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.assert_root_access(False)
+
+    def assert_root_access(self, expect_has_access, browser=default_browser):
+        root_id = 'workspaces'
+        browser.open()
+        if expect_has_access:
+            self.assertIn(root_id, globalnav.portaltabs().text)
             browser.open(self.workspace_root)
+            self.assertEquals(u'Teamr\xe4ume', plone.first_heading())
+        else:
+            self.assertNotIn(root_id, globalnav.portaltabs().text)
+            with self.assertRaises(Unauthorized):
+                self.workspace_root
+
+    def assert_workspace_addable(self, expect_is_addable, browser=default_browser):
+        # Requires access to workspace root.
+        browser.open(self.workspace_root)
+        if expect_is_addable:
             self.assertTrue(factoriesmenu.visible())
             self.assertIn('Workspace', factoriesmenu.addable_types())
-
-        with self.login(workspace_user, browser):
-            browser.open(self.workspace_root)
+        else:
             self.assertFalse(factoriesmenu.visible())

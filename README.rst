@@ -487,6 +487,10 @@ Users
 - ``self.records_manager``: ``ramon.flucht``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
+- ``self.workspace_admin``: ``fridolin.hugentobler``
+- ``self.workspace_guest``: ``hans.peter``
+- ``self.workspace_member``: ``beatrice.schrodinger``
+- ``self.workspace_owner``: ``gunther.frohlich``
 
 .. </fixture:users>
 

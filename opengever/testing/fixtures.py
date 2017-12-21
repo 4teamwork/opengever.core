@@ -82,8 +82,8 @@ class OpengeverContentFixture(object):
                 self.create_private_folder()
 
         with self.freeze_at_hour(18):
-            with self.login(self.administrator):
-                self.create_workspace_folder_and_workspace()
+            with self.login(self.workspace_owner):
+                self.create_workspace()
 
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
@@ -143,6 +143,15 @@ class OpengeverContentFixture(object):
         self.records_manager = self.create_user(
             'records_manager', u'Ramon', u'Flucht',
             ['Records Manager'])
+
+        self.workspace_owner = self.create_user(
+            'workspace_owner', u'G\xfcnther', u'Fr\xf6hlich')
+        self.workspace_admin = self.create_user(
+            'workspace_admin', u'Fridolin', u'Hugentobler')
+        self.workspace_member = self.create_user(
+            'workspace_member', u'B\xe9atrice', u'Schr\xf6dinger')
+        self.workspace_guest = self.create_user(
+            'workspace_guest', u'Hans', u'Peter')
 
     def create_teams(self):
         users = [ogds_service().find_user(user.getId())
@@ -921,12 +930,30 @@ class OpengeverContentFixture(object):
             Builder('workspace_root').having(id=u'workspaces',
                                              title_de=u'Teamr\xe4ume',
                                              title_fr=u'Espace partag\xe9')))
+        self.workspace_root.manage_setLocalRoles(self.workspace_owner.getId(),
+                                                 ['WorkspacesUser', 'WorkspacesCreator'])
+        self.workspace_root.manage_setLocalRoles(self.workspace_admin.getId(),
+                                                 ['WorkspacesUser', 'WorkspacesCreator'])
+        self.workspace_root.manage_setLocalRoles(self.workspace_member.getId(),
+                                                 ['WorkspacesUser'])
+        self.workspace_root.manage_setLocalRoles(self.workspace_guest.getId(),
+                                                 ['WorkspacesUser'])
+        self.workspace_root.reindexObjectSecurity()
 
-    def create_workspace_folder_and_workspace(self):
+    def create_workspace(self):
         self.workspace = self.register('workspace', create(
-            Builder('workspace').having(title_de=u'Teamraum',
-                                        title_fr=u'Espace partag\xe9')
-                                .within(self.workspace_root)))
+            Builder('workspace')
+            .having(title_de=u'Teamraum',
+                    title_fr=u'Espace partag\xe9')
+            .within(self.workspace_root)))
+
+        self.workspace.manage_setLocalRoles(self.workspace_admin.getId(),
+                                            ['WorkspaceAdmin'])
+        self.workspace.manage_setLocalRoles(self.workspace_member.getId(),
+                                            ['WorkspaceMember'])
+        self.workspace.manage_setLocalRoles(self.workspace_guest.getId(),
+                                            ['WorkspaceGuest'])
+        self.workspace.reindexObjectSecurity()
 
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder').having(title_de=u'WS F\xc3lder',
