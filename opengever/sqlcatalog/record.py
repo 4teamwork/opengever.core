@@ -13,6 +13,11 @@ import logging
 LOG = logging.getLogger('opengever.sqlcatalog')
 
 
+tables = [
+    'catalog_document',
+]
+
+
 class CatalogRecordBase(Base):
     """Catalog records are entries in the SQL catalog, compareable
     with a "brain" or a "record" of the ZCatalog.
