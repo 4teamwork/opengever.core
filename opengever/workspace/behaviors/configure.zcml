@@ -1,0 +1,16 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="opengever.workspace">
+
+  <include package="plone.behavior" file="meta.zcml" />
+
+  <plone:behavior
+      title="workspace name from title"
+      description="Behavior to get the workpace name/id"
+      provides=".namefromtitle.IWorkspaceNameFromTitle"
+      factory=".namefromtitle.WorkspaceNameFromTitle"
+      for="opengever.workspace.interfaces.IWorkspace"
+      />
+
+</configure>

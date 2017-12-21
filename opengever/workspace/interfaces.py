@@ -1,3 +1,4 @@
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from zope import schema
 from zope.interface import Interface
 
@@ -6,7 +7,7 @@ class IWorkspaceRoot(Interface):
     """ Marker interface for Workspace Roots """
 
 
-class IWorkspace(Interface):
+class IWorkspace(IDossierMarker):
     """ Marker interface for Workspace """
 
 

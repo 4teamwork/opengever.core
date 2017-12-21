@@ -3,4 +3,12 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.workspace">
 
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspace"
+      name="tabbed_view"
+      class=".tabbed.WorkspaceTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
 </configure>
