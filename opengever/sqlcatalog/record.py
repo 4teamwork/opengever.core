@@ -23,6 +23,7 @@ LOG = logging.getLogger('opengever.sqlcatalog')
 
 tables = [
     'catalog_document',
+    'catalog_mail',
 ]
 
 
@@ -124,10 +125,7 @@ class CatalogRecordBase(Base):
         return Oguid.parse(self.oguid).resolve_object()
 
 
-class DocumentCatalogRecord(CatalogRecordBase):
-    __tablename__ = 'catalog_document'
-    portal_type = 'opengever.document.document'
-
+class DocumentishMixin(object):
     sequence_number = Column(Integer, index=True, nullable=False)
     document_author = Column(String(USER_ID_LENGTH), index=True)
     document_date = Column(DateTime, index=True)
@@ -146,3 +144,13 @@ class DocumentCatalogRecord(CatalogRecordBase):
             return ''
 
         return manager.get_checked_out_by() or ''
+
+
+class DocumentCatalogRecord(DocumentishMixin, CatalogRecordBase):
+    __tablename__ = 'catalog_document'
+    portal_type = 'opengever.document.document'
+
+
+class MailCatalogRecord(DocumentishMixin, CatalogRecordBase):
+    __tablename__ = 'catalog_mail'
+    portal_type = 'ftw.mail.mail'
