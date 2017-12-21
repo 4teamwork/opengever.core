@@ -52,6 +52,22 @@ class TestTeamEditForm(IntegrationTestCase):
             u'Projekt \xdcberbaung Dorf S\xfcd', Team.get('1').title)
 
     @browsing
+    def test_values_injected_correclty(self, browser):
+        self.login(self.manager, browser=browser)
+
+        team = Team.get(1)
+        team.active = False
+
+        browser.open(self.contactfolder, view='team-1/edit')
+
+        form = browser.forms['form']
+        self.assertEquals(
+            u'Projekt \xdcberbaung Dorfmatte', form.find_field('Title').value)
+        self.assertIsNone(form.find_field('Active').get('checked'))
+        self.assertEquals(u'projekt_a', form.find_field('Group').value)
+        self.assertEquals(u'fa', form.find_field('Org Unit').value)
+
+    @browsing
     def test_editing_is_only_available_for_managers(self, browser):
         with browser.expect_unauthorized():
             self.login(self.regular_user, browser=browser)

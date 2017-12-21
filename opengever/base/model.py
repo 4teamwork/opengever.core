@@ -88,10 +88,12 @@ class SQLFormSupport(object):
         return self.get_url(context, view='edit')
 
     def get_edit_values(self, fieldnames):
+        _marker = object()
+
         values = {}
         for fieldname in fieldnames:
-            value = getattr(self, fieldname, None)
-            if not value:
+            value = getattr(self, fieldname, _marker)
+            if value is _marker:
                 continue
 
             values[fieldname] = value
