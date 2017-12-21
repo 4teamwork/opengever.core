@@ -22,6 +22,7 @@ Changelog
 - Display document mimetype icon on livesearch results. [Kevin Bieri]
 - Save current treeportlet index in localstorage. [Kevin Bieri]
 - Fix autofocus on forms with keywordwidget.[Kevin Bieri]
+- Implement cross tab logout mechanism. [Kevin Bieri]
 - Add filename and filesize in bumblebee overlay. [njohner]
 - OGIP 17: Add workspace folder content type [raphael-s]
 - Fix plonesite removal. [phgross]
