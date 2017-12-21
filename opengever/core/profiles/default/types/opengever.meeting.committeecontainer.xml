@@ -11,16 +11,16 @@
     <element value="opengever.meeting.committee" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.meeting.committeecontainer.ICommitteeContainer</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.meeting.committeecontainer.CommitteeContainer</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.meeting.AddCommitteeContainer</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
@@ -40,17 +40,6 @@
   <alias from="edit" to="@@edit" />
   <alias from="sharing" to="@@sharing" />
   <alias from="view" to="@@view" />
-
-  <action
-      action_id="add-member"
-      visible="True"
-      title="Committee Member"
-      category="folder_factories"
-      url_expr="string:${object_url}/add-member"
-      icon_expr=""
-      condition_expr="">
-    <permission value="opengever.meeting: Add Member" />
-  </action>
 
   <!-- Actions -->
   <action
@@ -73,6 +62,17 @@
     <permission value="Modify portal content" />
   </action>
 
+  <action
+      action_id="add-member"
+      visible="True"
+      title="Committee Member"
+      category="folder_factories"
+      url_expr="string:${object_url}/add-member"
+      icon_expr=""
+      condition_expr="">
+    <permission value="opengever.meeting: Add Member" />
+  </action>
+
   <!-- Tab Actions -->
   <action
       title="committees"
@@ -82,6 +82,7 @@
       url_expr="string:#"
       visible="True">
   </action>
+
   <action
       title="members"
       action_id="members"

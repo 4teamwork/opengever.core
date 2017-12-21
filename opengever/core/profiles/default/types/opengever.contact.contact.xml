@@ -8,16 +8,16 @@
   <property name="global_allow">False</property>
   <property name="filter_content_types">False</property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.contact.contact.IContact</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.contact.contact.Contact</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.contact.AddContact</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors" purge="False">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
@@ -49,6 +49,7 @@
       visible="False">
     <permission value="View" />
   </action>
+
   <action
       title="Edit"
       action_id="edit"
@@ -58,4 +59,5 @@
       visible="True">
     <permission value="Modify portal content" />
   </action>
+
 </object>

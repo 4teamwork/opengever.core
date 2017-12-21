@@ -7,16 +7,16 @@
   <property name="allow_discussion">False</property>
   <property name="global_allow">False</property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.meeting.proposaltemplate.IProposalTemplate</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.meeting.proposaltemplate.ProposalTemplate</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.meeting.AddProposalTemplate</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors" purge="False">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
@@ -59,6 +59,7 @@
       visible="False">
     <permission value="View" />
   </action>
+
   <action
       title="Edit metadata"
       action_id="edit"
@@ -78,6 +79,7 @@
       url_expr="string:#"
       visible="True"
       />
+
   <action
       title="Versions"
       action_id="versions"
@@ -86,6 +88,7 @@
       url_expr="string:#"
       visible="True"
       />
+
   <action
       title="journal"
       action_id="journal"
@@ -95,7 +98,7 @@
       visible="True"
       />
 
-  <!-- actions for staging -->
+  <!-- Actions for staging -->
   <action
       action_id="checkout_document"
       visible="True"

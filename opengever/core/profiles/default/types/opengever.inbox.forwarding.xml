@@ -13,17 +13,16 @@
     <element value="ftw.mail.mail" />
   </property>
 
-
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.inbox.forwarding.IForwarding</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.inbox.forwarding.Forwarding</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.inbox.AddForwarding</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
@@ -79,6 +78,7 @@
       visible="True">
     <permission value="View" />
   </action>
+
   <action
       i18n:domain="opengever.core"
       title="Related Documents"
@@ -89,4 +89,5 @@
       visible="True">
     <permission value="View" />
   </action>
+
 </object>

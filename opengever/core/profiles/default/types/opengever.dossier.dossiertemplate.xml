@@ -12,16 +12,16 @@
     <element value="opengever.document.document" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.dossier.dossiertemplate.dossiertemplate.DossierTemplate</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.dossier.AddDossierTemplate</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />

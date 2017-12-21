@@ -14,16 +14,16 @@
     <element value="opengever.inbox.yearfolder" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.inbox.inbox.IInbox</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.inbox.inbox.Inbox</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.inbox.AddInbox</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
@@ -70,7 +70,7 @@
     <permission value="Modify portal content" />
   </action>
 
-  <!-- Tabbedview tabs-->
+  <!-- Tabbedview actions -->
   <action
       title="Overview"
       action_id="overview"
