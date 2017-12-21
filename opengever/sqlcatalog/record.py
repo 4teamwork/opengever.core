@@ -3,8 +3,10 @@ from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.sqlcatalog.interfaces import ISQLRecord
 from operator import attrgetter
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -15,6 +17,8 @@ from sqlalchemy import String
 from sqlalchemy.orm.attributes import set_attribute
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.component.hooks import getSite
+from zope.interface import implementer
 import logging
 
 
@@ -27,6 +31,7 @@ tables = [
 ]
 
 
+@implementer(ISQLRecord)
 class CatalogRecordBase(Base):
     """Catalog records are entries in the SQL catalog, compareable
     with a "brain" or a "record" of the ZCatalog.
@@ -123,6 +128,19 @@ class CatalogRecordBase(Base):
         This method only works when the object is stored on this client.
         """
         return Oguid.parse(self.oguid).resolve_object()
+
+    @property
+    def Title(self):
+        return self.title
+
+    def getPath(self):
+        return self.absolute_path
+
+    def getURL(self):
+        if self.admin_unit_id == get_current_admin_unit().id():
+            return '/'.join((getSite().absolute_url(), self.relative_path))
+        else:
+            raise NotImplementedError()
 
 
 class DocumentishMixin(object):

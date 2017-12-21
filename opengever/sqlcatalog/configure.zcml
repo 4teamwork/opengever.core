@@ -6,6 +6,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="opengever.sqlcatalog">
 
+  <adapter factory=".contentlisting.SQLRecordContentListing" />
   <utility factory=".catalog.SQLCatalog" />
 
   <subscriber

@@ -32,3 +32,9 @@ class SQLCatalog(object):
             if model.portal_type == portal_type:
                 return model
         return None
+
+    def get_model_for_portal_type(self, portal_type):
+        for model in CatalogRecordBase.__subclasses__():
+            if model.portal_type == portal_type:
+                return model
+        return None
