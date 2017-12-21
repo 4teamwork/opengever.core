@@ -1,10 +1,8 @@
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
 
-
-  <!-- ###################################################### /-->
+  <!-- DOCUMENT ACTIONS -->
   <object name="document_actions" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
     <object name="watch" meta_type="CMF Action">
       <property name="visible">False</property>
     </object>
@@ -16,10 +14,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- SITE ACTIONS -->
   <object name="site_actions" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/base/profiles/default/actions.xml-->
     <object name="sitemap" meta_type="CMF Action" i18n:domain="plone">
       <property name="visible">False</property>
     </object>
@@ -27,10 +24,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- FOLDER BUTTONS -->
   <object name="folder_buttons" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/globalindex/profiles/default/actions.xml-->
     <object name="export_tasks" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Export selection</property>
       <property name="description" i18n:translate="" />
@@ -43,7 +39,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/base/profiles/default/actions.xml-->
     <object name="copy_items" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Copy Items</property>
       <property name="description" i18n:translate="" />
@@ -93,7 +88,6 @@
       <property name="visible">False</property>
     </object>
 
-    <!--migrated from opengever/document/profiles/default/actions.xml-->
     <object name="send_as_email" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Send as email</property>
       <property name="description" i18n:translate="" />
@@ -215,7 +209,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/dossier/profiles/default/actions.xml-->
     <object name="delete_participants" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Delete</property>
       <property name="description" i18n:translate="" />
@@ -264,7 +257,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/trash/profiles/default/actions.xml-->
     <object name="trashed" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">trashed</property>
       <property name="description" i18n:translate="" />
@@ -301,7 +293,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/inbox/profiles/default/actions.xml-->
     <object name="create_forwarding" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Forward</property>
       <property name="description" i18n:translate="" />
@@ -314,7 +305,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/latex/profiles/default/actions.xml-->
     <object name="pdf_dossierlisting" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Print selection (PDF)</property>
       <property name="description" i18n:translate="" />
@@ -339,7 +329,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/disposition/profiles/default/actions.xml-->
     <object name="create_disposition" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Create Disposition</property>
       <property name="description" i18n:translate="" />
@@ -367,10 +356,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- OBJECT -->
   <object name="object" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
     <object name="local_roles" meta_type="CMF Action">
       <property name="visible">False</property>
     </object>
@@ -396,10 +384,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- OBJECT BUTTONS -->
   <object name="object_buttons" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/base/profiles/default/actions.xml-->
     <object name="cut" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">Cut</property>
       <property name="description" i18n:translate="" />
@@ -534,7 +521,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/repository/profiles/default/actions.xml-->
     <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Prefix Manager</property>
       <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
@@ -561,7 +547,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/latex/profiles/default/actions.xml-->
     <object name="pdf_dossierdetails" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Print details (PDF)</property>
       <property name="description" i18n:translate="" />
@@ -627,10 +612,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- PORTAL TABS -->
   <object name="portal_tabs" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/base/profiles/default/actions.xml-->
     <object name="index_html" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">Overview</property>
       <property name="description" i18n:translate="" />
@@ -644,7 +628,6 @@
       <property name="visible">True</property>
     </object>
 
-    <!--migrated from opengever/private/profiles/default/actions.xml-->
     <object name="my_repository" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">My repository</property>
       <property name="description" i18n:translate="" />
@@ -661,10 +644,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- USER -->
   <object name="user" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/policy/base/profiles/default/actions.xml-->
     <object name="dashboard" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">Dashboard</property>
       <property name="description" i18n:translate="" />
@@ -746,18 +728,17 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- CONTROLPANEL -->
   <object name="controlpanel" meta_type="CMF Action Category" />
 
 
-  <!-- ###################################################### /-->
+  <!-- JQUERYUI PANELS -->
   <object name="jqueryui_panels" meta_type="CMF Action Category" />
 
 
-  <!-- ###################################################### /-->
+  <!-- MOBILE BUTTONS -->
   <object name="mobile_buttons" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/ogds/base/profiles/default/actions.xml-->
     <object name="toggle_orgunitselector" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Toggle orgunit selector</property>
       <property name="description" i18n:translate="" />
@@ -773,10 +754,9 @@
   </object>
 
 
-  <!-- ###################################################### /-->
+  <!-- OBJECT CHECKIN MENU -->
   <object name="object_checkin_menu" meta_type="CMF Action Category">
 
-    <!--migrated from opengever/document/profiles/default/actions.xml-->
     <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">with comment</property>
       <property name="description" i18n:translate="" />
@@ -802,6 +782,5 @@
     </object>
 
   </object>
-
 
 </object>

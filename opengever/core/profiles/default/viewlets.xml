@@ -16,7 +16,7 @@
 
 
   <!-- skinname="*" is buggy and only seems to work sometimes, but not reliably,
-     so we explicitely hide the viewlet for all the skins -->
+       so we explicitely hide the viewlet for all the skins -->
 
   <hidden manager="plone.belowcontenttitle" skinname="Plone Classic Theme">
     <viewlet name="ftw.mail.mail-in" />

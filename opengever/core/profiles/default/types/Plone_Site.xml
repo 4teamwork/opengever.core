@@ -11,8 +11,7 @@
     <element value="opengever.workspace.root" />
   </property>
 
-
-  <!--migrated from opengever/latex/profiles/default/types/Plone_Site.xml-->
+  <!-- Actions -->
   <action
       action_id="pdf-open-task-report"
       visible="True"

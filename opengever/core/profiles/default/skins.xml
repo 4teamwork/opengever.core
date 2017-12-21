@@ -1,6 +1,6 @@
 <object name="portal_skins">
 
-  <!--migrated from opengever/base/profiles/default/skins.xml-->
+  <!-- BASE -->
   <object name="opengever.base_scripts" meta_type="Filesystem Directory View" directory="opengever.base:skins/opengever.base_scripts" />
 
   <skin-path name="*">
@@ -8,7 +8,7 @@
   </skin-path>
 
 
-  <!--migrated from opengever/advancedsearch/profiles/default/skins.xml-->
+  <!-- ADVANCEDSEARCH -->
   <object name="advancedsearch_resources" meta_type="Filesystem Directory View" directory="opengever.advancedsearch:skins/advancedsearch_resources" />
 
   <skin-path name="*">
