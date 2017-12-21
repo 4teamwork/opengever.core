@@ -1,12 +1,20 @@
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from operator import attrgetter
+from plone import api
 from plone.uuid.interfaces import IUUID
 from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm.attributes import set_attribute
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
 import logging
 
 
@@ -32,8 +40,11 @@ class CatalogRecordBase(Base):
     uuid = Column(String(32), unique=True, nullable=False, index=True)
 
     title = Column(String(256), index=True)
+    id = Column(String(256))
     absolute_path = Column(String(512), index=True, nullable=False)
     relative_path = Column(String(512), index=True, nullable=False)
+    review_state = Column(String(256))
+    icon = Column(String(50))
 
     def __repr__(self):
         return '<Catalog record {} {!r}>'.format(type(self).__name__, self.guid, self.title)
@@ -45,6 +56,14 @@ class CatalogRecordBase(Base):
     @classmethod
     def relative_path_indexer(kls, obj):
         return '/'.join(obj.getPhysicalPath()[2:])
+
+    @classmethod
+    def review_state_indexer(kls, obj):
+        return api.content.get_state(obj)
+
+    @classmethod
+    def icon_indexer(kls, obj):
+        return obj.getIcon()
 
     @classmethod
     def create_from(cls, obj):
@@ -108,3 +127,22 @@ class CatalogRecordBase(Base):
 class DocumentCatalogRecord(CatalogRecordBase):
     __tablename__ = 'catalog_document'
     portal_type = 'opengever.document.document'
+
+    sequence_number = Column(Integer, index=True, nullable=False)
+    document_author = Column(String(USER_ID_LENGTH), index=True)
+    document_date = Column(DateTime, index=True)
+    receipt_date = Column(DateTime, index=True)
+    delivery_date = Column(DateTime, index=True)
+    checked_out = Column(String(USER_ID_LENGTH), index=True)
+
+    @classmethod
+    def sequence_number_indexer(kls, obj):
+        return getUtility(ISequenceNumber).get_number(obj)
+
+    @classmethod
+    def checked_out_indexer(kls, obj):
+        manager = queryMultiAdapter((obj, obj.REQUEST), ICheckinCheckoutManager)
+        if not manager:
+            return ''
+
+        return manager.get_checked_out_by() or ''
