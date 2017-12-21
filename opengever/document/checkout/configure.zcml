@@ -9,7 +9,8 @@
       permission="zope2.View"
       allowed_attributes="is_checkout_allowed
                           is_checkin_allowed
-                          is_cancel_allowed"
+                          is_cancel_allowed
+                          is_locked"
       />
 
   <browser:page

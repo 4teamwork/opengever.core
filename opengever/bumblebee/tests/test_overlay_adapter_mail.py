@@ -65,7 +65,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
         self.assertEqual(
-            'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12/bumblebee-open-pdf?filename=die-burgschaft.pdf',
+            'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-13/bumblebee-open-pdf?filename=die-burgschaft.pdf',
             adapter.get_open_as_pdf_url())
 
     def test_handles_non_ascii_characters_in_filename(self):
@@ -75,7 +75,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
         self.assertEqual(
-            u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf',
+            u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-13/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf',
             adapter.get_open_as_pdf_url())
 
 

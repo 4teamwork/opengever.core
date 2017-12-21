@@ -4,10 +4,13 @@ from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
+from plone.locking.interfaces import IRefreshableLockable
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import form, field, button
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 from zope.component import getMultiAdapter
@@ -23,12 +26,10 @@ class CheckinController(object):
 
     def checkin_document(self, document, comment=None):
         """Perform checkin for one document with an optional comment."""
-
         self.process_document(document, comment)
 
     def checkin_documents(self, document_paths, comment=None):
         """Perform checkin for multiple documents with an optional comment."""
-
         documents = self.resolve_documents(document_paths)
         for obj in documents:
             self.process_document(obj, comment)
@@ -47,23 +48,24 @@ class CheckinController(object):
             self.report_cannot_checkin_non_document(obj)
 
     def perform_checkin(self, document, comment):
-        manager = getMultiAdapter((document, self.request),
-                                  ICheckinCheckoutManager)
+        manager = getMultiAdapter(
+            (document, self.request),
+            ICheckinCheckoutManager,
+            )
 
         if not manager.is_checkin_allowed():
             msg = _(
                 u'Could not check in document ${title}',
-                mapping=dict(title=document.Title().decode('utf-8')))
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
+                mapping=dict(title=document.Title().decode('utf-8')),
+                )
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
         else:
             manager.checkin(comment)
             msg = _(
                 u'Checked in: ${title}',
                 mapping=dict(title=document.Title().decode('utf-8')))
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='info')
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'info')
 
     def report_cannot_checkin_non_document(self, obj):
         title = obj.Title()
@@ -72,20 +74,23 @@ class CheckinController(object):
         msg = _(
             u'Could not check in ${title}, it is not a document.',
             mapping=dict(title=title))
-        IStatusMessage(self.request).addStatusMessage(
-            msg, type='error')
+        IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
 
 class IContextCheckinCommentSchema(Interface):
     """Form schema to enter a journal comment for checkin."""
 
     comment = schema.Text(
-        title=_(u'label_checkin_journal_comment',
-                default=u'Journal Comment'),
-        description=_(u'help_checkin_journal_comment',
-                      default=u'Describe, why you checkin the '
-                      'selected documents'),
-        required=False)
+        title=_(
+            u'label_checkin_journal_comment',
+            default=u'Journal Comment',
+            ),
+        description=_(
+            u'help_checkin_journal_comment',
+            default=u'Describe, why you checkin the selected documents',
+            ),
+        required=False,
+        )
 
 
 class CheckinContextCommentForm(form.Form):
@@ -97,14 +102,43 @@ class CheckinContextCommentForm(form.Form):
 
     def __init__(self, context, request):
         super(CheckinContextCommentForm, self).__init__(context, request)
+        self.locked = IRefreshableLockable(self.context).locked()
+        if self.locked:
+            # Add a warning onto a locked document checkin view
+            msg = _(
+                u'label_warn_checkout_locked',
+                default=u' '.join((
+                    'This document is currently being worked on.',
+                    'When you check it in manually you will lose the changes.',
+                    'Please allow for the process to be finished first.'
+                    )),
+                )
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'warning')
+
+            # Swap the button label out on a locked document
+            for form_button in self.buttons.items():
+                if form_button[0] == 'button_checkin':
+                    button_payload = form_button[1]
+                    button_payload.title = _(
+                        u'button_checkin_anyway',
+                        default=u'Checkin anyway'
+                        )
+                    form_button = (
+                        'button_checkin_anyway',
+                        button_payload,
+                        )
+
         self.checkin_controller = CheckinController(self.request)
 
     @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'))
     def checkin_button_handler(self, action):
-        data, errors = self.extractData()
+        # Errors are handled by the checkin
+        data = self.extractData()[0]
 
-        self.checkin_controller.checkin_document(self.context,
-                                                 comment=data['comment'])
+        self.checkin_controller.checkin_document(
+            self.context,
+            comment=data['comment'],
+            )
 
         return self.redirect()
 
@@ -117,7 +151,7 @@ class CheckinContextCommentForm(form.Form):
 
 
 class IPathsCheckinCommentSchema(IContextCheckinCommentSchema):
-    """ Contains an additional (hidden) paths field. """
+    """Contains an additional (hidden) paths field."""
 
     paths = schema.TextLine(title=u'Selected Items')
 
@@ -129,18 +163,20 @@ class CheckinPathsCommentForm(CheckinContextCommentForm):
 
     @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'))
     def checkin_button_handler(self, action):
-        data, errors = self.extractData()
+        # Errors are handled by the checkin
+        data = self.extractData()[0]
 
         self.checkin_controller.checkin_documents(
-            self.get_document_paths(), comment=data['comment'])
+            self.get_document_paths(),
+            comment=data['comment'],
+            )
 
         return self.redirect()
 
     def get_document_paths(self):
         """Return document paths from previously submitted plone form form
         request or initialize from the submitted checkbox list.
-
-         """
+        """
         field_name = self.prefix + self.widgets.prefix + 'paths'
         value = self.request.get(field_name, False)
         if value:
@@ -171,8 +207,8 @@ class CheckinDocuments(layout.FormWrapper):
     """Checkin multiple documents with comment.
 
     This view is called from a tabbed_view.
-
     """
+
     form = CheckinPathsCommentForm
 
     def __call__(self, *args, **kwargs):
@@ -180,8 +216,7 @@ class CheckinDocuments(layout.FormWrapper):
             return layout.FormWrapper.__call__(self, *args, **kwargs)
         except NoItemsSelected:
             msg = _(u'You have not selected any documents.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
             return self.request.RESPONSE.redirect(
                 get_containing_document_tab_url(self.context))
@@ -209,15 +244,16 @@ class CheckinDocumentsWithoutComment(CheckinDocumentWithoutComment):
     """Checkin multiple documents without comment.
 
     This view is called from a tabbed_view.
-
     """
+
     def checkin(self):
         try:
-            self.checkin_controller.checkin_documents(self.request.get('paths'))
+            self.checkin_controller.checkin_documents(
+                self.request.get('paths'),
+                )
         except NoItemsSelected:
             msg = _(u'You have not selected any documents.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
             return self.request.RESPONSE.redirect(
                 get_containing_document_tab_url(self.context))
