@@ -5,7 +5,12 @@
         "title_de": "Sitzungen",
         "title_fr": "Séances",
         "protocol_template": "resolvePath::/vorlagen/sablon-template-1",
+        "protocol_header_template": "resolvePath::/vorlagen/sablon-template-6",
+        "protocol_suffix_template": "resolvePath::/vorlagen/sablon-template-7",
         "excerpt_template": "resolvePath::/vorlagen/sablon-template-2",
+        "excerpt_header_template": "resolvePath::/vorlagen/sablon-template-8",
+        "excerpt_suffix_template": "resolvePath::/vorlagen/sablon-template-9",
+        "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
         "agendaitem_list_template": "resolvePath::/vorlagen/sablon-template-3",
         "toc_template": "resolvePath::/vorlagen/sablon-template-4",
         "paragraph_template": "resolvePath::/vorlagen/sablon-template-5",
@@ -14,7 +19,7 @@
             {
                 "_id": "committee-1",
                 "_type": "opengever.meeting.committee",
-                "title": "Kommission für Rechtsfragen",
+                "title": "Kommission für Rechtsfragen [WORD]",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen/sitzungen",
                 "group_id": "og_demo-ftw_users"
             },
@@ -28,7 +33,7 @@
             {
                 "_id": "committee-3",
                 "_type": "opengever.meeting.committee",
-                "title": "Gemeindeversammlung",
+                "title": "Gemeindeversammlung [NOWORD]",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen",
                 "group_id": "og_demo-ftw_users"
             }

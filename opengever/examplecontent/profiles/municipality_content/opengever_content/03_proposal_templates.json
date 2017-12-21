@@ -1,0 +1,14 @@
+[
+    {
+        "_path": "/vorlagen/proposal-template-1",
+        "_type": "opengever.meeting.proposaltemplate",
+        "title": "Antrag",
+        "file:file": "templates/proposal.docx"
+    },
+    {
+        "_path": "/vorlagen/ad-hoc-template",
+        "_type": "opengever.meeting.proposaltemplate",
+        "title": "Traktandum ohne Antrag",
+        "file:file": "templates/ad_hoc.docx"
+    }
+]

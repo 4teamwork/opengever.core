@@ -46,6 +46,31 @@
       }
     ]
   },
+  {
+    "_path": "/ordnungssystem/ressourcen-und-support/personal/personalrekrutierung/dossier-5",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Hannah Baufrau",
+    "_children": [
+      {
+        "_id": "document-2",
+        "_type": "opengever.document.document",
+        "title": "Bewerbung Hanna Baufrau",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-3",
+        "_type": "opengever.document.document",
+        "title": "Kurzinfo Hannah Baufrau",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-4",
+        "_type": "opengever.document.document",
+        "title": "Bericht Hannah Baufrau",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
 
   {
     "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-5",
@@ -101,6 +126,41 @@
       }
     ]
   },
+
+  {
+    "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Dossier Rechtskommission 2016-iaio",
+    "_children": [
+      {
+        "_id": "document-4",
+        "_type": "opengever.document.document",
+        "title": "Checkliste",
+        "file:file": "files/subdossier.docx"
+      },
+      {
+        "_id": "document-5",
+        "_type": "opengever.document.document",
+        "title": "Memo - Bitte lesen",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
+  {
+    "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-2",
+    "_type": "opengever.dossier.businesscasedossier",
+    "title": "Gesetzesentwürfe",
+    "_children": [
+      {
+        "_id": "document-6",
+        "_type": "opengever.document.document",
+        "title": "Richtlinien Gesetzesentwürfe",
+        "file:file": "files/subdossier.docx"
+      }
+    ]
+  },
+
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/dossier-8",
     "_type": "opengever.dossier.businesscasedossier",

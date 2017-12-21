@@ -24,5 +24,25 @@
         "_type": "opengever.meeting.sablontemplate",
         "title": "Zwischentitel",
         "file:file": "templates/zwischentitel.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-6",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokollkopf",
+        "file:file": "templates/protokoll_kopf.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-7",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokollschlussteil",
+        "file:file": "templates/protokoll_schlussteil.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-8",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Kopf Protokollauszug",
+        "file:file": "templates/protokollauszug_kopf.docx"
+    }, {
+        "_path": "/vorlagen/sablon-template-9",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Schlussteil Protokollauszug",
+        "file:file": "templates/protokollauszug_schlussteil.docx"
     }
 ]

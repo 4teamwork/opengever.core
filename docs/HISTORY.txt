@@ -47,6 +47,7 @@ Changelog
 ---------------------
 
 - Extend OGGBundle with the DossierManager role. [elioschmutz]
+- SPV word: Add default content. [tarnap]
 - OGDS sync: handle multivalued group titles. [phgross]
 - Increase group title length. [phgross]
 - Fix bux when accepting a multi admin unit team task with option participate. [phgross]
