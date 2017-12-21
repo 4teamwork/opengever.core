@@ -38,4 +38,4 @@ class TestMailIndexers(IntegrationTestCase):
         extender = getAdapter(
             self.mail_eml, IDynamicTextIndexExtender, u'IDocumentSchema')
 
-        self.assertEquals('Client1 1.1 / 1 / 12 12', extender())
+        self.assertEquals('Client1 1.1 / 1 / 13 13', extender())

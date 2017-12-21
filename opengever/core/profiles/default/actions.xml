@@ -794,7 +794,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:$object_url/@@checkin_without_comment?_authenticator=${object/@@authenticator/token}</property>
       <property name="icon_expr" />
-      <property name="available_expr">python:path('object/@@checkout_control').is_checkin_allowed()</property>
+      <property name="available_expr">python:path('object/@@checkout_control').is_checkin_allowed() and not path('object/@@checkout_control').is_locked()</property>
       <property name="permissions">
         <element value="opengever.document: Checkin" />
       </property>

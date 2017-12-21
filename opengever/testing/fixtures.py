@@ -462,7 +462,7 @@ class OpengeverContentFixture(object):
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
             .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
 
-        self.register('archive_dossier', create(
+        archive_dossier = self.register('archive_dossier', create(
             Builder('dossier').within(self.repofolder00)
             .titled(u'Archiv Vertr\xe4ge')
             .having(description=u'Archiv der Vertr\xe4ge vor 2016.',
@@ -471,6 +471,13 @@ class OpengeverContentFixture(object):
                     end=date(2015, 12, 31),
                     responsible='hugo.boss')
             .in_state('dossier-state-resolved')))
+
+        self.register('archive_document', create(
+            Builder('document')
+            .within(archive_dossier)
+            .attach_archival_file_containing('TEST', name=u'test.pdf')
+            .with_dummy_content()
+            ))
 
     @staticuid()
     def create_empty_dossier(self):

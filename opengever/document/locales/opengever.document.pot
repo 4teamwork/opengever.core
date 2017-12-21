@@ -149,6 +149,11 @@ msgstr ""
 msgid "button_checkin"
 msgstr ""
 
+#. Default: "Checkin anyway"
+#: ./opengever/document/checkout/checkin.py
+msgid "button_checkin_anyway"
+msgstr ""
+
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py
 msgid "button_pdf"
@@ -507,6 +512,11 @@ msgstr ""
 #. Default: "Version"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
+msgstr ""
+
+#. Default: " This document is currently being worked on."
+#: ./opengever/document/checkout/checkin.py
+msgid "label_warn_checkout_locked"
 msgstr ""
 
 #. Default: "yes"

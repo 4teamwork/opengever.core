@@ -3,16 +3,20 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.tests.helpers import asset
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
 from opengever.trash.trash import Trasher
@@ -329,140 +333,273 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
             (document, self.portal.REQUEST), ICheckinCheckoutManager)
 
 
-class TestCheckinViews(FunctionalTestCase):
+class TestCheckinViews(IntegrationTestCase):
     """Tests for the checkin views."""
-
-    def setUp(self):
-        super(TestCheckinViews, self).setUp()
-
-        self.dossier = create(Builder("dossier"))
-        self.document = create(Builder("document")
-                               .checked_out()
-                               .within(self.dossier))
 
     @browsing
     def test_single_checkin_with_comment(self, browser):
-        browser.login().open(self.document)
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        # open checkin form
+        browser.open(self.document)
+        browser.css('#checkin_with_comment').first.click()
+
+        # fill and submit checkin form
+        journal_comment = u'Checkinerino'
+        browser.fill({
+            u'Journal Comment': journal_comment,
+            })
+
+        browser.css('#form-buttons-button_checkin').first.click()
+
+        manager = getMultiAdapter(
+            (self.document, self.portal.REQUEST),
+            ICheckinCheckoutManager,
+            )
+
+        self.assertEquals(None, manager.get_checked_out_by())
+
+        self.assert_journal_entry(
+            self.document,
+            DOCUMENT_CHECKED_IN,
+            u'Document checked in',
+            comment=journal_comment,
+            )
+
+    @browsing
+    def test_single_locked_checkin_with_comment(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        # Lock document
+        IRefreshableLockable(self.document).lock()
+        transaction.commit()
+
+        browser.open(self.document)
 
         # open checkin form
         browser.css('#checkin_with_comment').first.click()
 
+        assert_message(
+            ' '.join((
+                'This document is currently being worked on.',
+                'When you check it in manually you will lose the changes.',
+                'Please allow for the process to be finished first.',
+                ))
+            )
+
+        self.assertIn(
+            'Checkin anyway',
+            browser.css('#form-buttons-button_checkin')[0].outerHTML
+            )
+
+        self.assertNotIn(
+            'Cancel Checkout',
+            browser.css('.contentViews a').text
+            )
+
         # fill and submit checkin form
+        journal_comment = u'Checkinerino'
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
-            'Checkinerino'
+            u'Journal Comment': journal_comment,
             })
+
         browser.css('#form-buttons-button_checkin').first.click()
 
-        manager = getMultiAdapter((self.document, self.portal.REQUEST),
-                                  ICheckinCheckoutManager)
+        manager = getMultiAdapter(
+            (self.document, self.portal.REQUEST),
+            ICheckinCheckoutManager,
+            )
+
         self.assertEquals(None, manager.get_checked_out_by())
 
-        # check last history entry to verify the checkin
-        repository_tool = getToolByName(self.document, 'portal_repository')
-        history = repository_tool.getHistory(self.document)
-        last_entry = repository_tool.retrieve(self.document, len(history)-1)
-        self.assertEquals('Checkinerino', last_entry.comment)
+        self.assert_journal_entry(
+            self.document,
+            DOCUMENT_CHECKED_IN,
+            u'Document checked in',
+            comment=journal_comment,
+            )
 
     @browsing
     def test_multi_checkin_from_tabbedview_with_comment(self, browser):
-        document2 = create(Builder("document")
-                           .checked_out()
-                           .within(self.dossier))
+        self.login(self.regular_user, browser)
 
-        browser.login().open(
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        document2 = create(
+            Builder("document")
+            .within(self.dossier)
+            .attach_file_containing(
+                asset('example.docx').bytes(),
+                u'vertragsentwurf.docx',
+                ),
+            )
+
+        browser.open(document2, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        browser.open(
             self.dossier,
-            data={'paths': [obj2brain(self.document).getPath(),
-                            obj2brain(document2).getPath()],
-                  'checkin_documents:method': 1,
-                  '_authenticator': createToken()})
+            method='POST',
+            data={
+                'paths': [
+                    obj2brain(self.document).getPath(),
+                    obj2brain(document2).getPath(),
+                    ],
+                'checkin_documents:method': 1,
+                '_authenticator': createToken(),
+                },
+            )
 
         # fill and submit checkin form
+        journal_comment = u'Checkini'
         browser.fill({
-            'Journal Comment Describe, why you checkin the selected documents':
-            'Checkini'
+            'Journal Comment': journal_comment,
             })
+
         browser.css('#form-buttons-button_checkin').first.click()
 
-        manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
-                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager1.get_checked_out_by())
-        manager2 = getMultiAdapter((document2, self.portal.REQUEST),
-                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager2.get_checked_out_by())
+        for doc in (self.document, document2, ):
+            manager = getMultiAdapter(
+                (doc, self.portal.REQUEST),
+                ICheckinCheckoutManager,
+                )
 
-        # check last history entry to verify the checkin
-        repository_tool = getToolByName(document2, 'portal_repository')
-        history = repository_tool.getHistory(document2)
-        last_entry = repository_tool.retrieve(document2, len(history)-1)
-        self.assertEquals('Checkini', last_entry.comment)
+            self.assertEquals(None, manager.get_checked_out_by())
+
+            self.assert_journal_entry(
+                doc,
+                DOCUMENT_CHECKED_IN,
+                u'Document checked in',
+                comment=journal_comment,
+                )
 
     @browsing
     def test_single_checkin_without_comment(self, browser):
-        browser.login().open(self.document)
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        browser.open(self.document)
 
         browser.css('#checkin_without_comment').first.click()
 
-        manager = getMultiAdapter((self.document, self.portal.REQUEST),
-                                  ICheckinCheckoutManager)
+        manager = getMultiAdapter(
+            (self.document, self.portal.REQUEST),
+            ICheckinCheckoutManager,
+            )
+
         self.assertEquals(None, manager.get_checked_out_by())
 
-        # check last history entry to verify the checkin
-        repository_tool = getToolByName(self.document, 'portal_repository')
-        history = repository_tool.getHistory(self.document)
-        last_entry = repository_tool.retrieve(self.document, len(history)-1)
-        self.assertEquals(None, last_entry.comment)
+        self.assert_journal_entry(
+            self.document,
+            DOCUMENT_CHECKED_IN,
+            u'Document checked in',
+            comment='',
+            )
 
     @browsing
     def test_multi_checkin_from_tabbedview_without_comment(self, browser):
-        document2 = create(Builder("document")
-                           .checked_out_by(TEST_USER_ID)
-                           .within(self.dossier))
+        self.login(self.regular_user, browser)
 
-        browser.login().open(
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        document2 = create(
+            Builder("document")
+            .within(self.dossier)
+            .attach_file_containing(
+                asset('example.docx').bytes(),
+                u'vertragsentwurf.docx',
+                ),
+            )
+
+        browser.open(document2, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        browser.open(
             self.dossier,
-            data={'paths': [obj2brain(self.document).getPath(),
-                            obj2brain(document2).getPath()],
-                  'checkin_without_comment:method': 1,
-                  '_authenticator': createToken()})
+            method='POST',
+            data={
+                'paths': [
+                    obj2brain(self.document).getPath(),
+                    obj2brain(document2).getPath(),
+                    ],
+                'checkin_without_comment:method': 1,
+                '_authenticator': createToken(),
+                },
+            )
 
-        manager1 = getMultiAdapter((self.document, self.portal.REQUEST),
-                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager1.get_checked_out_by())
-        manager2 = getMultiAdapter((document2, self.portal.REQUEST),
-                                   ICheckinCheckoutManager)
-        self.assertEquals(None, manager2.get_checked_out_by())
+        for doc in (self.document, document2, ):
+            manager = getMultiAdapter(
+                (doc, self.portal.REQUEST),
+                ICheckinCheckoutManager,
+                )
 
-        # check last history entry to verify the checkin
-        repository_tool = getToolByName(document2, 'portal_repository')
-        history = repository_tool.getHistory(document2)
-        last_entry = repository_tool.retrieve(document2, len(history)-1)
-        self.assertEquals(None, last_entry.comment)
+            self.assertEquals(None, manager.get_checked_out_by())
+
+            self.assert_journal_entry(
+                doc,
+                DOCUMENT_CHECKED_IN,
+                u'Document checked in',
+                comment='',
+                )
 
     @browsing
     def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):  # noqa
-        browser.login().open(
-            self.dossier,
-            data={'paths': [],
-                  'checkin_without_comment:method': 1,
-                  '_authenticator': createToken()})
+        self.login(self.regular_user, browser)
 
-        self.assertEquals(['You have not selected any documents.'],
-                          error_messages())
+        browser.open(
+            self.dossier,
+            data={
+                'paths': [],
+                'checkin_without_comment:method': 1,
+                '_authenticator': createToken(),
+                },
+            )
+
         self.assertEquals(
-            'http://nohost/plone/dossier-1#documents', browser.url)
+            ['You have not selected any documents.'],
+            error_messages(),
+            )
 
-        browser.login().open(
+        redirect_target_url = ''.join((
+            self.dossier.absolute_url(),
+            '#documents'
+            ))
+
+        self.assertEquals(
+            redirect_target_url,
+            browser.url,
+            )
+
+        browser.open(
             self.dossier,
-            data={'paths': [],
-                  'checkin_documents:method': 1,
-                  '_authenticator': createToken()})
+            data={
+                'paths': [],
+                'checkin_documents:method': 1,
+                '_authenticator': createToken(),
+                },
+            )
+
         browser.click_on('Checkin')
 
-        self.assertEquals(['You have not selected any documents.'],
-                          error_messages())
         self.assertEquals(
-            'http://nohost/plone/dossier-1#documents', browser.url)
+            ['You have not selected any documents.'],
+            error_messages(),
+            )
+
+        self.assertIn(
+            redirect_target_url,
+            browser.url,
+            )
 
 
 # TODO: rewrite this test-case to express intent

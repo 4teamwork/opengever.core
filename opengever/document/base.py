@@ -59,6 +59,35 @@ class BaseDocumentMixin(object):
 
         return None
 
+    def get_proposal(self):
+        """Return the proposal to which this document belongs.
+
+        This may return a "proposal" or a "submitted proposal".
+        """
+        parent = aq_parent(aq_inner(self))
+        if IProposal.providedBy(parent):
+            return parent
+
+        # Find submitted proposal when self is an excerpt document in the
+        # meeting dossier.
+        for relation in getUtility(ICatalog).findRelations({
+                'to_id': getUtility(IIntIds).getId(aq_inner(self)),
+                'from_attribute': 'excerpts'}):
+            # We expect that there are 0 or 1 relation, because this document
+            # cannot be the excerpt of multiple proposals.
+            submitted_proposal = relation.from_object
+            if api.user.has_permission('View', obj=submitted_proposal):
+                return submitted_proposal
+
+        # Find proposal when self is an excerpt in the case dossier.
+        generated_excerpts = GeneratedExcerpt.query.by_document(self).all()
+        if generated_excerpts:
+            proposal = generated_excerpts[0].proposal.resolve_proposal()
+            if api.user.has_permission('View', obj=proposal):
+                return proposal
+
+        return None
+
     @property
     def is_removed(self):
         return api.content.get_state(obj=self) == self.removed_state

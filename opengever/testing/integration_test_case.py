@@ -4,8 +4,11 @@ from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from ftw.mail.mail import IMail
 from functools import wraps
+from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.journal.tests.utils import get_journal_entry
+from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
@@ -25,6 +28,7 @@ from unittest import TestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
 import timeit
 
@@ -373,6 +377,56 @@ class IntegrationTestCase(TestCase):
                 api.user.get_current(),
                 obj,
                 msg or ''))
+
+    def assert_journal_entry(self, obj, action_type, title, comment=None, entry=-1):  # noqa
+        entry = get_journal_entry(obj, entry)
+        action = entry.get('action')
+
+        self.assertEquals(action_type, action.get('type'))
+        self.assertEquals(title, translate(action.get('title')))
+
+        if comment is not None:
+            self.assertEquals(comment, entry.get('comments'))
+
+    def assert_local_roles(self, expected_roles, user, context):
+        if hasattr(user, 'getId'):
+            userid = user.getId()
+        else:
+            userid = user
+        current_roles = dict(context.get_local_roles()).get(userid, [])
+        self.assertItemsEqual(
+            expected_roles, current_roles,
+            "The user '{}' should have the roles {!r} on context {!r}. "
+            "But he has {}".format(userid, expected_roles, context, current_roles))
+
+    def assert_submitted_document_created(self, proposal, document,
+                                       submitted_version=0):
+        portal = api.portal.get()
+        submitted_document_model = SubmittedDocument.query.get_by_source(
+            proposal,
+            document,
+            )
+
+        submitted_document = portal.restrictedTraverse(
+            submitted_document_model.submitted_physical_path.encode('utf-8'),
+            )
+
+        self.assertIsNotNone(submitted_document_model)
+
+        self.assertEqual(
+            Oguid.for_object(submitted_document),
+            submitted_document_model.submitted_oguid,
+            )
+
+        self.assertEqual(
+            submitted_version,
+            submitted_document_model.submitted_version,
+            )
+
+        self.assertEqual(
+            proposal.load_model(),
+            submitted_document_model.proposal,
+            )
 
     def brain_to_object(self, brain):
         """Return the object of a brain.

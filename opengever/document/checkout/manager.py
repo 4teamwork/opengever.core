@@ -171,26 +171,27 @@ class CheckinCheckoutManager(object):
 
     def is_cancel_allowed(self):
         """Checks whether the user is able to cancel a checkout."""
-        # is the document checked out?
-        if not self.get_checked_out_by():
-            return False
-
-        # is it versionable?
-        if not self.versioner.is_versionable():
-            return False
-
-        # is the user allowed to cancel?
-        if not self.check_permission('opengever.document: Cancel'):
-            return False
-
-        # is the user either the one who owns the checkout or
-        # a manager?
-        is_manager = self.check_permission('Manage portal')
         current_user_id = getSecurityManager().getUser().getId()
-        if self.get_checked_out_by() == current_user_id or is_manager:
+        current_checkout_id = self.get_checked_out_by()
+
+        # is the document checked out?
+        # is the document not locked?
+        # is it versionable?
+        # is the user allowed to cancel?
+        # is the user either the one who owns the checkout or a manager?
+        if (
+                current_checkout_id
+                and not IRefreshableLockable(self.context).locked()
+                and self.versioner.is_versionable()
+                and self.check_permission('opengever.document: Cancel')
+                and bool(
+                    current_checkout_id == current_user_id
+                    or self.check_permission('Manage portal')
+                    )
+            ):
             return True
-        else:
-            return False
+
+        return False
 
     def cancel(self):
         """Cancel the current checkout."""
@@ -321,6 +322,7 @@ class CheckinCheckoutManager(object):
         # List of all users that hold a lock on the document
         if lockable and lockable.locked():
             return True
+
         return False
 
     def clear_locks(self):

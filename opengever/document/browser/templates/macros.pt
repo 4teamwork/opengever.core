@@ -60,9 +60,11 @@
             </tal:checkout_and_edit_disabled>
 
             <tal:checked_out tal:condition="checked_out_by_current_user">
-              <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
-                  Checkin without comment
-              </a>
+              <tal:checkin_without_comment tal:condition="not: view/is_locked">
+                <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
+                    Checkin without comment
+                </a>
+              </tal:checkin_without_comment>
               <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin" i18n:translate="">
                   Checkin with comment
               </a>

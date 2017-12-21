@@ -80,7 +80,7 @@ class FieldRow(BaseRow):
         value = widget.items[0]['checked']
         yes = _('label_yes', default='yes')
         no = _('label_no', default='no')
-        return bool(value) and yes or no
+        return yes if bool(value) else no
 
 
 class CustomRow(BaseRow):
@@ -194,13 +194,15 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
     def linked_documents(self):
         """Returns a list documents related to the context document.
         """
-
         return [{
             'class': self.get_css_class(obj),
             'title': obj.Title(),
             'url': obj.absolute_url(),
         } for obj in sorted(
-            self.context.related_items(bidirectional=True, documents_only=True),
+            self.context.related_items(
+                bidirectional=True,
+                documents_only=True,
+                ),
             key=lambda obj: obj.Title()
         )]
 

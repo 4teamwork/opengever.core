@@ -146,6 +146,11 @@ msgstr "Abbrechen"
 msgid "button_checkin"
 msgstr "Einchecken"
 
+#. Default: "Checkin anyway"
+#: ./opengever/document/checkout/checkin.py
+msgid "button_checkin_anyway"
+msgstr "Trotzdem einchecken"
+
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py
 msgid "button_pdf"
@@ -510,6 +515,11 @@ msgstr "Titel"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
 msgstr "Version"
+
+#. Default: " This document is currently being worked on."
+#: ./opengever/document/checkout/checkin.py
+msgid "label_warn_checkout_locked"
+msgstr "Dieses Dokument wird gerade bearbeitet. Wenn Sie es manuell einchecken, so gehen die Änderungen verloren. Bitte veranlassen Sie, dass die Bearbeitung des Dokuments zuerst abgeschlossen wird."
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py

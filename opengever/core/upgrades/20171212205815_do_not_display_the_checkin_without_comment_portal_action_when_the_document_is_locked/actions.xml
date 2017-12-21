@@ -1,0 +1,11 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="object_checkin_menu" meta_type="CMF Action Category">
+
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="available_expr">python:path('object/@@checkout_control').is_checkin_allowed() and not path('object/@@checkout_control').is_locked()</property>
+    </object>
+
+  </object>
+
+</object>

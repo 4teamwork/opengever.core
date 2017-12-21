@@ -6,6 +6,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
+from plone.locking.interfaces import IRefreshableLockable
 from zope.component import queryMultiAdapter
 import transaction
 
@@ -65,6 +66,9 @@ class TestDocumentIntegration(FunctionalTestCase):
              'Replace with new file'],
             browser.css('#form-widgets-file label').text)
 
+        IRefreshableLockable(self.document).unlock()
+        transaction.commit()
+
         manager.cancel()
 
     @browsing
@@ -83,7 +87,10 @@ class TestDocumentIntegration(FunctionalTestCase):
     def test_edit_form_does_not_contain_change_note(self, browser):
         browser.login().open(self.document, view='edit')
 
-        inputs = [input.name for input in browser.forms.get('form').inputs]
+        inputs = [
+            form_input.name
+            for form_input in browser.forms.get('form').inputs
+            ]
         self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)
 
     @browsing
@@ -91,7 +98,10 @@ class TestDocumentIntegration(FunctionalTestCase):
         browser.login().open(
             self.portal, view='++add++opengever.document.document')
 
-        inputs = [input.name for input in browser.forms.get('form').inputs]
+        inputs = [
+            form_input.name
+            for form_input in browser.forms.get('form').inputs
+            ]
         self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)
 
 
