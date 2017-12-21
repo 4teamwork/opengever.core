@@ -1,18 +1,17 @@
 <object name="portal_skins">
 
-  <!-- BASE -->
-  <object name="opengever.base_scripts" meta_type="Filesystem Directory View" directory="opengever.base:skins/opengever.base_scripts" />
-
-  <skin-path name="*">
-    <layer name="opengever.base_scripts" insert-after="custom" />
-  </skin-path>
-
-
   <!-- ADVANCEDSEARCH -->
   <object name="advancedsearch_resources" meta_type="Filesystem Directory View" directory="opengever.advancedsearch:skins/advancedsearch_resources" />
 
   <skin-path name="*">
     <layer name="advancedsearch_resources" insert-after="custom" />
+  </skin-path>
+
+  <!-- BASE -->
+  <object name="opengever.base_scripts" meta_type="Filesystem Directory View" directory="opengever.base:skins/opengever.base_scripts" />
+
+  <skin-path name="*">
+    <layer name="opengever.base_scripts" insert-after="custom" />
   </skin-path>
 
 </object>

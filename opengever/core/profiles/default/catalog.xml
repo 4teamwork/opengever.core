@@ -1,5 +1,8 @@
 <object name="portal_catalog">
 
+  <!-- Add indexes here on penalty of death or worse.
+       See INDEXES in config.py instead. -->
+
   <!-- BASE -->
   <column value="css_icon_class" />
   <index name="reference" meta_type="FieldIndex">
@@ -9,6 +12,13 @@
   <column value="title_de" />
   <column value="title_fr" />
 
+  <!-- CONTACT -->
+  <column value="contactid" />
+  <column value="email" />
+  <column value="email2" />
+  <column value="firstname" />
+  <column value="lastname" />
+  <column value="phone_office" />
 
   <!-- DOCUMENT -->
   <column value="document_author" />
@@ -18,12 +28,10 @@
   <column value="checked_out" />
   <column value="public_trial" />
 
-
   <!-- DOSSIER -->
   <column value="containing_subdossier" />
   <column value="containing_dossier" />
   <column value="retention_expiration" />
-
 
   <!-- TASK -->
   <column value="deadline" />
@@ -36,25 +44,10 @@
   <column value="is_subtask" />
   <column value="predecessor" />
 
+  <!-- TASKTEMPLATES -->
+  <column value="preselected" />
 
   <!-- TRASH -->
   <column value="trashed" />
-
-
-  <!-- TASKTEMPLATES -->
-  <!-- Add indexes here on penalty of death or worse.
-       See add_catalog_indexes in setuphandlers.py instead. -->
-  <column value="preselected" />
-
-
-  <!-- CONTACT -->
-  <!-- Add indexes here on penalty of death or worse.
-       See INDEXES in config.py instead. -->
-  <column value="contactid" />
-  <column value="email" />
-  <column value="email2" />
-  <column value="firstname" />
-  <column value="lastname" />
-  <column value="phone_office" />
 
 </object>
