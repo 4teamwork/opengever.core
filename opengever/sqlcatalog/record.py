@@ -1,3 +1,4 @@
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.model import Base
 from opengever.base.model import Session
@@ -44,7 +45,11 @@ class CatalogRecordBase(Base):
     oguid = Column(String(32), primary_key=True, index=True, nullable=False)
     admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     uuid = Column(String(32), unique=True, nullable=False, index=True)
+    record_created = Column(DateTime, default=utcnow_tz_aware)
+    record_modified = Column(DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware)
 
+    created = Column(DateTime, index=True)
+    modified = Column(DateTime, index=True)
     title = Column(String(256), index=True)
     id = Column(String(256))
     absolute_path = Column(String(512), index=True, nullable=False)
@@ -54,6 +59,14 @@ class CatalogRecordBase(Base):
 
     def __repr__(self):
         return '<Catalog record {} {!r}>'.format(type(self).__name__, self.oguid, self.title)
+
+    @classmethod
+    def created_indexer(kls, obj):
+        return obj.created().asdatetime()
+
+    @classmethod
+    def modified_indexer(kls, obj):
+        return obj.modified().asdatetime()
 
     @classmethod
     def absolute_path_indexer(kls, obj):
@@ -97,7 +110,8 @@ class CatalogRecordBase(Base):
         Columns which must not change, such as oguid, admin id, uuid, must be excluded here.
         """
         return [column for column in cls.__table__.columns
-                if column.name not in ('oguid', 'admin_unit_id', 'uuid')]
+                if column.name not in ('oguid', 'admin_unit_id', 'uuid',
+                                       'record_created', 'record_modified')]
 
     @classmethod
     def get_data_for(cls, obj):
