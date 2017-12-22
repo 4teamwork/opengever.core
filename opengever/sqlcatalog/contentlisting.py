@@ -1,4 +1,5 @@
 from ftw import bumblebee
+from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import Document
@@ -53,8 +54,18 @@ class SQLRecordContentListing(BaseContentListingObject):
     def PortalType(self):
         return self.record.portal_type
 
+    def ContentTypeClass(self):
+        """Here we set the correct content type class so that documents with
+        files have the correct MIME type icons displayed.
+        """
+        return get_css_class(self)
+
     def CroppedDescription(self):
         return None
+
+    @property
+    def portal_type(self):
+        return self.record.portal_type
 
     @property
     def is_document(self):
