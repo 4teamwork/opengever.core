@@ -1,4 +1,5 @@
-from opengever.base.date_time import utcnow_tz_aware
+from datetime import datetime
+from opengever.base.date_time import as_utc
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.model import Base
 from opengever.base.model import Session
@@ -45,8 +46,8 @@ class CatalogRecordBase(Base):
     oguid = Column(String(32), primary_key=True, index=True, nullable=False)
     admin_unit_id = Column(String(UNIT_ID_LENGTH), index=True, nullable=False)
     uuid = Column(String(32), unique=True, nullable=False, index=True)
-    record_created = Column(DateTime, default=utcnow_tz_aware)
-    record_modified = Column(DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware)
+    record_created = Column(DateTime, default=datetime.now)
+    record_modified = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     created = Column(DateTime, index=True)
     modified = Column(DateTime, index=True)
@@ -62,11 +63,11 @@ class CatalogRecordBase(Base):
 
     @classmethod
     def created_indexer(kls, obj):
-        return obj.created().asdatetime()
+        return as_utc(obj.created().asdatetime()).replace(tzinfo=None)
 
     @classmethod
     def modified_indexer(kls, obj):
-        return obj.modified().asdatetime()
+        return as_utc(obj.modified().asdatetime()).replace(tzinfo=None)
 
     @classmethod
     def absolute_path_indexer(kls, obj):
@@ -197,3 +198,7 @@ class RepositoryRootCatalogRecord(CatalogRecordBase):
 class RepositoryFolderCatalogRecord(CatalogRecordBase):
     __tablename__ = 'catalog_repository_folder'
     portal_type = 'opengever.repository.repositoryfolder'
+
+    @classmethod
+    def title_indexer(cls, obj):
+        return obj.Title().decode('utf-8')

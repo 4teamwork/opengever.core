@@ -1,4 +1,4 @@
-from opengever.base.date_time import utcnow_tz_aware
+from datetime import datetime
 from opengever.core.upgrade import SchemaMigration
 from opengever.sqlcatalog.interfaces import ISQLCatalog
 from sqlalchemy import Column
@@ -24,8 +24,8 @@ class InstallSQLCatalog(SchemaMigration):
             Column('oguid', String(32), primary_key=True, index=True, nullable=False),
             Column('admin_unit_id', String(30), index=True, nullable=False),
             Column('uuid', String(32), unique=True, nullable=False, index=True),
-            Column('record_created', DateTime, default=utcnow_tz_aware),
-            Column('record_modified', DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware),
+            Column('record_created', DateTime, default=datetime.now),
+            Column('record_modified', DateTime, default=datetime.now, onupdate=datetime.now),
             Column('created', DateTime, index=True),
             Column('modified', DateTime, index=True),
             Column('title', String(256), index=True),
@@ -49,8 +49,8 @@ class InstallSQLCatalog(SchemaMigration):
             Column('oguid', String(32), primary_key=True, index=True, nullable=False),
             Column('admin_unit_id', String(30), index=True, nullable=False),
             Column('uuid', String(32), unique=True, nullable=False, index=True),
-            Column('record_created', DateTime, default=utcnow_tz_aware),
-            Column('record_modified', DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware),
+            Column('record_created', DateTime, default=datetime.now),
+            Column('record_modified', DateTime, default=datetime.now, onupdate=datetime.now),
             Column('created', DateTime, index=True),
             Column('modified', DateTime, index=True),
             Column('title', String(256), index=True),
@@ -74,8 +74,8 @@ class InstallSQLCatalog(SchemaMigration):
             Column('oguid', String(32), primary_key=True, index=True, nullable=False),
             Column('admin_unit_id', String(30), index=True, nullable=False),
             Column('uuid', String(32), unique=True, nullable=False, index=True),
-            Column('record_created', DateTime, default=utcnow_tz_aware),
-            Column('record_modified', DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware),
+            Column('record_created', DateTime, default=datetime.now),
+            Column('record_modified', DateTime, default=datetime.now, onupdate=datetime.now),
             Column('created', DateTime, index=True),
             Column('modified', DateTime, index=True),
             Column('title', String(256), index=True),
@@ -93,8 +93,8 @@ class InstallSQLCatalog(SchemaMigration):
             Column('oguid', String(32), primary_key=True, index=True, nullable=False),
             Column('admin_unit_id', String(30), index=True, nullable=False),
             Column('uuid', String(32), unique=True, nullable=False, index=True),
-            Column('record_created', DateTime, default=utcnow_tz_aware),
-            Column('record_modified', DateTime, default=utcnow_tz_aware, onupdate=utcnow_tz_aware),
+            Column('record_created', DateTime, default=datetime.now),
+            Column('record_modified', DateTime, default=datetime.now, onupdate=datetime.now),
             Column('created', DateTime, index=True),
             Column('modified', DateTime, index=True),
             Column('title', String(256), index=True),
