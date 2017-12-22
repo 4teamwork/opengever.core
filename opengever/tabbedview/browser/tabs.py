@@ -8,8 +8,10 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.sqlcatalog.interfaces import ISQLCatalog
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseCatalogListingTab
+from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.filters import CatalogQueryFilter
 from opengever.tabbedview.filters import Filter
@@ -24,12 +26,15 @@ from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
 from opengever.tabbedview.interfaces import ITabbedViewProxy
 from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import BoundPageTemplate
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import implements
+import cgi
 
 
 PROXY_VIEW_POSTFIX = "-proxy"
@@ -110,17 +115,38 @@ class DocumentsProxy(BaseTabProxy):
     """
 
 
-class Documents(BaseCatalogListingTab):
+from ftw.table.interfaces import ITableSource, ITableSourceConfig
+class ISQLCatalogSourceConfig(ITableSourceConfig):
+    """"""
+
+
+def path_checkbox_sqlrecord(item, value):
+    title = safe_unicode(cgi.escape(item.Title, quote=True))
+    return u'''<input type="checkbox" class="noborder selectable"
+    name="paths:list" id="%s" value="%s"
+    alt="Select %s" title="Select %s" />''' % (
+        item.id, item.absolute_path, title, title)
+
+
+from opengever.tabbedview import BaseListingTab
+class Documents(BaseListingTab):
     """List all documents recursively. Working copies are not listed.
     """
 
-    types = ['opengever.document.document', 'ftw.mail.mail']
+    def get_base_query(self):
+        model = getUtility(ISQLCatalog).get_model_for_portal_type(
+            'opengever.document.document')
+        return model.query
+
+    sort_on = 'title'
+    sort_reverse = False
+    lazy = False
 
     columns = (
 
         {'column': '',
          'column_title': '',
-         'transform': helper.path_checkbox,
+         'transform': path_checkbox_sqlrecord,
          'sortable': False,
          'groupable': False,
          'width': 30},
@@ -130,9 +156,9 @@ class Documents(BaseCatalogListingTab):
                            default=u'Sequence Number'),
          'sort_index': 'sequence_number'},
 
-        {'column': 'Title',
+        {'column': 'title',
          'column_title': _(u'label_title', default=u'Title'),
-         'sort_index': 'sortable_title',
+         'sort_index': 'title',
          'transform': linked_document},
 
         {'column': 'document_author',
@@ -156,9 +182,9 @@ class Documents(BaseCatalogListingTab):
          'column_title': _('label_checked_out', default="Checked out by"),
          'transform': readable_ogds_user},
 
-        {'column': 'containing_subdossier',
-         'column_title': _('label_subdossier', default="Subdossier"),
-         'transform': linked_containing_subdossier},
+        # {'column': 'containing_subdossier',
+        #  'column_title': _('label_subdossier', default="Subdossier"),
+        #  'transform': linked_containing_subdossier},
 
         {'column': 'public_trial',
          'column_title': _('label_public_trial', default="Public Trial"),

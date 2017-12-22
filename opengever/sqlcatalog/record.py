@@ -53,7 +53,7 @@ class CatalogRecordBase(Base):
     icon = Column(String(50))
 
     def __repr__(self):
-        return '<Catalog record {} {!r}>'.format(type(self).__name__, self.guid, self.title)
+        return '<Catalog record {} {!r}>'.format(type(self).__name__, self.oguid, self.title)
 
     @classmethod
     def absolute_path_indexer(kls, obj):
@@ -118,6 +118,7 @@ class CatalogRecordBase(Base):
     def reindex(self):
         """Reindex the current record.
         """
+        LOG.warning('Index {!r} for {!r}'.format(self, self.get_object()))
         for key, value in self.get_data_for(self.get_object()).items():
             set_attribute(self, key, value)
         return self
@@ -131,14 +132,14 @@ class CatalogRecordBase(Base):
 
     @property
     def Title(self):
-        return self.title
+        return self.title.encode('utf-8')
 
     def getPath(self):
-        return self.absolute_path
+        return self.absolute_path.encode('utf-8')
 
     def getURL(self):
         if self.admin_unit_id == get_current_admin_unit().id():
-            return '/'.join((getSite().absolute_url(), self.relative_path))
+            return '/'.join((getSite().absolute_url(), self.relative_path.encode('utf-8')))
         else:
             raise NotImplementedError()
 
