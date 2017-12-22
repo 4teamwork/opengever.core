@@ -187,3 +187,13 @@ class DocumentCatalogRecord(DocumentishMixin, CatalogRecordBase):
 class MailCatalogRecord(DocumentishMixin, CatalogRecordBase):
     __tablename__ = 'catalog_mail'
     portal_type = 'ftw.mail.mail'
+
+
+class RepositoryRootCatalogRecord(CatalogRecordBase):
+    __tablename__ = 'catalog_repository_root'
+    portal_type = 'opengever.repository.repositoryroot'
+
+
+class RepositoryFolderCatalogRecord(CatalogRecordBase):
+    __tablename__ = 'catalog_repository_folder'
+    portal_type = 'opengever.repository.repositoryfolder'
