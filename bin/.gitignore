@@ -10,7 +10,6 @@
 !git-changed-xml
 !git-fork-point
 !i18n-build
-!mtest
 !pinchecker
 !qa
 !remove-test-cache
