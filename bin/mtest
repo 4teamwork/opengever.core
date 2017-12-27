@@ -35,11 +35,11 @@ def humanize_time(seconds):
     days, hours = divmod(hours, 24)
     weeks, days = divmod(days, 7)
 
-    seconds = int(round(seconds))
-    minutes = int(round(minutes))
-    hours = int(round(hours))
-    days = int(round(days))
-    weeks = int(round(weeks))
+    seconds = int(seconds)
+    minutes = int(minutes)
+    hours = int(hours)
+    days = int(days)
+    weeks = int(weeks)
 
     output = []
 
