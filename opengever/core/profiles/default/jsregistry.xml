@@ -283,7 +283,7 @@
       enabled="True"
       id="++resource++opengever.base/base.js"
       inline="False"
-      insert-after="++resource++opengever.meeting/meeting.js"
+      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
       />
 
   <javascript
