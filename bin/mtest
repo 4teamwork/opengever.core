@@ -87,7 +87,6 @@ def create_test_run_params():
         'opengever.document',
         'opengever.base',
         'opengever.task',
-        'opengever.dossier',
         'opengever.disposition',
         )
 
