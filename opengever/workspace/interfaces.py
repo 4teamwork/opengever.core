@@ -11,7 +11,7 @@ class IWorkspace(IDossierMarker):
     """ Marker interface for Workspace """
 
 
-class IWorkspaceFolder(Interface):
+class IWorkspaceFolder(IDossierMarker):
     """ Marker interface for Workspace Folders """
 
 

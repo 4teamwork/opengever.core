@@ -11,5 +11,6 @@
   <include package=".behaviors" />
 
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
+  <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
 
 </configure>

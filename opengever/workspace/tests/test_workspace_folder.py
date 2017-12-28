@@ -1,7 +1,9 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import IntegrationTestCase
+from zope.component import getUtility
 
 
 class TestWorkspaceFolder(IntegrationTestCase):
@@ -18,3 +20,10 @@ class TestWorkspaceFolder(IntegrationTestCase):
         form.save()
 
         assert_no_error_messages(browser)
+
+    def test_sequence_number(self):
+        self.assertEquals(
+            1, getUtility(ISequenceNumber).get_number(self.workspace_folder))
+
+    def test_workspace_generated_ids(self):
+        self.assertEquals('folder-1', self.workspace_folder.getId())
