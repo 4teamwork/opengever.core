@@ -5,6 +5,7 @@ Changelog
 2017.7.5 (unreleased)
 ---------------------
 
+- Bump docxcompose version to 1.0.0a4. [phgross]
 - Fix pre-filling committee group id in edit form. [deiferni]
 
 
