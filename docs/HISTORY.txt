@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Enable edit border for committee members on meeting view. [phgross]
+- Bump docxcompose version to 1.0.0a4. [phgross]
 - Add filename and filesize in bumblebee overlay. [njohner]
 - Fix plonesite removal. [phgross]
 - Fix pre-filling committee group id in edit form. [deiferni]
