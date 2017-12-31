@@ -228,6 +228,12 @@ class MeetingView(BrowserView):
 
     def __call__(self):
         if is_word_meeting_implementation_enabled():
+            # Enable border to show the zip export action also for
+            # committee members. Because the plone_view's `showEditableBorder`
+            # checks for `ModifyPortalContent`, we have to enable the border
+            # manually.
+            self.request.set('enable_border', True)
+
             return self.word_template()
         else:
             return self.noword_template()
