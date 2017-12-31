@@ -175,6 +175,20 @@ class TestWordMeetingView(IntegrationTestCase):
              'reopen_url': self.get_meeting_transition_url('closed-held')},
             view.get_closing_infos())
 
+    @browsing
+    def test_zip_export_action_is_available_for_committee_member(self, browser):
+        self.login(self.meeting_user, browser=browser)
+        browser.open(self.meeting)
+
+        self.assertIn('Export as Zip',
+                      browser.css('#contentActionMenus a').text)
+
+        browser.click_on('Export as Zip')
+        self.assertEquals('application/zip', browser.headers.get('content-type'))
+        self.assertEquals(
+            'inline; filename="9. Sitzung der Rechnungsprufungskommission.zip"',
+            browser.headers.get('content-disposition'))
+
     def get_meeting_transition_url(self, transition_name):
         transition_controller = self.meeting.model.workflow.transition_controller
         return transition_controller.url_for(self.meeting,
