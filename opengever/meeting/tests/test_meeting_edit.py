@@ -22,9 +22,8 @@ class TestEditMeeting(IntegrationTestCase):
     def test_edit_meeting_not_visibile_to_meeting_(self, browser):
         self.login(self.meeting_user, browser)
         browser.open(self.meeting)
-        # The "Edit" action is not visibile since the complete editbar
-        # is not visible.
-        self.assertFalse(editbar.visible())
+
+        self.assertEquals([], editbar.contentviews())
 
     @browsing
     def test_edit_meeting_metadata(self, browser):

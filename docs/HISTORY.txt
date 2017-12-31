@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bump docxcompose version to 1.0.0a4. [phgross]
+- Enable edit border for committee members on meeting view. [phgross]
 - Fix pre-filling committee group id in edit form. [deiferni]
 
 
