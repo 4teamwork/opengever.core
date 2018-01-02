@@ -5,11 +5,8 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
-- Enable edit border for committee members on meeting view. [phgross]
-- Bump docxcompose version to 1.0.0a4. [phgross]
 - Add filename and filesize in bumblebee overlay. [njohner]
 - Fix plonesite removal. [phgross]
-- Fix pre-filling committee group id in edit form. [deiferni]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]
 - OGIP 17: Add workspace content type [raphael-s]
 - Fix active field in the team edit form. [phgross]
@@ -21,6 +18,20 @@ Changelog
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
+
+
+2017.7.5 (2018-01-02)
+---------------------
+
+- Bump docxcompose version to 1.0.0a4. [phgross]
+- Enable edit border for committee members on meeting view. [phgross]
+- Fix pre-filling committee group id in edit form. [deiferni]
+
+
+2017.7.4 (2017-12-09)
+---------------------
+
+- Bump ftw.recipe.deployment version.
 
 
 2017.7.3 (2017-12-08)
