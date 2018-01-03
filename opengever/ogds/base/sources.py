@@ -10,9 +10,12 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.workspace.utils import get_workspace_user_ids
+from opengever.workspace.utils import is_within_workspace
 from plone import api
 from sqlalchemy import func
 from sqlalchemy import orm
+from sqlalchemy import sql
 from sqlalchemy.sql.expression import asc
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
@@ -61,7 +64,8 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
     """
     def __init__(self, context):
         super(BaseMultipleSourcesQuerySource, self).__init__(context)
-        self.source_instances = [source_class(context) for source_class in self.source_classes]
+        self.source_instances = [source_class(
+            context) for source_class in self.source_classes]
 
     @property
     def source_classes(self):
@@ -134,7 +138,9 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         `only_users` flag is enabled.
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
-        return create_session().query(*models)
+        query = create_session().query(*models)
+        query = self._extend_query_with_workspace_filter(query)
+        return query
 
     @property
     def search_query(self):
@@ -155,6 +161,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
 
+        query = self._extend_query_with_workspace_filter(query)
         return query
 
     def getTerm(self, value):
@@ -276,6 +283,16 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         for team in query:
             self.terms.insert(0, self.getTerm(team.actor_id()))
+
+    def _extend_query_with_workspace_filter(self, query):
+        if is_within_workspace(self.context):
+            userids = list(get_workspace_user_ids(self.context))
+            if userids:
+                query = query.filter(User.userid.in_(userids))
+            else:
+                # Avoid filter for a empty list.
+                query = query.filter(sql.false())
+        return query
 
     def get_client_id(self):
         """Tries to get the client from the request. If no client is found None
