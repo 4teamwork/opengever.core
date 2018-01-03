@@ -7,6 +7,8 @@ Changelog
 
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
 - Add partial reindex optimization for trashing and untrashing objects. [elioschmutz]
+- OGIP 17: Implement sequence_number and NameFromTitle behavior for Workspace. [mathias.leimgruber]
+- OGIP 17: Add tabbedviews for opengever.workspace types. [mathias.leimgruber]
 - Add filename and filesize in bumblebee overlay. [njohner]
 - Fix plonesite removal. [phgross]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]
