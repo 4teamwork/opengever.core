@@ -5,7 +5,7 @@ Changelog
 2017.6.7 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
 
 
 2017.6.6 (2017-11-30)
