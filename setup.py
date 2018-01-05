@@ -168,6 +168,7 @@ setup(name='opengever.core',
           'z3c.unconfigure',
           'zc.relation',
           'zope.globalrequest',
+          'ftw.solr',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,

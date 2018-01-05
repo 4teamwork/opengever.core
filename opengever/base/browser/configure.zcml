@@ -23,6 +23,14 @@
       />
 
   <browser:page
+      for="*"
+      name="livesearch_reply"
+      class=".livesearch.LiveSearchReplyView"
+      permission="zope2.View"
+      layer="ftw.solr.interfaces.IFtwSolrLayer"
+      />
+
+  <browser:page
       name="view"
       for="plone.dexterity.interfaces.IDexterityItem"
       class=".default_view.OGDefaultView"

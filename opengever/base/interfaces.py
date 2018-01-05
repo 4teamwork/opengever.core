@@ -1,3 +1,4 @@
+from ftw.solr.interfaces import ISolrDocument
 from Products.ZCatalog.interfaces import ICatalogBrain
 from zope import schema
 from zope.component import getAdapters
@@ -302,3 +303,16 @@ class ISQLFormSupport(Interface):
     def update_model(self, data):
         """Updated the model-fields given in data-dict.
         """
+
+
+class IOGSolrDocument(ISolrDocument):
+    """OpenGever Solr Document"""
+
+
+class ISearchSettings(Interface):
+
+    use_solr = schema.Bool(
+        title=u'Use Solr',
+        description=u'Enables Solr for search forms.',
+        default=False,
+    )

@@ -1,14 +1,22 @@
 from DateTime import DateTime
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
+from ftw.solr.query import make_query
+from opengever.base.interfaces import ISearchSettings
+from opengever.base.solr import OGSolrContentListing
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
 from plone.app.search.browser import Search
+from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.navtree import getNavigationRoot
+from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getMultiAdapter
-
+from zope.component import getUtility
+from ZPublisher.HTTPRequest import record
 
 FILTER_TYPES = [
     'ftw.mail.mail',
@@ -44,6 +52,13 @@ class OpengeverSearch(Search):
         over all brains because we don't know on which batch are how
         many bumblebeeable-items.
         """
+
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        if settings.use_solr:
+            return self.solr_results(
+                query=query, batch=batch, b_size=b_size, b_start=b_start)
+
         if is_bumblebee_feature_enabled:
             bumblebee_search_query = query or {}
             brains = super(OpengeverSearch, self).results(
@@ -53,6 +68,92 @@ class OpengeverSearch(Search):
 
         return super(OpengeverSearch, self).results(
             query=query, batch=batch, b_size=self.b_size, b_start=b_start)
+
+    def solr_results(self, query=None, batch=True, b_size=10, b_start=0):
+
+        searchable_text = self.request.form.get('SearchableText', '')
+        if searchable_text:
+            query = make_query(searchable_text)
+        else:
+            query = u'*:*'
+
+        params = {
+            'fl': [
+                'UID', 'Title', 'getIcon', 'portal_type', 'path',
+                'containing_dossier', 'id', 'created', 'modified',
+                'review_state',
+            ],
+            'hl': 'on',
+            'hl.fl': 'SearchableText',
+            'hl.snippets': 3,
+        }
+        solr = getUtility(ISolrSearch)
+        resp = solr.search(
+            query=query, filter=self.solr_filters(), start=b_start,
+            rows=b_size, **params)
+
+        self.offset = b_start
+        self.number_of_documents = resp.num_found
+
+        results = OGSolrContentListing(resp)
+        if batch:
+            results = Batch(results, b_size, b_start)
+        return results
+
+    def solr_filters(self):
+        solr = getUtility(ISolrSearch)
+        schema = solr.manager.schema
+        filters = []
+        for key, value in self.request.form.items():
+            if key == 'SearchableText':
+                continue
+            if key not in schema.fields:
+                continue
+
+            if isinstance(key, str):
+                key = key.decode('utf8')
+
+            # Date range queries
+            if isinstance(value, record):
+                range_ = value.get('range', None)
+                if range_ in ['min', 'max', 'minmax']:
+                    value = value.get('query', None)
+                    if value is None:
+                        continue
+                    try:
+                        value = [DateTime(v) for v in value]
+                    except SyntaxError:
+                        continue
+                    if range_ == 'min':
+                        filters.append(u'%s:[%s TO *]' % (
+                            key, escape(value[0].HTML4())))
+                    elif range_ == 'max':
+                        filters.append(u'%s:[* TO %s]' % (
+                            key, escape(value[0].HTML4())))
+                    elif range_ == 'minmax':
+                        filters.append(u'%s:[%s TO %s]' % (
+                            key,
+                            escape(value[0].HTML4()),
+                            escape(value[1].HTML4())))
+            else:
+                if not isinstance(value, (list, tuple)):
+                    value = [value]
+                for i, v in enumerate(value):
+                    if isinstance(v, str):
+                        v = v.strip()
+                        v = v.decode('utf8')
+                        v = escape(v)
+                        if ' ' in v:
+                            v = '"%s"' % v
+                        value[i] = v
+                    else:
+                        value[i] = v
+                if len(value) > 1:
+                    filters.append(u'%s:(%s)' % (key, ' OR '.join(value)))
+                else:
+                    filters.append(u'%s:%s' % (key, value[0]))
+
+        return filters
 
     def breadcrumbs(self, item):
         obj = item.getObject()
