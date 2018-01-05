@@ -63,6 +63,20 @@ class TestNotificationViewlet(FunctionalTestCase):
             browser.css('#portal-notifications .unread_number').first.text)
 
     @browsing
+    def test_number_of_unread_messages_counts_only_badge_notifications(self, browser):
+        create(Builder('notification')
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_a))
+        create(Builder('notification')
+               .watcher(self.test_watcher)
+               .having(activity=self.activity_b, is_badge=False))
+
+        browser.login().open()
+        self.assertEquals(
+            '1',
+            browser.css('#portal-notifications .unread_number').first.text)
+
+    @browsing
     def test_number_of_unread_messages_is_not_display_when_its_0(self, browser):
         browser.login().open()
         self.assertEquals([], browser.css('#portal-notifications .num-unread'))
