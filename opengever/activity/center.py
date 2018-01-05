@@ -137,8 +137,10 @@ class NotificationCenter(object):
             Notification.activity).order_by(desc(Activity.created))
         return query.limit(limit).all()
 
-    def count_users_unread_notifications(self, userid):
+    def count_users_unread_notifications(self, userid, badge_only=False):
         query = Notification.query.by_user(userid)
+        if badge_only:
+            query = query.filter(Notification.is_badge.is_(True))
         return query.filter(Notification.is_read.is_(False)).count()
 
     def mark_notification_as_read(self, notification_id):
@@ -247,9 +249,9 @@ class PloneNotificationCenter(NotificationCenter):
         oguid = self._get_oguid_for(obj)
         return super(PloneNotificationCenter, self).fetch_resource(oguid)
 
-    def count_current_users_unread_notifications(self):
+    def count_current_users_unread_notifications(self, badge_only=False):
         return super(PloneNotificationCenter, self).count_users_unread_notifications(
-            api.user.get_current().getId())
+            api.user.get_current().getId(), badge_only)
 
     def get_current_users_notifications(self, only_unread=False, limit=None):
         return super(PloneNotificationCenter, self).get_users_notifications(
