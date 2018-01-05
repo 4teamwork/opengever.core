@@ -2,6 +2,7 @@
 """A concurrent wrapper for timing xmltestrunner tests for opengever.core."""
 from __future__ import print_function
 from argparse import ArgumentParser
+from collections import OrderedDict
 from fnmatch import fnmatch
 from logging import DEBUG
 from logging import Formatter
@@ -20,8 +21,10 @@ from os import walk
 from signal import SIGINT
 from signal import SIGKILL
 from signal import signal
+from subprocess import check_output
 from subprocess import PIPE
 from subprocess import Popen
+from time import sleep
 from time import time
 
 
@@ -35,11 +38,11 @@ def humanize_time(seconds):
     days, hours = divmod(hours, 24)
     weeks, days = divmod(days, 7)
 
-    seconds = int(round(seconds))
-    minutes = int(round(minutes))
-    hours = int(round(hours))
-    days = int(round(days))
-    weeks = int(round(weeks))
+    seconds = int(seconds)
+    minutes = int(minutes)
+    hours = int(hours)
+    days = int(days)
+    weeks = int(weeks)
 
     output = []
 
@@ -79,60 +82,86 @@ def get_concurrency():
     return concurrency
 
 
+def discover_test_layers():
+    logger.info('Discovering test classes')
+
+    test_classes_per_layer = {}
+    current_layer = None
+
+    test_discovery = check_output(
+        ('bin/test', '--list-tests', ),
+        ).decode('UTF-8').splitlines()
+
+    for result in test_discovery:
+        is_layer_header = result.startswith('Listing')
+
+        # We're guaranteed the output format so we can just set this
+        if is_layer_header:
+            current_layer = result.split()[1]
+            test_classes_per_layer[current_layer] = []
+
+        # There are unrelated lines in the beginning we do not want to catch
+        if current_layer and not is_layer_header:
+            test_classes_per_layer[current_layer].append(
+                result.split()[-1].strip('()'),
+                )
+
+    # Prune to unique test classes per layer
+    return {
+        layer: tuple(sorted(set(tests)))
+        for layer, tests in test_classes_per_layer.iteritems()
+        }
+
+
 def create_test_run_params():
-    test_run_params = []
+    test_classes_per_layer = discover_test_layers()
 
-    # Manually ordered per metrification
-    standalone_modules = (
-        'opengever.document',
-        'opengever.base',
-        'opengever.task',
-        'opengever.dossier',
-        'opengever.disposition',
-        )
+    # Ordered by hand for a sensible run order
+    # The order is used below for ordering the test run
+    layers_to_split = OrderedDict()
+    layers_to_split[u'opengever.core.testing.MeetingLayer'] = 1
+    layers_to_split[u'opengever.core.testing.opengever.core:integration'] = 2
+    layers_to_split[u'opengever.core.testing.opengever.core:functional'] = 8
 
-    # Manually ordered per metrification
-    standalone_layers = (
-        'opengever.core.testing.MeetingLayer',
-        'opengever.core.testing.opengever.core:functional:zserver',
-        'opengever.core.testing.opengever.core:integration',
-        )
+    # The common grouping for all the small / quick layers
+    test_run_params = [{
+        'layers': [],
+        'test_classes': [],
+        'batch': '1 / 1',
+        }]
 
-    if CONCURRENCY > 1:
-        module_negation = tuple(
-            ''.join(('!', module, ))
-            for module in standalone_modules
-            )
-
-        layer_negation = tuple(
-            ''.join(('!', layer, ))
-            for layer in standalone_layers
-            )
-
-        for layer in standalone_layers:
-            test_run_params.append({
-                'layers': (layer, ),
-                'modules': None,
+    for layer, test_classes in test_classes_per_layer.iteritems():
+        if layer in layers_to_split:
+            n = layers_to_split.get(layer)
+            test_class_groups = [test_classes[i::n] for i in range(n)]
+            test_class_group_count = len(test_class_groups)
+            for i, test_class_group in enumerate(test_class_groups):
+                test_run_params.append({
+                    'layers': [layer],
+                    'test_classes': test_class_group,
+                    'batch': '{} / {}'.format(i + 1, test_class_group_count)
                 })
+        else:
+            test_run_params[0].get('layers').append(layer)
+            test_run_params[0].get('test_classes').extend(test_classes)
 
-        test_run_params.append({
-            'layers': layer_negation,
-            'modules': module_negation,
-            })
+    # Cement all the grouped layers
+    for i, params in enumerate(test_run_params):
+        params['layers'] = tuple(sorted(set(params['layers'])))
+        params['test_classes'] = tuple(sorted(set(params['test_classes'])))
+        params['port'] = i + 1
 
-        for module in standalone_modules:
-            test_run_params.append({
-                'layers': layer_negation,
-                'modules': (module, ),
-                })
+    # Make sure heavy stuff runs first - add light stuff on top
+    for priority_layer in layers_to_split:
+        for param in test_run_params:
+            if priority_layer in param.get('layers'):
+                test_run_params.insert(
+                    0,
+                    test_run_params.pop(test_run_params.index(param)),
+                    )
 
-    else:
-        test_run_params.append({
-            'layers': None,
-            'modules': None,
-            })
-
-    return tuple(test_run_params)
+    # Cement the test batches - reverse for proper ordering
+    return tuple(reversed(test_run_params))
 
 
 def remove_bytecode_files(directory_path):
@@ -155,25 +184,32 @@ def run_tests(test_run_params):
     """
     params = ['bin/test']
 
-    layers = test_run_params.get('layers', None)
-    modules = test_run_params.get('modules', None)
+    layers = test_run_params.get('layers')
+    test_classes = test_run_params.get('test_classes')
+    batch = test_run_params.get('batch')
+    port = test_run_params.get('port')
 
     if layers:
         for layer in layers:
             params.append('--layer')
             params.append(layer)
 
-    if modules:
-        for module in modules:
-            params.append('-m')
-            params.append(module)
+    if test_classes:
+        for test_class in test_classes:
+            params.append('-t')
+            params.append(test_class)
 
-    logger.debug('Start: %s %s', layers, modules)
+    printable_layers = ', '.join(layers)
 
-    # ZServer tests will be run separately of everything else per layer
-    # separation
+    logger.debug(
+        'Start: %s - %d test classes - batch %s',
+        printable_layers,
+        len(test_classes),
+        batch,
+        )
+
     env = environ.copy()
-    env['ZSERVER_PORT'] = env.get('PORT1', '55000')
+    env['ZSERVER_PORT'] = env.get('PORT{}'.format(port), str(55000 + port))
 
     start = time()
 
@@ -191,52 +227,82 @@ def run_tests(test_run_params):
 
     result = {
         'layers': layers,
-        'modules': modules,
+        'test_classes': test_classes,
+        'batch': batch,
+        'port': env.get('ZSERVER_PORT'),
         'returncode': returncode,
         'runtime': runtime,
         'stderr': stderr,
         'stdout': stdout,
         }
 
-    logger.debug('Done: %s %s in %s', layers, modules, humanize_time(runtime))
-    if DEBUG_MODE:
-        # This explicitly expects UTF-8 as the runtime locale!
-        if stderr:
-            print(stderr.decode('UTF-8'), end='')
-        if returncode:
-            print(stdout.decode('UTF-8'), end='')
+    logger.debug(
+        'Done : %s - %d test classes - batch %s in %s at %.2fs / test class',
+        printable_layers,
+        len(test_classes),
+        batch,
+        humanize_time(runtime),
+        runtime / len(test_classes),
+        )
 
     return result
 
 
 def handle_results(results):
     success = []
+    runtime = 0
 
-    for result in results:
-        # For some reason we get the test run result dict wrapped in a list
-        returncode = result.get('returncode', 1)
-        stderr = result.get('stderr', None)
-        stdout = result.get('stdout', None)
+    while results:
+        sleep(1)
 
-        if not stderr and not returncode:
-            success.append(True)
+        mature_indices = []
+        mature_results = []
 
-        else:
-            success.append(False)
-            # We already printed at test runtime
-            if not DEBUG_MODE:
+        for i, result in enumerate(results):
+            if result.ready():
+                mature_indices.append(i)
+                # The enumeration index can be off for the .pop() otherwise
+                break
+
+        for i in mature_indices:
+            mature_results.append(results.pop(i).get())
+
+        for result in mature_results:
+            # For some reason we get the test run result dict wrapped in a list
+            returncode = result.get('returncode', 1)
+            stderr = result.get('stderr')
+            stdout = result.get('stdout')
+            runtime += result.get('runtime')
+
+            if not stderr and not returncode:
+                success.append(True)
+
+            else:
+                success.append(False)
                 # This explicitly expects UTF-8 as the runtime locale!
+                print('')
+                print('STDERR')
+                print('')
+                print(result.get('layers'))
+                print('')
                 print(stderr.decode('UTF-8'), end='')
+                print('')
                 if returncode:
+                    print('')
+                    print('STDOUT')
+                    print('')
+                    print(result.get('layers'))
+                    print('')
                     print(stdout.decode('UTF-8'), end='')
+                    print('')
+
+    logger.debug(
+        'Aggregate runtime %s.',
+        humanize_time(runtime)
+        )
 
     # Nothing returned False, everything went fine
-    if all(r is True for r in success):
-        logger.info('No failed tests.')
-        exit(0)
-
-    # Fail per default
-    exit(1)
+    return all(r is True for r in success)
 
 
 def main():
@@ -246,34 +312,34 @@ def main():
     #
     # Setting PYTHONDONTWRITEBYTECODE is not enough, because running buildout
     # also already precompiles bytecode for some eggs.
-    logger.info('Cleaning bytecode files.')
+    logger.info('Cleaning bytecode files')
     remove_bytecode_files(OPENGEVER_PATH)
     remove_bytecode_files('src')
 
     test_run_params = create_test_run_params()
-    pool = Pool(CONCURRENCY)
 
     start = time()
 
-    results = tuple(sorted(
-        pool.map(run_tests, test_run_params),
-        key=lambda result: result.get('runtime', 0.0),
-        ))
+    logger.info('Running tests')
+
+    pool = Pool(CONCURRENCY)
+    results = [
+        pool.apply_async(run_tests, (params, ))
+        for params in test_run_params
+        ]
+
+    success = handle_results(results)
 
     pool.close()
     pool.join()
 
-    logger.debug(
-        'Aggregate runtime %s.',
-        humanize_time(sum(
-            i.get('runtime', 0.0)
-            for i in results
-            ))
-        )
-
     logger.debug('Wallclock runtime %s.', humanize_time(time() - start))
 
-    handle_results(results)
+    if success:
+        logger.info('No failed tests.')
+        return True
+
+    return False
 
 
 # Having the __main__ guard is necessary for multiprocessing.Pool().
@@ -345,4 +411,8 @@ if __name__ == '__main__':
     logger.addHandler(memory_handler)
 
     setup_termination()
-    main()
+
+    if main():
+        exit(0)
+
+    exit(1)
