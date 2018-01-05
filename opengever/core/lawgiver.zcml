@@ -292,4 +292,11 @@
         />
   </lawgiver:workflow>
 
+  <!-- Should be ignored, permission is only granted to manager and admin on site root -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.bumblebee: Revive Preview,
+                   "
+      />
+
 </configure>

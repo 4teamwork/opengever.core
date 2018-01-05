@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.dossier">
+
+  <permission id="opengever.bumblebee.RevivePreview" title="opengever.bumblebee: Revive Preview" />
+
+</configure>

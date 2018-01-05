@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-20 08:22+0000\n"
+"POT-Creation-Date: 2018-01-22 08:05+0000\n"
 "PO-Revision-Date: 2017-10-16 16:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,16 @@ msgstr "Aucun contenu"
 #: ./opengever/bumblebee/browser/overlay.py
 msgid "label_revert"
 msgstr "Reculer le document"
+
+#. Default: "Reviving the preview is not available for this context."
+#: ./opengever/bumblebee/browser/revive_preview.py
+msgid "preview_revive_not_available"
+msgstr ""
+
+#. Default: "Preview revived and will be available soon"
+#: ./opengever/bumblebee/browser/revive_preview.py
+msgid "preview_revived"
+msgstr ""
 
 #. Default: "You are looking at a versioned file."
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt

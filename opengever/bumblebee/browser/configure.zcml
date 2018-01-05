@@ -57,4 +57,12 @@
       permission="zope.Public"
       />
 
+  <browser:page
+      for="*"
+      name="revive_preview"
+      class=".revive_preview.RevivePreview"
+      permission="opengever.bumblebee.RevivePreview"
+      allowed_attributes="revive"
+      />
+
 </configure>

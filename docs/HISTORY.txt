@@ -15,6 +15,7 @@ Changelog
 - Tidy up XML files in default profile [raphael-s]
 - Trigger SQL task synchronisation when changing task state. [phgross]
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
+- Add action to revive bumblebee previews. [elioschmutz]
 - Add partial reindex optimization for trashing and untrashing objects. [elioschmutz]
 - OGIP 17: Implement sequence_number and NameFromTitle behavior for Workspace. [mathias.leimgruber]
 - OGIP 17: Add tabbedviews for opengever.workspace types. [mathias.leimgruber]
