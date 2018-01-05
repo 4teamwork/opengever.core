@@ -1,29 +1,45 @@
-from pkg_resources import resource_filename
+from distutils import spawn
+from opengever.base.sentry import log_msg_to_sentry
+from zope.globalrequest import getRequest
+import logging
 import os
+import shutil
 import subprocess
 import tempfile
 
 
-PERL_PATH = '/usr/bin/perl'
+logger = logging.getLogger('opengever.base.transforms')
 
 
 class Msg2MimeTransform(object):
     """A transform that converts an Outlook .msg file into a RFC822 MIME
-       message.
+    message.
     """
 
     def transform(self, value):
-        # Create a temporary msg file.
-        msg_file = tempfile.NamedTemporaryFile(delete=False)
-        msg_file.write(value)
-        msg_file.close()
+        # Create a temporary directory for 'msgconvert' to work in. It dumps
+        # the resulting .eml file to its working directory, and doesn't take
+        # an commandline option to actually specify the output path, so we
+        # have it do its work in a tempdir and predict the output filename.
+        tempdir = tempfile.mkdtemp()
 
-        # Locate conversion tool and launch it as a subprocess.
-        cmd = resource_filename('opengever.base.transforms', 'msg2mime.pl')
+        # Create a temporary msg file in the tempdir we just created
+        msg_path = os.path.join(tempdir, 'mail.msg')
+        with open(msg_path, 'wb') as msg_file:
+            msg_file.write(value)
+
+        msgconvert_path = spawn.find_executable("msgconvert")
+        if msgconvert_path is None:
+            error = 'msgconvert not found in $PATH'
+            log_msg_to_sentry(
+                error,
+                request=getRequest())
+            raise EnvironmentError(error)
 
         process = subprocess.Popen(
-            [PERL_PATH, cmd, msg_file.name],
+            [msgconvert_path, msg_path],
             bufsize=0,
+            cwd=tempdir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             close_fds=True)
@@ -31,12 +47,17 @@ class Msg2MimeTransform(object):
         # Wait for subprocess to terminate.
         stdout, stderr = process.communicate()
 
-        # Remove temporary msg file.
-        os.unlink(msg_file.name)
+        # The converted .eml file will be placed in the working directory
+        eml_path = os.path.join(tempdir, 'mail.eml')
+        with open(eml_path) as eml_file:
+            eml_data = eml_file.read()
+
+        # Remove temp directory
+        shutil.rmtree(tempdir)
 
         # If program terminated correctly return converted message
         if process.returncode == 0:
-            return stdout
+            return eml_data
         # If program terminated with error, raise exception
         else:
             msg = 'Program terminated with error code %s\n%s' % (

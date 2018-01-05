@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
 - Add partial reindex optimization for trashing and untrashing objects. [elioschmutz]
 - Fix notification counter, count only badge notifications. [phgross]
 - Add filename and filesize in bumblebee overlay. [njohner]
