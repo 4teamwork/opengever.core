@@ -67,7 +67,7 @@ class Trasher(object):
 
         # Trashed objects will be filtered from catalog search results by
         # default via a monkey patch somewhere in opengever.base.monkey
-        self.context.reindexObject()
+        self.reindex()
         notify(TrashedEvent(self.context))
 
     def untrash(self):
@@ -76,5 +76,8 @@ class Trasher(object):
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
         noLongerProvides(self.context, ITrashed)
-        self.context.reindexObject()
+        self.reindex()
         notify(UntrashedEvent(self.context))
+
+    def reindex(self):
+        self.context.reindexObject(idxs=['trashed', 'object_provides'])
