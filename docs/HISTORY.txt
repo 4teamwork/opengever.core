@@ -5,8 +5,7 @@ Changelog
 2017.7.6 (unreleased)
 ---------------------
 
-- Nothing changed yet.
-
+- Fix notification counter, count only badge notifications. [phgross]
 
 2017.7.5 (2018-01-02)
 ---------------------
