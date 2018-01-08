@@ -5,7 +5,7 @@ Changelog
 2017.7.7 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Trigger SQL task synchronisation when changing task state. [phgross]
 
 
 2017.7.6 (2018-01-08)

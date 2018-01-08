@@ -1,5 +1,9 @@
 from ftw.testing import MockTestCase
+from opengever.task.adapters import IResponseContainer
+from opengever.task.util import change_task_workflow_state
 from opengever.task.util import get_documents_of_task
+from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestGetDocumentsOfTask(MockTestCase):
@@ -74,3 +78,30 @@ class TestGetDocumentsOfTask(MockTestCase):
 
         self.assertEqual(get_documents_of_task(task, include_mails=True),
                          [doc1, mail1, obj1, obj3])
+
+
+class TestChangeTaskWorklowState(IntegrationTestCase):
+
+    def test_adds_corresponding_answer(self):
+        self.login(self.dossier_responsible)
+        change_task_workflow_state(
+            self.subtask, 'task-transition-resolved-tested-and-closed')
+
+        self.assertEqual('task-transition-resolved-tested-and-closed',
+                         IResponseContainer(self.subtask)[-1].transition)
+
+    def test_changes_workflow_state(self):
+        self.login(self.dossier_responsible)
+        change_task_workflow_state(
+            self.subtask, 'task-transition-resolved-tested-and-closed')
+
+        self.assertEqual('task-state-tested-and-closed',
+                         api.content.get_state(self.subtask))
+
+    def test_state_change_is_synced_to_globalindex(self):
+        self.login(self.dossier_responsible)
+        change_task_workflow_state(
+            self.subtask, 'task-transition-resolved-tested-and-closed')
+
+        self.assertEqual('task-state-tested-and-closed',
+                         self.subtask.get_sql_object().review_state)
