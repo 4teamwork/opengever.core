@@ -127,7 +127,12 @@ In order to convert Outlook ``*.msg`` messages to RFC822 ``*.eml`` when using
 Drag&Drop upload, we use the `msgconvert.pl <http://www.matijs.net/software/msgconv/>`_
 script. This script requires Perl and the ``Email::Outlook::Message`` module.
 
-So install Perl, ``perl-YAML`` and the following Perl modules:
+For production deployments, this module will be installed by Ops via Puppet
+(it's now packaged as an RPM).
+
+If you need this module for local development on macOS, you can also install
+it using Perl ``local::lib`` and CPAN. You then need to install Perl,
+``perl-YAML`` and the following Perl modules:
 
 .. code::
 
@@ -135,6 +140,8 @@ So install Perl, ``perl-YAML`` and the following Perl modules:
     Email::LocalDelivery
     Getopt::Long
     Pod::Usage
+
+In the end, GEVER will look for the ``msgconvert`` executable in ``$PATH``.
 
 
 Celery, Erlang and RabbitMQ
