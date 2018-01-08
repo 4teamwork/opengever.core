@@ -1,4 +1,5 @@
 from collective.elephantvocabulary import wrap_vocabulary
+from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task import _
@@ -159,6 +160,7 @@ def change_task_workflow_state(task, transition, **kwargs):
     response = add_simple_response(task, transition=transition, **kwargs)
 
     wftool.doActionFor(task, transition)
+    TaskSqlSyncer(task, None).sync()
 
     after = wftool.getInfoFor(task, 'review_state')
     after = wftool.getTitleForStateOnType(after, task.Type())
