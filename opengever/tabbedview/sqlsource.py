@@ -24,6 +24,36 @@ def cast_to_string(field):
     return cast(field, String)
 
 
+def sort_column_exists(query, sort_on):
+    for _column in query.column_descriptions:
+
+        column_exists = (
+            not _column.get('aliased') and
+            str(sort_on) in _column.get('entity').__table__.columns or
+            False
+        )
+
+        entity_exists = (
+            not _column.get('aliased') and
+            str(sort_on).replace(
+                '{}.'.format(_column.get('name')),
+                ''
+            ) in _column.get('entity').__table__.columns or
+            False
+        )
+
+        alias_exists = (
+            _column.get('aliased') and
+            str(sort_on) in _column.get('name') or
+            False
+        )
+
+        if any((column_exists, entity_exists, alias_exists)):
+            return True
+
+    return False
+
+
 @implementer(ITableSource)
 @adapter(IGeverTableSourceConfig, Interface)
 class SqlTableSource(GeverTableSource):
@@ -69,7 +99,8 @@ class SqlTableSource(GeverTableSource):
 
             order_f = self.config.sort_reverse and desc or asc
 
-            query = query.order_by(order_f(sort_on))
+            if sort_column_exists(query, sort_on):
+                query = query.order_by(order_f(sort_on))
 
         return query
 

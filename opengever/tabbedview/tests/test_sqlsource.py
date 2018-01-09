@@ -70,6 +70,20 @@ class TestSQLAlchemySortIndexes(FunctionalTestCase):
         self.assertIn('ORDER BY memberships.member_id',
                       str(source.build_query()))
 
+    def test_no_sorting_if_column_does_not_exist(self):
+        config = DummySQLTableSourceConfig(
+            self.portal,
+            self.request,
+            sql_indexes={'member_id': Membership.member_id})
+        config.sort_on = 'this_column_does_not_exist'
+        source = SqlTableSource(config, self.request)
+
+        query = source.build_query()
+        sorted_query = source.extend_query_with_ordering(query)
+
+        self.assertNotIn(
+            'ORDER BY this_column_does_not_exist',
+            str(sorted_query))
 
 class TestTextFilter(FunctionalTestCase):
 
