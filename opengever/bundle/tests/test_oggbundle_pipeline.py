@@ -279,7 +279,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         return self.assert_dossier_hanspeter_created(parent)
 
     def assert_dossier_peter_schneider_created(self, parent):
-        dossier_peter = parent.get('dossier-11')
+        dossier_peter = parent.get('dossier-12')
         self.assertEqual(
             u'Vreni Meier ist ein Tausendsassa',
             IDossier(dossier_peter).comments)
@@ -296,7 +296,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             index_data_for(dossier_peter)[GUID_INDEX_NAME])
 
     def assert_dossier_vreni_created(self, parent):
-        dossier = self.leaf_repofolder.get('dossier-13')
+        dossier = self.leaf_repofolder.get('dossier-14')
         self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
                          IDossier(dossier).comments)
         self.assertEqual(tuple(), IDossier(dossier).keywords)
@@ -312,7 +312,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             index_data_for(dossier)[GUID_INDEX_NAME])
 
     def assert_dossier_hanspeter_created(self, parent):
-        dossier_peter = parent.get('dossier-12')
+        dossier_peter = parent.get('dossier-13')
         self.assertEqual(
             u'archival worthy',
             ILifeCycle(dossier_peter).archival_value)

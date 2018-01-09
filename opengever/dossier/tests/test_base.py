@@ -100,7 +100,7 @@ class TestDossierContainer(IntegrationTestCase):
             'subdossier': 2,
             'subdossier2': 3,
             'archive_dossier': 4,
-            'empty_dossier': 5}
+            'empty_dossier': 6}
         got = {name: getattr(self, name).get_sequence_number()
                for name in expected.keys()}
         self.assertDictEqual(expected, got)
@@ -120,7 +120,7 @@ class TestDossierContainer(IntegrationTestCase):
             'subdossier': 'Client1 1.1 / 1.1',
             'subdossier2': 'Client1 1.1 / 1.2',
             'archive_dossier': 'Client1 1.1 / 2',
-            'empty_dossier': 'Client1 1.1 / 3'}
+            'empty_dossier': 'Client1 1.1 / 4'}
         got = {name: getattr(self, name).get_reference_number()
                for name in expected.keys()}
         self.assertDictEqual(expected, got)

@@ -125,7 +125,7 @@ class TestDossierIndexers(IntegrationTestCase):
             )
 
         self.assertEquals(
-            3,
+            4,
             len(catalog(Subject=u'Vertr\xe4ge')),
             u'Expected three items with Keyword "Vertr\xe4ge"',
             )
