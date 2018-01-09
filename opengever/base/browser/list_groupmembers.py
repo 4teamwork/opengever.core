@@ -15,9 +15,10 @@ class ListGroupMembers(BrowserView):
             return 'no group id'
 
         group = ogds_service().fetch_group(self.group_id)
-        self.active = group.active
+        self.active = getattr(group, 'active', None)
 
-        actors = [Actor.user(user.userid) for user in group.users]
+        actors = [Actor.user(user.userid)
+                  for user in getattr(group, 'users', [])]
         actors.sort(key=lambda actor: actor.get_label())
         self.members = [each.get_link() for each in actors]
 
