@@ -31,3 +31,14 @@ class TestResolveOGUIDView(FunctionalTestCase):
             [each.normalized_outerHTML for each in
              browser.css('.member_listing li a')]
         )
+
+    @browsing
+    def test_list_groupmembers_view_with_empty_group(self, browser):
+        group = create(Builder('ogds_group')
+                       .having(groupid='empty_group'))
+        browser.login().open(view='list_groupmembers',
+                             data={'group': group.groupid})
+        self.assertEqual(
+            'There are no members in this group.',
+            browser.css('p').text[0],
+        )
