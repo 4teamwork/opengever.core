@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from contextlib import nested
 from datetime import date
 from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
@@ -39,11 +40,13 @@ class OpengeverContentFixture(object):
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME)}
 
-        with self.freeze_at_hour(6):
+        with self.freeze_at_hour(5):
             self.create_units()
 
-        with self.freeze_at_hour(7):
+        with self.freeze_at_hour(6):
             self.create_users()
+
+        with self.freeze_at_hour(7):
             self.create_teams()
             self.create_contacts()
 
@@ -53,6 +56,9 @@ class OpengeverContentFixture(object):
                 self.create_templates()
                 with self.features('meeting'):
                     self.create_committees()
+
+        with self.freeze_at_hour(9):
+            with self.login(self.administrator):
                 self.create_inbox()
                 self.create_workspace_root()
 
@@ -721,11 +727,17 @@ class OpengeverContentFixture(object):
         We move it two minutes because the catalog rounds times sometimes to
         minute precision and we want to be more precise.
         """
-        with freeze(datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)) as clock:
+        start = datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)
+        end = start + timedelta(hours=1)
+        with freeze(start) as clock:
             with ticking_creator(clock, minutes=2):
                 with self.ticking_proposal_history(clock, seconds=1):
                     with time_based_intids():
                         yield
+            assert datetime.now(pytz.UTC) < end, (
+                'The context self.freeze_at_hour({}) creates too many objects '
+                'with ftw.builder, leading to a time overlap with '
+                'self.freeze_at_hour({}).').format(hour, hour + 1)
 
     @contextmanager
     def ticking_proposal_history(self, clock, **forward):
