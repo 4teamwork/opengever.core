@@ -463,7 +463,7 @@ class OpengeverContentFixture(object):
                     bumblebee_asset('example.docx').bytes(),
                     u'vertragsentwurf.docx')))
 
-        task = self.register('task', create(
+        self.task = self.register('task', create(
             Builder('task').within(self.dossier)
             .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
             .having(responsible_client=self.org_unit.id(),
@@ -475,7 +475,7 @@ class OpengeverContentFixture(object):
             .relate_to(self.document)))
 
         self.register('subtask', create(
-            Builder('task').within(task)
+            Builder('task').within(self.task)
             .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
             .having(responsible_client=self.org_unit.id(),
                     responsible=self.regular_user.getId(),
@@ -486,7 +486,7 @@ class OpengeverContentFixture(object):
             .relate_to(self.document)))
 
         self.register('taskdocument', create(
-            Builder('document').within(task)
+            Builder('document').within(self.task)
             .titled(u'Feedback zum Vertragsentwurf')
             .attach_file_containing('Feedback text',
                                     u'vertr\xe4g sentwurf.docx')))
@@ -559,12 +559,49 @@ class OpengeverContentFixture(object):
                     responsible=self.dossier_responsible.getId())
             .in_state('dossier-state-resolved')))
 
-        self.register('archive_document', create(
+        archive_document = self.register('archive_document', create(
             Builder('document')
             .within(archive_dossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge vor 2016')
             .attach_archival_file_containing('TEST', name=u'test.pdf')
-            .with_dummy_content()
-            ))
+            .with_dummy_content()))
+
+        self.register('archive_task', create(
+            Builder('task').within(archive_dossier)
+            .titled(u'Vertr\xe4ge abschliessen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2015, 12, 31))
+            .in_state('task-state-resolved')
+            .relate_to(archive_document)))
+
+        inactive_dossier = self.register('inactive_dossier', create(
+            Builder('dossier').within(self.repofolder00)
+            .titled(u'Inaktive Vertr\xe4ge')
+            .having(description=u'Inaktive Vertr\xe4ge von 2016.',
+                    keywords=(u'Vertr\xe4ge'),
+                    start=date(2016, 1, 1),
+                    end=date(2016, 12, 31),
+                    responsible=self.dossier_responsible.getId())
+            .in_state('dossier-state-inactive')))
+
+        inactive_document = self.register('inactive_document', create(
+            Builder('document').within(inactive_dossier)
+            .titled(u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016')
+            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
+
+        self.register('inactive_task', create(
+            Builder('task').within(inactive_dossier)
+            .titled(u'Status \xdcberpr\xfcfen')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-in-progress')
+            .relate_to(inactive_document)))
 
     @staticuid()
     def create_empty_dossier(self):

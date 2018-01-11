@@ -180,7 +180,7 @@ class TestDossier(IntegrationTestCase):
         browser.find_link_by_text(u'Vertr\xe4ge').click()
         search_result = browser.css('.searchResults dt a')
 
-        self.assertEquals(3, len(search_result))
+        self.assertEquals(4, len(search_result))
         self.assertIn(self.dossier.title, search_result.text)
         self.assertIn(self.meeting_dossier.title, search_result.text)
         self.assertIn(self.archive_dossier.title, search_result.text)

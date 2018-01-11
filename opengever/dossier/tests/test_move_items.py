@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.uuid.interfaces import IUUID
@@ -13,97 +14,64 @@ from zope.intid.interfaces import IIntIds
 import transaction
 
 
-class TestMoveItems(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestMoveItems, self).setUp()
-        self.request = self.layer['request']
-
-        self.source_repo = create(Builder("repository"))
-        self.source_dossier = create(Builder("dossier")
-                                     .within(self.source_repo))
+class TestMoveItems(IntegrationTestCase):
 
     def test_cant_move_items_to_invalid_target(self):
+        self.login(self.manager)
         bad_target = create(Builder("repository"))
-        task1 = create(Builder("task")
-                       .within(self.source_dossier).titled("a Task"))
-
-        self.assert_contains(self.source_dossier, ['a Task'])
-        self.assert_contains(bad_target, [])
-
-        self.move_items([task1], source=self.source_dossier, target=bad_target)
-
-        self.assert_contains(self.source_dossier, ['a Task'])
-        self.assert_contains(bad_target, [])
+        task_title = self.task.title.encode("utf-8")
+        self.assert_contains(self.dossier, [task_title])
+        self.assert_does_not_contain(bad_target, [task_title])
+        self.move_items([self.task], source=self.dossier, target=bad_target)
+        self.assert_contains(self.dossier, [task_title])
+        self.assert_does_not_contain(bad_target, [task_title])
 
     def test_render_documents_tab_when_no_items_are_selected(self):
-        view = self.source_dossier.restrictedTraverse('move_items')
-
-        self.assertEquals("%s#documents" % self.source_dossier.absolute_url(), view())
+        self.login(self.regular_user)
+        view = self.dossier.restrictedTraverse('move_items')
+        self.assertEquals("%s#documents" % self.dossier.absolute_url(), view())
 
     def test_render_orig_template_when_no_items_are_selected(self):
-        view = self.source_dossier.restrictedTraverse('move_items')
-        self.request.form['orig_template'] = "%s#dossiers" % self.source_dossier.absolute_url()
-        self.assertEquals("%s#dossiers" % self.source_dossier.absolute_url(), view())
+        self.login(self.regular_user)
+        view = self.dossier.restrictedTraverse('move_items')
+        self.request.form[
+            'orig_template'] = "%s#dossiers" % self.dossier.absolute_url()
+        self.assertEquals("%s#dossiers" % self.dossier.absolute_url(), view())
 
     def test_move_items_to_valid_target(self):
         """ Test integration of move_items method
         """
+        self.login(self.manager)
+        subdossier_title = self.subdossier.title.encode("utf-8")
+        doc_title = self.document.title.encode("utf-8")
+        self.assert_contains(self.dossier, [doc_title, subdossier_title])
+        self.assert_does_not_contain(self.empty_dossier,
+                                     [doc_title, subdossier_title])
 
-        target_repo = create(Builder("repository"))
+        self.move_items([self.document, self.subdossier],
+                        source=self.dossier,
+                        target=self.empty_dossier)
 
-        target_dossier = create(Builder("dossier").within(target_repo))
+        self.assert_does_not_contain(
+            self.dossier, [doc_title, subdossier_title])
+        self.assert_contains(self.empty_dossier, [doc_title, subdossier_title])
 
-        doc1 = create(Builder("document")
-                      .within(self.source_dossier).titled(u"Dossier \xb6c1"))
-        subdossier1 = create(Builder("dossier")
-                             .within(self.source_dossier).titled(u"a Dossier"))
+    def test_only_open_items_appear_in_destination_widget(self):
+        self.login(self.dossier_manager)
 
-        self.assert_contains(self.source_dossier,
-                             ['Dossier \xc2\xb6c1', 'a Dossier'])
-        self.assert_contains(target_dossier, [])
-
-        self.move_items([doc1, subdossier1],
-                        source=self.source_dossier,
-                        target=target_dossier)
-
-        self.assert_contains(self.source_dossier, [])
-        self.assert_contains(target_dossier,
-                             ['Dossier \xc2\xb6c1', 'a Dossier'])
-
-    def test_closed_items_hidden_in_destination_widget(self):
-        setRoles(self.portal, TEST_USER_ID, ['Reviewer', 'Manager'])
-        target_repo = create(Builder("repository"))
-
-        create(Builder("dossier")
-               .within(target_repo)
-               .in_state('dossier-state-resolved'))
-
-        self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
+        self.request['paths'] = '/'.join(self.dossier.getPhysicalPath())
 
         uids = self.get_uids_from_tree_widget()
 
-        self.assertEquals([IUUID(self.source_dossier),
-                           IUUID(self.source_repo),
-                           IUUID(target_repo)],
-                          uids,
-                          "Closed dossier found as target in move items")
-
-    def test_open_items_appear_in_destination_widget(self):
-        target_repo = create(Builder("repository"))
-
-        target_dossier = create(Builder("dossier").within(target_repo))
-        self.request['paths'] = '/'.join(self.source_dossier.getPhysicalPath())
-
-        uids = self.get_uids_from_tree_widget()
-
-        self.assertIn(IUUID(target_dossier),
-                      uids,
+        self.assertIn(IUUID(self.empty_dossier), uids,
                       "Active dossier not found as target in move items")
 
+        self.assertNotIn(IUUID(self.archive_dossier), uids,
+                         "Closed dossier found as target in move items")
+
     def get_uids_from_tree_widget(self):
-        view = self.source_repo.restrictedTraverse('move_items')
-        form = view.form(self.source_repo, self.request)
+        view = self.branch_repofolder.restrictedTraverse('move_items')
+        form = view.form(self.branch_repofolder, self.request)
         form.updateWidgets()
 
         catalog = getToolByName(self.portal, 'portal_catalog')
@@ -128,19 +96,18 @@ class TestMoveItems(FunctionalTestCase):
         form.handle_submit(form, object)
 
     def assert_contains(self, container, items):
-        self.assertEquals(items,
+        for item in items:
+            self.assertIn(item,
                           [a.Title for a in container.getFolderContents()])
 
+    def assert_does_not_contain(self, container, items):
+        for item in items:
+            self.assertNotIn(item,
+                             [a.Title for a in container.getFolderContents()])
 
-class TestMoveItemsWithTestbrowser(FunctionalTestCase):
 
-    def setUp(self):
-        super(TestMoveItemsWithTestbrowser, self).setUp()
+class TestMoveItemsWithTestbrowser(IntegrationTestCase):
 
-        self.source_repo = create(Builder("repository"))
-        self.source_dossier = create(Builder("dossier")
-                                     .within(self.source_repo))
-        self.target_dossier = create(Builder("dossier"))
 
     def move_items(self, browser, src, obj=None, task=None, target=None):
         path = None
@@ -171,166 +138,139 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
 
     @browsing
     def test_redirects_to_context_and_show_statusmessage_when_obj_cant_be_found(self, browser):
+        self.login(self.regular_user)
         self.move_items(
-            browser, src=self.source_dossier,
-            obj='/invalid/path', target=self.target_dossier)
+            browser, src=self.dossier,
+            obj='/invalid/path', target=self.empty_dossier)
 
-        self.assertEqual(self.source_dossier.absolute_url(), browser.url)
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
         self.assertEqual(
             "The selected objects can't be found, please try it again.",
             error_messages()[0])
 
     @browsing
     def test_document_inside_a_task_is_not_movable(self, browser):
-        task = create(Builder('task')
-                      .titled('Task A')
-                      .within(self.source_dossier))
-        document = create(Builder('document')
-                          .titled(u'Doc A').within(task))
-
+        self.login(self.regular_user)
         self.move_items(
-            browser, src=task,
-            obj=document, target=self.target_dossier)
+            browser, src=self.task,
+            obj=self.taskdocument, target=self.empty_dossier)
 
-        self.assertIn(document, task.objectValues())
-        self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
-            'Document Doc A is not movable.',
+            'Document {} is not movable.'.format(self.taskdocument.title),
             error_messages()[0])
+        self.assertIn(self.taskdocument, self.task.objectValues())
+        self.assertNotIn(self.taskdocument, self.empty_dossier.objectValues())
 
     @browsing
     def test_document_inside_closed_dossier_is_not_movable(self, browser):
-        dossier = create(Builder('dossier')
-                         .in_state('dossier-state-resolved'))
-        document = create(Builder('document')
-                          .within(dossier))
-
+        self.login(self.dossier_manager)
         self.move_items(
-            browser, src=dossier,
-            obj=document, target=self.target_dossier)
+            browser, src=self.archive_dossier,
+            obj=self.archive_document, target=self.empty_dossier)
 
-        self.assertIn(document, dossier.objectValues())
-        self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
             ['Can only move objects from open dossiers!'],
             error_messages())
+        self.assertIn(self.archive_document,
+                      self.archive_dossier.objectValues())
+        self.assertNotIn(self.archive_document,
+                         self.empty_dossier.objectValues())
 
     @browsing
     def test_document_inside_inactive_dossier_is_not_movable(self, browser):
-        dossier = create(Builder('dossier')
-                         .in_state('dossier-state-inactive'))
-        document = create(Builder('document')
-                          .within(dossier))
-
+        self.login(self.dossier_manager)
         self.move_items(
-            browser, src=dossier,
-            obj=document, target=self.target_dossier)
+            browser, src=self.inactive_dossier,
+            obj=self.inactive_document, target=self.empty_dossier)
 
-        self.assertIn(document, dossier.objectValues())
-        self.assertNotIn(document, self.target_dossier.objectValues())
         self.assertEqual(
             ['Can only move objects from open dossiers!'],
             error_messages())
+        self.assertIn(self.inactive_document,
+                      self.inactive_dossier.objectValues())
+        self.assertNotIn(self.inactive_document,
+                         self.empty_dossier.objectValues())
 
     @browsing
     def test_task_inside_closed_dossier_is_not_movable(self, browser):
-        dossier = create(Builder('dossier')
-                         .in_state('dossier-state-resolved'))
-        task = create(Builder('task')
-                      .within(dossier)
-                      .titled(u'My task'))
-
+        self.login(self.dossier_manager)
         self.move_items(
-            browser, src=dossier,
-            task=task, target=self.target_dossier)
+            browser, src=self.archive_dossier,
+            task=self.archive_task, target=self.empty_dossier)
 
-        self.assertIn(task, dossier.objectValues())
-        self.assertNotIn(task, self.target_dossier.objectValues())
         self.assertEqual(
             ['Can only move objects from open dossiers!'],
             error_messages())
+        self.assertIn(self.archive_task, self.archive_dossier.objectValues())
+        self.assertNotIn(self.archive_task, self.empty_dossier.objectValues())
 
     @browsing
     def test_mail_inside_closed_dossier_is_not_movable(self, browser):
-        dossier = create(Builder('dossier')
-                         .in_state('dossier-state-resolved'))
-        mail = create(Builder('mail')
-                      .within(dossier)
-                      .titled(u'My mail'))
-
+        self.login(self.dossier_manager)
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
         self.move_items(
-            browser, src=dossier,
-            obj=mail, target=self.target_dossier)
+            browser, src=self.dossier,
+            obj=self.mail_eml, target=self.empty_dossier)
 
-        self.assertIn(mail, dossier.objectValues())
-        self.assertNotIn(mail, self.target_dossier.objectValues())
         self.assertEqual(
             ['Can only move objects from open dossiers!'],
             error_messages())
+        self.assertIn(self.mail_eml, self.dossier.objectValues())
+        self.assertNotIn(self.mail_eml, self.empty_dossier.objectValues())
 
     @browsing
     def test_task_are_handled_correctly(self, browser):
-        task = create(Builder('task')
-                      .titled(u'Task')
-                      .within(self.source_dossier))
-
+        self.login(self.regular_user)
+        task_intid = getUtility(IIntIds).getId(self.subtask)
         self.move_items(
-            browser, src=self.source_dossier,
-            task=task, target=self.target_dossier)
-
-        self.assertIn(task, self.target_dossier.objectValues())
+            browser, src=self.task,
+            task=self.subtask, target=self.empty_dossier)
+        self.subtask = getUtility(IIntIds).getObject(task_intid)
+        self.assertIn(self.subtask, self.empty_dossier.objectValues())
 
     @browsing
     def test_move_items_within_templatefolder_is_possible(self, browser):
-        templatefolder = create(Builder('templatefolder'))
-        subtemplatefolder = create(Builder('templatefolder').within(templatefolder))
-
+        self.login(self.regular_user, browser)
+        # if the template folders are not in a valid root, this does not work
+        # No idea why it used to work in the functional test?
+        templatefolder = create(Builder('templatefolder').within(self.repository_root))
+        subtemplatefolder = create(
+            Builder('templatefolder').within(templatefolder))
         document = create(Builder('document').within(templatefolder))
-
-        self.move_items(
-            browser, src=templatefolder,
-            obj=document, target=subtemplatefolder)
-
+        self.move_items(browser, src=templatefolder,
+                        obj=document, target=subtemplatefolder)
         self.assertIn(document, subtemplatefolder.objectValues())
 
     @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):
-        resolved_dossier = create(Builder('dossier')
-                                  .in_state('dossier-state-resolved'))
-        document = create(Builder('document').within(self.source_dossier))
-
-        browser.login()
-        # Copy the document
-        paths = ['/'.join(document.getPhysicalPath())]
+        self.login(self.dossier_manager, browser)
+        paths = ['/'.join(self.document.getPhysicalPath())]
         browser.open(
-            self.source_dossier, {'paths:list': paths}, view='copy_items')
+            self.dossier, {'paths:list': paths}, view='copy_items')
 
-        browser.open(self.source_dossier)
+        browser.open(self.empty_dossier)
         self.assertIsNotNone(
             browser.find('Paste'),
             'Paste should be visible for open dossiers')
 
-        browser.open(resolved_dossier)
+        browser.open(self.archive_dossier)
         self.assertIsNone(
             browser.find('Paste'),
             'Paste should not be visible for resolved dossiers')
 
     @browsing
     def test_copy_then_move(self, browser):
-        subdossier = create(Builder('dossier').within(self.source_dossier))
-        document = create(Builder('document').within(self.source_dossier))
-
-        browser.login()
+        self.login(self.regular_user, browser)
 
         # Copy the document
-        paths = ['/'.join(document.getPhysicalPath())]
+        paths = ['/'.join(self.document.getPhysicalPath())]
         browser.open(
-            self.source_dossier, {'paths:list': paths}, view='copy_items')
+            self.empty_dossier, {'paths:list': paths}, view='copy_items')
 
         # Move the same document we copied before
         browser.open(
-            self.source_dossier, {'paths:list': paths}, view='move_items')
-        browser.fill({'Destination': subdossier})
+            self.empty_dossier, {'paths:list': paths}, view='move_items')
+        browser.fill({'Destination': self.dossier})
 
         # Should not cause our check in is_pasting_allowed view to fail
         browser.css('#form-buttons-button_submit').first.click()
@@ -341,22 +281,23 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         parent, the dossier will not actually change the location.
         In this case the reference number should not be changed.
         """
-        browser.login().open(self.source_dossier)
-        self.assertEquals('Reference Number: Client1 1 / 1',
+        self.login(self.regular_user, browser)
+        browser.open(self.empty_dossier)
+        self.assertEquals('Reference Number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number. Test fixture changed?')
-        dossier_intid = getUtility(IIntIds).getId(self.source_dossier)
+        dossier_intid = getUtility(IIntIds).getId(self.empty_dossier)
 
         self.move_items(browser,
-                        obj=self.source_dossier,
-                        src=self.source_repo,
-                        target=self.source_repo)
+                        obj=self.empty_dossier,
+                        src=self.leaf_repofolder,
+                        target=self.leaf_repofolder)
         assert_no_error_messages()
 
-        transaction.begin()  # sync
+        #transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
-        self.assertEquals('Reference Number: Client1 1 / 1',
+        self.assertEquals('Reference Number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Moving to the current parent should not change'
                           ' the reference number because the location does'
@@ -367,24 +308,21 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         """When a dossier is moved back to a repository where it was before,
         the original reference number should be recycled.
         """
-
-        browser.login().open(self.source_dossier)
-        self.assertEquals('Reference Number: Client1 1 / 1',
+        self.login(self.regular_user, browser)
+        browser.open(self.empty_dossier)
+        self.assertEquals('Reference Number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number. Test fixture changed?')
-        dossier_intid = getUtility(IIntIds).getId(self.source_dossier)
+        dossier_intid = getUtility(IIntIds).getId(self.empty_dossier)
 
         # Move to other_repository
-        other_repository = create(Builder('repository'))
-        self.move_items(browser,
-                        obj=self.source_dossier,
-                        src=self.source_repo,
-                        target=other_repository)
+        self.move_items(browser,obj=self.empty_dossier,src=self.leaf_repofolder,target=self.empty_repofolder)
         assert_no_error_messages()
 
-        transaction.begin()  # sync
+        #transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
+
         self.assertEquals('Reference Number: Client1 2 / 1',
                           browser.css('.reference_number').first.text,
                           'Unexpected reference number after moving.')
@@ -392,14 +330,13 @@ class TestMoveItemsWithTestbrowser(FunctionalTestCase):
         # Move back to source_repo
         self.move_items(browser,
                         obj=dossier,
-                        src=other_repository,
-                        target=self.source_repo)
+                        src=self.empty_repofolder,
+                        target=self.leaf_repofolder)
         assert_no_error_messages()
 
-        transaction.begin()  # sync
         dossier = getUtility(IIntIds).getObject(dossier_intid)
         browser.open(dossier)
-        self.assertEquals('Reference Number: Client1 1 / 1',
+        self.assertEquals('Reference Number: Client1 1.1 / 4',
                           browser.css('.reference_number').first.text,
                           'When moving back, the old reference_number should be'
                           ' recycled.')
