@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Upgrade docxcompose version pinning. [tarnap]
 - Fix listing the members of an empty group. [tarnap]
 - Trigger SQL task synchronisation when changing task state. [phgross]
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
