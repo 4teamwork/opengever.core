@@ -17,7 +17,11 @@ $(function(){
     // show current
     $('.'+selected).each(function(){
       $(this).parents('.field:first').show();
-      ftwKeywordWidgetInitSelect2($('.keyword-widget:visible'));
+
+    $('.keyword-widget:visible').each(function(index, widget){
+        window.ftwKeywordWidget.initWidget($(widget));
+    });
+
     });
 
     //hide others
