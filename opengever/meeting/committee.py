@@ -36,14 +36,10 @@ from zope.schema.vocabulary import SimpleVocabulary
 @provider(IContextSourceBinder)
 def get_group_vocabulary(context):
     service = ogds_service()
-    userid = api.user.get_current().getId()
     normalize = getUtility(IIDNormalizer).normalize
     terms = []
 
-    if api.user.has_permission('cmf.ManagePortal', obj=context):
-        groups = service.all_groups()
-    else:
-        groups = service.assigned_groups(userid)
+    groups = service.all_groups()
 
     for group in groups:
         terms.append(SimpleTerm(
