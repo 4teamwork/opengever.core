@@ -5,6 +5,8 @@ Changelog
 2017.7.7 (unreleased)
 ---------------------
 
+- Upgrade docxcompose version pinning. [tarnap]
+- Fix listing the members of an empty group. [tarnap]
 - Trigger SQL task synchronisation when changing task state. [phgross]
 
 
