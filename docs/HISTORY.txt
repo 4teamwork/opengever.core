@@ -5,13 +5,8 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
-- Upgrade docxcompose version pinning. [tarnap]
-- Fix listing groups for committees. [deiferni]
-- Fix listing the members of an empty group. [tarnap]
-- Trigger SQL task synchronisation when changing task state. [phgross]
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
 - Add partial reindex optimization for trashing and untrashing objects. [elioschmutz]
-- Fix notification counter, count only badge notifications. [phgross]
 - Add filename and filesize in bumblebee overlay. [njohner]
 - Fix plonesite removal. [phgross]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]
@@ -25,6 +20,21 @@ Changelog
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
+
+
+2017.7.7 (2018-01-12)
+---------------------
+
+- Upgrade docxcompose version pinning. [tarnap]
+- Fix listing groups for committees. [deiferni]
+- Fix listing the members of an empty group. [tarnap]
+- Trigger SQL task synchronisation when changing task state. [phgross]
+
+
+2017.7.6 (2018-01-08)
+---------------------
+
+- Fix notification counter, count only badge notifications. [phgross]
 
 
 2017.7.5 (2018-01-02)
