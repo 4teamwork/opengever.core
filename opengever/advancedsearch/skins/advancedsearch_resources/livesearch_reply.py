@@ -49,6 +49,24 @@ def quote_bad_chars(s):
         s = s.replace(char, quotestring(char))
     return s
 
+
+# https://github.com/4teamwork/opengever.core/blob/master/opengever/base/browser/helper.py#L20
+def get_mimetype_icon_klass(item):
+    # It just makes sense to guess the mimetype of documents
+    if not item.portal_type == 'opengever.document.document':
+        return ''
+
+    icon = item.getIcon
+
+    # Fallback for unknown file type
+    if icon == '':
+        return "icon-document_empty"
+
+    # Strip '.gif' from end of icon name and remove
+    # leading 'icon_'
+    filetype = icon[:icon.rfind('.')].replace('icon_', '')
+    return 'icon-%s' % context.plone_utils.normalizeString(filetype)
+
 # for now we just do a full search to prove a point, this is not the
 # way to do this in the future, we'd use a in-memory probability based
 # result set.
@@ -164,8 +182,13 @@ else:
             display_title = full_title
 
         full_title = full_title.replace('"', '&quot;')
-        klass = 'contenttype-%s' % ploneUtils.normalizeString(result.portal_type)
-        write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, klass, display_title))
+
+        css_klass = 'contenttype-%s' % ploneUtils.normalizeString(result.portal_type)
+        mime_type_klass = get_mimetype_icon_klass(result)
+        if mime_type_klass:
+            css_klass = mime_type_klass
+
+        write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, css_klass, display_title))
         display_description = safe_unicode(result.Description)
         if len(display_description) > MAX_DESCRIPTION:
             display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
