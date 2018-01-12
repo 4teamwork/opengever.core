@@ -164,6 +164,56 @@ msgid "opengever_workspace--STATUS--active"
 msgstr "Active"
 
 #. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--Administrator"
+msgstr "admin"
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--Manager"
+msgstr "systems administrator"
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceAdmin"
+msgstr "workspace admin"
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceGuest"
+msgstr "workspace guest"
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
+msgstr "workspace member"
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceOwner"
+msgstr "workspace owner"
+
+#. Default: "Workspace admins can manage the team as well as read and modify all contents."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceAdmin"
+msgstr "Workspace admins can manage the team as well as read and modify all contents."
+
+#. Default: "A workspace guest has read access to the content but cannot change anything."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceGuest"
+msgstr "A workspace guest has read access to the content but cannot change anything."
+
+#. Default: "Workspace members can read and modify all contents of the workspace."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceMember"
+msgstr "Workspace members can read and modify all contents of the workspace."
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--STATUS--active"
+msgstr "Active"
+
+#. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
 msgstr "admin"

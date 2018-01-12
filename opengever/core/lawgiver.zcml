@@ -282,4 +282,22 @@
         />
   </lawgiver:workflow>
 
+  <lawgiver:workflow name="opengever_workspace_folder">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate CommitteeAdministrator role,
+                     Sharing page: Delegate CommitteeMember role,
+                     Sharing page: Delegate CommitteeResponsible role,
+                     Sharing page: Delegate MeetingUser role,
+                     Sharing page: Delegate WorkspacesCreator role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+    <lawgiver:map_permissions
+        action_group="add"
+        permissions="opengever.workspace: Add WorkspaceFolder"
+        />
+  </lawgiver:workflow>
+
 </configure>

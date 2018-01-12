@@ -164,6 +164,56 @@ msgid "opengever_workspace--STATUS--active"
 msgstr ""
 
 #. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE--WorkspaceOwner"
+msgstr ""
+
+#. Default: "Workspace admins can manage the team as well as read and modify all contents."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "A workspace guest has read access to the content but cannot change anything."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceGuest"
+msgstr ""
+
+#. Default: "Workspace members can read and modify all contents of the workspace."
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceMember"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
+msgid "opengever_workspace_folder--STATUS--active"
+msgstr ""
+
+#. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
 msgstr ""
