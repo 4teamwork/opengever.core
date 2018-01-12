@@ -29,6 +29,3 @@ class TestBaseBehavior(IntegrationTestCase):
 
         common_fieldset = browser.css('fieldset').first
         self.assertEquals(['Common'], common_fieldset.css('legend').text)
-
-        self.assertIn('Title', common_fieldset.css('label').text)
-        self.assertIn('Description', common_fieldset.css('label').text)

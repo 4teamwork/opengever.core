@@ -10,25 +10,29 @@
 <metal:main fill-slot="content-core">
   <metal:content-core define-macro="content-core">
 
-    <tal:block repeat="widget view/widgets/values">
-        <div class="field" tal:condition="python:widget.__name__ not in view.omitted_fields">
-            <label tal:content="widget/label" />
-            <br />
-            <div tal:content="structure widget/render" />
-        </div>
-    </tal:block>
+<table>
+  <tal:block repeat="widget view/widgets/values">
+    <tr class="fields" tal:condition="python:widget.__name__ not in view.omitted_fields">
+            <td><label tal:content="widget/label" /></td>
+            <td><div tal:content="structure widget/render" /></td>
+    </tr>
+  </tal:block>
+</table>
 
-    <fieldset tal:repeat="group view/groups"
-              tal:attributes="id python:''.join((group.prefix, 'groups.', group.__name__)).replace('.', '-')">
-       <legend tal:content="group/label" />
-       <tal:block repeat="widget group/widgets/values">
-        <div class="field" tal:condition="python:widget.__name__ not in view.omitted_fields">
-            <label tal:content="widget/label" />
-            <br />
-            <div tal:content="structure widget/render" />
-        </div>
-      </tal:block>
-    </fieldset>
+
+    <table class="invisible dossier-detail-listing">
+        <tbody>
+        <tal:repeat tal:repeat="group view/groups">
+          <tr><th colspan="2" class="dossier-detail-listing-title" tal:content="group/label" /></tr>
+          <tal:repeat tal:repeat="widget group/widgets/values">
+            <tr tal:condition="python:widget.__name__ not in view.omitted_fields">
+              <th tal:content="widget/label" />
+              <td tal:content="structure widget/render" />
+            </tr>
+          </tal:repeat>
+        </tal:repeat>
+        </tbody>
+    </table>
 
   </metal:content-core>
 </metal:main>
