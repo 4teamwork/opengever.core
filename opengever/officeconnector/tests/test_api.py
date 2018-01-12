@@ -4,7 +4,7 @@ from opengever.document.document import Document
 from opengever.officeconnector.testing import OCIntegrationTestCase
 
 
-class TestOfficeconnectorAPIDisabled(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIDisabled(OCIntegrationTestCase):
     @browsing
     def test_attach_to_email_open_without_file(self, browser):
         self.login(self.regular_user, browser)
@@ -226,7 +226,7 @@ class TestOfficeconnectorAPIDisabled(OCIntegrationTestCase):
             self.assertIsNone(oc_url)
 
 
-class TestOfficeconnectorAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     features = (
         'officeconnector-attach',
     )
@@ -512,7 +512,7 @@ class TestOfficeconnectorAPIWithAttach(OCIntegrationTestCase):
             self.assertIsNone(oc_url)
 
 
-class TestOfficeconnectorAPIWithCheckout(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     features = (
         'officeconnector-checkout',
     )
