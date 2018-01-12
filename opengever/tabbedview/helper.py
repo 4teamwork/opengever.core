@@ -150,7 +150,7 @@ def linked(item, value):
     # Make sure all data used in the HTML snippet is properly escaped
     value = escape_html(value)
 
-    link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s">%s</a>' % (
+    link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s"><span>%s</span></a>' % (
         css_class, url, uid, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link
