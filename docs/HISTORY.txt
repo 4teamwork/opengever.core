@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Upgrade docxcompose version pinning. [tarnap]
+- Fix listing groups for committees. [deiferni]
 - Fix listing the members of an empty group. [tarnap]
 - Trigger SQL task synchronisation when changing task state. [phgross]
 

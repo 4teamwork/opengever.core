@@ -3,8 +3,7 @@ from ftw.builder import create
 from opengever.meeting.committee import get_group_vocabulary
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.testing import FunctionalTestCase
-from plone.app.testing import login
-from plone.app.testing import setRoles
+from opengever.testing import IntegrationTestCase
 
 
 class TestCommitteeTabs(FunctionalTestCase):
@@ -51,48 +50,17 @@ class TestCommitteeTabs(FunctionalTestCase):
             self.assertTrue(isinstance(principal, str), 'Not a byte string')
 
 
-class TestCommitteeGroupsVocabulary(FunctionalTestCase):
+class TestCommitteeGroupsVocabulary(IntegrationTestCase):
 
-    def test_return_empty_vocabulary_if_user_is_not_assigned_to_any_group(self):
-        container = create(Builder('committee_container'))
+    def test_return_all_groups(self):
+        self.login(self.committee_responsible)
 
-        create(Builder('user').with_userid('hugo.boss'))
-        create(Builder('ogds_user').id('hugo.boss'))
-
-        login(self.layer['portal'], 'hugo.boss')
-
-        self.assertEqual(
-            [],
-            [term for term in get_group_vocabulary(container)])
-
-    def test_return_only_groups_where_the_user_is_assigned(self):
-        container = create(Builder('committee_container'))
-
-        create(Builder('user').with_userid('hugo.boss'))
-        ogds_user = create(Builder('ogds_user').id('hugo.boss'))
-
-        create(Builder('ogds_group').id('foo').having(users=[ogds_user, ]))
-        create(Builder('ogds_group').id('bar'))
-
-        login(self.layer['portal'], 'hugo.boss')
-
-        self.assertEqual(
-            [u'foo'],
-            [term.value for term in get_group_vocabulary(container)])
-
-    def test_return_all_groups_if_the_user_has_manager_role(self):
-        container = create(Builder('committee_container'))
-
-        create(Builder('user').with_userid('hugo.boss'))
-        ogds_user = create(Builder('ogds_user').id('hugo.boss'))
-
-        create(Builder('ogds_group').id('foo').having(users=[ogds_user, ]))
-        create(Builder('ogds_group').id('bar'))
-
-        setRoles(self.layer['portal'], 'hugo.boss', ['Manager'])
-
-        login(self.layer['portal'], 'hugo.boss')
-
-        self.assertEqual(
-            [u'client1_users', u'client1_inbox_users', u'foo', u'bar'],
-            [term.value for term in get_group_vocabulary(container)])
+        self.assertItemsEqual(
+            [u'fa_users',
+             u'fa_inbox_users',
+             u'projekt_a',
+             u'projekt_b',
+             u'committee_rpk_group',
+             u'committee_ver_group'],
+            [term.value for term in
+             get_group_vocabulary(self.committee_container)])
