@@ -40,20 +40,27 @@ class Task(Base):
     MAX_TITLE_LENGTH = 256
     MAX_BREADCRUMB_LENGTH = 512
 
-    OVERDUE_INDEPENDENT_STATES = ['task-state-cancelled',
-                                  'task-state-rejected',
-                                  'task-state-tested-and-closed',
-                                  'task-state-resolved',
-                                  'forwarding-state-closed']
+    OVERDUE_INDEPENDENT_STATES = [
+        'task-state-cancelled',
+        'task-state-rejected',
+        'task-state-tested-and-closed',
+        'task-state-resolved',
+        'forwarding-state-closed',
+        ]
 
-    OPEN_STATES = ['task-state-open', 'forwarding-state-open']
+    OPEN_STATES = [
+        'task-state-open',
+        'forwarding-state-open',
+        ]
 
-    PENDING_STATES = ['task-state-open',
-                      'task-state-in-progress',
-                      'task-state-resolved',
-                      'task-state-rejected',
-                      'forwarding-state-open',
-                      'forwarding-state-refused']
+    PENDING_STATES = [
+        'task-state-open',
+        'task-state-in-progress',
+        'task-state-resolved',
+        'task-state-rejected',
+        'forwarding-state-open',
+        'forwarding-state-refused',
+        ]
 
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
@@ -91,24 +98,38 @@ class Task(Base):
 
     # XXX shit, this should be ...org_unit_ID
     issuing_org_unit = Column(
-        String(UNIT_ID_LENGTH), index=True, nullable=False)
+        String(UNIT_ID_LENGTH),
+        index=True,
+        nullable=False,
+        )
+
     assigned_org_unit = Column(
-        String(UNIT_ID_LENGTH), index=True, nullable=False)
+        String(UNIT_ID_LENGTH),
+        index=True,
+        nullable=False,
+        )
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
+
     successors = relationship(
         "Task",
         backref=backref('predecessor', remote_side=task_id),
-        cascade="delete")
+        cascade="delete",
+        )
 
-    _principals = relation('TaskPrincipal', backref='task',
-                           cascade='all, delete-orphan')
+    _principals = relation(
+        'TaskPrincipal',
+        backref='task',
+        cascade='all, delete-orphan',
+        )
+
     principals = association_proxy('_principals', 'principal')
 
     def __init__(self, int_id, admin_unit_id, **kwargs):
         super(Task, self).__init__(**kwargs)
         self.admin_unit_id = admin_unit_id
         self.int_id = int_id
+        self.predecessor = None
 
     def __repr__(self):
         return "<Task %s@%s>" % (self.int_id, self.admin_unit_id)
@@ -146,13 +167,14 @@ class Task(Base):
         return ogds_service().fetch_org_unit(self.assigned_org_unit)
 
     def sync_with(self, plone_task):
-        """Sync this task instace with its corresponding plone taks.
-
-        """
+        """Sync this task instace with its corresponding plone taks."""
         self.title = plone_task.safe_title
         self.text = plone_task.text
+
         self.breadcrumb_title = plone_task.get_breadcrumb_title(
-            self.MAX_BREADCRUMB_LENGTH)
+            self.MAX_BREADCRUMB_LENGTH,
+            )
+
         self.physical_path = plone_task.get_physical_path()
         self.review_state = plone_task.get_review_state()
         self.icon = plone_task.getIcon()
@@ -160,21 +182,29 @@ class Task(Base):
         self.issuer = plone_task.issuer
         self.deadline = plone_task.deadline
         self.completed = plone_task.date_of_completion
+
         # we need to have python datetime objects for make it work with sqlite
         self.modified = plone_task.modified().asdatetime().replace(tzinfo=None)
         self.task_type = plone_task.task_type
         self.is_subtask = plone_task.get_is_subtask()
         self.sequence_number = plone_task.get_sequence_number()
         self.reference_number = plone_task.get_reference_number()
+
         self.containing_dossier = safe_unicode(
-            plone_task.get_containing_dossier_title())
+            plone_task.get_containing_dossier_title(),
+            )
+
         self.dossier_sequence_number = plone_task.get_dossier_sequence_number()
         self.assigned_org_unit = plone_task.responsible_client
         self.principals = plone_task.get_principals()
+
         self.predecessor = self.query_predecessor(
-            *plone_task.get_predecessor_ids())
+            *plone_task.get_predecessor_ids()
+            )
+
         self.containing_subdossier = safe_unicode(
-            plone_task.get_containing_subdossier())
+            plone_task.get_containing_subdossier(),
+            )
 
     # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):
@@ -199,12 +229,14 @@ class Task(Base):
         if self.deadline < date.today():
             if self.review_state not in Task.OVERDUE_INDEPENDENT_STATES:
                 return True
+
         return False
 
     # XXX rename me, this should be get_responsible_link
     def get_responsible_label(self, linked=True):
         actor = Actor.lookup(self.responsible)
         org_unit = ogds_service().fetch_org_unit(self.assigned_org_unit)
+
         if not linked:
             return org_unit.prefix_label(actor.get_label())
 
@@ -213,26 +245,33 @@ class Task(Base):
     def get_state_label(self):
         return u"<span class=wf-{}>{}</span>".format(
             self.review_state,
-            translate(self.review_state, domain='plone',
-                      context=api.portal.get().REQUEST))
+            translate(
+                self.review_state,
+                domain='plone',
+                context=api.portal.get().REQUEST,
+                ),
+            )
 
-    def get_deadline_label(self, format="medium"):
+    def get_deadline_label(self, fmt="medium"):
         if not self.deadline:
             return u''
 
         if self.is_overdue:
             label = u'<span class="task-overdue">{}</span>'
+
         else:
             label = u'<span>{}</span>'
 
-        formatter = getRequest().locale.dates.getFormatter("date", format)
+        formatter = getRequest().locale.dates.getFormatter("date", fmt)
         formatted_date = formatter.format(self.deadline)
+
         return label.format(formatted_date.strip())
 
-    def _date_to_zope_datetime(self, date):
-        if not date:
+    def _date_to_zope_datetime(self, _date):
+        if not _date:
             return None
-        return ZopeDateTime(date.year, date.month, date.day)
+
+        return ZopeDateTime(_date.year, _date.month, _date.day)
 
     def get_deadline(self):
         return self._date_to_zope_datetime(self.deadline)
@@ -241,24 +280,24 @@ class Task(Base):
     def is_remote_task(self):
         """Returns true for tasks, where issuing and responsible
         admin_unit (assign org unit's admin_unit) are not equal.__add__()
-
         """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
 
     def get_css_class(self):
         """Returns css_class for the special task icons:
-         - Forwarding
-         - Regular Task
-         - Subtask
-         - Remotetask
-        """
 
+        - Forwarding
+        - Regular Task
+        - Subtask
+        - Remotetask
+        """
         if self.is_forwarding:
             css_class = 'contenttype-opengever-inbox-forwarding'
 
         elif self.is_subtask and self.is_remote_task:
             if self.admin_unit_id == get_current_admin_unit().id():
                 css_class = 'contenttype-opengever-task-sub-task'
+
             else:
                 css_class = 'contenttype-opengever-task-remote-task'
 
@@ -267,6 +306,7 @@ class Task(Base):
 
         elif self.is_remote_task:
             css_class = 'contenttype-opengever-task-remote-task'
+
         else:
             css_class = 'contenttype-opengever-task-task'
 
@@ -280,17 +320,21 @@ class Task(Base):
             return False
 
         roles = api.user.get_roles(user=member)
+
         if 'Administrator' in roles or 'Manager' in roles:
             return True
 
         principals = set(member.getGroups() + [member.getId()])
         allowed_principals = set(self.principals)
+
         return len(principals & allowed_principals) > 0
 
     def absolute_url(self):
         admin_unit = self.get_admin_unit()
+
         if not admin_unit:
             return ''
+
         return '/'.join((admin_unit.public_url, self.physical_path))
 
     def get_link(self, with_state_icon=True, with_responsible_info=True):
@@ -299,27 +343,42 @@ class Task(Base):
 
         if not admin_unit:
             return u'<span class="{}">{}</span>'.format(
-                self.get_css_class(), title)
+                self.get_css_class(),
+                title,
+                )
 
         url = self.absolute_url()
+
         breadcrumb_titles = u"[{}] > {}".format(
-            admin_unit.title, escape_html(self.breadcrumb_title))
+            admin_unit.title,
+            escape_html(self.breadcrumb_title),
+            )
 
         responsible_info = u' <span class="discreet">({})</span>'.format(
-            self.get_responsible_label(linked=False))
+            self.get_responsible_label(linked=False),
+            )
+
         link_content = u'<span class="{}">{}</span>'.format(
-            self.get_css_class(), title)
+            self.get_css_class(),
+            title,
+            )
 
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
             link_target = u' target="_blank"'
+
         else:
             link_target = u''
 
         # Render the full link if we have acccess
         if self.has_access(api.user.get_current()):
             link = u'<a href="{}"{} title="{}">{}</a>'.format(
-                url, link_target, breadcrumb_titles, link_content)
+                url,
+                link_target,
+                breadcrumb_titles,
+                link_content,
+                )
+
         else:
             link = link_content
 
@@ -329,23 +388,29 @@ class Task(Base):
         # wrapped it into span tag
         if with_state_icon:
             link = self._task_state_wrapper(link)
+
         else:
             link = u'<span>%s</span>' % (link)
 
         return link
 
     def _task_state_wrapper(self, text):
-        """ Wrap a span-tag around the text with the status-css class
-        """
+        """Wrap a span-tag around the text with the status-css class."""
         return u'<span class="wf-%s">%s</span>' % (self.review_state, text)
 
 
 class TaskPrincipal(Base):
+    """Define relations for task principals."""
+
     __tablename__ = 'task_principals'
 
     principal = Column(String(USER_ID_LENGTH), primary_key=True)
-    task_id = Column(Integer, ForeignKey('tasks.id'),
-                     primary_key=True)
+
+    task_id = Column(
+        Integer,
+        ForeignKey('tasks.id'),
+        primary_key=True,
+        )
 
     def __init__(self, principal):
         self.principal = principal

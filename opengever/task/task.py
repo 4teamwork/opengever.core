@@ -48,16 +48,21 @@ from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
+
 _marker = object()
 
 
 def deadline_default():
     offset = api.portal.get_registry_record(
-        'deadline_timedelta', interface=ITaskSettings)
+        'deadline_timedelta',
+        interface=ITaskSettings,
+        )
+
     return (datetime.today() + timedelta(days=offset)).date()
 
 
 class ITask(model.Schema):
+    """Define the task schema."""
 
     model.fieldset(
         u'common',
@@ -88,6 +93,7 @@ class ITask(model.Schema):
         )
 
     dexteritytextindexer.searchable('title')
+
     title = schema.TextLine(
         title=_(u"label_title", default=u"Title"),
         description=_('help_title', default=u""),
@@ -96,6 +102,7 @@ class ITask(model.Schema):
         )
 
     form.widget('issuer', KeywordFieldWidget, async=True)
+
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
         source=UsersContactsInboxesSourceBinder(),
@@ -103,6 +110,7 @@ class ITask(model.Schema):
         )
 
     form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
+
     task_type = schema.Choice(
         title=_(u'label_task_type', default=u'Task Type'),
         description=_('help_task_type', default=u''),
@@ -114,15 +122,22 @@ class ITask(model.Schema):
         )
 
     form.mode(responsible_client='hidden')
+
     responsible_client = schema.Choice(
-        title=_(u'label_resonsible_client',
-                default=u'Responsible Client'),
-        description=_(u'help_responsible_client',
-                      default=u''),
+        title=_(
+            u'label_resonsible_client',
+            default=u'Responsible Client',
+            ),
+        description=_(
+            u'help_responsible_client',
+            default=u'',
+            ),
         vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
-        required=True)
+        required=True,
+        )
 
     form.widget('responsible', KeywordFieldWidget, async=True)
+
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
@@ -131,6 +146,7 @@ class ITask(model.Schema):
         )
 
     form.widget(deadline=DatePickerFieldWidget)
+
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
@@ -140,6 +156,7 @@ class ITask(model.Schema):
 
     form.widget(date_of_completion=DatePickerFieldWidget)
     form.mode(IAddForm, date_of_completion=HIDDEN_MODE)
+
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
@@ -148,6 +165,7 @@ class ITask(model.Schema):
 
     dexteritytextindexer.searchable('text')
     model.primary('text')
+
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
@@ -163,18 +181,21 @@ class ITask(model.Schema):
             source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
-                    'object_provides':
-                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
-                         'opengever.document.document.IDocumentSchema',
-                         'opengever.task.task.ITask',
-                         'ftw.mail.mail.IMail',
-                         'opengever.meeting.proposal.IProposal'],
-                    }),
+                    'object_provides': [
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        'opengever.document.document.IDocumentSchema',
+                        'opengever.task.task.ITask',
+                        'ftw.mail.mail.IMail',
+                        'opengever.meeting.proposal.IProposal',
+                        ],
+                    },
+                ),
             ),
         required=False,
         )
 
     form.widget(expectedStartOfWork=DatePickerFieldWidget)
+
     expectedStartOfWork = schema.Date(
         title=_(u"label_expectedStartOfWork", default="Start with work"),
         required=False,
@@ -211,23 +232,30 @@ class ITask(model.Schema):
 
 
 validator.WidgetValidatorDiscriminators(
-    NoCheckedoutDocsValidator, field=ITask['relatedItems'])
+    NoCheckedoutDocsValidator,
+    field=ITask['relatedItems'],
+    )
+
 provideAdapter(NoCheckedoutDocsValidator)
 
 
 default_responsible_client = widget.ComputedWidgetAttribute(
     lambda adapter: get_current_org_unit().id(),
-    field=ITask['responsible_client'])
+    field=ITask['responsible_client'],
+    )
 
 
 class IAddTaskSchema(ITask):
+    """Define a schema for adding tasks."""
 
     form.widget('responsible', KeywordFieldWidget, async=True)
+
     responsible = schema.List(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible_multiple", default=""),
         value_type=schema.Choice(
-            source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True)),
+            source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
+            ),
         required=True,
         missing_value=[],
         default=[]
@@ -235,6 +263,8 @@ class IAddTaskSchema(ITask):
 
 
 class Task(Container):
+    """Provide a container for tasks."""
+
     implements(ITask, ITabbedviewUploadable)
 
     def __init__(self, *args, **kwargs):
@@ -246,14 +276,20 @@ class Task(Container):
 
     @property
     def task_type_category(self):
-        for category in ['unidirectional_by_reference',
-                         'unidirectional_by_value',
-                         'bidirectional_by_reference',
-                         'bidirectional_by_value']:
+        for category in [
+                'unidirectional_by_reference',
+                'unidirectional_by_value',
+                'bidirectional_by_reference',
+                'bidirectional_by_value'
+            ]:
             voc = getVocabularyRegistry().get(
-                self, 'opengever.task.' + category)
+                self,
+                ''.join(('opengever.task.', category,)),
+                )
+
             if self.task_type in voc:
                 return category
+
         return None
 
     @property
@@ -288,7 +324,9 @@ class Task(Container):
 
     def get_sql_object(self):
         return TaskModel.query.by_intid(
-            self.int_id, get_current_admin_unit().id())
+            self.int_id,
+            get_current_admin_unit().id(),
+            )
 
     @property
     def safe_title(self):
@@ -297,8 +335,11 @@ class Task(Container):
     def get_breadcrumb_title(self, max_length):
         # Generate and store the breadcrumb tooltip
         breadcrumb_titles = []
-        breadcrumbs_view = getMultiAdapter((self, self.REQUEST),
-                                           name='breadcrumbs_view')
+        breadcrumbs_view = getMultiAdapter(
+            (self, self.REQUEST),
+            name='breadcrumbs_view',
+            )
+
         for elem in breadcrumbs_view.breadcrumbs():
             breadcrumb_titles.append(safe_unicode(elem.get('Title')))
 
@@ -314,12 +355,14 @@ class Task(Container):
 
         for i, breadcrumb in enumerate(breadcrumb_titles):
             add_length = len(breadcrumb) + len(join_value) + len(end_value)
+
             if (actual_length + add_length) > max_length:
                 breadcrumb_title = breadcrumb_titles[:i]
                 breadcrumb_title.append(end_value)
                 break
 
             actual_length += len(breadcrumb) + len(join_value)
+
         return join_value.join(breadcrumb_title)
 
     def get_review_state(self):
@@ -345,37 +388,48 @@ class Task(Container):
 
     def get_containing_dossier_title(self):
         # get the containing_dossier value directly with the indexer
-        catalog = getToolByName(self, 'portal_catalog')
-        return getMultiAdapter(
-            (self, catalog), IIndexer, name='containing_dossier')()
+        adapter = getMultiAdapter(
+            (self, getToolByName(self, 'portal_catalog')),
+            IIndexer, name='containing_dossier',
+            )
+
+        return adapter()
 
     def get_containing_subdossier(self):
         # get the containing_dossier value directly with the indexer
-        catalog = getToolByName(self, 'portal_catalog')
-        return getMultiAdapter(
-            (self, catalog), IIndexer, name='containing_subdossier')()
+        adapter = getMultiAdapter(
+            (self, getToolByName(self, 'portal_catalog')),
+            IIndexer, name='containing_subdossier',
+            )
+
+        return adapter()
 
     def get_dossier_sequence_number(self):
         dossier = self.get_containing_dossier()
+
         if dossier:
             return dossier.get_sequence_number()
+
+        return None
 
     def get_predecessor_ids(self):
         if self.predecessor:
             return self.predecessor.split(':', 1)
-        else:
-            return (None, None,)
+
+        return (None, None,)
 
     def get_principals(self):
         # index the principal which have View permission. This is according to
         # the allowedRolesAndUsers index but it does not car of global roles.
         allowed_roles = rolesForPermissionOn(View, self)
         principals = []
+
         for principal, roles in _mergedLocalRoles(self).items():
             for role in roles:
                 if role in allowed_roles:
                     principals.append(safe_unicode(principal))
                     break
+
         return principals
 
     def get_task_type_label(self, language=None):
@@ -383,12 +437,14 @@ class Task(Container):
         # globalindex.Task for now.
         if not self.task_type:
             return ''
+
         if language:
             return util.get_task_type_title(self.task_type, language)
-        else:
-            vocabulary = util.getTaskTypeVocabulary(self)
-            term = vocabulary.getTerm(self.task_type)
-            return term.title
+
+        vocabulary = util.getTaskTypeVocabulary(self)
+        term = vocabulary.getTerm(self.task_type)
+
+        return term.title
 
 
 def related_document(context):
@@ -406,7 +462,9 @@ class DocumentRedirector(BrowserView):
         referer = self.context.REQUEST.environ.get('HTTP_REFERER')
         if referer.endswith('++add++opengever.document.document'):
             return self.context.REQUEST.RESPONSE.redirect(
-                '%s#relateddocuments' % self.context.absolute_url())
-        else:
-            return self.context.REQUEST.RESPONSE.redirect(
-                self.context.absolute_url())
+                '#'.join((self.context.absolute_url(), 'relateddocuments', )),
+                )
+
+        return self.context.REQUEST.RESPONSE.redirect(
+            self.context.absolute_url(),
+            )

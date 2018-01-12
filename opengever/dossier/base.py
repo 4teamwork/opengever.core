@@ -35,13 +35,15 @@ from zope.interface import Interface
 
 
 DOSSIER_STATES_OPEN = [
-    'dossier-state-active'
+    'dossier-state-active',
 ]
+
 
 DOSSIER_STATES_CLOSED = [
     'dossier-state-inactive',
-    'dossier-state-resolved'
+    'dossier-state-resolved',
 ]
+
 
 DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
 
@@ -50,13 +52,13 @@ _marker = object()
 
 
 class DossierContainer(Container):
+    """Provide a container for dossiers."""
 
     def _getOb(self, id_, default=_marker):
         """We extend `_getObj` in order to change the context for participation
         objects to the `ParticipationWrapper`. That allows us to register views
         and forms for Participations as regular BrowserViews.
         """
-
         obj = super(DossierContainer, self)._getOb(id_, default)
         if obj is not default:
             return obj
@@ -73,25 +75,38 @@ class DossierContainer(Container):
 
         if default is _marker:
             raise KeyError(id_)
+
         return default
 
     def allowedContentTypes(self, *args, **kwargs):
-        types = super(
-            DossierContainer, self).allowedContentTypes(*args, **kwargs)
+        types = (
+            super(
+                DossierContainer,
+                self,
+                )
+            .allowedContentTypes(*args, **kwargs)
+            )
 
         depth = self._get_dossier_depth()
 
         def filter_type(fti):
             # first we try the more specific one ...
-            decider = queryMultiAdapter((self.REQUEST, self, fti),
-                                        IConstrainTypeDecider,
-                                        name=fti.portal_type)
+            decider = queryMultiAdapter(
+                (self.REQUEST, self, fti),
+                IConstrainTypeDecider,
+                name=fti.portal_type,
+                )
+
             if not decider:
                 # .. then we try the more general one
-                decider = queryMultiAdapter((self.REQUEST, self, fti),
-                                            IConstrainTypeDecider)
+                decider = queryMultiAdapter(
+                    (self.REQUEST, self, fti),
+                    IConstrainTypeDecider,
+                    )
+
             if decider:
                 return decider.addable(depth)
+
             # if we don't have an adapter, we just allow it
             return True
 
@@ -101,17 +116,21 @@ class DossierContainer(Container):
         for fti in self.allowedContentTypes():
             if fti.id == portal_type:
                 return True
+
         return False
 
     def _get_dossier_depth(self):
         # calculate depth
         depth = 0
         obj = self
+
         while IDossierMarker.providedBy(obj):
             depth += 1
             obj = aq_parent(aq_inner(obj))
+
             if IPloneSiteRoot.providedBy(obj):
                 break
+
         return depth
 
     def is_open(self):
@@ -127,11 +146,14 @@ class DossierContainer(Container):
         """
         obj = self
         prev = self
+
         while IDossierMarker.providedBy(obj):
             prev = obj
             obj = aq_parent(aq_inner(obj))
+
             if IPloneSiteRoot.providedBy(obj):
                 break
+
         return prev
 
     def is_subdossier_addable(self):
@@ -140,23 +162,31 @@ class DossierContainer(Container):
         """
         max_depth = api.portal.get_registry_record(
             name='maximum_dossier_depth',
-            interface=IDossierContainerTypes, default=100)
+            interface=IDossierContainerTypes,
+            default=100,
+            )
 
         return self._get_dossier_depth() <= max_depth
 
     def has_subdossiers(self):
         return len(self.get_subdossiers()) > 0
 
-    def get_subdossiers(self, sort_on='created',
-                        sort_order='ascending',
-                        review_state=None,
-                        depth=-1):
+    def get_subdossiers(
+            self,
+            sort_on='created',
+            sort_order='ascending',
+            review_state=None,
+            depth=-1,
+        ):
 
         dossier_path = '/'.join(self.getPhysicalPath())
-        query = {'path': dict(query=dossier_path, depth=depth),
-                 'sort_on': sort_on,
-                 'sort_order': sort_order,
-                 'object_provides': IDossierMarker.__identifier__}
+
+        query = {
+            'path': dict(query=dossier_path, depth=depth),
+            'sort_on': sort_on,
+            'sort_order': sort_order,
+            'object_provides': IDossierMarker.__identifier__,
+            }
 
         if review_state:
             query['review_state'] = review_state
@@ -164,8 +194,11 @@ class DossierContainer(Container):
         subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
-        subdossiers = [s for s in subdossiers
-                       if not s.getPath() == dossier_path]
+        subdossiers = [
+            s
+            for s in subdossiers
+            if not s.getPath() == dossier_path
+            ]
 
         return subdossiers
 
@@ -174,27 +207,37 @@ class DossierContainer(Container):
 
     def get_parent_dossier(self):
         parent = aq_parent(aq_inner(self))
+
         if IDossierMarker.providedBy(parent):
             return parent
+
+        return None
 
     def is_all_supplied(self):
         """Check if all tasks and all documents(incl. mails) are supplied in
         a subdossier provided there are any (active) subdossiers
         """
-
         subdossiers = self.getFolderContents({
-            'object_provides':
-            'opengever.dossier.behaviors.dossier.IDossierMarker'})
+            'object_provides': (
+                'opengever.dossier.behaviors.dossier.IDossierMarker'
+                ),
+            })
 
-        active_dossiers = [d for d in subdossiers
-                           if not d.review_state == 'dossier-state-inactive']
+        active_dossiers = [
+            d
+            for d in subdossiers
+            if not d.review_state == 'dossier-state-inactive'
+            ]
 
-        if len(active_dossiers) > 0:
+        if active_dossiers:
             results = self.getFolderContents({
-                'object_provides': [ITask.__identifier__,
-                                    IBaseDocument.__identifier__]})
+                'object_provides': [
+                    ITask.__identifier__,
+                    IBaseDocument.__identifier__,
+                    ],
+                })
 
-            if len(results) > 0:
+            if results:
                 return False
 
         return True
@@ -204,8 +247,11 @@ class DossierContainer(Container):
         are not in an end state.
         """
         active_tasks = api.content.find(
-            context=self, depth=-1, object_provides=ITask,
-            review_state=OPEN_TASK_STATES)
+            context=self,
+            depth=-1,
+            object_provides=ITask,
+            review_state=OPEN_TASK_STATES,
+            )
 
         return bool(active_tasks)
 
@@ -214,16 +260,21 @@ class DossierContainer(Container):
         are not in an end state.
         """
         query = Proposal.query.active().by_container(
-            self, get_current_admin_unit())
+            self,
+            get_current_admin_unit(),
+            )
+
         return bool(query.count())
 
     def is_all_checked_in(self):
-        """ check if all documents in this path are checked in """
-
+        """Check if all documents in this path are checked in."""
         docs = self.portal_catalog(
             portal_type="opengever.document.document",
-            path=dict(depth=2,
-                      query='/'.join(self.getPhysicalPath())))
+            path=dict(
+                depth=2,
+                query='/'.join(self.getPhysicalPath()),
+                ),
+            )
 
         for doc in docs:
             if doc.checked_out:
@@ -232,8 +283,7 @@ class DossierContainer(Container):
         return True
 
     def has_valid_startdate(self):
-        """check if a startdate is valid (if exist)."""
-
+        """Check if a startdate is valid (if exist)."""
         return bool(IDossier(self).start)
 
     def has_valid_enddate(self):
@@ -252,6 +302,7 @@ class DossierContainer(Container):
             # than the earliest possible end_date
             if end_date > dossier.end:
                 return False
+
         return True
 
     def earliest_possible_end_date(self):
@@ -260,14 +311,17 @@ class DossierContainer(Container):
         """
         dates = []
         catalog = getToolByName(self, 'portal_catalog')
+
         dossier_brains = catalog({
             'path': '/'.join(self.getPhysicalPath()),
             'object_provides': [
-                'opengever.dossier.behaviors.dossier.IDossierMarker', ],
+                'opengever.dossier.behaviors.dossier.IDossierMarker',
+                ],
             'review_state': [
                 'dossier-state-active',
-                'dossier-state-resolved', ],
-        })
+                'dossier-state-resolved',
+                ],
+            })
 
         for dossier_brain in dossier_brains:
             dates.append(dossier_brain.end)
@@ -276,8 +330,9 @@ class DossierContainer(Container):
         document_brains = catalog({
             'path': '/'.join(self.getPhysicalPath()),
             'object_provides': [
-                'opengever.document.behaviors.IBaseDocument'],
-        })
+                'opengever.document.behaviors.IBaseDocument',
+                ],
+            })
 
         for document_brain in document_brains:
             dates.append(document_brain.document_date)
@@ -301,7 +356,10 @@ class DossierContainer(Container):
         return IParticipationAwareMarker.providedBy(self)
 
     def has_task_support(self):
-        return self.portal_types['opengever.task.task'] in self.allowedContentTypes()
+        return (
+            self.portal_types['opengever.task.task']
+            in self.allowedContentTypes()
+            )
 
     def get_reference_number(self):
         return IReferenceNumber(self).get_number()
@@ -311,12 +369,21 @@ class DossierContainer(Container):
         in `threshold` and transformed as web intelligent text.
         """
         comments = IDossier(self).comments
-        if comments:
-            if threshold:
-                comments = truncate_ellipsis(comments, threshold)
 
-            return api.portal.get_tool(name='portal_transforms').convertTo(
-                'text/html', comments, mimetype='text/x-web-intelligent').getData()
+        if comments and threshold:
+            comments = truncate_ellipsis(comments, threshold)
+
+            return (
+                api.portal.get_tool(name='portal_transforms')
+                .convertTo(
+                    'text/html',
+                    comments,
+                    mimetype='text/x-web-intelligent',
+                    )
+                .getData()
+                )
+
+        return None
 
     def get_retention_expiration_date(self):
         """Returns the date when the expiration date expires:
@@ -325,8 +392,11 @@ class DossierContainer(Container):
         retention period.
         """
         if IDossier(self).end:
-            year = IDossier(self).end.year + \
-                int(ILifeCycle(self).retention_period)
+            year = (
+                IDossier(self).end.year
+                + int(ILifeCycle(self).retention_period)
+                )
+
             return date(year + 1, 1, 1)
 
         return None
@@ -347,8 +417,10 @@ class DossierContainer(Container):
 
     def activate(self):
         self.reset_end_date()
-        api.content.transition(obj=self,
-                               transition='dossier-transition-activate')
+        api.content.transition(
+            obj=self,
+            transition='dossier-transition-activate',
+            )
 
     def reset_end_date(self):
         IDossier(self).end = None
@@ -363,6 +435,7 @@ class DossierContainer(Container):
         workflow = api.portal.get_tool('portal_workflow')
         workflow_id = workflow.getWorkflowsFor(self)[0].getId()
         history = workflow.getHistoryOf(workflow_id, self)
+
         for entry in reversed(history):
             if entry.get('review_state') in end_states:
                 return entry.get('review_state')
@@ -380,6 +453,7 @@ class DossierContainer(Container):
 @implementer(IConstrainTypeDecider)
 @adapter(Interface, IDossierMarker, IDexterityFTI)
 class DefaultConstrainTypeDecider(object):
+    """Provide an oracle to decide on container constraints."""
 
     def __init__(self, request, context, fti):
         self.context = context
@@ -388,21 +462,23 @@ class DefaultConstrainTypeDecider(object):
 
         max_dossier_depth = api.portal.get_registry_record(
             'maximum_dossier_depth',
-            interface=IDossierContainerTypes) + 1
+            interface=IDossierContainerTypes,
+            ) + 1
 
         self.constrain_configuration = {
             'opengever.dossier.businesscasedossier': {
                 'opengever.dossier.businesscasedossier': max_dossier_depth,
-            },
+                },
             'opengever.private.dossier': {
                 'opengever.private.dossier': max_dossier_depth
-            },
-        }
+                },
+            }
 
     def addable(self, depth):
         container_type = self.context.portal_type
         factory_type = self.fti.id
         mapping = self.constrain_type_mapping
+
         for const_ctype, const_depth, const_ftype in mapping:
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
@@ -415,6 +491,7 @@ class DefaultConstrainTypeDecider(object):
     @property
     def constrain_type_mapping(self):
         conf = self.constrain_configuration
+
         for container_type, type_constr in conf.items():
             for factory_type, max_depth in type_constr.items():
                 yield container_type, max_depth, factory_type

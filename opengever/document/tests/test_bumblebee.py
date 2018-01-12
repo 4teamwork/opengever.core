@@ -22,19 +22,20 @@ class TestBumblebeeIntegrationWithDisabledFeature(IntegrationTestCase):
 
         self.assertEquals(
             DOCX_CHECKSUM,
-            IBumblebeeDocument(self.document).get_checksum())
+            IBumblebeeDocument(self.document).get_checksum(),
+            )
 
     def test_opengever_documents_have_a_primary_field(self):
         self.login(self.dossier_responsible)
-
         fieldinfo = IPrimaryFieldInfo(self.document)
+
         self.assertEqual('file', fieldinfo.fieldname)
 
     @browsing
     def test_document_preview_is_hidden(self, browser):
         self.login(self.dossier_responsible, browser)
-
         browser.visit(self.document, view='tabbedview_view-overview')
+
         self.assertEqual(0, len(browser.css('.documentPreview')))
 
 
@@ -46,17 +47,18 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
     @browsing
     def test_document_preview_is_visible(self, browser):
         self.login(self.dossier_responsible, browser)
-
         browser.visit(self.document, view='tabbedview_view-overview')
+
         self.assertEqual(1, len(browser.css('.documentPreview')))
 
     @browsing
     def test_link_previews_to_bumblebee_overlay_document(self, browser):
         self.login(self.dossier_responsible, browser)
-
         browser.visit(self.document, view="tabbedview_view-overview")
+
         preview_element = browser.css('.documentPreview .showroom-item')
         url = preview_element.first.get('data-showroom-target')
+
         self.assertTrue(url.endswith('@@bumblebee-overlay-document'))
 
     def test_does_not_queue_bumblebee_storing_if_not_digitally_available(self):
@@ -64,6 +66,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
 
         create(Builder('document').within(self.dossier))
         queue = get_queue()
+
         self.assertEquals(0, len(queue), 'Expected no job in the queue.')
 
     def test_prevents_checked_out_document_checksum_update(self):
@@ -72,15 +75,21 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
 
         self.assertEquals(
             DOCX_CHECKSUM,
-            IBumblebeeDocument(self.document).get_checksum())
+            IBumblebeeDocument(self.document).get_checksum(),
+            )
 
-        self.document.update_file('foo', content_type='text/plain',
-                                  filename=u'foo.txt')
+        self.document.update_file(
+            'foo',
+            content_type='text/plain',
+            filename=u'foo.txt',
+            )
+
         IBumblebeeDocument(self.document).handle_modified()
 
         self.assertEquals(
             DOCX_CHECKSUM,
-            IBumblebeeDocument(self.document).get_checksum())
+            IBumblebeeDocument(self.document).get_checksum(),
+            )
 
     def test_queues_bumblebee_storing_after_document_checkin(self):
         self.login(self.dossier_responsible)
@@ -89,36 +98,52 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
         queue = get_queue()
         queue.reset()
 
-        self.subdocument.update_file(bumblebee_asset('example.docx').bytes(),
-                                     content_type='text/plain',
-                                     filename=u'example.docx')
+        self.subdocument.update_file(
+            bumblebee_asset('example.docx').bytes(),
+            content_type='text/plain',
+            filename=u'example.docx',
+            )
+
         self.checkin_document(self.subdocument)
 
         self.assertEquals(1, len(queue), 'Expected 1 job in the queue.')
-        job, = queue.queue
 
-        self.assertDictEqual(
-            {'application': 'local',
-             'file_url': ('http://nohost/plone/bumblebee_download' +
-                          '?checksum={}'.format(DOCX_CHECKSUM) +
-                          '&uuid={}'.format(IUUID(self.subdocument))),
-             'salt': IUUID(self.subdocument),
-             'checksum': DOCX_CHECKSUM,
-             'deferred': False,
-             'url': '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
-                    '/dossier-1/dossier-2/document-11/'
-                    'bumblebee_trigger_storing'},
-            job)
+        expected_job = {
+            'application': 'local',
+            'file_url': (
+                'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'
+                .format(DOCX_CHECKSUM, IUUID(self.subdocument))
+                ),
+            'salt': IUUID(self.subdocument),
+            'checksum': DOCX_CHECKSUM,
+            'deferred': False,
+            'url': (
+                '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
+                '/dossier-1/dossier-2/document-11/bumblebee_trigger_storing'
+                ),
+            }
+
+        found_job, = queue.queue
+
+        self.assertDictEqual(expected_job, found_job)
 
     def test_queues_bumblebee_storing_after_revert_to_previous_version(self):
         self.login(self.dossier_responsible)
 
-        self.subdocument.update_file('foo', content_type='text/plain',
-                                     filename=u'foo.txt')
+        self.subdocument.update_file(
+            'foo',
+            content_type='text/plain',
+            filename=u'foo.txt',
+            )
 
-        create_document_version(self.subdocument, 1,
-                                data=bumblebee_asset('example.docx').bytes())
+        create_document_version(
+            self.subdocument,
+            1,
+            data=bumblebee_asset('example.docx').bytes(),
+            )
+
         create_document_version(self.subdocument, 2)
+
         queue = get_queue()
         queue.reset()
 
@@ -126,20 +151,25 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
         manager.revert_to_version(1)
 
         self.assertEquals(1, len(queue), 'Expected 1 job in the queue.')
-        job, = queue.queue
 
-        self.assertDictEqual(
-            {'application': 'local',
-             'file_url': ('http://nohost/plone/bumblebee_download' +
-                          '?checksum={}'.format(DOCX_CHECKSUM) +
-                          '&uuid={}'.format(IUUID(self.subdocument))),
-             'salt': IUUID(self.subdocument),
-             'checksum': DOCX_CHECKSUM,
-             'deferred': False,
-             'url': '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
-                    '/dossier-1/dossier-2/document-11/'
-                    'bumblebee_trigger_storing'},
-            job)
+        expected_job = {
+            'application': 'local',
+            'file_url': (
+                'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'
+                .format(DOCX_CHECKSUM, IUUID(self.subdocument))
+                ),
+            'salt': IUUID(self.subdocument),
+            'checksum': DOCX_CHECKSUM,
+            'deferred': False,
+            'url': (
+                '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
+                '/dossier-1/dossier-2/document-11/bumblebee_trigger_storing'
+                ),
+            }
+
+        found_job, = queue.queue
+
+        self.assertDictEqual(expected_job, found_job)
 
     def test_updates_checksum_after_docproperty_update(self):
         self.activate_feature('doc-properties')
@@ -149,14 +179,21 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
 
         self.document.file = NamedBlobFile(
             data=assets.load(u'with_gever_properties_update.docx'),
-            filename=u'with_gever_properties.docx')
+            filename=u'with_gever_properties.docx',
+            )
+
         checksum_before = IBumblebeeDocument(self.document).update_checksum()
 
         self.checkin_document(self.document)
 
         self.assertNotEqual(
-            checksum_before, IBumblebeeDocument(self.document).get_checksum(),
-            'Document checksum not updated after docproperties update.')
+            checksum_before,
+            IBumblebeeDocument(self.document).get_checksum(),
+            'Document checksum not updated after docproperties update.',
+            )
+
         self.assertNotEqual(
-            checksum_before, obj2brain(self.document).bumblebee_checksum,
-            'Document checksum not updated after docproperties update.')
+            checksum_before,
+            obj2brain(self.document).bumblebee_checksum,
+            'Document checksum not updated after docproperties update.',
+            )

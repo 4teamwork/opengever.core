@@ -13,6 +13,8 @@ class LocalRolesSetter(object):
         self.task = task
         self._inbox_group_id = None
         self._permission_identifier = None
+        self.event = None
+        self._inbox_group = None
 
     def __call__(self, event):
         self.event = event
@@ -33,14 +35,19 @@ class LocalRolesSetter(object):
             self._permission_identifier = actor.permission_identifier
 
             if isinstance(self._permission_identifier, unicode):
-                self._permission_identifier = self._permission_identifier.encode('utf-8')
+                self._permission_identifier = (
+                    self._permission_identifier.encode('utf-8')
+                    )
 
         return self._permission_identifier
 
     @property
     def inbox_group_id(self):
         if self._inbox_group_id is None:
-            self._inbox_group = self.task.get_responsible_org_unit().inbox_group.groupid
+            self._inbox_group = (
+                self.task.get_responsible_org_unit().inbox_group.groupid
+                )
+
         return self._inbox_group
 
     def is_inboxgroup_agency_active(self):
@@ -59,12 +66,14 @@ class LocalRolesSetter(object):
     def set_roles_on_task(self):
         """Set local roles on task
         """
-        self._add_local_roles(self.task,
-                              self.responsible_permission_identfier,
-                              ('Editor',))
+        self._add_local_roles(
+            self.task,
+            self.responsible_permission_identfier,
+            ('Editor', ),
+            )
 
         if self.is_inboxgroup_agency_active() and self.inbox_group_id:
-            self._add_local_roles(self.task, self.inbox_group_id, ('Editor',))
+            self._add_local_roles(self.task, self.inbox_group_id, ('Editor', ))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -74,35 +83,43 @@ class LocalRolesSetter(object):
         sync_task(self.task, self.event)
 
     def set_roles_on_distinct_parent(self):
-        """Set local roles on the next parent which has a different
-        content type.
-        """
-
+        """Set local roles on next parent having a different content type."""
         context = self.task
         while context.Type() == self.task.Type():
             context = aq_parent(aq_inner(context))
-        self._add_local_roles(context,
-                              self.responsible_permission_identfier,
-                              ('Contributor', ))
+
+        self._add_local_roles(
+            context,
+            self.responsible_permission_identfier,
+            ('Contributor', ),
+            )
 
         if self.is_inboxgroup_agency_active() and self.inbox_group_id:
-            self._add_local_roles(context, self.inbox_group_id, ('Contributor', ))
+            self._add_local_roles(
+                context,
+                self.inbox_group_id,
+                ('Contributor', ),
+                )
 
     def set_roles_on_related_items(self):
-        """Set local roles on related items (usually documents)
-        """
-
+        """Set local roles on related items (usually documents)."""
         roles = ['Reader']
         if self.task.task_type_category == 'bidirectional_by_reference':
             roles.append('Editor')
 
         for item in getattr(self.task, 'relatedItems', []):
-            self._add_local_roles(item.to_object,
-                                  self.responsible_permission_identfier,
-                                  roles)
+            self._add_local_roles(
+                item.to_object,
+                self.responsible_permission_identfier,
+                roles,
+                )
 
             if self.is_inboxgroup_agency_active() and self.inbox_group_id:
-                self._add_local_roles(item.to_object, self.inbox_group_id, roles)
+                self._add_local_roles(
+                    item.to_object,
+                    self.inbox_group_id,
+                    roles,
+                    )
 
 
 def set_roles_after_adding(context, event):

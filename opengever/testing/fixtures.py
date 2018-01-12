@@ -38,7 +38,8 @@ class OpengeverContentFixture(object):
         start = time()
         self._logger = logger = logging.getLogger('opengever.testing')
         self._lookup_table = {
-            'manager': ('user', SITE_OWNER_NAME)}
+            'manager': ('user', SITE_OWNER_NAME),
+            }
 
         with self.freeze_at_hour(5):
             self.create_units()
@@ -54,6 +55,7 @@ class OpengeverContentFixture(object):
             with self.login(self.administrator):
                 self.create_repository_tree()
                 self.create_templates()
+
                 with self.features('meeting'):
                     self.create_committees()
 
@@ -78,6 +80,7 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(17):
             with self.login(self.administrator):
                 self.create_private_root()
+
             with self.login(self.regular_user):
                 self.create_private_folder()
 
@@ -93,27 +96,43 @@ class OpengeverContentFixture(object):
     def create_units(self):
         self.admin_unit = create(
             Builder('admin_unit')
-            .having(title=u'Hauptmandant',
-                    unit_id=u'plone',
-                    public_url='http://nohost/plone')
-            .as_current_admin_unit())
+            .having(
+                title=u'Hauptmandant',
+                unit_id=u'plone',
+                public_url='http://nohost/plone',
+                )
+            .as_current_admin_unit()
+            )
 
         self.org_unit = create(
             Builder('org_unit')
             .id('fa')
-            .having(title=u'Finanzamt',
-                    admin_unit=self.admin_unit)
+            .having(
+                title=u'Finanzamt',
+                admin_unit=self.admin_unit,
+                )
             .with_default_groups()
-            .as_current_org_unit())
+            .as_current_org_unit()
+            )
 
     def create_users(self):
         self.administrator = self.create_user(
-            'administrator', u'Nicole', u'Kohler',
-            ['Administrator', 'APIUser'])
+            'administrator',
+            u'Nicole',
+            u'Kohler',
+            ['Administrator', 'APIUser'],
+            )
+
         self.dossier_responsible = self.create_user(
-            'dossier_responsible', u'Robert', u'Ziegler')
+            'dossier_responsible',
+            u'Robert',
+            u'Ziegler',
+            )
+
         self.regular_user = self.create_user(
-            'regular_user', u'K\xe4thi', u'B\xe4rfuss',
+            'regular_user',
+            u'K\xe4thi',
+            u'B\xe4rfuss',
             address1='Kappelenweg 13',
             address2='Postfach 1234',
             city='Vorkappelen',
@@ -130,114 +149,214 @@ class OpengeverContentFixture(object):
             phone_office='012 34 56 78',
             salutation='Prof. Dr.',
             url='http://www.example.com',
-            zip_code='1234')
+            zip_code='1234',
+            )
+
         self.meeting_user = self.create_user(
-            'meeting_user', u'Herbert', u'J\xe4ger')
+            'meeting_user',
+            u'Herbert',
+            u'J\xe4ger',
+            )
+
         self.secretariat_user = self.create_user(
-            'secretariat_user', u'J\xfcrgen', u'K\xf6nig',
-            group=self.org_unit.inbox_group)
+            'secretariat_user',
+            u'J\xfcrgen',
+            u'K\xf6nig',
+            group=self.org_unit.inbox_group,
+            )
+
         self.committee_responsible = self.create_user(
-            'committee_responsible', u'Fr\xe4nzi', u'M\xfcller')
+            'committee_responsible',
+            u'Fr\xe4nzi',
+            u'M\xfcller',
+            )
+
         self.dossier_manager = self.create_user(
-            'dossier_manager', u'F\xe4ivel', u'Fr\xfchling')
+            'dossier_manager',
+            u'F\xe4ivel',
+            u'Fr\xfchling',
+            )
+
         self.records_manager = self.create_user(
-            'records_manager', u'Ramon', u'Flucht',
-            ['Records Manager'])
+            'records_manager',
+            u'Ramon',
+            u'Flucht',
+            ['Records Manager'],
+            )
 
         self.workspace_owner = self.create_user(
-            'workspace_owner', u'G\xfcnther', u'Fr\xf6hlich')
+            'workspace_owner',
+            u'G\xfcnther',
+            u'Fr\xf6hlich',
+            )
+
         self.workspace_admin = self.create_user(
-            'workspace_admin', u'Fridolin', u'Hugentobler')
+            'workspace_admin',
+            u'Fridolin',
+            u'Hugentobler',
+            )
+
         self.workspace_member = self.create_user(
-            'workspace_member', u'B\xe9atrice', u'Schr\xf6dinger')
+            'workspace_member',
+            u'B\xe9atrice',
+            u'Schr\xf6dinger',
+            )
+
         self.workspace_guest = self.create_user(
-            'workspace_guest', u'Hans', u'Peter')
+            'workspace_guest',
+            u'Hans',
+            u'Peter',
+            )
 
     def create_teams(self):
-        users = [ogds_service().find_user(user.getId())
-                 for user in [self.regular_user, self.dossier_responsible]]
-        group_a = create(Builder('ogds_group')
-                         .having(groupid='projekt_a',
-                                 title=u'Projekt A', users=users))
+        users = [
+            ogds_service().find_user(user.getId())
+            for user in [self.regular_user, self.dossier_responsible]
+            ]
+
+        group_a = create(
+            Builder('ogds_group')
+            .having(groupid='projekt_a', title=u'Projekt A', users=users)
+            )
+
         self.projekt_a = create(
             Builder('ogds_team')
-            .having(title=u'Projekt \xdcberbaung Dorfmatte',
-                    group=group_a, org_unit=self.org_unit))
+            .having(
+                title=u'Projekt \xdcberbaung Dorfmatte',
+                group=group_a,
+                org_unit=self.org_unit,
+                )
+            )
 
-        users = [ogds_service().find_user(user.getId())
-                 for user in [self.committee_responsible, self.meeting_user]]
-        group_b = create(Builder('ogds_group')
-                         .having(groupid='projekt_b',
-                                 title=u'Projekt B', users=users))
+        users = [
+            ogds_service().find_user(user.getId())
+            for user in [self.committee_responsible, self.meeting_user]
+            ]
+
+        group_b = create(
+            Builder('ogds_group')
+            .having(
+                groupid='projekt_b',
+                title=u'Projekt B',
+                users=users,
+                )
+            )
+
         self.projekt_b = create(
             Builder('ogds_team')
-            .having(title=u'Sekretariat Abteilung XY',
-                    group=group_b, org_unit=self.org_unit))
+            .having(
+                title=u'Sekretariat Abteilung XY',
+                group=group_b,
+                org_unit=self.org_unit,
+                )
+            )
 
     @staticuid()
     def create_repository_tree(self):
         self.root = self.register('repository_root', create(
             Builder('repository_root')
-            .having(title_de=u'Ordnungssystem',
-                    title_fr=u'Syst\xe8me de classement')))
-        self.root.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ['Reader', 'Contributor', 'Editor'])
-        self.root.manage_setLocalRoles(self.secretariat_user.getId(),
-                                       ['Reviewer', 'Publisher'])
+            .having(
+                title_de=u'Ordnungssystem',
+                title_fr=u'Syst\xe8me de classement',
+                )
+            ))
+
+        self.root.manage_setLocalRoles(
+            self.org_unit.users_group_id,
+            ['Reader', 'Contributor', 'Editor'],
+            )
+
+        self.root.manage_setLocalRoles(
+            self.secretariat_user.getId(),
+            ['Reviewer', 'Publisher'],
+            )
+
         self.root.reindexObjectSecurity()
 
         self.repofolder0 = self.register('branch_repofolder', create(
-            Builder('repository').within(self.root)
-            .having(title_de=u'F\xfchrung',
-                    title_fr=u'Direction',
-                    description=u'Alles zum Thema F\xfchrung.')))
+            Builder('repository')
+            .within(self.root)
+            .having(
+                title_de=u'F\xfchrung',
+                title_fr=u'Direction',
+                description=u'Alles zum Thema F\xfchrung.',
+                )
+            ))
 
-        self.repofolder0.manage_setLocalRoles(self.dossier_manager.getId(),
-                                              ['DossierManager'])
+        self.repofolder0.manage_setLocalRoles(
+            self.dossier_manager.getId(),
+            ['DossierManager'],
+            )
 
         self.repofolder0.reindexObjectSecurity()
 
         self.repofolder00 = self.register('leaf_repofolder', create(
-            Builder('repository').within(self.repofolder0)
-            .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
-                    title_fr=u'Contrats et accords')))
+            Builder('repository')
+            .within(self.repofolder0)
+            .having(
+                title_de=u'Vertr\xe4ge und Vereinbarungen',
+                title_fr=u'Contrats et accords',
+                )
+            ))
 
         self.repofolder1 = self.register('empty_repofolder', create(
-            Builder('repository').within(self.root)
-            .having(title_de=u'Rechnungspr\xfcfungskommission',
-                    title_fr=u'Commission de v\xe9rification')))
+            Builder('repository')
+            .within(self.root)
+            .having(
+                title_de=u'Rechnungspr\xfcfungskommission',
+                title_fr=u'Commission de v\xe9rification',
+                )
+            ))
 
     @staticuid()
     def create_contacts(self):
         self.contactfolder = self.register('contactfolder', create(
             Builder('contactfolder')
-            .having(id='kontakte',
-                    title_de=u'Kontakte',
-                    title_en=u'Contacts')))
+            .having(
+                id='kontakte',
+                title_de=u'Kontakte',
+                title_en=u'Contacts',
+                )
+            ))
 
         self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id, ['Reader'])
+            self.org_unit.users_group_id,
+            ['Reader'],
+            )
+
         self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id, ['Reader', 'Contributor', 'Editor'])
+            self.org_unit.users_group_id,
+            ['Reader', 'Contributor', 'Editor'],
+            )
+
         self.contactfolder.reindexObjectSecurity()
 
         self.hanspeter_duerr = self.register('hanspeter_duerr', create(
             Builder('contact')
             .within(self.contactfolder)
-            .having(firstname=u'Hanspeter',
-                    lastname='D\xc3\xbcrr'.decode('utf-8'))))
+            .having(
+                firstname=u'Hanspeter',
+                lastname='D\xc3\xbcrr'.decode('utf-8'),
+                )
+            ))
 
         self.franz_meier = self.register('franz_meier', create(
             Builder('contact')
             .within(self.contactfolder)
-            .having(firstname=u'Franz', lastname=u'Meier',
-                    email=u'meier.f@example.com')))
+            .having(
+                firstname=u'Franz',
+                lastname=u'Meier',
+                email=u'meier.f@example.com',
+                )
+            ))
 
         self.josef_buehler = create(
             Builder('person')
-            .having(firstname=u'Josef', lastname=u'B\xfchler'))
+            .having(firstname=u'Josef', lastname=u'B\xfchler'),
+            )
 
         self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+
         create_session().flush()
 
     @staticuid()
@@ -245,53 +364,71 @@ class OpengeverContentFixture(object):
         templates = self.register('templates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen')
-            .having(id='vorlagen')))
-        templates.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ['Reader'])
-        templates.manage_setLocalRoles(self.administrator.getId(),
-                                       ['Reader', 'Contributor', 'Editor'])
+            .having(id='vorlagen')
+            ))
+
+        templates.manage_setLocalRoles(
+            self.org_unit.users_group_id,
+            ['Reader'],
+            )
+
+        templates.manage_setLocalRoles(
+            self.administrator.getId(),
+            ['Reader', 'Contributor', 'Editor'],
+            )
+
         templates.reindexObjectSecurity()
 
         self.sablon_template = self.register('sablon_template', create(
             Builder('sablontemplate')
             .within(templates)
-            .with_asset_file('sablon_template.docx')))
+            .with_asset_file('sablon_template.docx')
+            ))
 
         with self.features('meeting', 'word-meeting'):
             self.proposal_template = self.register('proposal_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Geb\xfchren')
                 .with_asset_file(u'vertragsentwurf.docx')
-                .within(templates)))
+                .within(templates)
+                ))
 
         self.tasktemplatefolder = self.register('tasktemplatefolder', create(
             Builder('tasktemplatefolder')
             .titled(u'Verfahren Neuanstellung')
             .in_state('tasktemplatefolder-state-activ')
-            .within(templates)))
+            .within(templates)
+            ))
 
         self.tasktemplate = self.register('tasktemplate', create(
             Builder('tasktemplate')
             .titled(u'Arbeitsplatz einrichten.')
-            .having(**{'issuer': 'responsible',
-                       'responsible_client': 'fa',
-                       'responsible': 'robert.ziegler',
-                       'deadline': 10})
-            .within(self.tasktemplatefolder)))
+            .having(**{
+                'issuer': 'responsible',
+                'responsible_client': 'fa',
+                'responsible': 'robert.ziegler',
+                'deadline': 10,
+                })
+            .within(self.tasktemplatefolder)
+            ))
 
         self.dossiertemplate = self.register('dossiertemplate', create(
             Builder('dossiertemplate')
             .titled(u'Bauvorhaben klein')
-            .having(**{'description': u'Lorem ipsum',
-                       'keywords': (u'secret', u'special'),
-                       'comments': 'this is very special',
-                       'filing_prefix': 'department'})
-            .within(templates)))
+            .having(**{
+                'description': u'Lorem ipsum',
+                'keywords': (u'secret', u'special'),
+                'comments': 'this is very special',
+                'filing_prefix': 'department',
+                })
+            .within(templates)
+            ))
 
         self.subdossiertemplate = self.register('subdossiertemplate', create(
             Builder('dossiertemplate')
             .titled(u'Anfragen')
-            .within(self.dossiertemplate)))
+            .within(self.dossiertemplate)
+            ))
 
     @staticuid()
     def create_committees(self):
@@ -309,12 +446,22 @@ class OpengeverContentFixture(object):
                 paragraph_template=self.sablon_template,
                 )
             ))
+
         self.committee_container.manage_setLocalRoles(
-            self.committee_responsible.getId(), ['MeetingUser'])
+            self.committee_responsible.getId(),
+            ['MeetingUser'],
+            )
+
         self.committee_container.manage_setLocalRoles(
-            self.meeting_user.getId(), ['MeetingUser'])
+            self.meeting_user.getId(),
+            ['MeetingUser'],
+            )
+
         self.committee_container.manage_setLocalRoles(
-            self.administrator.getId(), ['CommitteeAdministrator'])
+            self.administrator.getId(),
+            ['CommitteeAdministrator'],
+            )
+
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
@@ -322,11 +469,21 @@ class OpengeverContentFixture(object):
             repository_folder=self.repofolder1,
             group_id='committee_rpk_group',
             group_title=u'Gruppe Rechnungspr\xfcfungskommission',
-            responsibles=[self.administrator,
-                          self.committee_responsible]))
-        self.register_raw('committee_id', self.committee.load_model().committee_id)
+            responsibles=[
+                self.administrator,
+                self.committee_responsible,
+                ]
+            ))
+
+        self.register_raw(
+            'committee_id',
+            self.committee.load_model().committee_id,
+            )
+
         self.committee.manage_setLocalRoles(
-            self.meeting_user.getId(), ['CommitteeMember'])
+            self.meeting_user.getId(),
+            ['CommitteeMember'],
+            )
 
         self.committee_president = self.create_committee_membership(
             self.committee,
@@ -335,7 +492,8 @@ class OpengeverContentFixture(object):
             lastname=u'Sch\xf6ller',
             email='h.schoeller@web.de',
             date_from=datetime(2014, 1, 1),
-            date_to=datetime(2016, 12, 31))
+            date_to=datetime(2016, 12, 31),
+            )
 
         self.committee_secretary = self.create_committee_membership(
             self.committee,
@@ -344,7 +502,8 @@ class OpengeverContentFixture(object):
             lastname=u'M\xfcller',
             email='h.mueller@gmx.ch',
             date_from=datetime(2016, 1, 1),
-            date_to=datetime(2016, 12, 31))
+            date_to=datetime(2016, 12, 31),
+            )
 
         self.committee_participant_1 = self.create_committee_membership(
             self.committee,
@@ -353,7 +512,8 @@ class OpengeverContentFixture(object):
             lastname=u'W\xf6lfl',
             email='g.woelfl@hotmail.com',
             date_from=datetime(2014, 1, 1),
-            date_to=datetime(2016, 12, 31))
+            date_to=datetime(2016, 12, 31),
+            )
 
         self.committee_participant_2 = self.create_committee_membership(
             self.committee,
@@ -362,7 +522,8 @@ class OpengeverContentFixture(object):
             lastname=u'Wendler',
             email='jens-wendler@gmail.com',
             date_from=datetime(2014, 1, 1),
-            date_to=datetime(2016, 12, 31))
+            date_to=datetime(2016, 12, 31),
+            )
 
         self.inactive_committee_participant = self.create_committee_membership(
             self.committee,
@@ -371,20 +532,33 @@ class OpengeverContentFixture(object):
             lastname=u'Neruda',
             email='pablo-neruda@gmail.com',
             date_from=datetime(2010, 1, 1),
-            date_to=datetime(2014, 12, 31))
+            date_to=datetime(2014, 12, 31),
+            )
 
         self.empty_committee = self.register(
-            'empty_committee', self.create_committee(
+            'empty_committee',
+            self.create_committee(
                 title=u'Kommission f\xfcr Verkehr',
                 repository_folder=self.repofolder1,
                 group_id='committee_ver_group',
                 group_title=u'Gruppe Kommission f\xfcr Verkehr',
-                responsibles=[self.administrator,
-                              self.committee_responsible]))
-        self.register_raw('empty_committee_id',
-                          self.empty_committee.load_model().committee_id)
+                responsibles=[
+                    self.administrator,
+                    self.committee_responsible,
+                    ],
+                ),
+            )
+
+        self.register_raw(
+            'empty_committee_id',
+            self.empty_committee.load_model().committee_id,
+            )
+
         self.empty_committee.manage_setLocalRoles(
-            self.meeting_user.getId(), ['CommitteeMember'])
+            self.meeting_user.getId(),
+            ['CommitteeMember'],
+            )
+
         self.empty_committee.reindexObjectSecurity()
 
     @staticuid()
@@ -392,160 +566,236 @@ class OpengeverContentFixture(object):
         self.inbox = self.register('inbox', create(
             Builder('inbox')
             .titled(u'Eingangsk\xf6rbli')
-            .having(id='eingangskorb',
-                    responsible_org_unit='fa',
-                    inbox_group=self.org_unit.inbox_group)))
+            .having(
+                id='eingangskorb',
+                responsible_org_unit='fa',
+                inbox_group=self.org_unit.inbox_group,
+                )
+            ))
+
         self.register('inbox_document', create(
-            Builder('document').within(self.inbox)
+            Builder('document')
+            .within(self.inbox)
             .titled(u'Dokument im Eingangsk\xf6rbli')
-            .with_asset_file('text.txt')))
+            .with_asset_file('text.txt')
+            ))
+
         self.inbox.manage_setLocalRoles(
-            self.secretariat_user.getId(), ['Contributor', 'Editor', 'Reader'])
+            self.secretariat_user.getId(),
+            ['Contributor', 'Editor', 'Reader'],
+            )
+
         self.inbox.reindexObjectSecurity()
 
     @staticuid()
     def create_private_root(self):
         self.private_root = self.register('private_root', create(
             Builder('private_root')
-            .titled(u'Meine Ablage')))
+            .titled(u'Meine Ablage')
+            ))
 
     @staticuid()
     def create_private_folder(self):
         self.private_folder = self.register('private_folder', create(
             Builder('private_folder')
             .having(id=self.regular_user.getId())
-            .within(self.private_root)))
+            .within(self.private_root)
+            ))
 
         self.private_dossier = self.register('private_dossier', create(
             Builder('private_dossier')
             .having(title=u'Mein Dossier 1')
             .within(self.private_folder)
-        ))
+            ))
+
         create(
             Builder('private_dossier')
             .having(title=u'Mein Dossier 2')
             .within(self.private_folder)
-        )
+            )
 
         self.register('private_document', create(
             Builder('document')
             .within(self.private_dossier)
             .with_asset_file('vertragsentwurf.docx')
-        ))
+            ))
 
         self.private_folder.manage_setLocalRoles(
             self.regular_user.getId(),
-            ['Publisher', 'Contributor', 'Reader', 'Owner', 'Reviewer',
-             'Editor'])
+            [
+                'Publisher',
+                'Contributor',
+                'Reader',
+                'Owner',
+                'Reviewer',
+                'Editor',
+                ],
+            )
+
         self.private_folder.reindexObjectSecurity()
 
     @staticuid()
     def create_treaty_dossiers(self):
         self.dossier = self.register('dossier', create(
-            Builder('dossier').within(self.repofolder00)
+            Builder('dossier')
+            .within(self.repofolder00)
             .titled(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
-            .having(description=u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 '
-                    u'geh\xf6ren ins Archiv.',
-                    keywords=(
-                        u'Finanzverwaltung',
-                        u'Vertr\xe4ge',
-                        ),
-                    start=date(2016, 1, 1),
-                    responsible=self.dossier_responsible.getId(),
-                    external_reference=u'qpr-900-9001-\xf7',
-                    )
+            .having(
+                description=u'Alle aktuellen Vertr\xe4ge mit der kantonalen '
+                u'Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 '
+                u'geh\xf6ren ins Archiv.',
+                keywords=(
+                    u'Finanzverwaltung',
+                    u'Vertr\xe4ge',
+                    ),
+                start=date(2016, 1, 1),
+                responsible=self.dossier_responsible.getId(),
+                external_reference=u'qpr-900-9001-\xf7',
+                )
             ))
 
-        create(Builder('contact_participation')
-               .for_contact(self.meier_ag)
-               .for_dossier(self.dossier)
-               .with_roles(['final-drawing']))
+        create(
+            Builder('contact_participation')
+            .for_contact(self.meier_ag)
+            .for_dossier(self.dossier)
+            .with_roles(['final-drawing'])
+            )
 
-        create(Builder('contact_participation')
-               .for_contact(self.josef_buehler)
-               .for_dossier(self.dossier)
-               .with_roles(['final-drawing', 'participation']))
+        create(
+            Builder('contact_participation')
+            .for_contact(self.josef_buehler)
+            .for_dossier(self.dossier)
+            .with_roles(['final-drawing', 'participation'])
+            )
 
         self.document = self.register('document', create(
-            Builder('document').within(self.dossier)
+            Builder('document')
+            .within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
-            .having(document_date=datetime(2010, 1, 3),
-                    document_author=TEST_USER_ID,
-                    document_type='contract',
-                    receipt_date=datetime(2010, 1, 3),
-                    delivery_date=datetime(2010, 1, 3))
+            .having(
+                document_date=datetime(2010, 1, 3),
+                document_author=TEST_USER_ID,
+                document_type='contract',
+                receipt_date=datetime(2010, 1, 3),
+                delivery_date=datetime(2010, 1, 3),
+                )
             .attach_file_containing(
-                    bumblebee_asset('example.docx').bytes(),
-                    u'vertragsentwurf.docx')))
+                bumblebee_asset('example.docx').bytes(),
+                u'vertragsentwurf.docx')
+            ))
 
         self.task = self.register('task', create(
-            Builder('task').within(self.dossier)
+            Builder('task')
+            .within(self.dossier)
             .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='correction',
-                    deadline=date(2016, 11, 1))
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+                )
             .in_state('task-state-in-progress')
-            .relate_to(self.document)))
+            .relate_to(self.document)
+            ))
 
         self.register('subtask', create(
-            Builder('task').within(self.task)
-            .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='correction',
-                    deadline=date(2016, 11, 1))
+            Builder('task')
+            .within(self.task)
+            .titled(
+                u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+                )
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+                )
             .in_state('task-state-resolved')
-            .relate_to(self.document)))
+            .relate_to(self.document)
+            ))
 
         self.register('taskdocument', create(
-            Builder('document').within(self.task)
+            Builder('document')
+            .within(self.task)
             .titled(u'Feedback zum Vertragsentwurf')
-            .attach_file_containing('Feedback text',
-                                    u'vertr\xe4g sentwurf.docx')))
+            .attach_file_containing(
+                'Feedback text',
+                u'vertr\xe4g sentwurf.docx',
+                )
+            ))
 
         proposal = self.register('proposal', create(
-            Builder('proposal').within(self.dossier)
-            .having(title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
-                    committee=self.committee.load_model())
+            Builder('proposal')
+            .within(self.dossier)
+            .having(
+                title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                committee=self.committee.load_model(),
+                )
             .relate_to(self.document)
-            .as_submitted()))
+            .as_submitted()
+            ))
+
         self.register_path(
             'submitted_proposal',
-            proposal.load_model().submitted_physical_path.encode('utf-8'))
+            proposal.load_model().submitted_physical_path.encode('utf-8'),
+            )
 
         self.register('draft_proposal', create(
-            Builder('proposal').within(self.dossier)
-            .having(title=u'Antrag f\xfcr Kreiselbau',
-                    committee=self.empty_committee.load_model())))
+            Builder('proposal')
+            .within(self.dossier)
+            .having(
+                title=u'Antrag f\xfcr Kreiselbau',
+                committee=self.empty_committee.load_model(),
+                )
+            ))
 
         self.decided_proposal = create(
-                Builder('proposal').within(self.dossier)
-                .having(title=u'Initialvertrag f\xfcr Bearbeitung',
-                        committee=self.committee.load_model())
-                .as_submitted())
+            Builder('proposal')
+            .within(self.dossier)
+            .having(
+                title=u'Initialvertrag f\xfcr Bearbeitung',
+                committee=self.committee.load_model(),
+                )
+            .as_submitted()
+            )
+
         self.register_path(
             'decided_proposal',
-            self.decided_proposal.load_model().submitted_physical_path.encode('utf-8'))
+            self.decided_proposal
+            .load_model()
+            .submitted_physical_path.encode('utf-8'),
+            )
 
         with self.features('meeting', 'word-meeting'):
             word_proposal = self.register('word_proposal', create(
-                Builder('proposal').within(self.dossier)
-                .having(title=u'\xc4nderungen am Personalreglement',
-                        committee=self.committee.load_model())
+                Builder('proposal')
+                .within(self.dossier)
+                .having(
+                    title=u'\xc4nderungen am Personalreglement',
+                    committee=self.committee.load_model(),
+                    )
                 .relate_to(self.document)
                 .with_proposal_file(assets.load('vertragsentwurf.docx'))
-                .as_submitted()))
+                .as_submitted()
+                ))
+
             self.register_path(
                 'submitted_word_proposal',
-                word_proposal.load_model().submitted_physical_path.encode('utf-8'))
+                word_proposal
+                .load_model()
+                .submitted_physical_path.encode('utf-8'),
+                )
 
             self.register('draft_word_proposal', create(
-                Builder('proposal').within(self.dossier)
-                .having(title=u'\xdcberarbeitung der GAV',
-                        committee=self.empty_committee.load_model())))
+                Builder('proposal')
+                .within(self.dossier)
+                .having(
+                    title=u'\xdcberarbeitung der GAV',
+                    committee=self.empty_committee.load_model(),
+                    )
+                ))
 
         subdossier = self.register('subdossier', create(
             Builder('dossier')
@@ -557,81 +807,114 @@ class OpengeverContentFixture(object):
             ))
 
         self.register('subdossier2', create(
-            Builder('dossier').within(self.dossier).titled(u'2015')))
+            Builder('dossier')
+            .within(self.dossier)
+            .titled(u'2015')
+            ))
 
         self.register('subdocument', create(
-            Builder('document').within(subdossier)
+            Builder('document')
+            .within(subdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
-            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
+            .attach_file_containing(
+                'Excel dummy content',
+                u'tab\xe4lle.xlsx',
+                )
+            ))
 
         archive_dossier = self.register('archive_dossier', create(
-            Builder('dossier').within(self.repofolder00)
+            Builder('dossier')
+            .within(self.repofolder00)
             .titled(u'Archiv Vertr\xe4ge')
-            .having(description=u'Archiv der Vertr\xe4ge vor 2016.',
-                    keywords=(u'Vertr\xe4ge'),
-                    start=date(2000, 1, 1),
-                    end=date(2015, 12, 31),
-                    responsible=self.dossier_responsible.getId())
-            .in_state('dossier-state-resolved')))
+            .having(
+                description=u'Archiv der Vertr\xe4ge vor 2016.',
+                keywords=(u'Vertr\xe4ge'),
+                start=date(2000, 1, 1),
+                end=date(2015, 12, 31),
+                responsible=self.dossier_responsible.getId(),
+                )
+            .in_state('dossier-state-resolved')
+            ))
 
         archive_document = self.register('archive_document', create(
             Builder('document')
             .within(archive_dossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge vor 2016')
             .attach_archival_file_containing('TEST', name=u'test.pdf')
-            .with_dummy_content()))
+            .with_dummy_content()
+            ))
 
         self.register('archive_task', create(
-            Builder('task').within(archive_dossier)
+            Builder('task')
+            .within(archive_dossier)
             .titled(u'Vertr\xe4ge abschliessen')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='correction',
-                    deadline=date(2015, 12, 31))
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2015, 12, 31),
+                )
             .in_state('task-state-resolved')
-            .relate_to(archive_document)))
+            .relate_to(archive_document)
+            ))
 
         inactive_dossier = self.register('inactive_dossier', create(
-            Builder('dossier').within(self.repofolder00)
+            Builder('dossier')
+            .within(self.repofolder00)
             .titled(u'Inaktive Vertr\xe4ge')
-            .having(description=u'Inaktive Vertr\xe4ge von 2016.',
-                    keywords=(u'Vertr\xe4ge'),
-                    start=date(2016, 1, 1),
-                    end=date(2016, 12, 31),
-                    responsible=self.dossier_responsible.getId())
-            .in_state('dossier-state-inactive')))
+            .having(
+                description=u'Inaktive Vertr\xe4ge von 2016.',
+                keywords=(u'Vertr\xe4ge'),
+                start=date(2016, 1, 1),
+                end=date(2016, 12, 31),
+                responsible=self.dossier_responsible.getId(),
+                )
+            .in_state('dossier-state-inactive')
+            ))
 
         inactive_document = self.register('inactive_document', create(
-            Builder('document').within(inactive_dossier)
+            Builder('document')
+            .within(inactive_dossier)
             .titled(u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016')
-            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')))
+            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')
+            ))
 
         self.register('inactive_task', create(
-            Builder('task').within(inactive_dossier)
+            Builder('task')
+            .within(inactive_dossier)
             .titled(u'Status \xdcberpr\xfcfen')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='correction',
-                    deadline=date(2016, 11, 1))
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+                )
             .in_state('task-state-in-progress')
-            .relate_to(inactive_document)))
+            .relate_to(inactive_document)
+            ))
 
     @staticuid()
     def create_empty_dossier(self):
         self.register('empty_dossier', create(
-            Builder('dossier').within(self.repofolder00)
+            Builder('dossier')
+            .within(self.repofolder00)
             .titled(u'An empty dossier')
-            .having(start=date(2016, 1, 1),
-                    responsible=self.dossier_responsible.getId())))
+            .having(
+                start=date(2016, 1, 1),
+                responsible=self.dossier_responsible.getId(),
+                )
+            ))
 
     @staticuid()
     def create_emails(self):
         self.mail_eml = self.register('mail_eml', create(
             Builder("mail")
             .with_message(MAIL_DATA)
-            .within(self.dossier)))
+            .within(self.dossier)
+            ))
+
         self.register('mail', self.mail_eml)
 
         class MockMsg2MimeTransform(object):
@@ -639,123 +922,179 @@ class OpengeverContentFixture(object):
             def transform(self, data):
                 return 'mock-eml-body'
 
-        command = CreateEmailCommand(self.dossier,
-                                     'testm\xc3\xa4il.msg',
-                                     'mock-msg-body',
-                                     transform=MockMsg2MimeTransform())
+        command = CreateEmailCommand(
+            self.dossier,
+            'testm\xc3\xa4il.msg',
+            'mock-msg-body',
+            transform=MockMsg2MimeTransform(),
+            )
+
         self.mail_msg = self.register('mail_msg', command.execute())
 
     @staticuid()
     def create_meetings(self):
         self.meeting_dossier = self.register('meeting_dossier', create(
-            Builder('meeting_dossier').within(self.repofolder00)
+            Builder('meeting_dossier')
+            .within(self.repofolder00)
             .titled(u'Sitzungsdossier 9/2017')
-            .having(start=date(2016, 9, 12),
-                    keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
-                    responsible=self.committee_responsible.getId())))
+            .having(
+                start=date(2016, 9, 12),
+                keywords=(u'Finanzverwaltung', u'Vertr\xe4ge'),
+                responsible=self.committee_responsible.getId(),
+                )
+            ))
 
-        create(Builder('contact_participation')
-               .for_contact(self.meier_ag)
-               .for_dossier(self.meeting_dossier)
-               .with_roles(['final-drawing']))
+        create(
+            Builder('contact_participation')
+            .for_contact(self.meier_ag)
+            .for_dossier(self.meeting_dossier)
+            .with_roles(['final-drawing'])
+            )
 
-        create(Builder('contact_participation')
-               .for_contact(self.josef_buehler)
-               .for_dossier(self.meeting_dossier)
-               .with_roles(['final-drawing', 'participation']))
+        create(
+            Builder('contact_participation')
+            .for_contact(self.josef_buehler)
+            .for_dossier(self.meeting_dossier)
+            .with_roles(['final-drawing', 'participation'])
+            )
 
         self.meeting_document = self.register('meeting_document', create(
-            Builder('document').within(self.meeting_dossier)
+            Builder('document')
+            .within(self.meeting_dossier)
             .titled(u'Programm')
-            .having(document_date=datetime(2016, 12, 1),
-                    document_author=TEST_USER_ID)
-            .with_asset_file('text.txt')))
+            .having(
+                document_date=datetime(2016, 12, 1),
+                document_author=TEST_USER_ID,
+                )
+            .with_asset_file('text.txt')
+            ))
 
         self.meeting = create(
             Builder('meeting')
-            .having(title=u'9. Sitzung der Rechnungspr\xfcfungskommission',
-                    committee=self.committee.load_model(),
-                    location=u'B\xfcren an der Aare',
-                    start=datetime(2016, 9, 12, 15, 30, tzinfo=pytz.UTC),
-                    end=datetime(2016, 9, 12, 17, 0, tzinfo=pytz.UTC),
-                    presidency=self.committee_president,
-                    secretary=self.committee_secretary,
-                    participants=[self.committee_participant_1,
-                                  self.committee_participant_2])
-            .link_with(self.meeting_dossier))
+            .having(
+                title=u'9. Sitzung der Rechnungspr\xfcfungskommission',
+                committee=self.committee.load_model(),
+                location=u'B\xfcren an der Aare',
+                start=datetime(2016, 9, 12, 15, 30, tzinfo=pytz.UTC),
+                end=datetime(2016, 9, 12, 17, 0, tzinfo=pytz.UTC),
+                presidency=self.committee_president,
+                secretary=self.committee_secretary,
+                participants=[
+                    self.committee_participant_1,
+                    self.committee_participant_2,
+                    ],
+                )
+            .link_with(self.meeting_dossier)
+            )
+
         create_session().flush()  # trigger id generation, part of path
+
         self.register_path(
-            'meeting', self.meeting.physical_path.encode('utf-8'))
+            'meeting',
+            self.meeting.physical_path.encode('utf-8'),
+            )
 
         meeting_task = self.register('meeting_task', create(
-            Builder('task').within(self.meeting_dossier)
+            Builder('task')
+            .within(self.meeting_dossier)
             .titled(u'Programm \xdcberpr\xfcfen')
-            .having(responsible=self.dossier_responsible.getId(),
-                    responsible_client=self.org_unit.id(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='correction',
-                    deadline=date(2016, 11, 1))
+            .having(
+                responsible=self.dossier_responsible.getId(),
+                responsible_client=self.org_unit.id(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+                )
             .in_state('task-state-in-progress')
-            .relate_to(self.meeting_document)))
+            .relate_to(self.meeting_document)
+            ))
 
         self.register('meeting_subtask', create(
-            Builder('task').within(meeting_task)
+            Builder('task')
+            .within(meeting_task)
             .titled(u'H\xf6rsaal reservieren')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.dossier_responsible.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    deadline=date(2016, 11, 1))
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.dossier_responsible.getId(),
+                issuer=self.dossier_responsible.getId(),
+                deadline=date(2016, 11, 1),
+                )
             .in_state('task-state-resolved')
-            .relate_to(self.meeting_document)))
+            .relate_to(self.meeting_document)
+            ))
 
         decided_meeting_dossier = self.register(
             'decided_meeting_dossier', create(
-                Builder('meeting_dossier').within(self.repofolder00)
+                Builder('meeting_dossier')
+                .within(self.repofolder00)
                 .titled(u'Sitzungsdossier 8/2017')
-                .having(start=date(2016, 8, 17),
-                        responsible=self.committee_responsible.getId())))
+                .having(
+                    start=date(2016, 8, 17),
+                    responsible=self.committee_responsible.getId(),
+                    )
+                ))
 
         self.decided_meeting = create(
             Builder('meeting')
-            .having(title=u'8. Sitzung der Rechnungspr\xfcfungskommission',
-                    committee=self.committee.load_model(),
-                    location=u'B\xfcren an der Aare',
-                    start=datetime(2016, 7, 17, 15, 30, tzinfo=pytz.UTC),
-                    end=datetime(2016, 7, 17, 16, 30, tzinfo=pytz.UTC),
-                    presidency=self.committee_president,
-                    secretary=self.committee_secretary,
-                    participants=[self.committee_participant_1,
-                                  self.committee_participant_2])
-            .link_with(decided_meeting_dossier))
+            .having(
+                title=u'8. Sitzung der Rechnungspr\xfcfungskommission',
+                committee=self.committee.load_model(),
+                location=u'B\xfcren an der Aare',
+                start=datetime(2016, 7, 17, 15, 30, tzinfo=pytz.UTC),
+                end=datetime(2016, 7, 17, 16, 30, tzinfo=pytz.UTC),
+                presidency=self.committee_president,
+                secretary=self.committee_secretary,
+                participants=[
+                    self.committee_participant_1,
+                    self.committee_participant_2,
+                    ],
+                )
+            .link_with(decided_meeting_dossier)
+            )
+
         create_session().flush()  # trigger id generation, part of path
+
         self.register_path(
             'decided_meeting',
-            self.decided_meeting.physical_path.encode('utf-8'))
+            self.decided_meeting.physical_path.encode('utf-8'),
+            )
 
         self.decided_meeting.schedule_proposal(
-            self.decided_proposal.load_model())
+            self.decided_proposal.load_model(),
+            )
+
         self.decided_meeting.close()
 
         closed_meeting_dossier = self.register(
             'closed_meeting_dossier', create(
-                Builder('meeting_dossier').within(self.repofolder00)
+                Builder('meeting_dossier')
+                .within(self.repofolder00)
                 .titled(u'Sitzungsdossier 7/2017')
-                .having(start=date(2016, 7, 17),
-                        responsible=self.committee_responsible.getId(),
-                        relatedDossier=[self.dossier, self.meeting_dossier])))
+                .having(
+                    start=date(2016, 7, 17),
+                    responsible=self.committee_responsible.getId(),
+                    relatedDossier=[self.dossier, self.meeting_dossier],
+                    )
+                ))
 
         self.closed_meeting = create(
             Builder('meeting')
-            .having(title=u'7. Sitzung der Rechnungspr\xfcfungskommission',
-                    committee=self.committee.load_model(),
-                    location=u'B\xfcren an der Aare',
-                    start=datetime(2015, 7, 17, 15, 30, tzinfo=pytz.UTC),
-                    end=datetime(2015, 7, 17, 16, 30, tzinfo=pytz.UTC),
-                    presidency=self.committee_president,
-                    secretary=self.committee_secretary,
-                    participants=[self.committee_participant_1,
-                                  self.committee_participant_2])
-            .link_with(closed_meeting_dossier))
+            .having(
+                title=u'7. Sitzung der Rechnungspr\xfcfungskommission',
+                committee=self.committee.load_model(),
+                location=u'B\xfcren an der Aare',
+                start=datetime(2015, 7, 17, 15, 30, tzinfo=pytz.UTC),
+                end=datetime(2015, 7, 17, 16, 30, tzinfo=pytz.UTC),
+                presidency=self.committee_president,
+                secretary=self.committee_secretary,
+                participants=[
+                    self.committee_participant_1,
+                    self.committee_participant_2,
+                    ],
+                )
+            .link_with(closed_meeting_dossier)
+            )
+
         create_session().flush()  # trigger id generation, part of path
 
     @contextmanager
@@ -780,6 +1119,7 @@ class OpengeverContentFixture(object):
                 with self.ticking_proposal_history(clock, seconds=1):
                     with time_based_intids():
                         yield
+
             assert datetime.now(pytz.UTC) < end, (
                 'The context self.freeze_at_hour({}) creates too many objects '
                 'with ftw.builder, leading to a time overlap with '
@@ -810,6 +1150,7 @@ class OpengeverContentFixture(object):
         setattr(BaseHistoryRecord, marker_name, True)
         try:
             yield
+
         finally:
             BaseHistoryRecord.__init__ = original_init
             delattr(BaseHistoryRecord, marker_name)
@@ -841,9 +1182,12 @@ class OpengeverContentFixture(object):
         """
         if url.startswith(self.admin_unit.public_url):
             url = url[len(self.admin_unit.public_url):]
+
         elif url.startswith(api.portal.get().absolute_url()):
             url = url[len(api.portal.get().absolute_url()):]
+
         url = url.lstrip('/')  # sanitize
+
         self.register_path(attrname, url)
 
     def register_raw(self, attrname, value):
@@ -852,8 +1196,15 @@ class OpengeverContentFixture(object):
         """
         self._lookup_table[attrname] = ('raw', value)
 
-    def create_user(self, attrname, firstname, lastname,
-                    globalroles=(), group=None, **kwargs):
+    def create_user(
+            self,
+            attrname,
+            firstname,
+            lastname,
+            globalroles=(),
+            group=None,
+            **kwargs
+        ):
         """Create an OGDS user and a Plone user.
         The user is member of the current org unit user group.
         The ``attrname`` is the attribute name used to access this user
@@ -864,108 +1215,176 @@ class OpengeverContentFixture(object):
             Builder('user')
             .named(firstname, lastname)
             .with_roles(*globalroles)
-            .in_groups(self.org_unit.users_group_id))
+            .in_groups(self.org_unit.users_group_id)
+            )
 
         builder.update_properties()  # updates builder.userid
         email = '{}@gever.local'.format(builder.userid)
         plone_user = create(builder.with_email(email))
 
-        create(Builder('ogds_user')
-               .id(plone_user.getId())
-               .having(firstname=firstname, lastname=lastname, email=email)
-               .assign_to_org_units([self.org_unit])
-               .in_group(group)
-               .having(**kwargs))
+        create(
+            Builder('ogds_user')
+            .id(plone_user.getId())
+            .having(firstname=firstname, lastname=lastname, email=email)
+            .assign_to_org_units([self.org_unit])
+            .in_group(group)
+            .having(**kwargs)
+            )
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
 
-    def create_committee_membership(self,
-                                    committee,
-                                    member_id_register_name,
-                                    firstname,
-                                    lastname,
-                                    email,
-                                    date_from,
-                                    date_to):
+    def create_committee_membership(
+            self,
+            committee,
+            member_id_register_name,
+            firstname,
+            lastname,
+            email,
+            date_from,
+            date_to,
+        ):
         member = create(
             Builder('member')
-            .having(firstname=firstname, lastname=lastname, email=email))
+            .having(firstname=firstname, lastname=lastname, email=email)
+            )
 
-        create(Builder('membership')
-               .having(committee=committee,
-                       member=member,
-                       date_from=date_from,
-                       date_to=date_to))
+        create(
+            Builder('membership')
+            .having(
+                committee=committee,
+                member=member,
+                date_from=date_from,
+                date_to=date_to,
+                )
+            )
+
         create_session().flush()  # trigger id generation, part of path
 
         self.register_url(
             member_id_register_name,
-            member.get_url(self.committee_container).encode('utf-8'))
+            member.get_url(self.committee_container).encode('utf-8'),
+            )
+
         return member
 
-    def create_committee(self, title, repository_folder, group_id, group_title,
-                         responsibles):
+    def create_committee(
+            self,
+            title,
+            repository_folder,
+            group_id,
+            group_title,
+            responsibles,
+        ):
         # XXX I would have expected the commitee builder to do all of that.
-        ogds_members = map(ogds_service().find_user,
-                           map(methodcaller('getId'), responsibles))
+        ogds_members = map(
+            ogds_service().find_user,
+            map(methodcaller('getId'), responsibles),
+            )
 
-        create(Builder('ogds_group')
-               .having(groupid=group_id,
-                       users=ogds_members))
-        create(Builder('group')
-               .with_groupid(group_id)
-               .having(title=group_title)
-               .with_members(*responsibles))
+        create(
+            Builder('ogds_group')
+            .having(
+                groupid=group_id,
+                users=ogds_members,
+                )
+            )
+
+        create(
+            Builder('group')
+            .with_groupid(group_id)
+            .having(title=group_title)
+            .with_members(*responsibles)
+            )
+
         committee = create(
             Builder('committee')
             .titled(title)
             .within(self.committee_container)
-            .having(repository_folder=repository_folder,
-                    group_id=group_id))
+            .having(
+                repository_folder=repository_folder,
+                group_id=group_id,
+                )
+            )
+
         return committee
 
     def create_workspace_root(self):
         self.workspace_root = self.register('workspace_root', create(
-            Builder('workspace_root').having(id=u'workspaces',
-                                             title_de=u'Teamr\xe4ume',
-                                             title_fr=u'Espace partag\xe9')))
-        self.workspace_root.manage_setLocalRoles(self.workspace_owner.getId(),
-                                                 ['WorkspacesUser', 'WorkspacesCreator'])
-        self.workspace_root.manage_setLocalRoles(self.workspace_admin.getId(),
-                                                 ['WorkspacesUser', 'WorkspacesCreator'])
-        self.workspace_root.manage_setLocalRoles(self.workspace_member.getId(),
-                                                 ['WorkspacesUser'])
-        self.workspace_root.manage_setLocalRoles(self.workspace_guest.getId(),
-                                                 ['WorkspacesUser'])
+            Builder('workspace_root')
+            .having(
+                id=u'workspaces',
+                title_de=u'Teamr\xe4ume',
+                title_fr=u'Espace partag\xe9',
+                )
+            ))
+
+        self.workspace_root.manage_setLocalRoles(
+            self.workspace_owner.getId(),
+            ['WorkspacesUser', 'WorkspacesCreator'],
+            )
+
+        self.workspace_root.manage_setLocalRoles(
+            self.workspace_admin.getId(),
+            ['WorkspacesUser', 'WorkspacesCreator'],
+            )
+
+        self.workspace_root.manage_setLocalRoles(
+            self.workspace_member.getId(),
+            ['WorkspacesUser'],
+            )
+
+        self.workspace_root.manage_setLocalRoles(
+            self.workspace_guest.getId(),
+            ['WorkspacesUser'],
+            )
+
         self.workspace_root.reindexObjectSecurity()
 
     def create_workspace(self):
         self.workspace = self.register('workspace', create(
             Builder('workspace')
-            .having(title_de=u'Teamraum',
-                    title_fr=u'Espace partag\xe9')
-            .within(self.workspace_root)))
+            .having(
+                title_de=u'Teamraum',
+                title_fr=u'Espace partag\xe9',
+                )
+            .within(self.workspace_root)
+            ))
 
-        self.workspace.manage_setLocalRoles(self.workspace_admin.getId(),
-                                            ['WorkspaceAdmin'])
-        self.workspace.manage_setLocalRoles(self.workspace_member.getId(),
-                                            ['WorkspaceMember'])
-        self.workspace.manage_setLocalRoles(self.workspace_guest.getId(),
-                                            ['WorkspaceGuest'])
+        self.workspace.manage_setLocalRoles(
+            self.workspace_admin.getId(),
+            ['WorkspaceAdmin'],
+            )
+
+        self.workspace.manage_setLocalRoles(
+            self.workspace_member.getId(),
+            ['WorkspaceMember'],
+            )
+
+        self.workspace.manage_setLocalRoles(
+            self.workspace_guest.getId(),
+            ['WorkspaceGuest'],
+            )
+
         self.workspace.reindexObjectSecurity()
 
         self.workspace_folder = self.register('workspace_folder', create(
-            Builder('workspace folder').having(title_de=u'WS F\xc3lder',
-                                               title_fr=u'WS fichi\xe9r')
-                                       .within(self.workspace)))
+            Builder('workspace folder')
+            .having(
+                title_de=u'WS F\xc3lder',
+                title_fr=u'WS fichi\xe9r',
+                )
+            .within(self.workspace)
+            ))
 
     @contextmanager
     def login(self, user):
         old_manager = getSecurityManager()
+
         try:
             login(getSite(), user.getId())
             yield
+
         finally:
             setSecurityManager(old_manager)
 
@@ -976,8 +1395,10 @@ class OpengeverContentFixture(object):
 
         before = api.portal.get_registry_record(FEATURE_FLAGS[feature])
         api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+
         try:
             yield
+
         finally:
             api.portal.set_registry_record(FEATURE_FLAGS[feature], before)
 

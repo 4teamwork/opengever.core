@@ -40,6 +40,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
         self.assertTrue(writer.is_supported_file())
 
         self.document.file.contentType = 'text/foo'
+
         self.assertFalse(writer.is_supported_file())
 
     def test_has_file(self):
@@ -50,11 +51,16 @@ class TestDocPropertyWriter(IntegrationTestCase):
         self.document.file = None
         self.assertFalse(DocPropertyWriter(self.document).has_file())
 
-    def test_document_with_gever_properties_is_updated_with_all_properties(self):
+    def test_document_with_gever_properties_is_updated_with_all_properties(
+            self,
+        ):
         self.login(self.regular_user)
         self.with_asset_file('with_gever_properties.docx')
 
-        DocPropertyWriter(self.document).update_doc_properties(only_existing=True)
+        (
+            DocPropertyWriter(self.document)
+            .update_doc_properties(only_existing=True)
+            )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
@@ -64,13 +70,17 @@ class TestDocPropertyWriter(IntegrationTestCase):
         self.login(self.regular_user)
         self.with_asset_file('with_property_of_wrong_type.docx')
 
-        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+        (
+            DocPropertyWriter(self.document)
+            .update_doc_properties(only_existing=False)
+            )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = dict(read_properties(tmpfile.path))
             self.assertEqual(
                 datetime(2010, 1, 3),
-                properties['ogg.document.document_date'])
+                properties['ogg.document.document_date'],
+                )
 
     def test_files_with_custom_properties_are_not_updated(self):
         self.login(self.regular_user)
@@ -78,21 +88,29 @@ class TestDocPropertyWriter(IntegrationTestCase):
 
         expected_doc_properties = [('Test', 'Peter',)]
 
-        DocPropertyWriter(self.document).update_doc_properties(only_existing=True)
+        (
+            DocPropertyWriter(self.document)
+            .update_doc_properties(only_existing=True)
+            )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
 
         self.assertEqual(1, get_journal_length(self.document))
+
         entry = get_journal_entry(self.document)
+
         self.assertNotEqual(entry['action']['type'], DOC_PROPERTIES_UPDATED)
 
     def test_properties_can_be_added_to_file_without_properties(self):
         self.login(self.regular_user)
         self.with_asset_file('without_custom_properties.docx')
 
-        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+        (
+            DocPropertyWriter(self.document)
+            .update_doc_properties(only_existing=False)
+            )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
@@ -102,19 +120,31 @@ class TestDocPropertyWriter(IntegrationTestCase):
         self.login(self.regular_user)
         self.with_asset_file('without_custom_properties.docx')
 
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller'))
-        address = create(Builder('address')
-                         .for_contact(peter)
-                         .labeled(u'Home')
-                         .having(street=u'Musterstrasse 283',
-                                 zip_code=u'1234',
-                                 city=u'Hinterkappelen',
-                                 country=u'Schweiz'))
+        peter = create(
+            Builder('person')
+            .having(
+                firstname=u'Peter',
+                lastname=u'M\xfcller',
+                )
+            )
+
+        address = create(
+            Builder('address')
+            .for_contact(peter)
+            .labeled(u'Home')
+            .having(
+                street=u'Musterstrasse 283',
+                zip_code=u'1234',
+                city=u'Hinterkappelen',
+                country=u'Schweiz',
+                )
+            )
 
         writer = DocPropertyWriter(
-            self.document, recipient_data=(peter, address))
+            self.document,
+            recipient_data=(peter, address),
+            )
+
         writer.update_doc_properties(only_existing=False)
 
         additional_recipient_properties = {
@@ -125,13 +155,14 @@ class TestDocPropertyWriter(IntegrationTestCase):
             'ogg.recipient.address.zip_code': '1234',
             'ogg.recipient.address.city': 'Hinterkappelen',
             'ogg.recipient.address.country': 'Schweiz',
-        }
+            }
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = read_properties(tmpfile.path)
             self.assertDictContainsSubset(
                 additional_recipient_properties,
-                dict(properties))
+                dict(properties),
+                )
 
     def with_asset_file(self, filename):
         self.document.file = NamedBlobFile(

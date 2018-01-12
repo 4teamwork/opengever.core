@@ -159,7 +159,6 @@ class TestOfficeconnectorAPIDisabled(OCIntegrationTestCase):
 
             self.assertIsNone(oc_url)
 
-
     @browsing
     def test_checkout_checkin_open_with_file(self, browser):
         self.login(self.regular_user, browser)

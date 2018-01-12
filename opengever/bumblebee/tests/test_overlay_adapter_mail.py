@@ -12,8 +12,8 @@ class TestAdapterRegisteredProperly(IntegrationTestCase):
 
     def test_get_overlay_adapter_for_mails(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertIsInstance(adapter, BumblebeeMailOverlay)
 
     def test_verify_implemented_interfaces(self):
@@ -27,13 +27,14 @@ class TestHasFile(IntegrationTestCase):
     def test_returns_true_if_mail_has_a_file(self):
         self.login(self.regular_user)
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertTrue(adapter.has_file())
 
     def test_returns_false_if_mail_has_no_file(self):
         self.login(self.regular_user)
         IMail(self.mail).message = None
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertFalse(adapter.has_file())
 
 
@@ -44,13 +45,12 @@ class TestGetFile(IntegrationTestCase):
     def test_returns_none_if_document_has_no_file(self):
         self.login(self.regular_user)
         IMail(self.mail).message = None
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertIsNone(adapter.get_file())
 
     def test_returns_file_if_document_has_file(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
 
         self.assertEqual(self.mail.message, adapter.get_file())
@@ -62,21 +62,28 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
     def test_returns_none_for_unsupported_mail_conversion(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
-        self.assertEqual(
-            'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/bumblebee-open-pdf?filename=die-burgschaft.pdf',
-            adapter.get_open_as_pdf_url())
+
+        expected_url = (
+            'http://nohost/plone/ordnungssystem/fuhrung'
+            '/vertrage-und-vereinbarungen/dossier-1/document-14'
+            '/bumblebee-open-pdf?filename=die-burgschaft.pdf'
+            )
+
+        self.assertEqual(expected_url, adapter.get_open_as_pdf_url())
 
     def test_handles_non_ascii_characters_in_filename(self):
         self.login(self.regular_user)
-
         IMail(self.mail).message.filename = u'GEVER - \xdcbernahme.msg'
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
-        self.assertEqual(
-            u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf',
-            adapter.get_open_as_pdf_url())
+
+        expected_url = (
+            u'http://nohost/plone/ordnungssystem/fuhrung'
+            u'/vertrage-und-vereinbarungen/dossier-1/document-14'
+            u'/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf'
+            )
+
+        self.assertEqual(expected_url, adapter.get_open_as_pdf_url())
 
 
 class TestGetCheckoutUrl(IntegrationTestCase):
@@ -85,8 +92,8 @@ class TestGetCheckoutUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkout_emails(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertIsNone(adapter.get_checkout_url())
 
 
@@ -96,8 +103,8 @@ class TestGetCheckinWithoutCommentUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkin_emails(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+
         self.assertIsNone(adapter.get_checkin_without_comment_url())
 
 
@@ -107,7 +114,6 @@ class TestGetCheckinWithCommentUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkin_emails(self):
         self.login(self.regular_user)
-
         adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
 
         self.assertIsNone(adapter.get_checkin_with_comment_url())

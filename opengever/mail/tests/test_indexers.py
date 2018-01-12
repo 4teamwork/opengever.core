@@ -1,4 +1,4 @@
-from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender
+from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender  # noqa
 from opengever.mail.indexer import checked_out
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -14,10 +14,15 @@ class TestMailIndexers(IntegrationTestCase):
         self.mail_eml.keywords = (u'Keyword 1', u'Keyword with \xf6')
         self.mail_eml.reindexObject()
 
-        self.assertTrue(len(catalog(Subject=u'Keyword 1')),
-                        'Expect one item with Keyword 1')
-        self.assertTrue(len(catalog(Subject=u'Keyword with \xf6')),
-                        u'Expect one item with Keyword with \xf6')
+        self.assertTrue(
+            len(catalog(Subject=u'Keyword 1')),
+            'Expect one item with Keyword 1',
+            )
+
+        self.assertTrue(
+            len(catalog(Subject=u'Keyword with \xf6')),
+            u'Expect one item with Keyword with \xf6',
+            )
 
     def test_mail_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
@@ -35,7 +40,11 @@ class TestMailIndexers(IntegrationTestCase):
 
     def test_reference_number(self):
         self.login(self.regular_user)
+
         extender = getAdapter(
-            self.mail_eml, IDynamicTextIndexExtender, u'IDocumentSchema')
+            self.mail_eml,
+            IDynamicTextIndexExtender,
+            u'IDocumentSchema',
+            )
 
         self.assertEquals('Client1 1.1 / 1 / 14 14', extender())

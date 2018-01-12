@@ -12,7 +12,6 @@ from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.event import notify
 from zope.i18n import translate
-
 import json
 
 
@@ -32,6 +31,7 @@ class OfficeConnectorURL(Service):
 
         # Fail per default
         self.request.response.setStatus(500)
+
         message = _(
             u'error_oc_url_too_long',
             default=(
@@ -77,6 +77,7 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
     def render(self):
         if is_officeconnector_checkout_feature_enabled():
             payload = {'action': 'checkout'}
+
             return self.create_officeconnector_url_json(payload)
 
         # Fail per default
@@ -94,8 +95,10 @@ class OfficeConnectorPayload(Service):
         # Require an authenticated user
         if not api.user.is_anonymous():
             documents = []
+
             for uuid in self.uuids:
                 document = api.content.get(UID=uuid)
+
                 if document and document.has_file():
                     documents.append(document)
 
@@ -105,6 +108,7 @@ class OfficeConnectorPayload(Service):
 
         if documents:
             payloads = []
+
             for document in documents:
                 payloads.append(
                     {
@@ -116,6 +120,7 @@ class OfficeConnectorPayload(Service):
                         'filename': document.get_filename(),
                         }
                     )
+
             return payloads
 
         # Fail per default
@@ -145,8 +150,10 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
 
             if parent_dossier:
                 if parent_dossier.is_open():
-                    payload['bcc'] = IEmailAddress(
-                        self.request).get_email_for_object(parent_dossier)
+                    payload['bcc'] = (
+                        IEmailAddress(self.request)
+                        .get_email_for_object(parent_dossier)
+                        )
 
                 parent_dossier_uuid = api.content.get_uuid(parent_dossier)
 
@@ -185,6 +192,7 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 'Modify portal content',
                 obj=payload['document'],
                 )
+
             if authorized:
                 del payload['document']
                 payload['checkin-with-comment'] = '@@checkin_document'
@@ -198,4 +206,5 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 raise Forbidden
 
         self.request.response.setHeader('Content-type', 'application/json')
+
         return json.dumps(payloads)
