@@ -4,15 +4,16 @@ from ftw.contentstats.interfaces import IStatsKeyFilter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import FunctionalTestCase
 from opengever.mail.tests import MAIL_DATA
-from plone.app.testing import SITE_OWNER_NAME
+from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
-import transaction
+from plone.app.testing import SITE_OWNER_NAME
 from zope.component import getMultiAdapter
+import transaction
 
 
-class TestContentStatsIntegration(FunctionalTestCase):
+class TestContentStatsIntegration(IntegrationTestCase):
 
     def test_portal_types_filter(self):
         flt = getMultiAdapter(
