@@ -229,6 +229,18 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
             'text/plain': 1},
             stats_provider.get_raw_stats())
 
+    def test_file_mimetypes_provider_doesnt_return_empty_string_mimetype(self):
+        # Document without file
+        create(Builder('document')
+               .titled(u'Document without file'))
+
+        stats_provider = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsProvider, name='file_mimetypes')
+
+        # Shouldn't cause a mimetype key of '' (empty string) to be produced
+        self.assertNotIn('', stats_provider.get_raw_stats().keys())
+
     @browsing
     def test_file_mimetypes_provider_in_view(self, browser):
         browser.login(SITE_OWNER_NAME)
