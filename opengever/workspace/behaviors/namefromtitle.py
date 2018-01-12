@@ -17,3 +17,16 @@ class WorkspaceNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IWorkspaceNameFromTitle)
 
     format = u'workspace-%i'
+
+
+class IWorkspaceFolderNameFromTitle(INameFromTitle):
+    """ Behavior interface.
+    """
+
+
+class WorkspaceFolderNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
+    """ The ID of a workspace folder should be 'folder-{sequence number}'.
+    """
+    implements(IWorkspaceFolderNameFromTitle)
+
+    format = u'folder-%i'

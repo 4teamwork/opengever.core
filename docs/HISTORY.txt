@@ -12,6 +12,7 @@ Changelog
 - OGIP 17: Add tabbedviews for opengever.workspace types. [mathias.leimgruber]
 - Prepare HTML structure for dossier title alignment. [Kevin Bieri]
 - Add filename and filesize in bumblebee overlay. [njohner]
+- OGIP 17: Add workspace folder content type [raphael-s]
 - Fix plonesite removal. [phgross]
 - Fix required input validation for the recipients field, when delegating a task. [phgross]
 - OGIP 17: Add workspace content type [raphael-s]

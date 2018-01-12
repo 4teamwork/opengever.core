@@ -13,4 +13,11 @@
       for="opengever.workspace.interfaces.IWorkspace"
       />
 
+  <plone:behavior
+      title="workspace folder name from title"
+      provides=".namefromtitle.IWorkspaceFolderNameFromTitle"
+      factory=".namefromtitle.WorkspaceFolderNameFromTitle"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      />
+
 </configure>

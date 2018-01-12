@@ -11,6 +11,10 @@ class IWorkspace(IDossierMarker):
     """ Marker interface for Workspace """
 
 
+class IWorkspaceFolder(IDossierMarker):
+    """ Marker interface for Workspace Folders """
+
+
 class IWorkspaceSettings(Interface):
 
     is_feature_enabled = schema.Bool(

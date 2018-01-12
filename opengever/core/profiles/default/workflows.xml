@@ -134,6 +134,7 @@
 
     <type type_id="opengever.workspace.root" />
     <type type_id="opengever.workspace.workspace" />
+    <type type_id="opengever.workspace.folder" />
   </bindings>
 
 </object>
