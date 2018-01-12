@@ -99,7 +99,7 @@ $(function() {
   var initial_tab_index = 0;
   var current_tab_class = 'active';
   if(tabs_count > 1) {
-    initial_tab_index = parseInt($.cookie('tree-portlet-tab-index'), 10) || 0;
+    initial_tab_index = parseInt(localStorage.getItem('tree-portlet-tab-index'), 10) || 0;
   }
 
   if(tabs_count == 1) {
@@ -114,7 +114,7 @@ $(function() {
         tabs: 'li > a',
         initialIndex: initial_tab_index,
         onBeforeClick: function(event, index) {
-          $.cookie('tree-portlet-tab-index', index.toString(), {path: '/'});
+          localStorage.setItem('tree-portlet-tab-index', index.toString());
           $(this.getPanes()[index]).trigger('portlet-tab:open');
         }});
 
