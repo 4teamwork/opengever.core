@@ -37,4 +37,18 @@ class WorkspaceTabbedView(GeverTabbedView):
             self.tasks_tab,
             self.trash_tab,
             self.journal_tab,
+
+        ])
+
+
+class WorkspaceRootTabbedView(GeverTabbedView):
+
+    workspaces_tab = {
+        'id': 'workspaces',
+        'title': _(u'label_workspaces', default=u'Workspaces'),
+        }
+
+    def _get_tabs(self):
+        return filter(None, [
+            self.workspaces_tab,
         ])
