@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]
 - Fix broken advanced search js initialization. [deiferni]
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
 - Add partial reindex optimization for trashing and untrashing objects. [elioschmutz]
