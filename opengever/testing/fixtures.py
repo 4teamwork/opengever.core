@@ -585,7 +585,7 @@ class OpengeverContentFixture(object):
             ['Contributor', 'Editor', 'Reader'],
             )
 
-        self.register('inbox_forwarding', create(
+        inbox_forwarding = self.register('inbox_forwarding', create(
             Builder('forwarding')
             .within(self.inbox)
             .titled(u'F\xf6rw\xe4rding')
@@ -594,6 +594,13 @@ class OpengeverContentFixture(object):
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 )
+            ))
+
+        self.register('inbox_forwarding_document', create(
+            Builder('document')
+            .within(inbox_forwarding)
+            .titled(u'Dokument im Eingangsk\xf6rbliweiterleitung')
+            .with_asset_file('text.txt')
             ))
 
         self.inbox.reindexObjectSecurity()

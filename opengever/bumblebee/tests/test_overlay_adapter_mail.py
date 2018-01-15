@@ -66,7 +66,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
         expected_url = (
             'http://nohost/plone/ordnungssystem/fuhrung'
-            '/vertrage-und-vereinbarungen/dossier-1/document-14'
+            '/vertrage-und-vereinbarungen/dossier-1/document-15'
             '/bumblebee-open-pdf?filename=die-burgschaft.pdf'
             )
 
@@ -79,7 +79,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
         expected_url = (
             u'http://nohost/plone/ordnungssystem/fuhrung'
-            u'/vertrage-und-vereinbarungen/dossier-1/document-14'
+            u'/vertrage-und-vereinbarungen/dossier-1/document-15'
             u'/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf'
             )
 

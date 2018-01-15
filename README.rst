@@ -520,6 +520,7 @@ Objects
   - self.inbox
     - self.inbox_document
     - self.inbox_forwarding
+      - self.inbox_forwarding_document
   - self.private_root
     - self.private_folder
       - self.private_dossier
