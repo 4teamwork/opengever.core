@@ -15,6 +15,7 @@ class SettingMixin(object):
 
     _badge_notification_roles = Column('badge_notification_roles', Text)
     _mail_notification_roles = Column('mail_notification_roles', Text)
+    _digest_notification_roles = Column('digest_notification_roles', Text)
 
     @property
     def mail_notification_roles(self):
@@ -39,6 +40,18 @@ class SettingMixin(object):
     @badge_notification_roles.setter
     def badge_notification_roles(self, roles):
         self._badge_notification_roles = json.dumps(roles)
+
+    @property
+    def digest_notification_roles(self):
+        roles = self._digest_notification_roles
+        if roles:
+            return frozenset(json.loads(self._digest_notification_roles))
+
+        return frozenset([])
+
+    @digest_notification_roles.setter
+    def digest_notification_roles(self, roles):
+        self._digest_notification_roles = json.dumps(roles)
 
 
 class NotificationDefault(SettingMixin, Base):
