@@ -585,6 +585,17 @@ class OpengeverContentFixture(object):
             ['Contributor', 'Editor', 'Reader'],
             )
 
+        self.register('inbox_forwarding', create(
+            Builder('forwarding')
+            .within(self.inbox)
+            .titled(u'F\xf6rw\xe4rding')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                )
+            ))
+
         self.inbox.reindexObjectSecurity()
 
     @staticuid()

@@ -175,6 +175,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-mytasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
@@ -192,6 +193,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-mytasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
@@ -253,6 +255,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-myissuedtasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
@@ -273,6 +276,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-myissuedtasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
@@ -296,6 +300,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-alltasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
@@ -316,6 +321,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-alltasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
@@ -339,6 +345,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-allissuedtasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
@@ -368,6 +375,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-allissuedtasks')
 
         expected_tasks = [
+            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
