@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import NotificationCenter
+from opengever.activity.digest import DigestDispatcher
 from opengever.activity.mail import NotificationDispatcher
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
@@ -407,7 +408,7 @@ class TestDispatchers(ActivityTestCase):
 
         self.dispatcher = FakeMailDispatcher()
         self.center = NotificationCenter(
-            [self.dispatcher, BadgeIconDispatcher()])
+            [self.dispatcher, BadgeIconDispatcher(), DigestDispatcher()])
 
         hugo = create(Builder('watcher').having(actorid='hugo'))
         peter = create(Builder('watcher').having(actorid='peter'))
@@ -509,3 +510,23 @@ class TestDispatchers(ActivityTestCase):
 
         self.assertFalse(hugos_note.is_badge)
         self.assertTrue(peters_note.is_badge)
+
+    def test_digest_dispatcher_sets_digest_flag_depending_on_the_setting(self):
+        create(Builder('notification_default_setting')
+               .having(kind='task-added',
+                       digest_notification_roles=[TASK_RESPONSIBLE_ROLE]))
+
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'task-added',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla accepted by Peter'},
+            'hugo.boss',
+            {'en': None})
+
+        peters_note = Notification.query.filter_by(userid='peter').one()
+        hugos_note = Notification.query.filter_by(userid='hugo').one()
+
+        self.assertFalse(hugos_note.is_digest)
+        self.assertTrue(peters_note.is_digest)
