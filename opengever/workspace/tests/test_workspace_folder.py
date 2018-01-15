@@ -4,13 +4,11 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import IntegrationTestCase
-from unittest2 import skip
 from zope.component import getUtility
 
 
 class TestWorkspaceFolder(IntegrationTestCase):
 
-    @skip('Currently broken because we merged conflicting pull requests :-(')
     @browsing
     def test_workspacefolder_is_addable_in_workspacefolder(self, browser):
         self.login(self.workspace_member, browser)
@@ -18,7 +16,7 @@ class TestWorkspaceFolder(IntegrationTestCase):
         factoriesmenu.add('WorkspaceFolder')
 
         form = browser.find_form_by_field('Title')
-        form.find_widget('Responsible').fill(self.regular_user.getId())
+        form.find_widget('Responsible').fill(self.workspace_member.getId())
         form.fill({'Title': u'Ein Unter\xf6rdnerli'})
         form.save()
 
