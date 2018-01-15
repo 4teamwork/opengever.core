@@ -56,9 +56,6 @@ class TestAllUsersInboxesAndTeamsSourceForWorkspace(IntegrationTestCase):
                         'Document in workspace is within workspace')
 
     def test_get_workspace_user_ids(self):
-        self.assertFalse(get_workspace_user_ids(self.workspace),
-                         'Expect ids, since there are no local roles')
-
         self.set_permissions_on_workspace()
         self.assertEquals([self.john.userid, self.hugo.userid],
                           get_workspace_user_ids(self.workspace))
