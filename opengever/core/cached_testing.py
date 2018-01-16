@@ -52,6 +52,7 @@ CACHE_GEVER_FIXTURE = {
     'id': 'GEVER_fixture',
     'description': 'Cache the fixture of opengever.core',
     'cache_globs': ('opengever/testing/**/*',),
+    'exclude_cache_globs': ('opengever/testing/pages/**/*',),
     'extends': CACHE_GEVER_INSTALLATION,
 }
 
@@ -173,10 +174,16 @@ class DBCacheManager(object):
         """
         assert isinstance(stack['cache_globs'], (list, tuple))
 
+        exclude_paths = []
+        for pattern in stack.get('exclude_cache_globs', ()):
+            exclude_paths.extend(map(Path, glob(BUILDOUT_DIR / pattern)))
+
         cachekey = {}
         for pattern in stack['cache_globs']:
             for path in map(Path, glob(BUILDOUT_DIR / pattern)):
                 if not path.isfile():
+                    continue
+                if path in exclude_paths:
                     continue
                 cachekey[str(path)] = path.getmtime()
 
