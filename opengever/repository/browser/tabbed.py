@@ -1,6 +1,9 @@
 from opengever.repository import _
+from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.tabbedview import GeverTabbedView
 from plone import api
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class RepositoryRootTabbedView(GeverTabbedView):
@@ -85,9 +88,33 @@ class RepositoryFolderTabbedView(GeverTabbedView):
 
         return None
 
+    @property
+    def documents_tab(self):
+        settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
+        if not getattr(settings, 'show_documents_tab', False):
+            return
+
+        return {
+            'id': 'documents-proxy',
+            'title': _(u'label_documents', default=u'Documents'),
+        }
+
+    @property
+    def tasks_tab(self):
+        settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
+        if not getattr(settings, 'show_tasks_tab', False):
+            return
+
+        return {
+            'id': 'tasks',
+            'title': _(u'label_tasks', default=u'Tasks'),
+        }
+
     def _get_tabs(self):
         return filter(None, [
             self.dossiers_tab,
+            self.documents_tab,
+            self.tasks_tab,
             self.info_tab,
             self.blocked_local_roles_tab,
         ])
