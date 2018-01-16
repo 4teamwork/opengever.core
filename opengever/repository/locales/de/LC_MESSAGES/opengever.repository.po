@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-01-16 13:29+0000\n"
+"POT-Creation-Date: 2018-01-16 13:43+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -145,6 +145,11 @@ msgstr "Leistung"
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
 msgstr "Die Ordnungsposition wurde erfolgreich gelöscht."
+
+#. Default: "Tasks"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_tasks"
+msgstr "Aufgaben"
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py

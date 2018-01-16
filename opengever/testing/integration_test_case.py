@@ -48,6 +48,7 @@ FEATURE_FLAGS = {
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
     'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_word_implementation_enabled',
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
+    'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
     }
 
 FEATURE_PROFILES = {

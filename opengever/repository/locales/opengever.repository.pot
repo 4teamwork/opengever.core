@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-16 13:29+0000\n"
+"POT-Creation-Date: 2018-01-16 13:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,6 +144,11 @@ msgstr ""
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
+msgstr ""
+
+#. Default: "Tasks"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_tasks"
 msgstr ""
 
 #. Default: "Valid from"

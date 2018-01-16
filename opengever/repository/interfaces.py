@@ -18,3 +18,6 @@ class IRepositoryFolderRecords(Interface):
 
     show_documents_tab = schema.Bool(title=u'Show documents tab on repository folder',
                                      default=True)
+
+    show_tasks_tab = schema.Bool(title=u'Show tasks tab on repository folder',
+                                 default=True)

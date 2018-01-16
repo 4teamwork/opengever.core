@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-16 13:29+0000\n"
+"POT-Creation-Date: 2018-01-16 13:43+0000\n"
 "PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -144,6 +144,11 @@ msgstr "Performance"
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
 msgstr "Le numéro de la position a été effacé avec succès."
+
+#. Default: "Tasks"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_tasks"
+msgstr ""
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py

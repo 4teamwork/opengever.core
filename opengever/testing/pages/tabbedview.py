@@ -51,8 +51,13 @@ def row_for(obj, browser=default_browser, query_info=None):
     In order for this to work, it is required that there is a checkbox with this
     path as value.
     """
-    return row_by_path('/'.join(obj.getPhysicalPath()),
-                       browser=browser, query_info=query_info)
+    table = browser.css('#listing_container table.listing').first
+    if table.css('input[name="task_ids:list"]'):
+        return row_by_task_id(obj.get_sql_object().task_id,
+                              browser=browser, query_info=query_info)
+    else:
+        return row_by_path('/'.join(obj.getPhysicalPath()),
+                           browser=browser, query_info=query_info)
 
 
 
@@ -69,6 +74,22 @@ def row_by_path(path, browser=default_browser, query_info=None):
             return checkbox.parent('tr')
 
     query_info.add_hint('Paths: {!r}'.format(
+        [box.attrib.get('value') for box in checkboxes]))
+    raise NoElementFound(query_info)
+
+
+@QueryInfo.build
+def row_by_task_id(task_id, browser=default_browser, query_info=None):
+    """Return the row representing an object identified by task id.
+    In order for this to work, it is required that there is a task_ids-checkbox.
+    """
+    table = browser.css('#listing_container table.listing').first
+    checkboxes = table.css('input[name="task_ids:list"]')
+    for checkbox in checkboxes:
+        if checkbox.attrib.get('value') == str(task_id):
+            return checkbox.parent('tr')
+
+    query_info.add_hint('Task IDs: {!r}'.format(
         [box.attrib.get('value') for box in checkboxes]))
     raise NoElementFound(query_info)
 
