@@ -100,4 +100,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.repository.repositoryfolder.IRepositoryFolder"
+      name="tabbedview_view-documents"
+      class=".tabs.RepositoryFolderDocuments"
+      permission="zope2.View"
+      />
+
 </configure>

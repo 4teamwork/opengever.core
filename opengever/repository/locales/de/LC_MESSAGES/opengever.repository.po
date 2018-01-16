@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-14 12:31+0000\n"
+"POT-Creation-Date: 2018-01-16 13:29+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -71,6 +71,11 @@ msgstr "Eine kurze Beschreibung des Inhalts."
 msgid "label_addable_dossier_types"
 msgstr "Erlaubte Spezialdossiers"
 
+#. Default: "Protected Objects"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr "Geschützte Objekte"
+
 #. Default: "Delete"
 #: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_delete"
@@ -90,6 +95,11 @@ msgstr "Beschreibung"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_dispositions"
 msgstr "Angebote"
+
+#. Default: "Documents"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_documents"
+msgstr "Dokumente"
 
 #. Default: "Dossiers"
 #: ./opengever/repository/browser/tabbed.py
@@ -115,11 +125,6 @@ msgstr "Journal"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_location"
 msgstr "Standort"
-
-#. Default: "Protected Objects"
-#: ./opengever/repository/browser/tabbed.py
-msgid "label_blocked_local_roles"
-msgstr "Geschützte Objekte"
 
 #. Default: "Overview"
 #: ./opengever/repository/browser/tabbed.py

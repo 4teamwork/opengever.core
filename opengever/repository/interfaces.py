@@ -15,3 +15,6 @@ class IRepositoryFolderRecords(Interface):
 
     maximum_repository_depth = schema.Int(title=u'Maximum Repository Depth',
                                           default=DEFAULT_REPOSITORY_DEPTH)
+
+    show_documents_tab = schema.Bool(title=u'Show documents tab on repository folder',
+                                     default=True)

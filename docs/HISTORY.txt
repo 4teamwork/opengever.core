@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Add documents tab to repository folder. [jone]
 - Add DocProperty ogg.document.version_number.  [njohner]
 - OGIP 17: Add workspace workflows and add workspace support to document workflow. [jone]
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]

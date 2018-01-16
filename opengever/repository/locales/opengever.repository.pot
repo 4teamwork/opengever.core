@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-14 12:31+0000\n"
+"POT-Creation-Date: 2018-01-16 13:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,11 @@ msgstr ""
 msgid "label_addable_dossier_types"
 msgstr ""
 
+#. Default: "Protected Objects"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_blocked_local_roles"
+msgstr ""
+
 #. Default: "Delete"
 #: ./opengever/repository/browser/templates/deletion.pt
 msgid "label_delete"
@@ -89,6 +94,11 @@ msgstr ""
 #. Default: "Dispositions"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_dispositions"
+msgstr ""
+
+#. Default: "Documents"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_documents"
 msgstr ""
 
 #. Default: "Dossiers"
@@ -114,11 +124,6 @@ msgstr ""
 #. Default: "Location"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_location"
-msgstr ""
-
-#. Default: "Protected Objects"
-#: ./opengever/repository/browser/tabbed.py
-msgid "label_blocked_local_roles"
 msgstr ""
 
 #. Default: "Overview"
