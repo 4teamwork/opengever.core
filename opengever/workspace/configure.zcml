@@ -13,4 +13,10 @@
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IWorkspace
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".subscribers.assign_owner_role_on_creation"
+      />
+
 </configure>

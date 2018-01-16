@@ -94,6 +94,8 @@ class TestContentStatsIntegration(FunctionalTestCase):
             'mail-state-removed',
             'opengever_committee_workflow--STATUS--active',
             'opengever_committee_workflow--STATUS--inactive',
+            'opengever_workspace--STATUS--active',
+            'opengever_workspace_folder--STATUS--active',
             'proposal-state-active',
             'proposal-state-submitted',
             'repositoryfolder-state-active',
@@ -123,6 +125,7 @@ class TestContentStatsIntegration(FunctionalTestCase):
             'contactfolder-state-active',
             'inbox-state-default',
             'opengever_committeecontainer_workflow--STATUS--active',
+            'opengever_workspace_root--STATUS--active',
             'repositoryroot-state-active',
             'templatefolder-state-active',
         ]

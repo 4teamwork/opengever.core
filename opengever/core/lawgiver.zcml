@@ -13,6 +13,13 @@
   <lawgiver:role name="Publisher" />
   <lawgiver:role name="DossierManager" />
 
+  <lawgiver:role name="WorkspaceAdmin" />
+  <lawgiver:role name="WorkspaceGuest" />
+  <lawgiver:role name="WorkspaceMember" />
+  <lawgiver:role name="WorkspaceOwner" />
+  <lawgiver:role name="WorkspacesCreator" />
+  <lawgiver:role name="WorkspacesUser" />
+
   <!--
       When inventing new action groups, please add a translation in
       opengever/core/locales/ftw.lawgiver.pot
@@ -47,6 +54,7 @@
                    opengever.private: Add private dossier,
                    opengever.task: Add task comment,
                    opengever.task: Add task,
+                   opengever.workspace: Add Workspace,
                    "
       />
 
@@ -201,9 +209,87 @@
   <lawgiver:ignore
       permissions="
                    opengever.workspace: Add WorkspaceRoot,
-                   opengever.workspace: Add Workspace,
                    opengever.workspace: Add WorkspaceFolder,
                    "
       />
+
+
+  <lawgiver:workflow name="opengever_committeecontainer_workflow">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate WorkspaceOwner role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     Sharing page: Delegate WorkspacesCreator role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+  </lawgiver:workflow>
+
+
+  <lawgiver:workflow name="opengever_committee_workflow">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate WorkspaceAdmin role,
+                     Sharing page: Delegate WorkspaceGuest role,
+                     Sharing page: Delegate WorkspaceMember role,
+                     Sharing page: Delegate WorkspaceOwner role,
+                     Sharing page: Delegate WorkspacesUser role,
+                     Sharing page: Delegate WorkspacesCreator role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+  </lawgiver:workflow>
+
+
+  <lawgiver:workflow name="opengever_workspace_root">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate CommitteeAdministrator role,
+                     Sharing page: Delegate CommitteeMember role,
+                     Sharing page: Delegate CommitteeResponsible role,
+                     Sharing page: Delegate MeetingUser role,
+                     "
+        />
+    <lawgiver:map_permissions
+        action_group="add"
+        permissions="opengever.workspace: Add Workspace"
+        />
+  </lawgiver:workflow>
+
+
+  <lawgiver:workflow name="opengever_workspace">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate CommitteeAdministrator role,
+                     Sharing page: Delegate CommitteeMember role,
+                     Sharing page: Delegate CommitteeResponsible role,
+                     Sharing page: Delegate MeetingUser role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+    <lawgiver:map_permissions
+        action_group="add"
+        permissions="opengever.workspace: Add WorkspaceFolder"
+        />
+  </lawgiver:workflow>
+
+  <lawgiver:workflow name="opengever_workspace_folder">
+    <lawgiver:ignore
+        permissions="
+                     Sharing page: Delegate CommitteeAdministrator role,
+                     Sharing page: Delegate CommitteeMember role,
+                     Sharing page: Delegate CommitteeResponsible role,
+                     Sharing page: Delegate MeetingUser role,
+                     opengever.workspace: Add Workspace,
+                     "
+        />
+    <lawgiver:map_permissions
+        action_group="add"
+        permissions="opengever.workspace: Add WorkspaceFolder"
+        />
+  </lawgiver:workflow>
 
 </configure>

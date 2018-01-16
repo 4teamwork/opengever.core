@@ -1,22 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.ogds.base.interfaces import IAdminUnitConfiguration
-from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
-from opengever.ogds.base.sources import AllGroupsSource
-from opengever.ogds.base.sources import AllOrgUnitsSource
-from opengever.ogds.base.sources import AllUsersAndGroupsSource
-from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
-from opengever.ogds.base.sources import AllUsersSource
-from opengever.ogds.base.sources import AssignedUsersSource
-from opengever.ogds.base.sources import ContactsSource
-from opengever.ogds.base.sources import UsersContactsInboxesSource
-from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.utils import get_workspace_user_ids
 from opengever.workspace.utils import is_within_workspace
-from plone.app.testing import TEST_USER_ID
 
 
 class TestAllUsersInboxesAndTeamsSourceForWorkspace(IntegrationTestCase):
@@ -67,9 +56,6 @@ class TestAllUsersInboxesAndTeamsSourceForWorkspace(IntegrationTestCase):
                         'Document in workspace is within workspace')
 
     def test_get_workspace_user_ids(self):
-        self.assertFalse(get_workspace_user_ids(self.workspace),
-                         'Expect ids, since there are no local roles')
-
         self.set_permissions_on_workspace()
         self.assertEquals([self.john.userid, self.hugo.userid],
                           get_workspace_user_ids(self.workspace))
