@@ -8,6 +8,7 @@ Changelog
 - Task globalindex: set the created time in sql from the Plone object. [jone]
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
+- OGIP 17: Implement invitation storage for workspace invitations. [mathias.leimgruber]
 - Add DocProperty ogg.document.version_number.  [njohner]
 - OGIP 17: Add workspace workflows and add workspace support to document workflow. [jone]
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]
