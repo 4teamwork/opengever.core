@@ -14,16 +14,16 @@
     <element value="opengever.workspace.folder" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.workspace.workspace.IWorkspaceSchema</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.workspace.workspace.Workspace</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.workspace.AddWorkspace</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
@@ -36,7 +36,6 @@
     <element value="opengever.trash.trash.ITrashable" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
-
 
   <!-- View information -->
   <property name="immediate_view">tabbed_view</property>

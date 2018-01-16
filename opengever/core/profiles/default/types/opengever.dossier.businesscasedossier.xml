@@ -15,16 +15,16 @@
     <element value="ftw.mail.mail" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.dossier.businesscase.IBusinessCaseDossier</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.dossier.base.DossierContainer</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.dossier.AddBusinessCaseDossier</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
@@ -126,10 +126,6 @@
       visible="True">
     <permission value="Modify portal content" />
   </action>
-
-
-  <!--migrated from opengever/tasktemplates/profiles/default/types/opengever.dossier.businesscasedossier.xml-->
-  <!-- Actions -->
 
   <action
       action_id="add_tasktemplate"

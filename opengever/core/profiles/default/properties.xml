@@ -1,6 +1,4 @@
 <site>
-
-  <!--migrated from opengever/base/profiles/default/properties.xml-->
   <property name="layout" type="string">@@personal_overview</property>
   <property name="search_label" type="string">Search OneGov Gever</property>
 </site>

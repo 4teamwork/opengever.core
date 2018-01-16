@@ -1,6 +1,11 @@
 <object name="portal_properties" meta_type="Plone Properties Tool">
 
-  <!--migrated from opengever/base/profiles/default/propertiestool.xml-->
+  <!-- SITE PROPERTIES -->
+  <object name="site_properties" meta_type="Plone Property Sheet">
+    <property name="icon_visibility" type="string">enabled</property>
+  </object>
+
+  <!-- NAVTREE PROPERTIES -->
   <object name="navtree_properties" meta_type="Plone Property Sheet">
     <property name="metaTypesNotToList" type="lines">
       <element value="ATBooleanCriterion" />
@@ -30,18 +35,15 @@
       <element value="ftw.mail.mail" />
       <element value="opengever.contact.contact" />
       <element value="opengever.document.document" />
+      <element value="opengever.dossier.dossiertemplate" />
       <element value="opengever.inbox.forwarding" />
+      <element value="opengever.meeting.proposaltemplate" />
       <element value="opengever.meeting.sablontemplate" />
+      <element value="opengever.private.root" />
       <element value="opengever.task.task" />
       <element value="opengever.tasktemplates.tasktemplate" />
       <element value="opengever.tasktemplates.tasktemplatefolder" />
-      <element value="opengever.dossier.dossiertemplate" />
-      <element value="opengever.private.root" />
-      <element value="opengever.meeting.proposaltemplate" />
     </property>
   </object>
 
-  <object name="site_properties" meta_type="Plone Property Sheet">
-    <property name="icon_visibility" type="string">enabled</property>
-  </object>
 </object>

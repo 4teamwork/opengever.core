@@ -1,16 +1,17 @@
 <rolemap>
+
   <roles>
-    <role name="Administrator" />
     <role name="APIUser" />
+    <role name="Administrator" />
     <role name="Archivist" />
     <role name="CommitteeAdministrator" />
     <role name="CommitteeMember" />
     <role name="CommitteeResponsible" />
+    <role name="DossierManager" />
     <role name="MeetingUser" />
     <role name="Publisher" />
     <role name="Records Manager" />
     <role name="Role Manager" />
-    <role name="DossierManager" />
     <role name="WorkspaceAdmin" />
     <role name="WorkspaceGuest" />
     <role name="WorkspaceMember" />
@@ -18,8 +19,176 @@
     <role name="WorkspacesCreator" />
     <role name="WorkspacesUser" />
   </roles>
+
   <permissions>
 
+    <!-- BASE -->
+    <permission name="Remove GEVER content" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="Delete objects" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="Edit date of submission" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="Edit date of cassation" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="ftw.keywordwidget: Add new term" acquire="False">
+      <role name="Manager" />
+      <role name="Site Administrator" />
+      <role name="Contributor" />
+    </permission>
+
+    <!-- CMFEDITIONS -->
+    <permission name="CMFEditions: Save new version" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Reviewer" />
+    </permission>
+
+    <!-- CONTACT -->
+    <permission name="opengever.contact: Add person" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.contact: Edit person" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <!-- DISPOSITION -->
+    <permission name="opengever.disposition: Add disposition" acquire="True">
+      <role name="Manager" />
+      <role name="Records Manager" />
+      <role name="Archivist" />
+    </permission>
+
+    <permission name="opengever.disposition: Download SIP Package" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.disposition: Edit transfer number" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <!-- DOCUMENT -->
+    <permission name="opengever.document: Add document" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.document: Force Checkin" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.document: Modify archival file" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <!-- DOSSIER -->
+    <permission name="opengever.dossier: Add businesscasedossier" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.dossier: Add templatefolder" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.dossier: Add dossiertemplate" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <!-- INBOX -->
+    <permission name="opengever.inbox: Add Inbox" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.inbox: Add Forwarding" acquire="True" />
+
+    <!-- MEETING -->
+    <permission name="opengever.meeting: Add Proposal" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Committee" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Member" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Sablon Template" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
+    <!-- POLICY -->
+    <permission name="plone.restapi: Use REST API" acquire="True">
+      <role name="Manager" />
+      <role name="APIUser" />
+    </permission>
+
+    <permission name="List folder contents" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <!-- PRIVATE -->
+    <permission name="opengever.private: Add private root" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.private: Add private folder" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <!-- REPOSITORY -->
+    <permission name="opengever.repository: Add repositoryfolder" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.repository: Add repositoryroot" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.repository: Unlock Reference Prefix" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
+    <!-- SHARING -->
     <permission name="Sharing page: Delegate Administrator role" acquire="True">
       <role name="Administrator" />
       <role name="Manager" />
@@ -54,91 +223,18 @@
       <role name="Manager" />
     </permission>
 
-    <permission name="CMFEditions: Save new version" acquire="True">
-      <role name="Administrator" />
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Editor" />
-      <role name="Reviewer" />
-    </permission>
-
-    <!--migrated from opengever/base/profiles/default/rolemap.xml-->
-    <permission name="Remove GEVER content" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="Delete objects" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="Edit date of submission" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="Edit date of cassation" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="ftw.keywordwidget: Add new term" acquire="False">
-      <role name="Manager" />
-      <role name="Site Administrator" />
-      <role name="Contributor" />
-    </permission>
-
-
-    <!--migrated from opengever/document/profiles/default/rolemap.xml-->
-    <permission name="opengever.document: Add document" acquire="True">
-      <role name="Manager" />
-      <role name="Owner" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-    <permission name="opengever.document: Force Checkin" acquire="True">
-      <role name="Manager" />
-      <role name="Administrator" />
-    </permission>
-    <permission name="opengever.document: Modify archival file" acquire="True">
+    <permission name="Modify view template" acquire="False">
       <role name="Manager" />
     </permission>
 
-
-    <!--migrated from opengever/dossier/profiles/default/rolemap.xml-->
-    <permission name="opengever.dossier: Add businesscasedossier" acquire="True">
-      <role name="Manager" />
-      <role name="Owner" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-    <permission name="opengever.dossier: Add templatefolder" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="opengever.dossier: Add dossiertemplate" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-
-    <!--migrated from opengever/repository/profiles/default/rolemap.xml-->
-    <permission name="opengever.repository: Add repositoryfolder" acquire="True">
-      <role name="Manager" />
-      <role name="Owner" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-    <permission name="opengever.repository: Add repositoryroot" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="opengever.repository: Unlock Reference Prefix" acquire="True">
-      <role name="Manager" />
-      <role name="Administrator" />
-    </permission>
-
-
-    <!--migrated from opengever/task/profiles/default/rolemap.xml-->
+    <!-- TASK -->
     <permission name="opengever.task: Add task" acquire="True">
       <role name="Manager" />
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
-
     </permission>
+
     <permission name="opengever.task: Edit task" acquire="True">
       <role name="Manager" />
       <role name="Owner" />
@@ -146,100 +242,18 @@
       <role name="Administrator" />
     </permission>
 
-
-    <!--migrated from opengever/trash/profiles/default/rolemap.xml-->
+    <!-- TRASH -->
     <permission name="opengever.trash: Trash content" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
     </permission>
+
     <permission name="opengever.trash: Untrash content" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
     </permission>
 
-
-    <!--migrated from opengever/inbox/profiles/default/rolemap.xml-->
-    <permission name="opengever.inbox: Add Inbox" acquire="True">
-      <role name="Manager" />
-    </permission>
-
-    <permission name="opengever.inbox: Add Forwarding" acquire="True">
-    </permission>
-
-
-    <!--migrated from opengever/contact/profiles/default/rolemap.xml-->
-    <permission name="opengever.contact: Add person" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.contact: Edit person" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-
-    <!--migrated from opengever/sharing/profiles/default/rolemap.xml-->
-    <permission name="Modify view template" acquire="False">
-      <role name="Manager" />
-    </permission>
-
-
-    <!--migrated from opengever/meeting/profiles/default/rolemap.xml-->
-    <permission name="opengever.meeting: Add Proposal" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
-      <role name="Manager" />
-    </permission>
-
-    <permission name="opengever.meeting: Add Committee" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.meeting: Add Member" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.meeting: Add Sablon Template" acquire="True">
-      <role name="Manager" />
-      <role name="Administrator" />
-    </permission>
-
-
-    <!--migrated from opengever/private/profiles/default/rolemap.xml-->
-    <permission name="opengever.private: Add private root" acquire="True">
-      <role name="Manager" />
-    </permission>
-
-    <permission name="opengever.private: Add private folder" acquire="True">
-      <role name="Manager" />
-    </permission>
-
-
-    <!--migrated from opengever/disposition/profiles/default/rolemap.xml-->
-    <permission name="opengever.disposition: Add disposition" acquire="True">
-      <role name="Manager" />
-      <role name="Records Manager" />
-      <role name="Archivist" />
-    </permission>
-    <permission name="opengever.disposition: Download SIP Package" acquire="True">
-      <role name="Manager" />
-    </permission>
-    <permission name="opengever.disposition: Edit transfer number" acquire="True">
-      <role name="Manager" />
-    </permission>
-
-
+    <!-- WORKSPACE -->
     <permission name="opengever.workspace: Add WorkspaceRoot" acquire="True">
       <role name="Manager" />
     </permission>
@@ -252,16 +266,6 @@
       <role name="Manager" />
     </permission>
 
-
-    <!--migrated from opengever/policy/base/profiles/default/rolemap.xml-->
-    <permission name="plone.restapi: Use REST API" acquire="True">
-      <role name="Manager" />
-      <role name="APIUser" />
-    </permission>
-
-    <permission name="List folder contents" acquire="True">
-      <role name="Manager" />
-    </permission>
-
   </permissions>
+
 </rolemap>

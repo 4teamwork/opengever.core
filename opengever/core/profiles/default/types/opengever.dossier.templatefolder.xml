@@ -16,16 +16,16 @@
     <element value="opengever.meeting.proposaltemplate" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.dossier.templatefolder.ITemplateFolder</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.dossier.templatefolder.TemplateFolder</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.dossier.AddTemplateFolder</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
@@ -62,6 +62,7 @@
       visible="False">
     <permission value="View" />
   </action>
+
   <action
       title="Edit"
       action_id="edit"

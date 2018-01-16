@@ -1,4 +1,6 @@
 <object name="Plone Site">
+
+  <!-- Basic metadata -->
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="opengever.contact.contactfolder" />
@@ -11,8 +13,7 @@
     <element value="opengever.workspace.root" />
   </property>
 
-
-  <!--migrated from opengever/latex/profiles/default/types/Plone_Site.xml-->
+  <!-- Actions -->
   <action
       action_id="pdf-open-task-report"
       visible="True"

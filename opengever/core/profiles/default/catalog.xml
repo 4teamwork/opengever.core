@@ -1,6 +1,9 @@
 <object name="portal_catalog">
 
-  <!--migrated from opengever/base/profiles/default/catalog.xml-->
+  <!-- Add indexes here on penalty of death or worse.
+       See INDEXES in config.py instead. -->
+
+  <!-- BASE -->
   <column value="css_icon_class" />
   <index name="reference" meta_type="FieldIndex">
     <indexed_attr value="reference" />
@@ -9,8 +12,15 @@
   <column value="title_de" />
   <column value="title_fr" />
 
+  <!-- CONTACT -->
+  <column value="contactid" />
+  <column value="email" />
+  <column value="email2" />
+  <column value="firstname" />
+  <column value="lastname" />
+  <column value="phone_office" />
 
-  <!--migrated from opengever/document/profiles/default/catalog.xml-->
+  <!-- DOCUMENT -->
   <column value="document_author" />
   <column value="document_date" />
   <column value="receipt_date" />
@@ -18,14 +28,12 @@
   <column value="checked_out" />
   <column value="public_trial" />
 
-
-  <!--migrated from opengever/dossier/profiles/default/catalog.xml-->
+  <!-- DOSSIER -->
   <column value="containing_subdossier" />
   <column value="containing_dossier" />
   <column value="retention_expiration" />
 
-
-  <!--migrated from opengever/task/profiles/default/catalog.xml-->
+  <!-- TASK -->
   <column value="deadline" />
   <column value="date_of_completion" />
   <column value="responsible" />
@@ -36,27 +44,10 @@
   <column value="is_subtask" />
   <column value="predecessor" />
 
-
-  <!--migrated from opengever/trash/profiles/default/catalog.xml-->
-  <column value="trashed" />
-
-
-  <!--migrated from opengever/tasktemplates/profiles/default/catalog.xml-->
-  <!-- Add indexes here on penalty of death or worse.
-         See add_catalog_indexes in setuphandlers.py instead. -->
-
+  <!-- TASKTEMPLATES -->
   <column value="preselected" />
 
-
-  <!--migrated from opengever/contact/profiles/default/catalog.xml-->
-  <!-- Add indexes here on penalty of death or worse.
-         See INDEXES in config.py instead. -->
-
-  <column value="contactid" />
-  <column value="email" />
-  <column value="email2" />
-  <column value="firstname" />
-  <column value="lastname" />
-  <column value="phone_office" />
+  <!-- TRASH -->
+  <column value="trashed" />
 
 </object>

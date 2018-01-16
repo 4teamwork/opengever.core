@@ -11,16 +11,16 @@
     <element value="ftw.mail.mail" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.meeting.proposal.ISubmittedProposal</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.meeting.proposal.SubmittedProposal</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.meeting.AddProposal</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors" purge="False">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />

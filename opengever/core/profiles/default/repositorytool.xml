@@ -1,6 +1,6 @@
 <repositorytool>
 
-  <!--migrated from opengever/document/profiles/default/repositorytool.xml-->
+  <!-- DOCUMENT -->
   <policymap purge="false">
     <type name="opengever.document.document">
       <policy name="version_on_revert" />
@@ -8,7 +8,7 @@
   </policymap>
 
 
-  <!--migrated from opengever/mail/profiles/default/repositorytool.xml-->
+  <!-- MAIL -->
   <policymap purge="false">
     <type name="ftw.mail.mail">
       <policy name="version_on_revert" />
@@ -16,7 +16,7 @@
   </policymap>
 
 
-  <!--migrated from opengever/meeting/profiles/default/repositorytool.xml-->
+  <!-- MEETING -->
   <policymap purge="false">
     <type name="opengever.meeting.sablontemplate">
       <policy name="version_on_revert" />
@@ -25,4 +25,5 @@
       <policy name="version_on_revert" />
     </type>
   </policymap>
+
 </repositorytool>

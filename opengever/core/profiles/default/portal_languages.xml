@@ -1,6 +1,4 @@
 <object>
-
-  <!--migrated from opengever/policy/base/profiles/default/portal_languages.xml-->
   <default_language value="de-ch" />
   <use_combined_language_codes value="True" />
   <display_flags value="False" />

@@ -10,17 +10,16 @@
     <element value="opengever.tasktemplates.tasktemplate" />
   </property>
 
+  <!-- Schema interface -->
+  <property name="schema">opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema</property>
 
-  <!-- schema interface -->
-  <property name="schema" />
-
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">plone.dexterity.content.Container</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">cmf.AddPortalContent</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
@@ -35,7 +34,7 @@
   <property name="view_methods">
     <element value="tabbed_view" />
   </property>
-  <property name="schema">opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema</property>
+
   <!-- Method aliases -->
   <alias from="(Default)" to="(selected layout)" />
   <alias from="edit" to="@@edit" />

@@ -11,16 +11,16 @@
     <element value="opengever.private.folder" />
   </property>
 
-  <!-- schema interface -->
+  <!-- Schema interface -->
   <property name="schema">opengever.private.root.IPrivateRoot</property>
 
-  <!-- class used for content items -->
+  <!-- Class used for content items -->
   <property name="klass">opengever.private.root.PrivateRoot</property>
 
-  <!-- add permission -->
+  <!-- Add permission -->
   <property name="add_permission">opengever.private.AddPrivateRoot</property>
 
-  <!-- enabled behaviors -->
+  <!-- Enabled behaviors -->
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
