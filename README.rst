@@ -843,6 +843,14 @@ You can manually remove / rebuild the caches:
 
 This feature is disabled on the CI server.
 
+When the environment variable ``GEVER_CACHE_VERBOSE`` is set to ``true``,
+a list of modified files will be printed whenever a cachekey is invalidated.
+This can be useful to debug problems with the fixture cache:
+
+.. code:: sh
+
+    GEVER_CACHE_VERBOSE=true bin/test-cached -m opengever.dossier.tests.test_activate
+
 
 Builder API
 ~~~~~~~~~~~
