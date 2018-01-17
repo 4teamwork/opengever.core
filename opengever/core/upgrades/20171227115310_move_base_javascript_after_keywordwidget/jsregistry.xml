@@ -1,0 +1,8 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      id="++resource++opengever.base/base.js"
+      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
+      />
+
+</object>

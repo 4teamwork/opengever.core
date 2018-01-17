@@ -1,8 +1,13 @@
-$(function() {
+$(window).load(function(){
   // set focus on first form field
-  $("form#form input:text:visible, form#form textarea:visible").first().focus();
+  var firstFormElement = $("form#form input:text:visible, form#form textarea:visible, .keyword-widget").first();
+  // Check if element is select2 widget
+  if (firstFormElement.data('select2')) {
+    firstFormElement.select2('open');
+  } else {
+    firstFormElement.focus();
+  }
 });
-
 
 $(document).delegate('body', 'tabbedview.unknownresponse', function(event, overview, jqXHR) {
   if (jqXHR.getResponseHeader('X-GEVER-Service') === 'Portal') {
