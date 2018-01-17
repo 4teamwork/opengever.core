@@ -87,7 +87,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         return url
 
-    def validate_attach_token(self, oc_url, documents):
+    def validate_attach_token(self, user, oc_url, documents):
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, verify=False)
         self.assertEquals('attach', token.get('action', None))
@@ -107,8 +107,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 parsed_documents[i],
                 )
 
-        user = token.get('sub', None)
-        self.assertEquals(self.regular_user.id, user)
+        self.assertEquals(user.id, token.get('sub', None))
 
         expiry = int(token.get('exp', 0))
         self.assertLess(int(time()), expiry)

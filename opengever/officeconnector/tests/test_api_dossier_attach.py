@@ -27,7 +27,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, (self.document, ))
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            (self.document, ),
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         self.assertEquals(200, browser.status_code)
@@ -62,7 +67,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, (self.document, ))
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            (self.document, ),
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         self.assertEquals(200, browser.status_code)
@@ -97,7 +107,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, (self.document, ))
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            (self.document, ),
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         self.assertEquals(200, browser.status_code)
@@ -137,7 +152,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, documents)
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            documents,
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         for payload in zip(payloads, documents):
@@ -170,7 +190,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, documents)
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            documents,
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         for payload in zip(payloads, documents):
@@ -203,7 +228,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         self.assertTrue(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(oc_url, documents)
+        tokens = self.validate_attach_token(
+            self.regular_user,
+            oc_url,
+            documents,
+            )
+
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         for payload in zip(payloads, documents):
