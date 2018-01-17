@@ -1,3 +1,8 @@
+from opengever.base.interfaces import ISearchSettings
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
+
 class FilteredTableSourceMixin(object):
 
     def build_query(self):
@@ -8,6 +13,15 @@ class FilteredTableSourceMixin(object):
 
         if self.config.filterlist_available:
             query = self.extend_query_with_filter(query)
+
+        if 'SearchableText' in query:
+            registry = getUtility(IRegistry)
+            settings = registry.forInterface(ISearchSettings)
+            # With Solr we don't have SearchableText in the catalog
+            # Let's use the Title index
+            if settings.use_solr:
+                query['Title'] = query['SearchableText']
+                del query['SearchableText']
 
         return query
 
