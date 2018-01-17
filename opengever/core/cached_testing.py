@@ -23,6 +23,8 @@ import transaction
 
 CACHE_ENABLED = (os.environ.get('GEVER_CACHE_TEST_DB', '')
                  .lower().strip() == 'true')
+CACHE_VERBOSE = (os.environ.get('GEVER_CACHE_VERBOSE', '')
+                 .lower().strip() == 'true')
 BUILDOUT_DIR = Path(__file__).joinpath('..', '..', '..').abspath()
 
 
@@ -197,7 +199,7 @@ class DBCacheManager(object):
                 return stack
         return None
 
-    def _is_stack_valid_to_load(self, stack):
+    def _is_stack_valid_to_load(self, stack, verbose=CACHE_VERBOSE):
         """A cache is valid when
         - the cache exists
         - the parent cache is valid, when there is one
@@ -207,10 +209,22 @@ class DBCacheManager(object):
             return False
 
         if stack.get('extends') and \
-           not self._is_stack_valid_to_load(stack['extends']):
+           not self._is_stack_valid_to_load(stack['extends'], verbose=False):
             return False
 
-        return stack['cachekey'] == self._load_cachekey(stack)
+        previous_cachekey = self._load_cachekey(stack)
+        if verbose and stack['cachekey'] != previous_cachekey:
+            print ''
+            print '-' * 40
+            print 'Cachekey changes in', stack['id']
+
+            for path in sorted(set(stack['cachekey']) | set(previous_cachekey)):
+                if stack['cachekey'].get(path) != previous_cachekey.get(path):
+                    print '-', Path(path).relpath(BUILDOUT_DIR)
+
+            print '-' * 40
+
+        return stack['cachekey'] == previous_cachekey
 
     def _dump_zodb_to(self, zodbDB, stack):
         """Dump the zodbDB into a data.fs by constructing a FileStorage database
