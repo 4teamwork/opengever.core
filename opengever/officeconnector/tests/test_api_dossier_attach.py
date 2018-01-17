@@ -24,7 +24,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
 
         oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
@@ -64,7 +64,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
 
         oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
@@ -104,7 +104,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
 
         oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
@@ -149,7 +149,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             dossier_email,
             )
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
@@ -187,7 +187,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             dossier_email,
             )
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
@@ -225,7 +225,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             dossier_email,
             )
 
-        self.assertTrue(oc_url)
+        self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_attach_token(
