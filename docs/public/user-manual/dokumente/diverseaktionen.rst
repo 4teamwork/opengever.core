@@ -170,6 +170,12 @@ exportiert werden.
 
 -  Wählen Sie den Speicherort für die ZIP-Datei aus.
 
+.. note::
+    Der Pfadname beim ZIP-Download lässt maximal 260 Zeichen zu. Bitte achten
+    Sie daher beim Sitzungsnamen darauf, dass diese Beschränkung nicht
+    überschritten wird. Ab Windows 10 (Version 1607) besteht die Möglichkeit,
+    dass ein längerer Pfadname mittels Konfiguration zugelassen werden kann.
+
 ZIP-Import
 ----------
 
