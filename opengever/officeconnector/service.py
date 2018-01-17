@@ -1,5 +1,6 @@
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
@@ -148,7 +149,10 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             document = payload['document']
             parent_dossier = document.get_parent_dossier()
 
-            if parent_dossier:
+            if (
+                    parent_dossier
+                    and IDossierMarker.providedBy(parent_dossier)
+                ):
                 if parent_dossier.is_open():
                     payload['bcc'] = (
                         IEmailAddress(self.request)
