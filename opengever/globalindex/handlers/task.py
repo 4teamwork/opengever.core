@@ -24,7 +24,8 @@ class TaskSqlSyncer(SqlSyncer):
             task = Task(self.obj_id, admin_unit_id,
                         issuing_org_unit=current_org_unit_id,
                         assigned_org_unit=assigned_org_unit,
-                        sequence_number=sequence_number)
+                        sequence_number=sequence_number,
+                        created=self.obj.created().asdatetime())
             Session.add(task)
         return task
 
