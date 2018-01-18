@@ -1,71 +1,32 @@
-from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
-from opengever.testing import FunctionalTestCase
-from plone.dexterity.interfaces import IDexterityFTI
-from plone.dexterity.utils import createContent, addContentToContainer
-from Products.CMFCore.utils import getToolByName
-from zope.component import createObject
-from zope.component import queryUtility
-from zope.event import notify
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectAddedEvent
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.testing import IntegrationTestCase
+from plone import api
 
 
-def create_testobject(parent, ptype, **kwargs):
-    createContent(ptype)
-    obj = createContent(ptype, **kwargs)
-    notify(ObjectCreatedEvent(obj))
-    obj = addContentToContainer(parent, obj, checkConstraints=False)
-    notify(ObjectAddedEvent(obj))
-    return obj
+class TestTaskTemplateFolder(IntegrationTestCase):
 
+    @browsing
+    def test_adding(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.open(self.templates)
+        factoriesmenu.add(u'TaskTemplateFolder')
+        browser.fill({'Title': 'Baugesuch'}).submit()
 
-class TestTaskTemplates(FunctionalTestCase):
+        self.assertEquals(['Item created'], info_messages())
+        self.assertEquals(['Baugesuch'], browser.css('h1').text)
+        self.assertEquals('opengever.tasktemplates.tasktemplatefolder',
+                          browser.context.portal_type)
 
-    def test_adding(self):
-        parent = self.layer['portal']
+    def test_default_state_is_inactive(self):
+        self.login(self.administrator)
+        tasktemplatefolder = create(Builder('tasktemplatefolder')
+                                    .titled(u'Verfahren Neuanstellung')
+                                    .within(self.templates))
 
-        t2 = create_testobject(
-            parent,
-            'opengever.tasktemplates.tasktemplatefolder',
-            title='TaskTemplateFolder 1')
+        self.assertEquals('tasktemplatefolder-state-inactiv',
+                          api.content.get_state(tasktemplatefolder))
 
-        self.failUnless(ITaskTemplateFolderSchema.providedBy(t2))
-
-    def test_fti(self):
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplatefolder')
-
-        self.assertNotEquals(None, fti)
-
-    def test_schema(self):
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplatefolder')
-        schema = fti.lookupSchema()
-
-        self.assertEquals(ITaskTemplateFolderSchema, schema)
-
-    def test_factory(self):
-
-        fti = queryUtility(
-            IDexterityFTI,
-            name='opengever.tasktemplates.tasktemplatefolder')
-        factory = fti.factory
-        new_object = createObject(factory)
-
-        self.failUnless(ITaskTemplateFolderSchema.providedBy(new_object))
-
-    def test_workflow_installed(self):
-        portal = self.layer['portal']
-        workflow = getToolByName(portal, 'portal_workflow')
-
-        self.assertTrue('opengever_tasktemplatefolder_workflow' in workflow)
-
-    def test_workflows_mapped(self):
-        portal = self.layer['portal']
-        workflow = getToolByName(portal, 'portal_workflow')
-
-        self.assertTrue(
-            'opengever_tasktemplatefolder_workflow' in \
-                workflow.getWorkflowsFor(
-                    'opengever.tasktemplates.tasktemplatefolder')[0].getId())
