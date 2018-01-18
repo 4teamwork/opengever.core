@@ -8,7 +8,7 @@
       name="manage-participants"
       class=".manage_participants.ManageParticipants"
       permission="zope2.View"
-      allowed_attributes="add"
+      allowed_attributes="add delete"
       />
 
 </configure>

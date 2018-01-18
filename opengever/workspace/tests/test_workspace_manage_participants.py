@@ -18,6 +18,8 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
 
     def setUp(self):
         super(TestWorkspaceManageParticipants, self).setUp()
+        self.login(self.workspace_admin)
+        self.storage = IInvitationStorage(self.workspace)
 
     @browsing
     def test_list_all_current_participants(self, browser):
@@ -74,13 +76,12 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     @browsing
     def test_list_all_pending_invitations(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        storage = IInvitationStorage(self.workspace)
         workspace2 = create(Builder('workspace')
                             .within(self.workspace_root)
                             .titled(u'Second workspace'))
         invitation = Invitation(workspace2, self.regular_user.getId(),
                                 self.workspace_admin.getId(), 'WorkspacesUser')
-        storage.add_invitation(invitation)
+        self.storage.add_invitation(invitation)
 
         browser.visit(workspace2, view='manage-participants')
         self.assertEquals(
@@ -107,8 +108,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                            'role': 'WorkspaceGuest',
                            '_authenticator': createToken()})
 
-        storage = IInvitationStorage(self.workspace)
-        invitations = storage.get_invitations_for_context(self.workspace)
+        invitations = self.storage.get_invitations_for_context(self.workspace)
         self.assertEquals(1, len(invitations), 'Expect one invitation.')
 
         invitations_in_response = filter(
@@ -126,3 +126,25 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
              u'roles': u'WorkspaceGuest',
              u'type_': u'invitation'},
             invitations_in_response[0])
+
+    @browsing
+    def test_delete_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        invitation = Invitation(self.workspace, self.regular_user.getId(),
+                                self.workspace_admin.getId(), 'WorkspacesUser')
+        self.storage.add_invitation(invitation)
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
+                     data={'token': invitation.iid,
+                           'type': 'invitation',
+                           '_authenticator': createToken()})
+
+        invitations = self.storage.get_invitations_for_context(self.workspace)
+        self.assertEquals(0, len(invitations), 'Expect no invitation anymore.')
+
+        invitations_in_response = filter(
+            lambda entry: entry['type_'] == 'invitation',
+            browser.json)
+
+        self.assertEquals(0, len(invitations_in_response),
+                          'Expect no invitation in response')

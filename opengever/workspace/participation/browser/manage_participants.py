@@ -93,3 +93,21 @@ class ManageParticipants(BrowserView):
         storage = IInvitationStorage(self.context)
         storage.add_invitation(invitation)
         return self.__call__()
+
+    def delete(self):
+        """ A traversable method to delete a pending invitation"""
+        CheckAuthenticator(self.request)
+
+        token = self.request.get('token', None)
+        type_ = self.request.get('type', None)
+
+        if not token or not type_:
+            raise BadRequest('A token a a type is required')
+
+        if type_ == 'invitation':
+            storage = IInvitationStorage(self.context)
+            invitation = storage.get_invitation_by_iid(token)
+            if storage.remove_invitation(invitation):
+                return self.__call__()
+            else:
+                raise BadRequest('Was not able to delete the invitation')
