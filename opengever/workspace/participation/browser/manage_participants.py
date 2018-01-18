@@ -73,13 +73,16 @@ class ManageParticipants(BrowserView):
         if member is None:
             member = api.user.get(userid=userid)
 
-        email = member.getProperty('email', '').decode('utf-8')
-        name = member.getProperty('fullname', '').decode('utf-8')
+        email = member.getProperty('email', '')
+        name = member.getProperty('fullname', '')
 
         if name and email:
-            return u'{} ({})'.format(name, email)
+            return u'{} ({})'.format(name.decode('utf-8'),
+                                     email.decode('utf-8'))
         elif name:
-            return name
+            return name.decode('utf-8')
+        elif member:
+            return member.getId().decode('utf-8')
         else:
             return userid.decode('utf-8')
 
