@@ -1,6 +1,9 @@
+from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
+from plone.protect import CheckAuthenticator
 from Products.Five.browser import BrowserView
+from zExceptions import BadRequest
 import json
 
 
@@ -74,3 +77,19 @@ class ManageParticipants(BrowserView):
             return name
         else:
             return userid.decode('utf-8')
+
+    def add(self):
+        """A traversable method to add new invitations"""
+        CheckAuthenticator(self.request)
+        userid = self.request.get('userid', None)
+        role = self.request.get('role', None)
+
+        if not userid or not role or not self.can_manage_member():
+            raise BadRequest('No userid provided')
+
+        invitation = Invitation(self.context, userid,
+                                api.user.get_current().getId(), role)
+
+        storage = IInvitationStorage(self.context)
+        storage.add_invitation(invitation)
+        return self.__call__()

@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone.protect import createToken
 
 
 def get_entry_by_userid(entries, userid):
@@ -97,3 +98,31 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'}
             ],
             browser.json)
+
+    @browsing
+    def test_add_invitiation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        browser.open(self.workspace.absolute_url() + '/manage-participants/add',
+                     data={'userid': self.regular_user.getId(),
+                           'role': 'WorkspaceGuest',
+                           '_authenticator': createToken()})
+
+        storage = IInvitationStorage(self.workspace)
+        invitations = storage.get_invitations_for_context(self.workspace)
+        self.assertEquals(1, len(invitations), 'Expect one invitation.')
+
+        invitations_in_response = filter(
+            lambda entry: entry['type_'] == 'invitation',
+            browser.json)
+
+        self.assertEquals(1, len(invitations_in_response),
+                          'Expect one invitation in response')
+
+        self.assertDictEqual(
+            {u'can_manage': True,
+             u'iid': invitations[0].iid,
+             u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)',
+             u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
+             u'roles': u'WorkspaceGuest',
+             u'type_': u'invitation'},
+            invitations_in_response[0])
