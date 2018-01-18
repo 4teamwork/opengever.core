@@ -162,6 +162,16 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
             'Expect to have no local roles anymore for the user')
 
     @browsing
+    def test_current_user_cannot_remove_its_local_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
+                         data={'token': self.workspace_admin.getId(),
+                               'type': 'user',
+                               '_authenticator': createToken()})
+
+    @browsing
     def test_modify_a_users_loca_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
         browser.open(self.workspace.absolute_url() + '/manage-participants/modify',

@@ -107,14 +107,15 @@ class ManageParticipants(BrowserView):
         if not token or not type_:
             raise BadRequest('A token and a type is required')
 
-        if type_ == 'invitation':
+        if type_ == 'invitation' and self.can_manage_member():
             storage = IInvitationStorage(self.context)
             invitation = storage.get_invitation_by_iid(token)
             if storage.remove_invitation(invitation):
                 return self.__call__()
             else:
                 raise BadRequest('Was not able to delete the invitation')
-        elif type_ == 'user':
+
+        elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
             self.context.manage_delLocalRoles([token])
             self.context.reindexObjectSecurity()
             return self.__call__()
