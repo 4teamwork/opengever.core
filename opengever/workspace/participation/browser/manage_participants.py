@@ -38,15 +38,17 @@ class ManageParticipants(BrowserView):
             if member is not None:
                 item = dict(userid=userid,
                             roles=roles,
-                            can_manage=self.can_manage_member(member),
+                            can_manage=self.can_manage_member(member, roles),
                             type_='user',
                             name=self.get_full_user_info(member=member))
                 entries.append(item)
         return entries
 
-    def can_manage_member(self, member=None):
+    def can_manage_member(self, member=None, roles=None):
 
         if member and member.getId() == api.user.get_current().getId():
+            return False
+        elif roles and 'WorkspaceOwner' in roles:
             return False
         else:
             return api.user.has_permission(
@@ -144,7 +146,9 @@ class ManageParticipants(BrowserView):
             raise Unauthorized('Inavlid role provided.')
 
         if type_ == 'user':
-            if api.user.get_roles(username=token, obj=self.context, inherit=False):
+            user_roles = api.user.get_roles(username=token, obj=self.context,
+                                            inherit=False)
+            if user_roles and 'WorkspaceOwner' not in user_roles:
                 self.context.manage_setLocalRoles(token, [role])
                 self.request.RESPONSE.setStatus(204)
                 return ''

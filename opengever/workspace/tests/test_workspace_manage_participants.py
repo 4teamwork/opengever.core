@@ -38,7 +38,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'roles': [u'WorkspaceAdmin'],
                  u'type_': u'user',
                  u'userid': u'fridolin.hugentobler'},
-                {u'can_manage': True,
+                {u'can_manage': False,
                  u'name': u'Fr\xf6hlich G\xfcnther (gunther.frohlich@gever.local)',
                  u'roles': [u'WorkspaceOwner'],
                  u'type_': u'user',
@@ -226,3 +226,15 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         self.assertEquals(
             ['WorkspaceAdmin'],
             get_entry_by_token(browser.json, invitation.iid)['roles'])
+
+    @browsing
+    def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
+                         data={'token': self.workspace_owner.getId(),
+                               'type': 'user',
+                               'role': 'WorkspaceAdmin',
+                               '_authenticator': createToken()})
+
