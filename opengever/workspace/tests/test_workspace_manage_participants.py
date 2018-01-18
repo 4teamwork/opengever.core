@@ -148,3 +148,15 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
 
         self.assertEquals(0, len(invitations_in_response),
                           'Expect no invitation in response')
+
+    @browsing
+    def test_delete_local_role(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
+                     data={'token': self.workspace_guest.getId(),
+                           'type': 'user',
+                           '_authenticator': createToken()})
+
+        self.assertIsNone(
+            get_entry_by_userid(browser.json, self.workspace_guest.getId()),
+            'Expect to have no local roles anymore for the user')
