@@ -1,3 +1,5 @@
+from datetime import datetime
+from datetime import timedelta
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
@@ -5,6 +7,7 @@ from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
+import pytz
 
 
 class ActivityQuery(BaseQuery):
@@ -28,6 +31,10 @@ class NotificationQuery(BaseQuery):
             return self.filter_by(activity_id=activity.id).filter(Notification.userid.in_(user_ids))
 
         return self.filter_by(activity_id=activity.id).filter(Notification.userid.is_(None))
+
+    def from_last_24_hours(self):
+        since = datetime.now().replace(tzinfo=pytz.utc) - timedelta(hours=24)
+        return self.join(Activity).filter(Activity.created > since)
 
 
 Notification.query_cls = NotificationQuery
