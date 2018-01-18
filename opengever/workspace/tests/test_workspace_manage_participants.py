@@ -7,9 +7,9 @@ from opengever.workspace.participation.storage import IInvitationStorage
 from plone.protect import createToken
 
 
-def get_entry_by_userid(entries, userid):
+def get_entry_by_token(entries, token):
     for entry in entries:
-        if entry['userid'] == userid:
+        if entry.get('userid', entry.get('iid', '')) == token:
             return entry
     return None
 
@@ -57,11 +57,11 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
         browser.visit(self.workspace, view='manage-participants')
         self.assertFalse(
-            get_entry_by_userid(browser.json, 'fridolin.hugentobler')[
+            get_entry_by_token(browser.json, 'fridolin.hugentobler')[
                 'can_manage'],
             'The admin should not be able to manage himself')
         self.assertTrue(
-            get_entry_by_userid(browser.json, 'hans.peter')['can_manage'],
+            get_entry_by_token(browser.json, 'hans.peter')['can_manage'],
             'The admin should be able to manage hans.peter')
 
     @browsing
@@ -69,7 +69,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         self.login(self.workspace_member, browser=browser)
         browser.visit(self.workspace, view='manage-participants')
         self.assertFalse(
-            get_entry_by_userid(browser.json, 'gunther.frohlich')[
+            get_entry_by_token(browser.json, 'gunther.frohlich')[
                 'can_manage'],
             'The admin should not be able to manage himself')
 
@@ -158,7 +158,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                            '_authenticator': createToken()})
 
         self.assertIsNone(
-            get_entry_by_userid(browser.json, self.workspace_guest.getId()),
+            get_entry_by_token(browser.json, self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user')
 
     @browsing
@@ -175,15 +175,16 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     def test_modify_a_users_loca_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
         browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
-                     data={'userid': self.workspace_guest.getId(),
+                     data={'token': self.workspace_guest.getId(),
                            'role': 'WorkspaceMember',
+                           'type': 'user',
                            '_authenticator': createToken()})
 
         browser.visit(self.workspace, view='manage-participants')
         self.assertEquals(
             ['WorkspaceMember'],
-            get_entry_by_userid(browser.json,
-                                self.workspace_guest.getId())['roles'])
+            get_entry_by_token(browser.json,
+                               self.workspace_guest.getId())['roles'])
 
     @browsing
     def test_cannot_modify_inexisting_user(self, browser):
@@ -191,6 +192,37 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
-                         data={'userid': self.regular_user.getId(),
+                         data={'token': self.regular_user.getId(),
                                'role': 'WorkspaceMember',
+                               'type': 'user',
                                '_authenticator': createToken()})
+
+    @browsing
+    def test_can_only_modify_workspace_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(403):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
+                         data={'token': self.regular_user.getId(),
+                               'role': 'Contributor',
+                               'type': 'user',
+                               '_authenticator': createToken()})
+
+    @browsing
+    def test_modify_role_of_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        invitation = Invitation(self.workspace, self.regular_user.getId(),
+                                self.workspace_admin.getId(), 'WorkspacesUser')
+        self.storage.add_invitation(invitation)
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
+                     data={'token': invitation.iid,
+                           'role': 'WorkspaceAdmin',
+                           'type': 'invitation',
+                           '_authenticator': createToken()})
+
+        browser.visit(self.workspace, view='manage-participants')
+        self.assertEquals(
+            ['WorkspaceAdmin'],
+            get_entry_by_token(browser.json, invitation.iid)['roles'])

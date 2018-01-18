@@ -4,7 +4,11 @@ from plone import api
 from plone.protect import CheckAuthenticator
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 import json
+
+
+MANAGED_ROLES = ['WorkspaceGuest', 'WorkspaceMember', 'WorkspaceAdmin']
 
 
 class ManageParticipants(BrowserView):
@@ -126,14 +130,27 @@ class ManageParticipants(BrowserView):
         """ A traversable method to modify a users local roles"""
         CheckAuthenticator(self.request)
 
-        userid = self.request.get('userid', None)
+        token = self.request.get('token', None)
         role = self.request.get('role', None)
+        type_ = self.request.get('type', None)
 
-        if not userid or not role:
-            raise BadRequest('No userid or role provided')
+        if not token or not type_:
+            raise BadRequest('No userid or type provided.')
 
-        if api.user.get_roles(username=userid, obj=self.context, inherit=False):
-            self.context.manage_setLocalRoles(userid, [role])
-            return True  # 204
+        if role not in MANAGED_ROLES:
+            raise Unauthorized('Inavlid role provided.')
+
+        if type_ == 'user':
+            if api.user.get_roles(username=token, obj=self.context, inherit=False):
+                self.context.manage_setLocalRoles(token, [role])
+                self.request.RESPONSE.setStatus(204)
+                return ''
+            else:
+                raise BadRequest('User does not have any local roles')
+        elif type_ == 'invitation':
+            storage = IInvitationStorage(self.context)
+            invitation = storage.get_invitation_by_iid(token)
+            invitation.role = role
         else:
-            raise BadRequest('User does not have any local roles')
+            raise BadRequest('Wrong type')
+
