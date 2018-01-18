@@ -364,19 +364,13 @@ class OpengeverContentFixture(object):
         templates = self.register('templates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen')
-            .having(id='vorlagen')
-            ))
-
-        templates.manage_setLocalRoles(
-            self.org_unit.users_group_id,
-            ['Reader'],
-            )
-
-        templates.manage_setLocalRoles(
-            self.administrator.getId(),
-            ['Reader', 'Contributor', 'Editor'],
-            )
-
+            .having(id='vorlagen')))
+        templates.manage_setLocalRoles(self.org_unit.users_group_id,
+                                       ['Reader'])
+        templates.manage_setLocalRoles(self.administrator.getId(),
+                                       ['Reader', 'Contributor', 'Editor'])
+        templates.manage_setLocalRoles(self.dossier_responsible.getId(),
+                                       ['Reader', 'Contributor', 'Editor'])
         templates.reindexObjectSecurity()
 
         self.sablon_template = self.register('sablon_template', create(

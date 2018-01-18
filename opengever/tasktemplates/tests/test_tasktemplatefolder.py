@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import IntegrationTestCase
@@ -30,3 +31,33 @@ class TestTaskTemplateFolder(IntegrationTestCase):
         self.assertEquals('tasktemplatefolder-state-inactiv',
                           api.content.get_state(tasktemplatefolder))
 
+    @browsing
+    def test_deletion_is_possible_for_administrator(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.open(self.templates, view='folder_delete_confirmation',
+                     data=self.make_path_param(self.tasktemplatefolder))
+        browser.click_on('Delete')
+
+        self.assertEquals(['Items successfully deleted.'], info_messages())
+        with self.assertRaises(KeyError):
+            self.tasktemplatefolder
+
+    @browsing
+    def test_deletion_is_possible_for_editor(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        browser.open(self.templates, view='folder_delete_confirmation',
+                     data=self.make_path_param(self.tasktemplatefolder))
+        browser.click_on('Delete')
+
+        self.assertEquals(['Items successfully deleted.'], info_messages())
+        with self.assertRaises(KeyError):
+            self.tasktemplatefolder
+
+    @browsing
+    def test_deletion_is_not_possible_for_reader(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with self.assertRaises(InsufficientPrivileges):
+            browser.open(self.templates, view='folder_delete_confirmation',
+                         data=self.make_path_param(self.tasktemplatefolder))
+            browser.click_on('Delete')

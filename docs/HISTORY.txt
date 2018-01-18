@@ -10,6 +10,7 @@ Changelog
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]
 - Fix attaching to email from documents within forwardings within the inbox. [Rotonen]
 - Task globalindex: set the created time in sql from the Plone object. [jone]
+- Allow administrator and template editors to remove a tasktemplatefolder. [phgross]
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
 - OGIP 17: Implement invitation storage for workspace invitations. [mathias.leimgruber]
