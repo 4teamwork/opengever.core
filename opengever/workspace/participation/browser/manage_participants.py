@@ -55,7 +55,7 @@ class ManageParticipants(BrowserView):
 
         for invitation in storage.get_invitations_for_context(self.context):
             item = dict(name=self.get_full_user_info(userid=invitation.userid),
-                        roles=invitation.role,
+                        roles=[invitation.role],
                         inviter=self.get_full_user_info(
                             userid=invitation.inviter),
                         can_manage=self.can_manage_member(),

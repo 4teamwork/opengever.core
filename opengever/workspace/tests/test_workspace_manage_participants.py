@@ -92,7 +92,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'roles': [u'WorkspaceOwner'],
                  u'name': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'},
                 {u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
-                 u'roles': u'WorkspacesUser',
+                 u'roles': [u'WorkspacesUser'],
                  u'can_manage': True,
                  u'iid': invitation.iid,
                  u'type_': u'invitation',
@@ -123,7 +123,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
              u'iid': invitations[0].iid,
              u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)',
              u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
-             u'roles': u'WorkspaceGuest',
+             u'roles': [u'WorkspaceGuest'],
              u'type_': u'invitation'},
             invitations_in_response[0])
 
