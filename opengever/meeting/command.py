@@ -400,8 +400,16 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
                     merge_tool.add(sablon.file_data)
 
                 elif agenda_item.has_document:
+                    sablon = self.get_agenda_item_header_sablon(agenda_item)
+                    if sablon is not None:
+                        merge_tool.add(sablon.file_data)
+
                     document = agenda_item.resolve_document()
                     merge_tool.add(document.file.data)
+
+                    sablon = self.get_agenda_item_suffix_sablon(agenda_item)
+                    if sablon is not None:
+                        merge_tool.add(sablon.file_data)
 
             if self.meeting.get_protocol_suffix_template():
                 sablon = self.get_suffix_sablon()
@@ -419,6 +427,20 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
     def get_suffix_sablon(self):
         return Sablon(self.meeting.get_protocol_suffix_template()).process(
             self.document_operations.get_meeting_data(self.meeting).as_json())
+
+    def get_agenda_item_header_sablon(self, agenda_item):
+        template = self.meeting.get_agenda_item_header_template()
+        if template is None:
+            return
+        return Sablon(template).process(
+            ProtocolData(self.meeting, [agenda_item]).as_json())
+
+    def get_agenda_item_suffix_sablon(self, agenda_item):
+        template = self.meeting.get_agenda_item_suffix_template()
+        if template is None:
+            return
+        return Sablon(template).process(
+            ProtocolData(self.meeting, [agenda_item]).as_json())
 
     def get_sablon_for_paragraph(self, agenda_item):
         return Sablon(self._get_paragraph_template()).process(

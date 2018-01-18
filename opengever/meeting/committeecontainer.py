@@ -34,6 +34,20 @@ class ICommitteeContainer(model.Schema):
         required=False,
     )
 
+    agenda_item_header_template = RelationChoice(
+        title=_('label_agenda_item_header_template',
+                default='Agenda item header template for the protocol'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    agenda_item_suffix_template = RelationChoice(
+        title=_('label_agenda_item_suffix_template',
+                default='Agenda item suffix template for the protocol'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     excerpt_header_template = RelationChoice(
         title=_('label_excerpt_header_template',
                 default='Excerpt header template'),
@@ -120,6 +134,12 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
     def get_protocol_suffix_template(self):
         return getattr(self.protocol_suffix_template, 'to_object', None)
+
+    def get_agenda_item_header_template(self):
+        return getattr(self.agenda_item_header_template, 'to_object', None)
+
+    def get_agenda_item_suffix_template(self):
+        return getattr(self.agenda_item_suffix_template, 'to_object', None)
 
     def get_excerpt_header_template(self):
         if self.excerpt_header_template:

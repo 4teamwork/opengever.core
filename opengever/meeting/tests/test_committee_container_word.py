@@ -52,6 +52,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         browser.fill({'Title': u'Sitzungen',
                       'Protocol header template': self.sablon_template,
                       'Protocol suffix template': self.sablon_template,
+                      'Agenda item header template for the protocol': self.sablon_template,
+                      'Agenda item suffix template for the protocol': self.sablon_template,
                       'Excerpt header template': self.sablon_template,
                       'Excerpt suffix template': self.sablon_template,
                       'Paragraph template': self.sablon_template,
@@ -67,7 +69,6 @@ class TestCommitteeContainer(IntegrationTestCase):
         self.assertEqual(self.sablon_template,
                          browser.context.get_excerpt_suffix_template())
 
-
     @browsing
     def test_visible_fields_in_forms(self, browser):
         """Some fields should only be displayed when the word feature is
@@ -77,6 +78,8 @@ class TestCommitteeContainer(IntegrationTestCase):
         fields = [u'Title',
                   u'Protocol header template',
                   u'Protocol suffix template',
+                  u'Agenda item header template for the protocol',
+                  u'Agenda item suffix template for the protocol',
                   u'Excerpt header template',
                   u'Excerpt suffix template',
                   u'Agendaitem list template',

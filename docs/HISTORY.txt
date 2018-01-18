@@ -9,6 +9,7 @@ Changelog
 - Disable outdated checkout/edit action and move checkout cancel action [njohner]
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]
 - Fix attaching to email from documents within forwardings within the inbox. [Rotonen]
+- SPV: Add header and suffix sablon for templates for the agenda items in protocols. [tarnap]
 - Task globalindex: set the created time in sql from the Plone object. [jone]
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
