@@ -56,7 +56,8 @@ class ManageParticipants(BrowserView):
         for invitation in storage.get_invitations_for_context(self.context):
             item = dict(name=self.get_full_user_info(userid=invitation.userid),
                         roles=invitation.role,
-                        inviter=self.get_full_user_info(userid=invitation.inviter),
+                        inviter=self.get_full_user_info(
+                            userid=invitation.inviter),
                         can_manage=self.can_manage_member(),
                         type_='invitation',
                         iid=invitation.iid)
@@ -85,7 +86,7 @@ class ManageParticipants(BrowserView):
         role = self.request.get('role', None)
 
         if not userid or not role or not self.can_manage_member():
-            raise BadRequest('No userid provided')
+            raise BadRequest('No userid or role provided')
 
         invitation = Invitation(self.context, userid,
                                 api.user.get_current().getId(), role)
@@ -119,3 +120,19 @@ class ManageParticipants(BrowserView):
             return self.__call__()
         else:
             raise BadRequest('Oh my, something went wrong')
+
+    def modify(self):
+        """ A traversable method to modify a users local roles"""
+        CheckAuthenticator(self.request)
+
+        userid = self.request.get('userid', None)
+        role = self.request.get('role', None)
+
+        if not userid or not role:
+            raise BadRequest('No userid or role provided')
+
+        if api.user.get_roles(username=userid, obj=self.context, inherit=False):
+            self.context.manage_setLocalRoles(userid, [role])
+            return True  # 204
+        else:
+            raise BadRequest('User does not have any local roles')

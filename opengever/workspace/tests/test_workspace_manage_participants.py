@@ -160,3 +160,27 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         self.assertIsNone(
             get_entry_by_userid(browser.json, self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user')
+
+    @browsing
+    def test_modify_a_users_loca_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
+                     data={'userid': self.workspace_guest.getId(),
+                           'role': 'WorkspaceMember',
+                           '_authenticator': createToken()})
+
+        browser.visit(self.workspace, view='manage-participants')
+        self.assertEquals(
+            ['WorkspaceMember'],
+            get_entry_by_userid(browser.json,
+                                self.workspace_guest.getId())['roles'])
+
+    @browsing
+    def test_cannot_modify_inexisting_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
+                         data={'userid': self.regular_user.getId(),
+                               'role': 'WorkspaceMember',
+                               '_authenticator': createToken()})
