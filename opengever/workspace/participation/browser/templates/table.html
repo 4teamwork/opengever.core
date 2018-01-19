@@ -1,0 +1,41 @@
+<script type="text/x-template" id="participants-table">
+
+  <div>
+
+    <div class="actions">
+      <select ref="userid" name="userid"
+              v-bind:data-ajaxoptions="ajaxOptions"
+              v-bind:data-select2config=select2Config>
+      </select>
+      <select ref="role" name="role">
+        <option v-for="role in roles" :value=role.value>{{role.name}}</option>
+      </select>
+      <input type="submit" :value="i18n.invite" @click.prevent="inviteUser" />
+    </div>
+
+    <table class="listing">
+      <tr>
+        <th>{{i18n.user}}</th><th>{{i18n.type}}</th><th>{{i18n.role}}</th><th>{{i18n.action}}</th>
+        <tr v-for="entry in entries">
+          <td>{{entry.name}}
+            <div class="discreet" v-if="entry.type_ === 'invitation'">
+              {{i18n.invited_by}} {{entry.inviter}}
+            </div>
+          </td>
+          <td v-if="entry.type_ === 'invitation'">{{i18n.type_invitation}}</td>
+          <td v-if="entry.type_ === 'user'">{{i18n.type_user}}</td>
+          <td v-if="!entry.can_manage">{{entry.roles.map(function (role){ return i18n[role.toLowerCase()]; }).join(', ')}}</td>
+          <td v-if="entry.can_manage">
+            <select name="newrole" :disabled="isModifying"
+                    @change="updateRoleForUser(entry, $event)">
+              <option v-for="role in roles" :value=role.value
+                      :selected="entry.roles[0] === role.value">{{role.name}}</option>
+            </select>
+          </td>
+          <td><input name="delete" :value="i18n.delete_action" type="submit" @click.prevent="deleteUser(entry)" :disabled="!entry.can_manage || isDeleting" /></td>
+        </tr>
+      </tr>
+    </table>
+
+  </div>
+</script>
