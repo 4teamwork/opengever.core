@@ -3,12 +3,24 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.workspace">
 
+  <browser:resourceDirectory
+      name="opengever.workspace.participants.resources"
+      directory="resources"
+      />
+
   <browser:page
       for="opengever.workspace.interfaces.IWorkspace"
       name="manage-participants"
       class=".manage_participants.ManageParticipants"
       permission="zope2.View"
-      allowed_attributes="add delete modify"
+      allowed_attributes="add delete modify search"
+      />
+
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspace"
+      name="participants"
+      class=".participants_view.ParticipantsView"
+      permission="zope2.View"
       />
 
 </configure>
