@@ -39,7 +39,8 @@ class InvitationStorage(object):
             'recipient': recipient,
             'inviter': inviter,
             'role': role,
-            'created': utcnow_tz_aware()})
+            'created': utcnow_tz_aware(),
+            'updated': None})
         return iid
 
     def get_invitation(self, iid):
@@ -50,6 +51,16 @@ class InvitationStorage(object):
 
     def remove_invitation(self, iid):
         del self._write_invitations[iid]
+
+    def update_invitation(self, iid, **updates):
+        self._write_invitations[iid]['updated'] = utcnow_tz_aware()
+        for key, value in updates.items():
+            if key in ('recipient', 'inviter', 'role'):
+                self._write_invitations[iid][key] = value
+            elif key == 'target':
+                self._write_invitations[iid]['target_uuid'] = IUUID(value)
+            else:
+                raise KeyError(key)
 
     def iter_invitions_for_context(self, context):
         uuid = IUUID(context)
