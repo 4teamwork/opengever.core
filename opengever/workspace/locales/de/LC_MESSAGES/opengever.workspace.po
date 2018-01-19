@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-19 13:02+0000\n"
+"POT-Creation-Date: 2018-01-19 14:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,3 +110,8 @@ msgstr "Papierkorb"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamräume"
+
+#. Default: "Manage participation of ${workspace}"
+#: ./opengever/workspace/participation/browser/templates/participants-view.pt
+msgid "title_manage_participation"
+msgstr "Teilnehmer von  \"${workspace}\""
