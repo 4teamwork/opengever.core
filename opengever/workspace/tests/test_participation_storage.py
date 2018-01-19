@@ -1,182 +1,96 @@
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
-from opengever.workspace.participation.invitation import Invitation
-from opengever.workspace.participation.storage import InvitationStorage
-from opengever.workspace.participation.storage import STORAGE_CACHE_KEY
-from persistent.dict import PersistentDict
-from zope.annotation.interfaces import IAnnotations
+from opengever.workspace.participation.storage import IInvitationStorage
+from operator import itemgetter
+from plone.uuid.interfaces import IUUID
+from zope.component import getUtility
+import pytz
 
 
 class TestWorspaceParticipationStorage(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestWorspaceParticipationStorage, self).setUp()
+    def test_add_and_retrieve_invitation(self):
         self.login(self.workspace_admin)
-        self.storage = InvitationStorage(self.workspace)
+        creation_date = datetime(2017, 1, 1, 1, 11, tzinfo=pytz.UTC)
+        with freeze(creation_date):
+            iid = getUtility(IInvitationStorage).add_invitation(
+                self.workspace,
+                self.workspace_guest.getId(),
+                self.workspace_owner.getId(),
+                'WorkspaceGuest')
 
-    def test_cached_access_of_invitations(self):
-        self.assertNotIn(STORAGE_CACHE_KEY, dir(self.storage))
-        # Not write on read!!
-        self.storage.invitations
-        self.assertNotIn(STORAGE_CACHE_KEY, dir(self.storage))
-
-        self.storage.initialize_storage()
-        self.storage.invitations
-        self.assertIn(STORAGE_CACHE_KEY, dir(self.storage))
-
-    def test_not_inititalize_storage_is_none(self):
-        self.assertEquals({}, self.storage.invitations)
-        self.assertNotIn(self.storage.ANNOTATIONS_DATA_KEY,
-                         IAnnotations(self.workspace))
-
-    def test_inititalized_storage_is_a_persisten_dict(self):
-        self.storage.initialize_storage()
-        self.assertTrue(isinstance(self.storage.invitations, PersistentDict),
-                        'Expect a PersistentDict in storage')
-
-    def test_get_used_iids_is_always_unique(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-
-        self.assertNotEquals(self.storage.generate_iid_for(invitation),
-                             self.storage.generate_iid_for(invitation))
-
-        with freeze(datetime(2017, 1, 1, 1, 11)):
-            self.assertEquals('1e05daca75db263c91482337f3819ead',
-                              self.storage.generate_iid_for(invitation))
-
-    def test_get_used_iids(self):
-        invitation1 = Invitation(self.workspace, self.regular_user.getId(),
-                                 self.workspace_admin.getId(), 'WorkspacesUser')
-        invitation2 = Invitation(self.workspace, self.regular_user.getId(),
-                                 self.workspace_admin.getId(), 'WorkspacesUser')
-        self.assertItemsEqual([invitation1.iid, invitation2.iid],
-                              self.storage.get_used_iids().keys())
-
-    def test_add_first_invitation(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-
-        self.storage.add_invitation(invitation)
-
-        self.assertEquals(
-            1, len(self.storage.invitations), 'Expect 1 item in storage')
-
-        self.assertEquals(
-            1, len(self.storage.invitations[self.regular_user.getId()]),
-            'Expect 1 invitation in storage')
-
-    def test_add_multiple_invitation_to_one_user(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
-
-        workspace2 = create(Builder('workspace')
-                            .within(self.workspace_root)
-                            .titled(u'Second workspace'))
-
-        invitation = Invitation(workspace2, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
-
-        self.assertEquals(
-            2, len(self.storage.invitations[self.regular_user.getId()]),
-            'Expect 2 invitations')
-
-    def test_get_invitation_by_iid(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
-
-        self.assertEquals(invitation,
-                          self.storage.get_invitation_by_iid(invitation.iid))
-
-        self.assertIsNone(self.storage.get_invitation_by_iid('asdf'),
-                          'Should be None, if not invitation is found.')
-
-    def test_get_invitations_by_userid(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
-
-        self.assertItemsEqual(
-            [invitation],
-            self.storage.get_invitations_by_userid(self.regular_user.getId()))
-
-        self.assertEquals(
-            [],
-            self.storage.get_invitations_by_userid('someuserid'),
-            'Should be a empty, if not invitation is found.')
-
-        self.login(self.regular_user)
-        self.assertItemsEqual([invitation],
-                              self.storage.get_invitations_by_userid())
-
-    def test_get_invitations_invited_by(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
-
-        workspace2 = create(Builder('workspace')
-                            .within(self.workspace_root)
-                            .titled(u'Second workspace'))
-        invitation2 = Invitation(workspace2, self.regular_user.getId(),
-                                 self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation2)
-
-        self.assertItemsEqual(
-            [invitation, invitation2],
-            self.storage.get_invitations_invited_by(self.workspace_admin.getId()))
-
-        self.assertEquals(
-            [],
-            self.storage.get_invitations_invited_by('someuserid'))
-
-        self.login(self.regular_user)
-        self.assertItemsEqual([], self.storage.get_invitations_invited_by())
-
-        self.login(self.workspace_admin)
-        self.assertItemsEqual(
-            [invitation, invitation2],
-            self.storage.get_invitations_invited_by())
-
-    def test_get_invitations_for_context(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        invitation2 = Invitation(self.workspace, self.regular_user.getId(),
-                                 self.workspace_admin.getId(), 'WorkspacesUser')
-
-        self.storage.add_invitation(invitation)
-        self.storage.add_invitation(invitation2)
-
-        workspace2 = create(Builder('workspace')
-                            .within(self.workspace_root)
-                            .titled(u'Second workspace'))
-        invitation3 = Invitation(workspace2, self.regular_user.getId(),
-                                 self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation3)
-
-        self.assertItemsEqual(
-            [invitation, invitation2],
-            self.storage.get_invitations_for_context(self.workspace))
-
-        self.assertItemsEqual(
-            [invitation3],
-            self.storage.get_invitations_for_context(workspace2))
-
-        self.assertEquals(
-            [],
-            self.storage.get_invitations_for_context(self.dossier))
+        self.assertDictEqual(
+            {'iid': iid,
+             'target_uuid': IUUID(self.workspace),
+             'target': self.workspace,
+             'recipient': 'hans.peter',
+             'inviter': 'gunther.frohlich',
+             'role': 'WorkspaceGuest',
+             'created': creation_date},
+            getUtility(IInvitationStorage).get_invitation(iid))
 
     def test_remove_invitation(self):
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
+        self.login(self.workspace_admin)
+        iid = self.add_invitation()
 
-        self.storage.add_invitation(invitation)
-        self.assertTrue(self.storage.remove_invitation(invitation),
-                        'Invitation should be removed')
-        self.assertFalse(self.storage.remove_invitation(invitation),
-                         'Invitation has been already removed')
+        self.assertTrue(getUtility(IInvitationStorage).get_invitation(iid))
+        getUtility(IInvitationStorage).remove_invitation(iid)
+
+        with self.assertRaises(KeyError):
+            getUtility(IInvitationStorage).get_invitation(iid)
+
+        with self.assertRaises(KeyError):
+            getUtility(IInvitationStorage).remove_invitation(iid)
+
+    def test_iter_invitations_for_context(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        workspace1 = self.add_invitation(target=self.workspace)
+        workspace2 = self.add_invitation(target=self.workspace)
+        folder = self.add_invitation(target=self.workspace_folder)
+
+        self.assertItemsEqual(
+            [workspace1, workspace2],
+            map(itemgetter('iid'), storage.iter_invitions_for_context(self.workspace)))
+
+        self.assertItemsEqual(
+            [folder],
+            map(itemgetter('iid'), storage.iter_invitions_for_context(self.workspace_folder)))
+
+    def test_iter_invitations_for_recipient(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        foo1 = self.add_invitation(recipient='foo')
+        foo2 = self.add_invitation(recipient='foo')
+        bar = self.add_invitation(recipient='bar')
+
+        self.assertItemsEqual(
+            [foo1, foo2],
+            map(itemgetter('iid'), storage.iter_invitions_for_recipient('foo')))
+
+        self.assertItemsEqual(
+            [bar],
+            map(itemgetter('iid'), storage.iter_invitions_for_recipient('bar')))
+
+    def test_iter_invitations_for_inviter(self):
+        self.login(self.workspace_admin)
+        storage = getUtility(IInvitationStorage)
+        foo1 = self.add_invitation(inviter='foo')
+        foo2 = self.add_invitation(inviter='foo')
+        bar = self.add_invitation(inviter='bar')
+
+        self.assertItemsEqual(
+            [foo1, foo2],
+            map(itemgetter('iid'), storage.iter_invitions_for_inviter('foo')))
+
+        self.assertItemsEqual(
+            [bar],
+            map(itemgetter('iid'), storage.iter_invitions_for_inviter('bar')))
+
+    def add_invitation(self, **options):
+        options.setdefault('target', self.workspace)
+        options.setdefault('recipient', self.workspace_guest.getId())
+        options.setdefault('inviter', self.workspace_owner.getId())
+        options.setdefault('role', 'WorkspaceGuest')
+        return getUtility(IInvitationStorage).add_invitation(**options)
