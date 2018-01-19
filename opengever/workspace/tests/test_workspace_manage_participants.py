@@ -9,7 +9,7 @@ from plone.protect import createToken
 
 def get_entry_by_token(entries, token):
     for entry in entries:
-        if entry.get('userid', entry.get('iid', '')) == token:
+        if entry['token'] == token:
             return entry
     return None
 
@@ -32,22 +32,22 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'name': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger@gever.local)',
                  u'roles': [u'WorkspaceMember'],
                  u'type_': u'user',
-                 u'userid': u'beatrice.schrodinger'},
+                 u'token': u'beatrice.schrodinger'},
                 {u'can_manage': False,
                  u'name': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)',
                  u'roles': [u'WorkspaceAdmin'],
                  u'type_': u'user',
-                 u'userid': u'fridolin.hugentobler'},
+                 u'token': u'fridolin.hugentobler'},
                 {u'can_manage': False,
                  u'name': u'Fr\xf6hlich G\xfcnther (gunther.frohlich@gever.local)',
                  u'roles': [u'WorkspaceOwner'],
                  u'type_': u'user',
-                 u'userid': u'gunther.frohlich'},
+                 u'token': u'gunther.frohlich'},
                 {u'can_manage': True,
                  u'name': u'Peter Hans (hans.peter@gever.local)',
                  u'roles': [u'WorkspaceGuest'],
                  u'type_': u'user',
-                 u'userid': u'hans.peter'},
+                 u'token': u'hans.peter'},
             ],
             browser.json
         )
@@ -87,14 +87,14 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         self.assertEquals(
             [
                 {u'can_manage': False,
-                 u'userid': u'fridolin.hugentobler',
+                 u'token': u'fridolin.hugentobler',
                  u'type_': u'user',
                  u'roles': [u'WorkspaceOwner'],
                  u'name': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'},
                 {u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
                  u'roles': [u'WorkspacesUser'],
                  u'can_manage': True,
-                 u'iid': invitation.iid,
+                 u'token': invitation.iid,
                  u'type_': u'invitation',
                  u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'}
             ],
@@ -120,7 +120,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'can_manage': True,
-             u'iid': invitations[0].iid,
+             u'token': invitations[0].iid,
              u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)',
              u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
              u'roles': [u'WorkspaceGuest'],

@@ -36,7 +36,7 @@ class ManageParticipants(BrowserView):
         for userid, roles in self.context.get_local_roles():
             member = api.user.get(userid=userid)
             if member is not None:
-                item = dict(userid=userid,
+                item = dict(token=userid,
                             roles=roles,
                             can_manage=self.can_manage_member(member, roles),
                             type_='user',
@@ -66,7 +66,7 @@ class ManageParticipants(BrowserView):
                             userid=invitation.inviter),
                         can_manage=self.can_manage_member(),
                         type_='invitation',
-                        iid=invitation.iid)
+                        token=invitation.iid)
             entries.append(item)
 
         return entries
