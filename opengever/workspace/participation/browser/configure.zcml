@@ -20,7 +20,7 @@
       for="opengever.workspace.interfaces.IWorkspace"
       name="participants"
       class=".participants_view.ParticipantsView"
-      permission="zope2.View"
+      permission="plone.DelegateRoles"
       />
 
 </configure>
