@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-20 18:03+0000\n"
+"POT-Creation-Date: 2018-01-19 13:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,58 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Aktion"
+msgstr "Aktion"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Delete"
+msgstr "Löschen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invitation"
+msgstr "Einladung"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invite"
+msgstr "Einladen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invited by:"
+msgstr "Eingeladen durch:"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Rolle"
+msgstr "Rolle"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Select a user ..."
+msgstr "Benutzer suchen ..."
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Type"
+msgstr "Typ"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "User"
+msgstr "Benutzer"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceAdmin"
+msgstr "Admin"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceGuest"
+msgstr "Gast"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceMember"
+msgstr "Teammitglied"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceOwner"
+msgstr "Federführung"
 
 #. Default: "Documents"
 #: ./opengever/workspace/browser/tabbed.py
