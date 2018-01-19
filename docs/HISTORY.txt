@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Prefix the reference numbers on private dossiers with a P. [Rotonen]
 - Task globalindex: set the created time in sql from the Plone object. [jone]
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
