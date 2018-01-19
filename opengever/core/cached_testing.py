@@ -47,6 +47,7 @@ CACHE_GEVER_INSTALLATION = {
                     'src/**/profiles/**/*',
                     'src/**/hooks.py',
                     'src/**/setuphandlers.py'),
+    'exclude_cache_globs': ('**/*.pyc',),
     'extends': CACHE_PLONE_SETUP,
 }
 
@@ -54,7 +55,8 @@ CACHE_GEVER_FIXTURE = {
     'id': 'GEVER_fixture',
     'description': 'Cache the fixture of opengever.core',
     'cache_globs': ('opengever/testing/**/*',),
-    'exclude_cache_globs': ('opengever/testing/pages/**/*',),
+    'exclude_cache_globs': ('**/*.pyc',
+                            'opengever/testing/pages/**/*',),
     'extends': CACHE_GEVER_INSTALLATION,
 }
 
