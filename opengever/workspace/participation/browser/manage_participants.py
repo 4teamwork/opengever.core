@@ -39,7 +39,7 @@ class ManageParticipants(BrowserView):
             member = api.user.get(userid=userid)
             if member is not None:
                 item = dict(token=userid,
-                            roles=roles,
+                            roles=list(set(roles) & set(MANAGED_ROLES + ['WorkspaceOwner'])),
                             can_manage=self.can_manage_member(member, roles),
                             type_='user',
                             name=self.get_full_user_info(member=member))
