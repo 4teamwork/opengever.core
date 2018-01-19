@@ -21,7 +21,7 @@ class IInvitation(Interface):
         """Sets the target to the given `obj`. Internally we store UIDs.
         """
 
-    def get_target(self):
+    def get_target():
         """Returns the currently stored target or `None`
         """
 
