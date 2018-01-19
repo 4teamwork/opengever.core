@@ -8,12 +8,9 @@
 
   <body>
   <metal:js fill-slot="javascript_head_slot">
-<!--     <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/vue.min.js"></script>
- -->
+    <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/vue.min.js"></script>
 
-    <script tal:attributes="src string:https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
-
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/axios.min.js"></script>
 
   </metal:js>
 
