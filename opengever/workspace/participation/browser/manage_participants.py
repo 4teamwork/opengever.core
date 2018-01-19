@@ -1,6 +1,8 @@
+from opengever.ogds.base.sources import AllUsersSource
 from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
+from plone.batching.batch import Batch
 from plone.protect import CheckAuthenticator
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
@@ -161,3 +163,30 @@ class ManageParticipants(BrowserView):
         else:
             raise BadRequest('Wrong type')
 
+    def search(self):
+        """ A traversable method to search for users"""
+        query = self.request.get('q', None)
+        page = int(self.request.get('page', 1))
+        pagesize = int(self.request.get('pagesize', 20))
+
+        if not query:
+            return json.dumps({})
+
+        source = AllUsersSource(api.portal.get())
+        batch = Batch.fromPagenumber(items=source.search(query),
+                                     pagesize=pagesize,
+                                     pagenumber=page)
+
+        def _term_to_dict(term):
+            return {'_resultId': term.token,
+                    'id': term.token,
+                    'text': term.title and term.title or term.token}
+
+        return json.dumps(
+            {
+                'results': map(_term_to_dict, batch),
+                'total_count': len(batch),
+                'page': page,
+                'pagination': {'more': (page * pagesize) < len(batch)}
+            }
+        )

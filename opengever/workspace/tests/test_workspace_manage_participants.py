@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
@@ -238,3 +239,34 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                                'role': 'WorkspaceAdmin',
                                '_authenticator': createToken()})
 
+    @browsing
+    def test_search_for_users(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        for number in range(20):
+            create(Builder('ogds_user')
+                   .assign_to_org_units([get_current_org_unit()])
+                   .having(firstname='Hans-{}'.format(str(number)),
+                           lastname='Muster')
+                   .id('hans.muster{}'.format(str(number))))
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/search',
+                     data={'q': 'beatrice'})
+
+        self.assertEquals(
+            {u'total_count': 1,
+             u'pagination': {u'more': False},
+             u'page': 1,
+             u'results': [
+                 {u'text': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
+                  u'_resultId': u'beatrice.schrodinger',
+                  u'id': u'beatrice.schrodinger'}]},
+            browser.json)
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/search',
+                     data={'q': 'hans'})
+
+        self.assertEquals(21, browser.json['total_count'])
+        self.assertEquals({u'more': True}, browser.json['pagination'])
+        self.assertEquals(1, browser.json['page'])
+        self.assertEquals(20, len(browser.json['results']))
