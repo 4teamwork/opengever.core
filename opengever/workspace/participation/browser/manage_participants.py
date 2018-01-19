@@ -1,5 +1,4 @@
 from opengever.ogds.base.sources import AllUsersSource
-from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.batching.batch import Batch
@@ -7,6 +6,7 @@ from plone.protect import CheckAuthenticator
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
+from zope.component import getUtility
 import json
 
 
@@ -39,7 +39,8 @@ class ManageParticipants(BrowserView):
             member = api.user.get(userid=userid)
             if member is not None:
                 item = dict(token=userid,
-                            roles=list(set(roles) & set(MANAGED_ROLES + ['WorkspaceOwner'])),
+                            roles=list(set(roles) & set(
+                                MANAGED_ROLES + ['WorkspaceOwner'])),
                             can_manage=self.can_manage_member(member, roles),
                             type_='user',
                             name=self.get_full_user_info(member=member))
@@ -58,17 +59,17 @@ class ManageParticipants(BrowserView):
                 obj=self.context)
 
     def get_pending_invitations(self):
-        storage = IInvitationStorage(self.context)
+        storage = getUtility(IInvitationStorage)
         entries = []
 
-        for invitation in storage.get_invitations_for_context(self.context):
-            item = dict(name=self.get_full_user_info(userid=invitation.userid),
-                        roles=[invitation.role],
+        for invitation in storage.iter_invitions_for_context(self.context):
+            item = dict(name=self.get_full_user_info(userid=invitation['recipient']),
+                        roles=[invitation['role']],
                         inviter=self.get_full_user_info(
-                            userid=invitation.inviter),
+                            userid=invitation['inviter']),
                         can_manage=self.can_manage_member(),
                         type_='invitation',
-                        token=invitation.iid)
+                        token=invitation['iid'])
             entries.append(item)
 
         return entries
@@ -99,11 +100,9 @@ class ManageParticipants(BrowserView):
         if not userid or not role or not self.can_manage_member():
             raise BadRequest('No userid or role provided')
 
-        invitation = Invitation(self.context, userid,
-                                api.user.get_current().getId(), role)
-
-        storage = IInvitationStorage(self.context)
-        storage.add_invitation(invitation)
+        storage = getUtility(IInvitationStorage)
+        storage.add_invitation(self.context, userid,
+                               api.user.get_current().getId(), role)
         return self.__call__()
 
     def delete(self):
@@ -119,12 +118,9 @@ class ManageParticipants(BrowserView):
             raise BadRequest('A token and a type is required')
 
         if type_ == 'invitation' and self.can_manage_member():
-            storage = IInvitationStorage(self.context)
-            invitation = storage.get_invitation_by_iid(token)
-            if storage.remove_invitation(invitation):
-                return self.__call__()
-            else:
-                raise BadRequest('Was not able to delete the invitation')
+            storage = getUtility(IInvitationStorage)
+            storage.remove_invitation(token)
+            return self.__call__()
 
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
             self.context.manage_delLocalRoles([token])
@@ -157,9 +153,8 @@ class ManageParticipants(BrowserView):
             else:
                 raise BadRequest('User does not have any local roles')
         elif type_ == 'invitation':
-            storage = IInvitationStorage(self.context)
-            invitation = storage.get_invitation_by_iid(token)
-            invitation.role = role
+            storage = getUtility(IInvitationStorage)
+            storage.update_invitation(token, role=role)
         else:
             raise BadRequest('Wrong type')
 

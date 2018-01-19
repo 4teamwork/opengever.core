@@ -3,9 +3,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import IntegrationTestCase
-from opengever.workspace.participation.invitation import Invitation
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.protect import createToken
+from zope.component import getUtility
 
 
 def get_entry_by_token(entries, token):
@@ -20,7 +20,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     def setUp(self):
         super(TestWorkspaceManageParticipants, self).setUp()
         self.login(self.workspace_admin)
-        self.storage = IInvitationStorage(self.workspace)
+        self.storage = getUtility(IInvitationStorage)
 
     @browsing
     def test_list_all_current_participants(self, browser):
@@ -80,9 +80,9 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         workspace2 = create(Builder('workspace')
                             .within(self.workspace_root)
                             .titled(u'Second workspace'))
-        invitation = Invitation(workspace2, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
+        iid = self.storage.add_invitation(
+            workspace2, self.regular_user.getId(),
+            self.workspace_admin.getId(), 'WorkspacesGuest')
 
         browser.visit(workspace2, view='manage-participants')
         self.assertEquals(
@@ -93,9 +93,9 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'roles': [u'WorkspaceOwner'],
                  u'name': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'},
                 {u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
-                 u'roles': [u'WorkspacesUser'],
+                 u'roles': [u'WorkspacesGuest'],
                  u'can_manage': True,
-                 u'token': invitation.iid,
+                 u'token': iid,
                  u'type_': u'invitation',
                  u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)'}
             ],
@@ -109,8 +109,8 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                            'role': 'WorkspaceGuest',
                            '_authenticator': createToken()})
 
-        invitations = self.storage.get_invitations_for_context(self.workspace)
-        self.assertEquals(1, len(invitations), 'Expect one invitation.')
+        invitations = tuple(self.storage.iter_invitions_for_context(self.workspace))
+        self.assertEquals(1, len(tuple(invitations)), 'Expect one invitation.')
 
         invitations_in_response = filter(
             lambda entry: entry['type_'] == 'invitation',
@@ -121,7 +121,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
 
         self.assertDictEqual(
             {u'can_manage': True,
-             u'token': invitations[0].iid,
+             u'token': invitations[0]['iid'],
              u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler@gever.local)',
              u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss@gever.local)',
              u'roles': [u'WorkspaceGuest'],
@@ -131,17 +131,18 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     @browsing
     def test_delete_invitation(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
+        iid = self.storage.add_invitation(
+            self.workspace, self.regular_user.getId(),
+            self.workspace_admin.getId(), 'WorkspacesGuest')
 
         browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
-                     data={'token': invitation.iid,
+                     data={'token': iid,
                            'type': 'invitation',
                            '_authenticator': createToken()})
 
-        invitations = self.storage.get_invitations_for_context(self.workspace)
-        self.assertEquals(0, len(invitations), 'Expect no invitation anymore.')
+        invitations = self.storage.iter_invitions_for_context(self.workspace)
+        self.assertEquals(0, len(tuple(invitations)),
+                          'Expect no invitation anymore.')
 
         invitations_in_response = filter(
             lambda entry: entry['type_'] == 'invitation',
@@ -213,12 +214,12 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     def test_modify_role_of_invitation(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
-        invitation = Invitation(self.workspace, self.regular_user.getId(),
-                                self.workspace_admin.getId(), 'WorkspacesUser')
-        self.storage.add_invitation(invitation)
+        iid = self.storage.add_invitation(
+            self.workspace, self.regular_user.getId(),
+            self.workspace_admin.getId(), 'WorkspacesGuest')
 
         browser.open(self.workspace.absolute_url() + '/manage-participants/modify',
-                     data={'token': invitation.iid,
+                     data={'token': iid,
                            'role': 'WorkspaceAdmin',
                            'type': 'invitation',
                            '_authenticator': createToken()})
@@ -226,7 +227,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
         browser.visit(self.workspace, view='manage-participants')
         self.assertEquals(
             ['WorkspaceAdmin'],
-            get_entry_by_token(browser.json, invitation.iid)['roles'])
+            get_entry_by_token(browser.json, iid)['roles'])
 
     @browsing
     def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
