@@ -11,18 +11,20 @@ class TestDocumentListing(IntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents')
         self.maxDiff = None
 
+        expected_metadata = {
+            '': '',
+            'Checked out by': '',
+            'Delivery Date': '03.01.2010',
+            'Document Author': 'test_user_1_',
+            'Document Date': '03.01.2010',
+            'Public Trial': 'unchecked',
+            'Receipt Date': '03.01.2010',
+            'Reference Number': 'Client1 1.1 / 1 / 5',
+            'Sequence Number': '5',
+            'Subdossier': '',
+            'Title': u'Vertr\xe4gsentwurf',
+            }
+
         listings = browser.css('.listing').first.dicts()
 
-        self.assertIn(
-            {'': '',
-             'Checked out by': '',
-             'Delivery Date': '03.01.2010',
-             'Document Author': 'test_user_1_',
-             'Document Date': '03.01.2010',
-             'Public Trial': 'unchecked',
-             'Receipt Date': '03.01.2010',
-             'Reference Number': 'Client1 1.1 / 1 / 4',
-             'Sequence Number': '4',
-             'Subdossier': '',
-             'Title': u'Vertr\xe4gsentwurf'},
-            listings)
+        self.assertIn(expected_metadata, listings)

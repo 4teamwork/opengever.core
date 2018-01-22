@@ -6,18 +6,22 @@ from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlug
 from ua_parser.user_agent_parser import ParseUserAgent
 from zExceptions import Forbidden
 from zExceptions import NotFound
-
 import json
 
 
 def is_officeconnector_attach_feature_enabled():
-    return api.portal.get_registry_record('attach_to_outlook_enabled',
-                                          interface=IOfficeConnectorSettings)
+    return api.portal.get_registry_record(
+        'attach_to_outlook_enabled',
+        interface=IOfficeConnectorSettings,
+        )
 
 
 def is_officeconnector_checkout_feature_enabled():
-    return api.portal.get_registry_record('direct_checkout_and_edit_enabled',
-                                          interface=IOfficeConnectorSettings)
+    return api.portal.get_registry_record(
+        'direct_checkout_and_edit_enabled',
+        interface=IOfficeConnectorSettings,
+        )
+
 
 def parse_bcc(request):
     body = request.get('BODY', None)
@@ -25,11 +29,15 @@ def parse_bcc(request):
         return json.loads(body).get('bcc', None)
     return None
 
+
 def parse_documents(request, context):
     documents = []
 
-    if (request['REQUEST_METHOD'] == 'GET' or
-            request['REQUEST_METHOD'] == 'POST' and 'BODY' not in request):
+    if (
+            request['REQUEST_METHOD'] == 'GET'
+            or request['REQUEST_METHOD'] == 'POST'
+            and 'BODY' not in request
+        ):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):
             raise NotFound
@@ -46,6 +54,7 @@ def parse_documents(request, context):
         for path in paths:
             # Restricted traversal does not handle unicode paths
             document = api.content.get(path=str(path))
+
             if document.has_file():
                 documents.append(document)
 
@@ -55,7 +64,7 @@ def parse_documents(request, context):
 def get_auth_plugin(context):
     plugin = None
     acl_users = getToolByName(context, "acl_users")
-    plugins = acl_users._getOb('plugins')
+    plugins = acl_users.plugins
     authenticators = plugins.listPlugins(IAuthenticationPlugin)
 
     # Assumes there is only one JWT auth plugin present in the acl_users
@@ -64,7 +73,7 @@ def get_auth_plugin(context):
     # This will work as long as the plugin this finds uses the same secret
     # as whatever it ends up authenticating against - this is in all
     # likelihood the Plone site keyring.
-    for id_, authenticator in authenticators:
+    for authenticator in (a[1] for a in authenticators):
         if authenticator.meta_type == "JWT Authentication Plugin":
             plugin = authenticator
             break
@@ -77,6 +86,7 @@ def create_oc_url(request, context, payload):
 
     if not auth_plugin:
         raise Forbidden
+
     action = payload.get('action', None)
 
     # Feature used wrong - an action is always required
@@ -127,10 +137,11 @@ def create_oc_url(request, context, payload):
 
     if user_agent['family'] == u'IE' and user_agent['major'] == '11':
         limit = 500
+
     else:
         limit = 2000
 
     if len(url) <= limit:
         return url
-    else:
-        return None
+
+    return None

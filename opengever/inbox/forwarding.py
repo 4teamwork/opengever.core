@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
@@ -7,7 +8,8 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
-from opengever.task.task import ITask, Task
+from opengever.task.task import ITask
+from opengever.task.task import Task
 from opengever.task.util import update_reponsible_field_data
 from plone.autoform import directives as form
 from plone.dexterity.browser import add
@@ -39,6 +41,7 @@ class IForwarding(ITask):
 
     # only hide date_of_completion, it's used
     form.mode(date_of_completion=HIDDEN_MODE)
+
     # make sure hidden field is not rendered in its own empty fieldset by
     # moving it to the form's first position before title
     form.order_before(date_of_completion='title')
@@ -55,14 +58,15 @@ class IForwarding(ITask):
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(
-            only_current_orgunit=True),
+            only_current_orgunit=True,
+            ),
         required=True,
     )
 
 
 class Forwarding(Task):
-    """Forwarding model class.
-    """
+    """Forwarding model class."""
+
     implements(IForwarding)
 
     @property
@@ -72,7 +76,7 @@ class Forwarding(Task):
 
     def get_static_task_type(self):
         """Provide a marker string, which will be translated
-           in the tabbedview helper method.
+        in the tabbedview helper method.
         """
         return 'forwarding_task_type'
 
@@ -86,9 +90,13 @@ class Forwarding(Task):
     def get_task_type_label(self, language=None):
         label = _('forwarding_task_type', default=u'Forwarding')
         if language:
-            return translate(label, context=self.REQUEST,
-                             domain='opengever.inbox',
-                             target_language=language)
+            return translate(
+                label,
+                context=self.REQUEST,
+                domain='opengever.inbox',
+                target_language=language,
+                )
+
         return label
 
 
@@ -98,26 +106,41 @@ class ForwardingAddForm(add.DefaultAddForm):
     The documents are later moved by move_documents_into_forwarding (see
     below).
     """
+
     portal_type = 'opengever.inbox.forwarding'
 
     def update(self):
-        """put default value for relatedItems into request - the added
-           objects will later be moved insed the forwarding
+        """Store default value for relatedItems in the request.
+
+        The added objects will later be moved inside the forwarding.
         """
         paths = self.request.get('paths', [])
-        search_endpoint = '++widget++form.widgets.responsible/search' in \
-            self.request.get('ACTUAL_URL', '')
 
-        if not (search_endpoint or paths or
-                self.request.form.get('form.widgets.relatedItems', [])):
+        search_endpoint = (
+            '++widget++form.widgets.responsible/search'
+            in self.request.get('ACTUAL_URL', '')
+            )
+
+        if not (
+                search_endpoint
+                or paths
+                or self.request.form.get('form.widgets.relatedItems', [])
+            ):
             # add status message and redirect current window back to inbox
             # but ONLY if we're not in a z3cform_inline_validation.
             IStatusMessage(self.request).addStatusMessage(
-                _(u'error_no_document_selected',
-                  u'Error: Please select at least one document to forward.'),
-                type='error')
-            redir_url = self.request.get('orig_template',
-                                         self.context.absolute_url())
+                _(
+                    u'error_no_document_selected',
+                    u'Error: Please select at least one document to forward.',
+                    ),
+                type=u'error',
+                )
+
+            redir_url = self.request.get(
+                'orig_template',
+                self.context.absolute_url(),
+                )
+
             self.request.RESPONSE.redirect(redir_url)
 
         if paths:
@@ -125,16 +148,23 @@ class ForwardingAddForm(add.DefaultAddForm):
 
         # put default value for issuer into request
         if not self.request.get('form.widgets.issuer', None):
-            self.request.set('form.widgets.issuer',
-                             get_current_org_unit().inbox().id())
+            self.request.set(
+                'form.widgets.issuer',
+                get_current_org_unit().inbox().id(),
+                )
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
-            org_unit = get_ou_selector(
-                ignore_anonymous=True).get_current_unit()
+            org_unit = (
+                get_ou_selector(ignore_anonymous=True).get_current_unit()
+                )
+
             self.request.set('form.widgets.responsible_client', org_unit.id())
-            self.request.set('form.widgets.responsible',
-                             [org_unit.inbox().id()])
+
+            self.request.set(
+                'form.widgets.responsible',
+                [org_unit.inbox().id()],
+                )
 
         super(ForwardingAddForm, self).update()
 
@@ -144,17 +174,26 @@ class ForwardingAddForm(add.DefaultAddForm):
 
     def createAndAdd(self, data):
         update_reponsible_field_data(data)
+
         forwarding = super(ForwardingAddForm, self).createAndAdd(data=data)
+
         ForwardingAddedActivity(
-            forwarding, self.request, self.context).record()
+            forwarding,
+            self.request,
+            self.context,
+            ).record()
+
         return forwarding
 
 
 class ForwardingAddView(add.DefaultAddView):
+    """Define a view for adding new forwardings."""
+
     form = ForwardingAddForm
 
 
 class ForwardingEditForm(DefaultEditForm):
+    """Define a form for editing forwardings."""
 
     def updateFieldsFromSchemata(self):
         super(ForwardingEditForm, self).updateFieldsFromSchemata()
@@ -162,26 +201,29 @@ class ForwardingEditForm(DefaultEditForm):
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
-        Also update the responsible_client and responsible user
+
+        Also update the responsible_client and responsible user.
         """
         update_reponsible_field_data(data)
         super(ForwardingEditForm, self).applyChanges(data)
 
 
 def _drop_empty_additional_fieldset(groups):
-    """make sure empty 'additional' fieldset is not displayed
+    """Ensure empty 'additional' fieldset is not displayed.
 
-     plone.autoform.base.AutoFields.updateFieldsFromSchemata initializes
-     fields and groups and moves fields. However it moves fields only
-     after initializing groups. Thus an empty group is left after we
-     move the field (see IForwarding). The empty group renders
-     a completely empty fieldset (i.e. tab in our case).
+    plone.autoform.base.AutoFields.updateFieldsFromSchemata initializes
+    fields and groups and moves fields. However it moves fields only
+    after initializing groups. Thus an empty group is left after we
+    move the field (see IForwarding). The empty group renders
+    a completely empty fieldset (i.e. tab in our case).
 
-     This code performs cleanup to remove that empty group.
-     """
-    assert len(groups[1].fields.keys()) == 0, \
-        "expecting empty group, please check field definitions in "\
+    This code performs cleanup to remove that empty group.
+    """
+    assert not groups[1].fields.keys(), (
+        "expecting empty group, please check field definitions in "
         "IForwarding and ITask"
+        )
+
     groups.pop(1)
 
 
@@ -193,20 +235,23 @@ def move_documents_into_forwarding(context, event):
     the forwarding (which did not exist before).
     """
     relations = context.relatedItems
+
     for relation in relations:
         obj = relation.to_object
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
+
     context.relatedItems = []
 
 
 def set_dates(context, event):
     """Eventhandler wich set automaticly the enddate
-    when a forwarding would be closed"""
-
+    when a forwarding would be closed.
+    """
     closing_transitions = [
         'forwarding-transition-close',
-        'forwarding-transition-assign-to-dossier']
+        'forwarding-transition-assign-to-dossier',
+        ]
 
     if event.action in closing_transitions:
         context.date_of_completion = datetime.now()
