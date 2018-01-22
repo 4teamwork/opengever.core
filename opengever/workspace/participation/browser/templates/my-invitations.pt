@@ -30,10 +30,10 @@
                     <td tal:content="invitation/inviter" />
                     <td tal:content="invitation/target_title" />
                     <td>
-                        <a tal:attributes="href string:${context/absolute_url}/my-invitations/accept" i18n:translate="">
+                        <a class="AcceptInvitation" tal:attributes="href string:${context/absolute_url}/my-invitations/accept?iid=${invitation/iid}" i18n:translate="">
                             Accept
                         </a>
-                        <a tal:attributes="href string:${context/absolute_url}/my-invitations/decline" i18n:translate="">
+                        <a class="DeclineInvitation" tal:attributes="href string:${context/absolute_url}/my-invitations/decline?iid=${invitation/iid}" i18n:translate="">
                             Decline
                         </a>
                     </td>

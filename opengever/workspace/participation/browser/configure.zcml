@@ -28,6 +28,7 @@
       name="my-invitations"
       class=".my_invitations.MyWorkspaceInvitations"
       permission="zope2.View"
+      allowed_attributes="accept"
       />
 
 </configure>
