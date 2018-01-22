@@ -26,7 +26,7 @@
 
       <tal:extjs condition="view/extjs_enabled">
         <div id="selection_container" class="ftwtable"><!--iefix--></div>
-        <div id="batching_container" class="ftwtable"><!--iefix--></div>
+        <div class="batchingContainer ftwtable"><!--iefix--></div>
       </tal:extjs>
       <tal:html condition="not:view/extjs_enabled">
         <div tal:replace="structure view/batching" />
@@ -45,7 +45,7 @@
                class="ftwtable +extjs tab_container"><!--iefix--></div>
 
           <!-- CUSTOM -->
-          <div id="batching_container" class="ftwtable"><!--iefix--></div>
+          <div class="batchingContainer ftwtable"><!--iefix--></div>
           <!-- END CUSTOM -->
           <div id="menu_container" class="ftwtable"><!--iefix--></div>
         </tal:extjs>

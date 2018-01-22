@@ -264,7 +264,7 @@
   function getOffset() {
     if (isOnTabbedviewTableView()) {
       var pagenumber = getTabbedviewTablePagenumber();
-      var batchSize = parseInt($("#tabbedview-batchbox").val(), 10);
+      var batchSize = parseInt($(".tabbedviewBatchbox").first().val(), 10);
       if (batchSize && pagenumber) {
         return (pagenumber - 1) * batchSize;
       }
