@@ -23,4 +23,11 @@
       permission="plone.DelegateRoles"
       />
 
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspaceRoot"
+      name="my-invitations"
+      class=".my_invitations.MyWorkspaceInvitations"
+      permission="zope2.View"
+      />
+
 </configure>
