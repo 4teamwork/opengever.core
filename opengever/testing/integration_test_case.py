@@ -12,6 +12,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
+from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
@@ -675,3 +676,9 @@ class IntegrationTestCase(TestCase):
         return {
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects],
             }
+
+    def get_favorites_for(self, username):
+        return getMultiAdapter(
+            (self.repository_root, username),
+            IRepositoryFavorites,
+            )
