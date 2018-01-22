@@ -10,6 +10,7 @@ import re
 @implementer(IReferenceNumberFormatter)
 @adapter(Interface)
 class DottedReferenceFormatter(object):
+    """Provide dotted-nested reference numbers for repository tree items."""
 
     is_grouped_by_three = False
 
@@ -21,27 +22,30 @@ class DottedReferenceFormatter(object):
         self.context = context
 
     def complete_number(self, numbers):
-        """Generate the complete reference number, for the given numbers dict.
+        """Generate the complete reference number, for the given numbers
+        dict.
         """
-
         reference_number = u' '.join(numbers.get('site', []))
 
         if self.repository_number(numbers):
             reference_number = u'%s %s' % (
                 reference_number,
-                self.repository_number(numbers))
+                self.repository_number(numbers),
+                )
 
         if self.dossier_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.repository_dossier_seperator,
-                self.dossier_number(numbers))
+                self.dossier_number(numbers),
+                )
 
         if self.document_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
-                self.document_number(numbers))
+                self.document_number(numbers),
+                )
 
         return reference_number.encode('utf-8')
 
@@ -57,8 +61,8 @@ class DottedReferenceFormatter(object):
         """Generate the dossier reference number part,
         Seperate every part with a dot.
 
-        Example: 3.2.1"""
-
+        Example: 3.2.1
+        """
         return u'.'.join(numbers.get('dossier', []))
 
     def document_number(self, numbers):
@@ -67,27 +71,34 @@ class DottedReferenceFormatter(object):
         return u'.'.join(numbers.get('document', []))
 
     def sorter(self, brain_or_value):
-        """ Converts the "reference" into a tuple containing integers,
+        """Converts the "reference" into a tuple containing integers,
         which are converted well. Sorting "10" and "2" as strings
         results in wrong order.
         """
         if not isinstance(brain_or_value, basestring):
             value = brain_or_value.reference
+
         else:
             value = brain_or_value
 
-        splitter = re.compile('[/\., ]')
-        if not isinstance(value, str) and not isinstance(
-            value, unicode):
+        splitter = re.compile(r'[/\., ]')
+
+        if not isinstance(value, str) and not isinstance(value, unicode):
             return value
+
         parts = []
+
         for part in splitter.split(value):
             part = part.strip()
+
             try:
                 part = int(part)
+
             except ValueError:
                 pass
+
             parts.append(part)
+
         return parts
 
     def get_portal_part(self):
@@ -103,12 +114,11 @@ class DottedReferenceFormatter(object):
 
         The list format is used by the OGGBundle format.
         """
-
         numbers = {
             'site': [self.get_portal_part()],
-        }
+            }
 
-        if len(reference_list):
+        if reference_list:
             numbers['repository'] = map(str, reference_list[0])
 
         if len(reference_list) > 1:
@@ -136,8 +146,10 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
     def repository_number(self, numbers):
         parts = numbers.get('repository', [])
 
-        return '.'.join(
-            [''.join(aa) for aa in self.grouper(parts, 3)])
+        return '.'.join([
+            ''.join(aa)
+            for aa in self.grouper(parts, 3)
+            ])
 
     def grouper(self, iterable, n, fillvalue=u''):
         args = [iter(iterable)] * n
@@ -147,6 +159,7 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
         if not isinstance(brain_or_value, basestring):
             # It's a brain
             value = brain_or_value.reference
+
         else:
             # It's already a string value
             value = brain_or_value
@@ -154,13 +167,14 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
         clientid_repository_separator = u' '
 
         # 'OG 010.123.43-1.1-7'  -->  '010.123.43-1.1-7'
-        clientid, remainder = value.split(clientid_repository_separator, 1)
+        remainder = value.split(clientid_repository_separator, 1)[1]
 
         if self.repository_dossier_seperator in remainder:
             # Dossier or document reference number
             # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
             refnums_part, remainder = remainder.split(
                 self.repository_dossier_seperator, 1)
+
         else:
             # Repofolder-only reference number
             # Nothing left to do, should already be sortable as string
@@ -175,16 +189,22 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
             # Document Reference Number
             dossier_part, document_part = remainder.split(
                 self.dossier_document_seperator, 1)
+
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
+
             return (refnums_part, tuple(subdossier_parts), int(document_part))
-        else:
-            # Dossier Reference Number
-            dossier_part = remainder
-            subdossier_parts = [int(d) for d in dossier_part.split('.')]
-            return (refnums_part, tuple(subdossier_parts))
+
+        # Dossier Reference Number
+        dossier_part = remainder
+        subdossier_parts = [int(d) for d in dossier_part.split('.')]
+
+        return (refnums_part, tuple(subdossier_parts))
 
 
 class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
+    """Provide client id omitted dotted-nested reference numbers for repository
+    tree items.
+    """
 
     def get_portal_part(self):
         """Returns the reference number part of the portal, the adminunit's
@@ -193,36 +213,7 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
         return
 
     def complete_number(self, numbers):
-            """DottedReferenceFormatter which omits client id.
-            """
-
-            reference_number = u''
-
-            if self.repository_number(numbers):
-                reference_number = self.repository_number(numbers)
-
-            if self.dossier_number(numbers):
-                reference_number = u'%s%s%s' % (
-                    reference_number,
-                    self.repository_dossier_seperator,
-                    self.dossier_number(numbers))
-
-            if self.document_number(numbers):
-                reference_number = u'%s%s%s' % (
-                    reference_number,
-                    self.dossier_document_seperator,
-                    self.document_number(numbers))
-
-            return reference_number.encode('utf-8')
-
-
-# XXX Refactor me and avoid copy-paste of complete_number.
-class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
-
-    def complete_number(self, numbers):
-        """GroupedByThreeFormatter which omits client id.
-        """
-
+        """Omit client id in this DottedReferenceFormatter."""
         reference_number = u''
 
         if self.repository_number(numbers):
@@ -232,13 +223,45 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.repository_dossier_seperator,
-                self.dossier_number(numbers))
+                self.dossier_number(numbers),
+                )
 
         if self.document_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
-                self.document_number(numbers))
+                self.document_number(numbers),
+                )
+
+        return reference_number.encode('utf-8')
+
+
+# XXX Refactor me and avoid copy-paste of complete_number.
+class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
+    """Provide client id omitted group-by-three reference numbers for
+    repository tree items.
+    """
+
+    def complete_number(self, numbers):
+        """A client id omitting GroupedByThreeFormatter."""
+        reference_number = u''
+
+        if self.repository_number(numbers):
+            reference_number = self.repository_number(numbers)
+
+        if self.dossier_number(numbers):
+            reference_number = u'%s%s%s' % (
+                reference_number,
+                self.repository_dossier_seperator,
+                self.dossier_number(numbers),
+                )
+
+        if self.document_number(numbers):
+            reference_number = u'%s%s%s' % (
+                reference_number,
+                self.dossier_document_seperator,
+                self.document_number(numbers),
+                )
 
         return reference_number.encode('utf-8')
 
@@ -246,6 +269,7 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
         if not isinstance(brain_or_value, basestring):
             # It's a brain
             value = brain_or_value.reference
+
         else:
             # It's already a string value
             value = brain_or_value
@@ -254,6 +278,7 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
             # '010.123.43-1.1-7'  -->  '010.123.43', '1.1-7'
             refnums_part, remainder = value.split(
                 self.repository_dossier_seperator, 1)
+
         else:
             # Repofolder-only reference number
             # Nothing left to do, should already be sortable as string
@@ -268,13 +293,16 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
             # Document Reference Number
             dossier_part, document_part = remainder.split(
                 self.dossier_document_seperator, 1)
+
             subdossier_parts = [int(d) for d in dossier_part.split('.')]
+
             return (refnums_part, tuple(subdossier_parts), int(document_part))
-        else:
-            # Dossier Reference Number
-            dossier_part = remainder
-            subdossier_parts = [int(d) for d in dossier_part.split('.')]
-            return (refnums_part, tuple(subdossier_parts))
+
+        # Dossier Reference Number
+        dossier_part = remainder
+        subdossier_parts = [int(d) for d in dossier_part.split('.')]
+
+        return (refnums_part, tuple(subdossier_parts))
 
     def get_portal_part(self):
         """Returns the reference number part of the portal, the adminunit's

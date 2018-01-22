@@ -10,6 +10,7 @@ from zope.interface import implementer
 @implementer(IQuotaSizeSettings)
 @adapter(IPrivateFolder)
 class PrivateFolderQuotaSizeSettings(object):
+    """Provide persistence for private folder quota settings."""
 
     def __init__(self, context):
         self.context = context
@@ -17,9 +18,11 @@ class PrivateFolderQuotaSizeSettings(object):
     def get_soft_limit(self):
         settings = getUtility(IRegistry).forInterface(
             IPrivateFolderQuotaSettings)
+
         return settings.size_soft_limit
 
     def get_hard_limit(self):
         settings = getUtility(IRegistry).forInterface(
             IPrivateFolderQuotaSettings)
+
         return settings.size_hard_limit

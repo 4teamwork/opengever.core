@@ -8,6 +8,7 @@ class PrivateFolderReferenceNumber(BasicReferenceNumber):
     """Reference number adapter for private folder. It uses the userid
     as local number part.
     """
+
     ref_type = 'repository'
 
     def get_local_number(self):
