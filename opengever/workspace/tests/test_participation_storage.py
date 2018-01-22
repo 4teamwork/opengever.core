@@ -24,7 +24,6 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
         self.assertDictEqual(
             {'iid': iid,
              'target_uuid': IUUID(self.workspace),
-             'target': self.workspace,
              'recipient': 'hans.peter',
              'inviter': 'gunther.frohlich',
              'role': 'WorkspaceGuest',
@@ -55,7 +54,6 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
-                 'target': self.workspace,
                  'recipient': 'hans.peter',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceGuest',
@@ -68,7 +66,6 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
-                 'target': self.workspace,
                  'recipient': 'hans.peter',
                  'inviter': 'gunther.frohlich',
                  'role': 'WorkspaceMember',
@@ -81,7 +78,6 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace),
-                 'target': self.workspace,
                  'recipient': 'fritz',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
@@ -94,7 +90,6 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
             self.assertDictEqual(
                 {'iid': iid,
                  'target_uuid': IUUID(self.workspace_folder),
-                 'target': self.workspace_folder,
                  'recipient': 'fritz',
                  'inviter': 'hans',
                  'role': 'WorkspaceMember',
