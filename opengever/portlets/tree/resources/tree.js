@@ -13,7 +13,7 @@ function Tree(nodes, config) {
     'components': [],
     expandActive: false
   }, config);
-  $(configuration['components']).each(function(_, component) {
+  $(configuration.components).each(function(_, component) {
     if(component !== null) {
       component.listen(tree);
     }
@@ -54,7 +54,7 @@ function Tree(nodes, config) {
     var $link = $('<a />').text(this.text).
         attr('href', this.url).
         attr('title', this.description).
-        addClass(function() { return this.active ? 'active' : 'inactive' }.bind(this));
+        addClass(function() { return this.active ? 'active' : 'inactive'; }.bind(this));
     $list_item.append($link);
     $(tree).trigger('tree:link-created', [this, $link]);
 
@@ -67,7 +67,7 @@ function Tree(nodes, config) {
     });
 
     $link.data('tree-node', this);
-    this['link'] = $link;
+    this.link = $link;
     tree.render_children.apply(this);
 
     if(!configuration.expandActive && this.parent) {
@@ -86,11 +86,11 @@ function Tree(nodes, config) {
 
     if($sublist.length === 0) {
       $sublist = $('<ul class="folded" />');
-      this['link'].parent('li:first').append($sublist);
+      this.link.parent('li:first').append($sublist);
     }
 
     $(this.nodes).each(function() {
-      if (!this['link']) {
+      if (!this.link) {
         tree.render_node_into_container.apply(this, [$sublist, force_render]);
       }
     });
@@ -130,7 +130,7 @@ function Tree(nodes, config) {
     var uids = [];
     this.each(function() {
       if(tree.is_expanded(this)) {
-        uids.push(this['uid']);
+        uids.push(this.uid);
       }
     });
     return uids;
@@ -214,7 +214,7 @@ function Tree(nodes, config) {
         clone[key] = node[key];
       }
     }
-    clone['nodes'] = $(node['nodes']).map(function(index, child) {
+    clone.nodes = $(node.nodes).map(function(index, child) {
       return tree.clone_node(child);
     });
     return clone;
@@ -369,7 +369,7 @@ RepositoryFavorites = function(url, cache_param) {
       $(tree).bind('tree:link-created', function(event, node, link) {
         var favorite_link = $('<span class="favorite-icon"><!-- --></span>').
             prependTo(link).
-            data('uuid', node['uid']).
+            data('uuid', node.uid).
             click(function(event) {
               event.preventDefault();
               if($(this).hasClass('bookmarked')) {
@@ -383,7 +383,7 @@ RepositoryFavorites = function(url, cache_param) {
             });
 
         self.load(function(favorites) {
-          if($.inArray(node['uid'], favorites) > -1) {
+          if($.inArray(node.uid, favorites) > -1) {
             favorite_link.addClass('bookmarked');
           }
           annotate_link_title(favorite_link);
