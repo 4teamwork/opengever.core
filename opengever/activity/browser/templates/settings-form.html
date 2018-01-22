@@ -6,6 +6,7 @@
         <th>%(label_activity)s</th>
         <th><span class="badge-title">%(label_badge)s</span></th>
         <th><span class="mail-title">%(label_mail)s</span></th>
+        <th><span class="digest-title">%(label_daily_digest)s</span></th>
         <th class="actions-column"></th>
       </tr>
     </thead>
@@ -42,6 +43,21 @@
             <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" />
             {{/if}}
             <label for="{{../kind}}-mail-{{@key}}">{{translate @key}}</label>
+          </li>
+          {{/each}}
+        </ul>
+      </td>
+
+      <td>
+        <ul class="digest" >
+          {{#each digest}}
+          <li>
+            {{#if this}}
+            <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" checked="checked"/>
+            {{else}}
+            <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" />
+            {{/if}}
+            <label for="{{../kind}}-digest-{{@key}}">{{translate @key}}</label>
           </li>
           {{/each}}
         </ul>
