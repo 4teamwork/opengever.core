@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone.protect import createToken
 from zope.component import getUtility
 
 
@@ -52,13 +53,14 @@ class TestMyInvitationsView(IntegrationTestCase):
 
     @browsing
     def test_cannot_accept_invitation_of_other_users(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.workspace_admin, browser=browser)
         foreign_iid = tuple(self.storage.iter_invitions_for_context(
-            self.workspace2))[0]['iid']
+            self.workspace))[0]['iid']
 
         with browser.expect_http_error(400):
             browser.open(self.workspace_root.absolute_url() + '/my-invitations/accept',
-                         data={'iid': foreign_iid})
+                         data={'iid': foreign_iid,
+                               '_authenticator': createToken()})
 
     @browsing
     def test_cannot_accept_invalid_invitation(self, browser):
@@ -66,4 +68,49 @@ class TestMyInvitationsView(IntegrationTestCase):
 
         with browser.expect_http_error(503):
             browser.open(self.workspace_root.absolute_url() + '/my-invitations/accept',
-                         data={'iid': 'someinvalidiid'})
+                         data={'iid': 'someinvalidiid',
+                               '_authenticator': createToken()})
+
+    @browsing
+    def test_decline_invitation(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.workspace_root, view='my-invitations')
+        browser.css('a.DeclineInvitation').first.click()
+
+        self.assertEquals(
+            self.workspace_root.absolute_url() + '/my-invitations',
+            browser.url,
+            'Expect to be on the my-invitations view')
+        self.assertEquals(
+            1,
+            len(browser.css('table.listing').first.body_rows.text),
+            'There should be only one invitation left')
+
+    @browsing
+    def test_cannot_access_workspace_of_declined_invitation(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.workspace_root, view='my-invitations')
+        browser.css('a.DeclineInvitation').first.click()
+
+        with browser.expect_unauthorized():
+            browser.visit(self.workspace2)
+
+    @browsing
+    def test_cannot_decline_invitation_from_other_users(self, browser):
+        self.login(self.regular_user, browser=browser)
+        foreign_iid = tuple(self.storage.iter_invitions_for_context(
+            self.workspace2))[0]['iid']
+
+        with browser.expect_http_error(400):
+            browser.open(self.workspace_root.absolute_url() + '/my-invitations/decline',
+                         data={'iid': foreign_iid,
+                               '_authenticator': createToken()})
+
+    @browsing
+    def test_cannot_decline_invalid_invitation(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(503):
+            browser.open(self.workspace_root.absolute_url() + '/my-invitations/decline',
+                         data={'iid': 'someinvalidiid',
+                               '_authenticator': createToken()})
