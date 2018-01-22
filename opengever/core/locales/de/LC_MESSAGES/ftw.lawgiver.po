@@ -33,4 +33,3 @@ msgstr "die REST API benutzen"
 #: ./opengever/core/lawgiver.zcml
 msgid "use the developer tools"
 msgstr "die Entwicklertools benutzen"
-

@@ -45,6 +45,11 @@
       <role name="Contributor" />
     </permission>
 
+    <permission name="opengever.bumblebee: Revive Preview" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+    </permission>
+
     <!-- CMFEDITIONS -->
     <permission name="CMFEditions: Save new version" acquire="True">
       <role name="Administrator" />

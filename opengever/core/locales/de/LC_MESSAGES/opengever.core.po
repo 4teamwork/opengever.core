@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-12-20 14:47+0000\n"
+"POT-Creation-Date: 2018-01-16 08:52+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -189,6 +189,11 @@ msgstr "Ordnungsposition"
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "RepositoryRoot"
 msgstr "Ordnungssystem"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180105141211_add_revive_bumblebee_preview_action/actions.xml
+msgid "Revive preview"
+msgstr "Vorschau neu generieren"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"

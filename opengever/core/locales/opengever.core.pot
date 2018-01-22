@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-20 14:47+0000\n"
+"POT-Creation-Date: 2018-01-16 08:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,6 +187,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "RepositoryRoot"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180105141211_add_revive_bumblebee_preview_action/actions.xml
+msgid "Revive preview"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml

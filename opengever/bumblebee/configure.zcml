@@ -8,6 +8,8 @@
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 
+  <include file="permissions.zcml" />
+
   <include package=".browser" />
 
   <genericsetup:registerProfile
