@@ -9,7 +9,7 @@
   <include file="permissions.zcml" />
   <include package=".browser" />
   <include package=".behaviors" />
-
+  <include package=".participation" />
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
 
