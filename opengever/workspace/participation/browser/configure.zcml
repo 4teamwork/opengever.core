@@ -24,7 +24,7 @@
       />
 
   <browser:page
-      for="opengever.workspace.interfaces.IWorkspaceRoot"
+      for="*"
       name="my-invitations"
       class=".my_invitations.MyWorkspaceInvitations"
       permission="zope2.View"

@@ -9,6 +9,8 @@ from zope.component import getUtility
 
 class TestMyInvitationsView(IntegrationTestCase):
 
+    features = ('workspace',)
+
     def setUp(self):
         super(TestMyInvitationsView, self).setUp()
         self.login(self.workspace_admin)
@@ -97,7 +99,7 @@ class TestMyInvitationsView(IntegrationTestCase):
 
     @browsing
     def test_cannot_decline_invitation_from_other_users(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.workspace_admin, browser=browser)
         foreign_iid = tuple(self.storage.iter_invitions_for_context(
             self.workspace2))[0]['iid']
 
@@ -114,3 +116,13 @@ class TestMyInvitationsView(IntegrationTestCase):
             browser.open(self.workspace_root.absolute_url() + '/my-invitations/decline',
                          data={'iid': 'someinvalidiid',
                                '_authenticator': createToken()})
+
+    @browsing
+    def test_my_invitation_link_personal_action(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        browser.visit()
+        self.assertTrue(browser.css('[href$="@@my-invitations"]'))
+
+        self.deactivate_feature('workspace')
+        browser.reload()
+        self.assertFalse(browser.css('[href$="@@my-invitations"]'))

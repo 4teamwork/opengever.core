@@ -53,7 +53,7 @@ msgstr "Eingeladen durch:"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "My invitations"
-msgstr "Meine Einaldungen"
+msgstr "Teamraum Einladungen"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Rolle"

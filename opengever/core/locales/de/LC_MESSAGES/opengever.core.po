@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-01-19 13:42+0000\n"
+"POT-Creation-Date: 2018-01-22 17:16+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -134,6 +134,11 @@ msgstr "Sitzungsdossier"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Move Items"
 msgstr "Elemente verschieben"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180122154722_add_my_invitation_action/actions.xml
+msgid "My Invitations"
+msgstr "Teamraum Einladungen"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"

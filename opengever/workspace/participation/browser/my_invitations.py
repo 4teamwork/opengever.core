@@ -1,5 +1,6 @@
 from opengever.base.security import elevated_privileges
 from opengever.workspace import _
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -16,6 +17,9 @@ class MyWorkspaceInvitations(BrowserView):
     def __call__(self):
 
         return self.template()
+
+    def is_feature_enabled(self):
+        return is_workspace_feature_enabled()
 
     def storage(self):
         return getUtility(IInvitationStorage)
