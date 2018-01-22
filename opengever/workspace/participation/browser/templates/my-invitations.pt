@@ -9,7 +9,7 @@
   <body>
 
     <metal:title fill-slot="content-title">
-       <h1 class="documentFirstHeading">
+       <h1 class="documentFirstHeading" i18n:translate="">
             My invitations
        </h1>
     </metal:title>
@@ -20,9 +20,9 @@
         <table class="listing">
             <thead>
                 <tr>
-                    <th>Invited by</th>
-                    <th>Workspace</th>
-                    <th>Action</th>
+                    <th i18n:translate="">Invited by</th>
+                    <th i18n:translate="">Workspace</th>
+                    <th i18n:translate="">Action</th>
                 </tr>
             </thead>
             <tbody>

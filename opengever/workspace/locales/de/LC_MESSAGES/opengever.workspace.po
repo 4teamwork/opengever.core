@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-19 14:11+0000\n"
+"POT-Creation-Date: 2018-01-22 16:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,13 +14,26 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Accept"
+msgstr "Annehmen"
+
 #: ./opengever/workspace/participation/browser/participants_view.py
-msgid "Aktion"
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Action"
 msgstr "Aktion"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Decline"
+msgstr "Ablehnen"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Delete"
 msgstr "Löschen"
+
+#: ./opengever/workspace/participation/browser/my_invitations.py
+msgid "Deleted Workspace"
+msgstr "Gelöschter Teamraum"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invitation"
@@ -30,9 +43,17 @@ msgstr "Einladung"
 msgid "Invite"
 msgstr "Einladen"
 
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Invited by"
+msgstr "Von"
+
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invited by:"
 msgstr "Eingeladen durch:"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "My invitations"
+msgstr "Meine Einaldungen"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Rolle"
@@ -49,6 +70,10 @@ msgstr "Typ"
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "User"
 msgstr "Benutzer"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Workspace"
+msgstr "Teamraum"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "WorkspaceAdmin"
