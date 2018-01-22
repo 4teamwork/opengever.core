@@ -1,19 +1,13 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.portlets.tree.interfaces import IRepositoryFavorites
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
-from zope.component import getMultiAdapter
+from opengever.testing import IntegrationTestCase
 
 
-class TestRepositoryFavorites(FunctionalTestCase):
-
-    def setUp(self):
-        self.root = create(Builder('repository_root'))
+class TestRepositoryFavorites(IntegrationTestCase):
 
     def test_managing_favorites(self):
-        favorites = self.favorites_for('john.doe')
+        self.login(self.regular_user)
+
+        favorites = self.get_favorites_for('john.doe')
 
         self.assertEquals([], favorites.list())
         favorites.add('foo')
@@ -27,46 +21,62 @@ class TestRepositoryFavorites(FunctionalTestCase):
         self.assertEquals(['foo', 'bar', 'baz'], favorites.list())
 
     def test_persistence_per_user(self):
-        self.favorites_for('hans').add('foo')
-        self.assertEquals(['foo'], self.favorites_for('hans').list())
+        self.login(self.regular_user)
 
-        self.favorites_for('peter').add('bar')
-        self.assertEquals(['bar'], self.favorites_for('peter').list())
+        self.get_favorites_for('hans').add('foo')
+        self.assertEquals(['foo'], self.get_favorites_for('hans').list())
 
-        self.assertEquals(['foo'], self.favorites_for('hans').list())
+        self.get_favorites_for('peter').add('bar')
+        self.assertEquals(['bar'], self.get_favorites_for('peter').list())
 
-    def favorites_for(self, username):
-        return getMultiAdapter((self.root, username), IRepositoryFavorites)
+        self.assertEquals(['foo'], self.get_favorites_for('hans').list())
 
 
-class TestRepositoryFavoritesView(FunctionalTestCase):
-
-    def setUp(self):
-        self.root = create(Builder('repository_root'))
+class TestRepositoryFavoritesView(IntegrationTestCase):
 
     @browsing
     def test_managing_favorites(self, browser):
-        browser.login()
+        self.login(self.regular_user, browser)
 
-        browser.open(self.root, view='repository-favorites/list')
+        browser.open(self.repository_root, view='repository-favorites/list')
+
         self.assertEquals([], browser.json)
 
-        browser.open(self.root, {'uuid': 'foo'}, view='repository-favorites/add')
-        self.assertEquals(['foo'], self.favorites_for(TEST_USER_ID).list())
+        browser.open(
+            self.repository_root,
+            {'uuid': 'foo'},
+            view='repository-favorites/add',
+            )
 
-        browser.open(self.root, {'uuids[]': ['foo', 'bar', 'baz']},
-                     view='repository-favorites/set')
-        browser.open(self.root, {'uuid': 'bar'}, view='repository-favorites/remove')
+        self.assertEquals(
+            ['foo'],
+            self.get_favorites_for(self.regular_user.id).list(),
+            )
 
-        browser.open(self.root, view='repository-favorites/list')
+        browser.open(
+            self.repository_root,
+            {'uuids[]': ['foo', 'bar', 'baz']},
+            view='repository-favorites/set',
+            )
+
+        browser.open(
+            self.repository_root,
+            {'uuid': 'bar'},
+            view='repository-favorites/remove',
+            )
+
+        browser.open(self.repository_root, view='repository-favorites/list')
+
         self.assertEquals(['foo', 'baz'], browser.json)
 
     def test_cache_invalidates(self):
-        view = self.root.restrictedTraverse('repository-favorites')
-        param = view.list_cache_param()
-        self.assertEqual(param, view.list_cache_param())
-        self.favorites_for(TEST_USER_ID).add('foo!')
-        self.assertNotEqual(param, view.list_cache_param())
+        self.login(self.regular_user)
 
-    def favorites_for(self, username):
-        return getMultiAdapter((self.root, username), IRepositoryFavorites)
+        view = self.repository_root.restrictedTraverse('repository-favorites')
+        param = view.list_cache_param()
+
+        self.assertEqual(param, view.list_cache_param())
+
+        self.get_favorites_for(self.regular_user.id).add('foo!')
+
+        self.assertNotEqual(param, view.list_cache_param())
