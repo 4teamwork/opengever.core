@@ -1356,10 +1356,7 @@ class OpengeverContentFixture(object):
     def create_workspace(self):
         self.workspace = self.register('workspace', create(
             Builder('workspace')
-            .having(
-                title_de=u'Teamraum',
-                title_fr=u'Espace partag\xe9',
-                )
+            .titled(u'A Workspace')
             .within(self.workspace_root)
             ))
 
@@ -1377,7 +1374,6 @@ class OpengeverContentFixture(object):
             self.workspace_guest.getId(),
             ['WorkspaceGuest'],
             )
-
         self.workspace.reindexObjectSecurity()
 
         self.workspace_folder = self.register('workspace_folder', create(
