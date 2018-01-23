@@ -6,9 +6,8 @@ from plone.restapi.interfaces import IDeserializeFromJson
 from random import randint
 from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
-
-import transaction
 import os.path
+import transaction
 
 
 def create_dossier(container, dossier, zipfile, responsible):
