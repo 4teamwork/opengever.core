@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.7.8 (unreleased)
+2017.7.8 (2018-01-23)
 ---------------------
 
 - SPV: Add header and suffix sablon for templates for the agenda items in protocols. [tarnap]
