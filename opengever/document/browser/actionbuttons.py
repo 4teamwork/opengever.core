@@ -154,6 +154,23 @@ class ActionButtonRendererMixin(object):
 
         return manager.is_checkin_allowed()
 
+    def is_checkout_cancel_available(self):
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        if not manager:
+            return False
+
+        return manager.is_cancel_allowed()
+
+    def get_checkout_cancel_url(self):
+        if not self.has_file() or not self.is_checkout_cancel_available():
+            return None
+
+        url = u'{}/@@cancel_document_checkouts'.format(
+            self.context.absolute_url())
+        return url
+
     def has_file(self):
         return self.context.has_file()
 

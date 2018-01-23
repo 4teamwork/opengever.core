@@ -32,12 +32,12 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
         self.assertEquals(
             ['Title',
              'Document Date',
+             'File',
              'Author',
              'creator',
              'Description',
              'Foreign Reference',
              'Checked out',
-             'File',
              'Digital Available',
              'Preserved as paper',
              'Date of receipt',

@@ -53,9 +53,8 @@ Dokument auschecken und bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Fahren Sie mit der Maus in der Dokumentliste auf das Icon des Dokuments,
-das Sie bearbeiten möchten und wählen Sie im angezeigten Tooltip-Fenster
-die Option "Auschecken / Bearbeiten". (Dieselbe Option befindet sich
-auch auf der Eigenschaftenmaske des Dokuments.)
+das Sie bearbeiten möchten und wählen Sie auf der Eigenschaftenmaske des
+Dokuments die Option "Auschecken / Bearbeiten".
 
 |img-dokumente-9|
 
@@ -82,7 +81,7 @@ weiteren Bearbeitungsmöglichkeiten angezeigt.
 
 |img-dokumente-10|
 
-1. **Widerrufen:** Die vorgenommenen Änderungen am Dokument werden
+1. **Checkout widerrufen:** Die vorgenommenen Änderungen am Dokument werden
    rückgängig gemacht und die Datei auf den zuletzt eingecheckten
    Zustand (= Version vor dem Auschecken) zurückgesetzt.
 

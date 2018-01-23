@@ -138,6 +138,8 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
         rows = [
             FieldRow('title'),
             FieldRow('IDocumentMetadata.document_date'),
+            TemplateRow(self.file_template,
+                        label=_('label_file', default='File')),
             FieldRow('IDocumentMetadata.document_type'),
             FieldRow('IDocumentMetadata.document_author'),
             CustomRow(self.render_creator_link,
@@ -146,8 +148,6 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
             FieldRow('IDocumentMetadata.foreign_reference'),
             CustomRow(self.render_checked_out_link,
                       label=_('label_checked_out', default='Checked out')),
-            TemplateRow(self.file_template,
-                        label=_('label_file', default='File')),
             FieldRow('IDocumentMetadata.digitally_available'),
             FieldRow('IDocumentMetadata.preserved_as_paper'),
             FieldRow('IDocumentMetadata.receipt_date'),

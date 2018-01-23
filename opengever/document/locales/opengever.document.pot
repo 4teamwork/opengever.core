@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-08 09:02+0000\n"
+"POT-Creation-Date: 2017-11-27 13:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,6 +24,10 @@ msgstr ""
 
 #: ./opengever/document/browser/edit.py
 msgid "Can't edit the document at moment, beacuse it's locked."
+msgstr ""
+
+#: ./opengever/document/browser/templates/macros.pt
+msgid "Cancel checkout"
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py
