@@ -78,8 +78,12 @@ können (ist jedoch abhängig von der jeweiligen Installation):
 Ein Dokument in den Papierkorb verschieben
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dokumente in OneGov GEVER können nicht gelöscht, sondern nur in den
-Papierkorb verschoben werden. Gehen Sie dabei wie folgt vor:
+Dokumente in OneGov GEVER können von normalen Benutzenden nicht gelöscht,
+sondern nur in den Papierkorb verschoben werden. Dort können diese mittels
+Reaktivierung wieder ins Dossier zurückgespielt werden. Der Administrator hat
+zudem die Möglichkeit, einen `Soft-Delete <https://docs.onegovgever.ch/admin-manual/soft-delete/>`_ vorzunehmen.
+
+Beim Verschieben in den Papierkorb gehen Sie wie folgt vor:
 
 1. Klicken Sie in der Dokumentenliste auf das zu löschende Dokument
 
