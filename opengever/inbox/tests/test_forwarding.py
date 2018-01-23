@@ -74,3 +74,41 @@ class TestForwarding(IntegrationTestCase):
         fieldsets = browser.css('form#form fieldset')
         self.assertEqual(1, len(fieldsets))
         self.assertEqual('Common', fieldsets.first.css('legend').first.text)
+
+    @browsing
+    def test_teams_are_available_as_responsible(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        data = self.make_path_param(self.inbox_document)
+        browser.open(
+            self.inbox, data, view='++add++opengever.inbox.forwarding')
+        browser.fill({'Title': u'Test forwarding'})
+
+        # Fill responsible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('team:1')
+        browser.find('Save').click()
+
+        forwarding = browser.context.objectValues()[-1]
+
+        self.assertEqual('team:1', forwarding.responsible)
+        self.assertEqual(u'Test forwarding', forwarding.title)
+
+    @browsing
+    def test_forwarding_can_reassigned_to_a_team(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(self.inbox_forwarding)
+        browser.click_on('forwarding-transition-reassign')
+
+        # Fill responsible manually
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('team:1')
+        browser.click_on('Assign')
+
+        self.assertEqual('team:1', self.inbox_forwarding.responsible)
+
+        browser.open(self.inbox_forwarding, view='tabbedview_view-overview')
+        responsible_row = browser.css('.listing').first.rows[7]
+        self.assertEqual(['Responsible'], responsible_row.css('th').text)
+        self.assertEqual([u'Projekt \xdcberbaung Dorfmatte (Finanzamt)'],
+                         responsible_row.css('td').text)
