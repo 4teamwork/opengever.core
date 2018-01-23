@@ -45,8 +45,10 @@ MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.docu
 
 class MergeDocxExcerptCommand(CreateDocumentCommand):
     """Create or update a merged excerpt word file.
-    """
 
+    If an excerpt header is available it is considered the master document.
+    If not, the agenda item`s file is considered the master document.
+    """
     def __init__(self, context, agenda_item, filename, title):
         self.agenda_item = agenda_item
         self.excerpt_protocol_data = ExcerptProtocolData(
@@ -62,15 +64,23 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
     def generate_file_data(self):
         header_template = self.agenda_item.get_excerpt_header_template()
         suffix_template = self.agenda_item.get_excerpt_suffix_template()
+        agenda_item_document = self.agenda_item.resolve_document()
 
-        if header_template is None and suffix_template is None:
-            return self.agenda_item.resolve_document().file.data
+        has_header_template = header_template is not None
 
-        master = self.agenda_item.resolve_document()
-        with DocxMergeTool(master.file.data, remove_property_fields=False) as merge_tool:
-            if header_template is not None:
-                sablon = self.get_sablon(template=header_template)
-                merge_tool.insert(0, sablon.file_data)
+        if has_header_template and suffix_template is None:
+            return agenda_item_document.file.data
+
+        if has_header_template:
+            sablon = self.get_sablon(template=header_template)
+            master_data = sablon.file_data
+        else:
+            master_data = agenda_item_document.file.data
+
+        with DocxMergeTool(master_data,
+                           remove_property_fields=False) as merge_tool:
+            if has_header_template:
+                merge_tool.add(agenda_item_document.file.data)
 
             if suffix_template is not None:
                 sablon = self.get_sablon(template=suffix_template)
