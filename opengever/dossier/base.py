@@ -36,6 +36,8 @@ from zope.interface import Interface
 
 DOSSIER_STATES_OPEN = [
     'dossier-state-active',
+    'opengever_workspace--STATUS--active',
+    'opengever_workspace_folder--STATUS--active',
 ]
 
 

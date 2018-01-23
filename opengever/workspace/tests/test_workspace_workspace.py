@@ -4,6 +4,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 
 
@@ -98,3 +99,14 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(expected, got)
+
+    @browsing
+    def test_workspace_overview_subdossierstructure(self, browser):
+        self.login(self.workspace_owner, browser=browser)
+        browser.visit(self.workspace, view='dossier_navigation.json')
+        self.assertEquals([{u'description': u'',
+                            u'nodes': [],
+                            u'text': u'',
+                            u'uid': IUUID(self.workspace_folder),
+                            u'url': self.workspace_folder.absolute_url()}],
+                          browser.json[0]['nodes'])
