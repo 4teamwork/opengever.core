@@ -9,12 +9,10 @@ Changelog
 - Disable outdated checkout/edit action and move checkout cancel action [njohner]
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]
 - Fix attaching to email from documents within forwardings within the inbox. [Rotonen]
-- SPV: Add header and suffix sablon for templates for the agenda items in protocols. [tarnap]
 - Task globalindex: set the created time in sql from the Plone object. [jone]
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
 - OGIP 17: Implement invitation storage for workspace invitations. [mathias.leimgruber]
-- Use excerpt header template as excerpt master document. [deiferni]
 - Add DocProperty ogg.document.version_number.  [njohner]
 - OGIP 17: Add workspace workflows and add workspace support to document workflow. [jone]
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]
@@ -46,6 +44,13 @@ Changelog
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
+
+
+2017.7.8 (2018-01-23)
+---------------------
+
+- SPV: Add header and suffix sablon for templates for the agenda items in protocols. [tarnap]
+- Use excerpt header template as excerpt master document. [deiferni]
 
 
 2017.7.7 (2018-01-12)
