@@ -11,6 +11,13 @@
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
       />
 
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      name="tabbed_view"
+      class=".tabbed.WorkspaceFolderTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
 
   <browser:page
       for="opengever.workspace.interfaces.IWorkspaceRoot"

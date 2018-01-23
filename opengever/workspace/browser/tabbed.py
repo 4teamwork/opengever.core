@@ -41,6 +41,10 @@ class WorkspaceTabbedView(GeverTabbedView):
         ])
 
 
+class WorkspaceFolderTabbedView(WorkspaceTabbedView):
+    """Define tabs available on Workspace Folder"""
+
+
 class WorkspaceRootTabbedView(GeverTabbedView):
 
     workspaces_tab = {
