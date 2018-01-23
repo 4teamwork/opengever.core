@@ -5,7 +5,7 @@ Changelog
 2017.7.8 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Use excerpt header template as excerpt master document. [deiferni]
 
 
 2017.7.7 (2018-01-12)
