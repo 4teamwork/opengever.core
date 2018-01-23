@@ -1,4 +1,5 @@
 from opengever.document.document import IDocumentSchema
+from opengever.document.subscribers import set_digitally_available
 from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
@@ -6,9 +7,10 @@ from plone.restapi.interfaces import IDeserializeFromJson
 from random import randint
 from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
-
-import transaction
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 import os.path
+import transaction
 
 
 def create_dossier(container, dossier, zipfile, responsible):
@@ -109,6 +111,10 @@ def create_document(container, document, zipfile):
             data=zipfile.read(zipinfo),
             contentType=file_.mimeType,
             filename=filename)
+
+        # work around possible event handler ordering issue
+        set_digitally_available(obj, None)
+        notify(ObjectModifiedEvent(obj))
 
     # Rename document
     chooser = INameChooser(container)

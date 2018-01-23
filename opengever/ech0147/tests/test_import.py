@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import obj2brain
 import os.path
 
 
@@ -93,6 +94,8 @@ class TestImport(IntegrationTestCase):
         docs = self.dossier.objectValues()[-2:]
         self.assertEqual(docs[0].Title(), 'Kaufvertrag')
         self.assertEqual(docs[1].Title(), 'Grundrissplan')
+
+        self.assertIsNotNone(obj2brain(docs[0]).bumblebee_checksum)
 
     @browsing
     def test_import_toplevel_documents_in_repofolder_displays_error(self, browser):

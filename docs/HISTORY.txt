@@ -5,6 +5,7 @@ Changelog
 2017.8.0 (unreleased)
 ---------------------
 
+- Fix bumblebee preview in ECH0147 import. [deiferni]
 - Disable outdated checkout/edit action and move checkout cancel action [njohner]
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]
 - Fix attaching to email from documents within forwardings within the inbox. [Rotonen]
