@@ -5,7 +5,6 @@ from ftw.solr.query import make_query
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import is_bumblebeeable
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
@@ -41,33 +40,21 @@ class OpengeverSearch(Search):
         self.valid_keys = self.valid_keys + tuple(catalog.indexes())
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
-        """Overwrite this method to adjust the default batch size from
-        10 to 25.
-
-        If bumblebee is enabled we have to update the number of documents
-        and the offset in a sepparate query because the query can contain
-        different portaltypes. In the showroom overlay we just want to display
-        the amount of bumblebee-items and not the amount of all search
-        results. We also have to calculate the offset while iterating
-        over all brains because we don't know on which batch are how
-        many bumblebeeable-items.
-        """
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
+
         if settings.use_solr:
-            return self.solr_results(
+            results = self.solr_results(
                 query=query, batch=batch, b_size=b_size, b_start=b_start)
+        else:
+            results = super(OpengeverSearch, self).results(
+                query=query, batch=batch, b_size=self.b_size, b_start=b_start)
 
         if is_bumblebee_feature_enabled:
-            bumblebee_search_query = query or {}
-            brains = super(OpengeverSearch, self).results(
-                query=bumblebee_search_query, batch=False)
+            self.calculate_showroom_configuration(results)
 
-            self.calculate_showroom_configuration(brains, b_start)
-
-        return super(OpengeverSearch, self).results(
-            query=query, batch=batch, b_size=self.b_size, b_start=b_start)
+        return results
 
     def solr_results(self, query=None, batch=True, b_size=10, b_start=0):
 
@@ -77,11 +64,13 @@ class OpengeverSearch(Search):
         else:
             query = u'*:*'
 
+        filters = self.solr_filters()
+
         params = {
             'fl': [
                 'UID', 'Title', 'getIcon', 'portal_type', 'path',
                 'containing_dossier', 'id', 'created', 'modified',
-                'review_state',
+                'review_state', 'bumblebee_checksum',
             ],
             'hl': 'on',
             'hl.fl': 'SearchableText',
@@ -89,16 +78,17 @@ class OpengeverSearch(Search):
         }
         solr = getUtility(ISolrSearch)
         resp = solr.search(
-            query=query, filter=self.solr_filters(), start=b_start,
-            rows=b_size, **params)
-
-        self.offset = b_start
-        self.number_of_documents = resp.num_found
-
+            query=query, filter=filters, start=b_start, rows=b_size, **params)
         results = OGSolrContentListing(resp)
+
         if batch:
             results = Batch(results, b_size, b_start)
         return results
+
+    def calculate_showroom_configuration(self, results):
+        bumblebee_docs = [d for d in results if d.is_bumblebeeable()]
+        self.offset = 0
+        self.number_of_documents = len(bumblebee_docs)
 
     def solr_filters(self):
         solr = getUtility(ISolrSearch)
@@ -162,27 +152,6 @@ class OpengeverSearch(Search):
         breadcrumbs = list(view.breadcrumbs())[:-1]
 
         return breadcrumbs
-
-    def calculate_showroom_configuration(self, brains, b_start):
-        """Calculates the number of documents from a list of brains
-        and the offset depending on the batch-start position.
-        """
-        offset = 0
-        number_of_documents = 0
-
-        for i, brain in enumerate(brains):
-            if not is_bumblebeeable(brain):
-                continue
-
-            if b_start > i:
-                # increment the offset as long as we are
-                # behind the batch start position
-                offset += 1
-
-            number_of_documents += 1
-
-        self.offset = offset
-        self.number_of_documents = number_of_documents
 
     def types_list(self):
         types = super(OpengeverSearch, self).types_list()

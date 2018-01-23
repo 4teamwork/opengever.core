@@ -4,8 +4,9 @@ from ftw.testbrowser import browsing
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
-from zope.component import getMultiAdapter
+from plone.app.contentlisting.interfaces import IContentListing
 from plone.uuid.interfaces import IUUID
+from zope.component import getMultiAdapter
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -153,14 +154,14 @@ class TestBumblebeePreview(FunctionalTestCase):
 
         brains = catalog({'sort_on': 'sortable_title', 'SearchableText':"Foo"})
 
-        search_view.calculate_showroom_configuration(brains, b_start=0)
-        self.assertEqual(4, search_view.number_of_documents)
+        search_view.calculate_showroom_configuration(IContentListing(brains[:2]))
+        self.assertEqual(1, search_view.number_of_documents)
         self.assertEqual(0, search_view.offset)
 
-        search_view.calculate_showroom_configuration(brains, b_start=3)
-        self.assertEqual(4, search_view.number_of_documents)
-        self.assertEqual(2, search_view.offset)
+        search_view.calculate_showroom_configuration(IContentListing(brains[2:4]))
+        self.assertEqual(2, search_view.number_of_documents)
+        self.assertEqual(0, search_view.offset)
 
-        search_view.calculate_showroom_configuration(brains, b_start=5)
-        self.assertEqual(4, search_view.number_of_documents)
-        self.assertEqual(3, search_view.offset)
+        search_view.calculate_showroom_configuration(IContentListing(brains[4:]))
+        self.assertEqual(1, search_view.number_of_documents)
+        self.assertEqual(0, search_view.offset)
