@@ -18,6 +18,7 @@ Changelog
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]
 - Fix broken advanced search js initialization. [deiferni]
 - Tidy up XML files in default profile [raphael-s]
+- Use index to sort the committees by title. [tarnap]
 - Trigger SQL task synchronisation when changing task state. [phgross]
 - Change msg2mime transform to use msgconvert executable from $PATH instead of shipping our own wrapper script. [lgraf]
 - Add action to revive bumblebee previews. [elioschmutz]

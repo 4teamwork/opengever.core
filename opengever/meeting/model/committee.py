@@ -50,7 +50,7 @@ class Committee(Base):
     admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
-    title = Column(String(256))
+    title = Column(String(256), index=True)
     physical_path = Column(String(256), nullable=False)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH),
                             nullable=False,
