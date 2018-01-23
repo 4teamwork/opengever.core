@@ -73,6 +73,20 @@ class ICommittee(model.Schema):
         required=False,
     )
 
+    agenda_item_header_template = RelationChoice(
+        title=_('label_agenda_item_header_template',
+                default='Agenda item header template for the protocol'),
+        source=sablon_template_source,
+        required=False,
+    )
+
+    agenda_item_suffix_template = RelationChoice(
+        title=_('label_agenda_item_suffix_template',
+                default='Agenda item suffix template for the protocol'),
+        source=sablon_template_source,
+        required=False,
+    )
+
     excerpt_header_template = RelationChoice(
         title=_('label_excerpt_header_template',
                 default='Excerpt header template'),
@@ -287,6 +301,18 @@ class Committee(ModelContainer):
             return self.protocol_suffix_template.to_object
 
         return self.get_committee_container().get_protocol_suffix_template()
+
+    def get_agenda_item_header_template(self):
+        if self.agenda_item_header_template:
+            return self.agenda_item_header_template.to_object
+
+        return self.get_committee_container().get_agenda_item_header_template()
+
+    def get_agenda_item_suffix_template(self):
+        if self.agenda_item_suffix_template:
+            return self.agenda_item_suffix_template.to_object
+
+        return self.get_committee_container().get_agenda_item_suffix_template()
 
     def get_excerpt_header_template(self):
         if self.excerpt_header_template:

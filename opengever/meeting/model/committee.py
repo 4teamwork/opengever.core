@@ -96,6 +96,12 @@ class Committee(Base):
     def get_protocol_suffix_template(self):
         return self.resolve_committee().get_protocol_suffix_template()
 
+    def get_agenda_item_header_template(self):
+        return self.resolve_committee().get_agenda_item_header_template()
+
+    def get_agenda_item_suffix_template(self):
+        return self.resolve_committee().get_agenda_item_suffix_template()
+
     def get_excerpt_header_template(self):
         return self.resolve_committee().get_excerpt_header_template()
 

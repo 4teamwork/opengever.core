@@ -51,6 +51,8 @@ class CommitteeFieldConfigurationMixin(object):
                                            'paragraph_template',
                                            'protocol_header_template',
                                            'protocol_suffix_template',
+                                           'agenda_item_header_template',
+                                           'agenda_item_suffix_template',
                                            'excerpt_header_template',
                                            'excerpt_suffix_template',
                                            'allowed_proposal_templates')

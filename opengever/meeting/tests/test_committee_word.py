@@ -59,6 +59,42 @@ class TestCommitteeWord(IntegrationTestCase):
         self.assertEqual(self.sablon_template,
                          self.committee.get_paragraph_template())
 
+    def test_get_agenda_item_header_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee_container.agenda_item_header_template = self.as_relation_value(
+            self.sablon_template)
+        self.assertIsNone(self.committee.agenda_item_header_template)
+
+        self.assertEqual(
+            self.sablon_template,
+            self.committee.get_excerpt_header_template())
+
+    def test_get_agenda_item_header_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.agenda_item_header_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_agenda_item_header_template())
+
+    def test_get_agenda_item_suffix_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee_container.agenda_item_suffix_template = self.as_relation_value(
+            self.sablon_template)
+        self.assertIsNone(self.committee.agenda_item_suffix_template)
+
+        self.assertEqual(
+            self.sablon_template,
+            self.committee.get_excerpt_suffix_template())
+
+    def test_get_agenda_item_suffix_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.agenda_item_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_agenda_item_suffix_template())
+
     def test_get_excerpt_header_template_falls_back_to_container(self):
         self.login(self.administrator)
         self.assertIsNone(self.committee.excerpt_header_template)
@@ -114,6 +150,8 @@ class TestCommitteeWord(IntegrationTestCase):
                   'Group',
                   'Protocol header template',
                   'Protocol suffix template',
+                  'Agenda item header template for the protocol',
+                  'Agenda item suffix template for the protocol',
                   'Excerpt header template',
                   'Excerpt suffix template',
                   'Agendaitem list template',

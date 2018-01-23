@@ -5,6 +5,7 @@ Changelog
 2017.7.8 (unreleased)
 ---------------------
 
+- SPV: Add header and suffix sablon for templates for the agenda items in protocols. [tarnap]
 - Use excerpt header template as excerpt master document. [deiferni]
 
 
