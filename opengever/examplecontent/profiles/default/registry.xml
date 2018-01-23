@@ -28,4 +28,9 @@
     <value key="is_feature_enabled">True</value>
   </records>
 
+  <records interface="opengever.ech0147.interfaces.IECH0147Settings">
+    <value key="ech0147_export_enabled">True</value>
+    <value key="ech0147_import_enabled">True</value>
+  </records>
+
 </registry>
