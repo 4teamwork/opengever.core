@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-27 14:08+0000\n"
+"POT-Creation-Date: 2018-01-18 10:54+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -873,9 +873,21 @@ msgstr ""
 msgid "label_agenda_item_decided"
 msgstr ""
 
+#. Default: "Agenda item header template for the protocol"
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
+msgid "label_agenda_item_header_template"
+msgstr ""
+
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number"
+msgstr ""
+
+#. Default: "Agenda item suffix template for the protocol"
+#: ./opengever/meeting/committee.py
+#: ./opengever/meeting/committeecontainer.py
+msgid "label_agenda_item_suffix_template"
 msgstr ""
 
 #. Default: "Agendaitem list"
