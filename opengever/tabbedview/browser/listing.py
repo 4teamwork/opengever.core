@@ -12,6 +12,7 @@ class ListingView(ftw.tabbedview.browser.listing.ListingView):
     implements(IGeverTableSourceConfig)
 
     batching = ViewPageTemplateFile("batching.pt")
+    template = ViewPageTemplateFile("generic.pt")
 
 
 class CatalogListingView(ftw.tabbedview.browser.listing.CatalogListingView):
@@ -23,3 +24,4 @@ class CatalogListingView(ftw.tabbedview.browser.listing.CatalogListingView):
     implements(IGeverCatalogTableSourceConfig)
 
     batching = ViewPageTemplateFile("batching.pt")
+    template = ViewPageTemplateFile("generic.pt")

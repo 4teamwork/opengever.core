@@ -13,6 +13,7 @@ Changelog
 - Add tasks tab to repository folder. [jone]
 - Add documents tab to repository folder. [jone]
 - OGIP 17: Implement invitation storage for workspace invitations. [mathias.leimgruber]
+- Add an additional batching_container for tabbedview-listings at the end of the table. [elioschmutz]
 - Add DocProperty ogg.document.version_number.  [njohner]
 - OGIP 17: Add workspace workflows and add workspace support to document workflow. [jone]
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]

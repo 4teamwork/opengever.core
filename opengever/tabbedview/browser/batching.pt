@@ -64,9 +64,9 @@
     </span>
 
     <!-- dynamic batching -->
-    <form tal:condition="view/dynamic_batchsize_enabled" id="dynamic_batching_form">
+    <div tal:condition="view/dynamic_batchsize_enabled" class="dynamicBatchSizeContainer">
       <span i18n:translate="" i18n:domain="opengever.tabbedview">Hits per site</span>
       <span>: </span>
-      <input id="tabbedview-batchbox" name="tabbedview-batchbox" tal:attributes="value batch/pagesize" value="50" />
-    </form>
+      <input class="tabbedviewBatchbox" tal:attributes="value batch/pagesize" value="50" />
+    </div>
 </div>
