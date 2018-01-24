@@ -1,5 +1,6 @@
-from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
+from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.tasktemplates import _
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
@@ -90,7 +91,11 @@ class TaskResponsibleSource(AllUsersInboxesAndTeamsSource):
 
 
 @implementer(IContextSourceBinder)
-class TaskResponsibleSourceBinder(object):
+class TaskResponsibleSourceBinder(AllUsersInboxesAndTeamsSourceBinder):
 
     def __call__(self, context):
-        return TaskResponsibleSource(context)
+        return TaskResponsibleSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_current_inbox=self.only_current_inbox,
+            include_teams=self.include_teams)

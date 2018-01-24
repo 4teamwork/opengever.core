@@ -72,7 +72,7 @@ class ITaskTemplate(model.Schema):
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description=_(u"help_responsible", default=""),
-        source=TaskResponsibleSourceBinder(),
+        source=TaskResponsibleSourceBinder(include_teams=True),
         required=True,
     )
 
