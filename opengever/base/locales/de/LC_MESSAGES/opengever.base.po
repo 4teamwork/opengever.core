@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-15 15:57+0000\n"
+"POT-Creation-Date: 2018-01-18 13:19+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -25,6 +25,10 @@ msgstr "(INAKTIV)"
 #: ./opengever/base/browser/templates/folder_delete_confirmation.pt
 msgid "Are you sure you want to deleted this items?"
 msgstr "Wollen Sie diese Inhalte wirklich löschen?"
+
+#: ./opengever/base/browser/folder_delete_confirmation.py
+msgid "Items successfully deleted."
+msgstr "Inhalte wurden erfolgreich gelöscht."
 
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "No content"

@@ -50,8 +50,9 @@ class FolderDeleteConfirmation(BrowserView):
 
     @protect(CheckAuthenticator)
     def _handle_form_submitted(self, REQUEST=None):
-        api.portal.show_message(pmf(u'Items successfully deleted.'), self.request, type="info")
         self._delete_objs(self.objs_without_backrefs)
+        api.portal.show_message(_(u'Items successfully deleted.'),
+                                self.request, type="info")
         return self._redirect_to_orig_template()
 
     def _delete_objs(self, objs):
