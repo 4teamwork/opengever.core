@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.document.behaviors import IBaseDocument
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from plone import api
@@ -63,20 +65,43 @@ def parse_documents(request, context):
 
 def get_auth_plugin(context):
     plugin = None
-    acl_users = getToolByName(context, "acl_users")
-    plugins = acl_users.plugins
-    authenticators = plugins.listPlugins(IAuthenticationPlugin)
+    acl_users = None
 
-    # Assumes there is only one JWT auth plugin present in the acl_users
-    # which manages the user/session in question.
-    #
-    # This will work as long as the plugin this finds uses the same secret
-    # as whatever it ends up authenticating against - this is in all
-    # likelihood the Plone site keyring.
-    for authenticator in (a[1] for a in authenticators):
-        if authenticator.meta_type == "JWT Authentication Plugin":
-            plugin = authenticator
+    parent = aq_inner(context)
+
+    while not acl_users:
+        acl_users_candidate = getToolByName(parent, 'acl_users')
+        # We've found the an acl_users for our user
+        if acl_users_candidate:
+            # And it also yielded a valid user
+            if acl_users_candidate._verifyUser(
+                    acl_users_candidate.plugins,
+                    user_id=api.user.get_current().id,
+                ):
+                acl_users = acl_users_candidate
+                break
+
+        # We've searched everywhere without finding anything
+        if parent is context.getPhysicalRoot():
             break
+
+        # Did not find anything, go up one level and try again
+        parent = aq_parent(parent)
+
+    if acl_users:
+        plugins = acl_users.plugins
+        authenticators = plugins.listPlugins(IAuthenticationPlugin)
+
+        # Assumes there is only one JWT auth plugin present in the acl_users
+        # which manages the user/session in question.
+        #
+        # This will work as long as the plugin this finds uses the same secret
+        # as whatever it ends up authenticating against - this is in all
+        # likelihood the Plone site keyring.
+        for authenticator in (a[1] for a in authenticators):
+            if authenticator.meta_type == "JWT Authentication Plugin":
+                plugin = authenticator
+                break
 
     return plugin
 

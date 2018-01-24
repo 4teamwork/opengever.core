@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from hashlib import sha256
 from opengever.document.document import Document
 from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.testing.assets import path_to_asset
 
 
 class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
@@ -172,7 +173,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(oc_url)
+        tokens = self.validate_checkout_token(self.regular_user, oc_url)
         payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
 
         self.validate_checkout_payload(payload, self.document)
@@ -185,7 +186,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             self.download_document(browser, tokens, payload),
             ).hexdigest()
 
-        with open('../../opengever/testing/assets/addendum.docx') as f:
+        with open(path_to_asset('addendum.docx')) as f:
             self.upload_document(browser, tokens, payload, self.document, f)
 
         new_checksum = sha256(
@@ -207,7 +208,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(oc_url)
+        tokens = self.validate_checkout_token(self.regular_user, oc_url)
         payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
 
         self.validate_checkout_payload(payload, self.document)
@@ -220,7 +221,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             self.download_document(browser, tokens, payload),
             ).hexdigest()
 
-        with open('../../opengever/testing/assets/addendum.docx') as f:
+        with open(path_to_asset('addendum.docx')) as f:
             self.upload_document(browser, tokens, payload, self.document, f)
 
         new_checksum = sha256(

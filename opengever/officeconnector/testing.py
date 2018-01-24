@@ -173,7 +173,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 self.request).get_email_for_object(parent_dossier)
             self.assertEquals(bcc, dossier_bcc)
 
-    def validate_checkout_token(self, oc_url):
+    def validate_checkout_token(self, user, oc_url):
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, verify=False)
         self.assertEquals('checkout', token.get('action', None))
@@ -185,8 +185,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
         self.assertEquals(1, len(documents))
         self.assertEquals(api.content.get_uuid(self.document), documents[0])
 
-        user = token.get('sub', None)
-        self.assertEquals(self.regular_user.id, user)
+        self.assertEquals(user.id, token.get('sub', None))
 
         expiry = int(token.get('exp', 0))
         self.assertLess(int(time()), expiry)
