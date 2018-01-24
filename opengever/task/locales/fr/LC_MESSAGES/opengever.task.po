@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-30 13:29+0000\n"
+"POT-Creation-Date: 2018-01-24 11:25+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-task/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/task/browser/close.py
 msgid "${num} documents were copied."
@@ -114,9 +113,7 @@ msgstr "Vous n'étes pas l'autorisation pour éditer ces réponses"
 
 #: ./opengever/task/browser/accept/main.py
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
-msgstr ""
-"Vous n'avez pas été assigné au mandant responsable. Vous ne pouvez traiter "
-"la tâche que dans le dossier du mandant."
+msgstr "Vous n'avez pas été assigné au mandant responsable. Vous ne pouvez traiter la tâche que dans le dossier du mandant."
 
 #: ./opengever/task/browser/close.py
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
@@ -216,6 +213,11 @@ msgstr "Responsable"
 msgid "error_checked_out_document"
 msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un checkin pour pouvoir les déposer."
 
+#. Default: "Team responsibles are only allowed if the task or forwarding is open."
+#: ./opengever/task/browser/assign.py
+msgid "error_no_team_responsible_in_progress_state"
+msgstr ""
+
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py
 msgid "error_same_responsible"
@@ -280,9 +282,7 @@ msgstr "En cas de besoin, choix des documents à copier dans un autre dossier."
 #. Default: "Select the documents you want to deliver to the issuer of the task. They will be attached to the original task of the issuer."
 #: ./opengever/task/browser/complete.py
 msgid "help_complete_documents"
-msgstr ""
-"Choix des documents à livrer au mandant. Ils seront ensuite attachés "
-"automatiquement à la tâche originale."
+msgstr "Choix des documents à livrer au mandant. Ils seront ensuite attachés automatiquement à la tâche originale."
 
 #. Default: "Enter a answer text which will be shown as response when the task is completed."
 #: ./opengever/task/browser/complete.py
@@ -825,9 +825,7 @@ msgstr "Accepté par ${user}"
 #. Default: "Accepted by ${user}, responsible changed from ${old_responsible} to ${new_responsible}."
 #: ./opengever/task/response_description.py
 msgid "transition_msg_accept_team_task"
-msgstr ""
-"Accepté par ${user}, mandataire changé de ${old_responsible} à "
-"${new_responsible}."
+msgstr "Accepté par ${user}, mandataire changé de ${old_responsible} à ${new_responsible}."
 
 #. Default: "Assigned to dossier by ${user} successor=${successor}"
 #: ./opengever/task/response_description.py
