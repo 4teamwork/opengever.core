@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.8.0 (unreleased)
+2018.1.0 (unreleased)
 ---------------------
 
 - Fix bumblebee preview in ECH0147 import. [deiferni]
