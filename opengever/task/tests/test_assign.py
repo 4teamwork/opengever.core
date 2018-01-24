@@ -5,110 +5,109 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
+from opengever.testing import IntegrationTestCase
 
 
-class TestAssignTask(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestAssignTask, self).setUp()
-
-        self.james = create(Builder('ogds_user')
-                            .in_group(self.org_unit.users_group)
-                            .having(userid='james.bond',
-                                    firstname='James',
-                                    lastname='Bond'))
-
-        self.task = create(Builder('task')
-                           .having(responsible_client='client1',
-                                   responsible=TEST_USER_ID))
+class TestAssignTask(IntegrationTestCase):
 
     @browsing
     def test_do_nothing_when_responsible_has_not_changed(self, browser):
-        self.assign_task('Test', TEST_USER_ID, '')
+        self.login(self.regular_user, browser=browser)
+
+        responsible = 'fa:{}'.format(self.regular_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
 
         self.assertEquals(self.task.absolute_url(), browser.url.strip('/'))
         self.assertEquals(['No changes: same responsible selected'],
                           error_messages())
 
+    def assign_task(self, responsible, response, browser=default_browser):
+        data = {'form.widgets.transition': 'task-transition-reassign'}
+        browser.open(self.task, data, view='assign-task')
+        browser.fill({'Response': response})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible)
+        browser.click_on('Assign')
+
     @browsing
     def test_responsible_client_and_transition_field_is_hidden(self, browser):
-        browser.login().open(self.task, view='assign-task')
+        self.login(self.regular_user, browser=browser)
 
-        self.assertEquals(None, browser.find('Responsible Client'))
+        browser.open(self.task, view='assign-task')
+        self.assertIsNone(browser.find('Responsible Client'))
+        self.assertIsNone(browser.find('Transition'))
 
     @browsing
     def test_updates_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
 
-        self.assign_task('James', 'james.bond', '')
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
 
-        self.assertEquals('james.bond', self.task.responsible)
-        self.assertEquals('james.bond',
+        self.assertEquals(self.secretariat_user.getId(),
+                          self.task.responsible)
+        self.assertEquals(self.secretariat_user.getId(),
                           self.task.get_sql_object().responsible)
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):
-        self.assign_task('James', 'james.bond', 'Please make that for me.')
+        self.login(self.regular_user, browser=browser)
+
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Please make that for me.')
 
         response = IResponseContainer(self.task)[-1]
-
         self.assertEquals(
-            [{'after': u'james.bond', 'id': 'responsible',
-             'name': u'label_responsible', 'before': 'test_user_1_'}],
+            [{'after': self.secretariat_user.getId(),
+              'id': 'responsible',
+              'name': u'label_responsible',
+              'before': self.regular_user.getId()}],
             response.changes)
         self.assertEquals('Please make that for me.', response.text)
 
     @browsing
     def test_assign_task_only_to_users_of_the_current_orgunit(self, browser):
+        self.login(self.regular_user, browser=browser)
 
         org_unit2 = create(Builder('org_unit')
-                           .id('unit2')
+                           .id('afi')
                            .having(title=u'Finanzdirektion',
-                                   admin_unit=self.admin_unit)
+                                   admin_unit_id='fa')
                            .with_default_groups())
 
         self.hans = create(Builder('ogds_user')
-                           .id('hans')
-                           .having(firstname=u'Hans', lastname=u'Peter')
+                           .id('james.bond')
+                           .having(firstname=u'James', lastname=u'Bond')
                            .assign_to_org_units([org_unit2]))
 
-        self.org_unit = org_unit2
-        self.assign_task('Peter Hans', 'hans.peter', 'Do something')
-
-        self.assertEquals(TEST_USER_ID,
-                          self.task.responsible,
-                          'Responsible should remain the same.')
-
-    def assign_task(self, name, userid, response, browser=default_browser):
         data = {'form.widgets.transition': 'task-transition-reassign'}
-        browser.login().open(self.task, data, view='assign-task')
-        browser.fill({'Response': response})
+        browser.open(self.task, data, view='assign-task')
 
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':' + userid)
+        browser.open(self.task,
+                     data={'q': 'james', 'page': 1},
+                     view='@@assign-task/++widget++form.widgets.responsible/search')
+        self.assertEquals([], browser.json.get('results'))
 
-        browser.click_on('Assign')
+        browser.open(self.task,
+                     data={'q': 'robert', 'page': 1},
+                     view='@@assign-task/++widget++form.widgets.responsible/search')
+        self.assertEquals(
+            [{u'_resultId': u'fa:robert.ziegler',
+              u'id': u'fa:robert.ziegler',
+              u'text': u'Finanzamt: Ziegler Robert (robert.ziegler)'}],
+            browser.json.get('results'))
 
 
-class TestAssignTaskWithSuccessors(FunctionalTestCase):
+class TestAssignTaskWithSuccessors(IntegrationTestCase):
 
     def setUp(self):
         super(TestAssignTaskWithSuccessors, self).setUp()
-        self.james = create(Builder('ogds_user')
-                            .in_group(self.org_unit.users_group)
-                            .having(userid='james.bond',
-                                    firstname='James',
-                                    lastname='Bond'))
-
-        self.predecessor = create(Builder('task')
-                                  .having(responsible_client='client1',
-                                          responsible=TEST_USER_ID))
+        self.login(self.regular_user)
         self.successor = create(Builder('task')
-                                .having(responsible_client='client1',
-                                        responsible=TEST_USER_ID)
-                                .successor_from(self.predecessor))
+                                .having(responsible_client='fa',
+                                        responsible=self.regular_user.getId())
+                                .successor_from(self.task))
 
         # disable IInternalOpengeverRequestLayer check in StateSyncer receiver
         self.org_check = WorkflowResponseSyncerReceiver._check_internal_request
@@ -120,40 +119,42 @@ class TestAssignTaskWithSuccessors(FunctionalTestCase):
 
     @browsing
     def test_syncs_predecessor_when_reassigning_successor(self, browser):
-        browser.login().open(self.successor)
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.successor)
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
-
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':james.bond')
-
+            'fa:{}'.format(self.secretariat_user.getId()))
         browser.find('Assign').click()
 
-        browser.open(self.predecessor, view='tabbedview_view-overview')
+        browser.open(self.task, view='tabbedview_view-overview')
         response = browser.css('.answers .answer')[0]
         self.assertEquals(
-            ['Reassigned from Test User (test_user_1_) to Bond James '
-             '(james.bond) by Test User (test_user_1_)'],
+            [u'Reassigned from B\xe4rfuss K\xe4thi (kathi.barfuss) to K\xf6nig '
+             u'J\xfcrgen (jurgen.konig) by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
             response.css('h3').text)
-        self.assertEquals('james.bond', self.predecessor.responsible)
+        self.assertEquals(
+            self.secretariat_user.getId(), self.task.responsible)
 
     @browsing
-    def test_syncs_successor_when_reassigning_successor(self, browser):
-        browser.login().open(self.predecessor)
+    def test_syncs_successor_when_reassigning_predecessor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task)
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
-
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':james.bond')
-
+            'fa:{}'.format(self.secretariat_user.getId()))
         browser.find('Assign').click()
 
         browser.open(self.successor, view='tabbedview_view-overview')
         response = browser.css('.answers .answer')[0]
         self.assertEquals(
-            ['Reassigned from Test User (test_user_1_) to Bond James '
-             '(james.bond) by Test User (test_user_1_)'],
+            [u'Reassigned from B\xe4rfuss K\xe4thi (kathi.barfuss) to K\xf6nig '
+             u'J\xfcrgen (jurgen.konig) by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
             response.css('h3').text)
-        self.assertEquals('james.bond', self.successor.responsible)
+        self.assertEquals(
+            self.secretariat_user.getId(), self.successor.responsible)
