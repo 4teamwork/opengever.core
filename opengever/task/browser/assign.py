@@ -74,7 +74,6 @@ validator.WidgetValidatorDiscriminators(
 provideAdapter(NoTeamsInProgressStateValidator)
 
 
-
 class AssignTaskForm(Form):
     """Form for assigning task.
     """
@@ -112,7 +111,6 @@ class AssignTaskForm(Form):
 
             self.reassign_task(**data)
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-
 
     def reassign_task(self, **kwargs):
         response = self.add_response(**kwargs)
