@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Make teams available as tasktemplate responsibles. [phgross]
 - Fix bumblebee preview in ECH0147 import. [deiferni]
 - Disable outdated checkout/edit action and move checkout cancel action [njohner]
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]

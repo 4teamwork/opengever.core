@@ -57,3 +57,28 @@ class TestTaskTemplates(IntegrationTestCase):
         self.assertEquals(self.tasktemplatefolder.absolute_url(), browser.url)
         self.assertEquals(u'Arbeitsplatz inkl. PC einrichten',
                           self.tasktemplatefolder.title)
+
+    @browsing
+    def test_teams_can_be_selected_as_responsible(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add('TaskTemplate')
+        browser.fill(
+            {'Title': 'Arbeitsplatz einrichten.',
+             'Task Type': 'comment',
+             'Deadline in Days': u'10'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('team:1')
+        form.find_widget('Issuer').fill(u'responsible')
+
+        browser.click_on('Save')
+        self.assertEquals(['Item created'], info_messages())
+
+        tasktemplate = self.tasktemplatefolder.listFolderContents()[-1]
+        self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
+        self.assertEquals(u'team:1', tasktemplate.responsible)
+        self.assertEquals('fa', tasktemplate.responsible_client)
+        self.assertEquals(u'responsible', tasktemplate.issuer)
+        self.assertEquals(10, tasktemplate.deadline)
