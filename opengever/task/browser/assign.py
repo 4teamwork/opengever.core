@@ -81,13 +81,14 @@ class AssignTaskForm(Form):
                         default=u'No changes: same responsible selected')
                 IStatusMessage(self.request).addStatusMessage(
                     msg, type='error')
-                return self.request.RESPONSE.redirect('.')
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
 
-            self.reassing_task(**data)
+            self.reassign_task(**data)
 
-        return self.request.RESPONSE.redirect('.')
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-    def reassing_task(self, **kwargs):
+    def reassign_task(self, **kwargs):
         response = self.add_response(**kwargs)
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
