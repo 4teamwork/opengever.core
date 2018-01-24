@@ -98,6 +98,26 @@ class TestAssignTask(IntegrationTestCase):
               u'text': u'Finanzamt: Ziegler Robert (robert.ziegler)'}],
             browser.json.get('results'))
 
+    @browsing
+    def test_reassign_task_to_a_team_is_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.set_workflow_state('task-state-open', self.task)
+
+        self.assign_task('team:1', 'Do something')
+        self.assertEquals('team:1', self.task.responsible)
+
+    @browsing
+    def test_reassign_task_in_progress_state_to_a_team_isnt_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.assign_task('team:1', 'Do something')
+
+        self.assertEquals(
+            ['Team responsibles are only allowed if the task or forwarding is open.'],
+            browser.css('.fieldErrorBox .error').text)
+        self.assertEquals(self.regular_user.getId(), self.task.responsible)
+
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):
 

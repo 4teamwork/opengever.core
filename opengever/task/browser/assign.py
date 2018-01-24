@@ -1,4 +1,5 @@
 from ftw.keywordwidget.widget import KeywordWidget
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
@@ -13,13 +14,16 @@ from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import validator
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
+from zope.component import provideAdapter
 from zope.event import notify
+from zope.interface import Invalid
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
@@ -39,7 +43,8 @@ class IAssignSchema(Schema):
         description=_(u"help_responsible_single_client_setup", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(
             only_current_inbox=True,
-            only_current_orgunit=True),
+            only_current_orgunit=True,
+            include_teams=True),
         required=True,
         )
 
@@ -47,6 +52,27 @@ class IAssignSchema(Schema):
         title=_('label_response', default="Response"),
         required=False,
         )
+
+
+class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
+    """Teams are only allowed if the task/forwarding is in open state.
+    """
+
+    def validate(self, value):
+        if ActorLookup(value).is_team() and not self.context.is_open():
+            raise Invalid(
+                _(u'error_no_team_responsible_in_progress_state',
+                  default=u'Team responsibles are only allowed if the task or '
+                  u'forwarding is open.'))
+
+
+validator.WidgetValidatorDiscriminators(
+    NoTeamsInProgressStateValidator,
+    field=IAssignSchema['responsible'],
+)
+
+provideAdapter(NoTeamsInProgressStateValidator)
+
 
 
 class AssignTaskForm(Form):
@@ -85,8 +111,8 @@ class AssignTaskForm(Form):
                     self.context.absolute_url())
 
             self.reassign_task(**data)
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def reassign_task(self, **kwargs):
         response = self.add_response(**kwargs)
