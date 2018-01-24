@@ -124,4 +124,13 @@ ADDITIONAL_TYPES = [
 
     # MS Powerpoint Slideshow (Macro Enabled)
     ('application/vnd.ms-powerpoint.slideshow.macroEnabled.12', '.ppsm'),
+
+    # Apple Keynote
+    ('application/x-iwork-keynote-sffkey', '.key'),
+
+    # Apple pages
+    ('application/x-iwork-pages-sffpages', '.pages'),
+
+    # Apple numbers
+    ('application/x-iwork-numbers-sffnumbers', '.numbers'),
 ]

@@ -155,6 +155,16 @@
       <element>application/vnd.ms-word.template.macroEnabled.12</element>
       <element>application/vnd.openxmlformats-officedocument.wordprocessingml.document</element>
       <element>application/vnd.openxmlformats-officedocument.wordprocessingml.template</element>
+
+      <!-- Apple Numbers -->
+      <element>application/x-iwork-numbers-sffnumbers</element>
+
+      <!-- Apple Keynote -->
+      <element>application/x-iwork-keynote-sffkey</element>
+
+      <!-- Apple Pages -->
+      <element>application/x-iwork-pages-sffpages</element>
+
     </value>
   </record>
 

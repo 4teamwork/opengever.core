@@ -9,6 +9,7 @@ Changelog
 - OGIP 17: Implement internal invitations for Workspaces. [mathias.leimgruber]
 - Improve description for committee group label. [deiferni]
 - Ensure bumblebee overlay view download links point to the correct version. [Rotonen]
+- Add keynote, numbers and pages mimetypes [njohner]
 - Checkout/Edit only for office connector supported file formats supported [njohner]
 - Make teams available as tasktemplate responsibles. [phgross]
 - Fix JWT authentication for users from the Zope root acl_users. [Rotonen]
