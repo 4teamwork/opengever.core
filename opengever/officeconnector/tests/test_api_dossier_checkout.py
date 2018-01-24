@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from hashlib import sha256
 from opengever.document.document import Document
 from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.testing.assets import path_to_asset
 
 
 class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
@@ -185,7 +186,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             self.download_document(browser, tokens, payload),
             ).hexdigest()
 
-        with open('../../opengever/testing/assets/addendum.docx') as f:
+        with open(path_to_asset('addendum.docx')) as f:
             self.upload_document(browser, tokens, payload, self.document, f)
 
         new_checksum = sha256(
@@ -220,7 +221,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             self.download_document(browser, tokens, payload),
             ).hexdigest()
 
-        with open('../../opengever/testing/assets/addendum.docx') as f:
+        with open(path_to_asset('addendum.docx')) as f:
             self.upload_document(browser, tokens, payload, self.document, f)
 
         new_checksum = sha256(

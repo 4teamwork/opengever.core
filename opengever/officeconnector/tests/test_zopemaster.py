@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from hashlib import sha256
 from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.testing.assets import path_to_asset
 
 
 class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase):
@@ -64,7 +65,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             self.download_document(browser, tokens, payload),
             ).hexdigest()
 
-        with open('../../opengever/testing/assets/addendum.docx') as f:
+        with open(path_to_asset('addendum.docx')) as f:
             self.upload_document(browser, tokens, payload, self.document, f)
 
         new_checksum = sha256(
