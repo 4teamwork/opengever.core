@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Make teams available as tasktemplate responsibles. [phgross]
+- Fix JWT authentication for users from the Zope root acl_users. [Rotonen]
 - Fix bumblebee preview in ECH0147 import. [deiferni]
 - Disable outdated checkout/edit action and move checkout cancel action [njohner]
 - Prefix the reference numbers on private dossiers with a P. [Rotonen]
