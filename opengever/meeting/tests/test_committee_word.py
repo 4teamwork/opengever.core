@@ -147,7 +147,7 @@ class TestCommitteeWord(IntegrationTestCase):
         Therefore we test the appearance of all fields.
         """
         fields = ['Title',
-                  'Group',
+                  'Committeeresponsible',
                   'Protocol header template',
                   'Protocol suffix template',
                   'Agenda item header template for the protocol',

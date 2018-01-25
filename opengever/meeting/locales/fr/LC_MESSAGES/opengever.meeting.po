@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-18 10:54+0000\n"
+"POT-Creation-Date: 2018-01-25 08:39+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -953,6 +953,11 @@ msgstr "Comité réactivé avec succès."
 msgid "label_committee"
 msgstr "Comité"
 
+#. Default: "Committeeresponsible"
+#: ./opengever/meeting/committee.py
+msgid "label_committee_responsible"
+msgstr ""
+
 #. Default: "The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "label_conflict_changes"
@@ -1173,11 +1178,6 @@ msgstr "Filtrage"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Prénom"
-
-#. Default: "Group"
-#: ./opengever/meeting/committee.py
-msgid "label_group"
-msgstr "Groupe"
 
 #. Default: "Initial position"
 #: ./opengever/meeting/browser/meetings/protocol.py

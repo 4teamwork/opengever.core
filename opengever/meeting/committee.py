@@ -178,7 +178,7 @@ class ICommitteeModel(Interface):
         )
 
     group_id = schema.Choice(
-        title=_('label_group', default="Group"),
+        title=_('label_committee_responsible', default="Committeeresponsible"),
         description=_(
             u'description_group',
             default=u'Automatically configure permissions on the committee '

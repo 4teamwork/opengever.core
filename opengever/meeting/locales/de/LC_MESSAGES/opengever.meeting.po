@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-18 10:54+0000\n"
+"POT-Creation-Date: 2018-01-25 08:39+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -687,7 +687,7 @@ msgstr "Beschlossen"
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
 msgid "description_group"
-msgstr "Für diese Gruppe werden automatisch Berechtigungen auf dem Gremium vergeben."
+msgstr "Diese Gruppe kann die Kommission bearbeiten und einsehen."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -951,6 +951,11 @@ msgstr "Gremium erfolgreich reaktiviert."
 msgid "label_committee"
 msgstr "Gremium"
 
+#. Default: "Committeeresponsible"
+#: ./opengever/meeting/committee.py
+msgid "label_committee_responsible"
+msgstr "Gremien-Verantwortliche"
+
 #. Default: "The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "label_conflict_changes"
@@ -1171,11 +1176,6 @@ msgstr "Filtern"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Vorname"
-
-#. Default: "Group"
-#: ./opengever/meeting/committee.py
-msgid "label_group"
-msgstr "Gruppe"
 
 #. Default: "Initial position"
 #: ./opengever/meeting/browser/meetings/protocol.py

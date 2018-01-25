@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-18 10:54+0000\n"
+"POT-Creation-Date: 2018-01-25 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -950,6 +950,11 @@ msgstr ""
 msgid "label_committee"
 msgstr ""
 
+#. Default: "Committeeresponsible"
+#: ./opengever/meeting/committee.py
+msgid "label_committee_responsible"
+msgstr ""
+
 #. Default: "The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "label_conflict_changes"
@@ -1169,11 +1174,6 @@ msgstr ""
 #: ./opengever/meeting/browser/members.py
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
-msgstr ""
-
-#. Default: "Group"
-#: ./opengever/meeting/committee.py
-msgid "label_group"
 msgstr ""
 
 #. Default: "Initial position"
