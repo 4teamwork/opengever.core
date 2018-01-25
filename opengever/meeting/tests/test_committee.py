@@ -16,7 +16,7 @@ class TestCommittee(IntegrationTestCase):
 
     features = ('meeting',)
 
-    group_field_name = 'Group'
+    group_field_name = 'Committeeresponsible'
 
     def test_committee_id_is_generated(self):
         self.login(self.administrator)
@@ -218,7 +218,8 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(u'A c\xf6mmittee', model.title)
 
         browser.open(self.committee, view='edit')
-        self.assertEqual('committee_ver_group', browser.find('Group').value)
+        self.assertEqual(
+            'committee_ver_group', browser.find('Committeeresponsible').value)
 
 
 class TestCommitteeWorkflow(IntegrationTestCase):
@@ -300,7 +301,7 @@ class TestCommitteeWorkflow(IntegrationTestCase):
         Therefore we test the appearance of all fields.
         """
         fields = ['Title',
-                  'Group',
+                  'Committeeresponsible',
                   'Protocol template',
                   'Excerpt template',
                   'Agendaitem list template',
