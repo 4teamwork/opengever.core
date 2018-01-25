@@ -81,11 +81,26 @@ class ActionButtonRendererMixin(object):
         links to the orginal message download view.
         """
         dc_helper = DownloadConfirmationHelper(self.context)
-        return dc_helper.get_html_tag(
-            additional_classes=['function-download-copy'],
-            viewname=self.context.get_download_view_name(),
-            include_token=True,
-        )
+
+        kwargs = {
+            'additional_classes': ['function-download-copy'],
+            'viewname': self.context.get_download_view_name(),
+            'include_token': True,
+            }
+
+        requested_version_id = self.request.get('version_id')
+
+        if requested_version_id:
+            requested_version_id = int(requested_version_id)
+            current_version_id = self.context.get_current_version_id()
+
+            if requested_version_id != current_version_id:
+                kwargs['url_extension'] = (
+                    '?version_id={}'
+                    .format(requested_version_id)
+                    )
+
+        return dc_helper.get_html_tag(**kwargs)
 
     def is_attach_to_email_available(self):
         if not is_officeconnector_attach_feature_enabled():

@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Improve description for committee group label. [deiferni]
+- Ensure bumblebee overlay view download links point to the correct version. [Rotonen]
 - Make teams available as tasktemplate responsibles. [phgross]
 - Fix JWT authentication for users from the Zope root acl_users. [Rotonen]
 - Fix bumblebee preview in ECH0147 import. [deiferni]
