@@ -1,0 +1,15 @@
+<div id="plone-lock-status"
+     i18n:domain="opengever.meeting">
+  <tal:block condition="not: context/is_valid_sablon_template">
+    <dl class="portalMessage error">
+      <dt i18n:domain="opengever.meeting"
+          i18n:translate="label_invalid_sablon_template">Sablon template invalid</dt>
+      <dd>
+        <tal:author-page
+            i18n:translate="sablon_template_is_invalid">
+          This template will not render correctly.
+        </tal:author-page>
+      </dd>
+    </dl>
+  </tal:block>
+</div>

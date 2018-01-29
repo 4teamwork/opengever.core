@@ -8,7 +8,10 @@ from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.sablontemplate import ISablonTemplate
+from opengever.meeting.sablontemplate import sablon_template_is_valid
 from plone import api
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.container.interfaces import IContainerModifiedEvent
@@ -94,3 +97,10 @@ def configure_committee_container_portlets(container, event):
     """Do not acquire portlets.
     """
     block_context_portlet_inheritance(container)
+
+
+def validate_template_file(obj, event):
+    if obj.file is not None:
+        IAnnotations(obj)[
+            'opengever.meeting.sablon_template_is_valid'
+        ] = sablon_template_is_valid(obj.file)

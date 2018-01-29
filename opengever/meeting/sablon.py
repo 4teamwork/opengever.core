@@ -19,10 +19,17 @@ class Sablon(object):
         self.stderr = None
         self.file_data = None
 
-    def process(self, json_data):
+    def process(self, json_data, namedblobfile=None):
+
         tmpdir_path = tempfile.mkdtemp(prefix='opengever.core.sablon_')
         output_path = join(tmpdir_path, 'sablon_output.docx')
-        template_path = self.template.as_file(tmpdir_path)
+
+        if namedblobfile is None:
+            template_path = self.template.as_file(tmpdir_path)
+        else:
+            template_path = join(tmpdir_path, namedblobfile.filename)
+            with open(template_path, 'wb') as template_file:
+                template_file.write(namedblobfile.data)
 
         try:
             sablon_path = environ.get('SABLON_BIN', 'sablon')

@@ -1200,6 +1200,11 @@ msgstr ""
 msgid "label_insert"
 msgstr ""
 
+#. Default: "Sablon template invalid"
+#: ./opengever/meeting/browser/templates/sablon_validation_state.pt
+msgid "label_invalid_sablon_template"
+msgstr ""
+
 #. Default: "Last Meeting:"
 #: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_last_meeting"
@@ -1819,6 +1824,11 @@ msgstr ""
 #. Default: "Revision"
 #: ./opengever/meeting/model/agendaitem.py
 msgid "revision"
+msgstr ""
+
+#. Default: "This template will not render correctly."
+#: ./opengever/meeting/browser/templates/sablon_validation_state.pt
+msgid "sablon_template_is_invalid"
 msgstr ""
 
 #. Default: "Schedule"
