@@ -146,6 +146,8 @@ class ManageParticipants(BrowserView):
                                             inherit=False)
             if user_roles and 'WorkspaceOwner' not in user_roles:
                 self.context.manage_setLocalRoles(token, [role])
+                self.context.setModificationDate()
+                self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)
                 return ''
             else:
