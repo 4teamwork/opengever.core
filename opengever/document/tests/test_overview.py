@@ -255,6 +255,42 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
     @browsing
+    def test_inactive_links_if_unsupported_format(self, browser):
+        """Check the document overview when the document's format is not,
+        supported by office connector:
+        - Edit link is inactive
+        - Checkout link is active
+        """
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='tabbedview_view-overview')
+        self.assertFalse(browser.css('.function-edit-inactive'),
+                        'There should not be an inactive edit button')
+
+        self.document.file.contentType = "application/foo"
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        edit_button = browser.css('a.function-edit')
+
+        self.assertEquals(
+            1,
+            len(edit_button.text),
+        )
+
+        self.assertEquals(
+            'Checkout',
+            edit_button.first.text,
+        )
+
+        self.assertIn(
+            '/@@checkout_documents',
+            edit_button.first.attrib['href'],
+        )
+
+        self.assertTrue(browser.css('.function-edit-inactive'),
+                        'There should be an inactive edit button')
+
+
+    @browsing
     def test_checkout_not_possible_if_locked_by_another_user(self, browser):
         self.login(self.dossier_responsible, browser)
 
