@@ -1,6 +1,20 @@
 from opengever.base.reference import BasicReferenceNumber
 from opengever.private.folder import IPrivateFolder
+from opengever.private.root import IPrivateRoot
 from zope.component import adapter
+
+
+@adapter(IPrivateRoot)
+class PrivateRootReferenceNumber(BasicReferenceNumber):
+    """Reference number adapter for private roots.
+
+    Provides a local prefix for the reference number.
+    """
+
+    ref_type = 'location_prefix'
+
+    def get_local_number(self):
+        return getattr(self.context, 'location_prefix', None)
 
 
 @adapter(IPrivateFolder)

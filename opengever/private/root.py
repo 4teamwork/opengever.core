@@ -17,3 +17,5 @@ class PrivateRoot(Container, TranslatedTitleMixin):
     implements(IHideFromBreadcrumbs)
 
     Title = TranslatedTitleMixin.Title
+
+    location_prefix = 'P'

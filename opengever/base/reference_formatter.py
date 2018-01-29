@@ -27,11 +27,20 @@ class DottedReferenceFormatter(object):
         """
         reference_number = u' '.join(numbers.get('site', []))
 
-        if self.repository_number(numbers):
+        if self.location_prefix(numbers):
             reference_number = u'%s %s' % (
+                self.location_prefix(numbers),
                 reference_number,
-                self.repository_number(numbers),
                 )
+
+        if self.repository_number(numbers):
+            if reference_number:
+                reference_number = u'%s %s' % (
+                    reference_number,
+                    self.repository_number(numbers),
+                    )
+            else:
+                reference_number = self.repository_number(numbers)
 
         if self.dossier_number(numbers):
             reference_number = u'%s%s%s' % (
@@ -48,6 +57,13 @@ class DottedReferenceFormatter(object):
                 )
 
         return reference_number.encode('utf-8')
+
+    def location_prefix(self, numbers):
+        """Return the location prefix of the context."""
+        location_prefix = numbers.get('location_prefix')
+        if location_prefix:
+            return ''.join(location_prefix)
+        return None
 
     def repository_number(self, numbers):
         """Generate the reposiotry reference number part.
@@ -216,8 +232,17 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
         """Omit client id in this DottedReferenceFormatter."""
         reference_number = u''
 
+        if self.location_prefix(numbers):
+            reference_number = self.location_prefix(numbers)
+
         if self.repository_number(numbers):
-            reference_number = self.repository_number(numbers)
+            if reference_number:
+                reference_number = u'%s %s' % (
+                    reference_number,
+                    self.repository_number(numbers),
+                    )
+            else:
+                reference_number = self.repository_number(numbers)
 
         if self.dossier_number(numbers):
             reference_number = u'%s%s%s' % (
@@ -246,8 +271,17 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
         """A client id omitting GroupedByThreeFormatter."""
         reference_number = u''
 
+        if self.location_prefix(numbers):
+            reference_number = self.location_prefix(numbers)
+
         if self.repository_number(numbers):
-            reference_number = self.repository_number(numbers)
+            if reference_number:
+                reference_number = u'%s %s' % (
+                    reference_number,
+                    self.repository_number(numbers),
+                    )
+            else:
+                reference_number = self.repository_number(numbers)
 
         if self.dossier_number(numbers):
             reference_number = u'%s%s%s' % (

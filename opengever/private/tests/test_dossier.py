@@ -62,19 +62,6 @@ class TestPrivateDossier(FunctionalTestCase):
         self.assertEquals(2, sequence_number.get_number(dossier2))
         self.assertEquals(3, sequence_number.get_number(dossier3))
 
-    def test_uses_the_same_reference_number_schema_as_regular_dossiers(self):
-        dossier1 = create(Builder('private_dossier')
-                          .within(self.folder)
-                          .having(responsible=TEST_USER_ID))
-        dossier2 = create(Builder('private_dossier')
-                          .within(self.folder)
-                          .having(responsible=TEST_USER_ID))
-
-        self.assertEquals('Client1 test_user_1_ / 1',
-                          IReferenceNumber(dossier1).get_number())
-        self.assertEquals('Client1 test_user_1_ / 2',
-                          IReferenceNumber(dossier2).get_number())
-
     def test_allow_one_level_of_subdossiers(self):
         dossier = create(Builder('private_dossier')
                          .within(self.folder)

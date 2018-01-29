@@ -1,5 +1,7 @@
+from ftw.testbrowser import browsing
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.testing import IntegrationTestCase
+from opengever.testing.pages import tabbedview
 from plone import api
 
 
@@ -100,3 +102,43 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             expected_reference_numbers,
             found_reference_numbers,
             )
+
+    @browsing
+    def test_prefix_visible_on_private_folder(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.private_folder)
+        tabbedview.open('Dossiers')
+
+        urlified_user_id = self.regular_user.id.replace('.', '-')
+
+        expected_reference_numbers = [
+            'P Client1 kathi-barfuss / 1',
+            'P Client1 kathi-barfuss / 2',
+            ]
+
+        found_reference_numbers = [
+            item
+            for item in browser.css('.listing td').text
+            if urlified_user_id in item
+            ]
+
+        self.assertEqual(
+            len(expected_reference_numbers),
+            len(found_reference_numbers),
+            )
+
+        self.assertEqual(
+            sorted(expected_reference_numbers),
+            sorted(found_reference_numbers),
+            )
+
+    @browsing
+    def test_prefix_visible_on_private_document(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.private_document)
+
+        expected_reference_number = 'P Client1 kathi-barfuss / 1 / 21'
+        found_reference_number = browser.css('.referenceNumber .value').text[0]
+
+        self.assertEqual(found_reference_number, expected_reference_number)
