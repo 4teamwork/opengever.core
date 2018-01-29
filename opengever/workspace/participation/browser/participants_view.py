@@ -43,4 +43,7 @@ class ParticipantsView(BrowserView):
             'type_user': translate(_('User'), context=self.request),
             'invite': translate(_('Invite'), context=self.request),
             'invited_by': translate(_('Invited by:'), context=self.request),
+            'message_updated': translate(_('Role updated'), context=self.request),
+            'message_invited': translate(_('Participant invited'), context=self.request),
+            'message_deleted': translate(_('Participant deleted'), context=self.request),
         })

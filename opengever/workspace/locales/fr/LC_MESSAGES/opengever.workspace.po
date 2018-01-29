@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-22 16:05+0000\n"
+"POT-Creation-Date: 2018-01-29 16:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,18 @@ msgstr ""
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "My invitations"
+msgstr ""
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant deleted"
+msgstr ""
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant invited"
+msgstr ""
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Role updated"
 msgstr ""
 
 #: ./opengever/workspace/participation/browser/participants_view.py

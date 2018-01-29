@@ -39,7 +39,7 @@ var app = new Vue({
       ];
     },
 
-    messanger: MessageFactory.getInstance,
+    messenger: MessageFactory.getInstance,
   },
 
   methods: {
@@ -69,7 +69,7 @@ var app = new Vue({
         if (response.status === 204) {
           entry.roles = [newRole];
           self.isModifying = false;
-          self.messanger.shout([{'messageTitle': 'Info', 'message': 'Rolle wurde aktualisiert', 'messageClass': 'info'}]);
+          self.messenger.shout([{'messageTitle': 'Info', 'message': self.i18n.message_updated, 'messageClass': 'info'}]);
         }
       });
     },
@@ -85,7 +85,7 @@ var app = new Vue({
         self.entries = response.data;
         jQuery('select[name="userid"]').val('').trigger('change');
         jQuery('select[name="role"]').val('WorkspaceGuest').trigger('change');
-        self.messanger.shout([{'messageTitle': 'Info', 'message': 'Teilnehmer wurde eingeladen', 'messageClass': 'info'}]);
+        self.messenger.shout([{'messageTitle': 'Info', 'message': self.i18n.message_invited, 'messageClass': 'info'}]);
       });
     },
 
@@ -100,7 +100,7 @@ var app = new Vue({
       axios.post(this.endpoint + '/delete', payload).then(function (response) {
         self.entries = response.data;
         self.isDeleting = false;
-        self.messanger.shout([{'messageTitle': 'Info', 'message': 'Teilnehmer wurde gelöscht', 'messageClass': 'info'}]);
+        self.messenger.shout([{'messageTitle': 'Info', 'message': self.i18n.message_deleted, 'messageClass': 'info'}]);
       });
     },
   },
