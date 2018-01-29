@@ -1,3 +1,4 @@
+from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
@@ -8,7 +9,6 @@ from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import getUtility
 import json
-
 
 MANAGED_ROLES = ['WorkspaceGuest', 'WorkspaceMember', 'WorkspaceAdmin']
 
@@ -28,10 +28,7 @@ class ManageParticipants(BrowserView):
         return json.dumps(data)
 
     def get_participants(self):
-        return self.get_user_role_mapping()
-
-    def get_user_role_mapping(self):
-        """Get local roles mapping for all local users.
+        """Get list of users with all managed local roles.
         """
         entries = []
 
@@ -78,18 +75,10 @@ class ManageParticipants(BrowserView):
         if member is None:
             member = api.user.get(userid=userid)
 
-        email = member.getProperty('email', '')
-        name = member.getProperty('fullname', '')
+        if userid is None:
+            userid = member.getId()
 
-        if name and email:
-            return u'{} ({})'.format(name.decode('utf-8'),
-                                     email.decode('utf-8'))
-        elif name:
-            return name.decode('utf-8')
-        elif member:
-            return member.getId().decode('utf-8')
-        else:
-            return userid.decode('utf-8')
+        return PloneUserActor(identifier=userid, user=member).get_label()
 
     def add(self):
         """A traversable method to add new invitations"""

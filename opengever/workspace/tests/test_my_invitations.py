@@ -38,8 +38,8 @@ class TestMyInvitationsView(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.workspace_root, view='my-invitations')
         self.assertItemsEqual(
-            ['fridolin.hugentobler Second workspace Accept Decline',
-             'fridolin.hugentobler A Workspace Accept Decline'],
+            ['Hugentobler Fridolin (fridolin.hugentobler) Second workspace Accept Decline',
+             'Hugentobler Fridolin (fridolin.hugentobler) A Workspace Accept Decline'],
             browser.css('table.listing').first.body_rows.text)
 
     @browsing

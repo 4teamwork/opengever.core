@@ -1,6 +1,7 @@
 from opengever.base.security import elevated_privileges
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
+from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -38,7 +39,9 @@ class MyWorkspaceInvitations(BrowserView):
                     target_title = target.Title()
 
             if target:
-                yield {'inviter': entry['inviter'],
+                inviter = PloneUserActor(entry['inviter'],
+                                         user=api.user.get(entry['inviter']))
+                yield {'inviter': inviter.get_label(),
                        'target_title': target_title,
                        'iid': entry['iid']}
 
