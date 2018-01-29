@@ -129,6 +129,30 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
             invitations_in_response[0])
 
     @browsing
+    def test_can_only_add_invitations_with_Workspace_related_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        with browser.expect_http_error(403):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/add',
+                         data={'userid': self.regular_user.getId(),
+                               'role': 'Reader',
+                               '_authenticator': createToken()})
+
+        with browser.expect_http_error(500):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/add',
+                         data={'userid': self.regular_user.getId(),
+                               'role': 'Site Administrator',
+                               '_authenticator': createToken()})
+
+    @browsing
+    def test_can_only_add_invitations_with_the_right_permission(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        with browser.expect_http_error(400):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/add',
+                         data={'userid': self.regular_user.getId(),
+                               'role': 'WorkspaceAdmin',
+                               '_authenticator': createToken()})
+
+    @browsing
     def test_delete_invitation(self, browser):
         self.login(self.workspace_admin, browser=browser)
         iid = self.storage.add_invitation(

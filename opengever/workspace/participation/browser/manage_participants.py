@@ -2,6 +2,7 @@ from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
+from plone.app.workflow.interfaces import ISharingPageRole
 from plone.batching.batch import Batch
 from plone.protect import CheckAuthenticator
 from Products.Five.browser import BrowserView
@@ -9,6 +10,7 @@ from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import getUtility
 import json
+
 
 MANAGED_ROLES = ['WorkspaceGuest', 'WorkspaceMember', 'WorkspaceAdmin']
 
@@ -80,6 +82,10 @@ class ManageParticipants(BrowserView):
 
         return PloneUserActor(identifier=userid, user=member).get_label()
 
+    def user_has_permission(self, role):
+        permission = getUtility(ISharingPageRole, name=role).required_permission
+        return api.user.has_permission(permission, obj=self.context)
+
     def add(self):
         """A traversable method to add new invitations"""
         CheckAuthenticator(self.request)
@@ -88,6 +94,9 @@ class ManageParticipants(BrowserView):
 
         if not userid or not role or not self.can_manage_member():
             raise BadRequest('No userid or role provided')
+
+        if role not in MANAGED_ROLES and not self.user_has_permission(role):
+            raise Unauthorized('No allowed to delegate this permission')
 
         storage = getUtility(IInvitationStorage)
         storage.add_invitation(self.context, userid,
