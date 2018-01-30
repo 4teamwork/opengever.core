@@ -1,9 +1,8 @@
 from opengever.base.command import BaseObjectCreatorCommand
 from opengever.base.command import CreateDocumentCommand
 from opengever.dossier.docprops import DocPropertyWriter
-from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
-from plone.dexterity.utils import iterSchemata
-from zope.schema import getFieldsInOrder
+from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
+from plone.dexterity.utils import iterSchemataForType
 
 
 class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
@@ -28,24 +27,35 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
     portal_type = 'opengever.dossier.businesscasedossier'
 
     def __init__(self, context, template):
+        kw = self._get_additional_attributes(template)
+        self.fields = kw["IOpenGeverBase"]
+        del kw["IOpenGeverBase"]
+        self.additional_fields = kw
         super(CreateDossierFromTemplateCommand, self).__init__(
-            context, **self._get_additional_attributes(template))
+            context, **self.fields)
+
+    def execute(self):
+        obj = super(CreateDossierFromTemplateCommand, self).execute()
+        schemas = iterSchemataForType(self.portal_type)
+        for schema in schemas:
+            schema_name = BEHAVIOR_INTERFACE_MAPPING.get(
+                schema.getName(), schema.getName())
+            if schema_name not in self.additional_fields:
+                continue
+            behavior = schema(obj)
+            for prop_name in self.additional_fields[schema_name]:
+                setattr(behavior, prop_name,
+                        self.additional_fields[schema_name][prop_name])
+        return obj
 
     def _get_additional_attributes(self, template):
-        """Get all attributes defined in the template.
+        """Get all templatable attributes defined in the template.
         """
-        data = {}
-        for schema in iterSchemata(template):
-            fields = getFieldsInOrder(schema)
-            for name, field in fields:
-                full_name = '{}.{}'.format(schema.__name__, name)
-                if full_name not in TEMPLATABLE_FIELDS:
-                    continue
-
-                value = field.get(template)
-                if not value:
-                    continue
-
-                data[name] = value
-
-        return data
+        kw = template.get_schema_values()
+        fields = {}
+        for key, value in kw.items():
+            schema_name, prop_name = key.split(".")
+            if schema_name not in fields:
+                fields[schema_name] = {}
+            fields[schema_name][prop_name] = value
+        return fields
