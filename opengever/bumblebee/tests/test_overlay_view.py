@@ -22,6 +22,71 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertEqual(1, len(browser.css('#file-preview')))
 
     @browsing
+    def test_render_download_link(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertNotIn(
+            'version_id',
+            download_link,
+            )
+
+        create_document_version(self.document, version_id=0)
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertNotIn(
+            'version_id',
+            download_link,
+            )
+
+        browser.open(
+            self.document,
+            view='bumblebee-overlay-listing?version_id=0',
+            )
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertNotIn(
+            'version_id',
+            download_link,
+            )
+
+        create_document_version(self.document, version_id=1)
+
+        browser.open(self.document, view='bumblebee-overlay-listing')
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertNotIn(
+            'version_id',
+            download_link,
+            )
+
+        browser.open(
+            self.document,
+            view='bumblebee-overlay-listing?version_id=0',
+            )
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertIn(
+            'version_id=0',
+            download_link,
+            )
+
+        browser.open(
+            self.document,
+            view='bumblebee-overlay-listing?version_id=1',
+            )
+        download_link = browser.css('#action-download')[0].get('href')
+
+        self.assertNotIn(
+            'version_id',
+            download_link,
+            )
+
+    @browsing
     def test_open_pdf_in_a_new_window_disabled(self, browser):
         self.login(self.regular_user, browser)
 
