@@ -1,0 +1,10 @@
+[
+  {
+    "unit_id": "ska",
+    "title": "Staatskanzlei",
+    "ip_address": "127.0.0.1",
+    "site_url": "http://localhost:8080/ska",
+    "public_url": "http://localhost:8080/ska",
+    "abbreviation": "SKA"
+  }
+]
