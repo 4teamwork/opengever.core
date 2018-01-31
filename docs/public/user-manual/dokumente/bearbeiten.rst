@@ -17,10 +17,6 @@ für Mac.
 
 https://www.4teamwork.ch/office-connector.
 
-Der Office Connector unter Windows bietet zusätzliche Funktionen, welche
-nach dem Basis-Teil im Kapitel "Zusätzliche Funktionen Windows" erläutert
-werden.
-
 Grundlagen
 ~~~~~~~~~~
 
@@ -88,29 +84,10 @@ weiteren Bearbeitungsmöglichkeiten angezeigt.
 2. **Einchecken:** Durch “Einchecken“ gibt das Dokument wieder für die übrigen
     Sachbearbeiter/innen frei.
 
-Zugelassene Dokumenttypen
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Mit Mailprogramm versenden
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Der External Editor und der Office Connector unterstützen die gängigen
-Dateiformate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft
-Excel, Microsoft Powerpoint, Microsoft OneNote, OpenOffice (nur Mac), Adobe
-Acrobat) sowie zusätzlich einige viel verwendete Anwendungen (MindManager,
-Microsoft Project, Microsoft Visio). Bedingung dazu ist, dass die jeweilige
-Anwendung auf dem PC installiert ist.
-
-Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
-InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
-empfohlen, da es zu unerwarteten Fehlern kommen kann. Für solche und andere,
-nicht unterstützte Dateien sollte untenstehender Hinweis unter `"Dokumente ohne External Editor" <https://docs.onegovgever.ch/user-manual/dokumente/bearbeiten/#dokumente-ohne-external-editor-office-connector-bearbeitenbefolgt>`_ befolgt werden.
-
-Zusätzliche Funktionen des Office Connectors auf Windows
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Auf Windows bietet der Office Connector folgende zusätzliche Funktionalitäten:
-
-Funktionalität "Mit Mailprogramm versenden":
-
-Unter den Buttons "Einchecken / Auschecken" erscheint zusätzlich der Button
+Unter den Buttons "Einchecken / Auschecken" findet sich zusätzlich der Button
 "Mit Mailprogramm versenden".
 
 |img-dokumente-35|
@@ -125,9 +102,9 @@ ins Dossier, in welchem das Dokument abgelegt ist, geschickt.
 Danach kann das Mail nach Wunsch bearbeitet, ergänzt und an den / die gwünschten
 Empfänger verschickt werden.
 
-Funktionalität direkt einchecken:
-
-Mit dem Office Connector auf Windows kann ein Dokument auch direkt (und nicht in
+Direkt einchecken
+~~~~~~~~~~~~~~~~~
+Mit dem Office Connector kann ein Dokument auch direkt (und nicht in
 zwei Schritten wie oben unter Kapitel "Dokument auschecken und bearbeiten"
 beschrieben) eingecheckt werden. Dazu das Dokument auschecken, die gwünschten
 Anpassungen vornehmen, speichern und das Dokument schliessen. Danach erscheint
@@ -140,6 +117,21 @@ Nach dem erfolgreichen Einchecken erscheint unten rechts folgende
 Bestätigungsmeldung:
 
 |img-dokumente-38|
+
+Zugelassene Dokumenttypen
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Der External Editor und der Office Connector unterstützen die gängigen
+Dateiformate zur Bearbeitung von Text und Tabellen (Microsoft Word, Microsoft
+Excel, Microsoft Powerpoint, Microsoft OneNote, OpenOffice (nur Mac), Adobe
+Acrobat) sowie zusätzlich einige viel verwendete Anwendungen (MindManager,
+Microsoft Project, Microsoft Visio). Bedingung dazu ist, dass die jeweilige
+Anwendung auf dem PC installiert ist.
+
+Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
+InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
+empfohlen, da es zu unerwarteten Fehlern kommen kann. Für solche und andere,
+nicht unterstützte Dateien sollte untenstehender Hinweis unter `"Dokumente ohne External Editor" <https://docs.onegovgever.ch/user-manual/dokumente/bearbeiten/#dokumente-ohne-external-editor-office-connector-bearbeitenbefolgt>`_ befolgt werden.
 
 Dokumente ohne External Editor / Office Connector bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
