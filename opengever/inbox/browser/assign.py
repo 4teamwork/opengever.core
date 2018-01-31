@@ -18,7 +18,7 @@ class IForwardingAssignSchema(IAssignSchema):
     responsible = schema.Choice(
         title=task_mf(u"label_responsible", default=u"Responsible"),
         description=task_mf(u"help_responsible", default=""),
-        source=AllUsersInboxesAndTeamsSourceBinder(),
+        source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
         )
 

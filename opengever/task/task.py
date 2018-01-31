@@ -310,6 +310,9 @@ class Task(Container):
         """Is true if the task responsible is a team."""
         return ActorLookup(self.responsible).is_team()
 
+    def is_open(self):
+        return api.content.get_state(self) in TaskModel.OPEN_STATES
+
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()
 
