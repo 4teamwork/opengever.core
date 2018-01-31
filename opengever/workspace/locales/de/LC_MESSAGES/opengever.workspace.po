@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-20 18:03+0000\n"
+"POT-Creation-Date: 2018-01-29 16:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,95 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Accept"
+msgstr "Annehmen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Action"
+msgstr "Aktion"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Decline"
+msgstr "Ablehnen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Delete"
+msgstr "Löschen"
+
+#: ./opengever/workspace/participation/browser/my_invitations.py
+msgid "Deleted Workspace"
+msgstr "Gelöschter Teamraum"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invitation"
+msgstr "Einladung"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invite"
+msgstr "Einladen"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Invited by"
+msgstr "Von"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Invited by:"
+msgstr "Eingeladen durch:"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "My invitations"
+msgstr "Teamraum Einladungen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant deleted"
+msgstr "Teilnehmer wurde gelöscht"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Participant invited"
+msgstr "Teilnehmer wurde eingeladen"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Role updated"
+msgstr "Rolle wurde aktualisiert"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Rolle"
+msgstr "Rolle"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Select a user ..."
+msgstr "Benutzer suchen ..."
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "Type"
+msgstr "Typ"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "User"
+msgstr "Benutzer"
+
+#: ./opengever/workspace/participation/browser/templates/my-invitations.pt
+msgid "Workspace"
+msgstr "Teamraum"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceAdmin"
+msgstr "Admin"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceGuest"
+msgstr "Gast"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceMember"
+msgstr "Teammitglied"
+
+#: ./opengever/workspace/participation/browser/participants_view.py
+msgid "WorkspaceOwner"
+msgstr "Federführung"
 
 #. Default: "Documents"
 #: ./opengever/workspace/browser/tabbed.py
@@ -58,3 +147,8 @@ msgstr "Papierkorb"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamräume"
+
+#. Default: "Manage participation of ${workspace}"
+#: ./opengever/workspace/participation/browser/templates/participants-view.pt
+msgid "title_manage_participation"
+msgstr "Teilnehmer von  \"${workspace}\""

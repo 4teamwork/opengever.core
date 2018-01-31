@@ -514,7 +514,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${object_url}/@@sharing</property>
       <property name="icon_expr" />
-      <property name="available_expr" />
+      <property name="available_expr">python:not here.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace')</property>
       <property name="permissions">
         <element value="Sharing page: Delegate roles" />
       </property>
@@ -621,6 +621,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="participants" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Participants</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/@@participants</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace')</property>
+      <property name="permissions">
+        <element value="Sharing page: Delegate roles" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 
@@ -681,6 +693,18 @@
       <property name="available_expr">python:member is not None</property>
       <property name="permissions">
         <element value="Set own properties" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="my-invitations" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">My Invitations</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/navigationRootUrl}/@@my-invitations</property>
+      <property name="icon_expr" />
+      <property name="available_expr">here/portal_url/@@my-invitations/is_feature_enabled</property>
+      <property name="permissions">
+        <element value="View" />
       </property>
       <property name="visible">True</property>
     </object>

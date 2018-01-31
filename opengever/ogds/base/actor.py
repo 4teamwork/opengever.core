@@ -28,6 +28,7 @@ from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.team import Team
+from plone.dexterity.utils import safe_unicode
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -240,10 +241,10 @@ class PloneUserActor(Actor):
     def get_label(self, with_principal=True):
         name = self.user.getProperty('fullname')
         if not name:
-            name = self.user.getUserName()
+            name = safe_unicode(self.user.getUserName())
 
         if with_principal:
-            return u'{} ({})'.format(name, self.identifier)
+            return u'{} ({})'.format(safe_unicode(name), safe_unicode(self.identifier))
         else:
             return name
 

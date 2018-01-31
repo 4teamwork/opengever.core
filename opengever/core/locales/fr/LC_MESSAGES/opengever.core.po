@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-01-16 08:52+0000\n"
+"POT-Creation-Date: 2018-01-22 17:16+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -133,6 +133,11 @@ msgid "Move Items"
 msgstr "Déplacer d'éléments"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180122154722_add_my_invitation_action/actions.xml
+msgid "My Invitations"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
 msgstr "Mon référentiel"
 
@@ -140,6 +145,11 @@ msgstr "Mon référentiel"
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
 msgid "Participant"
 msgstr "Participation"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180119143619_update_actions_for_workspace/actions.xml
+msgid "Participants"
+msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Prefix Manager"

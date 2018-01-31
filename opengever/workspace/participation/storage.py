@@ -1,7 +1,6 @@
 from BTrees.OOBTree import OOBTree
 from opengever.base.date_time import utcnow_tz_aware
 from persistent.mapping import PersistentMapping
-from plone.app.uuid.utils import uuidToObject
 from plone.uuid.interfaces import IUUID
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
@@ -46,7 +45,6 @@ class InvitationStorage(object):
     def get_invitation(self, iid):
         # The invitation is read-only.
         data = dict(self._read_invitations[iid])
-        data['target'] = uuidToObject(data['target_uuid'])
         return data
 
     def remove_invitation(self, iid):

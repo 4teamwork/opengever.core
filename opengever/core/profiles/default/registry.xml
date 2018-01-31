@@ -136,4 +136,7 @@
     <value>false</value>
   </record>
 
+  <!-- Workspace -->
+  <records interface="opengever.workspace.interfaces.IWorkspaceSettings" />
+
 </registry>
