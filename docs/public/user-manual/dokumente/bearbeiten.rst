@@ -131,7 +131,7 @@ Anwendung auf dem PC installiert ist.
 Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
 InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
 empfohlen, da es zu unerwarteten Fehlern kommen kann. Für solche und andere,
-nicht unterstützte Dateien sollte untenstehender Hinweis unter `"Dokumente ohne External Editor" <https://docs.onegovgever.ch/user-manual/dokumente/bearbeiten/#dokumente-ohne-external-editor-office-connector-bearbeitenbefolgt>`_ befolgt werden.
+nicht unterstützte Dateien sollte untenstehender Hinweis unter `"Dokumente ohne External Editor" <https://docs.onegovgever.ch/user-manual/dokumente/bearbeiten/#dokumente-ohne-external-editor-office-connector-bearbeiten>`_ befolgt werden.
 
 Dokumente ohne External Editor / Office Connector bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
