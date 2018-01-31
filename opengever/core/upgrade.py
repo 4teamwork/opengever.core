@@ -2,19 +2,29 @@ from alembic.migration import MigrationContext
 from alembic.operations import Operations
 from decorator import decorator
 from ftw.upgrade import UpgradeStep
+from ftw.upgrade.directory.recorder import UpgradeStepRecorder
 from opengever.base.model import create_session
+from plone.memoize import forever
+from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.upgrade import listUpgradeSteps
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
 from sqlalchemy import MetaData
-from sqlalchemy import select
 from sqlalchemy import String
 from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
+from zope.interface import implementer
+from zope.interface import Interface
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
 
 TRACKING_TABLE_NAME = 'opengever_upgrade_version'
+TRACKING_TABLE_DEFINITION = (
+    TRACKING_TABLE_NAME,
+    Column('profileid', String(50), primary_key=True),
+    Column('upgradeid', BigInteger, primary_key=True),
+)
 
 # Module global to keep a reference to the tracking table across several
 # instances of SchemaMigration upgrade steps
@@ -25,6 +35,34 @@ logger = logging.getLogger('opengever.upgrade')
 
 class AbortUpgrade(Exception):
     """The upgrade had to be aborted for the reason specified in message."""
+
+
+class ISchemaMigration(Interface):
+    """Marker interface for upgrade steps which apply schema migrations to the
+    SQL database and should therefore only be executed once per database.
+    """
+
+
+def get_operations(connection):
+    """MySQL does not have transactional DDL, we might have to recover
+    from partially executed migrations, thus we use IdempotentOperations.
+
+    For all other DBMS (oracle and PostgreSQL) use alembic operations since
+    they have transactional DDL and IdempotentOperations does not work
+    there.
+    """
+    cache_name = '_migration_operations'
+    if hasattr(connection, cache_name):
+        return getattr(connection, cache_name)
+
+    migration_context = MigrationContext.configure(connection)
+    if connection.dialect.name == 'mysql':
+        operations = IdempotentOperations(migration_context)
+    else:
+        operations = Operations(migration_context)
+
+    setattr(connection, cache_name, operations)
+    return operations
 
 
 @decorator
@@ -52,10 +90,9 @@ class IdempotentOperations(Operations):
     XXX: once we drop MySQL support this class should be removed.
 
     """
-    def __init__(self, migration_context, schema_migration):
+    def __init__(self, migration_context, metadata):
         super(IdempotentOperations, self).__init__(migration_context)
-        self.schema_migration = schema_migration
-        self.metadata = self.schema_migration.metadata
+        self.metadata = metadata
 
     def _get_table(self, table_name):
         return self.metadata.tables.get(table_name)
@@ -87,7 +124,8 @@ class IdempotentOperations(Operations):
         return False
 
     def _refresh_metadata(self):
-        self.schema_migration.refresh_metadata()
+        self.metadata.clear()
+        self.metadata.reflect()
 
     @metadata_operation
     def drop_column(self, table_name, column_name, **kw):
@@ -267,6 +305,7 @@ class SQLUpgradeStep(UpgradeStep):
         self.connection = self.session.connection()
 
 
+@implementer(ISchemaMigration)
 class SchemaMigration(SQLUpgradeStep):
     """Baseclass for database schema migrations.
 
@@ -277,16 +316,8 @@ class SchemaMigration(SQLUpgradeStep):
     def __call__(self):
         self._assert_configuration()
         self._setup_db_connection()
-        self._insert_initial_version()
-        if self._has_upgrades_to_install():
-            self._log_do_migration()
-            self.migrate()
-            self._update_migrated_version()
-            # If the transaction contains only DDL statements, the transaction
-            # isn't automatically marked as changed, so we do it ourselves
-            mark_changed(self.session)
-        else:
-            self._log_skipping_migration()
+        self.migrate()
+        mark_changed(self.session)
 
     @property
     def profileid(self):
@@ -340,95 +371,103 @@ class SchemaMigration(SQLUpgradeStep):
     def is_mysql(self):
         return self.dialect_name == 'mysql'
 
-    def _log_skipping_migration(self):
-        logger.log(logging.INFO,
-                   'Skipping DB-migration {} -> {}, already installed'.format(
-                       self.profileid, self.upgradeid))
-
-    def _log_do_migration(self):
-        logger.log(logging.INFO, 'Running DB-migration {} -> {}'.format(
-            self.profileid, self.upgradeid))
-
     def _assert_configuration(self):
         assert self.profileid is not None, 'configure a profileid'
         assert self.upgradeid is not None, 'configure an upgradeid'
         assert int(self.upgradeid) > 0, 'upgradeid must be > 0'
         assert len(self.profileid) < 50, 'profileid max length is 50 chars'
 
-    def _get_tracking_table(self):
-        """Fetches the tracking table from the DB schema metadata if present,
-        or creates it if necessary.
-
-        Once a reference to the tracking table has been obtained it's memoized
-        in the module global `_tracking_table` and reused in further calls to
-        this method.
-        """
-        global _tracking_table
-        if _tracking_table is None:
-            table = self.metadata.tables.get(TRACKING_TABLE_NAME)
-            if table is None:
-                table = self._create_tracking_table()
-            _tracking_table = table
-        return _tracking_table
-
-    def _current_version(self):
-        versions_table = self._get_tracking_table()
-        current_version_row = self.execute(
-            select([versions_table.c.upgradeid]).where(
-                versions_table.c.profileid == self.profileid).distinct()
-        ).fetchone()
-        return current_version_row.upgradeid or 0
-
-    def _has_upgrades_to_install(self):
-        return self._current_version() < self.upgradeid
-
-    def _create_tracking_table(self):
-        tracking_table_definition = (
-            TRACKING_TABLE_NAME,
-            Column('profileid', String(50), primary_key=True),
-            Column('upgradeid', BigInteger, nullable=False),
-        )
-        table = self.op.create_table(*tracking_table_definition)
-        return table
-
-    def _insert_initial_version(self):
-        versions_table = self._get_tracking_table()
-        result = self.execute(
-            versions_table.select().where(
-                versions_table.c.profileid == self.profileid)
-        ).fetchall()
-        if result:
-            return
-
-        self.execute(
-            versions_table.insert().values(profileid=self.profileid,
-                                           upgradeid=0))
-
-    def _update_migrated_version(self):
-        versions_table = self._get_tracking_table()
-        self.execute(
-            versions_table.update().values(upgradeid=self.upgradeid).
-            where(versions_table.c.profileid == self.profileid)
-        )
-
-    def _create_operations(self):
-        """MySQL does not have transactional DDL, we might have to recover
-        from partially executed migrations, thus we use IdempotentOperations.
-
-        For all other DBMS (oracle and PostgreSQL) use alembic operations since
-        they have transactional DDL and IdempotentOperations does not work
-        there.
-
-        """
-        if self.is_mysql:
-            return IdempotentOperations(self.migration_context, self)
-        else:
-            return Operations(self.migration_context)
-
     def _setup_db_connection(self):
         super(SchemaMigration, self)._setup_db_connection()
 
         self.dialect_name = self.connection.dialect.name
-        self.migration_context = MigrationContext.configure(self.connection)
         self.metadata = MetaData(self.connection, reflect=True)
-        self.op = self._create_operations()
+        self.op = get_operations(self.connection)
+
+
+class GeverUpgradeStepRecorder(UpgradeStepRecorder):
+    """The upgrade step recorder is customized for GEVER in order to track
+    SQL schema migrations in an SQL table, so that schema migrations are only
+    executed once per cluster.
+
+    The customization is responsible for the tracking table: it creates,
+    updates and migrates the tracking table.
+    """
+
+    def is_installed(self, target_version):
+        if self.is_marked_installed_in_sql(target_version):
+            return True
+        return super(GeverUpgradeStepRecorder, self).is_installed(target_version)
+
+    def mark_as_installed(self, target_version):
+        super(GeverUpgradeStepRecorder, self).mark_as_installed(target_version)
+        self.mark_as_installed_in_sql(target_version)
+
+    def is_marked_installed_in_sql(self, target_version):
+        if not self.is_schema_migration(target_version):
+            return False  # not a SchemaMigration, so its not tracked in SQL.
+
+        self._setup_db_connection()
+        tracking_record = self.session.query(self._get_tracking_table()).filter_by(
+            profileid=self.profile,
+            upgradeid=target_version).first()
+
+        return tracking_record is not None
+
+    def mark_as_installed_in_sql(self, target_version):
+        if not self.is_schema_migration(target_version):
+            return False  # we only track SchemaMigration upgrade steps in SQL
+
+        self._setup_db_connection()
+        mark_changed(self.session)
+        self.session.execute(self._get_tracking_table().insert().values(
+            profileid=self.profile,
+            upgradeid=target_version))
+
+    def is_schema_migration(self, target_version):
+        portal_setup = getToolByName(self.portal, 'portal_setup')
+        for info in portal_setup.listUpgrades(self.profile, show_old=True):
+            if not isinstance(info, dict):
+                # Upgrade step groups are nested in a list and they never
+                # contain schema migrations.
+                continue
+
+            if info['dest'] == (target_version,):
+                return ISchemaMigration.providedBy(info['step'].handler)
+
+        return False
+
+    @forever.memoize
+    def _get_tracking_table(self):
+        """Fetches the tracking table from the DB schema metadata if present,
+        or creates it if necessary.
+        """
+        table = MetaData(self.connection, reflect=True).tables.get(TRACKING_TABLE_NAME)
+        if table is not None:
+            self._migrate_tracking_table(table)
+            return table
+        else:
+            mark_changed(self.session)
+            return self.operations.create_table(*TRACKING_TABLE_DEFINITION)
+
+    def _migrate_tracking_table(self, table):
+        """Verify tracking table state and apply migrations on the fly when necessary.
+        We cannot do that in a schema migration because the migration mechanism relies
+        on it - thus we might need to run other schema migrations before running the
+        migration updating the table to the state the code expects.
+        """
+        if not table.columns.get('upgradeid').primary_key:
+            # We need a primarykey over both columns (profileid and upgradeid) in order
+            # to track / record each upgrade step for a profile; we used to only store
+            # the newest version.
+            mark_changed(self.session)
+            self.operations.drop_constraint('opengever_upgrade_version_pkey',
+                                            TRACKING_TABLE_NAME)
+            self.operations.create_primary_key('opengever_upgrade_version_pkey',
+                                               TRACKING_TABLE_NAME,
+                                               ['profileid', 'upgradeid'])
+
+    def _setup_db_connection(self):
+        self.session = create_session()
+        self.connection = self.session.connection()
+        self.operations = get_operations(self.connection)
