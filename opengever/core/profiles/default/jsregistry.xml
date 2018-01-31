@@ -327,7 +327,7 @@
       enabled="True"
       id="++resource++opengever.disposition/disposition.js"
       inline="False"
-      insert-after="++resource++opengever.base/trix-custom.js"
+      insert-after="++resource++opengever.base/Controller.js"
       />
 
   <javascript
