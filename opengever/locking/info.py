@@ -2,11 +2,12 @@ from opengever.base.oguid import Oguid
 from opengever.locking.lock import LOCK_TYPE_MEETING_EXCERPT_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_SUBMITTED_LOCK
 from opengever.locking.lock import LOCK_TYPE_SYS_LOCK
+from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import SubmittedDocument
+from plone import api
 from plone.locking.browser.info import LockInfoViewlet
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from opengever.meeting.model import GeneratedExcerpt
 
 
 class GeverLockInfoViewlet(LockInfoViewlet):
@@ -19,6 +20,8 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         'templates/submitted_document_lock_template.pt')
     excerpt_document_lock_template = ViewPageTemplateFile(
         'templates/excerpt_document_lock_template.pt')
+    oc_document_lock_template = ViewPageTemplateFile(
+        'templates/oc_document_lock_template.pt')
 
     # templates seem to be converted to BoundPageTemplate with acquisition
     # magic, thus we cannot put the ViewPageTemplateFile instances directly
@@ -26,7 +29,8 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     custom_templates = {
         LOCK_TYPE_SYS_LOCK: 'meeting_lock_template',
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
-        LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template'
+        LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template',
+        "office_connector_lock": 'oc_document_lock_template'
     }
 
     def render(self):
@@ -41,12 +45,14 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         lock_info = self.lock_info()
         if not lock_info:
             return None
-
         lock_type = lock_info.get('type')
-        if not lock_type:
-            return None
+        owner = lock_info.get('owner')
+        if not lock_type and owner == '<D:href>Office Connector</D:href>':
+            return "office_connector_lock"
+        return getattr(lock_type, "__name__", None)
 
-        return lock_type.__name__
+    def current_user_can_unlock_document(self):
+        return "Manager" in api.user.get_roles()
 
     def get_related_meeting_from_protocol(self):
         oguid = Oguid.for_object(self.context)
@@ -84,3 +90,12 @@ class GeverLockInfoViewlet(LockInfoViewlet):
             return None
 
         return agenda_item.meeting
+
+    def lock_info(self):
+        lock_info = self.info.lock_info()
+        locks = self.context.wl_lockValues()
+        if len(locks) == 0:
+            return lock_info
+        lock = locks[0]
+        lock_info["owner"] = lock.getOwner().strip()
+        return lock_info

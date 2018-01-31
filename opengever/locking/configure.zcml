@@ -5,6 +5,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.locking">
 
+  <include package=".browser" />
+
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 
