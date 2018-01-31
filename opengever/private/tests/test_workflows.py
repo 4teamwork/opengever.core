@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestPrivateFolderWorkflow(FunctionalTestCase):
@@ -14,8 +15,17 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def setUp(self):
         super(TestPrivateFolderWorkflow, self).setUp()
         self.root = create(Builder('private_root'))
-        self.folder = create_members_folder(self.root)
 
+        private_policy_id = 'opengever_private_policy'
+        # enable opengever.private placeful workflow policy
+        self.root.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
+        policy_config = pwf_tool.getWorkflowPolicyConfig(self.root)
+        policy_config.setPolicyIn(private_policy_id, update_security=False)
+        policy_config.setPolicyBelow(private_policy_id, update_security=False)
+
+        self.folder = create_members_folder(self.root)
         self.hugo = create(Builder('user')
                            .named('Hugo', 'Boss')
                            .with_roles('Member'))
@@ -41,7 +51,6 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def test_owner_can_add_private_dossiers(self, browser):
         browser.login().open(self.folder)
         self.assertIn('Private Dossier', factoriesmenu.addable_types())
-
 
     @browsing
     def test_admin_cant_access_private_dossier(self, browser):
@@ -78,7 +87,7 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
             browser.login(self.hugo).visit(dossier)
 
     @browsing
-    def test_only_owner_and_admin_can_see_private_documents(self, browser):
+    def test_only_owner_and_member_admins_can_see_private_documents(self, browser):
         dossier = create(Builder('private_dossier')
                          .within(self.folder)
                          .titled(u'Zuz\xfcge'))
@@ -88,9 +97,27 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
                           .titled(u'Some File'))
 
         browser.login().visit(document)
-        browser.login(self.admin).visit(document)
+        browser.login(self.member_admin).visit(document)
+
         with browser.expect_unauthorized():
+            browser.login(self.admin).visit(document)
             browser.login(self.hugo).visit(document)
+
+    @browsing
+    def test_only_owner_and_member_admins_can_see_private_mails(self, browser):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .titled(u'Zuz\xfcge'))
+        mail = create(Builder('mail')
+                      .within(dossier)
+                      .with_dummy_message())
+
+        browser.login().visit(mail)
+        browser.login(self.member_admin).visit(mail)
+
+        with browser.expect_unauthorized():
+            browser.login(self.admin).visit(mail)
+            browser.login(self.hugo).visit(mail)
 
     def test_make_sure_private_root_has_no_additional_local_roles(self):
         self.assertEquals({'test_user_1_': ['Owner']},
