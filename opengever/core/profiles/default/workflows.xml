@@ -13,6 +13,8 @@
   <object name="opengever_private_dossier_workflow" meta_type="Workflow" />
   <object name="opengever_private_folder_workflow" meta_type="Workflow" />
   <object name="opengever_private_root_workflow" meta_type="Workflow" />
+  <object name="opengever_private_document_workflow" meta_type="Workflow" />
+  <object name="opengever_private_mail_workflow" meta_type="Workflow" />
   <object name="opengever_proposal_workflow" meta_type="Workflow" />
   <object name="opengever_repository_workflow" meta_type="Workflow" />
   <object name="opengever_repositoryroot_workflow" meta_type="Workflow" />
