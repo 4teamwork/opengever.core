@@ -1,9 +1,13 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.browser import edit_public_trial
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 
 
@@ -76,7 +80,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                            and 'Document' in factoriesmenu.addable_types()
+                    and 'Document' in factoriesmenu.addable_types()
 
         self.maxDiff = None
         self.assertEquals(expected, got)
@@ -94,7 +98,27 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             with self.login(user, browser):
                 browser.open(self.workspace)
                 got[user] = factoriesmenu.visible() \
-                            and 'WorkspaceFolder' in factoriesmenu.addable_types()
+                    and 'WorkspaceFolder' in factoriesmenu.addable_types()
 
         self.maxDiff = None
         self.assertEquals(expected, got)
+
+    @browsing
+    def test_workspace_overview_subdossierstructure(self, browser):
+        self.login(self.workspace_owner, browser=browser)
+        browser.visit(self.workspace, view='dossier_navigation.json')
+        self.assertEquals([{u'description': u'',
+                            u'nodes': [],
+                            u'text': u'',
+                            u'uid': IUUID(self.workspace_folder),
+                            u'url': self.workspace_folder.absolute_url()}],
+                          browser.json[0]['nodes'])
+
+    def test_can_access_public_trial_edit_form_for_files_in_workspace(self):
+        self.login(self.workspace_owner)
+
+        document = create(Builder('document').within(self.workspace))
+        self.assertTrue(edit_public_trial.can_access_public_trial_edit_form(self.workspace_owner, document))
+        self.assertTrue(edit_public_trial.can_access_public_trial_edit_form(self.workspace_admin, document))
+        self.assertFalse(edit_public_trial.can_access_public_trial_edit_form(self.workspace_member, document))
+        self.assertFalse(edit_public_trial.can_access_public_trial_edit_form(self.workspace_guest, document))

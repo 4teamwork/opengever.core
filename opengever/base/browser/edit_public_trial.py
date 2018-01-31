@@ -37,6 +37,9 @@ def can_access_public_trial_edit_form(user, content):
     for open_state in DOSSIER_STATES_OPEN:
         state = wftool.get(workflow_id).states.get(open_state)
 
+        if state is None:
+            continue
+
         roles_with_modify = state.permission_roles['Modify portal content']
 
         has_role = bool(set(roles_with_modify) & set(user_roles))
