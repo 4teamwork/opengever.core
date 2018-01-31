@@ -1,4 +1,4 @@
-(function(global, $) {
+(function(global, $, Controller) {
 
   function DispositionController() {
     Controller.call(this);
@@ -47,6 +47,6 @@
     this.init();
   }
 
-  var dispositioncontroller = new DispositionController();
+  new DispositionController();
 
-}(window, jQuery));
+}(window, window.jQuery, window.Controller));

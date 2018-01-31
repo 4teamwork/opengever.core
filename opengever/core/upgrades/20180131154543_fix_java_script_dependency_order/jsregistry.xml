@@ -1,0 +1,8 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+<javascript
+      id="++resource++opengever.disposition/disposition.js"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
+</object>
