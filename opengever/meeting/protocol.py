@@ -65,6 +65,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
             members.append({
+                "firstname": participant.firstname,
+                "lastname": participant.lastname,
                 "fullname": participant.fullname,
                 "email": participant.email,
                 "role": membership.role if membership else None
@@ -87,6 +89,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, self.meeting.presidency)
             participants['presidency'] = {
+                "firstname": self.meeting.presidency.firstname,
+                "lastname": self.meeting.presidency.lastname,
                 "fullname": self.meeting.presidency.fullname,
                 "email": self.meeting.presidency.email,
                 "role": membership.role if membership else None
@@ -96,6 +100,8 @@ class ProtocolData(object):
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, self.meeting.secretary)
             participants['secretary'] = {
+                "firstname": self.meeting.secretary.firstname,
+                "lastname": self.meeting.secretary.lastname,
                 "fullname": self.meeting.secretary.fullname,
                 "email": self.meeting.secretary.email,
                 "role": membership.role if membership else None

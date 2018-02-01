@@ -113,13 +113,19 @@ class TestProtocolJsonData(FunctionalTestCase):
         create_session().delete(self.membership_peter)
 
         self.assertEquals(
-            {'members': [{'fullname': u'B\xe4nni Anna',
+            {'members': [{'firstname': 'Anna',
+                          'lastname': u'B\xe4nni',
+                          'fullname': u'B\xe4nni Anna',
                           'email': 'baenni@example.com',
                          'role': None},
-                         {'fullname': u'M\xfcller Franz',
+                         {'firstname': 'Franz',
+                          'lastname': u'M\xfcller',
+                          'fullname': u'M\xfcller Franz',
                           'role': None,
                           'email': u'mueller@example.com'},
-                         {'fullname': u'M\xfcller Peter',
+                         {'firstname': 'Peter',
+                          'lastname': u'M\xfcller',
+                          'fullname': u'M\xfcller Peter',
                           'role': None,
                           'email': None},
                          ]},
