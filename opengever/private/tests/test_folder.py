@@ -36,7 +36,7 @@ class TestPrivateFolder(FunctionalTestCase):
         self.assertTrue(isinstance(self.folder.Title(), str))
 
     def test_uses_userid_as_reference_number_part(self):
-        self.assertEquals('Client1 test_user_1_',
+        self.assertIn('test_user_1_',
                           IReferenceNumber(self.folder).get_number())
 
     def test_adds_additonal_roles_after_creation(self):
@@ -99,9 +99,9 @@ class TestPrivateFolderTabbedView(FunctionalTestCase):
         self.assertEquals(
             [['', 'Reference Number', 'Title', 'Review state',
               'Responsible', 'Start', 'End'],
-             ['', 'Client1 test_user_1_ / 1', u'Zuz\xfcge',
+             ['', 'P Client1 test_user_1_ / 1', u'Zuz\xfcge',
               'dossier-state-active', '', '01.09.2015', ''],
-             ['', 'Client1 test_user_1_ / 2', u'Abg\xe4nge',
+             ['', 'P Client1 test_user_1_ / 2', u'Abg\xe4nge',
               'dossier-state-active', '', '01.09.2015', '']],
             browser.css('.listing').first.lists())
 
