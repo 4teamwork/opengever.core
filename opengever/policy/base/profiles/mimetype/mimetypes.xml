@@ -461,7 +461,7 @@
       globs="*.oth"
       icon_path="icon_dokument_openoffice_writer.gif"
       mimetypes="application/vnd.oasis.opendocument.text-web"
-      /> 
+      />
 
   <mimetype
       name="ODS spreadsheet"
@@ -524,6 +524,36 @@
       globs="*.odf"
       icon_path="icon_dokument_openoffice_math.gif"
       mimetypes="application/vnd.oasis.opendocument.formula"
+      />
+
+  <!-- Numbers -->
+  <mimetype
+      name="Numbers"
+      binary="True"
+      extensions="numbers"
+      globs="*.numbers"
+      icon_path="icon_dokument_numbers.gif"
+      mimetypes="application/x-iwork-numbers-sffnumbers"
+      />
+
+  <!-- Keynote -->
+  <mimetype
+      name="Keynote"
+      binary="True"
+      extensions="key"
+      globs="*.key"
+      icon_path="icon_dokument_keynote.gif"
+      mimetypes="application/x-iwork-keynote-sffkey"
+      />
+
+  <!-- Pages -->
+  <mimetype
+      name="Pages"
+      binary="True"
+      extensions="pages"
+      globs="*.pages"
+      icon_path="icon_dokument_pages.gif"
+      mimetypes="application/x-iwork-pages-sffpages"
       />
 
   <!-- Various other file formats -->

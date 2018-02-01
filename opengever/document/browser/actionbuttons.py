@@ -58,6 +58,9 @@ class ActionButtonRendererMixin(object):
             return IDocumentSchema.providedBy(self.context)
         return False
 
+    def is_office_connector_editable(self):
+        return self.context.is_office_connector_editable()
+
     def is_checkout_and_edit_available(self):
         if self.is_versioned():
             return False

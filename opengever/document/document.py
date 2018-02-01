@@ -142,9 +142,9 @@ class UploadValidator(validator.SimpleFieldValidator):
 
         raise Invalid(_(
             u'error_mail_upload',
-            default=u"It's not possible to add E-mails here, please "
+            default=(u"It's not possible to add E-mails here, please "
             "send it to ${mailaddress} or drag it to the dossier "
-            "(Dragn'n'Drop).",
+            "(Dragn'n'Drop)."),
             mapping={'mailaddress': mail_address}
             ))
 
@@ -255,6 +255,12 @@ class Document(Item, BaseDocumentMixin):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
         return manager.get_checked_out_by()
+
+    def is_office_connector_editable(self):
+        if self.file is None:
+            return False
+        return self.content_type() in api.portal.get_registry_record(
+            'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types')
 
     def is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(

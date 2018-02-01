@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-27 13:45+0000\n"
+"POT-Creation-Date: 2018-01-29 09:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,7 +178,7 @@ msgstr ""
 msgid "error_file_and_preserved_as_paper"
 msgstr ""
 
-#. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
+#. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr ""
@@ -328,6 +328,11 @@ msgstr ""
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
+msgstr ""
+
+#. Default: "Checkout"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_checkout"
 msgstr ""
 
 #. Default: "Checkout and edit"
@@ -552,6 +557,11 @@ msgstr ""
 #: ./opengever/document/browser/templates/archiv_file.pt
 #: ./opengever/document/browser/templates/macros.pt
 msgid "no_file"
+msgstr ""
+
+#. Default: "Office connector unsupported type"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "oc_unsupported_message"
 msgstr ""
 
 #. Default: "Following documents are checked out:"

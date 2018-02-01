@@ -311,6 +311,11 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         return False
 
+    def is_office_connector_editable(self):
+        """Mail cannot be edited with office connector
+        """
+        return False
+
     def get_current_version_id(self, missing_as_zero=False):
         """Mails cannot be edited, they are read-only."""
         return 0

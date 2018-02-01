@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-27 13:45+0000\n"
+"POT-Creation-Date: 2018-01-29 09:52+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -175,7 +175,7 @@ msgstr "Sie sind dabei, eine Kopie des Dokuments ${filename} herunterzuladen."
 msgid "error_file_and_preserved_as_paper"
 msgstr "Sie haben weder eine Datei ausgewählt noch ist das Dokument in Papierform aufbewahrt, bitte korrigieren."
 
-#. Default: "It's not possible to add E-mails here, please '                    'send it to ${mailaddress} or drag it to the dossier '                    ' (Dragn'n'Drop)."
+#. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."
 #: ./opengever/document/document.py
 msgid "error_mail_upload"
 msgstr "Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop)."
@@ -331,6 +331,11 @@ msgstr "Ausgecheckt"
 #: ./opengever/document/checkout/checkin.py
 msgid "label_checkin_journal_comment"
 msgstr "Journal-Kommentar"
+
+#. Default: "Checkout"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_checkout"
+msgstr "Auschecken"
 
 #. Default: "Checkout and edit"
 #: ./opengever/document/browser/templates/macros.pt
@@ -555,6 +560,11 @@ msgstr "Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Ch
 #: ./opengever/document/browser/templates/macros.pt
 msgid "no_file"
 msgstr "Keine Datei"
+
+#. Default: "Office connector unsupported type"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "oc_unsupported_message"
+msgstr "Dieses Dokumentformat wird vom Office Connector nicht unterstützt und kann deshalb nicht direkt bearbeitet werden."
 
 #. Default: "Following documents are checked out:"
 #: ./opengever/document/browser/templates/logout_overlay.pt
