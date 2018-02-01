@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Sort attachments for proposal and submitted proposal alphabetically. [Rotonen]
 - OGIP 17: Use tabbedview as default view for WorkspaceFolder + Fix two display issues [mathias.leimgruber]
 - OGIP 17: Implement internal invitations for Workspaces. [mathias.leimgruber]
 - Improve description for committee group label. [deiferni]

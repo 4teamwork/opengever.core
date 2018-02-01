@@ -471,8 +471,8 @@ class SubmittedProposal(ProposalBase):
         documents = catalog(
             portal_type=['opengever.document.document', 'ftw.mail.mail'],
             path=dict(query='/'.join(self.getPhysicalPath())),
-            sort_on='modified',
-            sort_order='reverse')
+            sort_on='sortable_title'
+            )
 
         ignored_documents = [self.get_excerpt()]
         if is_word_meeting_implementation_enabled():
@@ -588,9 +588,10 @@ class Proposal(ProposalBase):
         return self.load_model().is_editable_in_dossier()
 
     def get_documents(self):
-        documents = [relation.to_object for relation in self.relatedItems]
-        documents.sort(lambda a, b: cmp(b.modified(), a.modified()))
-        return documents
+        return sorted(
+            [relation.to_object for relation in self.relatedItems],
+            key=lambda document: document.title_or_id(),
+            )
 
     def get_excerpt(self):
         return self.load_model().resolve_excerpt_document()
