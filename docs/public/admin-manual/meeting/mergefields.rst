@@ -84,6 +84,15 @@ Metadaten zur Sitzung:
 Metadaten zu einem Sitzungsteilnehmer (Participant):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+- ``member.firstname``
+  Vorname eines Teilnehmers (String). Dabei ist member eine Laufvariable, die
+  für die Iteration über alle Elemente von ``participants.members`` verwendet
+  wird.
+
+- ``member.lastname``
+  Name eines Teilnehmers (String). Dabei ist member eine Laufvariable, die für
+  die Iteration über alle Elemente von ``participants.members`` verwendet wird.
+
 - ``member.fullname``
 
   Vollständiger Name eines Teilnehmers (String). Dabei ist member eine
