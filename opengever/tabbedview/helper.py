@@ -199,11 +199,10 @@ def linked_version_preview(item, value):
             _('label_preview', default='Preview'),
             context=getRequest()).encode('utf-8')
     }
-
     return """
     <div>
         <a class="showroom-item function-preview-pdf"
-           href="{%(url)s}"
+           href="%(url)s"
            data-showroom-target="%(showroom_url)s"
            data-showroom-title="%(showroom_title)s">%(title)s</a>
     </div>
