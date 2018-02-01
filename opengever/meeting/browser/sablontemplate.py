@@ -52,13 +52,13 @@ SAMPLE_MEETING_DATA = {
         'is_paragraph': False,
         'decision_number': 1,
         'attachments': [{
+            "title": u'Beweisaufn\xe4hme',
+            "filename": u"beweisaufnahme.txt"
+            }, {
             "title": u"L\xf6rem",
             "filename": u"lorem.eml"
             }, {
             "title": "Strafbefehl"
-            }, {
-            "title": u'Beweisaufn\xe4hme',
-            "filename": u"beweisaufnahme.txt"
             }]
     }, {
         'description': u'R\xfccktritt Hans Muster',
