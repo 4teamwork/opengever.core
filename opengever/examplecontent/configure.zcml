@@ -11,7 +11,7 @@
 
 
   <opengever:registerDeployment
-      title="Development with examplecontent"
+      title="Development with examplecontent (FD)"
       policy_profile="opengever.examplecontent:default"
       additional_profiles="opengever.setup:default_content
                            opengever.examplecontent:empty_templates
@@ -19,6 +19,19 @@
                            opengever.examplecontent:municipality_content
                            opengever.examplecontent:init"
       admin_unit_id="fd"
+      records_manager_group="record_managers"
+      archivist_group="archiv"
+      />
+
+  <opengever:registerDeployment
+      title="Development with examplecontent (SKA)"
+      policy_profile="opengever.examplecontent:default-ska"
+      additional_profiles="opengever.setup:default_content
+                           opengever.examplecontent:empty_templates
+                           opengever.examplecontent:repository_minimal
+                           opengever.examplecontent:municipality_content
+                           opengever.examplecontent:init"
+      admin_unit_id="ska"
       records_manager_group="record_managers"
       archivist_group="archiv"
       />
@@ -36,6 +49,13 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   <include package=".upgrades" />
+
+  <genericsetup:registerProfile
+      name="default-ska"
+      title="opengever.examplecontent: default-ska"
+      directory="profiles/default-ska"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
 
   <genericsetup:registerProfile
       name="init"
