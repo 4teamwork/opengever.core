@@ -26,7 +26,7 @@
             <tr tal:condition="documents">
               <th i18n:translate="label_attachments">Attachments</th>
               <td>
-                <ul>
+                <ul class="proposal_attachments">
                   <li tal:repeat="document documents">
 
                     <a tal:replace="structure document/render_link" />
