@@ -495,4 +495,15 @@
       insert-after="++resource++opengever.base/keywordwidget.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/generateToc.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
 </object>
