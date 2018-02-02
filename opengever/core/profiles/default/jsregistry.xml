@@ -338,7 +338,7 @@
       enabled="True"
       id="++resource++opengever.document/logout_overlay.js"
       inline="False"
-      insert-after="++resource++opengever.disposition/disposition.js"
+      insert-after="++resource++opengever.base/logoutClient.js"
       />
 
   <javascript
