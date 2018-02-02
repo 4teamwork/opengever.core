@@ -326,24 +326,32 @@ LocalStorageJSONCache = function(name, url) {
     }
   }
 
+  var loaded = $.Deferred();
+  var loading = false;
+
   return {
-    'load': function(callback) {
+    'load': function() {
       if (json_cache) {
-        callback(json_cache);
+        loaded.resolve(json_cache);
       }
       else if (is_cached(url)) {
-        callback(get(url));
+        loaded.resolve(get(url));
       } else {
-        $.ajax({
-          dataType: 'text',  // we want to store it in localStorage
-          url: url,
-          cache: true,
-          success: function(data) {
-            set(url, data);
-            callback(get());
-          }
-        });
+        if (!loading) {
+          loading = true;
+          $.ajax({
+            dataType: 'text',  // we want to store it in localStorage
+            url: url,
+            cache: true,
+            success: function(data) {
+              set(url, data);
+              loaded.resolve(get());
+              loading = false;
+            }
+          });
+        }
       }
+      return loaded;
     }};
 };
 
@@ -395,7 +403,7 @@ RepositoryFavorites = function(url, cache_param) {
       if(_data_cache) {
         callback(_data_cache);
       } else {
-        local_storage.load(function(data) {
+        local_storage.load().done(function(data) {
           _data_cache = data;
           callback(data);
         });

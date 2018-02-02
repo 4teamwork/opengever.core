@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Prevent navigation tree from getting favorites multiple times. [Kevin Bieri]
 - SPV: Rename "abgeschlossene Sitzungen" to "vergangene Sitzungen". [tarnap]
 - SPV: Sort memberships by member's last name. [tarnap]
 - Fix logout overlay when used with cross tab logout. [Kevin Bieri]
