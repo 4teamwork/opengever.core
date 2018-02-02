@@ -225,8 +225,8 @@
       $(document).ajaxComplete(function(event, jqXHR, params) {
         if (params.url.indexOf("@@updated_search") !== -1 &&
             params.url.indexOf("deactivate_update=true") === -1) {
-
           updateShowroom();
+          BumblebeeCable.gatherNodes();
         }
 
       });
@@ -330,11 +330,24 @@
   }
 
   $(document)
-    .on("reload", updateShowroom)
-    .on("viewReady", updateShowroom)
+    .on("reload", function() {
+      BumblebeeCable.gatherNodes();
+      updateShowroom();
+    })
+    .on("ready", function() {
+      BumblebeeCable.init(window.bumblebee_notification_url);
+    })
+    .on("tooltip.show", function() {
+      scanForBrokenImages(".bumblebee-thumbnail");
+      BumblebeeCable.gatherNodes();
+    })
+    .on("showroom:item:shown", BumblebeeCable.gatherNodes)
+    .on("viewReady", function() {
+      BumblebeeCable.gatherNodes();
+      updateShowroom();
+    })
     .on("agendaItemsReady", updateShowroom)
     .on("click", ".bumblebeeGalleryShowMore", loadNextTabbedviewGalleryView)
-    .on("tooltip.show", function() { scanForBrokenImages(".bumblebee-thumbnail"); })
     .on("click", "#ftw-showroom-menu", toggleMenu);
   $(init);
 

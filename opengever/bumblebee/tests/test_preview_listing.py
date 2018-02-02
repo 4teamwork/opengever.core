@@ -53,7 +53,8 @@ class TestPreviewListing(IntegrationTestCase):
             dict(browser.css('div.showroom-item > span').first.attrib))
 
         img_attrs = dict(browser.css('div.showroom-item > img').first.attrib)
-        img_attrs.pop('src')
+        for e in ['src', 'data-bumblebee-src', 'data-bumblebee-checksum']:
+            img_attrs.pop(e)
         self.assertDictEqual(
             {'class': 'file-preview bumblebee-thumbnail',
              'alt': u'Vertr\xe4gsentwurf'},

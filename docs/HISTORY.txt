@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Implement bumblebee's auto refresh functionality. [siegy]
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]

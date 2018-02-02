@@ -440,9 +440,19 @@
       cookable="True"
       enabled="True"
       expression=""
-      id="++resource++opengever.bumblebee.resources/bumblebee.js"
+      id="++resource++opengever.bumblebee.resources/bumblebee-cable.js"
       insert-after="++resource++opengever.meeting/datetimepicker.js"
       inline="False"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="True"
+      expression=""
+      id="++resource++opengever.bumblebee.resources/bumblebee.js"
+      insert-after="++resource++opengever.bumblebee.resources/bumblebee-cable.js"
       />
 
   <javascript

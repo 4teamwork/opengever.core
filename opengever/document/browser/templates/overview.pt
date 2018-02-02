@@ -22,7 +22,9 @@
                  tal:attributes="data-showroom-target view/get_overlay_url;
                                  data-showroom-title string:${context/title};
                                  src view/get_preview_image_url;
-                                 alt context/title" />
+                                 alt context/title;
+                                 data-bumblebee-src view/get_preview_image_url;
+                                 data-bumblebee-checksum view/get_bumblebee_checksum" />
         </div>
     </div>
 </body>

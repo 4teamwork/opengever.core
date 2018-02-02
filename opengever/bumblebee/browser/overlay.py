@@ -1,6 +1,7 @@
 from Acquisition import aq_parent
 from ftw import bumblebee
 from ftw.bumblebee.mimetypes import is_mimetype_supported
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -57,6 +58,9 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     def get_preview_pdf_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context, 'preview')
+
+    def get_bumblebee_checksum(self):
+        return IBumblebeeDocument(self.context).get_checksum()
 
     def get_mime_type_css_class(self):
         return get_css_class(self.context)
