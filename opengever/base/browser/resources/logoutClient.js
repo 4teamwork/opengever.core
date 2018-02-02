@@ -7,24 +7,28 @@
     logoutWorker = new SharedWorker(workerSrc);
     // Reload the tab when the LogoutBus sends a broadcast message
     logoutWorker.port.onmessage = function() { location.reload(); };
-    setupListeners();
   }
 
   // Prevent the default login behavior. Broadcast a logout message to all open gever tabs instead.
-  function trackLogout(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    $.get(global.portal_url + '/logout').done(() => {
+  function logout(url) {
+    // Reject the promise immediately when the logout worker has not been initialized
+    if (!logoutWorker) {
+      return $.Deferred().promise().reject();
+    }
+
+    // Trigger the logout and broadcast to the other gever tabs
+    return $.get(url).done(function() {
       logoutWorker.port.postMessage('logout');
     });
   }
 
-  function setupListeners() {
-    var logoutButton = $('#personaltools-logout > a');
-    logoutButton.on('click', trackLogout);
-  }
-
+  // Check if SharedWorker is supported
   if('SharedWorker' in window) {
     $(initWorker);
   }
+
+  // Pop the logout API to the global scope
+  window.logoutWorker = {};
+  window.logoutWorker.logout = logout;
+
 })(window, window.jQuery);
