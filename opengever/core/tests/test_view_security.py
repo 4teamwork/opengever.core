@@ -23,6 +23,7 @@ WHITELIST = (
     'opengever.base.browser.context.WrapperContextState',
     'opengever.base.browser.ploneform_macros.Macros',
     'opengever.base.widgets.GeverRenderWidget',
+    'opengever.base.browser.jsvariables.GeverJSVariables',
 
     # The bumblebee token is verified in these views:
     'opengever.bumblebee.browser.callback.StoreArchivalFile',
