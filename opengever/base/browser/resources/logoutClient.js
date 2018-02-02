@@ -13,7 +13,7 @@
   function logout(url) {
     // Reject the promise immediately when the logout worker has not been initialized
     if (!logoutWorker) {
-      return $.Deferred().promise().reject();
+      return $.Deferred().reject();
     }
 
     // Trigger the logout and broadcast to the other gever tabs
