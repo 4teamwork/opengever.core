@@ -19,6 +19,7 @@ from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_containing_subdossier
 from opengever.tabbedview.helper import linked_document
+from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
@@ -142,15 +143,15 @@ class Documents(BaseCatalogListingTab):
 
         {'column': 'document_date',
          'column_title': _('label_document_date', default="Document Date"),
-         'transform': helper.readable_date},
+         'transform': readable_date},
 
         {'column': 'receipt_date',
          'column_title': _('label_receipt_date', default="Receipt Date"),
-         'transform': helper.readable_date},
+         'transform': readable_date},
 
         {'column': 'delivery_date',
          'column_title': _('label_delivery_date', default="Delivery Date"),
-         'transform': helper.readable_date},
+         'transform': readable_date},
 
         {'column': 'checked_out',
          'column_title': _('label_checked_out', default="Checked out by"),
@@ -246,11 +247,11 @@ class Dossiers(BaseCatalogListingTab):
 
         {'column': 'start',
          'column_title': _(u'label_start', default=u'Start'),
-         'transform': helper.readable_date},
+         'transform': readable_date},
 
         {'column': 'end',
          'column_title': _(u'label_end', default=u'End'),
-         'transform': helper.readable_date},
+         'transform': readable_date},
         )
 
     search_options = {'is_subdossier': False}

@@ -1,4 +1,7 @@
+from datetime import datetime
 from ftw.mail.utils import get_header
+from ftw.solr.document import SolrDocument
+from ftw.table import helper
 from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.utils import get_hostname
@@ -139,7 +142,7 @@ def linked(item, value):
 
     # Determine URL and UID
     url = get_url(item)
-    if ICatalogBrain.providedBy(item):
+    if ICatalogBrain.providedBy(item) or isinstance(item, SolrDocument):
         uid = item.UID
     else:
         uid = IUUID(item)
@@ -207,6 +210,16 @@ def linked_version_preview(item, value):
            data-showroom-title="%(showroom_title)s">%(title)s</a>
     </div>
     """ % data
+
+
+# Also handles datetime strings from Solr
+def readable_date(item, date):
+    if isinstance(date, str):
+        try:
+            date = datetime.strptime(date[:10], '%Y-%m-%d').date()
+        except ValueError:
+            return ''
+    return helper.readable_date(item, date)
 
 
 def readable_date_set_invisibles(item, date):
