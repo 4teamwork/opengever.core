@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
+      i18n:domain="opengever.activity"
       tal:define="portal_url context/@@plone_portal_state/portal_url">
   <head>
     <meta charset="utf-8"> <!-- utf-8 works for most cases -->
@@ -194,7 +195,7 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                   <tr>
                     <td style="padding: 20px 0; text-align: center">
-                      <img tal:attributes="src string:${portal_url}/customlogo" width="200" height="auto" alt="alt_text" border="0" style="height: auto;">
+                      <img src="cid:image1" width="200" height="auto" alt="logo" border="0" style="height: auto;">
                       </td>
                     </tr>
                   </table>
@@ -209,7 +210,10 @@
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                           <tr>
                             <td style="padding: 40px; font-family: Arial, sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
-                              <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;">Daily Digest</h1>
+                              <h1 style="text-align: center; margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 24px; line-height: 125%; color: #333333; font-weight: normal;"
+                                  i18n:translate="label_daily_digest">
+                                Daily Digest
+                              </h1>
                               <p tal:content="options/today" style="text-align: center; margin: 0;">today</p>
                             </td>
                           </tr>
@@ -263,7 +267,7 @@
                                        i18n:translate="label_notification_settings"
                                        tal:attributes="href string:${portal_url}/@@personal-preferences"
                                        style="font-family: Arial, sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;">
-                                      Notification Settings
+                                      Notification settings
                                     </a>
                                   </td>
                                 </tr>
