@@ -41,3 +41,18 @@ Die Inhaltsstatistiken werden einmal pro Tag mittels dem
 
     # GEVER Demo: Dump content stats
     0 22 * * * /home/zope/server/01-gever.example.org/bin/dump-content-stats -s <plone_site_id> >/dev/null 2>&1
+
+
+Daily Digest
+^^^^^^^^^^^^
+
+Die Daily Digest mails können via zopectl handler `send_digest` generiert und versandt werden. Da sie automatisch alle Benachrichtigungen der letzen 24h behandelt, sollte auch der Cronjob so eingericht werden das er alle 24h ausgeführt wird.
+
+.. code:: bash
+
+    # GEVER Demo: Send daily digest
+    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 send_digest >/dev/null 2>&1
+
+
+**Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
+der Daily Digest nur einmal durchgeführt werden! Es ist zu empfehlen die gleiche Konvention wie bei der OGDS Synchronisierung zu verwenden, also jeweils auf dem ersten Mandanten / Deployment des Verbunds durchführen.
