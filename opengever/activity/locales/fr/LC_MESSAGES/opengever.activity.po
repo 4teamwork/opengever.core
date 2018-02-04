@@ -4,21 +4,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-19 14:59+0000\n"
+"POT-Creation-Date: 2018-02-04 19:09+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-activity/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -110,6 +109,12 @@ msgstr "activité"
 msgid "label_badge"
 msgstr "message GEVER"
 
+#. Default: "Daily Digest"
+#: ./opengever/activity/browser/settings.py
+#: ./opengever/activity/templates/digest.pt
+msgid "label_daily_digest"
+msgstr ""
+
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
@@ -122,6 +127,7 @@ msgstr "e-mail"
 
 #. Default: "Notification settings"
 #: ./opengever/activity/browser/templates/settings.pt
+#: ./opengever/activity/templates/digest.pt
 msgid "label_notification_settings"
 msgstr "paramètres de notification"
 
@@ -144,6 +150,11 @@ msgstr "Manager records"
 #: ./opengever/activity/roles.py
 msgid "regular_watcher"
 msgstr "surveillant"
+
+#. Default: "Daily Digest"
+#: ./opengever/activity/digest.py
+msgid "subject_digest"
+msgstr ""
 
 #. Default: "GEVER Task"
 #: ./opengever/activity/mail.py
