@@ -25,10 +25,9 @@ class DigestMailer(Mailer):
     template = ViewPageTemplateFile("templates/digest.pt")
 
     def get_notifications(self):
-        query = Notification.query.from_last_24_hours()
-        query = query.filter(Notification.is_digest.is_(True))
-
         notifications = {}
+
+        query = Notification.query.unsent_digest_notifications()
         for notification in query.all():
             if notification.userid in notifications:
                 notifications[notification.userid].append(notification)

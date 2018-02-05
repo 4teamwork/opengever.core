@@ -7,6 +7,7 @@ from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import and_
 import pytz
 
 
@@ -31,6 +32,10 @@ class NotificationQuery(BaseQuery):
             return self.filter_by(activity_id=activity.id).filter(Notification.userid.in_(user_ids))
 
         return self.filter_by(activity_id=activity.id).filter(Notification.userid.is_(None))
+
+    def unsent_digest_notifications(self):
+        return self.filter(and_(Notification.is_digest.is_(True),
+                                Notification.sent_in_digest.is_(False)))
 
     def from_last_24_hours(self):
         since = datetime.now().replace(tzinfo=pytz.utc) - timedelta(hours=24)

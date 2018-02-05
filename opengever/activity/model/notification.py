@@ -24,6 +24,9 @@ class Notification(Base):
     is_badge = Column(Boolean, default=False, nullable=False)
     is_digest = Column(Boolean, default=False, nullable=False)
 
+    # Flag if the notification has already been part of a digest mail
+    sent_in_digest = Column(Boolean, default=False, nullable=False)
+
     def __repr__(self):
         return u'<Notification {} for {} on {} >'.format(
             self.notification_id,

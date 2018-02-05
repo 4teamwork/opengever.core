@@ -23,27 +23,37 @@ class TestDigestMail(IntegrationTestCase):
                     created=pytz.UTC.localize(datetime(2017, 10, 15, 18, 24)),
                     resource=resource))
 
-        create(Builder('notification')
-               .having(activity=activity,
-                       is_digest=True,
-                       userid=self.regular_user.getId()))
-        create(Builder('notification')
-               .having(activity=activity,
-                       is_digest=True,
-                       userid=self.dossier_responsible.getId()))
+        self.note1 = create(Builder('notification')
+                            .having(activity=activity,
+                                    is_digest=True,
+                                    userid=self.regular_user.getId()))
+        self.note2 = create(Builder('notification')
+                            .having(activity=activity,
+                                    is_digest=True,
+                                    userid=self.dossier_responsible.getId()))
 
     def tearDown(self):
         super(TestDigestMail, self).tearDown()
         Mailing(self.portal).tear_down()
 
     def test_sends_mail_to_all_notified_users(self):
-        with freeze(datetime(2017, 10, 16, 0, 0)):
-            DigestMailer().send_digests()
+        DigestMailer().send_digests()
 
         messages = [message_from_string(mail)
                     for mail in Mailing(self.portal).get_messages()]
         self.assertEquals(2, len(messages))
         self.assertEquals(['foo@example.com', 'robert.ziegler@gever.local'],
+                          [message.get('To') for message in messages])
+
+    def test_sends_only_not_yet_sended_notifications(self):
+        self.note2.sent_in_digest = True
+
+        DigestMailer().send_digests()
+
+        messages = [message_from_string(mail)
+                    for mail in Mailing(self.portal).get_messages()]
+        self.assertEquals(1, len(messages))
+        self.assertEquals(['foo@example.com'],
                           [message.get('To') for message in messages])
 
     @browsing

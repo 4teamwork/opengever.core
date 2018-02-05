@@ -64,35 +64,25 @@ class TestNotification(ActivityTestCase):
             [TASK_RESPONSIBLE_ROLE], activity).all()
         self.assertEqual([], notifications)
 
-    def test_from_last_24_hours(self):
+    def test_unsent_digest_notifications(self):
         resource = create(Builder('resource').oguid('fd:123'))
         activity1 = create(Builder('activity')
                            .having(title=u'Bitte \xc4nderungen nachvollziehen',
-                                   created=pytz.UTC.localize(datetime(2017, 10, 15, 18, 24)),
-                                   resource=resource))
-        activity2 = create(Builder('activity')
-                           .having(title=u'Testen',
-                                   created=pytz.UTC.localize(datetime(2017, 10, 14, 20, 24)),
                                    resource=resource))
 
-        note_1 = create(Builder('notification')
-                        .having(activity=activity1, userid=u'h\xfcgo'))
-        note_2 = create(Builder('notification')
-                        .having(activity=activity1, userid=u'peter'))
-        note_3 = create(Builder('notification')
-                        .having(activity=activity2, userid=u'h\xfcgo'))
+        create(Builder('notification')
+               .having(activity=activity1, userid=u'h\xfcgo',
+                       is_digest=False))
+        create(Builder('notification')
+               .having(activity=activity1, userid=u'peter',
+                       is_digest=True, sent_in_digest=True))
+        note3 = create(Builder('notification')
+                       .having(activity=activity1, userid=u'peter',
+                               is_digest=True, sent_in_digest=False))
 
-        with freeze(datetime(2017, 10, 16, 0, 0)):
-            self.assertEqual([note_1, note_2],
-                             Notification.query.from_last_24_hours().all())
-
-        with freeze(datetime(2017, 10, 16, 19, 0)):
-            self.assertEqual([],
-                             Notification.query.from_last_24_hours().all())
-
-        with freeze(datetime(2017, 10, 15, 19, 0)):
-            self.assertEqual([note_1, note_2, note_3],
-                             Notification.query.from_last_24_hours().all())
+        self.assertEqual(
+            [note3],
+            Notification.query.unsent_digest_notifications().all())
 
 
 class TestResource(ActivityTestCase):
