@@ -9,7 +9,14 @@ from zope.interface import implementer
 
 @implementer(IOGSolrDocument)
 class OGSolrDocument(SolrDocument):
-    pass
+
+    @property
+    def bumblebee_checksum(self):
+        return self.get('bumblebee_checksum', None)
+
+    @property
+    def containing_dossier(self):
+        return self.get('containing_dossier', None)
 
 
 class OGSolrContentListing(SolrContentListing):
