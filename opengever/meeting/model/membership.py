@@ -33,7 +33,11 @@ class Membership(Base, SQLFormSupport):
     committee_id = Column(Integer, ForeignKey('committees.id'))
     committee = relationship("Committee", backref="memberships")
     member_id = Column(Integer, ForeignKey('members.id'))
-    member = relationship("Member", backref="memberships")
+    member = relationship(
+        "Member",
+        backref="memberships",
+        order_by='Member.lastname',
+    )
     role = Column(String(256))
 
     def __repr__(self):
