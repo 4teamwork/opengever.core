@@ -8,6 +8,7 @@ Changelog
 - Fix logout overlay when used with cross tab logout. [Kevin Bieri]
 - Sort attachments for proposal and submitted proposal alphabetically. [Rotonen]
 - Upgrades: Introduce system-wide tracking of schema migrations. [jone]
+- Implement TOC generate loader. [Bieri Kevin]
 - OGIP 17: Use tabbedview as default view for WorkspaceFolder + Fix two display issues [mathias.leimgruber]
 - OGIP 17: Implement internal invitations for Workspaces. [mathias.leimgruber]
 - Improve description for committee group label. [deiferni]
