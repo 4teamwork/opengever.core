@@ -53,8 +53,7 @@ class CommitteeOverview(BrowserView, GeverTabMixin):
         return [proposal.get_submitted_link() for proposal in proposals]
 
     def current_members(self):
-        memberships = self.context.get_active_memberships().all()
-        members = [membership.member for membership in memberships]
+        members = self.context.get_active_members().all()
         committee_container = self.context.get_committee_container()
         return [member.get_link(committee_container) for member in members]
 

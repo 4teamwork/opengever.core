@@ -1,9 +1,11 @@
+from datetime import date
 from opengever.base.model import Base
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
+from opengever.meeting.model.member import Member
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.workflow import State
@@ -12,11 +14,13 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
+from sqlalchemy import and_
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
+from sqlalchemy.orm import joinedload
 from sqlalchemy.schema import Sequence
 
 
@@ -120,6 +124,16 @@ class Committee(Base):
     def get_active_memberships(self):
         return Membership.query.filter_by(
             committee=self).only_active()
+
+    def get_active_members(self):
+        return (Member
+                .query
+                .join(Member.memberships)
+                .options(joinedload(Member.memberships))
+                .filter(and_(Membership.committee == self,
+                             Membership.date_from <= date.today(),
+                             Membership.date_to >= date.today()))
+                .order_by(Member.lastname))
 
     def deactivate(self):
         if self.has_pending_meetings() or self.has_unscheduled_proposals():
