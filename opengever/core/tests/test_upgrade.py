@@ -30,7 +30,7 @@ class TestIdempotentOperations(TestCase):
         self.metadata.create_all()
 
         self.migration_context = MigrationContext.configure(self.connection)
-        self.op = IdempotentOperations(self.migration_context, self)
+        self.op = IdempotentOperations(self.migration_context, self.metadata)
         self.inspector = Inspector(self.connection)
 
     def tearDown(self):
