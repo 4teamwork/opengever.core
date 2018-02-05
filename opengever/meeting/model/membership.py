@@ -9,6 +9,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
@@ -37,7 +38,7 @@ class Membership(Base, SQLFormSupport):
         "Member",
         backref="memberships",
         order_by='Member.lastname',
-    )
+        collection_class=ordering_list('lastname'))
     role = Column(String(256))
 
     def __repr__(self):
