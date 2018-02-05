@@ -37,7 +37,10 @@ class TestCommitteeOverview(IntegrationTestCase):
             browser.open(self.committee, view='tabbedview_view-overview')
 
         self.assertEquals(
-            [u'Sch\xf6ller Heidrun', u'W\xf6lfl Gerda', 'Wendler Jens', u'M\xfcller Henning'],
+            [u'M\xfcller Henning',
+             u'Sch\xf6ller Heidrun',
+             u'Wendler Jens',
+             u'W\xf6lfl Gerda'],
             browser.css('#current_membersBox li:not(.moreLink)').text)
 
     @browsing
@@ -90,7 +93,7 @@ class TestCommitteeOverview(IntegrationTestCase):
 
         link = browser.css('#current_membersBox li a').first.get('href')
         self.assertEquals(
-            'http://nohost/plone/opengever-meeting-committeecontainer/member-1',
+            'http://nohost/plone/opengever-meeting-committeecontainer/member-2',
             browser.css('#current_membersBox li a').first.get('href'))
 
     @browsing
