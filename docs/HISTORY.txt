@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- SPV: Rename "abgeschlossene Sitzungen" to "vergangene Sitzungen". [tarnap]
 - Fix logout overlay when used with cross tab logout. [Kevin Bieri]
 - Sort attachments for proposal and submitted proposal alphabetically. [Rotonen]
 - Upgrades: Introduce system-wide tracking of schema migrations. [jone]
