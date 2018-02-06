@@ -932,7 +932,7 @@ msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Trak
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
-msgstr "Abgeschlossene Sitzungen"
+msgstr "Vergangene Sitzungen"
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
