@@ -6,7 +6,6 @@ from ftw.upgrade.directory.recorder import UpgradeStepRecorder
 from opengever.base.model import create_session
 from plone.memoize import forever
 from Products.CMFCore.utils import getToolByName
-from Products.GenericSetup.upgrade import listUpgradeSteps
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
 from sqlalchemy import MetaData
@@ -417,6 +416,9 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
     def mark_as_installed_in_sql(self, target_version):
         if not self.is_schema_migration(target_version):
             return False  # we only track SchemaMigration upgrade steps in SQL
+
+        if self.is_marked_installed_in_sql(target_version):
+            return False  # Version is already marked as installed.
 
         self._setup_db_connection()
         mark_changed(self.session)
