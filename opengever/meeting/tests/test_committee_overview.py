@@ -37,7 +37,52 @@ class TestCommitteeOverview(IntegrationTestCase):
             browser.open(self.committee, view='tabbedview_view-overview')
 
         self.assertEquals(
-            [u'Sch\xf6ller Heidrun', u'W\xf6lfl Gerda', 'Wendler Jens', u'M\xfcller Henning'],
+            [u'M\xfcller Henning',
+             u'Sch\xf6ller Heidrun',
+             u'Wendler Jens',
+             u'W\xf6lfl Gerda'],
+            browser.css('#current_membersBox li:not(.moreLink)').text)
+
+    @browsing
+    def test_membership_shows_members_alphabetically(self, browser):
+        with freeze(localized_datetime(2016, 1, 10)):
+            self.login(self.administrator)
+            anton = create(Builder('member')
+                           .having(firstname=u'Anton', lastname=u'Andermatt'))
+            lucas = create(Builder('member')
+                           .having(firstname=u'Lucas', lastname=u'Lenz'))
+            kevin = create(Builder('member')
+                           .having(firstname=u'Kevin', lastname=u'Kummermuth'))
+
+            create(Builder('membership')
+                   .having(member=anton,
+                           committee=self.committee,
+                           date_from=localized_datetime(2016, 1, 1),
+                           date_to=localized_datetime(2017, 1, 1)))
+
+            create(Builder('membership')
+                   .having(member=lucas,
+                           committee=self.committee,
+                           date_from=localized_datetime(2016, 1, 1),
+                           date_to=localized_datetime(2017, 1, 1)))
+
+            create(Builder('membership')
+                   .having(member=kevin,
+                           committee=self.committee,
+                           date_from=localized_datetime(2016, 1, 1),
+                           date_to=localized_datetime(2017, 1, 1)))
+
+            self.login(self.committee_responsible, browser)
+            browser.open(self.committee, view='tabbedview_view-overview')
+
+        self.assertEquals(
+            [u'Andermatt Anton',
+             u'Kummermuth Kevin',
+             u'Lenz Lucas',
+             u'M\xfcller Henning',
+             u'Sch\xf6ller Heidrun',
+             u'Wendler Jens',
+             u'W\xf6lfl Gerda'],
             browser.css('#current_membersBox li:not(.moreLink)').text)
 
     @browsing
@@ -48,7 +93,7 @@ class TestCommitteeOverview(IntegrationTestCase):
 
         link = browser.css('#current_membersBox li a').first.get('href')
         self.assertEquals(
-            'http://nohost/plone/opengever-meeting-committeecontainer/member-1',
+            'http://nohost/plone/opengever-meeting-committeecontainer/member-2',
             browser.css('#current_membersBox li a').first.get('href'))
 
     @browsing

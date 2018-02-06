@@ -265,6 +265,9 @@ class Committee(ModelContainer):
     def get_active_memberships(self):
         return self.load_model().get_active_memberships()
 
+    def get_active_members(self):
+        return self.load_model().get_active_members()
+
     def get_memberships(self):
         return self.load_model().memberships
 
