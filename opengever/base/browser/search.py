@@ -64,8 +64,6 @@ class OpengeverSearch(Search):
         else:
             query = u'*:*'
 
-        filters = self.solr_filters()
-
         params = {
             'fl': [
                 'UID', 'Title', 'getIcon', 'portal_type', 'path',
@@ -76,9 +74,11 @@ class OpengeverSearch(Search):
             'hl.fl': 'SearchableText',
             'hl.snippets': 3,
         }
+
         solr = getUtility(ISolrSearch)
         resp = solr.search(
-            query=query, filter=filters, start=b_start, rows=b_size, **params)
+            query=query, filters=self.solr_filters(), start=b_start,
+            rows=b_size, sort=self.solr_sort(), **params)
         results = OGSolrContentListing(resp)
 
         if batch:
@@ -144,6 +144,22 @@ class OpengeverSearch(Search):
                     filters.append(u'%s:%s' % (key, value[0]))
 
         return filters
+
+    def solr_sort(self):
+        sort = self.request.form.get('sort_on', None)
+        if sort == 'Date':
+            sort = 'modified'
+        elif sort == 'relevance':
+            sort = None
+
+        if sort:
+            sort_order = self.request.form.get('sort_order', 'ascending')
+            if sort_order in ['descending', 'reverse']:
+                sort += ' desc'
+            else:
+                sort += ' asc'
+
+        return sort
 
     def breadcrumbs(self, item):
         obj = item.getObject()

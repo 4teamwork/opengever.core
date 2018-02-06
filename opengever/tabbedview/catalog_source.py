@@ -51,13 +51,10 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 
-        sort = None
-        if 'sort_on' in query:
-            sort = query['sort_on']
-            if sort == 'sortable_title':
-                sort = 'Title'
-            if ('sort_order' in query and
-                    query['sort_order'] in ['descending', 'reverse']):
+        sort = query.get('sort_on', None)
+        if sort:
+            sort_order = query.get('sort_order', 'ascending')
+            if sort_order in ['descending', 'reverse']:
                 sort += ' desc'
             else:
                 sort += ' asc'
