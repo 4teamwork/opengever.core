@@ -23,5 +23,6 @@
     <dependency>profile-plone.app.caching:default</dependency>
     <dependency>profile-plone.app.caching:without-caching-proxy</dependency>
     <dependency>profile-plone.restapi:default</dependency>
+    <dependency>profile-Products.CMFPlacefulWorkflow:CMFPlacefulWorkflow</dependency>
   </dependencies>
 </metadata>

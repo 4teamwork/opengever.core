@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.upgrade import UpgradeStep
 from opengever.base.interfaces import IReferenceNumberPrefix
+from plone.dexterity.interfaces import IDexterityContent
 
 
 def regenerate_and_reindex_reference_number(obj):
@@ -13,7 +14,8 @@ def regenerate_and_reindex_reference_number(obj):
     obj.reindexObject(idxs=['reference'])
 
     for child in obj.objectValues():
-        regenerate_and_reindex_reference_number(child)
+        if IDexterityContent.providedBy(child):
+            regenerate_and_reindex_reference_number(child)
 
 
 class RegenerateAndReindexReferenceNumbersOnPrivateRootsAndTheirContents(UpgradeStep):

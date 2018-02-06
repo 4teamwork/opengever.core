@@ -1,0 +1,10 @@
+<rolemap>
+
+  <roles>
+    <role name="MemberAreaAdministrator" />
+  </roles>
+
+  <permissions>
+  </permissions>
+
+</rolemap>

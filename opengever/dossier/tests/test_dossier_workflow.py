@@ -26,7 +26,8 @@ class TestDossierWorkflow(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.visit(self.archive_dossier)
         expected = ['Cover (PDF)', 'Delete', 'Export as Zip',
-                    'Print details (PDF)', 'Properties', 'Sharing']
+                    'Print details (PDF)', 'Properties', 'Sharing',
+                    'Policy...']
         self.assertItemsEqual(expected, self.get_action_menu_content())
 
     @browsing

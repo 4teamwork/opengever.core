@@ -177,6 +177,7 @@ class OpengeverFixture(PloneSandboxLayer):
 
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
+        z2.installProduct(app, 'Products.CMFPlacefulWorkflow')
 
         setupCoreSessions(app)
 

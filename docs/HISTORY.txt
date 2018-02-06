@@ -16,6 +16,7 @@ Changelog
 - Ensure bumblebee overlay view download links point to the correct version. [Rotonen]
 - Add keynote, numbers and pages mimetypes [njohner]
 - Checkout/Edit only for office connector supported file formats supported [njohner]
+- Disallow access on foreign private folders for Administrator and allow access to MemberAreaAdministrators instead. [phgross]
 - Make teams available as tasktemplate responsibles. [phgross]
 - Fix JWT authentication for users from the Zope root acl_users. [Rotonen]
 - Fix bumblebee preview in ECH0147 import. [deiferni]

@@ -18,6 +18,7 @@
     <role name="WorkspaceOwner" />
     <role name="WorkspacesCreator" />
     <role name="WorkspacesUser" />
+    <role name="MemberAreaAdministrator" />
   </roles>
 
   <permissions>
