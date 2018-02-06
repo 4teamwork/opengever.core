@@ -4,6 +4,7 @@ from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
+from opengever.meeting.model.member import Member
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.workflow import State
@@ -17,6 +18,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
+from sqlalchemy.orm import joinedload
 from sqlalchemy.schema import Sequence
 
 
@@ -118,8 +120,13 @@ class Committee(Base):
         return self.resolve_committee().get_toc_template()
 
     def get_active_memberships(self):
-        return Membership.query.filter_by(
-            committee=self).only_active()
+        return (Membership
+                .query
+                .filter_by(committee=self)
+                .join(Membership.member)
+                .options(joinedload(Membership.member))
+                .order_by(Member.lastname)
+                .only_active())
 
     def deactivate(self):
         if self.has_pending_meetings() or self.has_unscheduled_proposals():
