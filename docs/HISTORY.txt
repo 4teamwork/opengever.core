@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - SPV: Rename "abgeschlossene Sitzungen" to "vergangene Sitzungen". [tarnap]
+- SPV: Sort memberships by member's last name. [tarnap]
 - Fix logout overlay when used with cross tab logout. [Kevin Bieri]
 - Sort attachments for proposal and submitted proposal alphabetically. [Rotonen]
 - Upgrades: Introduce system-wide tracking of schema migrations. [jone]
