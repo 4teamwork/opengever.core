@@ -30,6 +30,7 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
+import json
 import timeit
 
 
@@ -267,6 +268,12 @@ class IntegrationTestCase(TestCase):
                 expected_value, index_data[index_name],
                 'Unexpected index value {!r} in index {!r} for {!r}'.format(
                     index_data[index_name], index_name, obj))
+
+    def assert_json_structure_equal(self, expected_value, got, msg=None):
+        got = json.dumps(got, sort_keys=True, indent=4)
+        expected_value = json.dumps(expected_value, sort_keys=True, indent=4)
+        self.maxDiff = None
+        self.assertMultiLineEqual(expected_value, got, msg)
 
     def get_catalog_metadata(self, obj):
         """Return the catalog metadata for an object as dict.

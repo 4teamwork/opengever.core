@@ -11,6 +11,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
 from ZPublisher.Iterators import filestream_iterator
+import json
 import os
 import pytz
 
@@ -54,6 +55,9 @@ class MeetingZipExport(BrowserView):
             except AgendaItemListMissingTemplate:
                 pass
 
+            if is_word_meeting_implementation_enabled():
+                generator.add_file(*self.get_meeting_json())
+
             # Return zip
             zip_file = generator.generate()
             filename = '{}.zip'.format(normalize_path(self.model.title))
@@ -96,19 +100,14 @@ class MeetingZipExport(BrowserView):
 
     def add_agenda_item_proposal_documents(self, generator):
         for agenda_item in self.model.agenda_items:
-            if not agenda_item.has_proposal:
+            if not agenda_item.has_document:
                 continue
 
             document = agenda_item.resolve_document()
             if not document:
                 continue
 
-            extension = os.path.splitext(document.file.filename)[1]
-            path = u'{} {}/{}'.format(
-                agenda_item.number,
-                agenda_item.submitted_proposal.title,
-                safe_unicode(document.Title()) + extension
-            )
+            path = agenda_item.get_document_filename_for_zip(document)
             generator.add_file(path, document.file.open())
 
     def add_agenda_items_attachments(self, generator):
@@ -117,12 +116,7 @@ class MeetingZipExport(BrowserView):
                 continue
 
             for document in agenda_item.proposal.resolve_submitted_documents():
-                extension = os.path.splitext(document.file.filename)[1]
-                path = u'{} {}/{}'.format(
-                    agenda_item.number,
-                    agenda_item.submitted_proposal.title,
-                    safe_unicode(document.Title()) + extension
-                )
+                path = agenda_item.get_document_filename_for_zip(document)
                 generator.add_file(path, document.file.open())
 
     def get_agendaitem_list(self):
@@ -146,3 +140,12 @@ class MeetingZipExport(BrowserView):
 
         filename = u'{}.docx'.format(operations.get_title(self.model))
         return (filename, StringIO(command.generate_file_data()))
+
+    def get_meeting_json(self):
+        json_data = {
+            'version': '1.0.0',
+            'meetings': [self.context.get_data_for_zip_export()],
+        }
+        return 'meeting.json', StringIO(json.dumps(json_data,
+                                                   sort_keys=True,
+                                                   indent=4))

@@ -32,6 +32,8 @@ Changelog
 - Add documents tab to repository folder. [jone]
 - OGIP 17: Implement invitation storage for workspace invitations. [mathias.leimgruber]
 - Add an additional batching_container for tabbedview-listings at the end of the table. [elioschmutz]
+- SPV: Add json file containing the meetings metadata to zip export. [tarnap]
+- SPV: Add ad hoc agenda items to zip export. [tarnap]
 - Add DocProperty ogg.document.version_number.  [njohner]
 - OGIP 17: Add workspace workflows and add workspace support to document workflow. [jone]
 - OGIP 17: Introduce workspace specific sources used in Tasks [mathias.leimgruber]

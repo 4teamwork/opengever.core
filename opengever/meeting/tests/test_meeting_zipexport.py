@@ -84,7 +84,8 @@ class TestMeetingZipExportView(IntegrationTestCase):
             ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
              '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
              '1. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
-             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx'],
+             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
+             'meeting.json'],
             zip_file.namelist())
 
     @browsing
