@@ -19,6 +19,7 @@ tests_require = [
     'ftw.testbrowser',
     'ftw.testing',
     'lxml',
+    'mock',
     'opengever.pdfconverter',
     'plone.app.dexterity',
     'plone.app.testing',

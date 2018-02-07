@@ -1,0 +1,84 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 3,
+    "params": {
+      "json": "{\n  \"query\": \":\"\n}"
+    }
+  },
+  "response": {
+    "numFound": 3,
+    "start": 0,
+    "docs": [
+      {
+        "UID": "85bed8c49f6d4f8b841693c6a7c6cff1",
+        "Title": "My Folder 1",
+        "SearchableText": "my-folder-1 My Folder 1",
+        "path_parent": "/my-folder-1",
+        "Description": "",
+        "path": "/my-folder-1",
+        "_version_": 1588410098478219264,
+        "created": "2017-12-31T10:47:28.448Z",
+        "modified": "2018-01-01T16:35:46.262Z",
+        "id": "my-folder-1",
+        "portal_type": "Folder",
+        "allowedRolesAndUsers": [
+          "Contributor",
+          "Editor",
+          "Manager",
+          "Reader",
+          "Site Administrator",
+          "_View_Permission",
+          "user:admin"
+        ],
+        "review_state": "private"
+      },
+      {
+        "UID": "85a29144758f494c88df19182f749ed6",
+        "Title": "My Folder 2",
+        "SearchableText": "my-folder-2 My Folder 2",
+        "path_parent": "/my-folder-2",
+        "Description": "",
+        "path": "/my-folder-2",
+        "_version_": 1588410098511773696,
+        "created": "2017-12-31T10:14:46.855Z",
+        "modified": "2017-12-31T13:32:55.328Z",
+        "id": "my-folder-2",
+        "portal_type": "Folder",
+        "allowedRolesAndUsers": [
+          "Contributor",
+          "Editor",
+          "Manager",
+          "Reader",
+          "Site Administrator",
+          "_View_Permission",
+          "user:admin"
+        ],
+        "review_state": "private"
+      },
+      {
+        "UID": "9398dad21bcd49f8a197cd50d10ea778",
+        "Title": "My Document",
+        "SearchableText": "my-document My Document",
+        "path_parent": "/my-folder-1/my-document",
+        "Description": "",
+        "path": "/my-folder-1/my-document",
+        "_version_": 1588410098528550912,
+        "created": "2017-12-31T11:17:00.009Z",
+        "modified": "2017-12-31T11:17:00.137Z",
+        "id": "my-document",
+        "portal_type": "Document",
+        "allowedRolesAndUsers": [
+          "Contributor",
+          "Editor",
+          "Manager",
+          "Reader",
+          "Site Administrator",
+          "_View_Permission",
+          "user:admin"
+        ],
+        "review_state": "private"
+      }
+    ]
+  }
+}
