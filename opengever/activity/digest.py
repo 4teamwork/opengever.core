@@ -1,14 +1,23 @@
 from datetime import datetime
+from datetime import timedelta
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
+from opengever.activity.model import Digest
 from opengever.activity.model import Notification
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
+from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.model import create_session
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18nmessageid import MessageFactory
 
 
 _ = MessageFactory("opengever.activity")
+
+
+DIGEST_INTERVAL_HOURS = 24
+
+DIGEST_TOLERANCE = 1
 
 
 class DigestDispatcher(NotificationDispatcher):
@@ -70,6 +79,10 @@ class DigestMailer(Mailer):
 
     def send_digests(self):
         for userid, notifications in self.get_notifications().items():
+            # skip when digest interval is not expired yet
+            if not self.is_interval_expired(userid):
+                continue
+
             msg = self.prepare_mail(
                 subject=_(u'subject_digest', default=u'Daily Digest'),
                 to_userid=userid,
@@ -78,7 +91,33 @@ class DigestMailer(Mailer):
                           'plone').toLocalizedTime(datetime.today())})
             self.send_mail(msg)
             self.mark_as_sent(notifications)
+            self.record_digest(userid)
 
     def mark_as_sent(self, notifications):
         for notification in notifications:
             notification.sent_in_digest = True
+
+    def record_digest(self, userid):
+        digest = Digest.query.get_by_userid(userid)
+        if not digest:
+            digest = Digest(userid=userid, last_dispatch=utcnow_tz_aware())
+            create_session().add(digest)
+
+        digest.last_dispatch = utcnow_tz_aware()
+
+    def is_interval_expired(self, userid):
+        """Returns true it the time since the last dispatch expires the defined
+        interval for the given user.
+
+        The calculation has been made with a tolerance of 1 hour.
+        """
+
+        digest = Digest.query.get_by_userid(userid)
+        if not digest:
+            # no digests sent yet, so digest schould be send
+            return True
+
+        interval = timedelta(hours=DIGEST_INTERVAL_HOURS - DIGEST_TOLERANCE)
+        expired = utcnow_tz_aware() - interval
+
+        return digest.last_dispatch <= expired

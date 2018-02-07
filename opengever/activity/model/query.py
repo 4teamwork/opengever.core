@@ -1,6 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
 from opengever.activity.model import Activity
+from opengever.activity.model import Digest
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
@@ -100,3 +101,13 @@ class WatcherQuery(BaseQuery):
 
 
 Watcher.query_cls = WatcherQuery
+
+
+class DigestQuery(BaseQuery):
+    """Provide accessors to digests."""
+
+    def get_by_userid(self, userid):
+        return self.filter_by(userid=userid).first()
+
+
+Digest.query_cls = DigestQuery

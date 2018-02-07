@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity.digest import DigestMailer
+from opengever.activity.model import Digest
 from opengever.testing import IntegrationTestCase
 import pytz
 
@@ -58,7 +59,7 @@ class TestDigestMail(IntegrationTestCase):
 
     @browsing
     def test_mail_contains_date_activity_summaries(self, browser):
-        with freeze(datetime(2017, 10, 16, 0, 0)):
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             DigestMailer().send_digests()
 
         messages = [message_from_string(mail)
@@ -76,3 +77,53 @@ class TestDigestMail(IntegrationTestCase):
 
         self.assertTrue(self.note1.sent_in_digest)
         self.assertTrue(self.note2.sent_in_digest)
+
+    def test_record_all_dispatches_in_the_digest_table(self):
+        now = datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)
+        with freeze(now):
+            DigestMailer().send_digests()
+
+        self.assertEquals(
+            [now, now],
+            [digest.last_dispatch for digest in Digest.query.all()])
+        self.assertEquals(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            [digest.userid for digest in Digest.query.all()])
+
+    def test_only_send_digest_when_interval_has_been_expired(self):
+        create(Builder('digest')
+               .having(userid=self.regular_user.getId(),
+                       last_dispatch=datetime(2017, 10, 15, 12, 30, tzinfo=pytz.utc)))
+
+        create(Builder('digest')
+               .having(userid=self.dossier_responsible.getId(),
+                       last_dispatch=datetime(2017, 10, 16, 9, tzinfo=pytz.utc)))
+
+        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
+            DigestMailer().send_digests()
+
+            messages = [message_from_string(mail)
+                        for mail in Mailing(self.portal).get_messages()]
+
+            self.assertEquals(1, len(messages))
+            self.assertEquals('foo@example.com', messages[0].get('To'))
+
+    def test_interval_tolerance(self):
+        create(Builder('digest')
+               .having(userid=self.regular_user.getId(),
+                       last_dispatch=datetime(2017, 10, 15, 12, 30, tzinfo=pytz.utc)))
+
+        create(Builder('digest')
+               .having(userid=self.dossier_responsible.getId(),
+                       last_dispatch=datetime(2017, 10, 16, 9, tzinfo=pytz.utc)))
+
+        # test interval expired because of tolerance
+        Mailing(self.portal).reset()
+        with freeze(datetime(2017, 10, 16, 11, 30, tzinfo=pytz.utc)):
+            DigestMailer().send_digests()
+
+            messages = [message_from_string(mail)
+                        for mail in Mailing(self.portal).get_messages()]
+
+            self.assertEquals(1, len(messages))
+            self.assertEquals('foo@example.com', messages[0].get('To'))

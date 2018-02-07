@@ -1,5 +1,6 @@
 from ftw.builder import builder_registry
 from opengever.activity.model import Activity
+from opengever.activity.model import Digest
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import NotificationSetting
@@ -110,3 +111,11 @@ class NotificationSettingBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('notification_setting', NotificationSettingBuilder)
+
+
+class DigestBuilder(SqlObjectBuilder):
+
+    mapped_class = Digest
+
+
+builder_registry.register('digest', DigestBuilder)
