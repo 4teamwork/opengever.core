@@ -424,14 +424,14 @@ class AdvancedSearchForm(Form):
             usage = 'min'
         elif field_2_value:
             usage = 'max'
-        params.append(('{}_usage'.format(base_field_name), usage))
+        params.append(('{}.range:record'.format(base_field_name), usage))
 
-        key = '{}:list'.format(base_field_name)
+        key = '{}.query:record:list:date'.format(base_field_name)
         if field_1_value:
-            params.append((key, field_1_value.strftime('%m/%d/%y')))
+            params.append((key, field_1_value.strftime('%Y-%m-%d')))
         if field_2_value:
             inclusive_end_date = field_2_value + timedelta(days=1)
-            params.append((key, inclusive_end_date.strftime('%m/%d/%y')))
+            params.append((key, inclusive_end_date.strftime('%Y-%m-%d')))
 
     def build_search_params(self, data):
         # cannot use dict since the same parameter key might be used repeatedly

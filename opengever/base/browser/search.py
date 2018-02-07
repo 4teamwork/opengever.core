@@ -95,23 +95,7 @@ class OpengeverSearch(Search):
         if not value or not self.should_handle_key(key):
             return
 
-        usage = self.request.form.get('{}_usage'.format(key))
-        if usage:
-            self.handle_date_query_filter_value(usage, query, key, value)
-        else:
-            query[key] = value
-
-    def handle_date_query_filter_value(self, usage, query, key, value):
-        if usage not in ('min', 'max', 'minmax'):
-            return
-        if usage == 'minmax' and len(value) == 2:
-            query_value = [DateTime(value[0]), DateTime(value[1])]
-        else:
-            query_value = [DateTime(value[0])]
-        query[key] = {
-            'query': query_value,
-            'range': usage
-        }
+        query[key] = value
 
     def _filter_query(self, query):
         """The _filter_query of the standard search view (plone.app.search)
