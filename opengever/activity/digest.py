@@ -77,3 +77,8 @@ class DigestMailer(Mailer):
                       'today': api.portal.get().unrestrictedTraverse(
                           'plone').toLocalizedTime(datetime.today())})
             self.send_mail(msg)
+            self.mark_as_sent(notifications)
+
+    def mark_as_sent(self, notifications):
+        for notification in notifications:
+            notification.sent_in_digest = True

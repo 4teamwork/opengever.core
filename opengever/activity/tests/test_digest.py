@@ -70,3 +70,9 @@ class TestDigestMail(IntegrationTestCase):
         self.assertEquals(['Daily Digest'], browser.css('h1').text)
         self.assertEquals(['Bitte =C3=84nderungen nachvollziehen'],
                           browser.css('h2 a').text)
+
+    def test_send_in_digest_flag_is_enabled_after_send(self):
+        DigestMailer().send_digests()
+
+        self.assertTrue(self.note1.sent_in_digest)
+        self.assertTrue(self.note2.sent_in_digest)
