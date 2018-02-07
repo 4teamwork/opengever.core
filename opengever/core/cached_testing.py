@@ -312,10 +312,10 @@ class DBCacheManager(object):
 
         self._ensure_sql_database_is_empty()
         sql_file = stack['path'].joinpath('dump.sql')
+        sql_statements = ['DROP TABLE IF EXISTS opengever_upgrade_version']
+        sql_statements.extend(re.split(r';\n', sql_file.bytes().decode('utf-8')))
         session = create_session()
-        map(session.execute,
-            map(text,
-                re.split(r';\n', sql_file.bytes().decode('utf-8'))))
+        map(session.execute, map(text, sql_statements))
         transaction.commit()
 
     def _ensure_sql_database_is_empty(self):
