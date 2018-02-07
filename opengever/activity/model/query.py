@@ -1,5 +1,3 @@
-from datetime import datetime
-from datetime import timedelta
 from opengever.activity.model import Activity
 from opengever.activity.model import Digest
 from opengever.activity.model import Notification
@@ -9,7 +7,6 @@ from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import and_
-import pytz
 
 
 class ActivityQuery(BaseQuery):
@@ -37,10 +34,6 @@ class NotificationQuery(BaseQuery):
     def unsent_digest_notifications(self):
         return self.filter(and_(Notification.is_digest.is_(True),
                                 Notification.sent_in_digest.is_(False)))
-
-    def from_last_24_hours(self):
-        since = datetime.now().replace(tzinfo=pytz.utc) - timedelta(hours=24)
-        return self.join(Activity).filter(Activity.created > since)
 
 
 Notification.query_cls = NotificationQuery

@@ -1,14 +1,11 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.testing import freeze
 from opengever.activity.model.notification import Notification
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from sqlalchemy.exc import IntegrityError
-import pytz
 import transaction
 
 
