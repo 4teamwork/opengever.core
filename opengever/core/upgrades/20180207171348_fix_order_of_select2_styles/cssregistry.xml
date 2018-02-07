@@ -1,16 +1,6 @@
 <object name="portal_css">
 
   <stylesheet
-      id="++resource++plone.formwidget.autocomplete/jquery.autocomplete.css"
-      remove="True"
-      />
-
-  <stylesheet
-      id="++resource++ftw.showroom/style.css"
-      remove="True"
-      />
-
-  <stylesheet
       id="++resource++ftw.keywordwidget/select2/dist/css/select2.min.css"
       insert-before="++theme++plonetheme.teamraum/css/gever/gever.css"
       />
