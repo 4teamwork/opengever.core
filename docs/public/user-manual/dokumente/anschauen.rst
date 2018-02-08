@@ -8,6 +8,7 @@ Die Erweiterung „Visuelle Suche“ unterstützt die intuitive Suche der Benutz
 dank Galerieansicht der Dokumente und verbesserter Dokumentvorschau als
 Overlay-Fenster. Die folgenden Abschnitte beschreiben das Modul im Detail.
 
+
 Standard-Ansicht
 ~~~~~~~~~~~~~~~~
 
@@ -54,6 +55,108 @@ In der Detail-Ansicht kann folgendes ausgeführt werden:
 6. Detailansicht öffnen
 
 |img-grundlagen-13|
+
+
+Unterstützte Dokumenttypen
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Folgende Dokumenttypen werden von der Visuellen Suche unterstützt:
+
+=================================== =============== ======================
+Dokumenttyp                           Extension       Anwendung
+=================================== =============== ======================
+Word Dokument                         .doc, .docx     Microsoft Word
+
+Word Vorlage                          .dot, .dotx     Microsoft Word
+
+Word Dokument mit Makros              .docm           Microsoft Word
+
+Word Vorlage mit Makros               .dotm           Micorsoft Word
+
+Word Perfect Dokument                 .wpd            Microsoft Word
+
+Wordpad Dokument                      .wpc            Microsoft Word
+
+Richt Text                            .rtf            Microsoft Word
+
+HTML                                  .htm, .html     Browser
+
+Outlook Nachricht                     .msg            Microsoft Outlook
+
+Excel Dokument                        .xls, .xlsx     Microsoft Excel
+
+Excel Vorlage                         .xlt, .xltx     Microsoft Excel
+
+Excel Dokument mit Makros             .xlsm           Microsoft Excel
+
+Excel Vorlage mit Makros              .xltm           Microsoft Excel
+
+PowerPoint Präsentation               .ppt, .pptx     Microsoft PowerPoint
+
+PowerPoint Vorlage                    .pot, .potx     Microsoft PowerPoint
+
+PowerPoint Bildschirmpräsentation     .pps, .ppsx     Microsoft PowerPoint
+
+PowerPoint Präsentation mit Makros    .pptm           Microsoft PowerPoint
+
+PowerPoint Vorlage mit Makros         .potm           Microsoft PowerPoint
+
+Visio Zeichnung                       .vsd, .vdx      Microsoft Visio
+
+Visio Vorlage                         .vst, .vtx      Microsoft Visio
+
+Skalierbare Vektorgrafik              .svg, .svgz     Microsoft Visio
+
+Project Projekt                       .mpp            Microsoft Project
+
+Project Vorlage                       .mpt            Microsoft Project
+
+RFC822 Internet Message Format        .eml            k.A.
+
+ODF Textdokument                      .odt            OpenOffice Writer
+
+ODF Textdokumentvorlage               .ott            OpenOffice Writer
+
+OpenOffice Textdokument               .sxw            OpenOffice Writer
+
+OpenOffice Textdokumentvorlage        .stw            OpenOffice Writer
+
+ODF Tabellendokument                  .ods            OpenOffice Calc
+
+ODF Tabellendokumentvorlage           .ots            OpenOffice Calc
+
+OpenOffice Tabellendokument           .sxc            OpenOffice Calc
+
+OpenOffice Tabellendokumentvorlage    .stc            OpenOffice Calc
+
+ODF Präsentation                      .odp            OpenOffice Impress
+
+ODF Präsentationsdokumentvorlage      .otp            OpenOffice Impress
+
+OpenOffice Präsentation               .sxi            OpenOffice Impress
+
+OpenOffice Präsentationsvorlage       .sti            OpenOffice Impress
+
+ODF Zeichnung                         .odg            OpenOffice Draw
+
+ODF Zeichnungsdokumentvorlage         .otg            OpenOffice Draw
+
+OpenOffice Zeichnung                  .sxd            OpenOffice Draw
+
+OpenOffice Zeichnungsvorlage          .std            OpenOffice Draw
+
+ODF Formel                            .odf            OpenOffice Math
+
+OpenOffice Formel                     .sxm            OpenOffice Math
+
+Text                                  .txt, .log,     TXT2PDF
+                                      .ini
+
+Windows Enhanced Metafile             .emf            k.A
+
+PDF                                   .pdf            PDF Tools builtin
+
+=================================== =============== ======================
 
 .. |img-grundlagen-10| image:: ../img/media/img-grundlagen-10.png
 .. |img-grundlagen-11| image:: ../img/media/img-grundlagen-11.png
