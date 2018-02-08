@@ -28,10 +28,10 @@ class TestUserDetails(IntegrationTestCase):
             'Salutation': 'Prof. Dr.',
             'Teams': u'Projekt \xdcberbaung Dorfmatte',
             'URL': 'http://www.example.com',
-             }, metadata)
+        }, metadata)
 
     @browsing
-    def test_user_details_return_not_found_for_not_exisiting_user(self, browser):
+    def test_user_details_return_not_found_for_not_exisiting_user(self, browser):  # noqa
         with browser.expect_http_error(code=404):
             browser.login().open(self.portal, view='@@user-details/not.found')
 
