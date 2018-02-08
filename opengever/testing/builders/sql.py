@@ -96,14 +96,16 @@ class PloneOrgUnitBuilder(OrgUnitBuilder):
         self._as_current_org_unit = True
         return self
 
-    def _create_users_group(self, users_group_id):
+    def _create_users_group(self, users_group_id, users_group_title=None):
         create(Builder('group')
+               .having(title=users_group_title)
                .with_groupid(users_group_id)
                .with_members(api.user.get(TEST_USER_ID)))
         super(PloneOrgUnitBuilder, self)._create_users_group(users_group_id)
 
-    def _create_inbox_group(self, users_inbox_id):
+    def _create_inbox_group(self, users_inbox_id, users_inbox_title=None):
         create(Builder('group')
+               .having(title=users_inbox_title)
                .with_groupid(users_inbox_id)
                .with_members(api.user.get(TEST_USER_ID)))
         super(PloneOrgUnitBuilder, self)._create_inbox_group(users_inbox_id)
