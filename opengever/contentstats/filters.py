@@ -39,6 +39,10 @@ class PortalTypesFilter(object):
         if key in OG_TYPES_BLACKLIST:
             return False
 
+        if key == '_opengever.document.behaviors.IBaseDocument':
+            # Fake portal type that sums up docs and mails
+            return True
+
         # Otherwise default to including all opengever.* types, and excluding
         # all the other ones (Plone stock types)
         if key.startswith('opengever.'):

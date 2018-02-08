@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Content stats: Add custom GEVERPortalTypesProvider that sums up docs and mails. [lgraf]
 - Include favorites cache key in page cache key. [Kevin Bieri]
 - Content stats: Avoid producing empty string key in mimetypes stats. [lgraf]
 - Prevent navigation tree from getting favorites multiple times. [Kevin Bieri]
