@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 
 
@@ -44,3 +45,35 @@ class TestUserDetails(IntegrationTestCase):
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
         self.assertEquals('http://nohost/plone/kontakte/team-1/view',
                           browser.css('.teams a').first.get('href'))
+
+    @browsing
+    def test_lists_group_memberships(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+
+        self.assertEqual(
+            ['fa_users', 'Projekt A'], browser.css('.groups li').text)
+
+        group_links = [a.get('href') for a in browser.css('.groups li a')]
+        self.assertEqual(
+            ['http://nohost/plone/@@list_groupmembers?group=fa_users',
+             'http://nohost/plone/@@list_groupmembers?group=projekt_a'],
+            group_links)
+
+    @browsing
+    def test_urlencodes_group_member_urls(self, browser):
+        self.login(self.regular_user, browser)
+        user = self.get_ogds_user(self.regular_user)
+
+        group_with_spaces = Group(groupid='with spaces')
+        user.groups.append(group_with_spaces)
+
+        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+
+        group_links = [a.get('href') for a in browser.css('.groups li a')]
+        self.assertEqual(
+            ['http://nohost/plone/@@list_groupmembers?group=fa_users',
+             'http://nohost/plone/@@list_groupmembers?group=projekt_a',
+             'http://nohost/plone/@@list_groupmembers?group=with+spaces'],
+            group_links)
