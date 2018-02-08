@@ -88,4 +88,11 @@ class FileMimetypesProvider(object):
         }
         mails = catalog.unrestrictedSearchResults(mails_query)
         counts['message/rfc822'] = len(mails)
+
+        # Drop mimetype key of empty string (if present). This entry can
+        # result from documents without files. We need to drop this because
+        # several components in the ELK stack (filebeat, elasticsearch) can't
+        # deal with empty JSON keys gracefully, and choke on them.
+        counts.pop('', None)
+
         return counts

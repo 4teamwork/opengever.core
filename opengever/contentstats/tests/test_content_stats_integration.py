@@ -4,15 +4,16 @@ from ftw.contentstats.interfaces import IStatsKeyFilter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.testing import FunctionalTestCase
 from opengever.mail.tests import MAIL_DATA
-from plone.app.testing import SITE_OWNER_NAME
+from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
-import transaction
+from plone.app.testing import SITE_OWNER_NAME
 from zope.component import getMultiAdapter
+import transaction
 
 
-class TestContentStatsIntegration(FunctionalTestCase):
+class TestContentStatsIntegration(IntegrationTestCase):
 
     def test_portal_types_filter(self):
         flt = getMultiAdapter(
@@ -163,6 +164,13 @@ class TestContentStatsIntegration(FunctionalTestCase):
 
 
 class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
+    """This is done as a functional test because we don't want to use the
+    standard fixture from the Integration Testing Layer.
+
+    Content stats are special in the way that they'll always dump statistics
+    about the entire content to be found, and we therefore want to closely
+    control the fixture that's being in these tests.
+    """
 
     def setUp(self):
         super(TestContentStatsIntegrationWithFixture, self).setUp()
@@ -171,11 +179,15 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
 
         self.doc1 = create(Builder('document').within(self.dossier)
                            .titled(u'Feedback zum Vertragsentwurf')
-                           .attach_file_containing('Feedback text', u'vertr\xe4g sentwurf.docx'))
+                           .attach_file_containing(
+                               'Feedback text',
+                               u'vertr\xe4gsentwurf.docx'))
 
         self.doc2 = create(Builder('document').within(self.subdossier)
                            .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
-                           .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx'))
+                           .attach_file_containing(
+                               'Excel dummy content',
+                               u'tab\xe4lle.xlsx'))
 
         self.inbox = create(
             Builder('inbox')
@@ -190,15 +202,7 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
                                .with_message(MAIL_DATA)
                                .within(self.dossier))
 
-    @browsing
-    def test_providers(self, browser):
-        self._test_checked_out_docs_stats_provider(browser)
-        self._test_file_mimetypes_provider(browser)
-        self._test_file_mimetypes_provider_in_view(browser)
-        self._test_checked_out_docs_stats_provider_in_view(browser)
-
-    def _test_checked_out_docs_stats_provider(self, browser):
-        browser.login(SITE_OWNER_NAME)
+    def test_checked_out_docs_stats_provider(self):
         stats_provider = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='checked_out_docs')
@@ -213,33 +217,45 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
         self.assertEqual({'checked_out': 1, 'checked_in': 3},
                          stats_provider.get_raw_stats())
 
-    def _test_file_mimetypes_provider(self, browser):
-        browser.login()
-
+    def test_file_mimetypes_provider(self):
         stats_provider = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
             IStatsProvider, name='file_mimetypes')
 
         self.assertEqual({
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 1,
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,  # noqa
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 1,  # noqa
             'message/rfc822': 1,
             'text/plain': 1},
             stats_provider.get_raw_stats())
 
-    def _test_file_mimetypes_provider_in_view(self, browser):
+    def test_file_mimetypes_provider_doesnt_return_empty_string_mimetype(self):
+        # Document without file
+        create(Builder('document')
+               .titled(u'Document without file'))
+
+        stats_provider = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsProvider, name='file_mimetypes')
+
+        # Shouldn't cause a mimetype key of '' (empty string) to be produced
+        self.assertNotIn('', stats_provider.get_raw_stats().keys())
+
+    @browsing
+    def test_file_mimetypes_provider_in_view(self, browser):
         browser.login(SITE_OWNER_NAME)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-file_mimetypes').first
 
         self.assertEquals([
-            ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],
-            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '1'],
+            ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],  # noqa
+            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '1'],  # noqa
             ['', 'message/rfc822', '1'],
             ['', 'text/plain', '1']],
             table.lists())
 
-    def _test_checked_out_docs_stats_provider_in_view(self, browser):
+    @browsing
+    def test_checked_out_docs_stats_provider_in_view(self, browser):
         browser.login(SITE_OWNER_NAME)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
@@ -260,6 +276,3 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
         self.assertEquals(
             [['', 'checked_in', '3'], ['', 'checked_out', '1']],
             table.lists())
-
-        manager.checkin()
-        transaction.commit()
