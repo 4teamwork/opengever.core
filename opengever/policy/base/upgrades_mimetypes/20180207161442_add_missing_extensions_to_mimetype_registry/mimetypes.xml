@@ -1,0 +1,17 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+
+  <mimetype
+      mimetypes="image/bmp
+                 image/x-bmp
+                 image/x-MS-bmp"
+      icon_path="icon_dokument_bilddatei.gif"
+      extensions="bmp"
+      />
+
+  <mimetype
+      mimetypes="text/plain"
+      icon_path="icon_dokument_text.gif"
+      extensions="txt diff conf def in text pot ksh list log asc ini"
+      />
+
+</object>

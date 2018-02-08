@@ -133,4 +133,7 @@ ADDITIONAL_TYPES = [
 
     # Apple numbers
     ('application/x-iwork-numbers-sffnumbers', '.numbers'),
+
+    # Plain text
+    ('text/plain', '.ini'),
 ]

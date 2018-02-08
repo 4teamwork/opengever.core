@@ -22,6 +22,7 @@
                  image/x-bmp
                  image/x-MS-bmp"
       icon_path="icon_dokument_bilddatei.gif"
+      extensions="bmp"
       />
 
   <mimetype
@@ -32,6 +33,7 @@
   <mimetype
       mimetypes="text/plain"
       icon_path="icon_dokument_text.gif"
+      extensions="txt diff conf def in text pot ksh list log asc ini"
       />
 
   <mimetype
