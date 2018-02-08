@@ -118,7 +118,10 @@
               <td>
                   <ul class="groups">
                       <li tal:repeat="group groups">
-                        <a class="group link-overlay" tal:attributes="href string:list_groupmembers?group=${group/groupid}" tal:content="python: group.title or group.groupid"></a>
+                        <a class="group link-overlay"
+                           tal:define="groupmembers_url python:view.groupmembers_url(group.groupid)"
+                           tal:attributes="href groupmembers_url"
+                           tal:content="python: group.title or group.groupid"></a>
                       </li>
                   </ul>
               </td>

@@ -2,6 +2,7 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from Products.Five import BrowserView
+from urllib import urlencode
 from zExceptions import NotFound
 from zope.component.hooks import getSite
 from zope.interface import implementer
@@ -41,3 +42,8 @@ class UserDetails(BrowserView):
 
     def contactfolder_url(team_id):
         return get_contactfolder_url()
+
+    def groupmembers_url(self, groupid):
+        portal = getSite()
+        qs = urlencode({'group': groupid})
+        return '/'.join((portal.portal_url(), '@@list_groupmembers?%s' % qs))
