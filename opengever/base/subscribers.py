@@ -35,6 +35,7 @@ ALLOWED_ENDPOINTS = set([
     'require_login',
     'update_sync_stamp',
     'watcher-feed',
+    'receive-wizard-data-set',
     'zauth',
     'bumblebee_download',
     'health-check',
