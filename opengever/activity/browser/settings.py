@@ -53,8 +53,7 @@ ACTIVITY_GROUPS = [
          'forwarding-transition-close',
          'forwarding-transition-reassign',
          'forwarding-transition-reassign-refused',
-         'forwarding-transition-refuse']
- }
+         'forwarding-transition-refuse']}
 ]
 
 

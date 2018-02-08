@@ -6,7 +6,6 @@ from sqlalchemy import String
 from sqlalchemy.schema import Sequence
 
 
-
 class AddDigestModel(SchemaMigration):
     """Add Digest model.
     """

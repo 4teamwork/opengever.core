@@ -72,7 +72,7 @@ ACTIVITY_TRANSLATIONS = {
         'task-transition-resolved-in-progress', default=u'Task revision wanted'),
     'task-transition-resolved-tested-and-closed': _(
         'task-transition-resolved-tested-and-closed', default=u'Task closed'),
-    'forwarding-added':_(
+    'forwarding-added': _(
         'forwarding-added', default=u'Forwarding added'),
     'forwarding-transition-accept': _(
         'forwarding-transition-accept', default=u'Forwarding accepted'),
