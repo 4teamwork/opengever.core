@@ -24,7 +24,7 @@ $(function() {
     if ($(this).data('initialized')) {return;} $(this).data('initialized', 'true');
 
     var tree_node = $(this).find('>ul');
-    navigation_json.load(
+    navigation_json.load().then(
         function(tree_data) {
           var expand_store = ExpandStore('expanded_uids', 'uid');
           var navtree = make_tree(tree_data, {
@@ -48,7 +48,7 @@ $(function() {
   var favorites_tree;
   function render_favorites_tree() {
     var tree_node = portlet.find('#tree-favorites').find('>ul');
-    navigation_json.load(function(tree_data) {
+    navigation_json.load().then(function(tree_data) {
       favorites_store.load(function(favorites) {
         var fav_expand_store = ExpandStore('expanded_fav_uids', 'uid');
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
