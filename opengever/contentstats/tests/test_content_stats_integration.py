@@ -67,6 +67,9 @@ class TestContentStatsIntegration(IntegrationTestCase):
         # But any potential future type in opengever.* should be kept
         self.assertTrue(flt.keep('opengever.doesnt.exist.just.yet'))
 
+        # The fake portal_type that sums up docs and mails should also be kept
+        self.assertTrue(flt.keep('_opengever.document.behaviors.IBaseDocument'))  # noqa
+
     def test_review_states_filter(self):
         flt = getMultiAdapter(
             (self.portal, self.portal.REQUEST),
@@ -276,3 +279,14 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
         self.assertEquals(
             [['', 'checked_in', '3'], ['', 'checked_out', '1']],
             table.lists())
+
+    def test_gever_portal_types_contains_base_documents(self):
+        stats_provider = getMultiAdapter(
+            (self.portal, self.portal.REQUEST),
+            IStatsProvider, name='portal_types')
+        stats = stats_provider.get_raw_stats()
+
+        self.assertIn('_opengever.document.behaviors.IBaseDocument', stats)
+        self.assertEquals(
+            stats['opengever.document.document'] + stats['ftw.mail.mail'],
+            stats['_opengever.document.behaviors.IBaseDocument'])

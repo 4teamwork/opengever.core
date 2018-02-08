@@ -1,5 +1,7 @@
 from collections import Counter
 from ftw.contentstats.interfaces import IStatsProvider
+from ftw.contentstats.providers.portal_types import PortalTypesProvider
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
 from plone import api
@@ -7,6 +9,24 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+
+
+@implementer(IStatsProvider)
+@adapter(IPloneSiteRoot, IOpengeverBaseLayer)
+class GEVERPortalTypesProvider(PortalTypesProvider):
+    """Customization of the default ftw.contentstats `portal_types` provider
+    that sums up (Documents + Mails) as a separate, fake portal_type
+    _opengever.document.behaviors.IBaseDocument for easier processing in ELK.
+    """
+
+    def get_raw_stats(self):
+        """Return a list of dicts (keys: name, amount).
+        """
+        counts = super(GEVERPortalTypesProvider, self).get_raw_stats()
+        mails = counts.get('ftw.mail.mail', 0)
+        docs = counts.get('opengever.document.document', 0)
+        counts['_opengever.document.behaviors.IBaseDocument'] = (docs + mails)
+        return counts
 
 
 @implementer(IStatsProvider)
