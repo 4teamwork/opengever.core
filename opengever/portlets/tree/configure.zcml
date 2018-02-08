@@ -55,4 +55,9 @@
       allowed_attributes="list add remove set"
       />
 
+  <adapter
+      factory=".favorites.RepositoryFavoritesETagValue"
+      name="repository-favorites"
+      />
+
 </configure>

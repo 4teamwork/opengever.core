@@ -1,13 +1,18 @@
 from AccessControl import getSecurityManager
+from Acquisition import aq_chain
 from BTrees.OOBTree import OOBTree
 from opengever.base.protect import unprotected_write
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.repository.repositoryroot import IRepositoryRoot
 from persistent.list import PersistentList
+from plone.app.caching.interfaces import IETagValue
 from Products.Five import BrowserView
 from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
 from zope.component import adapts
 from zope.component import getMultiAdapter
+from zope.component.hooks import getSite
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 import json
@@ -109,15 +114,41 @@ class RepositoryFavoritesView(BrowserView):
         self._storage().set(uuids)
 
     def list_cache_param(self):
-        cache_key_data = ':'.join(self._storage().list())
-        cache_key = md5.new(cache_key_data).hexdigest()
         username = getSecurityManager().getUser().getId()
-        cache_key = '-'.join((cache_key, username))
+        cache_key = '-'.join((self.get_cache_key(), username))
         param = 'cache_key={0}'.format(cache_key)
         if self.request.getHeader('Cache-Control') == 'no-cache':
             param += '&nocache=true'
         return param
 
+    def get_cache_key(self):
+        cache_key_data = ':'.join(self._storage().list())
+        return md5.new(cache_key_data).hexdigest()
+
     def _storage(self):
         username = getSecurityManager().getUser().getId()
         return getMultiAdapter((self.context, username), IRepositoryFavorites)
+
+
+@implementer(IETagValue)
+@adapter(Interface, Interface)
+class RepositoryFavoritesETagValue(object):
+
+    def __init__(self, published, request):
+        self.published = published
+        self.request = request
+
+    def __call__(self):
+        return '-'.join(map(self.get_cache_key_for_repository_root,
+                            self.get_repository_roots()))
+
+    def get_cache_key_for_repository_root(self, repository_root):
+        view = repository_root.restrictedTraverse('repository-favorites')
+        return view.get_cache_key()
+
+    def get_repository_roots(self):
+        roots = filter(IRepositoryRoot.providedBy, aq_chain(self.published))
+        if roots:
+            return roots
+        # Avoid catalog query for performance reasons
+        return filter(IRepositoryRoot.providedBy, getSite().objectValues())

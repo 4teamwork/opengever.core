@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.testing import FunctionalTestCase
+from plone.app.caching.interfaces import IETagValue
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 
@@ -43,6 +44,8 @@ class TestRepositoryFavoritesView(FunctionalTestCase):
 
     def setUp(self):
         self.root = create(Builder('repository_root'))
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
 
     @browsing
     def test_managing_favorites(self, browser):
@@ -68,5 +71,17 @@ class TestRepositoryFavoritesView(FunctionalTestCase):
         self.favorites_for(TEST_USER_ID).add('foo!')
         self.assertNotEqual(param, view.list_cache_param())
 
+    def test_etag_value_invalidates(self):
+        value = self.get_etag_value_for(self.root)
+        self.assertEquals(value, self.get_etag_value_for(self.portal))
+        self.favorites_for(TEST_USER_ID).add('foo!')
+        self.assertNotEqual(value, self.get_etag_value_for(self.root))
+
     def favorites_for(self, username):
         return getMultiAdapter((self.root, username), IRepositoryFavorites)
+
+    def get_etag_value_for(self, context):
+        adapter = getMultiAdapter((context, self.request),
+                                  IETagValue,
+                                  name='repository-favorites')
+        return adapter()

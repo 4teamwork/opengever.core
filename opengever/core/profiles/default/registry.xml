@@ -33,6 +33,7 @@
       <element>quotawarning</element>
       <element>ouselector</element>
       <element>redirector</element>
+      <element>repository-favorites</element>
     </value>
   </record>
 
@@ -42,6 +43,7 @@
       <element>quotawarning</element>
       <element>ouselector</element>
       <element>redirector</element>
+      <element>repository-favorites</element>
     </value>
   </record>
 
