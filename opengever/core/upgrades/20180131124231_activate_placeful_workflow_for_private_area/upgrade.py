@@ -9,7 +9,9 @@ class ActivatePlacefulWorkflowForPrivateArea(UpgradeStep):
 
     def __call__(self):
         portal = api.portal.get()
-        private_root = portal.unrestrictedTraverse('private')
+        private_root = portal.unrestrictedTraverse('private', None)
+        if private_root is None:
+            return
 
         activator = PlacefulWorkflowPolicyActivator(private_root)
         activator.activate_policy(
