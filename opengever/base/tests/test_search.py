@@ -276,7 +276,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.solr.search.assert_called_with(
             query=(u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
                    u'Title:foo^100 OR Title:foo*^10 OR SearchableText:foo^10 '
-                   u'OR SearchableText:foo* OR sequence_number:foo^2000'),
+                   u'OR SearchableText:foo*'),
             filters=[u'trashed:false'],
             start=0,
             rows=10,
