@@ -1,3 +1,4 @@
+from ftw.solr.interfaces import ISolrDocument
 from opengever.globalindex.model.task import Task
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.ZCatalog.interfaces import ICatalogBrain
@@ -10,7 +11,7 @@ def _get_task_css_class(task):
     of a task. The task may be a brain, a dexterity object or a sql alchemy
     globalindex object.
     """
-    if ICatalogBrain.providedBy(task):
+    if ICatalogBrain.providedBy(task) or ISolrDocument.providedBy(task):
         task = Task.query.by_brain(task)
 
     return task.get_css_class()
