@@ -32,7 +32,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
 
     def solr_results(self, query):
         solr_query = u'Title:{term} OR SearchableText:{term}'.format(
-            term=query['SearchableText'])
+            term=query['SearchableText'].decode('utf8'))
 
         filters = [u'trashed:false']
         for key, value in query.items():
