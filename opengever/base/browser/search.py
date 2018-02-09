@@ -64,6 +64,10 @@ class OpengeverSearch(Search):
         else:
             query = u'*:*'
 
+        filters = self.solr_filters()
+        if 'trashed' not in self.request.form:
+            filters.append(u'trashed:false')
+
         params = {
             'fl': [
                 'UID', 'Title', 'getIcon', 'portal_type', 'path',
@@ -77,8 +81,8 @@ class OpengeverSearch(Search):
 
         solr = getUtility(ISolrSearch)
         resp = solr.search(
-            query=query, filters=self.solr_filters(), start=b_start,
-            rows=b_size, sort=self.solr_sort(), **params)
+            query=query, filters=filters, start=b_start, rows=b_size,
+            sort=self.solr_sort(), **params)
         results = OGSolrContentListing(resp)
 
         if batch:
@@ -135,9 +139,9 @@ class OpengeverSearch(Search):
                         v = escape(v)
                         if ' ' in v:
                             v = '"%s"' % v
-                        value[i] = v
-                    else:
-                        value[i] = v
+                    elif isinstance(v, bool):
+                        v = 'true' if v else 'false'
+                    value[i] = v
                 if len(value) > 1:
                     filters.append(u'%s:(%s)' % (key, ' OR '.join(value)))
                 else:

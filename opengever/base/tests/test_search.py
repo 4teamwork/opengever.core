@@ -277,7 +277,7 @@ class TestSolrSearch(IntegrationTestCase):
             query=(u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
                    u'Title:foo^100 OR Title:foo*^10 OR SearchableText:foo^10 '
                    u'OR SearchableText:foo* OR sequence_number:foo^2000'),
-            filters=[],
+            filters=[u'trashed:false'],
             start=0,
             rows=10,
             sort=None,
@@ -298,7 +298,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.search.solr_results()
         self.solr.search.assert_called_with(
             query=u'*:*',
-            filters=[u'responsible:hans.muster'],
+            filters=[u'responsible:hans.muster', u'trashed:false'],
             start=0,
             rows=10,
             sort=None,

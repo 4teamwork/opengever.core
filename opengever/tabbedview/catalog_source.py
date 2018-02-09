@@ -34,7 +34,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         solr_query = u'Title:{term} OR SearchableText:{term}'.format(
             term=query['SearchableText'])
 
-        filters = []
+        filters = [u'trashed:false']
         for key, value in query.items():
             if key == 'SearchableText':
                 continue
@@ -47,7 +47,8 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 filters.append(u'{}:({})'.format(
                     key, escape(' OR '.join(value))))
             elif isinstance(value, bool):
-                filters.append(u'{}:{}'.format(key, value))
+                filters.append(u'{}:{}'.format(
+                    key, 'true' if value else 'false'))
             else:
                 filters.append(u'{}:{}'.format(key, escape(value)))
 

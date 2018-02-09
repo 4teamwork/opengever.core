@@ -44,26 +44,33 @@ class TestSolrSearch(IntegrationTestCase):
             self.solr.search.call_args[1]['query'],
             u'Title:foo OR SearchableText:foo')
 
+    def test_solr_filters_contain_trashed(self):
+        self.source.solr_results(
+            {'SearchableText': 'foo'})
+        self.assertEqual(
+            self.solr.search.call_args[1]['filters'],
+            [u'trashed:false'])
+
     def test_solr_filters_contain_path_parent(self):
         self.source.solr_results(
             {'SearchableText': 'foo', 'path': {'query': '/my/path'}})
         self.assertEqual(
             self.solr.search.call_args[1]['filters'],
-            [u'path_parent:\\/my\\/path'])
+            [u'trashed:false', u'path_parent:\\/my\\/path'])
 
     def test_solr_filters_handle_booleans(self):
         self.source.solr_results(
             {'SearchableText': 'foo', 'is_subdossier': True})
         self.assertEqual(
             self.solr.search.call_args[1]['filters'],
-            [u'is_subdossier:True'])
+            [u'trashed:false', u'is_subdossier:true'])
 
     def test_solr_filters_handle_strings(self):
         self.source.solr_results(
             {'SearchableText': 'foo', 'reference_number': 'FD 1 / 1'})
         self.assertEqual(
             self.solr.search.call_args[1]['filters'],
-            [u'reference_number:FD 1 \\/ 1'])
+            [u'trashed:false', u'reference_number:FD 1 \\/ 1'])
 
     def test_solr_filters_do_not_contain_sort_parameters(self):
         self.source.solr_results({
@@ -73,7 +80,7 @@ class TestSolrSearch(IntegrationTestCase):
             })
         self.assertEqual(
             self.solr.search.call_args[1]['filters'],
-            [])
+            [u'trashed:false'])
 
     def test_solr_sort(self):
         self.source.solr_results(
