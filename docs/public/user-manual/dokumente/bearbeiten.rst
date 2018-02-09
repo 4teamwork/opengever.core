@@ -148,7 +148,7 @@ MS OneNote                x
 Open office                          x
 
 
-Acrobat Pro, Reader
+Acrobat Pro, Reader       x          x
 
 
 Adone InDesign            x
