@@ -1,14 +1,21 @@
 from DateTime import DateTime
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
+from ftw.solr.query import make_query
+from opengever.base.interfaces import ISearchSettings
+from opengever.base.solr import OGSolrContentListing
 from opengever.bumblebee import is_bumblebee_feature_enabled
-from opengever.bumblebee import is_bumblebeeable
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
 from plone.app.search.browser import Search
+from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.navtree import getNavigationRoot
+from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getMultiAdapter
-
+from zope.component import getUtility
+from ZPublisher.HTTPRequest import record
 
 FILTER_TYPES = [
     'ftw.mail.mail',
@@ -33,26 +40,130 @@ class OpengeverSearch(Search):
         self.valid_keys = self.valid_keys + tuple(catalog.indexes())
 
     def results(self, query=None, batch=True, b_size=10, b_start=0):
-        """Overwrite this method to adjust the default batch size from
-        10 to 25.
 
-        If bumblebee is enabled we have to update the number of documents
-        and the offset in a sepparate query because the query can contain
-        different portaltypes. In the showroom overlay we just want to display
-        the amount of bumblebee-items and not the amount of all search
-        results. We also have to calculate the offset while iterating
-        over all brains because we don't know on which batch are how
-        many bumblebeeable-items.
-        """
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+
+        if settings.use_solr:
+            results = self.solr_results(
+                query=query, batch=batch, b_size=b_size, b_start=b_start)
+        else:
+            results = super(OpengeverSearch, self).results(
+                query=query, batch=batch, b_size=self.b_size, b_start=b_start)
+
         if is_bumblebee_feature_enabled:
-            bumblebee_search_query = query or {}
-            brains = super(OpengeverSearch, self).results(
-                query=bumblebee_search_query, batch=False)
+            self.calculate_showroom_configuration(results)
 
-            self.calculate_showroom_configuration(brains, b_start)
+        return results
 
-        return super(OpengeverSearch, self).results(
-            query=query, batch=batch, b_size=self.b_size, b_start=b_start)
+    def solr_results(self, query=None, batch=True, b_size=10, b_start=0):
+
+        searchable_text = self.request.form.get('SearchableText', '')
+        if searchable_text:
+            query = make_query(searchable_text)
+        else:
+            query = u'*:*'
+
+        filters = self.solr_filters()
+        if 'trashed' not in self.request.form:
+            filters.append(u'trashed:false')
+
+        params = {
+            'fl': [
+                'UID', 'Title', 'getIcon', 'portal_type', 'path',
+                'containing_dossier', 'id', 'created', 'modified',
+                'review_state', 'bumblebee_checksum',
+            ],
+            'hl': 'on',
+            'hl.fl': 'SearchableText',
+            'hl.snippets': 3,
+        }
+
+        solr = getUtility(ISolrSearch)
+        resp = solr.search(
+            query=query, filters=filters, start=b_start, rows=b_size,
+            sort=self.solr_sort(), **params)
+        results = OGSolrContentListing(resp)
+
+        if batch:
+            results = Batch(results, b_size, b_start)
+        return results
+
+    def calculate_showroom_configuration(self, results):
+        bumblebee_docs = [d for d in results if d.is_bumblebeeable()]
+        self.offset = 0
+        self.number_of_documents = len(bumblebee_docs)
+
+    def solr_filters(self):
+        solr = getUtility(ISolrSearch)
+        schema = solr.manager.schema
+        filters = []
+        for key, value in self.request.form.items():
+            if key == 'SearchableText':
+                continue
+            if key not in schema.fields:
+                continue
+
+            if isinstance(key, str):
+                key = key.decode('utf8')
+
+            # Date range queries
+            if isinstance(value, record):
+                range_ = value.get('range', None)
+                if range_ in ['min', 'max', 'minmax']:
+                    value = value.get('query', None)
+                    if value is None:
+                        continue
+                    try:
+                        value = [DateTime(v) for v in value]
+                    except SyntaxError:
+                        continue
+                    if range_ == 'min':
+                        filters.append(u'%s:[%s TO *]' % (
+                            key, escape(value[0].HTML4())))
+                    elif range_ == 'max':
+                        filters.append(u'%s:[* TO %s]' % (
+                            key, escape(value[0].HTML4())))
+                    elif range_ == 'minmax':
+                        filters.append(u'%s:[%s TO %s]' % (
+                            key,
+                            escape(value[0].HTML4()),
+                            escape(value[1].HTML4())))
+            else:
+                if not isinstance(value, (list, tuple)):
+                    value = [value]
+                for i, v in enumerate(value):
+                    if isinstance(v, str):
+                        v = v.strip()
+                        v = v.decode('utf8')
+                        v = escape(v)
+                        if ' ' in v:
+                            v = '"%s"' % v
+                    elif isinstance(v, bool):
+                        v = 'true' if v else 'false'
+                    value[i] = v
+                if len(value) > 1:
+                    filters.append(u'%s:(%s)' % (key, ' OR '.join(value)))
+                else:
+                    filters.append(u'%s:%s' % (key, value[0]))
+
+        return filters
+
+    def solr_sort(self):
+        sort = self.request.form.get('sort_on', None)
+        if sort == 'Date':
+            sort = 'modified'
+        elif sort == 'relevance':
+            sort = None
+
+        if sort:
+            sort_order = self.request.form.get('sort_order', 'ascending')
+            if sort_order in ['descending', 'reverse']:
+                sort += ' desc'
+            else:
+                sort += ' asc'
+
+        return sort
 
     def breadcrumbs(self, item):
         obj = item.getObject()
@@ -61,27 +172,6 @@ class OpengeverSearch(Search):
         breadcrumbs = list(view.breadcrumbs())[:-1]
 
         return breadcrumbs
-
-    def calculate_showroom_configuration(self, brains, b_start):
-        """Calculates the number of documents from a list of brains
-        and the offset depending on the batch-start position.
-        """
-        offset = 0
-        number_of_documents = 0
-
-        for i, brain in enumerate(brains):
-            if not is_bumblebeeable(brain):
-                continue
-
-            if b_start > i:
-                # increment the offset as long as we are
-                # behind the batch start position
-                offset += 1
-
-            number_of_documents += 1
-
-        self.offset = offset
-        self.number_of_documents = number_of_documents
 
     def types_list(self):
         types = super(OpengeverSearch, self).types_list()
@@ -95,23 +185,7 @@ class OpengeverSearch(Search):
         if not value or not self.should_handle_key(key):
             return
 
-        usage = self.request.form.get('{}_usage'.format(key))
-        if usage:
-            self.handle_date_query_filter_value(usage, query, key, value)
-        else:
-            query[key] = value
-
-    def handle_date_query_filter_value(self, usage, query, key, value):
-        if usage not in ('min', 'max', 'minmax'):
-            return
-        if usage == 'minmax' and len(value) == 2:
-            query_value = [DateTime(value[0]), DateTime(value[1])]
-        else:
-            query_value = [DateTime(value[0])]
-        query[key] = {
-            'query': query_value,
-            'range': usage
-        }
+        query[key] = value
 
     def _filter_query(self, query):
         """The _filter_query of the standard search view (plone.app.search)

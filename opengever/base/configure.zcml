@@ -49,6 +49,11 @@
       />
 
   <adapter
+      factory=".solr.OGSolrContentListingObject"
+      for=".interfaces.IOGSolrDocument"
+      />
+
+  <adapter
       factory=".redirector.RedirectorETagValue"
       name="redirector"
       />

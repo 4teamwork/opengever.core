@@ -62,8 +62,5 @@
       </div>
     </div>
 
-  <!-- hidden fields for collective.solr - needed for default facets -->
-  <div tal:condition="has_solr" tal:replace="structure view/hiddenfields" />
-
   </form>
 </div>

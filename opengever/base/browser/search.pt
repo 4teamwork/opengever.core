@@ -336,7 +336,7 @@
 
                             </div>
 
-                            <div class="description" tal:content="item/CroppedDescription">
+                            <div class="description" tal:content="structure item/CroppedDescription">
                               Cropped description
                             </div>
 

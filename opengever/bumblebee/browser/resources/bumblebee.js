@@ -312,6 +312,7 @@
     showroom.options.multiple = numberOfDocuments > 1
 
     if (isOnSearchView()) {
+      showroom.options.multiple = false;
       searchViewNavigationBatch.initBatchPosition(
         $("#search-results").data("batch-size"),
         getOffset(),

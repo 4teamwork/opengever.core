@@ -154,10 +154,10 @@ class TestSearchWithoutContent(FunctionalTestCase):
 
         self.assertBrowserUrlContainsSearchParams(browser, [
             ('object_provides', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
-            ('start_usage', 'min'),
-            ('start:list', '01/01/10'),
-            ('end_usage', 'max'),
-            ('end:list', '04/02/10'),
+            ('start.range:record', 'min'),
+            ('start.query:record:list:date', '2010-01-01'),
+            ('end.range:record', 'max'),
+            ('end.query:record:list:date', '2010-04-02'),
         ])
 
     @browsing
@@ -187,12 +187,12 @@ class TestSearchWithoutContent(FunctionalTestCase):
         self.assertBrowserUrlContainsSearchParams(browser, [
             ('object_provides', 'opengever.dossier.behaviors.dossier.IDossierMarker'),
             ('SearchableText', 'dossier1'),
-            ('start_usage', 'minmax'),
-            ('start:list', '01/01/10'),
-            ('start:list', '02/02/10'),
-            ('end_usage', 'minmax'),
-            ('end:list', '03/01/10'),
-            ('end:list', '04/02/10'),
+            ('start.range:record', 'minmax'),
+            ('start.query:record:list:date', '2010-01-01'),
+            ('start.query:record:list:date', '2010-02-02'),
+            ('end.range:record', 'minmax'),
+            ('end.query:record:list:date', '2010-03-01'),
+            ('end.query:record:list:date', '2010-04-02'),
             ('reference', 'OG 14.2'),
             ('sequence_number:int', '5'),
             ('searchable_filing_no', '14'),
@@ -217,12 +217,12 @@ class TestSearchWithoutContent(FunctionalTestCase):
         self.assertBrowserUrlContainsSearchParams(browser, [
             ('object_provides', 'opengever.document.behaviors.IBaseDocument'),
             ('SearchableText', 'document1'),
-            ('receipt_date_usage', 'minmax'),
-            ('receipt_date:list', '01/01/10'),
-            ('receipt_date:list', '02/02/10'),
-            ('delivery_date_usage', 'minmax'),
-            ('delivery_date:list', '03/01/10'),
-            ('delivery_date:list', '04/02/10'),
+            ('receipt_date.range:record', 'minmax'),
+            ('receipt_date.query:record:list:date', '2010-01-01'),
+            ('receipt_date.query:record:list:date', '2010-02-02'),
+            ('delivery_date.range:record', 'minmax'),
+            ('delivery_date.query:record:list:date', '2010-03-01'),
+            ('delivery_date.query:record:list:date', '2010-04-02'),
             ('document_author', 'Eduard'),
             ('trashed:list:boolean', 'True'),
             ('trashed:list:boolean', 'False'),
@@ -242,9 +242,9 @@ class TestSearchWithoutContent(FunctionalTestCase):
         self.assertBrowserUrlContainsSearchParams(browser, [
             ('object_provides', 'opengever.task.task.ITask'),
             ('SearchableText', 'task1'),
-            ('deadline_usage', 'minmax'),
-            ('deadline:list', '01/01/10'),
-            ('deadline:list', '02/02/10'),
+            ('deadline.range:record', 'minmax'),
+            ('deadline.query:record:list:date', '2010-01-01'),
+            ('deadline.query:record:list:date', '2010-02-02'),
             ('task_type', 'information'),
         ])
 
