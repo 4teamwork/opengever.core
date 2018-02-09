@@ -17,6 +17,24 @@ MAX_TITLE = 29
 MAX_DESCRIPTION = 93
 
 
+# https://github.com/4teamwork/opengever.core/blob/master/opengever/base/browser/helper.py#L20
+def get_mimetype_icon_klass(item):
+    # It just makes sense to guess the mimetype of documents
+    if not item.portal_type == 'opengever.document.document':
+        return 'contenttype-%s' % normalizeString(item.portal_type)
+
+    icon = item.getIcon
+
+    # Fallback for unknown file type
+    if icon == '':
+        return "icon-document_empty"
+
+    # Strip '.gif' from end of icon name and remove
+    # leading 'icon_'
+    filetype = icon[:icon.rfind('.')].replace('icon_', '')
+    return 'icon-%s' % normalizeString(filetype)
+
+
 class LiveSearchReplyView(BrowserView):
 
     def __call__(self):
@@ -39,7 +57,7 @@ class LiveSearchReplyView(BrowserView):
             filters.append(u'path_parent:%s' % escape(self.path))
         params = {
             'fl': [
-                'UID', 'Title', 'getIcon', 'portal_type', 'path',
+                'UID', 'id', 'Title', 'getIcon', 'portal_type', 'path',
             ],
 
         }
@@ -96,8 +114,10 @@ class LiveSearchReplyView(BrowserView):
                     display_title = full_title
 
                 full_title = full_title.replace('"', '&quot;')
-                klass = 'contenttype-%s' % normalizeString(result.portal_type)
-                write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, klass, display_title))
+
+                css_klass = get_mimetype_icon_klass(result.doc)
+
+                write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, css_klass, display_title))
                 display_description = safe_unicode(result.Description()) or u''
                 if len(display_description) > MAX_DESCRIPTION:
                     display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
