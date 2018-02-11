@@ -86,3 +86,25 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
         self.assertDictContainsSubset(
             {u'title': u'Verträge mit der kantonalen Finanzverwaltung'},
             dossier_summary)
+
+    @browsing
+    def test_summary_with_custom_field_list(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(
+            self.dossier.absolute_url() +
+            '?items.fl=filesize,filename,modified,created,mimetype',
+            headers={'Accept': 'application/json'})
+
+        summary = browser.json['items'][0]
+        self.assertEqual(
+            summary,
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
+                u'und-vereinbarungen/dossier-1/document-5',
+                u'created': u'2016-08-31T15:07:33+02:00',
+                u'filename': u'vertragsentwurf.docx',
+                u'filesize': 27413,
+                u'mimetype': u'application/vnd.openxmlformats-officedocument.'
+                u'wordprocessingml.document',
+                u'modified': u'2016-08-31T15:07:33+02:00',
+            })
