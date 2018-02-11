@@ -10,6 +10,7 @@ from opengever.base.model import create_session
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 
 
@@ -84,8 +85,11 @@ class DigestMailer(Mailer):
             if not self.is_interval_expired(userid):
                 continue
 
+            subject = translate(
+                _(u'subject_digest', default=u'Daily Digest'),
+                context=self.request)
             msg = self.prepare_mail(
-                subject=_(u'subject_digest', default=u'Daily Digest'),
+                subject=subject,
                 to_userid=userid,
                 data={'notifications': self.prepare_data(notifications),
                       'public_url': get_current_admin_unit().public_url,
