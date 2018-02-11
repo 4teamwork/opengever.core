@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"
-      i18n:domain="opengever.activity"
-      tal:define="portal_url context/@@plone_portal_state/portal_url">
+      i18n:domain="opengever.activity">
   <head>
     <meta charset="utf-8"> <!-- utf-8 works for most cases -->
       <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
@@ -265,7 +264,7 @@
                                     <a href="#"
                                        class="button-a"
                                        i18n:translate="label_notification_settings"
-                                       tal:attributes="href string:${portal_url}/@@personal-preferences"
+                                       tal:attributes="href string:${options/public_url}/@@personal-preferences"
                                        style="font-family: Arial, sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;">
                                       Notification settings
                                     </a>

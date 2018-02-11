@@ -7,6 +7,7 @@ from opengever.activity.model import Notification
 from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18nmessageid import MessageFactory
@@ -87,6 +88,7 @@ class DigestMailer(Mailer):
                 subject=_(u'subject_digest', default=u'Daily Digest'),
                 to_userid=userid,
                 data={'notifications': self.prepare_data(notifications),
+                      'public_url': get_current_admin_unit().public_url,
                       'today': api.portal.get().unrestrictedTraverse(
                           'plone').toLocalizedTime(datetime.today())})
             self.send_mail(msg)
