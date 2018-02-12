@@ -7,8 +7,10 @@ from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
 from opengever.sharing.interfaces import ILocalRolesAcquisitionBlocked
 from opengever.sharing.interfaces import ILocalRolesModified
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_last_recorded_event
 from opengever.testing.event_recorder import register_event_recorder
+from opengever.testing.pages import tabbedview
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -188,20 +190,25 @@ class TestOpengeverSharingIntegration(FunctionalTestCase):
         self.assertEqual(TEST_USER_ID, results[0]['id'])
 
 
-class TestOpengeverSharingWithBrowser(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestOpengeverSharingWithBrowser, self).setUp()
-
-        self.grant('Manager')
-        self.dossier = create(Builder("dossier"))
+class TestOpengeverSharingWithBrowser(IntegrationTestCase):
 
     @browsing
     def test_sharing_views(self, browser):
         """ Test Integration of opengever.sharing
         """
-        # We just test to open the views because the rest is tested
-        # in other packages
-        browser.login().open(self.dossier, view='sharing')
+        self.login(self.manager, browser)
 
-        browser.open(self.dossier, view='tabbedview_view-sharing')
+        browser.open(self.dossier)
+        tabbedview.open('Info')
+
+        expected_users_and_roles = [
+            'Logged-in users',
+            'fa Users Group (fa_users)',
+            u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
+            u'K\xf6nig J\xfcrgen (jurgen.konig)',
+            ]
+
+        found_users_and_roles = browser.css('#user-group-sharing-settings tr').text
+
+        self.assertEqual(expected_users_and_roles, found_users_and_roles)
