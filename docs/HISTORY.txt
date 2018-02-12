@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Fix repository favorites cache key generation for Anonymous users. [lgraf]
 - Update plone.restapi to 1.1.0 and plone.rest to 1.0.0. [buchi]
 - Bump Products.LDAPMultiPlugins to 1.15.post3 to handle commas in CNs. [lgraf]
 - Content stats: Add custom GEVERPortalTypesProvider that sums up docs and mails. [lgraf]
