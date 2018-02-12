@@ -8,6 +8,8 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import Interface
 from zope.interface import noLongerProvides
+from opengever.document.interfaces import ICheckinCheckoutManager
+from zope.component import queryMultiAdapter
 
 
 class ITrashable(Interface):
@@ -50,6 +52,10 @@ class UntrashedEvent(ObjectEvent):
     implements(IUntrashedEvent)
 
 
+class TrashError(Exception):
+    """An error that occurs during a trash/untrash operation."""
+
+
 class Trasher(object):
     """An object which handles trashing/untrashing documents.
     """
@@ -58,10 +64,21 @@ class Trasher(object):
         self.context = context
 
     def trash(self):
+        if not _checkPermission('opengever.trash: Trash content',
+                                self.context):
+            raise Unauthorized()
+
         folder = aq_parent(aq_inner(self.context))
-        # check trash permission
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
+
+        if ITrashed.providedBy(self.context):
+            raise TrashError('Already trashed')
+
+        manager = queryMultiAdapter((self.context, self.context.REQUEST),
+                                    ICheckinCheckoutManager)
+        if manager and manager.get_checked_out_by():
+            raise TrashError('Document checked out')
 
         alsoProvides(self.context, ITrashed)
 
@@ -71,11 +88,15 @@ class Trasher(object):
         notify(TrashedEvent(self.context))
 
     def untrash(self):
-        # XXX check Permission
+        if not _checkPermission('opengever.trash: Untrash content', self.context):
+            raise Unauthorized()
+
         folder = aq_parent(aq_inner(self.context))
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
+
         noLongerProvides(self.context, ITrashed)
+
         self.reindex()
         notify(UntrashedEvent(self.context))
 

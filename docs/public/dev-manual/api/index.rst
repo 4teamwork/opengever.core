@@ -14,6 +14,7 @@ Inhalt:
    batching.rst
    summaries.rst
    searching.rst
+   trash.rst
    workflow.rst
    scanin.rst
    content_types.rst

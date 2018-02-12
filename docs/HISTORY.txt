@@ -78,6 +78,7 @@ Changelog
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
 - Integrate Solr into search form, live search and tabbedview filter. [buchi]
 - Add option to get a custom field list in REST API summaries. [buchi]
+- Add REST API endpoints for trashing/untrashing documents [buchi]
 
 
 2017.7.8 (2018-01-23)
