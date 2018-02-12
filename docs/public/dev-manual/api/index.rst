@@ -12,6 +12,7 @@ Inhalt:
    exploring.rst
    serialization.rst
    batching.rst
+   summaries.rst
    searching.rst
    workflow.rst
    scanin.rst

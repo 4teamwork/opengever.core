@@ -97,4 +97,10 @@ können diese mittels der Option ``metadata_fields`` verlangt werden:
 Um *alle* im Suchkatalog verfügbaren Metadaten direkt in den Suchresultaten
 darzustellen, kann ``metadata_fields=_all`` verwendet werden.
 
+.. note::
+    Die Verwendung des ``metadata_fields`` Parameters bedingt Kenntnis der
+    internen Index-Namen, und sollte daher mit 4teamwork abgesprochen werden.
+    Für :ref:`summarische Auflistungen bei GET requests <summaries>` gibt es
+    einen separaten Mechanismus.
+
 .. disqus::

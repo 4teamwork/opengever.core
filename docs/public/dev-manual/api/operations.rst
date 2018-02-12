@@ -24,8 +24,9 @@ Mit einem ``GET`` Request auf die URL eines Objekts können die Daten
 (Metadaten wie auch Primärdaten) eines Objekts ausgelesen werden.
 
 Im Fall eines Objekts das "folderish" ist (ein Container), gibt es ein
-spezielles Attribut ``items``, welches eine summarische Auflistung der
-Unterobjekte enthält (direkte children des Objekts).
+spezielles Attribut ``items``, welches eine
+:ref:`summarische Auflistung <summaries>` der Unterobjekte enthält (direkte
+children des Objekts).
 
 
 .. http:get:: /(path)
