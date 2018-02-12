@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Bump Products.LDAPMultiPlugins to 1.15.post3 to handle commas in CNs. [lgraf]
 - Content stats: Add custom GEVERPortalTypesProvider that sums up docs and mails. [lgraf]
 - User details view: URLEncode groupid's in links to group members. [lgraf]
 - Include favorites cache key in page cache key. [Kevin Bieri]
