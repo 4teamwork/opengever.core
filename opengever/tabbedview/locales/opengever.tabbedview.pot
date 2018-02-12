@@ -24,6 +24,7 @@ msgstr ""
 msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
 
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "Choose"
 msgstr ""
 
