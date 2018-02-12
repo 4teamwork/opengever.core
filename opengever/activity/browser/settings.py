@@ -35,13 +35,10 @@ ACTIVITY_GROUPS = [
          'task-transition-open-cancelled',
          'task-transition-open-in-progress',
          'task-transition-open-rejected',
-         'task-transition-open-resolved',
-         'task-transition-open-tested-and-closed',
          'task-commented',
          'task-transition-reassign',
          'task-transition-rejected-open',
          'task-transition-resolved-in-progress',
-         'task-transition-resolved-tested-and-closed'
      ]},
 
     {'id': 'forwarding',
@@ -55,6 +52,18 @@ ACTIVITY_GROUPS = [
          'forwarding-transition-reassign-refused',
          'forwarding-transition-refuse']}
 ]
+
+
+ALIASES = {
+    'task-transition-in-progress-tested-and-closed': (
+        'task-transition-in-progress-tested-and-closed',
+        'task-transition-open-tested-and-closed',
+        'task-transition-resolved-tested-and-closed',
+    ),
+    'task-transition-in-progress-resolved': (
+        'task-transition-in-progress-resolved',
+        'task-transition-open-resolved')
+}
 
 
 class NotificationSettings(BrowserView):
@@ -72,11 +81,16 @@ class NotificationSettings(BrowserView):
         badge = json.loads(self.request.form['badge'])
         digest = json.loads(self.request.form['digest'])
 
-        # todo check roles before save
-        setting = self.get_or_create_setting(kind)
-        setting.mail_notification_roles = mail
-        setting.badge_notification_roles = badge
-        setting.digest_notification_roles = digest
+        if ALIASES.get(kind):
+            kinds = ALIASES.get(kind)
+        else:
+            kinds = (kind, )
+
+        for kind in kinds:
+            setting = self.get_or_create_setting(kind)
+            setting.mail_notification_roles = mail
+            setting.badge_notification_roles = badge
+            setting.digest_notification_roles = digest
 
         return JSONResponse(self.request).proceed().dump()
 
@@ -84,8 +98,16 @@ class NotificationSettings(BrowserView):
         """Reset a personal setting
         """
         kind = self.request.form['kind']
-        setting = self.get_setting(kind)
-        create_session().delete(setting)
+
+        if ALIASES.get(kind):
+            kinds = ALIASES.get(kind)
+        else:
+            kinds = (kind, )
+
+        for kind in kinds:
+            setting = self.get_setting(kind)
+            create_session().delete(setting)
+
         return JSONResponse(self.request).proceed().dump()
 
     def list(self):
@@ -94,6 +116,7 @@ class NotificationSettings(BrowserView):
         activities = []
         for group in ACTIVITY_GROUPS:
             for kind in group.get('activities'):
+
                 kind_title = translate(
                     ACTIVITY_TRANSLATIONS[kind], context=self.request)
 

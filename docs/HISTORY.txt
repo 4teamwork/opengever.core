@@ -15,6 +15,7 @@ Changelog
 - Prevent navigation tree from getting favorites multiple times. [Kevin Bieri]
 - Fix bumblebee for *.bmp and *.ini files. [deiferni]
 - Fix select2 value dropdowns, which has been hidden by the exposator. [phgross]
+- Combine similar transitions to one in the activity settings page. [phgross]
 - SPV: Rename "abgeschlossene Sitzungen" to "vergangene Sitzungen". [tarnap]
 - SPV: Sort memberships by member's last name. [tarnap]
 - Fix logout overlay when used with cross tab logout. [Kevin Bieri]
