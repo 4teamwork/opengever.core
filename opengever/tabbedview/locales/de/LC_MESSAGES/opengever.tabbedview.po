@@ -23,6 +23,7 @@ msgstr "Aktiv"
 msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr "Alle Sichtbaren ausgewählt <a href=\"#\">x</a>"
 
+#: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "Choose"
 msgstr "Auswählen"
 

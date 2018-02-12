@@ -162,10 +162,6 @@ msgstr ""
 msgid "All visible entries chosen <a href=\"#\">x</a>"
 msgstr ""
 
--#: ./opengever/tabbedview/browser/tabs_templates/generic.pt:12
-msgid "Choose"
-msgstr ""
-
 #: ./opengever/tabbedview/browser/tabs_templates/generic.pt:13
 msgid "Show all in this Folder"
 msgstr ""
