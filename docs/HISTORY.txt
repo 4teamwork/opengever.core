@@ -73,6 +73,7 @@ Changelog
 - Allow to add proposal documents to tasks. [tarnap]
 - Improve Office Connector testing. [Rotonen]
 - SPV: Make title and dossier column wider and remove invalid sorting options in meetings tab. [tarnap]
+- Integrate Solr into search form, live search and tabbedview filter. [buchi]
 
 
 2017.7.8 (2018-01-23)
