@@ -19,16 +19,6 @@ class TestRemoveConditionsChecker(FunctionalTestCase):
         self.assertEquals(
             expected, [translate(msg) for msg in msgs])
 
-    def test_document_has_to_be_checked_in(self):
-        document = create(Builder('document')
-                          .trashed()
-                          .checked_out())
-        checker = RemoveConditionsChecker(document)
-
-        self.assertFalse(checker.removal_allowed())
-        self.assert_error_messages(
-            [u'The document is still checked out.'], checker.error_msg)
-
     def test_document_must_not_have_relations(self):
         document_a = create(Builder('document'))
         document_b = create(Builder('document')
