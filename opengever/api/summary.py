@@ -90,6 +90,7 @@ def filename(obj):
 FIELD_ACCESSORS = {
     '@type': 'PortalType',
     'created': 'created',
+    'creator': 'Creator',
     'description': 'Description',
     'filename': filename,
     'filesize': filesize,

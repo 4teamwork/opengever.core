@@ -92,7 +92,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
         self.login(self.administrator, browser)
         browser.open(
             self.dossier.absolute_url() +
-            '?items.fl=filesize,filename,modified,created,mimetype',
+            '?items.fl=filesize,filename,modified,created,mimetype,creator',
             headers={'Accept': 'application/json'})
 
         summary = browser.json['items'][0]
@@ -102,6 +102,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
                 u'und-vereinbarungen/dossier-1/document-5',
                 u'created': u'2016-08-31T15:07:33+02:00',
+                u'creator': u'robert.ziegler',
                 u'filename': u'vertragsentwurf.docx',
                 u'filesize': 27413,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
