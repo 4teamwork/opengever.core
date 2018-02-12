@@ -1,12 +1,17 @@
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import DisabledNotificationCenter
 from opengever.activity.center import PloneNotificationCenter
+from opengever.activity.digest import DigestDispatcher
+from opengever.activity.digest import DigestMailer
 from opengever.activity.interfaces import IActivitySettings
 from opengever.activity.mail import PloneNotificationMailer
+from opengever.core.debughelpers import get_first_plone_site
+from opengever.core.debughelpers import setup_plone
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
+import transaction
 
 
 _ = MessageFactory("opengever.activity")
@@ -25,8 +30,14 @@ def notification_center():
     if not is_activity_feature_enabled():
         return DisabledNotificationCenter()
 
-    return PloneNotificationCenter(
-        dispatchers=[PloneNotificationMailer(), BadgeIconDispatcher()])
+    return PloneNotificationCenter(dispatchers=[
+        PloneNotificationMailer(), BadgeIconDispatcher(), DigestDispatcher()])
+
+
+def send_digest_zopectl_handler(app, args):
+    plone = setup_plone(get_first_plone_site(app))
+    DigestMailer().send_digests()
+    transaction.commit()
 
 
 ACTIVITY_TRANSLATIONS = {
@@ -61,7 +72,7 @@ ACTIVITY_TRANSLATIONS = {
         'task-transition-resolved-in-progress', default=u'Task revision wanted'),
     'task-transition-resolved-tested-and-closed': _(
         'task-transition-resolved-tested-and-closed', default=u'Task closed'),
-    'forwarding-added':_(
+    'forwarding-added': _(
         'forwarding-added', default=u'Forwarding added'),
     'forwarding-transition-accept': _(
         'forwarding-transition-accept', default=u'Forwarding accepted'),

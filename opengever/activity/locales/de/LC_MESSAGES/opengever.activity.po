@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-19 14:59+0000\n"
+"POT-Creation-Date: 2018-02-04 19:09+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,6 +107,12 @@ msgstr "Aktivität"
 msgid "label_badge"
 msgstr "GEVER Benachrichtigung"
 
+#. Default: "Daily Digest"
+#: ./opengever/activity/browser/settings.py
+#: ./opengever/activity/templates/digest.pt
+msgid "label_daily_digest"
+msgstr "Daily Digest"
+
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
@@ -119,6 +125,7 @@ msgstr "Mail"
 
 #. Default: "Notification settings"
 #: ./opengever/activity/browser/templates/settings.pt
+#: ./opengever/activity/templates/digest.pt
 msgid "label_notification_settings"
 msgstr "Benachrichtigungs-Einstellungen"
 
@@ -141,6 +148,11 @@ msgstr "Records Manager"
 #: ./opengever/activity/roles.py
 msgid "regular_watcher"
 msgstr "Überwacher"
+
+#. Default: "Daily Digest"
+#: ./opengever/activity/digest.py
+msgid "subject_digest"
+msgstr "Daily Digest"
 
 #. Default: "GEVER Task"
 #: ./opengever/activity/mail.py

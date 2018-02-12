@@ -1,10 +1,12 @@
 from opengever.activity.model import Activity
+from opengever.activity.model import Digest
 from opengever.activity.model import Notification
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import and_
 
 
 class ActivityQuery(BaseQuery):
@@ -28,6 +30,10 @@ class NotificationQuery(BaseQuery):
             return self.filter_by(activity_id=activity.id).filter(Notification.userid.in_(user_ids))
 
         return self.filter_by(activity_id=activity.id).filter(Notification.userid.is_(None))
+
+    def unsent_digest_notifications(self):
+        return self.filter(and_(Notification.is_digest.is_(True),
+                                Notification.sent_in_digest.is_(False)))
 
 
 Notification.query_cls = NotificationQuery
@@ -88,3 +94,13 @@ class WatcherQuery(BaseQuery):
 
 
 Watcher.query_cls = WatcherQuery
+
+
+class DigestQuery(BaseQuery):
+    """Provide accessors to digests."""
+
+    def get_by_userid(self, userid):
+        return self.filter_by(userid=userid).first()
+
+
+Digest.query_cls = DigestQuery

@@ -186,6 +186,8 @@ setup(name='opengever.core',
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
       import = opengever.bundle.console:import_oggbundle
+      send_digest = opengever.activity:send_digest_zopectl_handler
+
 
       [console_scripts]
       create-policy = opengever.policytemplates.cli:main

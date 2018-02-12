@@ -37,7 +37,8 @@ class TestListSettings(IntegrationTestCase):
                        userid=self.regular_user.getId(),
                        mail_notification_roles=[TASK_RESPONSIBLE_ROLE],
                        badge_notification_roles=[TASK_ISSUER_ROLE,
-                                                 TASK_RESPONSIBLE_ROLE]))
+                                                 TASK_RESPONSIBLE_ROLE],
+                       digest_notification_roles=[TASK_ISSUER_ROLE]))
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/list')
@@ -51,6 +52,8 @@ class TestListSettings(IntegrationTestCase):
                           accept['mail'])
         self.assertEquals({u'task_issuer': True, u'task_responsible': True},
                           accept['badge'])
+        self.assertEquals({u'task_issuer': True, u'task_responsible': False},
+                          accept['digest'])
         self.assertEquals('personal', accept['setting_type'])
 
 
@@ -60,7 +63,8 @@ class TestSaveSettings(IntegrationTestCase):
 
     data = {'kind': 'task-added',
             'mail': json.dumps([TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]),
-            'badge': json.dumps([TASK_ISSUER_ROLE])}
+            'badge': json.dumps([TASK_ISSUER_ROLE]),
+            'digest': json.dumps([TASK_RESPONSIBLE_ROLE])}
 
     @browsing
     def test_save_setting_raises_keyerror_when_parameter_is_missing(self, browser):
@@ -81,6 +85,11 @@ class TestSaveSettings(IntegrationTestCase):
                 self.portal, view='notification-settings/save',
                 data={key: self.data[key] for key in self.data if key != 'badge'})
 
+        with browser.expect_http_error(503):
+            browser.open(
+                self.portal, view='notification-settings/save',
+                data={key: self.data[key] for key in self.data if key != 'digest'})
+
     @browsing
     def test_save_setting_adds_personal_setting(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -95,6 +104,8 @@ class TestSaveSettings(IntegrationTestCase):
                           settings[0].mail_notification_roles)
         self.assertEquals(frozenset([TASK_ISSUER_ROLE]),
                           settings[0].badge_notification_roles)
+        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE]),
+                          settings[0].digest_notification_roles)
 
     @browsing
     def test_save_updates_personal_setting_when_exists(self, browser):
@@ -102,7 +113,8 @@ class TestSaveSettings(IntegrationTestCase):
                .having(kind='task-added',
                        userid=self.regular_user.getId(),
                        mail_notification_roles=[],
-                       badge_notification_roles=[]))
+                       badge_notification_roles=[],
+                       digest_notification_roles=[]))
 
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/save', data=self.data)
@@ -115,6 +127,8 @@ class TestSaveSettings(IntegrationTestCase):
                           settings[0].mail_notification_roles)
         self.assertEquals(frozenset([TASK_ISSUER_ROLE]),
                           settings[0].badge_notification_roles)
+        self.assertEquals(frozenset([TASK_RESPONSIBLE_ROLE]),
+                          settings[0].digest_notification_roles)
 
 
 class TestResetSetting(IntegrationTestCase):
@@ -127,7 +141,8 @@ class TestResetSetting(IntegrationTestCase):
                .having(kind='task-added',
                        userid=self.regular_user.getId(),
                        mail_notification_roles=[],
-                       badge_notification_roles=[]))
+                       badge_notification_roles=[],
+                       digest_notification_roles=[]))
 
         query = NotificationSetting.query.filter_by(userid=self.regular_user.getId())
         self.assertEquals(1, query.count())

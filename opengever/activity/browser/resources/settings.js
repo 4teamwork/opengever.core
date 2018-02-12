@@ -21,6 +21,7 @@
     this.css_class = data.css_class;
     this.mail = data.mail;
     this.badge = data.badge;
+    this.digest = data.digest;
     this.setting_type = data.setting_type;
     this.changed = false;
   }
@@ -63,12 +64,14 @@
       var row = target.parents('tr');
       var mail = row.find("ul.mail input:checkbox:checked").map(function(){ return $(this).val(); }).get();
       var badge = row.find("ul.badge input:checkbox:checked").map(function(){ return $(this).val(); }).get();
+      var digest = row.find("ul.digest input:checkbox:checked").map(function(){ return $(this).val(); }).get();
 
       return this.request($('#notification-settings-form').data('save-url'), {
         method: "POST",
         data: { kind: row.data('kind'),
                 mail: JSON.stringify(mail),
-                badge: JSON.stringify(badge)}
+                badge: JSON.stringify(badge),
+                digest: JSON.stringify(digest)}
       }).done(function() {
         activities[row.data('kind')].changed = false;
       });

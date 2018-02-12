@@ -61,6 +61,26 @@ class TestNotification(ActivityTestCase):
             [TASK_RESPONSIBLE_ROLE], activity).all()
         self.assertEqual([], notifications)
 
+    def test_unsent_digest_notifications(self):
+        resource = create(Builder('resource').oguid('fd:123'))
+        activity1 = create(Builder('activity')
+                           .having(title=u'Bitte \xc4nderungen nachvollziehen',
+                                   resource=resource))
+
+        create(Builder('notification')
+               .having(activity=activity1, userid=u'h\xfcgo',
+                       is_digest=False))
+        create(Builder('notification')
+               .having(activity=activity1, userid=u'peter',
+                       is_digest=True, sent_in_digest=True))
+        note3 = create(Builder('notification')
+                       .having(activity=activity1, userid=u'peter',
+                               is_digest=True, sent_in_digest=False))
+
+        self.assertEqual(
+            [note3],
+            Notification.query.unsent_digest_notifications().all())
+
 
 class TestResource(ActivityTestCase):
 

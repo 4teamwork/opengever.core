@@ -53,8 +53,7 @@ ACTIVITY_GROUPS = [
          'forwarding-transition-close',
          'forwarding-transition-reassign',
          'forwarding-transition-reassign-refused',
-         'forwarding-transition-refuse']
-     }
+         'forwarding-transition-refuse']}
 ]
 
 
@@ -71,11 +70,13 @@ class NotificationSettings(BrowserView):
         kind = self.request.form['kind']
         mail = json.loads(self.request.form['mail'])
         badge = json.loads(self.request.form['badge'])
+        digest = json.loads(self.request.form['digest'])
 
         # todo check roles before save
         setting = self.get_or_create_setting(kind)
         setting.mail_notification_roles = mail
         setting.badge_notification_roles = badge
+        setting.digest_notification_roles = digest
 
         return JSONResponse(self.request).proceed().dump()
 
@@ -188,6 +189,7 @@ class NotificationSettingsForm(BrowserView):
                 _('label_activity', default=u'Activity'),
                 _('label_badge', default=u'Badge'),
                 _('label_mail', default=u'Mail'),
+                _('label_daily_digest', default=u'Daily Digest'),
                 _('btn_save', default=u'Save'),
                 _('btn_cancel', default=u'Cancel'),
                 _('btn_reset', default=u'Reset')])
