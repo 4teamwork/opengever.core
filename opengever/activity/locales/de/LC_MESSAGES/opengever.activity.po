@@ -111,7 +111,7 @@ msgstr "GEVER Benachrichtigung"
 #: ./opengever/activity/browser/settings.py
 #: ./opengever/activity/templates/digest.pt
 msgid "label_daily_digest"
-msgstr "Daily Digest"
+msgstr "Tageszusammenfassung"
 
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
@@ -152,7 +152,7 @@ msgstr "Überwacher"
 #. Default: "Daily Digest"
 #: ./opengever/activity/digest.py
 msgid "subject_digest"
-msgstr "Daily Digest"
+msgstr "Tageszusammenfassung"
 
 #. Default: "GEVER Task"
 #: ./opengever/activity/mail.py
