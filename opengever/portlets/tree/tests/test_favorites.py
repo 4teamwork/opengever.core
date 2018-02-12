@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.testing import FunctionalTestCase
 from plone.app.caching.interfaces import IETagValue
+from plone.app.testing import logout
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 
@@ -76,6 +77,10 @@ class TestRepositoryFavoritesView(FunctionalTestCase):
         self.assertEquals(value, self.get_etag_value_for(self.portal))
         self.favorites_for(TEST_USER_ID).add('foo!')
         self.assertNotEqual(value, self.get_etag_value_for(self.root))
+
+    def test_etag_value_for_anonymous(self):
+        logout()
+        self.assertEquals('', self.get_etag_value_for(self.root))
 
     def favorites_for(self, username):
         return getMultiAdapter((self.root, username), IRepositoryFavorites)

@@ -5,6 +5,7 @@ from opengever.base.protect import unprotected_write
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.repository.repositoryroot import IRepositoryRoot
 from persistent.list import PersistentList
+from plone import api
 from plone.app.caching.interfaces import IETagValue
 from Products.Five import BrowserView
 from zope.annotation.interfaces import IAnnotations
@@ -143,6 +144,10 @@ class RepositoryFavoritesETagValue(object):
                             self.get_repository_roots()))
 
     def get_cache_key_for_repository_root(self, repository_root):
+        if api.user.is_anonymous():
+            # Anonymous users can't have repository favorites - short circuit
+            # cache key generation, no need to ask the view
+            return ''
         view = repository_root.restrictedTraverse('repository-favorites')
         return view.get_cache_key()
 
