@@ -85,9 +85,10 @@ class DigestMailer(Mailer):
             if not self.is_interval_expired(userid):
                 continue
 
+            language = self.get_users_language()
             subject = translate(
                 _(u'subject_digest', default=u'Daily Digest'),
-                context=self.request)
+                context=self.request, target_language=language)
             msg = self.prepare_mail(
                 subject=subject,
                 to_userid=userid,
