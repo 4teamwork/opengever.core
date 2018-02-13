@@ -21,3 +21,7 @@ class IWorkspaceSettings(Interface):
         title=u'Enable workspace feature',
         description=u'Whether workspace integration is enabled',
         default=False)
+
+
+class IToDosContainer(Interface):
+    """ Marker interface for ToDosContainers """

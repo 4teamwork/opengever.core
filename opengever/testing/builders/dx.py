@@ -577,3 +577,10 @@ class WorkspaceFolderBuilder(DexterityBuilder):
 
 
 builder_registry.register('workspace folder', WorkspaceFolderBuilder)
+
+
+class ToDosContainerBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.todoscontainer'
+
+
+builder_registry.register('todos container', ToDosContainerBuilder)
