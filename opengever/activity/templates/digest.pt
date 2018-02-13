@@ -190,6 +190,14 @@
                     <td>
                     <![endif]-->
 
+                <!-- Email Header : BEGIN -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+                  <tr>
+                    <td style="padding: 20px 0; text-align: center"></td>
+                  </tr>
+                </table>
+                <!-- Email Header : END -->
+
                   <!-- Email Body : BEGIN -->
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
 
@@ -216,8 +224,8 @@
                                     </h2>
                                   </dt>
                                   <dd style="margin: 0; padding: 0;">
-                                    <ul style="padding: 0; margin: 0 0 50px 20px;">
-                                      <li tal:repeat="activity item/activities">
+                                    <ul style="padding: 0; Margin: 0;">
+                                      <li style="Margin:0 0 1em; list-style:disc; mso-special-format:bullet;" tal:repeat="activity item/activities">
                                         <p tal:content="structure activity/summary" />
                                       </li>
                                     </ul>
