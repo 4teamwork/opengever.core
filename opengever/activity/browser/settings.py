@@ -37,7 +37,6 @@ ACTIVITY_GROUPS = [
          'task-transition-open-rejected',
          'task-commented',
          'task-transition-reassign',
-         'task-transition-rejected-open',
          'task-transition-resolved-in-progress',
      ]},
 
@@ -62,7 +61,12 @@ ALIASES = {
     ),
     'task-transition-in-progress-resolved': (
         'task-transition-in-progress-resolved',
-        'task-transition-open-resolved')
+        'task-transition-open-resolved',
+    ),
+    'task-transition-cancelled-open': (
+        'task-transition-cancelled-open',
+        'task-transition-rejected-open',
+    ),
 }
 
 
