@@ -190,16 +190,6 @@
                     <td>
                     <![endif]-->
 
-                <!-- Email Header : BEGIN -->
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
-                  <tr>
-                    <td style="padding: 20px 0; text-align: center">
-                      <img src="cid:image1" width="200" height="auto" alt="logo" border="0" style="height: auto;">
-                      </td>
-                    </tr>
-                  </table>
-                  <!-- Email Header : END -->
-
                   <!-- Email Body : BEGIN -->
                   <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
 
