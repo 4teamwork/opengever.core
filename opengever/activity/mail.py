@@ -38,6 +38,7 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
     def get_data(self, notification):
         language = self.get_users_language()
         return {
+            'subject': self.get_subject(notification),
             'title': notification.activity.translations[language].title,
             'label': notification.activity.translations[language].label,
             'summary': notification.activity.translations[language].summary,
