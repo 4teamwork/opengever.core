@@ -217,7 +217,8 @@
                       <tal:repeat tal:repeat="item options/notifications">
                         <dt>
                           <h2 style="margin: 0 0 10px 0; font-family: Arial, sans-serif; font-size: 18px; line-height: 125%; color: #333333; font-weight: bold;">
-                            <a href="#"
+                            <a style="color: #418195;"
+                               href="#"
                                tal:content="item/title"
                                tal:attributes="href item/url">Item title</a>
                           </h2>
@@ -260,7 +261,7 @@
                              class="button-a"
                              i18n:translate="label_notification_settings"
                              tal:attributes="href string:${options/public_url}/@@personal-preferences"
-                             style="font-family: Arial, sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;">
+                             style="font-family: Arial, sans-serif; font-size: 13px; line-height: 110%; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold; color: #418195;">
                             Notification settings
                           </a>
                         </td>
