@@ -1,6 +1,6 @@
-from ftw.upgrade import UpgradeStep
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import NotificationSetting
+from opengever.core.upgrade import SchemaMigration
 from opengever.ogds.base.utils import create_session
 import logging
 
@@ -32,15 +32,19 @@ CHANNELS = (
 )
 
 
-class MigrateGroupedNotificationSettings(UpgradeStep):
+class MigrateGroupedNotificationSettings(SchemaMigration):
     """Migrate grouped notification settings (alias groups).
 
     This is required because if the settings for aliased groups aren't
     homogenous for a specific alias group, the UI might show different
     settings than those that will actually be used.
+
+    Implemented as a "schema migration" because this ensures this upgrade
+    step is only executed once per cluster, and therefore shouldn't be
+    affected by actual schema migrations.
     """
 
-    def __call__(self):
+    def migrate(self):
         log.info("Migrating notification settings for aliased groups...")
         self.session = create_session()
         self.new_settings_to_insert = {}
