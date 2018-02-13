@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from datetime import timedelta
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
@@ -8,6 +8,7 @@ from opengever.base.browser.resolveoguid import ResolveOGUIDView
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
@@ -85,17 +86,28 @@ class DigestMailer(Mailer):
             if not self.is_interval_expired(userid):
                 continue
 
+            today = api.portal.get_localized_time(date.today())
+            user = ogds_service().fetch_user(userid)
+
             language = self.get_users_language()
             subject = translate(
-                _(u'subject_digest', default=u'Daily Digest'),
-                context=self.request, target_language=language)
+                _(u'subject_digest',
+                  default=u'Daily Digest for ${date}',
+                  mapping={'date': today}),
+                context=self.request, target_language=language,)
+            title = translate(
+                _(u'title_daily_digest',
+                  default=u'Daily Digest for ${username}',
+                  mapping={'username': user.fullname()}),
+                context=self.request, target_language=language,)
             msg = self.prepare_mail(
                 subject=subject,
                 to_userid=userid,
                 data={'notifications': self.prepare_data(notifications),
                       'public_url': get_current_admin_unit().public_url,
-                      'today': api.portal.get().unrestrictedTraverse(
-                          'plone').toLocalizedTime(datetime.today())})
+                      'title': title,
+                      'today': today})
+
             self.send_mail(msg)
             self.mark_as_sent(notifications)
             self.record_digest(userid)

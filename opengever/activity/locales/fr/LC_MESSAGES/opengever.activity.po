@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-04 19:09+0000\n"
+"POT-Creation-Date: 2018-02-13 14:19+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -111,7 +111,6 @@ msgstr "message GEVER"
 
 #. Default: "Daily Digest"
 #: ./opengever/activity/browser/settings.py
-#: ./opengever/activity/templates/digest.pt
 msgid "label_daily_digest"
 msgstr ""
 
@@ -151,7 +150,7 @@ msgstr "Manager records"
 msgid "regular_watcher"
 msgstr "surveillant"
 
-#. Default: "Daily Digest"
+#. Default: "Daily Digest for ${date}"
 #: ./opengever/activity/digest.py
 msgid "subject_digest"
 msgstr ""
@@ -255,3 +254,8 @@ msgstr "Mandataire précédent"
 #: ./opengever/activity/roles.py
 msgid "task_responsible"
 msgstr "mandataire"
+
+#. Default: "Daily Digest for ${username}"
+#: ./opengever/activity/digest.py
+msgid "title_daily_digest"
+msgstr ""
