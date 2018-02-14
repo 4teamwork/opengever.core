@@ -143,25 +143,23 @@ Mandantenübergreifende Posteingänge
 Den Posteingang erfassen
 """"""""""""""""""""""""
 
-Siehe hierzu Abschnitt 9.2.
+Lesen Sie hierzu den folgenden Beitrag `Einen Posteingang erfassen`_. Dieser Vorgang
+bleibt auch bei einer mandantenübergreifenden Erfassung gleich.
 
 Den Posteingang weiterleiten
 """"""""""""""""""""""""""""
 
-Kreuzen Sie den Posteingang an und wählen Sie *Weiterleiten.*
+Kreuzen Sie den zu weiterleitenden Posteingang an und wählen Sie *Weiterleiten.*
 
-Erfassen Sie in der Weiterleitungsmaske nebst dem Titel den
-Zielmandanten und den Eingangskorb des Zielmandanten.
+|img-eingangskorb-24|
+
+Erfassen Sie in der Weiterleitungsmaske nebst dem Titel, den Zielmandanten und
+den Eingangskorb des Zielmandanten.
+
+|img-eingangskorb-25|
 
 .. note::
   Weiterleitungen werden immer an den Eingangskorb adressiert!
-
-
-|image244|
-
-|image245|
-
-|image247|
 
 Nach dem Speichern erscheint der Posteingang beim Sender unter dem
 Reiter *Weiterleitung*. Beim Empfänger erscheint der Posteingang unter
@@ -170,145 +168,9 @@ dem Reiter *Eingang*.
 Einen Posteingang aus einem anderen Mandanten bearbeiten
 --------------------------------------------------------
 
-Posteingang akzeptieren
-"""""""""""""""""""""""
-
-Noch nicht verarbeitete Posteingänge aus anderen Mandanten erscheinen im
-Eingangskorb unter dem Reiter *Eingang* (die neusten Elemente auch im
-Reiter *Übersicht*).
-
-|image248|
-
-Durch Klicken auf die Weiterleitung wird man auf den Eingangskorb des
-Sendermandanten weitergeleitet, indem sich im Browser ein neuer Reiter
-öffnet.
-
-|image249|
-
-Nach Klick auf die Aktion *Akzeptieren* bietet Ihnen OneGov GEVER drei
-Möglichkeiten an, wie Sie die Weiterleitung bearbeiten können:
-
-1. Im Eingangskorb Ihres Mandanten ablegen.
-
-2. Im Eingangskorb Ihres Mandanten ablegen und in einem bestehenden
-   Dossier bearbeiten.
-
-3. Im Eingangskorb Ihres Mandanten ablegen und in einem neuen Dossier
-   bearbeiten.
-
-|image250|
-
-    Unabhängig davon, welche Variante Sie wählen, wird beim Akzeptieren
-    die Weiterleitung in den eigenen Eingangskorb kopiert und
-    gleichzeitig im Eingangskorb des Sendermandanten abgeschlossen.
-
--  Wenn Sie die Weiterleitung ablehnen – weil Ihr Mandant nicht
-   zuständig ist – wird sie beim Sendermandanten im Status *offen*
-   belassen.
-
-Posteingang durch Sekretariat weiterverarbeiten
-"""""""""""""""""""""""""""""""""""""""""""""""
-
-Weiterleitung im Eingangskorb ablegen
-"""""""""""""""""""""""""""""""""""""
-
-Wählen Sie *…im Eingangskorb von xxx ablegen* und klicken Sie *Weiter*.
-Die Weiterleitung wird dadurch in den Eingangskorb Ihres Mandanten
-kopiert und im Eingangskorb des Sendermandanten automatisch
-abgeschlossen.
-
-Sie haben nun 3 Möglichkeiten zur weiteren Bearbeitung:
-
-1. ***Abschliessen*:** Weiterleitungen können direkt im Eingangskorb
-   abgeschlossen werden, wenn sie nicht dossierrelevant sind.
-
-2. ***Einem Dossier zuweisen:*** (empfohlener Weg, siehe unten)
-
-3. ***Neu zuweisen*:** Sie können die Weiterleitung einem Sachbearbeiter
-   zuweisen, wenn nicht bekannt ist, welchem Dossier ein Posteingang
-   zugeordnet werden soll. Die personalisierte Weiterleitung ist
-   einerseits im Eingangskorb unter dem Reiter *Weiterleitungen*
-   sichtbar, andererseits beim zuständigen Sachbearbeiter unter *Meine
-   Aufgaben*.
-
-|image251|
-
-Weiterleitung im Eingangskorb ablegen und in bestehendem Dossier weiterbearbeiten
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Klicken Sie beim Akzeptieren der Weiterleitung auf die Option *…im
-Eingangskorb von Mandant x ablegen und in bestehendem Dossier von
-Mandant x bearbeiten* und klicken Sie *Weiter*.
-
-|image252|
-
-Wählen Sie das Zieldossier durch direkte Texteingabe oder klicken Sie
-auf den Button *hinzufügen*, um das Dossier aus dem Ordnungssystem
-auszuwählen.
-
-|image253|
-
-Nach dem Speichern öffnet sich eine Aufgabenmaske, in der folgende
-Angaben mutiert oder ergänzt werden müssen:
-
--  *Auftraggeber*: Wählen Sie einen internen Auftraggeber, da die
-   Weiterleitung nun vom eigenen Mandanten zur Bearbeitung übernommen
-   worden ist.
-
--  *Auftragnehmer*: Weisen Sie die Aufgabe einem internen Mitarbeitenden
-   zur Bearbeitung zu.
-
--  *Termin*: Setzen Sie den Termin, bis wann die Aufgabe erledigt sein
-   soll.
-
-   |image254|
-
-Mit dem Speichern wird die Aufgabe im Zieldossier abgelegt. Der
-verantwortliche Mitarbeiter findet die Aufgabe im entsprechenden Dossier
-und unter dem Hauptreiter Übersicht / Meine Aufgaben.
-
-Mit dem Akzeptieren und Speichern werden die Weiterleitungen sowohl beim
-Sender als auch beim Empfänger abgeschlossen und in den entsprechenden
-Jahresordner im Eingangskorb abgelegt.
-
-|image255|
-
-|image256|
-
-Weiterleitung im Eingangskorb ablegen und in neuem Dossier weiterbearbeiten
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Klicken Sie beim Akzeptieren der Weiterleitung auf die Option *…im
-Eingangskorb von Mandant x ablegen und ein neuem Dossier von Mandant x
-bearbeiten* und klicken Sie *Weiter*.
-
-|image257|
-
-Im nächsten Schritt können Sie die Ordnungsposition auswählen, entweder
-durch direkte Texteingabe oder durch Auswahl der Ordnungsposition mit
-*Hinzufügen*. Klicken Sie danach *Weiter*.
-
-|image258|
-
--  Nun öffnet sich eine Geschäftsmaske. Standardmässig wird bei einer
-   Weiterleitung der Titel "Eingangskorb" angegeben (da die
-   Weiterleitung dem Eingangskorb zugeordnet ist). Passen Sie den Titel
-   und die übrigen Informationen nach Bedarf an.
-
-|image259|
-
-Nach dem Speichern öffnet sich eine Aufgabenmaske, in der Sie die
-entsprechenden Informationen ergänzen bzw. anpassen können (Auftragsart,
-Auftraggeber, Termin etc.).
-
-|image260|
-
-Mit dem Speichern wird die Aufgabe im neuen Dossier abgelegt. Der
-verantwortliche Mitarbeiter findet die Aufgabe im entsprechenden Dossier
-und unter dem Hauptreiter *Übersicht / Meine Aufgaben*. Gleichzeitig
-wird die Weiterleitung beim Sender- und beim Empfängermandanten
-abgeschlossen und im Eingangskorb unter dem jeweiligen Jahresordner
-abgelegt.
+Ein Posteingang aus einem anderen Mandanten bearbeiten deckt sich vom
+Funktionsumfang mit dem Kapitel *Mandantenübergreifende Zusammenarbeit*. Ziehen
+Sie daher bitte diesen `Beschrieb <https://docs.onegovgever.ch/user-manual/aufgaben/mandantenuebergreifende_zusammenarbeit/>`_ bei.
 
 
 .. |img-eingangskorb-1| image:: img/media/img-eingangskorb-1.png
@@ -334,24 +196,8 @@ abgelegt.
 .. |img-eingangskorb-21| image:: img/media/img-eingangskorb-21.png
 .. |img-eingangskorb-22| image:: img/media/img-eingangskorb-22.png
 .. |img-eingangskorb-23| image:: img/media/img-eingangskorb-23.png
+.. |img-eingangskorb-24| image:: img/media/img-eingangskorb-24.png
+.. |img-eingangskorb-25| image:: img/media/img-eingangskorb-25.png
 
-
-
-.. |image244| image:: img/media/image208.png
-.. |image245| image:: img/media/image226.png
-.. |image247| image:: img/media/image228.png
-.. |image248| image:: img/media/image229.png
-.. |image249| image:: img/media/image230.png
-.. |image250| image:: img/media/image231.png
-.. |image251| image:: img/media/image232.png
-.. |image252| image:: img/media/image233.png
-.. |image253| image:: img/media/image234.png
-.. |image254| image:: img/media/image235.png
-.. |image255| image:: img/media/image236.png
-.. |image256| image:: img/media/image237.png
-.. |image257| image:: img/media/image238.png
-.. |image258| image:: img/media/image239.png
-.. |image259| image:: img/media/image240.png
-.. |image260| image:: img/media/image241.png
 
 .. disqus::
