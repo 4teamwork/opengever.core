@@ -1,6 +1,9 @@
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from plone.app.textfield import RichText
 from zope import schema
 from zope.interface import Interface
+from zope.schema import Datetime
+from zope.schema import TextLine
 
 
 class IWorkspaceRoot(Interface):
@@ -29,3 +32,18 @@ class IToDo(Interface):
 
 class IToDosContainer(Interface):
     """ Marker interface for ToDosContainers """
+
+
+class IResponse(Interface):
+    """Represents a response - Not a DX type"""
+
+    text = RichText(required=True)
+    created = Datetime(required=True)
+    creator = TextLine(required=True)
+    modified = Datetime(required=False)
+    modifier = TextLine(required=False)
+
+
+class IResponses(Interface):
+    """Adapter for responses.
+    """

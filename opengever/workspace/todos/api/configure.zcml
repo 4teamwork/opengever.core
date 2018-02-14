@@ -1,0 +1,37 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone">
+
+  <plone:service
+    method="GET"
+    for="opengever.workspace.interfaces.IToDo"
+    factory=".response.Get"
+    name="@response"
+    permission="zope2.View"
+    />
+
+  <plone:service
+    method="POST"
+    for="opengever.workspace.interfaces.IToDo"
+    factory=".response.Post"
+    name="@response"
+    permission="cmf.AddPortalContent"
+    />
+
+  <plone:service
+    method="PATCH"
+    for="opengever.workspace.interfaces.IToDo"
+    factory=".response.Patch"
+    name="@response"
+    permission="cmf.ModifyPortalContent"
+    />
+
+  <plone:service
+    method="DELETE"
+    for="opengever.workspace.interfaces.IToDo"
+    factory=".response.Delete"
+    name="@response"
+    permission="cmf.ModifyPortalContent"
+    />
+
+</configure>
