@@ -60,10 +60,15 @@ ist nur mit den entsprechenden Rechten (Sekretariat, Leitung, Sachbearbeiter mit
 zentraler Aufgabenliste) möglich.
 
 1. Button "Neu zuweisen" anwählen
+
   |img-mu-aufgaben-4|
+
 2. Benutzer auswählen, welcher Aufgabe erledigen soll
+
   |img-mu-aufgaben-5|
+
 3. Übersicht mit neuer zuständigem Benutzer
+
   |img-mu-aufgaben-6|
 
 Dabei wird man automatisch auf den Mandanten des Auftraggebers
