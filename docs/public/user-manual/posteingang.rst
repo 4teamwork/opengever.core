@@ -143,7 +143,8 @@ Mandantenübergreifende Posteingänge
 Den Posteingang erfassen
 """"""""""""""""""""""""
 
-Lesen Sie hierzu den Beschrieb `oben <https://docs.onegovgever.ch/user-manual/posteingang/#einen-posteingang-erfassen>`_. Dieser Vorgang bleibt auch bei einer mandantenübergreifenden Erfassung gleich.
+Lesen Sie hierzu den folgenden Beitrag `Einen Posteingang erfassen`_. Dieser Vorgang
+bleibt auch bei einer mandantenübergreifenden Erfassung gleich.
 
 Den Posteingang weiterleiten
 """"""""""""""""""""""""""""
