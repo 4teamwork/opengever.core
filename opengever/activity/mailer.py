@@ -1,11 +1,9 @@
 from email.header import Header
-from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.base.utils import ogds_service
-from pkg_resources import resource_filename
 from plone import api
 
 
@@ -42,7 +40,6 @@ class Mailer(object):
 
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
-        msg.attach(self.get_logo_part())
         return msg
 
     def get_users_language(self):
@@ -50,15 +47,6 @@ class Mailer(object):
         # language. Therefore we send the mails always in the current selected
         # language.
         return get_locale()
-
-    def get_logo_part(self):
-        path = resource_filename(
-            'opengever.activity.browser.resources', 'gever.png')
-        fp = open(path, 'r')
-        msg_image = MIMEImage(fp.read())
-        fp.close()
-        msg_image.add_header('Content-ID', '<image1>')
-        return msg_image
 
     def prepare_html(self, data):
         return self.template(self, **data)
