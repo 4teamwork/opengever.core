@@ -167,6 +167,9 @@
       <!-- Apple Pages -->
       <element>application/x-iwork-pages-sffpages</element>
 
+      <!-- Mindjet Mind Manager -->
+      <element>application/vnd.mindjet.mindmanager</element>
+
     </value>
   </record>
 
