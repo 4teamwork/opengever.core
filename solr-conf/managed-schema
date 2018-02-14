@@ -147,11 +147,13 @@
     <field name="reference" type="string" indexed="true" stored="false" />
     <field name="responsible" type="string" indexed="true" stored="false" />
     <field name="sequence_number" type="pint" indexed="true" stored="false" />
+    <field name="sequence_number_string" type="string" indexed="true" stored="false" />
     <field name="start" type="pdate" indexed="true" stored="false" />
     <field name="task_type" type="string" indexed="true" stored="false" />
     <field name="trashed" type="boolean" indexed="true" stored="false" />
 
     <copyField source="path" dest="path_parent"/>
+    <copyField source="sequence_number" dest="sequence_number_string"/>
 
     <dynamicField name="ignored_*" type="ignored"/>
 
