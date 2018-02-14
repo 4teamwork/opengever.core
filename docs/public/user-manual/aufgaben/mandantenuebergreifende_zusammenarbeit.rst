@@ -5,34 +5,34 @@ Eine mandantenübergreifende Aufgabe erstellen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Das Erstellen einer mandantenübergreifenden Aufgabe unterscheidet sich
-nur wenig von einer Aufgabe, die von jemandem innerhalb desselben
-Mandanten erledigt werden soll. Zur Kennzeichnung einer
-mandantenübergreifenden Aufgabe wird das Icon verwendet.
+nur wenig von einer Aufgabe, die von jemandem innerhalb desselben Mandanten
+erledigt werden soll.
+
+Zur Kennzeichnung einer mandantenübergreifenden Aufgabe wird das folgende Icon
+verwendet:
 
 |img-mu-aufgaben-1|
 
 Im folgenden Beispiel geht es um die Prüfung eines Baugesuchs.
 
--  Erstellen Sie eine Aufgabe und verknüpfen Sie sie mit denjenigen
-   Dokumenten, die der Auftragnehmer zur Bearbeitung der Aufgabe
-   benötigt. Alle anderen Dokumente im Dossier bleiben für den
-   Auftragnehmer unsichtbar.
+Erstellen Sie eine Aufgabe und verknüpfen Sie sie mit denjenigen Dokumenten, die
+der Auftragnehmer zur Bearbeitung der Aufgabe benötigt. Alle anderen Dokumente
+im Dossier bleiben für den Auftragnehmer unsichtbar.
 
--  Wählen Sie im Feld *Mandant des Auftragnehmers* den Auftragnehmer. Als
-    Auftragnehmer wird im Normalfall der Eingangskorb des zuständigen
-   Mandanten eingetragen. Gegebenenfalls kann aber auch der zuständige
-   Sachbearbeiter gewählt werden.
+Wählen Sie im Feld *Mandant des Auftragnehmers* den Auftragnehmer. Als
+Auftragnehmer wird im Normalfall der Eingangskorb des zuständigen Mandanten
+eingetragen. Gegebenenfalls kann aber auch der zuständige Sachbearbeiter gewählt
+werden.
 
    |img-mu-aufgaben-2|
 
--  Wenn Sie den Eingangskorb als Auftragnehmer gewählt haben, gelangt
-   die Aufgabe in den Eingangskorb des betreffenden Mandanten (Reiter
-   *Erhaltene Aufgaben*). Personen mit Sekretariatsrechten
-   können die Aufgabe vom Eingangskorb aus der zuständigen Person
-   zuweisen.
+Wenn Sie den Eingangskorb als Auftragnehmer gewählt haben, gelangt die Aufgabe
+in den Eingangskorb des betreffenden Mandanten (Reiter *Erhaltene Aufgaben*).
+Personen mit Sekretariatsrechten können die Aufgabe vom Eingangskorb aus der
+zuständigen Person zuweisen.
 
--  Haben Sie einen Sachbearbeiter gewählt, wird der Auftrag unter dem
-   Reiter *Übersicht/Meine Aufgaben* angezeigt.
+Haben Sie einen Sachbearbeiter gewählt, wird der Auftrag unter dem Reiter
+*Übersicht/Meine Aufgaben* angezeigt.
 
    |img-mu-aufgaben-3|
 
@@ -59,16 +59,19 @@ verantwortlichen Sachbearbeiter durch die Aktion *Neu zuweisen* zugeteilt. Dies
 ist nur mit den entsprechenden Rechten (Sekretariat, Leitung, Sachbearbeiter mit
 zentraler Aufgabenliste) möglich.
 
+1. Button "Neu zuweisen" anwählen
+  |img-mu-aufgaben-4|
+2. Benutzer auswählen, welcher Aufgabe erledigen soll
+  |img-mu-aufgaben-5|
+3. Übersicht mit neuer zuständigem Benutzer
+  |img-mu-aufgaben-6|
+
 Dabei wird man automatisch auf den Mandanten des Auftraggebers
-weitergeleitet, indem im Browser ein neuer Tab geöffnet wird. Der
+weitergeleitet, indem im Browser ein neue Tab geöffnet wird. Der
 Auftragnehmer sieht nur diejenigen Dokumente des Dossiers, auf die in
 der Aufgabe verwiesen wurde. Auch das Ordnungssystem ist nur reduziert
 sichtbar. Damit die Übersicht gewahrt bleibt, wird der "Gastmandant"
 verblasst dargestellt.
-
-  |img-mu-aufgaben-4|
-  |img-mu-aufgaben-5|
-  |img-mu-aufgaben-6|
 
 Klicken Sie auf *Aktionen → Akzeptieren*.
 
@@ -111,16 +114,16 @@ Aufgabe in einem bestehenden Dossier im eigenen Mandanten bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Klicken Sie beim Akzeptieren der Aufgabe auf die Option *in einem
-bestehenden Dossier auf Mandant x bearbeiten.* und klicken Sie *Weiter*.
+bestehenden Dossier auf Mandant X bearbeiten.* und klicken Sie *Weiter*.
 
-|image182|
+|img-mu-aufgaben-9|
 
 Wählen Sie das Zieldossier durch direkte Texteingabe oder durch Anzeigen
 des Ordnungssystems mit dem Button *Hinzufügen* aus. Bei der Ansicht des
 Ordnungssystems werden nur die Dossiers angezeigt, die sich noch in
 Bearbeitung befinden.
 
-|image183|
+|img-mu-aufgaben-10|
 
 Mit dem Speichern wird die Aufgabe samt den angehängten Dokumenten in
 das gewählte Dossier kopiert. Dokumente, die mit der Aufgabe
@@ -129,13 +132,13 @@ Kommentar "Dokument von Aufgabe kopiert (Aufgabe akzeptiert)". In der
 kopierten Aufgabe wird auf die ursprüngliche Aufgabe im Dossier des
 Auftraggebers verwiesen.
 
-|image184|
+|img-mu-aufgaben-11|
 
 Im Dossier des Auftraggebers wird ebenfalls auf die kopierte Aufgabe des
 Auftragnehmers hingewiesen. Der Status der ursprünglichen und der
 kopierten Aufgabe wird immer automatisch synchronisiert.
 
-|image185|
+|img-mu-aufgaben-12|
 
 Die Aufgabe wird nun im eigenen Dossier bearbeitet, indem beispielsweise
 dem Dossier neue Dokumente hinzugefügt werden oder ein mitgeschicktes
@@ -154,15 +157,15 @@ beim Auftraggeber mit der Vorsilbe ***AW: (Antwort)***. Auf Ebene Version
 erhalten diese Dokumente automatisch den Kommentar "Dokument von Aufgabe kopiert
 (Aufgabe erledigt)".
 
-  |image188|
+  |img-mu-aufgaben-13|
 
 Aufgabe in einem neuen Dossier im eigenen Mandanten bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Klicken Sie beim Akzeptieren der Aufgabe auf die Option *in einem neuen
-Dossier auf Mandant x bearbeiten* und klicken Sie *Weiter*.
+Dossier auf Mandant X bearbeiten* und klicken Sie *Weiter*.
 
-|image189|
+  |img-mu-aufgaben-14|
 
 Wählen Sie die Ordnungsposition, unter der das Dossier erstellt werden
 soll, durch die direkte Texteingabe oder durch Anzeigen des
@@ -171,8 +174,7 @@ gewählten Ordnungsposition mehrere Dossiertypen (z.B. Geschäftsdossier
 und Falldossier) hinterlegt sind, werden Sie in einem Zwischenschritt
 nach dem Dossiertyp gefragt.
 
-|image190|
-|image191|
+|img-mu-aufgaben-15|
 
 Im nächsten Schritt wird das Dossier unter der gewünschten Position
 angelegt. Dabei wird automatisch der Titel des Dossiers des
@@ -189,15 +191,19 @@ Auch im Dossier des Auftraggebers wird auf die kopierte Aufgabe des
 Auftragnehmers hingewiesen. Der Status der ursprünglichen und der
 kopierten Aufgabe wird immer synchronisiert.
 
-|image192|
-|image193|
+|img-mu-aufgaben-16|
 
 Die Aufgabe wird nun im eigenen Dossier bearbeitet, indem beispielsweise
 dem Dossier neue Dokumente hinzugefügt werden oder ein mitgeschicktes
 Dokument bearbeitet wird.
 
-|image194|
-|image195|
+|img-mu-aufgaben-17|
+
+Im Dossier des Auftraggebers wird ebenfalls auf die kopierte Aufgabe des
+Auftragnehmers hingewiesen. Der Status der ursprünglichen und der
+kopierten Aufgabe wird immer automatisch synchronisiert.
+
+|img-mu-aufgaben-18|
 
 Beim Erledigen der Aufgabe kann aus der Auflistung der Dokumente ausgewählt
 werden, welche Dateien dem Auftraggeber übermittelt werden sollen. Die gewählten
@@ -208,41 +214,44 @@ Alle Dokumente, die der Auftragnehmer zurücksendet, erscheinen beim Auftraggebe
 mit der Vorsilbe ***AW:** (Antwort)*. Auf Ebene Version erhalten diese Dokumente
 automatisch den Kommentar "Dokument von Aufgabe kopiert (Aufgabe erledigt)".
 
-|image196|
+|img-mu-aufgaben-19|
+
+.. note::
+   Bearbeitet der Auftragnehmer vom Auftraggeber mitgesendete Dokumente, so
+   handelt es sich dabei um **Kopien**, die dem Auftraggeber bei der
+   Auftragserledigung erneut übermittelt werden müssen.
 
 Spezialfall mandantenübergreifende Zur Kenntnisnahme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Beim Aufagbentyp "zur Kenntnisnahme" kann folgendermasssen vorgegangen werden:
 
--  Der Auftraggeber erstellt mit dem entsprechenden Dokument eine
-   Aufgabe vom Typ "Zur Kenntnisnahme" zuhanden des betreffenden
-   Mandanten.
+Der Auftraggeber erstellt mit dem entsprechenden Dokument eine Aufgabe vom Typ
+"Zur Kenntnisnahme" zuhanden des betreffenden Mandanten.
 
    |img-mu-aufgaben-40|
 
--  Der Auftragnehmer öffnet die Aufgabe im Eingangskorb (bzw. weist sie
-   dem zuständigen Sachbearbeiter zu, der die Aufgabe anschliessend
-   unter *Meine Aufgaben* findet). Mit der Aktion *Abschliessen* wird die
-   Aufgabe im Mandanten des Auftraggebers automatisch abgeschlossen
+Der Auftragnehmer öffnet die Aufgabe im Eingangskorb (bzw. weist sie dem
+zuständigen Sachbearbeiter zu, der die Aufgabe anschliessend unter
+*Meine Aufgaben* findet). Mit der Aktion *Abschliessen* wird die Aufgabe im
+Mandanten des Auftraggebers automatisch abgeschlossen.
 
    |img-mu-aufgaben-41|
 
--  Im nächsten Schritt hat der Auftragnehmer die Möglichkeit, Dokumente
-   anzuklicken, die in ein eigenes Dossier kopiert werden
-   sollen.
+Im nächsten Schritt hat der Auftragnehmer die Möglichkeit, Dokumente anzuklicken,
+die in ein eigenes Dossier kopiert werden sollen.
 
    |img-mu-aufgaben-42|
 
--  Mit *Weiter* gelangt man zur Auswahl des Zieldossiers (direkte
-   Texteingabe oder Auswahl mit *Hinzufügen*).
+Mit *Weiter* gelangt man zur Auswahl des Zieldossiers (direkte Texteingabe oder
+Auswahl mit *Hinzufügen*).
 
    |img-mu-aufgaben-43|
 
--  Nach dem Speichern werden die angeklickten Dokumente ins Zieldossier
-   kopiert. Die Aufgabe wird beim Aufgabentyp "Zur Kenntnisnahme" nicht
-   mitkopiert.
+Nach dem Speichern werden die angeklickten Dokumente ins Zieldossier kopiert.
+Die Aufgabe wird beim Aufgabentyp "Zur Kenntnisnahme" nicht mitkopiert.
 
+   |img-mu-aufgaben-44|
 
 Spezialfall Delegieren
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -251,24 +260,24 @@ Mit der Funktion Delegieren kann eine Aufgabe mit wenig Aufwand gleich
 mehreren Adressaten zugestellt werden, sowohl mandantenintern als auch
 mandantenextern. Ein möglicher Anwendungsfall ist eine Vernehmlassung.
 
-Vorgehen:
-
--  Erstellen Sie zunächst eine Aufgabe mit den Dokumenten, die im
-   nächsten Schritt an andere Stellen weitergegeben werden sollen.
-   Akzeptieren Sie diese Aufgabe (die Funktion Delegieren steht erst
-   dann zur Verfügung).
+Erstellen Sie zunächst eine Aufgabe mit den Dokumenten, die im nächsten Schritt
+an andere Stellen weitergegeben werden sollen. Akzeptieren Sie diese Aufgabe
+(die Funktion Delegieren steht erst dann zur Verfügung).
 
    |img-mu-aufgaben-50|
+
    |img-mu-aufgaben-51|
+
    |img-mu-aufgaben-52|
 
--  Nun kann die Aufgabe delegiert werden. Wählen Sie durch Texteingabe alle
-    Adressaten aus, an welche die Aufgabe gerichtet werden soll und klicken Sie
-    die Dokumente an, die der Aufgabe mitgegeben werden sollen.
+Nun kann die Aufgabe delegiert werden. Wählen Sie durch Texteingabe alle
+Adressaten aus, an welche die Aufgabe gerichtet werden soll und klicken Sie die
+Dokumente an, die der Aufgabe mitgegeben werden sollen.
 
-   Klicken Sie auf *Weiter*.
+Klicken Sie auf *Weiter*.
 
    |img-mu-aufgaben-53|
+
    |img-mu-aufgaben-54|
 
 .. note::
@@ -276,17 +285,15 @@ Vorgehen:
    kopiert; es handelt sich dabei lediglich um einen Link auf dasselbe
    Dokument!
 
--  Passen Sie bei Bedarf den Aufgabentitel und das Datum an und
-   speichern Sie.
+Passen Sie bei Bedarf den Aufgabentitel und das Datum an und speichern Sie.
 
    |img-mu-aufgaben-55|
 
--  Nach dem Speichern werden unter der ursprünglich erstellten
-   Hauptaufgabe so viele Unteraufgaben erzeugt wie Sie Adressaten
-   eingegeben haben. Die Unteraufgabe ist auf der Hauptaufgabe
-   ersichtlich (und umgekehrt). Sollen noch mehr Adressaten hinzugefügt
-   werden, kann das Delegieren beliebig oft wiederholt
-   werden.
+Nach dem Speichern werden unter der ursprünglich erstellten Hauptaufgabe so
+viele Unteraufgaben erzeugt wie Sie Adressaten eingegeben haben. Die
+Unteraufgabe ist auf der Hauptaufgabe ersichtlich (und umgekehrt). Sollen noch
+mehr Adressaten hinzugefügt werden, kann das Delegieren beliebig oft wiederholt
+werden.
 
    |img-mu-aufgaben-56|
 
@@ -328,6 +335,7 @@ Vorgehen:
    .. |img-mu-aufgaben-41| image:: ../img/media/img-mu-aufgaben-41.png
    .. |img-mu-aufgaben-42| image:: ../img/media/img-mu-aufgaben-42.png
    .. |img-mu-aufgaben-43| image:: ../img/media/img-mu-aufgaben-43.png
+   .. |img-mu-aufgaben-44| image:: ../img/media/img-mu-aufgaben-44.png
 
    .. |img-mu-aufgaben-50| image:: ../img/media/img-mu-aufgaben-50.png
    .. |img-mu-aufgaben-51| image:: ../img/media/img-mu-aufgaben-51.png
