@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
-<object name="opengever.workspace.todosconatiner"
+<object name="opengever.workspace.todo"
         meta_type="Dexterity FTI"
         xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         i18n:domain="opengever.core">
 
-    <property name="title" i18n:translate="">ToDo Container</property>
+    <property name="title" i18n:translate="">ToDo</property>
     <property name="description"></property>
     <property name="icon_expr"></property>
     <property name="allow_discussion">False</property>
     <property name="global_allow">False</property>
     <property name="filter_content_types">True</property>
     <property name="allowed_content_types">
-        <element value="opengever.workspace.todo" />
+        <element value="Issue" />
     </property>
 
-    <property name="schema">opengever.workspace.todos.content.todoscontainer.IToDosContainerSchema</property>
-    <property name="klass">opengever.workspace.todos.content.todoscontainer.ToDosContainer</property>
+    <property name="schema">opengever.workspace.todos.content.todo.IToDoSchema</property>
+    <property name="klass">opengever.workspace.todos.content.todo.ToDo</property>
     <property name="add_permission">cmf.AddPortalContent</property>
 
     <property name="behaviors">

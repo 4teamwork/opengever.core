@@ -38,7 +38,7 @@ class ToDosContainer(Container):
 
 @provider(INameChooser)
 @adapter(IToDosContainer)
-class ToDoContainerNameChooser(NormalizingNameChooser):
+class TodosContainerNameChooser(NormalizingNameChooser):
     """The name chooser for the issue container chooses the name of its
     children, which are usually issues.
     We change the behavior to auto-increment a number so that we have an
@@ -48,7 +48,7 @@ class ToDoContainerNameChooser(NormalizingNameChooser):
     def chooseName(self, name, obj):
         if IToDo.providedBy(obj):
             return self.get_next_issue_name()
-        return super(ToDoContainerNameChooser, self).chooseName(name, obj)
+        return super(TodosContainerNameChooser, self).chooseName(name, obj)
 
     def get_next_issue_name(self):
         ann_key = 'opengever.workspace.todo:last-todo-number'

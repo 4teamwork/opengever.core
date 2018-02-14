@@ -584,3 +584,10 @@ class ToDosContainerBuilder(DexterityBuilder):
 
 
 builder_registry.register('todos container', ToDosContainerBuilder)
+
+
+class ToDoBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.todo'
+
+
+builder_registry.register('todo', ToDoBuilder)

@@ -23,5 +23,9 @@ class IWorkspaceSettings(Interface):
         default=False)
 
 
+class IToDo(Interface):
+    """ Marker interface for ToDos """
+
+
 class IToDosContainer(Interface):
     """ Marker interface for ToDosContainers """
