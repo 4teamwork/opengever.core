@@ -16,11 +16,10 @@ hinzuzufügen:
 Dokument mit Drag'n'Drop hinzufügen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dokumente können mittels Drag & Drop in ein Dossier, in den Eingangskorb
-oder in die Vorlagen importiert werden. Hierzu das gewünschte Dossier
-öffnen und das Dokument in den grauen Bereich ziehen. Bei Dokumenten,
-die mit Drag & Drop hinzugefügt werden, wird beim Dokumentdatum
-automatisch das aktuelle Datum gesetzt.
+Dokumente können mittels Drag & Drop in ein Dossier oder in den Eingangskorb
+importiert werden. Hierzu das gewünschte Dossier öffnen und das Dokument in den
+grauen Bereich ziehen. Bei Dokumenten, die mit Drag & Drop hinzugefügt werden,
+wird beim Dokumentdatum automatisch das aktuelle Datum gesetzt.
 
 |img-dokumente-6|
 
