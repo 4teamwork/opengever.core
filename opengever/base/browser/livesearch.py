@@ -9,6 +9,7 @@ from Products.CMFPlone.utils import normalizeString
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.PythonScripts.standard import html_quote
+from Products.PythonScripts.standard import url_quote_plus
 from zope.component import getUtility
 
 
@@ -41,6 +42,7 @@ class LiveSearchReplyView(BrowserView):
         self.search_term = self.request.form.get('q', None)
         if not isinstance(self.search_term, unicode):
             self.search_term = self.search_term.decode('utf-8')
+
         self.limit = self.request.form.get('limit', 10)
         self.path = self.request.form.get('path', None)
         results = self.results()
@@ -73,7 +75,6 @@ class LiveSearchReplyView(BrowserView):
 
         ts = getToolByName(self.context, 'translation_service')
         portal_url = getToolByName(self.context, 'portal_url')()
-        searchurlparameter = 1
         portalProperties = getToolByName(self.context, 'portal_properties')
         siteProperties = getattr(portalProperties, 'site_properties', None)
         useViewAction = []
@@ -88,7 +89,7 @@ class LiveSearchReplyView(BrowserView):
             write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=self.request))
             write('''<div class="LSRow">''')
             write('<a href="%s" style="font-weight:normal">%s</a>' %
-                  (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
+                  (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
                    ts.translate(label_advanced_search, context=self.request)))
             write('''</div>''')
             write('''</div>''')
@@ -104,7 +105,7 @@ class LiveSearchReplyView(BrowserView):
                 if result.portal_type in useViewAction:
                     itemUrl += '/view'
 
-                itemUrl = itemUrl + u'?SearchableText=%s' % self.search_term
+                itemUrl = itemUrl + u'?SearchableText=%s' % url_quote_plus(self.search_term)
 
                 write('''<li class="LSRow">''')
                 full_title = safe_unicode(result.Title())
@@ -130,14 +131,14 @@ class LiveSearchReplyView(BrowserView):
 
             write('''<li class="LSRow">''')
             write('<a href="%s" style="font-weight:normal">%s</a>' %
-                  (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
+                  (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
                    ts.translate(label_advanced_search, context=self.request)))
             write('''</li>''')
 
             if resp.num_found > self.limit:
                 # add a more... row
                 write('''<li class="LSRow">''')
-                searchquery = u'@@search?SearchableText=%s&path=%s' % (self.search_term, self.path)
+                searchquery = u'@@search?SearchableText=%s&path=%s' % (url_quote_plus(self.search_term), self.path)
                 write(u'<a href="%s" style="font-weight:normal">%s</a>' % (
                                      searchquery,
                                      ts.translate(label_show_all, context=self.request)))
