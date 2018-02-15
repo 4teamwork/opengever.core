@@ -6,7 +6,7 @@
     method="GET"
     for="opengever.workspace.interfaces.IToDo"
     factory=".response.Get"
-    name="@response"
+    name="@responses"
     permission="zope2.View"
     />
 
@@ -14,7 +14,7 @@
     method="POST"
     for="opengever.workspace.interfaces.IToDo"
     factory=".response.Post"
-    name="@response"
+    name="@responses"
     permission="cmf.AddPortalContent"
     />
 
@@ -22,7 +22,7 @@
     method="PATCH"
     for="opengever.workspace.interfaces.IToDo"
     factory=".response.Patch"
-    name="@response"
+    name="@responses"
     permission="cmf.ModifyPortalContent"
     />
 
@@ -30,7 +30,7 @@
     method="DELETE"
     for="opengever.workspace.interfaces.IToDo"
     factory=".response.Delete"
-    name="@response"
+    name="@responses"
     permission="cmf.ModifyPortalContent"
     />
 

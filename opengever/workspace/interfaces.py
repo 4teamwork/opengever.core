@@ -1,6 +1,7 @@
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.textfield import RichText
 from zope import schema
+from zope.interface import Attribute
 from zope.interface import Interface
 from zope.schema import Datetime
 from zope.schema import TextLine
@@ -44,6 +45,36 @@ class IResponse(Interface):
     modifier = TextLine(required=False)
 
 
-class IResponses(Interface):
+class IAnnotationDataList(Interface):
+
+    annotation_key = Attribute('Annotation key where the data ist stored.')
+    writeable_attributes = Attribute('Tuple of writeable attribute names.')
+
+    def __init__(context):
+        """The data is stored in the annotations of the ``context``.
+        """
+
+    def all():
+        """Return all items.
+        """
+
+    def get(item_id):
+        """Get an item.
+        """
+
+    def create(**kwargs):
+        """Create a new item.
+        """
+
+    def append(item):
+        """Append an item.
+        """
+
+    def remove(item):
+        """Remove an item.
+        """
+
+
+class IResponses(IAnnotationDataList):
     """Adapter for responses.
     """

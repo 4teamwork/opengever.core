@@ -1,5 +1,6 @@
 from datetime import datetime
 from opengever.workspace.interfaces import IToDo
+from opengever.workspace.todos.utils import get_current_user_id
 from plone import api
 from plone.app.textfield import RichText
 from plone.autoform.interfaces import IFormFieldProvider
@@ -11,10 +12,6 @@ from zope.schema import Date
 from zope.schema import Datetime
 from zope.schema import List
 from zope.schema import TextLine
-
-
-def get_current_user_id():
-    return api.user.get_current().getId()
 
 
 @provider(IFormFieldProvider)
