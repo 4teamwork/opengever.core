@@ -13,7 +13,8 @@ aktuellen geltenden Regeln wie OneGov GEVER über Ihre Aktivitäten
 benachrichtigt, darstellt. Sie können nun pro Aktivität definieren, in welcher
 Rolle Sie über welchen Kanal benachrichtigt werden wollen. Zurzeit stehen die
 Kanäle "GEVER Benachrichtigung" (Glocke im mittleren Headerbereich) oder Mail
-(Benachrichtigung direkt per Mail) zur Verfügung.
+(Benachrichtigung direkt per Mail) zur Verfügung. Zudem können Sie anwählen, ob
+Sie eine tägliche Zusammenfassung (Daily Digest) erhalten möchten.
 
 |img-benachrichtigungs-einstellungen-2|
 
