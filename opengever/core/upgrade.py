@@ -463,8 +463,9 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
             # to track / record each upgrade step for a profile; we used to only store
             # the newest version.
             mark_changed(self.session)
-            self.operations.drop_constraint('opengever_upgrade_version_pkey',
-                                            TRACKING_TABLE_NAME)
+            for constraint in table.constraints:
+                self.operations.drop_constraint(constraint.name,
+                                                TRACKING_TABLE_NAME)
             self.operations.create_primary_key('opengever_upgrade_version_pkey',
                                                TRACKING_TABLE_NAME,
                                                ['profileid', 'upgradeid'])
