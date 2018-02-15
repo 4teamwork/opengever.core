@@ -1,34 +1,30 @@
-<?xml version="1.0"?>
-<object name="opengever.workspace.todosconatiner"
-        meta_type="Dexterity FTI"
-        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-        i18n:domain="opengever.core">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.todosconatiner" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
-    <property name="title" i18n:translate="">ToDo Container</property>
-    <property name="description"></property>
-    <property name="icon_expr"></property>
-    <property name="allow_discussion">False</property>
-    <property name="global_allow">False</property>
-    <property name="filter_content_types">True</property>
-    <property name="allowed_content_types">
-        <element value="opengever.workspace.todo" />
+  <property name="title" i18n:translate="">ToDo Container</property>
+  <property name="description" />
+  <property name="icon_expr" />
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">False</property>
+  <property name="filter_content_types">True</property>
+  <property name="allowed_content_types">
+    <element value="opengever.workspace.todo" />
+  </property>
+
+  <property name="schema">opengever.workspace.todos.content.todoscontainer.IToDosContainerSchema</property>
+  <property name="klass">opengever.workspace.todos.content.todoscontainer.ToDosContainer</property>
+  <property name="add_permission">cmf.AddPortalContent</property>
+
+  <property name="behaviors">
     </property>
 
-    <property name="schema">opengever.workspace.todos.content.todoscontainer.IToDosContainerSchema</property>
-    <property name="klass">opengever.workspace.todos.content.todoscontainer.ToDosContainer</property>
-    <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="default_view">view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view" />
+  </property>
 
-    <property name="behaviors">
-    </property>
-
-    <property name="default_view">view</property>
-    <property name="default_view_fallback">False</property>
-    <property name="view_methods">
-        <element value="view"/>
-    </property>
-
-    <alias from="(Default)" to="view"/>
-    <alias from="edit" to="view"/>
-    <alias from="view" to="view"/>
+  <alias from="(Default)" to="view" />
+  <alias from="edit" to="view" />
+  <alias from="view" to="view" />
 
 </object>

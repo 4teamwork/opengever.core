@@ -3,7 +3,7 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.workspace">
 
-    <adapter factory=".todoscontainer.TodosContainerNameChooser" />
-    <adapter factory=".response.Responses" />
+  <adapter factory=".todoscontainer.TodosContainerNameChooser" />
+  <adapter factory=".response.Responses" />
 
 </configure>
