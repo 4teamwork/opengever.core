@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2017.6.8 (unreleased)
+2017.6.8 (2018-02-15)
 ---------------------
 
 - Fix malformed version URL on documents. [Rotonen]
