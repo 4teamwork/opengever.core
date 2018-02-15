@@ -2,6 +2,7 @@ recursive-include opengever *
 recursive-include docs *
 include *.rst
 include *.txt
+graft solr-conf
 global-exclude *.pyc
 global-exclude ._*
 global-exclude *.mo
