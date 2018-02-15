@@ -5,6 +5,7 @@ Changelog
 2018.1.0 (unreleased)
 ---------------------
 
+- Fix tracking table creation for oracle. [deiferni]
 - Use subject instead of summary as default mail title. [deiferni]
 - Fix repository favorites cache key generation for Anonymous users. [lgraf]
 - Update plone.restapi to 1.1.0 and plone.rest to 1.0.0. [buchi]
