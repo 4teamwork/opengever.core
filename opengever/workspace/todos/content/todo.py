@@ -32,6 +32,7 @@ class IToDoSchema(Schema):
     title = TextLine(title=u'Title', required=True)
     text = RichText(title=u'Text', required=False)
     due_date = Date(title=u'Due date', required=False)
+    todolist = TextLine(title=u'Todo List', required=False)
 
 
 class ToDo(Container):
