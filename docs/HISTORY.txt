@@ -5,6 +5,7 @@ Changelog
 2018.1.2 (unreleased)
 ---------------------
 
+- Move solr-conf into opengever/core/ to make sure it's included in the egg. [lgraf]
 - Bump ftw.tabbedview to 4.1.0 to fix filter clearing in IE. [lgraf]
 
 

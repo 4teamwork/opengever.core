@@ -5,8 +5,8 @@ from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.testing import IntegrationTestCase
+from pkg_resources import resource_filename
 import os
-import pkg_resources
 import unittest
 
 
@@ -20,8 +20,8 @@ def get_subclasses(cls):
 class TestSolr(IntegrationTestCase):
 
     def test_solr_schema_contains_all_tabbedview_columns(self):
-        pkg_path = pkg_resources.get_distribution('opengever.core').location
-        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema'))
+        solf_conf_dir = resource_filename('opengever.core', 'solr-conf')
+        tree = etree.parse(os.path.join(solf_conf_dir, 'managed-schema'))
         solr_fields = tree.xpath('.//field/@name')
         tabs = get_subclasses(BaseCatalogListingTab)
         all_columns = set()
