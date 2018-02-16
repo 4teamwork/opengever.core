@@ -4,6 +4,7 @@ from opengever.base.utils import get_preferred_language_code
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from zope.component import adapter
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -16,6 +17,7 @@ class GeverJSONSummarySerializer(DefaultJSONSummarySerializer):
     Includes
     - translated 'title' for objects with ITranslatedTitleSupport
     - the object's portal_type
+    - the possibility to register a custom serializer per type
 
     Titles will be translated in the negotiated language, coming from the
     request's Accept-Language header for API requests.
@@ -42,4 +44,10 @@ class GeverJSONSummarySerializer(DefaultJSONSummarySerializer):
             attr = 'title_{}'.format(get_preferred_language_code())
             summary['title'] = getattr(self.context, attr)
 
-        return summary
+        custom_serializer = queryMultiAdapter((self.context, self.request),
+                                              ISerializeToJsonSummary,
+                                              name=self.context.portal_type)
+        if custom_serializer:
+            return custom_serializer()
+        else:
+            return summary
