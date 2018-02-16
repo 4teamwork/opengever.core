@@ -5,7 +5,7 @@ Changelog
 2018.1.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Bump ftw.tabbedview to 4.1.0 to fix filter clearing in IE. [lgraf]
 
 
 2018.1.1 (2018-02-15)
