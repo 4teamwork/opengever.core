@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -24,10 +25,29 @@ class TestToDo(IntegrationTestCase):
     def test_create_todo_through_api(self, browser):
         self.login(self.administrator, browser=browser)
         container = create(Builder('todos container').within(self.workspace))
-        browser.append_request_header('Accept', 'application/json')
+        browser.replace_request_header('Accept', 'application/json')
+        browser.replace_request_header('Content-Type', 'application/json')
         browser.open(container,
                      method='POST',
                      data=json.dumps({
                          '@type': 'opengever.workspace.todo',
                          'title': 'The firts Todo'}))
         self.assertEquals(['1'], container.objectIds())
+
+    @browsing
+    def test_API_summary_provides_more_infos(self, browser):
+        self.login(self.administrator, browser=browser)
+        container = create(Builder('todos container').within(self.workspace))
+        todo = create(Builder('todo').within(container)
+                      .titled(u'The Todo')
+                      .having(due_date=date(2015, 1, 2)))
+
+        browser.replace_request_header('Accept', 'application/json')
+        browser.visit(container)
+        self.assertEquals(
+            [{u'@id': todo.absolute_url(),
+              u'@type': u'opengever.workspace.todo',
+              u'due_date': u'2015-01-02',
+              u'id': u'1',
+              u'title': u'The Todo'}],
+            browser.json['items'])
