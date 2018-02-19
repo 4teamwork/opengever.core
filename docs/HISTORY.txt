@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.1.2 (unreleased)
+2018.1.2 (2018-02-19)
 ---------------------
 
 - Bump plonetheme.teamraum to 3.21.3 (includes Mac Office icons). [lgraf]
