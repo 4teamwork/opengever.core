@@ -8,6 +8,7 @@ Changelog
 - Add some minimal logging for send_digest handler. [lgraf]
 - Fix bin/mtest output encoding. [lgraf]
 - Bump ftw.tabbedview to 4.1.0 to fix filter clearing in IE. [lgraf]
+- Improve Tabbedview filter in Solr, e.g. allow filtering by reference number. [buchi]
 
 
 2018.1.1 (2018-02-15)
