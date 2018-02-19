@@ -31,8 +31,11 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         return super(GeverCatalogTableSource, self).search_results(query)
 
     def solr_results(self, query):
-        solr_query = u'Title:{term} OR SearchableText:{term}'.format(
-            term=query['SearchableText'].decode('utf8'))
+        term = query['SearchableText'].rstrip('*').decode('utf8')
+        pattern = (
+            u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}*)')
+        term_queries = [pattern.format(term=escape(t)) for t in term.split()]
+        solr_query = u' AND '.join(term_queries)
 
         filters = [u'trashed:false']
         for key, value in query.items():
@@ -65,6 +68,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         fl = fl + [c['column'] for c in self.config.columns if c['column']]
         params = {
             'fl': fl,
+            'q.op': 'AND',
         }
 
         solr = getUtility(ISolrSearch)
