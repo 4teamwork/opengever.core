@@ -10,8 +10,11 @@ from opengever.core.debughelpers import setup_plone
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
-from zope.interface import Interface
 import transaction
+import logging
+
+
+logger = logging.getLogger('opengever.activity')
 
 
 _ = MessageFactory("opengever.activity")
@@ -22,7 +25,7 @@ def is_activity_feature_enabled():
         registry = getUtility(IRegistry)
         return registry.forInterface(IActivitySettings).is_feature_enabled
 
-    except KeyError, AttributeError:
+    except (KeyError, AttributeError):
         return False
 
 
@@ -35,7 +38,12 @@ def notification_center():
 
 
 def send_digest_zopectl_handler(app, args):
-    plone = setup_plone(get_first_plone_site(app))
+    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
+    # to make sure send_digests()'s output gets logged on console
+    stream_handler = logger.root.handlers[0]
+    stream_handler.setLevel(logging.INFO)
+
+    setup_plone(get_first_plone_site(app))
     DigestMailer().send_digests()
     transaction.commit()
 
@@ -69,7 +77,7 @@ ACTIVITY_TRANSLATIONS = {
     'task-transition-rejected-open': _(
         'task-transition-rejected-open', default=u'Task reopened'),
     'task-transition-resolved-in-progress': _(
-        'task-transition-resolved-in-progress', default=u'Task revision wanted'),
+        'task-transition-resolved-in-progress', default=u'Task revision wanted'),  # noqa
     'task-transition-resolved-tested-and-closed': _(
         'task-transition-resolved-tested-and-closed', default=u'Task closed'),
     'forwarding-added': _(
@@ -79,7 +87,7 @@ ACTIVITY_TRANSLATIONS = {
     'forwarding-transition-assign-to-dossier': _(
         'forwarding-transition-assign-to-dossier',
         default=u'Forwarding assigned to dossier'),
-    'forwarding-transition-close': _('forwarding-transition-close', default=u'Forwarding closed'),
+    'forwarding-transition-close': _('forwarding-transition-close', default=u'Forwarding closed'),  # noqa
     'forwarding-transition-reassign': _(
         'forwarding-transition-reassign', default=u'Forwarding reassigned'),
     'forwarding-transition-reassign-refused': _(
