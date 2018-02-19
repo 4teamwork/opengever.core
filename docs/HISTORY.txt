@@ -7,6 +7,7 @@ Changelog
 
 - Fix an issue with bumblebee preview not being renderend upon ECH0147 import. [deiferni]
 - Add Creator to Solr schema. [buchi]
+- Store DocValues in boolean fields. [buchi]
 
 
 2018.1.2 (2018-02-19)
