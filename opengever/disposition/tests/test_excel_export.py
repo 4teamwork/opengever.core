@@ -7,6 +7,7 @@ from opengever.testing import FunctionalTestCase
 from openpyxl import load_workbook
 from plone import api
 from tempfile import NamedTemporaryFile
+from unittest import skip
 import transaction
 
 
@@ -82,6 +83,8 @@ class TestDispositionExcelExport(FunctionalTestCase):
                  u'not archival worthy'],
                 [cell.value for cell in rows[2]])
 
+    @skip("This test currently fails in a flaky way on CI."
+          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_file_name(self, browser):
         # use the enable_languages method from
