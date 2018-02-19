@@ -139,6 +139,7 @@
     <field name="is_subdossier" type="boolean" indexed="true" stored="false" />
     <field name="issuer" type="string" indexed="true" stored="false" />
     <field name="lastname" type="string" indexed="true" stored="false" />
+    <field name="metadata" type="text" indexed="true" stored="true"/>
     <field name="object_provides" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="phone_office" type="string" indexed="true" stored="false" />
     <field name="preselected" type="boolean" indexed="true" stored="false" />
@@ -243,7 +244,7 @@
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
         <filter class="solr.WordDelimiterGraphFilterFactory"
@@ -255,7 +256,7 @@
               catenateWords="1"
               catenateNumbers="1"
               catenateAll="0"
-              preserveOriginal="0"/>
+              preserveOriginal="1"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
                 maxPosAsterisk="2" maxPosQuestion="1" minTrailing="2" maxFractionAsterisk="0"/>
@@ -263,19 +264,9 @@
       </analyzer>
       <analyzer type="query">
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-        <filter class="solr.WordDelimiterGraphFilterFactory"
-              splitOnCaseChange="1"
-              splitOnNumerics="1"
-              stemEnglishPossessive="1"
-              generateWordParts="1"
-              generateNumberParts="1"
-              catenateWords="0"
-              catenateNumbers="0"
-              catenateAll="0"
-              preserveOriginal="0"/>
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>

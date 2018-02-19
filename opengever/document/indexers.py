@@ -177,3 +177,21 @@ def public_trial(obj):
         return public_trial
 
     return ''
+
+
+@indexer(IBaseDocument)
+def metadata(obj):
+    metadata = []
+
+    reference_number = IReferenceNumber(obj)
+    metadata.append(reference_number.get_number())
+
+    doc_metadata = IDocumentMetadata(obj)
+    if doc_metadata.description:
+        metadata.append(doc_metadata.description.encode('utf8'))
+    if doc_metadata.keywords:
+        metadata.extend([k.encode('utf8') for k in doc_metadata.keywords])
+    if doc_metadata.foreign_reference:
+        metadata.append(doc_metadata.foreign_reference.encode('utf8'))
+
+    return ' '.join(metadata)
