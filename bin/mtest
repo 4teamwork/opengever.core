@@ -26,6 +26,8 @@ from subprocess import PIPE
 from subprocess import Popen
 from time import sleep
 from time import time
+import locale
+import sys
 
 
 def humanize_time(seconds):
@@ -88,9 +90,13 @@ def discover_test_layers():
     test_classes_per_layer = {}
     current_layer = None
 
+    output_encoding = sys.stdout.encoding
+    if output_encoding is None:
+        output_encoding = locale.getpreferredencoding()
+
     test_discovery = check_output(
         ('bin/test', '--list-tests', ),
-        ).decode('UTF-8').splitlines()
+        ).decode(output_encoding).splitlines()
 
     for result in test_discovery:
         is_layer_header = result.startswith('Listing')
@@ -252,6 +258,17 @@ def handle_results(results):
     success = []
     runtime = 0
 
+    # Set up a logger for writing output to stdout. We do this because
+    # the logging module handles I/O encoding properly, whereas with 'print'
+    # we'd need to do it ourselves. (Think piping the output of bin/mtest
+    # somewhere, or shell I/O redirection).
+    log_output = getLogger('mtest.output')
+    log_output.propagate = False
+    stdout_handler = StreamHandler(stream=sys.stdout)
+    stdout_handler.setFormatter(Formatter(''))
+    log_output.addHandler(stdout_handler)
+    log_output.setLevel(INFO)
+
     while results:
         sleep(1)
 
@@ -279,22 +296,21 @@ def handle_results(results):
 
             else:
                 success.append(False)
-                # This explicitly expects UTF-8 as the runtime locale!
-                print('')
-                print('STDERR')
-                print('')
-                print(result.get('layers'))
-                print('')
-                print(stderr.decode('UTF-8'), end='')
-                print('')
+                log_output.info('')
+                log_output.info('STDERR')
+                log_output.info('')
+                log_output.info(result.get('layers'))
+                log_output.info('')
+                log_output.info(stderr)
+                log_output.info('')
                 if returncode:
-                    print('')
-                    print('STDOUT')
-                    print('')
-                    print(result.get('layers'))
-                    print('')
-                    print(stdout.decode('UTF-8'), end='')
-                    print('')
+                    log_output.info('')
+                    log_output.info('STDOUT')
+                    log_output.info('')
+                    log_output.info(result.get('layers'))
+                    log_output.info('')
+                    log_output.info(stdout)
+                    log_output.info('')
 
     logger.debug(
         'Aggregate runtime %s.',
