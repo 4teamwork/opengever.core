@@ -139,6 +139,7 @@
     <field name="is_subdossier" type="boolean" indexed="true" stored="false" />
     <field name="issuer" type="string" indexed="true" stored="false" />
     <field name="lastname" type="string" indexed="true" stored="false" />
+    <field name="metadata" type="text" indexed="true" stored="true"/>
     <field name="object_provides" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="phone_office" type="string" indexed="true" stored="false" />
     <field name="preselected" type="boolean" indexed="true" stored="false" />

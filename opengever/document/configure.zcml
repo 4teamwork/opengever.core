@@ -260,6 +260,11 @@
       name="public_trial"
       />
 
+  <adapter
+      factory=".indexers.metadata"
+      name="metadata"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
 </configure>

@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testing import MockTestCase
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
+from opengever.document.indexers import metadata
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
@@ -140,6 +141,22 @@ class TestDocumentIndexers(FunctionalTestCase):
                         'Expect one item with Keyword 1')
         self.assertTrue(len(catalog(Subject=u'Keyword with \xf6')),
                         u'Expect one item with Keyword with \xf6')
+
+    def test_metadata_contains_reference_number(self):
+        doc = create(Builder("document"))
+        self.assertEqual(metadata(doc)(), 'Client1 / 1')
+
+    def test_metadata_contains_description(self):
+        doc = create(Builder("document").having(description=u'Foo bar baz.'))
+        self.assertEqual(metadata(doc)(), 'Client1 / 1 Foo bar baz.')
+
+    def test_metadata_contains_keywords(self):
+        doc = create(Builder("document").having(keywords=(u'Foo', u'Bar')))
+        self.assertEqual(metadata(doc)(), 'Client1 / 1 Foo Bar')
+
+    def test_metadata_contains_foreign_reference(self):
+        doc = create(Builder("document").having(foreign_reference=u'Ref 123'))
+        self.assertEqual(metadata(doc)(), 'Client1 / 1 Ref 123')
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
