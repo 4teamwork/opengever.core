@@ -12,6 +12,10 @@ from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 import transaction
+import logging
+
+
+logger = logging.getLogger('opengever.activity')
 
 
 _ = MessageFactory("opengever.activity")
@@ -35,6 +39,11 @@ def notification_center():
 
 
 def send_digest_zopectl_handler(app, args):
+    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
+    # to make sure send_digests()'s output gets logged on console
+    stream_handler = logger.root.handlers[0]
+    stream_handler.setLevel(logging.INFO)
+
     plone = setup_plone(get_first_plone_site(app))
     DigestMailer().send_digests()
     transaction.commit()

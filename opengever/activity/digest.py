@@ -13,10 +13,13 @@ from plone import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
+import logging
 
+
+logger = logging.getLogger('opengever.activity.digest')
+logger.setLevel(logging.INFO)
 
 _ = MessageFactory("opengever.activity")
-
 
 DIGEST_INTERVAL_HOURS = 24
 
@@ -81,6 +84,7 @@ class DigestMailer(Mailer):
             'description': activity.translations[language].description}
 
     def send_digests(self):
+        logger.info('Sending digests...')
         for userid, notifications in self.get_notifications().items():
             # skip when digest interval is not expired yet
             if not self.is_interval_expired(userid):
@@ -111,6 +115,9 @@ class DigestMailer(Mailer):
             self.send_mail(msg)
             self.mark_as_sent(notifications)
             self.record_digest(userid)
+            logger.info('  Digest sent for %s (%s)' % (userid, user.email))
+
+        logger.info('Done sending digests.')
 
     def mark_as_sent(self, notifications):
         for notification in notifications:
