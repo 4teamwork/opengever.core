@@ -5,6 +5,7 @@ Changelog
 2018.1.2 (unreleased)
 ---------------------
 
+- Bump plonetheme.teamraum to 3.21.3 (includes Mac Office icons). [lgraf]
 - Include solr-conf files in data_files so they get installed into the egg. [lgraf]
 - Add some minimal logging for send_digest handler. [lgraf]
 - Fix bin/mtest output encoding. [lgraf]
