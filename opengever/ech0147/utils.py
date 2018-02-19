@@ -112,12 +112,15 @@ def create_document(container, document, zipfile):
             contentType=file_.mimeType,
             filename=filename)
 
-        # work around possible event handler ordering issue
-        set_digitally_available(obj, None)
-        notify(ObjectModifiedEvent(obj))
-
     # Rename document
     chooser = INameChooser(container)
     name = chooser.chooseName(None, obj)
     transaction.savepoint(optimistic=True)
+
     container.manage_renameObject(obj.getId(), name)
+
+    # work around possible event handler ordering issue
+    set_digitally_available(obj, None)
+    # fire final modified event after rename to make sure bumblebee trigger
+    # storing views/handlers use correct document url
+    notify(ObjectModifiedEvent(obj))
