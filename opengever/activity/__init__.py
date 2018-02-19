@@ -26,7 +26,7 @@ def is_activity_feature_enabled():
         registry = getUtility(IRegistry)
         return registry.forInterface(IActivitySettings).is_feature_enabled
 
-    except KeyError, AttributeError:
+    except (KeyError, AttributeError):
         return False
 
 
