@@ -70,6 +70,15 @@ setup(name='opengever.core',
           'opengever.portlets',
       ],
       include_package_data=True,
+      data_files=[
+          ('solr-conf', [
+              'solr-conf/managed-schema',
+              'solr-conf/mapping-FoldToASCII.txt',
+              'solr-conf/solrconfig.xml',
+              'solr-conf/stopwords.txt',
+              'solr-conf/synonyms.txt',
+          ]),
+      ],
       zip_safe=False,
       install_requires=[
           'alembic >= 0.7.0',
