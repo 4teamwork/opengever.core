@@ -10,7 +10,6 @@ from opengever.core.debughelpers import setup_plone
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
-from zope.interface import Interface
 import transaction
 import logging
 
@@ -44,7 +43,7 @@ def send_digest_zopectl_handler(app, args):
     stream_handler = logger.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
 
-    plone = setup_plone(get_first_plone_site(app))
+    setup_plone(get_first_plone_site(app))
     DigestMailer().send_digests()
     transaction.commit()
 
@@ -78,7 +77,7 @@ ACTIVITY_TRANSLATIONS = {
     'task-transition-rejected-open': _(
         'task-transition-rejected-open', default=u'Task reopened'),
     'task-transition-resolved-in-progress': _(
-        'task-transition-resolved-in-progress', default=u'Task revision wanted'),
+        'task-transition-resolved-in-progress', default=u'Task revision wanted'),  # noqa
     'task-transition-resolved-tested-and-closed': _(
         'task-transition-resolved-tested-and-closed', default=u'Task closed'),
     'forwarding-added': _(
@@ -88,7 +87,7 @@ ACTIVITY_TRANSLATIONS = {
     'forwarding-transition-assign-to-dossier': _(
         'forwarding-transition-assign-to-dossier',
         default=u'Forwarding assigned to dossier'),
-    'forwarding-transition-close': _('forwarding-transition-close', default=u'Forwarding closed'),
+    'forwarding-transition-close': _('forwarding-transition-close', default=u'Forwarding closed'),  # noqa
     'forwarding-transition-reassign': _(
         'forwarding-transition-reassign', default=u'Forwarding reassigned'),
     'forwarding-transition-reassign-refused': _(
