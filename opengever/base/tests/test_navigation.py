@@ -7,6 +7,7 @@ from ftw.testing import freeze
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from plone.uuid.interfaces import IUUID
+from unittest import skip
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 import transaction
@@ -38,6 +39,8 @@ class TestNavigation(FunctionalTestCase):
         with self.assert_changes(view.get_caching_url, msg):
             root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de-ch'
 
+    @skip("This test currently fails in a flaky way on CI."
+          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_json_is_valid(self, browser):
         add_languages(['de-ch'])

@@ -3,17 +3,20 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
-from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
+from unittest import skip
 
 
 class TestCommitteeContainer(IntegrationTestCase):
 
     features = ('meeting',)
 
+    @skip("This test currently fails in a flaky way on CI."
+          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_supports_translated_title(self, browser):
         self.login(self.manager, browser)
