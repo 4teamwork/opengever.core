@@ -14,6 +14,7 @@ Changelog
 - Add Creator to Solr schema. [buchi]
 - Store DocValues in boolean fields. [buchi]
 - Bump plone.app.contentlisting to 1.0.7 to fix getting review_state of content without workflow. [buchi]
+- Bump docxcompose to 1.0.0a6 to fix a bug with renumbering of bullets [buchi]
 
 
 2018.1.2 (2018-02-19)
