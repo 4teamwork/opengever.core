@@ -7,11 +7,12 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.activity.mail import PloneNotificationMailer
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
-import transaction
 import logging
+import transaction
 
 
 logger = logging.getLogger('opengever.activity')
@@ -43,7 +44,15 @@ def send_digest_zopectl_handler(app, args):
     stream_handler = logger.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
 
-    setup_plone(get_first_plone_site(app))
+    plone = setup_plone(get_first_plone_site(app))
+
+    # Set up the language based on site wide preferred language. We do this
+    # so all the i18n and l10n machinery down the line uses the right language.
+    lang_tool = api.portal.get_tool('portal_languages')
+    lang = lang_tool.getPreferredLanguage()
+    plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
+    plone.REQUEST.setupLocale()
+
     DigestMailer().send_digests()
     transaction.commit()
 
