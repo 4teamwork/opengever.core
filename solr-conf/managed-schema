@@ -106,6 +106,7 @@
     <!-- Plone default fields -->
     <field name="allowedRolesAndUsers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="created" type="pdate" indexed="true" stored="false" />
+    <field name="Creator" type="string" indexed="true" stored="false" />
     <field name="Description" type="text" indexed="true" stored="true"/>
     <!-- <field name="effective" type="pdate" indexed="true" stored="false" /> -->
     <!-- <field name="expires" type="pdate" indexed="true" stored="false" /> -->
@@ -198,8 +199,8 @@
     <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true" docValues="true" />
 
     <!-- boolean type: "true" or "false" -->
-    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
-    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" docValues="true"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true" docValues="true"/>
 
     <!--
       Numeric field types that index values using KD-trees.
