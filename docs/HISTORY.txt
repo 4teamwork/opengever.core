@@ -5,7 +5,7 @@ Changelog
 2018.1.3 (unreleased)
 ---------------------
 
-- Bump ftw.solr version to get fix for security filter. [lgraf]
+- Bump ftw.solr version to get fix for security filter and indexing of invalid dates. [lgraf, buchi]
 - Digest: Set request language based on site wide preferred language. [lgraf]
 - Disable "Drop unused sequences" upgrade step because it failed on TEST. [lgraf]
 - Fix period ToC downloads on IE 11 and Edge. [bierik]
