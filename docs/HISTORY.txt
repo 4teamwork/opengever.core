@@ -9,6 +9,7 @@ Changelog
 - Digest: Set request language based on site wide preferred language. [lgraf]
 - Disable "Drop unused sequences" upgrade step because it failed on TEST. [lgraf]
 - Fix period ToC downloads on IE 11 and Edge. [bierik]
+- Downgrade cx-Oracle to avoid potentially broken version. [deiferni]
 - Fix an issue with bumblebee preview not being renderend upon ECH0147 import. [deiferni]
 - Add Creator to Solr schema. [buchi]
 - Store DocValues in boolean fields. [buchi]
