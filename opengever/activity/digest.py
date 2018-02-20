@@ -93,17 +93,16 @@ class DigestMailer(Mailer):
             today = api.portal.get_localized_time(date.today())
             user = ogds_service().fetch_user(userid)
 
-            language = self.get_users_language()
             subject = translate(
                 _(u'subject_digest',
                   default=u'Daily Digest for ${date}',
                   mapping={'date': today}),
-                context=self.request, target_language=language,)
+                context=self.request)
             title = translate(
                 _(u'title_daily_digest',
                   default=u'Daily Digest for ${username}',
                   mapping={'username': user.fullname()}),
-                context=self.request, target_language=language,)
+                context=self.request)
             msg = self.prepare_mail(
                 subject=subject,
                 to_userid=userid,
