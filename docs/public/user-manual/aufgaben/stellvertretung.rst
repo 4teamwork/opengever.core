@@ -6,12 +6,8 @@ können Aufgaben stellvertretend für ihre Mitarbeiter bearbeiten. Dabei
 können Sie Aktionen stellvertretend für Mitarbeiter durchführen.
 
 Es kann z.B. eine Sekretärin stellvertretend für einen abwesenden
-Sachbearbeiter eine Aufgabe erledigen.
-
-Ab dem Release 3.0 werden Aktionen welche nur aufgrund der
-Stellvertreter-Berechtigung zur Verfügung stehen, in einem separaten
-Dropdown dargestellt. Dies soll eine unbewusste Stellvertretung bei
-Aufgaben verhindern.
+Sachbearbeiter eine Aufgabe erledigen. Dies kann direkt im
+Stellvertreter-Dropdown vorgenommen werden.
 
 |image222|
 
