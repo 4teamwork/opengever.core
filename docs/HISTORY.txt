@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.1.3 (unreleased)
+2018.1.3 (2018-02-20)
 ---------------------
 
 - Bump ftw.solr version to get fix for security filter and indexing of invalid dates. [lgraf, buchi]
