@@ -5,7 +5,7 @@
         xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         lang="en"
         metal:use-macro="context/main_template/macros/master"
-        i18n:domain="ftw.tabbedview">
+        i18n:domain="opengever.disposition">
 
     <body>
       <div metal:fill-slot="main">
@@ -24,6 +24,7 @@
             </div>
 
             <div>
+              <h3 class="metadata" i18n:translate="label_proces">Process</h3>
               <div class="workflow_wizard">
                 <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
                   <li tal:repeat="state view/get_states"
@@ -33,6 +34,18 @@
                   </li>
                 </ul>
               </div>
+            </div>
+
+            <div class="metadata">
+              <h3 class="metadata" i18n:translate="label_metadata">Metadata</h3>
+              <div>
+
+                <span class="label" i18n:translate="label_transfer_number">Transfer number</span>
+                <span id="transfer-number-value" tal:content="context/transfer_number"></span>
+                <a href="#" class="edit edit_transfer_number" tal:condition="view/is_transfer_number_editable" i18n:translate="label_edit">Edit</a>
+
+              </div>
+
             </div>
 
             <ul class="list-group" tal:repeat="dossier_list view/get_dossier_lists">
@@ -247,8 +260,31 @@
               </div>
 
             </div>
+
+            <div class="overlay" id="transfer_number_dialog"
+                 tal:attributes="data-transfer-number-save-url view/update_transfer_number_url">
+              <h2 i18n:translate="edit_transfer_number">Edit transfer number</h2>
+              <form>
+                <div class="input-group">
+                  <label for="transfer_number"
+                         i18n:translate="label_transfer_number">Transfer number</label>
+                  <input type="text"
+                         name="transfer_number"
+                         tal:attributes="value context/transfer_number"
+                         id="transfer_number_field" />
+                </div>
+                <div class="button-group">
+                  <button class="button confirm context save_transfer_number"
+                          i18n:translate="label_save">Save</button>
+                  <button class="button cancel cancel_transfer_number"
+                          i18n:translate="label_cancel">Cancel</button>
+                </div>
+              </form>
+            </div>
+
           </metal:main-macro>
         </div>
+
       </body>
     </html>
   </metal:page>

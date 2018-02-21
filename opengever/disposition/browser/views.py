@@ -1,5 +1,7 @@
+from opengever.base.response import JSONResponse
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.disposition import IDisposition
 from plone import api
 from Products.Five.browser import BrowserView
 import json
@@ -45,6 +47,14 @@ class AppraiseView(BrowserView):
         return self.request.RESPONSE.redirect(
             '{}/content_status_modify?workflow_action={}'.format(
                 self.context.absolute_url(), self.transition))
+
+
+class UpdateTransferNumberView(BrowserView):
+
+    def __call__(self):
+        transfer_number = self.request.form['transfer_number']
+        IDisposition(self.context).transfer_number = transfer_number
+        return JSONResponse(self.request).proceed().dump()
 
 
 class GuardsView(BrowserView):

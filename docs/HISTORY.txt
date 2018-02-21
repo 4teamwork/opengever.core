@@ -31,6 +31,7 @@ Changelog
 - Add reference number to REST API summary. [buchi]
 - Include 'is_leafnode' in serialization of repository folder. [buchi]
 
+- Improve input position for the transfer number. [phgross]
 
 2018.1.3 (2018-02-20)
 ---------------------

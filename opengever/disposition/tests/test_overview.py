@@ -41,11 +41,9 @@ class TestDispositionOverview(FunctionalTestCase):
                                        archival_value_annotation=u''
                                        u'In Absprache mit ARCH.'))
 
-        self.disposition = create(Builder('disposition')
-                                  .having(dossiers=[
-                                      self.dossier1,
-                                      self.dossier2,
-                                      ]))
+        self.disposition = create(Builder('disposition').having(
+            dossiers=[self.dossier1, self.dossier2],
+            transfer_number=u'Ablieferung 2013-44'))
 
     @browsing
     def test_list_only_all_disposition_dossiers(self, browser):
@@ -290,6 +288,25 @@ class TestDispositionOverview(FunctionalTestCase):
         self.assertEquals(
             ['Dossier E', 'Dossier D', 'Dossier C'],
             repos.css('h3.title a').text)
+
+    @browsing
+    def test_does_not_show_transfer_number_edit_button_when_readonly(self, browser):
+        browser.login().open(self.disposition, view='overview')
+
+        self.assertEquals(['Ablieferung 2013-44'],
+                          browser.css('div.metadata #transfer-number-value').text)
+        self.assertEquals([],
+                          browser.css('div.metadata .edit_transfer_number').text)
+
+    @browsing
+    def test_shows_transfer_number_in_text_field_when_editable(self, browser):
+        self.grant('Archivist')
+        browser.login().open(self.disposition, view='overview')
+
+        self.assertEquals(['Ablieferung 2013-44'],
+                          browser.css('div.metadata #transfer-number-value').text)
+        self.assertEquals(['Edit'],
+                          browser.css('div.metadata .edit_transfer_number').text)
 
 
 class TestClosedDispositionOverview(FunctionalTestCase):
