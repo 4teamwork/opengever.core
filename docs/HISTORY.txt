@@ -241,6 +241,30 @@ Changelog
 - Support importing toplevel documents from eCH-0147 message. [buchi]
 
 
+2017.6.8 (2018-02-15)
+---------------------
+
+- Fix malformed version URL on documents. [Rotonen]
+
+
+2017.6.7 (2018-01-04)
+---------------------
+
+- Fix dossier responsible widget, in the DossierAddFormView step, when accepting a task.  [phgross]
+
+
+2017.6.6 (2017-11-30)
+---------------------
+
+- Fix an issue when delegating to inboxes. [deiferni]
+- Remove ZIP export action on plonesite. [phgross]
+- Fix manual journal entry link on documents journal. [phgross]
+- Make sure PDF Preview link is only available for documents not for mails. [phgross]
+- Only show subdossier tab on dossiers where the max depth allows to add subdossiers.  [phgross]
+- Ensure new versions are created when doc-properties change. [deiferni]
+- Don't display nochange/remove radio buttons for file in document add-form. [deiferni]
+
+
 2017.6.5 (2017-11-22)
 ---------------------
 
