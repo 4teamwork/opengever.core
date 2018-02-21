@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-20 14:11+0000\n"
+"POT-Creation-Date: 2018-03-19 12:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,11 @@ msgstr "bewertungsliste"
 #: ./opengever/disposition/browser/listing.py
 msgid "document_sequence_number"
 msgstr "Laufnummer"
+
+#. Default: "Edit transfer number"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "edit_transfer_number"
+msgstr "Ablieferungsnummer bearbeiten"
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
 #: ./opengever/disposition/validators.py
@@ -80,6 +85,11 @@ msgstr "Alle archivieren"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_archived"
 msgstr "Archiviert"
+
+#. Default: "Cancel"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_cancel"
+msgstr "Abbrechen"
 
 #. Default: "Details:"
 #: ./opengever/disposition/browser/templates/overview.pt
@@ -134,6 +144,11 @@ msgstr "Dossiers"
 msgid "label_download_removal_protocol"
 msgstr "Löschprotokoll herunterladen"
 
+#. Default: "Edit"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_edit"
+msgstr "Bearbeiten"
+
 #. Default: "Export appraisal list as excel"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_export_appraisal_list_as_excel"
@@ -149,10 +164,20 @@ msgstr "Verlauf"
 msgid "label_inactive_dossiers"
 msgstr "Stornierte Dossiers"
 
+#. Default: "Metadata"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_metadata"
+msgstr "Metadaten"
+
 #. Default: "No"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_no"
 msgstr "Nein"
+
+#. Default: "Process"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_process"
+msgstr "Prozess"
 
 #. Default: "Reference number"
 #: ./opengever/disposition/browser/removal_protocol.py
@@ -174,6 +199,11 @@ msgstr "Abgeschlossene Dossiers"
 msgid "label_review_state"
 msgstr "Status"
 
+#. Default: "Save"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_save"
+msgstr "Speichern"
+
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_time"
@@ -188,6 +218,7 @@ msgstr "Titel"
 
 #. Default: "Transfer number"
 #: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/browser/templates/overview.pt
 #: ./opengever/disposition/disposition.py
 msgid "label_transfer_number"
 msgstr "Ablieferungsnummer"
