@@ -6,9 +6,9 @@ Changelog
 ---------------------
 
 - Remove all uses of enableHTTPCompression in GEVER. [lgraf]
+- Fix NotificationDefault hook. [phgross]
 - Fix deleting agenda items for non-word agenda items. [deiferni]
 - Improve checking for truthy dates in sablon template data. [deiferni]
-
 
 2018.1.3 (2018-02-20)
 ---------------------

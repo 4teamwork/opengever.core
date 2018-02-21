@@ -33,7 +33,7 @@ class TestListSettings(IntegrationTestCase):
         task_added = [item for item in activities if item.get('kind') == 'task-added'][0]
         self.assertEquals({u'task_issuer': False, u'task_responsible': True},
                           task_added['mail'])
-        self.assertEquals({u'task_issuer': False, u'task_responsible': False},
+        self.assertEquals({u'task_issuer': True, u'task_responsible': True},
                           task_added['badge'])
         self.assertEquals('default', task_added['setting_type'])
 
