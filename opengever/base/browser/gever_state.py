@@ -2,6 +2,9 @@ from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_cluster_base_url
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.interfaces import IGeverState
+from opengever.contact.interfaces import IContactFolder
+from opengever.inbox.yearfolder import IYearFolder
+from plone.memoize.view import memoize
 from plone.memoize.view import memoize_contextless
 from Products.Five import BrowserView
 from zope.interface import implements
@@ -24,3 +27,16 @@ class GeverStateView(BrowserView):
     @memoize_contextless
     def cas_server_url(self):
         return get_cas_server_url()
+
+    @memoize
+    def properties_action_available(self):
+        plone_view = self.context.restrictedTraverse("@@plone")
+        if plone_view.getViewTemplateId() == 'view' or \
+           plone_view.isPortalOrPortalDefaultPage():
+            return False
+
+        if IContactFolder.providedBy(self.context) \
+           or IYearFolder.providedBy(self.context):
+            return False
+
+        return True
