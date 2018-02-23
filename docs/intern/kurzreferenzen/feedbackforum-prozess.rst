@@ -36,7 +36,7 @@ Die Schlagworte können in folgende zwei Gruppen unterteilt werden:
 
 - ``spv:`` Alle Beiträge die sich mit der SPV (Sitzungs- und Protokollverwaltung) auseinander setzen.
 
-- ``ogip:`` Alle Beiträge die sich mit einem OGIP (OneGov GEVER Improvement Proposal) auseinander setzte resp. für welche ein solcher erstellt werden soll.
+- ``ogip:`` Alle Beiträge die sich mit einem OGIP (OneGov GEVER Improvement Proposal) auseinander setzte resp. für welche ein solcher erstellt werden soll. Hierzu empfhielt es sich, im gleichen Schritt noch in Klammern die zugewiesen OGIP-Nr und de OGIP-Titel am Ende des Posts zu ergänzen.
 
 - ``workshop:`` Alle Beiträge die an einem Workshop im Detail angeschaut werden müssen / sollten.
 
