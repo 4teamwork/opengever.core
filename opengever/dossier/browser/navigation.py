@@ -12,6 +12,7 @@ class JSONNavigation(BrowserView):
     The navigation starts at the current context, i.e. the dossier.
 
     """
+
     def __call__(self):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
