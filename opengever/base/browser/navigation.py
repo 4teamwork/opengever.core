@@ -40,7 +40,6 @@ class JSONNavigation(BrowserView):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
-        response.enableHTTPCompression(REQUEST=self.request)
 
         if self.request.get('cache_key'):
             # Only cache when there is a cache_key in the request.
@@ -134,7 +133,10 @@ class JSONNavigation(BrowserView):
         # which the modified-index of the catalog cannot order correctly.
         # When we reach the next minute, return the newest modification
         # timestamp.
-        minute_of = lambda stamp: stamp.strftime('%Y-%m-%d %H:%M')
+
+        def minute_of(stamp):
+            return stamp.strftime('%Y-%m-%d %H:%M')
+
         previous = None
         newest = None
         for brain in brains:

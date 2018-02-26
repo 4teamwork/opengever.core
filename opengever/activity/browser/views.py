@@ -60,7 +60,6 @@ class NotificationView(BrowserView):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
-        response.enableHTTPCompression(REQUEST=self.request)
         return json.dumps(data)
 
     def dump_notifications(self, notifications):
