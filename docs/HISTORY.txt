@@ -5,7 +5,7 @@ Changelog
 2018.1.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix deleting agenda items for non-word agenda items. [deiferni]
 
 
 2018.1.3 (2018-02-20)

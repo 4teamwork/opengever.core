@@ -332,7 +332,9 @@
       };
 
       self.cancel = function() {
-        self.overlay.close();
+        if (typeof(self.overlay) !== 'undefined') {
+          self.overlay.close();
+        }
       };
     };
 
@@ -408,9 +410,7 @@
       if (typeof(createExcerptDialog) !== 'undefined') {
         createExcerptDialog.close();
       }
-      if (typeof(renameAgendaItemDialog) !== 'undefined') {
-        renameAgendaItemDialog.cancel();
-      }
+      renameAgendaItemDialog.cancel();
     };
 
     this.updateSortOrder = function() {
