@@ -12,6 +12,7 @@ Changelog
 - Fix REST API @move endpoint: Do not require delete permission when moving objects. [buchi]
 - Add REST API endpoint for querying configuration settings. [buchi]
 
+- Make sure notification-default for the forwarding-added kind exists. [phgross]
 
 2018.1.3 (2018-02-20)
 ---------------------
