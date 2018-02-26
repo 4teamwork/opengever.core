@@ -5,6 +5,7 @@ Changelog
 2018.1.4 (unreleased)
 ---------------------
 
+- Remove all uses of enableHTTPCompression in GEVER. [lgraf]
 - Fix deleting agenda items for non-word agenda items. [deiferni]
 
 

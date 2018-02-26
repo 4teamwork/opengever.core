@@ -144,5 +144,4 @@ class DownloadGeneratedAgendaItemList(BrowserView):
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
-        response.enableHTTPCompression(REQUEST=self.request)
         return self.get_json_data(pretty=True)
