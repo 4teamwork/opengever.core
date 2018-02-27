@@ -15,9 +15,11 @@ class TestParticipationHanlder(MockTestCase):
         super(TestParticipationHanlder, self).setUp()
         self.context = self.mocker.mock()
 
-        #annotation mock
         annonation_storage = {}
-        annotation_adapter = lambda obj: annonation_storage
+
+        def annotation_adapter(obj):
+            return annonation_storage
+
         self.mock_adapter(annotation_adapter, IAnnotations, [Interface, ])
 
         created_handler = self.mocker.mock()

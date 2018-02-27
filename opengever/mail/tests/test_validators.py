@@ -23,7 +23,7 @@ class TestValidators(MockTestCase):
 
         context = self.stub()
         request = self.stub()
-        mail1 = self.providing_stub([IMail,])
+        mail1 = self.providing_stub([IMail])
         doc1 = self.stub()
         self.expect(mail1.message.getSize()).result(300000)
         self.expect(doc1.file.getSize()).result(800000)
@@ -49,7 +49,6 @@ class TestValidators(MockTestCase):
             self.expect(
                 request.get('form.widgets.documents_as_links')).result(['selected', ])
             self.expect(reg_proxy.max_size).result(1)
-
 
         self.replay()
 
