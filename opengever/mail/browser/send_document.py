@@ -135,6 +135,7 @@ class ISendDocumentSchema(Interface):
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
 
+
 # put the validators
 validator.WidgetValidatorDiscriminators(
     DocumentSizeValidator,
