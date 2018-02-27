@@ -881,6 +881,32 @@ Then you can use the ``Builder`` function in your test cases:
 Note that when using the ``OPENGEVER_FUNCTIONAL_TESTING`` Layer the ``Builder`` will automatically do a ``transaction.commit()`` when ``create()`` is called.
 
 
+Unit testing and mock tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+opengever.core has some unit tests (without a testing layer) and some mock test cases (usually
+with the ``COMPONENT_UNIT_TESTING`` testing layer).
+
+When writing unit tests (with no layer), the developer must take into account that there is no
+isolation at all. The developer must make sure that neither the test nor any component used
+in the test leaks, or isolation must be ensured manually.
+The developer should also take into account that components under tests (or their dependencies)
+may be changed in the future.
+
+By leaking we mean any kind of thing changed outside of the test scope. This includes registering
+components (adapters, utilites), changing globals (``setSite``, registering transmogrifier
+blueprints, environment variables) or any other action that can influence other components later.
+
+If a developer cannot guarantee that the test is not leaking he/she shall not write a unit test,
+but use at least the ``COMPONENT_UNIT_TESTING`` layer or write an integration test.
+
+The ``COMPONENT_UNIT_TESTING`` provides a minimal isolation of z3 componentes (adapters,
+utilites) and registers basic adapters such as annotations.
+
+When using mock tests cases, which discourage from in general, always import the
+``MockTestCase`` from ``ftw.testing`` in order to be compatible with ``COMPONENT_UNIT_TESTING``.
+
+
 Testing Inbound Mail
 --------------------
 

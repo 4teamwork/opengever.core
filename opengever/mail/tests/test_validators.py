@@ -4,7 +4,7 @@ from ftw.mail.mail import IMail
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import MockTestCase
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
@@ -17,7 +17,7 @@ from zope.schema.interfaces import RequiredMissing
 
 
 class TestValidators(MockTestCase):
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def test_document_size_validator(self):
 

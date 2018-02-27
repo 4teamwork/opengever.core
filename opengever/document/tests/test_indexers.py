@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import MockTestCase
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
 from opengever.document.indexers import metadata
@@ -161,7 +161,7 @@ class TestDocumentIndexers(FunctionalTestCase):
 
 
 class TestDefaultDocumentIndexer(MockTestCase):
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def test_default_document_indexer_calls_portal_transforms_correctly(self):
         # Sample file conforming to NamedFile interface

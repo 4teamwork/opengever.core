@@ -1,6 +1,6 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.dossier.behaviors.participation import ParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
@@ -9,7 +9,7 @@ from zope.interface import Interface
 
 
 class TestParticipationHanlder(MockTestCase):
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(TestParticipationHanlder, self).setUp()

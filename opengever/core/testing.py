@@ -132,17 +132,19 @@ class PDFConverterAvailability(object):
         pdfconverter_available_lock.release()
 
 
-class AnnotationLayer(ComponentRegistryLayer):
-    """Loads ZML of zope.annotation.
+class ComponentUnitTesting(ComponentRegistryLayer):
+    """Testing layer for unit-testing zope components.
+    This test provides isolation of the component registry and the site hooks
+    as well as minimal components such as annotations.
     """
 
     def setUp(self):
-        super(AnnotationLayer, self).setUp()
+        super(ComponentUnitTesting, self).setUp()
         import zope.annotation
         self.load_zcml_file('configure.zcml', zope.annotation)
 
 
-ANNOTATION_LAYER = AnnotationLayer()
+COMPONENT_UNIT_TESTING = ComponentUnitTesting()
 
 
 class OpengeverFixture(PloneSandboxLayer):

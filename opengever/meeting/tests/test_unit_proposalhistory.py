@@ -1,6 +1,6 @@
 from datetime import datetime
 from ftw.testing import MockTestCase
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.meeting.proposalhistory import ProposalHistory
 from opengever.testing import IntegrationTestCase
@@ -9,7 +9,7 @@ from unittest import TestCase
 
 
 class TestUnitPorposalHistory(MockTestCase):
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(TestUnitPorposalHistory, self).setUp()
