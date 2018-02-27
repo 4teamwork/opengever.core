@@ -44,7 +44,6 @@ from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import provideAdapter
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
@@ -235,8 +234,6 @@ validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator,
     field=ITask['relatedItems'],
     )
-
-provideAdapter(NoCheckedoutDocsValidator)
 
 
 default_responsible_client = widget.ComputedWidgetAttribute(

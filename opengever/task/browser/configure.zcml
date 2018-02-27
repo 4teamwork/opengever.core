@@ -6,6 +6,9 @@
   <include package=".accept" />
   <include package=".delegate" />
 
+  <adapter factory=".complete.NoCheckedoutDocsValidator" />
+  <adapter factory=".assign.NoTeamsInProgressStateValidator" />
+
   <browser:page
       name="task_transition_controller"
       for="opengever.task.task.ITask"

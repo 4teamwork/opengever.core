@@ -29,10 +29,8 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <adapter
-      factory=".move_items.DestinationValidator"
-      provides="z3c.form.interfaces.IValidator"
-      />
+  <adapter factory=".archive.EnddateValidator" />
+  <adapter factory=".move_items.DestinationValidator" />
 
   <adapter
       factory=".statestorage.GeverTabbedviewDictStorage"

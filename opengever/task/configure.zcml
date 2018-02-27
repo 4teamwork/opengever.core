@@ -22,6 +22,8 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <adapter factory=".task.NoCheckedoutDocsValidator" />
+
   <browser:page
       name="task_response_delete"
       for="opengever.task.task.ITask"

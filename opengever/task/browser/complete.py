@@ -37,7 +37,6 @@ from zExceptions import Unauthorized
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
-from zope.component import provideAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import provider
@@ -110,7 +109,6 @@ class ICompleteSuccessorTaskSchema(Schema):
 
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator, field=ICompleteSuccessorTaskSchema['documents'])
-provideAdapter(NoCheckedoutDocsValidator)
 
 
 class CompleteSuccessorTaskForm(Form):

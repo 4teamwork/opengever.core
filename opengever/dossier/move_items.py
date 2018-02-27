@@ -19,7 +19,6 @@ from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope import schema
-from zope.component import provideAdapter
 from zope.interface import Interface, Invalid
 import z3c.form
 
@@ -275,6 +274,3 @@ class DestinationValidator(validator.SimpleFieldValidator):
 
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
-
-
-provideAdapter(DestinationValidator)
