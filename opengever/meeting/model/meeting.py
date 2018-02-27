@@ -402,7 +402,7 @@ class Meeting(Base, SQLFormSupport):
 
     def get_end_time(self):
         if not self.end:
-            return ''
+            return None
 
         return self._get_localized_time(self.end)
 
@@ -420,7 +420,7 @@ class Meeting(Base, SQLFormSupport):
 
     def _get_localized_time(self, date):
         if not date:
-            return ''
+            return None
 
         return api.portal.get_localized_time(datetime=date, time_only=True)
 
