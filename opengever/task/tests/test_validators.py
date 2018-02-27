@@ -1,3 +1,4 @@
+from opengever.core.testing import ANNOTATION_LAYER
 from ftw.testing import MockTestCase
 from opengever.task.browser.complete import ICompleteSuccessorTaskSchema
 from opengever.task.browser.complete import NoCheckedoutDocsValidator
@@ -9,6 +10,7 @@ from zope.schema import getFields
 
 
 class TestTaskCompletion(MockTestCase):
+    layer = ANNOTATION_LAYER
 
     def test_nocheckedout_docs_validator(self):
 

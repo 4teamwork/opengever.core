@@ -1,13 +1,15 @@
+from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.dossier.behaviors.participation import ParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
-from plone.mocktestcase import MockTestCase
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 
 
 class TestParticipationHanlder(MockTestCase):
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
         super(TestParticipationHanlder, self).setUp()

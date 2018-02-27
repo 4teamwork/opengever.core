@@ -1,10 +1,12 @@
 from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.tabbedview.utils import get_containing_document_tab_url
 from zope.interface import Interface
 
 
 class TestContainingDocumentsTabFunction(MockTestCase):
+    layer = ANNOTATION_LAYER
 
     def mock_obj(self, absolute_url=None):
         obj = self.stub()

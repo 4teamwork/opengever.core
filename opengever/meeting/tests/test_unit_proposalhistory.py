@@ -1,4 +1,6 @@
 from datetime import datetime
+from ftw.testing import MockTestCase
+from opengever.core.testing import ANNOTATION_LAYER
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.meeting.proposalhistory import ProposalHistory
 from opengever.testing import IntegrationTestCase
@@ -6,9 +8,11 @@ from persistent.mapping import PersistentMapping
 from unittest import TestCase
 
 
-class TestUnitPorposalHistory(TestCase):
+class TestUnitPorposalHistory(MockTestCase):
+    layer = ANNOTATION_LAYER
 
     def setUp(self):
+        super(TestUnitPorposalHistory, self).setUp()
         self.history = ProposalHistory(context=None)
 
     def test_append_record_raises_when_timestamp_is_not_datetime(self):
