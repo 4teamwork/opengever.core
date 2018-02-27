@@ -21,7 +21,7 @@ from ZODB.POSException import ConflictError
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
-from zope.component import getUtility, provideAdapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -296,9 +296,6 @@ validator.WidgetValidatorDiscriminators(
     EnddateValidator,
     field=IArchiveFormSchema['dossier_enddate'],
 )
-
-
-provideAdapter(EnddateValidator)
 
 
 @implementer(IDossierArchiver)

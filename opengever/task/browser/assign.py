@@ -21,7 +21,6 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from zope import schema
-from zope.component import provideAdapter
 from zope.event import notify
 from zope.interface import Invalid
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -70,8 +69,6 @@ validator.WidgetValidatorDiscriminators(
     NoTeamsInProgressStateValidator,
     field=IAssignSchema['responsible'],
 )
-
-provideAdapter(NoTeamsInProgressStateValidator)
 
 
 class AssignTaskForm(Form):

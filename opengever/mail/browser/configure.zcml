@@ -1,6 +1,10 @@
 <configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:zope="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
+
+  <adapter factory=".send_document.DocumentSizeValidator" />
+  <adapter factory=".send_document.AddressValidator" />
 
   <browser:viewlet
       name="plone.belowcontenttitle.documentbyline"

@@ -35,7 +35,6 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import getUtility
-from zope.component import provideAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
@@ -136,6 +135,7 @@ class ISendDocumentSchema(Interface):
             raise NoMail(_(u'You have to select a intern \
                             or enter a extern mail-addres'))
 
+
 # put the validators
 validator.WidgetValidatorDiscriminators(
     DocumentSizeValidator,
@@ -146,9 +146,6 @@ validator.WidgetValidatorDiscriminators(
     AddressValidator,
     field=ISendDocumentSchema['extern_receiver'],
     )
-
-provideAdapter(DocumentSizeValidator)
-provideAdapter(AddressValidator)
 
 
 class SendDocumentForm(form.Form):
