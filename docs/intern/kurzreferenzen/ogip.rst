@@ -13,6 +13,7 @@ soll.
 1.	Diskussion in `Feedbackforum <https://feedback.onegovgever.ch/>`_ zu gewünschtem Feature
 2.	Auftrag eines neuen OGIPs durch Pascal
 3.	Administration (wird durch Livia erledigt):
+
   - Neue OGIP-Nr. definieren
   - Excel in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip?overlay=9c9b52930dfc43a399d0f71ed0e5963f#documents>`_ aktualisieren
   - Übersicht in `FAQ-Übersicht <https://feedback.onegovgever.ch/faq>`_ in Feedbackforum aktualisieren
@@ -24,17 +25,20 @@ soll.
 4.  Erarbeitung Konzept: Dies geschieht im Zusammenspiel von Projektleiter, Kunde, Entwickler. Die Aufgabenverteilung bei der Erstellung des OGIP ist sehr unterschiedlich, je nach Komplexitätsgrad des gewünschten Features. Wie bereits erwähnt, bitte im Basecamp-to-do jeweils den aktuellen Stand reinschreiben, damit dort eine grobe Übersicht zum Status aller OGIPs ersichtlich ist.
 5.  Prüfung / Review des Konzeptes: Dieser Schritt muss zwingend durch einen GEVER-Entwickler sowie Pascal erfolgen.
 6.  Veröffentlichung Konzept: Reviewtes Konzept an Livia zurückspielen, damit folgende Schritte vorgenommen werden können:
+
   - Konzept in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip#overview>`_ laden
   - Im Feedbackforum auf Version in teamraum verweisen und Feedback einholen. Falls OGIP noch keinen fixen Geldgeber hat, muss via Feedbackforum nach Geldgebern gesucht werden.
   - Je nach Feedback muss Konzept gemäss Inputs feinjustiert werden
 
 7.  Freigabe Konzept durch Community / Geldgeber: Sobald das Konzept auch von extern freigegeben wurde, können folgende Schritte erfolgen:
+
   - Geschätzer Aufwand in Opty hinterlegen für Planung
   - GEVER-Dossier abschliessen
   - Sicherstellen, dass OGIP in GEVER-Roadmap aufgenommen wird
 
 8.  Umsetzung
 9.  Nach Realisierung OGIP:
+
   - In Feedbackforum in ursprünglichem Thema die Realisierung kommunizieren und Thema abschliessen
   - Im Feedbackforum FAQ-Bereich von "in Bearbeitung" nach "Umgesetzt" verschieben
   - Opty schliessen
