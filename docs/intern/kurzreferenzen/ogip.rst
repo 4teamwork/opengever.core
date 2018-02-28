@@ -15,7 +15,7 @@ soll.
 3.	Administration (wird durch Livia erledigt):
 
   - Neue OGIP-Nr. definieren
-  - Excel in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip?overlay=9c9b52930dfc43a399d0f71ed0e5963f#documents>`_ aktualisieren
+  - Excel in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip?overlay=9c9b52930dfc43a399d0f71ed0e5963f#documents>`__ aktualisieren
   - Übersicht in `FAQ-Übersicht <https://feedback.onegovgever.ch/faq>`_ in Feedbackforum aktualisieren
   - Neue `Opty <https://extranet.4teamwork.ch/crm/opportunities>`_ erstellen 
   - Neue Dokumentablage in `OneGov GEVER <https://gever.4teamwork.ch/ordnungssystem/3/2/2/5#dossier>`_ machen und `Vorlage <https://gever.4teamwork.ch/vorlagen/opengever-dossier-templatefolder/document-18818#overview>`_ hinzufügen
@@ -26,7 +26,7 @@ soll.
 5.  Prüfung / Review des Konzeptes: Dieser Schritt muss zwingend durch einen GEVER-Entwickler sowie Pascal erfolgen.
 6.  Veröffentlichung Konzept: Reviewtes Konzept an Livia zurückspielen, damit folgende Schritte vorgenommen werden können:
 
-  - Konzept in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip#overview>`_ laden
+  - Konzept in `teamraum <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip#overview>`__ laden
   - Im Feedbackforum auf Version in teamraum verweisen und Feedback einholen. Falls OGIP noch keinen fixen Geldgeber hat, muss via Feedbackforum nach Geldgebern gesucht werden.
   - Je nach Feedback muss Konzept gemäss Inputs feinjustiert werden
 
