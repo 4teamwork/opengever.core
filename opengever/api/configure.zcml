@@ -60,4 +60,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@move"
+      for="Products.CMFCore.interfaces.IFolderish"
+      factory=".move.Move"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
