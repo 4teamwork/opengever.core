@@ -230,6 +230,11 @@ class CheckinDocumentWithoutComment(BrowserView):
         self.checkin_controller = CheckinController(self.request)
 
     def __call__(self):
+        manager = getMultiAdapter((self.context, self.request),
+                                  ICheckinCheckoutManager)
+        if not manager.is_checkin_without_comment_allowed():
+            checkin_with_comment = CheckinDocuments(self.context, self.request)
+            return checkin_with_comment.__call__()
         self.checkin()
         return self.redirect()
 
@@ -245,6 +250,9 @@ class CheckinDocumentsWithoutComment(CheckinDocumentWithoutComment):
 
     This view is called from a tabbed_view.
     """
+    def __call__(self):
+        self.checkin()
+        return self.redirect()
 
     def checkin(self):
         try:

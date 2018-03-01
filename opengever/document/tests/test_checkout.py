@@ -36,6 +36,45 @@ import jwt
 import transaction
 
 
+class TestCheckinIntegration(IntegrationTestCase):
+
+    def test_manager_can_force_checkin(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        self.assertEqual(self.regular_user.getName(),
+                         manager.get_checked_out_by())
+
+        # Dossier Manager can't force checkin
+        self.login(self.dossier_manager)
+        with self.assertRaises(Unauthorized):
+            manager.checkin(comment="Force checkin")
+
+        # Dossier Responsible can't force checkin
+        self.login(self.dossier_responsible)
+        with self.assertRaises(Unauthorized):
+            manager.checkin(comment="Force checkin")
+
+        # Administrator can force checkin
+        self.login(self.administrator)
+        manager.checkin(comment="Force checkin")
+        self.assertIsNone(manager.get_checked_out_by())
+
+    def test_force_checkin_clears_lock(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+        self.assertFalse(IRefreshableLockable(self.document).locked())
+        IRefreshableLockable(self.document).lock()
+        self.assertTrue(IRefreshableLockable(self.document).locked())
+
+        self.login(self.administrator)
+        manager.checkin(comment="Force checkin")
+        self.assertFalse(IRefreshableLockable(self.document).locked())
+
+
 class TestCheckin(FunctionalTestCase):
     """Tests for the checkin functionality."""
 
@@ -234,6 +273,20 @@ class TestManagerHelpers(FunctionalTestCase):
     def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):  # noqa
         doc = create(Builder('document').checked_out())
         self.assertTrue(self.get_manager(doc).is_file_upload_allowed())
+
+    def test_checkin_permissions_when_document_is_checked_out_by_other_user(self):
+        doc = create(Builder('document').checked_out_by('hugo.boss'))
+        self.assertFalse(self.get_manager(doc).is_checkin_allowed())
+        self.grant('Manager')
+        self.assertTrue(self.get_manager(doc).is_checkin_allowed())
+
+        other_user = create(Builder('user').named("Other", "User")
+                            .with_roles("Member"))
+        self.login(other_user.id)
+        self.assertFalse(self.get_manager(doc).is_checkin_allowed())
+        doc.aq_parent.manage_permission("opengever.document: Force Checkin",
+                                        roles=["Member"], acquire=True)
+        self.assertTrue(self.get_manager(doc).is_checkin_allowed())
 
 
 class TestCheckinCheckoutManager(FunctionalTestCase):

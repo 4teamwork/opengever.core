@@ -28,7 +28,7 @@
             office_connector_editable view/is_office_connector_editable;
             copy_download_available view/is_download_copy_available;
             attach_to_email_available view/is_attach_to_email_available;
-            checked_out_by_current_user view/is_checked_out_by_current_user;
+            is_checkin_allowed view/_is_checkin_allowed;
             is_cancel_allowed view/is_checkout_cancel_available;
             new_external_edit_enabled context/@@officeconnector_settings/is_checkout_enabled">
 
@@ -76,7 +76,7 @@
                 </span>
             </tal:checkout_and_edit_disabled>
 
-            <tal:checked_out tal:condition="checked_out_by_current_user">
+            <tal:checked_out tal:condition="is_checkin_allowed">
               <tal:checkin_without_comment tal:condition="not: view/is_locked">
                 <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
                     Checkin without comment

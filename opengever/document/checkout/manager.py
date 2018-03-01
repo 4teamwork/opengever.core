@@ -95,6 +95,11 @@ class CheckinCheckoutManager(object):
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
 
+    def is_checkin_without_comment_allowed(self):
+        if self.is_checkin_allowed() and not self.is_locked():
+            return True
+        return False
+
     def is_checkin_allowed(self):
         """Checks whether checkin is allowed for the current user on the
         adapted document.
@@ -119,12 +124,10 @@ class CheckinCheckoutManager(object):
         if not self.check_permission('opengever.document: Checkin'):
             return False
 
-        # is the user either the one who owns the checkout or
-        # a manager?
-        is_manager = self.check_permission('Manage portal')
+        # is the user the one who owns the checkout
         current_user_id = getSecurityManager().getUser().getId()
 
-        return bool(self.get_checked_out_by() == current_user_id or is_manager)
+        return self.get_checked_out_by() == current_user_id
 
     def checkin(self, comment=''):
         """Checkin the adapted document, using the `comment` for the

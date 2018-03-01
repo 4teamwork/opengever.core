@@ -170,6 +170,10 @@ class ActionButtonRendererMixin(object):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
 
+        if not manager:
+            # This is probably a mail
+            return False
+
         return manager.is_checkin_allowed()
 
     def is_checkout_cancel_available(self):
