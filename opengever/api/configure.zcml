@@ -12,6 +12,9 @@
   <adapter factory=".summary.GeverJSONSummarySerializer" />
   <adapter factory=".fields.ChoiceFieldDeserializer" />
 
+  <adapter factory=".dossier.SerializeDossierToJson" />
+  <adapter factory=".document.SerializeDocumentToJson" />
+
   <plone:service
       method="POST"
       name="@checkout"
