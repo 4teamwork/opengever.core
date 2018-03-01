@@ -2,7 +2,6 @@
 """A concurrent wrapper for timing xmltestrunner tests for opengever.core."""
 from __future__ import print_function
 from argparse import ArgumentParser
-from collections import OrderedDict
 from fnmatch import fnmatch
 from logging import DEBUG
 from logging import Formatter
@@ -10,6 +9,7 @@ from logging import getLogger
 from logging import INFO
 from logging import StreamHandler
 from logging.handlers import MemoryHandler
+from math import ceil
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 from os import environ
@@ -28,6 +28,32 @@ from time import sleep
 from time import time
 import locale
 import sys
+
+
+# From https://gist.github.com/moshekaplan/4678925
+def chunks(chunkable, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(chunkable), n):
+        yield tuple(chunkable[i:i + n])
+
+
+def split_into_batches(
+        iterable,
+        chunk_count=None,
+        minimum_chunk_count=3,
+        minimum_chunk_size=8,
+        optimal_chunk_size=64,
+    ):
+    length = len(iterable)
+
+    if length / float(minimum_chunk_count) < minimum_chunk_size:
+        return (iterable, )
+
+    if not chunk_count:
+        chunk_count = max(length / optimal_chunk_size, minimum_chunk_count)
+    chunksize = int(ceil(length / float(chunk_count)))
+
+    return chunks(iterable, chunksize)
 
 
 def humanize_time(seconds):
@@ -84,19 +110,31 @@ def get_concurrency():
     return concurrency
 
 
-def discover_test_layers():
+def discover_tests(layers=None, modules=None):
     logger.info('Discovering test classes')
 
     test_classes_per_layer = {}
     current_layer = None
 
+    arguments = [
+        'bin/test',
+        '--list-tests',
+        ]
     output_encoding = sys.stdout.encoding
     if output_encoding is None:
         output_encoding = locale.getpreferredencoding()
 
-    test_discovery = check_output(
-        ('bin/test', '--list-tests', ),
-        ).decode(output_encoding).splitlines()
+    if layers:
+        for layer in layers:
+            arguments.append('--layer')
+            arguments.append(layer)
+
+    if modules:
+        for module in modules:
+            arguments.append('-m')
+            arguments.append(module)
+
+    test_discovery = check_output(arguments).decode(output_encoding).splitlines()
 
     for result in test_discovery:
         is_layer_header = result.startswith('Listing')
@@ -114,60 +152,32 @@ def discover_test_layers():
 
     # Prune to unique test classes per layer
     return {
-        layer: tuple(sorted(set(tests)))
+        layer: sorted(set(tests))
         for layer, tests in test_classes_per_layer.iteritems()
         }
 
 
-def create_test_run_params():
-    test_classes_per_layer = discover_test_layers()
+def create_test_run_params(layers=None, modules=None):
+    test_run_params = []
 
-    # Ordered by hand for a sensible run order
-    # The order is used below for ordering the test run
-    layers_to_split = OrderedDict()
-    layers_to_split[u'opengever.core.testing.MeetingLayer'] = 1
-    layers_to_split[u'opengever.core.testing.opengever.core:integration'] = 2
-    layers_to_split[u'opengever.core.testing.opengever.core:functional'] = 8
+    for layer, test_classes in discover_tests(layers, modules).iteritems():
+        layersize = len(test_classes)
+        batches = tuple(split_into_batches(test_classes))
+        batches_count = len(batches)
 
-    # The common grouping for all the small / quick layers
-    test_run_params = [{
-        'layers': [],
-        'test_classes': [],
-        'batch': '1 / 1',
-        }]
+        for i, batch in enumerate(batches):
+            n = i + 1
 
-    for layer, test_classes in test_classes_per_layer.iteritems():
-        if layer in layers_to_split:
-            n = layers_to_split.get(layer)
-            test_class_groups = [test_classes[i::n] for i in range(n)]
-            test_class_group_count = len(test_class_groups)
-            for i, test_class_group in enumerate(test_class_groups):
-                test_run_params.append({
-                    'layers': [layer],
-                    'test_classes': test_class_group,
-                    'batch': '{} / {}'.format(i + 1, test_class_group_count)
+            test_run_params.append({
+                'layers': (layer, ),
+                'test_classes': batch,
+                'batch': '{} / {}'.format(n, batches_count),
+                'count': len(batch),
+                'port': n,
+                'layersize': layersize,
                 })
-        else:
-            test_run_params[0].get('layers').append(layer)
-            test_run_params[0].get('test_classes').extend(test_classes)
 
-    # Cement all the grouped layers
-    for i, params in enumerate(test_run_params):
-        params['layers'] = tuple(sorted(set(params['layers'])))
-        params['test_classes'] = tuple(sorted(set(params['test_classes'])))
-        params['port'] = i + 1
-
-    # Make sure heavy stuff runs first - add light stuff on top
-    for priority_layer in layers_to_split:
-        for param in test_run_params:
-            if priority_layer in param.get('layers'):
-                test_run_params.insert(
-                    0,
-                    test_run_params.pop(test_run_params.index(param)),
-                    )
-
-    # Cement the test batches - reverse for proper ordering
-    return tuple(reversed(test_run_params))
+    return sorted(test_run_params, key=lambda batch: -batch.get('layersize'))
 
 
 def remove_bytecode_files(directory_path):
@@ -193,6 +203,7 @@ def run_tests(test_run_params):
     layers = test_run_params.get('layers')
     test_classes = test_run_params.get('test_classes')
     batch = test_run_params.get('batch')
+    count = test_run_params.get('count')
     port = test_run_params.get('port')
 
     if layers:
@@ -210,12 +221,13 @@ def run_tests(test_run_params):
     logger.debug(
         'Start: %s - %d test classes - batch %s',
         printable_layers,
-        len(test_classes),
+        count,
         batch,
         )
 
     env = environ.copy()
     env['ZSERVER_PORT'] = env.get('PORT{}'.format(port), str(55000 + port))
+    env['GEVER_CACHE_TEST_DB'] = 'false'
 
     start = time()
 
@@ -245,7 +257,7 @@ def run_tests(test_run_params):
     logger.debug(
         'Done : %s - %d test classes - batch %s in %s at %.2fs / test class',
         printable_layers,
-        len(test_classes),
+        count,
         batch,
         humanize_time(runtime),
         runtime / len(test_classes),
@@ -321,7 +333,7 @@ def handle_results(results):
     return all(r is True for r in success)
 
 
-def main():
+def main(layers=None, modules=None):
     """Discovers and times tests in parallel via multiprocessing.Pool()."""
     # Remove *.py[co] files to avoid race conditions with parallel workers
     # stepping on each other's toes when trying to clean up stale bytecode.
@@ -332,13 +344,14 @@ def main():
     remove_bytecode_files(OPENGEVER_PATH)
     remove_bytecode_files('src')
 
-    test_run_params = create_test_run_params()
+    test_run_params = create_test_run_params(layers, modules)
 
     start = time()
 
     logger.info('Running tests')
 
     pool = Pool(CONCURRENCY)
+
     results = [
         pool.apply_async(run_tests, (params, ))
         for params in test_run_params
@@ -373,6 +386,20 @@ if __name__ == '__main__':
 
     # CLI arguments
     parser = ArgumentParser(description='Run tests in parallel.')
+
+    parser.add_argument(
+        '-l',
+        '--layer',
+        help='Greedy match test layer name.',
+        action='append',
+        )
+
+    parser.add_argument(
+        '-m',
+        '--module',
+        help='Greedy match module name.',
+        action='append',
+        )
 
     parser.add_argument(
         '-d',
@@ -428,7 +455,7 @@ if __name__ == '__main__':
 
     setup_termination()
 
-    if main():
+    if main(layers=args.layer, modules=args.module):
         exit(0)
 
     exit(1)
