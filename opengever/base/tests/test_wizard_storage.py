@@ -3,7 +3,7 @@ from datetime import timedelta
 from ftw.testing import MockTestCase
 from opengever.base.browser.wizard import storage
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from persistent.dict import PersistentDict
 from zope.annotation.interfaces import IAttributeAnnotatable
 from zope.component import getSiteManager
@@ -15,7 +15,7 @@ import AccessControl
 
 class TestAcceptTaskStorageManager(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(TestAcceptTaskStorageManager, self).setUp()

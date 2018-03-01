@@ -1,21 +1,25 @@
+from ftw.testing import MockTestCase
 from mocker import ANY
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.dossier.behaviors.participation import ParticipationHandler
 from opengever.dossier.interfaces import IParticipationCreated
 from opengever.dossier.interfaces import IParticipationRemoved
-from plone.mocktestcase import MockTestCase
 from zope.annotation.interfaces import IAnnotations
 from zope.interface import Interface
 
 
 class TestParticipationHanlder(MockTestCase):
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(TestParticipationHanlder, self).setUp()
         self.context = self.mocker.mock()
 
-        #annotation mock
         annonation_storage = {}
-        annotation_adapter = lambda obj: annonation_storage
+
+        def annotation_adapter(obj):
+            return annonation_storage
+
         self.mock_adapter(annotation_adapter, IAnnotations, [Interface, ])
 
         created_handler = self.mocker.mock()

@@ -3,7 +3,7 @@ from ftw.testing import MockTestCase
 from mocker import ANY
 from opengever.task.browser.related_documents import \
     RelatedDocumentsCatalogTableSource
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from plone.uuid.interfaces import IUUID
 from zope.interface import Interface
 from ftw.table.catalog_source import default_custom_sort
@@ -11,7 +11,7 @@ from ftw.table.catalog_source import default_custom_sort
 
 class ExtendQueryWithOrdering(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(ExtendQueryWithOrdering, self).setUp()
@@ -220,7 +220,7 @@ class ExtendQueryWithOrdering(MockTestCase):
 
 class ExtendQueryWithTextfilterTests(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(ExtendQueryWithTextfilterTests, self).setUp()
@@ -296,7 +296,7 @@ class ExtendQueryWithTextfilterTests(MockTestCase):
 
 class GetRelatedDocumentsTests(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(GetRelatedDocumentsTests, self).setUp()
@@ -397,7 +397,7 @@ class GetRelatedDocumentsTests(MockTestCase):
 
 class BuildQueryTests(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(BuildQueryTests, self).setUp()

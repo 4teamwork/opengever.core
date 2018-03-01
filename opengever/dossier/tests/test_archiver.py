@@ -5,7 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import MockTestCase
-from opengever.core.testing import ANNOTATION_LAYER
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator
@@ -105,7 +105,7 @@ class TestArchiver(IntegrationTestCase):
 
 class TestArchiving(MockTestCase):
 
-    layer = ANNOTATION_LAYER
+    layer = COMPONENT_UNIT_TESTING
 
     def setUp(self):
         super(TestArchiving, self).setUp()

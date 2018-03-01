@@ -4,6 +4,7 @@ from ftw.mail.mail import IMail
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import MockTestCase
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.mail.interfaces import ISendDocumentConf
 from opengever.mail.validators import AddressValidator
 from opengever.mail.validators import DocumentSizeValidator
@@ -16,12 +17,13 @@ from zope.schema.interfaces import RequiredMissing
 
 
 class TestValidators(MockTestCase):
+    layer = COMPONENT_UNIT_TESTING
 
     def test_document_size_validator(self):
 
         context = self.stub()
         request = self.stub()
-        mail1 = self.providing_stub([IMail,])
+        mail1 = self.providing_stub([IMail])
         doc1 = self.stub()
         self.expect(mail1.message.getSize()).result(300000)
         self.expect(doc1.file.getSize()).result(800000)
@@ -47,7 +49,6 @@ class TestValidators(MockTestCase):
             self.expect(
                 request.get('form.widgets.documents_as_links')).result(['selected', ])
             self.expect(reg_proxy.max_size).result(1)
-
 
         self.replay()
 
