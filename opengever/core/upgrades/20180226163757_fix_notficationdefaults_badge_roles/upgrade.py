@@ -1,14 +1,16 @@
-from opengever.activity.model import NotificationDefault
-from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
-from opengever.base.model import create_session
-from sqlalchemy.orm.exc import NoResultFound
+from opengever.core.upgrade import SchemaMigration
+from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import table
+import json
 
+# copied from opengever.activity.roles
+TASK_RESPONSIBLE_ROLE = 'task_responsible'
+TASK_ISSUER_ROLE = 'task_issuer'
 
+# copied from opengever.activity
 DEFAULT_SETTINGS = [
     {'kind': 'task-added',
-     'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
+     'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-transition-cancelled-open',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-transition-delegate',
@@ -32,8 +34,7 @@ DEFAULT_SETTINGS = [
     {'kind': 'task-commented',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-transition-reassign',
-     'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE],
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE]},
+     'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-transition-rejected-open',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-transition-resolved-in-progress',
@@ -41,7 +42,6 @@ DEFAULT_SETTINGS = [
     {'kind': 'task-transition-resolved-tested-and-closed',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'forwarding-added',
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'forwarding-transition-accept',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
@@ -50,26 +50,38 @@ DEFAULT_SETTINGS = [
     {'kind': 'forwarding-transition-close',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'forwarding-transition-reassign',
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'forwarding-transition-reassign-refused',
-     'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
-    {'kind': 'forwarding-transition-refuse', 'mail_notification': False,
+    {'kind': 'forwarding-transition-refuse',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
 ]
 
 
-def insert_notification_defaults(site):
-    session = create_session()
-    for item in DEFAULT_SETTINGS:
-        try:
-            setting = NotificationDefault.query.by_kind(item.get('kind')).one()
-        except NoResultFound:
-            setting = NotificationDefault(kind=item.get('kind'))
-            session.add(setting)
+class FixNotficationdefaultsBadgeRoles(SchemaMigration):
+    """Fix Notficationdefaults badge roles.
 
-        setattr(setting, 'mail_notification_roles',
-                item.get('mail_notification_roles', []))
-        setattr(setting, 'badge_notification_roles',
-                item.get('badge_notification_roles', []))
+    The `insert_notification_defaults` profile hook, has been created wrong
+    entries for the badge_notification_roles column. This Upgradestep fix them.
+    """
+
+    def migrate(self):
+        defaults_table = table(
+            "notification_defaults",
+            column("id"),
+            column("kind"),
+            column("badge_notification_roles"),
+        )
+
+        defaults = {item.get('kind'): item.get('badge_notification_roles')
+                    for item in DEFAULT_SETTINGS}
+
+        settings = self.connection.execute(defaults_table.select()).fetchall()
+        for setting in settings:
+            if setting.badge_notification_roles is None:
+                roles = defaults.get(setting.kind, [])
+                self.execute(
+                    defaults_table.update()
+                    .values(badge_notification_roles=json.dumps(roles))
+                    .where(defaults_table.columns.id == setting.id)
+                )
