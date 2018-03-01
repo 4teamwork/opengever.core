@@ -111,7 +111,6 @@ DOSSIER_MISSING_VALUES = {
     'filing_prefix': None,
     'former_reference_number': None,
     'number_of_containers': None,
-    'reference_number': None,
     'responsible': None,
     'retention_period_annotation': None,
     'temporary_former_reference_number': None,

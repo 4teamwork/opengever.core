@@ -270,6 +270,10 @@ def set_default_values(content, container, values):
     """
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
+
+            if field.readonly:
+                continue
+
             if name in values:
                 # Only set default if no *actual* value was supplied as
                 # an argument to object construction

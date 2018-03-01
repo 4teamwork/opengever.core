@@ -179,9 +179,11 @@ class IDossier(model.Schema):
     )
 
     form.widget(reference_number=referenceNumberWidgetFactory)
+    form.mode(reference_number='display')
     reference_number = schema.TextLine(
         title=_(u'label_reference_number', default=u'Reference Number'),
         required=False,
+        readonly=True,
     )
 
     @invariant
