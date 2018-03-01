@@ -549,7 +549,7 @@ msgstr ""
 #: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "button_submit_attachments"
-msgstr "Soumettre des appendices"
+msgstr "Soumettre les documents additionnels"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/model/proposal.py
@@ -912,7 +912,7 @@ msgstr ""
 #: ./opengever/meeting/browser/submitdocuments.py
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_attachments"
-msgstr "Appendices"
+msgstr "Pièces jointes"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/excerpt.py

@@ -73,7 +73,7 @@ msgstr "Copier"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Cover (PDF)"
-msgstr "Couvertrure (PDF)"
+msgstr "Couverture (PDF)"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Disposition"
