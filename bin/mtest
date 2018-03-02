@@ -314,12 +314,14 @@ def handle_results(results):
                 log_output.info('')
                 log_output.info(result.get('params'))
                 log_output.info('')
-                log_output.info('STDERR')
-                log_output.info('')
-                log_output.info(stderr)
-                log_output.info('')
-                if returncode:
+
+                if stderr:
+                    log_output.info('STDERR')
                     log_output.info('')
+                    log_output.info(stderr)
+                    log_output.info('')
+
+                if returncode:
                     log_output.info('STDOUT')
                     log_output.info('')
                     log_output.info(stdout)
