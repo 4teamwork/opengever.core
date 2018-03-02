@@ -244,6 +244,7 @@ def run_tests(test_run_params):
     runtime = time() - start
 
     result = {
+        'params': ' '.join(params),
         'layers': layers,
         'test_classes': test_classes,
         'batch': batch,
@@ -309,17 +310,17 @@ def handle_results(results):
             else:
                 success.append(False)
                 log_output.info('')
-                log_output.info('STDERR')
+                log_output.info('Command line')
                 log_output.info('')
-                log_output.info(result.get('layers'))
+                log_output.info(result.get('params'))
+                log_output.info('')
+                log_output.info('STDERR')
                 log_output.info('')
                 log_output.info(stderr)
                 log_output.info('')
                 if returncode:
                     log_output.info('')
                     log_output.info('STDOUT')
-                    log_output.info('')
-                    log_output.info(result.get('layers'))
                     log_output.info('')
                     log_output.info(stdout)
                     log_output.info('')
