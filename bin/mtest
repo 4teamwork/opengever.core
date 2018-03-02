@@ -217,12 +217,14 @@ def run_tests(test_run_params):
             params.append(test_class)
 
     printable_layers = ', '.join(layers)
+    printable_params = ' '.join(params)
 
     logger.debug(
-        'Start: %s - %d test classes - batch %s',
+        'Start: %s - %d test classes - batch %s - commandline: %s',
         printable_layers,
         count,
         batch,
+        printable_params,
         )
 
     env = environ.copy()
@@ -244,6 +246,7 @@ def run_tests(test_run_params):
     runtime = time() - start
 
     result = {
+        'params': printable_params,
         'layers': layers,
         'test_classes': test_classes,
         'batch': batch,
@@ -255,12 +258,13 @@ def run_tests(test_run_params):
         }
 
     logger.debug(
-        'Done : %s - %d test classes - batch %s in %s at %.2fs / test class',
+        'Done : %s - %d test classes - batch %s in %s at %.2fs / test class - commandline: %s',
         printable_layers,
         count,
         batch,
         humanize_time(runtime),
         runtime / len(test_classes),
+        printable_params,
         )
 
     return result
@@ -309,17 +313,19 @@ def handle_results(results):
             else:
                 success.append(False)
                 log_output.info('')
-                log_output.info('STDERR')
+                log_output.info('Command line')
                 log_output.info('')
-                log_output.info(result.get('layers'))
+                log_output.info(result.get('params'))
                 log_output.info('')
-                log_output.info(stderr)
-                log_output.info('')
+
+                if stderr:
+                    log_output.info('STDERR')
+                    log_output.info('')
+                    log_output.info(stderr)
+                    log_output.info('')
+
                 if returncode:
-                    log_output.info('')
                     log_output.info('STDOUT')
-                    log_output.info('')
-                    log_output.info(result.get('layers'))
                     log_output.info('')
                     log_output.info(stdout)
                     log_output.info('')
