@@ -217,12 +217,14 @@ def run_tests(test_run_params):
             params.append(test_class)
 
     printable_layers = ', '.join(layers)
+    printable_params = ' '.join(params)
 
     logger.debug(
-        'Start: %s - %d test classes - batch %s',
+        'Start: %s - %d test classes - batch %s - commandline: %s',
         printable_layers,
         count,
         batch,
+        printable_params,
         )
 
     env = environ.copy()
@@ -244,7 +246,7 @@ def run_tests(test_run_params):
     runtime = time() - start
 
     result = {
-        'params': ' '.join(params),
+        'params': printable_params,
         'layers': layers,
         'test_classes': test_classes,
         'batch': batch,
@@ -256,12 +258,13 @@ def run_tests(test_run_params):
         }
 
     logger.debug(
-        'Done : %s - %d test classes - batch %s in %s at %.2fs / test class',
+        'Done : %s - %d test classes - batch %s in %s at %.2fs / test class - commandline: %s',
         printable_layers,
         count,
         batch,
         humanize_time(runtime),
         runtime / len(test_classes),
+        printable_params,
         )
 
     return result
