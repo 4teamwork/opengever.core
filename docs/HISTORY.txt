@@ -9,6 +9,7 @@ Changelog
 - Fix NotificationDefault hook. [phgross]
 - Fix deleting agenda items for non-word agenda items. [deiferni]
 - Improve checking for truthy dates in sablon template data. [deiferni]
+- Fix REST API @move endpoint: Do not require delete permission when moving objects. [buchi]
 
 2018.1.3 (2018-02-20)
 ---------------------
