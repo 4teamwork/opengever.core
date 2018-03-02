@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2018-03-02
+----------
+
+- Kapitel "Konfiguration" hinzugefügt
+
 2017-10-09
 ----------
 

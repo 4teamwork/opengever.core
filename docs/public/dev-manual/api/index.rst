@@ -19,6 +19,7 @@ Inhalt:
    scanin.rst
    content_types.rst
    metadata.rst
+   config.rst
    examples/index.rst
    docs_changelog.rst
 
