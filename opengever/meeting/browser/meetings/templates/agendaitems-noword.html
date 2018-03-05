@@ -4,7 +4,7 @@
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
     <td class="number">{{number}}</td>
     <td class="title">
-      <span>{{{link}}}</span>
+      <span class="proposal_title">{{{link}}}</span>
       {{#if has_proposal}}
       <ul class="attachements">
         {{#each documents}}
@@ -38,8 +38,13 @@
     <td class="actions">
       <div class="button-group">
         {{#if ../agendalist_editable}}
-        <a href="{{edit_link}}" title="%(label_edit_action)s" class="button edit-agenda-item"></a>
-        <a href="{{delete_link}}" title="%(label_delete_action)s" class="button delete-agenda-item"></a>
+          {{#if paragraph}}
+            <a href="{{edit_link}}" title="%(action_rename_agenda_paragraph)s" class="button edit-agenda-item"></a>
+            <a href="{{delete_link}}" title="%(action_remove_agenda_paragraph)s" class="button delete-agenda-item"></a>
+          {{else}}
+            <a href="{{edit_link}}" title="%(action_rename_agenda_item)s" class="button edit-agenda-item"></a>
+            <a href="{{delete_link}}" title="%(action_remove_agenda_item)s" class="button delete-agenda-item"></a>
+          {{/if}}
         {{/if}}
         {{#if decide_link}}
         <a href="{{decide_link}}" title="%(label_decide_action)s" class="button decide-agenda-item"><span></span></a>

@@ -263,7 +263,8 @@ class AgendaItemsView(BrowserView):
             if item.is_revise_possible():
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
-
+            if item.is_paragraph:
+                data['paragraph'] = True
             if is_word_meeting_implementation_enabled():
                 document = item.resolve_document()
                 if document:

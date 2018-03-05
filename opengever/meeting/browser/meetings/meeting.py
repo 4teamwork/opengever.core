@@ -362,11 +362,14 @@ class MeetingView(BrowserView):
             translations=(
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
-                _('label_edit_action', default='edit title'),
-                _('label_delete_action', default='remove this agenda item'),
                 _('label_decide_action', default='Decide this agenda item'),
                 _('label_reopen_action', default='Reopen this agenda item'),
                 _('label_revise_action', default='Revise this agenda item'),
+                _('action_rename_agenda_item', default='Rename agenda item'),
+                _('action_rename_agenda_paragraph', default='Rename paragraph'),
+                _('action_remove_agenda_item', default='Remove agenda item'),
+                _('action_remove_agenda_paragraph', default='Remove paragraph'),
+
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
 
@@ -386,7 +389,9 @@ class MeetingView(BrowserView):
                 _('action_decide', default='Decide'),
                 _('action_generate_excerpt', default='Generate excerpt'),
                 _('action_rename_agenda_item', default='Rename agenda item'),
+                _('action_rename_agenda_paragraph', default='Rename paragraph'),
                 _('action_remove_agenda_item', default='Remove agenda item'),
+                _('action_remove_agenda_paragraph', default='Remove paragraph'),
                 _('action_reopen', default='Reopen agenda item'),
                 _('action_return_excerpt', default='Return to proposal'),
                 _('help_return_excerpt',

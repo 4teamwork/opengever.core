@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-25 08:39+0000\n"
+"POT-Creation-Date: 2018-03-06 10:53+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,11 +136,6 @@ msgstr "Das Protokoll wird beim erneuten Sitzungsabschluss nicht automatisch akt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Delete"
 msgstr "Löschen"
-
-#: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
-msgid "Delete proposal"
-msgstr "Traktandum streichen"
 
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
 msgid "Discard"
@@ -433,10 +428,20 @@ msgstr "Protokollauszug generieren"
 msgid "action_remove_agenda_item"
 msgstr "Traktandum streichen"
 
+#. Default: "Remove paragraph"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_remove_agenda_paragraph"
+msgstr "Zwischentitel streichen"
+
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_item"
 msgstr "Traktandum umbenennen"
+
+#. Default: "Rename paragraph"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_rename_agenda_paragraph"
+msgstr "Zwischentitel neu setzen"
 
 #. Default: "Reopen agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1046,16 +1051,11 @@ msgstr "Beschlussentwurf"
 msgid "label_decision_number"
 msgstr "Beschlussnummer"
 
-#. Default: "remove this agenda item"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_delete_action"
-msgstr "Traktandum entfernen"
-
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_delete_agenda_item_confirm_text"
-msgstr "Wollen Sie dieses Traktandum wirklich streichen?"
+msgstr "Wollen Sie dieses Element wirklich streichen?"
 
 #. Default: "Disclose to"
 #: ./opengever/meeting/browser/meetings/protocol.py
@@ -1094,11 +1094,6 @@ msgstr "Inhaltsverzeichnis nach Ordnungsposition"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_edit"
 msgstr "Bearbeiten"
-
-#. Default: "edit title"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "label_edit_action"
-msgstr "Titel bearbeiten"
 
 #. Default: "Edit after creation"
 #: ./opengever/meeting/browser/proposalforms.py
@@ -1866,10 +1861,16 @@ msgstr "Zeit"
 msgid "title_ad_hoc_document"
 msgstr "Traktandum ${title}"
 
+#. Default: "Delete proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "title_confirm_delete_agenda_item"
+msgstr "Element streichen"
+
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "title_rename_agenda_item"
-msgstr "Traktandum umbenennen"
+msgstr "Neuer Titel setzen"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py
