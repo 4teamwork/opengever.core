@@ -67,83 +67,16 @@ Rolle zugewiesen. Die Beteiligung wird schliesslich mit *Erstellen* erstellt.
 
 |img-dossiers-15|
 
-Ein Dossier abschliessen und ablegen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ein Dossier abschliessen
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Die Möglichkeit, Dossiers abzuschliessen ist je nach Konfiguration allen
-Benutzern zugänglich oder aber nur für
-speziell berechtigte Sachbearbeiter/innen. Ansonsten erscheint
-diese Aktion nicht.
+Benutzern zugänglich oder aber nur für speziell berechtigte Sachbearbeiter.
+Im zweiten Fall erscheint diese Aktion nur den speziell berechtigten.
 
-Wählen Sie die Aktion *Abschliessen*:
+Wählen Sie dazu einfach die Aktion *Abschliessen* um das Dossier abzuschliessen.
 
 |img-dossiers-16|
-
-Darauf erscheint folgendes Formular:
-
-1. **Ablage-Präfix:** Im Pulldownmenü kann eine Ablage ausgewählt
-   werden, z.B. Amt, Leitung, Direktionssekretariat, Regierungsrat.
-
-2. **Ende:** OneGov GEVER schlägt als Ende-Datum das Datum des jüngsten
-   Dokuments im Dossier vor (sofern Dokumente im Dossier vorhanden
-   sind). Dieses Datum kann mit dem Kalender angepasst werden. (Das
-   Ende-Datum kann auch direkt im Geschäftsdossier über Bearbeiten
-   eingetragen werden.)
-
-3. **Ablage-Jahr:** Das Ablage-Jahr entspricht dem Jahr, in dem das
-   jüngste Dokument des Dossiers erstellt wurde. OneGov GEVER schlägt
-   das Ablagejahr automatisch vor, sofern im Dossier Dokumente vorhanden
-   sind; ansonsten muss es manuell eingetragen werden.
-
-4. **Aktion:** Beim Abschliessen kann zwischen zwei Aktionen gewählt
-   werden:
-
-   -  Abschliessen und Ablagenummer vergeben: Beim Speichern wird das
-      Dossier in den Status Abgeschlossen gesetzt und die Ablagenummer
-      automatisch vergeben. Pro Ablage wird eine eigene Nummernserie
-      geführt.
-
-      *Aufbau der Ablagenummer:*
-
-      Mandantenbezeichnung (1), Ablage (2), Ablagejahr (3), Laufnummer (4)
-
-   -  Nur abschliessen (keine Ablagenummer vergeben): Das Dossier wird in
-      den Status Abgeschlossen gesetzt, ohne dass eine Ablagenummer
-      vergeben wird.
-
-Mit dem Speichern werden die Informationen in der Byline angepasst:
-
-Regeln für den Abschluss eines Dossiers:
-
-- Abschluss eines elektronischen Dossiers, wenn kein physisches Dossier
-  vorhanden ist:
-
-  1. Aktion "Abschliessen" wählen
-
-  2. Feld Ablage:
-     Direktionssekretariate: Ablage Direktionssekretariat oder
-     Regierungsrat setzen (Ablagejahr stehen lassen). Die Vergabe der
-     Ablage ist notwendig, damit man unterscheiden kann, ob es sich um
-     ein Regierungsrats- oder ein Direktionsgeschäft handelt.
-
-     Amtsstellen: Ablage ausfüllen, wenn zur Unterscheidung der
-     Geschäftsart sinnvoll.
-
-  3. Ablagejahr stehen lassen
-
-  4. Keine Ablagenummer vergeben (Aktion "Nur abschliessen, keine
-     Ablagenummer vergeben")
-
-- Abschluss eines elektronischen Dossiers, wenn ergänzend oder
-  massgebend ein physisches Dossier vorhanden ist:
-
-  1. Aktion "Abschliessen" wählen
-
-  2. Ablage und Ablagenummer vergeben, Vergabe des Ablagejahres bestätigen
-     bzw. korrigieren
-
-  3. Physisches Dossier entsprechend ablegen
-
 
 Ein Dossier wieder eröffnen und wieder ablegen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
