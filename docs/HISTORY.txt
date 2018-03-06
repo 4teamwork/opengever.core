@@ -13,6 +13,7 @@ Changelog
 - Add REST API endpoint for querying configuration settings. [buchi]
 - Make sure notification-default for the forwarding-added kind exists. [phgross]
 - Fix reference number in REST API GET. [buchi]
+- Add reference number to REST API summary. [buchi]
 
 
 2018.1.3 (2018-02-20)

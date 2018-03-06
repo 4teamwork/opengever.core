@@ -1,5 +1,6 @@
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.utils import get_preferred_language_code
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.interfaces import ISerializeToJsonSummary
@@ -87,6 +88,12 @@ def filename(obj):
     return info.value.filename
 
 
+def reference_number(obj):
+    refnum = IReferenceNumber(obj.getObject(), None)
+    if refnum:
+        return refnum.get_number()
+
+
 FIELD_ACCESSORS = {
     '@type': 'PortalType',
     'created': 'created',
@@ -96,6 +103,7 @@ FIELD_ACCESSORS = {
     'filesize': filesize,
     'mimetype': 'getContentType',
     'modified': 'modified',
+    'reference_number': reference_number,
     'review_state': 'review_state',
     'title': 'Title',
 }
