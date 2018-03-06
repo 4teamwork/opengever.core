@@ -173,7 +173,7 @@ class AgendaItemsView(BrowserView):
             return []
 
         docs = IContentListing(item.proposal.resolve_submitted_documents())
-        return [doc.render_link() for doc in docs]
+        return [doc.render_link() for doc in sorted(docs, key=lambda doc: doc.title_or_id().lower())]
 
     def _serialize_submitted_excerpt(self, item):
         if not item.has_proposal:
