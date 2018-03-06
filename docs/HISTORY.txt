@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.1.4 (unreleased)
+2018.1.4 (2018-03-06)
 ---------------------
 
 - Detect and fix broken references to ICreatorAware in the relation catalog. [deiferni]
