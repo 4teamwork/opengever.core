@@ -5,6 +5,7 @@ Changelog
 2018.1.4 (unreleased)
 ---------------------
 
+- Detect and fix broken references to ICreatorAware in the relation catalog. [deiferni]
 - Remove all uses of enableHTTPCompression in GEVER. [lgraf]
 - Fix NotificationDefault hook. [phgross]
 - Fix deleting agenda items for non-word agenda items. [deiferni]
