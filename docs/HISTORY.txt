@@ -5,8 +5,9 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
-- Change action names for meeting agenda items.
+- Change action names for meeting agenda items. [njohner]
 - Order agenda item attachements alphabetically. [njohner]
+- Sort related dossiers alphabetically in dossier overview. [njohner]
 
 
 2018.1.4 (2018-03-06)

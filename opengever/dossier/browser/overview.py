@@ -188,7 +188,7 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                      'getURL': obj.absolute_url(),
                      'css_class': get_css_class(obj)})
 
-        return references
+        return sorted(references, key=lambda reference: reference["Title"]().lower())
 
     def get_dossier_back_relations(self):
         """Returns a list of intids form all dossiers which relates to the

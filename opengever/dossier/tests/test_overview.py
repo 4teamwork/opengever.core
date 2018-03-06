@@ -12,6 +12,9 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.protect import createToken
+from z3c.relationfield.relation import RelationValue
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import json
 
 
@@ -344,3 +347,24 @@ class TestOverview(IntegrationTestCase):
                      view='tabbedview_view-overview')
         self.assertEquals([u'secret', u'special'],
                           browser.css('#keywordsBox li span').text)
+
+    @browsing
+    def test_related_dossiers_are_listed_on_overview(self, browser):
+        self.login(self.regular_user, browser=browser)
+        intids = getUtility(IIntIds)
+        relations = IDossier(self.closed_meeting_dossier).relatedDossier
+        relations.append(RelationValue(intids.getId(self.subdossier)))
+        titles = ["abc", "Abd", "bcd"]
+
+        for relation, title in zip(relations, titles):
+            relation.to_object.setTitle(title)
+        browser.open(self.closed_meeting_dossier,
+                     view='tabbedview_view-overview')
+        self.assertEqual(titles, [node.text for node in
+                                  browser.css("#referencesBox li span")])
+
+        for relation, title in zip(relations, reversed(titles)):
+            relation.to_object.setTitle(title)
+        browser.open(self.closed_meeting_dossier, view='tabbedview_view-overview')
+        self.assertEqual(titles, [node.text for node in
+                                  browser.css("#referencesBox li span")])
