@@ -255,13 +255,21 @@
     var unscheduleDialog = $( "#confirm_unschedule" ).overlay({
       speed: 0,
       closeSpeed: 0,
-      mask: { loadSpeed: 0 }
+      mask: { loadSpeed: 0 },
+      onBeforeLoad: function() {
+        var title = self.currentItem.parents("tr").find(".proposal_title").text();
+        $('#confirm_unschedule_item_title').text(title);
+      },
     }).data("overlay");
 
     var deleteDialog = $( "#confirm_delete" ).overlay({
       speed: 0,
       closeSpeed: 0,
-      mask: { loadSpeed: 0 }
+      mask: { loadSpeed: 0 },
+      onBeforeLoad: function() {
+        var title = self.currentItem.parents("tr").find(".proposal_title").text();
+        $('#confirm_delete_item_title').text(title);
+      },
     }).data("overlay");
 
     var holdDialog = $( "#confirm_hold_meeting" ).overlay({

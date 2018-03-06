@@ -43,7 +43,8 @@
           <div class="close">
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
           </div>
-          <h2 i18n:translate="">Delete proposal</h2>
+          <h2 i18n:translate="title_confirm_delete_agenda_item">Delete proposal</h2>
+          <p id="confirm_delete_item_title"></p>
           <p i18n:translate="label_delete_agenda_item_confirm_text">Are you sure you want to delete this agendaitem?</p>
           <div class="button-group">
             <button class="button confirm destructive"
@@ -58,6 +59,7 @@
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
           </div>
           <h2 i18n:translate="">Unschedule proposal</h2>
+          <p id="confirm_unschedule_item_title"></p>
           <p i18n:translate="label_unschedule_agenda_item_confirm_text">Are you sure you want to unschedule this agendaitem?</p>
           <div class="button-group">
             <button class="button confirm destructive"

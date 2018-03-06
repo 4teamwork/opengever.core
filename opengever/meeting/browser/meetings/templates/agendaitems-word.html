@@ -36,8 +36,13 @@
         {{#if (or ../agendalist_editable reopen_link)}}
         <ul class="editing-menu">
           {{#if ../agendalist_editable}}
-          <li><a href="{{edit_link}}" class="rename-agenda-item">%(action_rename_agenda_item)s</a></li>
-          <li><a href="{{delete_link}}" class="delete-agenda-item">%(action_remove_agenda_item)s</a></li>
+            {{#if paragraph}}
+              <li><a href="{{edit_link}}" class="rename-agenda-item">%(action_rename_agenda_paragraph)s</a></li>
+              <li><a href="{{delete_link}}" class="delete-agenda-item">%(action_remove_agenda_paragraph)s</a></li>
+            {{else}}
+              <li><a href="{{edit_link}}" class="rename-agenda-item">%(action_rename_agenda_item)s</a></li>
+              <li><a href="{{delete_link}}" class="delete-agenda-item">%(action_remove_agenda_item)s</a></li>
+            {{/if}}
           {{/if}}
           {{#if reopen_link}}
           <li><a href="{{reopen_link}}" class="reopen-agenda-item">%(action_reopen)s</a></li>
