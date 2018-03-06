@@ -3,11 +3,13 @@ from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.dossier import _
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
+from opengever.dossier.widget import referenceNumberWidgetFactory
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
 from plone.dexterity.browser import edit
@@ -83,6 +85,17 @@ class DossierEditForm(edit.DefaultEditForm):
 
     def updateFields(self):
         super(DossierEditForm, self).updateFields()
+
+        # Add read-only field 'reference_number'
+        # plone.autoform ingores read-only fields, but we want to display it in
+        # the edit form.
+        for group in self.groups:
+            if group.label == u'fieldset_filing':
+                group.fields += Fields(
+                    IDossier['reference_number'], prefix='IDossier')
+                group.fields['IDossier.reference_number'].widgetFactory = referenceNumberWidgetFactory
+                group.fields['IDossier.reference_number'].mode = 'display'
+
         hide_fields_from_behavior(self,
                                   ['IClassification.public_trial',
                                    'IClassification.public_trial_statement'])

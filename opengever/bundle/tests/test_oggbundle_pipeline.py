@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.security import elevated_privileges
 from opengever.bundle.console import add_guid_index
 from opengever.bundle.loader import GUID_INDEX_NAME
@@ -284,7 +285,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
             u'Vreni Meier ist ein Tausendsassa',
             IDossier(dossier_peter).comments)
         self.assertEqual(tuple(), IDossier(dossier_peter).keywords)
-        self.assertEqual('1', IDossier(dossier_peter).reference_number)
+        self.assertEqual(
+            'Client1 0.3 / 1', IReferenceNumber(dossier_peter).get_number())
         self.assertEqual([], IDossier(dossier_peter).relatedDossier)
         self.assertEqual(u'lukas.graf', IDossier(dossier_peter).responsible)
         self.assertEqual('dossier-state-active',
@@ -341,8 +343,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             u'privacy_layer_yes',
             IClassification(dossier_peter).privacy_layer)
         self.assertEqual(
-            '7',
-            IDossier(dossier_peter).reference_number)
+            'Client1 0.3 / 7', IReferenceNumber(dossier_peter).get_number())
         self.assertEqual(
             [],
             IDossier(dossier_peter).relatedDossier)

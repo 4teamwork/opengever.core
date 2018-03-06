@@ -19,8 +19,7 @@ class ReferenceNumberWidget(widget.HTMLTextInputWidget, Widget):
 
     def update(self):
         super(ReferenceNumberWidget, self).update()
-        self.mode = 'display'
-        #check if is a add- or a editForm
+        # check if is a add- or a editForm
         if IAddForm.providedBy(self.form.parentForm):
             self.value = _(
                 u'label_no_reference_number',
