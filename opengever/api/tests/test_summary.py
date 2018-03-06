@@ -109,3 +109,20 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'wordprocessingml.document',
                 u'modified': u'2016-08-31T15:07:33+02:00',
             })
+
+    @browsing
+    def test_summary_with_reference_number(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(
+            self.dossier.absolute_url() +
+            '?items.fl=reference_number',
+            headers={'Accept': 'application/json'})
+
+        summary = browser.json['items'][0]
+        self.assertEqual(
+            summary,
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
+                u'und-vereinbarungen/dossier-1/document-5',
+                u'reference_number': u'Client1 1.1 / 1 / 5',
+            })
