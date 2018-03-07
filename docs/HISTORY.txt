@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Change action names for meeting agenda items.
+- Order agenda item attachements alphabetically. [njohner]
 
 
 2018.1.4 (2018-03-06)

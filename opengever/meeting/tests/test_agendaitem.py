@@ -16,6 +16,7 @@ from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
+import re
 import transaction
 
 
@@ -47,15 +48,17 @@ class TestAgendaItem(FunctionalTestCase):
 
         self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser')
 
-    def setup_proposal(self, has_document=False):
+    def setup_proposal(self, related_document_titles=None):
         builder = (Builder('proposal')
                    .within(self.dossier)
                    .having(committee=self.committee.load_model())
                    .as_submitted())
 
-        if has_document:
-            document = create(Builder('document').within(self.dossier))
-            builder = builder.relate_to(document)
+        if related_document_titles:
+            documents = []
+            for title in related_document_titles:
+                documents.append(create(Builder('document').within(self.dossier).titled(title)))
+            builder = builder.relate_to(*documents)
 
         return create(builder)
 
@@ -95,7 +98,7 @@ class TestAgendaItemList(TestAgendaItem):
 
     @browsing
     def test_agendaitem_with_attachements_has_documents(self, browser):
-        item = self.setup_proposal(has_document=True)
+        item = self.setup_proposal(related_document_titles=["a document"])
         item = self.schedule_proposal(item, browser)
 
         browser.login().open(
@@ -107,9 +110,27 @@ class TestAgendaItemList(TestAgendaItem):
         self.assertTrue(item.get('has_documents'))
 
     @browsing
+    def test_agendaitem_attachements_are_sorted(self, browser):
+        titles = ["abc", "Abd", "bcd"]
+        item = self.setup_proposal(related_document_titles=reversed(titles))
+        item = self.schedule_proposal(item, browser)
+
+        browser.login().open(
+            self.meeting_wrapper,
+            view='agenda_items/{}/list'.format(item.agenda_item_id),
+            data={'title': 'bar'})
+        item = browser.json.get('items')[0]
+
+        self.assertTrue(item.get('has_documents'))
+
+        pattern = re.compile('<a class="document_link.*?>(.*?)</a>')
+        browser_titles = [pattern.search(el).groups()[0] for el in item.get('documents')]
+        self.assertEquals(titles, browser_titles)
+
+    @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
         self.setup_excerpt_template()
-        item = self.setup_proposal(has_document=True)
+        item = self.setup_proposal(related_document_titles=["a document"])
         item = self.schedule_proposal(item, browser)
         browser.login().open(
             self.meeting_wrapper, {'_authenticator': createToken()},
