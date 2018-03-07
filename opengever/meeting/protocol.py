@@ -62,6 +62,9 @@ class ProtocolData(object):
     def add_members(self):
         members = []
         for participant in self.meeting.participants:
+            if self.has_special_role(participant):
+                continue
+
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
             members.append({
@@ -76,6 +79,12 @@ class ProtocolData(object):
         }
 
         return participants
+
+    def has_special_role(self, participant):
+        is_president = participant == self.meeting.presidency
+        is_secretary = participant == self.meeting.secretary
+
+        return is_president or is_secretary
 
     def add_participants(self):
         participants = self.add_members()
