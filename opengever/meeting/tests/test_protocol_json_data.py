@@ -110,7 +110,7 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.assertDictEqual(SAMPLE_MEETING_DATA, data)
 
     def test_add_members_handles_participants_are_no_longer_committee_memberships(self):
-        create_session().delete(self.membership_peter)
+        create_session().delete(self.membership_anna)
 
         self.assertEquals(
             {'members': [{'firstname': 'Anna',
@@ -118,16 +118,6 @@ class TestProtocolJsonData(FunctionalTestCase):
                           'fullname': u'B\xe4nni Anna',
                           'email': 'baenni@example.com',
                          'role': None},
-                         {'firstname': 'Franz',
-                          'lastname': u'M\xfcller',
-                          'fullname': u'M\xfcller Franz',
-                          'role': None,
-                          'email': u'mueller@example.com'},
-                         {'firstname': 'Peter',
-                          'lastname': u'M\xfcller',
-                          'fullname': u'M\xfcller Peter',
-                          'role': None,
-                          'email': None},
                          ]},
             ProtocolData(self.meeting).add_members())
 
