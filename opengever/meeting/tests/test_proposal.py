@@ -249,8 +249,7 @@ class TestProposal(IntegrationTestCase):
                          u'/dossier-1/proposal-2', model.physical_path)
         self.assertEqual(u'Rechnungspr\xfcfungskommission',
                          model.repository_folder_title)
-        # XXX is this correct??
-        self.assertEqual(u'Client1 2',
+        self.assertEqual(u'Client1 2 / 1',
                          model.dossier_reference_number)
 
     @browsing

@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Make sure to URLEncode links to the list_groupmember view in sharing views. [lgraf]
+- Ensure correct dossier reference numbers for proposals after a dossier move operation. [Rotonen]
 - No longer duplicate members with special role in protocol JSON data. [deiferni]
 - Change action names for meeting agenda items. [njohner]
 - Order agenda item attachements alphabetically. [njohner]
