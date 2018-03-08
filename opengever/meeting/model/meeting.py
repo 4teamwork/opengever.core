@@ -85,15 +85,27 @@ class CloseTransition(Transition):
         api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
+class CancelTransition(Transition):
+
+    def get_validation_errors(self, model):
+        if model.agenda_items:
+            return [_(u"label_meeting_has_agenda_items",
+                      u"The meeting already has agenda items and can't "
+                      u"be cancelled")]
+        return tuple()
+
+
 class Meeting(Base, SQLFormSupport):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
     STATE_HELD = State('held', title=_('held', default='Held'))
     STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
+    STATE_CANCELLED = State('cancelled',
+                            title=_('cancelled', default='Cancelled'))
 
     workflow = Workflow(
-        [STATE_PENDING, STATE_HELD, STATE_CLOSED],
+        [STATE_PENDING, STATE_HELD, STATE_CLOSED, STATE_CANCELLED],
         [CloseTransition(
             'pending', 'closed',
             title=_('close_meeting', default='Close meeting')),
@@ -104,7 +116,10 @@ class Meeting(Base, SQLFormSupport):
              title=_('close_meeting', default='Close meeting')),
          Transition('closed', 'held',
                     title=_('reopen', default='Reopen'),
-                    condition=is_word_meeting_implementation_enabled)],
+                    condition=is_word_meeting_implementation_enabled),
+         CancelTransition('pending', 'cancelled',
+                          title=_('cancel', default='Cancel')),
+         ],
         show_in_actions_menu=True,
         transition_controller=MeetingTransitionController,
     )

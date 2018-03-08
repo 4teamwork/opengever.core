@@ -49,6 +49,28 @@ class TestWordMeeting(IntegrationTestCase):
         self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
 
     @browsing
+    def test_cancel_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEquals(u'pending', self.meeting.model.workflow_state)
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Cancel').click()
+
+        self.assertEquals(u'cancelled', self.meeting.model.workflow_state)
+
+    @browsing
+    def test_meeting_with_agenda_items_cannot_be_cancelled(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Cancel').click()
+
+        self.assertDictContainsSubset({
+            'message': "The meeting already has agenda items and can't "
+                       "be cancelled",
+            'messageClass': 'error'},
+            browser.json.get('messages')[0])
+
+    @browsing
     def test_reopen_closed_meeting(self, browser):
         self.login(self.committee_responsible, browser)
         self.assertEquals(u'closed', self.decided_meeting.model.workflow_state)
