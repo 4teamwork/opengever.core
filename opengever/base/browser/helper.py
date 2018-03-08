@@ -41,28 +41,27 @@ def get_css_class(item, type_icon_only=False):
                               'opengever.meeting.sablontemplate',
                               'opengever.meeting.proposaltemplate']:
 
+        # It's a document, we therefore want to display an icon
+        # for the mime type of the contained file
+        icon = getattr(item, 'getIcon', '')
+        if callable(icon):
+            icon = icon()
+
+        if icon:
+            # Strip '.gif' from end of icon name and remove
+            # leading 'icon_'
+            filetype = icon[:icon.rfind('.')].replace('icon_', '')
+            css_class = 'icon-%s' % normalize(filetype)
+        else:
+            # Fallback for unknown file type
+            css_class = "icon-document_empty"
+
         if getattr(item, '_v__is_relation', False):
             # Document was listed as a relation, so we use a special icon.
-            css_class = "icon-dokument_verweis"
+            css_class += " is-document-relation"
             # Immediatly set the volatile attribute to False so it doesn't
             # affect other views using the same object instance
             item._v__is_relation = False
-
-        else:
-            # It's a document, we therefore want to display an icon
-            # for the mime type of the contained file
-            icon = getattr(item, 'getIcon', '')
-            if callable(icon):
-                icon = icon()
-
-            if not icon == '':
-                # Strip '.gif' from end of icon name and remove
-                # leading 'icon_'
-                filetype = icon[:icon.rfind('.')].replace('icon_', '')
-                css_class = 'icon-%s' % normalize(filetype)
-            else:
-                # Fallback for unknown file type
-                css_class = "icon-document_empty"
 
     if css_class is None:
         css_class = "contenttype-%s" % normalize(item.portal_type)
