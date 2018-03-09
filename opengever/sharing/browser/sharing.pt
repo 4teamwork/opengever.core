@@ -84,7 +84,8 @@
                                     sticky python:entry['id'] in view.STICKY"
                         tal:attributes="class python:oddrow and 'odd' or 'even'">
                         <td>
-                            <a tal:attributes="href string:list_groupmembers?group=${entry/id}"
+                            <a tal:define="groupmembers_url python:view.groupmembers_url(entry['id'])"
+                               tal:attributes="href groupmembers_url"
                                tal:omit-tag="not:is_group" class="link-overlay">
 							  <span tal:condition="is_group" tal:attributes="class string:contenttype-opengever-contact-contactfolder"></span>
 							  <span tal:condition="not:is_group" tal:attributes="class string:function-user"></span>
