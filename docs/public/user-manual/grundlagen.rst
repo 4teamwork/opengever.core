@@ -35,9 +35,9 @@ Nachdem Sie im Portal den gwünschten Mandanten ausgewählt haben, gelangen Sie
 auf die Übersicht unten. Von da haben Sie verschiedene Möglichkeiten, sich
 weiter in OneGov GEVER zu bewegen.
 
-1. `Servicenavigation <https://docs.onegovgever.ch/user-manual/grundlagen/#servicenavigation>`_
+1. `Servicenavigation`_
 
-2. `Hauptnavigation <https://docs.onegovgever.ch/user-manual/grundlagen/#hauptnavigation>`_
+2. `Hauptnavigation`_
 
 |img-grundlagen-15|
 

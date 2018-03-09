@@ -179,7 +179,7 @@ exportiert werden.
     Bitte achten Sie daher beim Titel darauf, dass diese Beschränkung
     nicht überschritten wird. Ab Windows 10 (Version 1607) besteht die
     Möglichkeit, dass ein längerer Pfadname mittels Konfiguration zugelassen
-    werden kann. Alternativ kann das  Zip-Programm http://www.7-zip.org/
+    werden kann. Alternativ kann das `Zip-Programm <http://www.7-zip.org/>`_
     installiert werden, welches mit langen Zip-Namen umgehen kann.
 
 ZIP-Import

@@ -1,5 +1,8 @@
+
 E-Mail als Dokument ablegen
 ===========================
+
+.. _label-emailimportieren:
 
 Eine E-Mail importieren
 ~~~~~~~~~~~~~~~~~~~~~~~

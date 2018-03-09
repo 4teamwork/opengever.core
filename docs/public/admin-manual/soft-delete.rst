@@ -1,3 +1,4 @@
+.. _my-reference-label:
 Soft-Delete
 ===========
 
