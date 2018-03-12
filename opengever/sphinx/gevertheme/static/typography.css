@@ -51,6 +51,17 @@ a.download code {
     color: #004B6B !important;
 }
 
+.guilabel {
+    font-weight: bold;
+    background-color: #f8f8f8;
+}
+
+/* Make links bold in authentication flow section. This section is important
+important to give an overview and provide easily spottable navigation links */
+#authentisierungs-flow a {
+    font-weight: bold;
+}
+
 /* -- sidebar ----------------------------------------------------------- */
 
 div.sphinxsidebar {

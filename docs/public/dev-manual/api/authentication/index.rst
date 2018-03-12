@@ -23,5 +23,6 @@ von OneGov GEVER unterstützt werden.
 
    basic_auth
    jwt
+   oauth2_token_auth
 
 .. disqus::
