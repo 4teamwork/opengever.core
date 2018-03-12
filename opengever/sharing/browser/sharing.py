@@ -10,12 +10,14 @@ from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.sharing.interfaces import ISharingConfiguration
+from plone import api
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from urllib import urlencode
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
@@ -221,6 +223,11 @@ class OpengeverSharingView(SharingView):
             else:
                 results.append(principal)
         return results
+
+    def groupmembers_url(self, groupid):
+        portal = api.portal.get()
+        qs = urlencode({'group': groupid})
+        return '/'.join((portal.portal_url(), '@@list_groupmembers?%s' % qs))
 
 
 class SharingTab(OpengeverSharingView):

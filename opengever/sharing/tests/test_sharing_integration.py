@@ -11,6 +11,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_last_recorded_event
 from opengever.testing.event_recorder import register_event_recorder
 from opengever.testing.pages import tabbedview
+from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -212,3 +213,45 @@ class TestOpengeverSharingWithBrowser(IntegrationTestCase):
         found_users_and_roles = browser.css('#user-group-sharing-settings tr').text
 
         self.assertEqual(expected_users_and_roles, found_users_and_roles)
+
+    @browsing
+    def test_sharing_info_view_urlencodes_links_with_spaces(self, browser):
+        self.login(self.regular_user, browser)
+
+        group = create(Builder('group').with_groupid('with spaces'))
+        api.group.grant_roles(
+            group=group,
+            obj=self.dossier,
+            roles=['Publisher'])
+
+        browser.open(self.dossier)
+        tabbedview.open('Info')
+
+        group_links = [a.get('href') for a
+                       in browser.css('#user-group-sharing-settings tr a')]
+
+        self.assertEqual(
+            ['http://nohost/plone/@@list_groupmembers?group=fa_users',
+             'http://nohost/plone/@@list_groupmembers?group=with+spaces'],
+            group_links)
+
+    @browsing
+    def test_sharing_view_urlencodes_links_with_spaces(self, browser):
+        self.login(self.manager, browser)
+
+        group = create(Builder('group').with_groupid('with spaces'))
+        api.group.grant_roles(
+            group=group,
+            obj=self.dossier,
+            roles=['Publisher'])
+
+        browser.open(self.dossier, view='@@sharing')
+
+        group_links = [a.get('href') for a
+                       in browser.css('#user-group-sharing-settings tr a')]
+
+        self.assertEqual(
+            ['http://nohost/plone/@@list_groupmembers?group=AuthenticatedUsers',
+             'http://nohost/plone/@@list_groupmembers?group=fa_users',
+             'http://nohost/plone/@@list_groupmembers?group=with+spaces'],
+            group_links)
