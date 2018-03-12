@@ -19,7 +19,7 @@ Erstellen Sie eine Aufgabe und verknüpfen Sie sie mit denjenigen Dokumenten, di
 der Auftragnehmer zur Bearbeitung der Aufgabe benötigt. Alle anderen Dokumente
 im Dossier bleiben für den Auftragnehmer unsichtbar.
 
-Wählen Sie im Feld *Mandant des Auftragnehmers* den Auftragnehmer. Als
+Wählen Sie im Feld *Auftragnehmer* den Adressaten der Aufgabe aus. Als
 Auftragnehmer wird im Normalfall der Eingangskorb des zuständigen Mandanten
 eingetragen. Gegebenenfalls kann aber auch der zuständige Sachbearbeiter gewählt
 werden.
