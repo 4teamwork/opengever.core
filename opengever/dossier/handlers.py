@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import get_resolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
+from opengever.meeting.handlers import ProposalSqlSyncer
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from zope.component import getAdapter
@@ -75,6 +76,14 @@ def save_reference_number_prefix(obj, event):
         'depth': -1})
     for task in tasks:
         TaskSqlSyncer(task.getObject(), None).sync()
+
+    # And also proposals
+    proposals = catalog({
+        'path': '/'.join(obj.getPhysicalPath()),
+        'object_provides': 'opengever.meeting.proposal.IProposal',
+        'depth': -1})
+    for proposal in proposals:
+        ProposalSqlSyncer(proposal.getObject(), None).sync()
 
     obj.reindexObject(idxs=['reference'])
 
