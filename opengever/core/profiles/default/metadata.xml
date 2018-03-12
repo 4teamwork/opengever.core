@@ -25,5 +25,6 @@
     <dependency>profile-plone.app.caching:without-caching-proxy</dependency>
     <dependency>profile-plone.restapi:default</dependency>
     <dependency>profile-Products.CMFPlacefulWorkflow:CMFPlacefulWorkflow</dependency>
+    <dependency>profile-ftw.tokenauth:default</dependency>
   </dependencies>
 </metadata>

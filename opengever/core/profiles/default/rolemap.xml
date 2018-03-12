@@ -12,6 +12,7 @@
     <role name="Publisher" />
     <role name="Records Manager" />
     <role name="Role Manager" />
+    <role name="ServiceKeyUser" />
     <role name="WorkspaceAdmin" />
     <role name="WorkspaceGuest" />
     <role name="WorkspaceMember" />
@@ -246,6 +247,11 @@
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
+    </permission>
+
+    <!-- TOKENAUTH -->
+    <permission name="ftw.tokenauth: Manage own Service Keys" acquire="False">
+      <role name="ServiceKeyUser" />
     </permission>
 
     <!-- TRASH -->
