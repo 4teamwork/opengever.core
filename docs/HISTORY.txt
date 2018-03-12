@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- Install and integrate ftw.tokenauth. [lgraf]
 - Make sure to URLEncode links to the list_groupmember view in sharing views. [lgraf]
 - No longer duplicate members with special role in protocol JSON data. [deiferni]
 - Change action names for meeting agenda items. [njohner]
