@@ -39,6 +39,7 @@ ALLOWED_ENDPOINTS = set([
     'bumblebee_download',
     'health-check',
     'upgrades-api',
+    'oauth2-token',
 ])
 
 
