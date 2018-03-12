@@ -301,6 +301,43 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         del decoded_parsed_oc_url['exp']
 
         self.assertEqual(decoded_oc_url, decoded_parsed_oc_url)
+        self.assertTrue(self.get_manager(self.doc1).is_checked_out_by_current_user())
+
+    @browsing
+    def test_officeconnector_reauth_does_not_checkout(self, browser):
+        api.portal.set_registry_record(
+            'direct_checkout_and_edit_enabled',
+            True,
+            interface=IOfficeConnectorSettings)
+        transaction.commit()
+
+        # We cannot freeze time due to the test browser being threaded
+        oc_url = create_oc_url(
+            self.doc1.REQUEST, self.doc1, {'action': 'checkout'})
+        decoded_oc_url = jwt.decode(oc_url.split(':')[-1], verify=False)
+
+        redirector_js = browser.login().open(
+            self.doc1,
+            view='checkout_documents'
+            '?_authenticator={}&mode=external&reauth=1'
+            .format(createToken()),
+            ).css('script.redirector')[0].text
+
+        tokens_from_js = [token for token in redirector_js.split("\'")
+                          if 'oc:' in token]
+
+        self.assertEqual(3, len(tokens_from_js))
+
+        parsed_oc_url = tokens_from_js[0]
+        decoded_parsed_oc_url = jwt.decode(
+            parsed_oc_url.split(':')[-1], verify=False)
+
+        # Take out the timestamps
+        del decoded_oc_url['exp']
+        del decoded_parsed_oc_url['exp']
+
+        self.assertEqual(decoded_oc_url, decoded_parsed_oc_url)
+        self.assertFalse(self.get_manager(self.doc1).is_checked_out_by_current_user())
 
     def test_cancel(self):
         manager = self.get_manager(self.doc1)
