@@ -7,7 +7,7 @@ Inhalt:
    :maxdepth: 2
 
    basics.rst
-   authentication.rst
+   authentication/index
    operations.rst
    exploring.rst
    serialization.rst
