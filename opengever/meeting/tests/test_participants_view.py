@@ -34,6 +34,12 @@ class TestParticipantsView(IntegrationTestCase):
         self.assertIsNone(meeting.presidency)
 
     @browsing
+    def test_secretary_not_rendered_in_dropdown_menu(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+        self.assertNotIn('Secretary', browser.css('select.role').text)
+
+    @browsing
     def test_meeting_user_cannot_change_role(self, browser):
         self.login(self.meeting_user, browser)
         member = self.committee_participant_1.model
