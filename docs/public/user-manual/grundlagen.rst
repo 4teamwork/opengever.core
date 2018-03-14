@@ -35,7 +35,7 @@ Für mehr Sicherheit empfehlen wir, die 2-Faktor-Authentifizierung zu aktivieren
 Das bedeutet, dass Sie Ihren OneGov GEVER Account mit einem zweiten Faktor
 absichern. Das System wird Sie dann bei jedem erneuten Anmelden nach einem
 Einmalpasswort ab, dass Sie jeweils mit einer zusätzlichen Applikation
-auf Ihrem Smartphone generieren. Mehr zu diesem Thema finden Sie in diesem `Beitrag <https://www.prosoft.de/loesungen/software/mehrfaktor-authentifizierung/?gclid=EAIaIQobChMImMO-5Jzf2QIViqMYCh0JEQyfEAAYASAAEgJw7PD_BwE>`_.
+auf Ihrem Smartphone generieren. Mehr zu diesem Thema finden Sie in diesem `Beitrag <https://de.wikipedia.org/wiki/Zwei-Faktor-Authentifizierung>`_.
 
 Zur Aktivierung kann zuerst auf der Portal-Seite ganz einfach auf *Aktivieren*
 geklickt werden.
