@@ -68,7 +68,7 @@ Sie die Datei ein.
 E-Mail als Dokument hinzufügen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Diese Variante wird unter :ref:`E-Mail als Dokument ablegen <label-emailimportieren>` detailliert beschrieben.
+Diese Variante wird unter :ref:`label-emailimportieren` detailliert beschrieben.
 
 
 .. |img-dokumente-4| image:: ../img/media/img-dokumente-4.png
