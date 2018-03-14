@@ -110,6 +110,19 @@
           </div>
         </div>
 
+        <div class="overlay" id="confirm_cancel_meeting">
+          <h2 i18n:translate="cancel_meeting">Cancel meeting</h2>
+          <p i18n:translate="">
+            Are you sure you want to cancel this meeting?
+          </p>
+          <div class="button-group">
+            <button class="button confirm context"
+                    i18n:translate="label_cancel_meeting">Cancel meeting</button>
+            <button class="button decline"
+                    i18n:translate="label_cancel">Cancel</button>
+          </div>
+        </div>
+
         <div class="overlay" id="confirm_return_excerpt">
           <h2 i18n:translate="return_excerpt">Return Excerpt</h2>
           <p i18n:translate="msg_confirm_return_excerpt_dialog">
@@ -167,8 +180,6 @@
             </div>
           </form>
         </div>
-
-
 
         <div class="sidebar"
              tal:define="participants view/get_participants">

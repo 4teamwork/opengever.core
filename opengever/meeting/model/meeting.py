@@ -94,6 +94,15 @@ class CancelTransition(Transition):
                       u"be cancelled")]
         return tuple()
 
+    def execute(self, obj, model):
+        super(CancelTransition, self).execute(obj, model)
+
+        msg = _(u'msg_meeting_successfully_cancelled',
+                default=u'The meeting ${title} has been successfully '
+                         'cancelled.',
+                mapping=dict(title=model.get_title()))
+        api.portal.show_message(msg, api.portal.get().REQUEST)
+
 
 class Meeting(Base, SQLFormSupport):
 
