@@ -23,11 +23,42 @@ Informationen zu entnehmen und Aktionen zu betätigen:
 
 1. Anmeldeverlauf: Dort sehen Sie Ihre letzten Aktivitäten mitsamt Browser- und IP-Informationen.
 
-2. Zwei-Faktor-Authentifizierung: Dort können Sie entnehmen, ob Ihre Installation doppelt geschützt ist. Bei mehr Informationen dazu, können Sie gerne Kontakt mit uns aufnehmen.
+2. Zwei-Faktor-Authentifizierung: Dort können Sie entnehmen, ob Ihre Installation doppelt geschützt ist.
 
 3. Mandanten: Dort finden Sie alle Mandanten Ihrer Organisation aufgelistet. Um die Arbeit in OneGov GEVER aufzunehmen, wählen Sie den gwünschten Mandanten an.
 
 4. Aufgaben: Hier finden Sie eine mandantenübergreifende Übersicht über alle Ihre Aufgaben.
+
+2-Faktor-Authentifizierung
+--------------------------
+Für mehr Sicherheit empfehlen wir, die 2-Faktor-Authentifizierung zu aktivieren.
+Das bedeutet, dass Sie Ihren OneGov GEVER Account mit einem zweiten Faktor
+absichern. Das System wird Sie dann bei jedem erneuten Anmelden nach einem
+Einmalpasswort ab, dass Sie jeweils mit einer zusätzlichen Applikation
+auf Ihrem Smartphone generieren. Mehr zu diesem Thema finden Sie in diesem `Beitrag <https://de.wikipedia.org/wiki/Zwei-Faktor-Authentifizierung>`_.
+
+Zur Aktivierung kann zuerst auf der Portal-Seite ganz einfach auf *Aktivieren*
+geklickt werden.
+
+|img-grundlagen-29|
+
+Dadurch gelangt man auf die Seite zur Einrichtung der 2-Faktor-Authentizierung.
+
+|img-grundlagen-30|
+
+Laden Sie die Applikation *Google Authenticator* herunter und befolgen Sie
+die Installations-Anweisung:
+
+- `Für iOS <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DiOS&hl=de&oco=0>`_
+- `Für Android <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DAndroid&hl=de>`_
+
+Mit der Applikation *Google Authenticator* können Sie den QR-Code scannen.
+Dadurch erhalten Sie ein Einmalpasswort, welches im Feld *Bestätigungscode*
+eingetragen werden kann. Klicken Sie dann auf *verifizieren und aktivieren*.
+
+|img-grundlagen-31|
+
+Bei erfolgreicher Aktivierung erscheint oben die Meldung *Die 2-Faktor-Authetifizierer ist jetzt mit Ihrem Account verknüpft.*
 
 Übersicht
 ---------
@@ -98,5 +129,8 @@ zweiten Bild ersichtlich, aufgeklappt werden.
 .. |img-grundlagen-19| image:: img/media/img-grundlagen-19.png
 .. |img-grundlagen-20| image:: img/media/img-grundlagen-20.png
 .. |img-grundlagen-21| image:: img/media/img-grundlagen-21.png
+.. |img-grundlagen-29| image:: img/media/img-grundlagen-29.png
+.. |img-grundlagen-30| image:: img/media/img-grundlagen-30.png
+.. |img-grundlagen-31| image:: img/media/img-grundlagen-31.png
 
 .. disqus::
