@@ -1,5 +1,5 @@
 
-.. _label-mü-zusammenarbeit:
+.. _label-mü_zusammenarbeit:
 
 Mandantenübergreifende Zusammenarbeit
 -------------------------------------
