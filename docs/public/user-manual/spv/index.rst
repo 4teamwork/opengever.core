@@ -1,4 +1,5 @@
 .. _kapitel-spv:
+.. _label-spv:
 
 Sitzungs- und Protokollverwaltung
 =================================

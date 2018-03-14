@@ -1,3 +1,5 @@
+.. _label-eingangskorb:
+
 Nutzung Eingangskorb
 ====================
 
@@ -166,11 +168,11 @@ Reiter *Weiterleitung*. Beim Empfänger erscheint der Posteingang unter
 dem Reiter *Eingang*.
 
 Einen Posteingang aus einem anderen Mandanten bearbeiten
---------------------------------------------------------
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Ein Posteingang aus einem anderen Mandanten bearbeiten deckt sich vom
 Funktionsumfang mit dem Kapitel *Mandantenübergreifende Zusammenarbeit*. Ziehen
-Sie daher bitte diesen `Beschrieb <https://docs.onegovgever.ch/user-manual/aufgaben/mandantenuebergreifende_zusammenarbeit/>`_ bei.
+Sie daher bitte das Kapitel :ref:`label-mü_zusammenarbeit` bei.
 
 
 .. |img-eingangskorb-1| image:: img/media/img-eingangskorb-1.png

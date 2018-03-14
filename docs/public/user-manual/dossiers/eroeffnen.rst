@@ -152,9 +152,8 @@ Stufe Ordnungsposition hinterlegt sind. Bei Bedarf können die Werte auf
 dieser Stufe verschärft, aber nicht abgeschwächt werden.
 
 Beispiel: In diesem konkreten Fall kann statt „Nicht klassifiziert“ der
-Wert „Vertraulich“ gewählt werden. Jedoch kann der
-*Öffentlichkeitsstatus* nicht auf „öffentlich“ gesetzt
-werden.
+Wert „Vertraulich“ gewählt werden. Jedoch kann der *Öffentlichkeitsstatus*
+nicht auf „öffentlich“ gesetzt werden.
 
 |img-dossiers-9|
 

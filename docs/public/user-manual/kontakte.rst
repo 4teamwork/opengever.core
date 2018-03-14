@@ -1,4 +1,5 @@
-.. _kapitel_kontakte:
+.. _label-kontakte:
+.. _kapitel-kontakte:
 
 Kontakte
 ========
@@ -60,8 +61,7 @@ Verwendung von Kontakten
 
 Erfasste Kontakte können über die normale Suche innerhalb von OneGov GEVER
 gefunden werden. Ausserdem stehen sie beim Erfassen von Beteiligungen innerhalb
-von Dossiers zur Verfügung (siehe
-:ref:`Einem Dossier Beteiligte hinzufügen <label-beteiligungen>`).
+von Dossiers zur Verfügung (siehe :ref:`label-beteiligungen`).
 
 .. |img-kontakte-1| image:: img/media/img-kontakte-1.png
 .. |img-kontakte-2| image:: img/media/img-kontakte-2.png

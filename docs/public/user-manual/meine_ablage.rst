@@ -1,3 +1,5 @@
+.. _label-meineablage:
+
 Meine Ablage
 ============
 
