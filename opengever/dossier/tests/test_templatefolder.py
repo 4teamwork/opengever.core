@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -11,7 +10,6 @@ from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.contact.interfaces import IContactSettings
 from opengever.core.testing import activate_meeting_word_implementation
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
@@ -24,6 +22,7 @@ from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 from opengever.testing.pages import sharing_tab_data
 from plone import api
@@ -846,23 +845,22 @@ class TestTemplateDocumentTabs(FunctionalTestCase):
                           sharing_tab_data())
 
 
-class TestDossierTemplateFeature(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER
+class TestDossierTemplateFeature(IntegrationTestCase):
+    features = (
+        'dossiertemplate',
+        )
 
     @browsing
     def test_dossier_template_is_addable_if_dossier_template_feature_is_enabled(self, browser):
-        templatefolder = create(Builder('templatefolder'))
-        browser.login().open(templatefolder)
+        self.login(self.manager, browser)
+        browser.open(self.templates)
 
-        self.assertIn('Dossier template', factoriesmenu.addable_types())
+        expected_addable_types = ['Document', 'Dossier template', 'TaskTemplateFolder', 'Template Folder']
+        self.assertEqual(expected_addable_types, factoriesmenu.addable_types())
 
     @browsing
     def test_show_dossier_templates_tab(self, browser):
-        templatefolder = create(Builder('templatefolder'))
+        self.login(self.regular_user, browser)
+        browser.open(self.templates)
 
-        browser.login().visit(templatefolder)
-
-        self.assertEqual(
-            'Dossier templates',
-            browser.css('.formTab #tab-dossiertemplates').first.text)
+        self.assertEqual('Dossier templates', browser.css('.formTab #tab-dossiertemplates').first.text)
