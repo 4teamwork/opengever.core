@@ -26,6 +26,13 @@ class TestEditMeeting(IntegrationTestCase):
         self.assertEquals([], editbar.contentviews())
 
     @browsing
+    def test_can_edit_meeting_secretary(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting, view='edit-meeting')
+
+        self.assertIsNotNone(browser.css('#form-widgets-secretary'))
+
+    @browsing
     def test_edit_meeting_metadata(self, browser):
         self.maxDiff = None
         self.login(self.committee_responsible, browser)

@@ -60,7 +60,6 @@ class EditMeetingView(ModelEditForm):
     def updateFields(self):
         super(EditMeetingView, self).updateFields()
         self.fields = (self.fields.omit('presidency')
-                       .omit('secretary')
                        .omit('participants'))
 
     def is_available_for_current_user(self):
