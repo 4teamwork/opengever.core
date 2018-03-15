@@ -9,8 +9,6 @@ from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.contact.interfaces import IContactSettings
-from opengever.core.testing import activate_meeting_word_implementation
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
@@ -637,34 +635,48 @@ class TestTemplateFolder(FunctionalTestCase):
         self.assertFalse(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
 
 
-class TestTemplateFolderMeetingEnabled(FunctionalTestCase):
+class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestTemplateFolderMeetingEnabled, self).setUp()
-        self.grant('Manager')
+    features = (
+        'meeting',
+        )
 
     @browsing
     def test_addable_types_with_meeting_feature(self, browser):
-        templatefolder = create(Builder('templatefolder'))
-        browser.login().open(templatefolder)
+        self.login(self.manager, browser)
+        browser.open(self.templates)
 
-        self.assertEquals(
-            ['Document', 'Sablon Template', 'TaskTemplateFolder',
-             'Template Folder'],
-            factoriesmenu.addable_types())
+        expected_addable_types = [
+            'Document',
+            'Sablon Template',
+            'TaskTemplateFolder',
+            'Template Folder',
+            ]
+
+        self.assertEquals(expected_addable_types, factoriesmenu.addable_types())
+
+
+class TestTemplateFolderWordMeetingEnabled(IntegrationTestCase):
+
+    features = (
+        'meeting',
+        'word-meeting',
+        )
 
     @browsing
     def test_addable_types_with_meeting_word_implementation(self, browser):
-        activate_meeting_word_implementation()
-        templatefolder = create(Builder('templatefolder'))
-        browser.login().open(templatefolder)
+        self.login(self.manager, browser)
+        browser.open(self.templates)
 
-        self.assertEquals(
-            ['Document', 'Proposal Template', 'Sablon Template',
-             'TaskTemplateFolder', 'Template Folder'],
-            factoriesmenu.addable_types())
+        expected_addable_types = [
+            'Document',
+            'Proposal Template',
+            'Sablon Template',
+            'TaskTemplateFolder',
+            'Template Folder',
+            ]
+
+        self.assertEquals(expected_addable_types, factoriesmenu.addable_types())
 
 
 class TestTemplateFolderUtility(FunctionalTestCase):
