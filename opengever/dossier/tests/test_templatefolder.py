@@ -36,7 +36,6 @@ from unittest import skip
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-import transaction
 
 
 def _make_token(document):
@@ -692,112 +691,204 @@ SABLONTEMPLATES_TAB = 'tabbedview_view-sablontemplates'
 PROPOSALTEMPLATES_TAB = 'tabbedview_view-proposaltemplates'
 
 
-class TestTemplateFolderListings(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestTemplateFolderListings, self).setUp()
-
-        self.templatefolder = create(Builder('templatefolder'))
-        self.dossier = create(Builder('dossier'))
-        self.template = create(Builder('sablontemplate')
-                               .within(self.templatefolder))
-        self.proposaltemplate = create(Builder('proposaltemplate')
-                                       .within(self.templatefolder))
-        self.document = create(Builder('document')
-                               .within(self.templatefolder))
+class TestTemplateFolderListings(IntegrationTestCase):
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self, browser):
-        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
 
-        table_heading = browser.css('table.listing').first.lists()[0]
-        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial',
-                           'Reference Number'],
-                          table_heading)
+        expected_table_header = [
+            '',
+            'Sequence Number',
+            'Title',
+            'Document Author',
+            'Document Date',
+            'Checked out by',
+            'Public Trial',
+            'Reference Number',
+            ]
+
+        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_sablon_template_tab(self, browser):
-        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
 
-        table_heading = browser.css('table.listing').first.lists()[0]
-        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial',
-                           'Reference Number'],
-                          table_heading)
+        expected_table_header = [
+            '',
+            'Sequence Number',
+            'Title',
+            'Document Author',
+            'Document Date',
+            'Checked out by',
+            'Public Trial',
+            'Reference Number',
+            ]
+
+        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_proposal_templates_tab(self, browser):
-        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
 
-        table_heading = browser.css('table.listing').first.lists()[0]
-        self.assertEquals(['', 'Sequence Number', 'Title', 'Document Author',
-                           'Document Date', 'Checked out by', 'Public Trial',
-                           'Reference Number'],
-                          table_heading)
+        expected_table_header = [
+            '',
+            'Sequence Number',
+            'Title',
+            'Document Author',
+            'Document Date',
+            'Checked out by',
+            'Public Trial',
+            'Reference Number',
+            ]
+
+        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_enabled_actions_are_limited_in_document_tab(self, browser):
-        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
 
-        self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
-             'Export selection', 'Move Items', 'Export as Zip'],
-            browser.css('.actionMenuContent li').text)
+        expected_action_menu_content = [
+            'Export as Zip',
+            'Copy Items',
+            'Export selection',
+            'Move Items',
+            ]
+
+        self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
+
+        self.login(self.administrator, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
+
+        expected_action_menu_content = [
+            'Export as Zip',
+            'Copy Items',
+            'Checkin with comment',
+            'Checkin without comment',
+            'Export selection',
+            'Delete',
+            'Move Items',
+            ]
+
+        self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
+
+        self.login(self.manager, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
+
+        self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
 
     @browsing
     def test_document_tab_lists_only_documents_directly_beneath(self, browser):
-        subdossier = create(Builder('templatefolder')
-                            .within(self.templatefolder))
-        create(Builder('document').within(subdossier))
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
 
-        browser.login().open(self.templatefolder, view=DOCUMENT_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
-        self.assertEqual(1, len(templates))
-        document_link = templates[0]['Title'].css('a').first.get('href')
-        self.assertEqual(self.document.absolute_url(), document_link)
+        self.assertEqual(4, len(templates))
+
+        expected_document_urls = [
+            self.docprops_template.absolute_url(),
+            self.asset_template.absolute_url(),
+            self.normal_template.absolute_url(),
+            self.empty_template.absolute_url(),
+            ]
+
+        document_urls = [
+            element.get('Title').css('a').first.get('href')
+            for element in templates
+            ]
+
+        self.assertEqual(expected_document_urls, document_urls)
+        self.assertNotIn(self.subtemplate.absolute_url(), document_urls)
 
     @browsing
     def test_enabled_actions_are_limited_in_sablontemplates_tab(self, browser):
-        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
 
-        self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
-             'Export selection', 'Export as Zip'],
-            browser.css('.actionMenuContent li').text)
+        expected_actions = [
+            'Export as Zip',
+            'Copy Items',
+            'Export selection',
+            ]
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
+
+        self.login(self.administrator, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
+
+        expected_actions = [
+            'Export as Zip',
+            'Copy Items',
+            'Checkin with comment',
+            'Checkin without comment',
+            'Export selection',
+            'Delete',
+            ]
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
+
+        self.login(self.manager, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
     @browsing
     def test_enabled_actions_are_limited_in_proposaltemplates_tab(self, browser):
-        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
 
-        self.assertItemsEqual(
-            ['Copy Items', 'Checkin with comment', 'Delete', 'Checkin without comment',
-             'Export selection', 'Export as Zip'],
-            browser.css('.actionMenuContent li').text)
+        expected_actions = [
+            'Export as Zip',
+            'Copy Items',
+            'Export selection',
+            ]
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
+
+        self.login(self.administrator, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
+
+        expected_actions = [
+            'Export as Zip',
+            'Copy Items',
+            'Checkin with comment',
+            'Checkin without comment',
+            'Export selection',
+            'Delete',
+            ]
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
+
+        self.login(self.manager, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
+
+        self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
     @browsing
     def test_sablontemplates_tab_lists_only_documents_directly_beneath(self, browser):
-        subdossier = create(Builder('templatefolder')
-                            .within(self.templatefolder))
-        create(Builder('sablontemplate').within(subdossier))
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
 
-        browser.login().open(self.templatefolder, view=SABLONTEMPLATES_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
         self.assertEqual(1, len(templates))
-        template_link = templates[0]['Title'].css('a').first.get('href')
-        self.assertEqual(self.template.absolute_url(), template_link)
+
+        document_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(self.sablon_template.absolute_url(), document_link)
 
     @browsing
     def test_proposaltemplates_tab_lists_only_documents_directly_beneath(self, browser):
-        subdossier = create(Builder('templatefolder')
-                            .within(self.templatefolder))
-        create(Builder('proposaltemplate').within(subdossier))
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
 
-        browser.login().open(self.templatefolder, view=PROPOSALTEMPLATES_TAB)
         templates = browser.css('table.listing').first.dicts(as_text=False)
         self.assertEqual(1, len(templates))
-        template_link = templates[0]['Title'].css('a').first.get('href')
-        self.assertEqual(self.proposaltemplate.absolute_url(), template_link)
+
+        document_link = templates[0]['Title'].css('a').first.get('href')
+        self.assertEqual(self.proposal_template.absolute_url(), document_link)
 
 
 class TestTemplateDocumentTabs(IntegrationTestCase):
@@ -805,25 +896,25 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
     @browsing
     def test_template_overview_tab(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.template_a, view='tabbedview_view-overview')
+        browser.open(self.normal_template, view='tabbedview_view-overview')
 
-        self.assertIn(['Title', u'T\xc3\xb6mpl\xc3\xb6te A'], browser.css('table.listing').first.lists())
+        self.assertIn(['Title', u'T\xc3\xb6mpl\xc3\xb6te Normal'], browser.css('table.listing').first.lists())
 
     @browsing
     def test_template_journal_tab(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.template_a, view='tabbedview_view-journal')
+        browser.open(self.normal_template, view='tabbedview_view-journal')
 
         journal_entries = browser.css('table.listing').first.dicts()
 
         self.assertEqual(Actor.lookup(self.administrator.id).get_label(), journal_entries[0]['Changed by'])
-        self.assertEqual(u'Document added: T\xc3\xb6mpl\xc3\xb6te A', journal_entries[0]['Title'])
+        self.assertEqual(u'Document added: T\xc3\xb6mpl\xc3\xb6te Normal', journal_entries[0]['Title'])
 
     @browsing
     def test_template_info_tab(self, browser):
         self.login(self.manager, browser)
 
-        browser.open(self.template_a, view='tabbedview_view-sharing')
+        browser.open(self.normal_template, view='tabbedview_view-sharing')
 
         expected_sharing_tab_data = [
             ['Logged-in users', False, False, False],
