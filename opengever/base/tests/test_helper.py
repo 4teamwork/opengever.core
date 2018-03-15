@@ -1,105 +1,49 @@
-from ftw.testing import MockTestCase
+from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import obj2brain
 from opengever.base.browser.helper import get_css_class
-from opengever.ogds.base import utils
-from plone.i18n.normalizer import idnormalizer, IIDNormalizer
 
 
-class TestCssClassHelpers(MockTestCase):
-
-    def setUp(self):
-        super(TestCssClassHelpers, self).setUp()
-
-        self.ori_get_current_admin_unit = utils.get_current_admin_unit
-        get_current_admin_unit = self.mocker.replace(
-            'opengever.ogds.base.utils.get_current_admin_unit', count=False)
-
-        admin_unit = self.stub()
-        self.expect(get_current_admin_unit()).result(admin_unit)
-        self.expect(admin_unit.id()).result('client1')
-
-        self.mock_utility(idnormalizer, IIDNormalizer)
-
-    def tearDown(self):
-        utils.get_current_admin_unit = self.ori_get_current_admin_unit
-
-    def test_obj(self):
-        obj = self.stub()
-        self.expect(obj.portal_type).result('ftw.obj.obj')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(obj), 'contenttype-ftw-obj-obj')
-
-    def test_document_brain_with_icon(self):
-        brain = self.stub()
-        self.expect(brain.portal_type).result('opengever.document.document')
-        self.expect(getattr(brain, '_v__is_relation', False)).result(False)
-        self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(brain), 'icon-dokument_pdf')
-
-    def test_document_obj_with_icon(self):
-        obj = self.stub()
-        self.expect(obj.portal_type).result('opengever.document.document')
-        self.expect(getattr(obj, '_v__is_relation', False)).result(False)
-        self.expect(obj.getIcon()).result('icon_dokument_word.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(obj), 'icon-dokument_word')
+class TestCssClassHelpers(IntegrationTestCase):
 
     def test_document_obj_with_relation_flag(self):
-        obj = self.stub()
-        self.expect(obj.portal_type).result('opengever.document.document')
-        self.expect(getattr(obj, '_v__is_relation', False)).result(True)
-        obj._v__is_relation = False
+        self.login(self.dossier_responsible)
+        setattr(self.document, '_v__is_relation', True)
+        self.assertEquals(
+            get_css_class(self.document),
+            'icon-docx is-document-relation')
 
-        self.replay()
+    def test_document_brain_with_icon(self):
+        self.login(self.dossier_responsible)
+        brain = obj2brain(self.document)
+        self.assertEquals(brain.getIcon, 'docx.png')
+        self.assertEquals(get_css_class(brain), 'icon-docx')
 
-        self.assertEquals(get_css_class(obj), 'icon-dokument_verweis')
+    def test_document_obj_with_icon(self):
+        self.login(self.dossier_responsible)
+        setattr(self.document, '_v__is_relation', False)
+        self.assertEquals(self.document.getIcon(), 'docx.png')
+        self.assertEquals(get_css_class(self.document), 'icon-docx')
 
     def test_sablontemplate_brain_with_icon(self):
-        brain = self.stub()
-        self.expect(brain.portal_type).result(
-            'opengever.meeting.sablontemplate')
-        self.expect(getattr(brain, '_v__is_relation', False)).result(False)
-        self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(brain), 'icon-dokument_pdf')
+        self.login(self.dossier_responsible)
+        brain = obj2brain(self.sablon_template)
+        self.assertEquals(brain.getIcon, 'docx.png')
+        self.assertEquals(get_css_class(brain), 'icon-docx')
 
     def test_sablontemplate_obj_with_icon(self):
-        obj = self.stub()
-        self.expect(obj.portal_type).result(
-            'opengever.meeting.sablontemplate')
-        self.expect(getattr(obj, '_v__is_relation', False)).result(False)
-        self.expect(obj.getIcon()).result('icon_dokument_word.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(obj), 'icon-dokument_word')
+        self.login(self.dossier_responsible)
+        setattr(self.sablon_template, '_v__is_relation', False)
+        self.assertEquals(self.sablon_template.getIcon(), 'docx.png')
+        self.assertEquals(get_css_class(self.sablon_template), 'icon-docx')
 
     def test_proposaltemplate_brain_with_icon(self):
-        brain = self.stub()
-        self.expect(brain.portal_type).result(
-            'opengever.meeting.proposaltemplate')
-        self.expect(getattr(brain, '_v__is_relation', False)).result(False)
-        self.expect(brain.getIcon).result('icon_dokument_pdf.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(brain), 'icon-dokument_pdf')
+        self.login(self.dossier_responsible)
+        brain = obj2brain(self.proposal_template)
+        self.assertEquals(brain.getIcon, 'docx.png')
+        self.assertEquals(get_css_class(brain), 'icon-docx')
 
     def test_proposaltemplate_obj_with_icon(self):
-        obj = self.stub()
-        self.expect(obj.portal_type).result(
-            'opengever.meeting.proposaltemplate')
-        self.expect(getattr(obj, '_v__is_relation', False)).result(False)
-        self.expect(obj.getIcon()).result('icon_dokument_word.gif')
-
-        self.replay()
-
-        self.assertEquals(get_css_class(obj), 'icon-dokument_word')
+        self.login(self.dossier_responsible)
+        setattr(self.proposal_template, '_v__is_relation', False)
+        self.assertEquals(self.proposal_template.getIcon(), 'docx.png')
+        self.assertEquals(get_css_class(self.proposal_template), 'icon-docx')
