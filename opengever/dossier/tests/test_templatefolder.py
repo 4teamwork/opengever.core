@@ -800,49 +800,39 @@ class TestTemplateFolderListings(FunctionalTestCase):
         self.assertEqual(self.proposaltemplate.absolute_url(), template_link)
 
 
-class TestTemplateDocumentTabs(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestTemplateDocumentTabs, self).setUp()
-
-        self.templatefolder = create(Builder('templatefolder'))
-        self.template = create(Builder('document')
-                               .within(self.templatefolder)
-                               .titled('My Document'))
+class TestTemplateDocumentTabs(IntegrationTestCase):
 
     @browsing
     def test_template_overview_tab(self, browser):
-        browser.login().open(self.template, view=OVERVIEW_TAB)
-        table = browser.css('table.listing').first
-        self.assertIn(['Title', 'My Document'], table.lists())
+        self.login(self.regular_user, browser)
+        browser.open(self.template_a, view='tabbedview_view-overview')
+
+        self.assertIn(['Title', u'T\xc3\xb6mpl\xc3\xb6te A'], browser.css('table.listing').first.lists())
 
     @browsing
     def test_template_journal_tab(self, browser):
-        browser.login().open(self.template, view=JOURNAL_TAB)
+        self.login(self.regular_user, browser)
+        browser.open(self.template_a, view='tabbedview_view-journal')
+
         journal_entries = browser.css('table.listing').first.dicts()
-        self.assertEqual(Actor.lookup(TEST_USER_ID).get_label(),
-                         journal_entries[0]['Changed by'])
-        self.assertEqual('Document added: My Document',
-                         journal_entries[0]['Title'])
+
+        self.assertEqual(Actor.lookup(self.administrator.id).get_label(), journal_entries[0]['Changed by'])
+        self.assertEqual(u'Document added: T\xc3\xb6mpl\xc3\xb6te A', journal_entries[0]['Title'])
 
     @browsing
     def test_template_info_tab(self, browser):
-        # we want to test authenticated user, which only a Manager can see
-        self.grant('Manager')
-        browser.login()
+        self.login(self.manager, browser)
 
-        browser.open(self.template, view=INFO_TAB)
-        self.assertEquals([['Logged-in users', False, False, False]],
-                          sharing_tab_data())
+        browser.open(self.template_a, view='tabbedview_view-sharing')
 
-        self.template.manage_setLocalRoles(TEST_USER_ID,
-                                           ["Reader", "Contributor", "Editor"])
-        transaction.commit()
+        expected_sharing_tab_data = [
+            ['Logged-in users', False, False, False],
+            ['fa Users Group (fa_users)', True, False, False],
+            ['Kohler Nicole (nicole.kohler)', True, True, True],
+            ['Ziegler Robert (robert.ziegler)', True, True, True],
+            ]
 
-        browser.open(self.template, view=INFO_TAB)
-        self.assertEquals([['Logged-in users', False, False, False],
-                           ['test-user (test_user_1_)', True, True, True]],
-                          sharing_tab_data())
+        self.assertEquals(expected_sharing_tab_data, sharing_tab_data())
 
 
 class TestDossierTemplateFeature(IntegrationTestCase):
