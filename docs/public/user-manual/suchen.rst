@@ -1,5 +1,5 @@
 .. _label-suchen:
-.. _kapitel-suchen:
+.. _kapitel-suchen_und_filtern:
 
 Suchen und Filtern
 ==================
