@@ -43,4 +43,9 @@ class FixRelationCatalogReferences(UpgradeStep):
         except cPickle.PicklingError as e:
             return True
 
+        except Exception as e:
+            # Make sure any other errors don't make this check fail
+            logger.warning('Trying to pickle %r failed with %r' % (btree, e))
+            return False
+
         return False
