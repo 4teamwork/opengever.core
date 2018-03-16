@@ -19,6 +19,14 @@ class FixRelationCatalogReferences(UpgradeStep):
     """
 
     def __call__(self):
+        # Disable this upgrade step until we figure out what exactly is going
+        # on in issue #4074 - right now it seems that pickling a persistent
+        # object (just to check whether it's in an ok state) might be a bad
+        # idea and not be side-effect free.
+        #
+        # Until we're sure this isn't harmful, we disable this upgrade step.
+        return
+
         catalog = getUtility(ICatalog)
 
         for mapping_key in POTENTIALLY_BROKEN:
@@ -42,5 +50,10 @@ class FixRelationCatalogReferences(UpgradeStep):
             pickler.dump(btree)
         except cPickle.PicklingError as e:
             return True
+
+        except Exception as e:
+            # Make sure any other errors don't make this check fail
+            logger.warning('Trying to pickle %r failed with %r' % (btree, e))
+            return False
 
         return False
