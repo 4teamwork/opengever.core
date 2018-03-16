@@ -5,7 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
-- Make upgrade step to fix broken references more robust. [lgraf]
+- Temporarily disable upgrade step to fix broken references until we're sure it's safe. [lgraf]
 - Install and integrate ftw.tokenauth. [lgraf]
 - Make sure to URLEncode links to the list_groupmember view in sharing views. [lgraf]
 - Ensure correct dossier reference numbers for proposals after a dossier move operation. [Rotonen]
