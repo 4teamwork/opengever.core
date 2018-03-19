@@ -307,7 +307,7 @@ def handle_results(results):
             stdout = result.get('stdout')
             runtime += result.get('runtime')
 
-            if not stderr and not returncode:
+            if not returncode:
                 success.append(True)
 
             else:
