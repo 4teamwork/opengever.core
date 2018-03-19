@@ -102,8 +102,7 @@ class CheckinContextCommentForm(form.Form):
 
     def __init__(self, context, request):
         super(CheckinContextCommentForm, self).__init__(context, request)
-        self.locked = IRefreshableLockable(self.context).locked()
-        if self.locked:
+        if self.is_document_locked():
             # Add a warning onto a locked document checkin view
             msg = _(
                 u'label_warn_checkout_locked',
@@ -115,23 +114,12 @@ class CheckinContextCommentForm(form.Form):
                 )
             IStatusMessage(self.request).addStatusMessage(msg, type=u'warning')
 
-            # Swap the button label out on a locked document
-            for form_button in self.buttons.items():
-                if form_button[0] == 'button_checkin':
-                    button_payload = form_button[1]
-                    button_payload.title = _(
-                        u'button_checkin_anyway',
-                        default=u'Checkin anyway'
-                        )
-                    form_button = (
-                        'button_checkin_anyway',
-                        button_payload,
-                        )
-
         self.checkin_controller = CheckinController(self.request)
 
-    @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'))
-    def checkin_button_handler(self, action):
+    def is_document_locked(self):
+        return IRefreshableLockable(self.context).locked()
+
+    def checkin_document(self):
         # Errors are handled by the checkin
         data = self.extractData()[0]
 
@@ -141,6 +129,16 @@ class CheckinContextCommentForm(form.Form):
             )
 
         return self.redirect()
+
+    @button.buttonAndHandler(_(u'button_checkin', default=u'Checkin'),
+                             condition=lambda form: not form.is_document_locked())
+    def checkin_button_handler(self, action):
+        return self.checkin_document()
+
+    @button.buttonAndHandler(_(u'button_checkin_anyway', default=u'Checkin anyway'),
+                             condition=lambda form: form.is_document_locked())
+    def checkin_anyway_button_handler(self, action):
+        return self.checkin_document()
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
