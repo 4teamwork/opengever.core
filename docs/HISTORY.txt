@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- Update ftw.datepicker to version 1.3.0. [mathias.leimgruber]
 - Temporarily disable upgrade step to fix broken references until we're sure it's safe. [lgraf]
 - Install and integrate ftw.tokenauth. [lgraf]
 - Make sure to URLEncode links to the list_groupmember view in sharing views. [lgraf]
