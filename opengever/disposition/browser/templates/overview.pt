@@ -24,7 +24,7 @@
             </div>
 
             <div>
-              <h3 class="metadata" i18n:translate="label_proces">Process</h3>
+              <h3 class="metadata" i18n:translate="label_process">Process</h3>
               <div class="workflow_wizard">
                 <ul class="wizard_steps" tal:define="current_state view/get_current_state" >
                   <li tal:repeat="state view/get_states"
