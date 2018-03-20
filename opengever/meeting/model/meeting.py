@@ -301,7 +301,8 @@ class Meeting(Base, SQLFormSupport):
         committee = self.committee.resolve_committee()
         if not api.user.has_permission('Modify portal content', obj=committee):
             return False
-        return self.get_state() in [self.STATE_PENDING, self.STATE_HELD]
+
+        return self.is_active()
 
     def is_agendalist_editable(self):
         if not self.is_editable():
@@ -310,6 +311,9 @@ class Meeting(Base, SQLFormSupport):
 
     def is_pending(self):
         return self.get_state() == self.STATE_PENDING
+
+    def is_active(self):
+        return self.get_state() in [self.STATE_HELD, self.STATE_PENDING]
 
     def is_closed(self):
         return self.get_state() == self.STATE_CLOSED

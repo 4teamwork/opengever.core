@@ -158,6 +158,7 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(
             {'is_closed': False,
              'close_url': self.get_meeting_transition_url('pending-closed'),
+             'cancel_url': self.get_meeting_transition_url('pending-cancelled'),
              'reopen_url': None},
             view.get_closing_infos())
 
