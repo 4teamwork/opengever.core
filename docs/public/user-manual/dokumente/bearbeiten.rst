@@ -47,7 +47,7 @@ Dokument auschecken und bearbeiten
 
 Fahren Sie mit der Maus in der Dokumentliste auf das Icon des Dokuments,
 das Sie bearbeiten möchten und wählen Sie auf der Eigenschaftenmaske des
-Dokuments die Option "Auschecken / Bearbeiten".
+Dokuments die Option "Auschecken und Bearbeiten".
 
 |img-dokumente-9|
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-16 15:57+0000\n"
+"POT-Creation-Date: 2018-03-22 12:19+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -65,9 +65,6 @@ msgid "button_more_actions"
 msgstr ""
 
 msgid "checked_out"
-msgstr ""
-
-msgid "checkout_and_edit"
 msgstr ""
 
 #. Default: "Date of completion"
