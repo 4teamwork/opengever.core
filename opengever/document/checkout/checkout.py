@@ -45,18 +45,19 @@ class CheckoutDocuments(BrowserView):
             objects = [self.context]
 
         # now, lets checkout every document
-        for obj in objects:
-            if not IDocumentSchema.providedBy(obj):
-                # notify the user. we have a no-checkoutable object
-                msg = _(
-                    u'Could not check out object: ${title}, '
-                    'it is not a document.',
-                    mapping={'title': obj.Title().decode('utf-8')})
-                IStatusMessage(
-                    self.request).addStatusMessage(msg, type='error')
-                continue
+        if not self.request.get('reauth') == '1':
+            for obj in objects:
+                if not IDocumentSchema.providedBy(obj):
+                    # notify the user. we have a no-checkoutable object
+                    msg = _(
+                        u'Could not check out object: ${title}, '
+                        'it is not a document.',
+                        mapping={'title': obj.Title().decode('utf-8')})
+                    IStatusMessage(
+                        self.request).addStatusMessage(msg, type='error')
+                    continue
 
-            self.checkout(obj)
+                self.checkout(obj)
 
         # lets register a redirector for starting external
         # editor - if requested
