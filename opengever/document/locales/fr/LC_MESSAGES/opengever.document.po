@@ -155,7 +155,7 @@ msgstr "Checkin"
 #. Default: "Checkin anyway"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin_anyway"
-msgstr ""
+msgstr "Checkin malgré tout"
 
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py
@@ -535,7 +535,7 @@ msgstr "Version"
 #. Default: " This document is currently being worked on."
 #: ./opengever/document/checkout/checkin.py
 msgid "label_warn_checkout_locked"
-msgstr ""
+msgstr "Quelqu'un travaille actuellement sur ce document. Les modifications seront perdues si vous faites un checkin manuel. Veuillez s'il vous plait permettre au processus d'edition actuel de se terminer."
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
@@ -545,7 +545,7 @@ msgstr "Oui"
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
-msgstr "Ce document a été verrouillé par ${creator}."
+msgstr "${creator} a fait un checkout de ce document."
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."
 #: ./opengever/document/checkout/cancel.py

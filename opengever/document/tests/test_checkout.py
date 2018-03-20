@@ -5,6 +5,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import NoElementFound
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
@@ -426,6 +427,30 @@ class TestCheckinViews(IntegrationTestCase):
     """Tests for the checkin views."""
 
     @browsing
+    def test_checkin_anyway_shown_for_locked_documents(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        browser.open(self.document)
+        browser.css('#checkin_with_comment').first.click()
+        with self.assertRaises(NoElementFound):
+            browser.css('#form-buttons-button_checkin_anyway').first
+
+        self.assertEqual(browser.css('#form-buttons-button_checkin').first.name, 'form.buttons.button_checkin')
+
+        # Lock document
+        IRefreshableLockable(self.document).lock()
+
+        browser.open(self.document)
+        browser.css('#checkin_with_comment').first.click()
+        with self.assertRaises(NoElementFound):
+            browser.css('#form-buttons-button_checkin').first
+
+        self.assertEqual(browser.css('#form-buttons-button_checkin_anyway').first.name, 'form.buttons.button_checkin_anyway')
+
+    @browsing
     def test_single_checkin_with_comment(self, browser):
         self.login(self.regular_user, browser)
 
@@ -467,7 +492,6 @@ class TestCheckinViews(IntegrationTestCase):
 
         # Lock document
         IRefreshableLockable(self.document).lock()
-        transaction.commit()
 
         browser.open(self.document)
 
@@ -484,7 +508,7 @@ class TestCheckinViews(IntegrationTestCase):
 
         self.assertIn(
             'Checkin anyway',
-            browser.css('#form-buttons-button_checkin')[0].outerHTML
+            browser.css('#form-buttons-button_checkin_anyway')[0].outerHTML
             )
 
         self.assertNotIn(
@@ -498,7 +522,7 @@ class TestCheckinViews(IntegrationTestCase):
             u'Journal Comment': journal_comment,
             })
 
-        browser.css('#form-buttons-button_checkin').first.click()
+        browser.css('#form-buttons-button_checkin_anyway').first.click()
 
         manager = getMultiAdapter(
             (self.document, self.portal.REQUEST),
