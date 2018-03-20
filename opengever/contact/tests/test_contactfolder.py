@@ -6,7 +6,6 @@ from opengever.contact.interfaces import IContactFolder
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
 from plone import api
-from unittest import skip
 
 
 class TestContactFolder(IntegrationTestCase):
@@ -19,8 +18,6 @@ class TestContactFolder(IntegrationTestCase):
         self.login(self.manager)
         self.assertTrue(IContactFolder.providedBy(self.contactfolder))
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_supports_translated_title(self, browser):
         self.login(self.manager, browser=browser)

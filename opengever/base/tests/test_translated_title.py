@@ -14,7 +14,6 @@ from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
 from opengever.testing import TestCase
 from plone import api
-from unittest import skip
 import transaction
 
 
@@ -99,8 +98,6 @@ class TestTranslatedTitle(FunctionalTestCase):
         self.assertEquals(u"Ablage 1", repository_root.title_de)
         self.assertEquals(u"syst\xe8me d'ordre 1", repository_root.title_fr)
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_Title_returns_title_in_preffered_language_by_default(self, browser):
         repository_root = create(Builder('repository_root')
@@ -136,8 +133,6 @@ class TestTranslatedTitle(FunctionalTestCase):
             u"Ablage",
             ITranslatedTitle(repository_root).translated_title(language='it'))
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_fallback_for_title_is_the_german_title(self, browser):
         repository_root = create(Builder('repository_root')
