@@ -111,12 +111,15 @@
         </div>
 
         <div class="overlay" id="confirm_cancel_meeting">
+          <div class="close">
+            <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
+          </div>
           <h2 i18n:translate="cancel_meeting">Cancel meeting</h2>
           <p i18n:translate="">
             Are you sure you want to cancel this meeting?
           </p>
           <div class="button-group">
-            <button class="button confirm context"
+            <button class="button destructive confirm"
                     i18n:translate="label_cancel_meeting">Cancel meeting</button>
             <button class="button decline"
                     i18n:translate="label_cancel">Cancel</button>
@@ -305,6 +308,12 @@
                       The meeting can only be closed when all agenda items are decided.
                     </div>
                   </div>
+
+                  <div class="cancel-meeting" tal:condition="closing_infos/cancel_url">
+                    <a tal:attributes="href closing_infos/cancel_url"
+                       i18n:translate="action_cancel_meeting">Cancel meeting</a>
+                  </div>
+
                 </div>
               </div>
             </div>

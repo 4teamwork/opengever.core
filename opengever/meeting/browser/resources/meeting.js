@@ -255,7 +255,7 @@
       },
       {
         method: "click",
-        target: "#pending-cancelled",
+        target: "#pending-cancelled, .cancel-meeting a",
         callback: this.showCancelMeetingDialog,
         options: {
           update: true
@@ -612,8 +612,10 @@
     this.updateCloseTransitionActionState = function() {
       if($('.decide-agenda-item, .revise-agenda-item').length > 0) {
         $('.close-meeting').addClass('disabled');
+        $('.cancel-meeting').hide();
       } else {
         $('.close-meeting').removeClass('disabled');
+        $('.cancel-meeting').show();
       }
       this.updateNavigationScrollArea();
     };
