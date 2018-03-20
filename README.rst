@@ -503,6 +503,7 @@ Objects
 
   - self.committee_container
     - self.committee
+      - self.cancelled_meeting
       - self.decided_meeting
       - self.decided_proposal
       - self.meeting
@@ -531,6 +532,7 @@ Objects
         - self.archive_dossier
           - self.archive_document
           - self.archive_task
+        - self.cancelled_meeting_dossier
         - self.closed_meeting_dossier
         - self.decided_meeting_dossier
         - self.dossier

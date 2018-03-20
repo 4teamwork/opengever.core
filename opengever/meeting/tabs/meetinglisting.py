@@ -4,8 +4,10 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
-from opengever.tabbedview import BaseListingTab
+from opengever.tabbedview import FilteredListingTab
 from opengever.tabbedview import SqlTableSource
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import adapter
@@ -47,10 +49,30 @@ def dossier_link_or_title(item, value):
     return link
 
 
-class MeetingListingTab(BaseListingTab):
+class ActiveMeetingFilter(Filter):
+    """Only display active meetings."""
+
+    def update_query(self, query):
+        return query.active()
+
+
+class MeetingListingTab(FilteredListingTab):
     implements(IMeetingTableSourceConfig)
 
+    filterlist_name = 'meeting_state_filter'
+    filterlist = FilterList(
+        Filter(
+            'filter_meeting_all',
+            _('all', default=u'All')),
+        ActiveMeetingFilter(
+            'filter_meeting_active',
+            _('active', default=u'Active'),
+            default=True)
+        )
+
     model = Meeting
+    sort_on = 'start_datetime'
+    show_selects = False
 
     columns = (
         {'column': 'committee_id',

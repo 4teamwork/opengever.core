@@ -15,13 +15,7 @@ from zope.interface import Interface
 
 
 class Meetings(MeetingListingTab):
-
-    selection = ViewPageTemplateFile("templates/no_selection.pt")
-
-    sort_on = 'start_datetime'
-
-    enabled_actions = []
-    major_actions = []
+    pass
 
 
 class Memberships(MembershipListingTab):

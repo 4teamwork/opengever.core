@@ -32,6 +32,32 @@ class TestMeetingListing(IntegrationTestCase):
             result)
 
     @browsing
+    def test_active_filter_hides_cancelled_and_closed_meetings(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-meetings',
+                     data={'meeting_state_filter': 'filter_meeting_active'})
+
+        self.assertEqual(
+            [u'7. Sitzung der Rechnungspr\xfcfungskommission',
+             u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+            browser.css('#listing_container tbody tr td:first-child').text)
+
+    @browsing
+    def test_all_filter_shows_all_meetings(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.committee,
+                     view='tabbedview_view-meetings',
+                     data={'meeting_state_filter': 'filter_meeting_all'})
+
+        self.assertEqual(
+            [u'7. Sitzung der Rechnungspr\xfcfungskommission',
+             u'8. Sitzung der Rechnungspr\xfcfungskommission',
+             u'9. Sitzung der Rechnungspr\xfcfungskommission',
+             u'Stornierte Sitzung der Rechnungspr\xfcfungskommission'],
+            browser.css('#listing_container tbody tr td:first-child').text)
+
+    @browsing
     def test_link_appears_if_view_permission_on_dossier(self, browser):
         self.login(self.meeting_user, browser)
         result = dossier_link_or_title(self.meeting.model, None)
@@ -49,7 +75,7 @@ class TestMeetingListing(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.committee, view='tabbedview_view-meetings')
         self.assertEquals(
-            ['Jul 17, 2015', 'Jul 17, 2016', 'Sep 12, 2016'],
+            ['Jul 17, 2015', 'Sep 12, 2016'],
             browser.css('#listing_container tbody tr td:nth-child(4)').text)
 
         self.login(self.committee_responsible)
@@ -60,5 +86,5 @@ class TestMeetingListing(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.committee, view='tabbedview_view-meetings')
         self.assertEquals(
-            ['Jul 17, 2015', 'Jul 17, 2016', 'Aug 21, 2016', 'Sep 12, 2016'],
+            ['Jul 17, 2015', 'Aug 21, 2016', 'Sep 12, 2016'],
             browser.css('#listing_container tbody tr td:nth-child(4)').text)
