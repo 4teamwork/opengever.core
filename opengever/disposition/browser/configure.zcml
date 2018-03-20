@@ -61,6 +61,13 @@
       />
 
   <browser:page
+      class=".views.UpdateTransferNumberView"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="update-transfer-number"
+      permission="opengever.disposition.EditTransferNumber"
+      />
+
+  <browser:page
       class=".views.AppraiseView"
       for="opengever.disposition.interfaces.IDisposition"
       name="appraise-transition"

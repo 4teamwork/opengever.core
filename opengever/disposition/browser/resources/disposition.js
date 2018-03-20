@@ -31,6 +31,31 @@
       });
     };
 
+    this.update_transfer_number = function(target){
+      var url = $('#transfer_number_dialog').data('transfer-number-save-url');
+      return this.request(url, {
+        method: "POST",
+        data: {
+          transfer_number: $('#transfer_number_field').val()
+        }
+      }).done(function() {
+        $('#transfer-number-value').text($('#transfer_number_field').val());
+        $('#transfer_number_dialog').data('overlay').close();
+      });
+    };
+
+    this.cancel_transfer_number = function(target){
+      $('#transfer_number_dialog').data('overlay').close();
+    };
+
+    this.show_transfer_number_dialog = function(){
+      var dialog = $('#transfer_number_dialog')
+      if (dialog.data('overlay') === undefined){
+        dialog.overlay();
+      }
+      dialog.data('overlay').load();
+    }
+
     this.events = [
       {
         method: "click",
@@ -41,10 +66,28 @@
         method: "click",
         target: ".repo-appraisal-button-group a",
         callback: this.update_repository_appraisal
+      },
+      {
+        method: "click",
+        target: ".edit_transfer_number",
+        callback: this.show_transfer_number_dialog
+      },
+
+      {
+        method: "click",
+        target: ".save_transfer_number",
+        callback: this.update_transfer_number
+      },
+      {
+        method: "click",
+        target: ".cancel_transfer_number",
+        callback: this.cancel_transfer_number
       }
+
     ];
 
     this.init();
+
   }
 
   new DispositionController();

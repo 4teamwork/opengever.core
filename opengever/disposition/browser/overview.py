@@ -114,3 +114,10 @@ class DispositionOverview(BrowserView):
 
     def get_current_state(self):
         return api.content.get_state(self.context)
+
+    def update_transfer_number_url(self):
+        return '{}/update-transfer-number'.format(self.context.absolute_url())
+
+    def is_transfer_number_editable(self):
+        return api.user.has_permission(
+            'opengever.disposition: Edit transfer number', obj=self.context)

@@ -275,6 +275,10 @@ class IGeverState(Interface):
         """URL of the CAS server.
         """
 
+    def properties_action_available():
+        """Check if properties action is available.
+        """
+
 
 class ISQLObjectWrapper(Interface):
     """Marker interface for sql object wrappers."""
