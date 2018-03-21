@@ -61,6 +61,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         # for more information).
         expected_labels = [
             u'Template',
+            u'Filter',
             u'Title',
             u'Edit after creation',
             ]

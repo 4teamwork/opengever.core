@@ -124,12 +124,16 @@ class TestRadioTableWidget(FunctionalTestCase):
         browser.login().visit(view='test-z3cform-widget')
         inputs = browser.css(
             '#formfield-form-widgets-default_radio_table_field input')
-        self.assertEqual(
-            [u'<input id="form-widgets-default_radio_table_field-1" name="form.widgets.default_radio_table_field" value="1" title="foo" type="radio">',
-             u'<input id="form-widgets-default_radio_table_field-2" name="form.widgets.default_radio_table_field" value="2" title="bar" type="radio">',
-             u'<input name="form.widgets.default_radio_table_field-empty-marker" type="hidden" value="1">'],
-            [each.normalized_outerHTML for each in inputs]
-        )
+        expected_inputs = [
+            u'<input type="text" name="searchable_text" id="tableradio-searchbox" class="inputLabel" autocomplete="false" '
+            u'placeholder="Filter" title="Filter">',
+            u'<input id="form-widgets-default_radio_table_field-1" '
+            u'name="form.widgets.default_radio_table_field" value="1" title="foo" type="radio">',
+            u'<input id="form-widgets-default_radio_table_field-2" '
+            u'name="form.widgets.default_radio_table_field" value="2" title="bar" type="radio">',
+            u'<input name="form.widgets.default_radio_table_field-empty-marker" type="hidden" value="1">',
+            ]
+        self.assertEqual(expected_inputs, [each.normalized_outerHTML for each in inputs])
 
     @browsing
     def test_renders_empty_message(self, browser):
