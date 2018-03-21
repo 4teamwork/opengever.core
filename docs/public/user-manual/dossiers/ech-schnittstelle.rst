@@ -3,7 +3,7 @@
 Import / Export eCH-0039 Schnittstelle
 ---------------------------------------
 
-OneGov GEVER bietet den Import und Export gemäss `eCH-0039 <https://www.ech.ch/vechweb/page?p=dossier&documentNumber=eCH-0039>`_ sowie `eCH-0147 <https://www.ech.ch/vechweb/page?p=dossier&documentNumber=eCH-0147&documentVersion=1.2>`_ an.
+OneGov GEVER bietet den Import und Export gemäss `eCH-0039 <https://www.ech.ch/vechweb/page?p=dossier&documentNumber=eCH-0039>`_ sowie `eCH-0147 <https://www.ech.ch/vechweb/page?p=dossier&documentNumber=eCH-0147>`_ an.
 
 Export
 ~~~~~~
