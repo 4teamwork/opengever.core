@@ -81,7 +81,7 @@ Ein Dokument in den Papierkorb verschieben
 Dokumente in OneGov GEVER können von normalen Benutzenden nicht gelöscht,
 sondern nur in den Papierkorb verschoben werden. Dort können diese mittels
 Reaktivierung wieder ins Dossier zurückgespielt werden. Der Administrator hat
-zudem die Möglichkeit, einen `Soft-Delete <https://docs.onegovgever.ch/admin-manual/soft-delete/>`_ vorzunehmen.
+zudem die Möglichkeit, einen :ref:`Soft-Delete <label-soft-delete>` vorzunehmen.
 
 Beim Verschieben in den Papierkorb gehen Sie wie folgt vor:
 
@@ -179,7 +179,7 @@ exportiert werden.
     Bitte achten Sie daher beim Titel darauf, dass diese Beschränkung
     nicht überschritten wird. Ab Windows 10 (Version 1607) besteht die
     Möglichkeit, dass ein längerer Pfadname mittels Konfiguration zugelassen
-    werden kann. Alternativ kann das  Zip-Programm http://www.7-zip.org/
+    werden kann. Alternativ kann das `Programm 7-Zip <http://www.7-zip.org/>`_
     installiert werden, welches mit langen Zip-Namen umgehen kann.
 
 ZIP-Import

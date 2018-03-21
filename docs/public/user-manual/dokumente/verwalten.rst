@@ -1,3 +1,6 @@
+
+.. _label-dokumentvorlage:
+
 Dokumentvorlagen verwalten
 --------------------------
 

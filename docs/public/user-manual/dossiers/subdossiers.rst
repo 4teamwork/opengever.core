@@ -9,7 +9,7 @@ Subdossier eröffnen
 Wählen Sie auf dem Hauptdossier *Hinzufügen → Subdossier*.
 
 Die Erfassungsmasken von Haupt- und Subdossiers sind identisch (siehe
-:ref:`Neues Dossier eröffnen <label-dossier-erstellen>`). Die federführende
+:ref:`label-dossier-erstellen`). Die federführende
 Person wird automatisch vom Hauptdossier übernommen, kann aber geändert werden. Unter
 einem Hauptdossier können beliebig viele Verschachtelungsstufen von Subdossiers
 eröffnet werden; standardmässig ist dies jedoch auf eine Hierarchiestufe
@@ -19,7 +19,7 @@ Subdossier bearbeiten
 ~~~~~~~~~~~~~~~~~~~~~
 
 Die Bearbeitung eines Subdossiers ist identisch zur Bearbeitung von
-Hauptdossiers (siehe :ref:`Dossier bearbeiten <label-dossier-bearbeiten>`).
+Hauptdossiers (siehe :ref:`label-dossier-bearbeiten`).
 
 Dossiers mit Subdossiers abschliessen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

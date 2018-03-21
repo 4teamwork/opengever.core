@@ -1,3 +1,5 @@
+.. _label-soft-delete:
+
 Soft-Delete
 ===========
 

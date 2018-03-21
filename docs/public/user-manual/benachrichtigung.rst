@@ -3,8 +3,7 @@ Benachrichtigungs-Einstellungen
 
 Bei der Benachrichtigungs-Einstellung können Sie individuell einstellen, wann
 und wie OneGov GEVER Sie über Ihre Aktivitäten benachrichtigen soll.
-Gehen Sie dazu oben rechts auf Ihren Profilnamen und dann auf " Meine
-Einstellungen":
+Gehen Sie dazu oben rechts auf Ihren Profilnamen und dann auf *Meine Einstellungen* :
 
 |img-benachrichtigungs-einstellungen-1|
 
@@ -12,7 +11,7 @@ Danach gelangen Sie automatisch auf die untenstehende Übersicht, welche die
 aktuellen geltenden Regeln wie OneGov GEVER über Ihre Aktivitäten
 benachrichtigt, darstellt. Sie können nun pro Aktivität definieren, in welcher
 Rolle Sie über welchen Kanal benachrichtigt werden wollen. Zurzeit stehen die
-Kanäle "GEVER Benachrichtigung" (Glocke im mittleren Headerbereich) oder Mail
+Kanäle *GEVER Benachrichtigung* (Glocke im mittleren Headerbereich) oder Mail
 (Benachrichtigung direkt per Mail) zur Verfügung. Zudem können Sie anwählen, ob
 Sie eine tägliche Zusammenfassung (Daily Digest) erhalten möchten.
 
@@ -26,8 +25,7 @@ somit rückgängig machen können.
 
 |img-benachrichtigungs-einstellungen-3|
 
-Individualisierte Einstellungen können mit der Aktion "Auf Standard
-zurücksetzen" gelöscht und somit auf den GEVER Standard zurück gesetzt werden.
+Individualisierte Einstellungen können mit der Aktion *Auf Standard zurücksetzen* gelöscht und somit auf den GEVER Standard zurück gesetzt werden.
 
 |img-benachrichtigungs-einstellungen-4|
 
