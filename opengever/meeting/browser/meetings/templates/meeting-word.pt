@@ -114,7 +114,7 @@
           <div class="close">
             <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
           </div>
-          <h2 i18n:translate="cancel_meeting">Cancel meeting</h2>
+          <h2 i18n:translate="label_cancel_meeting">Cancel meeting</h2>
           <p i18n:translate="">
             Are you sure you want to cancel this meeting?
           </p>

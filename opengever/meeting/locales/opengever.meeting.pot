@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-06 10:53+0000\n"
+"POT-Creation-Date: 2018-03-21 17:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,6 +79,10 @@ msgstr ""
 #. Default: "An unexpected error has occurred"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "An unexpected error has occurred"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Are you sure you want to cancel this meeting?"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -389,6 +393,11 @@ msgstr ""
 msgid "You are not allowed to view the meeting dossier."
 msgstr ""
 
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_cancel_meeting"
+msgstr ""
+
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_close_meeting"
@@ -521,6 +530,7 @@ msgstr ""
 
 #. Default: "All"
 #: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/tabs/meetinglisting.py
 msgid "all"
 msgstr ""
 
@@ -554,11 +564,13 @@ msgid "button_submit_attachments"
 msgstr ""
 
 #. Default: "Cancel"
+#: ./opengever/meeting/model/meeting.py
 #: ./opengever/meeting/model/proposal.py
 msgid "cancel"
 msgstr ""
 
 #. Default: "Cancelled"
+#: ./opengever/meeting/model/meeting.py
 #: ./opengever/meeting/model/proposal.py
 msgid "cancelled"
 msgstr ""
@@ -923,6 +935,11 @@ msgstr ""
 msgid "label_cancel"
 msgstr ""
 
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_cancel_meeting"
+msgstr ""
+
 #. Default: "Close"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_close"
@@ -1229,6 +1246,11 @@ msgstr ""
 #. Default: "Meeting closed"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_meeting_closed"
+msgstr ""
+
+#. Default: "The meeting already has agenda items and can't be cancelled"
+#: ./opengever/meeting/model/meeting.py
+msgid "label_meeting_has_agenda_items"
 msgstr ""
 
 #. Default: "Member"
@@ -1595,6 +1617,11 @@ msgstr ""
 #. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_inactive_committee_selected"
+msgstr ""
+
+#. Default: "The meeting ${title} has been successfully cancelled."
+#: ./opengever/meeting/model/meeting.py
+msgid "msg_meeting_successfully_cancelled"
 msgstr ""
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
