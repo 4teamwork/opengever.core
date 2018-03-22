@@ -52,8 +52,8 @@ class EditMeetingView(ModelEditForm):
 
         if self.actions.executedActions:
             return
-        if not self.is_available_for_current_user():
-            raise Redirect(self.context.absolute_url())
+        # if not self.is_available_for_current_user():
+        #     raise Redirect(self.context.absolute_url())
 
         self.lock()
 
