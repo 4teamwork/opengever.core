@@ -33,6 +33,13 @@ class TestEditMeeting(IntegrationTestCase):
         self.assertIsNotNone(browser.css('#form-widgets-secretary'))
 
     @browsing
+    def test_secretary_edit_field_is_a_keyword_widget(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting, view='edit-meeting')
+
+        self.assertIn('keyword-widget', browser.css('#form-widgets-secretary')[0].classes)
+
+    @browsing
     def test_edit_meeting_metadata(self, browser):
         self.maxDiff = None
         self.login(self.committee_responsible, browser)

@@ -21,16 +21,8 @@ class TestParticipantsView(IntegrationTestCase):
 
         browser.open(self.meeting, view='participants/change_role',
                      data={'member_id': member.member_id,
-                           'role': 'secretary'})
-        self.assertEqual({u'proceed': True}, browser.json)
-        self.assertEqual(member, meeting.secretary)
-        self.assertIsNone(meeting.presidency)
-
-        browser.open(self.meeting, view='participants/change_role',
-                     data={'member_id': member.member_id,
                            'role': ''})
         self.assertEqual({u'proceed': True}, browser.json)
-        self.assertIsNone(meeting.secretary)
         self.assertIsNone(meeting.presidency)
 
     @browsing

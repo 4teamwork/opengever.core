@@ -291,13 +291,8 @@ class TestProtocol(FunctionalTestCase):
     @browsing
     def test_protocol_participants_can_be_edited(self, browser):
         peter = create(Builder('member'))
-        hans = create(Builder('member').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
         create(Builder('membership').having(
             member=peter,
-            committee=self.committee_model))
-        create(Builder('membership').having(
-            member=hans,
             committee=self.committee_model))
         prev_modified = self.meeting.modified
 
@@ -305,7 +300,6 @@ class TestProtocol(FunctionalTestCase):
         browser.open(self.meeting.get_url(view='protocol'))
 
         browser.fill({'Presidency': str(peter.member_id),
-                      'Secretary': str(hans.member_id),
                       'Participants': str(peter.member_id),
                       'Other Participants': 'Klara'}).submit()
 
@@ -321,11 +315,9 @@ class TestProtocol(FunctionalTestCase):
         # refresh intances
         meeting = Meeting.query.get(self.meeting.meeting_id)
         peter = Member.get(peter.member_id)
-        hans = Member.get(hans.member_id)
 
         self.assertSequenceEqual([peter], meeting.participants)
         self.assertEqual(peter, meeting.presidency)
-        self.assertEqual(hans, meeting.secretary)
         self.assertEqual(u'Klara', meeting.other_participants)
 
     @browsing

@@ -1,5 +1,6 @@
 from calendar import timegm
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.date_time import as_utc
 from opengever.base.response import JSONResponse
@@ -11,6 +12,7 @@ from opengever.meeting.model import Meeting
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.sources import AllUsersSourceBinder
 from plone import api
 from plone.autoform import directives as form
 from plone.locking.interfaces import ILockable
@@ -35,10 +37,13 @@ class IMeetingMetadata(model.Schema):
         source=get_committee_member_vocabulary,
         required=False)
 
+    form.widget('secretary', KeywordFieldWidget, async=True)
+    form.order_after(secretary='other_participants')
     secretary = schema.Choice(
         title=_('label_secretary', default=u'Secretary'),
-        source=get_committee_member_vocabulary,
-        required=False)
+        source=AllUsersSourceBinder(),
+        required=False,
+        )
 
     form.widget(participants=CheckBoxFieldWidget)
     participants = schema.List(

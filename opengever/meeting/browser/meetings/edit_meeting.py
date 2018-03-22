@@ -8,6 +8,7 @@ from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.protocol import IMeetingMetadata
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_org_unit
 from plone.locking.interfaces import ILockable
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
