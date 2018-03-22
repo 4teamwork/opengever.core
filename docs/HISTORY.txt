@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- Only allow to add contacts when IContactSettings.is_feature_enabled is disabled [njohner]
 - Cleanup leftovers from ICreatorAware interface in index [njohner]
 - Update policy template to set flags for new features [njohner]
 - Add French translations of the Ordnungssystem in the example content [njohner]

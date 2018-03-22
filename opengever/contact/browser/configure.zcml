@@ -20,6 +20,12 @@
       template="templates/contact_view.pt"
       />
 
+  <adapter
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".contact_forms.ContactAddView"
+      name="opengever.contact.contact"
+      />
+
   <browser:page
       name="tabbedview_view-local"
       for="plone.dexterity.interfaces.IDexterityContainer"

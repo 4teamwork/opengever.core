@@ -1,4 +1,5 @@
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.contact import is_contact_feature_enabled
 from opengever.contact.interfaces import IContactFolder
 from opengever.contact.models import Contact
 from opengever.ogds.base.wrapper import TeamWrapper
@@ -43,3 +44,13 @@ class ContactFolder(Container, TranslatedTitleMixin):
         if default is _marker:
             raise KeyError(id_)
         return default
+
+    def allowedContentTypes(self, *args, **kwargs):
+        types = super(ContactFolder, self).allowedContentTypes(*args, **kwargs)
+
+        def filter_type(fti):
+            if fti.id == "opengever.contact.contact":
+                return not is_contact_feature_enabled()
+            return True
+
+        return filter(filter_type, types)
