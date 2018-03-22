@@ -12,6 +12,15 @@ class TestWordMeetingView(IntegrationTestCase):
     features = ('meeting', 'word-meeting')
 
     @browsing
+    def test_displays_correct_edit_bar_actions(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+
+        self.assertEquals(
+            ['Export as Zip', 'Properties', 'Close meeting', 'Cancel'],
+            editbar.menu_options('Actions'))
+
+    @browsing
     def test_meeting_metadata_is_visible(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)

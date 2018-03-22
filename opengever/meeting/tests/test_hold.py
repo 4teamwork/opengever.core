@@ -72,5 +72,5 @@ class TestHoldMeeting(FunctionalTestCase):
         browser.login().open(self.meeting.get_url())
 
         self.assertEquals(
-            ['Close meeting', 'Cancel'],
+            ['Close meeting'],
             browser.css('.actionButtons a').text)
