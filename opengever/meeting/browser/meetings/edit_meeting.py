@@ -49,13 +49,8 @@ class EditMeetingView(ModelEditForm):
     @require_word_meeting_feature
     def update(self):
         super(EditMeetingView, self).update()
-
         if self.actions.executedActions:
             return
-        if not self.is_available_for_current_user():
-            raise Redirect(self.context.absolute_url())
-
-        self.lock()
 
     def updateFields(self):
         super(EditMeetingView, self).updateFields()
@@ -127,6 +122,10 @@ class EditMeetingView(ModelEditForm):
         super(EditMeetingView, self).cancel(self, action)
 
     def render(self):
+        if not self.is_available_for_current_user():
+            raise Redirect(self.context.absolute_url())
+
+        self.lock()
         return self.template()
 
     def get_agenda_items(self, include_paragraphs=False):
