@@ -52,7 +52,7 @@ class TestEditMeeting(IntegrationTestCase):
              'Start:': 'Sep 12, 2016 05:30 PM',
              'End:': 'Sep 12, 2016 07:00 PM',
              'Presidency:': u'Sch\xf6ller Heidrun',
-             'Secretary:': u'M\xfcller Henning',
+             'Secretary:': u'Secretary C\xf6mmittee',
              'Location:': u'B\xfcren an der Aare',
              'Meeting dossier:': 'Sitzungsdossier 9/2017'},
             byline.text_dict())
@@ -72,7 +72,7 @@ class TestEditMeeting(IntegrationTestCase):
              'Start:': 'Oct 13, 2016 08:00 AM',
              'End:': 'Oct 13, 2016 10:00 AM',
              'Presidency:': u'Sch\xf6ller Heidrun',
-             'Secretary:': u'M\xfcller Henning',
+             'Secretary:': u'Secretary C\xf6mmittee',
              'Location:': u'Sitzungszimmer 3',
              'Meeting dossier:': 'New Meeting Title'},
             byline.text_dict())

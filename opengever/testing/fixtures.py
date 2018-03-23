@@ -548,14 +548,11 @@ class OpengeverContentFixture(object):
             date_to=datetime(2016, 12, 31),
             )
 
-        self.committee_secretary = self.create_committee_membership(
-            self.committee,
-            'committee_secretary',
-            firstname=u'Henning',
-            lastname=u'M\xfcller',
-            email='h.mueller@gmx.ch',
-            date_from=datetime(2016, 1, 1),
-            date_to=datetime(2016, 12, 31),
+        self.committee_secretary = create(
+            Builder('ogds_user')
+            .id('committee.secretary')
+            .having(firstname=u'C\xf6mmittee', lastname='Secretary', email='committee.secretary@example.com')
+            .assign_to_org_units([self.org_unit])
             )
 
         self.committee_participant_1 = self.create_committee_membership(
