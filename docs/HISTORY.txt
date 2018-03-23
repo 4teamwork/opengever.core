@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- Update object security when objects are moved (account for changes in placeful workflow). [lgraf]
 - Only allow to add contacts when IContactSettings.is_feature_enabled is disabled [njohner]
 - Cleanup leftovers from ICreatorAware interface in index [njohner]
 - Update policy template to set flags for new features [njohner]

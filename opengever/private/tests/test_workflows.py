@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone import api
+import transaction
 
 
 class TestPrivateFolderWorkflow(FunctionalTestCase):
@@ -28,7 +29,7 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
         self.folder = create_members_folder(self.root)
         self.hugo = create(Builder('user')
                            .named('Hugo', 'Boss')
-                           .with_roles('Member'))
+                           .with_roles('Member', 'Reader'))
         self.admin = create(Builder('user')
                             .named('Ad', 'Min')
                             .with_roles('Member', 'Administrator'))
@@ -122,3 +123,43 @@ class TestPrivateFolderWorkflow(FunctionalTestCase):
     def test_make_sure_private_root_has_no_additional_local_roles(self):
         self.assertEquals({'test_user_1_': ['Owner']},
                           self.root.__ac_local_roles__)
+
+    @browsing
+    def test_moving_documents_out_of_private_area(self, browser):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .titled(u'Zuz\xfcge'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content()
+                          .titled(u'Some File'))
+
+        public_dossier = create(Builder('dossier')
+                                .titled(u'Public Dossier'))
+
+        api.content.move(document, public_dossier)
+        transaction.commit()
+
+        # Other users should be allowed to view document in public repo
+        pasted_document = public_dossier.objectValues()[0]
+        browser.login(self.hugo).visit(pasted_document)
+
+    @browsing
+    def test_copying_documents_out_of_private_area(self, browser):
+        dossier = create(Builder('private_dossier')
+                         .within(self.folder)
+                         .titled(u'Zuz\xfcge'))
+        document = create(Builder('document')
+                          .within(dossier)
+                          .with_dummy_content()
+                          .titled(u'Some File'))
+
+        public_dossier = create(Builder('dossier')
+                                .titled(u'Public Dossier'))
+
+        api.content.copy(document, public_dossier)
+        transaction.commit()
+
+        # Other users should be allowed to view document in public repo
+        pasted_document = public_dossier.objectValues()[0]
+        browser.login(self.hugo).visit(pasted_document)
