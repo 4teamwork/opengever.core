@@ -9,9 +9,12 @@ from opengever.meeting.browser.meetings.protocol import IMeetingMetadata
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.user import User
 from plone.locking.interfaces import ILockable
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
+from z3c.form.interfaces import IDataConverter
 from zExceptions import Redirect
 
 
@@ -58,6 +61,22 @@ class EditMeetingView(ModelEditForm):
         self.fields = (self.fields.omit('presidency')
                        .omit('participants'))
 
+    def inject_initial_data(self):
+        if self.request.method != 'GET':
+            return
+
+        values = self.model.get_edit_values(self.fields.keys())
+        # XXX - Doing this instead of a data adapter
+        secretary = values.get('secretary')
+        if secretary:
+            if isinstance(secretary, User):
+                values['secretary'] = secretary.userid
+
+        for fieldname, value in values.items():
+            widget = self.widgets[fieldname]
+            value = IDataConverter(widget).toWidgetValue(value)
+            widget.value = value
+
     def is_available_for_current_user(self):
         """Check whether the current meeting can be safely unlocked.
 
@@ -78,6 +97,14 @@ class EditMeetingView(ModelEditForm):
             lockable.unlock()
 
     def applyChanges(self, data):
+        # XXX - Doing this instead of a data adapter
+        secretary = data.get('secretary')
+        if secretary:
+            # We get in the user id from the keyword widget
+            ogds_user = ogds_service().fetch_user(secretary)
+            if ogds_user:
+                data['secretary'] = ogds_user
+
         ModelEditForm.applyChanges(self, data)
         self.unlock()
         return True
