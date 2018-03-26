@@ -6,6 +6,9 @@ Changelog
 ---------------------
 
 - Update object security when objects are moved (account for changes in placeful workflow). [lgraf]
+- Disallow force-checkin for mutli-checkin action (table action) [njohner]
+- Make sure to warn users before they can force-checkin a document [njohner]
+- Add checkin button for force-checkin in the document actions [njohner]
 - Only allow to add contacts when IContactSettings.is_feature_enabled is disabled [njohner]
 - Cleanup leftovers from ICreatorAware interface in index [njohner]
 - Update policy template to set flags for new features [njohner]

@@ -95,8 +95,11 @@ class CheckinCheckoutManager(object):
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
 
-    def is_checkin_without_comment_allowed(self):
-        if self.is_checkin_allowed() and not self.is_locked():
+    def is_simple_checkin_allowed(self):
+        return self.is_checkin_allowed() and not self.is_locked()
+
+    def is_only_force_checkin_allowed(self):
+        if self.is_checkin_allowed() and self.is_locked():
             return True
         return False
 

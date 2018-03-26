@@ -24,9 +24,9 @@ class CheckinController(object):
         self.portal = api.portal.get()
         self.request = request
 
-    def checkin_document(self, document, comment=None):
+    def checkin_document(self, document, comment=None, force=False):
         """Perform checkin for one document with an optional comment."""
-        self.process_document(document, comment)
+        self.process_document(document, comment, force)
 
     def checkin_documents(self, document_paths, comment=None):
         """Perform checkin for multiple documents with an optional comment."""
@@ -41,31 +41,32 @@ class CheckinController(object):
         encoded_paths = [p.encode('utf-8') for p in document_paths]
         return [self.portal.unrestrictedTraverse(p) for p in encoded_paths]
 
-    def process_document(self, obj, comment):
+    def process_document(self, obj, comment, force=False):
         if IDocumentSchema.providedBy(obj):
-            self.perform_checkin(obj, comment)
+            self.perform_checkin(obj, comment, force)
         else:
             self.report_cannot_checkin_non_document(obj)
 
-    def perform_checkin(self, document, comment):
+    def perform_checkin(self, document, comment, force=False):
         manager = getMultiAdapter(
             (document, self.request),
             ICheckinCheckoutManager,
             )
 
-        if not manager.is_checkin_allowed():
-            msg = _(
-                u'Could not check in document ${title}',
-                mapping=dict(title=document.Title().decode('utf-8')),
-                )
-            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
-
-        else:
+        if (manager.is_simple_checkin_allowed() or (
+                manager.is_checkin_allowed() and force)):
             manager.checkin(comment)
             msg = _(
                 u'Checked in: ${title}',
                 mapping=dict(title=document.Title().decode('utf-8')))
             IStatusMessage(self.request).addStatusMessage(msg, type=u'info')
+
+        else:
+            msg = _(
+                u'Could not check in document ${title}',
+                mapping=dict(title=document.Title().decode('utf-8')),
+                )
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
     def report_cannot_checkin_non_document(self, obj):
         title = obj.Title()
@@ -119,13 +120,14 @@ class CheckinContextCommentForm(form.Form):
     def is_document_locked(self):
         return IRefreshableLockable(self.context).locked()
 
-    def checkin_document(self):
+    def checkin_document(self, force=False):
         # Errors are handled by the checkin
         data = self.extractData()[0]
 
         self.checkin_controller.checkin_document(
             self.context,
             comment=data['comment'],
+            force=force
             )
 
         return self.redirect()
@@ -138,7 +140,7 @@ class CheckinContextCommentForm(form.Form):
     @button.buttonAndHandler(_(u'button_checkin_anyway', default=u'Checkin anyway'),
                              condition=lambda form: form.is_document_locked())
     def checkin_anyway_button_handler(self, action):
-        return self.checkin_document()
+        return self.checkin_document(force=True)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def cancel(self, action):
@@ -230,7 +232,7 @@ class CheckinDocumentWithoutComment(BrowserView):
     def __call__(self):
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
-        if not manager.is_checkin_without_comment_allowed():
+        if manager.is_only_force_checkin_allowed():
             checkin_with_comment = CheckinDocuments(self.context, self.request)
             return checkin_with_comment.__call__()
         self.checkin()
