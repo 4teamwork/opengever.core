@@ -63,6 +63,7 @@ class ICreateDocumentFromTemplate(model.Schema):
         title=_(u"label_template", default=u"Template"),
         source=get_templates,
         required=True,
+        show_filter=True,
         columns=(
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),

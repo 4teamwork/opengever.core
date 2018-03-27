@@ -37,6 +37,7 @@ class IWidgetTestFormSchema(Interface):
     default_radio_table_field = TableChoice(
         required=False,
         title=u"default_table",
+        show_filter=True,
         vocabulary=get_radio_table_vocabulary(),)
     # field with custom columns
     custom_radio_table_field = TableChoice(

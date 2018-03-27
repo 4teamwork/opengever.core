@@ -125,7 +125,7 @@ class TestRadioTableWidget(FunctionalTestCase):
         inputs = browser.css(
             '#formfield-form-widgets-default_radio_table_field input')
         expected_inputs = [
-            u'<input type="text" name="searchable_text" id="tableradio-searchbox" class="inputLabel" autocomplete="false" '
+            u'<input type="text" name="searchable_text" class="inputLabel tableradioSearchbox" autocomplete="false" '
             u'placeholder="Filter" title="Filter">',
             u'<input id="form-widgets-default_radio_table_field-1" '
             u'name="form.widgets.default_radio_table_field" value="1" title="foo" type="radio">',
@@ -142,6 +142,7 @@ class TestRadioTableWidget(FunctionalTestCase):
             "No items available",
             browser.css('#formfield-form-widgets-empty_radio_table_field .empty_message').first.text
         )
+
 
 class TestUnitTrixStripWhitespace(TestCase):
 

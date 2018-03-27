@@ -7,6 +7,7 @@ Changelog
 
 - Only allow to add contacts when IContactSettings.is_feature_enabled is disabled [njohner]
 - Implemented a JavaScript filter field for choosing templates. [Rotonen]
+- Add filter to proposal and dossier from template addform. [deiferni]
 - Cleanup leftovers from ICreatorAware interface in index [njohner]
 - Update policy template to set flags for new features [njohner]
 - Add French translations of the Ordnungssystem in the example content [njohner]

@@ -49,10 +49,16 @@ class TableChoice(schema.Choice):
     a list of field names which influence the result of the table.
     This allows the widget to be reloaded automatically when the here
     listed fields change its values.
+
+    If show_filter is `True` a filter-box will be rendered before the
+    table. WARNING: the filter is currently hard-coded to search the first
+    non-radio button ONLY colum.
     """
     implements(ITableChoice)
 
-    def __init__(self, columns=tuple(), vocabulary_depends_on=(), **kwargs):
+    def __init__(self, columns=tuple(), vocabulary_depends_on=(),
+                 show_filter=False, **kwargs):
         self.columns = columns
         self.vocabulary_depends_on = vocabulary_depends_on
+        self.show_filter = show_filter
         super(TableChoice, self).__init__(**kwargs)
