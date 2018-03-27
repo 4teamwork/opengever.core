@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-23 09:53+0000\n"
+"POT-Creation-Date: 2018-03-27 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,7 +82,7 @@ msgstr "Anweisung"
 #. Default: "eCH 0147 Export"
 #: ./opengever/ech0147/browser/export.py
 msgid "label_ech0147_export_form"
-msgstr "eCH-0147/eCH-0039 Export"
+msgstr "eCH-0147 Export"
 
 #. Default: "eCH 0147 Import"
 #: ./opengever/ech0147/browser/import.py
