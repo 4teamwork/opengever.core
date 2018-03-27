@@ -19,8 +19,8 @@ class TestDocumentListing(IntegrationTestCase):
             'Document Date': '03.01.2010',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
-            'Reference Number': 'Client1 1.1 / 1 / 5',
-            'Sequence Number': '5',
+            'Reference Number': 'Client1 1.1 / 1 / 10',
+            'Sequence Number': '10',
             'Subdossier': '',
             'Title': u'Vertr\xe4gsentwurf',
             }

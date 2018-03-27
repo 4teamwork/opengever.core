@@ -327,17 +327,6 @@ class ActivityLayer(PloneSandboxLayer):
 OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER = ActivityLayer()
 
 
-class DossierTemplateLayer(PloneSandboxLayer):
-
-    def setUpPloneSite(self, portal):
-        toggle_feature(IDossierTemplateSettings, enabled=True)
-
-    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
-
-
-OPENGEVER_FUNCTIONAL_DOSSIER_TEMPLATE_LAYER = DossierTemplateLayer()
-
-
 class BumblebeeLayer(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):

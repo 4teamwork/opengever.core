@@ -96,6 +96,7 @@ class IAddProposal(IProposal):
         title=_('label_proposal_template', default=u'Proposal template'),
         vocabulary='opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
         required=True,
+        show_filter=True,
         vocabulary_depends_on=['form.widgets.committee'],
         columns=(
             {'column': 'title',

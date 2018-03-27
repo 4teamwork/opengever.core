@@ -1,4 +1,25 @@
 $(function() {
+  function tableradio_searchfilter() {
+    var filter = $(this);
+    var text = filter.val().toUpperCase();
+    var widget = filter.closest('.tableradioSearchboxContainer').next('.tableradio-widget-wrapper');
+    var tr = widget.find('tbody tr');
+    var td;
+
+    tr.each(function(_, tr) {
+      // Second cell is the title
+      td = tr.cells[1];
+      tr = $(tr);
+      if (td.textContent.trim().toUpperCase().indexOf(text) > -1) {
+        tr.show();
+      } else {
+        tr.hide();
+      }
+    });
+  }
+
+  $('.tableradioSearchbox').on('input', tableradio_searchfilter);
+
   $('.tableradio-widget-wrapper[data-vocabulary-depends-on]').each(function() {
     /** When a table radio widget has a list of fieldnames configured
         in  "vocabulary-depends-on", the widget should be re-rendered

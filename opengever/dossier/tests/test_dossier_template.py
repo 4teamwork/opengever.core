@@ -146,18 +146,19 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         create(Builder('document')
-               .titled(u'Template document')
-               .within(self.templates))
-        create(Builder('document')
                .titled(u'Dossiertemplate document')
                .within(self.dossiertemplate))
 
-        browser.open(
-            self.templates, view="tabbedview_view-documents-proxy")
+        browser.open(self.templates, view="tabbedview_view-documents-proxy")
 
-        self.assertEqual(
-            ['Template document'],
-            browser.css('.listing td .linkWrapper').text)
+        expected_documents = [
+            u'T\xc3\xb6mpl\xc3\xb6te Mit',
+            u'T\xc3\xb6mpl\xc3\xb6te Ohne',
+            u'T\xc3\xb6mpl\xc3\xb6te Normal',
+            u'T\xc3\xb6mpl\xc3\xb6te Leer',
+            ]
+
+        self.assertEqual(expected_documents, browser.css('.listing td .linkWrapper').text)
 
     @browsing
     def test_show_only_whitelisted_schema_fields_in_add_form(self, browser):

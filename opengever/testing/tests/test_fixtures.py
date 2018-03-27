@@ -18,12 +18,12 @@ class TestTestingFixture(IntegrationTestCase):
 
     def test_repository_root_has_static_creation_date(self):
         self.login(self.regular_user)
-        self.assertEquals(DateTime('2016/08/31 09:01:33 GMT+2'),
+        self.assertEquals(DateTime('2016/08/31 08:01:33 GMT+2'),
                           self.repository_root.created())
 
     def test_repository_root_has_static_intid(self):
         self.login(self.regular_user)
-        self.assertEquals(1008013300,
+        self.assertEquals(1007013300,
                           getUtility(IIntIds).getId(self.repository_root))
 
     def test_dossier_has_static_intid(self):

@@ -76,6 +76,9 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
 
     empty_message = _("msg_no_items_available", default=u"No items available")
 
+    def show_filter(self):
+        return self.field.show_filter
+
     def is_checked(self, term):
         return term.token in self.value
 

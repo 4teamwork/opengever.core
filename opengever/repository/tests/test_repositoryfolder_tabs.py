@@ -99,8 +99,8 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
             'Dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
-            'Reference Number': 'Client1 1.1 / 1 / 5',
-            'Sequence Number': '5',
+            'Reference Number': 'Client1 1.1 / 1 / 10',
+            'Sequence Number': '10',
             'Subdossier': '',
             'Title': u'Vertr\xe4gsentwurf',
             }

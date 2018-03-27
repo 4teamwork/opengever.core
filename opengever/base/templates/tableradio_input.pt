@@ -2,6 +2,20 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="">
 
+
+<div i18n:domain="ftw.tabbedview" tal:condition="view/show_filter" class="tableradioSearchboxContainer">
+  <label for="tableradio-searchbox"
+         class="hiddenStructure"
+         i18n:translate="label_filter">
+  </label>
+  <input type="text"
+         name="searchable_text"
+         class="inputLabel tableradioSearchbox"
+         autocomplete="false"
+         i18n:domain="ftw.tabbedview"
+         i18n:attributes="title filter; placeholder filter"/>
+ </div>
+
 <div tal:content="structure view/render_table" tal:condition="view/has_items"
      tal:attributes="data-vocabulary-depends-on view/get_vocabulary_depends_on"
      class="tableradio-widget-wrapper" />

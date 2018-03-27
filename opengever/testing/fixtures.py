@@ -41,25 +41,33 @@ class OpengeverContentFixture(object):
             'manager': ('user', SITE_OWNER_NAME),
             }
 
-        with self.freeze_at_hour(5):
+        with self.freeze_at_hour(4):
             self.create_units()
 
-        with self.freeze_at_hour(6):
+        with self.freeze_at_hour(5):
             self.create_users()
 
-        with self.freeze_at_hour(7):
+        with self.freeze_at_hour(6):
             self.create_teams()
             self.create_contacts()
 
-        with self.freeze_at_hour(8):
+        with self.freeze_at_hour(7):
             with self.login(self.administrator):
                 self.create_repository_tree()
+
+        with self.freeze_at_hour(8):
+            with self.login(self.administrator):
                 self.create_templates()
+
+        with self.freeze_at_hour(9):
+            with self.login(self.administrator):
+                self.create_special_templates()
+                self.create_subtemplates()
 
                 with self.features('meeting'):
                     self.create_committees()
 
-        with self.freeze_at_hour(9):
+        with self.freeze_at_hour(10):
             with self.login(self.administrator):
                 self.create_inbox()
                 self.create_workspace_root()
@@ -361,21 +369,51 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_templates(self):
-        templates = self.register('templates', create(
+        self.templates = self.register('templates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen')
-            .having(id='vorlagen')))
-        templates.manage_setLocalRoles(self.org_unit.users_group_id,
-                                       ['Reader'])
-        templates.manage_setLocalRoles(self.administrator.getId(),
-                                       ['Reader', 'Contributor', 'Editor'])
-        templates.manage_setLocalRoles(self.dossier_responsible.getId(),
-                                       ['Reader', 'Contributor', 'Editor'])
-        templates.reindexObjectSecurity()
+            .having(id='vorlagen')
+            ))
 
+        self.templates.manage_setLocalRoles(self.org_unit.users_group_id, ['Reader'])
+        self.templates.manage_setLocalRoles(self.administrator.getId(), ['Reader', 'Contributor', 'Editor'])
+        self.templates.manage_setLocalRoles(self.dossier_responsible.getId(), ['Reader', 'Contributor', 'Editor'])
+        self.templates.reindexObjectSecurity()
+
+        self.register('asset_template', create(
+            Builder('document')
+            .titled(u'T\xc3\xb6mpl\xc3\xb6te Ohne')
+            .with_asset_file('without_custom_properties.docx')
+            .within(self.templates)
+            ))
+
+        self.register('normal_template', create(
+            Builder('document')
+            .titled(u'T\xc3\xb6mpl\xc3\xb6te Normal')
+            .with_dummy_content()
+            .within(self.templates)
+            ))
+
+        self.register('empty_template', create(
+            Builder('document')
+            .titled(u'T\xc3\xb6mpl\xc3\xb6te Leer')
+            .within(self.templates)
+            ))
+
+        with self.features('doc-properties', ):
+            self.register('docprops_template', create(
+                Builder('document')
+                .titled(u'T\xc3\xb6mpl\xc3\xb6te Mit')
+                .with_asset_file('with_custom_properties.docx')
+                .with_modification_date(datetime(2010, 12, 28))
+                .within(self.templates)
+                ))
+
+    @staticuid()
+    def create_special_templates(self):
         self.sablon_template = self.register('sablon_template', create(
             Builder('sablontemplate')
-            .within(templates)
+            .within(self.templates)
             .with_asset_file('sablon_template.docx')
             ))
 
@@ -384,14 +422,14 @@ class OpengeverContentFixture(object):
                 Builder('proposaltemplate')
                 .titled(u'Geb\xfchren')
                 .with_asset_file(u'vertragsentwurf.docx')
-                .within(templates)
+                .within(self.templates)
                 ))
 
         self.tasktemplatefolder = self.register('tasktemplatefolder', create(
             Builder('tasktemplatefolder')
             .titled(u'Verfahren Neuanstellung')
             .in_state('tasktemplatefolder-state-activ')
-            .within(templates)
+            .within(self.templates)
             ))
 
         self.tasktemplate = self.register('tasktemplate', create(
@@ -415,13 +453,34 @@ class OpengeverContentFixture(object):
                 'comments': 'this is very special',
                 'filing_prefix': 'department',
                 })
-            .within(templates)
+            .within(self.templates)
             ))
 
         self.subdossiertemplate = self.register('subdossiertemplate', create(
             Builder('dossiertemplate')
             .titled(u'Anfragen')
             .within(self.dossiertemplate)
+            ))
+
+    @staticuid()
+    def create_subtemplates(self):
+        subtemplates = self.register('subtemplates', create(
+            Builder('templatefolder')
+            .titled(u'Vorlagen neu')
+            .having(id='vorlagen-neu')
+            .within(self.templates)
+            ))
+        subtemplates.manage_setLocalRoles(self.org_unit.users_group_id, ['Reader'])
+        subtemplates.manage_setLocalRoles(self.administrator.getId(), ['Reader', 'Contributor', 'Editor'])
+        subtemplates.manage_setLocalRoles(self.dossier_responsible.getId(), ['Reader', 'Contributor', 'Editor'])
+        subtemplates.reindexObjectSecurity()
+
+        self.register('subtemplate', create(
+            Builder('document')
+            .titled(u'T\xc3\xb6mpl\xc3\xb6te Sub')
+            .with_dummy_content()
+            .with_modification_date(datetime(2020, 2, 29))
+            .within(subtemplates)
             ))
 
     @staticuid()
