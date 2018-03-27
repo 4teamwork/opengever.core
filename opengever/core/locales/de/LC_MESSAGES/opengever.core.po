@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-01-22 17:16+0000\n"
+"POT-Creation-Date: 2018-03-27 09:30+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -179,6 +179,7 @@ msgid "Private folder"
 msgstr "Persönlicher Ordner"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180221144648_update_properties_action_available_expression/actions.xml
 msgid "Properties"
 msgstr "Eigenschaften"
 
@@ -201,7 +202,7 @@ msgid "RepositoryRoot"
 msgstr "Ordnungssystem"
 
 #: ./opengever/core/profiles/default/actions.xml
-#: ./opengever/core/upgrades/20180105141211_add_revive_bumblebee_preview_action/actions.xml
+#: ./opengever/core/upgrades/20180122090342_add_revive_bumblebee_preview_action/actions.xml
 msgid "Revive preview"
 msgstr "Vorschau neu generieren"
 
@@ -265,11 +266,14 @@ msgid "YearFolder"
 msgstr "Jahresordner"
 
 #: ./opengever/core/profiles/default/actions.xml
+msgid "eCH-0147 Export"
+msgstr "eCH-0147 Export"
+
+#: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147 Import"
 msgstr "eCH-0147 Import"
 
-#: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147/eCH-0039 Export"
 msgstr "eCH-0147/eCH-0039 Export"
