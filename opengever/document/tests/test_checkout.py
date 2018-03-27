@@ -545,16 +545,7 @@ class TestCheckinViews(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
         browser.find('Checkout and edit').click()
 
-        document2 = create(
-            Builder("document")
-            .within(self.dossier)
-            .attach_file_containing(
-                asset('example.docx').bytes(),
-                u'vertragsentwurf.docx',
-                ),
-            )
-
-        browser.open(document2, view='tabbedview_view-overview')
+        browser.open(self.subdocument, view='tabbedview_view-overview')
         browser.find('Checkout and edit').click()
 
         browser.open(
@@ -563,7 +554,7 @@ class TestCheckinViews(IntegrationTestCase):
             data={
                 'paths': [
                     obj2brain(self.document).getPath(),
-                    obj2brain(document2).getPath(),
+                    obj2brain(self.subdocument).getPath(),
                     ],
                 'checkin_documents:method': 1,
                 '_authenticator': createToken(),
@@ -578,7 +569,7 @@ class TestCheckinViews(IntegrationTestCase):
 
         browser.css('#form-buttons-button_checkin').first.click()
 
-        for doc in (self.document, document2, ):
+        for doc in (self.document, self.subdocument, ):
             manager = getMultiAdapter(
                 (doc, self.portal.REQUEST),
                 ICheckinCheckoutManager,
@@ -625,16 +616,7 @@ class TestCheckinViews(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
         browser.find('Checkout and edit').click()
 
-        document2 = create(
-            Builder("document")
-            .within(self.dossier)
-            .attach_file_containing(
-                asset('example.docx').bytes(),
-                u'vertragsentwurf.docx',
-                ),
-            )
-
-        browser.open(document2, view='tabbedview_view-overview')
+        browser.open(self.subdocument, view='tabbedview_view-overview')
         browser.find('Checkout and edit').click()
 
         browser.open(
@@ -643,14 +625,14 @@ class TestCheckinViews(IntegrationTestCase):
             data={
                 'paths': [
                     obj2brain(self.document).getPath(),
-                    obj2brain(document2).getPath(),
+                    obj2brain(self.subdocument).getPath(),
                     ],
                 'checkin_without_comment:method': 1,
                 '_authenticator': createToken(),
                 },
             )
 
-        for doc in (self.document, document2, ):
+        for doc in (self.document, self.subdocument):
             manager = getMultiAdapter(
                 (doc, self.portal.REQUEST),
                 ICheckinCheckoutManager,
@@ -714,6 +696,44 @@ class TestCheckinViews(IntegrationTestCase):
             browser.url,
             )
 
+    @browsing
+    def test_multi_checkin_does_not_checkin_locked_documents(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        browser.open(self.subdocument, view='tabbedview_view-overview')
+        browser.find('Checkout and edit').click()
+
+        lockable = IRefreshableLockable(self.document)
+        lockable.lock()
+
+        browser.open(
+            self.dossier,
+            method='POST',
+            data={
+                'paths': [
+                    obj2brain(self.document).getPath(),
+                    obj2brain(self.subdocument).getPath(),
+                    ],
+                'checkin_without_comment:method': 1,
+                '_authenticator': createToken(),
+                },
+            )
+
+        manager = getMultiAdapter(
+                    (self.document, self.portal.REQUEST),
+                    ICheckinCheckoutManager)
+        self.assertEquals('kathi.barfuss', manager.get_checked_out_by())
+
+        manager = getMultiAdapter(
+                (self.subdocument, self.portal.REQUEST),
+                ICheckinCheckoutManager)
+        self.assertEquals(None, manager.get_checked_out_by())
+
+        self.assertEquals([u'Could not check in document Vertr\xe4gsentwurf'],
+                          error_messages())
 
 # TODO: rewrite this test-case to express intent
 class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
