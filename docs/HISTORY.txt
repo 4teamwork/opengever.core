@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- Homogenize eCH-0147 import/export action titles. [lgraf]
 - Update object security when objects are moved (account for changes in placeful workflow). [lgraf]
 - Disallow force-checkin for mutli-checkin action (table action) [njohner]
 - Make sure to warn users before they can force-checkin a document [njohner]
