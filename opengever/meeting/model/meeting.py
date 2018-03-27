@@ -85,15 +85,36 @@ class CloseTransition(Transition):
         api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
+class CancelTransition(Transition):
+
+    def get_validation_errors(self, model):
+        if model.agenda_items:
+            return [_(u"label_meeting_has_agenda_items",
+                      u"The meeting already has agenda items and can't "
+                      u"be cancelled")]
+        return tuple()
+
+    def execute(self, obj, model):
+        super(CancelTransition, self).execute(obj, model)
+
+        msg = _(u'msg_meeting_successfully_cancelled',
+                default=u'The meeting ${title} has been successfully '
+                         'cancelled.',
+                mapping=dict(title=model.get_title()))
+        api.portal.show_message(msg, api.portal.get().REQUEST)
+
+
 class Meeting(Base, SQLFormSupport):
 
     STATE_PENDING = State('pending', is_default=True,
                           title=_('pending', default='Pending'))
     STATE_HELD = State('held', title=_('held', default='Held'))
     STATE_CLOSED = State('closed', title=_('closed', default='Closed'))
+    STATE_CANCELLED = State('cancelled',
+                            title=_('cancelled', default='Cancelled'))
 
     workflow = Workflow(
-        [STATE_PENDING, STATE_HELD, STATE_CLOSED],
+        [STATE_PENDING, STATE_HELD, STATE_CLOSED, STATE_CANCELLED],
         [CloseTransition(
             'pending', 'closed',
             title=_('close_meeting', default='Close meeting')),
@@ -104,7 +125,11 @@ class Meeting(Base, SQLFormSupport):
              title=_('close_meeting', default='Close meeting')),
          Transition('closed', 'held',
                     title=_('reopen', default='Reopen'),
-                    condition=is_word_meeting_implementation_enabled)],
+                    condition=is_word_meeting_implementation_enabled),
+         CancelTransition('pending', 'cancelled',
+                          title=_('cancel', default='Cancel'),
+                          condition=is_word_meeting_implementation_enabled),
+         ],
         show_in_actions_menu=True,
         transition_controller=MeetingTransitionController,
     )
@@ -277,7 +302,8 @@ class Meeting(Base, SQLFormSupport):
         committee = self.committee.resolve_committee()
         if not api.user.has_permission('Modify portal content', obj=committee):
             return False
-        return self.get_state() in [self.STATE_PENDING, self.STATE_HELD]
+
+        return self.is_active()
 
     def is_agendalist_editable(self):
         if not self.is_editable():
@@ -286,6 +312,9 @@ class Meeting(Base, SQLFormSupport):
 
     def is_pending(self):
         return self.get_state() == self.STATE_PENDING
+
+    def is_active(self):
+        return self.get_state() in [self.STATE_HELD, self.STATE_PENDING]
 
     def is_closed(self):
         return self.get_state() == self.STATE_CLOSED

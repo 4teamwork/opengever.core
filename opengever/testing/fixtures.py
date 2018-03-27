@@ -1168,6 +1168,43 @@ class OpengeverContentFixture(object):
 
         create_session().flush()  # trigger id generation, part of path
 
+        self.cancelled_meeting_dossier = self.register(
+            'cancelled_meeting_dossier', create(
+                Builder('meeting_dossier')
+                .within(self.repofolder00)
+                .titled(u'Sitzungsdossier 10/2016')
+                .having(
+                    start=date(2016, 10, 17),
+                    responsible=self.committee_responsible.getId(),
+                    )
+                ))
+
+        self.cancelled_meeting = create(
+            Builder('meeting')
+            .having(
+                title=u'Stornierte Sitzung der Rechnungspr\xfcfungskommission',
+                committee=self.committee.load_model(),
+                workflow_state='cancelled',
+                location=u'B\xfcren an der Aare',
+                start=datetime(2016, 10, 17, 13, 30, tzinfo=pytz.UTC),
+                end=datetime(2016, 10, 17, 14, 30, tzinfo=pytz.UTC),
+                presidency=self.committee_president,
+                secretary=self.committee_secretary,
+                participants=[
+                    self.committee_participant_1,
+                    self.committee_participant_2,
+                    ],
+                )
+            .link_with(self.cancelled_meeting_dossier)
+            )
+
+        create_session().flush()  # trigger id generation, part of path
+
+        self.register_path(
+            'cancelled_meeting',
+            self.cancelled_meeting.physical_path.encode('utf-8'),
+            )
+
     @contextmanager
     def freeze_at_hour(self, hour):
         """Freeze the time when creating content with builders, so that

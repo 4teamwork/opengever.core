@@ -12,6 +12,15 @@ class TestWordMeetingView(IntegrationTestCase):
     features = ('meeting', 'word-meeting')
 
     @browsing
+    def test_displays_correct_edit_bar_actions(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+
+        self.assertEquals(
+            ['Export as Zip', 'Properties', 'Close meeting', 'Cancel'],
+            editbar.menu_options('Actions'))
+
+    @browsing
     def test_meeting_metadata_is_visible(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
@@ -158,6 +167,7 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(
             {'is_closed': False,
              'close_url': self.get_meeting_transition_url('pending-closed'),
+             'cancel_url': self.get_meeting_transition_url('pending-cancelled'),
              'reopen_url': None},
             view.get_closing_infos())
 
@@ -165,6 +175,7 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(
             {'is_closed': False,
              'close_url': self.get_meeting_transition_url('held-closed'),
+             'cancel_url': None,
              'reopen_url': None},
             view.get_closing_infos())
 
@@ -172,6 +183,7 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertEquals(
             {'is_closed': True,
              'close_url': None,
+             'cancel_url': None,
              'reopen_url': self.get_meeting_transition_url('closed-held')},
             view.get_closing_infos())
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-06 10:53+0000\n"
+"POT-Creation-Date: 2018-03-21 17:07+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,10 @@ msgstr "Traktandenliste"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "An unexpected error has occurred"
 msgstr "Ein unerwarteter Fehler ist aufgetreten"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "Are you sure you want to cancel this meeting?"
+msgstr "Wollen Sie diese Sitzung wirklich stornieren?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -390,6 +394,11 @@ msgstr "Sie haben nicht die nötigen Rechte, um Änderungen vorzunehmen."
 msgid "You are not allowed to view the meeting dossier."
 msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_cancel_meeting"
+msgstr "Sitzung stornieren"
+
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_close_meeting"
@@ -522,6 +531,7 @@ msgstr "Traktandum erfolgreich aktualisiert."
 
 #. Default: "All"
 #: ./opengever/meeting/browser/documents/proposalstab.py
+#: ./opengever/meeting/tabs/meetinglisting.py
 msgid "all"
 msgstr "Alle"
 
@@ -555,11 +565,13 @@ msgid "button_submit_attachments"
 msgstr "Anhänge einreichen"
 
 #. Default: "Cancel"
+#: ./opengever/meeting/model/meeting.py
 #: ./opengever/meeting/model/proposal.py
 msgid "cancel"
 msgstr "Stornieren"
 
 #. Default: "Cancelled"
+#: ./opengever/meeting/model/meeting.py
 #: ./opengever/meeting/model/proposal.py
 msgid "cancelled"
 msgstr "Storniert"
@@ -924,6 +936,11 @@ msgstr "Anhänge"
 msgid "label_cancel"
 msgstr "Abbrechen"
 
+#. Default: "Cancel meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_cancel_meeting"
+msgstr "Sitzung stornieren"
+
 #. Default: "Close"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_close"
@@ -1231,6 +1248,11 @@ msgstr "Sitzung"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_meeting_closed"
 msgstr "Sitzung abgeschlossen"
+
+#. Default: "The meeting already has agenda items and can't be cancelled"
+#: ./opengever/meeting/model/meeting.py
+msgid "label_meeting_has_agenda_items"
+msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py
@@ -1597,6 +1619,11 @@ msgstr "Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bea
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_inactive_committee_selected"
 msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eingereicht werden."
+
+#. Default: "The meeting ${title} has been successfully cancelled."
+#: ./opengever/meeting/model/meeting.py
+msgid "msg_meeting_successfully_cancelled"
+msgstr "Die Sitzung ${title} wurde erfolgreich storniert."
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py

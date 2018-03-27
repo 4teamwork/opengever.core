@@ -483,7 +483,8 @@ class MeetingView(BrowserView):
         transition_controller = self.model.workflow.transition_controller
         infos = {'is_closed': False,
                  'close_url': None,
-                 'reopen_url': None}
+                 'reopen_url': None,
+                 'cancel_url': None}
 
         can_change = api.user.has_permission(
             'Modify portal content',
@@ -499,12 +500,25 @@ class MeetingView(BrowserView):
                 infos['close_url'] = can_change and transition_controller.url_for(
                     self.context, self.model, close_transition.name)
 
+            cancel_transition = self.get_cancel_transition()
+            if cancel_transition:
+                infos['cancel_url'] = can_change and transition_controller.url_for(
+                    self.context, self.model, cancel_transition.name)
+
         return infos
 
     @require_word_meeting_feature
     def get_close_transition(self):
         for transition in self.model.workflow.get_transitions(self.model.get_state()):
             if transition.state_to == 'closed' and transition.visible:
+                return transition
+
+        return None
+
+    @require_word_meeting_feature
+    def get_cancel_transition(self):
+        for transition in self.model.workflow.get_transitions(self.model.get_state()):
+            if transition.state_to == 'cancelled' and transition.visible:
                 return transition
 
         return None

@@ -177,12 +177,16 @@ class MeetingQuery(BaseQuery):
 
     def _upcoming_meetings(self, committee):
         query = self._committee_meetings(committee)
+        query = query.filter(
+            Meeting.workflow_state != Meeting.STATE_CANCELLED.name)
         query = query.filter(Meeting.start >= utcnow_tz_aware())
         query = query.order_by(Meeting.start)
         return query
 
     def _past_meetings(self, committee):
         query = self._committee_meetings(committee)
+        query = query.filter(
+            Meeting.workflow_state != Meeting.STATE_CANCELLED.name)
         query = query.filter(Meeting.start < utcnow_tz_aware())
         query = query.order_by(Meeting.start.desc())
         return query
@@ -208,6 +212,10 @@ class MeetingQuery(BaseQuery):
     def by_dossier(self, dossier):
         dossier_oguid = Oguid.for_object(dossier)
         return self.filter_by(dossier_oguid=dossier_oguid)
+
+    def active(self):
+        return self.filter(Meeting.workflow_state.in_(
+            [Meeting.STATE_HELD.name, Meeting.STATE_PENDING.name]))
 
 
 Meeting.query_cls = MeetingQuery

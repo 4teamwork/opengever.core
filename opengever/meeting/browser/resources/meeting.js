@@ -18,6 +18,12 @@
       mask: { loadSpeed: 0 }
     }).data("overlay");
 
+    var cancelMeetingDialog = $( "#confirm_cancel_meeting" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+    }).data("overlay");
+
     this.openModal = function(target) {
       self.currentItem = target;
       dialog.load();
@@ -34,6 +40,25 @@
     };
 
     this.closeModal = function() { dialog.close(); };
+
+    this.showCancelMeetingDialog = function(target) {
+      self.currentItem = target;
+      cancelMeetingDialog.load();
+    }
+
+    this.closeCancelMeetingDialog = function() {
+      cancelMeetingDialog.close();
+    }
+
+    this.cancelMeeting = function() {
+      return $.post(self.currentItem.attr("href")).always(function(){
+        cancelMeetingDialog.close();
+      }).done(function(data) {
+        if (data.redirectUrl){
+          window.location = data.redirectUrl;
+        }
+      });
+    }
 
     this.reopenMeeting = function(target) {
       return $.post(target.attr("href")).done(function(data) {
@@ -206,6 +231,32 @@
         method: "click",
         target: "#confirm_close_meeting .decline",
         callback: this.closeModal,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_cancel_meeting .confirm",
+        callback: this.cancelMeeting,
+        options: {
+          prevent: false,
+          update: true,
+          loading: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_cancel_meeting .decline",
+        callback: this.closeCancelMeetingDialog,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#pending-cancelled, .cancel-meeting a",
+        callback: this.showCancelMeetingDialog,
         options: {
           update: true
         }
@@ -561,8 +612,10 @@
     this.updateCloseTransitionActionState = function() {
       if($('.decide-agenda-item, .revise-agenda-item').length > 0) {
         $('.close-meeting').addClass('disabled');
+        $('.cancel-meeting').hide();
       } else {
         $('.close-meeting').removeClass('disabled');
+        $('.cancel-meeting').show();
       }
       this.updateNavigationScrollArea();
     };
