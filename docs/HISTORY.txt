@@ -5,6 +5,7 @@ Changelog
 2018.2.1 (unreleased)
 ---------------------
 
+- Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
 
 
