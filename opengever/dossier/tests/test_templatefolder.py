@@ -771,6 +771,15 @@ class TestTemplateFolderUtility(FunctionalTestCase):
 class TestTemplateFolderListings(IntegrationTestCase):
 
     @browsing
+    def test_renders_quickupload_uploadbox(self, browser):
+        self.login(self.administrator, browser) # admins can add templates
+        browser.open(self.templates)
+
+        self.assertIsNotNone(
+            browser.css('#uploadbox').first,
+            'Upload box should be available in template folders')
+
+    @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_document_tab(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.templates, view='tabbedview_view-documents')
