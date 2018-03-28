@@ -1,4 +1,5 @@
 from opengever.base.command import CreateDocumentCommand
+from opengever.base.security import elevated_privileges
 from plone import api
 from plone.restapi.services import Service
 from plone.restapi.services.content.utils import create
@@ -36,34 +37,20 @@ class ScanIn(Service):
                 return self.error(message='Destination does not exist.')
             filename = file_.filename.decode('utf8')
             command = CreateDocumentCommand(destination, filename, file_)
-            command.execute()
+            with elevated_privileges():
+                command.execute()
 
         self.request.response.setStatus(201)
         return super(ScanIn, self).reply()
 
     def destination(self):
         """Return the destination for scanned documents."""
-        portal = api.portal.get()
         destination = self.request.form.get('destination', 'inbox')
-        org_unit = self.request.form.get('org_unit')
 
         if destination == 'inbox':
-            # Find inbox for the given org_unit
-            inbox_container = portal.listFolderContents(
-                contentFilter={'portal_type': 'opengever.inbox.container'})
-            if inbox_container:
-                inboxes = inbox_container[0].listFolderContents(
-                    contentFilter={'portal_type': 'opengever.inbox.inbox'})
-                for inbox in inboxes:
-                    inbox_ou = inbox.get_responsible_org_unit()
-                    if (inbox_ou.unit_id == org_unit or
-                            inbox_ou.title == org_unit):
-                        return inbox
-            else:
-                inboxes = portal.listFolderContents(
-                    contentFilter={'portal_type': 'opengever.inbox.inbox'})
-                if inboxes:
-                    return inboxes[0]
+            inbox = self.find_inbox()
+            if api.user.has_permission('opengever.inbox: Scan In', obj=inbox):
+                return inbox
 
         elif destination == 'private':
             # Try to find a dossier with title 'Scaneingang'
@@ -88,6 +75,28 @@ class ScanIn(Service):
                 title='Scaneingang')
             rename(obj)
             return obj
+
+    def find_inbox(self):
+        portal = api.portal.get()
+        org_unit = self.request.form.get('org_unit')
+
+        with elevated_privileges():
+            # Find inbox for the given org_unit
+            inbox_container = portal.listFolderContents(
+                contentFilter={'portal_type': 'opengever.inbox.container'})
+            if inbox_container:
+                inboxes = inbox_container[0].listFolderContents(
+                    contentFilter={'portal_type': 'opengever.inbox.inbox'})
+                for inbox in inboxes:
+                    inbox_ou = inbox.get_responsible_org_unit()
+                    if inbox_ou.unit_id == org_unit \
+                       or inbox_ou.title == org_unit:
+                        return inbox
+            else:
+                inboxes = portal.listFolderContents(
+                    contentFilter={'portal_type': 'opengever.inbox.inbox'})
+                if inboxes:
+                    return inboxes[0]
 
     def error(self, status=400, type_='BadRequest', message=''):
         self.request.response.setStatus(status)

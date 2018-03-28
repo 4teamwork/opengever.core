@@ -37,6 +37,7 @@ Changelog
 
 - AdvancedSearch: Fix user sources for dossier responsible, task issuer and doc checked_out. [lgraf]
 - Fix displaying quickupload uploadbox for template folders. [deiferni]
+- Introduce new permisssion to protect scan to inboxes. [phgross]
 - Homogenize eCH-0147 import/export action titles. [lgraf]
 - Update object security when objects are moved (account for changes in placeful workflow). [lgraf]
 - Disallow force-checkin for mutli-checkin action (table action) [njohner]
