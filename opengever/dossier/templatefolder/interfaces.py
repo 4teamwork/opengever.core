@@ -1,5 +1,5 @@
-from zope.interface import Interface
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 
 
-class ITemplateFolder(Interface):
+class ITemplateFolder(ITabbedviewUploadable):
     pass
