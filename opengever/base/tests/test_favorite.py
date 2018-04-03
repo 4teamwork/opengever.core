@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -20,3 +22,21 @@ class TestFavoriteModel(IntegrationTestCase):
 
         self.assertEqual(1, Favorite.query.count())
         self.assertEqual(u'Testposition 1', Favorite.query.one().title)
+
+    def test_is_marked_as_favorite(self):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.document)
+               .for_user(self.regular_user))
+
+        create(Builder('favorite')
+               .for_object(self.dossier)
+               .for_user(self.dossier_responsible))
+
+        self.assertFalse(
+            Favorite.query.is_marked_as_favorite(self.document, self.dossier_responsible))
+        self.assertTrue(
+            Favorite.query.is_marked_as_favorite(self.document, self.regular_user))
+        self.assertFalse(
+            Favorite.query.is_marked_as_favorite(self.dossier, self.regular_user))
