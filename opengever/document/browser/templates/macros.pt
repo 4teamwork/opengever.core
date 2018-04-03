@@ -88,9 +88,7 @@
             </tal:checked_out>
 
             <tal:check_out_cancel tal:condition="is_cancel_allowed">
-              <a tal:attributes="href view/get_checkout_cancel_url; class string:function-revert" i18n:translate="">
-                  Cancel checkout
-              </a>
+                <span tal:replace="structure view/get_checkout_cancel_tag"></span>
             </tal:check_out_cancel>
 
             <tal:download_copy_enabled tal:condition="copy_download_available">

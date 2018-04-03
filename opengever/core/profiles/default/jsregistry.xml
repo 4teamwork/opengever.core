@@ -358,9 +358,20 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.document/officeconnector.js"
+      id="++resource++opengever.document/cancel_checkout_confirmation.js"
       inline="False"
       insert-after="++resource++opengever.document/download_confirmation.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.document/officeconnector.js"
+      inline="False"
+      insert-after="++resource++opengever.document/cancel_checkout_confirmation.js"
       />
 
   <javascript

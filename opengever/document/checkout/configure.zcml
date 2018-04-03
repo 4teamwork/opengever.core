@@ -29,6 +29,22 @@
 
   <browser:page
       for="*"
+      name="cancel_document_checkout_confirmation"
+      class=".cancel.CancelDocumentCheckoutConfirmation"
+      template="templates/cancelconfirmation.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="cancel_documents_checkout_confirmation"
+      class=".cancel.CancelDocumentsCheckoutConfirmation"
+      template="templates/cancelconfirmationform.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
       name="cancel_document_checkouts"
       class=".cancel.CancelDocuments"
       permission="zope2.View"

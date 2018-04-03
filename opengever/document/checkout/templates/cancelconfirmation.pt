@@ -1,0 +1,17 @@
+<form id="cancel_confirmation" name="cancel_overlay" method="POST"
+    i18n:domain="opengever.document" tal:attributes="action view/get_checkout_cancel_url">
+
+  <h1 class="documentFirstHeading" i18n:translate="Cancel checkout">
+      Cancel checkout
+  </h1>
+
+  <div class="details">
+    <p i18n:translate="cancel_checkout_confirmation">Are you sure you want to cancel the checkout?</p>
+  </div>
+  <div class="formControls">
+    <input type="submit" class="context" value="Cancel checkout" i18n:attributes="value"/>
+    <input id="cancel" type="button" class="standalone" value="label_cancel" i18n:attributes="value" />
+  </div>
+
+
+</form>

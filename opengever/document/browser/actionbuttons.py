@@ -1,12 +1,14 @@
 from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
+from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.protect import createToken
 from zope.component import queryMultiAdapter
+from zope.i18n import translate
 
 
 class ActionButtonRendererMixin(object):
@@ -185,13 +187,17 @@ class ActionButtonRendererMixin(object):
 
         return manager.is_cancel_allowed()
 
-    def get_checkout_cancel_url(self):
+    def get_checkout_cancel_tag(self):
         if not self.has_file() or not self.is_checkout_cancel_available():
             return None
-
-        url = u'{}/@@cancel_document_checkouts'.format(
+        clazz = 'link-overlay modal function-revert'
+        url = u'{}/@@cancel_document_checkout_confirmation'.format(
             self.context.absolute_url())
-        return url
+        label = translate(_(u'Cancel checkout'),
+                          context=self.request).encode('utf-8')
+        return ('<a href="{0}" '
+                'id="action-cancel-checkout" '
+                'class="{1}">{2}</a>').format(url, clazz, label)
 
     def has_file(self):
         return self.context.has_file()
