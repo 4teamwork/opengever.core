@@ -201,6 +201,69 @@ class TestSearchWithoutContent(FunctionalTestCase):
         ])
 
     @browsing
+    def test_can_select_dossier_responsible_from_inactive_ou_in_widget(self, browser):
+        create(Builder('ogds_user')
+               .having(firstname='Without', lastname='Orgunit',
+                       userid='user.without.orgunit'))
+
+        # We manually do a request on the widget here because
+        # ftw.keywordwidget.tests.widget.AsyncKeywordWidget
+        # doesn't support .query() yet
+        widget_url = '/'.join((
+            self.portal.absolute_url(),
+            'advanced_search',
+            '++widget++form.widgets.responsible'))
+        browser.login().open(widget_url + '/search?q=without')
+
+        self.assertIn(
+            {'id': 'user.without.orgunit',
+             'text': 'Orgunit Without (user.without.orgunit)',
+             '_resultId': 'user.without.orgunit'},
+            browser.json['results'])
+
+    @browsing
+    def test_can_select_task_issuer_from_inactive_ou_in_widget(self, browser):
+        create(Builder('ogds_user')
+               .having(firstname='Without', lastname='Orgunit',
+                       userid='user.without.orgunit'))
+
+        # We manually do a request on the widget here because
+        # ftw.keywordwidget.tests.widget.AsyncKeywordWidget
+        # doesn't support .query() yet
+        widget_url = '/'.join((
+            self.portal.absolute_url(),
+            'advanced_search',
+            '++widget++form.widgets.issuer'))
+        browser.login().open(widget_url + '/search?q=without')
+
+        self.assertIn(
+            {'id': 'user.without.orgunit',
+             'text': 'Orgunit Without (user.without.orgunit)',
+             '_resultId': 'user.without.orgunit'},
+            browser.json['results'])
+
+    @browsing
+    def test_can_select_doc_checked_out_from_inactive_ou_in_widget(self, browser):
+        create(Builder('ogds_user')
+               .having(firstname='Without', lastname='Orgunit',
+                       userid='user.without.orgunit'))
+
+        # We manually do a request on the widget here because
+        # ftw.keywordwidget.tests.widget.AsyncKeywordWidget
+        # doesn't support .query() yet
+        widget_url = '/'.join((
+            self.portal.absolute_url(),
+            'advanced_search',
+            '++widget++form.widgets.checked_out'))
+        browser.login().open(widget_url + '/search?q=without')
+
+        self.assertIn(
+            {'id': 'user.without.orgunit',
+             'text': 'Orgunit Without (user.without.orgunit)',
+             '_resultId': 'user.without.orgunit'},
+            browser.json['results'])
+
+    @browsing
     def test_validate_searchstring_for_documents(self, browser):
         browser.login().open(view='advanced_search')
         browser.fill({'form.widgets.searchableText': "document1",

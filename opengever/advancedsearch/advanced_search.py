@@ -161,7 +161,7 @@ class IAdvancedSearch(model.Schema):
 
     responsible = schema.Choice(
         title=_('label_reponsible', default='Responsible'),
-        source=AllUsersSourceBinder(),
+        source=AllUsersSourceBinder(only_active_orgunits=False),
         required=False,
     )
 
@@ -214,7 +214,7 @@ class IAdvancedSearch(model.Schema):
 
     checked_out = schema.Choice(
         title=_('label_checked_out', default='Checked out by'),
-        source=AllUsersSourceBinder(),
+        source=AllUsersSourceBinder(only_active_orgunits=False),
         required=False,
     )
 
@@ -227,7 +227,7 @@ class IAdvancedSearch(model.Schema):
     issuer = schema.Choice(
         title=_(u"label_issuer", default=u"Issuer"),
         description=_('help_issuer', default=u""),
-        source=UsersContactsInboxesSourceBinder(),
+        source=UsersContactsInboxesSourceBinder(only_active_orgunits=False),
         required=False,
     )
 

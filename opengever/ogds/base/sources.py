@@ -433,8 +433,24 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 @implementer(IContextSourceBinder)
 class UsersContactsInboxesSourceBinder(object):
 
+    def __init__(self,
+                 only_current_orgunit=False,
+                 only_active_orgunits=True,
+                 only_current_inbox=False,
+                 include_teams=False):
+
+        self.only_current_orgunit = only_current_orgunit
+        self.only_active_orgunits = only_active_orgunits
+        self.only_current_inbox = only_current_inbox
+        self.include_teams = include_teams
+
     def __call__(self, context):
-        return UsersContactsInboxesSource(context)
+        return UsersContactsInboxesSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_active_orgunits=self.only_active_orgunits,
+            only_current_inbox=self.only_current_inbox,
+            include_teams=self.include_teams)
 
 
 class AllUsersSource(AllUsersInboxesAndTeamsSource):
@@ -493,8 +509,19 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
 @implementer(IContextSourceBinder)
 class AllUsersSourceBinder(object):
 
+    def __init__(self,
+                 only_current_orgunit=False,
+                 only_active_orgunits=True):
+
+        self.only_current_orgunit = only_current_orgunit
+        self.only_active_orgunits = only_active_orgunits
+
     def __call__(self, context):
-        return AllUsersSource(context)
+        return AllUsersSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_active_orgunits=self.only_active_orgunits,
+        )
 
 
 class AssignedUsersSource(AllUsersSource):
