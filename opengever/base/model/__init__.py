@@ -15,7 +15,15 @@ SUPPORTED_LOCALES = ['de', 'fr', 'en']
 
 
 CONTENT_TITLE_LENGTH = 255
+PORTAL_TYPE_LENGTH = 100
 ZIP_CODE_LENGTH = 16
+CSS_CLASS_LENGTH = 100
+UID_LENGTH = 32
+
+
+tables = [
+    'favorites',
+]
 
 
 def get_locale():
