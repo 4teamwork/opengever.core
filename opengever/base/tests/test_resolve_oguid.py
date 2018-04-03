@@ -28,3 +28,37 @@ class TestResolveOGUIDView(IntegrationTestCase):
 
         browser.open(url)
         self.assertEqual(self.task.absolute_url(), browser.url)
+
+    @browsing
+    def test_with_get_parameter_ids(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        oguid = Oguid.for_object(self.task)
+        url = "{}/@@resolve_oguid?oguid={}".format(
+            self.portal.absolute_url(), oguid)
+
+        browser.open(url)
+        self.assertEqual(self.task.absolute_url(), browser.url)
+
+    @browsing
+    def test_with_traversal_based_ids(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        oguid = Oguid.for_object(self.document)
+        url = "{}/@@resolve_oguid/{}".format(
+            self.portal.absolute_url(), oguid)
+
+        browser.open(url)
+        self.assertEqual(self.document.absolute_url(), browser.url)
+
+    @browsing
+    def test_to_specific_view(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        oguid = Oguid.for_object(self.document)
+        url = "{}/@@resolve_oguid/{}/tooltip".format(
+            self.portal.absolute_url(), oguid)
+
+        browser.open(url)
+        self.assertEqual(
+            '{}/tooltip'.format(self.document.absolute_url()), browser.url)
