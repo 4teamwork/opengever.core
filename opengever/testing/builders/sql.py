@@ -3,6 +3,8 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
+from opengever.base.browser.helper import get_css_class
+from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
@@ -49,6 +51,7 @@ from opengever.testing.model import TransparentModelLoader
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
+from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 
 
@@ -608,3 +611,25 @@ class ParticipationRoleBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('participation_role', ParticipationRoleBuilder)
+
+
+class FavoriteBuilder(SqlObjectBuilder):
+
+    mapped_class = Favorite
+    id_argument_name = 'favorite_id'
+
+    def for_object(self, obj):
+        self.arguments['oguid'] = Oguid.for_object(obj)
+        self.arguments['title'] = obj.title
+        self.arguments['portal_type'] = obj.portal_type
+        self.arguments['icon_class'] = get_css_class(obj)
+        self.arguments['plone_uid'] = IUUID(obj)
+
+        return self
+
+    def for_user(self, user):
+        self.arguments['userid'] = user.getId()
+        return self
+
+
+builder_registry.register('favorite', FavoriteBuilder)
