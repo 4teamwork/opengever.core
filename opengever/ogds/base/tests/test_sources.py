@@ -553,20 +553,36 @@ class TestAllUsersSource(FunctionalTestCase):
                .having(firstname='Simon', lastname='Says')
                .assign_to_org_units([disabled_unit]))
 
+        create(Builder('ogds_user').id('without.orgunit')
+               .having(firstname='User Without', lastname='Orgunit'))
+
         self.source = AllUsersSource(self.portal)
 
     def test_all_users_are_valid(self):
-
         self.assertIn('hugo.boss', self.source)
         self.assertIn('peter.muster', self.source)
         self.assertIn('jamie.lannister', self.source)
         self.assertIn(TEST_USER_ID, self.source)
         self.assertIn('peter.meier', self.source)
         self.assertIn('john.doe', self.source)
+        self.assertIn('without.orgunit', self.source)
 
-    def test_users_from_inactive_orgunits_are_valid_but_not_foudn_by_the_search(self):
+    def test_users_from_inactive_orgunits_are_valid_but_not_found_by_search(self):
         self.assertIn('simon.says', self.source)
         self.assertEquals([], self.source.search('simon'))
+
+    def test_users_without_orgunits_are_valid_but_not_found_by_search(self):
+        self.assertIn('without.orgunit', self.source)
+        self.assertEquals([], self.source.search('without'))
+
+    def test_users_assigned_to_other_admin_units_are_valid_and_found_by_search(self):
+        self.assertIn('peter.meier', self.source)
+        result = self.source.search('meier')
+        self.assertEquals(
+            1, len(result),
+            'Expected user Peter Meier from other admin unit in result')
+
+        self.assertEquals('peter.meier', result[0].token)
 
     def test_return_no_search_result_for_inactive_orgunits(self):
         result = self.source.search('Simon')

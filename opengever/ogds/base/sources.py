@@ -429,7 +429,7 @@ class UsersContactsInboxesSourceBinder(object):
 
 
 class AllUsersSource(AllUsersInboxesAndTeamsSource):
-    """Vocabulary of all users assigned to the current admin unit.
+    """Vocabulary of all users.
     """
 
     @property
