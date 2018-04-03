@@ -575,6 +575,17 @@ class TestAllUsersSource(FunctionalTestCase):
         self.assertIn('without.orgunit', self.source)
         self.assertEquals([], self.source.search('without'))
 
+    def test_users_without_orgunits_are_valid_and_found_by_search_if_requested(self):
+        source = AllUsersSource(self.portal, only_active_orgunits=False)
+        self.assertIn('without.orgunit', source)
+
+        result = source.search('without')
+        self.assertEquals(
+            1, len(result),
+            'Expected user Without Orgunit in result')
+
+        self.assertEquals('without.orgunit', result[0].token)
+
     def test_users_assigned_to_other_admin_units_are_valid_and_found_by_search(self):
         self.assertIn('peter.meier', self.source)
         result = self.source.search('meier')
