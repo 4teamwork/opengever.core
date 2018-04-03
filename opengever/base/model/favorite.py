@@ -8,6 +8,7 @@ from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -40,3 +41,17 @@ class Favorite(Base):
     modified = Column(UTCDateTime(timezone=True),
                       default=utcnow_tz_aware,
                       onupdate=utcnow_tz_aware)
+
+
+class FavoriteQuery(BaseQuery):
+
+    def is_marked_as_favorite(self, obj, user):
+        favorite = self.by_object_and_user(obj, user).first()
+        return favorite is not None
+
+    def by_object_and_user(self, obj, user):
+        oguid = Oguid.for_object(obj)
+        return self.filter_by(oguid=oguid, userid=user.getId())
+
+
+Favorite.query_cls = FavoriteQuery
