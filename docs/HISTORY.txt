@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
+- Add favorite API endpoints. [phgross]
 - Add favorite SQL-Model. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
 

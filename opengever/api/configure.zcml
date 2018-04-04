@@ -81,4 +81,36 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".favorite.FavoritesGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".favorite.FavoritesPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".favorite.FavoritesDelete"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".favorite.FavoritesPatch"
+      permission="zope2.View"
+      />
+
 </configure>

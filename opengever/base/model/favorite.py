@@ -6,8 +6,10 @@ from opengever.base.model import PORTAL_TYPE_LENGTH
 from opengever.base.model import UID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
+from opengever.bumblebee import is_bumblebeeable
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -42,6 +44,31 @@ class Favorite(Base):
                       default=utcnow_tz_aware,
                       onupdate=utcnow_tz_aware)
 
+    def serialize(self):
+        return {'@id': self.favorite_id,
+                'oguid': self.oguid.id,
+                'title': self.title,
+                'icon_class': self.icon_class,
+                'url': self.get_url(),
+                'tooltip_url': self.get_tooltip_url(),
+                'position': self.position}
+
+    @property
+    def tooltip_view(self):
+        if is_bumblebeeable(self):
+            return 'tooltip'
+
+    def get_tooltip_url(self):
+        url = self.get_url()
+        if self.tooltip_view:
+            return u'{}/{}'.format(url, self.tooltip_view)
+
+        return None
+
+    def get_url(self):
+        admin_unit = AdminUnit.query.get(self.admin_unit_id)
+        return u'{}/resolve_oguid/{}'.format(admin_unit.public_url, self.oguid)
+
 
 class FavoriteQuery(BaseQuery):
 
@@ -52,6 +79,9 @@ class FavoriteQuery(BaseQuery):
     def by_object_and_user(self, obj, user):
         oguid = Oguid.for_object(obj)
         return self.filter_by(oguid=oguid, userid=user.getId())
+
+    def by_userid(self, userid):
+        return self.filter_by(userid=userid)
 
 
 Favorite.query_cls = FavoriteQuery
