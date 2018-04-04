@@ -92,7 +92,7 @@ msgstr "eCH-0147 Import"
 #. Default: "Export"
 #: ./opengever/ech0147/browser/export.py
 msgid "label_export"
-msgstr "Exportiern"
+msgstr "Exportieren"
 
 #. Default: "Exported as eCH-0147 message"
 #: ./opengever/ech0147/browser/export.py
