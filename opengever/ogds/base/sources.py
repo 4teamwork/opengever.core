@@ -125,6 +125,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         self.client_id = self.get_client_id()
 
         self.only_current_orgunit = kwargs.get('only_current_orgunit', False)
+        self.only_active_orgunits = kwargs.get('only_active_orgunits', True)
         self.only_current_inbox = kwargs.get('only_current_inbox', False)
         self.include_teams = kwargs.get('include_teams', False)
 
@@ -149,14 +150,19 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
             - only_users: Decide if only the user model will be returned
             - only_current_orgunit: Decide if only the current Orgunit will
               be queried.
-
-        The search_query also filters results from disabled orgunits by default.
+            - only_active_orgunits: Filter out actors that don't have an org
+              unit at all, or an inactive one (true by default).
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
-        query = create_session().query(*models) \
-                                .join(OrgUnit.users_group) \
-                                .join(Group.users)
-        query = query.filter(OrgUnit.enabled == True)  # noqa
+        query = create_session().query(*models)
+
+        # When filtering by orgunit criteria, join tables accordingly
+        if self.only_active_orgunits or self.only_current_orgunit:
+            query = query.join(OrgUnit.users_group) \
+                         .join(Group.users)
+
+        if self.only_active_orgunits:
+            query = query.filter(OrgUnit.enabled == True)  # noqa
 
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
@@ -319,10 +325,12 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
 
     def __init__(self,
                  only_current_orgunit=False,
+                 only_active_orgunits=True,
                  only_current_inbox=False,
                  include_teams=False):
 
         self.only_current_orgunit = only_current_orgunit
+        self.only_active_orgunits = only_active_orgunits
         self.only_current_inbox = only_current_inbox
         self.include_teams = include_teams
 
@@ -330,6 +338,7 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
         return AllUsersInboxesAndTeamsSource(
             context,
             only_current_orgunit=self.only_current_orgunit,
+            only_active_orgunits=self.only_active_orgunits,
             only_current_inbox=self.only_current_inbox,
             include_teams=self.include_teams)
 
@@ -424,12 +433,28 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 @implementer(IContextSourceBinder)
 class UsersContactsInboxesSourceBinder(object):
 
+    def __init__(self,
+                 only_current_orgunit=False,
+                 only_active_orgunits=True,
+                 only_current_inbox=False,
+                 include_teams=False):
+
+        self.only_current_orgunit = only_current_orgunit
+        self.only_active_orgunits = only_active_orgunits
+        self.only_current_inbox = only_current_inbox
+        self.include_teams = include_teams
+
     def __call__(self, context):
-        return UsersContactsInboxesSource(context)
+        return UsersContactsInboxesSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_active_orgunits=self.only_active_orgunits,
+            only_current_inbox=self.only_current_inbox,
+            include_teams=self.include_teams)
 
 
 class AllUsersSource(AllUsersInboxesAndTeamsSource):
-    """Vocabulary of all users assigned to the current admin unit.
+    """Vocabulary of all users.
     """
 
     @property
@@ -484,8 +509,19 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
 @implementer(IContextSourceBinder)
 class AllUsersSourceBinder(object):
 
+    def __init__(self,
+                 only_current_orgunit=False,
+                 only_active_orgunits=True):
+
+        self.only_current_orgunit = only_current_orgunit
+        self.only_active_orgunits = only_active_orgunits
+
     def __call__(self, context):
-        return AllUsersSource(context)
+        return AllUsersSource(
+            context,
+            only_current_orgunit=self.only_current_orgunit,
+            only_active_orgunits=self.only_active_orgunits,
+        )
 
 
 class AssignedUsersSource(AllUsersSource):

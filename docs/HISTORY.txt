@@ -5,6 +5,7 @@ Changelog
 2018.2.0 (unreleased)
 ---------------------
 
+- AdvancedSearch: Fix user sources for dossier responsible, task issuer and doc checked_out. [lgraf]
 - Fix displaying quickupload uploadbox for template folders. [deiferni]
 - Homogenize eCH-0147 import/export action titles. [lgraf]
 - Update object security when objects are moved (account for changes in placeful workflow). [lgraf]
