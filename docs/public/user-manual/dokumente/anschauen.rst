@@ -46,7 +46,7 @@ In der Detail-Ansicht kann folgendes ausgeführt werden:
 
 2. Metadaten bearbeiten
 
-3. Auschecken / Bearbeiten
+3. Auschecken und Bearbeiten
 
 4. Kopie herunterladen
 

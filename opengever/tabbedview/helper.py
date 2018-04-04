@@ -286,7 +286,7 @@ def external_edit_link(item, value):
     return '<a id="%s" title="%s" href="%s" class="function-edit"></a>' % (
         item.id,
         getSite().translate(
-            'checkout_and_edit', domain="opengever.tabbedview"),
+            'label_checkout_and_edit', domain="opengever.document"),
         url)
 
 

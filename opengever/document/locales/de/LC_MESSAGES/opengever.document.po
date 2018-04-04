@@ -340,7 +340,7 @@ msgstr "Auschecken"
 #. Default: "Checkout and edit"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_checkout_and_edit"
-msgstr "Auschecken / Bearbeiten"
+msgstr "Auschecken und Bearbeiten"
 
 #. Default: "Comment"
 #: ./opengever/document/browser/versions_tab.py

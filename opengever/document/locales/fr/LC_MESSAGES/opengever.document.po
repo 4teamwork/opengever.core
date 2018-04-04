@@ -337,7 +337,7 @@ msgstr "Faire le check-out"
 #. Default: "Checkout and edit"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_checkout_and_edit"
-msgstr "Faire le check-out / éditer"
+msgstr "Faire le check-out et éditer"
 
 #. Default: "Comment"
 #: ./opengever/document/browser/versions_tab.py
