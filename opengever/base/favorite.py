@@ -2,6 +2,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
@@ -79,3 +80,8 @@ class FavoriteManager(object):
 
     def list_all(self, userid):
         return Favorite.query.by_userid(userid=userid).all()
+
+    def list_all_repository_favorites(self, userid):
+        favorites = Favorite.query.only_repository_favorites(
+            userid, get_current_admin_unit().id()).all()
+        return favorites

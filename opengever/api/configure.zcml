@@ -113,4 +113,12 @@
       permission="cmf.SetOwnProperties"
       />
 
+  <plone:service
+      method="GET"
+      name="@repository-favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".repository_favorites.RepositoryFavoritesGet"
+      permission="zope2.View"
+      />
+
 </configure>

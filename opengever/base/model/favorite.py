@@ -100,4 +100,11 @@ class FavoriteQuery(BaseQuery):
         return self.session.query(
             func.max(Favorite.position)).filter_by(userid=userid).scalar()
 
+    def only_repository_favorites(self, userid, admin_unit_id):
+        query = self.by_userid(userid)
+        query = query.filter_by(
+            portal_type='opengever.repository.repositoryfolder')
+        return query.filter_by(admin_unit_id=admin_unit_id)
+
+
 Favorite.query_cls = FavoriteQuery
