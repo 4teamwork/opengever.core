@@ -2,6 +2,8 @@
 
   "use strict";
 
+  var tooltipHideTimer = null;
+
   var settings = {
     overwrite: false, // Do not reload the tooltip when it's already created
     content: { text: tooltipContent }, // Set ajax content
@@ -30,6 +32,7 @@
     },
     events: {
       show: closeTooltips,
+      hide: hideBackdrop,
     }
   };
 
@@ -58,7 +61,36 @@
 
   function initTooltips(event) { $(event.currentTarget).qtip(settings, event); }
 
-  function closeTooltips(event, api) { $(event.originalEvent.target).on("click", function() { api.hide(); }); }
+  function activateTableCell(target) {
+    $(target).closest('.x-grid3-row').addClass('bumblebee-tooltip-active');
+  }
+
+  function deactivateTableCells(target) {
+    $(target).closest('.x-grid3-row').siblings().removeClass('bumblebee-tooltip-active');
+  }
+
+  function showBackdrop(event) {
+    var target = event.originalEvent.target;
+    deactivateTableCells(target);
+    clearTimeout(tooltipHideTimer);
+    $('body').addClass('bumblebee-tooltip-open');
+    activateTableCell(target);
+  }
+
+  function hideBackdrop() {
+    tooltipHideTimer = setTimeout(function() {
+      $('body').removeClass('bumblebee-tooltip-open');
+    }, settings.hide.delay / 2);
+  }
+
+  function closeTooltips(event, api) {
+    var target = event.originalEvent.target;
+    $(target).on("click", function() {
+      api.hide();
+      hideBackdrop(event);
+    });
+    showBackdrop(event);
+  }
 
   $(document).on("mouseover", ".tooltip-trigger", initTooltips);
 
