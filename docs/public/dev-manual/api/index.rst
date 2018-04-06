@@ -20,6 +20,7 @@ Inhalt:
    content_types.rst
    metadata.rst
    config.rst
+   favorite.rst
    examples/index.rst
    docs_changelog.rst
 
