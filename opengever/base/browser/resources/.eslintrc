@@ -1,0 +1,37 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 5
+  },
+  "rules": {
+    "indent": ["error", 2, {"SwitchCase": 1}],
+    "linebreak-style": 0,
+    "padded-blocks": 0,
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-unused-vars": ["off"],
+    "valid-jsdoc": [
+      "error",
+      {
+        "prefer": {
+          "return": "returns"
+        },
+        "requireReturn": false,
+        "requireParamDescription": false,
+        "requireReturnDescription": false
+      }
+    ],
+
+    "no-var": 0,
+    "func-call-spacing": 0
+  },
+  "globals": {
+    "Vue": true,
+    "axios": true,
+    "jQuery": true,
+    "MessageFactory": true,
+  }
+}
