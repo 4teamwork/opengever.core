@@ -8,9 +8,9 @@
 
   <body>
     <metal:js fill-slot="javascript_head_slot">
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/vue.min.js"></script>
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/vue.min.js"></script>
 
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/axios.min.js"></script>
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/axios.min.js"></script>
 
     </metal:js>
 
