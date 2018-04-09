@@ -57,7 +57,6 @@ class FavoriteManager(object):
 
     def update_position(self, fav_to_updated, position, userid):
         """Update the position all favorites affected by the reordering."""
-
         old_position = fav_to_updated.position
 
         if old_position == position:
