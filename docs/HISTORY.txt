@@ -20,6 +20,7 @@ Changelog
 - Fix i18n domain in the types xml of the filing profile. [phgross]
 - Drop unused pinnings. [lgraf]
 - Grant team add and edit permissions to Adminstrators. [Rotonen]
+- Add form to create a document from a oneoffix template. [njohner]
 - Omit search keywords from advanced search on site search prefill. [Rotonen]
 - Prefix tasks in zip exports. [Rotonen]
 - Allow REST API request for all members. [phgross]

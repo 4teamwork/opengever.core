@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.oneoffixx">
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="document_with_oneoffixx_template"
+      class=".form.SelectOneOffixxTemplateDocumentView"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="*"
+      name="is_oneoffixx_feature_enabled"
+      class=".oneoffixx_feature_enabled.OneoffixxFeatureEnabledView"
+      permission="zope2.View"
+      />
+
+</configure>

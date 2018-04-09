@@ -85,6 +85,9 @@
   <!-- OFFICEATWORK -->
   <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings" />
 
+  <!-- ONEOFFIXX -->
+  <records interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" />
+
   <!-- OFFICECONNECTOR -->
   <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
   <record
