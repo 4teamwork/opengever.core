@@ -1,0 +1,45 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-04-30 09:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. Default: "Cancel"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "button_cancel"
+msgstr "Abbrechen"
+
+#. Default: "Save"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "button_save"
+msgstr "Speichern"
+
+#. Default: "Create document from template"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "create_document_with_template"
+msgstr "Dokument aus Vorlage erstellen"
+
+#. Default: "Template"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "label_template"
+msgstr "Vorlage"
+
+#. Default: "Template group"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "label_template_group"
+msgstr "Vorlagengruppe"
+
+#. Default: "Title"
+#: ./opengever/oneoffixx/browser/form.py
+msgid "label_title"
+msgstr "Titel"

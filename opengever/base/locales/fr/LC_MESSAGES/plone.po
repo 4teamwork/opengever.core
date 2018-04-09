@@ -186,6 +186,9 @@ msgstr "Récupérer"
 msgid "document_from_officeatwork"
 msgstr ""
 
+msgid "document_with_oneoffixx_template"
+msgstr "Document à partir d'un modèle OneOffixx"
+
 msgid "document_with_template"
 msgstr "Document à partir du modèle"
 
