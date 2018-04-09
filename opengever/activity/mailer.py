@@ -23,7 +23,10 @@ class Mailer(object):
     def send_mail(self, msg):
         self.mailhost.send(msg)
 
-    def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data={}):
+    def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data=None):
+        if data is None:
+            data = {}
+
         msg = MIMEMultipart('related')
 
         if from_userid:
