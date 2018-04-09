@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.base">
+
+  <body>
+    <metal:js fill-slot="javascript_head_slot">
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/vue.min.js"></script>
+
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/axios.min.js"></script>
+
+    </metal:js>
+
+
+    <metal:title fill-slot="content-title">
+       <h1 class="documentFirstHeading" i18n:translate="title_manage_favorites"> Favorites
+       </h1>
+    </metal:title>
+
+    <div metal:fill-slot="content-core">
+      <metal:core-macro define-macro="content-core">
+
+        <div tal:replace="structure view/vuejs_template" />
+
+        <div id="vue-app"
+             tal:attributes="data-portalurl here/portal_url;
+                             data-i18n view/translations;
+                             data-userid view/get_userid;
+                             data-authtoken context/@@authenticator/token"></div>
+
+        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_app.js"></script>
+
+      </metal:core-macro>
+    </div>
+  </body>
+</html>

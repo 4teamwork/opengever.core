@@ -1,0 +1,36 @@
+<script type="text/x-template" id="favorites-list">
+
+  <div>
+
+    <table class="favorites">
+        <tr v-for="entry in entries">
+            <td>
+                <span class="moveHandler fa fa-bars" />
+                {{entry.position}}
+            </td>
+            <td>
+                <a :class="entry.icon_class" :href="entry.url">
+                    {{ entry.title }}
+                </a>
+            </td>
+            <td>Finanzdirektion (hardcoded)</td>
+            <td>
+                <a class="editAction fa fa-pencil" @click.prevent="openOverlay(entry)" />
+                <a class="deleteAction fa fa-times" />
+            </td>
+        </tr>
+    </table>
+
+    <div class="overlay" v-if="showOverlay" :style="showOverlay ? 'display:block' : ''">
+        <h2>Edit Favorite</h2>
+        <input type="text" name="editFavriteTitle" v-focus
+               @input="handleUpdate(event)"
+               :value="this.editEntry.title"
+               @keyup="handleEnterAndEsc" />
+        <div class="button-group">
+            <button class="button confirm destructive" @click="saveAction">Save</button>
+            <button class="button decline" @click="cancelAction">Cancel</button>
+        </div>
+    </div>
+  </div>
+</script>
