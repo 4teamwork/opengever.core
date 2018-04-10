@@ -250,6 +250,12 @@
       handler=".handlers.remove_favorites"
       />
 
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           opengever.trash.trash.ITrashedEvent"
+      handler=".handlers.remove_favorites"
+      />
+
   <adapter
       factory=".indexes.referenceIndexer"
       name="reference"

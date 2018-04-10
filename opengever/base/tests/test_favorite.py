@@ -4,6 +4,7 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import Trasher
 from plone import api
 
 
@@ -59,5 +60,22 @@ class TestHandlers(IntegrationTestCase):
         self.assertEquals(2, Favorite.query.count())
 
         api.content.delete(obj=self.empty_dossier)
+
+        self.assertEquals(1, Favorite.query.count())
+
+    def test_all_favorites_are_deleted_when_moving_a_document_to_trash(self):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_object(self.dossier)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.document)
+               .for_user(self.dossier_responsible))
+
+        self.assertEquals(2, Favorite.query.count())
+
+        Trasher(self.document).trash()
 
         self.assertEquals(1, Favorite.query.count())
