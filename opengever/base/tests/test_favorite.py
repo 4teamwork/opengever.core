@@ -4,6 +4,7 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestFavoriteModel(IntegrationTestCase):
@@ -40,3 +41,23 @@ class TestFavoriteModel(IntegrationTestCase):
             Favorite.query.is_marked_as_favorite(self.document, self.regular_user))
         self.assertFalse(
             Favorite.query.is_marked_as_favorite(self.dossier, self.regular_user))
+
+
+class TestHandlers(IntegrationTestCase):
+
+    def test_all_favorites_are_deleted_when_removing_object(self):
+        self.login(self.manager)
+
+        create(Builder('favorite')
+               .for_object(self.dossier)
+               .for_user(self.administrator))
+
+        create(Builder('favorite')
+               .for_object(self.empty_dossier)
+               .for_user(self.dossier_responsible))
+
+        self.assertEquals(2, Favorite.query.count())
+
+        api.content.delete(obj=self.empty_dossier)
+
+        self.assertEquals(1, Favorite.query.count())
