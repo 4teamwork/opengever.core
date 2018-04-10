@@ -256,6 +256,12 @@
       handler=".handlers.remove_favorites"
       />
 
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.update_favorites_title"
+      />
+
   <adapter
       factory=".indexes.referenceIndexer"
       name="reference"

@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -79,3 +80,29 @@ class TestHandlers(IntegrationTestCase):
         Trasher(self.document).trash()
 
         self.assertEquals(1, Favorite.query.count())
+
+    @browsing
+    def test_titled_of_favorites_get_updated(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        fav1 = create(Builder('favorite')
+                      .for_object(self.dossier)
+                      .for_user(self.administrator)
+                      .having(is_title_personalized=True,
+                              title='GEVER Weeklies'))
+
+        fav2 = create(Builder('favorite')
+                      .for_object(self.dossier)
+                      .for_user(self.regular_user))
+
+        self.assertEquals('GEVER Weeklies', fav1.title)
+        self.assertEquals(
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung', fav2.title)
+
+        browser.open(self.dossier, view='edit')
+        browser.fill({u'Title': u'Anfragen 2018'})
+        browser.click_on('Save')
+
+        self.assertEquals('GEVER Weeklies',
+                          Favorite.query.get(fav1.favorite_id).title)
+        self.assertEquals(u'Anfragen 2018', Favorite.query.get(fav2.favorite_id).title)
