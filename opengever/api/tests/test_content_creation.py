@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.api.testing import RelativeSession
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.testing import FunctionalTestCase
@@ -76,3 +77,6 @@ class TestContentCreation(FunctionalTestCase):
         doc = self.dossier.restrictedTraverse('document-1')
         self.assertEqual(u'Sanierung B\xe4rengraben 2016', doc.title)
         self.assertEqual(u'sanierung-barengraben-2016.txt', doc.file.filename)
+
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertIsNotNone(checksum)
