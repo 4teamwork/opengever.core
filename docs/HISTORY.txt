@@ -5,6 +5,7 @@ Changelog
 2018.2.1 (unreleased)
 ---------------------
 
+- Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite SQL-Model. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
