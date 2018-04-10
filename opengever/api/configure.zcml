@@ -17,6 +17,13 @@
   <adapter factory=".document.SerializeDocumentToJson" />
 
   <plone:service
+      method="PATCH"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".document.DocumentPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="POST"
       name="@checkout"
       for="opengever.document.document.IDocumentSchema"

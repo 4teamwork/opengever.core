@@ -9,6 +9,7 @@ Changelog
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite SQL-Model. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
+- Only allow updating a documents file if the document is checked-out by the current user. [buchi]
 
 
 2018.2.1 (2018-04-12)
