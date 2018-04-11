@@ -30,19 +30,20 @@
     };
 
     if (!this.start.val()) {
-      var roundedStartDateTime = roundMinutes(this.startwidget.getCurrentTime());
-      this.start.val(this.startwidget.str(roundedStartDateTime));
+      var roundedStartDateTime = roundMinutes(this.startwidget.now());
+      this.startwidget.setCurrentTime(roundedStartDateTime);
+      this.start.val(this.startwidget.str());
     }
 
     self.getMinTime = function () {
       var start = self.startwidget.getCurrentTime();
       var end = self.endwidget.getCurrentTime();
-      if (end.getDayOfYear() <= start.getDayOfYear()) {
-        return start.format2();
+      if (end.getYear() <= start.getYear() && end.getDay() <= start.getDay()) {
+        return self.startwidget.getCurrentTime();
       } else {
         return false;
       }
-    }
+    };
 
     // make sure no date is selected before the start of the range by looking
     // up the earliest valid time in the startwidget
@@ -60,7 +61,7 @@
                     }
     });
 
-    // avoid ftw.datetimepicker destroying our end datetime picker 
+    // avoid ftw.datetimepicker destroying our end datetime picker
     $(document).off('change', '.datetimepicker-widget');
   };
 
