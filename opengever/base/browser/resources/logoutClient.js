@@ -3,10 +3,12 @@
 
   // Setup the shared worker which holds all open gever tabs
   function initWorker() {
-    var workerSrc = global.portal_url + "/++resource++opengever.base/logoutWorker.js";
+    var workerSrc = global.portal_url + "/++resource++opengever.base/logoutWorker.js?r=1";
     logoutWorker = new SharedWorker(workerSrc);
     // Reload the tab when the LogoutBus sends a broadcast message
-    logoutWorker.port.onmessage = function() { location.reload(); };
+    logoutWorker.port.onmessage = function(e) {
+      window.location = e.data[0];
+    };
   }
 
   // Prevent the default login behavior. Broadcast a logout message to all open gever tabs instead.
@@ -17,9 +19,8 @@
     }
 
     // Trigger the logout and broadcast to the other gever tabs
-    return $.get(url).done(function() {
-      logoutWorker.port.postMessage('logout');
-    });
+    logoutWorker.port.postMessage([url]);
+    return $.Deferred().resolve();
   }
 
   // Check if SharedWorker is supported
