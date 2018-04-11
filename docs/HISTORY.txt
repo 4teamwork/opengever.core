@@ -11,6 +11,7 @@ Changelog
 2018.2.0 (2018-04-04)
 ---------------------
 
+- Fix logout worker when using SSO. [Kevin Bieri]
 - AdvancedSearch: Fix user sources for dossier responsible, task issuer and doc checked_out. [lgraf]
 - Fix displaying quickupload uploadbox for template folders. [deiferni]
 - Homogenize eCH-0147 import/export action titles. [lgraf]
