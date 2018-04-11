@@ -76,4 +76,12 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.favorite_action"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".favorite_action.FavoriteAction"
+      permission="zope2.View"
+      />
+
 </configure>
