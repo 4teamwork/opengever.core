@@ -506,4 +506,15 @@
       insert-after="++resource++opengever.base/Controller.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/Favorites.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
 </object>
