@@ -5,6 +5,7 @@ Changelog
 2018.2.1 (unreleased)
 ---------------------
 
+- Fix logout worker when using SSO. [Kevin Bieri]
 - Fix datetime picker when adding a new meeting. [phgross]
 
 
