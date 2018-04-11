@@ -5,6 +5,7 @@ Changelog
 2018.2.1 (unreleased)
 ---------------------
 
+- Fix datetime picker when adding a new meeting. [phgross]
 - Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite SQL-Model. [phgross]
