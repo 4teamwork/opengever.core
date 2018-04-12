@@ -34,6 +34,7 @@
       <element>ouselector</element>
       <element>redirector</element>
       <element>repository-favorites</element>
+      <element>favorite</element>
     </value>
   </record>
 
@@ -44,6 +45,7 @@
       <element>ouselector</element>
       <element>redirector</element>
       <element>repository-favorites</element>
+      <element>favorite</element>
     </value>
   </record>
 
