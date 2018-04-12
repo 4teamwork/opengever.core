@@ -38,7 +38,9 @@
     self.getMinTime = function () {
       var start = self.startwidget.getCurrentTime();
       var end = self.endwidget.getCurrentTime();
-      if (end.getYear() <= start.getYear() && end.getDay() <= start.getDay()) {
+      if (end.getYear() <= start.getYear() &&
+          end.getMonth() <= start.getMonth() &&
+          end.getDay() <= start.getDay()) {
         return self.startwidget.getCurrentTime();
       } else {
         return false;
