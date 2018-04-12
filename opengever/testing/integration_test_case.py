@@ -3,7 +3,9 @@ from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from ftw.mail.mail import IMail
+from ftw.testing.mailing import Mailing
 from functools import wraps
+from opengever.activity.hooks import insert_notification_defaults
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -68,6 +70,14 @@ class IntegrationTestCase(TestCase):
         self.request = self.layer['request']
         self.deactivate_extjs()
         map(self.activate_feature, self.features)
+        if 'activity' in self.features:
+            Mailing(self.portal).set_up()
+            insert_notification_defaults(self.portal)
+
+    def tearDown(self):
+        super(IntegrationTestCase, self).tearDown()
+        if 'activity' in self.features:
+            Mailing(self.portal).tear_down()
 
     @staticmethod
     def open_flamegraph(func):
