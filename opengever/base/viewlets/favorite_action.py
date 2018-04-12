@@ -1,3 +1,4 @@
+from opengever.base import is_favorites_feature_enabled
 from opengever.base.favorite import FavoriteManager
 from opengever.base.oguid import Oguid
 from plone import api
@@ -26,6 +27,9 @@ class FavoriteAction(common.ViewletBase):
             api.portal.get().absolute_url(), api.user.get_current().getId())
 
     def available(self):
+        if not is_favorites_feature_enabled():
+            return False
+
         return IDexterityContent.providedBy(self.context) and self.oguid()
 
 

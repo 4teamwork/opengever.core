@@ -9,6 +9,8 @@ from opengever.testing import IntegrationTestCase
 
 class TestFavoriteAction(IntegrationTestCase):
 
+    features = ('favorites', )
+
     @browsing
     def test_favorite_link_is_shown_on_dexterity_object(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -20,6 +22,16 @@ class TestFavoriteAction(IntegrationTestCase):
                           viewlet.get('data-oguid'))
         self.assertEquals('http://nohost/plone/@favorites/kathi.barfuss',
                           viewlet.get('data-url'))
+
+
+    @browsing
+    def test_favorite_action_respects_feature_flag(self, browser):
+        self.deactivate_feature('favorites')
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier)
+
+        self.assertEqual([], browser.css('#favorite-action'))
 
     @browsing
     def test_favorite_action_is_disabled_on_wrapper_objects(self, browser):

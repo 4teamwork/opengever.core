@@ -320,3 +320,11 @@ class ISearchSettings(Interface):
         description=u'Enables Solr for search forms.',
         default=False,
     )
+
+
+class IFavoritesSettings(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable favorites feature',
+        description=u'Whether favorite feature is enabled',
+        default=False)
