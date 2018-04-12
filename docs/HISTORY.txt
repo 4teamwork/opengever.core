@@ -2,20 +2,25 @@
 Changelog
 =========
 
-2018.2.1 (unreleased)
+2018.3.0 (unreleased)
 ---------------------
 
-- Fix datetime picker when adding a new meeting. [phgross]
 - Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite SQL-Model. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
 
 
-2018.2.0 (2018-04-04)
+2018.2.1 (2018-04-12)
 ---------------------
 
 - Fix logout worker when using SSO. [Kevin Bieri]
+- Fix datetime picker when adding a new meeting. [phgross]
+
+
+2018.2.0 (2018-04-04)
+---------------------
+
 - AdvancedSearch: Fix user sources for dossier responsible, task issuer and doc checked_out. [lgraf]
 - Fix displaying quickupload uploadbox for template folders. [deiferni]
 - Homogenize eCH-0147 import/export action titles. [lgraf]
