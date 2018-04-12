@@ -20,6 +20,17 @@ class TestEmailNotification(IntegrationTestCase):
         # XXX - we cannot yet fixturize SQL objects
         create(Builder('watcher').having(actorid=self.regular_user.id))
         # XXX - we cannot yet fixturize SQL objects
+        create(
+            Builder('notification_setting')
+            .having(
+                kind='task-commented',
+                userid=self.regular_user.getId(),
+                mail_notification_roles=[TASK_RESPONSIBLE_ROLE],
+                badge_notification_roles=[],
+                digest_notification_roles=[],
+                ),
+            )
+        # XXX - we cannot yet fixturize SQL objects
         # The secretariat user is a part of the inbox group
         create(Builder('watcher').having(actorid=self.secretariat_user.id))
 
@@ -45,7 +56,20 @@ class TestEmailNotification(IntegrationTestCase):
         self.assertEquals('GEVER Task: Test Task', mail.get('Subject'))
 
     @browsing
+    def test_notification_summary_is_split_into_paragraphs(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.create_task_via_browser(browser)
+        # XXX - did not find a neater way to get the task quickly
+        browser.open(Task.query.all()[-1], view='addcommentresponse')
+        browser.fill({'Response': 'Multi\n\nline\ncomment'})
         browser.css('#form-buttons-save').first.click()
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual(len(mails), 2)
+        raw_mail = mails[-1]
+        self.assertIn('<p>Multi</p>', raw_mail)
+        self.assertIn('<p></p>', raw_mail)
+        self.assertIn('<p>line</p>', raw_mail)
+        self.assertIn('<p>comment</p>', raw_mail)
 
     @browsing
     def test_from_and_to_addresses(self, browser):
