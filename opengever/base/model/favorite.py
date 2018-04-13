@@ -6,11 +6,15 @@ from opengever.base.model import PORTAL_TYPE_LENGTH
 from opengever.base.model import UID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
+from opengever.bumblebee import is_bumblebeeable
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.query import BaseQuery
+from sqlalchemy import and_
 from sqlalchemy import Boolean
 from sqlalchemy import Column
+from sqlalchemy import func
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import composite
@@ -42,6 +46,38 @@ class Favorite(Base):
                       default=utcnow_tz_aware,
                       onupdate=utcnow_tz_aware)
 
+    def serialize(self, portal_url):
+        return {
+            '@id': self.api_url(portal_url),
+            'favorite_id': self.favorite_id,
+            'oguid': self.oguid.id,
+            'title': self.title,
+            'icon_class': self.icon_class,
+            'target_url': self.get_target_url(),
+            'tooltip_url': self.get_tooltip_url(),
+            'position': self.position,
+            'admin_unit': AdminUnit.query.get(self.admin_unit_id).title}
+
+    def api_url(self, portal_url):
+        return '{}/@favorites/{}/{}'.format(
+            portal_url, self.userid, self.favorite_id)
+
+    @property
+    def tooltip_view(self):
+        if is_bumblebeeable(self):
+            return 'tooltip'
+
+    def get_tooltip_url(self):
+        url = self.get_target_url()
+        if self.tooltip_view:
+            return u'{}/{}'.format(url, self.tooltip_view)
+
+        return None
+
+    def get_target_url(self):
+        admin_unit = AdminUnit.query.get(self.admin_unit_id)
+        return u'{}/resolve_oguid/{}'.format(admin_unit.public_url, self.oguid)
+
 
 class FavoriteQuery(BaseQuery):
 
@@ -52,6 +88,23 @@ class FavoriteQuery(BaseQuery):
     def by_object_and_user(self, obj, user):
         oguid = Oguid.for_object(obj)
         return self.filter_by(oguid=oguid, userid=user.getId())
+
+    def by_userid(self, userid):
+        return self.filter_by(userid=userid)
+
+    def by_userid_and_id(self, fav_id, userid):
+        return Favorite.query.filter(
+            and_(Favorite.favorite_id == fav_id, Favorite.userid == userid))
+
+    def get_highest_position(self, userid):
+        return self.session.query(
+            func.max(Favorite.position)).filter_by(userid=userid).scalar()
+
+    def only_repository_favorites(self, userid, admin_unit_id):
+        query = self.by_userid(userid)
+        query = query.filter_by(
+            portal_type='opengever.repository.repositoryfolder')
+        return query.filter_by(admin_unit_id=admin_unit_id)
 
 
 Favorite.query_cls = FavoriteQuery
