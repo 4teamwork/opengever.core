@@ -11,6 +11,7 @@ Changelog
 - Add favorite SQL-Model. [phgross]
 - Enhance resolve_oguid view, to support other views. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
+- Only allow updating a documents file if the document is checked-out by the current user. [buchi]
 
 
 2018.2.1 (2018-04-12)
