@@ -12,7 +12,6 @@ class TestMove(IntegrationTestCase):
     @browsing
     def test_regular_user_can_move_document(self, browser):
         self.login(self.regular_user, browser)
-        setRoles(self.portal, self.regular_user.getId(), ['APIUser'])
         doc_id = self.document.getId()
         browser.open(
             self.subdossier.absolute_url() + '/@move',
