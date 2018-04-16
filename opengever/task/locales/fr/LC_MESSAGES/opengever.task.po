@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-24 11:25+0000\n"
+"POT-Creation-Date: 2018-04-16 13:38+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -69,6 +69,11 @@ msgstr "Choix de la tâche liée aux documents qui vont être liés à une nouve
 #: ./opengever/task/menu.py
 msgid "Subtask"
 msgstr "Sous-tâche"
+
+#. Default: "Task"
+#: ./opengever/task/task.py
+msgid "Task"
+msgstr "Tâche"
 
 #: ./opengever/task/browser/complete.py
 msgid "The documents were delivered to the issuer and the tasks were completed."
