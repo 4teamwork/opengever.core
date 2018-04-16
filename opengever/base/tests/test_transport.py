@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
@@ -98,3 +99,16 @@ class TestTransporter(FunctionalTestCase):
         Transporter().transport_to(
             task, 'client1', target_path,
             view='transporter-privileged-receive-object')
+
+    def test_transport_to_does_not_break_deadline_datatype(self):
+        source = create(Builder("dossier").titled(u"Source"))
+        target = create(Builder("dossier").titled(u"Target"))
+        target_path = '/'.join(target.getPhysicalPath())
+        task = create(
+            Builder("task")
+            .within(source)
+            .titled(u'Fo\xf6')
+            .having(deadline=date(2014, 7, 1)),
+            )
+        Transporter().transport_to(task, 'client1', target_path, view='transporter-privileged-receive-object')
+        self.assertFalse(isinstance(target.getFirstChild().deadline, datetime))

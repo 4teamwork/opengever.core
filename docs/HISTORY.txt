@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Fix transport of dates across admin units. [Rotonen]
 - Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite API endpoints. [phgross]

@@ -275,12 +275,15 @@ class DexterityFieldDataCollector(object):
         are stored on the field later.
         """
         if self._provided_by_one_of(field, [
-                schema.interfaces.IDate,
                 schema.interfaces.ITime,
                 schema.interfaces.IDatetime,
                 ]):
             if value:
                 return DateTime.DateTime(value).asdatetime()
+
+        if self._provided_by_one_of(field, [schema.interfaces.IDate]):
+            if value:
+                return DateTime.DateTime(value).asdatetime().date()
 
         if self._provided_by_one_of(field, [INamedFileField]):
             if value and isinstance(value, dict):
