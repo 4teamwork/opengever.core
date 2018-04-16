@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Omit search keywords from advanced search on site search prefill. [Rotonen]
 - Bump ftw.datepicker to 1.3.2 [lgraf]
 - Bump ftw.tokenauth version to 1.0.1 [lgraf]
 - Fix transport of dates across admin units. [Rotonen]
