@@ -17,8 +17,10 @@
     <div metal:fill-slot="main">
       <metal:core-macro define-macro="main">
 
-       <h1 class="documentFirstHeading" i18n:translate="title_manage_favorites">Favorites
-       </h1>
+        <div id="watermark-header">
+          <h1 class="documentFirstHeading" i18n:translate="title_manage_favorites">Favorites
+          </h1>
+        </div>
 
         <div tal:replace="structure view/vuejs_template" />
 
