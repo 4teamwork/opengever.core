@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Bump ftw.tokenauth version to 1.0.1 [lgraf]
 - Fix transport of dates across admin units. [Rotonen]
 - Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
