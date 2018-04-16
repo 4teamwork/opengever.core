@@ -40,7 +40,9 @@
 
     <tal:block tal:condition="options/description">
       <p class="details" i18n:translate="label_details">Details:</p>
-      <div tal:content="structure options/description"></div>
+      <tal:block tal:repeat="paragraph options/description">
+        <p tal:content="structure paragraph" />
+      </tal:block>
     </tal:block>
   </body>
 

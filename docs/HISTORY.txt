@@ -8,6 +8,7 @@ Changelog
 - Bump ftw.tokenauth version to 1.0.1 [lgraf]
 - Fix transport of dates across admin units. [Rotonen]
 - Make sure bumblebee checksum gets calculated for docs created via REST API. [lgraf]
+- Break activity details out per paragraph. [Rotonen]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite API endpoints. [phgross]
 - Add favorite SQL-Model. [phgross]

@@ -23,7 +23,10 @@ class Mailer(object):
     def send_mail(self, msg):
         self.mailhost.send(msg)
 
-    def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data={}):
+    def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data=None):
+        if data is None:
+            data = {}
+
         msg = MIMEMultipart('related')
 
         if from_userid:
@@ -37,6 +40,10 @@ class Mailer(object):
         recipient = ogds_service().fetch_user(to_userid)
         msg['To'] = recipient.email
         msg['Subject'] = Header(subject, 'utf-8')
+
+        # Break (potential) description out into a list element per newline
+        if 'description' in data:
+            data['description'] = [line for line in data.get('description').splitlines()]
 
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
