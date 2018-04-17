@@ -8,6 +8,7 @@ tests_require = [
     'ftw.builder',
     'ftw.testbrowser',
     'ftw.testing',
+    'opengever.core[tests]',
     'plone.app.testing',
 ]
 
