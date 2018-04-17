@@ -52,3 +52,29 @@ class TestCssClassHelpers(IntegrationTestCase):
         self.login(self.dossier_responsible)
         self.assertEquals('contenttype-opengever-task-task',
                           get_css_class(self.task))
+
+    def test_document_obj_checked_out_suffix(self):
+        self.login(self.dossier_responsible)
+
+        self.assertEquals('icon-docx', get_css_class(self.document))
+
+        self.checkout_document(self.document)
+        self.assertEquals('icon-docx is-checked-out', get_css_class(self.document))
+
+    def test_document_brain_checked_out_suffix(self):
+        self.login(self.dossier_responsible)
+
+        self.assertEquals('icon-docx', get_css_class(obj2brain(self.document)))
+
+        self.checkout_document(self.document)
+        self.assertEquals('icon-docx is-checked-out',
+                          get_css_class(obj2brain(self.document)))
+
+    def test_proposaltemplate_checked_out_suffix(self):
+        self.login(self.dossier_responsible)
+
+        self.assertEquals('icon-docx', get_css_class(self.proposal_template))
+
+        self.checkout_document(self.proposal_template)
+        self.assertEquals('icon-docx is-checked-out',
+                          get_css_class(obj2brain(self.proposal_template)))

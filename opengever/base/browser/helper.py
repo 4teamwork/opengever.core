@@ -1,4 +1,5 @@
 from ftw.solr.interfaces import ISolrDocument
+from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.model.task import Task
 from opengever.task.task import ITask
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -19,6 +20,13 @@ def _get_task_css_class(task):
         task = task.get_sql_object()
 
     return task.get_css_class()
+
+
+def is_checked_out(item):
+    if IBaseDocument.providedBy(item):
+        return item.checked_out_by()
+
+    return getattr(item, 'checked_out', False)
 
 
 # XXX object orient me!
@@ -66,6 +74,10 @@ def get_css_class(item, type_icon_only=False):
             # Immediatly set the volatile attribute to False so it doesn't
             # affect other views using the same object instance
             item._v__is_relation = False
+
+        # add checked out class
+        if is_checked_out(item):
+            css_class += " is-checked-out"
 
     if css_class is None:
         css_class = "contenttype-%s" % normalize(item.portal_type)
