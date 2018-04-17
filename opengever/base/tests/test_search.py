@@ -61,6 +61,17 @@ class TestOpengeverSearch(FunctionalTestCase):
         browser.login().open(self.portal, view='search')
         self.assertEqual(0, len(browser.css('.searchImage')))
 
+    @browsing
+    def test_prefill_from_advanced_search_omits_searchable_text_keywords(self, browser):
+        browser.login().open(
+            self.portal,
+            view='advanced_search?SearchableText=foo+NOT+bar+AND+qwe+OR+asd+AND+zxc+OR+dsa+NOT+rsa',
+            )
+        prefill = browser.css('#searchGadget').first.value
+        self.assertNotIn('AND', prefill)
+        self.assertNotIn('OR', prefill)
+        self.assertNotIn('NOT', prefill)
+
 
 class TestBumblebeePreview(FunctionalTestCase):
 

@@ -20,3 +20,9 @@ class SearchBoxViewlet(SearchBoxViewlet):
         placeholder = getattr(self.context, 'search_label',
                               u'title_search_site')
         return translate(placeholder, domain='plone', context=self.request)
+
+    def prefill(self):
+        searchable_text = self.request.form.get('SearchableText')
+        if searchable_text:
+            return searchable_text.replace(' AND', '').replace(' OR', '').replace(' NOT', '')
+        return ''

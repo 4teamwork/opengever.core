@@ -24,7 +24,7 @@
              title="Search Site"
              accesskey="4"
              i18n:attributes="title title_search_site"
-             tal:attributes="value request/form/SearchableText|nothing;
+             tal:attributes="value view/prefill|nothing;
                              id search_input_id;
                              placeholder view/placeholder"
              class="searchField inputLabel" /><input class="searchButton"
@@ -57,7 +57,7 @@
                i18n:translate="label_advanced_search">Advanced Search&#8230;</a>
           </div>
 		  <!-- END GEVER custom -->
-		  
+
         </div>
       </div>
     </div>
