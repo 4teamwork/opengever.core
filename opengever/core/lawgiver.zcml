@@ -299,4 +299,12 @@
                    "
       />
 
+  <!-- Should be ignored, teams are site-global. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.contact: Add team,
+                   opengever.contact: Edit team,
+                   "
+      />
+
 </configure>

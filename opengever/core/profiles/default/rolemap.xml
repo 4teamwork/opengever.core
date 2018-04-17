@@ -73,6 +73,16 @@
       <role name="Administrator" />
     </permission>
 
+    <permission name="opengever.contact: Add team" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
+    <permission name="opengever.contact: Edit team" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
     <!-- DISPOSITION -->
     <permission name="opengever.disposition: Add disposition" acquire="True">
       <role name="Manager" />
