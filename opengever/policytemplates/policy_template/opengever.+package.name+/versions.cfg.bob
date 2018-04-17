@@ -1,6 +1,6 @@
 [buildout]
 extends =
-    http://kgs.4teamwork.ch/release/opengever/XXX
+    https://raw.githubusercontent.com/4teamwork/opengever.core/20XX.Y.Z/versions.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/4teamwork-psc.cfg
     https://raw.githubusercontent.com/4teamwork/opengever.core/master/sources.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-sources.cfg
