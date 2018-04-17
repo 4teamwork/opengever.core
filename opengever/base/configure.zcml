@@ -58,6 +58,11 @@
       name="redirector"
       />
 
+  <adapter
+      factory=".viewlets.favorite_action.FavoriteETagValue"
+      name="favorite"
+      />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"

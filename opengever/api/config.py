@@ -1,4 +1,5 @@
 from opengever.activity.interfaces import IActivitySettings
+from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
@@ -65,5 +66,7 @@ class Config(Service):
             'is_feature_enabled', interface=IWorkspaceSettings)
         config['features']['solr'] = api.portal.get_registry_record(
             'use_solr', interface=ISearchSettings)
+        config['features']['favorites'] = api.portal.get_registry_record(
+            'is_feature_enabled', interface=IFavoritesSettings)
 
         return config

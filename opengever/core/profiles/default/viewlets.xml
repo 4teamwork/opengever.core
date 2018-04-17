@@ -34,8 +34,12 @@
     <viewlet name="ftw.mail.mail-in" />
   </hidden>
 
-
   <order manager="plone.portalheader" skinname="*">
     <viewlet name="opengever.activity.notification" insert-after="plone.personal_bar" />
   </order>
+
+  <order manager="plone.belowcontenttitle" skinname="*">
+    <viewlet name="opengever.favorite_action" insert-before="ftw.tabbedview.searchbox" />
+  </order>
+
 </object>

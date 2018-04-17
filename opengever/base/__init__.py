@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from opengever.base import monkey  # noqa
+from opengever.base.interfaces import IFavoritesSettings
+from plone import api
 from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
 import csv
@@ -9,6 +11,11 @@ import csv
 _ = MessageFactory('opengever.base')
 
 VERSION = 'GEVER Version %(version)s'
+
+
+def is_favorites_feature_enabled():
+    return api.portal.get_registry_record(
+        'is_feature_enabled', interface=IFavoritesSettings)
 
 
 class OpenGeverCSVDialect(csv.excel):

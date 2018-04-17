@@ -7,6 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import Trasher
 from plone import api
+from sqlalchemy.exc import IntegrityError
 
 
 class TestFavoriteModel(IntegrationTestCase):
@@ -25,6 +26,23 @@ class TestFavoriteModel(IntegrationTestCase):
 
         self.assertEqual(1, Favorite.query.count())
         self.assertEqual(u'Testposition 1', Favorite.query.one().title)
+
+    def test_unique_constraint(self):
+        data = {
+            'oguid': Oguid.parse('fd:123'),
+            'userid': self.regular_user.getId(),
+            'title': u'Testposition 1',
+            'position': 2,
+            'portal_type': 'opengever.repositoryfolder.repositoryfolder',
+            'icon_class': 'contenttype-opengever-repository-repositoryfolder',
+            'plone_uid': '127bad76e535451493bb5172c28eb38d'}
+
+        session = create_session()
+        session.add(Favorite(**data))
+
+        with self.assertRaises(IntegrityError):
+            session.add(Favorite(**data))
+            session.flush()
 
     def test_is_marked_as_favorite(self):
         self.login(self.regular_user)

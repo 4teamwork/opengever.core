@@ -3,6 +3,7 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
+from plone import api
 from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
@@ -85,3 +86,6 @@ class FavoriteManager(object):
         favorites = Favorite.query.only_repository_favorites(
             userid, get_current_admin_unit().id()).all()
         return favorites
+
+    def get_favorite(self, obj, user):
+        return Favorite.query.by_object_and_user(obj, user).first()

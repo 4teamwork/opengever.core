@@ -17,6 +17,7 @@ from sqlalchemy import Column
 from sqlalchemy import func
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
 from sqlalchemy.schema import Sequence
 
@@ -24,6 +25,10 @@ from sqlalchemy.schema import Sequence
 class Favorite(Base):
 
     __tablename__ = 'favorites'
+    __table_args__ = (
+        UniqueConstraint('admin_unit_id', 'int_id', 'userid',
+                         name='ix_favorites_unique'),
+        {})
 
     favorite_id = Column('id', Integer, Sequence("favorites_id_seq"),
                 primary_key=True)

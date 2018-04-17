@@ -53,6 +53,7 @@ FEATURE_FLAGS = {
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',
+    'favorites': 'opengever.base.interfaces.IFavoritesSettings.is_feature_enabled',
     }
 
 FEATURE_PROFILES = {

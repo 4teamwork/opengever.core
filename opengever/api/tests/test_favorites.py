@@ -184,6 +184,38 @@ class TestFavoritesPost(IntegrationTestCase):
              u'type': u'Unauthorized'},
             browser.json)
 
+    @browsing
+    def test_adding_already_existing_favorite_returns_409_and_existing_representation(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.administrator)
+               .for_object(self.document))
+
+        oguid = Oguid.for_object(self.document)
+        url = '{}/@favorites/{}'.format(
+            self.portal.absolute_url(), self.administrator.getId())
+        data = json.dumps({'oguid': oguid.id})
+
+        with browser.expect_http_error(409):
+            browser.open(url, data=data, method='POST',
+                         headers={'Accept': 'application/json',
+                                  'Content-Type': 'application/json'})
+
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@favorites/nicole.kohler/1',
+             u'admin_unit': u'Hauptmandant',
+             u'favorite_id': 1,
+             u'icon_class': u'icon-docx',
+             u'oguid': u'plone:1014073300',
+             u'position': None,
+             u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
+             u'title': u'Vertr\xe4gsentwurf',
+             u'tooltip_url': u'http://nohost/plone/resolve_oguid/plone:1014073300/tooltip'},
+            browser.json)
+
+        self.assertEqual(1, Favorite.query.count())
+
 
 class TestFavoritesDelete(IntegrationTestCase):
 

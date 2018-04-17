@@ -1,0 +1,11 @@
+<div id="favorite-action"
+     tal:condition="view/available"
+     tal:define="favorite view/get_favorite"
+     tal:attributes="data-oguid python: view.oguid().id;
+                     data-url view/url">
+
+  <a href="#" id="mark-as-favorite"
+     tal:attributes="class python:'is-favorite' if favorite else '';
+                     data-favorite-id python: favorite and favorite.favorite_id" />
+
+</div>
