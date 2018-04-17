@@ -44,6 +44,7 @@ from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
@@ -266,6 +267,11 @@ class Task(Container):
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)
+
+    @property
+    def zipexport_title(self):
+        translated_taskname = translate(_(u'Task', default=u'Task'), context=api.portal.get().REQUEST)
+        return u' - '.join((translated_taskname, self.Title().decode('utf-8'), ))
 
     @property
     def sequence_number(self):
