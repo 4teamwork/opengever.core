@@ -52,7 +52,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_to_inbox(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         inbox = self.create_single_inbox()
         body, headers = self.prepare_request()
 
@@ -67,7 +67,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_to_org_unit_inbox(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         inbox = self.create_org_unit_inbox()
 
         body, headers = self.prepare_request(org_unit='fa')
@@ -82,7 +82,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_to_org_unit_inbox_by_title(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         inbox = self.create_org_unit_inbox()
 
         body, headers = self.prepare_request(org_unit='Finanzamt')
@@ -133,7 +133,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_with_missing_userid(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal.absolute_url() + '/@scan-in',
                          method='POST',
@@ -143,7 +143,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_with_unkown_userid(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
 
         body, headers = self.prepare_request(userid='chief')
         with browser.expect_http_error(code=400, reason='Bad Request'):
@@ -155,7 +155,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_without_file(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal.absolute_url() + '/@scan-in',
                          method='POST',
@@ -165,7 +165,7 @@ class TestScanIn(IntegrationTestCase):
 
     @browsing
     def test_scanin_to_unknown_destination(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
 
         body, headers = self.prepare_request(destination='unknown')
         with browser.expect_http_error(code=400, reason='Bad Request'):

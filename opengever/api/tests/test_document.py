@@ -11,7 +11,7 @@ class TestDocumentPatch(IntegrationTestCase):
 
     @browsing
     def test_document_patch_forbidden_if_not_checked_out(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         self.assertFalse(self.document.is_checked_out())
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(
@@ -27,12 +27,12 @@ class TestDocumentPatch(IntegrationTestCase):
 
     @browsing
     def test_document_patch_forbidden_if_not_checked_out_by_current_user(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.dossier_responsible, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
 
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(
                 self.document.absolute_url(),
@@ -47,7 +47,7 @@ class TestDocumentPatch(IntegrationTestCase):
 
     @browsing
     def test_document_patch_allowed_if_checked_out_by_current_user(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
@@ -63,7 +63,7 @@ class TestDocumentPatch(IntegrationTestCase):
 
     @browsing
     def test_document_patch_allowed_if_not_modifying_file(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.document.absolute_url(),
             data='{"description": "Foo bar"}',
