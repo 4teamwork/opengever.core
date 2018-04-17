@@ -95,8 +95,13 @@ class FavoritesPost(Service):
         if not obj:
             raise BadRequest('Invalid oguid, could not be resolved.')
 
-        favorite = FavoriteManager().add(userid, obj)
+        favorite = FavoriteManager().get_favorite(obj, api.user.get_current())
+        if favorite:
+            # favorite already exists
+            self.request.response.setStatus(409)
+            return favorite.serialize(api.portal.get().absolute_url())
 
+        favorite = FavoriteManager().add(userid, obj)
         self.request.response.setStatus(201)
         url = favorite.api_url(api.portal.get().absolute_url())
         self.request.response.setHeader('Location', url)
