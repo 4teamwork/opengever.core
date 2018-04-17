@@ -33,6 +33,13 @@
         target.addClass('is-favorite');
         target.removeClass('loading');
       }).fail(function(data){
+
+        if (data.status == 409){
+          // favorite already exists
+          target.data('favorite-id', data.responseJSON['favorite_id']);
+          target.addClass('is-favorite');
+        }
+
         target.removeClass('loading');
       });
 
@@ -53,6 +60,11 @@
           target.removeClass('is-favorite');
           target.removeClass('loading');
         }).fail(function(data) {
+          if (data.status == 404){
+            // favorite already removed
+            target.removeClass('is-favorite');
+            target.data('favorite-id', null);
+          }
           target.removeClass('loading');
         });
     };
