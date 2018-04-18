@@ -18,13 +18,11 @@ class TeamDetails(BrowserView):
         self.request = request
 
     def prepare_model_tabs(self, viewlet):
-        if api.user.has_permission('cmf.ManagePortal', obj=self.context):
-            url = u'{}/team-{}/edit'.format(
-                self.context.parent.absolute_url(), self.model.team_id)
+        if api.user.get_current().checkPermission('opengever.contact: Edit team', self.context):
+            url = u'{}/team-{}/edit'.format(self.context.parent.absolute_url(), self.model.team_id)
             return viewlet.prepare_edit_tab(url)
 
         return tuple()
 
     def get_team_members(self):
-        return [Actor.user(user.userid)
-                for user in self.model.group.users]
+        return [Actor.user(user.userid) for user in self.model.group.users]

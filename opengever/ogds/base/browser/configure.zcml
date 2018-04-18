@@ -66,14 +66,14 @@
       for="opengever.contact.contactfolder.IContactFolder"
       name="add-team"
       class=".team_forms.TeamAddForm"
-      permission="cmf.ManagePortal"
+      permission="opengever.contact.AddTeam"
       />
 
   <browser:page
       name="edit"
       for="opengever.ogds.base.interfaces.ITeam"
       class=".team_forms.TeamEditForm"
-      permission="cmf.ManagePortal"
+      permission="opengever.contact.EditTeam"
       />
 
 </configure>
