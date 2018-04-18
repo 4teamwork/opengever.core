@@ -176,14 +176,30 @@ class StrictDossierResolver(object):
     def after_resolve(self):
         """After resolving a dossier, some cleanup jobs have to be executed:
 
+        - Remove all shadowed documents.
         - Remove all trashed documents.
         - (Trigger PDF-A conversion).
         - Generate a PDF output of the journal.
         """
 
+        self.trash_shadowed_docs()
         self.purge_trash()
         self.create_journal_pdf()
         self.trigger_pdf_conversion()
+
+    def trash_shadowed_docs(self):
+        """Trash all documents that are in shadow state (recursive).
+        """
+        portal_catalog = api.portal.get_tool('portal_catalog')
+        query = {'path': {'query': self.context.absolute_url_path(), 'depth': -1},
+                'object_provides': [IBaseDocument.__identifier__],
+                'review_state': "document-state-shadow"}
+        shadowed_docs = portal_catalog.unrestrictedSearchResults(query)
+
+        if shadowed_docs:
+            with elevated_privileges():
+                api.content.delete(
+                    objects=[brain.getObject() for brain in shadowed_docs])
 
     def purge_trash(self):
         """Delete all trashed documents inside the dossier (recursive).

@@ -172,6 +172,39 @@ class TestResolveJobs(FunctionalTestCase):
             [doc1], self.dossier.listFolderContents(),
             "Journal PDF created altough it's disabled by default.")
 
+    def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self):
+        doc1 = create(Builder('document').within(self.dossier))
+        doc2 = create(Builder('document').within(self.dossier).as_shadow_document())
+        doc1.reindexObject(idxs=["review_state"])
+        doc2.reindexObject(idxs=["review_state"])
+
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
+
+    def test_shadowed_documents_are_deleted_recursively_when_resolving_a_dossier(self):
+        subdossier = create(Builder('dossier').within(self.dossier))
+        doc1 = create(Builder('document').within(subdossier))
+        doc2 = create(Builder('document').within(subdossier).as_shadow_document())
+        doc1.reindexObject(idxs=["review_state"])
+        doc2.reindexObject(idxs=["review_state"])
+
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-resolve')
+
+        docs = [brain.getObject() for brain in
+                self.catalog.unrestrictedSearchResults(
+                    path='/'.join(self.dossier.getPhysicalPath()))]
+
+        self.assertIn(doc1, docs)
+        self.assertNotIn(doc2, docs)
+
 
 class TestAutomaticPDFAConversion(FunctionalTestCase):
 
