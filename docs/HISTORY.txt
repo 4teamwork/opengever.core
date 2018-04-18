@@ -8,6 +8,7 @@ Changelog
 - Drop unused pinnings. [lgraf]
 - Omit search keywords from advanced search on site search prefill. [Rotonen]
 - Prefix tasks in zip exports. [Rotonen]
+- Allow REST API request for all members. [phgross]
 - Bump ftw.datepicker to 1.3.2 [lgraf]
 - Bump ftw.tokenauth version to 1.0.1 [lgraf]
 - Fix transport of dates across admin units. [Rotonen]

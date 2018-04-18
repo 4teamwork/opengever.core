@@ -12,7 +12,7 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
 
     @browsing
     def test_repofolder_serialization_contains_reference_number(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.leaf_repofolder, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
@@ -20,7 +20,7 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
 
     @browsing
     def test_repofolder_serialization_contains_is_leafnode(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.leaf_repofolder, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
@@ -36,7 +36,7 @@ class TestDossierSerializer(IntegrationTestCase):
 
     @browsing
     def test_dossier_serialization_contains_reference_number(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.dossier, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1')
@@ -51,14 +51,14 @@ class TestDocumentSerializer(IntegrationTestCase):
 
     @browsing
     def test_document_serialization_contains_reference_number(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.document, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 10')
 
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.mail, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 20')

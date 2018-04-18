@@ -22,7 +22,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
 
     @browsing
     def test_portal_type_is_included(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.repository_root.absolute_url(),
             headers={'Accept': 'application/json'})
@@ -44,7 +44,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
     @browsing
     def test_translated_title_contained_in_summary_if_obj_translated(
             self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.repository_root.absolute_url(),
             headers={'Accept': 'application/json', 'Accept-Language': 'de-ch'})
@@ -65,7 +65,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
 
     @browsing
     def test_translated_titles_default_to_german(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.repository_root.absolute_url(),
             headers={'Accept': 'application/json'})
@@ -77,7 +77,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
 
     @browsing
     def test_regular_title_in_summary_if_obj_not_translated(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.leaf_repofolder.absolute_url(),
             headers={'Accept': 'application/json'})
@@ -89,7 +89,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
 
     @browsing
     def test_summary_with_custom_field_list(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.dossier.absolute_url() +
             '?items.fl=filesize,filename,modified,created,mimetype,creator',
@@ -112,7 +112,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
 
     @browsing
     def test_summary_with_reference_number(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(
             self.dossier.absolute_url() +
             '?items.fl=reference_number',

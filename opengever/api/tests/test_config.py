@@ -9,7 +9,7 @@ class TestConfig(IntegrationTestCase):
 
     @browsing
     def test_config_contains_id(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         url = self.portal.absolute_url() + '/@config'
         browser.open(url, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
@@ -17,7 +17,7 @@ class TestConfig(IntegrationTestCase):
 
     @browsing
     def test_config_contains_features(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config',
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
@@ -46,7 +46,7 @@ class TestConfig(IntegrationTestCase):
 
     @browsing
     def test_config_contains_max_subdossier_depth(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config',
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
@@ -54,7 +54,7 @@ class TestConfig(IntegrationTestCase):
 
     @browsing
     def test_config_contains_max_repository_depth(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config',
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)

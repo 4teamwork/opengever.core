@@ -12,7 +12,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_checkout_document(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.document.absolute_url() + '/@checkout',
                      method='POST', headers={'Accept': 'application/json'})
         self.assertEqual(204, browser.status_code)
@@ -20,7 +20,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_checkout_checkedout_document_returns_forbidden(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
@@ -32,7 +32,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_checkin_document(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
@@ -44,7 +44,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_checkin_document_with_comment(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
@@ -62,7 +62,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_checkin_checkedin_document_returns_forbidden(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(self.document.absolute_url() + '/@checkin',
                          method='POST', headers={'Accept': 'application/json'})
@@ -70,7 +70,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_cancel_checkout(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
@@ -82,7 +82,7 @@ class TestCheckoutAPI(IntegrationTestCase):
 
     @browsing
     def test_cancel_checkedin_document_returns_forbidden(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(self.document.absolute_url() + '/@cancelcheckout',
                          method='POST', headers={'Accept': 'application/json'})

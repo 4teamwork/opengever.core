@@ -11,7 +11,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_trash_document(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.document.absolute_url() + '/@trash',
                      method='POST', headers={'Accept': 'application/json'})
         self.assertEqual(204, browser.status_code)
@@ -19,7 +19,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_trash_trashed_document_gives_bad_request(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.document.absolute_url() + '/@trash',
                      method='POST', headers={'Accept': 'application/json'})
 
@@ -31,7 +31,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_trash_checked_out_document_gives_bad_request(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         browser.open(self.document.absolute_url() + '/@checkout',
                      method='POST', headers={'Accept': 'application/json'})
 
@@ -44,7 +44,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_trash_document_without_permission_gives_401(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
 
         self.document.aq_parent.manage_permission(
             'opengever.trash: Trash content', roles=[], acquire=0)
@@ -57,7 +57,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_untrash_document(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
         trasher = ITrashable(self.document)
         trasher.trash()
         browser.open(self.document.absolute_url() + '/@untrash',
@@ -67,7 +67,7 @@ class TestTrashAPI(IntegrationTestCase):
 
     @browsing
     def test_untrash_document_without_permission_gives_401(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.regular_user, browser)
 
         self.document.aq_parent.manage_permission(
             'opengever.trash: Untrash content', roles=[], acquire=0)
