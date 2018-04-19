@@ -71,4 +71,10 @@ Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe des
 auftragnehmenden Mandanten mitberechtigt. Dies im Sinne der
 Stellvertreter-Regelung.
 
+**Aufgaben-Workflow-Diagramm**
+
+|img-aufgaben-workflow-1|
+
+.. |img-aufgaben-workflow-1| image:: ../img/media/img-aufgaben-workflow-1.png
+
 .. disqus::
