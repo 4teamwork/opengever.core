@@ -1,6 +1,6 @@
 var app = new Vue({
   template: '#favorites-list',
-  el: '#vue-app',
+  el: '#favorite-view-vue-app',
   data: {
     userid: null,
     i18n: {},

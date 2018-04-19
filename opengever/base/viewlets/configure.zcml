@@ -84,4 +84,11 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.base.favoritesmenu"
+      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+      class=".favorites_menu.FavoritesMenuViewlet"
+      permission="zope2.View"
+      />
+
 </configure>

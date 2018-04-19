@@ -24,7 +24,7 @@
 
         <div tal:replace="structure view/vuejs_template" />
 
-        <div id="vue-app"
+        <div id="favorite-view-vue-app"
              tal:attributes="data-portalurl here/portal_url;
                              data-i18n view/translations;
                              data-userid view/get_userid;

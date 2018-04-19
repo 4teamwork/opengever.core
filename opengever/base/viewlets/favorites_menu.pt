@@ -1,0 +1,15 @@
+<div id="favorites-menu" class="gever-portal-control" i18n:domain="opengever.base">
+
+  <div tal:replace="structure view/vuejs_template" />
+
+  <div id="contianer"></div>
+
+  <div id="favorite-vue-app"
+       tal:attributes="data-portalurl here/portal_url;
+                       data-overviewurl string:${here/portal_url}/favorites-view;
+                       data-i18n view/translations;
+                       data-userid view/get_userid" />
+
+  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_menu_app.js"></script>
+
+</div>
