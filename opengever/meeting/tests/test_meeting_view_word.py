@@ -17,7 +17,8 @@ class TestWordMeetingView(IntegrationTestCase):
         browser.open(self.meeting)
 
         self.assertEquals(
-            ['Export as Zip', 'Properties', 'Close meeting', 'Cancel'],
+            ['Export as Zip', 'Export to meeting application', 'Properties',
+             'Close meeting', 'Cancel'],
             editbar.menu_options('Actions'))
 
     @browsing

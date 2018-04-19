@@ -100,6 +100,13 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="export-meeting-app"
+      class=".appexport.MeetingAppExport"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="export-meeting-zip"
       class=".zipexport.MeetingZipExport"
       permission="zope2.View"

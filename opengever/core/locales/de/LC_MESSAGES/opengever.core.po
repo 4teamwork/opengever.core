@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-03-27 09:30+0000\n"
+"POT-Creation-Date: 2018-04-19 09:26+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -110,6 +110,10 @@ msgstr "Als Zip-Datei exportieren"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Export to meeting application"
+msgstr "Auf Sitzungsapplikation publizieren"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Forward"
