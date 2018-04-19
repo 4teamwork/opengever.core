@@ -490,12 +490,12 @@ class TestFavoritesPatch(IntegrationTestCase):
         url = '{}/@favorites/{}/4'.format(
             self.portal.absolute_url(), self.regular_user.getId())
         browser.open(url, method='PATCH',
-                     data=json.dumps({'position': 1}),
+                     data=json.dumps({'position': 0}),
                      headers={'Accept': 'application/json',
                               'Content-Type': 'application/json'})
 
         self.assertEquals(
-            [self.dossier, self.branch_repofolder, self.document,
+            [self.branch_repofolder, self.dossier, self.document,
              self.leaf_repofolder],
             [fav.oguid.resolve_object() for fav in Favorite.query.order_by(Favorite.position)])
 

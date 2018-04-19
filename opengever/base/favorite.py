@@ -50,7 +50,7 @@ class FavoriteManager(object):
             favorite.title = title
             favorite.is_title_personalized = True
 
-        if position:
+        if position is not None:
             self.update_position(favorite, position, userid)
 
         return favorite
