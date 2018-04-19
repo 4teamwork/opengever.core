@@ -81,3 +81,13 @@ class TestMeetingAppExportView(IntegrationTestCase):
 
         with self.assertRaises(FormFieldNotFound):
             browser.fill({'Meeting app export URL': u'https://some.url'})
+
+    @browsing
+    def test_export_of_meeting_of_committee_without_export_url_is_not_possible(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.meeting, view='export-meeting-app')
+        self.assertEquals(
+            [u'The committee Rechnungspr\xfcfungskommission has no meeting app export URL.',
+             'An unexpected error has occured'],
+            statusmessages.error_messages())
