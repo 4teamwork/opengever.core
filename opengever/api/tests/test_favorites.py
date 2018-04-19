@@ -269,7 +269,8 @@ class TestFavoritesDelete(IntegrationTestCase):
 
         favorite = create(Builder('favorite')
                           .for_user(self.regular_user)
-                          .for_object(self.dossier))
+                          .for_object(self.dossier)
+                          .having(position=0))
 
         self.assertEqual(1, Favorite.query.count())
 
@@ -280,6 +281,31 @@ class TestFavoritesDelete(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertEqual(0, Favorite.query.count())
+
+    @browsing
+    def test_updates_positions_when_deleting_favorite(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        fav1 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=0)
+                      .for_object(self.dossier))
+        fav2 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=1)
+                      .for_object(self.document))
+        fav3 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=2)
+                      .for_object(self.leaf_repofolder))
+
+        url = '{}/@favorites/{}/{}'.format(
+            self.portal.absolute_url(), self.administrator.getId(),
+            fav1.favorite_id)
+        browser.open(url, method='DELETE', headers={'Accept': 'application/json'})
+
+        self.assertEqual(0, fav2.position)
+        self.assertEqual(1, fav3.position)
 
     @browsing
     def test_raises_unauthorized_when_removing_a_favorite_of_a_other_user(self, browser):
