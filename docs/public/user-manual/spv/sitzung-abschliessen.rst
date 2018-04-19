@@ -22,7 +22,10 @@ abschliessen» anwählen.
 
 Sie können nun das Protokoll fertigstellen. Klicken Sie auf den Protokoll-Titel
 und dann wie gewohnt auf Auschecken/Bearbeiten. Das Protokoll hat nach Abschluss
-der Sitzung den Platz des Vorprotokolls eingenommen.
+der Sitzung den Platz des Vorprotokolls eingenommen. Bitte beachten Sie, dass
+das Protokoll vor Abschluss der Sitzung generiert werden muss. Ist die Sitzung 
+abgeschlossen, muss diese wieder geöffnet werden, damit das Protokoll neu
+generiert werden kann.
 
 |img-spvupdate-29|
 |img-spvupdate-30|
