@@ -1,4 +1,4 @@
-<div id="favorites-menu" class="gever-portal-control" i18n:domain="opengever.base">
+<div id="favorites-menu" class="gever-portal-control" i18n:domain="opengever.base" tal:condition="view/available">
 
   <div tal:replace="structure view/vuejs_template" />
 

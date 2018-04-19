@@ -1,4 +1,5 @@
 from opengever.base import _
+from opengever.base import is_favorites_feature_enabled
 from opengever.base.handlebars import get_handlebars_template
 from pkg_resources import resource_filename
 from plone import api
@@ -31,7 +32,5 @@ class FavoritesMenuViewlet(common.ViewletBase):
                 context=self.request)
         })
 
-
     def available(self):
-        # todo check for feature flag
-        return True
+        return is_favorites_feature_enabled()
