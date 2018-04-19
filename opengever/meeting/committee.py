@@ -19,6 +19,7 @@ from opengever.meeting.wrapper import PeriodWrapper
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.autoform import directives as form
+from plone.autoform.directives import write_permission
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.supermodel import model
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -157,6 +158,14 @@ class ICommittee(model.Schema):
         required=False,
         default=None,
         missing_value=None)
+
+    write_permission(meeting_app_export_url='opengever.meeting.EditMeetingAppExportURL')
+    meeting_app_export_url = schema.TextLine(
+        title=_(u"label_meeting_app_export_url",
+                default=u"Meeting app export URL"),
+        required=False,
+        max_length=256,
+    )
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):

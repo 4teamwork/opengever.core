@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-21 17:07+0000\n"
+"POT-Creation-Date: 2018-04-19 12:51+0000\n"
 "PO-Revision-Date: 2017-06-22 09:02+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1245,6 +1245,11 @@ msgstr "Propriétés"
 #: ./opengever/meeting/proposal.py
 msgid "label_meeting"
 msgstr "Séance"
+
+#. Default: "Meeting app export URL"
+#: ./opengever/meeting/committee.py
+msgid "label_meeting_app_export_url"
+msgstr ""
 
 #. Default: "Meeting closed"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt

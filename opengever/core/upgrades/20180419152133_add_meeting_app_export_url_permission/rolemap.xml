@@ -1,0 +1,7 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.meeting: Edit meeting app export URL" acquire="True">
+      <role name="Manager" />
+    </permission>
+  </permissions>
+</rolemap>

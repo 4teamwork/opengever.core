@@ -168,6 +168,10 @@
       <role name="Administrator" />
     </permission>
 
+    <permission name="opengever.meeting: Edit meeting app export URL" acquire="True">
+      <role name="Manager" />
+    </permission>
+
     <!-- POLICY -->
     <permission name="plone.restapi: Use REST API" acquire="True">
       <role name="Manager" />

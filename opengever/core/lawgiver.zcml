@@ -307,4 +307,11 @@
                    "
       />
 
+  <!-- Should be ignored since not dependet of workflow. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.meeting: Edit meeting app export URL,
+                   "
+      />
+
 </configure>

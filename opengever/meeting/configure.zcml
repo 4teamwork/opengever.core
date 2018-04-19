@@ -13,6 +13,8 @@
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 
+  <permission id="opengever.meeting.EditMeetingAppExportURL" title="opengever.meeting: Edit meeting app export URL" />
+
   <!-- Register an extension profile to make the product installable -->
   <genericsetup:registerProfile
       name="default"

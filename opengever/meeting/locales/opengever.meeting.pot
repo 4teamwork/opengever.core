@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-21 17:07+0000\n"
+"POT-Creation-Date: 2018-04-19 12:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1241,6 +1241,11 @@ msgstr ""
 #. Default: "Meeting"
 #: ./opengever/meeting/proposal.py
 msgid "label_meeting"
+msgstr ""
+
+#. Default: "Meeting app export URL"
+#: ./opengever/meeting/committee.py
+msgid "label_meeting_app_export_url"
 msgstr ""
 
 #. Default: "Meeting closed"

@@ -55,7 +55,8 @@ class CommitteeFieldConfigurationMixin(object):
                                            'agenda_item_suffix_template',
                                            'excerpt_header_template',
                                            'excerpt_suffix_template',
-                                           'allowed_proposal_templates')
+                                           'allowed_proposal_templates',
+                                           'meeting_app_export_url')
 
 
 class AddForm(CommitteeFieldConfigurationMixin,
