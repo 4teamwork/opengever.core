@@ -232,7 +232,7 @@ automatisch den Kommentar "Dokument von Aufgabe kopiert (Aufgabe erledigt)".
 Spezialfall mandantenübergreifende Zur Kenntnisnahme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Beim Aufagbentyp "zur Kenntnisnahme" kann folgendermasssen vorgegangen werden:
+Beim Aufgabentyp "zur Kenntnisnahme" kann folgendermassen vorgegangen werden:
 
 Der Auftraggeber erstellt mit dem entsprechenden Dokument eine Aufgabe vom Typ
 "Zur Kenntnisnahme" zuhanden des betreffenden Mandanten.
