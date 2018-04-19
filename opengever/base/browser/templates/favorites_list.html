@@ -9,9 +9,17 @@
                     <span class="moveHandler fa fa-bars" />
                 </td>
                 <td>
-                    <a :class="entry.icon_class" :href="entry.url">
-                        {{entry.title}}
+                  <!-- document -->
+                  <div v-show="entry.tooltip_url" class="linkWrapper tooltip-trigger" :data-tooltip-url="entry.tooltip_url">
+                    <a :class="entry.icon_class" :href="entry.target_url">
+                      {{entry.title}}
                     </a>
+                  </div>
+
+                  <a v-show="!entry.tooltip_url" :class="entry.icon_class" :href="entry.target_url">
+                    {{entry.title}}
+                  </a>
+
                 </td>
                 <td class="admin_unit">{{entry.admin_unit}}</td>
                 <td class="edit-controls">
