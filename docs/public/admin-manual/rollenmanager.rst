@@ -150,16 +150,18 @@ Globale Rollen gelten für einen physischen Mandanten. Die Rolle wird durch
 
 Die Globalen Rollen und deren Charakteristik sind
 
--   Administrator: kann Ordnungssystem anpassen/ergänzen, Vorlagen verwalten,
-    Force Checkin ausführen
+-   Administrator: Sieht alle Dossiers, kann auf OS und Dossiers Rechte
+    einrichten, kann Ordnungssystem anpassen/ergänzen, kann Vorlagen verwalten,
+    kann Force Checkin ausführen.
 
--   Rollenmanager: kann auf Ordnungspositionen und Dossiers die Berechtigungen
-    anpassen, d.h. einschränken oder erweitern.
+-   Rollenmanager: Darf in denjenigen Dossiers Rechte vergeben (einschränken
+    oder erweitern), auf welche er mindestens als "Benutzer" berechtigt ist.
 
 -   Records Manager: Diese Rolle wird in der Regel einem kleinen Benutzerkreis,
     welche für die Aussonderung des entsprechenden Mandants zuständig sind,
-    vergeben. Die Rolle kann Aussonderungsangebot inkl. Selektion von
-    Dossiers für Archivierung und Aussonderung erstellen.
+    vergeben. Die Rolle kann Aussonderungsangebot inkl. Selektion von Dossiers
+    für Archivierung und Aussonderung erstellen. Dies darf der Recordsmanager,
+    bei diesen Dossiers, wo er mindestens als "Benutzer" berechtigt ist.
 
 -   Archivist: Die Rolle Archivist wird in der Regel Archiv-Mitarbeitenden
     vergeben, welche dazu berechtigt sind Angebote des Records Managers zu
@@ -177,6 +179,13 @@ Die Globalen Rollen und deren Charakteristik sind
     Unpersönliche Aufgaben an Eingangskorb verwalten sowie sind diese
     Stellvertretung bei Aufgaben. Zudem sind sie automatisch für alle Aufgaben
     an den Mandanten mitberechtigt.
+
+Grundsätzlich gilt, dass die Globalen Rollen Rollenmanager und Recordsmanager
+ein Grundrecht erteilen, jedoch keine Sichtrechte auf Dossiers per se.
+
+Weiter gilt, dass die Rollen Rollenmanager und Recordsmanager nur in denjenigen
+Dossiers wahrgenommen werden können, in welchen die Person via eine zusätzliche
+AD-Gruppe oder Personenzuweisung mindestens Sichtrechte hat.
 
 
 Rollen innerhalb der Ordnungsstruktur
