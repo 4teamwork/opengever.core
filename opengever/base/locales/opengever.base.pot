@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-13 07:04+0000\n"
+"POT-Creation-Date: 2018-04-19 14:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -238,6 +238,16 @@ msgstr ""
 msgid "label_last_modified"
 msgstr ""
 
+#. Default: "No favorites exists."
+#: ./opengever/base/viewlets/favorites_menu.py
+msgid "label_no_favorites"
+msgstr ""
+
+#. Default: "Overview"
+#: ./opengever/base/viewlets/favorites_menu.py
+msgid "label_overview"
+msgstr ""
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_privacy_layer"
@@ -310,6 +320,7 @@ msgid "message_record_created"
 msgstr ""
 
 #. Default: "Error"
+#: ./opengever/base/browser/favorites.py
 #: ./opengever/base/response.py
 msgid "message_title_error"
 msgstr ""

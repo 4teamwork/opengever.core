@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-13 07:04+0000\n"
+"POT-Creation-Date: 2018-04-19 14:14+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -241,6 +241,16 @@ msgstr "Dossier:"
 msgid "label_last_modified"
 msgstr "Zuletzt verändert"
 
+#. Default: "No favorites exists."
+#: ./opengever/base/viewlets/favorites_menu.py
+msgid "label_no_favorites"
+msgstr "Es existieren keine Favoriten"
+
+#. Default: "Overview"
+#: ./opengever/base/viewlets/favorites_menu.py
+msgid "label_overview"
+msgstr "Übersicht"
+
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_privacy_layer"
@@ -314,6 +324,7 @@ msgid "message_record_created"
 msgstr "Eintrag erzeugt"
 
 #. Default: "Error"
+#: ./opengever/base/browser/favorites.py
 #: ./opengever/base/response.py
 msgid "message_title_error"
 msgstr "Fehler"
