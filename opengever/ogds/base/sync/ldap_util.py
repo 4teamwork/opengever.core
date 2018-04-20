@@ -206,7 +206,11 @@ class LDAPSearch(object):
                         is_last_page = True
             else:
                 is_last_page = True
-                logger.warn("Server ignores paged results control (RFC 2696).")
+                if results:
+                    # If the search returned an empty result, page controls
+                    # aren't included - so don't produce a bogus warning
+                    logger.warn(
+                        "Server ignores paged results control (RFC 2696).")
 
         return results
 
