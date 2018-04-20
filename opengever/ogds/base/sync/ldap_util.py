@@ -215,8 +215,8 @@ class LDAPSearch(object):
         """Search LDAP for entries matching the given criteria, using result
         pagination if appropriate, and return the results immediately.
 
-        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning as the
-        corresponding arguments on the ldap.search* methods.
+        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning
+        as the corresponding arguments on the ldap.search* methods.
         """
         if base_dn is None:
             base_dn = self.base_dn
@@ -455,7 +455,7 @@ class LDAPSearch(object):
         """
         schema_maps = self.context.getSchemaDict()
         for schema_map in schema_maps:
-            pattern = '\(%s([><~]?=)' % schema_map['public_name']
+            pattern = '\\(%s([><~]?=)' % schema_map['public_name']
             repl = '(%s\\1' % schema_map['ldap_name']
             filterstr = re.sub(pattern, repl, filterstr)
         return filterstr
