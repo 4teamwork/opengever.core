@@ -1,6 +1,7 @@
 <rolemap>
 
   <roles>
+    <role name="APIUser" />
     <role name="Administrator" />
     <role name="Archivist" />
     <role name="CommitteeAdministrator" />
@@ -70,16 +71,6 @@
     <permission name="opengever.contact: Edit person" acquire="True">
       <role name="Manager" />
       <role name="Contributor" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.contact: Add team" acquire="True">
-      <role name="Manager" />
-      <role name="Administrator" />
-    </permission>
-
-    <permission name="opengever.contact: Edit team" acquire="True">
-      <role name="Manager" />
       <role name="Administrator" />
     </permission>
 
@@ -175,7 +166,7 @@
     <!-- POLICY -->
     <permission name="plone.restapi: Use REST API" acquire="True">
       <role name="Manager" />
-      <role name="Member" />
+      <role name="APIUser" />
     </permission>
 
     <permission name="List folder contents" acquire="True">

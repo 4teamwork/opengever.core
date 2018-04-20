@@ -8,4 +8,6 @@
 
   <permission id="opengever.inbox.AddYearFolder" title="opengever.inbox: Add Year Folder" />
 
+  <permission id="opengever.inbox.ScanIn" title="opengever.inbox: Scan In" />
+
 </configure>

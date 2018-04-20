@@ -53,7 +53,7 @@ class TestScanIn(IntegrationTestCase):
     @browsing
     def test_scanin_to_inbox(self, browser):
         self.login(self.regular_user, browser)
-        inbox = self.create_single_inbox()
+        self.create_single_inbox()
         body, headers = self.prepare_request()
 
         browser.open(self.portal.absolute_url() + '/@scan-in',
@@ -62,8 +62,24 @@ class TestScanIn(IntegrationTestCase):
                      data=body)
 
         self.assertEqual(201, browser.status_code)
-        doc = inbox.objectValues()[0]
+        self.login(self.administrator, browser)
+
+        doc = self.inbox.objectValues()[-1]
         self.assertEqual('mydocument', doc.Title())
+
+    @browsing
+    def test_scanin_to_inbox_without_permission(self, browser):
+        self.login(self.administrator, browser)
+        body, headers = self.prepare_request(
+            userid=self.dossier_responsible.getId())
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal.absolute_url() + '/@scan-in',
+                         method='POST',
+                         headers=headers,
+                         data=body)
+
+        self.assertIn('Destination does not exist.', browser.contents)
 
     @browsing
     def test_scanin_to_org_unit_inbox(self, browser):

@@ -46,6 +46,7 @@
                    opengever.dossier: Add templatefolder,
                    opengever.inbox: Add Forwarding,
                    opengever.inbox: Add Year Folder,
+                   opengever.inbox: Scan In,
                    opengever.meeting: Add Committee,
                    opengever.meeting: Add Member,
                    opengever.meeting: Add Proposal Template,
