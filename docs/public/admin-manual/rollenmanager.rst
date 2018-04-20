@@ -152,24 +152,25 @@ Die Globalen Rollen und deren Charakteristik sind
 
 -   Administrator: Sieht alle Dossiers, kann auf OS und Dossiers Rechte
     einrichten, kann Ordnungssystem anpassen/ergänzen, kann Vorlagen verwalten,
-    kann Force Checkin ausführen.
+    kann :ref:`label-force-checkin` ausführen.
 
 -   Rollenmanager: Darf in denjenigen Dossiers Rechte vergeben (einschränken
-    oder erweitern), auf welche er mindestens als "Benutzer" berechtigt ist.
+    oder erweitern), auf welche er mindestens lesend berechtigt ist.
 
 -   Records Manager: Diese Rolle wird in der Regel einem kleinen Benutzerkreis,
     welche für die Aussonderung des entsprechenden Mandants zuständig sind,
-    vergeben. Die Rolle kann Aussonderungsangebot inkl. Selektion von Dossiers
-    für Archivierung und Aussonderung erstellen. Dies darf der Recordsmanager,
-    bei diesen Dossiers, wo er mindestens als "Benutzer" berechtigt ist.
+    vergeben. Die Rolle erlaubt es Aussonderungsangebote zu erstellen. Die Rolle
+    Records Managerer teilt keine zusätzlichen Rechte auf Dossiers, es können
+    demnach nur Dossiers für Angebote selektiert werden, welche vom Benutzer
+    eingesehen werden dürfen.
 
 -   Archivist: Die Rolle Archivist wird in der Regel Archiv-Mitarbeitenden
     vergeben, welche dazu berechtigt sind Angebote des Records Managers zu
     bewerten und diese ins Langzeitarchiv zu überführen. Benutzer mit der Rolle
     Archivist können alle angebotenen und archivierten Dossiers sehen, auch wenn
     Sie nicht dem entsprechenden Mandanten zugewiesen sind. Dies ermöglicht eine
-    Prüfung der Dossiers durch die Archiv Mitarbeitenden während der
-    Bewertungsphase. Dies ist somt die Rolle für die Archivierung von Dossiers
+    Prüfung der Dossiers durch die Archiv-Mitarbeitenden während der
+    Bewertungsphase. Dies ist somit die Rolle für die Archivierung von Dossiers
     sowie zur Bewertung eines Aussonderungsangebots.
 
 -   Sonderrolle Eingangskorb pro physischen und/oder virtuellen Mandanten: Die
@@ -184,8 +185,8 @@ Grundsätzlich gilt, dass die Globalen Rollen Rollenmanager und Recordsmanager
 ein Grundrecht erteilen, jedoch keine Sichtrechte auf Dossiers per se.
 
 Weiter gilt, dass die Rollen Rollenmanager und Recordsmanager nur in denjenigen
-Dossiers wahrgenommen werden können, in welchen die Person via eine zusätzliche
-AD-Gruppe oder Personenzuweisung mindestens Sichtrechte hat.
+Dossiers wahrgenommen werden können, in welchen die Person durch andere
+Berechtigungen über mindestens Sichtrechte verfügen.
 
 
 Rollen innerhalb der Ordnungsstruktur
