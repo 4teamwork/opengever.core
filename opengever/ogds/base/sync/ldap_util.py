@@ -362,7 +362,11 @@ class LDAPSearch(object):
         """
         results = self.search(base_dn=dn, scope=ldap.SCOPE_BASE)
 
-        # We query for a specific DN and therefor expect at most one entry
+        if not results:
+            # No results found
+            return None
+
+        # We query for a specific DN and therefore expect at most one entry
         entry = results[0]
 
         entry = self.apply_schema_map(entry)
