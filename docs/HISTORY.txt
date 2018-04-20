@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]
 - Fix i18n domain in the types xml of the filing profile. [phgross]
 - Drop unused pinnings. [lgraf]
