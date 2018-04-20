@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
+- Allow '\uf04a' in task text. [tarnap]
 - Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]
 - Fix i18n domain in the types xml of the filing profile. [phgross]

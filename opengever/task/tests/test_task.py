@@ -159,6 +159,14 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals(
             u'bidirectional_by_reference', t1.task_type_category)
 
+    @browsing
+    def test_task_with_invalid_unicode_character_charakter_in_text_is_displayed(self, browser):
+        task = create(Builder('task')
+                      .titled('Task 1')
+                      .having(text=u'\uf04aHello Unicode Error Character!'))
+        browser.login().open(task, view='tabbedview_view-overview')
+        self.assertIn('Hello Unicode Error Character!', browser.contents)
+
     def test_task_date_subscriber(self):
         member = self.portal.restrictedTraverse('plone_portal_state').member()
         t1 = create(Builder('task')

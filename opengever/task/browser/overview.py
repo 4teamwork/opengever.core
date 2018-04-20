@@ -7,6 +7,7 @@ from opengever.task.task import ITask
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 
 
 class Overview(GeverTabMixin):
@@ -64,11 +65,12 @@ class Overview(GeverTabMixin):
             if not description:
                 return ''
 
-            return api.portal.get_tool(name='portal_transforms').convertTo(
+            text = api.portal.get_tool(name='portal_transforms').convertTo(
                 'text/html',
                 description,
                 mimetype='text/x-web-intelligent',
-                )
+            ).getData()
+            return safe_unicode(text)
 
         items = [
             {
