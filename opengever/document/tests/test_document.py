@@ -297,6 +297,13 @@ class TestDocument(FunctionalTestCase):
         self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
 
+    def test_is_office_connector_editable_mimetype_check_is_case_insensitive(self):
+        self.grant('Reader', 'Contributor', 'Editor')
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document').within(dossier).with_dummy_content())
+        document.file.contentType = document.file.contentType.upper()
+        self.assertTrue(document.is_office_connector_editable())
+
     def test_checkout_and_get_office_connector_url(self):
         """The checkout_and_get_office_connector_url method should check out
         the document and return an url which will open the office connector.

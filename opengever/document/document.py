@@ -259,8 +259,9 @@ class Document(Item, BaseDocumentMixin):
     def is_office_connector_editable(self):
         if self.file is None:
             return False
-        return self.content_type() in api.portal.get_registry_record(
-            'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types')
+        editable_mimetypes = [record.lower() for record in api.portal.get_registry_record(
+            'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types')]
+        return self.content_type().lower() in editable_mimetypes
 
     def is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(

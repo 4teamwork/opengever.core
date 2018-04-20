@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]
 - Drop unused pinnings. [lgraf]
 - Grant team add and edit permissions to Adminstrators. [Rotonen]
