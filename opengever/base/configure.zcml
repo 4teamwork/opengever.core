@@ -141,6 +141,8 @@
 
   <adapter factory=".reference.PlatformReferenceNumber" />
 
+  <adapter factory=".configuration.GeverSettingsAdpaterV1" />
+
   <utility
       name="ZPublisher.HTTPRequest.FileUpload"
       provides="plone.namedfile.interfaces.IStorage"
