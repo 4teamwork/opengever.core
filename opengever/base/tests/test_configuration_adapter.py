@@ -1,12 +1,14 @@
 from collections import OrderedDict
 from opengever.base.interfaces import IGeverSettings
 from opengever.testing import IntegrationTestCase
+from pkg_resources import get_distribution
 
 
 class TestConfigurationAdapter(IntegrationTestCase):
     def test_configuration(self):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
+            ('version', get_distribution('opengever.core').version),
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
             ('features', OrderedDict([

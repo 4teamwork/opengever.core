@@ -14,6 +14,7 @@ from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.workspace.interfaces import IWorkspaceSettings
+from pkg_resources import get_distribution
 from plone import api
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.component import adapter
@@ -38,6 +39,7 @@ class GeverSettingsAdpaterV1(object):
     def get_info(self):
         info = OrderedDict()
         info['@id'] = self.context.absolute_url() + '/@config'
+        info['version'] = get_distribution('opengever.core').version
         return info
 
     def get_settings(self):
