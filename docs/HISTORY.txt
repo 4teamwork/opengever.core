@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Update dependencies. [lgraf]
 - Drop unused pinnings. [lgraf]
 - Grant team add and edit permissions to Adminstrators. [Rotonen]
 - Omit search keywords from advanced search on site search prefill. [Rotonen]
