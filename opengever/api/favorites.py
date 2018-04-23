@@ -81,19 +81,9 @@ class FavoritesPost(Service):
         return self
 
     def reply(self):
-        userid = self.get_userid()
-        if userid != api.user.get_current().getId():
-            raise Unauthorized(
-                "It's not allowed to add favorites for other users.")
-
-        data = json_body(self.request)
-        if not data.get('oguid'):
-            raise BadRequest('Missing parameter oguid')
-
-        oguid = Oguid.parse(data.get('oguid'))
-        obj = oguid.resolve_object()
-        if not obj:
-            raise BadRequest('Invalid oguid, could not be resolved.')
+        userid = self.validate_user(self.get_userid())
+        data = self.validate_data(json_body(self.request))
+        obj = self.lookup_object(data)
 
         favorite = FavoriteManager().get_favorite(obj, api.user.get_current())
         if favorite:
@@ -107,6 +97,24 @@ class FavoritesPost(Service):
         self.request.response.setHeader('Location', url)
 
         return favorite.serialize(api.portal.get().absolute_url())
+
+    def lookup_object(dataself, data):
+        oguid = Oguid.parse(data.get('oguid'))
+        obj = oguid.resolve_object()
+        if not obj:
+            raise BadRequest('Invalid oguid, could not be resolved.')
+        return obj
+
+    def validate_data(self, data):
+        if not data.get('oguid'):
+            raise BadRequest('Missing parameter oguid')
+        return data
+
+    def validate_user(self, userid):
+        if userid != api.user.get_current().getId():
+            raise Unauthorized(
+                "It's not allowed to add favorites for other users.")
+        return userid
 
     def get_userid(self):
         if len(self.params) != 1:
