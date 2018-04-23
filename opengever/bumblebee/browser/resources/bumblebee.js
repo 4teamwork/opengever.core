@@ -335,7 +335,10 @@
       updateShowroom();
     })
     .on("ready", function() {
-      BumblebeeCable.init(window.bumblebee_notification_url);
+      var nofitication_url = window.bumblebee_notification_url;
+      if (typeof nofitication_url !== 'undefined') {
+        BumblebeeCable.init(window.bumblebee_notification_url);
+      }
     })
     .on("tooltip.show", function() {
       scanForBrokenImages(".bumblebee-thumbnail");
