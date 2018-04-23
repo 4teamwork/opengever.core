@@ -200,3 +200,87 @@ class TestRepositoryFavoritesPost(IntegrationTestCase):
             browser.json)
 
         self.assertEqual(1, Favorite.query.count())
+
+
+class TestFavoritesDelete(IntegrationTestCase):
+
+    def uuid(self, obj):
+        return IUUID(obj, None)
+
+    @browsing
+    def test_raises_when_id_is_missing(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(400):
+            url = '{}/@repository-favorites/{}'.format(
+                self.portal.absolute_url(), self.regular_user.getId())
+            browser.open(url, method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'message': u'Must supply exactly two parameters (user id and uuid)',
+             u'type': u'BadRequest'}, browser.json)
+
+    @browsing
+    def test_raises_when_favorite_is_not_owned_by_the_given_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        favorite = create(Builder('favorite')
+                          .for_user(self.dossier_responsible)
+                          .for_object(self.dossier))
+
+        self.assertEqual(1, Favorite.query.count())
+
+        with browser.expect_http_error(404):
+            url = '{}/@repository-favorites/{}/{}'.format(
+                self.portal.absolute_url(),
+                self.regular_user.getId(),
+                favorite.favorite_id)
+
+            browser.open(url, method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u"message": u'Resource not found: http://nohost/plone/@repository-favorites/kathi.barfuss/1',
+             u"type": u"NotFound"}, browser.json)
+
+    @browsing
+    def test_removes_favorite_when_already_exists_for_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.dossier)
+               .having(position=0))
+
+        self.assertEqual(1, Favorite.query.count())
+
+        url = '{}/@repository-favorites/{}/{}'.format(
+            self.portal.absolute_url(), self.regular_user.getId(),
+            self.uuid(self.dossier))
+        browser.open(url, method='DELETE', headers={'Accept': 'application/json'})
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(0, Favorite.query.count())
+
+    @browsing
+    def test_raises_unauthorized_when_removing_a_favorite_of_a_other_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.dossier_responsible)
+               .for_object(self.dossier))
+
+        self.assertEqual(1, Favorite.query.count())
+
+        url = '{}/@favorites/{}/{}'.format(
+            self.portal.absolute_url(), self.dossier_responsible.getId(),
+            self.uuid(self.dossier))
+
+        with browser.expect_http_error(401):
+            browser.open(url, method='DELETE', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'message': u"It's not allowed to delete favorites of other users.",
+             u'type': u'Unauthorized'},
+            browser.json)
