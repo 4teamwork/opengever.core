@@ -7,6 +7,10 @@ class TestGeverJSVariables(IntegrationTestCase):
     """Test the base behavior with the help of businesscase dossier.
     """
 
+    features = (
+        'bumblebee-auto-refresh',
+    )
+
     def test_geverjs_variables(self):
         self.login(self.regular_user)
 

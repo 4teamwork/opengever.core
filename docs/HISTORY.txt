@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Implement bumblebee's auto refresh functionality. [siegy]
+- Add bumblebee auto refresh feature flag. [deiferni]
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]
