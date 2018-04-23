@@ -202,4 +202,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="@config"
+      class=".config.ConfigView"
+      template="templates/config.pt"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

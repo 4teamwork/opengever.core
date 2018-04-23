@@ -1,0 +1,41 @@
+<script id="config_table_template" type="text/x-handlebars-template">
+
+  <h2>Settings</h2>
+  <table class="listing">
+    <thead>
+      <tr>
+        <th>Config</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each config}}
+      {{#ifNot @key 'features'}}
+      <tr>
+        <td>{{@key}}</td>
+        <td>{{this}}</td>
+      </tr>
+      {{/ifNot}}
+      {{/each}}
+    </tbody>
+  </table>
+
+  <h2>Features</h2>
+  <table class="listing">
+    <thead>
+      <tr>
+        <th>Config</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each config.features}}
+      <tr>
+        <td>{{@key}}</td>
+        <td>{{this}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+</script>
