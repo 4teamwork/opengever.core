@@ -206,7 +206,11 @@ class LDAPSearch(object):
                         is_last_page = True
             else:
                 is_last_page = True
-                logger.warn("Server ignores paged results control (RFC 2696).")
+                if results:
+                    # If the search returned an empty result, page controls
+                    # aren't included - so don't produce a bogus warning
+                    logger.warn(
+                        "Server ignores paged results control (RFC 2696).")
 
         return results
 
@@ -215,8 +219,8 @@ class LDAPSearch(object):
         """Search LDAP for entries matching the given criteria, using result
         pagination if appropriate, and return the results immediately.
 
-        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning as the
-        corresponding arguments on the ldap.search* methods.
+        `base_dn`, `scope`, `search_filter` and `attrs` have the same meaning
+        as the corresponding arguments on the ldap.search* methods.
         """
         if base_dn is None:
             base_dn = self.base_dn
@@ -362,7 +366,11 @@ class LDAPSearch(object):
         """
         results = self.search(base_dn=dn, scope=ldap.SCOPE_BASE)
 
-        # We query for a specific DN and therefor expect at most one entry
+        if not results:
+            # No results found
+            return None
+
+        # We query for a specific DN and therefore expect at most one entry
         entry = results[0]
 
         entry = self.apply_schema_map(entry)
@@ -451,7 +459,7 @@ class LDAPSearch(object):
         """
         schema_maps = self.context.getSchemaDict()
         for schema_map in schema_maps:
-            pattern = '\(%s([><~]?=)' % schema_map['public_name']
+            pattern = '\\(%s([><~]?=)' % schema_map['public_name']
             repl = '(%s\\1' % schema_map['ldap_name']
             filterstr = re.sub(pattern, repl, filterstr)
         return filterstr

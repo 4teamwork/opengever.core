@@ -1,4 +1,3 @@
-from ldap import NO_SUCH_OBJECT
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.model import create_session
 from opengever.base.pathfinder import PathFinder
@@ -138,7 +137,6 @@ class OGDSUpdater(object):
         """Joins multivalued (list or tuples) in to a single string and make
         sure its an unicode string.
         """
-
         # We can't store sequences in SQL columns. So if we do get
         # a multi-valued field to be stored directly in OGDS, we
         # treat it as a multi-line string and join it.
@@ -319,55 +317,57 @@ class OGDSUpdater(object):
 
                 logger.info(u"Importing group '{}'...".format(groupid))
                 for user_dn in group_members:
-                    try:
-                        ldap_user = ldap_util.entry_by_dn(user_dn)
-                        user_dn, user_info = ldap_user
+                    ldap_user = ldap_util.entry_by_dn(user_dn)
 
-                        if isinstance(user_dn, str):
-                            user_dn = user_dn.decode('utf-8')
-
-                        if not ldap_util.is_ad:
-                            if 'userid' not in user_info:
-                                logger.warn(NO_UID_MSG.format(user_dn))
-                                continue
-                            userid = user_info['userid']
-                        else:
-                            # Active Directory
-                            uid_found = False
-                            for uid_key in AD_UID_KEYS:
-                                if uid_key in user_info:
-                                    userid = user_info[uid_key]
-                                    uid_found = True
-                                    break
-                            if not uid_found:
-                                # No suitable UID found, skip this user
-                                logger.warn(NO_UID_AD_MSG.format(
-                                    user_dn, AD_UID_KEYS))
-                                continue
-
-                        if isinstance(userid, list):
-                            userid = userid[0]
-
-                        if isinstance(userid, str):
-                            userid = userid.decode('utf-8')
-
-                        try:
-                            user = self.get_sql_user(userid)
-                        except NoResultFound:
-                            logger.warn(USER_NOT_FOUND_SQL.format(userid))
-                            continue
-                        except MultipleResultsFound:
-                            # Duplicate user - skip (see above).
-                            logger.warn(
-                                u"  Skipping duplicate user '{}'!".format(userid))
-                            continue
-
-                        contained_users.append(user)
-                        logger.info(
-                            u"Importing user '{}' into group '{}'...".format(
-                                userid, groupid))
-                    except NO_SUCH_OBJECT:
+                    if ldap_user is None:
                         logger.warn(USER_NOT_FOUND_LDAP.format(user_dn))
+                        continue
+
+                    user_dn, user_info = ldap_user
+
+                    if isinstance(user_dn, str):
+                        user_dn = user_dn.decode('utf-8')
+
+                    if not ldap_util.is_ad:
+                        if 'userid' not in user_info:
+                            logger.warn(NO_UID_MSG.format(user_dn))
+                            continue
+                        userid = user_info['userid']
+                    else:
+                        # Active Directory
+                        uid_found = False
+                        for uid_key in AD_UID_KEYS:
+                            if uid_key in user_info:
+                                userid = user_info[uid_key]
+                                uid_found = True
+                                break
+                        if not uid_found:
+                            # No suitable UID found, skip this user
+                            logger.warn(NO_UID_AD_MSG.format(
+                                user_dn, AD_UID_KEYS))
+                            continue
+
+                    if isinstance(userid, list):
+                        userid = userid[0]
+
+                    if isinstance(userid, str):
+                        userid = userid.decode('utf-8')
+
+                    try:
+                        user = self.get_sql_user(userid)
+                    except NoResultFound:
+                        logger.warn(USER_NOT_FOUND_SQL.format(userid))
+                        continue
+                    except MultipleResultsFound:
+                        # Duplicate user - skip (see above).
+                        logger.warn(
+                            u"  Skipping duplicate user '{}'!".format(userid))
+                        continue
+
+                    contained_users.append(user)
+                    logger.info(
+                        u"Importing user '{}' into group '{}'...".format(
+                            userid, groupid))
 
                 group.users = contained_users
                 group.active = True

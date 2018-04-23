@@ -3,7 +3,6 @@ from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from zope.component import adapts
 from zope.interface import implements
 from zope.interface import Interface
-import ldap
 
 
 class IFakeLDAPUserFolder(Interface):
@@ -92,4 +91,4 @@ class FakeLDAPSearchUtility(object):
         for entry in entries:
             if entry[0] == dn:
                 return entry
-        raise ldap.NO_SUCH_OBJECT(dn)
+        return None

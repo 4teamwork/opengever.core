@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Make office connector mimetype checks case insensitive. [tarnap]
 - Update dependencies. [lgraf]
 - Fix i18n domain in the types xml of the filing profile. [phgross]
