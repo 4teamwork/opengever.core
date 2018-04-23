@@ -1,24 +1,11 @@
+from opengever.api.favorites import FavoritesGet
 from opengever.base.favorite import FavoriteManager
 from plone import api
-from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
-from zope.interface import implements
-from zope.publisher.interfaces import IPublishTraverse
 
 
-class RepositoryFavoritesGet(Service):
-
-    implements(IPublishTraverse)
-
-    def __init__(self, context, request):
-        super(RepositoryFavoritesGet, self).__init__(context, request)
-        self.params = []
-
-    def publishTraverse(self, request, name):
-        # Consume any path segments after /@favorites as parameters
-        self.params.append(name)
-        return self
+class RepositoryFavoritesGet(FavoritesGet):
 
     def reply(self):
         userid = self.get_userid()
