@@ -1,3 +1,5 @@
+.. _label-force-checkin:
+
 Force Check-In
 ===============
 
