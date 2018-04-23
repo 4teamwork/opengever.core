@@ -39,12 +39,56 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.meeting.sablon_template_status"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".info.SablonValidationInfoViewlet"
+      permission="cmf.ModifyPortalContent"
+      for="opengever.meeting.sablontemplate.ISablonTemplate"
+      />
+
   <adapter factory=".proposaltemplate.UploadValidator" />
 
   <subscriber
       for="opengever.meeting.committeecontainer.ICommitteeContainer
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.configure_committee_container_portlets"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.validate_template_file"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".handlers.validate_template_file"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.validate_template_file"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.validate_template_file"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.validate_template_file"
+      />
+
+  <subscriber
+      for="opengever.meeting.sablontemplate.ISablonTemplate
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.validate_template_file"
       />
 
   <adapter

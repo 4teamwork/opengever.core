@@ -7,6 +7,7 @@ Changelog
 
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Make office connector mimetype checks case insensitive. [tarnap]
+- Display sablon template validation status. [tarnap]
 - Update dependencies. [lgraf]
 - Fix i18n domain in the types xml of the filing profile. [phgross]
 - Drop unused pinnings. [lgraf]
