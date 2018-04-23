@@ -398,7 +398,7 @@ RepositoryFavorites = function(url, cache_param) {
               annotate_link_title($(this));
             });
 
-        self.load(function(favorites) {
+        self.load().then(function(favorites) {
           if($.inArray(node['uid'], favorites) > -1) {
             favorite_link.addClass('bookmarked');
           }
@@ -407,15 +407,10 @@ RepositoryFavorites = function(url, cache_param) {
       });
     },
 
-    load: function(callback) {
-      if(_data_cache) {
-        callback(_data_cache);
-      } else {
-        local_storage.load().done(function(data) {
-          _data_cache = data;
-          callback(data);
-        });
-      }
+    load: function() {
+      return api.get().then(
+        function(res) { return res.data }
+      )
     },
 
     add: function(uuid) {

@@ -49,7 +49,7 @@ $(function() {
   function render_favorites_tree() {
     var tree_node = portlet.find('#tree-favorites').find('>ul');
     navigation_json.load().then(function(tree_data) {
-      favorites_store.load(function(favorites) {
+      favorites_store.load().then(function(favorites) {
         var fav_expand_store = ExpandStore('expanded_fav_uids', 'uid');
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
         sort_by_text(favorite_nodes);
