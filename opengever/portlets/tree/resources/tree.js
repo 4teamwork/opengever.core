@@ -357,6 +357,14 @@ LocalStorageJSONCache = function(name, url) {
 
 
 RepositoryFavorites = function(url, cache_param) {
+  var base = $('.portletTreePortlet');
+  var api = axios.create({
+    baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
   var _data_cache;
   var local_storage = new LocalStorageJSONCache(
       'favorites', url + '/list?' + cache_param);

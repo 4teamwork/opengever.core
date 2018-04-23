@@ -1,5 +1,6 @@
 from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_inner
+from plone import api
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.registry.interfaces import IRegistry
@@ -90,6 +91,9 @@ class Renderer(base.Renderer):
 
     def context_url(self):
         return self.context.absolute_url()
+
+    def get_userid(self):
+        return api.user.get_current().getId()
 
     @property
     def available(self):
