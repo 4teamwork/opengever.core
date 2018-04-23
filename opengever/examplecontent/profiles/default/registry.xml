@@ -14,6 +14,7 @@
 
   <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
     <value key="is_feature_enabled">True</value>
+    <value key="is_auto_refresh_enabled">True</value>
   </records>
 
   <records interface="opengever.contact.interfaces.IContactSettings">
