@@ -30,7 +30,7 @@ class RepositoryFavoritesGet(FavoritesGet):
 class RepositoryFavoritesPost(FavoritesPost):
     """API Endpoint to add a new favorite for the given UID and user.
 
-    POST /@favorites/peter.mueller HTTP/1.1
+    POST /@repository-favorites/peter.mueller HTTP/1.1
     {
         "uuid": "967775b9b9094446950eef8e2a35d42d"
     }

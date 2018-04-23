@@ -414,10 +414,9 @@ RepositoryFavorites = function(url, cache_param) {
     },
 
     add: function(uuid) {
-      $.post(url + '/add', {uuid: uuid}, function() {
-        _data_cache.push(uuid);
+      return api.post('', {uuid: uuid}).then(function() {
         $(self).trigger('favorites:changed');
-      });
+      })
     },
 
     remove: function(uuid) {
