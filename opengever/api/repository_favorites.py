@@ -50,7 +50,7 @@ class RepositoryFavoritesPost(FavoritesPost):
 class RepositoryFavoritesDelete(FavoritesDelete):
     """API Endpoint to delete an existing favorite.
 
-    DELETE /@favorites/peter.mueller/967775b9b9094446950eef8e2a35d42d HTTP/1.1
+    DELETE /@repository-favorites/peter.mueller/967775b9b9094446950eef8e2a35d42d HTTP/1.1
     """
 
     def read_params(self):

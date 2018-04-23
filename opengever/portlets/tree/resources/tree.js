@@ -420,10 +420,9 @@ RepositoryFavorites = function(url, cache_param) {
     },
 
     remove: function(uuid) {
-      $.post(url + '/remove', {uuid: uuid}, function() {
-        _data_cache.remove(uuid);
+      api.delete(uuid).then(function() {
         $(self).trigger('favorites:changed');
-      });
+      })
     }
   };
   return self;
