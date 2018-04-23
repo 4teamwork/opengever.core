@@ -262,6 +262,14 @@ class TestSolrSearch(IntegrationTestCase):
             self.search.solr_filters(),
             [u'responsible:hans.muster', u'sequence_number:123'])
 
+    def test_solr_filters_switch_path_to_parent_path(self):
+        self.request.environ['QUERY_STRING'] = (
+            'sequence_number:int=123&path=/fd/ordnungssystem')
+        self.request.processInputs()
+        self.assertEqual(
+            self.search.solr_filters(),
+            [u'path_parent:\\/fd\\/ordnungssystem', u'sequence_number:123'])
+
     def test_solr_sort_on_date(self):
         self.request.environ['QUERY_STRING'] = (
             'sort_on=Date&sort_order=reverse')
