@@ -374,6 +374,7 @@ RepositoryFavorites = function(url, cache_param) {
   var _data_cache;
   var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
   var i18n_remove = $('[data-i18n-remove-from-favorites]').data('i18n-remove-from-favorites') || '';
+  var favorites = $.Deferred();
 
   function annotate_link_title(favorite_link) {
     if(favorite_link.hasClass('bookmarked')) {
@@ -383,6 +384,32 @@ RepositoryFavorites = function(url, cache_param) {
     }
   }
 
+  function load_favorites() {
+    favorites = $.Deferred();
+    if (_data_cache) {
+      return favorites.resolve(_data_cache).promise();
+    }
+
+    localStorageCache = JSON.parse(localStorage.getItem(CACHEKEY));
+    config = {
+      headers: {
+        'If-None-Match': localStorageCache ? localStorageCache.etag : ''
+      }
+    }
+    return api.get('', config)
+      .then(function(res) {
+        _data_cache = res.data;
+        localStorage.setItem(CACHEKEY,
+          JSON.stringify({etag: res.headers.etag, data: _data_cache}));
+        favorites.resolve(_data_cache);
+      })
+      .catch(function(error) {
+        if (error.response.status === httpCodes.notModified) {
+          _data_cache = localStorageCache.data;
+          favorites.resolve(_data_cache);
+        }
+      })
+  }
   var self = {
     listen: function(tree) {
       $(tree).bind('tree:link-created', function(event, node, link) {
@@ -400,8 +427,7 @@ RepositoryFavorites = function(url, cache_param) {
               }
               annotate_link_title($(this));
             });
-
-        self.load().then(function(favorites) {
+        self.favorites().then(function(favorites) {
           if($.inArray(node['uid'], favorites) > -1) {
             favorite_link.addClass('bookmarked');
           }
@@ -409,33 +435,7 @@ RepositoryFavorites = function(url, cache_param) {
         });
       });
     },
-
-    load: function() {
-      if (_data_cache) {
-        return Promise.resolve(_data_cache);
-      }
-
-      localStorageCache = JSON.parse(localStorage.getItem(CACHEKEY));
-      config = {
-        headers: {
-          'If-None-Match': localStorageCache ? localStorageCache.etag : ''
-        }
-      }
-
-      return api.get('', config)
-        .then(function(res) {
-            _data_cache = $(res.data);
-            localStorage.setItem(CACHEKEY,
-                                 JSON.stringify({etag: res.headers.etag, data: _data_cache}));
-            return _data_cache;
-         })
-        .catch(function(error) {
-          if (error.response.status === httpCodes.notModified) {
-            _data_cache = $(localStorageCache.data);
-            return _data_cache;
-          }
-        })
-    },
+    load: load_favorites,
 
     add: function(uuid) {
       return api.post('', {uuid: uuid}).then(function() {
@@ -446,14 +446,21 @@ RepositoryFavorites = function(url, cache_param) {
 
     remove: function(uuid) {
       api.delete(uuid).then(function() {
-        _data_cache.remove(uuid);
+        _data_cache = _data_cache.filter(function(data) { return data !== uuid })
         window.dispatchEvent(changedEvent);
       })
     },
 
     clearDataCache: function() {
       _data_cache = null;
-    }
+    },
+
+    init: function() {
+      self.load();
+      return self;
+    },
+
+    favorites: function() { return favorites; },
   };
   return self;
 };

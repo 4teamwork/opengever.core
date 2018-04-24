@@ -13,7 +13,7 @@ $(function() {
       'navigation', portlet.data('navigation-url'));
   var favorites_store = new RepositoryFavorites(
       portlet.data('favorites-url'),
-      portlet.data('favorites-cache-param'));
+      portlet.data('favorites-cache-param')).init();
   if ($('#tree-favorites').length === 0) {
     // Favorites are disabled.
     favorites_store = null;
@@ -53,7 +53,7 @@ $(function() {
   function render_favorites_tree() {
     var tree_node = portlet.find('#tree-favorites').find('>ul');
     navigation_json.load().then(function(tree_data) {
-      favorites_store.load().then(function(favorites) {
+      favorites_store.favorites().then(function(favorites) {
         var fav_expand_store = ExpandStore('expanded_fav_uids', 'uid');
         var favorite_nodes = make_tree(tree_data).clone_by_uids(favorites);
         sort_by_text(favorite_nodes);
@@ -83,13 +83,6 @@ $(function() {
     });
   }
 
-  function favorites_changed(clearDataCache) {
-    if (clearDataCache) {
-      favorites_store.clearDataCache();
-      render_complete_tree()
-    }
-    render_favorites_tree();
-  }
   portlet.find('#tree-favorites').bind('portlet-tab:open', render_favorites_tree);
 
   portlet.find('#tree-favorites a.toggle-helptext').click(function(event) {
@@ -99,11 +92,15 @@ $(function() {
   });
 
   $(window).bind('favorites-tree:changed', function() {
-    favorites_changed(clearDataCache=false);
+    favorites_store.load();
+    render_favorites_tree();
   });
 
   $(window).bind('favorites:changed', function() {
-    favorites_changed(clearDataCache=true);
+    favorites_store.clearDataCache();
+    favorites_store.load();
+    render_complete_tree();
+    render_favorites_tree();
   })
 
   /* Tabs configuration */
