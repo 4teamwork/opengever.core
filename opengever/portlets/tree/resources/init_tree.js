@@ -11,9 +11,7 @@ $(function() {
 
   var navigation_json = new LocalStorageJSONCache(
       'navigation', portlet.data('navigation-url'));
-  var favorites_store = new RepositoryFavorites(
-      portlet.data('favorites-url'),
-      portlet.data('favorites-cache-param')).init();
+  var favorites_store = new RepositoryFavorites().init();
   if ($('#tree-favorites').length === 0) {
     // Favorites are disabled.
     favorites_store = null;

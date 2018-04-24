@@ -45,16 +45,6 @@
       editview=".treeportlet.EditForm"
       />
 
-  <adapter factory=".favorites.RepositoryFavorites" />
-
-  <browser:page
-      for="opengever.repository.repositoryroot.IRepositoryRoot"
-      name="repository-favorites"
-      class=".favorites.RepositoryFavoritesView"
-      permission="zope2.View"
-      allowed_attributes="list add remove set"
-      />
-
   <adapter
       factory=".favorites.RepositoryFavoritesETagValue"
       name="repository-favorites"
