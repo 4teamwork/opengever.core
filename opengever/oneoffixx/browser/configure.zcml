@@ -17,4 +17,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="oneoffix_connect_xml"
+      class=".connect_xml.OneoffixxConnectXml"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
