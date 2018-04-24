@@ -84,6 +84,14 @@
       />
 
   <browser:page
+      name="tabbedview_view-documents-gallery"
+      for="opengever.inbox.inbox.IInbox"
+      class=".tabs.InboxDocumentsGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
+      />
+
+  <browser:page
       name="tabbedview_view-trash"
       for="opengever.inbox.inbox.IInbox"
       class=".tabs.InboxTrash"

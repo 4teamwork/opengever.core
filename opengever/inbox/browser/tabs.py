@@ -5,6 +5,7 @@ from opengever.tabbedview.browser.tabs import Tasks
 from opengever.tabbedview.browser.tabs import Trash
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.helper import external_edit_link
+from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 
 
 def _get_current_org_unit_id(context):
@@ -117,6 +118,12 @@ class InboxDocuments(Documents):
                    if action not in ('create_task',)]
         actions += ['create_forwarding']
         return actions
+
+
+class InboxDocumentsGallery(BumblebeeGalleryMixin, InboxDocuments):
+    """Bumblebee gallery for inbox documents
+    """
+    depth = 1
 
 
 class InboxTrash(Trash):
