@@ -218,6 +218,41 @@ with these contents:
 respective user in our development LDAP tree.
 
 
+Installing and activating Solr
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
+.. code::
+
+    [buildout]
+    extends =
+        development.cfg
+        https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/solr.cfg
+    solr-port = 8983
+
+    [solr]
+    url = http://www-eu.apache.org/dist/lucene/solr/7.3.0/solr-7.3.0.tgz
+    md5sum = dfb6893fc656e14919df48ff654d38f2
+
+
+Buildout
+.. code::
+
+    $ bin/buildout
+
+Then start Solr
+.. code::
+
+    $ bin/solr start
+
+Run the `activate_solr` maintenance script:
+.. code::
+
+    $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
+
+And finally activate ``use_solr`` in the registry.
+
+
 Setting up a multi-admin environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
