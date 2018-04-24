@@ -30,6 +30,13 @@ var app = new Vue({
     this.fetchData();
   },
 
+  created: function() {
+    window.addEventListener('favorites-tree:changed',this.fetchData);
+  },
+  destroyed: function() {
+    window.removeEventListener('favorites-tree:changed', this.fetchData);
+  },
+
   directives: {
     focus: { inserted: function (el) { el.focus(); }}
   },
@@ -123,6 +130,7 @@ var app = new Vue({
       this.requester.delete(entry['@id'], payload).then(function (response) {
         if (response.status === 204) {
           self.fetchData();
+          $(window).trigger('favorites:changed');
         } else {
           self.errorMessage();
         }

@@ -22,8 +22,12 @@ $(function() {
   /* Complete tree tab */
   portlet.find('#tree-complete').bind('portlet-tab:open', function() {
     if ($(this).data('initialized')) {return;} $(this).data('initialized', 'true');
+    render_complete_tree();
+  });
 
-    var tree_node = $(this).find('>ul');
+  function render_complete_tree() {
+    var tree = portlet.find('#tree-complete');
+    var tree_node = $(tree).find('>ul');
     navigation_json.load().then(
         function(tree_data) {
           var expand_store = ExpandStore('expanded_uids', 'uid');
@@ -42,7 +46,7 @@ $(function() {
               navtree, portlet.data('context-url')));
           scroll_to_selected_item();
         });
-  });
+  };
 
   /* Favorites tree tab */
   var favorites_tree;
@@ -79,6 +83,13 @@ $(function() {
     });
   }
 
+  function favorites_changed(clearDataCache) {
+    if (clearDataCache) {
+      favorites_store.clearDataCache();
+      render_complete_tree()
+    }
+    render_favorites_tree();
+  }
   portlet.find('#tree-favorites').bind('portlet-tab:open', render_favorites_tree);
 
   portlet.find('#tree-favorites a.toggle-helptext').click(function(event) {
@@ -87,12 +98,13 @@ $(function() {
     portlet.find('#tree-favorites .helptext').toggle();
   });
 
-  $(favorites_store).bind('favorites:changed', function() {
-    if(portlet.find('#tree-favorites').is(':visible')) {
-      render_favorites_tree();
-    }
+  $(window).bind('favorites-tree:changed', function() {
+    favorites_changed(clearDataCache=false);
   });
 
+  $(window).bind('favorites:changed', function() {
+    favorites_changed(clearDataCache=true);
+  })
 
   /* Tabs configuration */
   var tabs_count = portlet.find('.portlet-header-tabs li').length;

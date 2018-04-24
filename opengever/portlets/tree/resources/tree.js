@@ -359,6 +359,7 @@ LocalStorageJSONCache = function(name, url) {
 RepositoryFavorites = function(url, cache_param) {
   var base = $('.portletTreePortlet');
   var CACHEKEY = 'og-repository-favorites';
+  var changedEvent = new Event('favorites-tree:changed');
   var httpCodes = {
     notModified: 304
   }
@@ -423,14 +424,14 @@ RepositoryFavorites = function(url, cache_param) {
 
       return api.get('', config)
         .then(function(res) {
-            _data_cache = res.data;
+            _data_cache = $(res.data);
             localStorage.setItem(CACHEKEY,
                                  JSON.stringify({etag: res.headers.etag, data: _data_cache}));
             return _data_cache;
          })
         .catch(function(error) {
           if (error.response.status === httpCodes.notModified) {
-            _data_cache = localStorageCache.data;
+            _data_cache = $(localStorageCache.data);
             return _data_cache;
           }
         })
@@ -439,15 +440,19 @@ RepositoryFavorites = function(url, cache_param) {
     add: function(uuid) {
       return api.post('', {uuid: uuid}).then(function() {
         _data_cache.push(uuid);
-        $(self).trigger('favorites:changed');
+        window.dispatchEvent(changedEvent);
       })
     },
 
     remove: function(uuid) {
       api.delete(uuid).then(function() {
         _data_cache.remove(uuid);
-        $(self).trigger('favorites:changed');
+        window.dispatchEvent(changedEvent);
       })
+    },
+
+    clearDataCache: function() {
+      _data_cache = null;
     }
   };
   return self;
