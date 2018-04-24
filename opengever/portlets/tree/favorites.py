@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_chain
 from BTrees.OOBTree import OOBTree
+from opengever.base.favorite import FavoriteManager
 from opengever.base.protect import unprotected_write
 from opengever.portlets.tree.interfaces import IRepositoryFavorites
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -139,20 +140,18 @@ class RepositoryFavoritesETagValue(object):
         self.request = request
 
     def __call__(self):
-        return '-'.join(map(self.get_cache_key_for_repository_root,
-                            self.get_repository_roots()))
-
-    def get_cache_key_for_repository_root(self, repository_root):
         if api.user.is_anonymous():
             # Anonymous users can't have repository favorites - short circuit
             # cache key generation, no need to ask the view
             return ''
-        view = repository_root.restrictedTraverse('repository-favorites')
-        return view.get_cache_key()
 
-    def get_repository_roots(self):
-        roots = filter(IRepositoryRoot.providedBy, aq_chain(self.published))
-        if roots:
-            return roots
-        # Avoid catalog query for performance reasons
-        return filter(IRepositoryRoot.providedBy, getSite().objectValues())
+        favorites = FavoriteManager().list_all_repository_favorites(
+            api.user.get_current().getId())
+
+        if not favorites:
+            return ''
+
+        return '-'.join([
+            str(len(favorites)),
+            max(fav.modified.strftime('%s') for fav in favorites)
+            ])

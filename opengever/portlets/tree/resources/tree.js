@@ -358,6 +358,11 @@ LocalStorageJSONCache = function(name, url) {
 
 RepositoryFavorites = function(url, cache_param) {
   var base = $('.portletTreePortlet');
+  var CACHEKEY = 'og-repository-favorites';
+  var httpCodes = {
+    notModified: 304
+  }
+
   var api = axios.create({
     baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),
     headers: {
@@ -366,9 +371,6 @@ RepositoryFavorites = function(url, cache_param) {
     },
   });
   var _data_cache;
-  var local_storage = new LocalStorageJSONCache(
-      'favorites', url + '/list?' + cache_param);
-
   var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
   var i18n_remove = $('[data-i18n-remove-from-favorites]').data('i18n-remove-from-favorites') || '';
 
@@ -408,19 +410,42 @@ RepositoryFavorites = function(url, cache_param) {
     },
 
     load: function() {
-      return api.get().then(
-        function(res) { return res.data }
-      )
+      if (_data_cache) {
+        return Promise.resolve(_data_cache);
+      }
+
+      localStorageCache = JSON.parse(localStorage.getItem(CACHEKEY));
+      config = {
+        headers: {
+          'If-None-Match': localStorageCache ? localStorageCache.etag : ''
+        }
+      }
+
+      return api.get('', config)
+        .then(function(res) {
+            _data_cache = res.data;
+            localStorage.setItem(CACHEKEY,
+                                 JSON.stringify({etag: res.headers.etag, data: _data_cache}));
+            return _data_cache;
+         })
+        .catch(function(error) {
+          if (error.response.status === httpCodes.notModified) {
+            _data_cache = localStorageCache.data;
+            return _data_cache;
+          }
+        })
     },
 
     add: function(uuid) {
       return api.post('', {uuid: uuid}).then(function() {
+        _data_cache.push(uuid);
         $(self).trigger('favorites:changed');
       })
     },
 
     remove: function(uuid) {
       api.delete(uuid).then(function() {
+        _data_cache.remove(uuid);
         $(self).trigger('favorites:changed');
       })
     }

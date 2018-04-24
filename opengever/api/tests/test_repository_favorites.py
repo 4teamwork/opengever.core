@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.base.model.favorite import Favorite
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from z3c.caching.registry import lookup
 import json
 
 
@@ -100,6 +101,12 @@ class TestRepositoryFavoritesGet(IntegrationTestCase):
             {"message": "Must supply exactly one parameter (user id)",
              "type": "BadRequest"},
             browser.json)
+
+    def test_includes_folderview_caching_ruleset(self):
+        view = self.portal.restrictedTraverse(
+            'GET_application_json_@repository-favorites')
+
+        self.assertEqual('plone.content.folderView', lookup(view))
 
 
 class TestRepositoryFavoritesPost(IntegrationTestCase):
