@@ -67,12 +67,4 @@
       name="GEVER: Checked out documents (checked_out_by and WebDAV locks)"
       />
 
-  <adapter
-      factory=".migrations.RepoFavoritesMigration"
-      provides="ftw.usermigration.interfaces.IPreMigrationHook"
-      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
-           zope.publisher.interfaces.browser.IBrowserRequest"
-      name="GEVER: Repository favorites"
-      />
-
 </configure>
