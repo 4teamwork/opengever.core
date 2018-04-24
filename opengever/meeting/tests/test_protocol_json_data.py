@@ -78,6 +78,11 @@ class TestProtocolJsonData(FunctionalTestCase):
             date_from=date(2010, 1, 1),
             date_to=date(2012, 1, 1),
             role=None))
+        self.committee_secretary = create(
+            Builder('ogds_user')
+            .id('committee.secretary')
+            .having(firstname=u'C\xf6mmittee', lastname='Secretary', email='committee.secretary@example.com')
+            )
         self.meeting = create(Builder('meeting').having(
             committee=self.committee,
             participants=[self.member_peter,
@@ -87,7 +92,7 @@ class TestProtocolJsonData(FunctionalTestCase):
             protocol_start_page_number=42,
             meeting_number=11,
             presidency=self.member_peter,
-            secretary=self.member_franz,))
+            secretary=self.committee_secretary,))
 
         self.agend_item_text = create(
             Builder('agenda_item').having(
@@ -118,6 +123,11 @@ class TestProtocolJsonData(FunctionalTestCase):
                           'fullname': u'B\xe4nni Anna',
                           'email': 'baenni@example.com',
                          'role': None},
+                         {'email': u'mueller@example.com',
+                          'firstname': u'Franz',
+                          'fullname': u'M\xfcller Franz',
+                          'lastname': u'M\xfcller',
+                          'role': None},
                          ]},
             ProtocolData(self.meeting).add_members())
 

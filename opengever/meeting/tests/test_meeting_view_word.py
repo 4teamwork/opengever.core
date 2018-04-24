@@ -31,7 +31,7 @@ class TestWordMeetingView(IntegrationTestCase):
              ('Start:', 'Sep 12, 2016 05:30 PM'),
              ('End:', 'Sep 12, 2016 07:00 PM'),
              ('Presidency:', u'Sch\xf6ller Heidrun'),
-             ('Secretary:', u'M\xfcller Henning'),
+             ('Secretary:', u'Secretary C\xf6mmittee'),
              ('Location:', u'B\xfcren an der Aare'),
              ('Meeting dossier:', 'Sitzungsdossier 9/2017')],
             byline.text_items())
@@ -133,22 +133,9 @@ class TestWordMeetingView(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
         self.assertEquals(
-            [{'fullname': u'M\xfcller Henning',
-              'email': '',
-              'present': False,
-              'role': 'Secretary'},
-             {'fullname': u'Sch\xf6ller Heidrun',
-              'email': '',
-              'present': False,
-              'role': 'Presidency'},
-             {'fullname': 'Wendler Jens',
-              'email': '',
-              'present': True,
-              'role': ''},
-             {'fullname': u'W\xf6lfl Gerda',
-              'email': '',
-              'present': True,
-              'role': ''}],
+            [{'fullname': u'Sch\xf6ller Heidrun', 'role': 'Presidency', 'email': '', 'present': False},
+             {'fullname': 'Wendler Jens', 'role': '', 'email': '', 'present': True},
+             {'fullname': u'W\xf6lfl Gerda', 'role': '', 'email': '', 'present': True}],
             meeting_view.participants())
 
     def test_get_closing_infos(self):

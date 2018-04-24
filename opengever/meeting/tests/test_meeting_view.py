@@ -56,9 +56,11 @@ class TestMeetingView(FunctionalTestCase):
                                                     lastname="Boss",
                                                     email="boss@foo.ch"))
 
-        self.sile = create(Builder('member').having(firstname="Silvia",
-                                                    lastname="Pangani",
-                                                    email="pangani@foo.ch"))
+        self.committee_secretary = create(
+            Builder('ogds_user')
+            .id('committee.secretary')
+            .having(firstname=u'C\xf6mmittee', lastname='Secretary', email='committee.secretary@example.com')
+            )
 
         self.peter = create(Builder('member').having(firstname="Peter",
                                                      lastname="Meter",
@@ -100,7 +102,7 @@ class TestMeetingView(FunctionalTestCase):
                     participants=[self.peter,
                                   self.hans,
                                   self.roland],
-                    secretary=self.sile,
+                    secretary=self.committee_secretary,
                     protocol_document=self.generated_protocol,
                     excerpt_documents=[self.generated_excerpt],)
             .scheduled_proposals([self.proposal_a, self.proposal_b])
@@ -150,7 +152,7 @@ class TestMeetingView(FunctionalTestCase):
     def test_participants_listing_secretary_is_existing(self, browser):
         browser.login().open(self.meeting.get_url())
         self.assertEquals(
-            [u'Pangani Silvia (pangani@foo.ch)'],
+            [u'Secretary C\xf6mmittee'],
             browser.css("#meeting_secretary + dd").text)
 
     @browsing

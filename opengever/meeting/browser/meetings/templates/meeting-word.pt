@@ -349,7 +349,6 @@
                                             data-member_id participant/member_id">
                       <option value=""></option>
                       <option value="presidency" i18n:translate="meeting_role_presidency">Presidency</option>
-                      <option value="secretary" i18n:translate="meeting_role_secretary">Secretary</option>
                     </select>
                   </div>
 

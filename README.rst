@@ -512,7 +512,6 @@ Objects
     - self.committee_participant_1
     - self.committee_participant_2
     - self.committee_president
-    - self.committee_secretary
     - self.empty_committee
     - self.inactive_committee_participant
   - self.contactfolder

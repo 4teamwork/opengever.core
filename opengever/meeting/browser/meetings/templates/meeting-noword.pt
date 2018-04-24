@@ -138,7 +138,7 @@
                     i18n:attributes="title"
                     title="secretary"></dt>
                 <dd tal:condition="meeting/secretary"
-                    tal:content="structure meeting/secretary/get_title"></dd>
+                    tal:content="structure meeting/secretary/fullname"></dd>
 
                 <dt id="meeting_participants"
                     i18n:attributes="title"

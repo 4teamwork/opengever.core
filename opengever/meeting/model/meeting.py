@@ -22,7 +22,9 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.ogds.models.user import User
 from operator import methodcaller
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -153,9 +155,8 @@ class Meeting(Base, SQLFormSupport):
     presidency = relationship(
         'Member', primaryjoin="Member.member_id==Meeting.presidency_id")
     presidency_id = Column(Integer, ForeignKey('members.id'))
-    secretary = relationship(
-        'Member', primaryjoin="Member.member_id==Meeting.secretary_id")
-    secretary_id = Column(Integer, ForeignKey('members.id'))
+    secretary_id = Column(String(USER_ID_LENGTH), ForeignKey(User.userid))
+    secretary = relationship(User, primaryjoin=User.userid == secretary_id)
     other_participants = Column(UnicodeCoercingText)
     participants = relationship('Member',
                                 secondary=meeting_participants,

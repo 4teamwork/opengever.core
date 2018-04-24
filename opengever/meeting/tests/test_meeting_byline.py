@@ -15,7 +15,7 @@ class TestMeetingByline(IntegrationTestCase):
              ('Start:', 'Sep 12, 2016 05:30 PM'),
              ('End:', 'Sep 12, 2016 07:00 PM'),
              ('Presidency:', u'Sch\xf6ller Heidrun'),
-             ('Secretary:', u'M\xfcller Henning'),
+             ('Secretary:', u'Secretary C\xf6mmittee'),
              ('Location:', u'B\xfcren an der Aare'),
              ('Meeting dossier:', 'Sitzungsdossier 9/2017')],
             byline.text_items())

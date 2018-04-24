@@ -106,14 +106,11 @@ class ProtocolData(object):
             }
 
         if self.meeting.secretary:
-            membership = Membership.query.fetch_for_meeting(
-                self.meeting, self.meeting.secretary)
             participants['secretary'] = {
                 "firstname": self.meeting.secretary.firstname,
                 "lastname": self.meeting.secretary.lastname,
-                "fullname": self.meeting.secretary.fullname,
+                "fullname": self.meeting.secretary.fullname(),
                 "email": self.meeting.secretary.email,
-                "role": membership.role if membership else None
             }
 
         self.data['participants'] = participants
