@@ -1,3 +1,6 @@
+
+.. _label-office-connector:
+
 Dateien automatisch mit OfficeConnector öffnen
 ==============================================
 

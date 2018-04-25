@@ -14,5 +14,6 @@ Systemadministratoren einer Organisation.
    :maxdepth: 2
 
    officeconnector/index.rst
+   zope-edit-manager.rst
 
 * :ref:`genindex`
