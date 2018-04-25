@@ -13,12 +13,13 @@ Power-User und Administratoren von OneGov GEVER.
 .. toctree::
    :maxdepth: 2
 
-   aussonderung.rst
+   rollenmodell.rst
    rollenmanager.rst
    berechtigungoe.rst
+   adminansicht.rst
+   aussonderung.rst
    forcecheckin.rst
    soft-delete.rst
-   adminansicht.rst
    standardablauferstellen.rst
    docproperties/index.rst
    meeting/index.rst
