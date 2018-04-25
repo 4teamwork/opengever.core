@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Fix path filterd Solr searches. [phgross]
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Allow '\uf04a' in task text. [tarnap]
 - Make office connector mimetype checks case insensitive. [tarnap]

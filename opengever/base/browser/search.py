@@ -104,6 +104,11 @@ class OpengeverSearch(Search):
             if key not in schema.fields:
                 continue
 
+            # ftw.solr expect an exact match on the 'path' index,
+            # so we have to use `path_parent`.
+            if key == 'path':
+                key = 'path_parent'
+
             if isinstance(key, str):
                 key = key.decode('utf8')
 
