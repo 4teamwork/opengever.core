@@ -16,6 +16,11 @@ def is_bumblebee_feature_enabled():
         'is_feature_enabled', interface=IGeverBumblebeeSettings)
 
 
+def is_auto_refresh_enabled():
+    return api.portal.get_registry_record(
+        'is_auto_refresh_enabled', interface=IGeverBumblebeeSettings)
+
+
 def set_preferred_listing_view(value):
     request = getRequest()
     request.RESPONSE.setCookie(BUMBLEBEE_VIEW_COOKIE_NAME, value, path='/')

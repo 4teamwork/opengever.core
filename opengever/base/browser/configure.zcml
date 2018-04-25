@@ -187,4 +187,12 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="plone_javascript_variables.js"
+      class=".jsvariables.GeverJSVariables"
+      permission="zope.Public"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>

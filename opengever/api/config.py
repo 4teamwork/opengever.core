@@ -54,6 +54,8 @@ class Config(Service):
             'direct_checkout_and_edit_enabled', interface=IOfficeConnectorSettings)
         config['features']['preview'] = api.portal.get_registry_record(
             'is_feature_enabled', interface=IGeverBumblebeeSettings)
+        config['features']['preview_auto_refresh'] = api.portal.get_registry_record(
+            'is_auto_refresh_enabled', interface=IGeverBumblebeeSettings)
         config['features']['preview_open_pdf_in_new_window'] = api.portal.get_registry_record(
             'open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)
         config['features']['repositoryfolder_documents_tab'] = api.portal.get_registry_record(

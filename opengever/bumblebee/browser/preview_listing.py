@@ -1,4 +1,5 @@
 from ftw import bumblebee
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base.browser.helper import get_css_class
 from plone.uuid.interfaces import IUUID
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -146,6 +147,7 @@ class PreviewListingObjects(PreviewListingItems):
             'title': obj.Title(),
             'overlay_url': obj.absolute_url() + '/@@bumblebee-overlay-listing',
             'uid': IUUID(obj),
+            'checksum': IBumblebeeDocument(obj).get_checksum(),
             'mime_type_css_class': get_css_class(obj),
             'preview_image_url': bumblebee.get_service_v3().get_representation_url(
                 obj, 'thumbnail')}
@@ -158,6 +160,7 @@ class PreviewListingBrains(PreviewListingItems):
             'title': brain.Title,
             'overlay_url': brain.getURL() + '/@@bumblebee-overlay-listing',
             'uid': brain.UID,
+            'checksum': brain.bumblebee_checksum,
             'mime_type_css_class': get_css_class(brain),
             'preview_image_url': bumblebee.get_service_v3().get_representation_url(
                 brain, 'thumbnail')}

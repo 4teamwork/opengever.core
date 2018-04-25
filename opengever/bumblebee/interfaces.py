@@ -21,6 +21,11 @@ class IGeverBumblebeeSettings(Interface):
         description=u'Sets target="_blank" for links to PDF files.',
         default=False)
 
+    is_auto_refresh_enabled = schema.Bool(
+        title=u'Enable bumblebee auto refresh feature',
+        description=u'Automatically load preview images once available.',
+        default=False)
+
 
 class IVersionedContextMarker(Interface):
     """Marker interface for a versioned context.
