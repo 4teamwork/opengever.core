@@ -35,6 +35,7 @@ class TestConfig(IntegrationTestCase):
                 u'officeconnector_attach': False,
                 u'officeconnector_checkout': False,
                 u'preview': False,
+                u'preview_auto_refresh': False,
                 u'preview_open_pdf_in_new_window': False,
                 u'repositoryfolder_documents_tab': True,
                 u'repositoryfolder_tasks_tab': True,
