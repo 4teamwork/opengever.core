@@ -73,7 +73,7 @@ class Renderer(base.Renderer):
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
-        if self.root_path() != None:
+        if self.root_path() is not None:
             portal_url = getToolByName(self.context, 'portal_url')
             current = portal_url.getPortalObject().restrictedTraverse(self.root_path())
             return aq_inner(current).Title()
@@ -97,7 +97,7 @@ class Renderer(base.Renderer):
 
     @property
     def available(self):
-        if self.root_path() != None:
+        if self.root_path() is not None:
             portal_url = getToolByName(self.context, 'portal_url')
             try:
                 portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
