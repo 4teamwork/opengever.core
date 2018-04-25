@@ -3,7 +3,6 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.ogds.base.utils import get_current_admin_unit
-from plone import api
 from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
@@ -16,6 +15,14 @@ class FavoriteManager(object):
         if not favorite:
             # inexistent favorite-id or not ownded by given user
             raise NotFound
+
+        # update positions
+        favorites_to_reduce = Favorite.query.by_userid(userid).filter(
+            Favorite.position > favorite.position).with_for_update()
+
+        for new_pos, fav_to_reduce in enumerate(
+                favorites_to_reduce, start=favorite.position):
+            fav_to_reduce.position = new_pos
 
         create_session().delete(favorite)
 
@@ -50,14 +57,13 @@ class FavoriteManager(object):
             favorite.title = title
             favorite.is_title_personalized = True
 
-        if position:
+        if position is not None:
             self.update_position(favorite, position, userid)
 
         return favorite
 
     def update_position(self, fav_to_updated, position, userid):
         """Update the position all favorites affected by the reordering."""
-
         old_position = fav_to_updated.position
 
         if old_position == position:
@@ -66,14 +72,14 @@ class FavoriteManager(object):
             # move down
             favorites_to_reduce = Favorite.query.by_userid(userid).filter(
                 and_(Favorite.position > old_position,
-                     Favorite.position <= position))
+                     Favorite.position <= position)).with_for_update()
             for favorite in favorites_to_reduce:
                 favorite.position = favorite.position - 1
         else:
             # move up
             favorites_to_raise = Favorite.query.by_userid(userid).filter(
                 and_(Favorite.position >= position,
-                     Favorite.position < old_position))
+                     Favorite.position < old_position)).with_for_update()
             for favorite in favorites_to_raise:
                 favorite.position = favorite.position + 1
 

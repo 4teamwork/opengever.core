@@ -195,4 +195,11 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="favorites-view"
+      class=".favorites.ManageFavoritesView"
+      permission="zope2.View"
+      />
+
 </configure>
