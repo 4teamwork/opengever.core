@@ -4,8 +4,10 @@ Zope Edit Manager für OSX
 Mit dem ZopeEditManager (ExternalEditor für Mac) können Files direkt bearbeitet
 werden. Der Editor kann auf `4teamwork.ch <https://www.4teamwork.ch/office-connector>`_ heruntergeladen werden,
 danach die Anwendung ins Programm Verzeichnis verschoben und gestartet werden.
-Der ZopeEditManager für Mac OS X wird aktuell nicht weiterentwickelt und ist das
-auslaufende Vorgängermodell vom :ref:`Office Connector <label-office-connector>`.
+
+.. note::
+    Der ZopeEditManager für Mac OS X wird aktuell nicht weiterentwickelt und ist
+    das auslaufende Vorgängermodell vom :ref:`Office Connector <label-office-connector>`.
 
 Im Menüpunkt ZopeEditManager/Preferences können die spezifischen Extensions
 konfiguriert werden:
