@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Bump docxcompose to 1.0.0a8 to fix a bug while merging numbered documents. [deiferni]
 - Fix path filterd Solr searches. [phgross]
 - Implement bumblebee's auto refresh functionality. [siegy]
 - Add bumblebee auto refresh feature flag. [deiferni]
