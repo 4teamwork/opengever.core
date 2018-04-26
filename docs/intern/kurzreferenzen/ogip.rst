@@ -19,7 +19,7 @@ soll.
   - Übersicht in `FAQ-Übersicht <https://feedback.onegovgever.ch/faq>`_ in Feedbackforum aktualisieren
   - Neue `Opty <https://extranet.4teamwork.ch/crm/opportunities>`_ erstellen 
   - Neue Dokumentablage in `OneGov GEVER <https://gever.4teamwork.ch/ordnungssystem/3/2/2/5#dossier>`_ machen und `Vorlage <https://gever.4teamwork.ch/vorlagen/opengever-dossier-templatefolder/document-18818#overview>`_ hinzufügen
-  - Neues To-Do in `Basecamp <https://basecamp.com/2768704/projects/13482340/todolists/46980735>`_ erstellen. Bitte dieses to-do dann bei den weiteren Arbeiten am OGIP als Acitvity Stream benutzen (also jeweils kurz den Stand reinschreiben). Zudem ist das dort hinterlegte Datum verbindlich. Wenn der Konzept-Schreiber merkt, dass dieses nicht eingehalten werden kann, bitte frühzeitig Livia informieren, damit die Planung angepasst und allenfalls der Geldgeber informiert werden kann.
+  - Neues To-Do in `Basecamp-Liste OGIP (in Bearbeitung) <https://basecamp.com/2768704/projects/13482340/todolists/46980735>`_ erstellen. Dieses to-do soll bei den weiteren Arbeiten am OGIP als Acitvity Stream benutzt werden (Status zu Stand). Zudem ist das dort hinterlegte Datum verbindlich. Wenn der Konzept-Schreiber merkt, dass dieses nicht eingehalten werden kann, bitte frühzeitig Livia informieren, damit die Planung angepasst und allenfalls der Geldgeber informiert werden kann.
   - Feedbackforum-Post mit „OGIP“-Tag versehen und in Titel nachträglich in Klammern OGIP Nummer und Titel anfügen
 
 4.  Erarbeitung Konzept: Dies geschieht im Zusammenspiel von Projektleiter, Kunde, Entwickler. Die Aufgabenverteilung bei der Erstellung des OGIP ist sehr unterschiedlich, je nach Komplexitätsgrad des gewünschten Features. Wie bereits erwähnt, bitte im Basecamp-to-do jeweils den aktuellen Stand reinschreiben, damit dort eine grobe Übersicht zum Status aller OGIPs ersichtlich ist.
@@ -35,10 +35,12 @@ soll.
   - Geschätzer Aufwand in Opty hinterlegen für Planung
   - GEVER-Dossier abschliessen
   - Sicherstellen, dass OGIP in GEVER-Roadmap aufgenommen wird
+  - To-Do von `Basecamp-Liste OGIP (in Bearbeitung) <https://basecamp.com/2768704/projects/13482340/todolists/46980735>`_ nach `Basecamp-Liste OGIP (in Umsetzung) <https://basecamp.com/2768704/projects/13482340/todolists/51639259>`_ verschieben.
 
 8.  Umsetzung
 9.  Nach Realisierung OGIP:
 
   - In Feedbackforum in ursprünglichem Thema die Realisierung kommunizieren und Thema abschliessen
   - Im Feedbackforum FAQ-Bereich von "in Bearbeitung" nach "Umgesetzt" verschieben
+  - `Basecamp-Liste OGIP (in Umsetzung) <https://basecamp.com/2768704/projects/13482340/todolists/51639259>`_ abschliessen
   - Opty schliessen
