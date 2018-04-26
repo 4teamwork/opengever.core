@@ -12,6 +12,8 @@ from sqlalchemy import MetaData
 from sqlalchemy import String
 from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
+from sqlalchemy.sql.expression import column
+from sqlalchemy.sql.expression import table
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.sqlalchemy.datamanager import mark_changed
@@ -302,6 +304,11 @@ class SQLUpgradeStep(UpgradeStep):
     def _setup_db_connection(self):
         self.session = create_session()
         self.connection = self.session.connection()
+
+    def has_multiple_admin_units(self):
+        admin_unit_table = table("admin_units", column("unit_id"))
+        query = self.session.query(admin_unit_table.c.unit_id)
+        return query.count() > 1
 
 
 @implementer(ISchemaMigration)
