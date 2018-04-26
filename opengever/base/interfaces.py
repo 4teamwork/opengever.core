@@ -280,6 +280,13 @@ class IGeverState(Interface):
         """
 
 
+class IGeverSettings(Interface):
+    """Provide the current site configuration."""
+
+    def get_config():
+        """Provide a nested OrderedDict of the current site configuration."""
+
+
 class ISQLObjectWrapper(Interface):
     """Marker interface for sql object wrappers."""
 

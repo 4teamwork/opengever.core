@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  metal:use-macro="context/main_template/macros/master"
+  lang="en"
+  i18n:domain="opengever.base">
+  <body>
+    <metal:main fill-slot="content-core">
+      <metal:content-core define-macro="content-core">
+        <h1>Current configuration</h1>
+        <div id="config_table">
+          <tal:block tal:replace="structure view/render_form_template"></tal:block>
+        </div>
+      </metal:content-core>
+    </metal:main>
+  </body>
+</html>

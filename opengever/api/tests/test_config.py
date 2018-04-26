@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from pkg_resources import get_distribution
 
 
 class TestConfig(IntegrationTestCase):
@@ -14,6 +15,14 @@ class TestConfig(IntegrationTestCase):
         browser.open(url, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'@id'), url)
+
+    @browsing
+    def test_config_contains_version(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'version'), get_distribution('opengever.core').version)
 
     @browsing
     def test_config_contains_features(self, browser):

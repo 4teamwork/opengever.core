@@ -10,6 +10,7 @@ Changelog
 - Implement bumblebee's auto refresh functionality. [siegy]
 - Add bumblebee auto refresh feature flag. [deiferni]
 - Fix dates for transported objects. [phgross]
+- Implement a view for the manger to see the current config. [Rotonen]
 - OGDS sync: Fix handling of missing user after updating python-ldap. [lgraf]
 - Allow '\uf04a' in task text. [tarnap]
 - Make office connector mimetype checks case insensitive. [tarnap]
