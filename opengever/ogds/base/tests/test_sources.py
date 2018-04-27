@@ -1,5 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr.connection import SolrResponse
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.schema import SolrSchema
+from mock import MagicMock
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllGroupsSource
 from opengever.ogds.base.sources import AllOrgUnitsSource
@@ -13,7 +17,95 @@ from opengever.ogds.models.group import Group
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
+from zope.component import getUtility
 from zope.schema.vocabulary import SimpleTerm
+import os
+
+
+class SolrMockupTestCase(IntegrationTestCase):
+
+    features = ('solr', )
+
+    def setUp(self):
+        super(SolrMockupTestCase, self).setUp()
+
+        if not hasattr(self, 'schema_path'):
+            raise
+        schema = open(self.schema_path, 'r').read()
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(
+            name='get',
+            return_value=SolrResponse(
+                body=schema,
+                status=200,
+            ))
+
+        manager = MagicMock(name='SolrConnectionManager')
+        manager.connection = conn
+        manager.schema = SolrSchema(manager)
+
+        solr = getUtility(ISolrSearch)
+        solr._manager = manager
+
+        if not hasattr(self, 'search_path'):
+            raise
+        search_resp = open(self.search_path, 'r').read()
+        solr.search = MagicMock(
+            name='search',
+            return_value=SolrResponse(
+                body=search_resp,
+                status=200,
+            ))
+        self.solr = solr
+        self.source = UsersContactsInboxesSource(self.portal)
+
+
+class TestUsersContactsInboxesSourceInt(SolrMockupTestCase):
+
+    schema_path = os.path.join(
+        os.path.dirname(__file__),
+        'data',
+        'solr_user_contacts_inboxes_source_schema.json')
+    search_path = os.path.join(
+        os.path.dirname(__file__),
+        'data',
+        'solr_user_contacts_inboxes_source_search.json')
+
+    def setUp(self):
+        super(TestUsersContactsInboxesSourceInt, self).setUp()
+        self.source = UsersContactsInboxesSource(self.portal)
+
+    def test_contacts_appear_in_solr_result(self):
+        query_string = u'B\xc3\xbcu'
+        terms = self.source.search(query_string)
+        self.assertEquals([u'Lehner-Baum\xe4nn Maria'],
+                          [term.title for term in terms])
+        self.assertEquals([u'contact:lehner-baumann-maria'],
+                          [term.value for term in terms])
+
+
+class TestAllEmailContactsAndUsersSourceInt(SolrMockupTestCase):
+
+    schema_path = os.path.join(
+        os.path.dirname(__file__),
+        'data',
+        'solr_all_email_contacts_and_users_source_schema.json')
+    search_path = os.path.join(
+        os.path.dirname(__file__),
+        'data',
+        'solr_all_email_contacts_and_users_source_search.json')
+
+    def setUp(self):
+        super(TestAllEmailContactsAndUsersSourceInt, self).setUp()
+        self.source = AllEmailContactsAndUsersSource(self.portal)
+
+    def test_contacts_appear_in_solr_result(self):
+        query_string = u'B\xc3\xbcu'
+        terms = self.source.search(query_string)
+        self.assertEquals([u'Lehner-Baum\xe4nn Maria (m@r.ia)'],
+                          [term.title for term in terms])
+        self.assertEquals([u'm@r.ia:lehner-baumann-maria'],
+                          [term.value for term in terms])
 
 
 class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
