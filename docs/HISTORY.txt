@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Fix favorite etag adapter for webdav requests. [phgross]
 - Fix path filterd Solr searches. [phgross]
 - Implement bumblebee's auto refresh functionality. [siegy]
 - Add bumblebee auto refresh feature flag. [deiferni]

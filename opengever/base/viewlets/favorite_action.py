@@ -5,6 +5,7 @@ from plone import api
 from plone.app.caching.interfaces import IETagValue
 from plone.app.layout.viewlets import common
 from plone.dexterity.interfaces import IDexterityContent
+from Products.CMFCore.interfaces import IContentish
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import adapts
 from zope.interface import implements
@@ -42,8 +43,13 @@ class FavoriteETagValue(object):
         self.request = request
 
     def __call__(self):
+        if IContentish.providedBy(self.published):
+            context = self.published
+        else:
+            context = self.published.context
+
         favorite = FavoriteManager().get_favorite(
-            self.published.context, api.user.get_current())
+            context, api.user.get_current())
 
         if not favorite:
             return None
