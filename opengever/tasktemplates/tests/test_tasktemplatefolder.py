@@ -15,7 +15,7 @@ class TestTaskTemplateFolder(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add(u'TaskTemplateFolder')
-        browser.fill({'Title': 'Baugesuch'}).submit()
+        browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEquals(['Baugesuch'], browser.css('h1').text)
