@@ -1,5 +1,6 @@
 from ftw.solr.interfaces import ISolrDocument
 from opengever.globalindex.model.task import Task
+from opengever.task.task import ITask
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -13,6 +14,9 @@ def _get_task_css_class(task):
     """
     if ICatalogBrain.providedBy(task) or ISolrDocument.providedBy(task):
         task = Task.query.by_brain(task)
+
+    if ITask.providedBy(task):
+        task = task.get_sql_object()
 
     return task.get_css_class()
 
