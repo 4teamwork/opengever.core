@@ -1,13 +1,12 @@
 from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_inner
+from opengever.base import is_favorites_feature_enabled
 from plone import api
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope import schema
-from zope.component import getUtility
 from zope.formlib import form
 from zope.interface import implements
 
@@ -114,8 +113,7 @@ class Renderer(base.Renderer):
         return view.get_caching_url()
 
     def favorites_enabled(self):
-        registry = getUtility(IRegistry)
-        return registry.get('opengever.portlets.tree.enable_favorites')
+        return is_favorites_feature_enabled()
 
 
 class AddForm(base.AddForm):
