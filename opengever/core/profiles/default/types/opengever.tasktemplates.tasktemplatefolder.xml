@@ -14,7 +14,7 @@
   <property name="schema">opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema</property>
 
   <!-- Class used for content items -->
-  <property name="klass">plone.dexterity.content.Container</property>
+  <property name="klass">opengever.tasktemplates.tasktemplatefolder.TaskTemplateFolder</property>
 
   <!-- Add permission -->
   <property name="add_permission">cmf.AddPortalContent</property>
