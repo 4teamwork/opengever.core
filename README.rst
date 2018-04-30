@@ -250,8 +250,6 @@ Run the `activate_solr` maintenance script:
 
     $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
 
-And finally activate ``use_solr`` in the registry.
-
 
 Setting up a multi-admin environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
