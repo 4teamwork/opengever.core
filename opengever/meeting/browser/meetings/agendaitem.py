@@ -239,11 +239,11 @@ class AgendaItemsView(BrowserView):
 
         button = {}
         button['visible'] = bool(
-            checkout_manager.check_permission('Modify portal content') and
-            not agenda_item.is_decided())
+            checkout_manager.check_permission('Modify portal content')
+            and not agenda_item.is_decided())
         button['active'] = button['visible'] and (
-            checkout_manager.is_checkout_allowed() or
-            checkout_manager.is_checked_out_by_current_user())
+            checkout_manager.is_checkout_allowed()
+            or checkout_manager.is_checked_out_by_current_user())
         button['url'] = meeting.get_url(
             view='agenda_items/{}/edit_document'.format(
                 agenda_item.agenda_item_id))
