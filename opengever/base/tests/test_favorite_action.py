@@ -4,6 +4,8 @@ from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.viewlets.favorite_action import FavoriteETagValue
+from opengever.document.browser.tabbed import DocumentTabbedView
 from opengever.testing import IntegrationTestCase
 
 
@@ -55,3 +57,32 @@ class TestFavoriteAction(IntegrationTestCase):
         browser.open(self.document)
         self.assertEqual(
             '', browser.css('#mark-as-favorite').first.get('class'))
+
+
+class TestFavoriteEtagValue(IntegrationTestCase):
+    """Exceptions in the etag value adapter are failing silently,
+    therefore we tests the etag adapter unittest like.
+    """
+
+    features = ('favorites', )
+
+    def test_handles_regular_requests(self):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.document))
+
+        view = DocumentTabbedView(self.document, None)
+        value = FavoriteETagValue(view, None)()
+        self.assertEqual('1', value)
+
+    def test_handles_webdav_requests(self):
+        self.login(self.regular_user)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.document))
+
+        value = FavoriteETagValue(self.document, None)()
+        self.assertEqual('1', value)
