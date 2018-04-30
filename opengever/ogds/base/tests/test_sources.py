@@ -25,12 +25,12 @@ import os
 class SolrMockupTestCase(IntegrationTestCase):
 
     features = ('solr', )
+    schema_path = None
+    search_path = None
 
     def setUp(self):
         super(SolrMockupTestCase, self).setUp()
-
-        if not hasattr(self, 'schema_path'):
-            raise
+        assert self.schema_path is not None, 'A path for Solr schema is needed'
         schema = open(self.schema_path, 'r').read()
         conn = MagicMock(name='SolrConnection')
         conn.get = MagicMock(
@@ -47,8 +47,7 @@ class SolrMockupTestCase(IntegrationTestCase):
         solr = getUtility(ISolrSearch)
         solr._manager = manager
 
-        if not hasattr(self, 'search_path'):
-            raise
+        assert self.search_path is not None, 'A path for Solr search is needed'
         search_resp = open(self.search_path, 'r').read()
         solr.search = MagicMock(
             name='search',
