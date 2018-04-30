@@ -17,6 +17,7 @@ from opengever.base.model import create_session
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
+from opengever.private import MEMBERSFOLDER_ID
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
@@ -659,8 +660,13 @@ class OpengeverContentFixture(object):
     def create_private_root(self):
         self.private_root = self.register('private_root', create(
             Builder('private_root')
-            .titled(u'Meine Ablage')
-            ))
+            .titled(u'Private')
+        ))
+
+        # The id of the private_root needs to match the MEMBERSFOLDER_ID
+        # and setting the id is not possible when using dexterity builder,
+        # we use the id ad title and rename it after creation.
+        self.private_root.title_de = 'Meine Ablage'
 
     @staticuid()
     def create_private_folder(self):

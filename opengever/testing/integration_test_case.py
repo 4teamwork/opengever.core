@@ -14,6 +14,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
+from opengever.private import enable_opengever_private
 from opengever.task.task import ITask
 from operator import methodcaller
 from plone import api
@@ -60,6 +61,11 @@ FEATURE_FLAGS = {
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
 }
+
+FEATURE_METHODS = {
+    'private': enable_opengever_private,
+}
+
 
 
 class IntegrationTestCase(TestCase):
@@ -183,6 +189,8 @@ class IntegrationTestCase(TestCase):
             api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
         elif feature in FEATURE_PROFILES:
             applyProfile(self.portal, FEATURE_PROFILES[feature])
+        elif feature in FEATURE_METHODS:
+            FEATURE_METHODS[feature]()
         else:
             raise ValueError('Invalid {!r}'.format(feature))
 
@@ -192,6 +200,8 @@ class IntegrationTestCase(TestCase):
         if feature in FEATURE_FLAGS:
             api.portal.set_registry_record(FEATURE_FLAGS[feature], False)
         elif feature in FEATURE_PROFILES:
+            raise NotImplementedError('Feel free to implement.')
+        elif feature in FEATURE_METHODS:
             raise NotImplementedError('Feel free to implement.')
         else:
             raise ValueError('Invalid {!r}'.format(feature))
