@@ -1,3 +1,5 @@
+from copy import deepcopy
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.sablon import Sablon
 from Products.Five.browser import BrowserView
@@ -120,7 +122,17 @@ class FillMeetingTemplate(BrowserView):
 
     def __call__(self):
         sablon = Sablon(self.context)
-        sablon.process(json.dumps(SAMPLE_MEETING_DATA))
+
+        # strip html fields when word-meeting is enabled, we don't have
+        # them there and this helps developing new templates in the meantime
+        sample_meeting_data = deepcopy(SAMPLE_MEETING_DATA)
+        if is_word_meeting_implementation_enabled():
+            for agenda_item in sample_meeting_data['agenda_items']:
+                for key in agenda_item.keys():
+                    if key.startswith('html:'):
+                        del agenda_item[key]
+
+        sablon.process(json.dumps(sample_meeting_data))
         assert sablon.is_processed_successfully(), sablon.stderr
 
         response = self.request.response
