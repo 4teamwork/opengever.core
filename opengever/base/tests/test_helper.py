@@ -47,3 +47,8 @@ class TestCssClassHelpers(IntegrationTestCase):
         setattr(self.proposal_template, '_v__is_relation', False)
         self.assertEquals(self.proposal_template.getIcon(), 'docx.png')
         self.assertEquals(get_css_class(self.proposal_template), 'icon-docx')
+
+    def test_task_obj(self):
+        self.login(self.dossier_responsible)
+        self.assertEquals('contenttype-opengever-task-task',
+                          get_css_class(self.task))
