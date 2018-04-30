@@ -1,6 +1,7 @@
 from ftw.solr.interfaces import ISolrSearch
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.contact.contact import IContact
 from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
 from opengever.ogds.base.actor import Actor
@@ -439,7 +440,9 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
     def _extend_terms_with_contacts_from_solr(self, query_string):
         solr = getUtility(ISolrSearch)
-        resp = solr.search(query=u'SearchableText:{}* AND object_provides:opengever.contact.contact.IContact'.format(query_string))
+        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
+            query_string,
+            IContact.__identifier__))
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
 
@@ -667,7 +670,9 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
 
     def _extend_terms_with_contacts_from_solr(self, query_string):
         solr = getUtility(ISolrSearch)
-        resp = solr.search(query=u'SearchableText:{}* AND object_provides:opengever.contact.contact.IContact'.format(query_string))
+        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
+            query_string,
+            IContact.__identifier__))
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
 
