@@ -2,6 +2,9 @@ _build/
 .DS_Store
 .installed.cfg
 .mr.developer.cfg
+.python-version
+.ruby-gemset
+.ruby-version
 *.egg-info
 *.mo
 *.pyc
@@ -14,6 +17,7 @@ develop-eggs/
 dist/
 eggs/
 parts/
+requirements.txt
 snakefood/
 src/
 var/
