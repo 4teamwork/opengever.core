@@ -1,10 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
 from zope.component import getMultiAdapter
@@ -119,3 +121,44 @@ class TestCancelDocuments(FunctionalTestCase):
         self.assertEquals([u'Could not cancel checkout on document [No Subject], '
                            'mails does not support the checkin checkout process.'],
                           error_messages())
+
+
+class TestCancelDocumentCheckoutConfirmation(IntegrationTestCase):
+
+    @browsing
+    def test_cancel_checkout_action_needs_confirmation(self, browser):
+        self.login(self.regular_user, browser=browser)
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout()
+        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+
+        browser.open(self.document, view="tabbedview_view-overview")
+        browser.click_on("Cancel checkout")
+        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+
+        browser.click_on("Cancel checkout")
+        self.assertEqual(None, manager.get_checked_out_by())
+        assert_message(u"Cancel checkout: Vertr\xe4gsentwurf")
+
+    @browsing
+    def test_cancel_checkouts_action_needs_confirmation(self, browser):
+        self.login(self.regular_user, browser=browser)
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout()
+        browser.open(self.dossier, view="tabbedview_view-documents-proxy")
+        self.assertEqual('cancel_documents_checkout_confirmation:method',
+                         browser.find("Cancel").get("href"))
+
+        paths = [self.document.absolute_url_path(),
+                 self.subdocument.absolute_url_path()]
+        browser.open(self.dossier,
+                     {'paths': paths,
+                      '_authenticator': createToken()},
+                     view='cancel_documents_checkout_confirmation', )
+        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+        browser.click_on("Cancel checkout")
+        self.assertEqual(None, manager.get_checked_out_by())

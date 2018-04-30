@@ -139,7 +139,7 @@
     <object name="cancel" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Cancel</property>
       <property name="description" i18n:translate="" />
-      <property name="url_expr">string:cancel_document_checkouts:method</property>
+      <property name="url_expr">string:cancel_documents_checkout_confirmation:method</property>
       <property name="icon_expr" />
       <property name="available_expr" />
       <property name="permissions">

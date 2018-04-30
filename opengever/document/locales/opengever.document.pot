@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-29 09:52+0000\n"
+"POT-Creation-Date: 2018-04-06 06:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,9 @@ msgstr ""
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr ""
 
-#: ./opengever/document/browser/templates/macros.pt
+#: ./opengever/document/browser/actionbuttons.py
+#: ./opengever/document/checkout/cancel.py
+#: ./opengever/document/checkout/templates/cancelconfirmation.pt
 msgid "Cancel checkout"
 msgstr ""
 
@@ -51,6 +53,10 @@ msgstr ""
 #: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
+msgstr ""
+
+#: ./opengever/document/checkout/templates/cancelconfirmationform.pt
+msgid "Chosen documents"
 msgstr ""
 
 #: ./opengever/document/checkout/cancel.py
@@ -144,6 +150,7 @@ msgid "alert_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Cancel"
+#: ./opengever/document/checkout/cancel.py
 #: ./opengever/document/checkout/checkin.py
 msgid "button_cancel"
 msgstr ""
@@ -161,6 +168,12 @@ msgstr ""
 #. Default: "PDF"
 #: ./opengever/document/browser/versions_tab.py
 msgid "button_pdf"
+msgstr ""
+
+#. Default: "Are you sure you want to cancel the checkout?"
+#: ./opengever/document/checkout/templates/cancelconfirmation.pt
+#: ./opengever/document/checkout/templates/cancelconfirmationform.pt
+msgid "cancel_checkout_confirmation"
 msgstr ""
 
 #. Default: "copy of"
@@ -310,6 +323,7 @@ msgid "label_by_author"
 msgstr ""
 
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
+#: ./opengever/document/checkout/templates/cancelconfirmation.pt
 msgid "label_cancel"
 msgstr ""
 

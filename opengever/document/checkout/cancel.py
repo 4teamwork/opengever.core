@@ -1,10 +1,20 @@
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
+from opengever.document.exceptions import NoItemsSelected
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.tabbedview.utils import get_containing_document_tab_url
 from plone import api
+from plone.z3cform import layout
 from Products.Five import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
+from z3c.form.interfaces import HIDDEN_MODE
+from zope import schema
 from zope.component import getMultiAdapter
+from zope.interface import Interface
 
 
 class CancelDocuments(BrowserView):
@@ -85,3 +95,84 @@ class CancelDocuments(BrowserView):
                     mapping={'title': obj.Title().decode('utf-8')})
             api.portal.show_message(
                 message=msg, request=self.request, type='info')
+
+
+class CancelDocumentCheckoutConfirmation(BrowserView):
+    """Confirmation overlay view to cancel the checkout of a document.
+    This view is called directly on the document itself
+    (without any request parameters).
+    """
+
+    def get_checkout_cancel_url(self):
+        url = u'{}/@@cancel_document_checkouts'.format(
+            self.context.absolute_url())
+        return url
+
+
+class IMultiCheckoutCancelSchema(Interface):
+    """Form schema to confirm multi checkout cancel."""
+
+    paths = schema.TextLine(title=u'Selected Items')
+
+
+class MultiCheckoutCancelForm(form.Form):
+    """Form to confirm cancelation of checkout for mutliple documents."""
+
+    fields = field.Fields(IMultiCheckoutCancelSchema)
+    ignoreContext = True
+
+    def __init__(self, context, request):
+        super(MultiCheckoutCancelForm, self).__init__(context, request)
+
+    def cancel_checkout(self, force=False):
+        self.request.set("paths", self.get_document_paths())
+        return CancelDocuments(self.context, self.request).__call__()
+
+    @button.buttonAndHandler(_(u'Cancel checkout'))
+    def cancel_checkout_button(self, action):
+        return self.cancel_checkout()
+
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def cancel(self, action):
+        return self.redirect()
+
+    def redirect(self):
+        return self.request.RESPONSE.redirect(
+            get_containing_document_tab_url(self.context))
+
+    def get_document_paths(self):
+        if self.widgets:
+            field_name = self.prefix + self.widgets.prefix + 'paths'
+            value = self.request.get(field_name, False)
+            if value:
+                return value.split(';;')
+        return self.request.get('paths', [])
+
+    def get_filenames(self):
+        portal = api.portal.get()
+        paths = self.get_document_paths()
+        return [portal.unrestrictedTraverse(path.split("/")).title_or_id() for path in paths]
+
+    def updateWidgets(self):
+        super(MultiCheckoutCancelForm, self).updateWidgets()
+        self.widgets['paths'].mode = HIDDEN_MODE
+        self.widgets['paths'].value = ';;'.join(self.get_document_paths())
+
+
+class CancelDocumentsCheckoutConfirmation(layout.FormWrapper):
+    """Checkin multiple documents with comment.
+
+    This view is called from a tabbed_view.
+    """
+
+    form = MultiCheckoutCancelForm
+
+    def __call__(self, *args, **kwargs):
+        try:
+            return layout.FormWrapper.__call__(self, *args, **kwargs)
+        except NoItemsSelected:
+            msg = _(u'You have not selected any documents.')
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
+
+            return self.request.RESPONSE.redirect(
+                get_containing_document_tab_url(self.context))

@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="opengever.document">
+  <metal:main metal:fill-slot="main">
+    <metal:title metal:fill-slot="content-title">
+      <div id="tabbedview-header">
+        <h1 class="documentFirstHeading" i18n:translate="Cancel checkout">Cancel checkout
+        </h1>
+      </div>
+    </metal:title>
+
+    <metal:content-core fill-slot="content-core">
+
+      <p i18n:translate="cancel_checkout_confirmation">Are you sure you want to cancel the checkout?</p>
+      <h3 i18n:translate="">Chosen documents</h3>
+      <ul>
+        <tal:filenames tal:repeat="filename view/form_instance/get_filenames">
+          <li class="document-list" tal:content="filename"></li>
+        </tal:filenames>
+      </ul>
+      <div id="form-input">
+          <span tal:replace="structure view/contents" />
+      </div>
+
+    </metal:content-core>
+  </metal:main>
+</html>

@@ -30,6 +30,7 @@ Changelog
 - Break activity details out per paragraph. [Rotonen]
 - Delete shadowed documents when resolving a dossier [njohner]
 - Moved the secretary selection in a meeting from the participants view to the metadata edit form and made it a keyword widget. [Rotonen]
+- Require confirmation to cancel document checkouts [njohner]
 - Implement bumblebee tooltip backdrop. [Kevin Bieri]
 - Add favorite API endpoints. [phgross]
 - Add favorite SQL-Model. [phgross]
