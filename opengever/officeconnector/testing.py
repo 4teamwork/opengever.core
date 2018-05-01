@@ -1,6 +1,7 @@
 from Acquisition import aq_parent
 from contextlib import contextmanager
 from ftw.mail.interfaces import IEmailAddress
+from opengever.document.behaviors import IBaseDocument
 from opengever.journal.handlers import DOCUMENT_ATTACHED
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.journal.handlers import DOCUMENT_CHECKED_OUT
@@ -101,6 +102,8 @@ class OCIntegrationTestCase(IntegrationTestCase):
         return url
 
     def validate_token(self, user, oc_url, documents, action):
+        if IBaseDocument.providedBy(documents):
+            documents = (documents,)
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, verify=False)
         self.assertEquals(action, token.get('action', None))
@@ -195,7 +198,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 self.request).get_email_for_object(parent_dossier)
             self.assertEquals(bcc, dossier_bcc)
 
-
     def fetch_document_checkout_payloads(self, browser, tokens):
         with self.as_officeconnector(browser):
             headers = {
@@ -246,30 +248,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         upload_form = payload.get('upload-form', None)
         self.assertEquals('file_upload', upload_form)
-
-    def validate_oneoffixx_token(self, user, oc_url):
-        raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
-        self.assertEquals('oneoffixx', token.get('action', None))
-
-        url = token.get('url', None)
-        self.assertTrue(url)
-
-        documents = token.get('documents', [])
-        self.assertEquals(1, len(documents))
-        self.assertEquals(api.content.get_uuid(self.document), documents[0])
-
-        self.assertEquals(user.id, token.get('sub', None))
-
-        expiry = int(token.get('exp', 0))
-        self.assertLess(int(time()), expiry)
-
-        tokens = {
-            'raw_token': raw_token,
-            'token': token,
-            }
-
-        return tokens
 
     def checkout_document(self, browser, tokens, payload, document):
         """Logs out, uses JWT to check out the document and logs back in."""
