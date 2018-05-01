@@ -1,8 +1,9 @@
+.DS_Store
+.installed.cfg
+.mr.developer.cfg
 *.egg-info
 *.mo
 *.pyc
-.installed.cfg
-.mr.developer.cfg
 bin/
 build/
 buildout.cfg
@@ -13,4 +14,3 @@ eggs/
 parts/
 src/
 var/
-.DS_Store
