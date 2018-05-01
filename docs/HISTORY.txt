@@ -5,7 +5,6 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
-- Bump docxcompose to 1.0.0a9 to fix zero numbering and num_ids mapping error. [deiferni]
 - No longer show unsortable columns as sortable, bump ftw.tabbedview to 4.1.1. [deiferni]
 - Add debug views for agenda_items and docxcompose. [deiferni]
 - Fix favorite etag adapter for webdav requests. [phgross]
@@ -40,6 +39,12 @@ Changelog
 - Enhance resolve_oguid view, to support other views. [phgross]
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
 - Only allow updating a documents file if the document is checked-out by the current user. [buchi]
+
+
+2018.2.4 (2018-05-01)
+---------------------
+
+- Bump docxcompose to 1.0.0a9 to fix zero numbering and num_ids mapping error. [deiferni]
 
 
 2018.2.3 (2018-04-26)
