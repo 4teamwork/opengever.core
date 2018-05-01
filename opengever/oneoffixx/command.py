@@ -21,4 +21,6 @@ class CreateDocumentFromOneOffixxTemplateCommand(BaseObjectCreatorCommand):
         annotations = IAnnotations(obj)
         annotations["template-id"] = self.template_id
         annotations["languages"] = self.languages
+        annotations["filename"] = self.filename
+
         return obj.as_shadow_document()

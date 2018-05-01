@@ -34,25 +34,25 @@ def parse_bcc(request):
 
 def parse_documents(request, context, action):
     documents = []
-
     if (
             request['REQUEST_METHOD'] == 'GET'
             or request['REQUEST_METHOD'] == 'POST'
-            and 'BODY' not in request
+            and ('BODY' not in request
+                 or isinstance(json.loads(request['BODY']), list))
         ):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):
             raise NotFound
 
         # for checkout and attach actions, the document needs to have a file
-        # for the oneoffixx action, the document should be in the shadow state
-        if not (context.has_file()
-                or action == "oneoffixx" and context.is_shadow_document()):
+        # for the oneoffixx action or checkout action fetched from
+        # OfficeConnectorOneOffixxPayload, the document should be in the shadow state
+        if not (context.has_file() or context.is_shadow_document()):
             raise NotFound
 
         documents.append(context)
 
-    if request['REQUEST_METHOD'] == 'POST' and 'BODY' in request:
+    elif request['REQUEST_METHOD'] == 'POST' and 'BODY' in request:
         payload = json.loads(request['BODY'])
         paths = payload.get('documents', None)
 

@@ -20,7 +20,9 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
         self.assertEquals(200, browser.status_code)
 
         tokens = self.validate_oneoffixx_token(self.dossier_responsible, oc_url, (self.document,))
+        payload = self.fetch_document_oneoffixx_payloads(browser, tokens)[0]
 
+        self.validate_oneoffixx_payload(payload, self.document, self.dossier_responsible)
 
     @browsing
     def test_create_with_oneoffixx_when_not_shadow_document(self, browser):
