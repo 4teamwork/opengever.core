@@ -52,7 +52,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(self.manager, oc_url)
+        tokens = self.validate_checkout_token(self.manager, oc_url, self.document)
         payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
 
         self.validate_checkout_payload(payload, self.document)

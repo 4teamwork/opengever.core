@@ -53,6 +53,19 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         return url
 
+    def fetch_document_oneoffixx_oc_url(self, browser, document):
+        headers = {
+            'Accept': 'application/json',
+            }
+
+        url = browser.open(
+            document,
+            headers=headers,
+            view='officeconnector_oneoffixx_url',
+            ).json.get('url', None)
+
+        return url
+
     def fetch_dossier_bcc(self, browser, dossier):
         headers = {
             'Accept': 'application/json',
@@ -87,15 +100,15 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         return url
 
-    def validate_attach_token(self, user, oc_url, documents):
+    def validate_token(self, user, oc_url, documents, action):
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, verify=False)
-        self.assertEquals('attach', token.get('action', None))
+        self.assertEquals(action, token.get('action', None))
 
         url = token.get('url', None)
         expected_url = '/'.join((
             api.portal.get().absolute_url(),
-            'oc_attach',
+            'oc_' + action,
             ))
         self.assertEquals(expected_url, url)
 
@@ -118,6 +131,15 @@ class OCIntegrationTestCase(IntegrationTestCase):
             }
 
         return tokens
+
+    def validate_attach_token(self, user, oc_url, documents):
+        return self.validate_token(user, oc_url, documents, "attach")
+
+    def validate_checkout_token(self, user, oc_url, documents):
+        return self.validate_token(user, oc_url, documents, "checkout")
+
+    def validate_oneoffixx_token(self, user, oc_url, documents):
+        return self.validate_token(user, oc_url, documents, "oneoffixx")
 
     def fetch_document_attach_payloads(self, browser, tokens):
         with self.as_officeconnector(browser):
@@ -173,29 +195,6 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 self.request).get_email_for_object(parent_dossier)
             self.assertEquals(bcc, dossier_bcc)
 
-    def validate_checkout_token(self, user, oc_url):
-        raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
-        self.assertEquals('checkout', token.get('action', None))
-
-        url = token.get('url', None)
-        self.assertTrue(url)
-
-        documents = token.get('documents', [])
-        self.assertEquals(1, len(documents))
-        self.assertEquals(api.content.get_uuid(self.document), documents[0])
-
-        self.assertEquals(user.id, token.get('sub', None))
-
-        expiry = int(token.get('exp', 0))
-        self.assertLess(int(time()), expiry)
-
-        tokens = {
-            'raw_token': raw_token,
-            'token': token,
-            }
-
-        return tokens
 
     def fetch_document_checkout_payloads(self, browser, tokens):
         with self.as_officeconnector(browser):
@@ -247,6 +246,30 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         upload_form = payload.get('upload-form', None)
         self.assertEquals('file_upload', upload_form)
+
+    def validate_oneoffixx_token(self, user, oc_url):
+        raw_token = oc_url.split(':')[-1]
+        token = jwt.decode(raw_token, verify=False)
+        self.assertEquals('oneoffixx', token.get('action', None))
+
+        url = token.get('url', None)
+        self.assertTrue(url)
+
+        documents = token.get('documents', [])
+        self.assertEquals(1, len(documents))
+        self.assertEquals(api.content.get_uuid(self.document), documents[0])
+
+        self.assertEquals(user.id, token.get('sub', None))
+
+        expiry = int(token.get('exp', 0))
+        self.assertLess(int(time()), expiry)
+
+        tokens = {
+            'raw_token': raw_token,
+            'token': token,
+            }
+
+        return tokens
 
     def checkout_document(self, browser, tokens, payload, document):
         """Logs out, uses JWT to check out the document and logs back in."""
