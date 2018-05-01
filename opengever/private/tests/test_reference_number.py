@@ -8,7 +8,7 @@ from plone import api
 class TestPrivateReferenceNumber(IntegrationTestCase):
 
     def test_dotted_reference_number(self):
-        self.login(self.administrator)
+        self.login(self.regular_user)
 
         api.portal.set_registry_record(
             'formatter',
@@ -32,7 +32,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             )
 
     def test_grouped_by_three_reference_number(self):
-        self.login(self.administrator)
+        self.login(self.regular_user)
 
         api.portal.set_registry_record(
             'formatter',
@@ -56,7 +56,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             )
 
     def test_no_client_id_dotted_reference_number(self):
-        self.login(self.administrator)
+        self.login(self.regular_user)
 
         api.portal.set_registry_record(
             'formatter',
@@ -80,7 +80,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             )
 
     def test_no_client_id_grouped_by_three_reference_number(self):
-        self.login(self.administrator)
+        self.login(self.regular_user)
 
         api.portal.set_registry_record(
             'formatter',

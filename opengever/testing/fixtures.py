@@ -17,7 +17,6 @@ from opengever.base.model import create_session
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
-from opengever.private import MEMBERSFOLDER_ID
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
@@ -87,8 +86,7 @@ class OpengeverContentFixture(object):
                 self.create_meetings()
 
         with self.freeze_at_hour(17):
-            with self.login(self.administrator):
-                self.create_private_root()
+            self.create_private_root()
 
             with self.login(self.regular_user):
                 self.create_private_folder()
@@ -130,6 +128,13 @@ class OpengeverContentFixture(object):
             u'Nicole',
             u'Kohler',
             ['Administrator', 'APIUser'],
+            )
+
+        self.member_admin = self.create_user(
+            'member_admin',
+            u'David',
+            u'Meier',
+            ['MemberAreaAdministrator', 'APIUser'],
             )
 
         self.dossier_responsible = self.create_user(
@@ -668,6 +673,15 @@ class OpengeverContentFixture(object):
         # we use the id ad title and rename it after creation.
         self.private_root.title_de = 'Meine Ablage'
 
+        # Enable opengever.private placeful workflow policy
+        private_policy_id = 'opengever_private_policy'
+        self.private_root.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
+        policy_config = pwf_tool.getWorkflowPolicyConfig(self.private_root)
+        policy_config.setPolicyIn(private_policy_id, update_security=False)
+        policy_config.setPolicyBelow(private_policy_id, update_security=False)
+
     @staticuid()
     def create_private_folder(self):
         self.private_folder = self.register('private_folder', create(
@@ -693,6 +707,11 @@ class OpengeverContentFixture(object):
             .within(self.private_dossier)
             .with_asset_file('vertragsentwurf.docx')
             ))
+
+        self.register('private_mail', create(
+            Builder('mail')
+            .within(self.private_dossier)
+        ))
 
         self.private_folder.manage_setLocalRoles(
             self.regular_user.getId(),
