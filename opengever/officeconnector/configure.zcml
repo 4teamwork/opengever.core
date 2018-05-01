@@ -50,6 +50,15 @@
       />
 
   <plone:service
+      method="GET"
+      for="opengever.document.document.IDocumentSchema"
+      accept="application/json"
+      factory=".service.OfficeConnectorOneOffixxURL"
+      name="officeconnector_oneoffixx_url"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       accept="application/json"

@@ -6,6 +6,7 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
@@ -369,12 +370,16 @@ class Document(Item, BaseDocumentMixin):
                 redirector.redirect(create_oc_url(
                     request,
                     self,
-                    dict(action='checkout'),
+                    dict(action=action),
                 ))
             else:
                 redirector.redirect(
                     '%s/external_edit' % self.absolute_url(),
                     target='_self',
                     timeout=1000)
-        elif action == "oneoffixx":
-            pass
+        elif action == "oneoffixx" and is_oneoffixx_feature_enabled():
+            redirector.redirect(create_oc_url(
+                    request,
+                    self,
+                    dict(action=action),
+                ))
