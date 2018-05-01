@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from ftw import bumblebee
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
@@ -7,6 +8,7 @@ from opengever.document.document import Document
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.mail.mail import OGMail
 from plone.app.contentlisting.catalog import CatalogContentListingObject
+from plone.app.contentlisting.realobject import RealContentListingObject
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 
@@ -126,3 +128,22 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     def _render_simplelink(self):
         self.context = self
         return self.simple_link_template(self, self.request)
+
+
+class OpengeverRealContentListingObject(RealContentListingObject):
+
+    def __getattr__(self, name):
+        """The original RealContentListingObject drops the aquistion
+        information, when accessing the value. This lead to problems when
+        calling getOwner in the Title accessor for example.
+
+        Customization can be removed as soon the bug gets fixed in
+        plone.app.contentlisting.
+        """
+        if name.startswith('_'):
+            raise AttributeError(name)
+        obj = self.getObject()
+        if hasattr(aq_base(obj), name):
+            return getattr(obj, name)
+        else:
+            raise AttributeError(name)

@@ -53,4 +53,9 @@
       factory=".protect.ProtectAwareAttributeAnnotations"
       />
 
+  <adapter
+      factory=".contentlisting.OpengeverRealContentListingObject"
+      for="Products.CMFCore.interfaces.IContentish"
+      />
+
 </configure>

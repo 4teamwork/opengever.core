@@ -177,3 +177,21 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
                           info_messages())
         self.assertEqual('dossier-state-resolved',
                          api.content.get_state(self.private_dossier))
+
+    @browsing
+    def test_accessing_dossier_via_rest_api(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            self.private_dossier.absolute_url(), method='GET',
+            headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Mein Dossier 1', browser.json['title'])
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/private/kathi-barfuss',
+             u'@type': u'opengever.private.folder',
+             u'description': u'',
+             u'review_state': u'folder-state-active',
+             u'title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)'},
+            browser.json['parent'])
