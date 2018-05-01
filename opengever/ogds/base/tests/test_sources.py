@@ -16,6 +16,7 @@ from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.models.group import Group
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from pkg_resources import resource_string
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from zope.schema.vocabulary import SimpleTerm
@@ -25,18 +26,17 @@ import os
 class SolrMockupTestCase(IntegrationTestCase):
 
     features = ('solr', )
-    schema_path = None
-    search_path = None
+    schema = None
+    search = None
 
     def setUp(self):
         super(SolrMockupTestCase, self).setUp()
-        assert self.schema_path is not None, 'A path for Solr schema is needed'
-        schema = open(self.schema_path, 'r').read()
+        assert self.schema is not None, 'A path for Solr schema is needed'
         conn = MagicMock(name='SolrConnection')
         conn.get = MagicMock(
             name='get',
             return_value=SolrResponse(
-                body=schema,
+                body=self.schema,
                 status=200,
             ))
 
@@ -47,12 +47,11 @@ class SolrMockupTestCase(IntegrationTestCase):
         solr = getUtility(ISolrSearch)
         solr._manager = manager
 
-        assert self.search_path is not None, 'A path for Solr search is needed'
-        search_resp = open(self.search_path, 'r').read()
+        assert self.search is not None, 'A path for Solr search is needed'
         solr.search = MagicMock(
             name='search',
             return_value=SolrResponse(
-                body=search_resp,
+                body=self.search,
                 status=200,
             ))
         self.solr = solr
@@ -61,14 +60,18 @@ class SolrMockupTestCase(IntegrationTestCase):
 
 class TestUsersContactsInboxesSourceInt(SolrMockupTestCase):
 
-    schema_path = os.path.join(
-        os.path.dirname(__file__),
-        'data',
-        'solr_user_contacts_inboxes_source_schema.json')
-    search_path = os.path.join(
-        os.path.dirname(__file__),
-        'data',
-        'solr_user_contacts_inboxes_source_search.json')
+    schema = resource_string(
+        'opengever.ogds.base.tests',
+        os.path.join(
+            'data',
+            'solr_user_contacts_inboxes_source_schema.json'),
+    )
+    search = resource_string(
+        'opengever.ogds.base.tests',
+        os.path.join(
+            'data',
+            'solr_user_contacts_inboxes_source_search.json'),
+    )
 
     def setUp(self):
         super(TestUsersContactsInboxesSourceInt, self).setUp()
@@ -85,14 +88,18 @@ class TestUsersContactsInboxesSourceInt(SolrMockupTestCase):
 
 class TestAllEmailContactsAndUsersSourceInt(SolrMockupTestCase):
 
-    schema_path = os.path.join(
-        os.path.dirname(__file__),
-        'data',
-        'solr_all_email_contacts_and_users_source_schema.json')
-    search_path = os.path.join(
-        os.path.dirname(__file__),
-        'data',
-        'solr_all_email_contacts_and_users_source_search.json')
+    schema = resource_string(
+        'opengever.ogds.base.tests',
+        os.path.join(
+            'data',
+            'solr_all_email_contacts_and_users_source_schema.json'),
+    )
+    search = resource_string(
+        'opengever.ogds.base.tests',
+        os.path.join(
+            'data',
+            'solr_all_email_contacts_and_users_source_search.json'),
+    )
 
     def setUp(self):
         super(TestAllEmailContactsAndUsersSourceInt, self).setUp()
