@@ -204,6 +204,9 @@ def update_reponsible_field_data(data):
     """The responsible field always contains the orgunit id and the userid
     separated by a colon.
     """
+    if not data['responsible']:
+        return
+
     if ActorLookup(data['responsible']).is_inbox():
         client = data['responsible'].split(':', 1)[1]
         data['responsible_client'] = client

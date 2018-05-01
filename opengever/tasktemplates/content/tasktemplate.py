@@ -66,14 +66,14 @@ class ITaskTemplate(model.Schema):
         description=_(u'help_responsible_client',
                       default=u''),
         vocabulary='opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
-        required=True)
+        required=False)
 
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),
         description=_(u"help_responsible", default=""),
         source=TaskResponsibleSourceBinder(include_teams=True),
-        required=True,
+        required=False,
     )
 
     deadline = schema.Int(
