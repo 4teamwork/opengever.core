@@ -1,3 +1,5 @@
+from ftw.zipexport.generation import ZipGenerator
+from ftw.zipexport.utils import normalize_path
 from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -9,6 +11,8 @@ from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.protocol import ExcerptProtocolData
+from opengever.meeting.sablon import Sablon
 from opengever.meeting.service import meeting_service
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -18,6 +22,7 @@ from plone.protect.utils import addTokenToUrl
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
+from StringIO import StringIO
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zExceptions import NotFound
@@ -28,7 +33,9 @@ from zope.interface import implements
 from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces.browser import IBrowserView
+from ZPublisher.Iterators import filestream_iterator
 import json
+import os
 
 
 class IAgendaItemActions(Interface):
@@ -90,6 +97,11 @@ class IAgendaItemActions(Interface):
 
     def return_excerpt():
         """Return an excerpt to the proposals dossier.
+        """
+
+    def debug_excerpt_docxcompose():
+        """Return filled sablon templates agenda item document used to generate
+        excerpts as a zipfile. This helps debugging docxcompose.
         """
 
 
@@ -227,11 +239,11 @@ class AgendaItemsView(BrowserView):
 
         button = {}
         button['visible'] = bool(
-            checkout_manager.check_permission('Modify portal content') and
-            not agenda_item.is_decided())
+            checkout_manager.check_permission('Modify portal content')
+            and not agenda_item.is_decided())
         button['active'] = button['visible'] and (
-            checkout_manager.is_checkout_allowed() or
-            checkout_manager.is_checked_out_by_current_user())
+            checkout_manager.is_checkout_allowed()
+            or checkout_manager.is_checked_out_by_current_user())
         button['url'] = meeting.get_url(
             view='agenda_items/{}/edit_document'.format(
                 agenda_item.agenda_item_id))
@@ -547,3 +559,54 @@ class AgendaItemsView(BrowserView):
             if IUUID(doc) == doc_uuid:
                 return doc
         return None
+
+    def debug_excerpt_docxcompose(self):
+        if not api.user.has_permission('cmf.ManagePortal'):
+            raise Forbidden
+
+        if not is_word_meeting_implementation_enabled():
+            raise Forbidden
+
+        if self.agenda_item.is_paragraph:
+            raise NotFound
+
+        excerpt_protocol_data = ExcerptProtocolData(
+            self.meeting, [self.agenda_item])
+
+        header_template = self.agenda_item.get_excerpt_header_template()
+        suffix_template = self.agenda_item.get_excerpt_suffix_template()
+
+        with ZipGenerator() as generator:
+            if header_template:
+                sablon = Sablon(header_template).process(
+                    excerpt_protocol_data.as_json())
+                generator.add_file(
+                    u'000_excerpt_header_template.docx',
+                    StringIO(sablon.file_data))
+
+            document = self.agenda_item.resolve_document()
+            filename = u'001_agenda_item_{}.docx'.format(
+                safe_unicode(document.Title()))
+            generator.add_file(filename, document.file.open())
+
+            if suffix_template:
+                sablon = Sablon(suffix_template).process(
+                    excerpt_protocol_data.as_json())
+                generator.add_file(
+                    u'002_excerpt_suffix_template.docx',
+                    StringIO(sablon.file_data))
+
+            # Return zip
+            response = self.request.response
+            zip_file = generator.generate()
+            filename = '{}.zip'.format(normalize_path(self.meeting.title))
+            response.setHeader(
+                "Content-Disposition",
+                'inline; filename="{0}"'.format(
+                    safe_unicode(filename).encode('utf-8')))
+            response.setHeader("Content-type", "application/zip")
+            response.setHeader(
+                "Content-Length",
+                os.stat(zip_file.name).st_size)
+
+            return filestream_iterator(zip_file.name, 'rb')

@@ -21,4 +21,11 @@ Verfügung:
   herunterzuladen. Dies ermöglicht es Fehler im docxcompose einfacher zu
   analysieren.
 
+- Inhaltstyp Traktandum: ``debug_excerpt_docxcompose`` ermöglicht es die
+  ``docx`` Dateien, die zum Protokollauszug zusammengesetzt werden, separat in
+  einem ``zip`` herunterzuladen. Dies ermöglicht es Fehler im docxcompose
+  einfacher zu analysieren. Die URL beinhaltet die id des Traktandums wie die
+  sonstigen traktandumbasierten Aktionen, z.B.:
+  ``meeting-X/agenda_items/YZ/debug_excerpt_docxcompose``.
+
 .. disqus::
