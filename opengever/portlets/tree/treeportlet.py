@@ -1,6 +1,7 @@
 from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_inner
 from opengever.base import is_favorites_feature_enabled
+from opengever.base.favorite import FavoriteManager
 from plone import api
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
@@ -114,6 +115,10 @@ class Renderer(base.Renderer):
 
     def favorites_enabled(self):
         return is_favorites_feature_enabled()
+
+    def favorites_cache_key(self):
+        return FavoriteManager().get_repository_favorites_cache_key(
+            api.user.get_current().getId())
 
 
 class AddForm(base.AddForm):

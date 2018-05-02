@@ -358,11 +358,8 @@ LocalStorageJSONCache = function(name, url) {
 
 RepositoryFavorites = function(url, cache_param) {
   var base = $('.portletTreePortlet');
-  var CACHEKEY = 'og-repository-favorites';
+  var cachekey = base.data('favorites-cache-key');
   var changedEvent = new Event('favorites-tree:changed');
-  var httpCodes = {
-    notModified: 304
-  }
 
   var api = axios.create({
     baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),
@@ -384,23 +381,27 @@ RepositoryFavorites = function(url, cache_param) {
     }
   }
 
-  function load_favorites() {
+  function clearDataCache() {
+    _data_cache = null;
+  }
+
+  function load_favorites(withCache=true) {
+    var params = {}
+
+    if ( withCache ) {
+      params.cache_key = cachekey
+    } else {
+      clearDataCache();
+    }
+
     favorites = $.Deferred();
     if (_data_cache) {
       return favorites.resolve(_data_cache).promise();
     }
 
-    localStorageCache = JSON.parse(localStorage.getItem(CACHEKEY));
-    config = {
-      headers: {
-        'If-None-Match': localStorageCache ? localStorageCache.etag : ''
-      }
-    }
-    return api.get('', config)
+    return api.get('', {params: params})
       .then(function(res) {
         _data_cache = res.data;
-        localStorage.setItem(CACHEKEY,
-          JSON.stringify({etag: res.headers.etag, data: _data_cache}));
         favorites.resolve(_data_cache);
       })
       .catch(function(error) {
@@ -449,10 +450,6 @@ RepositoryFavorites = function(url, cache_param) {
         _data_cache = _data_cache.filter(function(data) { return data !== uuid })
         window.dispatchEvent(changedEvent);
       })
-    },
-
-    clearDataCache: function() {
-      _data_cache = null;
     },
 
     init: function() {

@@ -20,13 +20,5 @@ class RepositoryFavoritesETagValue(object):
             # cache key generation, no need to ask the view
             return ''
 
-        favorites = FavoriteManager().list_all_repository_favorites(
+        return FavoriteManager().get_repository_favorites_cache_key(
             api.user.get_current().getId())
-
-        if not favorites:
-            return ''
-
-        return '-'.join([
-            str(len(favorites)),
-            max(fav.modified.strftime('%s') for fav in favorites)
-            ])

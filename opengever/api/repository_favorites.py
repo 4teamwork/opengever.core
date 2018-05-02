@@ -11,6 +11,7 @@ from zExceptions import Unauthorized
 class RepositoryFavoritesGet(FavoritesGet):
 
     def reply(self):
+        self.set_cache_header()
         userid = self.get_userid()
         if userid != api.user.get_current().getId():
             raise Unauthorized(
@@ -25,6 +26,17 @@ class RepositoryFavoritesGet(FavoritesGet):
             raise BadRequest(
                 "Must supply exactly one parameter (user id)")
         return self.params[0]
+
+    def set_cache_header(self):
+        if not self.request.get('cache_key'):
+            return
+
+        # Only cache when there is a cache_key in the request.
+        # Representations may be cached by any cache.
+        # The cached representation is to be considered fresh for 1 year
+        # http://stackoverflow.com/a/3001556/880628
+        self.request.response.setHeader(
+            'Cache-Control', 'private, max-age=31536000')
 
 
 class RepositoryFavoritesPost(FavoritesPost):

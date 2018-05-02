@@ -95,8 +95,7 @@ $(function() {
   });
 
   $(window).bind('favorites:changed', function() {
-    favorites_store.clearDataCache();
-    favorites_store.load();
+    favorites_store.load(withCache=false);
     render_complete_tree();
     render_favorites_tree();
   })
