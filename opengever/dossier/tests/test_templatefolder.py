@@ -1004,7 +1004,7 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
 
         expected_sharing_tab_data = [
             ['Logged-in users', False, False, False],
-            ['fa Users Group (fa_users)', True, False, False],
+            ['fa_users', True, False, False],
             ['Kohler Nicole (nicole.kohler)', True, True, True],
             ['Ziegler Robert (robert.ziegler)', True, True, True],
             ]
