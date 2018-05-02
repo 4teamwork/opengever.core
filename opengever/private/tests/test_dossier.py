@@ -140,7 +140,9 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
         browser.open(self.private_dossier)
 
         self.assertEquals(
-            ['Document', 'document_with_template', 'Subdossier'],
+            ['Document',
+             'document_with_template',
+             'Subdossier'],
             factoriesmenu.addable_types())
 
     @browsing

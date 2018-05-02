@@ -23,6 +23,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('officeatwork', False),
                 ('officeconnector_attach', False),
                 ('officeconnector_checkout', False),
+                ('oneoffixx', False),
                 ('preview_auto_refresh', False),
                 ('preview_open_pdf_in_new_window', False),
                 ('preview', False),

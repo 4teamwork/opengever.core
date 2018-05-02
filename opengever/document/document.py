@@ -362,16 +362,19 @@ class Document(Item, BaseDocumentMixin):
 
             return '{}/external_edit'.format(self.absolute_url())
 
-    def setup_external_edit_redirect(self, request):
+    def setup_external_edit_redirect(self, request, action='checkout'):
         redirector = IRedirector(request)
-        if is_officeconnector_checkout_feature_enabled():
-            redirector.redirect(create_oc_url(
-                request,
-                self,
-                dict(action='checkout'),
-            ))
-        else:
-            redirector.redirect(
-                '%s/external_edit' % self.absolute_url(),
-                target='_self',
-                timeout=1000)
+        if action == "checkout":
+            if is_officeconnector_checkout_feature_enabled():
+                redirector.redirect(create_oc_url(
+                    request,
+                    self,
+                    dict(action='checkout'),
+                ))
+            else:
+                redirector.redirect(
+                    '%s/external_edit' % self.absolute_url(),
+                    target='_self',
+                    timeout=1000)
+        elif action == "oneoffixx":
+            pass

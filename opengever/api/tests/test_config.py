@@ -43,6 +43,7 @@ class TestConfig(IntegrationTestCase):
                 u'officeatwork': False,
                 u'officeconnector_attach': False,
                 u'officeconnector_checkout': False,
+                u'oneoffixx': False,
                 u'preview': False,
                 u'preview_auto_refresh': False,
                 u'preview_open_pdf_in_new_window': False,

@@ -12,6 +12,7 @@ from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.workspace.interfaces import IWorkspaceSettings
 from pkg_resources import get_distribution
@@ -61,6 +62,7 @@ class GeverSettingsAdpaterV1(object):
         features['officeatwork'] = api.portal.get_registry_record('is_feature_enabled', interface=IOfficeatworkSettings)
         features['officeconnector_attach'] = api.portal.get_registry_record('attach_to_outlook_enabled', interface=IOfficeConnectorSettings)  # noqa
         features['officeconnector_checkout'] = api.portal.get_registry_record('direct_checkout_and_edit_enabled', interface=IOfficeConnectorSettings)  # noqa
+        features['oneoffixx'] = api.portal.get_registry_record('is_feature_enabled', interface=IOneoffixxSettings)
         features['preview_auto_refresh'] = api.portal.get_registry_record('is_auto_refresh_enabled', interface=IGeverBumblebeeSettings)  # noqa
         features['preview_open_pdf_in_new_window'] = api.portal.get_registry_record('open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)  # noqa
         features['preview'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverBumblebeeSettings)
