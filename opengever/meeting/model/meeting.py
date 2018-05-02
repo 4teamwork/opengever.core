@@ -23,6 +23,7 @@ from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.ogds.models.user import User
+from operator import attrgetter
 from operator import methodcaller
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -411,6 +412,7 @@ class Meeting(Base, SQLFormSupport):
 
     def get_data_for_zip_export(self):
         meeting_data = {
+            'opengever_id': safe_unicode(self.meeting_id),
             'title': safe_unicode(self.title),
             'start': safe_unicode(self.start.isoformat()),
             'end': safe_unicode(self.end and self.end.isoformat() or ''),

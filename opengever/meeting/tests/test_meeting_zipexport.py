@@ -141,6 +141,10 @@ class TestMeetingZipExportView(IntegrationTestCase):
         with freeze(localized_datetime(2017, 12, 13)):
             self.schedule_ad_hoc(self.meeting, u'Ad-hoc Traktand\xfem')
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        data = self.meeting.get_data_for_zip_export()
+        data.pop('opengever_id')
+        for agenda_item in data['agenda_items']:
+            agenda_item.pop('opengever_id')
         self.assertEquals({
             'agenda_items': [{
                 'title': u'A Gesch\xfcfte',
@@ -175,7 +179,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             'location': u'B\xfcren an der Aare',
             'start': u'2016-09-12T15:30:00+00:00',
             'title': u'9. Sitzung der Rechnungspr\xfcfungskommission',
-        }, self.meeting.get_data_for_zip_export())
+        }, data)
 
     @browsing
     def test_exported_meeting_json_has_correct_file_names(self, browser):
@@ -201,6 +205,9 @@ class TestMeetingZipExportView(IntegrationTestCase):
         # the protocol is generated during the tests and its checksum cannot
         # be predicted
         meeting_json['meetings'][0]['protocol']['checksum'] = 'unpredictable'
+        meeting_json['meetings'][0].pop('opengever_id')
+        for agenda_item in meeting_json['meetings'][0]['agenda_items']:
+            agenda_item.pop('opengever_id')
 
         self.assert_json_structure_equal({
             'meetings': [
