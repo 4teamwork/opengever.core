@@ -457,7 +457,6 @@ class Meeting(Base, SQLFormSupport):
     @require_word_meeting_feature
     def get_data_for_zip_export(self):
         meeting_data = {
-            'id': safe_unicode(self.meeting_id),
             'title': safe_unicode(self.title),
             'start': safe_unicode(self.start.isoformat()),
             'end': safe_unicode(self.end and self.end.isoformat() or ''),
