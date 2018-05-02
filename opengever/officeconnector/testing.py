@@ -296,20 +296,26 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
             data = (
                 '<?xml version="1.0" encoding="utf-8"?>\n'
-                '<d:lockinfo xmlns:d="DAV:">\n'
-                '  <d:lockscope><d:exclusive/></d:lockscope>\n'
-                '  <d:locktype><d:write/></d:locktype>\n'
-                '  <d:owner>\n'
-                '  <d:href>Office Connector</d:href>\n'
-                '  </d:owner>\n'
-                '</d:lockinfo>'
+                '<D:lockinfo xmlns:D="DAV:">\n'
+                '  <D:lockscope><D:exclusive/></D:lockscope>\n'
+                '  <D:locktype><D:write/></D:locktype>\n'
+                '  <D:owner>\n'
+                '  <D:href>Office Connector</D:href>\n'
+                '  </D:owner>\n'
+                '</D:lockinfo>'
                 )
 
             browser.webdav('LOCK', document, headers=headers, data=data)
             self.assertEquals(200, browser.status_code)
             self.assertTrue(lock_manager.is_locked())
 
-            lock_token = ET.fromstring(browser.contents).find(
+            # Because of a Plone WebDav namespacing bug, the generated
+            # XML is not valid and has to be corrected before parsing.
+            # ftw.testbrowser does the correction when generating self.document
+            contents = browser.contents.replace(
+                '<D:href>', '<d:href>').replace('</D:href>', '</d:href>')
+
+            lock_token = ET.fromstring(contents).find(
                 './d:lockdiscovery/d:activelock/d:locktoken/',
                 {'d': 'DAV:'},
                 ).text
