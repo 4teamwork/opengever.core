@@ -1,0 +1,45 @@
+<OneOffixxConnectBatch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.oneoffixx.com/OneOffixxConnectBatch/1">
+  <Settings>
+    <Add key="KeepConnector">true</Add>
+    <Add key="CreateConnectorResultOnError">true</Add>
+    <Add key="CreateConnectorResult">true</Add>
+  </Settings>
+  <Entries>
+    <OneOffixxConnect>
+      <Arguments>
+        <TemplateId>2574d08d-95ea-4639-beab-3103fe4c3bc7</TemplateId>
+        <LanguageLcid>2055</LanguageLcid>
+      </Arguments>
+      <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">
+        <Arguments>
+          <Interface Name="OneGovGEVER">
+            <Node Id="ogg.document.title">A doc</Node>
+            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 27</Node>
+            <Node Id="ogg.document.sequence_number">27</Node>
+          </Interface>
+        </Arguments>
+      </Function>
+      <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">
+        <Value key="ogg.document.title" type="string">A doc</Value>
+        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 27</Value>
+        <Value key="ogg.document.sequence_number" type="string">27</Value>
+      </Function>
+      <Commands>
+        <Command Name="DefaultProcess">
+          <Parameters>
+            <Add key="start">false</Add>
+          </Parameters>
+        </Command>
+        <Command Name="SaveAs">
+          <Parameters>
+            <Add key="Overwrite">true</Add>
+            <Add key="CreateFolder">true</Add>
+            <Add key="AllowUpdateDocumentPart">false</Add>
+            <Add key="Filename"></Add>
+          </Parameters>
+        </Command>
+        <Command Name="ConvertToDocument"/>
+      </Commands>
+    </OneOffixxConnect>
+  </Entries>
+</OneOffixxConnectBatch>
