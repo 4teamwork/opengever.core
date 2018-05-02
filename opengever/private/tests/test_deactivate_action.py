@@ -8,7 +8,7 @@ class TestDeleteActionInPrivateFolderTabbedViews(IntegrationTestCase):
 
     @browsing
     def test_deactivate_action_is_not_displayed_for_administrator(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.member_admin, browser)
         browser.open(self.private_dossier)
         statusmessages.assert_no_error_messages()
 

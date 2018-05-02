@@ -1,49 +1,50 @@
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
 from opengever.private.tests import create_members_folder
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
-from plone.app.testing import TEST_USER_ID
 
 
-class TestPrivateFolder(FunctionalTestCase):
+class TestPrivateFolder(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestPrivateFolder, self).setUp()
-        self.root = create(Builder('private_root'))
-        self.folder = create_members_folder(self.root)
+    features = ('private',)
 
     @browsing
     def test_nesting_private_folders_is_disallowed(self, browser):
-        browser.login().open(self.folder)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_folder)
         self.assertEquals(['Private Dossier'], factoriesmenu.addable_types())
 
     def test_object_id_is_userid(self):
-        self.assertEquals(TEST_USER_ID, self.folder.getId())
+        self.login(self.regular_user)
+        self.assertEquals('kathi-barfuss', self.private_folder.getId())
 
     def test_Title_is_corresponding_users_label(self):
-        self.assertEquals('Test User (test_user_1_)', self.folder.Title())
+        self.login(self.regular_user)
+        self.assertEquals('B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss)',
+                          self.private_folder.Title())
 
     def test_Title_returns_string(self):
-        self.assertTrue(isinstance(self.folder.Title(), str))
+        self.login(self.regular_user)
+        self.assertTrue(isinstance(self.private_folder.Title(), str))
 
     def test_uses_userid_as_reference_number_part(self):
-        self.assertIn('test_user_1_',
-                          IReferenceNumber(self.folder).get_number())
+        self.login(self.regular_user)
+        self.assertEquals('P Client1 kathi-barfuss',
+                          IReferenceNumber(self.private_folder).get_number())
 
     def test_adds_additonal_roles_after_creation(self):
+        self.login(self.dossier_responsible)
+        create_members_folder(self.private_root)
+
+        folder = self.private_root.get(self.dossier_responsible.getId())
         self.assertItemsEqual(
             ['Publisher', 'Authenticated', 'Owner', 'Editor', 'Reader',
-             'Contributor', 'Reviewer'],
-            api.user.get_roles(username=TEST_USER_ID, obj=self.folder))
+             'Contributor', 'Reviewer', 'Member'],
+            api.user.get_roles(username=self.dossier_responsible.getId(), obj=folder))
 
     def test_handles_dashes_in_userids(self):
         create(Builder('user').with_userid('peter-mustermann'))
@@ -60,79 +61,62 @@ class TestPrivateFolder(FunctionalTestCase):
             'Mustermann Peter (peter-mustermann)', folder.Title())
 
 
-class TestPrivateFolderTabbedView(FunctionalTestCase):
+class TestPrivateFolderTabbedView(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestPrivateFolderTabbedView, self).setUp()
-        self.root = create(Builder('private_root').titled(u'Private root'))
-        self.folder = create_members_folder(self.root)
+    features = ('private',)
 
     @browsing
     def test_has_a_only_a_dossier_tab(self, browser):
-        browser.login().open(self.folder)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_folder)
 
         self.assertEquals(
             ['Dossiers'], browser.css('.formTab').text)
 
     @browsing
     def test_private_root_is_hidden_from_breadcrumbs(self, browser):
-        browser.login().open(self.folder)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_folder)
+
         self.assertEqual(
-            ['Test User (test_user_1_)'],
+            [u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
             browser.css('#portal-breadcrumbs li').text)
 
     @browsing
     def test_dossier_tab_lists_all_containig_private_dossiers(self, browser):
-        with freeze(datetime(2015, 9, 1)):
-            create(Builder('private_dossier')
-                   .within(self.folder)
-                   .titled(u'Zuz\xfcge'))
-            create(Builder('private_dossier')
-                   .within(self.folder)
-                   .titled(u'Abg\xe4nge'))
-
-        browser.login().open(self.folder,
-                             view='tabbedview_view-dossiers')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_folder, view='tabbedview_view-dossiers')
 
         self.assertEquals(
-            [['', 'Reference Number', 'Title', 'Review state',
-              'Responsible', 'Start', 'End'],
-             ['', 'P Client1 test_user_1_ / 1', u'Zuz\xfcge',
-              'dossier-state-active', '', '01.09.2015', ''],
-             ['', 'P Client1 test_user_1_ / 2', u'Abg\xe4nge',
-              'dossier-state-active', '', '01.09.2015', '']],
+            [['', 'Reference Number', 'Title',
+              'Review state', 'Responsible', 'Start', 'End'],
+             ['', 'P Client1 kathi-barfuss / 2', 'Mein Dossier 2',
+              'dossier-state-active', '', '31.08.2016', ''],
+             ['', 'P Client1 kathi-barfuss / 1', 'Mein Dossier 1',
+              'dossier-state-active', '', '31.08.2016', '']],
             browser.css('.listing').first.lists())
 
     @browsing
     def test_copy_and_move_items_actions_are_disabled(self, browser):
-        create(Builder('private_dossier')
-               .within(self.folder)
-               .titled(u'Zuz\xfcge'))
-
-        browser.login().open(self.folder, view='tabbedview_view-dossiers')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.private_folder, view='tabbedview_view-dossiers')
 
         self.assertEquals(
             ['Delete', 'Export selection', 'Print selection (PDF)'],
             browser.css('.actionMenuContent a').text)
 
 
-class TestMyRepositoryAction(FunctionalTestCase):
+class TestMyRepositoryAction(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_PRIVATE_FOLDER_LAYER
-
-    def setUp(self):
-        super(TestMyRepositoryAction, self).setUp()
-        self.root = create(Builder('private_root'))
-        self.folder = create_members_folder(self.root)
+    features = ('private',)
 
     @browsing
     def is_show_when_private_folder_exists_and_redirects_to_homefolder(self, browser):
-        browser.debug().login()
+        self.login(self.regular_user, browser=browser)
+        browser.open()
 
         self.assertIn('My Repository',
                       browser.css('#portal-globalnav li').text)
 
         browser.click_on('My Repository')
-        self.assertEquals(self.folder.absolute_url(), browser.url)
+        self.assertEquals(self.private_folder.absolute_url(), browser.url)
