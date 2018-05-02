@@ -1,4 +1,7 @@
+from ftw.solr.interfaces import ISolrSearch
+from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.contact.contact import IContact
 from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
 from opengever.ogds.base.actor import Actor
@@ -18,11 +21,17 @@ from sqlalchemy import orm
 from sqlalchemy import sql
 from sqlalchemy.sql.expression import asc
 from z3c.formwidget.query.interfaces import IQuerySource
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
+
+
+def is_solr_feature_enabled():
+    return api.portal.get_registry_record(
+        'use_solr', interface=ISearchSettings)
 
 
 @implementer(IQuerySource)
@@ -349,7 +358,13 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
     def only_users(self):
         return True
 
-    def getTerm(self, value, brain=None):
+    def getTerm(self, value=None, brain=None, solr_doc=None):
+
+        if solr_doc is not None:
+            value = u'contact:{}'.format(solr_doc[u'id'])
+            title = solr_doc[u'Title']
+            return SimpleTerm(value, title=title)
+
         # Contacts
         if ActorLookup(value).is_contact() and brain is None:
             catalog = api.portal.get_tool('portal_catalog')
@@ -418,6 +433,20 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
         return self.terms
 
     def _extend_terms_with_contacts(self, query_string):
+        if is_solr_feature_enabled():
+            self._extend_terms_with_contacts_from_solr(query_string)
+        else:
+            self._extend_terms_with_contacts_from_portal_catalog(query_string)
+
+    def _extend_terms_with_contacts_from_solr(self, query_string):
+        solr = getUtility(ISolrSearch)
+        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
+            query_string,
+            IContact.__identifier__))
+        for result in resp.docs:
+            self.terms.append(self.getTerm(solr_doc=result))
+
+    def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
 
         if not query_string.endswith('*'):
@@ -562,7 +591,13 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
     def only_users(self):
         return True
 
-    def getTerm(self, value, brain=None):
+    def getTerm(self, value=None, brain=None, solr_doc=None):
+
+        if solr_doc is not None:
+            value = u'{}:{}'.format(solr_doc[u'email'], solr_doc[u'id'])
+            title = u'{} ({})'.format(solr_doc[u'Title'], solr_doc[u'email'])
+            return SimpleTerm(value, title=title)
+
         email, id_ = value.split(':', 1)
 
         query = self.base_query.filter(User.userid == id_)
@@ -628,6 +663,20 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         return self.terms
 
     def _extend_terms_with_contacts(self, query_string):
+        if is_solr_feature_enabled():
+            self._extend_terms_with_contacts_from_solr(query_string)
+        else:
+            self._extend_terms_with_contacts_from_portal_catalog(query_string)
+
+    def _extend_terms_with_contacts_from_solr(self, query_string):
+        solr = getUtility(ISolrSearch)
+        resp = solr.search(query=u'SearchableText:{}* AND object_provides:{}'.format(
+            query_string,
+            IContact.__identifier__))
+        for result in resp.docs:
+            self.terms.append(self.getTerm(solr_doc=result))
+
+    def _extend_terms_with_contacts_from_portal_catalog(self, query_string):
         catalog = api.portal.get_tool('portal_catalog')
 
         if not query_string.endswith('*'):
