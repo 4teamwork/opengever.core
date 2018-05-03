@@ -28,24 +28,24 @@ def sort_column_exists(query, sort_on):
     for _column in query.column_descriptions:
 
         column_exists = (
-            not _column.get('aliased') and
-            str(sort_on) in _column.get('entity').__table__.columns or
-            False
+            not _column.get('aliased')
+            and str(sort_on) in _column.get('entity').__table__.columns
+            or False
         )
 
         entity_exists = (
-            not _column.get('aliased') and
-            str(sort_on).replace(
+            not _column.get('aliased')
+            and str(sort_on).replace(
                 '{}.'.format(_column.get('name')),
                 ''
-            ) in _column.get('entity').__table__.columns or
-            False
+            ) in _column.get('entity').__table__.columns
+            or False
         )
 
         alias_exists = (
-            _column.get('aliased') and
-            str(sort_on) in _column.get('name') or
-            False
+            _column.get('aliased')
+            and str(sort_on) in _column.get('name')
+            or False
         )
 
         if any((column_exists, entity_exists, alias_exists)):

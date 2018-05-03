@@ -85,6 +85,7 @@ class TestSQLAlchemySortIndexes(FunctionalTestCase):
             'ORDER BY this_column_does_not_exist',
             str(sorted_query))
 
+
 class TestTextFilter(FunctionalTestCase):
 
     def setUp(self):
