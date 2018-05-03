@@ -39,4 +39,8 @@
     <value key="direct_checkout_and_edit_enabled">True</value>
   </records>
 
+  <records interface="opengever.ogds.base.interfaces.IOGDSSyncConfiguration">
+    <value key="group_title_ldap_attribute">description</value>
+  </records>
+
 </registry>

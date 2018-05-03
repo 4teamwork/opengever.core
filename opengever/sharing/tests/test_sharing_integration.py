@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.sharing.browser.sharing import OpengeverSharingView
 from opengever.sharing.browser.sharing import SharingTab
 from opengever.sharing.interfaces import ILocalRolesAcquisitionActivated
@@ -204,7 +205,7 @@ class TestOpengeverSharingWithBrowser(IntegrationTestCase):
 
         expected_users_and_roles = [
             'Logged-in users',
-            'fa Users Group (fa_users)',
+            'fa_users',
             u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
             u'Fr\xfchling F\xe4ivel (faivel.fruhling)',
             u'K\xf6nig J\xfcrgen (jurgen.konig)',
@@ -255,3 +256,19 @@ class TestOpengeverSharingWithBrowser(IntegrationTestCase):
              'http://nohost/plone/@@list_groupmembers?group=fa_users',
              'http://nohost/plone/@@list_groupmembers?group=with+spaces'],
             group_links)
+
+    @browsing
+    def test_sharing_view_uses_group_title_attribute_if_exists(self, browser):
+        self.login(self.manager, browser)
+
+        inbox_group = get_current_org_unit().inbox_group
+        inbox_group.title = u'The inbox group title'
+        api.group.grant_roles(
+            groupname=inbox_group.id(), obj=self.dossier, roles=['Publisher'])
+
+        browser.open(self.dossier, view='@@sharing')
+        self.assertEqual(
+            ['Logged-in users',
+             'The inbox group title (fa_inbox_users)',
+             'fa_users'],
+            browser.css('#user-group-sharing-settings tr a').text)

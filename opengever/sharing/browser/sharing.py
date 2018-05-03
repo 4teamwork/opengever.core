@@ -4,6 +4,7 @@ from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.sharing import _
 from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -98,15 +99,22 @@ class OpengeverSharingView(SharingView):
         but pop the AuthenticatedUsers group for not managers.
         """
         results = super(OpengeverSharingView, self).role_settings()
-
         member = self.context.portal_membership.getAuthenticatedMember()
 
-        if member:
-            if 'Manager' in member.getRolesInContext(self.context):
-                return results
+        if member and 'Manager' not in member.getRolesInContext(self.context):
+            # remove the group AuthenticatedUsers
+            results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
 
-        # remove the group AuthenticatedUsers
-        results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
+        # Use group title attribute if exists, because our LDAP stack does
+        # not support mapping additional attributes, we fetch the information
+        # from ogds.
+        for result in results:
+            if not result.get('type') == 'group':
+                continue
+            group = ogds_service().fetch_group(result['id'])
+            if not group:
+                continue
+            result['title'] = group.label()
 
         return results
 
