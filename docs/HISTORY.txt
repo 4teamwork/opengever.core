@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Skip plonesite removals in ObjectRemovedEvent handler, to fix plonesite removal. [phgross]
 - Add view to get the Connect XML for OneOffixx. [njohner]
 - Show group title in the sharing view. [phgross]
 - No longer show unsortable columns as sortable, bump ftw.tabbedview to 4.1.1. [deiferni]

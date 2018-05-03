@@ -5,6 +5,7 @@ from opengever.base.oguid import Oguid
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.CMFCatalogAware import CatalogAware
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -37,6 +38,13 @@ def remove_favorites(context, event):
     """Event handler which removes all existing favorites for the
     current context.
     """
+
+    # Skip plone site removals. Unfortunately no deletion-order seems to be
+    # guaranteed, when removing the plone site, so it might happen that the
+    # intid utility is removed before removing content.
+    if IPloneSiteRoot.providedBy(event.object):
+        return
+
     oguid = Oguid.for_object(context)
 
     stmt = Favorite.__table__.delete().where(Favorite.oguid == oguid)
