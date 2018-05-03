@@ -95,3 +95,14 @@ class FavoriteManager(object):
 
     def get_favorite(self, obj, user):
         return Favorite.query.by_object_and_user(obj, user).first()
+
+    def get_repository_favorites_cache_key(self, userid):
+        favorites = self.list_all_repository_favorites(userid)
+
+        if not favorites:
+            return ''
+
+        return '-'.join([
+            str(len(favorites)),
+            max(fav.modified.strftime('%s') for fav in favorites)
+            ])

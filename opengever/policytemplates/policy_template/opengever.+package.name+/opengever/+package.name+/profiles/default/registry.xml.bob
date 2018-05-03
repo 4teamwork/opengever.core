@@ -1,10 +1,5 @@
 <registry>
 
-{{% if setup.enable_tree_favorites %}}
-  <record name="opengever.portlets.tree.enable_favorites">
-      <value>True</value>
-  </record>
-
 {{% endif %}}
 {{% if not setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">

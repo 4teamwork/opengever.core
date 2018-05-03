@@ -1,12 +1,13 @@
 from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_inner
+from opengever.base import is_favorites_feature_enabled
+from opengever.base.favorite import FavoriteManager
+from plone import api
 from plone.app.portlets.portlets import base
 from plone.portlets.interfaces import IPortletDataProvider
-from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope import schema
-from zope.component import getUtility
 from zope.formlib import form
 from zope.interface import implements
 
@@ -72,7 +73,7 @@ class Renderer(base.Renderer):
         current = aq_inner(self.context)
         # Don't travsere to top-level application obj if TreePortlet
         # was added to the Plone Site Root
-        if self.root_path() != None:
+        if self.root_path() is not None:
             portal_url = getToolByName(self.context, 'portal_url')
             current = portal_url.getPortalObject().restrictedTraverse(self.root_path())
             return aq_inner(current).Title()
@@ -91,9 +92,12 @@ class Renderer(base.Renderer):
     def context_url(self):
         return self.context.absolute_url()
 
+    def get_userid(self):
+        return api.user.get_current().getId()
+
     @property
     def available(self):
-        if self.root_path() != None:
+        if self.root_path() is not None:
             portal_url = getToolByName(self.context, 'portal_url')
             try:
                 portal_url.getPortalObject().restrictedTraverse(self.root_path().encode('utf-8'))
@@ -109,20 +113,12 @@ class Renderer(base.Renderer):
         view = root.restrictedTraverse('navigation.json')
         return view.get_caching_url()
 
-    def favorites_url(self):
-        site = getToolByName(self.context, 'portal_url').getPortalObject()
-        root = site.restrictedTraverse(self.root_path())
-        return '/'.join((root.absolute_url(), 'repository-favorites'))
-
-    def favorites_cache_param(self):
-        site = getToolByName(self.context, 'portal_url').getPortalObject()
-        root = site.restrictedTraverse(self.root_path())
-        favorites_view = root.restrictedTraverse('repository-favorites')
-        return favorites_view.list_cache_param()
-
     def favorites_enabled(self):
-        registry = getUtility(IRegistry)
-        return registry.get('opengever.portlets.tree.enable_favorites')
+        return is_favorites_feature_enabled()
+
+    def favorites_cache_key(self):
+        return FavoriteManager().get_repository_favorites_cache_key(
+            api.user.get_current().getId())
 
 
 class AddForm(base.AddForm):

@@ -128,4 +128,20 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@repository-favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".repository_favorites.RepositoryFavoritesPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@repository-favorites"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".repository_favorites.RepositoryFavoritesDelete"
+      permission="zope2.View"
+      />
+
 </configure>

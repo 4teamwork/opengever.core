@@ -32,6 +32,7 @@
         target.data('favorite-id', data['favorite_id']);
         target.addClass('is-favorite');
         target.removeClass('loading');
+        $(window).trigger('favorites:changed');
       }).fail(function(data){
 
         if (data.status == 409){
@@ -59,6 +60,7 @@
           target.data('favorite-id', null);
           target.removeClass('is-favorite');
           target.removeClass('loading');
+          $(window).trigger('favorites:changed');
         }).fail(function(data) {
           if (data.status == 404){
             // favorite already removed

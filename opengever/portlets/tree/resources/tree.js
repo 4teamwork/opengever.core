@@ -357,12 +357,21 @@ LocalStorageJSONCache = function(name, url) {
 
 
 RepositoryFavorites = function(url, cache_param) {
-  var _data_cache;
-  var local_storage = new LocalStorageJSONCache(
-      'favorites', url + '/list?' + cache_param);
+  var base = $('.portletTreePortlet');
+  var cachekey = base.data('favorites-cache-key');
+  var changedEvent = new Event('favorites-tree:changed');
 
+  var api = axios.create({
+    baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  var _data_cache;
   var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
   var i18n_remove = $('[data-i18n-remove-from-favorites]').data('i18n-remove-from-favorites') || '';
+  var favorites = $.Deferred();
 
   function annotate_link_title(favorite_link) {
     if(favorite_link.hasClass('bookmarked')) {
@@ -372,6 +381,36 @@ RepositoryFavorites = function(url, cache_param) {
     }
   }
 
+  function clearDataCache() {
+    _data_cache = null;
+  }
+
+  function load_favorites(withCache=true) {
+    var params = {}
+
+    if ( withCache ) {
+      params.cache_key = cachekey
+    } else {
+      clearDataCache();
+    }
+
+    favorites = $.Deferred();
+    if (_data_cache) {
+      return favorites.resolve(_data_cache).promise();
+    }
+
+    return api.get('', {params: params})
+      .then(function(res) {
+        _data_cache = res.data;
+        favorites.resolve(_data_cache);
+      })
+      .catch(function(error) {
+        if (error.response.status === httpCodes.notModified) {
+          _data_cache = localStorageCache.data;
+          favorites.resolve(_data_cache);
+        }
+      })
+  }
   var self = {
     listen: function(tree) {
       $(tree).bind('tree:link-created', function(event, node, link) {
@@ -389,8 +428,7 @@ RepositoryFavorites = function(url, cache_param) {
               }
               annotate_link_title($(this));
             });
-
-        self.load(function(favorites) {
+        self.favorites().then(function(favorites) {
           if($.inArray(node['uid'], favorites) > -1) {
             favorite_link.addClass('bookmarked');
           }
@@ -398,31 +436,28 @@ RepositoryFavorites = function(url, cache_param) {
         });
       });
     },
-
-    load: function(callback) {
-      if(_data_cache) {
-        callback(_data_cache);
-      } else {
-        local_storage.load().done(function(data) {
-          _data_cache = data;
-          callback(data);
-        });
-      }
-    },
+    load: load_favorites,
 
     add: function(uuid) {
-      $.post(url + '/add', {uuid: uuid}, function() {
+      return api.post('', {uuid: uuid}).then(function() {
         _data_cache.push(uuid);
-        $(self).trigger('favorites:changed');
-      });
+        window.dispatchEvent(changedEvent);
+      })
     },
 
     remove: function(uuid) {
-      $.post(url + '/remove', {uuid: uuid}, function() {
-        _data_cache.remove(uuid);
-        $(self).trigger('favorites:changed');
-      });
-    }
+      api.delete(uuid).then(function() {
+        _data_cache = _data_cache.filter(function(data) { return data !== uuid })
+        window.dispatchEvent(changedEvent);
+      })
+    },
+
+    init: function() {
+      self.load();
+      return self;
+    },
+
+    favorites: function() { return favorites; },
   };
   return self;
 };
