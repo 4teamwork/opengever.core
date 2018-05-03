@@ -32,7 +32,7 @@ def parse_bcc(request):
     return None
 
 
-def parse_documents(request, context):
+def parse_documents(request, context, action):
     documents = []
 
     if (
@@ -44,7 +44,10 @@ def parse_documents(request, context):
         if not IBaseDocument.providedBy(context):
             raise NotFound
 
-        if not context.has_file():
+        # for checkout and attach actions, the document needs to have a file
+        # for the oneoffixx action, the document should be in the shadow state
+        if not (context.has_file()
+                or action == "oneoffixx" and context.is_shadow_document()):
             raise NotFound
 
         documents.append(context)
@@ -120,7 +123,7 @@ def create_oc_url(request, context, payload):
 
     bcc = parse_bcc(request)
 
-    documents = parse_documents(request, context)
+    documents = parse_documents(request, context, action)
 
     if not documents:
         raise NotFound

@@ -19,7 +19,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
         with freeze():
             self.login(self.regular_user, browser)
             oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
-            tokens = self.validate_checkout_token(self.regular_user, oc_url)
+            tokens = self.validate_checkout_token(self.regular_user, oc_url, self.document)
             self.lock_document(browser, tokens, self.document)
 
             self.login(self.meeting_user, browser)
@@ -36,7 +36,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
     def test_force_unlock_clears_lock(self, browser):
         self.login(self.regular_user, browser)
         oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
-        tokens = self.validate_checkout_token(self.regular_user, oc_url)
+        tokens = self.validate_checkout_token(self.regular_user, oc_url, self.document)
         lockable = ILockable(self.document)
 
         self.lock_document(browser, tokens, self.document)
