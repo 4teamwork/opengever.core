@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from plone import api
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from opengever.testing import IntegrationTestCase
+from opengever.oneoffixx.tests import OneOffixIntegrationTests
+from plone import api
 from zope.annotation.interfaces import IAnnotations
 
 
-class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
+class TestCreateDocFromOneoffixxTemplate(OneOffixIntegrationTests):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
@@ -43,7 +43,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         self.assertEqual(node.get("value"), annotations['template-id'])
 
 
-class TestOneOffixxTemplateFeature(IntegrationTestCase):
+class TestOneOffixxTemplateFeature(OneOffixIntegrationTests):
 
     @browsing
     def test_doc_from_oneoffixx_template_available_if_oneoffixxtemplate_feature_enabled(self, browser):

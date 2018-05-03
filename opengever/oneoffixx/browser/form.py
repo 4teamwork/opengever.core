@@ -1,11 +1,14 @@
 from opengever.base.schema import TableChoice
 from opengever.dossier import _
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
+from opengever.oneoffixx.connector import OneOffixConnector
+from opengever.oneoffixx.connector import OneOffixxAPIException
+from plone import api
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
-from z3c.form.form import Form
 from z3c.form.field import Fields
+from z3c.form.form import Form
 from zope import schema
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
@@ -13,39 +16,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 def get_template_groups():
-    templates = [
-                 {'templates': [
-                                {u'languages': [2055],
-                                 u'localizedName': u'Brief schwarz/weiss',
-                                 u'templateGroupId': u'14ff1ebc-ba0c-4732-93e2-829fe6cc6bc6',
-                                 u'id': u'52945b6c-b65a-436d-8045-619e4e41af51'},
-                                {u'languages': [2055],
-                                 u'localizedName': u'Brief farbig',
-                                 u'templateGroupId': u'14ff1ebc-ba0c-4732-93e2-829fe6cc6bc6',
-                                 u'id': u'06149cd5-efe1-47e5-a822-993fa1b65ef0'},
-                                {u'languages': [2055],
-                                 u'localizedName': u'Kurzbrief',
-                                 u'templateGroupId': u'14ff1ebc-ba0c-4732-93e2-829fe6cc6bc6',
-                                 u'id': u'2574d08d-95ea-4639-beab-3103fe4c3bc7'},
-                                ],
-                  u'id':u'14ff1ebc-ba0c-4732-93e2-829fe6cc6bc6',
-                  u'localizedName': u'Korrespondenz'
-                  },
-                 {'templates': [
-                                {u'languages': [2055],
-                                 u'localizedName': u'Entwurf Bericht/Botschaft',
-                                 u'templateGroupId': u'3a66d83c-077c-4917-aef6-6d4765af1126',
-                                 u'id': u'8b82b8c1-6780-4c5c-8229-00da90f96b15'},
-                                {u'languages': [2055],
-                                 u'localizedName': u'Antwort Vorstoss',
-                                 u'templateGroupId': u'3a66d83c-077c-4917-aef6-6d4765af1126',
-                                 u'id': u'810b1174-f12e-4e43-959e-d5fda1e7f0e2'},
-                                ],
-                  u'id': u'3a66d83c-077c-4917-aef6-6d4765af1126',
-                  u'localizedName': u'Kantonsrat'
-                  }
-                ]
-    return templates
+    return OneOffixConnector().get_template_groups()
 
 
 def get_oneoffixx_templates():
@@ -59,7 +30,6 @@ def get_oneoffixx_templates():
 def list_templates(context):
     """Return a list available templates
     """
-
     templates = get_oneoffixx_templates()
 
     template_group = context.REQUEST.form.get('form.widgets.template_group')
@@ -145,6 +115,16 @@ class SelectOneOffixxTemplateDocumentWizardStep(Form):
               default=u'Create document from template')
     ignoreContext = True
     fields = Fields(ICreateDocumentFromOneOffixxTemplate)
+
+    def updateWidgets(self):
+        try:
+            return super(SelectOneOffixxTemplateDocumentWizardStep, self).updateWidgets()
+        except OneOffixxAPIException:
+            msg = _('msg_api_connection_failed',
+                    default=u'connection to the OneOffix API failed: could not '
+                    'fetch oneoffix template.')
+            api.portal.show_message(msg, request=self.request, type='error')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)

@@ -1,11 +1,11 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from lxml import etree
-from opengever.testing import IntegrationTestCase
+from opengever.oneoffixx.tests import OneOffixIntegrationTests
 from pkg_resources import resource_string
 
 
-class TestConnectXML(IntegrationTestCase):
+class TestConnectXML(OneOffixIntegrationTests):
     features = ("officeconnector-checkout", "oneoffixx")
 
     def create_document(self, browser):
