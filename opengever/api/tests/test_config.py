@@ -52,7 +52,7 @@ class TestConfig(IntegrationTestCase):
                 u'solr': False,
                 u'word_meetings': False,
                 u'workspace': False,
-                u'favorites': False,
+                u'favorites': True,
             })
 
     @browsing
