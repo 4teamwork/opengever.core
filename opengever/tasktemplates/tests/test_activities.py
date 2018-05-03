@@ -38,6 +38,8 @@ class TestTaskTemplateActivites(FunctionalTestCase):
         browser.login().open(self.dossier, view='add-tasktemplate')
         browser.fill({'Tasktemplatefolder': u'Mitberichtsverfahren'})
         browser.click_on('Continue')
+
+        browser.click_on('Continue')
         browser.click_on('Trigger')
 
         self.assertItemsEqual(

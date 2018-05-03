@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
@@ -24,6 +25,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
         if templates:
             browser.fill({'Tasktemplates': templates})
+        browser.click_on('Continue')
 
         browser.click_on('Trigger')
 
@@ -169,6 +171,55 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             [item.title for item in main_task.listFolderContents()])
 
     @browsing
+    def test_step3_shows_responsible_field_for_each_selected_templates(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible', deadline=10, preselected=True)
+               .within(self.tasktemplatefolder))
+        create(Builder('tasktemplate')
+               .titled(u'User Accounts erstellen.')
+               .having(issuer='responsible', responsible=None,
+                       responsible_client=None, deadline=10, preselected=True)
+               .within(self.tasktemplatefolder))
+
+        browser.open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.click_on('Continue')
+        browser.fill({'Tasktemplates': ['User Accounts erstellen.',
+                                        'Arbeitsplatz einrichten.']})
+        browser.click_on('Continue')
+
+        # labels
+        self.assertItemsEqual(
+            [u'Responsible \xabUser Accounts erstellen.\xbb',
+             u'Responsible \xabArbeitsplatz einrichten.\xbb'],
+            browser.forms['form'].css('label').text)
+
+        # Default values
+        fields = browser.css('select')
+        self.assertItemsEqual(
+            ['fa:robert.ziegler', None],
+            [field.value for field in fields])
+
+        field_name = u'Responsible \xabUser Accounts erstellen.\xbb'
+        form = browser.find_form_by_field(field_name)
+        form.find_widget(field_name).fill('fa:jurgen.konig')
+        browser.click_on('Trigger')
+
+        self.assertEquals(['tasks created'], info_messages())
+        main_task = self.dossier.listFolderContents()[-1]
+        ids = main_task.objectIds()
+        task1, task2 = [main_task.get(_id) for _id in ids]
+
+        self.assertEquals(u'Arbeitsplatz einrichten.', task1.title)
+        self.assertEquals(u'robert.ziegler', task1.responsible)
+
+        self.assertEquals(u'User Accounts erstellen.', task2.title)
+        self.assertEquals(u'jurgen.konig', task2.responsible)
+
+    @browsing
     def test_replace_interactive_issuer(self, browser):
         self.login(self.regular_user, browser=browser)
         self.trigger_tasktemplatefolder(
@@ -184,6 +235,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         ITaskTemplate(self.tasktemplate).responsible = 'current_user'
+        ITaskTemplate(self.tasktemplate).responsible_client = 'interactive_users'
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'])
 
@@ -196,6 +248,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         ITaskTemplate(self.tasktemplate).responsible = 'current_user'
+        ITaskTemplate(self.tasktemplate).responsible_client = 'interactive_users'
 
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'],

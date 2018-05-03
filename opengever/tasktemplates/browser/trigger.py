@@ -1,6 +1,7 @@
 from AccessControl.users import nobody
 from datetime import date
 from datetime import timedelta
+from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
@@ -11,15 +12,19 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import _
+from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
+from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
 from plone.supermodel import model
+from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser import checkbox
 from z3c.form.browser import radio
 from z3c.form.button import buttonAndHandler
+from z3c.form.field import Field
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
@@ -31,10 +36,12 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.event import notify
+from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import provider
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
+import re
 
 
 TRIGGER_TASKTEMPLATE_STEPS = (
@@ -43,7 +50,10 @@ TRIGGER_TASKTEMPLATE_STEPS = (
        default=u'Tasktemplatefolder selection')),
 
     ('select-tasktemplate',
-     _(u'label_tasktemplate_selection', default=u'Tasktemplate selection'))
+     _(u'label_tasktemplate_selection', default=u'Tasktemplate selection')),
+
+    ('select-responsibles',
+     _(u'label_responsibles_selection', default=u'Responsibles selection'))
 )
 
 
@@ -190,10 +200,113 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         value = get_wizard_data(self.context, 'related_documents')
         return [RelationValue(intids.getId(obj)) for obj in value]
 
-    def get_selected_tasktemplates(self, data):
+    @buttonAndHandler(_(u'button_continue', default=u'Continue'), name='continue')
+    def handle_continue(self, action):
+        data, errors = self.extractData()
+        if errors:
+            return
+
+        dm = getUtility(IWizardDataStorage)
+        dm.update(get_datamanger_key(self.context), data)
+
+        return self.request.RESPONSE.redirect(
+            '{}/select-responsibles'.format(self.context.absolute_url()))
+
+    @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
+    def handle_cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def get_responsible_client(self, template, responsible):
+        if template.responsible_client == 'interactive_users':
+            current_org_unit = get_current_org_unit()
+            responsible_org_units = ogds_service().assigned_org_units(responsible)
+
+            if current_org_unit in responsible_org_units or \
+               not responsible_org_units:
+                return current_org_unit.id()
+            else:
+                return responsible_org_units[0].id()
+
+        return template.responsible_client
+
+
+class SelectTaskTemplatesView(FormWrapper):
+    form = SelectTaskTemplatesWizardStep
+
+
+class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
+    step_name = 'select-responsibles'
+    label = _('label_select_responsibles',
+              default=u'Select responsibles')
+
+    steps = TRIGGER_TASKTEMPLATE_STEPS
+
+    @property
+    def fields(self):
+        """Dynamically generate a responsible field with the Keywordwidget
+        for each selected template.
+        """
+
+        # When using the keywordwidget autocomplete search, the widget is
+        # traversing anonymously. Therefore we're not able to get the selected
+        # templates and generate all fields correctly.
+        # Therefore we handle all responsible widget traversals "manually".
+        responsible_field_match = re.match(
+            r'^{}(.*?)\.responsible$'.format(re.escape('++widget++form.widgets.')),
+            self.request._steps[-1])
+        if IDeferSecurityCheck.providedBy(self.request) and responsible_field_match:
+            field = Field(ITaskTemplate['responsible'],
+                          prefix=responsible_field_match.group(1),)
+            field.widgetFactory[INPUT_MODE] = ParameterizedWidget(
+                KeywordWidget, async=True)
+            return Fields(field)
+
+        self.fallback_field = ITaskTemplate['responsible']
+        fields = []
+        for template in self.get_selected_tasktemplates():
+            field = Field(ITaskTemplate['responsible'], prefix=template.id)
+            field.widgetFactory[INPUT_MODE] = ParameterizedWidget(
+                KeywordWidget, async=True)
+            fields.append(field)
+
+        return Fields(*fields)
+
+    def updateWidgets(self):
+        """Change the label of the dynamically generated responsible fields.
+        """
+        super(SelectResponsiblesWizardStep, self).updateWidgets()
+        if IDeferSecurityCheck.providedBy(self.request):
+            return
+
+        for name in self.widgets:
+            if not name.endswith('responsible'):
+                continue
+            widget = self.widgets[name]
+            template_id = self.fields[name].prefix
+            template = self.get_selected_task_templatefolder().get(template_id)
+            widget.label = translate(
+                _('label_responsible_for_task',
+                  default=u'Responsible \xab${template_title}\xbb',
+                  mapping={'template_title': template.title}),
+                context=self.request)
+
+            if template.responsible:
+                widget.value = (u'{}:{}'.format(
+                    template.responsible_client, template.responsible), )
+
+    def get_selected_task_templatefolder(self):
+        uid = get_wizard_data(self.context, 'tasktemplatefolder')
+        return api.content.get(UID=uid)
+
+    def get_selected_related_documents(self):
+        intids = getUtility(IIntIds)
+        value = get_wizard_data(self.context, 'related_documents')
+        return [RelationValue(intids.getId(obj)) for obj in value]
+
+    def get_selected_tasktemplates(self):
+        tasktemplates = get_wizard_data(self.context, 'tasktemplates')
         catalog = api.portal.get_tool('portal_catalog')
-        return [brain.getObject() for brain in
-                catalog(UID=data.get('tasktemplates'))]
+        return [brain.getObject() for brain in catalog(UID=tasktemplates)]
 
     @buttonAndHandler(_(u'button_trigger', default=u'Trigger'), name='trigger')
     def handle_continue(self, action):
@@ -203,14 +316,17 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
 
         tasktemplatefolder = self.get_selected_task_templatefolder()
         related_documents = self.get_selected_related_documents()
-        templates = self.get_selected_tasktemplates(data)
+        templates = self.get_selected_tasktemplates()
+        self.responsibles = data
 
         main_task = self.create_main_task(tasktemplatefolder, templates)
-        self.create_subtasks(main_task, templates, related_documents)
+        self.create_subtasks(
+            main_task, templates, related_documents, responsibles=data)
 
         api.portal.show_message(
             _(u'message_tasks_created', default=u'tasks created'),
             self.request, type="info")
+
         return self.request.RESPONSE.redirect(
             '{}#tasks'.format(self.context.absolute_url()))
 
@@ -249,24 +365,23 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         return main_task
 
     def create_subtasks(self, main_task,
-                        selected_templates, related_documents):
+                        selected_templates, related_documents, responsibles):
 
         for template in selected_templates:
             self.create_subtask(main_task, template, related_documents)
 
     def create_subtask(self, main_task, template, related_documents):
+        responsible, responsible_client = self.get_responsible(template)
         data = dict(
             title=template.title,
             issuer=self.replace_interactive_user(template.issuer),
-            responsible=self.replace_interactive_user(template.responsible),
+            responsible=self.replace_interactive_user(responsible),
+            responsible_client=responsible_client,
             task_type=template.task_type,
             text=template.text,
             relatedItems=related_documents,
             deadline=date.today() + timedelta(template.deadline),
         )
-
-        data['responsible_client'] = self.get_responsible_client(
-            template, data['responsible'])
 
         task = createContent('opengever.task.task', **data)
         notify(ObjectCreatedEvent(task))
@@ -278,6 +393,17 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         # add activity record for subtask
         activity = TaskAddedActivity(task, self.request, self.context)
         activity.record()
+
+    def get_responsible(self, template):
+        form_identifier = '{}.responsible'.format(template.id)
+        value = self.responsibles.get(form_identifier)
+        responsible_client, responsible = value.split(':')
+
+        if responsible_client == 'interactive_users':
+            responsible_client = get_current_org_unit().id()
+            responsible = self.replace_interactive_user(responsible)
+
+        return responsible, responsible_client
 
     def replace_interactive_user(self, principal):
         """The current systems knows two interactive users:
@@ -313,5 +439,5 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         alsoProvides(task, IFromTasktemplateGenerated)
 
 
-class SelectTaskTemplatesView(FormWrapper):
-    form = SelectTaskTemplatesWizardStep
+class SelectResponsiblesView(FormWrapper):
+    form = SelectResponsiblesWizardStep
