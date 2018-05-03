@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Enable favorites feature by default. [phgross]
+- Fix sorting of membership listing. [deiferni]
 - Skip plonesite removals in ObjectRemovedEvent handler, to fix plonesite removal. [phgross]
 - Add view to get the Connect XML for OneOffixx. [njohner]
 - Show group title in the sharing view. [phgross]

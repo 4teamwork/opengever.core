@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.globalindex.model.task import Task
+from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.tabbedview.browser.base_tabs import BaseListingTab
 from opengever.tabbedview.sqlsource import cast_to_string
@@ -83,6 +84,24 @@ class TestSQLAlchemySortIndexes(FunctionalTestCase):
 
         self.assertNotIn(
             'ORDER BY this_column_does_not_exist',
+            str(sorted_query))
+
+    def test_allow_special_order_by_in_additional_sql_indices(self):
+        config = DummySQLTableSourceConfig(
+            self.portal,
+            self.request,
+            sql_indexes={'member_id': Member.fullname})
+        config.sort_on = 'member_id'
+        source = SqlTableSource(config, self.request)
+
+        query = source.build_query()
+        sorted_query = source.extend_query_with_ordering(query)
+
+        # fullname is  a col-property it will order by lastname and firstname.
+        # only assert against lastname as the rest of the query serializes
+        # in a weird way here
+        self.assertIn(
+            'ORDER BY members.lastname',
             str(sorted_query))
 
 

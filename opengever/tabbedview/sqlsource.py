@@ -86,10 +86,13 @@ class SqlTableSource(GeverTableSource):
             # defines a mapping between default sort_on attributes based on
             # strings and sqlalchemy sort-indexes based on an sqlalchemy column.
             # This allows us to sort by joined table columns.
-            if hasattr(self.config, 'sqlalchemy_sort_indexes'):
-                sqlalchemy_sort_index = self.config.sqlalchemy_sort_indexes.get(sort_on)
-                if sqlalchemy_sort_index:
-                    sort_on = sqlalchemy_sort_index
+            sqlalchemy_sort_index = self.get_sqlalchemy_custom_sort_index(sort_on)
+            if sqlalchemy_sort_index:
+                sort_on = sqlalchemy_sort_index
+            else:
+                # early abort if the column is not in the query
+                if not sort_column_exists(query, sort_on):
+                    return query
 
             # Don't plug column names as literal strings into an order_by
             # clause, but use a ColumnClause instead to allow SQLAlchemy to
@@ -98,11 +101,15 @@ class SqlTableSource(GeverTableSource):
                 sort_on = column(sort_on)
 
             order_f = self.config.sort_reverse and desc or asc
-
-            if sort_column_exists(query, sort_on):
-                query = query.order_by(order_f(sort_on))
+            query = query.order_by(order_f(sort_on))
 
         return query
+
+    def get_sqlalchemy_custom_sort_index(self, sort_on):
+        if not hasattr(self.config, 'sqlalchemy_sort_indexes'):
+            return None
+
+        return self.config.sqlalchemy_sort_indexes.get(sort_on)
 
     def extend_query_with_textfilter(self, query, text):
         """Extends the given `query` with text filters. This is only done when
