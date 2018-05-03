@@ -41,6 +41,7 @@ from zope.interface import alsoProvides
 from zope.interface import provider
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
+import copy
 import re
 
 
@@ -264,7 +265,9 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
         self.fallback_field = ITaskTemplate['responsible']
         fields = []
         for template in self.get_selected_tasktemplates():
-            field = Field(ITaskTemplate['responsible'], prefix=template.id)
+            schema_field = copy.copy(ITaskTemplate['responsible'])
+            field = Field(schema_field, prefix=template.id)
+            field.field.required = True
             field.widgetFactory[INPUT_MODE] = ParameterizedWidget(
                 KeywordWidget, async=True)
             fields.append(field)

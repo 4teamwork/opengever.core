@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
@@ -219,16 +220,30 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(u'User Accounts erstellen.', task2.title)
         self.assertEquals(u'jurgen.konig', task2.responsible)
 
+
     @browsing
-    def test_replace_interactive_issuer(self, browser):
+    def test_step3_responsible_fields_are_required(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.trigger_tasktemplatefolder(
-            browser, templates=['Arbeitsplatz einrichten.'])
 
-        main_task = self.dossier.listFolderContents()[-1]
-        subtask = main_task.listFolderContents()[0]
+        self.tasktemplate.responsible = None
+        self.tasktemplate.responsible_client = None
 
-        self.assertEquals(self.dossier_responsible.getId(), subtask.issuer)
+        browser.open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.click_on('Continue')
+        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.']})
+        browser.click_on('Continue')
+
+        browser.click_on('Trigger')
+
+        self.assertEquals(
+            '{}/select-responsibles'.format(self.dossier.absolute_url()),
+            browser.url)
+
+        self.assertEquals(
+            {u'Responsible \xabArbeitsplatz einrichten.\xbb': ['Required input is missing.']},
+            erroneous_fields())
+
 
     @browsing
     def test_replace_interactive_responsible(self, browser):
