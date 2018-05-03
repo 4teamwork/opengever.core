@@ -249,6 +249,39 @@ class OCIntegrationTestCase(IntegrationTestCase):
         upload_form = payload.get('upload-form', None)
         self.assertEquals('file_upload', upload_form)
 
+    def fetch_document_oneoffixx_payloads(self, browser, tokens):
+        with self.as_officeconnector(browser):
+            headers = {
+                'Accept': 'application/json',
+                'Authorization': 'Bearer {}'.format(tokens.get('raw_token')),
+                'Content-Type': 'application/json',
+            }
+
+            data = json.dumps(tokens.get('token').get('documents', []))
+
+        payloads = browser.open(
+            self.portal,
+            method='POST',
+            data=data,
+            headers=headers,
+            view='oc_oneoffixx',
+            ).json
+
+        return payloads
+
+    def validate_oneoffixx_payload(self, payload, document, user):
+        csrf_token = payload.get('csrf-token', None)
+        self.assertTrue(csrf_token)
+
+        document_url = payload.get('document-url', None)
+        self.assertEquals(document.absolute_url(), document_url)
+
+        connect_xml = payload.get('connect-xml', None)
+        self.assertEquals('@@oneoffix_connect_xml', connect_xml)
+
+        checkout_token = payload.get('checkout-url', None)
+        self.validate_checkout_token(user, checkout_token, (document,))
+
     def checkout_document(self, browser, tokens, payload, document):
         """Logs out, uses JWT to check out the document and logs back in."""
         self.assertFalse(document.checked_out_by())

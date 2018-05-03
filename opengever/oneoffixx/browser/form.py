@@ -153,17 +153,9 @@ class SelectOneOffixxTemplateDocumentWizardStep(Form):
                 new_doc.absolute_url())
 
     def activate_external_editing(self, new_doc):
-        """Check out the given document, and add the external_editor URL
-        to redirector queue.
+        """Add the oneoffixx external_editor URL to redirector queue.
         """
-        # Check out the new document
-        manager = self.context.restrictedTraverse('checkout_documents')
 
-        # When it will be implemented we should use the new oneoffix
-        # action instead of checkout
-        # we can extend setup_external_edit_redirect to take a keyword argument
-        # action
-        manager.checkout(new_doc)
         new_doc.setup_external_edit_redirect(self.request, action="oneoffixx")
 
     def create_document(self, data):

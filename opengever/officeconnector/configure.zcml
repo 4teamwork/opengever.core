@@ -76,4 +76,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
+      factory=".service.OfficeConnectorOneOffixxPayload"
+      name="oc_oneoffixx"
+      permission="zope2.View"
+      />
+
 </configure>

@@ -12,6 +12,7 @@ from plone.protect import createToken
 from plone.rest import Service
 from zExceptions import Forbidden
 from zExceptions import NotFound
+from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.i18n import translate
 import json
@@ -110,6 +111,10 @@ class OfficeConnectorPayload(Service):
         super(OfficeConnectorPayload, self).__init__(context, request)
         self.uuids = json.loads(request['BODY'])
 
+    @staticmethod
+    def document_is_valid(document):
+        return document and document.has_file()
+
     def get_base_payloads(self):
         # Require an authenticated user
         if not api.user.is_anonymous():
@@ -118,7 +123,7 @@ class OfficeConnectorPayload(Service):
             for uuid in self.uuids:
                 document = api.content.get(UID=uuid)
 
-                if document and document.has_file():
+                if self.document_is_valid(document):
                     documents.append(document)
 
         else:
@@ -131,12 +136,9 @@ class OfficeConnectorPayload(Service):
             for document in documents:
                 payloads.append(
                     {
-                        'content-type': document.get_file().contentType,
                         'csrf-token': createToken(),
                         'document-url': document.absolute_url(),
                         'document': document,
-                        'download': document.get_download_view_name(),
-                        'filename': document.get_filename(),
                         }
                     )
 
@@ -185,6 +187,9 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
                 dossier_notifications[parent_dossier_uuid].append(document)
 
             payload['title'] = document.title_or_id()
+            payload['content-type'] = document.get_file().contentType
+            payload['download'] = document.get_download_view_name()
+            payload['filename'] = document.get_filename()
             del payload['document']
             notify(FileAttachedToEmailEvent(document))
 
@@ -210,18 +215,69 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
         # form.
         for payload in payloads:
             # A permission check to verify the user is also able to upload
+            document = payload['document']
             authorized = api.user.has_permission(
                 'Modify portal content',
-                obj=payload['document'],
+                obj=document,
                 )
 
             if authorized:
+                payload['content-type'] = document.get_file().contentType
+                payload['download'] = document.get_download_view_name()
+
+                # for oneoffixx, we checkout the document to fall in the normal
+                # checkout-checkin cycle.
+                if document.is_shadow_document():
+                    payload['filename'] = IAnnotations(document).get("filename")
+                else:
+                    payload['filename'] = document.get_filename()
+
                 del payload['document']
                 payload['checkin-with-comment'] = '@@checkin_document'
                 payload['checkin-without-comment'] = 'checkin_without_comment'
                 payload['checkout'] = '@@checkout_documents'
                 payload['upload-form'] = 'file_upload'
                 payload['upload-api'] = None
+
+            else:
+                # Fail per default
+                raise Forbidden
+
+        self.request.response.setHeader('Content-type', 'application/json')
+
+        return json.dumps(payloads)
+
+
+class OfficeConnectorOneOffixxPayload(OfficeConnectorPayload):
+    """Issue JSON instruction payloads for OfficeConnector.
+
+    Contains the instruction set to generate a document from a oneoffixx
+    template (connect-xml), then checkout the corresponding document (checkout-url)
+    to open the created document in an editor. From there the normal checkout,
+    checkin cycle can begin.
+    """
+
+    @staticmethod
+    def document_is_valid(document):
+        return document and document.is_shadow_document()
+
+    def render(self):
+        payloads = self.get_base_payloads()
+
+        for payload in payloads:
+            # A permission check to verify the user is also able to upload
+            authorized = api.user.has_permission(
+                'Modify portal content',
+                obj=payload['document'],
+                )
+
+            if authorized:
+                document = payload['document']
+                checkout_token = create_oc_url(self.request, document, {"action": "checkout"})
+                payload['checkout-url'] = checkout_token
+                payload['filename'] = IAnnotations(document).get("filename")
+                del payload['document']
+                payload['connect-xml'] = '@@oneoffix_connect_xml'
 
             else:
                 # Fail per default
