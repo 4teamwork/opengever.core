@@ -41,13 +41,13 @@
 
     function isDocumentLocked(documentURL) {
         return requestJSON(documentURL + "/status").pipe(function(data) {
-            return JSON.parse(data)["locked"];
+            return JSON.parse(data).locked;
         });
     }
 
     function checkout(documentURL) {
         return poll(function() {
-            return isDocumentLocked(documentURL)
+            return isDocumentLocked(documentURL);
         });
     }
 
@@ -83,41 +83,41 @@
 
 function openOfficeconnector(data) {
     // URLs the browser does not handle get passed onto the OS
-    window.location = data['url'];
+    window.location = data.url;
 }
 
 function alertUser(data) {
-    alert(JSON.parse(data["responseText"])["error"]["message"]);
+    alert(JSON.parse(data.responseText).error.message);
 }
 
 function officeConnectorCheckout(url) {
-    var officeconnector_config = {}
+    var officeconnector_config = {};
 
     officeconnector_config.url = url;
     officeconnector_config.headers = {};
-    officeconnector_config.headers['Accept'] = 'application/json';
+    officeconnector_config.headers.Accept = 'application/json';
 
     $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
 }
 
 function officeConnectorAttach(url) {
-    var officeconnector_config = {}
+    var officeconnector_config = {};
 
     officeconnector_config.url = url;
     officeconnector_config.headers = {};
-    officeconnector_config.headers['Accept'] = 'application/json';
+    officeconnector_config.headers.Accept = 'application/json';
 
     $.ajax(officeconnector_config).error(alertUser).done(openOfficeconnector);
 }
 
 function officeConnectorMultiAttach(url) {
-    var officeconnector_config = {}
+    var officeconnector_config = {};
 
     officeconnector_config.data = {};
     officeconnector_config.data.documents = [];
     officeconnector_config.dataType = 'json';
     officeconnector_config.headers = {};
-    officeconnector_config.headers['Accept'] = 'application/json';
+    officeconnector_config.headers.Accept = 'application/json';
     officeconnector_config.headers['Content-Type'] = 'application/json';
     officeconnector_config.type = 'POST';
     officeconnector_config.url = url;
@@ -129,11 +129,11 @@ function officeConnectorMultiAttach(url) {
     });
 
     if (officeconnector_config.data.documents.length > 0) {
-        var dossier_config = {}
+        var dossier_config = {};
 
         dossier_config.dataType = 'json';
         dossier_config.headers = {};
-        dossier_config.headers['Accept'] = 'application/json';
+        dossier_config.headers.Accept = 'application/json';
         dossier_config.type = 'GET';
         dossier_config.url = document.getElementsByTagName('base')[0].href + '/attributes';
 
