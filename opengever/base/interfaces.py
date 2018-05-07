@@ -334,4 +334,4 @@ class IFavoritesSettings(Interface):
     is_feature_enabled = schema.Bool(
         title=u'Enable favorites feature',
         description=u'Whether favorite feature is enabled',
-        default=False)
+        default=True)

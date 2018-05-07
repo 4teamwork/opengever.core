@@ -18,7 +18,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('dossier_templates', False),
                 ('ech0147_export', False),
                 ('ech0147_import', False),
-                ('favorites', False),
+                ('favorites', True),
                 ('meetings', False),
                 ('officeatwork', False),
                 ('officeconnector_attach', False),
