@@ -17,6 +17,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
@@ -42,35 +43,29 @@ class TestResolverVocabulary(FunctionalTestCase):
             vocabulary.by_value.keys())
 
 
-class TestResolvingDossiers(FunctionalTestCase):
+class TestResolvingDossiers(IntegrationTestCase):
 
     @browsing
     def test_archive_form_is_omitted_for_sites_without_filing_number_support(self, browser):
-        self.grant('Manager')
-        dossier = create(Builder('dossier')
-                         .having(start=date(2013, 11, 5)))
+        self.login(self.secretariat_user, browser)
 
-        browser.login().open(dossier,
-                             {'_authenticator': createToken()},
-                             view='transition-resolve')
+        browser.open(self.empty_dossier,
+                    {'_authenticator': createToken()},
+                    view='transition-resolve')
 
-        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
 
     @browsing
     def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
-        self.grant('Manager')
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier')
-                            .within(dossier)
-                            .having(start=date(2013, 11, 5)))
+        self.login(self.secretariat_user, browser)
 
-        browser.login().open(subdossier,
-                             {'_authenticator': createToken()},
-                             view='transition-resolve')
+        browser.open(self.subdossier,
+                    {'_authenticator': createToken()},
+                     view='transition-resolve')
 
-        self.assertEquals(subdossier.absolute_url(), browser.url)
+        self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
 
