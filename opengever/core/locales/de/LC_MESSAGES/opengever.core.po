@@ -181,7 +181,7 @@ msgstr "Persönlicher Ordner"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180221144648_update_properties_action_available_expression/actions.xml
 msgid "Properties"
-msgstr "Eigenschaften"
+msgstr "Metadaten anzeigen"
 
 #. Default: "Proposal"
 #: ./opengever/core/profiles/default/types/opengever.meeting.proposal.xml
