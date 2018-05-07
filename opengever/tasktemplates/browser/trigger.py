@@ -1,23 +1,15 @@
 from AccessControl.users import nobody
-from datetime import date
-from datetime import timedelta
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
-from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.task.activities import TaskAddedActivity
-from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import _
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
-from plone.dexterity.utils import addContentToContainer
-from plone.dexterity.utils import createContent
 from plone.supermodel import model
 from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.layout import FormWrapper
@@ -33,13 +25,9 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getAdapter
 from zope.component import getUtility
-from zope.event import notify
 from zope.i18n import translate
-from zope.interface import alsoProvides
 from zope.interface import provider
-from zope.lifecycleevent import ObjectCreatedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
 import copy
 import re
@@ -320,16 +308,20 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
         tasktemplatefolder = self.get_selected_task_templatefolder()
         related_documents = self.get_selected_related_documents()
         templates = self.get_selected_tasktemplates()
-        self.responsibles = data
+        responsibles = {}
 
-        main_task = self.create_main_task(tasktemplatefolder, templates)
-        self.create_subtasks(
-            main_task, templates, related_documents, responsibles=data)
+        for template in templates:
+            responsible_client, responsible = self.get_responsible(template, data)
+            responsibles[template.id] = {
+                'responsible': responsible,
+                'responsible_client': responsible_client}
+
+        tasktemplatefolder.trigger(
+            self.context, templates, related_documents, responsibles)
 
         api.portal.show_message(
             _(u'message_tasks_created', default=u'tasks created'),
             self.request, type="info")
-
         return self.request.RESPONSE.redirect(
             '{}#tasks'.format(self.context.absolute_url()))
 
@@ -337,109 +329,10 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-    def create_main_task(self, templatefolder, selected_templates):
-        highest_deadline = max(
-            [template.deadline for template in selected_templates])
-
-        deadline_timedelta = api.portal.get_registry_record(
-            'deadline_timedelta', interface=ITaskSettings)
-
-        data = dict(
-            title=templatefolder.title,
-            issuer=self.replace_interactive_user('current_user'),
-            responsible=self.replace_interactive_user('current_user'),
-            responsible_client=get_current_org_unit().id(),
-            task_type='direct-execution',
-            deadline=date.today() +
-            timedelta(highest_deadline + deadline_timedelta),
-        )
-
-        main_task = createContent('opengever.task.task', **data)
-        notify(ObjectCreatedEvent(main_task))
-        main_task = addContentToContainer(
-            self.context, main_task, checkConstraints=True)
-
-        self.mark_as_generated_from_tasktemplate(main_task)
-
-        # set the main_task in to the in progress state
-        api.content.transition(obj=main_task,
-                               transition='task-transition-open-in-progress')
-
-        return main_task
-
-    def create_subtasks(self, main_task,
-                        selected_templates, related_documents, responsibles):
-
-        for template in selected_templates:
-            self.create_subtask(main_task, template, related_documents)
-
-    def create_subtask(self, main_task, template, related_documents):
-        responsible, responsible_client = self.get_responsible(template)
-        data = dict(
-            title=template.title,
-            issuer=self.replace_interactive_user(template.issuer),
-            responsible=self.replace_interactive_user(responsible),
-            responsible_client=responsible_client,
-            task_type=template.task_type,
-            text=template.text,
-            relatedItems=related_documents,
-            deadline=date.today() + timedelta(template.deadline),
-        )
-
-        task = createContent('opengever.task.task', **data)
-        notify(ObjectCreatedEvent(task))
-        task = addContentToContainer(main_task, task, checkConstraints=True)
-        self.mark_as_generated_from_tasktemplate(task)
-
-        task.reindexObject()
-
-        # add activity record for subtask
-        activity = TaskAddedActivity(task, self.request, self.context)
-        activity.record()
-
-    def get_responsible(self, template):
+    def get_responsible(self, template, data):
         form_identifier = '{}.responsible'.format(template.id)
-        value = self.responsibles.get(form_identifier)
-        responsible_client, responsible = value.split(':')
-
-        if responsible_client == 'interactive_users':
-            responsible_client = get_current_org_unit().id()
-            responsible = self.replace_interactive_user(responsible)
-
-        return responsible, responsible_client
-
-    def replace_interactive_user(self, principal):
-        """The current systems knows two interactive users:
-
-        `responsible`: the reponsible of the main dossier.
-        `current_user`: the currently logged in user.
-        """
-
-        if principal == 'responsible':
-            finder = getAdapter(self.context, name='parent-dossier-finder')
-            return IDossier(finder.find_dossier()).responsible
-
-        elif principal == 'current_user':
-            return api.user.get_current().getId()
-
-        else:
-            return principal
-
-    def get_responsible_client(self, template, responsible):
-        if template.responsible_client == 'interactive_users':
-            current_org_unit = get_current_org_unit()
-            responsible_org_units = ogds_service().assigned_org_units(responsible)
-
-            if current_org_unit in responsible_org_units or \
-               not responsible_org_units:
-                return current_org_unit.id()
-            else:
-                return responsible_org_units[0].id()
-
-        return template.responsible_client
-
-    def mark_as_generated_from_tasktemplate(self, task):
-        alsoProvides(task, IFromTasktemplateGenerated)
+        value = data.get(form_identifier)
+        return value.split(':')
 
 
 class SelectResponsiblesView(FormWrapper):
