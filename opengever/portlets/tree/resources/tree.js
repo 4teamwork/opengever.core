@@ -54,7 +54,7 @@ function Tree(nodes, config) {
     var $link = $('<a />').text(this.text).
         attr('href', this.url).
         attr('title', this.description).
-        addClass(function() { return this.active ? 'active' : 'inactive' }.bind(this));
+        addClass(function() { return this.active ? 'active' : 'inactive'; }.bind(this));
     $list_item.append($link);
     $(tree).trigger('tree:link-created', [this, $link]);
 
@@ -365,8 +365,8 @@ RepositoryFavorites = function(url, cache_param) {
     baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   });
   var _data_cache;
   var i18n_add = $('[data-i18n-add-to-favorites]').data('i18n-add-to-favorites') || '';
@@ -385,7 +385,9 @@ RepositoryFavorites = function(url, cache_param) {
     _data_cache = null;
   }
 
-  function load_favorites(withCache=true) {
+  function load_favorites(withCache) {
+    withCache = withCache || true;
+
     var params = {}
 
     if ( withCache ) {
