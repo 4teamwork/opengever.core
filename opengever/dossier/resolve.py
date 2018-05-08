@@ -221,6 +221,10 @@ class StrictDossierResolver(object):
     def create_journal_pdf(self):
         """Creates a pdf representation of the dossier journal, and add it to
         the dossier as a normal document.
+
+        If the dossiers has an end date use that date as the document date.
+        This prevents the dossier from entering an invalid state with a
+        document date outside the dossiers start-end range.
         """
         if not self.get_property('journal_pdf_enabled'):
             return
@@ -233,13 +237,19 @@ class StrictDossierResolver(object):
                   default=u'Journal of dossier ${title}, ${timestamp}',
                   mapping={'title': self.context.title,
                            'timestamp': today})
+        kwargs = {
+            'preserved_as_paper': False,
+        }
+        dossier = IDossier(self.context)
+        if dossier and dossier.end:
+            kwargs['document_date'] = dossier.end
 
         with elevated_privileges():
             CreateDocumentCommand(
                 self.context, filename, view.get_data(),
                 title=translate(title, context=self.context.REQUEST),
                 content_type='application/pdf',
-                preserved_as_paper=False).execute()
+                **kwargs).execute()
 
     def trigger_pdf_conversion(self):
         if not self.get_property('archival_file_conversion_enabled'):

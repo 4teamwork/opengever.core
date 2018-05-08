@@ -1,4 +1,3 @@
-from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -13,10 +12,10 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
@@ -33,6 +32,12 @@ def get_resolver_vocabulary():
     return voca_factory(api.portal.get())
 
 
+def resolve_dossier(dossier, browser):
+    browser.open(dossier,
+                 view='transition-resolve',
+                 data={'_authenticator': createToken()})
+
+
 class TestResolverVocabulary(FunctionalTestCase):
 
     def test_resolver_vocabulary(self):
@@ -42,168 +47,175 @@ class TestResolverVocabulary(FunctionalTestCase):
             vocabulary.by_value.keys())
 
 
-class TestResolvingDossiers(FunctionalTestCase):
+class TestResolvingDossiers(IntegrationTestCase):
 
     @browsing
     def test_archive_form_is_omitted_for_sites_without_filing_number_support(self, browser):
-        self.grant('Manager')
-        dossier = create(Builder('dossier')
-                         .having(start=date(2013, 11, 5)))
+        self.login(self.secretariat_user, browser)
 
-        browser.login().open(dossier,
-                             {'_authenticator': createToken()},
-                             view='transition-resolve')
+        resolve_dossier(self.empty_dossier, browser)
 
-        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
 
     @browsing
     def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
-        self.grant('Manager')
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier')
-                            .within(dossier)
-                            .having(start=date(2013, 11, 5)))
+        self.login(self.secretariat_user, browser)
 
-        browser.login().open(subdossier,
-                             {'_authenticator': createToken()},
-                             view='transition-resolve')
+        resolve_dossier(self.subdossier, browser)
 
-        self.assertEquals(subdossier.absolute_url(), browser.url)
+        self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
 
 
-class TestResolveJobs(FunctionalTestCase):
+class TestResolveJobs(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestResolveJobs, self).setUp()
-        self.dossier = create(Builder('dossier').titled(u'Anfragen'))
-        self.grant('Contributor', 'Editor', 'Reader', 'Reviewer')
-        self.catalog = api.portal.get_tool('portal_catalog')
+    @browsing
+    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self, browser):
+        self.activate_feature('purge-trash')
+        self.login(self.secretariat_user, browser)
 
-    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self):
-        api.portal.set_registry_record(
-            'purge_trash_enabled', True, interface=IDossierResolveProperties)
+        doc1 = create(Builder('document').within(self.empty_dossier))
+        doc2 = create(Builder('document').within(self.empty_dossier).trashed())
 
-        doc1 = create(Builder('document').within(self.dossier))
-        doc2 = create(Builder('document').within(self.dossier).trashed())
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
 
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
 
-        docs = [brain.getObject() for brain in
-                self.catalog.unrestrictedSearchResults(
-                    path='/'.join(self.dossier.getPhysicalPath()))]
+    @browsing
+    def test_purge_trashs_recursive(self, browser):
+        self.activate_feature('purge-trash')
+        self.login(self.secretariat_user, browser)
 
-        self.assertIn(doc1, docs)
-        self.assertNotIn(doc2, docs)
-
-    def test_purge_trashs_recursive(self):
-        api.portal.set_registry_record(
-            'purge_trash_enabled', True, interface=IDossierResolveProperties)
-
-        subdossier = create(Builder('dossier').within(self.dossier))
+        subdossier = create(Builder('dossier').within(self.empty_dossier))
         doc1 = create(Builder('document').within(subdossier))
         doc2 = create(Builder('document').within(subdossier).trashed())
 
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+        with self.observe_children(subdossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
 
-        docs = [brain.getObject() for brain in
-                self.catalog.unrestrictedSearchResults(
-                    path='/'.join(self.dossier.getPhysicalPath()))]
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
 
-        self.assertIn(doc1, docs)
-        self.assertNotIn(doc2, docs)
+    @browsing
+    def test_purging_trashed_documents_is_disabled_by_default(self, browser):
+        self.login(self.secretariat_user, browser)
+        doc1 = create(Builder('document').within(self.empty_dossier).trashed())
 
-    def test_purging_trashed_documents_is_disabled_by_default(self):
-        api.portal.set_registry_record(
-            'purge_trash_enabled', False, interface=IDossierResolveProperties)
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
 
-        doc1 = create(Builder('document').within(self.dossier).trashed())
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+        self.assertIn(doc1, children['after'])
 
-        docs = [brain.getObject() for brain in
-                self.catalog.unrestrictedSearchResults(
-                    path='/'.join(self.dossier.getPhysicalPath()))]
-        self.assertIn(doc1, docs)
+    @browsing
+    def test_adds_journal_pdf_to_main_and_subdossier(self, browser):
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
 
-    def test_adds_journal_pdf_when_enabled(self):
-        api.portal.set_registry_record(
-            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .titled(u'Sub'))
 
-        with freeze(datetime(2016, 4, 25)):
-            api.content.transition(obj=self.dossier,
-                                   transition='dossier-transition-resolve')
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    resolve_dossier(self.empty_dossier, browser)
 
-        journal_pdf = self.dossier.get('document-1')
-        self.assertEquals(u'Journal of dossier Anfragen, Apr 25, 2016 12:00 AM',
-                          journal_pdf.title)
-        self.assertEquals(u'journal-of-dossier-anfragen-apr-25-2016-12-00-am.pdf',
-                          journal_pdf.file.filename)
+        self.assertEquals(1, len(main_children['added']))
+        main_journal_pdf, = main_children['added']
+        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
+                          main_journal_pdf.title)
+        self.assertEquals(u'journal-of-dossier-an-empty-dossier-apr-25-2016-12.pdf',
+                          main_journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
-                          journal_pdf.file.contentType)
-        self.assertFalse(journal_pdf.preserved_as_paper)
+                          main_journal_pdf.file.contentType)
+        self.assertFalse(main_journal_pdf.preserved_as_paper)
 
-    def test_journal_pdf_is_only_added_to_main_dossier(self):
-        api.portal.set_registry_record(
-            'journal_pdf_enabled', True, interface=IDossierResolveProperties)
+        self.assertEquals(1, len(sub_children['added']))
+        sub_journal_pdf, = sub_children['added']
+        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12:00 AM',
+                          sub_journal_pdf.title)
+        self.assertEquals(u'journal-of-dossier-sub-apr-25-2016-12-00-am.pdf',
+                          sub_journal_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          sub_journal_pdf.file.contentType)
+        self.assertFalse(sub_journal_pdf.preserved_as_paper)
 
-        create(Builder('dossier').within(self.dossier))
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+    @browsing
+    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
+        """When the document date is not set to the dossiers end date the
+        subdossier will be left in an inconsistent state. this will make
+        resolving the main dossier impossible.
+        """
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
 
-        docs = api.content.find(context=self.dossier,
-                                depth=-1,
-                                object_provides=[IBaseDocument])
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
 
-        self.assertEquals(1, len(docs))
-        self.assertEquals(self.dossier, aq_parent(docs[0].getObject()))
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                resolve_dossier(subdossier, browser)
 
-    def test_journal_pdf_is_disabled_by_default(self):
-        doc1 = create(Builder('document').within(self.dossier))
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+        self.assertEquals(1, len(sub_children['added']))
+        sub_journal_pdf, = sub_children['added']
+        self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
+                         "End date should be set to dossier end date")
 
-        self.assertEquals(
-            [doc1], self.dossier.listFolderContents(),
-            "Journal PDF created altough it's disabled by default.")
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                resolve_dossier(self.empty_dossier, browser)
 
-    def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self):
-        doc1 = create(Builder('document').within(self.dossier))
-        doc2 = create(Builder('document').within(self.dossier).as_shadow_document())
-        doc1.reindexObject(idxs=["review_state"])
-        doc2.reindexObject(idxs=["review_state"])
+        self.assertEquals(1, len(main_children['added']))
+        main_journal_pdf, = main_children['added']
+        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
+                         "End should be earliest possible date")
+        self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
+                         "Document date should be earliest possible date")
 
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+    @browsing
+    def test_journal_pdf_is_disabled_by_default(self, browser):
+        self.login(self.secretariat_user, browser)
 
-        docs = [brain.getObject() for brain in
-                self.catalog.unrestrictedSearchResults(
-                    path='/'.join(self.dossier.getPhysicalPath()))]
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
 
-        self.assertIn(doc1, docs)
-        self.assertNotIn(doc2, docs)
+        self.assertEquals(0, len(children['added']))
 
-    def test_shadowed_documents_are_deleted_recursively_when_resolving_a_dossier(self):
-        subdossier = create(Builder('dossier').within(self.dossier))
+    @browsing
+    def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        doc1 = create(Builder('document').within(self.empty_dossier))
+        doc2 = create(Builder('document').within(self.empty_dossier).as_shadow_document())
+
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
+
+    @browsing
+    def test_shadowed_documents_are_deleted_recursively_when_resolving_a_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier').within(self.empty_dossier))
         doc1 = create(Builder('document').within(subdossier))
         doc2 = create(Builder('document').within(subdossier).as_shadow_document())
-        doc1.reindexObject(idxs=["review_state"])
-        doc2.reindexObject(idxs=["review_state"])
 
-        api.content.transition(obj=self.dossier,
-                               transition='dossier-transition-resolve')
+        with self.observe_children(subdossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
 
-        docs = [brain.getObject() for brain in
-                self.catalog.unrestrictedSearchResults(
-                    path='/'.join(self.dossier.getPhysicalPath()))]
-
-        self.assertIn(doc1, docs)
-        self.assertNotIn(doc2, docs)
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
 
 
 class TestAutomaticPDFAConversion(FunctionalTestCase):

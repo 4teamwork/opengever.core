@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Set document date of generated journal pdfs to dossier end-date. [deiferni]
 - Enable favorites feature by default. [phgross]
 - Fix sorting of membership listing. [deiferni]
 - Skip plonesite removals in ObjectRemovedEvent handler, to fix plonesite removal. [phgross]
