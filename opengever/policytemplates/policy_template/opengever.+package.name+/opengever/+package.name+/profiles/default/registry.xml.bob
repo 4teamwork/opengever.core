@@ -1,6 +1,5 @@
 <registry>
 
-{{% endif %}}
 {{% if not setup.enable_activity_feature %}}
   <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
