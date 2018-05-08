@@ -386,7 +386,7 @@ RepositoryFavorites = function(url, cache_param) {
   }
 
   function load_favorites(withCache) {
-    withCache = withCache || true;
+    withCache = (typeof withCache !== 'undefined') ?  withCache : true;
 
     var params = {}
 
