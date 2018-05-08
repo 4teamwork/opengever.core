@@ -435,6 +435,11 @@ RepositoryFavorites = function(url, cache_param) {
                 $(this).addClass('bookmarked');
                 self.add($(this).data('uuid'));
               }
+              if ($(this).parent().hasClass('current')) {
+                  // Toggles the favorites-marker next to the title in the main
+                  // content.
+                  $('#mark-as-favorite').trigger('toggle-favorite-marker');
+              }
               annotate_link_title($(this));
             });
         self.favorites().then(function(favorites) {

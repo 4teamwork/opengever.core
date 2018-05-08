@@ -3,6 +3,10 @@
   function FavoriteController() {
     Controller.call(this);
 
+    this.toggle_favorite_marker = function(target) {
+      target.toggleClass('is-favorite');
+    }
+
     this.toggle_favorite = function(target) {
       if ($('#mark-as-favorite').hasClass('loading')){
         return;
@@ -76,7 +80,13 @@
         method: "click",
         target: "#mark-as-favorite",
         callback: this.toggle_favorite
+      },
+      {
+        method: "toggle-favorite-marker",
+        target: "#mark-as-favorite",
+        callback: this.toggle_favorite_marker
       }
+
     ];
 
     this.init();
