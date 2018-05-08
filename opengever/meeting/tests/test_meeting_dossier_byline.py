@@ -12,4 +12,5 @@ class TestMeetingDossierByline(test_dossier_byline.TestDossierByline):
                       .having(reference_number_prefix='5',
                               responsible='hugo.boss',
                               start=date(2013, 11, 6),
-                              end=date(2013, 11, 7)))
+                              end=date(2013, 11, 7),
+                              external_reference='22900-2017'))
