@@ -128,6 +128,7 @@ class DocumentBuilder(DexterityBuilder):
 
         if self._is_shadow:
             obj.as_shadow_document()
+            obj.reindexObject(idxs=["review_state"])
 
         super(DocumentBuilder, self).after_create(obj)
 

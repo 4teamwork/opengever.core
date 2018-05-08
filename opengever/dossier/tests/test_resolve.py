@@ -170,8 +170,6 @@ class TestResolveJobs(FunctionalTestCase):
     def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self):
         doc1 = create(Builder('document').within(self.dossier))
         doc2 = create(Builder('document').within(self.dossier).as_shadow_document())
-        doc1.reindexObject(idxs=["review_state"])
-        doc2.reindexObject(idxs=["review_state"])
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
@@ -187,8 +185,6 @@ class TestResolveJobs(FunctionalTestCase):
         subdossier = create(Builder('dossier').within(self.dossier))
         doc1 = create(Builder('document').within(subdossier))
         doc2 = create(Builder('document').within(subdossier).as_shadow_document())
-        doc1.reindexObject(idxs=["review_state"])
-        doc2.reindexObject(idxs=["review_state"])
 
         api.content.transition(obj=self.dossier,
                                transition='dossier-transition-resolve')
