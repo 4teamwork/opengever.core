@@ -1,4 +1,3 @@
-from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -13,7 +12,6 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import FunctionalTestCase
