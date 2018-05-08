@@ -58,6 +58,8 @@ FEATURE_FLAGS = {
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',
     'favorites': 'opengever.base.interfaces.IFavoritesSettings.is_feature_enabled',
     'solr': 'opengever.base.interfaces.ISearchSettings.use_solr',
+    'purge-trash': 'opengever.dossier.interfaces.IDossierResolveProperties.purge_trash_enabled',
+    'journal-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.journal_pdf_enabled',
     }
 
 FEATURE_PROFILES = {
@@ -67,7 +69,6 @@ FEATURE_PROFILES = {
 FEATURE_METHODS = {
     'private': enable_opengever_private,
 }
-
 
 
 class IntegrationTestCase(TestCase):
