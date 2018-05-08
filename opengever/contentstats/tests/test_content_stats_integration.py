@@ -110,6 +110,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'task-state-planned',
             'task-state-rejected',
             'task-state-resolved',
+            'task-state-skipped',
             'task-state-tested-and-closed',
             'tasktemplate-state-active',
             'tasktemplatefolder-state-activ',

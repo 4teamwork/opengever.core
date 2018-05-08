@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-13 14:19+0000\n"
+"POT-Creation-Date: 2018-05-28 08:22+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -220,6 +220,11 @@ msgstr "tâche traitée"
 msgid "task-transition-open-tested-and-closed"
 msgstr "tâche close"
 
+#. Default: "Task skipped"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-planned-skipped"
+msgstr "tâche omise"
+
 #. Default: "Task reassign"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-reassign"
@@ -230,6 +235,11 @@ msgstr "tâche réassignée"
 msgid "task-transition-rejected-open"
 msgstr "tâche rouverte"
 
+#. Default: "Task skipped"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-rejected-skipped"
+msgstr "tâche omise"
+
 #. Default: "Task revision wanted"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-in-progress"
@@ -239,6 +249,11 @@ msgstr "révision de la tâche requise"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "tâche close"
+
+#. Default: "Task reopend"
+#: ./opengever/activity/__init__.py
+msgid "task-transition-skipped-open"
+msgstr "tâche rouverte"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py

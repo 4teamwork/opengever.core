@@ -157,6 +157,20 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
 
 
+class TestSkipAction(BaseTransitionActionFunctionalTest):
+
+    transition = 'task-transition-rejected-skipped'
+
+    @browsing
+    def test_is_responseform(self, browser):
+        task = create(Builder('task').in_state('task-state-rejected'))
+        self.do_transition(task)
+
+        self.assert_action(
+            'http://nohost/plone/task-1/addresponse?form.widgets.transition='
+            + self.transition)
+
+
 class TestInProgressResolveAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-in-progress-resolved'
 

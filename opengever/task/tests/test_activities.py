@@ -160,6 +160,26 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'Ist erledigt.', activity.description)
 
     @browsing
+    def test_task_skipped(self, browser):
+        task = create(Builder('task')
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=TEST_USER_ID)
+                      .in_state('task-state-rejected'))
+
+        browser.login().open(task)
+        browser.css('#workflow-transition-task-transition-rejected-skipped').first.click()
+        browser.fill({'Response': u'Wird \xfcbersprungen.'})
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.one()
+        self.assertEquals(u'task-transition-rejected-skipped', activity.kind)
+        self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+            u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
+        self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
+
+
+    @browsing
     def test_deadline_modified_activity(self, browser):
         task = create(Builder('task')
                       .titled(u'Abkl\xe4rung Fall Meier')

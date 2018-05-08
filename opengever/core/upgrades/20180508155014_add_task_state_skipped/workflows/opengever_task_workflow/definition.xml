@@ -185,7 +185,6 @@
     <exit-transition transition_id="task-transition-in-progress-tested-and-closed" />
     <exit-transition transition_id="task-transition-modify-deadline" />
     <exit-transition transition_id="task-transition-reassign" />
-    <exit-transition transition_id="task-transition-in-progress-cancelled" />
     <permission-map
         name="Access contents information"
         acquired="False">
@@ -776,21 +775,6 @@
         icon="">task-transition-open-cancelled</action>
     <guard>
       <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-open-cancelled')</guard-expression>
-    </guard>
-  </transition>
-  <transition
-      transition_id="task-transition-in-progress-cancelled"
-      title="task-transition-in-progress-cancelled"
-      new_state="task-state-cancelled"
-      trigger="USER"
-      before_script=""
-      after_script="">
-    <action
-        url="%(content_url)s/@@task_transition_controller?transition=task-transition-in-progress-cancelled"
-        category="workflow"
-        icon="">task-transition-in-progress-cancelled</action>
-    <guard>
-      <guard-expression>python: here.restrictedTraverse('@@task_transition_controller').is_transition_possible('task-transition-in-progress-cancelled')</guard-expression>
     </guard>
   </transition>
   <transition

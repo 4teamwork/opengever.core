@@ -300,6 +300,9 @@ msgstr "Abgelehnt"
 msgid "task-state-resolved"
 msgstr "Erledigt"
 
+msgid "task-state-skipped"
+msgstr "Übersprungen"
+
 msgid "task-state-tested-and-closed"
 msgstr "Abgeschlossen"
 
@@ -342,17 +345,26 @@ msgstr "Abschliessen"
 msgid "task-transition-planned-open"
 msgstr "Starten"
 
+msgid "task-transition-planned-skipped"
+msgstr "Überspringen"
+
 msgid "task-transition-reassign"
 msgstr "Neu zuweisen"
 
 msgid "task-transition-rejected-open"
 msgstr "Wieder eröffnen"
 
+msgid "task-transition-rejected-skipped"
+msgstr "Überspringen"
+
 msgid "task-transition-resolved-in-progress"
 msgstr "Überarbeiten"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Abschliessen"
+
+msgid "task-transition-skipped-open"
+msgstr "Wieder eröffnen"
 
 msgid "tasktemplate-state-active"
 msgstr "Aktiv"

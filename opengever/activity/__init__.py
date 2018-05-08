@@ -89,6 +89,12 @@ ACTIVITY_TRANSLATIONS = {
         'task-transition-resolved-in-progress', default=u'Task revision wanted'),  # noqa
     'task-transition-resolved-tested-and-closed': _(
         'task-transition-resolved-tested-and-closed', default=u'Task closed'),
+    'task-transition-skipped-open': _(
+        'task-transition-skipped-open', default=u'Task reopend'),
+    'task-transition-rejected-skipped': _(
+        'task-transition-rejected-skipped', default=u'Task skipped'),
+    'task-transition-planned-skipped': _(
+        'task-transition-planned-skipped', default=u'Task skipped'),
     'forwarding-added': _(
         'forwarding-added', default=u'Forwarding added'),
     'forwarding-transition-accept': _(

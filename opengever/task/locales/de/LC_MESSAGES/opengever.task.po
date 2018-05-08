@@ -845,6 +845,11 @@ msgstr "Aufgabe erledigt"
 msgid "transition_label_revise"
 msgstr "Überarbeitung der Aufgabe angefordert"
 
+#. Default: "Task skipped"
+#: ./opengever/task/response_description.py
+msgid "transition_label_skip"
+msgstr "Aufgabe übersprungen"
+
 #. Default: "Accepted by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_accept"
@@ -914,6 +919,11 @@ msgstr "Erledigt durch ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_revise"
 msgstr "Überarbeitung angefordert durch ${user}"
+
+#. Default: "Skipped by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_skip"
+msgstr "Übersprungen durch ${user}"
 
 #. Default: "Document copied from forwarding (forwarding accepted)"
 #: ./opengever/task/browser/accept/utils.py
