@@ -394,6 +394,13 @@ RepositoryFavorites = function(url, cache_param) {
       params.cache_key = cachekey
     } else {
       clearDataCache();
+      if (!!window.MSInputMethodContext && !!document.documentMode) {
+        // IE11 Fix: Requesting the ressource without a cache-key will return
+        // the currently cached ressource anyway. We have to fix this issue
+        // through adding a timestamp as a cache-key to be sure, the IE11 will
+        // perform the request to the server.
+        params.cache_key = Date.now();
+      }
     }
 
     favorites = $.Deferred();
