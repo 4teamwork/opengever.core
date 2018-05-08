@@ -526,6 +526,11 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
+#. Default: "Oneoffixx retry"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_retry_oneoffixx"
+msgstr "Mit Oneoffixx wiederholen"
+
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"

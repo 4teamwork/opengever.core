@@ -523,6 +523,11 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
+#. Default: "Oneoffixx retry"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_retry_oneoffixx"
+msgstr ""
+
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"

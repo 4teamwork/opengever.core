@@ -175,6 +175,16 @@
             </a>
         </tal:details_view>
 
+        <tal:oneoffixx tal:define="link context/absolute_url" tal:condition="view/is_oneoffixx_creatable">
+          <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_oneoffixx_url');
+                             data-document-url context/absolute_url"
+              class="function-revert oc-checkout"
+              href="#"
+              i18n:translate="label_retry_oneoffixx">
+              Oneoffixx retry
+          </a>
+        </tal:oneoffixx>
+
     </div>
 
     <tal:nofile tal:condition="not:context/has_file">
