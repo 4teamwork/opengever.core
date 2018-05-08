@@ -16,7 +16,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
     def trigger_tasktemplatefolder(
             self, browser, folder=u'Verfahren Neuanstellung',
-            templates=None, documents=None):
+            templates=None, documents=None, start_immediately=None):
 
         browser.open(self.dossier, view='add-tasktemplate')
         browser.fill({'Tasktemplatefolder': folder})
@@ -26,8 +26,11 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
         if templates:
             browser.fill({'Tasktemplates': templates})
-        browser.click_on('Continue')
 
+        if start_immediately is not None:
+            browser.fill({'Start immediately': start_immediately})
+
+        browser.click_on('Continue')
         browser.click_on('Trigger')
 
     @browsing
@@ -214,12 +217,11 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         ids = main_task.objectIds()
         task1, task2 = [main_task.get(_id) for _id in ids]
 
-        self.assertEquals(u'Arbeitsplatz einrichten.', task1.title)
-        self.assertEquals(u'robert.ziegler', task1.responsible)
+        self.assertEquals(u'User Accounts erstellen.', task1.title)
+        self.assertEquals(u'jurgen.konig', task1.responsible)
 
-        self.assertEquals(u'User Accounts erstellen.', task2.title)
-        self.assertEquals(u'jurgen.konig', task2.responsible)
-
+        self.assertEquals(u'Arbeitsplatz einrichten.', task2.title)
+        self.assertEquals(u'robert.ziegler', task2.responsible)
 
     @browsing
     def test_step3_responsible_fields_are_required(self, browser):
@@ -243,7 +245,6 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(
             {u'Responsible \xabArbeitsplatz einrichten.\xbb': ['Required input is missing.']},
             erroneous_fields())
-
 
     @browsing
     def test_replace_interactive_responsible(self, browser):
@@ -275,3 +276,84 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(
             [self.document],
             [relation.to_object for relation in subtask.relatedItems])
+
+    @browsing
+    def test_initial_state_is_open_for_parallel_folders(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.tasktemplatefolder.sequence_type = u'parallel'
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        self.trigger_tasktemplatefolder(
+            browser,
+            templates=['Arbeitsplatz einrichten.', 'Notebook einrichten.'],
+            documents=[self.document])
+
+        main_task = self.dossier.objectValues()[-1]
+
+        self.assertEquals('task-state-in-progress',
+                          api.content.get_state(main_task))
+        self.assertEquals(
+            ['task-state-open', 'task-state-open'],
+            [api.content.get_state(task) for task in main_task.objectValues()])
+
+    @browsing
+    def test_initial_state_is_planned_for_sequential_folders(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.tasktemplatefolder.sequence_type = u'sequential'
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        self.trigger_tasktemplatefolder(
+            browser,
+            templates=['Arbeitsplatz einrichten.', 'Notebook einrichten.'],
+            documents=[self.document], start_immediately=False)
+
+        main_task = self.dossier.objectValues()[-1]
+
+        self.assertEquals('task-state-in-progress',
+                          api.content.get_state(main_task))
+        self.assertEquals(
+            ['task-state-planned', 'task-state-planned'],
+            [api.content.get_state(task) for task in main_task.objectValues()])
+
+    @browsing
+    def test_respects_start_immediately_flag(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.tasktemplatefolder.sequence_type = u'sequential'
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        self.trigger_tasktemplatefolder(
+            browser,
+            templates=['Arbeitsplatz einrichten.', 'Notebook einrichten.'],
+            documents=[self.document], start_immediately=True)
+
+        main_task = self.dossier.objectValues()[-1]
+
+        self.assertEquals('task-state-in-progress',
+                          api.content.get_state(main_task))
+        self.assertEquals(
+            ['task-state-open', 'task-state-planned'],
+            [api.content.get_state(task) for task in main_task.objectValues()])

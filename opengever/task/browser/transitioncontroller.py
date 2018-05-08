@@ -6,10 +6,12 @@ from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.util import get_documents_of_task
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
 from zExceptions import NotFound
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -148,6 +150,10 @@ class TaskTransitionController(BrowserView):
     @action('task-transition-modify-deadline')
     def modify_deadline_action(self, transition, c):
         return ModifyDeadlineFormView.url_for(self.context, transition)
+
+    @guard('task-transition-open-planned')
+    def planned_guard(self, transition, c):
+        return IDuringTaskTemplateFolderTriggering.providedBy(getRequest())
 
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):

@@ -19,6 +19,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Field
 from z3c.form.field import Fields
 from z3c.form.form import Form
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
@@ -159,6 +160,14 @@ class ISelectTaskTemplates(model.Schema):
         defaultFactory=get_preselected_tasktemplates
     )
 
+    start_immediately = schema.Bool(
+        title=_(u'label_start_immediately', default=u'Start immediately'),
+        description=_(u'description_start_immediately', default=u'Immediately '
+                      'open the first task after creation.'),
+        default=True,
+        required=True,
+    )
+
 
 class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
     step_name = 'select-tasktemplates'
@@ -168,9 +177,13 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
     steps = TRIGGER_TASKTEMPLATE_STEPS
     fields = Fields(ISelectTaskTemplates)
 
-    def update(self):
-        self.fields['tasktemplates'].widgetFactory[INPUT_MODE] = checkbox.CheckBoxFieldWidget
-        return super(SelectTaskTemplatesWizardStep, self).update()
+    fields['tasktemplates'].widgetFactory[INPUT_MODE] = checkbox.CheckBoxFieldWidget
+    fields['start_immediately'].widgetFactory[INPUT_MODE] = checkbox.SingleCheckBoxFieldWidget # noqa
+
+    def updateWidgets(self):
+        super(SelectTaskTemplatesWizardStep, self).updateWidgets()
+        if not self.get_selected_task_templatefolder().is_sequential:
+            self.widgets['start_immediately'].mode = HIDDEN_MODE
 
     def get_preselected_tasktemplates(self):
         templates = api.content.find(
@@ -307,6 +320,7 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
 
         tasktemplatefolder = self.get_selected_task_templatefolder()
         related_documents = self.get_selected_related_documents()
+        start_immediately = get_wizard_data(self.context, 'start_immediately')
         templates = self.get_selected_tasktemplates()
         responsibles = {}
 
@@ -316,8 +330,8 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
                 'responsible': responsible,
                 'responsible_client': responsible_client}
 
-        tasktemplatefolder.trigger(
-            self.context, templates, related_documents, responsibles)
+        tasktemplatefolder.trigger(self.context, templates, related_documents,
+                                   responsibles, start_immediately)
 
         api.portal.show_message(
             _(u'message_tasks_created', default=u'tasks created'),

@@ -5,6 +5,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.content.templatefoldersschema import sequence_types
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.dexterity.content import Container
@@ -13,6 +14,7 @@ from plone.dexterity.utils import createContent
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -22,24 +24,36 @@ class TaskTemplateFolder(Container):
     def sequence_type_label(self):
         return sequence_types.by_value[self.sequence_type].title
 
-    def trigger(self, dossier, templates, related_documents,
-                values, start_immediately=True):
+    @property
+    def is_sequential(self):
+        return self.sequence_type == u'sequential'
 
-        trigger = TaskTemplateFolderTrigger(dossier, templates, related_documents,
-                                  values, start_immediately)
-        main_task = trigger.create_main_task()
-        trigger.create_subtasks(main_task, templates, related_documents)
+    def trigger(self, dossier, templates, related_documents,
+                values, start_immediately):
+
+        trigger = TaskTemplateFolderTrigger(
+            self, dossier, templates, related_documents,
+            values, start_immediately)
+        trigger.generate()
 
 
 class TaskTemplateFolderTrigger(object):
 
-    def __init__(self, dossier, templates,
+    def __init__(self, context, dossier, templates,
                  related_documents, values, start_immediately):
+        self.context = context
         self.dossier = dossier
         self.selected_templates = templates
         self.related_documents = related_documents
         self.values = values
         self.start_immediately = start_immediately
+        self.request = getRequest()
+
+    def generate(self):
+        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        main_task = self.create_main_task()
+        self.create_subtasks(main_task)
+        noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
 
     def add_task(self, container, data):
         task = createContent('opengever.task.task', **data)
@@ -66,10 +80,23 @@ class TaskTemplateFolderTrigger(object):
         return main_task
 
     def create_subtasks(self, main_task):
-
         for template in self.selected_templates:
             self.create_subtask(
                 main_task, template, self.values.get(template.id))
+
+    def set_initial_state(self, task, template):
+        """Set the initial states to planned for tasks of a sequential
+        tasktemplatefolder except for the first if start_immediately is True.
+        Tasks of a parallel tasktemplatefolder are skipped.
+        """
+        if not self.context.is_sequential:
+            return
+
+        if not self.start_immediately \
+           or template != self.selected_templates[0]:
+            api.content.transition(obj=task,
+                                   transition='task-transition-open-planned')
+            task.get_sql_object().sync_with(task)
 
     def create_subtask(self, main_task, template, values):
         data = dict(
@@ -79,7 +106,7 @@ class TaskTemplateFolderTrigger(object):
             responsible_client=template.responsible_client,
             task_type=template.task_type,
             text=template.text,
-            relatedItems=related_documents,
+            relatedItems=self.related_documents,
             deadline=date.today() + timedelta(template.deadline),
         )
 
@@ -87,6 +114,7 @@ class TaskTemplateFolderTrigger(object):
         self.replace_interactive_actors(data)
 
         task = self.add_task(main_task, data)
+        self.set_initial_state(task, template)
         task.reindexObject()
 
         # add activity record for subtask
