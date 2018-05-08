@@ -386,7 +386,7 @@ RepositoryFavorites = function(url, cache_param) {
   }
 
   function load_favorites(withCache) {
-    withCache = withCache || true;
+    withCache = (typeof withCache !== 'undefined') ?  withCache : true;
 
     var params = {}
 
@@ -394,6 +394,13 @@ RepositoryFavorites = function(url, cache_param) {
       params.cache_key = cachekey
     } else {
       clearDataCache();
+      if (!!window.MSInputMethodContext && !!document.documentMode) {
+        // IE11 Fix: Requesting the ressource without a cache-key will return
+        // the currently cached ressource anyway. We have to fix this issue
+        // through adding a timestamp as a cache-key to be sure, the IE11 will
+        // perform the request to the server.
+        params.cache_key = Date.now();
+      }
     }
 
     favorites = $.Deferred();
@@ -427,6 +434,11 @@ RepositoryFavorites = function(url, cache_param) {
               } else {
                 $(this).addClass('bookmarked');
                 self.add($(this).data('uuid'));
+              }
+              if ($(this).parent().hasClass('current')) {
+                  // Toggles the favorites-marker next to the title in the main
+                  // content.
+                  $('#mark-as-favorite').trigger('toggle-favorite-marker');
               }
               annotate_link_title($(this));
             });
