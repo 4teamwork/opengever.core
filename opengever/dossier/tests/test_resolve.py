@@ -146,6 +146,42 @@ class TestResolveJobs(IntegrationTestCase):
         self.assertFalse(sub_journal_pdf.preserved_as_paper)
 
     @browsing
+    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
+        """When the document date is not set to the dossiers end date the
+        subdossier will be left in an inconsistent state. this will make
+        resolving the main dossier impossible.
+        """
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
+
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                resolve_dossier(subdossier, browser)
+
+        self.assertEquals(1, len(sub_children['added']))
+        sub_journal_pdf, = sub_children['added']
+        self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
+                         "End date should be set to dossier end date")
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                resolve_dossier(self.empty_dossier, browser)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_journal_pdf, = main_children['added']
+        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
+                         "End should be earliest possible date")
+        self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
+                         "Document date should be earliest possible date")
+
+    @browsing
     def test_journal_pdf_is_disabled_by_default(self, browser):
         self.login(self.secretariat_user, browser)
 
