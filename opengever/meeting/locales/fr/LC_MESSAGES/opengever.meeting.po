@@ -267,6 +267,10 @@ msgstr "Regénérer le document"
 msgid "action_generate_excerpt"
 msgstr "Générer l'extrait de protocole"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_generate_zip"
+msgstr ""
+
 #. Default: "Remove agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
@@ -301,6 +305,10 @@ msgstr "Rouvrir la réunion"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
 msgstr "Renvoyer l'extrait du protocole"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_zip_download"
+msgstr ""
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -998,6 +1006,11 @@ msgstr "Réunion clôturée"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
 msgstr "Cette réunion ne peut pas être annulée tant qu'elle contient des points de l'ordre du jour."
+
+#. Default: "Komplettes ZIP vom Meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_meeting_zip_file"
+msgstr ""
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py

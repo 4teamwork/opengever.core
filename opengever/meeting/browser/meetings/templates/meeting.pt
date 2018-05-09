@@ -299,6 +299,29 @@
 
                 </div>
 
+                <div class="meeting-zip meeting-document">
+
+                  <div class="document-actions">
+                    <a class="action generate"
+                       tal:attributes="href view/url_async_zipexport;
+                                       data-pollurl view/url_async_zipexport_poll;"
+                       i18n:attributes="title action_generate_zip"></a>
+
+                    <a class="action download" href="" style="display:none;"
+                       tal:attributes="href view/url_async_zipexport_download"
+                       i18n:attributes="title action_zip_download"></a>
+                  </div>
+
+                  <div class="document-label"
+                         i18n:translate="label_meeting_zip_file">
+                    Komplettes ZIP vom Meeting
+                  </div>
+                  <div class="document-created zip"
+                         i18n:translate="document_not_yet_generated">
+                    Not yet generated.
+                  </div>
+                </div>
+
                 <div class="meeting-workflow" tal:condition="meeting/is_editable">
                   <div class="close-meeting" tal:condition="closing_infos/close_url">
                     <a tal:attributes="href closing_infos/close_url"

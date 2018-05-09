@@ -20,6 +20,7 @@ from path import Path
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.dexterity.i18n import MessageFactory as pd_mf
+from plone.protect.utils import addTokenToUrl
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from Products.Five.browser import BrowserView
@@ -302,6 +303,18 @@ class MeetingView(BrowserView):
             return GenerateAgendaItemList.url_for(self.model)
         else:
             return UpdateAgendaItemList.url_for(self.model)
+
+    def url_async_zipexport(self):
+        return addTokenToUrl(
+            self.model.get_url(view='async-export-meeting-zip'))
+
+    def url_async_zipexport_poll(self):
+        return addTokenToUrl(
+            self.model.get_url(view='async-export-meeting-zip/completed'))
+
+    def url_async_zipexport_download(self):
+        return addTokenToUrl(
+            self.model.get_url(view='async-export-meeting-zip/download'))
 
     def render_handlebars_agendaitems_template(self):
         return prepare_handlebars_template(

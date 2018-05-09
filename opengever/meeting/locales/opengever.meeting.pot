@@ -264,6 +264,10 @@ msgstr ""
 msgid "action_generate_excerpt"
 msgstr ""
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_generate_zip"
+msgstr ""
+
 #. Default: "Remove agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
@@ -297,6 +301,10 @@ msgstr ""
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_zip_download"
 msgstr ""
 
 #. Default: "Active"
@@ -994,6 +1002,11 @@ msgstr ""
 #. Default: "The meeting already has agenda items and can't be cancelled"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
+msgstr ""
+
+#. Default: "Komplettes ZIP vom Meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_meeting_zip_file"
 msgstr ""
 
 #. Default: "Member"

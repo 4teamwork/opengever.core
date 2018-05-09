@@ -265,6 +265,10 @@ msgstr "Dokument neu generieren"
 msgid "action_generate_excerpt"
 msgstr "Protokollauszug generieren"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_generate_zip"
+msgstr "ZIP-Datei von der kompletten Sitzung generieren."
+
 #. Default: "Remove agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
@@ -299,6 +303,10 @@ msgstr "Sitzung wieder öffnen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
 msgstr "Protokollauszug zurücksenden"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "action_zip_download"
+msgstr "ZIP-Datei herunterladen"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -996,6 +1004,11 @@ msgstr "Sitzung abgeschlossen"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
 msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
+
+#. Default: "Komplettes ZIP vom Meeting"
+#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+msgid "label_meeting_zip_file"
+msgstr "ZIP-Datei herunterladen"
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py

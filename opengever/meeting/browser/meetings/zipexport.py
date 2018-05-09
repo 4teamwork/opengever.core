@@ -1,5 +1,7 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
+from netsight.async.browser.BaseAsyncView import BaseAsyncView
+from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import MergeDocxProtocolCommand
@@ -13,6 +15,11 @@ from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 import pytz
+import shutil
+import tempfile
+
+
+MEETINGZIPPREFIX = '_meeting_zip_export'
 
 
 class MeetingZipExport(BrowserView):
@@ -34,7 +41,7 @@ class MeetingZipExport(BrowserView):
         """
         return IMeetingWrapper.providedBy(self.context)
 
-    def generate_zip(self):
+    def generate_zip(self, process_id=None):
         response = self.request.response
 
         with ZipGenerator() as generator:
@@ -53,8 +60,19 @@ class MeetingZipExport(BrowserView):
 
             generator.add_file(*self.get_meeting_json())
 
+            if process_id:
+                self.set_progress(process_id, 90)
+
             # Return zip
             zip_file = generator.generate()
+
+            if process_id:
+                tmpdir = tempfile.gettempdir()
+                shutil.copy(zip_file.name, '{}/{}{}'.format(tmpdir,
+                                                            process_id,
+                                                            MEETINGZIPPREFIX))
+                return
+
             filename = '{}.zip'.format(normalize_path(self.model.title))
             response.setHeader(
                 "Content-Disposition",
@@ -127,7 +145,7 @@ class MeetingZipExport(BrowserView):
             self.context,
             self.model,
             operations,
-            )
+        )
 
         filename = u'{}.docx'.format(operations.get_title(self.model))
         return (filename, StringIO(command.generate_file_data()))
@@ -140,3 +158,47 @@ class MeetingZipExport(BrowserView):
         return 'meeting.json', StringIO(json.dumps(json_data,
                                                    sort_keys=True,
                                                    indent=4))
+
+
+class AsyncMeetingZipExport(BaseAsyncView, MeetingZipExport):
+
+    def publishTraverse(self, request, name):
+        if name in ('completed', 'processing', 'result', 'download'):
+            return getattr(self, name)
+
+        return self
+
+    def __init__(self, context, request):
+        super(AsyncMeetingZipExport, self).__init__(context, request)
+        self.model = self.context.model
+
+    def __call__(self):
+        process_id = self._run()
+        self.request.response.setHeader('Content-Type', 'application/json')
+        self.request.response.setHeader('X-Theme-Disabled', 'True')
+        return json.dumps({'process_id': process_id})
+
+    def __run__(self, process_id=None):
+        self.set_progress(process_id, 10)
+        self.generate_zip(process_id=process_id)
+
+    def download(self, process_id):
+        """Downloads the zipfile"""
+        response = self.request.response
+        tmpdir = tempfile.gettempdir()
+
+        zip_file_path = '{}/{}{}'.format(tmpdir,
+                                         process_id,
+                                         MEETINGZIPPREFIX)
+        with open(zip_file_path, 'r') as zip_file:
+            filename = '{}.zip'.format(normalize_path(self.model.title))
+            response.setHeader(
+                "Content-Disposition",
+                'inline; filename="{0}"'.format(
+                    safe_unicode(filename).encode('utf-8')))
+            response.setHeader("Content-type", "application/zip")
+            response.setHeader(
+                "Content-Length",
+                os.stat(zip_file.name).st_size)
+
+            return filestream_iterator(zip_file.name, 'rb')
