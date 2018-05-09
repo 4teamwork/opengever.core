@@ -61,7 +61,9 @@ function init() {
         this.isOpen = false;
       },
       fetchData: function () {
-        return this.requester.get(this.endpoint)
+        // make sure IE 11 does not cache the fetch request
+        var url = this.endpoint + '?_t=' + Date.now().toString();
+        return this.requester.get(url)
           .then(function (response) {
           var items = response.data.sort(function(a, b){
             return a.position - b.position;

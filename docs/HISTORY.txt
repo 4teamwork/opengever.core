@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Set document date of generated journal pdfs to dossier end-date. [deiferni]
+- Make sure IE 11 does not cache favorites fetch requets. [phgross]
 - Enable favorites feature by default. [phgross]
 - Fix sorting of membership listing. [deiferni]
 - Skip plonesite removals in ObjectRemovedEvent handler, to fix plonesite removal. [phgross]
