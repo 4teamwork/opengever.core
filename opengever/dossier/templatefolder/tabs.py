@@ -50,6 +50,15 @@ class TemplateFolderDocuments(Documents):
     ]
 
 
+class TemplateFolderDocumentsGallery(BumblebeeGalleryMixin, TemplateFolderDocuments):
+    """Bumblebee gallery for templates (documents inside templatefolder).
+
+    Shows only documens directly inside the templatefolder not recursive.
+    """
+
+    depth = 1
+
+
 class TemplateFolderSablonTemplatesProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.
