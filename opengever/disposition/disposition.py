@@ -16,6 +16,7 @@ from opengever.disposition.interfaces import IHistoryStorage
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import ogds_service
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
@@ -278,6 +279,7 @@ class Disposition(Container):
         acl_users = api.portal.get_tool('acl_users')
         role_manager = acl_users.get('portal_role_manager')
         for principal, title in role_manager.listAssignedPrincipals('Archivist'):
+
             info = role_manager.searchPrincipals(
                 id=principal, exact_match=True)
             # skip not existing or duplicated groups or users
@@ -285,8 +287,8 @@ class Disposition(Container):
                 continue
 
             if info[0].get('principal_type') == 'group':
-                group = acl_users.getGroupById(principal)
-                archivists += group.getGroupMemberIds()
+                archivists += [user.userid for user in
+                               ogds_service().fetch_group(principal).users]
             else:
                 archivists.append(principal)
 
