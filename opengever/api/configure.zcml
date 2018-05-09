@@ -16,6 +16,8 @@
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
 
+  <adapter factory=".mail.DeserializeMailFromJson" />
+
   <plone:service
       method="PATCH"
       for="opengever.document.document.IDocumentSchema"
