@@ -222,6 +222,7 @@ Installing and activating Solr
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
+
 .. code::
 
     [buildout]
@@ -236,16 +237,19 @@ Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
 
 
 Buildout
+
 .. code::
 
     $ bin/buildout
 
 Then start Solr
+
 .. code::
 
     $ bin/solr start
 
 Run the `activate_solr` maintenance script:
+
 .. code::
 
     $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
