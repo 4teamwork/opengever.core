@@ -15,16 +15,16 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
     @browsing
     def test_create_with_oneoffixx(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.empty_document.as_shadow_document()
+
         with freeze(FREEZE_DATE):
-            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.empty_document)
+            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.shadow_document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         expected_token = {
             u'action': u'oneoffixx',
-            u'documents': [u'createtreatydossiers000000000033'],
+            u'documents': [u'createshadowdocument000000000001'],
             u'exp': 4121033100,
             u'sub': u'robert.ziegler',
             u'url': u'http://nohost/plone/oc_oneoffixx',
@@ -35,14 +35,14 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
 
         expected_payloads = [{
             u'checkout-url': u'oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-                             u'.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWVu'
-                             u'dHMiOlsiY3JlYXRldHJlYXR5ZG9zc2llcnMwMDAwMDAwMDAwMzMiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHAiO'
-                             u'jQxMjEwMzMxMDB9'
-                             u'.P14rMZA1TXQsPYVIiOxIZwTSi6gfw-aRV2yYJEF9GSw',
+                             u'.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWV'
+                             u'udHMiOlsiY3JlYXRlc2hhZG93ZG9jdW1lbnQwMDAwMDAwMDAwMDEiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHA'
+                             u'iOjQxMjEwMzMxMDB9'
+                             u'.tf1OL0GixVdQv9OBiItrblq3B9Q46jQOwT8kK8CXyDo',
             u'connect-xml': u'@@oneoffix_connect_xml',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-26',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-37',
             u'filename': None,
-            u'uuid': u'createtreatydossiers000000000033',
+            u'uuid': u'createshadowdocument000000000001',
             }]
         with freeze(FREEZE_DATE):
             payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
@@ -53,7 +53,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
 
         expected_token = {
             u'action': u'checkout',
-            u'documents': [u'createtreatydossiers000000000033'],
+            u'documents': [u'createshadowdocument000000000001'],
             u'exp': 4121033100,
             u'sub': u'robert.ziegler',
             u'url': u'http://nohost/plone/oc_checkout',
@@ -72,20 +72,23 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             '  </Settings>',
             '  <Entries>',
             '    <OneOffixxConnect>',
-            '      <Arguments/>',
+            '      <Arguments>',
+            '        <TemplateId>2574d08d-95ea-4639-beab-3103fe4c3bc7</TemplateId>',
+            '        <LanguageLcid>2055</LanguageLcid>',
+            '      </Arguments>',
             '      <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">',
             '        <Arguments>',
             '          <Interface Name="OneGovGEVER">',
-            '            <Node Id="ogg.document.title">L&#228;&#228;r</Node>',
-            '            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 26</Node>',
-            '            <Node Id="ogg.document.sequence_number">26</Node>',
+            '            <Node Id="ogg.document.title">Sch&#228;ttengarten</Node>',
+            '            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 37</Node>',
+            '            <Node Id="ogg.document.sequence_number">37</Node>',
             '          </Interface>',
             '        </Arguments>',
             '      </Function>',
             '      <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">',
-            '        <Value key="ogg.document.title" type="string">L&#228;&#228;r</Value>',
-            '        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 26</Value>',
-            '        <Value key="ogg.document.sequence_number" type="string">26</Value>',
+            '        <Value key="ogg.document.title" type="string">Sch&#228;ttengarten</Value>',
+            '        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 37</Value>',
+            '        <Value key="ogg.document.sequence_number" type="string">37</Value>',
             '      </Function>',
             '      <Commands>',
             '        <Command Name="DefaultProcess">',
