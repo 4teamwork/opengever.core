@@ -7,7 +7,8 @@ from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -133,14 +134,26 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
     @browsing
     def test_all_tasks_are_marked_with_marker_interface(self, browser):
         self.login(self.regular_user, browser=browser)
+
+        # parallel
+        self.tasktemplatefolder.sequence_type = u'parallel'
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
-        self.assertTrue(IFromTasktemplateGenerated.providedBy(main_task))
-
+        self.assertTrue(IFromParallelTasktemplateGenerated.providedBy(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromTasktemplateGenerated.providedBy(subtask))
+            self.assertTrue(IFromParallelTasktemplateGenerated.providedBy(subtask))
+
+        # sequential
+        self.tasktemplatefolder.sequence_type = u'sequential'
+        self.trigger_tasktemplatefolder(
+            browser, templates=['Arbeitsplatz einrichten.'])
+
+        main_task = self.dossier.listFolderContents()[-1]
+        self.assertTrue(IFromSequentialTasktemplateGenerated.providedBy(main_task))
+        for subtask in main_task.listFolderContents():
+            self.assertTrue(IFromSequentialTasktemplateGenerated.providedBy(subtask))
 
     @browsing
     def test_creates_a_subtask_for_each_selected_template(self, browser):

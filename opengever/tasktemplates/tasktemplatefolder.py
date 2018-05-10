@@ -6,7 +6,8 @@ from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.content.templatefoldersschema import sequence_types
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import addContentToContainer
@@ -129,7 +130,10 @@ class TaskTemplateFolderTrigger(object):
         return date.today() + timedelta(highest_deadline + deadline_timedelta)
 
     def mark_as_generated_from_tasktemplate(self, task):
-        alsoProvides(task, IFromTasktemplateGenerated)
+        if self.context.is_sequential:
+            alsoProvides(task, IFromSequentialTasktemplateGenerated)
+        else:
+            alsoProvides(task, IFromParallelTasktemplateGenerated)
 
     def replace_interactive_actors(self, data):
         data['issuer'] = self.get_interactive_represent(data['issuer'])
