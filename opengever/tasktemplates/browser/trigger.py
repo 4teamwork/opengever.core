@@ -185,6 +185,10 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         if not self.get_selected_task_templatefolder().is_sequential:
             self.widgets['start_immediately'].mode = HIDDEN_MODE
 
+    def updateActions(self):
+        super(SelectTaskTemplatesWizardStep, self).updateActions()
+        self.actions['continue'].addClass("context")
+
     def get_preselected_tasktemplates(self):
         templates = api.content.find(
             context=self.get_selected_task_templatefolder(),
@@ -274,6 +278,10 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
             fields.append(field)
 
         return Fields(*fields)
+
+    def updateActions(self):
+        super(SelectResponsiblesWizardStep, self).updateActions()
+        self.actions['trigger'].addClass("context")
 
     def updateWidgets(self):
         """Change the label of the dynamically generated responsible fields.
