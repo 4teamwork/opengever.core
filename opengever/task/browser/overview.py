@@ -4,6 +4,8 @@ from opengever.base.browser.helper import get_css_class
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.task import ITask
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
@@ -134,6 +136,18 @@ class Overview(GeverTabMixin):
             )
 
         return [each.get_sql_object() for each in tasks]
+
+    def get_sequence_type(self):
+        if IFromSequentialTasktemplateGenerated.providedBy(self.context):
+            return u'sequential'
+        elif IFromParallelTasktemplateGenerated.providedBy(self.context):
+            return u'parallel'
+
+    def get_sequence_type_label(self):
+        if IFromSequentialTasktemplateGenerated.providedBy(self.context):
+            return _('label_sequential_process', default=u'Sequential process')
+        elif IFromParallelTasktemplateGenerated.providedBy(self.context):
+            return _('label_parallel_process', default=u'Parallel process')
 
     def get_containing_task(self):
         """Get the parent-tasks if we have one."""

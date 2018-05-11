@@ -4,9 +4,13 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
 from plone import api
 from StringIO import StringIO
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 
 class TestTaskOverview(IntegrationTestCase):
@@ -150,6 +154,48 @@ class TestTaskOverview(IntegrationTestCase):
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertIn(['Etat', u'Ferm\xe9'],
                       browser.css('table.listing').first.lists())
+
+
+class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
+
+    @browsing
+    def test_subtask_box_contains_sequence_type_label(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # sequential
+        alsoProvides(self.task, IFromSequentialTasktemplateGenerated)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            [u'Sequential process'],
+            browser.css('#sub_taskBox .sequence_type').text)
+
+        # parallel
+        noLongerProvides(self.task, IFromSequentialTasktemplateGenerated)
+        alsoProvides(self.task, IFromParallelTasktemplateGenerated)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            [u'Parallel process'],
+            browser.css('#sub_taskBox .sequence_type').text)
+
+    @browsing
+    def test_subtask_contains_sequence_type_class(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # sequential
+        alsoProvides(self.task, IFromSequentialTasktemplateGenerated)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            'task-container sequential',
+            browser.css('#sub_taskBox div').first.get('class'))
+
+        # parallel
+        noLongerProvides(self.task, IFromSequentialTasktemplateGenerated)
+        alsoProvides(self.task, IFromParallelTasktemplateGenerated)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertEquals(
+            'task-container parallel',
+            browser.css('#sub_taskBox div').first.get('class'))
+
 
 
 class TestTaskTextTransformation(IntegrationTestCase):

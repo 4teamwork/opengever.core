@@ -52,9 +52,22 @@
       <div id="sub_taskBox" class="box">
         <tal:condition tal:condition="sub_tasks">
           <h2 i18n:translate="label_sub_task">Sub tasks</h2>
-          <tal:tasks tal:repeat="task sub_tasks">
-            <div class="task" tal:content="structure python:view.render_task(task)"></div>
-          </tal:tasks>
+
+          <span class="sequence_type" tal:condition="context/is_from_tasktemplate"
+                tal:content="view/get_sequence_type_label"/>
+
+          <div tal:attributes="class string:task-container ${view/get_sequence_type}">
+            <div class="task-sequence-line-container">
+              <div class="task-sequence-line" />
+              <div class="task-sequence-arrow" />
+            </div>
+            <div class="task-list">
+              <tal:tasks tal:repeat="task sub_tasks">
+                <div class="task" tal:content="structure python:view.render_task(task)"></div>
+              </tal:tasks>
+            </div>
+          </div>
+
         </tal:condition>
       </div>
 
