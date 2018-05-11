@@ -178,7 +178,7 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
     fields = Fields(ISelectTaskTemplates)
 
     fields['tasktemplates'].widgetFactory[INPUT_MODE] = checkbox.CheckBoxFieldWidget
-    fields['start_immediately'].widgetFactory[INPUT_MODE] = checkbox.SingleCheckBoxFieldWidget # noqa
+    fields['start_immediately'].widgetFactory[INPUT_MODE] = checkbox.SingleCheckBoxFieldWidget  # noqa
 
     def updateWidgets(self):
         super(SelectTaskTemplatesWizardStep, self).updateWidgets()
