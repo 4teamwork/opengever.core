@@ -291,6 +291,9 @@ msgstr "Tâche suivante créée"
 msgid "task-state-open"
 msgstr "Ouvert"
 
+msgid "task-state-planned"
+msgstr ""
+
 msgid "task-state-rejected"
 msgstr "Refusé"
 
@@ -321,6 +324,9 @@ msgstr "Annuler"
 msgid "task-transition-open-in-progress"
 msgstr "Accepter"
 
+msgid "task-transition-open-planned"
+msgstr ""
+
 msgid "task-transition-open-rejected"
 msgstr "Refuser"
 
@@ -329,6 +335,9 @@ msgstr "Accomplir"
 
 msgid "task-transition-open-tested-and-closed"
 msgstr "Fermer"
+
+msgid "task-transition-planned-open"
+msgstr ""
 
 msgid "task-transition-reassign"
 msgstr "Attribuer à nouveau"

@@ -291,6 +291,9 @@ msgstr "Folgeaufgabe wird erstellt"
 msgid "task-state-open"
 msgstr "Offen"
 
+msgid "task-state-planned"
+msgstr "Geplant"
+
 msgid "task-state-rejected"
 msgstr "Abgelehnt"
 
@@ -321,6 +324,9 @@ msgstr "Stornieren"
 msgid "task-transition-open-in-progress"
 msgstr "Akzeptieren"
 
+msgid "task-transition-open-planned"
+msgstr "Planen"
+
 msgid "task-transition-open-rejected"
 msgstr "Ablehnen"
 
@@ -329,6 +335,9 @@ msgstr "Erledigen"
 
 msgid "task-transition-open-tested-and-closed"
 msgstr "Abschliessen"
+
+msgid "task-transition-planned-open"
+msgstr "Starten"
 
 msgid "task-transition-reassign"
 msgstr "Neu zuweisen"

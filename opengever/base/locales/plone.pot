@@ -273,6 +273,9 @@ msgstr ""
 msgid "task-state-tested-and-closed"
 msgstr ""
 
+msgid "task-state-planned"
+msgstr ""
+
 msgid "task-transition-in-progress-tested-and-closed"
 msgstr ""
 
@@ -280,6 +283,12 @@ msgid "task-transition-resolved-in-progress"
 msgstr ""
 
 msgid "task-transition-modify-deadline"
+msgstr ""
+
+msgid "task-transition-open-planned"
+msgstr ""
+
+msgid "task-transition-planned-open"
 msgstr ""
 
 msgid "tasktemplate-state-active"
