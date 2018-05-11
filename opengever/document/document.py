@@ -269,6 +269,7 @@ class Document(Item, BaseDocumentMixin):
             'actor': ''})
         workflow = wftool.getWorkflowById(workflow_id)
         workflow.updateRoleMappingsFor(self)
+        self.reindexObjectSecurity()
         return self
 
     def checked_out_by(self):
