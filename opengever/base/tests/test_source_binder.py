@@ -1,8 +1,16 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr.connection import SolrResponse
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.schema import SolrSchema
+from ftw.testbrowser import browsing
+from mock import MagicMock
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from zope.component import getUtility
+import os.path
 
 
 class TestRepositoryPathSourceBinder(FunctionalTestCase):
@@ -58,3 +66,33 @@ class TestDossierSourceBinder(FunctionalTestCase):
         source = source_binder(sub)
         self.assertEqual(
             ['Test 1'], [term.title for term in source.search('Test')])
+
+
+class TestSolrObjPathSourceBinder(IntegrationTestCase):
+
+    @browsing
+    def test_related_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
+        self.activate_feature('solr')
+        self.solr = self.mock_solr('solr_autocomplete.json')
+
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier, view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty')
+        self.assertEqual('/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+                         browser.contents)
+
+        self.solr.search.assert_called_with(
+            query=u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
+                  u'Title:empty^100 OR Title:empty*^20 OR SearchableText:empty^5 '
+                  u'OR SearchableText:empty* OR metadata:empty^10 OR '
+                  u'metadata:empty*^2 OR sequence_number_string:empty^2000',
+            rows=20,
+            fl=['path'],
+            filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker']
+        )
+
+    @browsing
+    def test_related_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier, view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty')
+        self.assertEqual('/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+                         browser.contents)

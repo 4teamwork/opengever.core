@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.stream import TempfileStreamIterator
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ech0147 import _
@@ -8,7 +9,6 @@ from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.journal.handlers import journal_entry_factory
 from plone.autoform import directives
 from plone.autoform.form import AutoExtensibleForm
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.model import Schema
 from tempfile import TemporaryFile
@@ -112,7 +112,7 @@ class IECH0147ExportFormSchema(Schema):
         missing_value=[],
         value_type=RelationChoice(
             title=u"Path",
-            source=ObjPathSourceBinder(
+            source=SolrObjPathSourceBinder(
                 object_provides=(
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     'opengever.document.behaviors.IBaseDocument'),
