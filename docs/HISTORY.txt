@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Add responsible and issuer to notification mail for TaskAdded activities. [phgross]
 - Fetch archivist group members from ogds. [phgross]
 - Set document date of generated journal pdfs to dossier end-date. [deiferni]
 - Make sure IE 11 does not cache favorites fetch requets. [phgross]
