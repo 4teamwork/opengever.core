@@ -901,50 +901,6 @@
 
   }
 
-  function CommitteeController() {
-
-    Controller.call(this);
-
-    var title = $("#form-widgets-title");
-    var autoUpdate = true;
-    var initialTitle = title.val();
-
-    var formatDate = function(date) { return $.datepicker.formatDate("dd.mm.yy", date); };
-
-    var applyTimezone = function(date) {
-      return new Date(date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000)));
-    };
-
-    function applyDate(date) {
-      if (!autoUpdate) {
-        return false;
-      }
-      title.val(initialTitle + ", " + formatDate(date));
-      return true;
-    }
-
-    this.trackDate = function(target, event) { applyDate(applyTimezone(event.date)); };
-
-    this.unbindDate = function() { autoUpdate = false; };
-
-    this.events = [
-      {
-        method: "changeDate",
-        target: "#formfield-form-widgets-start .spv-datetime-widget",
-        callback: this.trackDate
-      },
-      {
-        method: "input",
-        target: "#form-widgets-title",
-        callback: this.unbindDate
-      }
-    ];
-
-    this.init();
-    applyDate(new Date());
-
-  }
-
   $(function() {
 
     if($("#opengever_meeting_meeting").length) {
@@ -961,10 +917,6 @@
 
       $('#opengever_meeting_meeting .sidebar > ul.formTabs').tabs(
             '.sidebar .panes > div', {current: 'selected'});
-    }
-
-    if ($(".template-add-meeting").length) {
-      new CommitteeController();
     }
 
     $(global.document).on("notify", function() {
