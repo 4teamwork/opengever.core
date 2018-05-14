@@ -70,7 +70,9 @@ var app = new Vue({
 
     fetchData: function () {
       var self = this;
-      this.requester.get(this.endpoint).then(function (response) {
+      // make sure IE 11 does not cache the fetch request
+      var url = this.endpoint+ '?_t=' + Date.now().toString();
+      this.requester.get(url).then(function (response) {
         var items = response.data.sort(function(a, b){
           if (a.position > b.position) {
             return 1;
