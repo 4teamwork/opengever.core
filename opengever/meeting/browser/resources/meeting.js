@@ -44,11 +44,11 @@
     this.showCancelMeetingDialog = function(target) {
       self.currentItem = target;
       cancelMeetingDialog.load();
-    }
+    };
 
     this.closeCancelMeetingDialog = function() {
       cancelMeetingDialog.close();
-    }
+    };
 
     this.cancelMeeting = function() {
       return $.post(self.currentItem.attr("href")).always(function(){
@@ -58,7 +58,7 @@
           window.location = data.redirectUrl;
         }
       });
-    }
+    };
 
     this.reopenMeeting = function(target) {
       return $.post(target.attr("href")).done(function(data) {
