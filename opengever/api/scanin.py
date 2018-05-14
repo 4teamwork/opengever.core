@@ -29,16 +29,19 @@ class ScanIn(Service):
         try:
             adopt_user = api.env.adopt_user(username=userid)
         except api.exc.UserNotFoundError:
-            return self.error(message='Unknown user.')
+            return self.error(status=404, message='Unknown user.')
 
         with adopt_user:
             destination = self.destination()
-            if destination is None:
-                return self.error(message='Destination does not exist.')
-            filename = file_.filename.decode('utf8')
-            command = CreateDocumentCommand(destination, filename, file_)
-            with elevated_privileges():
-                command.execute()
+            if destination:
+                # XXX - Duck typing as error handling
+                # We've encountered an error while discovering a destination
+                if isinstance(destination, dict):
+                    return destination
+                filename = file_.filename.decode('utf8')
+                command = CreateDocumentCommand(destination, filename, file_)
+                with elevated_privileges():
+                    command.execute()
 
         self.request.response.setStatus(201)
         return super(ScanIn, self).reply()
@@ -51,30 +54,40 @@ class ScanIn(Service):
             inbox = self.find_inbox()
             if api.user.has_permission('opengever.inbox: Scan In', obj=inbox):
                 return inbox
+            return self.error(
+                status=403,
+                type_='Forbidden',
+                message='The user does not have the required permissions to perform a scan-in via the API.',
+                )
 
         elif destination == 'private':
             # Try to find a dossier with title 'Scaneingang'
             mtool = api.portal.get_tool(name='portal_membership')
             private_folder = mtool.getHomeFolder()
-            if private_folder is None:
-                return
-            catalog = api.portal.get_tool(name='portal_catalog')
-            dossiers = catalog(
-                portal_type='opengever.private.dossier',
-                path={'query': '/'.join(private_folder.getPhysicalPath()),
-                      'depth': -1},
-                sortable_title='scaneingang',  # Exact match
-            )
-            if dossiers:
-                return dossiers[0].getObject()
+            if private_folder:
+                catalog = api.portal.get_tool(name='portal_catalog')
+                dossiers = catalog(
+                    portal_type='opengever.private.dossier',
+                    path={'query': '/'.join(private_folder.getPhysicalPath()),
+                          'depth': -1},
+                    sortable_title='scaneingang',  # Exact match
+                )
+                if dossiers:
+                    return dossiers[0].getObject()
 
-            # No dossier found, create a new one
-            obj = create(
-                private_folder,
-                'opengever.private.dossier',
-                title='Scaneingang')
-            rename(obj)
-            return obj
+                # No dossier found, create a new one
+                obj = create(
+                    private_folder,
+                    'opengever.private.dossier',
+                    title='Scaneingang')
+                rename(obj)
+                return obj
+
+        return self.error(
+            status=404,
+            type_='NotFound',
+            message='The scan-in destination does not exist.',
+            )
 
     def find_inbox(self):
         portal = api.portal.get()

@@ -8,9 +8,6 @@ from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 class TestScanIn(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestScanIn, self).setUp()
-
     def create_single_inbox(self):
         inbox = create(Builder('inbox').titled(u'Inbox'))
         inbox.manage_setLocalRoles(self.regular_user.getId(),
@@ -72,14 +69,15 @@ class TestScanIn(IntegrationTestCase):
         self.login(self.administrator, browser)
         body, headers = self.prepare_request(
             userid=self.dossier_responsible.getId())
-
-        with browser.expect_http_error(code=400, reason='Bad Request'):
+        browser.exception_bubbling = True
+        with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(self.portal.absolute_url() + '/@scan-in',
                          method='POST',
                          headers=headers,
                          data=body)
 
-        self.assertIn('Destination does not exist.', browser.contents)
+        expected_message = 'The user does not have the required permissions to perform a scan-in via the API.'
+        self.assertEqual(expected_message, browser.json.get('error').get('message'))
 
     @browsing
     def test_scanin_to_org_unit_inbox(self, browser):
@@ -148,6 +146,20 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual('mydocument', doc.Title())
 
     @browsing
+    def test_scanin_to_missing_private_dossier(self, browser):
+        self.login(self.manager, browser)
+
+        body, headers = self.prepare_request(destination='private')
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.portal.absolute_url() + '/@scan-in',
+                         method='POST',
+                         headers=headers,
+                         data=body)
+
+        expected_message = 'The scan-in destination does not exist.'
+        self.assertIn(expected_message, browser.json.get('error').get('message'))
+
+    @browsing
     def test_scanin_with_missing_userid(self, browser):
         self.login(self.regular_user, browser)
         with browser.expect_http_error(code=400, reason='Bad Request'):
@@ -162,7 +174,7 @@ class TestScanIn(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         body, headers = self.prepare_request(userid='chief')
-        with browser.expect_http_error(code=400, reason='Bad Request'):
+        with browser.expect_http_error(code=404, reason='Not Found'):
             browser.open(self.portal.absolute_url() + '/@scan-in',
                          method='POST',
                          headers=headers,
@@ -184,9 +196,11 @@ class TestScanIn(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         body, headers = self.prepare_request(destination='unknown')
-        with browser.expect_http_error(code=400, reason='Bad Request'):
+        with browser.expect_http_error(code=404, reason='Not Found'):
             browser.open(self.portal.absolute_url() + '/@scan-in',
                          method='POST',
                          headers=headers,
                          data=body)
-        self.assertIn('Destination does not exist.', browser.contents)
+
+        expected_message = 'The scan-in destination does not exist.'
+        self.assertIn(expected_message, browser.json.get('error').get('message'))
