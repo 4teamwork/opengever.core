@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add fr-ch translations to vdex files. [tarnap]
+- Document generation of policies in internal docs. [tarnap]
 - Implement recently touched menu that lists checked out documents and recently touched objects. [lgraf]
 - Sort the entries of the reference browser widget. [tarnap]
 - Drop non-word meeting feature. [deiferni]

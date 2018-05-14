@@ -10,6 +10,7 @@ Inhalt:
 
    kurzreferenzen/index.rst
    development/index.rst
+   policies/index.rst
    releasemanagement/index.rst
    operations/index.rst
    notizen.rst
