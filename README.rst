@@ -232,7 +232,7 @@ Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
     solr-port = 8983
 
     [solr]
-    url = http://www-eu.apache.org/dist/lucene/solr/7.3.0/solr-7.3.0.tgz
+    url = http://archive.apache.org/dist/lucene/solr/7.3.0/solr-7.3.0.tgz
     md5sum = dfb6893fc656e14919df48ff654d38f2
 
 
