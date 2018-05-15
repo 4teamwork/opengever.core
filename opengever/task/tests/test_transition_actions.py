@@ -8,7 +8,7 @@ import re
 URL_WIHOUT_TOKEN_RE = re.compile(r'(.*)([\?, &]_authenticator=.*)')
 
 
-class BaseTransitionActionTest(FunctionalTestCase):
+class BaseTransitionActionFunctionalTest(FunctionalTestCase):
 
     def assert_action(self, browser, expected):
         url = URL_WIHOUT_TOKEN_RE.match(browser.url).groups()[0]
@@ -19,7 +19,7 @@ class BaseTransitionActionTest(FunctionalTestCase):
         browser.css('#workflow-transition-{}'.format(self.transition)).first.click()
 
 
-class TestDelegateAction(BaseTransitionActionTest):
+class TestDelegateAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-delegate'
 
     @browsing
@@ -30,7 +30,7 @@ class TestDelegateAction(BaseTransitionActionTest):
         self.assertEquals('Delegate task', browser.css('.documentFirstHeading').first.text)
 
 
-class TestModifyDeadlineAction(BaseTransitionActionTest):
+class TestModifyDeadlineAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-modify-deadline'
 
     @browsing
@@ -44,7 +44,7 @@ class TestModifyDeadlineAction(BaseTransitionActionTest):
             )
 
 
-class TestReOpenAction(BaseTransitionActionTest):
+class TestReOpenAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-cancelled-open'
 
     @browsing
@@ -57,7 +57,7 @@ class TestReOpenAction(BaseTransitionActionTest):
             )
 
 
-class TestReassignAction(BaseTransitionActionTest):
+class TestReassignAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-reassign'
 
     @browsing
@@ -70,7 +70,7 @@ class TestReassignAction(BaseTransitionActionTest):
             )
 
 
-class TestCancelAction(BaseTransitionActionTest):
+class TestCancelAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-open-cancelled'
 
     @browsing
@@ -83,7 +83,7 @@ class TestCancelAction(BaseTransitionActionTest):
             )
 
 
-class TestRejectAction(BaseTransitionActionTest):
+class TestRejectAction(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-open-rejected'
 
@@ -97,7 +97,7 @@ class TestRejectAction(BaseTransitionActionTest):
             )
 
 
-class TestInProgressResolveAction(BaseTransitionActionTest):
+class TestInProgressResolveAction(BaseTransitionActionFunctionalTest):
     transition = 'task-transition-in-progress-resolved'
 
     @browsing
@@ -149,7 +149,7 @@ class TestInProgressResolveAction(BaseTransitionActionTest):
             )
 
 
-class TestOpenResolveAction(BaseTransitionActionTest):
+class TestOpenResolveAction(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-open-resolved'
 
@@ -163,7 +163,7 @@ class TestOpenResolveAction(BaseTransitionActionTest):
             )
 
 
-class TestInProgressTestedAndClosedAction(BaseTransitionActionTest):
+class TestInProgressTestedAndClosedAction(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-in-progress-tested-and-closed'
     task_type = 'direct-execution'
@@ -209,7 +209,7 @@ class TestInProgressTestedAndClosedAction(BaseTransitionActionTest):
             )
 
 
-class TestAccept(BaseTransitionActionTest):
+class TestAccept(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-open-in-progress'
 
@@ -244,7 +244,7 @@ class TestAccept(BaseTransitionActionTest):
             )
 
 
-class TestOpenToClose(BaseTransitionActionTest):
+class TestOpenToClose(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-open-tested-and-closed'
 
@@ -302,7 +302,7 @@ class TestOpenToClose(BaseTransitionActionTest):
             )
 
 
-class TestReworkAction(BaseTransitionActionTest):
+class TestReworkAction(BaseTransitionActionFunctionalTest):
 
     transition = 'task-transition-resolved-in-progress'
 

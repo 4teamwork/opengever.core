@@ -1,10 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.task.tests.test_transition_actions import BaseTransitionActionTest
+from opengever.task.tests.test_transition_actions import BaseTransitionActionFunctionalTest
 
 
-class TestAcceptAction(BaseTransitionActionTest):
+class TestAcceptAction(BaseTransitionActionFunctionalTest):
     transition = 'forwarding-transition-accept'
 
     def setUp(self):
@@ -21,14 +21,11 @@ class TestAcceptAction(BaseTransitionActionTest):
     def test_is_accept_wizzard(self, browser):
         forwarding = create(Builder('forwarding')
                       .having(responsible_client='additional'))
-
-        self.do_transition(forwarding)
-
-        self.assert_action(
-            'http://nohost/plone/forwarding-1/@@accept_choose_method')
+        self.do_transition(browser, forwarding)
+        self.assert_action(browser, 'http://nohost/plone/forwarding-1/@@accept_choose_method')
 
 
-class TestRefuseAction(BaseTransitionActionTest):
+class TestRefuseAction(BaseTransitionActionFunctionalTest):
     transition = 'forwarding-transition-refuse'
 
     def setUp(self):
@@ -45,42 +42,37 @@ class TestRefuseAction(BaseTransitionActionTest):
     def test_is_refuse_form(self, browser):
         forwarding = create(Builder('forwarding')
                       .having(responsible_client='additional'))
-
-        self.do_transition(forwarding)
-
+        self.do_transition(browser, forwarding)
         self.assert_action(
-            'http://nohost/plone/forwarding-1/@@refuse-task?'
-            'form.widgets.transition=forwarding-transition-refuse')
+            browser,
+            'http://nohost/plone/forwarding-1/@@refuse-task?form.widgets.transition=forwarding-transition-refuse',
+            )
 
 
-class TestAssignToDossierAction(BaseTransitionActionTest):
+class TestAssignToDossierAction(BaseTransitionActionFunctionalTest):
     transition = 'forwarding-transition-assign-to-dossier'
 
     @browsing
     def test_is_assign_wizzard(self, browser):
         forwarding = create(Builder('forwarding'))
-
-        self.do_transition(forwarding)
-
-        self.assert_action(
-            'http://nohost/plone/forwarding-1/@@assign_choose_method')
+        self.do_transition(browser, forwarding)
+        self.assert_action(browser, 'http://nohost/plone/forwarding-1/@@assign_choose_method')
 
 
-class TestReassignToDossierAction(BaseTransitionActionTest):
+class TestReassignToDossierAction(BaseTransitionActionFunctionalTest):
     transition = 'forwarding-transition-reassign'
 
     @browsing
     def test_is_assign_task_form(self, browser):
         forwarding = create(Builder('forwarding'))
-
-        self.do_transition(forwarding)
-
+        self.do_transition(browser, forwarding)
         self.assert_action(
-            'http://nohost/plone/forwarding-1/@@assign-task?'
-            'form.widgets.transition=forwarding-transition-reassign')
+            browser,
+            'http://nohost/plone/forwarding-1/@@assign-task?form.widgets.transition=forwarding-transition-reassign',
+            )
 
 
-class TestReassignRefuseAction(BaseTransitionActionTest):
+class TestReassignRefuseAction(BaseTransitionActionFunctionalTest):
 
     transition = 'forwarding-transition-reassign-refused'
 
@@ -88,23 +80,20 @@ class TestReassignRefuseAction(BaseTransitionActionTest):
     def test_is_assign_fowarding_form(self, browser):
         forwarding = create(Builder('forwarding')
                             .in_state('forwarding-state-refused'))
-
-        self.do_transition(forwarding)
-
+        self.do_transition(browser, forwarding)
         self.assert_action(
-            'http://nohost/plone/forwarding-1/@@assign-forwarding?'
-            'form.widgets.transition=forwarding-transition-reassign-refused')
+            browser,
+            'http://nohost/plone/forwarding-1/@@assign-forwarding'
+            '?form.widgets.transition=forwarding-transition-reassign-refused',
+            )
 
 
-class TestCloseAction(BaseTransitionActionTest):
+class TestCloseAction(BaseTransitionActionFunctionalTest):
 
     transition = 'forwarding-transition-close'
 
     @browsing
     def test_is_assign_fowarding_form(self, browser):
         forwarding = create(Builder('forwarding'))
-
-        self.do_transition(forwarding)
-
-        self.assert_action(
-            'http://nohost/plone/forwarding-1/@@close-forwarding')
+        self.do_transition(browser, forwarding)
+        self.assert_action(browser, 'http://nohost/plone/forwarding-1/@@close-forwarding')
