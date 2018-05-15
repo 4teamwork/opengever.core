@@ -1,3 +1,4 @@
+from ftw.mail.interfaces import IEmailAddress
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
@@ -14,5 +15,7 @@ class SerializeDossierToJson(SerializeFolderToJson):
         result = super(SerializeDossierToJson, self).__call__(*args, **kwargs)
 
         result[u'reference_number'] = self.context.get_reference_number()
+        result[u'email'] = IEmailAddress(self.request).get_email_for_object(
+            self.context)
 
         return result

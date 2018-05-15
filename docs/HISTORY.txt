@@ -54,6 +54,7 @@ Changelog
 - Change label of "checkout/edit" button to "checkout and edit" [njohner]
 - Only allow updating a documents file if the document is checked-out by the current user. [buchi]
 - Convert .msg mails to .eml when created through REST API. [buchi]
+- Include email address in dossier serialization. [buchi]
 
 
 2018.2.4 (2018-05-01)
