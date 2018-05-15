@@ -1,5 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import date
+from opengever.activity import notification_center
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task import _
@@ -69,6 +71,12 @@ def reassign_team_tasks(task, event):
             'responsible',
             _(u"label_responsible", default=u"Responsible"),
             old_responsible, ITask(task).responsible)
+
+
+def set_responsible_to_issuer_on_reject(task, event):
+    if event.action == 'task-transition-open-rejected':
+        notification_center().remove_watcher_from_resource(task.oguid, task.responsible, TASK_RESPONSIBLE_ROLE)
+        task.responsible = task.issuer
 
 
 def cancel_subtasks(task, event):

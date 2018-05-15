@@ -1,8 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.activity import notification_center
+from opengever.activity.roles import TASK_ISSUER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from plone import api
 import re
 
 
@@ -84,9 +88,29 @@ class TestTaskTransitionActionsForCancelled(BaseTransitionActionIntegrationTest)
 
 class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
 
+    features = (
+        'activity',
+        )
+
     def setUp(self):
         super(TestTaskTransitionActionsForOpen, self).setUp()
+        # XXX - we cannot yet fixturize SQL objects
+        regular_user_watcher = create(Builder('watcher').having(actorid=self.regular_user.id))
+        dossier_responsible_watcher = create(Builder('watcher').having(actorid=self.dossier_responsible.id))
         with self.login(self.regular_user):
+            task_resource = create(
+                Builder('resource')
+                .oguid(self.task.oguid.id)
+                )
+            # XXX - the subscriptions must match the fixture for the tests to make sense
+            create(
+                Builder('subscription')
+                .having(resource=task_resource, watcher=regular_user_watcher, role=TASK_RESPONSIBLE_ROLE)
+                )
+            create(
+                Builder('subscription')
+                .having(resource=task_resource, watcher=dossier_responsible_watcher, role=TASK_ISSUER_ROLE)
+                )
             self.set_workflow_state('task-state-open', self.task)
 
     @browsing
@@ -102,6 +126,27 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         self.do_transition(browser, self.task, 'task-transition-open-rejected')
         expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-rejected'
         self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+    @browsing
+    def test_rejecting_sets_responsible_to_issuer(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(self.task.issuer, self.dossier_responsible.id)
+        self.assertEqual(self.task.responsible, self.regular_user.id)
+        subscription_count = len(notification_center().fetch_resource(self.task.oguid).subscriptions)
+        subscription_assertion_text = 'Both the issuer and the responsible should be initially subscribed.'
+        self.assertEqual(2, subscription_count, subscription_assertion_text)
+        self.do_transition(browser, self.task, 'task-transition-open-rejected')
+        browser.fill({'Response': 'No.'})
+        browser.css('#form-buttons-save').first.click()
+        self.assertEqual(api.content.get_state(self.task), 'task-state-rejected')
+        task_responsible_assertion_text = 'The task responsible should have been set to the issuer.'
+        self.assertEqual(self.task.issuer, self.dossier_responsible.id)
+        self.assertEqual(self.task.responsible, self.dossier_responsible.id, task_responsible_assertion_text)
+        subscriptions = notification_center().fetch_resource(self.task.oguid).subscriptions
+        subscription_count = len(subscriptions)
+        subscription_assertion_text = 'The subscription for the responsible should have been removed.'
+        self.assertEqual(1, subscription_count, subscription_assertion_text)
+        self.assertEqual('task_issuer', subscriptions[0].role, subscription_assertion_text)
 
     @browsing
     def test_resolving(self, browser):
