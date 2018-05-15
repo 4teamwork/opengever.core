@@ -41,6 +41,13 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1')
 
+    @browsing
+    def test_dossier_serialization_contains_email(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'email'), u'1014013300@example.org')
+
 
 class TestDocumentSerializer(IntegrationTestCase):
 
