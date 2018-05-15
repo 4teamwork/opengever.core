@@ -61,7 +61,11 @@ class TaskAddedActivity(BaseActivity):
             [_('label_dossier_title', u'Dossier title'),
              self.parent.title],
             [_('label_text', u'Text'),
-             self.context.text if self.context.text else u'-' ]
+             self.context.text if self.context.text else u'-'],
+            [_('label_responsible', u'Responsible'),
+             self.context.get_responsible_actor().get_label()],
+            [_('label_issuer', u'Issuer'),
+             self.context.get_issuer_actor().get_label()]
         ]
 
     def before_recording(self):

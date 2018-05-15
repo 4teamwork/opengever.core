@@ -322,6 +322,9 @@ class Task(Container):
     def get_responsible_actor(self):
         return Actor.lookup(self.responsible)
 
+    def get_issuer_actor(self):
+        return Actor.lookup(self.issuer)
+
     def get_responsible_org_unit(self):
         return ogds_service().fetch_org_unit(self.responsible_client)
 

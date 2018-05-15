@@ -49,16 +49,18 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task added by Test User', activity.summary)
 
-        # XXX should be a better assertion like the ftw.testbrowser table
-        # dict representation
-        self.maxDiff = None
-        expected = (u'<table><tbody>'
-                    u'<tr><td class="label">Task title</td><td>Abkl\xe4rung Fall Meier</td></tr>'
-                    u'<tr><td class="label">Deadline</td><td>Feb 13, 2015</td></tr>'
-                    u'<tr><td class="label">Task Type</td><td>To comment</td></tr>'
-                    u'<tr><td class="label">Dossier title</td><td>Dossier XY</td></tr>'
-                    u'<tr><td class="label">Text</td><td>Lorem ipsum</td></tr></tbody></table>')
-        self.assertEquals(expected, activity.description)
+        browser.open_html(activity.description)
+        rows = browser.css('table').first.rows
+
+        self.assertEquals(
+            [['Task title', u'Abkl\xe4rung Fall Meier'],
+             ['Deadline', 'Feb 13, 2015'],
+             ['Task Type', 'To comment'],
+             ['Dossier title', 'Dossier XY'],
+             ['Text', 'Lorem ipsum'],
+             ['Responsible', 'Boss Hugo (hugo.boss)'],
+             ['Issuer', 'Test User (test_user_1_)']],
+            [row.css('td').text for row in rows])
 
     @browsing
     def test_adding_task_adds_responsible_and_issuer_to_watchers(self, browser):
