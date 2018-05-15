@@ -772,7 +772,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
 
     @browsing
     def test_renders_quickupload_uploadbox(self, browser):
-        self.login(self.administrator, browser) # admins can add templates
+        self.login(self.administrator, browser)  # admins can add templates
         browser.open(self.templates)
 
         self.assertIsNotNone(
@@ -979,6 +979,8 @@ class TestTemplateFolderListings(IntegrationTestCase):
 
 class TestTemplateDocumentTabs(IntegrationTestCase):
 
+    features = ('bumblebee', )
+
     @browsing
     def test_template_overview_tab(self, browser):
         self.login(self.regular_user, browser)
@@ -1010,6 +1012,23 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
             ]
 
         self.assertEquals(expected_sharing_tab_data, sharing_tab_data())
+
+    @browsing
+    def test_documents_tab_shows_only_docs_directly_inside_the_folder(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # main templatefolder
+        browser.open(self.templates, view='tabbedview_view-documents-gallery')
+        self.assertEquals(
+            [self.empty_template.title, self.normal_template.title,
+             self.asset_template.title, self.docprops_template.title],
+            [img.attrib.get('alt') for img in browser.css('img')])
+
+        # subtemplatefolder
+        browser.open(self.subtemplates, view='tabbedview_view-documents-gallery')
+        self.assertEquals(
+            [self.subtemplate.title],
+            [img.attrib.get('alt') for img in browser.css('img')])
 
 
 class TestDossierTemplateFeature(IntegrationTestCase):

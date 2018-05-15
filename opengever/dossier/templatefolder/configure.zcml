@@ -32,6 +32,14 @@
       />
 
   <browser:page
+      name="tabbedview_view-documents-gallery"
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
+      class=".tabs.TemplateFolderDocumentsGallery"
+      permission="zope2.View"
+      allowed_attributes="fetch"
+      />
+
+  <browser:page
       for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
       name="tabbedview_view-sablontemplates-proxy"
       class=".tabs.TemplateFolderSablonTemplatesProxy"
