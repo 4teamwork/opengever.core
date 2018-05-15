@@ -462,6 +462,24 @@ class Task(Container):
 
         return term.title
 
+    def cancel_subtasks(self):
+        for subtask in self.objectValues():
+            if not ITask.providedBy(subtask):
+                continue
+
+            wftool = api.portal.get_tool('portal_workflow')
+            workflow_id = wftool.getChainFor(subtask)[0]
+            wftool.setStatusOf(
+                workflow_id, subtask,
+                {'review_state': 'task-state-cancelled',
+                 'action': 'Main task cancelled',
+                 'actor': api.user.get_current().getId()})
+
+            workflow = wftool.getWorkflowById(workflow_id)
+            workflow.updateRoleMappingsFor(subtask)
+            subtask.reindexObject()
+            subtask.get_sql_object().sync_with(subtask)
+
 
 def related_document(context):
     intids = getUtility(IIntIds)

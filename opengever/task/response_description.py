@@ -123,7 +123,9 @@ ResponseDescription.add_description(Close)
 
 
 class Cancel(ResponseDescription):
-    transition = 'task-transition-open-cancelled'
+    transitions = ['task-transition-open-cancelled',
+                   'task-transition-in-progress-cancelled']
+
     css_class = 'cancelled'
 
     def msg(self):
