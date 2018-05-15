@@ -39,11 +39,6 @@ class MissingProtocolHeaderTemplate(Exception):
     """
 
 
-class MissingParagraphTemplate(Exception):
-    """No paragraph template could be found for the committee or its container.
-    """
-
-
 class WrongAgendaItemState(Exception):
     """The agenda item is not in the correct state to perform the desired
     action.

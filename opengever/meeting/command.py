@@ -14,7 +14,6 @@ from opengever.meeting import _
 from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
-from opengever.meeting.exceptions import MissingParagraphTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
 from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
@@ -397,7 +396,8 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             for agenda_item in self.meeting.agenda_items:
                 if agenda_item.is_paragraph:
                     sablon = self.get_sablon_for_paragraph(agenda_item)
-                    merge_tool.add(sablon.file_data)
+                    if sablon is not None:
+                        merge_tool.add(sablon.file_data)
 
                 elif agenda_item.has_document:
                     sablon = self.get_agenda_item_header_sablon(agenda_item)
@@ -443,16 +443,17 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
             ProtocolData(self.meeting, [agenda_item]).as_json())
 
     def get_sablon_for_paragraph(self, agenda_item):
+        template = self._get_paragraph_template()
+        if template is None:
+            return
+
         return Sablon(self._get_paragraph_template()).process(
             ProtocolData(self.meeting, [agenda_item]).as_json())
 
     @instance.memoize
     def _get_paragraph_template(self):
         committee = self.meeting.committee.resolve_committee()
-        template = committee.get_paragraph_template()
-        if template is None:
-            raise MissingParagraphTemplate()
-        return template
+        return committee.get_paragraph_template()
 
 
 class UpdateGeneratedDocumentCommand(object):

@@ -93,7 +93,7 @@ class ICommitteeContainer(model.Schema):
         title=_('label_paragraph_template',
                 default=u'Paragraph template'),
         source=sablon_template_source,
-        required=True,
+        required=False,
     )
 
 
