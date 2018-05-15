@@ -1,10 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.solr.connection import SolrResponse
-from ftw.solr.interfaces import ISolrSearch
-from ftw.solr.schema import SolrSchema
 from ftw.testbrowser import browsing
-from mock import MagicMock
 from opengever.base.interfaces import ISearchSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
@@ -15,7 +11,6 @@ from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-import os.path
 
 
 class TestOpengeverSearch(FunctionalTestCase):
@@ -191,22 +186,9 @@ class TestSolrSearch(IntegrationTestCase):
 
     def setUp(self):
         super(TestSolrSearch, self).setUp()
+
         self.search = self.portal.unrestrictedTraverse('@@search')
-        conn = MagicMock(name='SolrConnection')
-        schema_resp = open(os.path.join(
-            os.path.dirname(__file__), 'data', 'solr_schema.json'), 'r').read()
-        conn.get = MagicMock(name='get', return_value=SolrResponse(
-            body=schema_resp, status=200))
-        manager = MagicMock(name='SolrConnectionManager')
-        manager.connection = conn
-        manager.schema = SolrSchema(manager)
-        solr = getUtility(ISolrSearch)
-        solr._manager = manager
-        search_resp = open(os.path.join(
-            os.path.dirname(__file__), 'data', 'solr_search.json'), 'r').read()
-        solr.search = MagicMock(name='search', return_value=SolrResponse(
-            body=search_resp, status=200))
-        self.solr = solr
+        self.solr = self.mock_solr('solr_search.json')
 
     def test_solr_filters_ignores_searchabletext(self):
         self.request.form.update({'SearchableText': 'foo'})
