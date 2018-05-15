@@ -321,6 +321,9 @@ msgstr "Frist ändern"
 msgid "task-transition-open-cancelled"
 msgstr "Abbrechen"
 
+msgid "task-transition-in-progress-cancelled"
+msgstr "Abbrechen"
+
 msgid "task-transition-open-in-progress"
 msgstr "Akzeptieren"
 

@@ -228,6 +228,9 @@ msgstr ""
 msgid "task-transition-open-cancelled"
 msgstr ""
 
+msgid "task-transition-in-progress-cancelled"
+msgstr ""
+
 msgid "task-transition-open-in-progress"
 msgstr ""
 
