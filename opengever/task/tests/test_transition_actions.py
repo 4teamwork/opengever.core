@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 import re
 
 
@@ -15,6 +16,13 @@ class BaseTransitionActionTestMixin(object):
         self.assertEquals(expected, url)
 
 
+class BaseTransitionActionIntegrationTest(IntegrationTestCase, BaseTransitionActionTestMixin):
+
+    def do_transition(self, browser, task, transition):
+        browser.open(task)
+        browser.css('#workflow-transition-{}'.format(transition)).first.click()
+
+
 class BaseTransitionActionFunctionalTest(FunctionalTestCase, BaseTransitionActionTestMixin):
 
     def do_transition(self, browser, task):
@@ -22,82 +30,85 @@ class BaseTransitionActionFunctionalTest(FunctionalTestCase, BaseTransitionActio
         browser.css('#workflow-transition-{}'.format(self.transition)).first.click()
 
 
-class TestDelegateAction(BaseTransitionActionFunctionalTest):
-    transition = 'task-transition-delegate'
+class TestTaskTransitionActionsForInProgress(BaseTransitionActionIntegrationTest):
 
     @browsing
-    def test_is_delegate_form(self, browser):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-        self.do_transition(browser, task)
-        self.assert_action(browser, 'http://nohost/plone/task-1/@@delegate_recipients')
+    def test_delegation(self, browser):
+        self.login(self.regular_user, browser)
+        self.do_transition(browser, self.task, 'task-transition-delegate')
+        expected_transition_action = '@@delegate_recipients'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
         self.assertEquals('Delegate task', browser.css('.documentFirstHeading').first.text)
 
-
-class TestModifyDeadlineAction(BaseTransitionActionFunctionalTest):
-    transition = 'task-transition-modify-deadline'
-
     @browsing
-    def test_is_modify_deadline_form(self, browser):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-        self.do_transition(browser, task)
+    def test_deadline_modification(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-modify-deadline')
+        expected_transition_action = '@@modify_deadline?form.widgets.transition=task-transition-modify-deadline'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
         self.assertEquals('Modify deadline', browser.css('.documentFirstHeading').first.text)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/@@modify_deadline?form.widgets.transition=task-transition-modify-deadline',
-            )
-
-
-class TestReOpenAction(BaseTransitionActionFunctionalTest):
-    transition = 'task-transition-cancelled-open'
 
     @browsing
-    def test_is_responseform(self, browser):
-        task = create(Builder('task').in_state('task-state-cancelled'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-cancelled-open',
-            )
+    def test_reassigning(self, browser):
+        self.login(self.regular_user, browser)
+        self.do_transition(browser, self.task, 'task-transition-reassign')
+        expected_transition_action = '@@assign-task?form.widgets.transition=task-transition-reassign'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
 
 
-class TestReassignAction(BaseTransitionActionFunctionalTest):
-    transition = 'task-transition-reassign'
+class TestTaskTransitionActionsForResolved(BaseTransitionActionIntegrationTest):
+    """This class is taking advantage of self.subtask being resolved."""
 
     @browsing
-    def test_is_reassign_form(self, browser):
-        task = create(Builder('task'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/@@assign-task?form.widgets.transition=task-transition-reassign',
-            )
+    def test_reworking(self, browser):
+        self.login(self.regular_user, browser)
+        self.do_transition(browser, self.subtask, 'task-transition-resolved-in-progress')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-resolved-in-progress'
+        self.assert_action(browser, '/'.join((self.subtask.absolute_url(), expected_transition_action, )))
 
 
-class TestCancelAction(BaseTransitionActionFunctionalTest):
-    transition = 'task-transition-open-cancelled'
+class TestTaskTransitionActionsForCancelled(BaseTransitionActionIntegrationTest):
 
-    @browsing
-    def test_is_responseform(self, browser):
-        task = create(Builder('task'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-open-cancelled',
-            )
-
-
-class TestRejectAction(BaseTransitionActionFunctionalTest):
-
-    transition = 'task-transition-open-rejected'
+    def setUp(self):
+        super(TestTaskTransitionActionsForCancelled, self).setUp()
+        with self.login(self.regular_user):
+            self.set_workflow_state('task-state-cancelled', self.task)
 
     @browsing
-    def test_is_responseform(self, browser):
-        task = create(Builder('task'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-open-rejected',
-            )
+    def test_reopening_task(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-cancelled-open')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-cancelled-open'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+
+class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
+
+    def setUp(self):
+        super(TestTaskTransitionActionsForOpen, self).setUp()
+        with self.login(self.regular_user):
+            self.set_workflow_state('task-state-open', self.task)
+
+    @browsing
+    def test_cancelling(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-open-cancelled')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-cancelled'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+    @browsing
+    def test_rejecting(self, browser):
+        self.login(self.regular_user, browser)
+        self.do_transition(browser, self.task, 'task-transition-open-rejected')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-rejected'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+    @browsing
+    def test_resolving(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-open-cancelled')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-cancelled'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
 
 
 class TestInProgressResolveAction(BaseTransitionActionFunctionalTest):
@@ -149,20 +160,6 @@ class TestInProgressResolveAction(BaseTransitionActionFunctionalTest):
         self.assert_action(
             browser,
             'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-in-progress-resolved',
-            )
-
-
-class TestOpenResolveAction(BaseTransitionActionFunctionalTest):
-
-    transition = 'task-transition-open-resolved'
-
-    @browsing
-    def test_is_responseform(self, browser):
-        task = create(Builder('task'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-open-resolved',
             )
 
 
@@ -302,18 +299,4 @@ class TestOpenToClose(BaseTransitionActionFunctionalTest):
         self.assert_action(
             browser,
             'http://nohost/plone/task-1/@@close-task-wizard_select-documents',
-            )
-
-
-class TestReworkAction(BaseTransitionActionFunctionalTest):
-
-    transition = 'task-transition-resolved-in-progress'
-
-    @browsing
-    def test_is_addform(self, browser):
-        task = create(Builder('task').in_state('task-state-resolved'))
-        self.do_transition(browser, task)
-        self.assert_action(
-            browser,
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition=task-transition-resolved-in-progress',
             )
