@@ -8,11 +8,14 @@ import re
 URL_WIHOUT_TOKEN_RE = re.compile(r'(.*)([\?, &]_authenticator=.*)')
 
 
-class BaseTransitionActionFunctionalTest(FunctionalTestCase):
+class BaseTransitionActionTestMixin(object):
 
     def assert_action(self, browser, expected):
         url = URL_WIHOUT_TOKEN_RE.match(browser.url).groups()[0]
         self.assertEquals(expected, url)
+
+
+class BaseTransitionActionFunctionalTest(FunctionalTestCase, BaseTransitionActionTestMixin):
 
     def do_transition(self, browser, task):
         browser.login().open(task)
