@@ -1,4 +1,7 @@
 from opengever.task.browser.transitioncontroller import TaskTransitionController
+from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
+from opengever.testing import IntegrationTestCase
+from zope.interface import alsoProvides
 import unittest
 
 
@@ -107,6 +110,36 @@ class TestOpenCancelledGuard(BaseTransitionGuardTests):
             self.transition, False, checker))
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, checker))
+
+
+class TestInProgressCancelledGuard(IntegrationTestCase):
+    transition = 'task-transition-in-progress-cancelled'
+
+    def test_not_available_for_regular_task(self):
+        self.login(self.regular_user)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+    def test_not_available_for_adminstrators_on_regular_task(self):
+        self.login(self.administrator)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+    def test_only_available_for_tasktemplate_process_main_tasks(self):
+        self.login(self.regular_user)
+        self.set_workflow_state('task-state-in-progress', self.task)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        alsoProvides(self.task, IFromTasktemplateGenerated)
+        alsoProvides(self.subtask, IFromTasktemplateGenerated)
+
+        self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.subtask))
 
 
 class TestInProgressResolvedGuard(BaseTransitionGuardTests):

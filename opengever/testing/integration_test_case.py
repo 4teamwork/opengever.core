@@ -627,3 +627,8 @@ class IntegrationTestCase(TestCase):
 
         predecessor.get_sql_object().sync_with(predecessor)
         successor.get_sql_object().sync_with(successor)
+
+    def get_workflow_transitions_for(self, obj):
+        wftool = api.portal.get_tool('portal_workflow')
+        return [transition['id'] for transition in
+                wftool.listActionInfos(object=obj, check_condition=True)]
