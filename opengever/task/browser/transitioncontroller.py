@@ -9,7 +9,6 @@ from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
@@ -264,7 +263,13 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-open-cancelled')
     def open_to_cancelled_guard(self, c, include_agency):
         """Checks if:
-        - The current user is the issuer."""
+        - The task is not a subtask of a tasktemplate process
+        - The current user is the issuer
+        """
+
+        if self.context.is_from_tasktemplate and self.context.get_is_subtask():
+            return False
+
         if include_agency:
             return (c.current_user.is_issuer
                     or c.current_user.in_issuing_orgunits_inbox_group
