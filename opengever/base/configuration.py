@@ -7,6 +7,7 @@ from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.meeting.interfaces import IMeetingSettings
@@ -52,12 +53,14 @@ class GeverSettingsAdpaterV1(object):
     def get_features(self):
         features = OrderedDict()
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
+        features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)
         features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
+        features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IMeetingSettings)
         features['officeatwork'] = api.portal.get_registry_record('is_feature_enabled', interface=IOfficeatworkSettings)
         features['officeconnector_attach'] = api.portal.get_registry_record('attach_to_outlook_enabled', interface=IOfficeConnectorSettings)  # noqa
@@ -66,8 +69,10 @@ class GeverSettingsAdpaterV1(object):
         features['preview_auto_refresh'] = api.portal.get_registry_record('is_auto_refresh_enabled', interface=IGeverBumblebeeSettings)  # noqa
         features['preview_open_pdf_in_new_window'] = api.portal.get_registry_record('open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)  # noqa
         features['preview'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverBumblebeeSettings)
+        features['purge_trash'] = api.portal.get_registry_record('purge_trash_enabled', interface=IDossierResolveProperties)
         features['repositoryfolder_documents_tab'] = api.portal.get_registry_record('show_documents_tab', interface=IRepositoryFolderRecords)  # noqa
         features['repositoryfolder_tasks_tab'] = api.portal.get_registry_record('show_tasks_tab', interface=IRepositoryFolderRecords)  # noqa
+        features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['word_meetings'] = api.portal.get_registry_record('is_word_implementation_enabled', interface=IMeetingSettings)  # noqa
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)

@@ -34,11 +34,14 @@ class TestConfig(IntegrationTestCase):
             browser.json.get(u'features'),
             {
                 u'activity': False,
+                u'archival_file_conversion': False,
                 u'contacts': False,
                 u'doc_properties': False,
                 u'dossier_templates': False,
                 u'ech0147_export': False,
                 u'ech0147_import': False,
+                u'favorites': True,
+                u'journal_pdf': False,
                 u'meetings': False,
                 u'officeatwork': False,
                 u'officeconnector_attach': False,
@@ -47,12 +50,13 @@ class TestConfig(IntegrationTestCase):
                 u'preview': False,
                 u'preview_auto_refresh': False,
                 u'preview_open_pdf_in_new_window': False,
+                u'purge_trash': False,
                 u'repositoryfolder_documents_tab': True,
                 u'repositoryfolder_tasks_tab': True,
+                u'resolver_name': u'strict',
                 u'solr': False,
                 u'word_meetings': False,
                 u'workspace': False,
-                u'favorites': True,
             })
 
     @browsing

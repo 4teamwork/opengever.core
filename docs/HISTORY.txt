@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bumblebee bugfix: no longer defer preview for new documents. [deiferni]
+- Display dossier resolve properties in the config view. [tarnap]
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 
