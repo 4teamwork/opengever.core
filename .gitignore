@@ -5,6 +5,7 @@ _build/
 .python-version
 .ruby-gemset
 .ruby-version
+.sass-cache
 *.egg-info
 *.mo
 *.pyc

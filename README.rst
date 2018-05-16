@@ -373,6 +373,17 @@ For building all packages, use the ``--all`` option:
     bin/i18n-build --all
 
 
+Theme Development
+-----------------
+
+You will need the ``sass`` command for compiling ``SCSS`` to ``CSS``. Start the
+``bin/sass-watcher`` script and it will pick up changes base on filesystem
+events and compile the style files automatically for you.
+
+There is a ``Gemfile`` to help make ``SASS`` versions consistent across
+development environments. Please refer to http://bundler.io/ for more details.
+
+
 Updating the history file
 -------------------------
 
