@@ -110,12 +110,20 @@ class Task(Base):
         )
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
-
     successors = relationship(
         "Task",
+        foreign_keys=[predecessor_id],
         backref=backref('predecessor', remote_side=task_id),
         cascade="delete",
         )
+
+    tasktemplate_predecessor_id = Column(Integer, ForeignKey('tasks.id'))
+    tasktemplate_successors = relationship(
+        "Task",
+        foreign_keys=[tasktemplate_predecessor_id],
+        backref=backref('tasktemplate_predecessor', remote_side=task_id),
+        cascade="delete",
+    )
 
     _principals = relation(
         'TaskPrincipal',
@@ -205,6 +213,10 @@ class Task(Base):
         self.containing_subdossier = safe_unicode(
             plone_task.get_containing_subdossier(),
             )
+
+        predecessor = plone_task.get_tasktemplate_predecessor()
+        if predecessor:
+            self.tasktemplate_predecessor = predecessor.get_sql_object()
 
     # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):

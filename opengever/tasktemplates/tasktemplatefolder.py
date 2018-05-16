@@ -82,9 +82,11 @@ class TaskTemplateFolderTrigger(object):
         return main_task
 
     def create_subtasks(self, main_task):
+        predecessor = None
+
         for template in self.selected_templates:
-            self.create_subtask(
-                main_task, template, self.values.get(template.id))
+            predecessor = self.create_subtask(
+                main_task, template, self.values.get(template.id), predecessor)
 
     def set_initial_state(self, task, template):
         """Set the initial states to planned for tasks of a sequential
@@ -100,7 +102,7 @@ class TaskTemplateFolderTrigger(object):
                                    transition='task-transition-open-planned')
             task.get_sql_object().sync_with(task)
 
-    def create_subtask(self, main_task, template, values):
+    def create_subtask(self, main_task, template, values, predecessor):
         data = dict(
             title=template.title,
             issuer=template.issuer,
@@ -117,11 +119,15 @@ class TaskTemplateFolderTrigger(object):
 
         task = self.add_task(main_task, data)
         self.set_initial_state(task, template)
+        self.set_tasktemplate_predecessor(task, predecessor)
         task.reindexObject()
+        task.get_sql_object().sync_with(task)
 
         # add activity record for subtask
         activity = TaskAddedActivity(task, getRequest(), main_task)
         activity.record()
+
+        return task
 
     def get_main_task_deadline(self):
         highest_deadline = max(
@@ -158,3 +164,10 @@ class TaskTemplateFolderTrigger(object):
 
         else:
             return principal
+
+    def set_tasktemplate_predecessor(self, task, predecessor):
+        if not self.context.is_sequential:
+            return
+
+        if predecessor:
+            task.set_tasktemplate_predecessor(predecessor)

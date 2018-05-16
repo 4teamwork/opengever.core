@@ -42,6 +42,7 @@ from z3c.form.interfaces import IAddForm
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
+from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -51,6 +52,7 @@ from zope.schema.vocabulary import getVocabularyRegistry
 
 
 _marker = object()
+TASKTEMPLATE_PREDECESSOR_KEY = 'tasktemplate_predecessor'
 
 
 def deadline_default():
@@ -479,6 +481,18 @@ class Task(Container):
             workflow.updateRoleMappingsFor(subtask)
             subtask.reindexObject()
             subtask.get_sql_object().sync_with(subtask)
+
+    def set_tasktemplate_predecessor(self, predecessor):
+        annotations = IAnnotations(self)
+
+        oguid = Oguid.for_object(predecessor).id
+        annotations[TASKTEMPLATE_PREDECESSOR_KEY] = oguid
+
+    def get_tasktemplate_predecessor(self):
+        annotations = IAnnotations(self)
+        oguid = annotations.get(TASKTEMPLATE_PREDECESSOR_KEY)
+        if oguid:
+            return Oguid.parse(oguid).resolve_object()
 
 
 def related_document(context):
