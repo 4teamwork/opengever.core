@@ -81,14 +81,14 @@ class CustomStylesUtility(object):
         """
         if LOGO_RIGHT_KEY in self.annotations['customstyles']:
             del self.annotations['customstyles'][LOGO_RIGHT_KEY]
-            #TODO: save_styles to recalculate the logo padding...
+            # TODO: save_styles to recalculate the logo padding...
 
     def reset_logo(self):
         """Reset the custom styles logo.
         """
         if LOGO_KEY in self.annotations['customstyles']:
             del self.annotations['customstyles'][LOGO_KEY]
-            #TODO: save_styles to recalculate the logo padding...
+            # TODO: save_styles to recalculate the logo padding...
 
     def get_logo_right(self, logo_file):
         """ Read the logo from a file-like stream object `logo_file` and create

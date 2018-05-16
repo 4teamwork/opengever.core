@@ -26,7 +26,6 @@ class TestCustomLogo(TestCase):
                     '\x01\x00\x00\x02\x02D\x01\x00;')
         styles_json = StringIO('{"css.logo": "%s"}' % imgdata)
 
-
         self.portal.REQUEST.form = {'form.import': '1',
                                     'import_styles': styles_json}
 

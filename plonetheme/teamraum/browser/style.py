@@ -35,7 +35,7 @@ class TinyMCEStyle(BrowserView):
                     style.getId() not in TINYMCE_BANNED_STYLES:
                 # do not load Internet Explorer conditional styles on non IE
                 # browsers
-                if not "Trident" in user_agent and \
+                if "Trident" not in user_agent and \
                         style.getConditionalcomment():
                     continue
                 if style.isExternalResource():

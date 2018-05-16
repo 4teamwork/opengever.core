@@ -72,5 +72,5 @@ class TestIconsView(BrowserView):
     def other_content_types(self):
         """returns other content types
         """
-        #return self.all_content_types.sort(key=lambda x: x[1])
+        # return self.all_content_types.sort(key=lambda x: x[1])
         return sorted(self.all_content_types.items(), key=itemgetter(1))

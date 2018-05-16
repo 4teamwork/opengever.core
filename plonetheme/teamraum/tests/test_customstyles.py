@@ -62,7 +62,6 @@ class TestCustomStyles(TestCase):
         handler = open(os.path.join(os.path.dirname(__file__),
                                     'json_files/styles.json'))
 
-
         view = self.portal.restrictedTraverse('teamraumtheme-controlpanel')
         self.portal.REQUEST.form.update({'form.import': '1',
                                          'import_styles': handler})

@@ -41,8 +41,8 @@ class TestGenericSetupUninstall(TestCase, GenericSetupUninstallMixin):
 
         lines_to_be_removed = []
         for index, line in enumerate(diff_list):
-            if line.startswith('-') and '<value/>' in line and diff_list[index+1].startswith('+') and '<value></value>' in diff_list[index+1]:
-                lines_to_be_removed.extend([index, index+1])
+            if line.startswith('-') and '<value/>' in line and diff_list[index + 1].startswith('+') and '<value></value>' in diff_list[index + 1]:
+                lines_to_be_removed.extend([index, index + 1])
 
         for i in sorted(lines_to_be_removed, reverse=True):
             diff_list.pop(i)

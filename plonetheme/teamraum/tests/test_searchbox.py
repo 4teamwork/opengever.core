@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.solr.interfaces import IFtwSolrLayer
 from ftw.testbrowser import browsing
-from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plonetheme.teamraum.interfaces import IPlonethemeTeamraumLayer
