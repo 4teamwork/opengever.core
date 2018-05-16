@@ -28,15 +28,15 @@ In der sich öffnenden Maske können folgende Felder abgefüllt werden:
     benannt werden.
 -  *Titel:* Titel der Dossiervorlage
 -  *Beschreibung:* Beschreibung des Einsatzes der Dossiervorlage
--  *Schlagworte:* Zur Umschreibung des Dossiers können Schlagworte gesetzt
+-  *Schlagwörter:* Zur Umschreibung des Dossiers können Schlagwörter gesetzt
     werden. Dabei können folgende beiden Optionen angewählt werden:
--  *Checkbox "Schlagworte vorausfüllen":*
+-  *Checkbox "Schlagwörter vorausfüllen":*
     Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab
-    Vorlage die angegebenen Schlagworte bereits vorausgefüllt.
+    Vorlage die angegebenen Schlagwörter bereits vorausgefüllt.
 -  *Checkbox "Schlagwortkatalog einschränken"":*
     Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab
-    Vorlage nur noch die in der Vorlage angegebenen Schlagworte zur Auswahl.
-    Der Benutzer kann dadurch auch keine neuen Schlagworte erfassen.
+    Vorlage nur noch die in der Vorlage angegebenen Schlagwörter zur Auswahl.
+    Der Benutzer kann dadurch auch keine neuen Schlagwörter erfassen.
 -  *Kommentar:* Zusätzliche Bemerkungen können im Kommentar-Feld gemacht werden.
 
 Zuletzt die Aktion mit "Speichern" abschliessen. Ab diesem Zeitpunkt kann die
@@ -66,8 +66,8 @@ Gewünschte Dossiervorlage anklicken.
 |img-dossiervorlagen-5|
 
 Danach öffnet sich die bekannte Dossiermaske mitsamt Hinweisen auf den Titel
-sowie den definierten Schlagworten. (Im Beispiel unten wurde definiert, dass
-die Schlagworte nicht vorausgefült werden, aber nur jene welche im
+sowie den definierten Schlagwörter. (Im Beispiel unten wurde definiert, dass
+die Schlagwörter nicht vorausgefült werden, aber nur jene welche im
 Vorlagendossier definiert wurden, ausgewählt werden können.)
 
 |img-dossiervorlagen-6|

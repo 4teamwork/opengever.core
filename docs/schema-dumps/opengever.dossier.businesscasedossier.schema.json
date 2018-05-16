@@ -18,8 +18,8 @@
         },
         "keywords": {
             "type": "array",
-            "title": "Schlagworte",
-            "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagworten die Datenschutzvorgaben (z.B. keine Eigennamen).",
+            "title": "Schlagw\u00f6rter",
+            "description": "Schlagw\u00f6rter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagw\u00f6rter die Datenschutzvorgaben (z.B. keine Eigennamen).",
             "_zope_schema_type": "Tuple"
         },
         "start": {
