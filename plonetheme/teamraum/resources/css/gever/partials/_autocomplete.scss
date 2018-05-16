@@ -1,0 +1,63 @@
+.template-add-membership, .template-opengever-meeting-proposa, .portaltype-opengever-meeting-proposal.template-edit {
+  .ui-autocomplete {
+    border: 1px solid $gray-dark;
+    background: none #fff;
+    padding: 0;
+    border-radius: $border-radius;
+    box-shadow: 0 5px 40px 0 $shadow-black-color;
+    font-size: inherit;
+    > .ui-menu-item {
+      padding: 0;
+      border-bottom: 1px solid $gray-dark;
+      display: block;
+      &:last-child {
+        border-bottom: none;
+      }
+      > a {
+        padding: $padding-factor * 16px $padding-factor * 18px;
+        border-radius: 0;
+        &.ui-state-focus {
+          border: none;
+          background: none $gray-light;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+
+/* plone.formwidget.autocomplete */
+.ac_results {
+  border: 1px solid $gray-dark;
+  background-color: #fff;
+  padding: 0;
+  border-radius: $border-radius;
+  box-shadow: 0 5px 40px 0 $shadow-black-color;
+  font-size: inherit;
+
+  ul {
+	  width: 100%;
+	  list-style-position: outside;
+	  list-style: none;
+	  padding: 0;
+	  margin: 0;
+
+    li {
+      padding: 5px 10px;
+      border-bottom: 1px solid $gray-dark;
+	    line-height: 16px;
+      display: block;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.ac_over {
+	      background-color: #5897fb;
+        color: $white;
+      }
+    }
+  }
+
+}

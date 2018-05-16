@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-239.35" y1="374.91" x2="-239.49" y2="367.26" gradientTransform="matrix(2.83, 0, 0, -2.83, 690.68, 1063.6)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#e2e2e2"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-210.32" y1="373.09" x2="-209.25" y2="374.17" gradientTransform="matrix(2.83, 0, 0, -2.83, 611.93, 1063.6)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="-181.54" y1="283" x2="-181.54" y2="287.64" gradientTransform="matrix(2.83, 0, 0, -2.83, 523.44, 821.35)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#317339"/>
+      <stop offset="1" stop-color="#45a950"/>
+    </linearGradient>
+  </defs>
+  <title>project</title>
+  <g id="g19235">
+    <path id="path12629" d="M3,23.25V0.75H16.5L21,5.25v18H3Z" style="fill:url(#linear-gradient)"/>
+    <rect id="rect13489" width="24" height="24" style="fill:none"/>
+    <rect id="rect13507" x="3.75" y="23.25" width="17.25" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13509" x="21" y="6" width="0.75" height="18" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13511" x="16.5" y="6" width="4.5" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13517" d="M3,23.25L3.75,24V23.25H3Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13519" d="M21.75,6L21,5.25V6h0.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13521" d="M15.75,6L16.5,6.75V6H15.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13527" x="13.5" y="9" width="4.5" height="1.5" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13529" x="16.5" y="10.5" width="1.5" height="3" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13531" d="M19.5,13.5l-2.25,3L15,13.5h4.5Z" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13533" d="M19.5,19.5l-2.25,2.25L15,19.5h4.5Z" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13535" d="M19.5,19.5l-2.25-2.25L15,19.5h4.5Z" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13639" d="M15.75,0.75H16.5L21,5.25V6H15.75V0.75Z" style="fill:url(#linear-gradient-2)"/>
+    <rect id="rect13501" x="2.25" y="6" width="13.16" height="13.16" style="fill:url(#linear-gradient-3)"/>
+    <rect id="rect13503" x="15.41" y="6.88" width="0.88" height="13.16" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13505" x="3.13" y="19.16" width="12.28" height="0.88" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <g id="text13515" style="isolation:isolate">
+      <g style="isolation:isolate">
+        <path d="M10.73,9.53a2.09,2.09,0,0,1,.8,1.78,2.24,2.24,0,0,1-.78,1.86,3.27,3.27,0,0,1-2.1.63H7.86v2.43H6.13V8.93H8.49A3.67,3.67,0,0,1,10.73,9.53Zm-1.3,2.73a1.23,1.23,0,0,0,.32-1,1.08,1.08,0,0,0-1.28-1.15H7.86v2.39H8.5A1.35,1.35,0,0,0,9.43,12.26Z" style="fill:#fff"/>
+      </g>
+    </g>
+    <path id="path13523" d="M16.29,6.88L15.41,6V6.88h0.88Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13525" d="M2.25,19.16L3.13,20V19.16H2.25Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+  </g>
+</svg>

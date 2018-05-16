@@ -1,0 +1,76 @@
+.notifyjs-corner {
+  margin-right: $padding-factor * 16px;
+  margin-top: 100px;
+  position: absolute;
+  z-index: 1000;
+
+  &.sticky {
+    margin-top: $padding-factor * 16px;
+    position: fixed;
+  }
+
+  .notifyjs-wrapper {
+    margin-bottom: $padding-factor * 8px;
+  }
+}
+
+.notifyjs-gever-base {
+  border-radius: $border-radius;
+  box-shadow: 0 2px 5px 1px rgba(68, 68, 68, .8);
+  display: table;
+  opacity: .95;
+  width: 100%;
+
+  > span {
+    color: $white;
+    display: table-cell;
+  }
+
+  > .title {
+    border-bottom-left-radius: $border-radius;
+    border-top-left-radius: $border-radius;
+    font-weight: bold;
+    padding: ($padding-factor * 8px) ($padding-factor * 16px);
+    width: 80px;
+  }
+
+  > .message {
+    border-bottom-right-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    padding: ($padding-factor * 8px) ($padding-factor * 16px);
+    width: 300px;
+  }
+}
+
+.notifyjs-gever-error {
+  > .title {
+    background-color: $message-error;
+  }
+
+  > .message {
+    background-color: $white;
+    color: $black;
+  }
+}
+
+.notifyjs-gever-info {
+  > .title {
+    background-color: $message-info;
+  }
+
+  > .message {
+    background-color: $white;
+    color: $black;
+  }
+}
+
+.notifyjs-gever-warn {
+  > .title {
+    background-color: $message-warn;
+  }
+
+  > .message {
+    background-color: $white;
+    color: $black;
+  }
+}

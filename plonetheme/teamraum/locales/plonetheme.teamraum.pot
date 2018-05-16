@@ -1,0 +1,207 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-03-04 14:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "Active shadow inset"
+msgstr ""
+
+msgid "Active shadow top"
+msgstr ""
+
+#: ./plonetheme/teamraum/browser/controlpanel.pt:272
+msgid "Additional CSS"
+msgstr ""
+
+msgid "Also used as bottom shadow in navigation bar."
+msgstr ""
+
+msgid "Content background color"
+msgstr ""
+
+msgid "Content width"
+msgstr ""
+
+msgid "Font size"
+msgstr ""
+
+msgid "Footer background color"
+msgstr ""
+
+msgid "Header background color"
+msgstr ""
+
+msgid "Header height"
+msgstr ""
+
+msgid "Header margin top"
+msgstr ""
+
+msgid "Headerbox background color"
+msgstr ""
+
+msgid "Hover shadow inset"
+msgstr ""
+
+msgid "Hover shadow top"
+msgstr ""
+
+msgid "Link color"
+msgstr ""
+
+msgid "Login background color"
+msgstr ""
+
+msgid "Logo title"
+msgstr ""
+
+msgid "Navi gradient active end"
+msgstr ""
+
+msgid "Navi gradient active start"
+msgstr ""
+
+msgid "Navi gradient end"
+msgstr ""
+
+msgid "Navi gradient hover end"
+msgstr ""
+
+msgid "Navi gradient hover start"
+msgstr ""
+
+msgid "Navi gradient start"
+msgstr ""
+
+msgid "Navi shadow inset"
+msgstr ""
+
+msgid "Navi shadow top"
+msgstr ""
+
+#: ./plonetheme/teamraum/profiles/default/controlpanel.xml
+msgid "Teamraum theme"
+msgstr ""
+
+msgid "Text color"
+msgstr ""
+
+msgid "The unit is needed!"
+msgstr ""
+
+#. Default: "Teamraumtheme settings"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:47
+msgid "heading_teamraumtheme_settings"
+msgstr ""
+
+#. Default: "This is recommended if there are banner-images."
+#: ./plonetheme/teamraum/browser/controlpanel.pt:206
+msgid "help_showheaderbox"
+msgstr ""
+
+#. Default: "Changes resetted"
+#: ./plonetheme/teamraum/browser/controlpanel.py:82
+msgid "info_changes_resetted"
+msgstr ""
+
+#. Default: "Changes saved"
+#: ./plonetheme/teamraum/browser/controlpanel.py:68
+msgid "info_changes_saved"
+msgstr ""
+
+#. Default: "Logo resetted"
+#: ./plonetheme/teamraum/browser/controlpanel.py:92
+msgid "info_logo_resetted"
+msgstr ""
+
+#. Default: "export styles"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:305
+msgid "label_export_styles"
+msgstr ""
+
+#. Default: "Footer"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:253
+msgid "label_footer"
+msgstr ""
+
+#. Default: "Header"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:129
+msgid "label_header"
+msgstr ""
+
+#. Default: "Show headerbox"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:203
+msgid "label_headerbox"
+msgstr ""
+
+#. Default: "import styles"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:298
+msgid "label_import_styles"
+msgstr ""
+
+#. Default: "Import / Export"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:293
+msgid "label_importexport"
+msgstr ""
+
+#. Default: "Logo"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:133
+msgid "label_logo"
+msgstr ""
+
+#. Default: "Logo space left"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:216
+msgid "label_logo_spaceleft"
+msgstr ""
+
+#. Default: "Miscellaneous"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:262
+msgid "label_misc"
+msgstr ""
+
+#. Default: "Navigation bar"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:68
+msgid "label_navbar"
+msgstr ""
+
+#. Default: "Show searchbox in navi"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:173
+msgid "label_navisearch"
+msgstr ""
+
+#. Default: "reset to default"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:319
+msgid "label_reset_default"
+msgstr ""
+
+#. Default: "Reset logo"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:139
+msgid "label_reset_logo"
+msgstr ""
+
+#. Default: "save"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:283
+msgid "label_save"
+msgstr ""
+
+#. Default: "Show full banner"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:156
+msgid "label_showfullbanner"
+msgstr ""
+
+#. Default: "Site"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:224
+msgid "label_site"
+msgstr ""
+

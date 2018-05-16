@@ -1,0 +1,24 @@
+.box a {
+  word-break: break-all;
+}
+
+.documentMetadata td {
+  word-break: break-word;
+
+  .filename {
+    word-break: break-all;
+  }
+}
+
+.linkWrapper > .contenttype-opengever-dossier-businesscasedossier {
+  display: inline-block;
+
+  > span {
+    vertical-align: middle;
+  }
+
+  &:before {
+    vertical-align: middle;
+    padding-bottom: 6px;
+  }
+}

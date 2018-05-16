@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<metadata>
+    <version>3300</version>
+    <dependencies>
+        <dependency>profile-plonetheme.teamraum:default</dependency>
+    </dependencies>
+</metadata>

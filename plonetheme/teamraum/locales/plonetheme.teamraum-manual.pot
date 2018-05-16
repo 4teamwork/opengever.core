@@ -1,0 +1,92 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-01-18 08:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+
+msgid "Navi shadow top"
+msgstr ""
+
+msgid "Also used as bottom shadow in navigation bar."
+msgstr ""
+
+msgid "Navi shadow inset"
+msgstr ""
+
+msgid "Hover shadow top"
+msgstr ""
+
+msgid "Hover shadow inset"
+msgstr ""
+
+msgid "Active shadow top"
+msgstr ""
+
+msgid "Active shadow inset"
+msgstr ""
+
+msgid "Navi gradient start"
+msgstr ""
+
+msgid "Navi gradient end"
+msgstr ""
+
+msgid "Navi gradient hover start"
+msgstr ""
+
+msgid "Navi gradient hover end"
+msgstr ""
+
+msgid "Navi gradient active start"
+msgstr ""
+
+msgid "Navi gradient active end"
+msgstr ""
+
+msgid "Header height"
+msgstr ""
+
+msgid "Header margin top"
+msgstr ""
+
+msgid "Headerbox background color"
+msgstr ""
+
+msgid "Header background color"
+msgstr ""
+
+msgid "Content background color"
+msgstr ""
+
+msgid "Content width"
+msgstr ""
+
+msgid "Font size"
+msgstr ""
+
+msgid "The unit is needed!"
+msgstr ""
+
+msgid "Link color"
+msgstr ""
+
+msgid "Text color"
+msgstr ""
+
+msgid "Footer background color"
+msgstr ""
+
+msgid "Logo title"
+msgstr ""
+
+msgid "Login background color"
+mststr ""

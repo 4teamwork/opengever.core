@@ -1,0 +1,84 @@
+// Special case for dossier notes.
+#editNoteOverlay {
+  width: 60%;
+  background-color: #ffffcc;
+  left: 18%;
+
+  h1 {
+    font-size: 2em;
+    line-height: 1em;
+  }
+
+  .formControls {
+    margin-left: 0;
+
+    button.delete {
+      float: right;
+
+      @extend .fa;
+      @extend .fa-trash;
+    }
+  }
+
+  textarea {
+    background-image: url(../../images/line.gif);
+    background-repeat: repeat;
+    background-color: transparent;
+    min-height: 200px;
+    font-size: 14px;
+    line-height: 20px;
+    border: none;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    max-width: 100%;
+    resize: none;
+  }
+}
+
+.editNoteWrapper {
+  display: none;
+}
+
+.editNoteLink {
+
+  .hide {
+    display: none;
+  }
+
+  .visualHint {
+    font-size: 16px;
+  }
+
+  .editNoteIcon {
+    @extend .fa;
+    @extend .fa-pencil;
+  }
+}
+
+#commentsBox {
+  word-wrap: break-word;
+}
+
+#commentsBox .editNoteLink {
+  display: block;
+}
+
+.documentFirstHeading .editNoteLink {
+  text-decoration: none;
+
+  .add {
+    display: none;
+  }
+
+  .linkLabel {
+    display: none;
+  }
+
+  .visualHint {
+    font-size: 16px;
+    @extend .fa;
+    @extend .fa-sticky-note;
+    color: #FED568;
+    vertical-align: .5em;
+  }
+}

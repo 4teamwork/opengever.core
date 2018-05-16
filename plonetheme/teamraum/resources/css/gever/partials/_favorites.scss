@@ -1,0 +1,230 @@
+$favorites-icon-size: 1em;
+
+#favorite-action {
+  display: inline-block;
+  vertical-align: 2px;
+  margin-left: 4px;
+
+  #mark-as-favorite {
+    color: $gever-green;
+    font-size: 16px;
+
+    &:before {
+      @extend .fa;
+      @extend .fa-star-o;
+    }
+
+    &.is-favorite {
+      &:before {
+        @extend .fa;
+        @extend .fa-star;
+      }
+    }
+
+    &.loading {
+      cursor: default;
+
+      &:before {
+        @extend .fa;
+        @extend .fa-spin;
+        @extend .fa-star;
+      }
+    }
+  }
+}
+
+table.favorites {
+  width: 100%;
+  padding-top: 46px;
+  position: relative;
+  z-index: 2;
+
+
+  tbody {
+    tr {
+      &:first-child td {
+        border-top: 1px solid $gray-dark;
+      }
+
+      &:hover {
+        td {
+          background-color: $gray-light;
+        }
+      }
+
+      td {
+        padding: ($padding-factor * 12px) ($padding-factor * 18px);
+        border-bottom: 1px solid $gray-dark;
+        text-align: left;
+
+        &:first-child {
+          width: 16px;
+          text-align: center;
+          padding-right: 0;
+        }
+
+        &.admin_unit {
+          // Forces cell to be as small as possible.
+          width: 1px;
+          color: $discreet;
+        }
+
+        &.edit-controls {
+          width: 50px;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .moveHandler {
+    cursor: move;
+    font-size: $favorites-icon-size;
+  }
+
+  .editAction, .deleteAction {
+    font-size: $favorites-icon-size;
+    display: inline-block;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .editAction {
+    padding-right: .5em;
+  }
+
+  .ui-sortable-helper {
+    display: table !important;
+  }
+}
+
+.template-favorites-view .overlay {
+  input[type="text"] {
+    @include component;
+    width: 100%;
+  }
+
+  label {
+    display: block;
+    margin-bottom: $padding-factor * 8px;
+  }
+
+  .button-group {
+    margin-top: 16px;
+    button {
+      margin-right: 0;
+
+      &:not(:first-child) {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-left: none;
+      }
+
+      &:not(:last-child) {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+}
+
+.favorites-menu {
+  padding-right: 2px;
+
+  #favorites-menu-toggler {
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(center);
+
+    background-image: -moz-linear-gradient(top, #f5f5f5, #e6e6e6);
+    background-image: -ms-linear-gradient(top, #f5f5f5, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6);
+    background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6);
+    background-image: linear-gradient(top, #f5f5f5, #e6e6e6);
+
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 26px;
+    height: 27px;
+
+    &.isOpen {
+      background-image: -moz-linear-gradient(top, #e6e6e6, #f5f5f5);
+      background-image: -ms-linear-gradient(top, #e6e6e6, #f5f5f5);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#e6e6e6), to(#f5f5f5));
+      background-image: -webkit-linear-gradient(top, #e6e6e6, #f5f5f5);
+      background-image: -o-linear-gradient(top, #e6e6e6, #f5f5f5);
+      background-image: linear-gradient(top, #e6e6e6, #f5f5f5);
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:before {
+      @extend .fa;
+      @extend .fa-star;
+      color: #606060;
+      font-size: 15px;
+    }
+  }
+
+  > dl {
+    position: relative;
+  }
+
+  dd {
+    position: absolute;
+    width: 350px;
+    background-color: $white;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+
+    > ul {
+
+      max-height: 300px;
+      overflow: auto;
+
+      > li {
+        display: list-item;
+
+        > span {
+          display: block;
+          padding: 6px 8px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &:hover {
+            background-color: #eaeaea;
+            text-decoration: none;
+          }
+
+          border-bottom: 1px solid #eaeaea;
+
+        }
+
+        &:last-child > span {
+          border-bottom: 0;
+        }
+      }
+
+    }
+
+    .overview {
+      padding: 10px 6px;
+      text-align: center;
+      border-top: 1px solid #eaeaea;
+    }
+
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+}

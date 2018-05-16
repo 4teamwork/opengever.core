@@ -1,0 +1,294 @@
+#mobile-navbuttons {
+  display: none;
+}
+
+@media screen and (max-width: 769px) {
+
+  /* @group layout */
+
+  body {
+    font-size: 16px;
+  }
+  #container .fixedWidth {
+    width: 99.6016%;
+  }
+  #container div.cell {
+    float: none;
+    width: 99.6016%;
+    margin-left: -99.6016%;
+  }
+  #column-navigation {
+    display: none;
+  }
+  #dashboard .dashboard-column {
+    float: none;
+    width: 100%;
+    min-height: 0px !important;
+    margin: 0;
+  }
+  #header-wrapper,
+  #columns-wrapper {
+    min-width: 0;
+  }
+
+  /* @end */
+
+  /* @group buttons */
+
+  ul.mobileButtons {
+    position: relative;
+    background-color: transparent;
+  }
+  ul.mobileButtons a {
+    background-color: transparent;
+  }
+
+  /* @end */
+
+  /* @group header */
+
+  #header {
+    margin-top: 53px;
+    z-index: 10;
+  }
+  #banner-image {
+    display: none;
+  }
+  #header div.headerTop {
+    margin-top: 0;
+  }
+  #container .headerTop > div {
+    float: left;
+  }
+  div.logo-wrapper {
+   padding-left: 0;
+  }
+  #portal-logo {
+    margin-left: 1em;
+  }
+
+  /* @end */
+
+  /* @group navigation */
+
+  #navi-wrapper {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+  }
+
+  #portal-globalnav.mobileNavigation {
+    z-index: 5;
+    border-bottom: 1px solid #000;
+  }
+  #portal-globalnav.mobileNavigation a {
+    float: none;
+    line-height: 1em;
+    font-size: 100%;
+  }
+  #portal-globalnav.mobileNavigation li a.loadChildren:hover,
+  #portal-globalnav.mobileNavigation .selected a,
+  #portal-globalnav.mobileNavigation a:hover {
+    color: #FFF;
+    background-color: transparent;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+
+  /* @end */
+
+  /* @group slide navigation */
+
+  #slider-container .slideNavi ul.globalnav li,
+  #slider-container .slideNavi ul.globalnav a {
+    color: #FFF;
+    border: none;
+  }
+  #slider-container .slideNavi ul.globalnav li {
+    border-bottom: 1px solid #000;
+  }
+  #slider-container .slideNavi ul.globalnav a:hover {
+    text-decoration: none;
+  }
+
+  /* @end */
+
+  /* @group usermenu */
+
+  #portal-personaltools {
+    width: 100%;
+    margin-left: 0;
+    margin-top: -12px;
+    z-index: 3;
+  }
+  #portal-personaltools dd {
+    background: #E6E6E6;
+  }
+  #portal-personaltools dd {
+    border-bottom: 1px solid #000;
+    padding: 0;
+  }
+  #portal-personaltools li a {
+    font-size: 100%;
+    padding: 1em;
+    line-height: 1em;
+    letter-spacing: 0.04em;
+    border-top: 1px solid #000;
+    background-color: #005fa2;
+    color: #FFF;
+    text-shadow: 0px 1px 0px #000;
+  }
+  #portal-personaltools li a:hover {
+    color: #FFF;
+    background-color: #005fa2;
+  }
+
+  /* @end */
+
+  /* @group search */
+
+  #portal-searchbox {
+    display: none;
+    margin-top: -12px;
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+    background-color: #005fa2;
+  }
+  #LSResult {
+    text-align: left;
+    width: 90%;
+    left: 5%;
+  }
+  .LSRow, #LSNothingFound {
+    width: 100%;
+  }
+  #searchGadget {
+    width: 80%;
+  }
+
+  /* @end */
+
+  /* @group navigation search */
+
+  #navi-search-wrapper > #portal-searchbox {
+    z-index: 5;
+    margin-top: 57px;
+  }
+
+  /* @end */
+
+  /* @group content */
+
+  #edit-bar {
+    font-size: 12px;
+  }
+  #content .simplelayout-content.two-columns-design .twocolumn,
+  .listing-column-left,
+  .listing-column-right {
+    float: none;
+    width: 100%;
+  }
+
+  /* @end */
+
+  /* @group images */
+
+  .sl-img-wrapper,
+  iframe,
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* @end */
+
+  /* @group tabbedview */
+
+  .tabbedview_search {
+    position: relative;
+    width: 80%;
+  }
+  .tabbedview_search #tabbedview-searchbox {
+    position: static;
+    width: 95%;
+    padding: 0.5em;
+    margin-bottom: 1em;
+  }
+  #tabbedview-body .boxGroup {
+    float: none;
+    width: 100% !important;
+  }
+
+  /* @end */
+
+  /* @group portlets */
+
+  #dashboard {
+    overflow: hidden;
+  }
+  #dashboard-add-portlet {
+    display: none;
+  }
+
+/* @end */
+
+  /* @group subsite */
+  #content-core .subsiteColumns .column {
+    float: none;
+    width: 98%;
+    padding: 0 1%;
+  }
+  /* @end */
+
+  /* @group tabs */
+
+  #content ul.formTabs {
+    width: 90%;
+    float: left;
+    border-bottom-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  a.toggleTabs {
+    padding: 0.3333em 0;
+    display: block;
+    float: left;
+    text-align: right;
+    border: 1px solid #ccc;
+    border-left-width: 0;
+    background-color: #eee;
+    width: 10%;
+    text-align: center;
+    margin-right: -1px;
+  }
+  a.toggleTabs:hover {
+    text-decoration: none;
+  }
+  #content li.formTab {
+    float: none;
+    margin: 0;
+  }
+  #content li.formTab a {
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    margin-bottom: -1px;
+  }
+  #content li.formTab a.selected,
+  #content li.formTab a:hover {
+    border-bottom-color: #ccc;
+  }
+  #content li.formTab a {
+    display: none;
+  }
+  #content li.formTab a.visible,
+  #content li.formTab a.selected {
+    display: block;
+  }
+
+
+/* @end */
+
+}

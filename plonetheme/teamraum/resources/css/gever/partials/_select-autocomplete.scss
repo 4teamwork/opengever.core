@@ -1,0 +1,12 @@
+.template-add-membership, .template-opengever-meeting-proposal, #content, .portaltype-opengever-meeting-proposal.template-edit {
+  #opengever_meeting_meeting, #opengever_meeting_protocol, #content {
+    input.select-autocomplete {
+      background: url("../../images/caret_down.png") no-repeat right center;
+      max-width: 300px;
+      padding: $padding-factor * 8px $padding-factor * 16px + 15px $padding-factor * 8px $padding-factor * 16px;
+      &.searching {
+        background: url("../../images/search.png") no-repeat right center;
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-229.73" y1="384.31" x2="-229.87" y2="376.66" gradientTransform="matrix(2.83, 0, 0, -2.83, 663.41, 1090.25)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#e2e2e2"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-200.7" y1="382.49" x2="-199.63" y2="383.57" gradientTransform="matrix(2.83, 0, 0, -2.83, 584.66, 1090.25)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-3" x1="-180.47" y1="283.35" x2="-180.47" y2="286.72" gradientTransform="matrix(2.83, 0, 0, -2.83, 522.41, 820.25)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a91e22"/>
+      <stop offset="1" stop-color="#ee2424"/>
+    </linearGradient>
+  </defs>
+  <title>pdf</title>
+  <g id="g19133">
+    <path id="path12621" d="M3,23.25V0.75H16.5L21,5.25v18H3Z" style="fill:url(#linear-gradient)"/>
+    <path id="path13151" d="M9,15a2.25,2.25,0,0,0-2.25,2.25h0A2.25,2.25,0,0,0,9,19.5H9a2.25,2.25,0,0,0,2.25-2.25h0A2.25,2.25,0,0,0,9,15H9Zm0,0.75a1.51,1.51,0,0,1,1.51,1.5h0A1.51,1.51,0,0,1,9,18.75H9a1.51,1.51,0,0,1-1.51-1.5h0A1.51,1.51,0,0,1,9,15.74H9Z" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13319" width="24" height="24" style="fill:none"/>
+    <rect id="rect13321" x="5.25" y="11.25" width="13.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13327" x="6" y="13.5" width="12" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13329" x="5.25" y="13.5" width="0.75" height="7.5" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13335" x="13.5" y="16.5" width="0.75" height="3" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13339" x="8.25" y="15" width="1.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13341" x="7.5" y="15.75" width="0.75" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13343" x="9.75" y="15.75" width="0.75" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13345" x="15" y="17.25" width="0.75" height="2.25" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13353" x="3.75" y="23.25" width="17.25" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13355" x="21" y="6" width="0.75" height="18" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13357" x="16.5" y="6" width="4.5" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13363" x="5.25" y="9" width="13.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13365" x="5.25" y="6.75" width="13.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13367" d="M3,23.25L3.75,24V23.25H3Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13369" d="M21.75,6L21,5.25V6h0.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13371" d="M15.75,6L16.5,6.75V6H15.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13373" x="5.25" y="4.5" width="10.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13377" x="18" y="13.5" width="0.75" height="7.5" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13379" x="6" y="20.25" width="12" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13387" x="12" y="18" width="0.75" height="1.5" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13389" x="16.5" y="15" width="0.75" height="4.5" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13391" d="M2.25,17.25L3,18V17.25H2.25Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13645" d="M15.75,0.75H16.5L21,5.25V6H15.75V0.75Z" style="fill:url(#linear-gradient-2)"/>
+    <rect id="rect13347" x="2.25" y="7.51" width="17.17" height="9.54" style="fill:url(#linear-gradient-3)"/>
+    <rect id="rect13349" x="19.42" y="8.46" width="0.95" height="9.54" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13351" x="3.2" y="17.05" width="16.21" height="0.95" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <g id="text13361" style="isolation:isolate">
+      <g style="isolation:isolate">
+        <path d="M7.24,10.2a1.78,1.78,0,0,1,.68,1.52,1.91,1.91,0,0,1-.67,1.59,2.8,2.8,0,0,1-1.79.53H4.79v2.08H3.31V9.69h2A3.13,3.13,0,0,1,7.24,10.2ZM6.13,12.54a1,1,0,0,0,.27-0.81,0.92,0.92,0,0,0-1.1-1H4.79v2H5.34A1.15,1.15,0,0,0,6.13,12.54Z" style="fill:#fff"/>
+        <path d="M12.8,10.35a2.85,2.85,0,0,1,.89,2.42,3,3,0,0,1-.86,2.44,3.43,3.43,0,0,1-2.24.71H8.71V9.69h1.74A3.84,3.84,0,0,1,12.8,10.35Zm-2.62,4.5h0.49a1.36,1.36,0,0,0,1.11-.45,2.61,2.61,0,0,0,.38-1.62A3.25,3.25,0,0,0,12,11.53a1.15,1.15,0,0,0-.51-0.61,1.74,1.74,0,0,0-.8-0.17H10.19v4.09Z" style="fill:#fff"/>
+        <path d="M16,10.74V12.4h1.82v1.05H16v2.47H14.57V9.69h3.72l-0.15,1.05H16Z" style="fill:#fff"/>
+      </g>
+    </g>
+    <path id="path13375" d="M20.37,8.46l-1-1v1h1Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+#tabbedview-body #journal_overview {
+  .contacts, .documents {
+    p {
+      margin-bottom: 0.5em;
+      margin-top: 0.5em;
+    }
+  }
+
+  .add_journal_entry {
+    display: inline-block;
+    padding: $spacing;
+    padding-left: $spacing * 1.5;
+    color: #000;
+    border: 1px solid $gray-dark;
+    margin-bottom: $spacing;
+    border-radius: 2px;
+    transition: background-color .2s ease-out;
+
+    &:before {
+      @extend .fa;
+      @extend .fa-plus;
+      font-size: 1.6em;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 12px;
+    }
+
+    &:hover {
+      text-decoration: none;
+      background-color: $gray-light;
+    }
+
+    &:visited {
+      color: #000;
+    }
+  }
+}
+
+.template-add-journal-entry {
+  #form-widgets-comment {
+    height: 150px;
+  }
+}

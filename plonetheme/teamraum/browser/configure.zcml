@@ -1,0 +1,58 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="plone">
+
+    <browser:resource
+        name="teamraumtheme_icon.png"
+        image="teamraumtheme_icon.png"
+        />
+
+    <browser:page
+        name="customlogo"
+        for="*"
+        class=".customstyles.CustomLogo"
+        permission="zope2.Public"
+        />
+
+    <browser:page
+        name="customlogoright"
+        for="*"
+        class=".customstyles.CustomLogoRight"
+        permission="zope2.Public"
+        />
+
+    <browser:page
+        name="customstyles.css"
+        for="*"
+        class=".customstyles.CustomStyles"
+        permission="zope2.Public"
+        />
+
+    <browser:page
+        name="teamraumtheme-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".controlpanel.TeamraumThemeControlpanel"
+        template="controlpanel.pt"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        name="test_icons"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        class=".test_icons.TestIconsView"
+        template="test_icons.pt"
+        permission="cmf.ManagePortal"
+        />
+
+    <browser:page
+        for="Products.TinyMCE.interfaces.utility.ITinyMCE"
+        name="tinymce-getstyle"
+        class=".style.TinyMCEStyle"
+        attribute="getStyle"
+        permission="zope2.View"
+        layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
+        />
+
+</configure>

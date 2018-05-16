@@ -1,0 +1,51 @@
+.refbrowser.overlay {
+  .pathbar {
+    padding: 0;
+    min-height: 65px;
+  }
+
+  .path {
+    min-width: 100%;
+    float: none;
+    max-width: 100%;
+    margin-bottom: 1em;
+
+    a {
+      white-space: nowrap;
+    }
+  }
+
+  .sorter {
+    position: relative;
+    float: left;
+  }
+
+  .search {
+    margin-bottom: .5em;
+
+    button {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .listing {
+    left: 2em;
+    right: 2em;
+    margin-top: 2.7em;
+
+    li {
+      padding-left: 0.25em;
+    }
+  }
+}
+
+#content .referencewidget {
+  .selected_items ul {
+    list-style-type: none;
+    margin-left: 0;
+    li {
+      background-color: transparent;
+    }
+  }
+}

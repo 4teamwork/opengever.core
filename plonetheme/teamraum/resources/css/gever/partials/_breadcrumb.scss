@@ -1,0 +1,185 @@
+$breadcrumb-border-width: 1px;
+
+#portal-breadcrumbs {
+  padding: 1em 0;
+  color: $gray-dark;
+
+  .breadcrumb {
+    display: inline-block;
+    position: relative;
+
+    > li {
+      display: block;
+      float: left;
+      position: relative;
+      margin-bottom: 2px;
+
+      > a {
+        box-sizing: border-box;
+        border-top: $breadcrumb-border-width solid $gray-dark;
+        border-bottom: $breadcrumb-border-width solid $gray-dark;
+        padding: 6px 25px 6px 18px;
+        position: relative;
+        font-size: 1rem;
+        text-decoration: none;
+        display: block;
+
+        &:before {
+          border-top: $breadcrumb-border-width solid $gray-dark;
+          border-bottom: $breadcrumb-border-width solid $gray-dark;
+          content: "";
+          position: absolute;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 14px 0 14px 10px;
+          border-color: transparent transparent transparent $gray-dark;
+          right: -10px;
+          top: -$breadcrumb-border-width;
+          z-index: 3;
+        }
+
+        &:after {
+          border-top: $breadcrumb-border-width solid $white;
+          border-bottom: $breadcrumb-border-width solid $white;
+          content: "";
+          position: absolute;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 13px 0 13px 9px;
+          border-color: transparent transparent transparent $white;
+          right: -9px;
+          top: 0;
+          z-index: 3;
+        }
+
+        &:hover {
+          background-color: $gray-light;
+          &:after {
+            border-color: transparent transparent transparent $gray-light;
+          }
+        }
+
+        &:first-child {
+          border-left: $breadcrumb-border-width solid $gray-dark;
+        }
+
+        > i {
+          font-size: 16px;
+          font-style: normal;
+          display: block;
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          top: 50%;
+          margin-top: -8px;
+
+          /* The dossier and mail icons are not aligned correctly in the
+          /* icon font, therefore we had to make this workaround. */
+          &.contenttype-opengever-dossier-businesscasedossier,
+          &.contenttype-opengever-dossier-templatefolder,
+          &.contenttype-opengever-dossier-dossiertemplate,
+          &.contenttype-opengever-dossier-templatedossier,
+          &.contenttype-opengever-dossier-businesscasedossier,
+          &.contenttype-opengever-zug-bdarp-casedossier2,
+          &.contenttype-opengever-zug-bdbds-bdbdscasebddossier,
+          &.contenttype-opengever-zug-bdbds-bdbdscasedossier2,
+          &.contenttype-opengever-zug-bdbds-bdbdscasevgbgdossier,
+          &.contenttype-opengever-zug-digva-orderdossier,
+          &.contenttype-opengever-zug-komsko-skocase,
+          &.contenttype-opengever-zug-skakr-businesscasedossier {
+            top: 40%;
+          }
+          &.contenttype-ftw-mail-mail, {
+            top: 40%;
+          }
+
+        }
+
+        > span {
+          margin-left: 20px;
+        }
+      }
+
+      &:hover:after {
+        border-left-color: #gray-light;
+      }
+
+    }
+
+    /* dropdown  */
+    .repo-dropdown {
+      display: none;
+      position: absolute;
+      z-index: 3;
+      box-shadow: 2px 2px 5px 0 rgba(0,0,0,.3);
+      border: 1px solid $gray-dark;
+      top: 27px;
+      left: 0;
+      min-width: 100%;
+      width: auto;
+
+      &.dropdown-open {
+        display: block;
+      }
+
+      > li {
+        > a {
+          display: block;
+          padding: 6px 8px;
+          font-size: 1rem;
+          background: $white;
+          border-bottom: 1px solid $gray-dark;
+          text-decoration: none;
+          position: relative;
+          white-space: nowrap;
+          clear: both;
+
+          &:hover {
+            background-color: $gray-light;
+          }
+
+          > i {
+            width: 16px;
+            height: 16px;
+            display: block;
+            position: absolute;
+            top: 50%;
+            margin-top: -8px;
+            font-size: 16px;
+            font-style: normal;
+          }
+
+          > span {
+            margin-left: 20px;
+          }
+        }
+
+        &:last-child > a {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    .repo-dropdown-toggle {
+      @extend .fa;
+      @extend .fa-caret-down;
+      padding: 4px 8px;
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      right: 0;
+    }
+
+    #repo-dropdown-toggler {
+      display: none;
+
+      &:checked + ul {
+        display: block;
+      }
+    }
+
+  }
+
+}

@@ -1,0 +1,167 @@
+#contactHistory,
+body:not(.feature-word-meeting) #opengever_meeting_meeting,
+#opengever_meeting_protocol,
+body:not(.feature-word-meeting) .overlay:not(#editNoteOverlay),
+body.feature-word-meeting .portaltype-opengever-meeting-proposal.template-edit #content,
+body.feature-word-meeting .template-opengever-meeting-proposal #content,
+body.feature-word-meeting .template-add-membership,
+body.feature-word-meeting .template-add-meeting,
+body.feature-word-meeting .add-agenda-items,
+.portaltype-opengever-meeting-submittedproposal.template-edit {
+  .actionButtons {
+    .regular_buttons {
+      @include clearfix();
+    }
+  }
+
+  @mixin button() {
+    @include component();
+
+
+    color: $black;
+    text-shadow: none;
+    @include gradient-vertical($white, $gray-light, 0%, 100%);
+    display: inline-block;
+    border-radius: 0;
+    font-size: $button-font-size;
+    &:hover, &:focus {
+      color: $black;
+      text-shadow: none;
+      background-image: none;
+      background-color: $gray-light;
+      border-color: $gray-dark;
+    }
+    &:active {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, .15), 0 1px 2px rgba(0, 0, 0, .05);
+      border-color: $gray-dark;
+    }
+    &#form-buttons-save, &.success {
+      color: $white;
+      @include gradient-vertical($green-light, $green, 0%, 100%);
+      &:hover, &:focus {
+        background-image: none;
+        background-color: $green;
+      }
+    }
+    &.destructive {
+      color: $white;
+      @include gradient-vertical($red-light, $red, 0%, 100%);
+      &:hover, &:focus {
+        background-image: none;
+        background-color: $red;
+      }
+    }
+    &.loading {
+      font-size: 0;
+      pointer-events: none;
+      &:before {
+        @extend .fa;
+        @extend .fa-circle-o-notch;
+        @extend .fa-spin;
+        margin-right: 5px;
+        font-size: $button-font-size;
+      }
+    }
+    &[disabled] {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+
+
+  input[type="submit"], input[type="button"], .button {
+    @include button();
+  }
+
+  div.actionButtons a:before {
+    font-family: FontAwesome;
+  }
+
+  div.actionButtons {
+    height: 38px;
+    padding: 0;
+    display: inline-block;
+    > .regular_buttons {
+      height: 38px;
+      width: 100%;
+      > li {
+        margin: 0;
+        height: 38px;
+        width: 100%;
+        > a {
+          @include button();
+          &:before {
+            padding: 0;
+            font-size: 13px;
+          }
+          > .actionText {
+            font-family: Arial, FreeSans, sans-serif;
+          }
+        }
+      }
+    }
+  }
+
+  .formControls {
+    width: 100%;
+  }
+
+  .button-group, .formControls {
+    white-space: nowrap;
+    border-collapse: separate;
+    font-size: 0;
+    @include clearfix();
+    input, .button {
+      border-right: none;
+      &:first-child {
+        border-top-left-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+      }
+      &:last-child {
+        border-top-right-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
+        border-right: 1px solid $gray-dark;
+      }
+    }
+    &.horizontal {
+      input, .button {
+        border-bottom: none;
+        width: 100%;
+        box-sizing: border-box;
+        border-right: 1px solid $gray-dark;
+        &:first-child {
+          border-top-left-radius: $border-radius;
+          border-top-right-radius: $border-radius;
+          border-bottom-left-radius: 0;
+        }
+        &:last-child {
+          border-bottom-right-radius: $border-radius;
+          border-bottom-left-radius: $border-radius;
+          border-top-right-radius: 0;
+          border-bottom: 1px solid $gray-dark;
+        }
+      }
+    }
+    &.fluid {
+      width: 100%;
+      > input, > .button {
+        display: table-cell;
+        float: left;
+      }
+      > div.actionButtons {
+        display: table-cell;
+        float: left;
+        > .regular_buttons {
+          > li {
+            > a {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    &.pull-right {
+      float: right;
+    }
+  }
+}

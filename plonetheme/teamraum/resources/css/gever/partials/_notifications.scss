@@ -1,0 +1,113 @@
+.notifications-settings-form {
+
+  .actions-column {
+    width: 450px;
+  }
+
+  .badge-title:before{
+    @extend .fa;
+    @extend .fa-bell-o;
+    padding-right: 5px;
+  }
+
+  .mail-title:before{
+    @extend .fa;
+    @extend .fa-envelope-o;
+    padding-right: 5px;
+  }
+
+  .settings-changed td,
+  .settings-changed:nth-child(even) td {
+    background-color: #fce9e3;
+  }
+
+  tr:nth-child(even) td {
+    background-color: $gray-table-row;
+  }
+
+  tr td {
+    vertical-align: middle;
+  }
+
+  .notification-settings-kind span{
+    font-weight: bold;
+
+    &:before {
+      font-family: 'opengever';
+      content: "x";
+      padding-right: 5px;
+    }
+
+    &.created:before { content: $refuse; }
+    &.reopen:before { content: $reopen; }
+    &.reactivate:before { content: $reactivate; }
+    &.cancelled:before { content: $cancelled; }
+    &.accept:before { content: $accept; }
+    &.reassign:before { content: $reassign; }
+    &.revise:before { content: $revise; }
+    &.taskCommented:before { content: $comment; }
+    &.assignDossier:before { content: $assignDossier; }
+    &.complete:before { content: $complete; }
+    &.close:before { content: $close;}
+    &.addSubtask:before { content: $addSubtask;}
+    &.addDocument:before { content: $addDocument;}
+    &.created:before { content: $created; }
+    &.modifyDeadline:before { content: $modifyDeadline; }
+    &.reactivated:before { content: $reactivate; }
+    &.refuse:before { content: $refuse; }
+    &.delegate:before { content: $delegate; }
+
+  }
+
+  .action {
+    @include button();
+  }
+
+  .save-setting,
+  .cancel-setting {
+    display: none;
+  }
+
+  .settings-changed {
+    .save-setting,
+    .cancel-setting {
+      display: inline-block;
+    }
+  }
+
+  .save-setting:before {
+    @extend .fa;
+    @extend .fa-check;
+  }
+
+  .reset-setting:before {
+    @extend .fa;
+    @extend .fa-trash-o;
+  }
+
+  .cancel-setting:before {
+    @extend .fa;
+    @extend .fa-times;
+  }
+
+  label {
+    font-weight: normal;
+    line-height: 30px;
+  }
+
+}
+
+#notification-settings-form ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+.template-personal-preferences .documentByLine {
+  display: none;
+}
+
+.notification-settings-description {
+  max-width: 850px;
+  margin-bottom: 30px;
+}

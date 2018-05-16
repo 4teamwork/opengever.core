@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <!-- The personal bar -->
+    <browser:viewlet
+        name="plone.personal_bar"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        class=".personal_bar.PersonalBarViewlet"
+        permission="zope2.View"
+        layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
+        />
+
+    <!-- The logo -->
+    <browser:viewlet
+        name="plone.logo"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        class=".logo.LogoViewlet"
+        permission="zope2.View"
+        layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
+        />
+
+    <!-- The logo right -->
+    <browser:viewlet
+        name="plone.logo_right"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        class=".logo.LogoRightViewlet"
+        permission="zope2.View"
+        layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
+        />
+
+    <!-- searchbox viewlet -->
+    <browser:viewlet
+        name="plone.searchbox"
+        manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
+        class=".searchbox.SearchBoxViewlet"
+        permission="zope2.View"
+        layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
+        />
+
+</configure>

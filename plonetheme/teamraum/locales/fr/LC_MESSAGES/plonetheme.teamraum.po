@@ -1,0 +1,206 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-03-04 14:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+msgid "Active shadow inset"
+msgstr "Elément actif ombre intérieur"
+
+msgid "Active shadow top"
+msgstr "Elément actif ombre supérieur"
+
+#: ./plonetheme/teamraum/browser/controlpanel.pt:272
+msgid "Additional CSS"
+msgstr "CSS supplémentaire"
+
+msgid "Also used as bottom shadow in navigation bar."
+msgstr "Est affiché aussi au-dessous de la barre de navigation."
+
+msgid "Content background color"
+msgstr "Fond d'aperçu"
+
+msgid "Content width"
+msgstr "Envergure de la page"
+
+msgid "Font size"
+msgstr "Largeur de la typographie"
+
+msgid "Footer background color"
+msgstr "Fond secteur en bas"
+
+msgid "Header background color"
+msgstr "Fond secteur en-tête"
+
+msgid "Header height"
+msgstr "Hauteur en-tête"
+
+msgid "Header margin top"
+msgstr "Marge en haut des éléments en-tête"
+
+msgid "Headerbox background color"
+msgstr "Couleur du fond en-tête"
+
+msgid "Hover shadow inset"
+msgstr "Hover élément ombre intérieur"
+
+msgid "Hover shadow top"
+msgstr "Hover élément ombre supérieur"
+
+msgid "Link color"
+msgstr "Couleur des liens"
+
+msgid "Login background color"
+msgstr "Couleur du fond de la fenêtre login"
+
+msgid "Logo title"
+msgstr "Titre au-dessous du logo"
+
+msgid "Navi gradient active end"
+msgstr "Elément actif: première couleur du spectre des couleurs"
+
+msgid "Navi gradient active start"
+msgstr "Elément actif: dernière couleur du spectre des couleurs"
+
+msgid "Navi gradient end"
+msgstr "Barre de navigation: dernière couleur du spectre des couleurs"
+
+msgid "Navi gradient hover end"
+msgstr "Effet Hover: dernière couleur du spectre des couleurs"
+
+msgid "Navi gradient hover start"
+msgstr "Effet Hover: première couleur du spectre des couleurs"
+
+msgid "Navi gradient start"
+msgstr "Barre de navigation: première couleur du spectre des couleurs"
+
+msgid "Navi shadow inset"
+msgstr "Navigation ombre intérieur"
+
+msgid "Navi shadow top"
+msgstr "Navigation ombre supérieur"
+
+#: ./plonetheme/teamraum/profiles/default/controlpanel.xml
+msgid "Teamraum theme"
+msgstr ""
+
+msgid "Text color"
+msgstr "Couleur du texte"
+
+msgid "The unit is needed!"
+msgstr "Veuillez saisir l'unité de mesure"
+
+#. Default: "Teamraumtheme settings"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:47
+msgid "heading_teamraumtheme_settings"
+msgstr "Paramètres mise en page Teamraum"
+
+#. Default: "This is recommended if there are banner-images."
+#: ./plonetheme/teamraum/browser/controlpanel.pt:206
+msgid "help_showheaderbox"
+msgstr "Ceci est recommandé en cas des banderoles"
+
+#. Default: "Changes resetted"
+#: ./plonetheme/teamraum/browser/controlpanel.py:82
+msgid "info_changes_resetted"
+msgstr "Les changements ont étés reculés."
+
+#. Default: "Changes saved"
+#: ./plonetheme/teamraum/browser/controlpanel.py:68
+msgid "info_changes_saved"
+msgstr "Vos changements ont étés enregistrés."
+
+#. Default: "Logo resetted"
+#: ./plonetheme/teamraum/browser/controlpanel.py:92
+msgid "info_logo_resetted"
+msgstr "Le logo a été supprimé."
+
+#. Default: "export styles"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:305
+msgid "label_export_styles"
+msgstr "Exporter des styles"
+
+#. Default: "Footer"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:253
+msgid "label_footer"
+msgstr "Secteur en bas"
+
+#. Default: "Header"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:129
+msgid "label_header"
+msgstr "Secteur en-tête"
+
+#. Default: "Show headerbox"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:203
+msgid "label_headerbox"
+msgstr "Afficher en-tête comme boîte"
+
+#. Default: "import styles"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:298
+msgid "label_import_styles"
+msgstr "Importer styles"
+
+#. Default: "Import / Export"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:293
+msgid "label_importexport"
+msgstr "Importer / Exporter"
+
+#. Default: "Logo"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:133
+msgid "label_logo"
+msgstr "Logo"
+
+#. Default: "Logo space left"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:216
+msgid "label_logo_spaceleft"
+msgstr "Le logo n'a pas une marge vers la gauche"
+
+#. Default: "Miscellaneous"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:262
+msgid "label_misc"
+msgstr "Divers"
+
+#. Default: "Navigation bar"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:68
+msgid "label_navbar"
+msgstr "Barre de navigation"
+
+#. Default: "Show searchbox in navi"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:173
+msgid "label_navisearch"
+msgstr "Afficher le champ de recherche"
+
+#. Default: "reset to default"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:319
+msgid "label_reset_default"
+msgstr "Rétablir la mise en page standard"
+
+#. Default: "Reset logo"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:139
+msgid "label_reset_logo"
+msgstr "Eliminer le logo"
+
+#. Default: "save"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:283
+msgid "label_save"
+msgstr "Enregistrer les changement"
+
+#. Default: "Show full banner"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:156
+msgid "label_showfullbanner"
+msgstr "Afficher la banderole toute l'envergure"
+
+#. Default: "Site"
+#: ./plonetheme/teamraum/browser/controlpanel.pt:224
+msgid "label_site"
+msgstr "Page"
+
+
