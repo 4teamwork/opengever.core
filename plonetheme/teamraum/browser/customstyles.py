@@ -4,14 +4,41 @@ from plone.app.blob.download import handleIfModifiedSince, handleRequestRange
 from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 from plonetheme.teamraum.importexport import CustomStylesUtility
 from plonetheme.teamraum.importexport import DEFAULT_STYLES
-from Products.Archetypes.utils import contentDispositionHeader
+from plonetheme.teamraum.importexport import LOGO_KEY
+from plonetheme.teamraum.importexport import LOGO_RIGHT_KEY
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO
 from webdav.common import rfc1123_date
 from zope.annotation.interfaces import IAnnotations
 from zope.publisher.browser import BrowserView
-from plonetheme.teamraum.importexport import LOGO_KEY
-from plonetheme.teamraum.importexport import LOGO_RIGHT_KEY
+
+
+def contentDispositionHeader(disposition, charset='utf-8', language=None, **kw):
+    """Return a properly quoted disposition header
+
+    Copy of Products.Archetypes.utils.contentDispositionHeader
+    """
+    from email.Message import Message as emailMessage
+
+    for key, value in kw.items():
+        # stringify the value
+        if isinstance(value, unicode):
+            value = value.encode(charset)
+        else:
+            value = str(value)
+            # raise an error if the charset doesn't match
+            unicode(value, charset, 'strict')
+        # if any value contains 8-bit chars, make it an
+        # encoding 3-tuple for special treatment by
+        # Message.add_header() (actually _formatparam())
+        try:
+            unicode(value, 'us-ascii', 'strict')
+        except UnicodeDecodeError:
+            value = (charset, language, value)
+
+    m = emailMessage()
+    m.add_header('content-disposition', disposition, **kw)
+    return m['content-disposition']
 
 
 class CustomLogo(BrowserView):
