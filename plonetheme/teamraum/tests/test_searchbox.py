@@ -2,8 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.solr.interfaces import IFtwSolrLayer
 from ftw.testbrowser import browsing
-from pkg_resources import get_distribution
-from pkg_resources import SetuptoolsVersion
+from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plonetheme.teamraum.interfaces import IPlonethemeTeamraumLayer
@@ -16,10 +15,6 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.viewlet.interfaces import IViewletManager
 import transaction
-import unittest
-
-ftw_solr_dist = get_distribution('ftw.solr')
-FTW_SOLR_2 = ftw_solr_dist.parsed_version >= SetuptoolsVersion('2.0.0')
 
 
 class TestSeachBoxViewlet(TestCase):
@@ -51,12 +46,11 @@ class TestSeachBoxViewlet(TestCase):
         viewlet = self._get_viewlet(self.portal)
         self.assertFalse(viewlet.has_solr())
 
-    @unittest.skipIf(FTW_SOLR_2, "Viewlet doesn't exist in ftw.solr >= 2.0.0")
-    def test_when_request_is_marked_with_requestlayer_has_solr_is_true(self):
+    def test_when_request_is_marked_with_requestlayer_has_solr_is_false_for_new_solr(self):
         viewlet = self._get_viewlet(self.portal)
         alsoProvides(self.portal.REQUEST, IFtwSolrLayer)
 
-        self.assertTrue(viewlet.has_solr())
+        self.assertFalse(viewlet.has_solr())
 
     @browsing
     def test_default_plone_placeholder_is_used_by_default(self, browser):
