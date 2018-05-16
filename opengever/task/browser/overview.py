@@ -172,3 +172,13 @@ class Overview(GeverTabMixin):
             return None
 
         return item.get_link(with_responsible_info=False)
+
+    def is_part_of_sequential_process(self):
+        return self.context.get_is_subtask() and \
+            IFromSequentialTasktemplateGenerated.providedBy(self.context)
+
+    def next_task_link(self):
+        return self.render_task(self.context.get_sql_object().get_next_task())
+
+    def previous_task_link(self):
+        return self.render_task(self.context.get_sql_object().get_previous_task())

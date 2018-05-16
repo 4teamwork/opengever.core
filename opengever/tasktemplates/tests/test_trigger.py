@@ -407,3 +407,8 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertIsNone(task1.get_tasktemplate_predecessor())
         self.assertEquals(task1, task2.get_tasktemplate_predecessor())
         self.assertEquals(task2, task3.get_tasktemplate_predecessor())
+
+        self.assertEquals(task1.get_sql_object(),
+                          task2.get_sql_object().get_previous_task())
+        self.assertEquals(task3.get_sql_object(),
+                          task2.get_sql_object().get_next_task())

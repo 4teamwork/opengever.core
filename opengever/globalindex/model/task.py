@@ -295,6 +295,19 @@ class Task(Base):
         """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
 
+    def get_previous_task(self):
+        """If the task is part of a sequence it returns previous task of the
+        sequence otherwise None."""
+
+        return self.tasktemplate_predecessor
+
+    def get_next_task(self):
+        """If the task is part of a sequence it returns the next task of the
+        sequence otherwise None."""
+
+        if self.tasktemplate_successors:
+            return self.tasktemplate_successors[0]
+
     def get_css_class(self):
         """Returns css_class for the special task icons:
 

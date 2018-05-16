@@ -196,6 +196,27 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             'task-container parallel',
             browser.css('#sub_taskBox div').first.get('class'))
 
+    @browsing
+    def test_subtask_contains_sequence_type_class(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.subtask.set_tasktemplate_predecessor(self.archive_task)
+        self.subtask.get_sql_object().sync_with(self.subtask)
+
+        self.inactive_task.set_tasktemplate_predecessor(self.subtask)
+        self.inactive_task.get_sql_object().sync_with(self.inactive_task)
+
+        # sequential
+        alsoProvides(self.subtask, IFromSequentialTasktemplateGenerated)
+
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        self.assertEquals(
+            [self.archive_task.title],
+            browser.css('#sequence_taskBox .previous_task .task').text)
+
+        self.assertEquals(
+            [self.inactive_task.title],
+            browser.css('#sequence_taskBox .next_task .task').text)
 
 
 class TestTaskTextTransformation(IntegrationTestCase):
