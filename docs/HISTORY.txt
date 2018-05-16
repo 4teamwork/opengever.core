@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- No longer require a paragraph template for committee containers. [deiferni]
 - Add responsible and issuer to notification mail for TaskAdded activities. [phgross]
 - Fetch archivist group members from ogds. [phgross]
 - Fix content displayed in the templatefolder's gallery view. [phgross]
