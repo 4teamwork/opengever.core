@@ -14,7 +14,6 @@ tests_require = [
     'ftw.builder',
     'ftw.flamegraph',
     'ftw.journal',
-    'ftw.subsite',
     'ftw.tabbedview',
     'ftw.table',
     'ftw.testbrowser',
