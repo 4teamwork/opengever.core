@@ -8,6 +8,7 @@ Changelog
 - Distinguish icons for docs checked out by current user vs. someone else. [lgraf]
 - Allow Editors and Administrators to delete tasktemplates. [phgross]
 - Fix NotificationMailer for TaskReassigned activities. [phgross]
+- Customize insufficient privileges error page. [phgross]
 - No longer require a paragraph template for committee containers. [deiferni]
 - Fix autocomplete for relation list widgets when solr is enabled. [deiferni]
 - Add responsible and issuer to notification mail for TaskAdded activities. [phgross]

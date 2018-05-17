@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-19 14:14+0000\n"
+"POT-Creation-Date: 2018-05-17 08:15+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -98,6 +98,11 @@ msgstr "Veuillez confirmer que vous souhaitez effectuer cette action."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_include_error_in_admin_message"
 msgstr "Si vous voulez signaler cette erreur au responsable de l'application, veuillez ajouter le numéro d'erreur,  s'il vous plaît."
+
+#. Default: "You do not have sufficient privileges to view this page. If you believe you are receiving this message by mistake, please contact the responsible person."
+#: ./opengever/base/skins/opengever.base_scripts/insufficient_privileges.pt
+msgid "description_no_privileges_for_page"
+msgstr ""
 
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
 #: ./opengever/base/browser/templates/error.pt
