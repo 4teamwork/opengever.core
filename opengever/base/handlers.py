@@ -2,12 +2,14 @@ from ftw.upgrade.helpers import update_security_for
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.touched import ObjectTouchedEvent
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.CMFCatalogAware import CatalogAware
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
 from zope.container.interfaces import IContainerModifiedEvent
+from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.sqlalchemy.datamanager import mark_changed
 
@@ -57,6 +59,11 @@ def is_title_changed(descriptions):
             if attr in ['IOpenGeverBase.title', 'title']:
                 return True
     return False
+
+
+def object_modified(context, event):
+    update_favorites_title(context, event)
+    notify(ObjectTouchedEvent(context))
 
 
 def update_favorites_title(context, event):

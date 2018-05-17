@@ -266,7 +266,13 @@
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".handlers.update_favorites_title"
+      handler=".handlers.object_modified"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           opengever.base.touched.IObjectTouchedEvent"
+      handler=".touched.handle_object_touched"
       />
 
   <adapter
