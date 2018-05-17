@@ -85,10 +85,13 @@ class CheckinCheckoutManager(object):
 
         # finally, reindex the object
         catalog = api.portal.get_tool('portal_catalog')
+        # update last modified timestamp for recently modified menu
+        self.context.setModificationDate()
         catalog.reindexObject(
             self.context,
             idxs=(
                 'checked_out',
+                'modified',
                 ),
             update_metadata=True,
             )
@@ -158,10 +161,13 @@ class CheckinCheckoutManager(object):
 
         # finally, reindex the object
         catalog = api.portal.get_tool('portal_catalog')
+        # update last modified timestamp for recently modified menu
+        self.context.setModificationDate()
         catalog.reindexObject(
             self.context,
             idxs=(
                 'checked_out',
+                'modified',
                 ),
             update_metadata=True,
             )
