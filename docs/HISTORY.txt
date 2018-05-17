@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.2.0 (unreleased)
+2018.1.5 (unreleased)
 ---------------------
 
 - Nothing changed yet.
