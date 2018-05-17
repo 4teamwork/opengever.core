@@ -24,6 +24,14 @@ class RecentlyTouchedMenuViewlet(common.ViewletBase):
     def available(self):
         return True
 
+    def get_num_checked_out(self):
+        current_user_id = api.user.get_current().getId()
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(
+            portal_type='opengever.document.document',
+            checked_out=current_user_id)
+        return len(brains)
+
     def translations(self):
         return json.dumps({
             'label_no_checked_out_docs': translate(

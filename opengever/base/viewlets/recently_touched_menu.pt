@@ -5,6 +5,7 @@
   <div id="recently-touched-vue-app"
        tal:attributes="data-portalurl here/portal_url;
                        data-i18n view/translations;
+                       data-num-checked-out view/get_num_checked_out;
                        data-userid view/get_userid" />
 
   <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/recently_touched_menu_app.js"></script>

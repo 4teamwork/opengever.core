@@ -6,6 +6,7 @@ function init() {
     data: {
       userid: null,
       i18n: {},
+      numCheckedOut: null,
       recentlyTouched: [],
       checkedOut: [],
       isOpen: false,
@@ -13,6 +14,7 @@ function init() {
 
     beforeMount: function () {
       var portalurl = this.$el.attributes['data-portalurl'].value;
+      this.numCheckedOut = this.$el.attributes['data-num-checked-out'].value;
       this.userid = this.$el.attributes['data-userid'].value;
       this.endpoint = portalurl + '/@recently-touched/' + this.userid;
       this.i18n = JSON.parse(this.$el.attributes['data-i18n'].value);
@@ -58,6 +60,9 @@ function init() {
           .then(function (response) {
             this.recentlyTouched = response.data['recently_touched'];
             this.checkedOut = response.data['checked_out'];
+
+            // Update number of checked out items (for badge counter)
+            this.numCheckedOut = this.checkedOut.length;
         }.bind(this));
       },
     },

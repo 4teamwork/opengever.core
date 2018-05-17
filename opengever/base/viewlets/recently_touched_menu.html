@@ -5,6 +5,7 @@
         <dl>
             <dt>
                 <a :class="{ isOpen: isOpen }" href="#" id="recently-touched-menu-toggler" @click.prevent="toggle"></a>
+                <span v-show="numCheckedOut > 0" class="num-checked-out-docs">{{numCheckedOut}}</span>
             </dt>
             <dd v-show="isOpen">
 
