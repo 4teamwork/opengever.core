@@ -82,3 +82,21 @@ class TestTaskTemplates(IntegrationTestCase):
         self.assertEquals('fa', tasktemplate.responsible_client)
         self.assertEquals(u'responsible', tasktemplate.issuer)
         self.assertEquals(10, tasktemplate.deadline)
+
+    @browsing
+    def test_deleting_a_tasktemplate_is_possible(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.tasktemplatefolder)
+        self.assertIn(
+            'Delete',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+
+        data = self.make_path_param(self.tasktemplate)
+        browser.open(self.tasktemplatefolder, data,
+                     view='folder_delete_confirmation')
+        browser.click_on('Delete')
+
+        self.assertEquals(
+            ['Items successfully deleted.'], info_messages())
+        self.assertEquals([], self.tasktemplatefolder.listFolderContents())
