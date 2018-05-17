@@ -16,6 +16,7 @@ Release 2018.1
    grundlagen
    tippsundtricks
    benachrichtigung
+   favoriten
    dossiers/index
    dokumente/index
    kontakte
