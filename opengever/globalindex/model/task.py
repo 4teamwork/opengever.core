@@ -75,7 +75,7 @@ class Task(Base):
     title = Column(String(MAX_TITLE_LENGTH))
     text = Column(UnicodeCoercingText())
     breadcrumb_title = Column(String(MAX_BREADCRUMB_LENGTH))
-    physical_path = Column(String(256))
+    physical_path = Column(UnicodeCoercingText)
     review_state = Column(String(WORKFLOW_STATE_LENGTH))
     icon = Column(String(50))
 
