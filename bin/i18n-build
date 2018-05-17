@@ -18,7 +18,8 @@ LANGUAGES="de fr"
 
 pkg_dir=`bin/package-directory`
 core_dir=`dirname $pkg_dir`
-locales_dirs=`find $pkg_dir -name 'locales'`
+theme_dir="$core_dir/plonetheme"
+locales_dirs=`find $pkg_dir -name 'locales' && find $theme_dir -name 'locales'`
 
 if [ $# -eq 0 ] || [ "$1" == "--help" ]; then
     echo "ERROR: Either provide a package name or use --all for all packages."
