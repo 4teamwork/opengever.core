@@ -99,7 +99,7 @@ class Proposal(Base):
     admin_unit_id = Column(String(UNIT_ID_LENGTH), nullable=False)
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
-    physical_path = Column(String(256), nullable=False)
+    physical_path = Column(UnicodeCoercingText, nullable=False)
     creator = Column(String(USER_ID_LENGTH), nullable=False)
 
     title = Column(String(MAX_TITLE_LENGTH), index=True)
@@ -111,7 +111,7 @@ class Proposal(Base):
     submitted_int_id = Column(Integer)
     submitted_oguid = composite(
         Oguid, submitted_admin_unit_id, submitted_int_id)
-    submitted_physical_path = Column(String(256))
+    submitted_physical_path = Column(UnicodeCoercingText)
 
     excerpt_document_id = Column(Integer, ForeignKey('generateddocuments.id'))
     excerpt_document = relationship(
