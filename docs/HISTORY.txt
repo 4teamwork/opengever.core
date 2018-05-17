@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Allow Editors and Administrators to delete tasktemplates. [phgross]
 - No longer require a paragraph template for committee containers. [deiferni]
 - Fix autocomplete for relation list widgets when solr is enabled. [deiferni]
 - Add responsible and issuer to notification mail for TaskAdded activities. [phgross]

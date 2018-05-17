@@ -57,9 +57,9 @@ class TaskTemplates(BaseCatalogListingTab):
 
     types = ['opengever.tasktemplates.tasktemplate', ]
 
-    enabled_actions = []
+    enabled_actions = ['folder_delete_confirmation']
 
-    major_actions = []
+    major_actions = ['folder_delete_confirmation']
 
 
 class View(DefaultView):
