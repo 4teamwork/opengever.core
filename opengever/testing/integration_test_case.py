@@ -3,8 +3,12 @@ from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from ftw.flamegraph import flamegraph
 from ftw.mail.mail import IMail
+from ftw.solr.connection import SolrResponse
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.schema import SolrSchema
 from ftw.testing.mailing import Mailing
 from functools import wraps
+from mock import MagicMock
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
@@ -16,6 +20,7 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
 from opengever.private import enable_opengever_private
 from opengever.task.task import ITask
+from opengever.testing import assets
 from operator import methodcaller
 from plone import api
 from plone.app.relationfield.event import update_behavior_relations
@@ -34,6 +39,7 @@ from zope.component import getUtility
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
 import json
+import os.path
 import timeit
 
 
@@ -589,3 +595,27 @@ class IntegrationTestCase(TestCase):
     def make_path_param(self, *objects):
         return {
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
+
+    def mock_solr(self, response_file):
+        conn = MagicMock(name='SolrConnection')
+        schema_resp = assets.load('solr_schema.json')
+        conn.get = MagicMock(name='get', return_value=SolrResponse(
+            body=schema_resp, status=200))
+        manager = MagicMock(name='SolrConnectionManager')
+        manager.connection = conn
+        manager.schema = SolrSchema(manager)
+        solr = getUtility(ISolrSearch)
+        solr._manager = manager
+        search_resp = assets.load(response_file)
+        solr.search = MagicMock(name='search', return_value=SolrResponse(
+            body=search_resp, status=200))
+        return solr
+
+    def assert_solr_called(self, solr, text, **kwargs):
+        query = (
+            u'{{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}}'
+            u'Title:{0}^100 OR Title:{0}*^20 OR SearchableText:{0}^5 '
+            u'OR SearchableText:{0}* OR metadata:{0}^10 OR '
+            u'metadata:{0}*^2 OR sequence_number_string:{0}^2000'.format(text)
+        )
+        solr.search.assert_called_with(query=query, **kwargs)

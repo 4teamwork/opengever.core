@@ -1,9 +1,9 @@
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 
 
-sablon_template_source = ObjPathSourceBinder(
+sablon_template_source = SolrObjPathSourceBinder(
     portal_type=("opengever.meeting.sablontemplate"),
     navigation_tree_query={
         'object_provides':
@@ -14,7 +14,7 @@ sablon_template_source = ObjPathSourceBinder(
 )
 
 
-proposal_template_source = ObjPathSourceBinder(
+proposal_template_source = SolrObjPathSourceBinder(
     portal_type=("opengever.meeting.proposaltemplate"),
     navigation_tree_query={
         'object_provides':

@@ -8,6 +8,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
@@ -29,7 +30,6 @@ from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
 from plone.autoform.directives import omitted
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
@@ -149,7 +149,7 @@ class IProposal(model.Schema):
         default=None,
         missing_value=None,
         required=False,
-        source=ObjPathSourceBinder(portal_type='opengever.meeting.proposal')
+        source=SolrObjPathSourceBinder(portal_type='opengever.meeting.proposal')
         )
 
     omitted('date_of_submission')

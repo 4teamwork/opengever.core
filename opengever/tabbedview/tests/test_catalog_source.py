@@ -1,14 +1,9 @@
-from ftw.solr.connection import SolrResponse
-from ftw.solr.interfaces import ISolrSearch
-from ftw.solr.schema import SolrSchema
-from mock import MagicMock
 from opengever.base.interfaces import ISearchSettings
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.catalog_source import GeverCatalogTableSource
 from opengever.testing import IntegrationTestCase
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
-import os.path
 import pkg_resources
 
 pkg_path = pkg_resources.get_distribution('opengever.core').location
@@ -18,23 +13,8 @@ class TestSolrSearch(IntegrationTestCase):
 
     def setUp(self):
         super(TestSolrSearch, self).setUp()
-        conn = MagicMock(name='SolrConnection')
-        schema_resp = open(os.path.join(
-            pkg_path, 'opengever', 'base', 'tests', 'data',
-            'solr_schema.json'), 'r').read()
-        conn.get = MagicMock(name='get', return_value=SolrResponse(
-            body=schema_resp, status=200))
-        manager = MagicMock(name='SolrConnectionManager')
-        manager.connection = conn
-        manager.schema = SolrSchema(manager)
-        solr = getUtility(ISolrSearch)
-        solr._manager = manager
-        search_resp = open(os.path.join(
-            pkg_path, 'opengever', 'base', 'tests', 'data',
-            'solr_search.json'), 'r').read()
-        solr.search = MagicMock(name='search', return_value=SolrResponse(
-            body=search_resp, status=200))
-        self.solr = solr
+
+        self.solr = self.mock_solr('solr_search.json')
         self.source = GeverCatalogTableSource(
             BaseCatalogListingTab(self.portal, self.request), self.request)
 

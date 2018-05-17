@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -10,7 +11,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.globalindex.model.task import Task
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
@@ -31,13 +31,12 @@ class IMoveItemsSchema(Interface):
         source=RepositoryPathSourceBinder(
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                'opengever.repository.repositoryfolder.'
-                'IRepositoryFolderSchema'],
+                'opengever.repository.repositoryfolder.IRepositoryFolderSchema'
+                ],
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
-                    'opengever.repository.repositoryfolder.' +
-                    'IRepositoryFolderSchema',
+                    'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                 ],
                 'review_state': DOSSIER_STATES_OPEN + [
@@ -56,7 +55,7 @@ class IMoveTemplateItemsSchema(IMoveItemsSchema):
         title=_('label_destination', default="Destination"),
         description=_('help_destination',
                       default="Live Search: search the Plone Site"),
-        source=ObjPathSourceBinder(
+        source=SolrObjPathSourceBinder(
             navigation_tree_query={
                 'object_provides': [
                     ITemplateFolder.__identifier__,

@@ -1,8 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
 class TestRepositoryPathSourceBinder(FunctionalTestCase):
@@ -58,3 +60,72 @@ class TestDossierSourceBinder(FunctionalTestCase):
         source = source_binder(sub)
         self.assertEqual(
             ['Test 1'], [term.title for term in source.search('Test')])
+
+
+class TestRelatedDossierAutocomplete(IntegrationTestCase):
+
+    @browsing
+    def test_related_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
+        self.activate_feature('solr')
+        self.solr = self.mock_solr('solr_autocomplete_dossier.json')
+
+        self.login(self.dossier_responsible, browser)
+        browser.open(
+            self.dossier,
+            view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
+        )
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+            browser.contents
+        )
+        self.assert_solr_called(
+            self.solr, 'empty', rows=20, fl=['path'],
+            filters=[u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker']
+        )
+
+    @browsing
+    def test_related_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(
+            self.dossier,
+            view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
+        )
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+            browser.contents
+        )
+
+
+class TestAddableDossierTemplatesAutocomplete(IntegrationTestCase):
+
+    @browsing
+    def test_addable_dossier_autocomplete_uses_solr_when_feature_enabled(self, browser):
+        self.activate_feature('solr')
+        self.solr = self.mock_solr('solr_autocomplete_dossiertemplate.json')
+
+        self.login(self.administrator, browser)
+        browser.open(
+            self.empty_repofolder,
+            view='@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/@@autocomplete-search?q=Bauvorhaben'
+        )
+        self.assertEqual(
+            '/plone/vorlagen/dossiertemplate-1|Bauvorhaben klein',
+            browser.contents
+        )
+        self.assert_solr_called(
+            self.solr, 'Bauvorhaben', rows=20, fl=['path'],
+            filters=[u'portal_type:opengever.dossier.dossiertemplate',
+                     u'is_subdossier:false']
+        )
+
+    @browsing
+    def test_addable_dossier_autocomplete_uses_catalog_when_solr_disabled(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(
+            self.empty_repofolder,
+            view='@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/@@autocomplete-search?q=Bauvorhaben'
+        )
+        self.assertEqual(
+            '/plone/vorlagen/dossiertemplate-1|Bauvorhaben klein',
+            browser.contents
+        )

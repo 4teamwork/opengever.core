@@ -1,0 +1,18 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 1,
+    "params": {
+      "json": "{\n  \"query\": \":\"\n}"
+    }
+  },
+  "response": {
+    "start": 0,
+    "numFound": 1,
+    "docs": [
+      {
+        "path": "/plone/vorlagen/dossiertemplate-1"
+      }
+    ]
+  }
+}

@@ -8,6 +8,7 @@ from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.interfaces import IDisposition
@@ -22,7 +23,6 @@ from persistent.list import PersistentList
 from plone import api
 from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -147,7 +147,7 @@ class IDispositionSchema(model.Schema):
         missing_value=[],
         value_type=RelationChoice(
             title=u"Dossier",
-            source=ObjPathSourceBinder(
+            source=SolrObjPathSourceBinder(
                 object_provides=('opengever.dossier.behaviors.dossier.IDossierMarker'),
                 review_state=DOSSIER_STATES_OFFERABLE,
                 navigation_tree_query={

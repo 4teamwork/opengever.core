@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - No longer require a paragraph template for committee containers. [deiferni]
+- Fix autocomplete for relation list widgets when solr is enabled. [deiferni]
 - Add responsible and issuer to notification mail for TaskAdded activities. [phgross]
 - Fetch archivist group members from ogds. [phgross]
 - Fix content displayed in the templatefolder's gallery view. [phgross]

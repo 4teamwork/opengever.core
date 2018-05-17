@@ -1,12 +1,12 @@
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base import _ as base_mf
+from opengever.base.source import SolrObjPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.behaviors import dossiernamefromtitle
 from opengever.dossier.behaviors.dossier import IDossier
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
@@ -112,7 +112,7 @@ class IRestrictAddableDossierTemplates(model.Schema):
         missing_value=[],
         value_type=RelationChoice(
             title=u'Addable dossiertemplate',
-            source=ObjPathSourceBinder(
+            source=SolrObjPathSourceBinder(
                 portal_type=("opengever.dossier.dossiertemplate"),
                 is_subdossier=False,
                 navigation_tree_query={
