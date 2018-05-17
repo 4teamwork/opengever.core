@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from datetime import date
 from datetime import datetime
+from opengever.base.handlers import ObjectTouchedEvent
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectBeforeCheckInEvent
@@ -94,6 +95,7 @@ class CheckinCheckoutManager(object):
 
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
+        notify(ObjectTouchedEvent(self.context))
 
     def is_simple_checkin_allowed(self):
         return self.is_checkin_allowed() and not self.is_locked()
@@ -166,6 +168,7 @@ class CheckinCheckoutManager(object):
 
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))
+        notify(ObjectTouchedEvent(self.context))
 
     def is_cancel_allowed(self):
         """Checks whether the user is able to cancel a checkout."""
