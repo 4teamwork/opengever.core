@@ -69,10 +69,14 @@ während dieser Zeit via Bleistift-Icon oder Link auf der
 Dokumentansicht in OneGov GEVER nochmals öffnen, so erscheint ein entsprechender
 Hinweis.
 
+Ein ausgechecktes Dokument wird mit einem orangen Punkt gekennzeichnet:
+
+-  ein gefüllter oranger Punkt falls der Benutzer selbst das Dokumente ausgecheckt hat, oder
+
+-  ein oranger Ring wenn das Dokument durch einen anderen Benutzer ausgecheckt wurde
+
 Nach dem Schliessen des Dokumentes wird die Eigenschaftenmaske des Dokuments mit
 den weiteren Bearbeitungsmöglichkeiten angezeigt.
-
-Ein ausgechecktes Dokument wird mit einem orangen Punkt gekennzeichnet.
 
 |img-dokumente-10|
 
