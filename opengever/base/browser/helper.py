@@ -2,6 +2,7 @@ from ftw.solr.interfaces import ISolrDocument
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.model.task import Task
 from opengever.task.task import ITask
+from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -22,11 +23,15 @@ def _get_task_css_class(task):
     return task.get_css_class()
 
 
-def is_checked_out(item):
-    if IBaseDocument.providedBy(item):
-        return item.checked_out_by()
+def checked_out_by(item):
+    """Return user ID of user that the document is currently checked out by,
 
-    return getattr(item, 'checked_out', False)
+    or None if the document isn't checked out (for both brains and objects).
+    """
+    checked_out_by = getattr(item, 'checked_out', None)
+    if IBaseDocument.providedBy(item):
+        checked_out_by = item.checked_out_by()
+    return checked_out_by
 
 
 # XXX object orient me!
@@ -75,9 +80,14 @@ def get_css_class(item, type_icon_only=False):
             # affect other views using the same object instance
             item._v__is_relation = False
 
-        # add checked out class
-        if is_checked_out(item):
-            css_class += " is-checked-out"
+        # add checked out class, distinguishing between whether the document
+        # is checked out by current user or someone else (or nobody at all)
+        checked_out_userid = checked_out_by(item)
+        if checked_out_userid:
+            if checked_out_userid == api.user.get_current().id:
+                css_class += " is-checked-out-by-current-user"
+            else:
+                css_class += " is-checked-out"
 
     if css_class is None:
         css_class = "contenttype-%s" % normalize(item.portal_type)

@@ -59,7 +59,8 @@ class TestCssClassHelpers(IntegrationTestCase):
         self.assertEquals('icon-docx', get_css_class(self.document))
 
         self.checkout_document(self.document)
-        self.assertEquals('icon-docx is-checked-out', get_css_class(self.document))
+        self.assertEquals('icon-docx is-checked-out-by-current-user',
+                          get_css_class(self.document))
 
     def test_document_brain_checked_out_suffix(self):
         self.login(self.dossier_responsible)
@@ -67,7 +68,7 @@ class TestCssClassHelpers(IntegrationTestCase):
         self.assertEquals('icon-docx', get_css_class(obj2brain(self.document)))
 
         self.checkout_document(self.document)
-        self.assertEquals('icon-docx is-checked-out',
+        self.assertEquals('icon-docx is-checked-out-by-current-user',
                           get_css_class(obj2brain(self.document)))
 
     def test_proposaltemplate_checked_out_suffix(self):
@@ -76,5 +77,29 @@ class TestCssClassHelpers(IntegrationTestCase):
         self.assertEquals('icon-docx', get_css_class(self.proposal_template))
 
         self.checkout_document(self.proposal_template)
+        self.assertEquals('icon-docx is-checked-out-by-current-user',
+                          get_css_class(obj2brain(self.proposal_template)))
+
+    def test_document_obj_checked_out_by_other_suffix(self):
+        self.login(self.dossier_responsible)
+        self.checkout_document(self.document)
+
+        self.login(self.regular_user)
+        self.assertEquals('icon-docx is-checked-out',
+                          get_css_class(self.document))
+
+    def test_document_brain_checked_out_by_other_suffix(self):
+        self.login(self.dossier_responsible)
+        self.checkout_document(self.document)
+
+        self.login(self.regular_user)
+        self.assertEquals('icon-docx is-checked-out',
+                          get_css_class(obj2brain(self.document)))
+
+    def test_proposaltemplate_checked_out_by_other_suffix(self):
+        self.login(self.dossier_responsible)
+        self.checkout_document(self.proposal_template)
+
+        self.login(self.regular_user)
         self.assertEquals('icon-docx is-checked-out',
                           get_css_class(obj2brain(self.proposal_template)))
