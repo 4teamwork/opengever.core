@@ -14,6 +14,7 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.ogds.models.types import UnicodeCoercingText
 from sqlalchemy import and_
 from sqlalchemy import Column
 from sqlalchemy import Integer
@@ -55,7 +56,7 @@ class Committee(Base):
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     title = Column(String(256), index=True)
-    physical_path = Column(String(256), nullable=False)
+    physical_path = Column(UnicodeCoercingText, nullable=False)
     workflow_state = Column(String(WORKFLOW_STATE_LENGTH),
                             nullable=False,
                             default=workflow.default_state.name)
