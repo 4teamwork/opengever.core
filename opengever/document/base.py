@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
@@ -12,6 +13,7 @@ from plone import api
 from plone.dexterity.content import Item
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
+from Products.MimetypesRegistry.interfaces import IMimetype
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -153,7 +155,7 @@ class BaseDocumentMixin(object):
         contenttype = field.contentType
         mimetypeitem = None
         try:
-            mimetypeitem = mtr.lookup(contenttype)
+            mimetypeitem = mimetype_lookup(mtr, contenttype)
         except MimeTypeException, msg:
             LOG.error(
                 'MimeTypeException for %s. Error is: %s' % (
@@ -162,3 +164,27 @@ class BaseDocumentMixin(object):
             # not found
             return False
         return mimetypeitem
+
+
+def mimetype_lookup(mtr, contenttype):
+    """Reimplemented as case insensitive from Products.MimetypesRegistry."""
+    __traceback_info__ = (repr(contenttype), str(contenttype))
+    mapping = mtr._mimetypes
+    contenttype = contenttype.lower()
+    if IMimetype.providedBy(contenttype):
+        return (aq_base(contenttype), )
+    try:
+        major, minor = contenttype.split('/', 1)
+    except ValueError:
+        raise MimeTypeException('Malformed MIME type ({})'.format(contenttype))
+    mapping = {k.lower(): v for k, v in mapping.items()}
+    group = {k.lower(): v for k, v in mapping.get(major, {}).items()}
+    if not minor or minor == '*':
+        res = group.values()
+    else:
+        res = group.get(minor)
+        if res:
+            res = (res,)
+        else:
+            return ()
+    return tuple(aq_base(mtitem) for mtitem in res)

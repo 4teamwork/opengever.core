@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Make document mimetype lookups case insensitive. [Rotonen]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Rename cancelled task in German from "storniert" to "abgebrochen" .
 - Make tasktemplates sortable. [njohner]
