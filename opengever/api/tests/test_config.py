@@ -55,7 +55,6 @@ class TestConfig(IntegrationTestCase):
                 u'repositoryfolder_tasks_tab': True,
                 u'resolver_name': u'strict',
                 u'solr': False,
-                u'word_meetings': False,
                 u'workspace': False,
             })
 
