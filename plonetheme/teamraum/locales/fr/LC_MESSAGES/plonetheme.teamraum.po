@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-03-04 14:36+0000\n"
+"POT-Creation-Date: 2018-05-17 09:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9,6 +9,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
@@ -18,7 +20,7 @@ msgstr "Elément actif ombre intérieur"
 msgid "Active shadow top"
 msgstr "Elément actif ombre supérieur"
 
-#: ./plonetheme/teamraum/browser/controlpanel.pt:272
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "Additional CSS"
 msgstr "CSS supplémentaire"
 
@@ -99,108 +101,106 @@ msgid "The unit is needed!"
 msgstr "Veuillez saisir l'unité de mesure"
 
 #. Default: "Teamraumtheme settings"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:47
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "heading_teamraumtheme_settings"
 msgstr "Paramètres mise en page Teamraum"
 
 #. Default: "This is recommended if there are banner-images."
-#: ./plonetheme/teamraum/browser/controlpanel.pt:206
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "help_showheaderbox"
 msgstr "Ceci est recommandé en cas des banderoles"
 
 #. Default: "Changes resetted"
-#: ./plonetheme/teamraum/browser/controlpanel.py:82
+#: ./plonetheme/teamraum/browser/controlpanel.py
 msgid "info_changes_resetted"
 msgstr "Les changements ont étés reculés."
 
 #. Default: "Changes saved"
-#: ./plonetheme/teamraum/browser/controlpanel.py:68
+#: ./plonetheme/teamraum/browser/controlpanel.py
 msgid "info_changes_saved"
 msgstr "Vos changements ont étés enregistrés."
 
 #. Default: "Logo resetted"
-#: ./plonetheme/teamraum/browser/controlpanel.py:92
+#: ./plonetheme/teamraum/browser/controlpanel.py
 msgid "info_logo_resetted"
 msgstr "Le logo a été supprimé."
 
 #. Default: "export styles"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:305
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_export_styles"
 msgstr "Exporter des styles"
 
 #. Default: "Footer"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:253
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_footer"
 msgstr "Secteur en bas"
 
 #. Default: "Header"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:129
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_header"
 msgstr "Secteur en-tête"
 
 #. Default: "Show headerbox"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:203
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_headerbox"
 msgstr "Afficher en-tête comme boîte"
 
 #. Default: "import styles"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:298
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_import_styles"
 msgstr "Importer styles"
 
 #. Default: "Import / Export"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:293
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_importexport"
 msgstr "Importer / Exporter"
 
 #. Default: "Logo"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:133
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_logo"
 msgstr "Logo"
 
+#. Default: "Logo right"
+#: ./plonetheme/teamraum/browser/controlpanel.pt
+msgid "label_logo_right"
+msgstr ""
+
 #. Default: "Logo space left"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:216
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_logo_spaceleft"
 msgstr "Le logo n'a pas une marge vers la gauche"
 
 #. Default: "Miscellaneous"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:262
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_misc"
 msgstr "Divers"
 
 #. Default: "Navigation bar"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:68
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_navbar"
 msgstr "Barre de navigation"
 
-#. Default: "Show searchbox in navi"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:173
-msgid "label_navisearch"
-msgstr "Afficher le champ de recherche"
-
 #. Default: "reset to default"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:319
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_reset_default"
 msgstr "Rétablir la mise en page standard"
 
 #. Default: "Reset logo"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:139
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_reset_logo"
 msgstr "Eliminer le logo"
 
 #. Default: "save"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:283
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_save"
 msgstr "Enregistrer les changement"
 
 #. Default: "Show full banner"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:156
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_showfullbanner"
 msgstr "Afficher la banderole toute l'envergure"
 
 #. Default: "Site"
-#: ./plonetheme/teamraum/browser/controlpanel.pt:224
+#: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_site"
 msgstr "Page"
-
-
