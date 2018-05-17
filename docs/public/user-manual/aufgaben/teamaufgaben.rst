@@ -1,9 +1,8 @@
 Teamaufgaben
 ------------
 
-Mittels den Teamaufgaben können Aufgaben an AD-Gruppen adressiert werden. Dazu
-wird die AD-Gruppe nach einem entsprechenden Service Request (Ticket in Tracker)
-durch 4teamwork als Team in OneGov GEVER erfasst und entsprechend benennt.
+Mittels den Teamaufgaben können Aufgaben an AD-Gruppen adressiert werden. Diese
+Teams können durch den Adminsitrator erfasst werden. 
 
 |img-aufgaben-team-1|
 
