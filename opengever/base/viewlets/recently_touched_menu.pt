@@ -1,0 +1,12 @@
+<div id="recently-touched-menu" class="gever-portal-control" i18n:domain="opengever.base" tal:condition="view/available">
+
+  <div tal:replace="structure view/vuejs_template" />
+
+  <div id="recently-touched-vue-app"
+       tal:attributes="data-portalurl here/portal_url;
+                       data-i18n view/translations;
+                       data-userid view/get_userid" />
+
+  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/recently_touched_menu_app.js"></script>
+
+</div>
