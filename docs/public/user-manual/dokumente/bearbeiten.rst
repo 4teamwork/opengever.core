@@ -69,17 +69,15 @@ während dieser Zeit via Bleistift-Icon oder Link auf der
 Dokumentansicht in OneGov GEVER nochmals öffnen, so erscheint ein entsprechender
 Hinweis.
 
-Nach dem Schliessen wird die Eigenschaftenmaske des Dokuments mit den
-weiteren Bearbeitungsmöglichkeiten angezeigt.
+Nach dem Schliessen des Dokumentes wird die Eigenschaftenmaske des Dokuments mit
+den weiteren Bearbeitungsmöglichkeiten angezeigt.
+
+Ein ausgechecktes Dokument wird mit einem orangen Punkt gekennzeichnet.
 
 |img-dokumente-10|
 
-1. **Checkout widerrufen:** Die vorgenommenen Änderungen am Dokument werden
-   rückgängig gemacht und die Datei auf den zuletzt eingecheckten
-   Zustand (= Version vor dem Auschecken) zurückgesetzt.
-
-2. **Einchecken:** Durch “Einchecken“ gibt das Dokument wieder für die übrigen
-    Sachbearbeiter/innen frei.
+1. **Einchecken:** Durch “Einchecken“ wird das Dokument wieder für die übrigen Sachbearbeitenden frei. Dies kann mit oder ohne Kommentar und entweder bei 1a. oder 1b. erfolgen.
+2. **Checkout widerrufen:** Die vorgenommenen Änderungen am Dokument werden rückgängig gemacht und die Datei auf den zuletzt eingecheckten Zustand (= Version vor dem Auschecken) zurückgesetzt. Die Aktion muss doppelt bestätigt werden.
 
 Mit Mailprogramm versenden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
