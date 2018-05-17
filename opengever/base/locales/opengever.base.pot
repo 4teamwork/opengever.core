@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-19 14:14+0000\n"
+"POT-Creation-Date: 2018-05-17 08:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,6 +95,11 @@ msgstr ""
 #. Default: "If you need to report this to the responsible person, please include this entry number in your message."
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_include_error_in_admin_message"
+msgstr ""
+
+#. Default: "You do not have sufficient privileges to view this page. If you believe you are receiving this message by mistake, please contact the responsible person."
+#: ./opengever/base/skins/opengever.base_scripts/insufficient_privileges.pt
+msgid "description_no_privileges_for_page"
 msgstr ""
 
 #. Default: "We apologize for the inconvenience, but the page you were trying to access is not at this address."
