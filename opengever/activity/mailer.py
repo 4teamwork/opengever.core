@@ -42,8 +42,8 @@ class Mailer(object):
         msg['Subject'] = Header(subject, 'utf-8')
 
         # Break (potential) description out into a list element per newline
-        if 'description' in data:
-            data['description'] = [line for line in data.get('description').splitlines()]
+        if data.get('description'):
+            data['description'] = data.get('description').splitlines()
 
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))

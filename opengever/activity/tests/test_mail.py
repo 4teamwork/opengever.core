@@ -72,6 +72,25 @@ class TestEmailNotification(IntegrationTestCase):
         self.assertIn('<p>comment</p>', raw_mail)
 
     @browsing
+    def test_notification_mailer_handle_empty_activity_description(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.create_task_via_browser(browser)
+
+        # reassign task
+        task = self.dossier.objectValues()[-1]
+        data = {'form.widgets.transition': 'task-transition-reassign'}
+        browser.open(task, data, view='assign-task')
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible)
+        browser.click_on('Assign')
+
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual(len(mails), 2)
+        raw_mail = mails[-1]
+        self.assertIn('Reassigned from', raw_mail)
+
+    @browsing
     def test_from_and_to_addresses(self, browser):
         self.login(self.dossier_responsible, browser)
         self.create_task_via_browser(browser)
