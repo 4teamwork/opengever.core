@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.1.5 (unreleased)
+2018.1.5 (2018-05-18)
 ---------------------
 
 - Fix an issue where the physical_path value could be too long. [deiferni]
