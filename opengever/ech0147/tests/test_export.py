@@ -14,7 +14,7 @@ class TestExport(IntegrationTestCase):
         browser.open(self.dossier)
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
-            ).normalized_text()
+            ).text
         self.assertNotIn('eCH-0147 Export', actions)
 
     @browsing
@@ -24,7 +24,7 @@ class TestExport(IntegrationTestCase):
         browser.open(self.dossier)
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
-            ).normalized_text()
+            ).text
         self.assertIn('eCH-0147 Export', actions)
 
     @browsing
