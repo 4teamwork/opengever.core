@@ -3,12 +3,12 @@
 from __future__ import print_function
 from argparse import ArgumentParser
 from fnmatch import fnmatch
-from itertools import cycle
 from logging import Formatter
 from logging import getLogger
 from logging import INFO
 from logging import StreamHandler
 from logging.handlers import MemoryHandler
+from math import ceil
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 from os import access
@@ -147,29 +147,40 @@ def test_discovery(layers=None, modules=None):
     return check_output(cmdline).decode(output_encoding).splitlines()
 
 
-def split(batch, maxcount=256):
-    batch['count'] = sum(batch.get('testclasses').values())
-    if batch.get('count') <= maxcount or len(batch.get('testclasses')) == 1:
+def chunks(chunkable, chunksize):
+    output = []
+    while chunkable:
+        output.append([])
+        size = 0
+        while chunkable and size < chunksize:
+            output[-1].append(chunkable.pop(0))
+            size = sum(testclass[-1] for testclass in output[-1])
+    return output
+
+
+def split(batch):
+    minsize_mapping = {
+        'opengever.core.testing.opengever.core:integration': 200,
+        'opengever.core.testing.opengever.core:functional': 100,
+        'opengever.core.testing.MeetingLayer': 25,
+        }
+
+    layer = batch.get('layer')
+
+    if layer not in minsize_mapping or CONCURRENCY < 2:
+        batch['count'] = sum(batch.get('testclasses').values())
         return (batch, )
 
-    sorted_testclasses = sorted(
-        batch.get('testclasses').iteritems(),
-        key=lambda testclass: -testclass[1],
-        )
+    original_count = batch.get('original_count')
+    chunksize = max(minsize_mapping.get(layer), int(ceil(original_count / float(CONCURRENCY))))
 
-    split_batches = [
-        {'layer': batch.get('layer'), 'testclasses': {}, 'original_count': batch.get('original_count')},
-        {'layer': batch.get('layer'), 'testclasses': {}, 'original_count': batch.get('original_count')},
-        ]
-
-    alternator = cycle((0, 1, ))
-
-    while sorted_testclasses:
-        testclass = sorted_testclasses.pop(0)
-        split_batches[alternator.next()]['testclasses'][testclass[0]] = testclass[1]
+    splinters = []
+    for chunk in chunks(batch.get('testclasses').items(), chunksize):
+        splinters.append({'layer': layer, 'testclasses': dict(chunk), 'original_count': original_count})
+        splinters[-1]['count'] = sum(splinters[-1].get('testclasses').values())
 
     return tuple(sorted(
-        (a for b in split_batches for a in split(b)),
+        splinters,
         key=lambda batch: -batch.get('count'),
         ))
 
@@ -192,7 +203,7 @@ def create_test_run_params(layers=None, modules=None):
 
     return tuple(sorted(
         test_run_params,
-        key=lambda batch: (-batch.get('original_count'), -batch.get('count'), ),
+        key=lambda batch: -batch.get('original_count'),
         ))
 
 
@@ -215,7 +226,6 @@ def run_tests(test_run_params):
 
     Return the module name, layer name and stderr.
     """
-
     params = ['bin/test']
     params.append('--xml')
 
@@ -247,10 +257,8 @@ def run_tests(test_run_params):
     memory_handler.flush()
 
     env = environ.copy()
-
     # ZServer layers need unique ports
     env['ZSERVER_PORT'] = env.get('PORT{}'.format(port), str(55000 + port))
-
     # We cannot access cached sqlite fixtures in parallel yet
     env['GEVER_CACHE_TEST_DB'] = 'false'
 
@@ -416,7 +424,7 @@ def main(layers=None, modules=None):
 
     for params in test_run_params:
         # Alleviate cPickle load bursting for IPC
-        sleep(0.25)
+        sleep(0.1)
         results.append(pool.apply_async(run_tests, (params, )))
 
     success = handle_results(results)
@@ -433,13 +441,18 @@ def main(layers=None, modules=None):
     return False
 
 
+def get_concurrency():
+    # Counter system congestion and hyperthreading, FWIW
+    return max(cpu_count() // 2 - 1, 1)
+
+
 # Having the __main__ guard is necessary for multiprocessing.Pool().
 if __name__ == '__main__':
     # Globals
     environ['PYTHONUNBUFFERED'] = '1'
     environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-    CONCURRENCY = int(environ.get('MTEST_PROCESSORS', cpu_count()))
+    CONCURRENCY = int(environ.get('MTEST_PROCESSORS', get_concurrency()))
     BUILDOUT_PATH = path.abspath(path.join(__file__, '..', '..'))
     OPENGEVER_PATH = path.join(BUILDOUT_PATH, 'opengever')
     SOURCE_PATH = path.join(BUILDOUT_PATH, 'src')
