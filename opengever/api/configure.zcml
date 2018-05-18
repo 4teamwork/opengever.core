@@ -165,4 +165,12 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
     />
 
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".listing.Listing"
+      name="@listing"
+      permission="zope2.View"
+    />
+
 </configure>
