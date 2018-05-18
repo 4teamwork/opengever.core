@@ -5,7 +5,6 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
-- Fix an issue where the physical_path value could be too long. [deiferni]
 - Distinguish icons for docs checked out by current user vs. someone else. [lgraf]
 - Allow Editors and Administrators to delete tasktemplates. [phgross]
 - Fix NotificationMailer for TaskReassigned activities. [phgross]
@@ -67,6 +66,12 @@ Changelog
 - Include email address in dossier serialization. [buchi]
 
 
+2018.2.5 (2018-05-18)
+---------------------
+
+- Fix an issue where the physical_path value could be too long. [deiferni]
+
+
 2018.2.4 (2018-05-01)
 ---------------------
 
@@ -122,6 +127,12 @@ Changelog
 - Change action names for meeting agenda items. [njohner]
 - Order agenda item attachements alphabetically. [njohner]
 - Sort related dossiers alphabetically in dossier overview. [njohner]
+
+
+2018.1.5 (2018-05-18)
+---------------------
+
+- Fix an issue where the physical_path value could be too long. [deiferni]
 
 
 2018.1.4 (2018-03-06)
