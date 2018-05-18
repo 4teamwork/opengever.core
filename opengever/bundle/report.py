@@ -210,7 +210,7 @@ class XLSXReportBuilderBase(object):
 
     def __init__(self, *args, **kwargs):
         self.workbook = Workbook()
-        self.workbook.remove_sheet(self.workbook.active)
+        self.workbook.remove(self.workbook.active)
 
     def build_and_save(self, report_path):
         self.write_report_data()
