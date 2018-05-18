@@ -2,9 +2,9 @@ Favoriten
 =========
 
 Mit dem `OGIP 32 <https://my.teamraum.com/workspaces/onegov-gever-innovation-session/ogip/?overlay=cfd18fa5c8b14a9eb28ad98a9787425e#documents>`_ wurde das Setzen von Favoriten umgesetzt.
-Ein Favorit kann auf Stufe Ordnungsposition, Dossier und Dokument gesetzt
-werden. Bei Inhalten der Sitzungs- und Protokollverwaltung ist das Setzen
-eines Favoriten nicht möglich.
+Ein Favorit kann bei allen Objekten auf allen Stufen (Ordnungsposition, Dossier,
+Dokument und Aufgabe) gesetzt werden. Bei Inhalten der Sitzungs- und
+Protokollverwaltung ist das Setzen eines Favoriten nicht möglich.
 
 Ein Favorit kann über das *Stern-Symbol* jeweils rechts des Titels gesetzt
 werden. Ordnungspositionen können im Ordnungssystembaum ebenfalls rechts
@@ -13,11 +13,11 @@ neben der Bezeichnung angewählt werden.
 Favorit hinzufügen:
 |img-favoriten-2|
 
-In der Servicenavigation wird bei Klick auf das *Stern-Symbol* die letzten
-gespeicherten Favoriten angezeigt und ein Schnellzugriff ermöglicht.
+In der Servicenavigation werden bei Klick auf das *Stern-Symbol* alle
+ausgewählten Favoriten angezeigt und dadurch ein Schnellzugriff auf die
+jeweiligen Objekte ermöglicht.
 
 |img-favoriten-1|
-
 
 Bei Klick auf *Übersicht* gelangt der Benutzende auf die Übersicht aller
 Favoriten.
