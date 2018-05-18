@@ -5,6 +5,7 @@ Changelog
 2018.3.0 (unreleased)
 ---------------------
 
+- Bump ftw.pdfgenerator to 1.6.1 to get encoding fix. [lgraf]
 - Distinguish icons for docs checked out by current user vs. someone else. [lgraf]
 - Allow Editors and Administrators to delete tasktemplates. [phgross]
 - Fix NotificationMailer for TaskReassigned activities. [phgross]
