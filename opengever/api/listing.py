@@ -34,6 +34,7 @@ class Listing(Service):
             data = {}
             for header in headers:
                 data[header] = json_compatible(getattr(item, header))
+            data['@id'] = item.getURL()
             res['items'].append(data)
 
         return res
