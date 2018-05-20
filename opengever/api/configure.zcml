@@ -154,7 +154,10 @@
       permission="zope2.View"
       />
 
-  <adapter factory=".navigation.Navigation" name="navigation"/>
+  <adapter
+      factory=".navigation.Navigation"
+      name="navigation"
+      />
 
   <plone:service
       method="GET"
@@ -163,7 +166,7 @@
       name="@navigation"
       permission="zope2.View"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
-    />
+      />
 
   <plone:service
       method="GET"
@@ -171,6 +174,6 @@
       factory=".listing.Listing"
       name="@listing"
       permission="zope2.View"
-    />
+      />
 
 </configure>
