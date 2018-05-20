@@ -31,6 +31,8 @@ class Listing(Service):
         headers = self.request.form.get('headers')
         res = {'items': []}
         for item in items[:50]:
+            if item.getPath() == query['path']:
+                continue
             data = {}
             for header in headers:
                 data[header] = json_compatible(getattr(item, header))
