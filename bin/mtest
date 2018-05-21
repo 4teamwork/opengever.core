@@ -187,7 +187,6 @@ def split(batch):
 
 def create_test_run_params(layers=None, modules=None):
     test_run_params = []
-    port = 0
 
     for layer, testclasses in discover_tests(layers, modules).iteritems():
         batch = {}
@@ -196,9 +195,7 @@ def create_test_run_params(layers=None, modules=None):
         batch['original_count'] = sum(testclasses.values())
         split_batches = split(batch)
         for i, split_batch in enumerate(split_batches):
-            split_batch['port'] = port
             split_batch['batchinfo'] = '{}/{}'.format(i + 1, len(split_batches))
-            port += 1
             test_run_params.append(split_batch)
 
     return tuple(sorted(
@@ -233,7 +230,6 @@ def run_tests(test_run_params):
     batchinfo = test_run_params.get('batchinfo')
     testclasses = test_run_params.get('testclasses', ())
     count = test_run_params.get('count')
-    port = test_run_params.get('port')
 
     if layer:
         params.append('--layer')
@@ -257,8 +253,6 @@ def run_tests(test_run_params):
     memory_handler.flush()
 
     env = environ.copy()
-    # ZServer layers need unique ports
-    env['ZSERVER_PORT'] = env.get('PORT{}'.format(port), str(55000 + port))
     # We cannot access cached sqlite fixtures in parallel yet
     env['GEVER_CACHE_TEST_DB'] = 'false'
 
