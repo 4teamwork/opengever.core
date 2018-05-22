@@ -207,7 +207,7 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
         self.inactive_task.get_sql_object().sync_with(self.inactive_task)
 
         # sequential
-        alsoProvides(self.subtask, IFromSequentialTasktemplateGenerated)
+        alsoProvides(self.subtask, IFromSequentialTasktemplate)
 
         browser.open(self.subtask, view='tabbedview_view-overview')
         self.assertEquals(

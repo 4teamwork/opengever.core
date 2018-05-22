@@ -1,4 +1,5 @@
 from Acquisition import aq_parent
+from opengever.base.interfaces import IInternalWorkflowTransition
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -156,6 +157,10 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-open-planned')
     def planned_guard(self, transition, c):
         return IDuringTaskTemplateFolderTriggering.providedBy(getRequest())
+
+    @guard('task-transition-planned-open')
+    def open_guard(self, transition, c):
+        return IInternalWorkflowTransition.providedBy(getRequest())
 
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):

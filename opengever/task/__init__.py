@@ -22,3 +22,5 @@ FINISHED_TASK_STATES = [
     'task-state-rejected',
     'task-state-cancelled'
 ]
+
+TASK_STATE_PLANNED = 'task-state-planned'
