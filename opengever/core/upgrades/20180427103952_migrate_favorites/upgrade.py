@@ -23,6 +23,10 @@ class MigrateFavorites(SQLUpgradeStep):
             for userid, uuids in storage.items():
                 objs = map(uuidToObject, uuids)
                 for obj in self.drop_existing(objs, userid):
+                    if not obj:
+                        # Object does no longer existng - skip it
+                        continue
+
                     FavoriteManager().add(userid, obj)
 
             self.remove_storage(repo)
