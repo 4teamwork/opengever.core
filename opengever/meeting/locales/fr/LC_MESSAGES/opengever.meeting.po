@@ -89,7 +89,7 @@ msgstr "Une erreur imprévue est apparue"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "Are you sure you want to cancel this meeting?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir annuler cette réunion?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -409,7 +409,7 @@ msgstr "Vous ne disposez pas des droits nécessaires pour accéder au dossier."
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_cancel_meeting"
-msgstr ""
+msgstr "Annuler la réunion"
 
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
@@ -462,7 +462,7 @@ msgstr "Renommer le point de l'ordre du jour"
 #. Default: "Rename paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_paragraph"
-msgstr ""
+msgstr "Modifier l'intertitre"
 
 #. Default: "Reopen agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -916,7 +916,7 @@ msgstr "Clôturé"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_header_template"
-msgstr ""
+msgstr "Modèle pour l'en-tête d'un point de l'ordre du jour dans le protocole"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -927,7 +927,7 @@ msgstr "Numéro du point de l'ordre du jour dans cette réunion"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_suffix_template"
-msgstr ""
+msgstr "Modèle pour la partie finale d'un point de l'ordre du jour dans le protocole"
 
 #. Default: "Agendaitem list"
 #: ./opengever/meeting/model/meeting.py
@@ -963,7 +963,7 @@ msgstr "Annuler"
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "label_cancel_meeting"
-msgstr ""
+msgstr "Annuler la réunion"
 
 #. Default: "Close"
 #: ./opengever/meeting/browser/meetings/protocol.py
@@ -1002,7 +1002,7 @@ msgstr "Comité"
 #. Default: "Committeeresponsible"
 #: ./opengever/meeting/committee.py
 msgid "label_committee_responsible"
-msgstr ""
+msgstr "Responsables de comités"
 
 #. Default: "The protocol has been modified in the meantime. If you want to keep your changes try resolving the conflicts manually."
 #: ./opengever/meeting/browser/meetings/templates/protocol.pt
@@ -1232,7 +1232,7 @@ msgstr "Insérer"
 #. Default: "Sablon template invalid"
 #: ./opengever/meeting/browser/templates/sablon_validation_state.pt
 msgid "label_invalid_sablon_template"
-msgstr ""
+msgstr "Etat de validité"
 
 #. Default: "Last Meeting:"
 #: ./opengever/meeting/browser/templates/committee.pt
@@ -1287,7 +1287,7 @@ msgstr "Réunion clôturée"
 #. Default: "The meeting already has agenda items and can't be cancelled"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
-msgstr ""
+msgstr "Cette réunion ne peut pas être annulée tant qu'elle contient des points de l'ordre du jour."
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py
@@ -1666,7 +1666,7 @@ msgstr "Le comité sélectionné a été désactivé; la proposition n'a pas pu 
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
-msgstr ""
+msgstr "La réunion ${title} a été annulée avec succès"
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py
@@ -1872,7 +1872,7 @@ msgstr "Révision"
 #. Default: "This template will not render correctly."
 #: ./opengever/meeting/browser/templates/sablon_validation_state.pt
 msgid "sablon_template_is_invalid"
-msgstr ""
+msgstr "Ce modèle ne peut pas être utilisé"
 
 #. Default: "Schedule"
 #: ./opengever/meeting/model/proposal.py
