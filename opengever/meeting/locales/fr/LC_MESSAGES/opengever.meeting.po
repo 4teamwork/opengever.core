@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2018-03-21 17:07+0000\n"
-"PO-Revision-Date: 2018-01-19 21:48+0000\n"
-"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
+"PO-Revision-Date: 2018-05-22 10:15+0000\n"
+"Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
 "gever/opengever-meeting/fr/>\n"
 "Language: fr\n"
@@ -720,7 +720,7 @@ msgstr "Clôturé"
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
 msgid "description_group"
-msgstr "Pour ce groupe, les autorisations sont attribuées automatiquement au comité."
+msgstr "Ce groupe peut modifier et consulter le comité."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -980,7 +980,7 @@ msgstr ""
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
-msgstr "Réunions clôturées"
+msgstr "Réunions passées"
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
