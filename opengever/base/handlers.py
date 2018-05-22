@@ -15,6 +15,8 @@ from zope.sqlalchemy.datamanager import mark_changed
 
 
 def object_moved_or_added(context, event):
+    notify(ObjectTouchedEvent(context))
+
     if IObjectRemovedEvent.providedBy(event):
         return
 
