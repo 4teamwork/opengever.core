@@ -5,7 +5,7 @@ Changelog
 2018.3.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix favorites-migration: skip no longer existing repo-favorites. [phgross]
 
 
 2018.3.0 (2018-05-22)
