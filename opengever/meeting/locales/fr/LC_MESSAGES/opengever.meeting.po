@@ -414,7 +414,7 @@ msgstr ""
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_close_meeting"
-msgstr "Fermer la réunion"
+msgstr "Clôturer la réunion"
 
 #. Default: "Create task"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -433,7 +433,7 @@ msgstr "Télécharger le document"
 #. Default: "Edit with word"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_edit_document"
-msgstr "Modifier en Word"
+msgstr "Modifier dans Word"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "action_generate_document"
@@ -511,7 +511,7 @@ msgstr "Le point de l'ordre du jour a été clôturé et la réunion a eu lieu."
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_order_updated"
-msgstr "La hiérarchie des points de l'ordre du jour a été actualisée."
+msgstr "Les points de l'ordre du jour ont été réarrangés."
 
 #. Default: "Agenda Item decided and excerpt generated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -708,14 +708,14 @@ msgstr "Décider"
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "decide_agendaitem"
-msgstr "Fixer un point de l'ordre du jour"
+msgstr "Clôturer un point de l'ordre du jour"
 
 #. Default: "Decided"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/model/agendaitem.py
 #: ./opengever/meeting/model/proposal.py
 msgid "decided"
-msgstr "Fixé"
+msgstr "Clôturé"
 
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
@@ -1009,7 +1009,7 @@ msgstr ""
 msgid "label_conflict_changes"
 msgstr ""
 "Le protocole a été modifié entre-temps. Si vous voulez garder vos "
-"changements, essayer de résoudre les conflits de façon manuelle."
+"changements, essayez de résoudre les conflits de façon manuelle."
 
 #. Default: "Considerations"
 #: ./opengever/meeting/browser/meetings/protocol.py
@@ -1307,7 +1307,7 @@ msgstr "Prochaine réunion:"
 #. Default: "No agenda item list has been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
 msgid "label_no_agendaitem_list"
-msgstr "Aucun ordre du jour n'a été généré encore."
+msgstr "Aucun ordre du jour n'a encore été généré."
 
 #. Default: "No additional excerpts have been generated yet."
 #: ./opengever/meeting/browser/meetings/templates/meeting-noword.pt
@@ -1490,7 +1490,7 @@ msgstr "Modèle de la table de matière"
 #. Default: "Toggle attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_toggle_attachments"
-msgstr "Afficher / cacher les appendices"
+msgstr "Afficher / cacher les pièces jointes"
 
 #. Default: "Transition ${transition} executed"
 #: ./opengever/meeting/browser/meetings/transitions.py
@@ -1924,7 +1924,7 @@ msgstr "Apperçu"
 #. Default: "${count} Participants"
 #: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
 msgid "tab_participants"
-msgstr "Participants ${count}"
+msgstr "${count} participants"
 
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
