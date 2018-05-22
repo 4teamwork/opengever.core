@@ -132,7 +132,7 @@ msgstr "Actualiser la version soumise"
 
 #: ./opengever/document/widgets/document_link.pt
 msgid "You are not allowed to view this document."
-msgstr ""
+msgstr "Vous ne disposez pas des droits suffisants pour voir ce document."
 
 #: ./opengever/document/browser/edit.py
 msgid "You are not authorized to edit the document ${title}."

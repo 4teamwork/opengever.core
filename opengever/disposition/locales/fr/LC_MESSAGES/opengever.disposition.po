@@ -2,23 +2,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2018-03-19 12:59+0000\n"
-"PO-Revision-Date: 2017-06-04 17:02+0000\n"
-"Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
+"PO-Revision-Date: 2018-05-22 10:09+0000\n"
+"Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
+"gever/opengever-disposition/fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
-"Language: fr\n"
-"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/disposition/browser/excel_export.py
 msgid "The report could not been generated."
-msgstr ""
+msgstr "Le rapport n'a pas pu être généré."
 
 #: ./opengever/disposition/browser/listing.py
 msgid "active"
@@ -26,7 +27,7 @@ msgstr "Actif"
 
 #: ./opengever/disposition/browser/listing.py
 msgid "all"
-msgstr ""
+msgstr "Tous"
 
 #. Default: "appraisal_list"
 #: ./opengever/disposition/browser/excel_export.py
@@ -41,17 +42,17 @@ msgstr "Numéro courant"
 #. Default: "Edit transfer number"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "edit_transfer_number"
-msgstr ""
+msgstr "Editer le numéro de livraison"
 
 #. Default: "The dossier ${title} is already offered in a different disposition."
 #: ./opengever/disposition/validators.py
 msgid "error_offered_in_a_different_disposition"
-msgstr ""
+msgstr "Le dossier ${title} est déjà inclus dans une autre offre."
 
 #. Default: "The retention period of the selected dossiers is not expired."
 #: ./opengever/disposition/validators.py
 msgid "error_retention_period_not_expired"
-msgstr ""
+msgstr "Le période de rétention des dossiers sélectionnés n'est pas échue."
 
 #. Default: "Common"
 #: ./opengever/disposition/disposition.py
@@ -61,37 +62,37 @@ msgstr "En général"
 #. Default: "Action"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_action"
-msgstr ""
+msgstr "Action"
 
 #. Default: "Actor"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_actor"
-msgstr ""
+msgstr "Acteur"
 
 #. Default: "Appraisal"
 #: ./opengever/disposition/browser/excel_export.py
 msgid "label_appraisal"
-msgstr ""
+msgstr "Décision d'évaluation"
 
 #. Default: "Archive"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_archive"
-msgstr ""
+msgstr "Archiver"
 
 #. Default: "Archive all"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_archive_all"
-msgstr ""
+msgstr "Archiver tous"
 
 #. Default: "Archived"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_archived"
-msgstr ""
+msgstr "Archivé"
 
 #. Default: "Cancel"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_cancel"
-msgstr ""
+msgstr "Annuler"
 
 #. Default: "Details:"
 #: ./opengever/disposition/browser/templates/overview.pt
@@ -101,38 +102,38 @@ msgstr "Détails:"
 #. Default: "Disposition"
 #: ./opengever/disposition/disposition.py
 msgid "label_disposition"
-msgstr ""
+msgstr "Offre"
 
 #. Default: "Disposition added"
 #: ./opengever/disposition/activities.py
 #: ./opengever/disposition/history.py
 msgid "label_disposition_added"
-msgstr ""
+msgstr "Offre ajoutée"
 
 #. Default: "Disposition edited"
 #: ./opengever/disposition/history.py
 msgid "label_disposition_edited"
-msgstr ""
+msgstr "Offre éditée"
 
 #. Default: "Download disposition package"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_dispositon_package_download"
-msgstr ""
+msgstr "Télécharger le colis de livraison"
 
 #. Default: "Don't archive"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_dont_archive"
-msgstr ""
+msgstr "Ne pas archiver"
 
 #. Default: "Do not archive all"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_dont_archive_all"
-msgstr ""
+msgstr "Ne pas archiver tous"
 
 #. Default: "Dossier"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_dossier"
-msgstr ""
+msgstr "Dossier"
 
 #. Default: "Dossiers"
 #: ./opengever/disposition/browser/removal_protocol.py
@@ -144,32 +145,32 @@ msgstr "Dossiers"
 #. Default: "Download removal protocol"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_download_removal_protocol"
-msgstr ""
+msgstr "Télécharger le protocole de supression"
 
 #. Default: "Edit"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_edit"
-msgstr ""
+msgstr "Editer"
 
 #. Default: "Export appraisal list as excel"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_export_appraisal_list_as_excel"
-msgstr ""
+msgstr "Exporter la liste d'évaluation en excel"
 
 #. Default: "History"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_history"
-msgstr ""
+msgstr "Historique"
 
 #. Default: "Inactive Dossiers"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_inactive_dossiers"
-msgstr ""
+msgstr "Dossiers annulés"
 
 #. Default: "Metadata"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_metadata"
-msgstr ""
+msgstr "Métadonnées"
 
 #. Default: "No"
 #: ./opengever/disposition/browser/removal_protocol.py
@@ -179,7 +180,7 @@ msgstr "Non"
 #. Default: "Process"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_process"
-msgstr ""
+msgstr "Processus"
 
 #. Default: "Reference number"
 #: ./opengever/disposition/browser/removal_protocol.py
@@ -189,12 +190,12 @@ msgstr "Numéro de référence"
 #. Default: "Removal protocol"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_removal_protocol"
-msgstr ""
+msgstr "Protocole de supression"
 
 #. Default: "Resolved Dossiers"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_resolved_dossiers"
-msgstr ""
+msgstr "Dossiers clôturés"
 
 #. Default: "Review state"
 #: ./opengever/disposition/browser/listing.py
@@ -204,12 +205,12 @@ msgstr "Etat"
 #. Default: "Save"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_save"
-msgstr ""
+msgstr "Enregistrer"
 
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "label_time"
-msgstr ""
+msgstr "date"
 
 #. Default: "Title"
 #: ./opengever/disposition/browser/listing.py
@@ -223,7 +224,7 @@ msgstr "Titre"
 #: ./opengever/disposition/browser/templates/overview.pt
 #: ./opengever/disposition/disposition.py
 msgid "label_transfer_number"
-msgstr ""
+msgstr "Numéro de livraison"
 
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py
@@ -233,64 +234,64 @@ msgstr "Oui"
 #. Default: "The appraisal is incomplete, appraisal could not be finalized."
 #: ./opengever/disposition/browser/views.py
 msgid "msg_appraisal_incomplete"
-msgstr ""
+msgstr "L'évaluation n'est pas complète, l'évaluation n'a pas pu être finalisée"
 
 #. Default: "Added by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_added"
-msgstr ""
+msgstr "Ajouté par ${user}"
 
 #. Default: "Appraisal finalized by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_appraised"
-msgstr ""
+msgstr "Evaluation finalisée par ${user}"
 
 #. Default: "The archiving confirmed by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_archived"
-msgstr ""
+msgstr "Archivage confirmé par ${user}"
 
 #. Default: "Disposition closed and all dossiers destroyed by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_close"
-msgstr ""
+msgstr "Offre clôturée et tous les dossiers détruits par ${user}"
 
 #. Default: "Disposition disposed for the archive by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_disposed"
-msgstr ""
+msgstr "Proposé pour archivage par ${user}"
 
 #. Default: "Edited by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_edited"
-msgstr ""
+msgstr "Edité par ${user}"
 
 #. Default: "Disposition refused by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_refuse"
-msgstr ""
+msgstr "Offre refusée par ${user}"
 
 #. Default: "Updated by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_updated"
-msgstr ""
+msgstr "Actualisé par ${user}"
 
 #. Default: "Period"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "period"
-msgstr ""
+msgstr "Période"
 
 #. Default: "Progress"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "progress"
-msgstr ""
+msgstr "Progrès"
 
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
 #: ./opengever/disposition/activities.py
 msgid "summary_disposition_added"
-msgstr ""
+msgstr "Nouvelle offre ajoutée par ${user} dans le mandataire ${admin_unit}"
 
 #. Default: "Removal protocol for ${disposition}"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "title_removal_protocol"
-msgstr ""
+msgstr "Protocole de supression pour ${disposition}"

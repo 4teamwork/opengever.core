@@ -98,7 +98,7 @@ msgstr "Offres"
 #. Default: "Documents"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_documents"
-msgstr ""
+msgstr "Documents"
 
 #. Default: "Dossiers"
 #: ./opengever/repository/browser/tabbed.py
@@ -148,7 +148,7 @@ msgstr "Le numéro de la position a été effacé avec succès."
 #. Default: "Tasks"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_tasks"
-msgstr ""
+msgstr "Tâches"
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py
