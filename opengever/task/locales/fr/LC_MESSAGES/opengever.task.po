@@ -221,7 +221,7 @@ msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un 
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_team_responsible_in_progress_state"
-msgstr "Les équipes ne sont autorisées comme mandataires que pour transmissions ou des tâches ouvertes."
+msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmissions ou des tâches ouvertes."
 
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py
