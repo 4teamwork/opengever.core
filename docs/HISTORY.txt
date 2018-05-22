@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.3.0 (unreleased)
+2018.3.0 (2018-05-22)
 ---------------------
 
 - Bump ftw.pdfgenerator to 1.6.1 to get encoding fix. [lgraf]
