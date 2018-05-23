@@ -78,13 +78,6 @@ def activate_meeting():
     toggle_feature(IMeetingSettings, enabled=True)
 
 
-def activate_meeting_word_implementation():
-    api.portal.set_registry_record('is_word_implementation_enabled', True,
-                                   interface=IMeetingSettings)
-    # The meeting feature must be activated too for having an effect.
-    activate_meeting()
-
-
 def deactivate_activity_center():
     toggle_feature(IActivitySettings, enabled=False)
 

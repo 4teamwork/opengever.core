@@ -5,21 +5,19 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.testing import IntegrationTestCase
 
 
-class TestProposalTemplateWordEnabled(IntegrationTestCase):
+class TestProposalTemplate(IntegrationTestCase):
+
     features = (
         'meeting',
-        'word-meeting',
         )
-
-    @browsing
-    def test_proposal_templates_addable_when_feature_enabled(self, browser):
-        self.login(self.administrator, browser)
-        browser.open(self.templates)
-        self.assertIn('Proposal Template', factoriesmenu.addable_types(browser))
 
     @browsing
     def test_adding_new_proposal_template(self, browser):
         self.login(self.administrator, browser)
+
+        browser.open(self.templates)
+        self.assertIn('Proposal Template', factoriesmenu.addable_types(browser))
+
         browser.open(self.templates, view='++add++opengever.meeting.proposaltemplate')
         browser.fill({'Title': 'Baugesuch', 'File': ('Binary Data', 'Baugesuch.docx', MIME_DOCX)}).save()
         statusmessages.assert_no_error_messages()
@@ -38,16 +36,3 @@ class TestProposalTemplateWordEnabled(IntegrationTestCase):
             ['Only word files (.docx) can be added here.'],
             browser.css('#formfield-form-widgets-file .error').text,
             )
-
-
-class TestProposalTemplateWordDisabled(IntegrationTestCase):
-
-    features = (
-        'meeting',
-        )
-
-    @browsing
-    def test_proposal_templates_not_addable_when_feature_disabled(self, browser):
-        self.login(self.administrator, browser)
-        browser.open(self.templates)
-        self.assertNotIn('Proposal Template', factoriesmenu.addable_types(browser))
