@@ -8,8 +8,8 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -142,9 +142,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
-        self.assertTrue(IFromParallelTasktemplateGenerated.providedBy(main_task))
+        self.assertTrue(IFromParallelTasktemplate.providedBy(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromParallelTasktemplateGenerated.providedBy(subtask))
+            self.assertTrue(IFromParallelTasktemplate.providedBy(subtask))
 
         # sequential
         self.tasktemplatefolder.sequence_type = u'sequential'
@@ -152,9 +152,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
-        self.assertTrue(IFromSequentialTasktemplateGenerated.providedBy(main_task))
+        self.assertTrue(IFromSequentialTasktemplate.providedBy(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromSequentialTasktemplateGenerated.providedBy(subtask))
+            self.assertTrue(IFromSequentialTasktemplate.providedBy(subtask))
 
     @browsing
     def test_creates_a_subtask_for_each_selected_template(self, browser):

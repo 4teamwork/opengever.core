@@ -4,8 +4,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 from StringIO import StringIO
@@ -163,15 +163,15 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         # sequential
-        alsoProvides(self.task, IFromSequentialTasktemplateGenerated)
+        alsoProvides(self.task, IFromSequentialTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             [u'Sequential process'],
             browser.css('#sub_taskBox .sequence_type').text)
 
         # parallel
-        noLongerProvides(self.task, IFromSequentialTasktemplateGenerated)
-        alsoProvides(self.task, IFromParallelTasktemplateGenerated)
+        noLongerProvides(self.task, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IFromParallelTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             [u'Parallel process'],
@@ -182,15 +182,15 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         # sequential
-        alsoProvides(self.task, IFromSequentialTasktemplateGenerated)
+        alsoProvides(self.task, IFromSequentialTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             'task-container sequential',
             browser.css('#sub_taskBox div').first.get('class'))
 
         # parallel
-        noLongerProvides(self.task, IFromSequentialTasktemplateGenerated)
-        alsoProvides(self.task, IFromParallelTasktemplateGenerated)
+        noLongerProvides(self.task, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IFromParallelTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             'task-container parallel',

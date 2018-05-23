@@ -7,8 +7,8 @@ from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import addContentToContainer
@@ -132,9 +132,9 @@ class TaskTemplateFolderTrigger(object):
 
     def mark_as_generated_from_tasktemplate(self, task):
         if self.context.is_sequential:
-            alsoProvides(task, IFromSequentialTasktemplateGenerated)
+            alsoProvides(task, IFromSequentialTasktemplate)
         else:
-            alsoProvides(task, IFromParallelTasktemplateGenerated)
+            alsoProvides(task, IFromParallelTasktemplate)
 
     def replace_interactive_actors(self, data):
         data['issuer'] = self.get_interactive_represent(data['issuer'])
