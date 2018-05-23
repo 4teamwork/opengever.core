@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import _
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from plone import api
 from plone.dexterity.utils import createContent, addContentToContainer
@@ -277,7 +278,7 @@ class AddForm(BrowserView):
                 deadline=deadline,
                 )
 
-            if template.responsible_client == 'interactive_users':
+            if template.responsible_client == INTERACTIVE_USERS:
                 responsible_assigned_org_units = ogdsservice.assigned_org_units(
                     data['responsible'])
                 current_org_unit = get_current_org_unit()

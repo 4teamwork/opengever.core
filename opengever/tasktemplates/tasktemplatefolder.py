@@ -4,10 +4,11 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import addContentToContainer
@@ -137,7 +138,7 @@ class TaskTemplateFolderTrigger(object):
 
     def replace_interactive_actors(self, data):
         data['issuer'] = self.get_interactive_represent(data['issuer'])
-        if data['responsible_client'] == 'interactive_users':
+        if data['responsible_client'] == INTERACTIVE_USERS:
             data['responsible_client'] = get_current_org_unit().id()
             data['responsible'] = self.get_interactive_represent(
                 data['responsible'])

@@ -7,6 +7,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tasktemplates import _
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
@@ -227,7 +228,7 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def get_responsible_client(self, template, responsible):
-        if template.responsible_client == 'interactive_users':
+        if template.responsible_client == INTERACTIVE_USERS:
             current_org_unit = get_current_org_unit()
             responsible_org_units = ogds_service().assigned_org_units(responsible)
 

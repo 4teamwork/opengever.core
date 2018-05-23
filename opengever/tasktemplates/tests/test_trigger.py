@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
@@ -264,7 +265,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         ITaskTemplate(self.tasktemplate).responsible = 'current_user'
-        ITaskTemplate(self.tasktemplate).responsible_client = 'interactive_users'
+        ITaskTemplate(self.tasktemplate).responsible_client = INTERACTIVE_USERS
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'])
 
@@ -277,7 +278,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         ITaskTemplate(self.tasktemplate).responsible = 'current_user'
-        ITaskTemplate(self.tasktemplate).responsible_client = 'interactive_users'
+        ITaskTemplate(self.tasktemplate).responsible_client = INTERACTIVE_USERS
 
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'],

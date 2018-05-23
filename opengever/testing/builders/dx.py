@@ -14,6 +14,7 @@ from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
@@ -503,7 +504,7 @@ class TaskTemplateBuilder(DexterityBuilder):
         super(TaskTemplateBuilder, self).__init__(session)
 
         self.arguments = {
-            'responsible_client': 'interactive_users',
+            'responsible_client': INTERACTIVE_USERS,
             'responsible': 'current_user',
             'deadline': 5,
             'issuer': TEST_USER_ID}

@@ -2,6 +2,7 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.tasktemplates import _
+from opengever.tasktemplates import INTERACTIVE_USERS
 from z3c.formwidget.query.interfaces import IQuerySource
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -64,7 +65,7 @@ class TaskResponsibleSource(AllUsersInboxesAndTeamsSource):
 
     def getTerm(self, value):
         special_users = interactive_users()
-        if value.startswith('interactive_users:'):
+        if value.startswith('{}:'.format(INTERACTIVE_USERS)):
             special_user = value.split(':', 1)[1]
         elif value in special_users:
             special_user = value
@@ -72,7 +73,7 @@ class TaskResponsibleSource(AllUsersInboxesAndTeamsSource):
             special_user = None
 
         if special_user:
-            token = 'interactive_users:' + special_user
+            token = '{}:{}'.format(INTERACTIVE_USERS, special_user)
             value = token
             return SimpleTerm(value, token, special_users[special_user])
 
