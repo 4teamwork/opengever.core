@@ -56,8 +56,8 @@ Reiter.
    jedoch nur der Titel angezeigt. Die zentralen, identifizierenden
    Geschäftsinformationen müssen daher im Titelfeld enthalten sein.
 
-3. **Schlagworte:** Zusätzlich zu Titel und Beschreibung kann das
-   Dossier mit Schlagworten versehen werden.
+3. **Schlagwörter:** Zusätzlich zu Titel und Beschreibung kann das
+   Dossier mit Schlagwörter versehen werden.
 
 4. **Beginn:** Das Beginndatum eines Geschäfts entspricht dem ersten
    Dokument eines Dossiers. Standardmässig wird in OneGov GEVER das

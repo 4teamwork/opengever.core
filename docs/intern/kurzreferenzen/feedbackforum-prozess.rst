@@ -1,7 +1,7 @@
 Prozess Feedbackforum
 =====================
 Der Prozess innerhalb des Feedbackforums wird primär durch die Kategorien und
-Schlagworte bestimmt. Sobald durch einen OneGov GEVER-Benutzer ein neues Thema
+Schlagwörter bestimmt. Sobald durch einen OneGov GEVER-Benutzer ein neues Thema
 im Feedbackforum erstellt wird, wird die Kategorisierung und Setzung eines
 Schlagwortes durch den Feedbackforum-Moderator (aktuell primär durch Livia)
 vorgenommen und dadurch der Prozess jeweils angestossen.
@@ -18,11 +18,11 @@ Es wurden folgende Kategorien für die Themen definiert:
 
 - ``Intern:`` Thema wurde von 4tw-Mitarbeitern erfasst und beinhaltet Verbesserungs-Vorschläge.
 
-Schlagworte
------------
-Die Schlagworte können in folgende zwei Gruppen unterteilt werden:
+Schlagwörter
+------------
+Die Schlagwörter können in folgende zwei Gruppen unterteilt werden:
 
-1. Es gibt Schlagworte, die definieren den Status des Themas. Pro Thema darf immer nur ein Schlagwort von dieser Liste aktiv sein. Es können aber parallel Schlagworte von der zweiten Liste unten angewählt werden:
+1. Es gibt Schlagwörter, die definieren den Status des Themas. Pro Thema darf immer nur ein Schlagwort von dieser Liste aktiv sein. Es können aber parallel Schlagwörter von der zweiten Liste unten angewählt werden:
 
 - ``diskussion:`` Ein neuer Beitrag wird meist zuerst in diesen Status gesetzt, da die Community darüber diskutieren soll.
 
@@ -32,7 +32,7 @@ Die Schlagworte können in folgende zwei Gruppen unterteilt werden:
 
 - ``realisiert:`` Sobald das Thema realisert wurde, wird dieses Schlagwort gesetzt. Sobald der Release herauskommt, bei welchem dieses Thema eingespielt wird, kann das Thema dann geschlossen werden.
 
-2. Es gibt Schlagworte, die behandeln ein spezifisches Thema. Von diesen können mehrere aktiviert werden und es sollte max. 1 Schlagwort von der ersten Liste oben ergänzt werden:
+2. Es gibt Schlagwörter, die behandeln ein spezifisches Thema. Von diesen können mehrere aktiviert werden und es sollte max. 1 Schlagwort von der ersten Liste oben ergänzt werden:
 
 - ``spv:`` Alle Beiträge die sich mit der SPV (Sitzungs- und Protokollverwaltung) auseinander setzen.
 

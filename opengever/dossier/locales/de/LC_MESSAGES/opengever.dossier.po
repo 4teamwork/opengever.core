@@ -278,7 +278,7 @@ msgstr "Wählen Sie hier einen Benutzer oder eine Gruppe, welche nach dem Schüt
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_predefined_keywords"
-msgstr "Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagworte bereits vorausgefüllt."
+msgstr "Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagwörter bereits vorausgefüllt."
 
 #. Default: "Choose users and groups which have only readable access to the dossier"
 #: ./opengever/dossier/behaviors/protect_dossier.py
@@ -293,7 +293,7 @@ msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schre
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_restrict_keywords"
-msgstr "Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab Vorlage nur noch die in der Vorlage angegebenen Schlagworte zur Auswahl.<br>Der Benutzer kann dadurch auch keine neuen Schlagworte erfassen."
+msgstr "Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab Vorlage nur noch die in der Vorlage angegebenen Schlagwörter zur Auswahl.<br>Der Benutzer kann dadurch auch keine neuen Schlagwörter erfassen."
 
 msgid "documents"
 msgstr "Dokumente"
@@ -415,7 +415,7 @@ msgstr "Geben Sie die vollständige Ablagenummer an."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_keywords"
-msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagworten die Datenschutzvorgaben (z.B. keine Eigennamen)."
+msgstr "Schlagwörter zur Umschreibung eines Dossiers. Nicht zu verwechseln mit der Ordnungsposition. <br>ACHTUNG: Beachten Sie bei der Verwendung von Schlagwörter die Datenschutzvorgaben (z.B. keine Eigennamen)."
 
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "help_number_of_containers"
@@ -608,7 +608,7 @@ msgstr "Journal"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
 msgid "label_keywords"
-msgstr "Schlagworte"
+msgstr "Schlagwörter"
 
 #. Default: "Label"
 #: ./opengever/dossier/templatefolder/form.py
@@ -669,7 +669,7 @@ msgstr "Telefonnummer"
 #. Default: "Predefined Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_predefined_keywords"
-msgstr "Schlagworte vorausfüllen"
+msgstr "Schlagwörter vorausfüllen"
 
 #. Default: "Proposal Templates"
 #: ./opengever/dossier/browser/tabbed.py

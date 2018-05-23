@@ -30,7 +30,7 @@ Reiter Allgemein
 
 2.  **Beschreibung:** Erläuterungen, Ergänzungen zum Dokumentinhalt
 
-3.  **Schlagworte:** Zusätzlich zu Titel und Beschreibung können
+3.  **Schlagwörter:** Zusätzlich zu Titel und Beschreibung können
     Schlüsselwörter vergeben werden.
 
 4.  **Fremdzeichen:** Aktenzeichen des Absenders
