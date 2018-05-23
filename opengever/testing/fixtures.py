@@ -1094,7 +1094,7 @@ class OpengeverContentFixture(object):
                 responsible_client=self.org_unit.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
-                task_type='correction',
+                task_type='direct-execution',
                 deadline=date(2016, 11, 1),
                 )
             .in_state('task-state-in-progress')
