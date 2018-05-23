@@ -124,6 +124,8 @@ class SelectTaskTemplateFolderWizardStep(BaseWizardStepForm, Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
+        dm = getUtility(IWizardDataStorage)
+        dm.drop_data(get_datamanger_key(self.context))
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def has_active_tasktemplates(self):
@@ -220,6 +222,8 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
+        dm = getUtility(IWizardDataStorage)
+        dm.drop_data(get_datamanger_key(self.context))
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def get_responsible_client(self, template, responsible):
@@ -349,6 +353,8 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):
+        dm = getUtility(IWizardDataStorage)
+        dm.drop_data(get_datamanger_key(self.context))
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def get_responsible(self, template, data):
