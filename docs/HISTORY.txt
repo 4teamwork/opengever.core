@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Integrate plonetheme.teamraum. [deiferni]
+- Make external reference clickable in dossiers. [njohner]
 
 
 2018.3.1 (2018-05-23)

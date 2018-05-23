@@ -4,6 +4,7 @@ from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import Actor
+from plone import api
 
 
 class BusinessCaseByline(BylineBase):
@@ -32,6 +33,14 @@ class BusinessCaseByline(BylineBase):
 
     def external_reference(self):
         return IDossier(self.context).external_reference
+
+    def external_reference_link(self):
+        if not self.external_reference():
+            return self.external_reference()
+        ref_tag = api.portal.get_tool(name='portal_transforms').convertTo(
+            'text/html', self.external_reference(),
+            mimetype='text/x-web-intelligent').getData()
+        return '<span>%s</span>' % ref_tag
 
     def get_items(self):
         items = [
@@ -82,8 +91,8 @@ class BusinessCaseByline(BylineBase):
                 'class': 'external_reference',
                 'label': _('label_external_reference',
                            default=u'External Reference'),
-                'content': self.external_reference(),
-                'replace': False
+                'content': self.external_reference_link(),
+                'replace': True
             }
         ]
 

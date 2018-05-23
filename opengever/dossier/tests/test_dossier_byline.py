@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.core.testing import activate_filing_number
 from opengever.core.testing import inactivate_filing_number
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -28,6 +29,7 @@ class TestDossierBylineBase(TestBylineBase):
         mail_settings.mail_domain = u'opengever.4teamwork.ch'
         transaction.commit()
 
+
 class TestDossierByline(TestDossierBylineBase):
 
     def create_dossier(self):
@@ -36,7 +38,8 @@ class TestDossierByline(TestDossierBylineBase):
                       .having(reference_number_prefix='5',
                               responsible='hugo.boss',
                               start=date(2013, 11, 6),
-                              end=date(2013, 11, 7)))
+                              end=date(2013, 11, 7),
+                              external_reference='22900-2017'))
 
     @browsing
     def test_dossier_byline_responsible_display(self, browser):
@@ -96,25 +99,31 @@ class TestDossierByline(TestDossierBylineBase):
         self.assertEquals(None,
                           self.get_byline_value_by_label('Filing Number:'))
 
-
-class TestBusinessCaseDossierByline(TestDossierBylineBase):
-
-    def create_dossier(self):
-        return create(Builder('dossier')
-                      .in_state('dossier-state-active')
-                      .having(reference_number_prefix='5',
-                              responsible='hugo.boss',
-                              start=date(2013, 11, 6),
-                              end=date(2013, 11, 7),
-                              external_reference='22900-2017'))
-
     @browsing
     def test_dossier_byline_external_reference_display(self, browser):
         browser.login().open(self.dossier)
-
         external_reference = self.get_byline_value_by_label(
                 'External Reference:')
         self.assertEquals('22900-2017', external_reference.text)
+
+    @browsing
+    def test_dossier_byline_external_reference_link_only_for_valid_url(self, browser):
+        valid_url = "http://google.ch"
+        invalid_url = "google.ch"
+
+        IDossier(self.dossier).external_reference = invalid_url
+        transaction.commit()
+        browser.login().open(self.dossier)
+        external_reference = self.get_byline_value_by_label(
+                'External Reference:')
+        self.assertIsNone(external_reference.node.find("a"))
+
+        IDossier(self.dossier).external_reference = valid_url
+        transaction.commit()
+        browser.login().open(self.dossier)
+        external_reference = self.get_byline_value_by_label(
+                'External Reference:')
+        self.assertEquals(valid_url, external_reference.node.find("a").get("href"))
 
 
 class TestFilingBusinessCaseByline(TestBylineBase):
