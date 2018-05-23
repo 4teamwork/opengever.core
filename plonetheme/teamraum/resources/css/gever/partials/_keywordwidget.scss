@@ -1,0 +1,30 @@
+#content .select2 .select2-selection--multiple .select2-selection__rendered li.select2-selection__choice {
+    line-height: 2em;
+
+    .select2-selection__choice__remove {
+        float: right;
+        margin-left: .5em;
+        bottom: -1px;
+    }
+}
+.keywordWidgetUsersAndGroupsElement {
+    span.fa {
+        margin-right: 0.5em;
+    }
+}
+.select2-selection__choice,
+.select2-selection--single {
+    a {
+        color: $white;
+    }
+}
+.select2-results__option {
+    a {
+        color: $black;
+    }
+    &.select2-results__option--highlighted {
+        a {
+            color: $white;
+        }
+    }
+}

@@ -1,0 +1,55 @@
+#content .select2 {
+  &.select2-container--focus {
+    .select2-selection {
+      border: 1px solid black;
+      background-color: #ffffe0;
+    }
+  }
+
+  .select2-selection ul {
+    list-style-type: none;
+    margin: 0;
+  }
+
+  .select2-selection--multiple .select2-selection__rendered li {
+    line-height: 1.5em;
+    margin-top: 5px;
+  }
+
+  .select2-selection--multiple .select2-selection__choice {
+    background-color: $gever-green;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+
+    .select2-selection__choice__remove {
+      color: #fff;
+      font-size: 18px;
+      display: inline-block;
+      bottom: -2px;
+      position: relative;
+    }
+  }
+}
+
+// Styles for select2 fields - shows one entry per selected item
+#formfield-form-widgets-responsible,
+#formfield-form-widgets-responsibles,
+#formfield-form-widgets-issuer,
+#formfield-form-widgets-IDossier-responsible,
+#formfield-form-widgets-contacts,
+#formfield-form-widgets-recipient,
+#formfield-form-widgets-intern_receiver {
+  .select2 {
+    width: 100% !important;
+
+    .select2-search--inline,
+    .select2-selection__choice {
+      clear: both;
+    }
+  }
+}
+
+.select2-dropdown {
+  z-index: 7001;
+}

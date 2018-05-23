@@ -1,0 +1,58 @@
+.dossier-detail-listing {
+  .dossier-detail-listing-title {
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    background-color: $gray-light;
+  }
+}
+
+#opengever_meeting_meeting {
+  table {
+    width: 100%;
+    border-radius: $border-radius;
+    thead {
+      tr {
+        th {
+          background-color: $light-blue;
+          padding: $padding-factor * 16px $padding-factor * 18px;
+          color: $white;
+          text-align: left;
+          font-weight: normal;
+          &:first-child {
+            border-top-left-radius: $border-radius;
+          }
+          &:last-child {
+            border-top-right-radius: $border-radius;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          background-color: $white;
+          padding: $padding-factor * 16px $padding-factor * 18px;
+          border-bottom: 1px solid $gray-dark;
+          text-align: left;
+        }
+        &:last-child {
+          td {
+            border-bottom: none;
+            &:last-child {
+              border-bottom-right-radius: $border-radius;
+            }
+            &:first-child {
+              border-bottom-left-radius: $border-radius;
+            }
+          }
+        }
+        &:hover {
+          td {
+            background-color: $gray-light;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,245 @@
+$organization: $fa-var-building-o;
+$person: $fa-var-user;
+$spacing: 8px;
+
+body.portaltype-opengever-contact-person {
+  @include heading-icon($person, $iconset:'FontAwesome');
+  @include watermark-icon($person, $iconset:'FontAwesome');
+
+  &.state-inactive {
+    @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
+  }
+}
+
+body.portaltype-opengever-contact-organization {
+  @include heading-icon($organization, $iconset:'FontAwesome');
+  @include watermark-icon($organization, $iconset:'FontAwesome');
+
+  &.state-inactive {
+    @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
+  }
+
+}
+
+a.contenttype-person:before {
+  @extend .fa;
+  content: $person;
+  padding-right: 0.4em;
+  font-size: 16px;
+}
+
+a.contenttype-organization:before {
+  @extend .fa;
+  content: $organization;
+  padding-right: 0.4em;
+  font-size: 16px;
+}
+
+
+body.portaltype-opengever-contact-person,
+body.portaltype-opengever-contact-organization {
+
+  #contactHistory {
+    margin-top: 10px;
+  }
+
+  .archivedBy {
+    font-size: 11px;
+    margin-bottom: 13px;
+  }
+
+  .personal_info, .contact_details {
+    margin-bottom: 30px;
+
+    th {
+      padding: 8px 34px 8px 8px;
+      font-size: 13px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    td {
+      padding: 6px 8px;
+    }
+
+    .address, .mail, .phone_number, .url {
+      text-align: left;
+      dt {
+        font-style: italic;
+        width: 100px;
+        float: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      dd {
+        margin-left: 130px;
+        padding-bottom: 15px;
+      }
+    }
+  }
+
+  #content {
+    .orgrole_listing, .dossier_listing {
+      display: table;
+      width: 100%;
+      vertical-align: top;
+      margin: 0px 15px 30px 15px;
+      padding: 0;
+
+      li {
+        padding: 15px 0;
+        list-style-type: none;
+        border-bottom: 1px solid #eee;
+
+        .name {
+          display: table-cell;
+          width: 250px;
+
+          > a {
+            a:visited {
+              color: #205C90;
+            }
+
+            &:before {
+              @extend .fa;
+              padding-right: 0.4em;
+              font-size: 16px;
+            }
+
+            &.dossier:before {
+              content: $dossier;
+              font-family: 'opengever';
+            }
+          }
+
+        }
+
+        .function, .department {
+          display: table-cell;
+        }
+
+        .function:not(:empty) {
+          padding-right: 3em;
+        }
+
+        .roles li {
+          padding: 0;
+          border-bottom: none;
+          list-style-type: none;
+        }
+
+        &.show_all_link {
+          border-bottom: none;
+        }
+
+      }
+
+      &.organizations {
+        .name a:before {
+          content: $organization;
+        }
+      }
+
+      &.persons {
+        .name a:before {
+          content: $person;
+        }
+      }
+    }
+  }
+}
+
+.portaltype-opengever-contact-person.template-edit {
+    .actions {
+        width: 81px;
+    }
+
+    table input {
+        width: 100%;
+    }
+
+    .email-record-edit-form {
+        display: none;
+    }
+}
+
+
+
+#content #participation_listing {
+
+  list-style-type: none;
+  margin-left: 10px;
+
+  > li {
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+    margin-bottom: 0;
+  }
+
+  .contact {
+    display: table-cell;
+    width: 250px;
+    vertical-align: top;
+
+    a:visited {
+      color: #205C90;
+    }
+
+  }
+
+  .actions {
+    display: table-cell;
+    vertical-align: middle;
+    li {
+      display: inline;
+      margin-left: 5px;
+    }
+  }
+
+  .roles {
+    display: table-cell;
+    width: 250px;
+    vertical-align: top;
+    list-style-type: none;
+  }
+
+  .actions {
+
+    a {
+      padding: $spacing;
+      padding-left: $spacing;
+      color: #000;
+      border: 1px solid $gray-dark;
+      margin-bottom: $spacing;
+      border-radius: 2px;
+      transition: background-color .2s ease-out;
+
+      &:hover {
+        text-decoration: none;
+        background-color: $gray-light;
+      }
+
+      &:before {
+        @extend .fa;
+        font-size: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+
+      &.edit-action:before {
+        @extend .fa-pencil;
+      }
+
+      &.remove-action:before {
+        @extend .fa-trash;
+      }
+
+    }
+
+  }
+}

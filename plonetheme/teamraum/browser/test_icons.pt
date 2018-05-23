@@ -1,0 +1,245 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<head>
+  <metal:css fill-slot="css_slot">
+    <style type="text/css">
+    #portal-column-two {
+        display: none;
+    }
+    div#portal-column-content {
+        margin-left: -100% !important;
+        width: 100% !important;
+    }
+    code {
+        margin: 0 0 1em;
+        display: none;
+    }
+    p {
+        display: block !important;
+    }
+    .testicons_column {
+        float: left;
+        margin-right: 1%;
+        width: 24%;
+    }
+    /* img-tags deaktivieren */
+    .hide-img-icons *[class*=contenttype-] img,
+    .hide-img-icons *[class*=mimetype-] img,
+    .hide-img-icons *[class*=wf-] img {
+    display: none !important;
+    }
+    </style>
+  </metal:css>
+  <metal:js fill-slot="javascript_head_slot">
+    <script type="text/javascript">
+    jq(document).ready(function() {
+          // initial status: no <img>-icons, icons activated, code not shown
+          jq("#toggler input[type=checkbox]")[0].checked=false;
+          jq("#toggler input[type=checkbox]")[1].checked=true;
+          jq("#toggler input[type=checkbox]")[2].checked=false;
+          jq("body").addClass("hide-img-icons");
+          jq("body").addClass("icons-on");
+          // toggler checkboxes
+          jq("#toggler input[type=checkbox]").live("click", function(e) {
+              if (this.name=='code') {
+                  if (this.checked) {
+                      jq("code").slideDown();
+                  } else {
+                      jq("code").slideUp();
+                  }
+              } else if (this.name=='show_icons') {
+                  if (this.checked) {
+                      jq("body").addClass("icons-on");
+                  } else {
+                      jq("body").removeClass("icons-on");
+                  }
+              } else if (this.name=='show_img') {
+                  if (this.checked) {
+                      jq("body").removeClass("hide-img-icons");
+                  } else {
+                      jq("body").addClass("hide-img-icons");
+                  }
+              }
+          });
+    });
+    </script>
+  </metal:js>
+</head>
+<body>
+<metal:main fill-slot="main">
+<h1 class="documentFirstHeading">Icons test page</h1>
+
+<div class="documentDescription">
+Hier werden alle Icons angezeigt. Die Seite soll helfen, zu überprüfen ob alle Icons korrekt sind.
+</div>
+<p><span class="contenttype-000noicon"/>&mdash; kein Icon definiert</p>
+<div id="toggler">
+    <div class="field"><input type="checkbox" id="code" name="code"/>&nbsp;<label for="code">CSS-Klassen anzeigen</label></div>
+    <div class="field"><input type="checkbox" id="show_icons" name="show_icons"/>&nbsp;<label for="show_icons">Anzeige von Icons aktivieren (wie in Plone Settings)</label></div>
+    <div class="field"><input type="checkbox" id="show_img" name="show_img"/>&nbsp;<label for="show_img">&lt;img&gt;-icons aktivieren</label></div>
+</div>
+<div id="helper">
+    <h2>alle &lt;img ...&gt;-Icons anzeigen</h2>
+    <code>jq("[class*=contenttype-] img, [class*=mimetype-] img, [class*=wf-] img, [class*=function-] img").css("outline", "5px dotted green")</code>
+</div>
+
+<div class="testicons_column">
+    <h2>Content types (static)</h2>
+    <tal:block define="types view/other_content_types"
+               repeat="type types">
+            <p tal:attributes="class python:type[0]">
+                <span tal:replace="python:type[1]">Type title</span>
+            </p>
+            <code tal:content="python:type[0]"/>
+
+    </tal:block>
+</div>
+
+<div class="testicons_column">
+    <h2>Content Types (generated)</h2>
+    <tal:block define="types view/content_types"
+               repeat="item types">
+            <p tal:attributes="class string:contenttype-${item/extra/id};
+                                   for string:form-field-${item/extra/id};">
+                <img tal:attributes="src item/icon" alt="" />
+                <span tal:replace="item/title">Type title</span>
+            </p>
+            <code tal:content="string:contenttype-${item/extra/id}"/>
+    </tal:block>
+</div>
+
+<div class="testicons_column">
+<!--
+    <h2>Workflow States (static)</h2>
+    <p class="wf-task-state-cancelled">Abgebrochen</p>
+    <code>wf-task-state-cancelled</code>
+    <p class="wf-task-state-in-progress">In Bearbeitung</p>
+    <code>wf-task-state-in-progress</code>
+    <p class="wf-task-state-new-successor">Überweisen</p>
+    <code>wf-task-state-new-successor</code>
+    <p class="wf-task-state-open">Bearbeitung notwendig</p>
+    <code>wf-task-state-open</code>
+    <p class="wf-task-state-rejected">Zurückgewiesen</p>
+    <code>wf-task-state-rejected</code>
+    <p class="wf-task-state-resolved">Erledigt</p>
+    <code>wf-task-state-resolved</code>
+    <p class="wf-task-state-tested-and-closed">Abgeschlossen</p>
+    <code>wf-task-state-tested-and-closed</code>
+    <p class="wf-forwarding-state-closed">Abgeschlossen</p>
+    <code>wf-forwarding-state-closed</code>
+    <p class="wf-forwarding-state-open">Bearbeitung notwendig</p>
+    <code>wf-forwarding-state-open</code>
+-->
+    <h2>Mimetype Icons (static)</h2>
+    <p><img src="doc.png" /> Doc</p>
+    <p><img src="xls.png" /> Xls</p>
+    <p><img src="ppt.png" /> Ppt</p>
+<p>&nbsp;</p>
+    <p><img src="++resource++office-2007-icons/docx.gif" /> Docx</p>
+    <p><img src="++resource++office-2007-icons/xlsx.gif" /> Xlsx</p>
+    <p><img src="++resource++office-2007-icons/pptx.gif" /> Pptx</p>
+<p>&nbsp;</p>
+    <p><img src="image_icon.gif" /> Image</p>
+    <p><img src="txt.png" /> Txt</p>
+    <p><img src="text.png" /> Text</p>
+    <p><img src="zip.png" /> Zip Archiv</p>
+    <p><img src="tar.png" /> Tar Archiv</p>
+    <p><img src="pdf_icon.gif" /> PDF</p>
+<p>&nbsp;</p>
+    <p><img src="sxw.png" /> Sxw</p>
+    <p><img src="sxi.png" /> Sxi</p>
+    <p><img src="sxc.png" /> Sxc</p>
+</div>
+<div class="testicons_column">
+    <h2>Sonstige Icons (static)</h2>
+    <span class="link-external"><a href="#">external Link</a></span>
+    <code>span.link-external</code>
+<!--
+    <p class="function-arrow-right">Betonter Link</p>
+    <code>function-arrow-right</code>
+    <p class="function-basket">Warenkorb</p>
+    <code>function-basket</code>
+    <p class="function-collapsible-closed">Pfeil geöffnet</p>
+    <code>function-collapsible-closed</code>
+    <p class="function-collapsible-open">Pfeil geschlossen</p>
+    <code>function-collapsible-open</code>
+    <p class="function-delete">Löschen</p>
+    <code>function-delete</code>
+    <p class="function-download">Download</p>
+    <code>function-download</code>
+    <p class="function-edit-inverse">Bearbeiten invertiert</p>
+    <code>function-edit-inverse</code>
+    <p class="function-edit">Bearbeiten</p>
+    <code>function-edit</code>
+    <p class="function-export-outlook">Export Outlook</p>
+    <code>function-export-outlook</code>
+    <p class="function-export-pdf-inverse">Export PDF invertiert</p>
+    <code>function-export-pdf-inverse</code>
+    <p class="function-export-pdf">Export PDF</p>
+    <code>function-export-pdf</code>
+    <p class="function-favorites-inverse">Favoriten invertiert</p>
+    <code>function-favorites-inverse</code>
+    <p class="function-favorites">Favoriten</p>
+    <code>function-favorites</code>
+    <p class="function-information">Information</p>
+    <code>function-information</code>
+    <p class="function-internet-inverse">Internet invertiert</p>
+    <code>function-internet-inverse</code>
+    <p class="function-internet">Internet</p>
+    <code>function-internet</code>
+    <p class="function-print-inverse">Drucken invertiert</p>
+    <code>function-print-inverse</code>
+    <p class="function-print">Drucken</p>
+    <code>function-print</code>
+    <p class="function-rss">RSS</p>
+    <code>function-rss</code>
+    <p class="function-settings-inverse">Einstellungen invertiert</p>
+    <code>function-settings-inverse</code>
+    <p class="function-settings">Einstellungen</p>
+    <code>function-settings</code>
+    <p class="function-start">Start</p>
+    <code>function-start</code>
+    <p class="function-subscribe-newsletter">Newsletter abonnieren</p>
+    <code>function-subscribe-newsletter</code>
+    <p class="function-upload">Upload</p>
+    <code>function-upload</code>
+    <p class="function-user">Benutzer</p>
+    <code>function-user</code>
+    <p class="function-watch-inverse">Beobachten invertiert</p>
+    <code>function-watch-inverse</code>
+    <p class="function-watch">Beobachten</p>
+    <code>function-watch</code>
+    <p class="function-watchlist">Merkliste</p>
+    <code>function-watchlist</code>
+    <p class="function-site">Site</p>
+    <code>function-site</code>
+    <p class="function-ok">Ok</p>
+    <code>function-ok</code>
+    <p class="function-journal">Journal</p>
+    <code>function-journal</code>
+    <p class="function-journal-inverse">Journal invertiert</p>
+    <code>function-journal-inverse</code>
+    <p class="function-todolist">Traktandenliste</p>
+    <code>function-todolist</code>
+    <p class="function-lock">Gesperrt</p>
+    <code>function-lock</code>
+    <p class="function-arrow-down">Pfeil nach unten</p>
+    <code>function-arrow-down</code>
+    <p class="function-arrow-up">Pfeil nach oben</p>
+    <code>function-arrow-up</code>
+    <p class="ui-icon-gripsmall-diagonal-se">UI resizable</p>
+    <code> ui-icon-gripsmall-diagonal-se</code>
+    -->
+</div>
+
+<div class="visualClear"><!-- IE Fix --></div>
+</metal:main>
+
+</body>
+</html>

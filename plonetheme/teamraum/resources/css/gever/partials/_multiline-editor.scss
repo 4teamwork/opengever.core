@@ -1,0 +1,18 @@
+@mixin multiline-editor() {
+  max-width: 600px;
+  min-height: 15em;
+  padding: 1.2em 1em;
+  box-sizing: border-box;
+  line-height: 1.6em;
+}
+
+.template-accept_choose_method #content textarea,
+.template-refuse-task #content textarea,
+.template-assign_choose_method #content textarea,
+.template-assign-task #content textarea,
+.template-addresponse #content textarea,
+.template-checkin_document #form-widgets-comment,
+.template-modify_deadline #form-widgets-text,
+.template-addcommentresponse #form-widgets-text {
+  @include multiline-editor();
+}

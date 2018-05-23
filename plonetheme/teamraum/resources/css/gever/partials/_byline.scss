@@ -1,0 +1,47 @@
+#content {
+  .byline-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .documentByLine, #plone-document-byline {
+    min-height: 3em;
+
+    .description {
+      margin-bottom: 1em;
+      margin-top: -1em;
+      width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    ul {
+      margin-left: 0;
+
+      li {
+        display: inline-block;
+        border-right: 1px solid #333;
+        padding: 0 0.5em 0 0.2em;
+
+        &:last-child {
+          border-right: none;
+          padding-right: 0;
+        }
+
+        &:first-child {
+          padding-left: 0;
+        }
+
+        > * {
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .label {
+        color: #333;
+      }
+    }
+  }
+}

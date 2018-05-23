@@ -1,0 +1,223 @@
+/* @group general */
+
+#header-wrapper,
+#portal-breadcrumbs,
+#document-actions,
+#column-navigation,
+#column-sidebar,
+#edit-bar,
+.sl-controls,
+.managePortletsLink,
+#mobile-navbuttons,
+#mobile-navi-wrapper,
+#footer,
+#footer-wrapper,
+#viewlet-below-content,
+.actionButtons
+{ display: none !important; }
+
+#content .blockHighlight,
+a {border: none;}
+
+
+#columns-wrapper { box-shadow: none; }
+
+.leftFloatable { float: left; }
+.blockClear { clear: both; }
+
+/* @end */
+
+/* @group simplelayout */
+
+.sl-img-small .sl-img-wrapper,
+.sl-img-middle .sl-img-wrapper {
+  float: left;
+}
+
+/* @end */
+
+/* @group fonts */
+
+body {
+  font-size: 14px;
+}
+h1, h2, h3 {
+  margin: 1.15em 0 0.5em 0;
+  line-height: 1.15em;
+  font-weight: normal;
+  letter-spacing: 0;
+}
+h1 {
+  clear: both;
+  font-size: 215%;
+}
+h2 {
+  font-size: 185%;
+}
+h3 {
+  font-size: 135%;
+}
+#content h1.documentFirstHeading {
+  margin: 1em 0 0.5em 0;
+}
+.portletItem .documentFirstHeading {
+  margin-top: 0;
+}
+#content p {
+  margin-bottom: 1em;
+}
+#content ul {
+  list-style-type: disc;
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+#content ol {
+  list-style-type: decimal;
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+#content li {
+  margin-bottom: 0.25em;
+  line-height: 1.5em;
+  display: list-item;
+}
+
+.documentDescription {
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 25px;
+}
+
+/* @end */
+
+/* @group tables */
+
+#content table.listing {
+  border-collapse: collapse;
+}
+#content table.listing th,
+#content table.listing td {
+  border: 1px solid #ddd;
+}
+/* @end */
+
+/* @group maps */
+
+div.olLayerGoogleCopyright,
+div.olControlMousePosition,
+div.olControlLayerSwitcher,
+div.olButton {
+  display: none;
+}
+div.olMapViewport {
+  /* position: absolute !important; */
+  display: block;
+  height: 400px !important;
+  width: 400px !important;
+}
+.sl-text-wrapper .addressText,
+.sl-text-wrapper .addressMap {
+  float: none;
+}
+
+/* @end */
+
+/* @group calendar */
+.fc table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.tabbedview-tabs,
+.tabbedview_search,
+.tabbedview-tab-menu,
+.tabbdview-tab-menu-template,
+.ViewChooser,
+.tabbedview-tab-menu,
+.fc table .fc-header-left,
+.fc table .fc-header-right {
+  display: none !important;
+}
+.fc table.fc-header,
+.fc table.fc-header td {
+  border: none;
+}
+.fc table td {
+  border: 1px solid #000;
+  width: 14%;
+}
+.fc td, .fc th {
+  padding: 0;
+  vertical-align: top;
+}
+.fc-grid .fc-day-number {
+  float: right;
+  padding: 0 2px;
+}
+.fc-grid .fc-day-content {
+  clear: both;
+  padding: 2px 2px 0;
+}
+.fc-grid .fc-event-time {
+  font-weight: bold;
+}
+.fc-event-time, .fc-event-title {
+  padding: 0 1px;
+}
+.fc-content .fc-corner-right {
+  margin-right: 5px;
+}
+.fc-content .fc-corner-left {
+  margin-left: 5px;
+}
+.fc-event a {
+  display: block;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+.fc-event a {
+  cursor: pointer;
+  font-size: 0.85em;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.portaltype-opengever-meeting-submittedproposal div.answers {
+  display: none;
+}
+
+.portaltype-opengever-meeting-submittedproposal h3 {
+  display: none;
+}
+
+.fixedWidth {
+  width: 100% !important;
+}
+
+#column-content {
+  margin-left: 0 !important;
+  width: 100% !important;
+  position: static !important;
+  left: auto !important;
+}
+
+.row {
+  position: static !important;
+}
+
+#tabbedview-header::after { content: none !important; }
+
+.answer {
+  page-break-inside: avoid;
+}
+
+.answers {
+  position: static;
+  page-break-inside: avoid;
+}
+
+[class*="wf-task"], [class*="icon-task"] {
+  padding-left: 0 !important;
+}
+
+/* @end */

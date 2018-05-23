@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-230.3" y1="373.98" x2="-230.44" y2="366.33" gradientTransform="matrix(2.83, 0, 0, -2.83, 665.02, 1060.97)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#e2e2e2"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="-233.94" y1="426.93" x2="-233.94" y2="429.72" gradientTransform="matrix(2.83, 0, 0, -2.83, 672.52, 1228.22)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd42b"/>
+      <stop offset="1" stop-color="#fff6cf"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="-222.04" y1="285.77" x2="-222.04" y2="283.56" gradientTransform="matrix(2.83, 0, 0, -2.83, 638.77, 824.72)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#010101"/>
+      <stop offset="1" stop-color="#010101" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="-233.94" y1="426.44" x2="-233.94" y2="428.32" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-5" x1="-222.04" y1="284.74" x2="-222.04" y2="288.26" xlink:href="#linear-gradient-3"/>
+    <linearGradient id="linear-gradient-6" x1="-233.94" y1="427.33" x2="-233.94" y2="429.82" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-7" x1="-201.26" y1="372.17" x2="-200.2" y2="373.24" gradientTransform="matrix(2.83, 0, 0, -2.83, 586.27, 1060.97)" xlink:href="#linear-gradient"/>
+  </defs>
+  <title>mail</title>
+  <g id="g19212">
+    <path id="path12631" d="M3,23.25V0.75H16.5L21,5.25v18H3Z" style="fill:url(#linear-gradient)"/>
+    <rect id="rect13537" width="24" height="24" style="fill:none"/>
+    <rect id="rect13539" x="16.5" y="9.75" width="2.25" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13541" x="2.25" y="9.75" width="14.25" height="9.75" style="fill:url(#linear-gradient-2)"/>
+    <rect id="rect13543" x="16.5" y="10.5" width="0.75" height="9.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13545" x="3" y="19.5" width="13.5" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13547" x="3.75" y="23.25" width="17.25" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13549" x="21" y="6" width="0.75" height="18" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <rect id="rect13551" x="16.5" y="6" width="4.5" height="0.75" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13553" d="M3,23.25L3.75,24V23.25H3Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13555" d="M21.75,6L21,5.25V6h0.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13557" d="M15.75,6L16.5,6.75V6H15.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13559" d="M17.25,10.5L16.5,9.75V10.5h0.75Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13561" d="M2.25,19.5L3,20.25V19.5H2.25Z" style="fill:#818181;opacity:0.5;isolation:isolate"/>
+    <path id="path13563" d="M2.53,19.5l5.42-6.75H10.8l5.42,6.75H2.53Z" style="fill:url(#linear-gradient-3)"/>
+    <path id="path13565" d="M3,19.5l5.57-6.75h1.59l5.59,6.75H3Z" style="fill:url(#linear-gradient-4)"/>
+    <path id="path13567" d="M2.25,10.78l5.7,5.72,1.43,1.35L10.8,16.5l5.7-5.72V10.5H2.25v0.28Z" style="opacity:0.800000011920929;isolation:isolate;fill:url(#linear-gradient-5)"/>
+    <path id="path13569" d="M2.25,10.5l5.7,5.25L9.37,17l1.43-1.24,5.7-5.25V9.75H2.25V10.5Z" style="fill:url(#linear-gradient-6)"/>
+    <rect id="rect13571" x="5.25" y="7.5" width="13.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13573" x="5.25" y="5.25" width="4.5" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13575" x="16.5" y="12" width="2.25" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13577" x="16.5" y="14.25" width="2.25" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13579" x="16.5" y="16.5" width="2.25" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <rect id="rect13581" x="16.5" y="18.75" width="2.25" height="0.75" style="fill:#818181;opacity:0.800000011920929;isolation:isolate"/>
+    <path id="path13631" d="M15.75,0.75H16.5L21,5.25V6H15.75V0.75Z" style="fill:url(#linear-gradient-7)"/>
+  </g>
+</svg>

@@ -1,0 +1,327 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/prefs_main_template/macros/master"
+      i18n:domain="plonetheme.teamraum">
+
+  <body>
+
+    <div metal:fill-slot="prefs_configlet_main">
+
+      <script type="text/javascript">
+        jQuery(function($) {
+        /* Make sure the field color changes if edited in input field */
+        $('.colorSelection').change(function(){
+        $(this).next('.pickColorButton').css('background-color',$(this).val());
+        });
+
+        $('.pickColorButton').ColorPicker({
+        onSubmit: function(hsb, hex, rgb, el) {
+        $(el).css("background-color", "#"+hex);
+        $(el).parent('div.field').find('.colorSelection').val("#"+hex);
+        $(el).ColorPickerHide();
+        },
+        onBeforeShow: function () {
+        $(this).ColorPickerSetColor(
+        $(this).parent('div.field').find('.colorSelection').val());
+        }
+        });
+
+        /* show or hide fields when checking a checkbox */
+        $('input.activateField').click(function(){
+        var me = $(this);
+        var field = me.parent().next('.toggleField');
+        if (me.attr('checked')) {
+        field.fadeIn();
+        }
+        else {
+        field.fadeOut();
+        }
+        });
+
+        });
+      </script>
+
+      <h1 class="documentFirstHeading"
+          i18n:translate="heading_teamraumtheme_settings">Teamraumtheme settings</h1>
+
+      <a href=""
+         class="link-parent"
+         tal:attributes="href string:${portal_url}/plone_control_panel"
+         i18n:domain="plone"
+         i18n:translate="label_up_to_plone_setup">
+        Up to Site Setup
+      </a>
+
+
+      <form method="post"
+            action=""
+            enctype="multipart/form-data"
+            id="customstyles-form"
+            class="enableFormTabbing"
+            tal:define="defaults view/defaults">
+
+        <fieldset id="fieldset-navbar" class="formPanel">
+          <legend id="fieldsetlegend-navbar" i18n:translate="label_navbar">
+            Navigation bar
+          </legend>
+
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_grad_start',
+                            'Navi gradient start',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_grad_end',
+                            'Navi gradient end',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_shadowtop',
+                            'Navi shadow top',
+                            help='Also used as bottom shadow in navigation bar.',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_shadowinset',
+                            'Navi shadow inset',
+                            cssclass='colorSelection')" />
+
+
+          <h2>Hover</h2>
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_hover_start',
+                            'Navi gradient hover start',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_hover_end',
+                            'Navi gradient hover end',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_hover_shadowtop',
+                            'Hover shadow top',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_hover_shadowinset',
+                            'Hover shadow inset',
+                            cssclass='colorSelection')" />
+
+          <h2>Active</h2>
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_active_start',
+                            'Navi gradient active start',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_active_end',
+                            'Navi gradient active end',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_active_shadowtop',
+                            'Active shadow top',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'gnav_active_shadowinset',
+                            'Active shadow inset',
+                            cssclass='colorSelection')" />
+
+        </fieldset>
+        <fieldset id="fieldset-header" class="formPanel">
+          <legend id="fieldsetlegend-header" i18n:translate="label_header">
+            Header
+          </legend>
+          <div class="field">
+            <label for="css_logo" i18n:translate="label_logo">Logo</label>
+            <div class="logoPreview">
+              <img tal:attributes="src view/logo_url" alt="" />
+            </div>
+            <input type="file" name="css.logo" id="css_logo" />
+            <div>
+              <a tal:attributes="href string:@@${view/__name__}?reset_logo=1"
+                 i18n:translate="label_reset_logo">Reset logo</a>
+            </div>
+          </div>
+
+          <div tal:replace="structure python:view.customfield(
+                            'logo_title',
+                            'Logo title')" />
+
+          <div class="field">
+            <label for="css_logo_right" i18n:translate="label_logo_right">Logo right</label>
+            <div class="logoPreview">
+              <img tal:condition="view/has_right_logo"
+                   tal:attributes="src view/logo_right_url" alt="" />
+            </div>
+            <input type="file" name="css.logo_right" id="css_logo_right" />
+            <div tal:condition="view/has_right_logo">
+              <a tal:attributes="href string:@@${view/__name__}?reset_logo_right=1"
+                 i18n:translate="label_reset_logo">Reset logo</a>
+            </div>
+          </div>
+
+          <div tal:replace="structure python:view.customfield(
+                            'header_height',
+                            'Header height',
+                            help='The unit is needed!')" />
+
+          <div class="field">
+            <input type="checkbox" name="css.show_fullbanner" id="css_show_fullbanner"
+                   tal:attributes="checked defaults/css.show_fullbanner|nothing"/>
+            <label for="css_show_fullbanner" i18n:translate="label_showfullbanner">
+              Show full banner
+            </label>
+          </div>
+
+
+          <div tal:replace="structure python:view.customfield(
+                            'header_background',
+                            'Header background color',
+                            cssclass='colorSelection')" />
+
+          <div tal:replace="structure python:view.customfield(
+                            'headerbox_spacetop',
+                            'Header margin top',
+                            help='The unit is needed!')" />
+
+          <div class="field">
+            <input type="checkbox" name="css.show_headerbox" id="css_show_headerbox"
+                   class="activateField"
+                   tal:attributes="checked defaults/css.show_headerbox|nothing"/>
+            <label for="css_show_headerbox" i18n:translate="label_headerbox">
+              Show headerbox
+            </label>
+            <div class="formHelp" i18n:translate="help_showheaderbox">This is recommended if there are banner-images.</div>
+          </div>
+          <div tal:attributes="class python:defaults.get('css.show_headerbox','') and 'toggleField activeField' or 'toggleField inactiveField'">
+            <div tal:replace="structure python:view.customfield(
+                              'headerbox_background',
+                              'Headerbox background color',
+                              cssclass='colorSelection')" />
+
+            <input type="checkbox" name="css.logo_spaceleft" id="css_logo_spaceleft"
+                   tal:attributes="checked defaults/css.logo_spaceleft|nothing"/>
+            <label for="css_logo_spaceleft" i18n:translate="label_logo_spaceleft">
+              Logo space left
+            </label>
+          </div>
+
+
+        </fieldset>
+        <fieldset id="fieldset-site" class="formPanel">
+          <legend id="fieldsetlegend-site" i18n:translate="label_site">
+            Site
+          </legend>
+          <div tal:replace="structure python:view.customfield(
+                            'content_background',
+                            'Content background color',
+                            cssclass='colorSelection')" />
+
+          <div tal:replace="structure python:view.customfield(
+                            'content_width',
+                            'Content width',
+                            help='The unit is needed!')" />
+
+          <div tal:replace="structure python:view.customfield(
+                            'font_size',
+                            'Font size',
+                            help='The unit is needed!')" />
+
+          <div tal:replace="structure python:view.customfield(
+                            'text_color',
+                            'Text color',
+                            cssclass='colorSelection')" />
+
+          <div tal:replace="structure python:view.customfield(
+                            'link_color',
+                            'Link color',
+                            cssclass='colorSelection')" />
+        </fieldset>
+        <fieldset id="fieldset-footer" class="formPanel">
+          <legend id="fieldsetlegend-footer" i18n:translate="label_footer">
+            Footer
+          </legend>
+          <div tal:replace="structure python:view.customfield(
+                            'footer_background',
+                            'Footer background color',
+                            cssclass='colorSelection')" />
+          <div tal:replace="structure python:view.customfield(
+                            'footer_height',
+                            'Footer height',
+                            help='Just insert a number, its always em!')" />
+        </fieldset>
+        <fieldset id="fieldset-misc" class="formPanel">
+          <legend id="fieldsetlegend-misc" i18n:translate="label_misc">
+            Miscellaneous
+          </legend>
+          <div class="field">
+
+            <div tal:replace="structure python:view.customfield(
+                              'login_background',
+                              'Login background color',
+                              cssclass='colorSelection')" />
+
+            <label for="additional_css" i18n:translate="">Additional CSS</label>
+            <div class="formHelp"></div>
+            <textarea name="css.additional_css"
+                      id="additional_css"
+                      rows="10"
+                      tal:content="defaults/css.additional_css|nothing">
+            </textarea>
+          </div>
+        </fieldset>
+
+        <!-- Use this submit action if you hit the enter button -->
+        <input type="submit"
+               class="context"
+               name="form.submitted"
+               style="display: none"
+               i18n:attributes="value label_save"
+               value="save" />
+
+
+
+        <fieldset id="fieldset-importexport">
+          <legend id="fieldsetlegend-importexport" i18n:translate="label_importexport">Import / Export</legend>
+          <div class="field">
+            <input type="file" name="import_styles" />
+          </div>
+          <div class="field">
+            <input type="submit"
+                   class="context"
+                   name="form.import"
+                   i18n:attributes="value label_import_styles"
+                   value="import styles" />
+            <!-- </div> -->
+            <!-- <div class="field"> -->
+            <input type="submit"
+                   class="context"
+                   name="form.export"
+                   i18n:attributes="value label_export_styles"
+                   value="export styles" />
+          </div>
+        </fieldset>
+        <div class="formControls">
+          <input type="submit"
+                 class="context"
+                 name="form.submitted"
+                 i18n:attributes="value label_save"
+                 value="save" />
+        </div>
+
+
+      </form>
+
+      <form method="post"
+            action=""
+            id="customstyles-reset-form">
+        <input type="hidden" name="form.reset" value="1" />
+        <input type="submit"
+               class="context destructive"
+               name="form.submit.reset"
+               i18n:attributes="value label_reset_default"
+               value="reset to default" />
+      </form>
+
+
+    </div>
+
+  </body>
+</html>

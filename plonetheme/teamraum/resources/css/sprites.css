@@ -1,0 +1,258 @@
+#plone-contentmenu-factories li a.contenttype-blog span,
+.contenttype-blog,
+#plone-contentmenu-factories li a.contenttype-blogcategory span,
+.contenttype-blogcategory {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 0;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-book span,
+.contenttype-book {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -96px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-textblock span,
+.contenttype-textblock,
+#plone-contentmenu-factories li a.contenttype-paragraph span,
+.contenttype-paragraph {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -192px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-htmlblock span,
+.contenttype-htmlblock {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -192px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-contact span,
+.contenttype-contact {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -288px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-ftw_contact span,
+.contenttype-ftw_contact {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -288px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-member span,
+.contenttype-member {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -288px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-poodle span,
+.contenttype-poodle {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -384px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-document span,
+.contenttype-document,
+#plone-contentmenu-factories li a.contenttype-contentpage span,
+.contenttype-contentpage {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -480px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-meeting-item span,
+.contenttype-meeting-item {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -574px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-billboardcategory span,
+.contenttype-billboardcategory,
+#plone-contentmenu-factories li a.contenttype-newsfolder span,
+.contenttype-newsfolder,
+#plone-contentmenu-factories li a.contenttype-eventfolder span,
+.contenttype-eventfolder,
+#plone-contentmenu-factories li a.contenttype-homefolder span,
+.contenttype-homefolder,
+#plone-contentmenu-factories li a.contenttype-tabbedviewfolder span,
+.contenttype-tabbedviewfolder,
+#plone-contentmenu-factories li a.contenttype-folder span,
+.contenttype-folder {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -672px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-banner span,
+.contenttype-banner {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -768px;
+  padding: 1px 0 1px 20px;
+}
+
+#plone-contentmenu-factories li a.contenttype-link span,
+.contenttype-link {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -864px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-mail span,
+.contenttype-mail {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -960px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-ftw-mail-mail span,
+.contenttype-ftw-mail-mail {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2688px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-ftw_mail span,
+.contenttype-ftw_mail,
+.link-mailto a {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2688px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-news span,
+.contenttype-news {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -960px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-news-item span,
+.contenttype-news-item {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -960px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-event span,
+.contenttype-event,
+#plone-contentmenu-factories li a.contenttype-eventpage span,
+.contenttype-eventpage,
+#plone-contentmenu-factories li a.contenttype-meeting span,
+.contenttype-meeting {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1056px;
+  /* background: url(../images/contenttypes-sprite.png) no-repeat 0 -1152px; */
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-remark span,
+.contenttype-remark {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1152px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-shopitem span,
+.contenttype-shopitem {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1248px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-task span,
+.contenttype-task {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1344px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-ticket span,
+#plone-contentmenu-factories li a.actionicon-folder_factories-create_ticket span,
+.contenttype-ticket {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1344px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-poiissue span,
+.contenttype-poiissue {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1344px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-workspace span,
+.contenttype-workspace {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1536px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-billboardad span,
+.contenttype-billboardad {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1632px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-orgunit span,
+.contenttype-orgunit {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1728px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-organisation span,
+.contenttype-organisation {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1728px;
+  padding: 1px 0 1px 20px;
+}
+span.link-external a {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1824px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-ticket-box span,
+.contenttype-ticket-box {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -1920px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-chapter span,
+.contenttype-chapter {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2014px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-table span,
+.contenttype-table {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2110px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-classificationitem span,
+.contenttype-classificationitem {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2206px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-blogentry span,
+#plone-contentmenu-factories li a.actionicon-folder_factories-create_blog_entry span,
+.contenttype-blogentry {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2302px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-formfolder span,
+.contenttype-formfolder {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2398px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-subsite span,
+.contenttype-subsite {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -2494px;
+  padding: 1px 0 1px 20px;
+}
+
+/* TODO: Needs own icons */
+
+#plone-contentmenu-factories li a.contenttype-listingblock span,
+.contenttype-listingblock {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -192px;
+  padding: 1px 0 1px 20px;
+}
+#plone-contentmenu-factories li a.contenttype-addressblock span,
+.contenttype-addressblock {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -192px;
+  padding: 1px 0 1px 20px;
+}
+
+/* #plone-contentmenu-factories li a.contenttype-htmlblock span, */
+/* .contenttype-htmlblock { */
+  /* background: url(../images/contenttypes-sprite.png) no-repeat 0 -1440px; */
+  /* padding: 1px 0 1px 20px; */
+  /* /*min-height: 16px; */
+/* } */
+
+
+/* no images in navigation */
+dl.portletNavigationTree img {
+  display: none;
+}
+#column-navigation .portletNavigationTree a {
+  background-image: none;*/
+}
+
+/* only show sprites in factory menu for file and image */
+body.template-create_from_template .contenttype-image,
+#plone-contentmenu-factories li a.contenttype-image span {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -768px;
+  padding: 1px 0 1px 20px;
+}
+body.template-create_from_template .contenttype-file,
+#plone-contentmenu-factories li a.contenttype-file span {
+  background: url(../images/contenttypes-sprite.png) no-repeat 0 -576px;
+  padding: 1px 0 1px 20px;
+}
+
+/* fix for extjs table */
+.x-grid3-cell-inner .function-user {
+  padding-left: 16px;
+}
+
+/* @end */

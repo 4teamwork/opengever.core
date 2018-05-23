@@ -1,0 +1,80 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    i18n_domain="plonetheme.teamraum">
+
+  <include package="plone.resource" file="meta.zcml" />
+  <include package="ftw.profilehook" />
+
+  <five:registerPackage package="." />
+
+  <include package=".browser" />
+  <include package=".viewlets" />
+
+  <i18n:registerTranslations directory="locales" />
+
+
+  <genericsetup:registerProfile
+      name="default"
+      title="plonetheme.teamraum"
+      directory="profiles/default"
+      description="Installs the plonetheme.teamraum package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <profilehook:hook
+      profile="plonetheme.teamraum:default"
+      handler=".hooks.remove_screen_media_types"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall plonetheme.teamraum"
+      directory="profiles/uninstall"
+      description=""
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      />
+
+  <genericsetup:registerProfile
+      name="gever"
+      title="plonetheme.teamraum: gever"
+      directory="profiles/gever"
+      description="Installs the plonetheme.teamraum package including gever styles"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="bumblebee"
+      title="plonetheme.teamraum: bumblebee"
+      directory="profiles/bumblebee"
+      description="Installs the plonetheme.teamraum package including bumblebee styles"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <include package=".upgrades" />
+
+  <plone:static type="theme" directory="resources" />
+
+  <cmf:registerDirectory name="plonetheme_teamraum_gever"/>
+
+  <genericsetup:importStep
+      name="teamraum-various-import"
+      title="An import step acting as a hook for programmatic changes."
+      description=""
+      handler=".setuphandlers.import_various"
+      />
+
+  <genericsetup:importStep
+      name="teamraum-customstyles"
+      title="Import teamraum customstyles configuration"
+      description=""
+      handler=".setuphandlers.import_styles_configuration"
+      />
+
+</configure>

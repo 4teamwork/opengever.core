@@ -9,6 +9,7 @@
   <include package="ftw.profilehook" />
   <include package="Products.CMFPlacefulWorkflow" file="configure.zcml" />
   <include package="ftw.upgrade" file="meta.zcml" />
+  <include package="plonetheme.teamraum" file="configure.zcml" />
 
   <include file="lawgiver.zcml" />
 

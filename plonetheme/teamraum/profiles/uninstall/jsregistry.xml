@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript id="livesearch.js" enabled="true" />
+
+  <javascript id="++theme++plonetheme.teamraum/js/teamraum.js"
+              remove="True"/>
+
+  <javascript id="++theme++plonetheme.teamraum/js/livesearch.js"
+              remove="True"/>
+
+  <javascript id="++theme++plonetheme.teamraum/colorpicker/colorpicker.js"
+              remove="True"/>
+
+  <javascript id="++theme++plonetheme.teamraum/js/Editbox.js"
+              remove="True"/>
+
+</object>

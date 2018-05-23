@@ -14,5 +14,6 @@
 !pinchecker
 !qa
 !remove-test-cache
+!sass-watcher
 !shellcheck
 !test-cached

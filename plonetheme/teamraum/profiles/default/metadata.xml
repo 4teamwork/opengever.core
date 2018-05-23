@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<metadata>
+    <version>2012</version>
+    <dependencies>
+        <dependency>profile-plone.app.theming:default</dependency>
+        <dependency>profile-ftw.mobilenavigation:default</dependency>
+        <dependency>profile-collective.mtrsetup:default</dependency>
+    </dependencies>
+</metadata>
