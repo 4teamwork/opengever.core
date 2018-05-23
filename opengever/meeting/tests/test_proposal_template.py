@@ -29,10 +29,11 @@ class TestProposalTemplate(IntegrationTestCase):
     @browsing
     def test_uploading_non_docx_files_is_not_allowed(self, browser):
         self.login(self.administrator, browser)
-        browser.open(self.templates, view='++add++opengever.meeting.proposaltemplate')
-        browser.fill({'Title': u'Geb\xfchren', 'File': ('DATA', 'Wrong.txt', 'text/plain')}).save()
+        factoriesmenu.add('Proposal Template')
+        browser.fill({
+            'Title': u'Geb\xfchren',
+            'File': ('DATA', 'Wrong.txt', 'text/plain')}).save()
         statusmessages.assert_message('There were some errors.')
         self.assertEquals(
             ['Only word files (.docx) can be added here.'],
-            browser.css('#formfield-form-widgets-file .error').text,
-            )
+            browser.css('#formfield-form-widgets-file .error').text)

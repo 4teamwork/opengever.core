@@ -19,29 +19,9 @@ def is_meeting_feature_enabled():
 
 
 def is_word_meeting_implementation_enabled():
-    """The word implementation is a new implementation of parts of the meeting
-    feature.
-    It allows to do much more directly in Word instead of using structured
-    fields in GEVER.
-
-    This is a feature flag so that we can develop the new version in parallel
-    and switch it in production at a later point.
-    The feature flag only works when the base meeting feature is enabled.
-
-    Switching from old to new by activating this flag should only happen when
-    there are no meeting objects, since they are currently not migrated
-    automatically.
+    """There is no longer a separate flag for word.
     """
-    if not is_meeting_feature_enabled():
-        return False
-
-    try:
-        registry = getUtility(IRegistry)
-        return (registry.forInterface(IMeetingSettings)
-                .is_word_implementation_enabled)
-
-    except (KeyError, AttributeError):
-        return False
+    return is_meeting_feature_enabled()
 
 
 def require_word_meeting_feature(func):
