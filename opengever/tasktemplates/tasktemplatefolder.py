@@ -4,7 +4,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
-from opengever.tasktemplates.content.templatefoldersschema import sequence_types
+from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplateGenerated
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplateGenerated
@@ -23,7 +23,7 @@ class TaskTemplateFolder(Container):
 
     @property
     def sequence_type_label(self):
-        return sequence_types.by_value[self.sequence_type].title
+        return sequence_type_vocabulary.by_value[self.sequence_type].title
 
     @property
     def is_sequential(self):

@@ -6,7 +6,7 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-sequence_types = SimpleVocabulary(
+sequence_type_vocabulary = SimpleVocabulary(
     [SimpleTerm(value=u'parallel', title=_(u'Parallel')),
      SimpleTerm(value=u'sequential', title=_(u'Sequential'))])
 
@@ -22,6 +22,6 @@ class ITaskTemplateFolderSchema(model.Schema):
     directives.order_after(sequence_type='IOpenGeverBase.description')
     sequence_type = schema.Choice(
         title=_(u'label_sequence_type', default='Type'),
-        vocabulary=sequence_types,
+        vocabulary=sequence_type_vocabulary,
         required=True,
     )
