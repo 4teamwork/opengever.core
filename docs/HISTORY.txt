@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Bumblebee bugfix: no longer defer preview for new documents. [deiferni]
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 
