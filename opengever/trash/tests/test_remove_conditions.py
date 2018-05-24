@@ -71,6 +71,16 @@ class TestRemoveConditionsChecker(FunctionalTestCase):
             [u'The document is not trashed.'],
             checker.error_msg)
 
+    def test_document_must_not_already_be_removed(self):
+        document = create(Builder('document')
+                          .trashed()
+                          .removed())
+        checker = RemoveConditionsChecker(document)
+        self.assertFalse(checker.removal_allowed())
+        self.assert_error_messages(
+            [u'The document is already removed.'],
+            checker.error_msg)
+
     def test_removal_allowed(self):
         document = create(Builder('document').trashed())
         checker = RemoveConditionsChecker(document)

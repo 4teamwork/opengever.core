@@ -7,6 +7,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import obj2brain
 from opengever.trash.trash import ITrashed
+from plone import api
 from plone.protect import createToken
 import transaction
 
@@ -185,3 +186,28 @@ class TestUntrash(FunctionalTestCase):
 
         self.assertEquals([u'Untrashing The document is forbidden'],
                           error_messages())
+
+    @browsing
+    def test_error_when_untrashing_removed_document(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .trashed()
+                          .removed()
+                          .titled(u'The document'))
+
+        # Removed document cannot be untrashed
+        self.grant('Manager')
+        data = {'paths:list': ['/'.join(document.getPhysicalPath())],
+                '_authenticator': createToken()}
+        browser.login().open(self.dossier, view="untrashed", data=data)
+        self.assertTrue(ITrashed.providedBy(document))
+        self.assertEquals([u'Untrashing The document is forbidden'],
+                          error_messages())
+
+        # When restored, document can be untrashed
+        api.content.transition(obj=document,
+                               transition=document.restore_transition)
+        transaction.commit()
+        self.assertEqual(document.active_state, api.content.get_state(document))
+        browser.login().open(self.dossier, view="untrashed", data=data)
+        self.assertFalse(ITrashed.providedBy(document))
