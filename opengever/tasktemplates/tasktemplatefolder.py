@@ -137,13 +137,13 @@ class TaskTemplateFolderTrigger(object):
             alsoProvides(task, IFromParallelTasktemplate)
 
     def replace_interactive_actors(self, data):
-        data['issuer'] = self.get_interactive_represent(data['issuer'])
+        data['issuer'] = self.get_interactive_representative(data['issuer'])
         if data['responsible_client'] == INTERACTIVE_USERS:
             data['responsible_client'] = get_current_org_unit().id()
-            data['responsible'] = self.get_interactive_represent(
+            data['responsible'] = self.get_interactive_representative(
                 data['responsible'])
 
-    def get_interactive_represent(self, principal):
+    def get_interactive_representative(self, principal):
         """The current systems knows two interactive users:
 
         `responsible`: the reponsible of the main dossier.
