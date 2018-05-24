@@ -93,7 +93,7 @@ class RedirectorViewlet(ViewletBase):
 
     JS_TEMPLATE = '''
 <script type="text/javascript" class="redirector">
-$(function() {
+$(document).on('reload', function() {
   if ('%(url)s'.split(':')[0] == 'oc') {
     window.location = '%(url)s';
   } else {
