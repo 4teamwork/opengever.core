@@ -76,11 +76,22 @@
       cacheable="True"
       compression="safe"
       cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/unorm.js"
+      inline="False"
+      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
       enabled="True"
       expression=""
       id="++resource++opengever.base/TableRadioWidget.js"
       inline="False"
-      insert-after="++resource++opengever.base/Synchronizer.js"
+      insert-after="++resource++opengever.base/unorm.js"
       />
 
   <javascript

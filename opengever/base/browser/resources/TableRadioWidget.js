@@ -10,7 +10,8 @@ $(function() {
       // Second cell is the title
       td = tr.cells[1];
       tr = $(tr);
-      if (td.textContent.trim().toUpperCase().indexOf(text) > -1) {
+
+      if (unorm.nfc(td.textContent.trim().toUpperCase()).indexOf(unorm.nfc(text)) > -1) {
         tr.show();
       } else {
         tr.hide();
