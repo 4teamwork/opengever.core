@@ -564,9 +564,6 @@ class AgendaItemsView(BrowserView):
         if not api.user.has_permission('cmf.ManagePortal'):
             raise Forbidden
 
-        if not is_word_meeting_implementation_enabled():
-            raise Forbidden
-
         if self.agenda_item.is_paragraph:
             raise NotFound
 
