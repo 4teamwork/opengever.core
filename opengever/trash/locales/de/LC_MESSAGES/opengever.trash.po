@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2018-05-24 07:27+0000\n"
 "PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -95,6 +95,11 @@ msgstr "Das Dokument ist noch ausgecheckt."
 msgid "msg_is_not_trashed"
 msgstr "Das Dokument ist noch nicht im Papierkorb."
 
+#. Default: "The document is already removed."
+#: ./opengever/trash/remover.py
+msgid "msg_is_removed"
+msgstr "Das Dokument ist schon gelöscht"
+
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
 msgstr "Löschen"
@@ -102,4 +107,3 @@ msgstr "Löschen"
 #: ./opengever/trash/browser/trash.py
 msgid "the object ${obj} trashed"
 msgstr "Das Objekt ${obj} wurde in den Papierkorb verschoben."
-

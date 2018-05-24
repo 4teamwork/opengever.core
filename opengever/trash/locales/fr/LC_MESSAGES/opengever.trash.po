@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2018-05-24 07:27+0000\n"
 "PO-Revision-Date: 2017-12-03 12:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-trash/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-trash/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/trash/browser/trash.py
 msgid "Trashing ${title} is forbidden"
@@ -96,6 +95,11 @@ msgstr "Le document est encore en checkout."
 #: ./opengever/trash/remover.py
 msgid "msg_is_not_trashed"
 msgstr "Le document n'est pas encore dans la corbeille."
+
+#. Default: "The document is already removed."
+#: ./opengever/trash/remover.py
+msgid "msg_is_removed"
+msgstr "Le document est déjà effacé"
 
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"

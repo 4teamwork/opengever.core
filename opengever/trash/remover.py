@@ -40,6 +40,7 @@ class RemoveConditionsChecker(object):
         self.verify_checked_in()
         self.verify_no_relations()
         self.verify_is_trashed()
+        self.verify_is_not_removed()
 
         if self.error_msg:
             return False
@@ -75,6 +76,12 @@ class RemoveConditionsChecker(object):
             self.error_msg.append(
                 _(u'msg_is_not_trashed',
                   default=u'The document is not trashed.'))
+
+    def verify_is_not_removed(self):
+        if self.document.is_removed:
+            self.error_msg.append(
+                _(u'msg_is_removed',
+                  default=u'The document is already removed.'))
 
     def get_backreferences(self):
         catalog = getUtility(ICatalog)
