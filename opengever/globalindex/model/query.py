@@ -3,6 +3,8 @@ from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
+from sqlalchemy import and_
+from sqlalchemy import or_
 
 
 class TaskQuery(BaseQuery):
@@ -77,13 +79,23 @@ class TaskQuery(BaseQuery):
         return self.by_admin_unit(get_current_admin_unit())\
                    .filter(Task.physical_path == relative_content_path).one()
 
+    def subtasks_by_tasks(self, tasks):
+        """Queries all subtask of the given tasks sql object."""
+        query = self.filter(
+            or_(
+                and_(
+                    Task.admin_unit_id == task.admin_unit_id,
+                    Task.physical_path.startswith(
+                        '{}/'.format(task.physical_path)),
+                )
+                for task in tasks
+            )
+        )
+        return query
+
     def subtasks_by_task(self, task):
         """Queries all subtask of the given task sql object."""
-        query = self.filter(
-            Task.admin_unit_id == task.admin_unit_id)
-        query = query.filter(Task.physical_path.startswith(
-            '{}/'.format(task.physical_path)))
-        return query
+        return self.subtasks_by_tasks([task])
 
     def in_pending_state(self):
         return self.filter(Task.review_state.in_(Task.PENDING_STATES))
