@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix stuck tabbedview spinner on firefox. [Kevin Bieri]
 - Bumblebee bugfix: no longer defer preview for new documents. [deiferni]
 - Display dossier resolve properties in the config view. [tarnap]
 - Integrate plonetheme.teamraum. [deiferni]
