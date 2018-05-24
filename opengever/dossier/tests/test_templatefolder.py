@@ -730,29 +730,6 @@ class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
         self.assertEquals(expected_addable_types, factoriesmenu.addable_types())
 
 
-class TestTemplateFolderWordMeetingEnabled(IntegrationTestCase):
-
-    features = (
-        'meeting',
-        'word-meeting',
-        )
-
-    @browsing
-    def test_addable_types_with_meeting_word_implementation(self, browser):
-        self.login(self.manager, browser)
-        browser.open(self.templates)
-
-        expected_addable_types = [
-            'Document',
-            'Proposal Template',
-            'Sablon Template',
-            'TaskTemplateFolder',
-            'Template Folder',
-            ]
-
-        self.assertEquals(expected_addable_types, factoriesmenu.addable_types())
-
-
 class TestTemplateFolderUtility(FunctionalTestCase):
 
     def test_get_template_folder_returns_path_of_the_templatefolder(self):
