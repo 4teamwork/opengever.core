@@ -593,7 +593,14 @@ class TaskChecker(object):
 
     @property
     def all_subtasks_finished(self):
-        query = Task.query.subtasks_by_task(self.task)
+
+        task = self.task
+
+        if task.predecessor is not None:
+            query = Task.query.subtasks_by_tasks([task, task.predecessor])
+        else:
+            query = Task.query.subtasks_by_task(task)
+
         query = query.filter(
             ~Task.query._attribute('review_state').in_(FINISHED_TASK_STATES))
 

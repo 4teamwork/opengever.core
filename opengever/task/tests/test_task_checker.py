@@ -1,7 +1,10 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.task.browser.transitioncontroller import Checker
 from opengever.task.browser.transitioncontroller import get_checker
+from opengever.task.browser.transitioncontroller import TaskChecker
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
 import transaction
@@ -151,3 +154,46 @@ class TestTaskControllerChecker(FunctionalTestCase):
 
         self.assertTrue(get_checker(task1).task.is_assigned_to_current_admin_unit)
         self.assertFalse(get_checker(task2).task.is_assigned_to_current_admin_unit)
+
+    def test_all_subtasks_finished_if_predecessor_has_subtasks(self):
+
+        # Create a pending task
+        predecessor = create(
+            Builder('task')
+            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
+            .having(
+                responsible_client='client1',
+                task_type='correction',
+                )
+            .in_state('task-state-in-progress')
+            )
+
+        # Create a pending subtask
+        create(
+            Builder('task')
+            .within(predecessor)
+            .titled(u'Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
+            .having(
+                responsible_client='client1',
+                task_type='correction',
+            )
+            .in_state('task-state-in-progress')
+        )
+
+        # Create a pending successor
+        create(
+            Builder('task')
+            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
+            .having(
+                responsible_client='client1',
+                task_type='correction',
+                )
+            .successor_from(predecessor)
+            .in_state('task-state-in-progress')
+            )
+
+        sql_successor_task = ISuccessorTaskController(
+            predecessor).get_successors()[0]
+
+        task_checker = TaskChecker(sql_successor_task)
+        self.assertFalse(task_checker.all_subtasks_finished)
