@@ -8,6 +8,7 @@ Changelog
 - Fix stuck tabbedview spinner on firefox. [Kevin Bieri]
 - Normalize query strings of template filter. [Kevin Bieri]
 - Improve error handling on the @scan-in API endpoint. [Rotonen]
+- Fix missing translation for committee filter. [tarnap]
 - Bumblebee bugfix: no longer defer preview for new documents. [deiferni]
 - Display dossier resolve properties in the config view. [tarnap]
 - Integrate plonetheme.teamraum. [deiferni]

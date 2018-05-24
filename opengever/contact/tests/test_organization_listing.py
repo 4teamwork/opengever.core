@@ -41,7 +41,7 @@ class TestOrganizationListing(FunctionalTestCase):
         browser.login().open(
             self.contactfolder, view='tabbedview_view-organizations')
 
-        self.assertEquals(['all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
     @browsing
