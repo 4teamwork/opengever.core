@@ -423,7 +423,7 @@ class OpengeverContentFixture(object):
             .with_asset_file('sablon_template.docx')
             ))
 
-        with self.features('meeting', 'word-meeting'):
+        with self.features('meeting'):
             self.proposal_template = self.register('proposal_template', create(
                 Builder('proposaltemplate')
                 .titled(u'Geb\xfchren')
@@ -820,49 +820,49 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        proposal = self.register('proposal', create(
-            Builder('proposal')
-            .within(self.dossier)
-            .having(
-                title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
-                committee=self.committee.load_model(),
+        with self.features('meeting'):
+            proposal = self.register('proposal', create(
+                Builder('proposal')
+                .within(self.dossier)
+                .having(
+                    title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                    committee=self.committee.load_model(),
+                    )
+                .relate_to(self.document)
+                .as_submitted()
+                ))
+
+            self.register_path(
+                'submitted_proposal',
+                proposal.load_model().submitted_physical_path.encode('utf-8'),
                 )
-            .relate_to(self.document)
-            .as_submitted()
-            ))
 
-        self.register_path(
-            'submitted_proposal',
-            proposal.load_model().submitted_physical_path.encode('utf-8'),
-            )
+            self.register('draft_proposal', create(
+                Builder('proposal')
+                .within(self.dossier)
+                .having(
+                    title=u'Antrag f\xfcr Kreiselbau',
+                    committee=self.empty_committee.load_model(),
+                    )
+                ))
 
-        self.register('draft_proposal', create(
-            Builder('proposal')
-            .within(self.dossier)
-            .having(
-                title=u'Antrag f\xfcr Kreiselbau',
-                committee=self.empty_committee.load_model(),
+            self.decided_proposal = create(
+                Builder('proposal')
+                .within(self.dossier)
+                .having(
+                    title=u'Initialvertrag f\xfcr Bearbeitung',
+                    committee=self.committee.load_model(),
+                    )
+                .as_submitted()
                 )
-            ))
 
-        self.decided_proposal = create(
-            Builder('proposal')
-            .within(self.dossier)
-            .having(
-                title=u'Initialvertrag f\xfcr Bearbeitung',
-                committee=self.committee.load_model(),
+            self.register_path(
+                'decided_proposal',
+                self.decided_proposal
+                .load_model()
+                .submitted_physical_path.encode('utf-8'),
                 )
-            .as_submitted()
-            )
 
-        self.register_path(
-            'decided_proposal',
-            self.decided_proposal
-            .load_model()
-            .submitted_physical_path.encode('utf-8'),
-            )
-
-        with self.features('meeting', 'word-meeting'):
             word_proposal = self.register('word_proposal', create(
                 Builder('proposal')
                 .within(self.dossier)

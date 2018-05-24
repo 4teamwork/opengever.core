@@ -8,7 +8,6 @@ from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
 from opengever.meeting.proposal import Proposal
@@ -336,7 +335,7 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
                           'language': TranslatedTitle.FALLBACK_LANGUAGE}
         self.model_arguments = None
         self._transition = None
-        self._proposal_file_data = 'file body'
+        self._proposal_file_data = assets.load('empty.docx')
         self._also_return_submitted_proposal = False
 
     def with_proposal_file(self, data):
@@ -355,13 +354,11 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
 
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
-
-        if is_word_meeting_implementation_enabled():
-            obj.create_proposal_document(
-                filename=u'proposal_document.docx',
-                data=self._proposal_file_data,
-                content_type='application/vnd.openxmlformats'
-                '-officedocument.wordprocessingml.document')
+        obj.create_proposal_document(
+            filename=u'proposal_document.docx',
+            data=self._proposal_file_data,
+            content_type='application/vnd.openxmlformats'
+            '-officedocument.wordprocessingml.document')
 
         if self._transition:
             obj.execute_transition(self._transition)

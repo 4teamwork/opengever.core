@@ -67,12 +67,12 @@ class TestMessageModel(IntegrationTestCase):
         msg.add_object(self.document)
         zipfile = DummyZipFile()
         msg.add_to_zip(zipfile)
+
         self.assertEqual(
             [u'files/dossier-1/dossier-2/ubersicht-der-vertrage-von-2016.xlsx',
              u'files/dossier-1/vertragsentwurf.docx',
              u'files/dossier-1/die-burgschaft.eml',
              u'files/dossier-1/testm\xe4il.msg',
-             u'files/dossier-1/initialvertrag-fur-bearbeitung-8-sitzung-der.docx',  # noqa
              u'files/vertragsentwurf.docx'],
             zipfile.arcnames)
 

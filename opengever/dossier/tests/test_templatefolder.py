@@ -196,15 +196,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 28',
-            'Document.SequenceNumber': '28',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
+            'Document.SequenceNumber': '31',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 9, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 28',
-            'ogg.document.sequence_number': '28',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
+            'ogg.document.sequence_number': '31',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
@@ -254,15 +254,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 28',
-            'Document.SequenceNumber': '28',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
+            'Document.SequenceNumber': '31',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 10, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 28',
-            'ogg.document.sequence_number': '28',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
+            'ogg.document.sequence_number': '31',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
@@ -722,12 +722,14 @@ class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
 
         expected_addable_types = [
             'Document',
+            'Proposal Template',
             'Sablon Template',
             'TaskTemplateFolder',
             'Template Folder',
             ]
 
-        self.assertEquals(expected_addable_types, factoriesmenu.addable_types())
+        self.assertItemsEqual(
+            expected_addable_types, factoriesmenu.addable_types())
 
 
 class TestTemplateFolderUtility(FunctionalTestCase):
