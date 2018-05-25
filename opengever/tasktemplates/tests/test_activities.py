@@ -2,48 +2,42 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.model import Activity
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestTaskTemplateActivites(FunctionalTestCase):
+class TestTaskTemplateActivites(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-
-    def setUp(self):
-        super(TestTaskTemplateActivites, self).setUp()
-
-        self.template_folder = create(Builder('templatefolder'))
-        self.dossier = create(Builder('dossier'))
+    features = ('activity', )
 
     @browsing
     def test_record_activity_for_the_maintask_and_all_subtasks(self, browser):
-        template_folder = create(Builder('tasktemplatefolder')
-                                 .within(self.template_folder)
-                                 .in_state('tasktemplatefolder-state-activ')
-                                 .titled(u'Mitberichtsverfahren'))
-        create(Builder('tasktemplate')
-               .within(template_folder)
-               .titled(u'Einladung zum Mitbericht versenden')
-               .having(preselected=True))
-        create(Builder('tasktemplate')
-               .within(template_folder)
-               .titled(u'Mitberichte zusammenfassen.')
-               .having(preselected=True))
-        create(Builder('tasktemplate')
-               .within(template_folder)
-               .titled(u'Endg\xfcltige Stellungnahme versenden')
-               .having(preselected=True))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.dossier, view='add-tasktemplate')
-        browser.fill({'Tasktemplatefolder': u'Mitberichtsverfahren'})
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        browser.open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
+
+        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.',
+                                        u'Notebook einrichten.']})
 
         browser.click_on('Continue')
         browser.click_on('Trigger')
 
+        main_task = self.dossier.objectValues()[-1]
+
         self.assertItemsEqual(
-            [u'Einladung zum Mitbericht versenden',
-             u'Mitberichte zusammenfassen.',
-             u'Endg\xfcltige Stellungnahme versenden'],
-            [activity.title for activity in Activity.query.all()])
+            main_task.objectValues(),
+            [activity.resource.oguid.resolve_object() for activity in Activity.query.all()])
+
+        self.assertItemsEqual(
+            [u'task-added', u'task-added'],
+            [activity.kind for activity in Activity.query.all()])
