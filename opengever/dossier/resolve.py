@@ -352,7 +352,9 @@ class ResolveConditions(object):
 
         errors = []
 
-        if self.strict and not self.context.is_all_supplied():
+        if (self.strict and
+                not self.context.is_all_supplied() and
+                not self.context.is_subdossier()):
             errors.append(NOT_SUPPLIED_OBJECTS)
         if not self.context.is_all_checked_in():
             errors.append(NOT_CHECKED_IN_DOCS)
