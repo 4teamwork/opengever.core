@@ -21,7 +21,7 @@ class Committees(BrowserView, GeverTabMixin):
     filterlist_name = 'committee_state_filter'
     filterlist_available = True
     filterlist = FilterList(
-        Filter('filter_all', tmf('all')),
+        Filter('filter_all', tmf('label_tabbedview_filter_all')),
         ActiveOnlyFilter('filter_active', tmf('Active'), default=True))
 
     def __call__(self):
