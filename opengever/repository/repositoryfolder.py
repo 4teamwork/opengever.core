@@ -32,6 +32,8 @@ class IRepositoryFolderSchema(model.Schema):
             u'location',
             u'referenced_activity',
             u'former_reference',
+            u'addable_dossier_types',
+            u'allow_add_businesscase_dossier',
             ],
         )
 

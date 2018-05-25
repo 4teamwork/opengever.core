@@ -4,18 +4,129 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import statusmessages
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
 from opengever.testing import TestCase
 from plone import api
 from unittest import skip
 import transaction
+
+
+class TestTranslatedTitleIsOnTop(IntegrationTestCase):
+
+    def assert_translated_title_fields_in_browser(self, browser):
+        translated_fields = [
+            'forms.widgets.ITranslatedTitle.title_{}'.format(lang)
+            for lang in api.portal.get_tool('portal_languages').supported_langs
+            if lang in TranslatedTitle.SUPPORTED_LANGUAGES
+        ]
+
+        first_fields = [
+            _input.name
+            for _input in browser.css("#form input[type!='hidden']")[:len(translated_fields)]
+        ]
+        self.assertEquals(translated_fields, first_fields)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_inbox_container(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        inbox_container = create(Builder('inbox_container')
+                                 .titled(u'Inboxes')
+                                 .within(self.portal))
+
+        browser.open(inbox_container, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_private_root(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.private_root, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_inbox(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.inbox, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_committee_container(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.committee_container, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_templates(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.templates, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_workspace_root(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.workspace_root, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_repository_root(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.repository_root, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_contact_folder(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.contactfolder, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
+
+    @browsing
+    def test_translated_title_is_on_top_when_editing_the_repository_folder(
+            self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.branch_repofolder, view='edit')
+        statusmessages.assert_no_error_messages()
+
+        self.assert_translated_title_fields_in_browser(browser)
 
 
 class TestTranslatedTitleConfig(TestCase):

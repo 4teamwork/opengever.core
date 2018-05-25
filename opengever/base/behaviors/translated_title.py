@@ -33,13 +33,28 @@ class ITranslatedTitle(model.Schema):
     content.
     """
 
-    form.order_before(title_de='*')
+    model.fieldset(
+        u'common',
+        label=_(u'fieldset_common', default=u'Common'),
+        fields=[
+            u'title_de',
+            u'title_fr',
+            ],
+        )
+
+    form.order_before(title_de='inbox_group')
+    form.order_before(title_de='protocol_header_template')
+    form.order_before(title_de='valid_from')
+    form.order_before(title_de='description')
     searchable('title_de')
     title_de = TextLine(
         title=_(u'label_title_de', default=u'Title (German)'),
         required=True)
 
-    form.order_before(title_fr='*')
+    form.order_before(title_fr='inbox_group')
+    form.order_before(title_fr='protocol_header_template')
+    form.order_before(title_fr='valid_from')
+    form.order_before(title_fr='description')
     searchable('title_fr')
     title_fr = TextLine(
         title=_(u'label_title_fr', default=u'Title (French)'),

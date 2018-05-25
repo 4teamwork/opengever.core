@@ -1,3 +1,4 @@
+from opengever.base import _ as bmf
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
@@ -13,6 +14,16 @@ from zope.interface import implementer
 class IRepositoryRoot(model.Schema):
     """ Repository root marker / schema interface
     """
+
+    model.fieldset(
+        u'common',
+        label=bmf(u'fieldset_common', default=u'Common'),
+        fields=[
+            'valid_from',
+            'valid_until',
+            'version',
+        ],
+    )
 
     valid_from = schema.Date(
         title=_(u'label_valid_from', default=u'Valid from'),
