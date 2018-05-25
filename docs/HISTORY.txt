@@ -10,6 +10,7 @@ Changelog
 - Improve error handling on the @scan-in API endpoint. [Rotonen]
 - Bumblebee bugfix: no longer defer preview for new documents. [deiferni]
 - Display dossier resolve properties in the config view. [tarnap]
+- Add a tasktemplatefolder to GEVER examplecontent. [phgross]
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 

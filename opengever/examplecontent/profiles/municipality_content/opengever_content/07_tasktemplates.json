@@ -1,0 +1,43 @@
+[{
+    "_path": "/vorlagen/tasktemplatefolder-1",
+    "_type": "opengever.tasktemplates.tasktemplatefolder",
+    "title": "Personaleintritt",
+    "_transitions": "tasktemplatefolder-transition-inactiv-activ",
+    "sequence_type": "sequential",
+    "_children": [
+        {
+            "_id": "tasktemplate-1",
+            "_type": "opengever.tasktemplates.tasktemplate",
+            "title": "Arbeitsplatz einrichten",
+            "issuer": "responsible",
+            "task_type": "correction",
+            "deadline": 10,
+            "preselected": true,
+            "responsible_client": "afi",
+            "responsible": "philippe.gross"
+        },
+        {
+            "_id": "tasktemplate-2",
+            "_type": "opengever.tasktemplates.tasktemplate",
+            "title": "Accounts erstellen und Zugänge einrichten",
+            "description": "Mail, Intranet, AD etc.",
+            "issuer": "responsible",
+            "task_type": "correction",
+            "deadline": 7,
+            "preselected": true,
+            "responsible_client": "afi",
+            "responsible": "philippe.gross"
+        },
+        {
+            "_id": "tasktemplate-3",
+            "_type": "opengever.tasktemplates.tasktemplate",
+            "title": "Eintrittsgespräch vorbereiten und planen",
+            "issuer": "responsible",
+            "deadline": 7,
+            "preselected": false,
+            "responsible": "responsible",
+            "responsible_client": "interactive_users",
+            "task_type": "direct-execution"
+        }
+    ]
+}]
