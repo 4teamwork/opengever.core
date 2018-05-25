@@ -231,11 +231,11 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         ids = main_task.objectIds()
         task1, task2 = [main_task.get(_id) for _id in ids]
 
-        self.assertEquals(u'User Accounts erstellen.', task1.title)
-        self.assertEquals(u'jurgen.konig', task1.responsible)
+        self.assertEquals(u'Arbeitsplatz einrichten.', task1.title)
+        self.assertEquals(u'robert.ziegler', task1.responsible)
 
-        self.assertEquals(u'Arbeitsplatz einrichten.', task2.title)
-        self.assertEquals(u'robert.ziegler', task2.responsible)
+        self.assertEquals(u'User Accounts erstellen.', task2.title)
+        self.assertEquals(u'jurgen.konig', task2.responsible)
 
     @browsing
     def test_step3_responsible_fields_are_required(self, browser):
