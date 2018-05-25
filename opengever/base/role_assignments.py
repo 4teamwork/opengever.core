@@ -5,7 +5,8 @@ from zope.annotation.interfaces import IAnnotations
 
 
 ASSIGNNMENT_VIA_TASK = 1
-ASSIGNNMENT_VIA_SHARING = 2
+ASSIGNNMENT_VIA_TASK_AGENCY = 2
+ASSIGNNMENT_VIA_SHARING = 3
 
 
 class RoleAssignmentStorage(object):

@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
@@ -55,14 +56,17 @@ class LocalRolesSetter(object):
     def is_inboxgroup_agency_active(self):
         return get_current_org_unit().is_inboxgroup_agency_active
 
-    def _add_local_roles(self, context, principal, roles):
+    def _add_local_roles(self, context, principal, roles, is_agency=False):
         """Adds local roles to the context.
         `roles` example:
         {'peter': ('Reader', 'Editor')}
         """
 
-        RoleAssignmentManager(context).add(
-            principal, roles, ASSIGNNMENT_VIA_TASK, self.task)
+        cause = ASSIGNNMENT_VIA_TASK
+        if is_agency:
+            cause = ASSIGNNMENT_VIA_TASK_AGENCY
+
+        RoleAssignmentManager(context).add(principal, roles, cause, self.task)
 
     def set_roles_on_task(self):
         """Set local roles on task
@@ -74,7 +78,8 @@ class LocalRolesSetter(object):
             )
 
         if self.is_inboxgroup_agency_active() and self.inbox_group_id:
-            self._add_local_roles(self.task, self.inbox_group_id, ('Editor', ))
+            self._add_local_roles(self.task, self.inbox_group_id,
+                                  ('Editor', ), is_agency=True)
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -96,11 +101,8 @@ class LocalRolesSetter(object):
             )
 
         if self.is_inboxgroup_agency_active() and self.inbox_group_id:
-            self._add_local_roles(
-                context,
-                self.inbox_group_id,
-                ('Contributor', ),
-                )
+            self._add_local_roles(context, self.inbox_group_id,
+                                  ('Contributor', ), is_agency=True)
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)."""
@@ -117,10 +119,7 @@ class LocalRolesSetter(object):
 
             if self.is_inboxgroup_agency_active() and self.inbox_group_id:
                 self._add_local_roles(
-                    item.to_object,
-                    self.inbox_group_id,
-                    roles,
-                    )
+                    item.to_object, self.inbox_group_id, roles, is_agency=True)
 
 
 def set_roles_after_adding(context, event):
