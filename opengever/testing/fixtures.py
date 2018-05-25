@@ -435,8 +435,9 @@ class OpengeverContentFixture(object):
             Builder('tasktemplatefolder')
             .titled(u'Verfahren Neuanstellung')
             .in_state('tasktemplatefolder-state-activ')
+            .having(sequence_type='parallel')
             .within(self.templates)
-            ))
+        ))
 
         self.tasktemplate = self.register('tasktemplate', create(
             Builder('tasktemplate')

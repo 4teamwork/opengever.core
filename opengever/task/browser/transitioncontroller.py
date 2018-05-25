@@ -6,10 +6,12 @@ from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.util import get_documents_of_task
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
 from zExceptions import NotFound
+from zope.globalrequest import getRequest
 from zope.interface import implements
 from zope.interface import Interface
 
@@ -149,15 +151,19 @@ class TaskTransitionController(BrowserView):
     def modify_deadline_action(self, transition, c):
         return ModifyDeadlineFormView.url_for(self.context, transition)
 
+    @guard('task-transition-open-planned')
+    def planned_guard(self, transition, c):
+        return IDuringTaskTemplateFolderTriggering.providedBy(getRequest())
+
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):
         """Checks if:
         - The current user is the issuer of the current task(context)"""
 
         if include_agency:
-            return (c.current_user.is_issuer or
-                    c.current_user.in_issuing_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_issuer
 
@@ -183,9 +189,9 @@ class TaskTransitionController(BrowserView):
             return False
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
         else:
             return c.current_user.is_responsible
 
@@ -231,9 +237,9 @@ class TaskTransitionController(BrowserView):
             return False
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
         else:
             return c.current_user.is_responsible
 
@@ -258,9 +264,9 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer."""
 
         if include_agency:
-            return (c.current_user.is_issuer or
-                    c.current_user.in_issuing_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_issuer
 
@@ -274,9 +280,9 @@ class TaskTransitionController(BrowserView):
         - The current user is the responsible or a member of the inbox group.
         """
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -299,9 +305,9 @@ class TaskTransitionController(BrowserView):
         """
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -317,9 +323,9 @@ class TaskTransitionController(BrowserView):
         """
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -342,9 +348,9 @@ class TaskTransitionController(BrowserView):
         """
 
         if include_agency:
-            return (c.current_user.is_issuer or
-                    c.current_user.in_issuing_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_issuer
 
@@ -360,9 +366,9 @@ class TaskTransitionController(BrowserView):
         - Current user is the responsible or a member of the inbox group.
         """
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -410,9 +416,9 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer of the task"""
 
         if include_agency:
-            return (c.current_user.is_issuer or
-                    c.current_user.in_issuing_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_issuer
 
@@ -429,9 +435,9 @@ class TaskTransitionController(BrowserView):
             return True
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.in_responsible_orgunits_inbox_group or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -552,8 +558,8 @@ class CurrentUserChecker(object):
     @property
     def is_administrator(self):
         current = api.user.get_current()
-        return bool(current.has_role('Administrator') or
-                    current.has_role('Manager'))
+        return bool(current.has_role('Administrator')
+                    or current.has_role('Manager'))
 
 
 class TaskChecker(object):

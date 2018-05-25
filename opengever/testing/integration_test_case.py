@@ -19,6 +19,7 @@ from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import ogds_service
 from opengever.private import enable_opengever_private
+from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
 from operator import methodcaller
@@ -619,3 +620,10 @@ class IntegrationTestCase(TestCase):
             u'metadata:{0}*^2 OR sequence_number_string:{0}^2000'.format(text)
         )
         solr.search.assert_called_with(query=query, **kwargs)
+
+    def register_successor(self, predecessor, successor):
+        ISuccessorTaskController(successor).set_predecessor(
+            Oguid.for_object(predecessor).id)
+
+        predecessor.get_sql_object().sync_with(predecessor)
+        successor.get_sql_object().sync_with(successor)

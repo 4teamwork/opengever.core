@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-04-16 13:38+0000\n"
+"POT-Creation-Date: 2018-05-23 15:07+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -482,9 +482,9 @@ msgid "label_expectedStartOfWork"
 msgstr "Beginn der Arbeit"
 
 #. Default: "Issuer"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/delegate/metadata.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/task.py
 msgid "label_issuer"
 msgstr "Auftraggeber"
 
@@ -502,6 +502,11 @@ msgstr "Eigenschaften"
 #: ./opengever/task/browser/modify_deadline.py
 msgid "label_new_deadline"
 msgstr "Neue Frist"
+
+#. Default: "Parallel process"
+#: ./opengever/task/browser/overview.py
+msgid "label_parallel_process"
+msgstr "Paralleler Ablauf"
 
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py
@@ -538,9 +543,9 @@ msgid "label_response"
 msgstr "Antworttext"
 
 #. Default: "Responsible"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/handlers.py
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
@@ -553,6 +558,11 @@ msgstr "Zurück zur Aufgabe"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Laufnummer"
+
+#. Default: "Sequential process"
+#: ./opengever/task/browser/overview.py
+msgid "label_sequential_process"
+msgstr "Sequenzieller Ablauf"
 
 #. Default: "Sub tasks"
 #: ./opengever/task/browser/templates/overview.pt

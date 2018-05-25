@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2018-05-23 15:07+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -16,6 +16,14 @@ msgstr ""
 
 msgid "Description"
 msgstr "Beschreibung"
+
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "Parallel"
+msgstr "Parallel"
+
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "Sequential"
+msgstr "Sequenziell"
 
 msgid "Title"
 msgstr "Titel"
@@ -48,8 +56,14 @@ msgstr "Vorlage auswählen"
 msgid "client_interactive_users"
 msgstr "Interaktiver Benutzer"
 
+#. Default: "Immediately open the first task after creation."
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "description_start_immediately"
+msgstr "Erste Aufgabe nach Erstellung sofort starten."
+
 #. Default: "Common"
 #: ./opengever/tasktemplates/content/tasktemplate.py
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -138,15 +152,30 @@ msgstr "Mandant des Auftragnehmers"
 msgid "label_responsible"
 msgstr "Auftragnehmer"
 
+#. Default: "Responsible «${template_title}»"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_responsible_for_task"
+msgstr "Auftragnehmer «${template_title}»"
+
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "label_responsible_task"
 msgstr "Auftragnehmer"
 
+#. Default: "Responsibles selection"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_responsibles_selection"
+msgstr "Auswahl Auftragnehmer"
+
 #. Default: "Review state"
 #: ./opengever/tasktemplates/browser/templatefolders.py
 msgid "label_review_state"
 msgstr "Status"
+
+#. Default: "Select responsibles"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_select_responsibles"
+msgstr "Auswahl Auftragnehmer"
 
 #. Default: "Select tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -157,6 +186,17 @@ msgstr "Auswahl Standardablauf"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_select_tasktemplates"
 msgstr "Auswahl Aufgabenvorlagen"
+
+#. Default: "Type"
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+#: ./opengever/tasktemplates/viewlets/byline.py
+msgid "label_sequence_type"
+msgstr "Ablauftyp"
+
+#. Default: "Start immediately"
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "label_start_immediately"
+msgstr "Sofort auslösen"
 
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -225,4 +265,3 @@ msgstr "Ja"
 #: ./opengever/tasktemplates/browser/form.pt
 msgid "select tasks"
 msgstr "Aufgaben auswählen"
-

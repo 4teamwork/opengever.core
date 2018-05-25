@@ -107,6 +107,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'task-state-cancelled',
             'task-state-in-progress',
             'task-state-open',
+            'task-state-planned',
             'task-state-rejected',
             'task-state-resolved',
             'task-state-tested-and-closed',

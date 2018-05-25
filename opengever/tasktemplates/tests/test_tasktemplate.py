@@ -100,3 +100,23 @@ class TestTaskTemplates(IntegrationTestCase):
         self.assertEquals(
             ['Items successfully deleted.'], info_messages())
         self.assertEquals([], self.tasktemplatefolder.listFolderContents())
+
+    @browsing
+    def test_responsible_is_not_required(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add('TaskTemplate')
+        browser.fill(
+            {'Title': 'Arbeitsplatz einrichten.',
+             'Task Type': 'comment',
+             'Deadline in Days': u'10'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Issuer').fill(u'responsible')
+
+        browser.click_on('Save')
+        self.assertEquals(['Item created'], info_messages())
+        tasktemplate = self.tasktemplatefolder.listFolderContents()[-1]
+        self.assertEquals(u'Arbeitsplatz einrichten.', tasktemplate.title)
+        self.assertEquals(None, tasktemplate.responsible)

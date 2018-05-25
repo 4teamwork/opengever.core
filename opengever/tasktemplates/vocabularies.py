@@ -1,6 +1,7 @@
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.ogds.base.vocabularies import OrgUnitsVocabularyFactory
 from opengever.tasktemplates import _
+from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.browser.trigger import get_datamanger_key
 from plone import api
 from zope.component import getUtility
@@ -19,7 +20,7 @@ class ResponsibleOrgUnitVocabularyFactory(OrgUnitsVocabularyFactory):
     """
 
     def key_value_provider(self):
-        yield ('interactive_users',
+        yield (INTERACTIVE_USERS,
                translate(_(u'client_interactive_users',
                            default=u'Interactive users'),
                          context=getRequest()))

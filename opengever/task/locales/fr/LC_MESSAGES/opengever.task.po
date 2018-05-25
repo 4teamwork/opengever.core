@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-16 13:38+0000\n"
+"POT-Creation-Date: 2018-05-23 15:07+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -484,9 +484,9 @@ msgid "label_expectedStartOfWork"
 msgstr "Début du travail"
 
 #. Default: "Issuer"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/delegate/metadata.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/task.py
 msgid "label_issuer"
 msgstr "Mandant"
 
@@ -504,6 +504,11 @@ msgstr "Attributs"
 #: ./opengever/task/browser/modify_deadline.py
 msgid "label_new_deadline"
 msgstr "Nouveau délai"
+
+#. Default: "Parallel process"
+#: ./opengever/task/browser/overview.py
+msgid "label_parallel_process"
+msgstr ""
 
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py
@@ -540,9 +545,9 @@ msgid "label_response"
 msgstr "Response"
 
 #. Default: "Responsible"
+#: ./opengever/task/activities.py
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/overview.py
-#: ./opengever/task/handlers.py
 msgid "label_responsible"
 msgstr "Mandataire"
 
@@ -555,6 +560,11 @@ msgstr "Retour à la tâche"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Numéro courant"
+
+#. Default: "Sequential process"
+#: ./opengever/task/browser/overview.py
+msgid "label_sequential_process"
+msgstr ""
 
 #. Default: "Sub tasks"
 #: ./opengever/task/browser/templates/overview.pt

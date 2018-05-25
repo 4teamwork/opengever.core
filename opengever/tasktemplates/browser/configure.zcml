@@ -39,4 +39,11 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      name="select-responsibles"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class=".trigger.SelectResponsiblesView"
+      permission="cmf.AddPortalContent"
+      />
+
 </configure>
