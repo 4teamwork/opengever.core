@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
 from zope.container.interfaces import IContainerModifiedEvent
@@ -58,10 +60,9 @@ class LocalRolesSetter(object):
         `roles` example:
         {'peter': ('Reader', 'Editor')}
         """
-        current_roles = dict(context.get_local_roles()).get(principal, ())
-        new_roles = list(set(list(current_roles) + list(roles)))
-        context.manage_setLocalRoles(principal, new_roles)
-        context.reindexObjectSecurity()
+
+        RoleAssignmentManager(context).add(
+            principal, roles, ASSIGNNMENT_VIA_TASK, self.task)
 
     def set_roles_on_task(self):
         """Set local roles on task
