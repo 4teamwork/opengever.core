@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Bump ftw.datepicker to get JS fix for language format selection. [lgraf]
 - Fix stuck tabbedview spinner on firefox. [Kevin Bieri]
 - Normalize query strings of template filter. [Kevin Bieri]
 - Improve error handling on the @scan-in API endpoint. [Rotonen]
