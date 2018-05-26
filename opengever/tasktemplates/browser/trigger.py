@@ -11,6 +11,7 @@ from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
+from plone.app.uuid.utils import uuidToObject
 from plone.supermodel import model
 from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.layout import FormWrapper
@@ -196,7 +197,6 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         templates = api.content.find(
             context=self.get_selected_task_templatefolder(),
             portal_type='opengever.tasktemplates.tasktemplate')
-
         return [template.UID for template in templates
                 if template.getObject().preselected]
 
@@ -322,15 +322,13 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
 
     def get_selected_tasktemplates(self):
         tasktemplates = get_wizard_data(self.context, 'tasktemplates')
-        catalog = api.portal.get_tool('portal_catalog')
-        return [brain.getObject() for brain in catalog(UID=tasktemplates)]
+        return [uuidToObject(uid) for uid in tasktemplates]
 
     @buttonAndHandler(_(u'button_trigger', default=u'Trigger'), name='trigger')
     def handle_continue(self, action):
         data, errors = self.extractData()
         if errors:
             return
-
         tasktemplatefolder = self.get_selected_task_templatefolder()
         related_documents = self.get_selected_related_documents()
         start_immediately = get_wizard_data(self.context, 'start_immediately')

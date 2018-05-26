@@ -70,4 +70,6 @@ class TasktemplatesVocabulary(object):
     def get_tasktemplates(self, tasktemplatefolder):
         return api.content.find(
             context=tasktemplatefolder,
-            portal_type='opengever.tasktemplates.tasktemplate')
+            portal_type='opengever.tasktemplates.tasktemplate',
+            sort_on='getObjPositionInParent'
+            )
