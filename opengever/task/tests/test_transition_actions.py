@@ -86,6 +86,36 @@ class TestTaskTransitionActionsForCancelled(BaseTransitionActionIntegrationTest)
         self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
 
 
+class TestTaskTransitionActionsForRejected(BaseTransitionActionIntegrationTest):
+
+    def setUp(self):
+        super(TestTaskTransitionActionsForRejected, self).setUp()
+        with self.login(self.regular_user):
+            self.set_workflow_state('task-state-rejected', self.task)
+
+    @browsing
+    def test_skip_task(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-rejected-skipped')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-rejected-skipped'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+
+class TestTaskTransitionActionsForSkipped(BaseTransitionActionIntegrationTest):
+
+    def setUp(self):
+        super(TestTaskTransitionActionsForSkipped, self).setUp()
+        with self.login(self.regular_user):
+            self.set_workflow_state('task-state-skipped', self.task)
+
+    @browsing
+    def test_reopening_task(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.do_transition(browser, self.task, 'task-transition-skipped-open')
+        expected_transition_action = 'addresponse?form.widgets.transition=task-transition-skipped-open'
+        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+
+
 class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
 
     features = (
@@ -155,20 +185,6 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         self.do_transition(browser, self.task, 'task-transition-open-cancelled')
         expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-cancelled'
         self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
-
-
-class TestSkipAction(BaseTransitionActionFunctionalTest):
-
-    transition = 'task-transition-rejected-skipped'
-
-    @browsing
-    def test_is_responseform(self, browser):
-        task = create(Builder('task').in_state('task-state-rejected'))
-        self.do_transition(task)
-
-        self.assert_action(
-            'http://nohost/plone/task-1/addresponse?form.widgets.transition='
-            + self.transition)
 
 
 class TestInProgressResolveAction(BaseTransitionActionFunctionalTest):
