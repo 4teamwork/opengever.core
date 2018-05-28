@@ -2,6 +2,7 @@ from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import INTERACTIVE_USERS
@@ -124,8 +125,9 @@ class TaskTemplateFolderTrigger(object):
         task.get_sql_object().sync_with(task)
 
         # add activity record for subtask
-        activity = TaskAddedActivity(task, getRequest(), main_task)
-        activity.record()
+        if api.content.get_state(task) != TASK_STATE_PLANNED:
+            activity = TaskAddedActivity(task, getRequest(), main_task)
+            activity.record()
 
         return task
 

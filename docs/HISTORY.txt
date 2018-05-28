@@ -21,6 +21,7 @@ Changelog
 - Do not apply the current date to meeting titles. [Rotonen]
 - Rename cancelled task in German from "storniert" to "abgebrochen" .
 - Make tasktemplates sortable. [njohner]
+- Only send notifications for open tasks when triggering a tasktemplatefolder. [phgross]
 - Bump ftw.datepicker to get JS fix for language format selection. [lgraf]
 - Fix stuck tabbedview spinner on firefox. [Kevin Bieri]
 - Normalize query strings of template filter. [Kevin Bieri]
