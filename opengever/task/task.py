@@ -24,6 +24,7 @@ from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import util
+from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.validators import NoCheckedoutDocsValidator
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -522,6 +523,10 @@ class Task(Container):
             api.content.transition(
                 obj=next_task, transition='task-transition-planned-open')
             next_task.sync()
+
+            activity = TaskAddedActivity(
+                next_task, getRequest(), aq_parent(next_task))
+            activity.record()
 
     def sync(self):
         """Syncs the corresponding SQL task (globalindex).
