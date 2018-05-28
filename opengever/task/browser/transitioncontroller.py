@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -5,6 +6,7 @@ from opengever.task import FINISHED_TASK_STATES
 from opengever.task.browser.delegate.main import DelegateTask
 from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
+from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from plone import api
@@ -261,7 +263,12 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-open-cancelled')
     def open_to_cancelled_guard(self, c, include_agency):
         """Checks if:
-        - The current user is the issuer."""
+        - The task is not a subtask of a tasktemplate process
+        - The current user is the issuer
+        """
+
+        if self.context.is_from_tasktemplate and self.context.get_is_subtask():
+            return False
 
         if include_agency:
             return (c.current_user.is_issuer
@@ -269,6 +276,18 @@ class TaskTransitionController(BrowserView):
                     or c.current_user.is_administrator)
 
         return c.current_user.is_issuer
+
+    @guard('task-transition-in-progress-cancelled')
+    def progress_to_cancelled_guard(self, c, include_agency):
+        """Checks if:
+        The task is generated from tasktemplate and its the main task.
+        """
+        return self.context.is_from_tasktemplate and not \
+            ITask.providedBy(aq_parent(self.context))
+
+    @action('task-transition-in-progress-cancelled')
+    def progress_to_cancelled_action(self, transition, c):
+        return self._addresponse_form_url(transition)
 
     @action('task-transition-open-cancelled')
     def open_to_cancelled_action(self, transition, c):

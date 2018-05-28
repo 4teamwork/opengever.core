@@ -39,6 +39,7 @@ Changelog
 - Fetch archivist group members from ogds. [phgross]
 - Fix content displayed in the templatefolder's gallery view. [phgross]
 - Add Subject index to solr. [phgross]
+- Add new task transition in-progress to cancel. [phgross]
 - Set document date of generated journal pdfs to dossier end-date. [deiferni]
 - Make sure IE 11 does not cache favorites fetch requets. [phgross]
 - Enable favorites feature by default. [phgross]

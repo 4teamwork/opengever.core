@@ -69,3 +69,12 @@ def reassign_team_tasks(task, event):
             'responsible',
             _(u"label_responsible", default=u"Responsible"),
             old_responsible, ITask(task).responsible)
+
+
+def cancel_subtasks(task, event):
+    if event.action not in ['task-transition-in-progress-cancelled',
+                            'task-transition-open-cancelled']:
+
+        return
+
+    task.cancel_subtasks()

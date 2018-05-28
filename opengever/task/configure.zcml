@@ -118,6 +118,12 @@
       handler=".handlers.reassign_team_tasks"
       />
 
+  <subscriber
+      for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.cancel_subtasks"
+      />
+
   <adapter
       factory=".indexers.date_of_completion"
       name="date_of_completion"
