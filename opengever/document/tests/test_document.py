@@ -502,6 +502,16 @@ class TestDocumentMimetype(FunctionalTestCase):
         doc = browser.context.restrictedTraverse('document-1')
         self.assertEquals('application/foobar', doc.file.contentType)
 
+    def test_mimetype_lookups_are_case_insensitive(self):
+        doc = create(Builder('document').within(self.dossier).with_dummy_content())
+        self.assertEqual(str(doc.get_mimetype()[0]), 'application/msword')
+        doc.file.contentType = 'application/MSWORD'
+        self.assertEqual(str(doc.get_mimetype()[0]), 'application/msword')
+        doc.file.contentType = 'application/vnd.ms-excel.sheet.macroEnabled.12'
+        self.assertEqual(str(doc.get_mimetype()[0]), 'application/vnd.ms-excel.sheet.macroEnabled.12')
+        doc.file.contentType = 'application/vnd.ms-excel.sheet.macroenabled.12'
+        self.assertEqual(str(doc.get_mimetype()[0]), 'application/vnd.ms-excel.sheet.macroEnabled.12')
+
 
 class TestDocumentAuthorResolving(FunctionalTestCase):
 
