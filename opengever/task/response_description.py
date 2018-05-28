@@ -384,7 +384,6 @@ class ForwardingAdded(ResponseDescription):
 ResponseDescription.add_description(ForwardingAdded)
 
 
-
 class NullResponseDescription(ResponseDescription):
     """Fallback description for responses without any transition information.
     """
