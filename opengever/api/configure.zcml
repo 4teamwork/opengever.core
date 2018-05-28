@@ -176,4 +176,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@caslogin"
+      for="*"
+      factory=".caslogin.CASLogin"
+      permission="zope.Public"
+      />
+
 </configure>
