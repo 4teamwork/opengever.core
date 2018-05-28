@@ -124,6 +124,12 @@
       handler=".handlers.cancel_subtasks"
       />
 
+  <subscriber
+      for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.set_responsible_to_issuer_on_reject"
+      />
+
   <adapter
       factory=".indexers.date_of_completion"
       name="date_of_completion"

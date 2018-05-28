@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Rename cancelled task in German from "storniert" to "abgebrochen" .
 - Make tasktemplates sortable. [njohner]
 - Bump ftw.datepicker to get JS fix for language format selection. [lgraf]
