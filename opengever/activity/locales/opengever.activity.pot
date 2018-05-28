@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 08:22+0000\n"
+"POT-Creation-Date: 2018-05-28 08:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,7 +168,7 @@ msgstr ""
 msgid "task-commented"
 msgstr ""
 
-#. Default: "Task reopend"
+#. Default: "Task reopened"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-cancelled-open"
 msgstr ""
@@ -248,7 +248,7 @@ msgstr ""
 msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
 
-#. Default: "Task reopend"
+#. Default: "Task reopened"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-skipped-open"
 msgstr ""
