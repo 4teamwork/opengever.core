@@ -196,7 +196,7 @@ msgstr "Aufgaben-Frist verändert"
 #. Default: "Task cancelled"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-cancelled"
-msgstr "Aufgaben storniert"
+msgstr "Aufgaben abgebrochen"
 
 #. Default: "Task accepted"
 #: ./opengever/activity/__init__.py

@@ -280,7 +280,7 @@ msgid "task-added"
 msgstr "Aufgabe hinzugefügt."
 
 msgid "task-state-cancelled"
-msgstr "Storniert"
+msgstr "Abgebrochen"
 
 msgid "task-state-in-progress"
 msgstr "In Arbeit"
@@ -319,7 +319,7 @@ msgid "task-transition-modify-deadline"
 msgstr "Frist ändern"
 
 msgid "task-transition-open-cancelled"
-msgstr "Stornieren"
+msgstr "Abbrechen"
 
 msgid "task-transition-open-in-progress"
 msgstr "Akzeptieren"
