@@ -47,7 +47,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
-        self.assertEquals(u'New task added by Test User', activity.summary)
+        self.assertEquals(u'New task opened by Test User', activity.summary)
 
         browser.open_html(activity.description)
         rows = browser.css('table').first.rows
@@ -207,7 +207,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
-        self.assertEquals(u'New task added by Test User', activity.summary)
+        self.assertEquals(u'New task opened by Test User', activity.summary)
 
     @browsing
     def test_adding_a_document_notifies_watchers(self, browser):
@@ -245,7 +245,7 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Huber', activity.title)
-        self.assertEquals(u'New task added by Test User', activity.summary)
+        self.assertEquals(u'New task opened by Test User', activity.summary)
 
 
 class TestTaskReassignActivity(FunctionalTestCase):

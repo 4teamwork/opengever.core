@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-05-23 15:07+0000\n"
+"POT-Creation-Date: 2018-05-28 06:31+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -503,6 +503,11 @@ msgstr ""
 msgid "label_new_deadline"
 msgstr ""
 
+#. Default: "Next task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_next_task"
+msgstr ""
+
 #. Default: "Parallel process"
 #: ./opengever/task/browser/overview.py
 msgid "label_parallel_process"
@@ -520,6 +525,11 @@ msgstr ""
 #. Default: "Predecessor task"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
+msgstr ""
+
+#. Default: "Previous task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_previous_task"
 msgstr ""
 
 #. Default: "Related Items"
@@ -553,6 +563,11 @@ msgstr ""
 msgid "label_return_to_issue"
 msgstr ""
 
+#. Default: "Sequence"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_sequence"
+msgstr ""
+
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
@@ -573,7 +588,7 @@ msgstr ""
 msgid "label_successor_task"
 msgstr ""
 
-#. Default: "New task added by ${user}"
+#. Default: "New task opened by ${user}"
 #: ./opengever/task/activities.py
 msgid "label_task_added"
 msgstr ""
@@ -782,7 +797,7 @@ msgstr ""
 msgid "transition_label_created"
 msgstr ""
 
-#. Default: "Task added"
+#. Default: "Task opened"
 #: ./opengever/task/activities.py
 #: ./opengever/task/response_description.py
 msgid "transition_label_default"

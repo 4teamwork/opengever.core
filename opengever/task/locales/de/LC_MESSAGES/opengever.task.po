@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-05-23 15:07+0000\n"
+"POT-Creation-Date: 2018-05-28 06:31+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -503,6 +503,11 @@ msgstr "Eigenschaften"
 msgid "label_new_deadline"
 msgstr "Neue Frist"
 
+#. Default: "Next task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_next_task"
+msgstr "Nächste Aufgabe"
+
 #. Default: "Parallel process"
 #: ./opengever/task/browser/overview.py
 msgid "label_parallel_process"
@@ -522,6 +527,11 @@ msgstr "Vorgänger"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
 msgstr "Ursprüngliche Aufgabe"
+
+#. Default: "Previous task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_previous_task"
+msgstr "Vorherige Aufgabe"
 
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py
@@ -554,6 +564,11 @@ msgstr "Auftragnehmer"
 msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
+#. Default: "Sequence"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_sequence"
+msgstr "Ablauf"
+
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
@@ -574,10 +589,10 @@ msgstr "Unteraufgaben"
 msgid "label_successor_task"
 msgstr "Kopierte Aufgabe"
 
-#. Default: "New task added by ${user}"
+#. Default: "New task opened by ${user}"
 #: ./opengever/task/activities.py
 msgid "label_task_added"
-msgstr "Neue Aufgabe hinzugefügt durch ${user}"
+msgstr "Neue Aufgabe eröffnet durch ${user}"
 
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py
@@ -784,11 +799,11 @@ msgstr "Aufgabe abgeschlossen"
 msgid "transition_label_created"
 msgstr "Erstellt durch ${user}"
 
-#. Default: "Task added"
+#. Default: "Task opened"
 #: ./opengever/task/activities.py
 #: ./opengever/task/response_description.py
 msgid "transition_label_default"
-msgstr "Aufgabe hinzugefügt"
+msgstr "Aufgabe eröffnet"
 
 #. Default: "Task deadline modified"
 #: ./opengever/task/response_description.py

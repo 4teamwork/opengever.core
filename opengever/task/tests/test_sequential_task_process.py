@@ -69,5 +69,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         activity = Activity.query.all()[-1]
         self.assertEquals('task-added', activity.kind)
-        self.assertEquals(
-            Oguid.for_object(self.archive_task), activity.resource.oguid)
+        self.assertEquals('Task opened', activity.label)
+        self.assertEquals(u'New task opened by Ziegler Robert',
+                          activity.summary)
+        self.assertEquals(Oguid.for_object(self.archive_task),
+                          activity.resource.oguid)
