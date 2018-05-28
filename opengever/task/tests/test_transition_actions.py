@@ -130,8 +130,8 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
     @browsing
     def test_rejecting_sets_responsible_to_issuer(self, browser):
         self.login(self.regular_user, browser)
-        self.assertEqual(self.task.issuer, self.dossier_responsible.id)
-        self.assertEqual(self.task.responsible, self.regular_user.id)
+        self.assertEqual(self.dossier_responsible.id, self.task.issuer)
+        self.assertEqual(self.regular_user.id, self.task.responsible)
         subscription_count = len(notification_center().fetch_resource(self.task.oguid).subscriptions)
         subscription_assertion_text = 'Both the issuer and the responsible should be initially subscribed.'
         self.assertEqual(2, subscription_count, subscription_assertion_text)
@@ -140,8 +140,8 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         browser.css('#form-buttons-save').first.click()
         self.assertEqual(api.content.get_state(self.task), 'task-state-rejected')
         task_responsible_assertion_text = 'The task responsible should have been set to the issuer.'
-        self.assertEqual(self.task.issuer, self.dossier_responsible.id)
-        self.assertEqual(self.task.responsible, self.dossier_responsible.id, task_responsible_assertion_text)
+        self.assertEqual(self.dossier_responsible.id, self.task.issuer)
+        self.assertEqual(self.dossier_responsible.id, self.task.responsible, task_responsible_assertion_text)
         subscriptions = notification_center().fetch_resource(self.task.oguid).subscriptions
         subscription_count = len(subscriptions)
         subscription_assertion_text = 'The subscription for the responsible should have been removed.'
