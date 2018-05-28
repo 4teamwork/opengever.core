@@ -309,6 +309,9 @@ msgstr "Wieder eröffnen"
 msgid "task-transition-delegate"
 msgstr "Delegieren"
 
+msgid "task-transition-in-progress-cancelled"
+msgstr "Abbrechen"
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Erledigen"
 
@@ -319,9 +322,6 @@ msgid "task-transition-modify-deadline"
 msgstr "Frist ändern"
 
 msgid "task-transition-open-cancelled"
-msgstr "Abbrechen"
-
-msgid "task-transition-in-progress-cancelled"
 msgstr "Abbrechen"
 
 msgid "task-transition-open-in-progress"

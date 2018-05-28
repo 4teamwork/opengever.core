@@ -309,6 +309,9 @@ msgstr "Rouvrir"
 msgid "task-transition-delegate"
 msgstr "Déléguer"
 
+msgid "task-transition-in-progress-cancelled"
+msgstr ""
+
 msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
 
