@@ -143,10 +143,11 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         self.assertEqual(self.dossier_responsible.id, self.task.issuer)
         self.assertEqual(self.dossier_responsible.id, self.task.responsible, task_responsible_assertion_text)
         subscriptions = notification_center().fetch_resource(self.task.oguid).subscriptions
-        subscription_count = len(subscriptions)
-        subscription_assertion_text = 'The subscription for the responsible should have been removed.'
-        self.assertEqual(1, subscription_count, subscription_assertion_text)
-        self.assertEqual('task_issuer', subscriptions[0].role, subscription_assertion_text)
+        expected_subscriptions = [
+            (u'task_issuer', u'robert.ziegler', ),
+            (u'task_responsible', u'robert.ziegler', ),
+            ]
+        self.assertEqual(expected_subscriptions, [(s.role, s.watcher.actorid, ) for s in subscriptions])
 
     @browsing
     def test_resolving(self, browser):
