@@ -56,7 +56,7 @@ class TestFavoriteAction(IntegrationTestCase):
 
         browser.open(self.document)
         self.assertEqual(
-            '', browser.css('#mark-as-favorite').first.get('class'))
+            None, browser.css('#mark-as-favorite').first.get('class'))
 
 
 class TestFavoriteEtagValue(IntegrationTestCase):

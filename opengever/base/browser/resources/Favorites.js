@@ -13,8 +13,10 @@
       }
 
       if ($('#mark-as-favorite').hasClass('is-favorite')){
+        target.attr('title', target.data('markFavoriteTitle'));
         this.delete_favorite(target);
       } else {
+        target.attr('title', target.data('unmarkFavoriteTitle'));
         this.add_favorite(target);
       }
     };

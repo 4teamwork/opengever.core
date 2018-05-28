@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-23 15:08+0000\n"
+"POT-Creation-Date: 2018-05-28 15:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -432,6 +432,15 @@ msgstr ""
 #. Default: "Favorites"
 #: ./opengever/base/browser/templates/favorites.pt
 msgid "title_manage_favorites"
+msgstr ""
+
+#. Default: "Mark as favorite"
+#: ./opengever/base/viewlets/favorite_action.pt
+msgid "tooltip_mark_favorite_action"
+msgstr ""
+
+#: ./opengever/base/viewlets/favorite_action.pt
+msgid "tooltip_remove_favorite_action"
 msgstr ""
 
 #. Default: "You are not allowed to see this reference"
