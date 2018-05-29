@@ -1,4 +1,5 @@
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from Products.ZCTextIndex.ParseTree import ParseError
@@ -56,9 +57,18 @@ class Listing(Service):
         headers = self.request.form.get('headers')
         res = {'items': []}
         for item in items[start:start + rows]:
+            obj = IContentListingObject(item)
             data = {}
             for header in headers:
-                data[header] = json_compatible(getattr(item, header))
+                accessor = FIELD_ACCESSORS.get(header, header)
+                if isinstance(accessor, str):
+                    value = getattr(obj, accessor, None)
+                    if callable(value):
+                        value = value()
+                else:
+                    value = accessor(obj)
+                data[header] = json_compatible(value)
+
             data['@id'] = item.getURL()
             res['items'].append(data)
 
@@ -67,3 +77,19 @@ class Listing(Service):
         res['rows'] = rows
 
         return res
+
+
+FIELD_ACCESSORS = {
+    '@type': 'PortalType',
+    'created': 'created',
+    'creator': 'Creator',
+    'description': 'Description',
+    # 'filename': filename,
+    # 'filesize': filesize,
+    'mimetype': 'getContentType',
+    'modified': 'modified',
+    # 'reference_number': reference_number,
+    'review_state': 'review_state',
+    'title': 'Title',
+    'thumbnail': 'get_preview_image_url',
+}
