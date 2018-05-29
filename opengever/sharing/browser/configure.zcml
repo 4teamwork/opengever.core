@@ -11,6 +11,14 @@
       />
 
   <browser:page
+      name="new_sharing"
+      for="*"
+      class=".sharing.NewSharingView"
+      permission="plone.DelegateRoles"
+      layer="opengever.sharing.interfaces.IOpengeverSharing"
+      />
+
+  <browser:page
       name="updateSharingInfo"
       for="*"
       class=".sharing.OpengeverSharingView"
@@ -32,5 +40,11 @@
       class=".admin_list.BlockedLocalRolesList"
       permission="opengever.document.ListProtectedObjects"
       />
+
+  <browser:resourceDirectory
+      name="opengever.sharing"
+      directory="resources"
+      />
+
 
 </configure>

@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.sharing">
+
+  <body>
+
+    <div metal:fill-slot="main">
+      <metal:core-macro define-macro="main">
+
+        <h1 class="documentFirstHeading"
+            i18n:domain="plone"
+            i18n:translate="heading_currently_assigned_shares">
+          Sharing for
+          <q tal:content="context/Title" i18n:name="folder">title</q>
+        </h1>
+
+        <div tal:replace="structure view/vuejs_template" />
+
+        <div id="sharing-view-vue-app"
+             tal:attributes="data-contexturl context/absolute_url;
+                             data-portalurl here/portal_url;
+                             data-i18n view/translations;
+                             data-userid view/get_userid;
+                             data-authtoken context/@@authenticator/token"></div>
+
+        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.sharing/sharing.js"></script>
+
+      </metal:core-macro>
+    </div>
+  </body>
+</html>

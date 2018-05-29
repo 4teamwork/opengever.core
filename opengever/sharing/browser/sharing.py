@@ -3,6 +3,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
+from opengever.base.handlebars import get_handlebars_template
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.sharing import _
@@ -11,17 +12,22 @@ from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.sharing.interfaces import ISharingConfiguration
+from pkg_resources import resource_filename
 from plone import api
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as PMF
+from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
+from zope.i18n import translate
+import json
 import re
 
 
@@ -42,6 +48,43 @@ ROLE_MAPPING = (
         (u'Role Manager', _('sharing_role_manager')),
         )),
     )
+
+
+class NewSharingView(BrowserView):
+
+    template = ViewPageTemplateFile('templates/sharing.pt')
+
+    @property
+    def vuejs_template(self):
+        return get_handlebars_template(
+            resource_filename('opengever.sharing.browser',
+                              'templates/sharing.html'))
+
+    def __call__(self):
+        return self.template()
+
+    def get_userid(self):
+        return api.user.get_current().getId()
+
+    def translate(self, msg):
+        return translate(msg, context=self.request)
+
+    def plone_translate(self, msgid):
+        return self.translate(PMF(msgid))
+
+    def translations(self):
+        return json.dumps({
+            'label_search': self.plone_translate('label_search'),
+            'label_inherit_local_roles': self.plone_translate('label_inherit_local_roles'),
+            'help_inherit_local_roles': self.plone_translate('help_inherit_local_roles'),
+            'image_link_icon': self.plone_translate('image_link_icon'),
+            'image_confirm_icon': self.plone_translate('image_confirm_icon'),
+            'principal_search_placeholder': self.translate(
+                _(u'principal_search_placeholder',
+                  default=u'Search for Users and Groups')),
+            'label_name': self.plone_translate('label_name'),
+            'label_acquired': _(u'label_acquired', default=u'Acuired')
+        })
 
 
 class OpengeverSharingView(SharingView):
@@ -109,6 +152,7 @@ class OpengeverSharingView(SharingView):
         # not support mapping additional attributes, we fetch the information
         # from ogds.
         for result in results:
+            result['url'] = self.get_detail_view_url(result)
             if not result.get('type') == 'group':
                 continue
             group = ogds_service().fetch_group(result['id'])
@@ -117,6 +161,16 @@ class OpengeverSharingView(SharingView):
             result['title'] = group.label()
 
         return results
+
+    def get_detail_view_url(self, item):
+        """Returns the url to the detail view for users or group.
+        """
+        if item.get('type') == 'group':
+            return '{}/@@list_groupmembers?group={}'.format(
+                api.portal.get().absolute_url(), item['id'])
+        else:
+            return '{}/@@user-details/{}'.format(
+                api.portal.get().absolute_url(), item['id'])
 
     def update_inherit(self, status=True, reindex=True):
         """Method Wrapper for the super method, to allow notify a

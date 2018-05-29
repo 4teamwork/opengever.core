@@ -1,0 +1,37 @@
+<script type="text/x-template" id="sharing-form">
+
+  <div class="sharing-form">
+    <form @submit.prevent="search">
+      <input type="text" class="search_box" v-model="principal_search"
+             :placeholder="i18n.principal_search_placeholder" />
+      <a class="button" @click="search">{{i18n.label_search}}</a>
+    </form>
+
+    <table class="sharing-table" class="listing">
+      <tr>
+        <th>{{i18n.label_name}}</th>
+        <th v-for="role in available_roles">{{role}}</th>
+      </tr>
+      <tr v-for="entry in entries" :key="entry.id">
+        <td><a class="link_overlay" :href="entry.url">{{entry.title}}</a></td>
+        <td v-for="role in available_roles">
+          <span class="aquired" :title="i18n.label_acquired"
+                v-if="entry.roles[role] == 'acquired'" />
+          <input type="checkbox" v-if="entry.roles[role] != 'acquired'"
+                 :checked="entry.roles[role]" :class="role"
+                 @click="(event) => {toggle_checkbox(event, entry, role)}"/>
+        </td>
+      </tr>
+    </table>
+    <input type="checkbox" v-model="inherit" />
+    <label for="inherit">{{i18n.label_inherit_local_roles}}</label>
+    <div class="formHelp">{{i18n.help_inherit_local_roles}}
+    <span class="function-ok"></span> {{i18n.image_confirm_icon}}
+    </div>
+
+    <a class="button context" @click="save">Save</a>
+    <a class="button" :href="context_url">Cancel</a>
+
+  </div>
+
+</script>
