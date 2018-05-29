@@ -8,6 +8,7 @@ from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
@@ -58,6 +59,20 @@ class TestResolvingDossiers(IntegrationTestCase):
         self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
+
+    @browsing
+    def test_resolving_subdossier_when_parent_dossier_contains_documents(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        create(Builder('document').within(self.subdossier))
+        create(Builder('dossier').within(self.subdossier))
+
+        resolve_dossier(self.subdossier, browser)
+
+        statusmessages.assert_no_error_messages()
+        self.assertEquals(
+            ['The subdossier has been succesfully resolved.'],
+            info_messages())
 
     @browsing
     def test_archive_form_is_omitted_when_resolving_subdossiers(self, browser):
