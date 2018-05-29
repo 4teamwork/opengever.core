@@ -48,7 +48,8 @@ class CASLogin(Service):
             data['service'],
         )
 
-        payload = {}
+        user = uf.getUserById(userid)
+        payload = {'fullname': user.getProperty('fullname')}
         return {
             'token': jwt_plugin.create_token(userid, data=payload)
         }
