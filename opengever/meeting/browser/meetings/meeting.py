@@ -276,9 +276,6 @@ class MeetingView(BrowserView):
                                             default=u'Agenda item list'),
                                     show_icon=False)
 
-    def url_protocol(self):
-        return self.model.get_url(view='protocol')
-
     def url_generate_protocol(self):
         if is_word_meeting_implementation_enabled():
             return self.url_merge_docx_protocol()

@@ -167,16 +167,6 @@ class EditMeetingView(ModelEditForm):
     def nextURL(self):
         return self.model.get_url()
 
-    def is_field_visible(self, field, agenda_item):
-        field_value = getattr(agenda_item, field.get('name'))
-        if agenda_item.is_decided() and not field_value:
-            return False
-
-        if field['needs_proposal']:
-            return agenda_item.has_proposal
-        else:
-            return not agenda_item.is_paragraph
-
     @property
     def server_timestamp(self):
         """Return the modified timestamp as seconds since the epoch."""

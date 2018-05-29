@@ -103,34 +103,6 @@ class AgendaItem(Base):
 
         super(AgendaItem, self).__init__(*args, **kwargs)
 
-    def update(self, request):
-        """Update with changed data."""
-
-        data = request.get(self.name)
-        if not data:
-            return
-
-        def to_safe_html(markup):
-            # keep empty data (whatever it is), it makes transform unhappy
-            if not markup:
-                return markup
-
-            markup = markup.decode('utf-8')
-            markup = trix2sablon.convert(markup)
-            return trix_strip_whitespace(markup)
-
-        if self.has_proposal:
-            self.submitted_proposal.legal_basis = to_safe_html(data.get('legal_basis'))
-            self.submitted_proposal.initial_position = to_safe_html(data.get('initial_position'))
-            self.submitted_proposal.considerations = to_safe_html(data.get('considerations'))
-            self.submitted_proposal.proposed_action = to_safe_html(data.get('proposed_action'))
-            self.submitted_proposal.publish_in = to_safe_html(data.get('publish_in'))
-            self.submitted_proposal.disclose_to = to_safe_html(data.get('disclose_to'))
-            self.submitted_proposal.copy_for_attention = to_safe_html(data.get('copy_for_attention'))
-
-        self.discussion = to_safe_html(data.get('discussion'))
-        self.decision = to_safe_html(data.get('decision'))
-
     def get_field_data(self, include_initial_position=True,
                        include_legal_basis=True, include_considerations=True,
                        include_proposed_action=True, include_discussion=True,

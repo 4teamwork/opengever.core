@@ -19,13 +19,6 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="protocol"
-      class=".protocol.EditProtocol"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="edit-meeting"
       class=".edit_meeting.EditMeetingView"
       permission="cmf.ModifyPortalContent"
