@@ -10,4 +10,3 @@ Inhalt:
    ogip
    feedbackforum-prozess
    ubersetzungen
-   teams
