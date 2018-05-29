@@ -95,6 +95,9 @@ class Trasher(object):
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
 
+        if not ITrashed.providedBy(self.context) or self.context.is_removed:
+            raise Unauthorized()
+
         noLongerProvides(self.context, ITrashed)
 
         self.reindex()

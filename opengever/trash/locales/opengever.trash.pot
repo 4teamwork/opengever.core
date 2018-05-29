@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2018-05-24 07:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,6 +97,11 @@ msgstr ""
 msgid "msg_is_not_trashed"
 msgstr ""
 
+#. Default: "The document is already removed."
+#: ./opengever/trash/remover.py
+msgid "msg_is_removed"
+msgstr ""
+
 #: ./opengever/trash/upgrades/profiles/4100/actions.xml
 msgid "remove"
 msgstr ""
@@ -104,4 +109,3 @@ msgstr ""
 #: ./opengever/trash/browser/trash.py
 msgid "the object ${obj} trashed"
 msgstr ""
-
