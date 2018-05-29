@@ -7,6 +7,7 @@ Changelog
 
 - Make document mimetype lookups case insensitive. [Rotonen]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
+- Do not apply the current date to meeting titles. [Rotonen]
 - Rename cancelled task in German from "storniert" to "abgebrochen" .
 - Make tasktemplates sortable. [njohner]
 - Bump ftw.datepicker to get JS fix for language format selection. [lgraf]
