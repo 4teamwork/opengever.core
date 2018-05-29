@@ -5,7 +5,7 @@ Changelog
 2018.3.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Bumped ftw.recipe.solr to fix permission issues. [deiferni]
 
 
 2018.3.3 (2018-06-06)
