@@ -7,6 +7,7 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
@@ -113,9 +114,11 @@ class IDocumentMetadata(model.Schema):
 
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
-        source=wrap_vocabulary('opengever.document.document_types',
-                    visible_terms_from_registry='opengever.document' +
-                            '.interfaces.IDocumentType.document_types'),
+        source=wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.'
+                                        'interfaces.IDocumentType.'
+                                        'document_types'),
         required=False,
         )
 
@@ -194,11 +197,18 @@ class FileOrPaperValidator(validator.SimpleFieldValidator):
         if getattr(form, 'skip_validate_file_field', False):
             return
 
-        if not (self.has_file() or self.is_preserved_as_paper()):
+        if not any([self.has_file(),
+                    self.is_preserved_as_paper(),
+                    self.has_referenced_document()]):
             raise Invalid(
                 _(u'error_file_and_preserved_as_paper',
-                default=u"You don't select a file and document is also not "
-                         "preserved in paper_form, please correct it."))
+                  default=u"You don't select a file and document is also not "
+                          u"preserved in paper_form, please correct it."))
+
+    def has_referenced_document(self):
+        RELATED_DOCUMENTS_KEY = 'form.widgets.IRelatedDocuments.relatedItems'
+        related_documents = self.request.form.get(RELATED_DOCUMENTS_KEY)
+        return related_documents is not None and len(related_documents) > 0
 
     def is_preserved_as_paper(self):
         PAPER_KEY = 'form.widgets.IDocumentMetadata.preserved_as_paper'

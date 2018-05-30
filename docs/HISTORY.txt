@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Improve the validation of "preserved as paper" for related documents. [tarnap]
 - Omit parentheses if no abbreviation for directorate or department available. [tarnap]
 - Allow attaching documents of sibling proposals to proposals. [Rotonen]
 - Add today to the data passed to the sablon template. [tarnap]
