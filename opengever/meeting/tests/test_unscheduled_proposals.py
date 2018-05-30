@@ -34,8 +34,7 @@ class TestUnscheduledProposals(FunctionalTestCase):
         dossier = create(Builder('dossier').within(folder))
         proposal = create(Builder('proposal')
                           .within(dossier)
-                          .having(committee=self.committee.load_model(),
-                                  decision_draft=u'<div>Project allowed.</div>')
+                          .having(committee=self.committee.load_model())
                           .as_submitted())
 
         return proposal
@@ -94,18 +93,6 @@ class TestScheduleProposal(TestUnscheduledProposals):
                            u'message': u'Scheduled Successfully',
                            u'messageClass': u'info'}],
                          browser.json.get('messages'))
-
-    @browsing
-    def test_fills_decision_with_decision_draft_value(self, browser):
-        proposal = self.setup_proposal()
-
-        view = 'unscheduled_proposals/{}/schedule'.format(
-            proposal.load_model().proposal_id)
-        browser.login().open(self.meeting_wrapper, view=view)
-
-        agenda_items = Meeting.get(self.meeting.meeting_id).agenda_items
-        self.assertEquals(u'<div>Project allowed.</div>',
-                          agenda_items[0].decision)
 
     @browsing
     def test_raise_forbidden_when_meeting_is_not_editable(self, browser):

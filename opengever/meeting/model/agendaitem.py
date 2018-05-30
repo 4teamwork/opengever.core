@@ -85,14 +85,7 @@ class AgendaItem(Base):
     decision = Column(UnicodeCoercingText)
 
     def __init__(self, *args, **kwargs):
-        """Prefill the decision attributes with proposal's decision_draft.
-        """
         proposal = kwargs.get('proposal')
-        if proposal and not kwargs.get('decision'):
-            submitted_proposal = proposal.resolve_submitted_proposal()
-            decision_draft = submitted_proposal.decision_draft
-            kwargs.update({'decision': decision_draft})
-
         document = kwargs.pop('document', None)
         if document:
             assert not proposal, 'must only have one of proposal and document'
@@ -111,7 +104,6 @@ class AgendaItem(Base):
             'is_paragraph': self.is_paragraph,
             'decision_number': self.decision_number
         }
-
         self._add_attachment_data(data)
         return data
 
