@@ -184,7 +184,7 @@ Main file for all gever styles. */
 
 .fa-times-circle:before, .removed_document:before, .no_access.removed_document:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.not_archive_all:before { content: ""; }
 
-.fa-check-circle:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.archive_all:before { content: ""; }
+.fa-check-circle:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.archive_all:before, .sharing-form .aquired:before { content: ""; }
 
 .fa-question-circle:before { content: ""; }
 
@@ -3382,5 +3382,9 @@ table.favorites .ui-sortable-helper { display: table !important; }
 .recently-touched-menu dd > ul > li .item-content .document-link { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px; }
 .recently-touched-menu dd > ul > li .item-content .item-timestamp { white-space: nowrap; }
 .recently-touched-menu dd > ul > li:last-child > span { border-bottom: 0; }
+
+.sharing-form .search_box { min-width: 200px; }
+.sharing-form .sharing-table td { padding-right: 10px; }
+.sharing-form .aquired:before { font-size: 16px; color: #51a351; }
 
 /*# sourceMappingURL=gever.css.map */

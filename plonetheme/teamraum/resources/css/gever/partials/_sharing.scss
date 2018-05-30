@@ -1,0 +1,18 @@
+.sharing-form {
+
+  .search_box {
+    min-width: 200px;
+  }
+
+  .sharing-table td {
+    padding-right: 10px;
+  }
+
+  .aquired:before {
+    @extend .fa;
+    @extend .fa-check-circle;
+    font-size: 16px;
+    color: $green;
+  }
+
+}
