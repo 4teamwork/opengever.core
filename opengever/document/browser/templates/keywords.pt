@@ -1,0 +1,10 @@
+<tal:block xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="opengever.document">
+
+    <div class="keywords"
+         tal:repeat="keyword view/get_keywords">
+        <a tal:attributes="href keyword/url"
+           tal:content="keyword/title"/>
+    </div>
+
+</tal:block>

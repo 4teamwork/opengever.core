@@ -394,6 +394,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Author',
             'creator',
             'Description',
+            'Keywords',
             'Foreign Reference',
             'Checked out',
             'Digital Available',

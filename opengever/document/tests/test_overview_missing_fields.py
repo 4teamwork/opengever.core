@@ -36,6 +36,7 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
              'Author',
              'creator',
              'Description',
+             'Keywords',
              'Foreign Reference',
              'Checked out',
              'Digital Available',

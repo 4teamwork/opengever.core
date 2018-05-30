@@ -19,7 +19,9 @@ from plone import api
 from plone.dexterity.browser.view import DefaultView
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.MimetypesRegistry.common import MimeTypeException
+from urllib import quote_plus
 from z3c.form.browser.checkbox import SingleCheckBoxWidget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getUtility
@@ -129,6 +131,7 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
     show_searchform = False
 
     file_template = ViewPageTemplateFile('templates/file.pt')
+    keywords_template = ViewPageTemplateFile('templates/keywords.pt')
     related_documents_template = ViewPageTemplateFile(
         'templates/related_documents.pt')
     archival_file_template = ViewPageTemplateFile('templates/archiv_file.pt')
@@ -146,6 +149,8 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
             CustomRow(self.render_creator_link,
                       label=_('label_creator', default='creator')),
             FieldRow('IDocumentMetadata.description'),
+            TemplateRow(self.keywords_template,
+                        label=_(u'label_keywords', default=u'Keywords')),
             FieldRow('IDocumentMetadata.foreign_reference'),
             CustomRow(self.render_checked_out_link,
                       label=_('label_checked_out', default='Checked out')),
@@ -257,6 +262,15 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
         if manager.get_checked_out_by():
             return Actor.user(manager.get_checked_out_by()).get_link()
         return ''
+
+    def get_keywords(self):
+        linked_keywords = [{
+            'url': u'{}/@@search?Subject={}'.format(
+                api.portal.get().absolute_url(),
+                quote_plus(safe_unicode(keyword).encode('utf-8'))),
+            'title': keyword,
+        } for keyword in IDocumentMetadata(self.context).keywords]
+        return linked_keywords
 
     def get_css_class(self, context=None):
         return get_css_class(context or self.context)
