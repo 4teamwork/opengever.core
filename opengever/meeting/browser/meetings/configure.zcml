@@ -27,14 +27,6 @@
   <!-- registered for admin use only, not available in the UI -->
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="download_generated_protocol"
-      class=".protocol.DownloadGeneratedProtocol"
-      permission="zope2.View"
-      />
-
-  <!-- registered for admin use only, not available in the UI -->
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="debug_docxcompose"
       class=".debug.DebugDocxCompose"
       permission="cmf.ManagePortal"

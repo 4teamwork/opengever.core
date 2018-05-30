@@ -12,10 +12,6 @@ Verfügung:
   herunterzuladen, das zum Generieren des Dokuments aus der Sablon-Vorlage
   verwendet wird.
 
-- Inhaltstyp Sitzung: ``download_generated_protocol`` ermöglicht es, ein
-  Protokoll einer Sitzung zu generieren und herunterzuladen, ohne dass das
-  bestehende Protokoll (das im GEVER abgelegte Dokument) verändert wird.
-
 - Inhaltstyp Sitzung: ``debug_docxcompose`` ermöglicht es die ``docx`` Dateien,
   die zum Protokoll zusammengesetzt werden, separat in einem ``zip``
   herunterzuladen. Dies ermöglicht es Fehler im docxcompose einfacher zu
