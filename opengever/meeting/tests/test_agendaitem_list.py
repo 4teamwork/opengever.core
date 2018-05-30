@@ -156,12 +156,7 @@ class TestAgendaItemList(FunctionalTestCase):
         proposal = create(Builder('submitted_proposal')
                           .within(committee)
                           .having(title='Mach doch',
-                                  committee=committee,
-                                  legal_basis=u'We may do it',
-                                  decision_draft=u'Proposal approved',
-                                  initial_position=u'We should do it.',
-                                  proposed_action=u'Do it.',
-                                  considerations=u'Uhm....'))
+                                  committee=committee))
 
         create(Builder('agenda_item')
                .having(title=u'foo', number=u'2', meeting=meeting))
@@ -175,16 +170,6 @@ class TestAgendaItemList(FunctionalTestCase):
             [{u'decision_number': None,
               u'description': u'Mach doch',
               u'dossier_reference_number': u'123',
-              u'html:considerations': u'Uhm....',
-              u'html:copy_for_attention': None,
-              u'html:decision': u'Proposal approved',
-              u'html:decision_draft': u'Proposal approved',
-              u'html:disclose_to': None,
-              u'html:discussion': u'I say Nay!',
-              u'html:initial_position': u'We should do it.',
-              u'html:legal_basis': u'We may do it',
-              u'html:proposed_action': u'Do it.',
-              u'html:publish_in': None,
               u'is_paragraph': False,
               u'number': u'1.',
               u'repository_folder_title': u'repo',
@@ -192,16 +177,6 @@ class TestAgendaItemList(FunctionalTestCase):
              {u'decision_number': None,
               u'description': u'foo',
               u'dossier_reference_number': None,
-              u'html:considerations': None,
-              u'html:copy_for_attention': None,
-              u'html:decision': None,
-              u'html:decision_draft': None,
-              u'html:disclose_to': None,
-              u'html:discussion': None,
-              u'html:initial_position': None,
-              u'html:legal_basis': None,
-              u'html:proposed_action': None,
-              u'html:publish_in': None,
               u'is_paragraph': False,
               u'number': u'2.',
               u'repository_folder_title': None,
