@@ -48,6 +48,8 @@ Reiter Allgemein
       werden muss; daher kann bei diesen beiden Auftragstypen die Aufgabe
       durch den Auftragnehmer abgeschlossen werden.
 
+    Mehr zu diesem Thema, beispielsweise auch welche Rechte je Auftragstyp gelten findet sich unter :ref:`aufgaben-workflow`.
+
 4. **Auftragnehmer:** Diejenige Person, die den Auftrag erledigen soll.
 
    Bei Mehrmandanteninstallationen von OneGov GEVER

@@ -9,7 +9,7 @@ Mit Aufgaben arbeiten
    erstellen
    detailansicht
    unteraufgabe
-   workflow
+   aufgaben-workflow
    empfangene_bearbeiten
    erledigte_abschliessen
    auflisten_von_statusaenderungen
