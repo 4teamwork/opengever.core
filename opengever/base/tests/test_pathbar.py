@@ -70,6 +70,8 @@ class TestPathBar(IntegrationTestCase):
 
     @browsing
     def test_meeting_is_linked_with_title(self, browser):
+        self.activate_feature('meeting')
+
         self.login(self.meeting_user, browser)
         browser.open(self.meeting)
 

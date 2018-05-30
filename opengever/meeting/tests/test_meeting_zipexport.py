@@ -25,6 +25,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
     @browsing
     def test_zip_export_includes_generated_protocol(self, browser):
         self.login(self.committee_responsible, browser)
+        self.meeting.model.update_protocol_document()
         self.assertTrue(self.meeting.model.has_protocol_document())
 
         browser.open(self.meeting, view='export-meeting-zip')

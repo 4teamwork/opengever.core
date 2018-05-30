@@ -1,6 +1,9 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import localized_datetime
+from pyquery import PyQuery
 
 
 ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
@@ -10,14 +13,90 @@ class TestWordMeeting(IntegrationTestCase):
     features = ('meeting', 'word-meeting')
 
     @browsing
-    def test_excerpts_section_no_longer_in_sidebar(self, browser):
-        """The sablon-based excerpts no longer work with word files.
-        Therefore the word-meeting feature flag should remove the excerpt
-        generation section from the metadata sidebar in the meeting view.
-        """
+    def test_add_meeting_and_dossier(self, browser):
         self.login(self.committee_responsible, browser)
-        browser.open(self.meeting)
-        self.assertFalse(browser.css('.sidebar .excerpts'))
+        committee_model = self.committee.load_model()
+        previous_meetings = len(committee_model.meetings)
+
+        # create meeting
+        browser.open(self.committee, view='add-meeting')
+        browser.fill({
+            'Title': u'M\xe4\xe4hting',
+            'Start': '01.01.2010 10:00',
+            'End': '01.01.2010 11:00',
+            'Location': 'Somewhere',
+        }).submit()
+
+        # create dossier
+        browser.find('Save').click()
+
+        # back to meeting page
+        self.assertEqual(
+            [u'The meeting and its dossier were created successfully'],
+            info_messages())
+
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1#meetings',
+            browser.url)
+
+        committee_model = self.committee.load_model()
+        self.assertEqual(previous_meetings + 1, len(committee_model.meetings))
+        meeting = committee_model.meetings[-1]
+
+        self.assertEqual(localized_datetime(2010, 1, 1, 10), meeting.start)
+        self.assertEqual(localized_datetime(2010, 1, 1, 11), meeting.end)
+        self.assertEqual('Somewhere', meeting.location)
+        dossier = meeting.dossier_oguid.resolve_object()
+        self.assertIsNotNone(dossier)
+        self.assertEquals(u'M\xe4\xe4hting', dossier.title)
+        self.assertIsNotNone(meeting.modified)
+
+    @browsing
+    def test_meeting_title_is_used_as_site_title_and_heading(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting.absolute_url())
+
+        self.assertEquals(
+            [u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+            browser.css('h1').text)
+        self.assertEquals(
+            u'9. Sitzung der Rechnungspr\xfcfungskommission \u2014 Plone site',
+            browser.css('title').first.text)
+
+    @browsing
+    def test_regression_add_meeting_without_end_date_does_not_fail(self, browser):
+        self.login(self.committee_responsible, browser)
+        committee_model = self.committee.load_model()
+        previous_meetings = len(committee_model.meetings)
+
+        # create meeting
+        browser.open(self.committee, view='add-meeting')
+        browser.fill({
+            'Start': '01.01.2010 10:00',
+            'End': '',
+            'Location': u'B\xe4rn',
+        }).submit()
+        # create dossier
+        browser.find('Save').click()
+
+        committee_model = self.committee.load_model()
+        self.assertEqual(previous_meetings + 1, len(committee_model.meetings))
+        meeting = committee_model.meetings[-1]
+        self.assertIsNone(meeting.end)
+
+    def test_meeting_link(self):
+        self.login(self.committee_responsible)
+
+        link = PyQuery(self.meeting.model.get_link())[0]
+
+        self.assertEqual(
+            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
+            link.get('href'))
+        self.assertEqual('contenttype-opengever-meeting-meeting', link.get('class'))
+        self.assertEqual(u'9. Sitzung der Rechnungspr\xfcfungskommission',
+                         link.get('title'))
+        self.assertEqual(u'9. Sitzung der Rechnungspr\xfcfungskommission',
+                         link.text)
 
     @browsing
     def test_zipexport_action_in_action_menu(self, browser):
@@ -27,17 +106,6 @@ class TestWordMeeting(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
         self.assertIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
-
-    @browsing
-    def test_zipexport_action_not_in_action_menu_without_word_feature(self, browser):
-        """The zipexport action should not be available in the actions menu
-        when the word-meeting feature is not enabled.
-        In this case the action is available in the sidebar.
-        """
-        self.deactivate_feature('word-meeting')
-        self.login(self.manager, browser)
-        browser.open(self.meeting)
-        self.assertNotIn(ZIP_EXPORT_ACTION_LABEL, editbar.menu_options('Actions'))
 
     @browsing
     def test_zipexport_action_not_available_on_non_meeting_content(self, browser):
@@ -95,6 +163,7 @@ class TestWordMeeting(IntegrationTestCase):
             browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(1, model.protocol_document.generated_version)
+        self.assertEquals(u'closed', model.workflow_state)
 
     @browsing
     def test_re_closing_meeting_regenerates_the_protocol(self, browser):
