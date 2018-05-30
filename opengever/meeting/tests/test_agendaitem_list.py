@@ -161,8 +161,7 @@ class TestAgendaItemList(FunctionalTestCase):
         create(Builder('agenda_item')
                .having(title=u'foo', number=u'2', meeting=meeting))
         create(Builder('agenda_item')
-               .having(meeting=meeting, proposal=proposal,
-                       discussion=u'I say Nay!', number=u'1'))
+               .having(meeting=meeting, proposal=proposal))
 
         browser.login().open(meeting.get_url(view='agenda_item_list/as_json'))
 

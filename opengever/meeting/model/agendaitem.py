@@ -7,7 +7,6 @@ from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
@@ -81,9 +80,6 @@ class AgendaItem(Base):
 
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
 
-    discussion = Column(UnicodeCoercingText)
-    decision = Column(UnicodeCoercingText)
-
     def __init__(self, *args, **kwargs):
         proposal = kwargs.get('proposal')
         document = kwargs.pop('document', None)
@@ -146,9 +142,7 @@ class AgendaItem(Base):
             self.title = title
 
     def get_decision_number(self):
-        if not is_word_meeting_implementation_enabled():
-            return self.decision_number
-
+        # XXX huh? what is this?
         if not self.decision_number:
             return self.decision_number
 

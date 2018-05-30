@@ -4,7 +4,6 @@ from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.exceptions import MissingAdHocTemplate
@@ -277,28 +276,28 @@ class AgendaItemsView(BrowserView):
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
             if item.is_paragraph:
                 data['paragraph'] = True
-            if is_word_meeting_implementation_enabled():
-                document = item.resolve_document()
-                if document:
-                    data['document_link'] = (
-                        IContentListingObject(document).render_link())
-                    data.update(self._get_edit_document_options(
-                        document, item, meeting))
 
-                data['excerpts'] = self._serialize_excerpts(meeting, item)
-                if item.can_generate_excerpt():
-                    data['generate_excerpt_default_title'] = translate(
-                        _(u'excerpt_document_default_title',
-                          default=u'Excerpt ${title}',
-                          mapping={'title': safe_unicode(item.get_title())}),
-                        context=self.request,
-                    ).strip()
-                    data['generate_excerpt_link'] = meeting.get_url(
-                        view='agenda_items/{}/generate_excerpt'.format(
-                            item.agenda_item_id))
+            document = item.resolve_document()
+            if document:
+                data['document_link'] = (
+                    IContentListingObject(document).render_link())
+                data.update(self._get_edit_document_options(
+                    document, item, meeting))
 
-                if item.is_decided():
-                    data['css_class'] += ' decided'
+            data['excerpts'] = self._serialize_excerpts(meeting, item)
+            if item.can_generate_excerpt():
+                data['generate_excerpt_default_title'] = translate(
+                    _(u'excerpt_document_default_title',
+                      default=u'Excerpt ${title}',
+                      mapping={'title': safe_unicode(item.get_title())}),
+                    context=self.request,
+                ).strip()
+                data['generate_excerpt_link'] = meeting.get_url(
+                    view='agenda_items/{}/generate_excerpt'.format(
+                        item.agenda_item_id))
+
+            if item.is_decided():
+                data['css_class'] += ' decided'
 
             agenda_items.append(data)
         return agenda_items
@@ -398,10 +397,6 @@ class AgendaItemsView(BrowserView):
         return response.dump()
 
     def _checkin_proposal_document_before_deciding(self):
-        if not is_word_meeting_implementation_enabled():
-            # old implementation: there is no proposal document
-            return
-
         if not self.agenda_item.has_proposal:
             # no proposal => no document to checkin
             return
@@ -499,10 +494,7 @@ class AgendaItemsView(BrowserView):
                     _('empty_proposal', default=u"Proposal must not be empty.")
                 ).proceed().dump()
 
-        if is_word_meeting_implementation_enabled():
-            self.meeting.schedule_ad_hoc(title)
-        else:
-            self.meeting.schedule_text(title)
+        self.meeting.schedule_ad_hoc(title)
 
         return JSONResponse(self.request).info(
             _('text_added', default=u"Text successfully added.")).proceed().dump()
