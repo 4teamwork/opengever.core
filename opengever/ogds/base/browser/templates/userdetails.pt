@@ -50,7 +50,7 @@
             <th i18n:translate="label_directorate">Directorate</th>
             <td>
               <tal:title tal:replace="user/directorate" />
-              <span class="discreet">
+              <span class="discreet" tal:condition="user/directorate_abbr">
                 (<tal:abbr tal:replace="user/directorate_abbr" />)
               </span>
             </td>
@@ -60,7 +60,7 @@
             <th i18n:translate="label_department">Department</th>
             <td>
               <tal:title tal:replace="user/department" />
-              <span class="discreet">
+              <span class="discreet" tal:condition="user/department_abbr">
                 (<tal:abbr tal:replace="user/department_abbr" />)
               </span>
             </td>

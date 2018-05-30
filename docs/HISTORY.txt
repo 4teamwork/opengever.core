@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Omit parentheses if no abbreviation for directorate or department available. [tarnap]
 - Make document mimetype lookups case insensitive. [Rotonen]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Do not apply the current date to meeting titles. [Rotonen]
