@@ -23,6 +23,7 @@ Power-User und Administratoren von OneGov GEVER.
    standardablauferstellen.rst
    docproperties/index.rst
    meeting/index.rst
+   teams.rst
    ogg-bundle.rst
 
 * :ref:`genindex`

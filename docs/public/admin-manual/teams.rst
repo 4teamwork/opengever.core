@@ -1,7 +1,7 @@
 Teams verwalten
 ===============
 
-In OneGov GEVER können seit neuem Teams als Auftragnehmer einer Aufgabe verwendet werden. Solche sind global über den ganzen Mandantenverbund ersichtlich und können zurzeit nur durch einen Manager, also durch einen 4Teamwork Mitarbeiter, erstellt bzw. bearbeitet werden.
+In OneGov GEVER können seit neuem Teams als Auftragnehmer einer Aufgabe verwendet werden. Solche sind global über den ganzen Mandantenverbund ersichtlich und können nur durch einen Administrator erstellt bzw. bearbeitet werden.
 
 Alle Teams sind im Hauptnavigationspunkt "Kontakte" im separaten Reiter "Teams" aufgelistet:
 
@@ -25,7 +25,7 @@ Via der Detailansicht eines Teams, können diese auch bearbeitet werden:
    |team-edit|
 
 
- .. |team-listing| image:: ../_static/img/team_listing.png
- .. |team-edit| image:: ../_static/img/team_edit.png
- .. |team-add-1| image:: ../_static/img/team_add_1.png
- .. |team-add-2| image:: ../_static/img/team_add_2.png
+ .. |team-listing| image:: _static/img/team_listing.png
+ .. |team-edit| image:: _static/img/team_edit.png
+ .. |team-add-1| image:: _static/img/team_add_1.png
+ .. |team-add-2| image:: _static/img/team_add_2.png
