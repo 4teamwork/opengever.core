@@ -374,6 +374,11 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertIsNone(agenda_item.proposal.excerpt_document)
         self.assertIsNone(agenda_item.proposal.submitted_excerpt_document)
 
+        # temporarily block access to dossier
+        self.dossier.__ac_local_roles_block__ = True
+        with browser.expect_unauthorized():
+            browser.open(self.dossier)
+
         return_excerpt_url = addTokenToUrl(self.meeting.model.get_url(
             view='agenda_items/{}/return_excerpt?document={}'.format(
                 agenda_item.agenda_item_id, IUUID(excerpt))))
@@ -409,3 +414,15 @@ class TestWordAgendaItem(IntegrationTestCase):
         self.assertEquals(
             expected_url.split('&_authenticator')[0],
             excerpt_data['create_task_url'].split('&_authenticator')[0])
+
+    @browsing
+    def test_agendaitem_with_excerpts_has_documents(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting,
+                                             self.submitted_word_proposal)
+        agenda_item.decide()
+        agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
+
+        browser.open(self.meeting, view='agenda_items/list')
+        agenda_item_data = browser.json['items'][0]
+        self.assertTrue(agenda_item_data.get('has_documents'))

@@ -10,7 +10,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
@@ -56,9 +55,6 @@ class CloseTransition(Transition):
     """
 
     def get_validation_errors(self, model):
-        if not is_word_meeting_implementation_enabled():
-            return ()
-
         if model.get_undecided_agenda_items():
             return [_(u'label_close_error_has_undecided_agenda_items',
                       u'The meeting cannot be closed because it has undecided'
@@ -119,11 +115,9 @@ class Meeting(Base, SQLFormSupport):
              'held', 'closed',
              title=_('close_meeting', default='Close meeting')),
          Transition('closed', 'held',
-                    title=_('reopen', default='Reopen'),
-                    condition=is_word_meeting_implementation_enabled),
+                    title=_('reopen', default='Reopen')),
          CancelTransition('pending', 'cancelled',
-                          title=_('cancel', default='Cancel'),
-                          condition=is_word_meeting_implementation_enabled),
+                          title=_('cancel', default='Cancel')),
          ],
         show_in_actions_menu=True,
         transition_controller=MeetingTransitionController,

@@ -68,7 +68,8 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
+
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
 
         self.assertEqual(browser.url, meeting.get_url())
         self.assertEqual(
@@ -83,8 +84,9 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
-        browser.css('.download-agendaitem-list-btn').first.click()
+
+        browser.css('.document-actions .action.generate').first.click()
+        browser.css('.document-actions .action.download').first.click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
@@ -94,44 +96,25 @@ class TestAgendaItemList(FunctionalTestCase):
             browser.headers)
 
     @browsing
-    def test_agendaitem_list_cannot_be_regenerated(self, browser):
-        meeting = create(Builder('meeting')
-                         .having(committee=self.committee_model)
-                         .link_with(self.meeting_dossier))
-
-        browser.login().open(meeting.get_url())
-
-        generate_url = browser.css('.generate-agendaitem-list').first.get('href')
-        browser.open(generate_url)
-        self.assertIn('has been generated successfully', browser.css('.portalMessage.info')[-1].text)
-
-        generated_document = meeting.agendaitem_list_document.resolve_document()
-        browser.open(generate_url)
-        self.assertIn('has already been generated', browser.css('.portalMessage.error').first.text)
-        self.assertTrue(meeting.agendaitem_list_document.resolve_document() == generated_document,
-                        'Unexpectedly generated a new document.')
-        self.assertEqual(None, generated_document.get_current_version_id())
-
-    @browsing
     def test_updated_agendaitem_list_can_be_downloaded(self, browser):
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
         generated_document = meeting.agendaitem_list_document.resolve_document()
         self.assertEqual(None, generated_document.get_current_version_id(),
                          'Did not generate a new fresh document.')
 
-        browser.css('.refresh-agendaitem-list').first.click()
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
         refreshed_document = meeting.agendaitem_list_document.resolve_document()
         self.assertTrue(generated_document == refreshed_document,
                         'Unexpectedly generated a new document instead of a document version when refreshing an agenda item.')
         self.assertNotEqual(0, refreshed_document.version_id,
                             'Unexpectedly generated a new fresh document.')
 
-        browser.css('.download-agendaitem-list-btn').first.click()
+        browser.css('.agenda-item-list-doc .action.download').first.click()
 
         self.assertDictContainsSubset(
             {
