@@ -13,9 +13,7 @@ from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
-from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
-from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
@@ -275,15 +273,6 @@ class MeetingView(BrowserView):
         return document.render_link(title=_(u'document_label_agenda_item_list',
                                             default=u'Agenda item list'),
                                     show_icon=False)
-
-    def url_generate_protocol(self):
-        if is_word_meeting_implementation_enabled():
-            return self.url_merge_docx_protocol()
-
-        if not self.model.has_protocol_document():
-            return GenerateProtocol.url_for(self.model)
-        else:
-            return UpdateProtocol.url_for(self.model)
 
     def url_merge_docx_protocol(self):
         return MergeDocxProtocol.url_for(self.model)

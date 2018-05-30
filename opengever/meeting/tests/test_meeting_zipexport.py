@@ -3,7 +3,6 @@ from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
-from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
 from StringIO import StringIO
@@ -26,7 +25,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
     @browsing
     def test_zip_export_includes_generated_protocol(self, browser):
         self.login(self.committee_responsible, browser)
-        browser.open(GenerateProtocol.url_for(self.meeting.model))
         self.assertTrue(self.meeting.model.has_protocol_document())
 
         browser.open(self.meeting, view='export-meeting-zip')
@@ -37,7 +35,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
     @browsing
     def test_zip_export_generate_protocol_if_outdated(self, browser):
         self.login(self.committee_responsible, browser)
-        browser.open(GenerateProtocol.url_for(self.meeting.model))
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
