@@ -49,13 +49,6 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="generate_excerpt"
-      class=".excerpt.GenerateExcerpt"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="agenda_items"
       class=".agendaitem.AgendaItemsView"
       permission="zope2.View"

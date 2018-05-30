@@ -317,20 +317,11 @@ class MeetingView(BrowserView):
     def url_zipexport(self):
         return self.model.get_url(view='export-meeting-zip')
 
-    def url_manually_generate_excerpt(self):
-        return self.model.get_url(view='generate_excerpt')
-
     def transitions(self):
         return self.model.get_state().get_transitions()
 
     def agenda_items(self):
         return self.model.agenda_items
-
-    def manually_generated_excerpts(self):
-        docs = [excerpt.resolve_document()
-                for excerpt in self.model.excerpt_documents]
-
-        return IContentListing(docs)
 
     def render_handlebars_agendaitems_template(self):
         if is_word_meeting_implementation_enabled():
