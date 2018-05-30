@@ -51,13 +51,6 @@ meeting_participants = Table(
 )
 
 
-meeting_excerpts = Table(
-    'meeting_excerpts', Base.metadata,
-    Column('meeting_id', Integer, ForeignKey('meetings.id')),
-    Column('document_id', Integer, ForeignKey('generateddocuments.id'))
-)
-
-
 class CloseTransition(Transition):
     """Used by pending-closed and held-closed transitions.
     """
@@ -182,12 +175,6 @@ class Meeting(Base, SQLFormSupport):
         'GeneratedAgendaItemList', uselist=False,
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedAgendaItemList.document_id==Meeting.agendaitem_list_document_id")
-
-    # define relationship here using a secondary table to keep
-    # GeneratedDocument as simple as possible and avoid that it actively
-    # knows about all its relationships
-    excerpt_documents = relationship('GeneratedExcerpt',
-                                     secondary=meeting_excerpts,)
 
     def get_other_participants_list(self):
         if self.other_participants is not None:
