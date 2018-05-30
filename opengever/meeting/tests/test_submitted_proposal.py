@@ -72,20 +72,22 @@ class TestSubmittedProposal(IntegrationTestCase):
              u'label_committee',
              u'label_dossier',
              u'label_meeting',
-             u'label_legal_basis',
-             u'label_initial_position',
-             u'label_proposed_action',
-             u'label_considerations',
-             u'label_discussion',
-             u'label_decision_draft',
-             u'label_decision',
-             u'label_publish_in',
-             u'label_disclose_to',
-             u'label_copy_for_attention',
              u'label_workflow_state',
              u'label_decision_number'],
             [attribute.get('label') for attribute in attributes],
             )
+
+    def test_sql_index_proposal_title_is_updated(self):
+        # an agenda item is needed for this test
+        self.login(self.committee_responsible)
+        self.meeting.model.schedule_proposal(self.proposal.load_model())
+        agenda_item = self.meeting.model.agenda_items[0]
+        self.assertEquals(agenda_item.get_title(), agenda_item.proposal.submitted_title)
+
+        agenda_item.set_title('New agenda item title')
+
+        self.assertEquals('New agenda item title', agenda_item.get_title())
+        self.assertEquals('New agenda item title', agenda_item.proposal.submitted_title)
 
     def test_get_containing_dossier_for_submitted_proposal_if_on_same_admin_unit(self):
         self.login(self.committee_responsible)

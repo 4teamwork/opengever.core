@@ -4,8 +4,6 @@ from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -195,11 +193,6 @@ class Proposal(Base):
     def css_class(self):
         return 'contenttype-opengever-meeting-proposal'
 
-    def get_decision(self):
-        if self.agenda_item:
-            return self.agenda_item.decision
-        return None
-
     def get_decision_number(self):
         if self.agenda_item:
             return self.agenda_item.get_decision_number()
@@ -262,11 +255,7 @@ class Proposal(Base):
         return [doc.resolve_submitted() for doc in self.submitted_documents]
 
     def has_submitted_documents(self):
-        if is_word_meeting_implementation_enabled():
-            return bool(self.submitted_documents)
-
-        return bool(
-            self.submitted_documents or self.submitted_excerpt_document)
+        return bool(self.submitted_documents)
 
     def resolve_excerpt_document(self):
         document = self.excerpt_document
@@ -334,15 +323,13 @@ class Proposal(Base):
 
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
-        if is_word_meeting_implementation_enabled():
-            document = self.resolve_submitted_proposal().get_proposal_document()
-            checkout_manager = getMultiAdapter((document, document.REQUEST),
-                                               ICheckinCheckoutManager)
-            if checkout_manager.get_checked_out_by() is not None:
-                raise ValueError(
-                    'Cannot revise proposal when proposal document is checked out.')
-        else:
-            self.update_excerpt(agenda_item)
+
+        document = self.resolve_submitted_proposal().get_proposal_document()
+        checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                           ICheckinCheckoutManager)
+        if checkout_manager.get_checked_out_by() is not None:
+            raise ValueError(
+                'Cannot revise proposal when proposal document is checked out.')
 
         IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
@@ -369,17 +356,12 @@ class Proposal(Base):
         UpdateExcerptInDossierCommand(self).execute()
 
     def decide(self, agenda_item):
-        if is_word_meeting_implementation_enabled():
-            document = self.resolve_submitted_proposal().get_proposal_document()
-            checkout_manager = getMultiAdapter((document, document.REQUEST),
-                                               ICheckinCheckoutManager)
-            if checkout_manager.get_checked_out_by() is not None:
-                raise ValueError(
-                    'Cannot decide proposal when proposal document is checked out.')
-        else:
-            self.generate_excerpt(agenda_item)
-            document_intid = self.copy_excerpt_to_proposal_dossier()
-            self.register_excerpt(document_intid)
+        document = self.resolve_submitted_proposal().get_proposal_document()
+        checkout_manager = getMultiAdapter((document, document.REQUEST),
+                                           ICheckinCheckoutManager)
+        if checkout_manager.get_checked_out_by() is not None:
+            raise ValueError(
+                'Cannot decide proposal when proposal document is checked out.')
 
         IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
@@ -395,7 +377,6 @@ class Proposal(Base):
         self.session.add(excerpt)
         self.excerpt_document = excerpt
 
-    @require_word_meeting_feature
     def return_excerpt(self, document):
         """Return the selected excerpt to the proposals originating dossier.
 

@@ -11,7 +11,6 @@ from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
@@ -471,12 +470,11 @@ class CreateSubmittedProposalCommand(object):
                                     name='field-data')
         jsondata['field-data'] = collector.extract()
 
-        if is_word_meeting_implementation_enabled():
-            blob = self.proposal.get_proposal_document().file
-            jsondata['file'] = {
-                'filename': blob.filename,
-                'contentType': blob.contentType,
-                'data': base64.encodestring(blob.data)}
+        blob = self.proposal.get_proposal_document().file
+        jsondata['file'] = {
+            'filename': blob.filename,
+            'contentType': blob.contentType,
+            'data': base64.encodestring(blob.data)}
 
         record = IHistory(self.proposal).append_record(u'submitted')
         history_data = advancedjson.dumps({'uuid': record.uuid})

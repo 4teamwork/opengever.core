@@ -4,7 +4,6 @@ from opengever.base.interfaces import IDataCollector
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
@@ -39,11 +38,10 @@ class CreateSubmittedProposal(BrowserView):
             # sync data to proposal after inserting field data
             submitted_proposal.sync_model(proposal_model=proposal)
 
-            if is_word_meeting_implementation_enabled():
-                submitted_proposal.create_proposal_document(
-                    filename=data['file']['filename'],
-                    content_type=data['file']['contentType'].encode('utf-8'),
-                    data=base64.decodestring(data['file']['data']))
+            submitted_proposal.create_proposal_document(
+                filename=data['file']['filename'],
+                content_type=data['file']['contentType'].encode('utf-8'),
+                data=base64.decodestring(data['file']['data']))
 
             history_data = advancedjson.loads(self.request.get('history_data'))
             IHistory(submitted_proposal).append_record(

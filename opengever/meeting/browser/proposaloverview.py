@@ -3,7 +3,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _ as document_mf
 from opengever.document.widgets.document_link import DocumentLinkWidget
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
@@ -11,7 +10,6 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.tabbedview import GeverTabMixin
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
-from Products.Five.browser import BrowserView
 
 
 class OverviewBase(object):
@@ -53,9 +51,10 @@ class OverviewBase(object):
         return not ISubmittedProposal.providedBy(self.context)
 
     def show_preview(self):
-        return is_bumblebee_feature_enabled() and \
-            is_word_meeting_implementation_enabled() and \
-            self.context.get_proposal_document() is not None
+        return (
+            is_bumblebee_feature_enabled()
+            and self.context.get_proposal_document() is not None
+        )
 
     def get_preview_image_url(self):
         return bumblebee.get_service_v3().get_representation_url(

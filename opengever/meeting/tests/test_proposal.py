@@ -87,14 +87,8 @@ class TestProposal(IntegrationTestCase):
         factoriesmenu.add('Proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Committee': str(self.committee_id),
-            'Legal basis': u'<div>possible</div>',
-            'Initial position': u'<div>My pr\xf6posal</div>',
-            'Proposed action': u'<div>Lorem ips\xfcm</div>',
-            'Decision draft': u'<div>Project allowed.</div>',
-            'Publish in': u'<div>B\xe4rner Zeitung</div>',
-            'Disclose to': u'<div>Hansj\xf6rg</div>',
-            'Copy for attention': u'<div>   &nbsp; \n  &nbsp;</div>',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal template': u'Geb\xfchren',
             'Attachments': [self.document],
         }).save()
         statusmessages.assert_no_error_messages()
@@ -104,13 +98,6 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
         self.assertEqual(u'A pr\xf6posal', proposal.title)
-        self.assertEqual(u'<div>possible</div>', proposal.legal_basis)
-        self.assertEqual(u'<div>Lorem ips\xfcm</div>', proposal.proposed_action)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
-        self.assertEqual(u'<div>Project allowed.</div>', proposal.decision_draft)
-        self.assertEqual(u'<div>B\xe4rner Zeitung</div>', proposal.publish_in)
-        self.assertEqual(u'<div>Hansj\xf6rg</div>', proposal.disclose_to)
-        self.assertEqual(u'<div></div>', proposal.copy_for_attention)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
@@ -122,9 +109,8 @@ class TestProposal(IntegrationTestCase):
                          model.repository_folder_title)
         self.assertEqual(u'en', model.language)
 
-        self.assertTrue(set(['a', 'proposal', 'my', 'proposal']).issubset(set(
+        self.assertTrue(set(['a', 'proposal']).issubset(set(
                             index_data_for(proposal)['SearchableText'])))
-
         self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
 
     @browsing
@@ -134,10 +120,9 @@ class TestProposal(IntegrationTestCase):
         factoriesmenu.add('Proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
-            'Legal basis': u'possible',
-            'Initial position': u'My pr\xf6posal',
-            'Proposed action': u'Lorem ips\xfcm',
-            'Committee': str(self.committee_id)}).save()
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal template': u'Geb\xfchren',
+        }).save()
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Item created')
 
@@ -150,7 +135,7 @@ class TestProposal(IntegrationTestCase):
                          ' reference number of the main dossier.')
 
     @browsing
-    def test_proposal_can_be_edited_in_browser_and_strips_whitespace(self, browser):
+    def test_proposal_can_be_edited_in_browser(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.visit(self.draft_proposal)
         editbar.contentview('Edit').click()
@@ -159,13 +144,6 @@ class TestProposal(IntegrationTestCase):
 
         browser.fill({
             'Title': u'Another pr\xf6posal',
-            'Legal basis': u'<div>not possible</div>',
-            'Initial position': u'<div>My pr\xf6posal</div>',
-            'Proposed action': u'<div>&nbsp; do it  \r </div>',
-            'Committee': str(self.committee_id),
-            'Publish in': u'<div>B\xe4rner Zeitung</div>',
-            'Disclose to': u'<div>Hansj\xf6rg</div>',
-            'Copy for attention': u'<div>P\xe4tra</div>',
             'Attachments': [self.document]}).save()
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Changes saved')
@@ -174,16 +152,9 @@ class TestProposal(IntegrationTestCase):
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'Another pr\xf6posal'],
-             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Committee', u'Kommission f\xfcr Verkehr'],
              ['Meeting', ''],
-             ['Legal basis', 'not possible'],
-             ['Initial position', u'My pr\xf6posal'],
-             ['Proposed action', 'do it'],
-             ['Decision draft', ''],
-             ['Decision', ''],
-             ['Publish in', u'B\xe4rner Zeitung'],
-             ['Disclose to', u'Hansj\xf6rg'],
-             ['Copy for attention', u'P\xe4tra'],
+             ['Proposal document', u'Antrag f\xfcr Kreiselbau'],
              ['State', 'Pending'],
              ['Decision number', ''],
              ['Attachments', u'Vertr\xe4gsentwurf']],
@@ -192,9 +163,6 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
         self.assertEqual(u'Another pr\xf6posal', proposal.title)
-        self.assertEqual(u'<div>not possible</div>', proposal.legal_basis)
-        self.assertEqual(u'<div>My pr\xf6posal</div>', proposal.initial_position)
-        self.assertEqual(u'<div>do it</div>', proposal.proposed_action)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
@@ -484,14 +452,7 @@ class TestProposal(IntegrationTestCase):
             [u'label_title',
              u'label_committee',
              u'label_meeting',
-             u'label_legal_basis',
-             u'label_initial_position',
-             u'label_proposed_action',
-             u'label_decision_draft',
-             u'label_decision',
-             u'label_publish_in',
-             u'label_disclose_to',
-             u'label_copy_for_attention',
+             u'proposal_document',
              u'label_workflow_state',
              u'label_decision_number'],
             [attribute.get('label') for attribute in attributes])
@@ -519,25 +480,6 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.proposal, view='tabbedview_view-overview')
         self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
                          browser.css('.listing td').first.innerHTML)
-
-    @browsing
-    def test_nonword_fields_visible_in_proposal_addform(self, browser):
-        """When the "word implementation" feature is not enabled,
-        the "old" trix fields should be visible.
-        """
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-        factoriesmenu.add('Proposal')
-        expected = ('Legal basis',
-                    'Initial position',
-                    'Proposed action',
-                    'Decision draft',
-                    'Publish in',
-                    'Disclose to',
-                    'Copy for attention')
-        missing = tuple(set(expected) - set(browser.forms['form'].field_labels))
-        self.assertEquals((), missing)
-        self.assertNotIn('File', browser.forms['form'].field_labels)
 
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(

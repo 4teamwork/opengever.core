@@ -1,10 +1,7 @@
 from ftw.table import helper
 from opengever.base.schema import TableChoice
-from opengever.base.widgets import TrixFieldWidget
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.proposal import IProposal
@@ -31,39 +28,15 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 
 
-class FieldConfigurationMixin(object):
-    """The field omitter mixin makes sure that the right fields are present
-    in each form.
-    """
-
-    def updateFields(self):
-        super(FieldConfigurationMixin, self).updateFields()
-        textfields = ('legal_basis',
-                      'initial_position',
-                      'proposed_action',
-                      'decision_draft',
-                      'publish_in',
-                      'disclose_to',
-                      'copy_for_attention')
-
-        map(self.use_trix, textfields)
-        if is_word_meeting_implementation_enabled():
-            map(self.omit_field, textfields)
-            move(self, 'title', before='*')
-
-    def omit_field(self, fieldname):
-        self.fields = self.fields.omit(fieldname)
-
-    def use_trix(self, fieldname):
-        self.fields[fieldname].widgetFactory = TrixFieldWidget
-
-
-class ProposalEditForm(FieldConfigurationMixin,
-                       ModelProxyEditForm,
+class ProposalEditForm(ModelProxyEditForm,
                        edit.DefaultEditForm):
 
     fields = field.Fields(Proposal.model_schema, ignoreContext=True)
     content_type = Proposal
+
+    def updateFields(self):
+        super(ProposalEditForm, self).updateFields()
+        move(self, 'title', before='*')
 
     def updateWidgets(self):
         super(ProposalEditForm, self).updateWidgets()
@@ -72,8 +45,7 @@ class ProposalEditForm(FieldConfigurationMixin,
             self.widgets['language'].mode = HIDDEN_MODE
 
 
-class SubmittedProposalEditForm(FieldConfigurationMixin,
-                                ModelProxyEditForm,
+class SubmittedProposalEditForm(ModelProxyEditForm,
                                 edit.DefaultEditForm):
 
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
@@ -81,9 +53,7 @@ class SubmittedProposalEditForm(FieldConfigurationMixin,
 
     def updateFields(self):
         super(SubmittedProposalEditForm, self).updateFields()
-        self.use_trix('considerations')
-        if is_word_meeting_implementation_enabled():
-            self.fields = self.fields.omit('considerations', 'excerpts')
+        move(self, 'title', before='*')
 
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
@@ -117,16 +87,13 @@ class IAddProposal(IProposal):
         required=False)
 
 
-class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm):
+class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
     content_type = Proposal
     fields = field.Fields(Proposal.model_schema)
 
     def __init__(self, *args, **kwargs):
         super(ProposalAddForm, self).__init__(*args, **kwargs)
-        if is_word_meeting_implementation_enabled():
-            self.instance_schema = IAddProposal
-        else:
-            self.instance_schema = IProposal
+        self.instance_schema = IAddProposal
 
     @property
     def schema(self):
@@ -137,9 +104,7 @@ class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm
         return self.instance_schema
 
     def update(self):
-        if is_word_meeting_implementation_enabled():
-            self.prefillPredecessorDefaults()
-
+        self.prefillPredecessorDefaults()
         return super(ProposalAddForm, self).update()
 
     def updateFields(self):
@@ -148,6 +113,7 @@ class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm
         finally:
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
+            move(self, 'title', before='*')
 
     def updateWidgets(self):
         super(ProposalAddForm, self).updateWidgets()
@@ -155,7 +121,6 @@ class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm
         if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
 
-    @require_word_meeting_feature
     def prefillPredecessorDefaults(self):
         """When we create a successor proposal, the defaults change to
         be based on the predecessor.
@@ -194,9 +159,6 @@ class ProposalAddForm(FieldConfigurationMixin, ModelProxyAddForm, DefaultAddForm
             self.request.form['form.widgets.' + name] = value
 
     def createAndAdd(self, data):
-        if not is_word_meeting_implementation_enabled():
-            return super(ProposalAddForm, self).createAndAdd(data)
-
         proposal_template = data.pop('proposal_template')
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal

@@ -4,8 +4,9 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
 
 
-class TestWordProposalOverview(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+class TestProposalOverview(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_proposal_excerpt_document_link(self, browser):

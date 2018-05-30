@@ -20,7 +20,7 @@ DRAFT_PROPOSAL = {
      'Date of submission': ''}
 
 DECIDED_PROPOSAL = {
-    'Decision number': '1',
+    'Decision number': '2016 / 1',
     'Meeting': u'8. Sitzung der Rechnungspr\xfcfungskommission',
     'State': 'Decided',
     'Comittee': u'Rechnungspr\xfcfungskommission',
@@ -53,6 +53,7 @@ def proposal_dicts(browser):
 
 
 class TestDossierProposalListing(IntegrationTestCase):
+
     features = ('meeting',)
 
     maxDiff = None
@@ -93,7 +94,7 @@ class TestDossierProposalListing(IntegrationTestCase):
               'Titre': u'Antrag f\xfcr Kreiselbau'},
              {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': u'Cl\xf4tur\xe9',
-              u'Num\xe9ro de d\xe9cision': '1',
+              u'Num\xe9ro de d\xe9cision': '2016 / 1',
               u'R\xe9union': u'8. Sitzung der Rechnungspr\xfcfungskommission',
               'Soumis le': '31.08.2016',
               'Titre': u'Initialvertrag f\xfcr Bearbeitung'},
@@ -164,6 +165,7 @@ class TestDossierProposalListing(IntegrationTestCase):
 
         cancelled_proposal = DRAFT_PROPOSAL.copy()
         cancelled_proposal['State'] = 'Cancelled'
+
         self.assertEquals(
             [SUBMITTED_PROPOSAL, cancelled_proposal, DECIDED_PROPOSAL,
              SUBMITTED_WORD_PROPOSAL, DRAFT_WORD_PROPOSAL],
@@ -179,11 +181,10 @@ class TestDossierProposalListing(IntegrationTestCase):
         self.assertEquals([DECIDED_PROPOSAL], proposal_dicts(browser))
 
     @browsing
-    def test_decision_number_is_prefixed_when_word_feature_enabled(self, browser):
+    def test_decision_number_is_prefixed(self, browser):
         """When the word feature is enabled, the decision number is prefixed
         with the year of the meeting.
         """
-        self.activate_feature('word-meeting')
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier,
                      view='tabbedview_view-proposals',
@@ -205,6 +206,10 @@ class TestDossierProposalListing(IntegrationTestCase):
 
 
 class TestMyProposals(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    maxDiff = None
 
     @browsing
     def test_lists_only_proposals_created_by_current_user(self, browser):
@@ -260,6 +265,8 @@ class TestMyProposals(IntegrationTestCase):
 
 
 class TestSubmittedProposals(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_listing_shows_submitted_proposals_by_default(self, browser):
