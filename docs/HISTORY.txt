@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Implement recently touched menu that lists checked out documents and recently touched objects. [lgraf]
 - Sort the entries of the reference browser widget. [tarnap]
 - Improve the validation of "preserved as paper" for related documents. [tarnap]
 - Display flyup menues above the selected list items. [tarnap]
