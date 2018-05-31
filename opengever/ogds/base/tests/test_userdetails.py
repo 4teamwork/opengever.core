@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 
@@ -29,6 +30,25 @@ class TestUserDetails(IntegrationTestCase):
             'Salutation': 'Prof. Dr.',
             'Teams': u'Projekt \xdcberbaung Dorfmatte',
             'URL': 'http://www.example.com',
+        }, metadata)
+
+    @browsing
+    def test_parentheses_do_not_appear_without_abbreviation(self, browser):
+        self.login(self.regular_user, browser)
+
+        kathi = ogds_service().fetch_user('kathi.barfuss')
+        kathi.department_abbr = None
+        kathi.directorate_abbr = None
+
+        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+
+        self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
+                          browser.css('h1.documentFirstHeading').text)
+
+        metadata = dict(browser.css('.vertical').first.lists())
+        self.assertDictContainsSubset({
+            'Department': 'Staatskanzlei',
+            'Directorate': 'Staatsarchiv',
         }, metadata)
 
     @browsing
