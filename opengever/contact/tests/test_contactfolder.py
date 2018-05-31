@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.contact.interfaces import IContactFolder
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
-from plone import api
 from unittest import skip
 
 
@@ -31,7 +28,7 @@ class TestContactFolder(IntegrationTestCase):
                       'Title (French)': u'Contacts'})
         browser.find('Save').click()
 
-        browser.find(u'Français').click()
+        browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u"Contacts", browser.css('h1').first.text)
 
         browser.find('Deutsch').click()
@@ -57,3 +54,10 @@ class TestLocalContactListing(IntegrationTestCase):
              u'D\xfcrr Hanspeter',
              u'Meier Franz meier.f@example.com'],
             browser.css('.listing').first.rows.text)
+
+    @browsing
+    def test_administrator_has_add_team_action_visible(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.open(self.contactfolder)
+        available_actions = browser.css('dd.actionMenuContent span').text
+        self.assertIn('Team', available_actions)
