@@ -86,6 +86,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, self.draft_proposal)
         # submit proposal
         browser.css('#pending-submitted').first.click()
+        browser.css('#form-buttons-save').first.click()
         expected_history = [u'Submitted by B\xe4rfuss K\xe4thi (kathi.barfuss)']
         with self.login(self.meeting_user, browser):
             self.assert_proposal_history_records(expected_history, self.draft_proposal, browser, with_submitted=True)
@@ -108,6 +109,8 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, self.draft_proposal)
         # cancel proposal
         browser.css('#pending-cancelled').first.click()
+        browser.css('#form-buttons-save').first.click()
+
         self.assert_proposal_history_records(
             u'Proposal cancelled by B\xe4rfuss K\xe4thi (kathi.barfuss)',
             self.draft_proposal,
@@ -115,6 +118,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             )
         # reactivate proposal
         browser.css('#cancelled-pending').first.click()
+        browser.css('#form-buttons-save').first.click()
         self.assert_proposal_history_records(
             u'Proposal reactivated by B\xe4rfuss K\xe4thi (kathi.barfuss)',
             self.draft_proposal,
