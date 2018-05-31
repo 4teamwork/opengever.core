@@ -2,13 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.meeting import _
 from plone import api
-from plone.z3cform import layout
-from z3c.form.field import Fields
-from z3c.form.form import button
-from z3c.form.form import Form
 from zExceptions import NotFound
-from zope import schema
-from zope.interface import Interface
 
 
 class ProposalTransitionController(object):
@@ -31,12 +25,15 @@ class ProposalTransitionController(object):
             api.portal.show_message(message=msg,
                                     request=self.request,
                                     type='error')
-            return self.redirect_to_proposal()
+            return self.redirect()
 
         if not self.is_valid_transition(transition):
             raise NotFound
         self.context.execute_transition(transition, text)
-        return self.redirect_to_proposal()
+        if transition == 'submitted-pending':
+            return self.redirect(to_parent=True)
+        else:
+            return self.redirect()
 
     def is_valid_transition(self, transition_name):
         if not api.user.has_permission('Modify portal content', obj=self.context):
@@ -44,51 +41,11 @@ class ProposalTransitionController(object):
 
         return self.context.can_execute_transition(transition_name)
 
-    def redirect_to_proposal(self):
+    def redirect(self, to_parent=False):
+        if to_parent:
+            url = aq_parent(aq_inner(self.context)).absolute_url()
+        else:
+            url = self.context.absolute_url()
         response = self.request.RESPONSE
         if response.status != 302:  # only redirect if not already redirecting
-            return response.redirect(self.context.absolute_url())
-
-
-class IRejectProposalSchema(Interface):
-
-    text = schema.Text(
-        title=_(u'label_reject_proposal_text', default=u'Comment'),
-        description=_(u'help_reject_proposal_text',
-                      default=u'Describe, why the proposal is rejected'),
-        required=False)
-
-
-class RejectProposalForm(Form):
-    fields = Fields(IRejectProposalSchema)
-    ignoreContext = True
-    label = _(u'heading_reject_proposal_form', u'Reject proposal')
-
-    @button.buttonAndHandler(_(u'reject', default=u'Reject'))
-    def reject_handler(self, action):
-        data, errors = self.extractData()
-        if len(errors) > 0:
-            return
-
-        self.reject_proposal(data['text'])
-        committee = aq_parent(aq_inner(self.context))
-
-        api.portal.show_message(
-            _(u"The proposal has been rejected successfully"),
-            request=self.request)
-        self.redirect(committee)
-
-    def reject_proposal(self, text):
-        self.context.reject(text)
-
-    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
-    def cancel(self, action):
-        return self.redirect(self.context)
-
-    def redirect(self, content):
-        return self.request.RESPONSE.redirect(content.absolute_url())
-
-
-class RejectProposalView(layout.FormWrapper):
-
-    form = RejectProposalForm
+            return response.redirect(url)

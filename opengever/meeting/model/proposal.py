@@ -57,8 +57,9 @@ class Submit(Transition):
 class Reject(Transition):
 
     def execute(self, obj, model, text=None, **kwargs):
-        url = "{}/reject_proposal".format(obj.absolute_url())
-        return getRequest().RESPONSE.redirect(url)
+        obj.reject(text)
+        msg = _(u"The proposal has been rejected successfully")
+        api.portal.show_message(msg, request=getRequest(), type='info')
 
 
 class Cancel(Transition):
