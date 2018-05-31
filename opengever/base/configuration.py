@@ -2,6 +2,7 @@ from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
+from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
@@ -48,6 +49,7 @@ class GeverSettingsAdpaterV1(object):
         settings = OrderedDict()
         settings['max_dossier_levels'] = api.portal.get_registry_record('maximum_dossier_depth', interface=IDossierContainerTypes) + 1  # noqa
         settings['max_repositoryfolder_levels'] = api.portal.get_registry_record('maximum_repository_depth', interface=IRepositoryFolderRecords)  # noqa
+        settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
         return settings
 
     def get_features(self):

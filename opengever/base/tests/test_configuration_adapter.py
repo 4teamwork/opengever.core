@@ -11,6 +11,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('version', get_distribution('opengever.core').version),
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
+            ('recently_touched_limit', 10),
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),
