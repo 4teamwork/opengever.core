@@ -8,9 +8,30 @@ from opengever.meeting.exceptions import NoSubmittedDocument
 from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 import transaction
+
+
+class TestSubmitAdditionalDocumentsIntegration(IntegrationTestCase):
+
+    @browsing
+    def test_update_existing_document_without_permission_on_committee_is_possible(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        repository = api.portal.get_tool('portal_repository')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.docx')
+        repository.save(self.document)
+
+        browser.open(
+            self.word_proposal, view='tabbedview_view-overview')
+        browser.find('Update document in proposal').click()
+        browser.find('Submit Attachments').click()
+
+        self.assertSequenceEqual(
+            [u'A new submitted version of document Vertr\xe4gsentwurf has been created.'],
+            info_messages())
 
 
 class TestSubmitAdditionalDocuments(FunctionalTestCase):
@@ -230,9 +251,9 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
             submitted_proposal, view='tabbedview_view-overview')
 
         self.assertEqual(
-            ['A Document'],
+            ['Mach doch', 'A Document'],
             browser.css('.document_link').text,
-            "The document should be available in the "
+            "Attachment and proposal document should be available in the "
             "submittedproposal listing")
 
         self.assertEqual(
@@ -253,22 +274,4 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
         self.assertSubmittedDocumentCreated(proposal, self.document)
         self.assertSequenceEqual(
             ['Additional document A Document has been submitted successfully.'],
-            info_messages())
-
-    @browsing
-    def test_update_existing_document_without_permission_on_committee_is_possible(self, browser):
-        proposal = self.setup_proposal(attach_document=True)
-        repository = api.portal.get_tool('portal_repository')
-        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
-        repository.save(self.document)
-        transaction.commit()
-
-        self.login_as_user_without_committee_permission(browser)
-
-        browser.visit(proposal, view='tabbedview_view-overview')
-        browser.find('Update document in proposal').click()
-        browser.find('Submit Attachments').click()
-
-        self.assertSequenceEqual(
-            ['A new submitted version of document A Document has been created.'],
             info_messages())

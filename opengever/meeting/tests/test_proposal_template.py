@@ -29,7 +29,7 @@ class TestProposalTemplate(IntegrationTestCase):
     @browsing
     def test_uploading_non_docx_files_is_not_allowed(self, browser):
         self.login(self.administrator, browser)
-        factoriesmenu.add('Proposal Template')
+        browser.open(self.templates, view='++add++opengever.meeting.proposaltemplate')
         browser.fill({
             'Title': u'Geb\xfchren',
             'File': ('DATA', 'Wrong.txt', 'text/plain')}).save()
