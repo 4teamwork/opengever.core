@@ -18,6 +18,7 @@ from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
+from requests_toolbelt.utils import formdata
 from zExceptions import Unauthorized
 
 
@@ -56,6 +57,28 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.dossier, view='++add++opengever.meeting.proposal')
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
                          browser.find('Title').value)
+
+    @browsing
+    def test_proposal_creation_lists_sibling_proposal_documents_as_attachables(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        contenttree_url = '/'.join((
+            self.dossier.absolute_url(),
+            '++add++opengever.meeting.proposal',
+            '++widget++form.widgets.relatedItems',
+            '@@contenttree-fetch',
+            ))
+        browser.open(
+            contenttree_url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
+            )
+        containers = browser.css('li.navTreeFolderish').text
+        selectables = browser.css('li.selectable').text
+        self.assertIn(self.proposal.title, containers)
+        for document in self.proposal.get_documents():
+            self.assertIn(document.title, selectables)
 
     @browsing
     def test_proposal_can_be_created_in_browser_and_strips_whitespace(self, browser):

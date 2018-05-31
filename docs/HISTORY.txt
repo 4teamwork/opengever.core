@@ -7,6 +7,7 @@ Changelog
 
 - Team add portal action permissions: Administrators to add. [Rotonen]
 - Omit parentheses if no abbreviation for directorate or department available. [tarnap]
+- Allow attaching documents of sibling proposals to proposals. [Rotonen]
 - Make document mimetype lookups case insensitive. [Rotonen]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Do not apply the current date to meeting titles. [Rotonen]

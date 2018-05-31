@@ -133,11 +133,13 @@ class IProposal(model.Schema):
             source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
-                    'object_provides':
-                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
-                         'opengever.document.document.IDocumentSchema',
-                         'opengever.task.task.ITask',
-                         'ftw.mail.mail.IMail', ],
+                    'object_provides': [
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        'opengever.document.document.IDocumentSchema',
+                        'opengever.task.task.ITask',
+                        'opengever.meeting.proposal.IProposal',
+                        'ftw.mail.mail.IMail',
+                        ],
                     }),
             ),
         required=False,
