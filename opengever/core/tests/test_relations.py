@@ -207,9 +207,9 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
                                   .relate_to(sablontemplate_a))
 
         create(Builder('committee_container')
-               .having(protocol_template=sablontemplate_b))
+               .having(protocol_header_template=sablontemplate_b))
         committee = create(Builder('committee')
-                           .having(protocol_template=sablontemplate_b))
+                           .having(protocol_header_template=sablontemplate_b))
 
         proposal, submittedproposal = create(
             Builder('proposal')

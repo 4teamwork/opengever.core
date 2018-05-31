@@ -213,10 +213,8 @@ class Meeting(Base, SQLFormSupport):
 
     def update_protocol_document(self):
         """Update or create meeting's protocol."""
-        from opengever.meeting.command import CreateGeneratedDocumentCommand
         from opengever.meeting.command import MergeDocxProtocolCommand
         from opengever.meeting.command import ProtocolOperations
-        from opengever.meeting.command import UpdateGeneratedDocumentCommand
 
         if self.has_protocol_document() and not self.protocol_document.is_locked():
             # The protocol should never be changed when it is no longer locked:
@@ -224,20 +222,9 @@ class Meeting(Base, SQLFormSupport):
             return
 
         operations = ProtocolOperations()
-
-        if is_word_meeting_implementation_enabled():
-            command = MergeDocxProtocolCommand(
-                self.get_dossier(), self, operations,
-                lock_document_after_creation=True)
-        else:
-            if self.has_protocol_document():
-                command = UpdateGeneratedDocumentCommand(
-                    self.protocol_document, self, operations)
-            else:
-                command = CreateGeneratedDocumentCommand(
-                    self.get_dossier(), self, operations,
-                    lock_document_after_creation=True)
-
+        command = MergeDocxProtocolCommand(
+            self.get_dossier(), self, operations,
+            lock_document_after_creation=True)
         command.execute()
 
     def unlock_protocol_document(self):
@@ -263,14 +250,8 @@ class Meeting(Base, SQLFormSupport):
         - update and unlock the protocol document
         """
         self.hold()
-
-        if is_word_meeting_implementation_enabled():
-            assert not self.get_undecided_agenda_items(), \
-                'All agenda items must be decided before a meeting is closed.'
-
-        else:
-            for agenda_item in self.agenda_items:
-                agenda_item.close()
+        assert not self.get_undecided_agenda_items(), \
+            'All agenda items must be decided before a meeting is closed.'
 
         self.update_protocol_document()
         self.unlock_protocol_document()
@@ -341,9 +322,6 @@ class Meeting(Base, SQLFormSupport):
         return self._get_filename(
             _(u'label_agendaitem_list', default=u'Agendaitem list'))
 
-    def get_protocol_template(self):
-        return self.committee.get_protocol_template()
-
     def get_protocol_header_template(self):
         return self.committee.get_protocol_header_template()
 
@@ -355,9 +333,6 @@ class Meeting(Base, SQLFormSupport):
 
     def get_agenda_item_suffix_template(self):
         return self.committee.get_agenda_item_suffix_template()
-
-    def get_excerpt_template(self):
-        return self.committee.get_excerpt_template()
 
     def get_agendaitem_list_template(self):
         return self.committee.get_agendaitem_list_template()

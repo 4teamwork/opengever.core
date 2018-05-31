@@ -83,7 +83,8 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(16):
             with self.login(self.committee_responsible):
-                self.create_meetings()
+                with self.features('meeting'):
+                    self.create_meetings()
 
         with self.freeze_at_hour(17):
             self.create_private_root()
@@ -498,8 +499,6 @@ class OpengeverContentFixture(object):
             .having(
                 ad_hoc_template=self.proposal_template,
                 agendaitem_list_template=self.sablon_template,
-                excerpt_template=self.sablon_template,
-                protocol_template=self.sablon_template,
                 protocol_header_template=self.sablon_template,
                 excerpt_header_template=self.sablon_template,
                 excerpt_suffix_template=self.sablon_template,
@@ -1156,7 +1155,8 @@ class OpengeverContentFixture(object):
         self.decided_meeting.schedule_proposal(
             self.decided_proposal.load_model(),
             )
-
+        for agenda_item in self.decided_meeting.agenda_items:
+            agenda_item.close()
         self.decided_meeting.close()
 
         closed_meeting_dossier = self.register(

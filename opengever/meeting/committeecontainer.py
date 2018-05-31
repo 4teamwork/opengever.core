@@ -14,12 +14,6 @@ class ICommitteeContainer(model.Schema):
     """Base schema for a the committee container.
     """
 
-    protocol_template = RelationChoice(
-        title=_('Protocol template'),
-        source=sablon_template_source,
-        required=True,
-    )
-
     protocol_header_template = RelationChoice(
         title=_('label_protocol_header_template',
                 default='Protocol header template'),
@@ -60,12 +54,6 @@ class ICommitteeContainer(model.Schema):
                 default='Excerpt suffix template'),
         source=sablon_template_source,
         required=False,
-    )
-
-    excerpt_template = RelationChoice(
-        title=_('Excerpt template'),
-        source=sablon_template_source,
-        required=True,
     )
 
     agendaitem_list_template = RelationChoice(
@@ -124,9 +112,6 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
             raise KeyError(id_)
         return default
 
-    def get_protocol_template(self):
-        return self.protocol_template.to_object
-
     def get_protocol_header_template(self):
         if self.protocol_header_template:
             return self.protocol_header_template.to_object
@@ -150,9 +135,6 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
         if self.excerpt_suffix_template:
             return self.excerpt_suffix_template.to_object
         return None
-
-    def get_excerpt_template(self):
-        return self.excerpt_template.to_object
 
     def get_agendaitem_list_template(self):
         if self.agendaitem_list_template:

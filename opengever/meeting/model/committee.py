@@ -92,9 +92,6 @@ class Committee(Base):
     def resolve_committee(self):
         return self.oguid.resolve_object()
 
-    def get_protocol_template(self):
-        return self.resolve_committee().get_protocol_template()
-
     def get_protocol_header_template(self):
         return self.resolve_committee().get_protocol_header_template()
 
@@ -112,9 +109,6 @@ class Committee(Base):
 
     def get_excerpt_suffix_template(self):
         return self.resolve_committee().get_excerpt_suffix_template()
-
-    def get_excerpt_template(self):
-        return self.resolve_committee().get_excerpt_template()
 
     def get_agendaitem_list_template(self):
         return self.resolve_committee().get_agendaitem_list_template()

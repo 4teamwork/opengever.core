@@ -460,10 +460,17 @@ class CommitteeBuilder(DexterityBuilder):
         return self
 
     def after_create(self, obj):
-        self.arguments.pop('repository_folder', None)
-        self.arguments.pop('excerpt_template', None)
-        self.arguments.pop('protocol_template', None)
-        self.arguments.pop('toc_template', None)
+        for fieldname in ('repository_folder',
+                          'ad_hoc_template',
+                          'paragraph_template',
+                          'protocol_header_template',
+                          'protocol_suffix_template',
+                          'agenda_item_header_template',
+                          'agenda_item_suffix_template',
+                          'excerpt_header_template',
+                          'excerpt_suffix_template',
+                          'allowed_proposal_templates'):
+            self.arguments.pop(fieldname, None)
 
         obj.create_model(self.arguments, self.container)
         self.create_default_period(obj)

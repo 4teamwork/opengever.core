@@ -9,9 +9,6 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.protect import createToken
-from z3c.relationfield.relation import RelationValue
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 import json
 import re
 import transaction
@@ -31,11 +28,10 @@ class TestAgendaItem(FunctionalTestCase):
             Builder('dossier').within(self.repository_folder))
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
-        self.excerpt_template = create(Builder('sablontemplate')
-                                       .with_asset_file('excerpt_template.docx'))
+        self.template = create(Builder('sablontemplate')
+                                       .with_asset_file('empty.docx'))
         self.container = create(Builder('committee_container')
-                                .having(excerpt_template=self.excerpt_template,
-                                        ad_hoc_template=self.excerpt_template))
+                                .having(ad_hoc_template=self.template))
 
         self.committee = create(Builder('committee').within(self.container))
         self.grant('CommitteeResponsible', on=self.committee)
@@ -68,16 +64,6 @@ class TestAgendaItem(FunctionalTestCase):
         browser.login().open(self.meeting_wrapper, view=view)
 
         return AgendaItem.query.first()
-
-    def setup_excerpt_template(self):
-        templates = create(Builder('templatefolder'))
-        sablon_template = create(
-            Builder('sablontemplate')
-            .within(templates)
-            .with_asset_file('sablon_template.docx'))
-
-        self.container.excerpt_template = RelationValue(
-            getUtility(IIntIds).getId(sablon_template))
 
 
 class TestAgendaItemList(TestAgendaItem):
@@ -128,7 +114,6 @@ class TestAgendaItemList(TestAgendaItem):
 
     @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
-        self.setup_excerpt_template()
         item = self.setup_proposal(related_document_titles=["a document"])
         item = self.schedule_proposal(item, browser)
         browser.login().open(
@@ -315,7 +300,6 @@ class TestAgendaItemDecide(TestAgendaItem):
 
     @browsing
     def test_decide_proposal_agenda_item(self, browser):
-        self.setup_excerpt_template()
         proposal = self.setup_proposal()
 
         # schedule

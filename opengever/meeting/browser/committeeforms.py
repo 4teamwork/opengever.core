@@ -5,7 +5,6 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.browser.periods import IPeriodModel
 from opengever.meeting.committee import Committee
 from opengever.meeting.form import ModelProxyAddForm
@@ -36,31 +35,7 @@ def get_dm_key(context):
     return 'create_committee:{}'.format(container_oguid)
 
 
-class CommitteeFieldConfigurationMixin(object):
-    """Form mixin, configuring the avialable fields of committe
-    forms according to the feature flag configuration.
-    """
-
-    def updateFields(self):
-        super(CommitteeFieldConfigurationMixin, self).updateFields()
-        if is_word_meeting_implementation_enabled():
-            self.fields = self.fields.omit('excerpt_template',
-                                           'protocol_template')
-        else:
-            self.fields = self.fields.omit('ad_hoc_template',
-                                           'paragraph_template',
-                                           'protocol_header_template',
-                                           'protocol_suffix_template',
-                                           'agenda_item_header_template',
-                                           'agenda_item_suffix_template',
-                                           'excerpt_header_template',
-                                           'excerpt_suffix_template',
-                                           'allowed_proposal_templates')
-
-
-class AddForm(CommitteeFieldConfigurationMixin,
-              BaseWizardStepForm,
-              add.DefaultAddForm):
+class AddForm(BaseWizardStepForm, add.DefaultAddForm):
     """Form to create a committee.
 
     Is registered as default add form for committees. Does not create the
@@ -180,9 +155,7 @@ class AddInitialPeriodStepView(FormWrapper):
     form = AddInitialPeriodStep
 
 
-class EditForm(CommitteeFieldConfigurationMixin,
-               ModelProxyEditForm,
-               edit.DefaultEditForm):
+class EditForm(ModelProxyEditForm, edit.DefaultEditForm):
 
     fields = field.Fields(Committee.model_schema, ignoreContext=True)
     content_type = Committee

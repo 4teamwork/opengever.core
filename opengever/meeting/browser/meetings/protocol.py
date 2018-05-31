@@ -2,9 +2,7 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
-from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.sablon import Sablon
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from plone.autoform import directives as form

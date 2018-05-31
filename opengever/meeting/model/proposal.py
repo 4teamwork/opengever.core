@@ -312,15 +312,6 @@ class Proposal(Base):
     def resolve_proposal(self):
         return self.oguid.resolve_object()
 
-    def generate_excerpt(self, agenda_item):
-        from opengever.meeting.command import CreateGeneratedDocumentCommand
-        from opengever.meeting.command import ExcerptOperations
-
-        proposal_obj = self.resolve_submitted_proposal()
-        operations = ExcerptOperations(agenda_item)
-        CreateGeneratedDocumentCommand(
-            proposal_obj, agenda_item.meeting, operations).execute()
-
     def revise(self, agenda_item):
         assert self.get_state() == self.STATE_DECIDED
 
@@ -342,18 +333,6 @@ class Proposal(Base):
 
     def reactivate(self):
         IHistory(self.resolve_proposal()).append_record(u'reactivated')
-
-    def update_excerpt(self, agenda_item):
-        from opengever.meeting.command import ExcerptOperations
-        from opengever.meeting.command import UpdateExcerptInDossierCommand
-        from opengever.meeting.command import UpdateGeneratedDocumentCommand
-
-        operations = ExcerptOperations(agenda_item)
-        UpdateGeneratedDocumentCommand(
-            self.submitted_excerpt_document,
-            agenda_item.meeting,
-            operations).execute()
-        UpdateExcerptInDossierCommand(self).execute()
 
     def decide(self, agenda_item):
         document = self.resolve_submitted_proposal().get_proposal_document()

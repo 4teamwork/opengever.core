@@ -29,8 +29,6 @@ class TestAgendaItemList(FunctionalTestCase):
 
         self.container = create(
             Builder('committee_container').having(
-                protocol_template=self.sablon_template,
-                excerpt_template=self.sablon_template,
                 agendaitem_list_template=self.sablon_template))
 
         self.committee = create(Builder('committee')
