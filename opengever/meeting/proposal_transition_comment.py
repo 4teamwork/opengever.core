@@ -30,7 +30,7 @@ def getTransitionVocab(context):
 
 
 class IProposalTransitionCommentFormSchema(Interface):
-    """Schema-interface class for the task transition response form
+    """Schema-interface class for the proposal transition comment form
     """
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
@@ -105,3 +105,54 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
 class ProposalTransitionCommentAddFormView(layout.FormWrapper):
 
     form = ProposalTransitionCommentAddForm
+
+
+class IProposalCommentFormSchema(Interface):
+    """Schema-interface class for the proposal comment form
+    """
+
+    text = schema.Text(
+        title=_('label_comment', default="Comment"),
+        required=False,
+        )
+
+
+class ProposalCommentAddForm(form.AddForm, AutoExtensibleForm):
+
+    fields = field.Fields(IProposalCommentFormSchema)
+
+    @property
+    def label(self):
+        return self.context.Title().decode('utf-8')
+
+    def updateActions(self):
+        super(ProposalCommentAddForm, self).updateActions()
+        self.actions["save"].addClass("context")
+
+    @button.buttonAndHandler(_(u'button_confirm', default='Confirm'),
+                             name='save')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            errorMessage = '<ul>'
+            for error in errors:
+                if errorMessage.find(error.message):
+                    errorMessage += '<li>' + error.message + '</li>'
+            errorMessage += '</ul>'
+            self.status = errorMessage
+            return None
+
+        else:
+            comment = data.get('text')
+            self.context.comment(comment)
+            return self.request.RESPONSE.redirect('.')
+
+    @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
+                             name='cancel', )
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
+
+class ProposalCommentAddFormView(layout.FormWrapper):
+
+    form = ProposalCommentAddForm

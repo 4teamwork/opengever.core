@@ -1382,6 +1382,11 @@ msgstr "Document de proposition"
 msgid "proposal_history_label_cancelled"
 msgstr "Annulé par ${user}"
 
+#. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_commented"
+msgstr "Commenté par ${user}"
+
 #. Default: "Created by ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_created"

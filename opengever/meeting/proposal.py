@@ -204,6 +204,9 @@ class ProposalBase(ModelContainer):
 
         return attributes
 
+    def can_comment(self):
+        return api.user.has_permission('Modify portal content', obj=self)
+
     def can_execute_transition(self, name):
         if not api.user.has_permission('Modify portal content', obj=self):
             return False
@@ -278,6 +281,9 @@ class ProposalBase(ModelContainer):
                 return True
 
         return False
+
+    def comment(self, text, uuid=None):
+        return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
 
 class SubmittedProposal(ProposalBase):
@@ -600,3 +606,7 @@ class Proposal(ProposalBase):
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
+
+    def is_submitted(self):
+        model = self.load_model()
+        return bool(model.submitted_physical_path)

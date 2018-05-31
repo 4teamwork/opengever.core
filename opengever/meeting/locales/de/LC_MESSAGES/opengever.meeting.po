@@ -1380,6 +1380,11 @@ msgstr "Antragsdokument"
 msgid "proposal_history_label_cancelled"
 msgstr "Storniert durch ${user}"
 
+#. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_commented"
+msgstr "Kommentiert durch ${user}"
+
 #. Default: "Created by ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_created"

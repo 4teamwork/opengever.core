@@ -384,8 +384,15 @@
       />
 
   <browser:page
-      name="addcomment"
+      name="addtransitioncomment"
       class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
+      for="opengever.meeting.proposal.IProposal"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="addcomment"
+      class="opengever.meeting.proposal_transition_comment.ProposalCommentAddFormView"
       for="opengever.meeting.proposal.IProposal"
       permission="cmf.AddPortalContent"
       />

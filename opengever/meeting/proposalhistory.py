@@ -7,10 +7,11 @@ from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
+from opengever.meeting.proposal import Proposal
+from opengever.meeting.proposal import SubmittedProposal
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListingObject
 from uuid import UUID
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
@@ -65,19 +66,28 @@ class ProposalHistory(object):
         record.append_to(history)
 
         if record.needs_syncing:
-            # currently we only sync from the submitted side
-            # to the dossier
-            path = self.context.load_model().physical_path
+            if isinstance(self.context, SubmittedProposal):
+                # sync from the submitted side to the dossier
+                path = self.context.load_model().physical_path
+                admin_unit_id = self.context.get_source_admin_unit_id()
+
+            elif isinstance(self.context, Proposal) and self.context.is_submitted():
+                # sync from the dossier to the submitted side
+                path = self.context.load_model().submitted_physical_path
+                admin_unit_id = self.context.get_committee_admin_unit().id()
+
+            else:
+                return record
+
             request_data = {'data': advancedjson.dumps({
                 'timestamp': record.timestamp,
                 'data': record.data,
             })}
             dispatch_request(
-                self.context.get_source_admin_unit_id(),
+                admin_unit_id,
                 '@@receive-proposal-history',
                 path=path,
                 data=request_data,)
-
         return record
 
     def receive_record(self, timestamp, data):
@@ -187,6 +197,18 @@ class ProposalCreated(BaseHistoryRecord):
     def message(self):
         return _(u'proposal_history_label_created',
                  u'Created by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+
+@ProposalHistory.register
+class ProposalCommented(BaseHistoryRecord):
+
+    history_type = u'commented'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_commented',
+                 u'Proposal commented by ${user}',
                  mapping={'user': self.get_actor_link()})
 
 

@@ -9,7 +9,7 @@ class ProposalTransitionController(object):
 
     @classmethod
     def url_for(cls, context, transition):
-        return '%s/addcomment?form.widgets.transition=%s' % (
+        return '%s/addtransitioncomment?form.widgets.transition=%s' % (
             context.absolute_url(),
             transition)
 

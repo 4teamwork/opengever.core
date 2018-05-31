@@ -20,6 +20,12 @@ class OverviewBase(object):
     def transition_url(self, transition):
         return ProposalTransitionController.url_for(self.context, transition.name)
 
+    def is_comment_allowed(self):
+        return self.context.can_comment()
+
+    def comment_url(self):
+        return '%s/addcomment' % self.context.absolute_url()
+
     def get_main_attributes(self):
         """ return a list of widgets,
         which should be displayed in the attributes box
