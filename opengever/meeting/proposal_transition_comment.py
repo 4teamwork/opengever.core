@@ -54,10 +54,11 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
 
     @property
     def label(self):
-        label = self.context.Title().decode('utf-8')
-        transition = translate(self.transition, domain='plone',
+        title = self.context.Title().decode('utf-8')
+        transition = self.context.workflow.get_transition(self.transition)
+        transition_title = translate(transition.title, domain='plone',
                                context=self.request)
-        return u'{}: {}'.format(label, transition)
+        return u'{} {}'.format(title, transition_title)
 
     @property
     def transition(self):
@@ -76,12 +77,7 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         super(ProposalTransitionCommentAddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
-    @button.buttonAndHandler(_(u'cancel', default='Cancel'),
-                             name='cancel', )
-    def handleCancel(self, action):
-        return self.request.RESPONSE.redirect('.')
-
-    @button.buttonAndHandler(_(u'save', default='Save'),
+    @button.buttonAndHandler(_(u'button_confirm', default='Confirm'),
                              name='save')
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -99,6 +95,11 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
             comment = data.get('text')
             controller = ProposalTransitionController(self.context, self.request)
             return controller.execute_transition(transition, comment)
+
+    @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
+                             name='cancel', )
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
 
 
 class ProposalTransitionCommentAddFormView(layout.FormWrapper):

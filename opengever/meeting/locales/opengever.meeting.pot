@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-06 13:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "The meeting and its dossier were created successfully"
 msgstr ""
 
-#: ./opengever/meeting/browser/proposaltransitions.py
+#: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
 msgstr ""
 
@@ -377,6 +377,11 @@ msgstr ""
 #. Default: "Close period"
 #: ./opengever/meeting/browser/periods.py
 msgid "button_close_period"
+msgstr ""
+
+#. Default: "Confirm"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "button_confirm"
 msgstr ""
 
 #. Default: "Continue"
@@ -632,11 +637,6 @@ msgstr ""
 msgid "filename_repository_toc"
 msgstr ""
 
-#. Default: "Reject proposal"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "heading_reject_proposal_form"
-msgstr ""
-
 #. Default: "Held"
 #: ./opengever/meeting/model/meeting.py
 msgid "held"
@@ -650,11 +650,6 @@ msgstr ""
 #. Default: "Create a new task the meeting dossier and attach this excerpt."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_create_task"
-msgstr ""
-
-#. Default: "Describe, why the proposal is rejected"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "help_reject_proposal_text"
 msgstr ""
 
 #. Default: "Return this excerpt the as official answer to the proposal."
@@ -752,6 +747,11 @@ msgstr ""
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
+msgstr ""
+
+#. Default: "Comment"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_comment"
 msgstr ""
 
 #. Default: "Committee deactivated successfully"
@@ -1075,11 +1075,6 @@ msgstr ""
 msgid "label_reactivate"
 msgstr ""
 
-#. Default: "Comment"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "label_reject_proposal_text"
-msgstr ""
-
 #. Default: "Remove"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_remove"
@@ -1154,6 +1149,11 @@ msgstr ""
 #. Default: "Toggle attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_toggle_attachments"
+msgstr ""
+
+#. Default: "Transition"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_transition"
 msgstr ""
 
 #. Default: "Transition ${transition} executed"
@@ -1455,7 +1455,6 @@ msgid "reactivate"
 msgstr ""
 
 #. Default: "Reject"
-#: ./opengever/meeting/browser/proposaltransitions.py
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
 msgstr ""

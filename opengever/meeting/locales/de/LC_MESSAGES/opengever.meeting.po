@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-06 13:41+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -191,7 +191,7 @@ msgstr "Erfolgreich traktandiert"
 msgid "The meeting and its dossier were created successfully"
 msgstr "Die Sitzung und das dazugehörige Sitzungsdossier wurden erfolgreich erstellt."
 
-#: ./opengever/meeting/browser/proposaltransitions.py
+#: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
 msgstr "Der Antrag wurde erfolgreich zurückgewiesen."
 
@@ -379,6 +379,11 @@ msgstr "Abbrechen"
 #: ./opengever/meeting/browser/periods.py
 msgid "button_close_period"
 msgstr "Periode abschliessen"
+
+#. Default: "Confirm"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "button_confirm"
+msgstr "Bestätigen"
 
 #. Default: "Continue"
 #: ./opengever/meeting/browser/committeeforms.py
@@ -633,11 +638,6 @@ msgstr "Inhaltsverzeichnis ${period} ${committee} alphabetisch"
 msgid "filename_repository_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 
-#. Default: "Reject proposal"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "heading_reject_proposal_form"
-msgstr "Antrag zurückweisen"
-
 #. Default: "Held"
 #: ./opengever/meeting/model/meeting.py
 msgid "held"
@@ -652,11 +652,6 @@ msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_create_task"
 msgstr "Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen."
-
-#. Default: "Describe, why the proposal is rejected"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "help_reject_proposal_text"
-msgstr "Beschreiben Sie, warum der Antrag zurückgewiesen wird"
 
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -754,6 +749,11 @@ msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Trak
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
 msgstr "Vergangene Sitzungen"
+
+#. Default: "Comment"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_comment"
+msgstr "Kommentar"
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1076,11 +1076,6 @@ msgstr "Vorlage Schlussteil des Protokolls"
 msgid "label_reactivate"
 msgstr "Gremium reaktivieren"
 
-#. Default: "Comment"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "label_reject_proposal_text"
-msgstr "Kommentar"
-
 #. Default: "Remove"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_remove"
@@ -1156,6 +1151,11 @@ msgstr "Vorlage Inhaltsverzeichnis"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_toggle_attachments"
 msgstr "Anhänge anzeigen / ausblenden"
+
+#. Default: "Transition"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_transition"
+msgstr "Transition"
 
 #. Default: "Transition ${transition} executed"
 #: ./opengever/meeting/browser/meetings/transitions.py
@@ -1456,7 +1456,6 @@ msgid "reactivate"
 msgstr "Wieder eröffnen"
 
 #. Default: "Reject"
-#: ./opengever/meeting/browser/proposaltransitions.py
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
 msgstr "Zurückweisen"
