@@ -2,6 +2,12 @@
 Changelog
 =========
 
+2018.3.2 (unreleased)
+---------------------
+
+- Team add portal action permissions: Administrators to add. [Rotonen]
+
+
 2018.3.1 (2018-05-23)
 ---------------------
 

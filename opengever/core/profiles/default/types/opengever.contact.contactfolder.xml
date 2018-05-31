@@ -61,7 +61,7 @@
       icon_expr=""
       condition_expr=""
       i18n:domain="opengever.core">
-    <permission value="Manage portal content" />
+    <permission value="opengever.contact: Add team" />
   </action>
 
 </object>
