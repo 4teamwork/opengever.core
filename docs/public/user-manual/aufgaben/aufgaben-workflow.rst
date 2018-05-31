@@ -1,3 +1,5 @@
+.. _aufgaben-workflow:
+
 Übersicht über den typischen Aufgabenworkflow
 ---------------------------------------------
 
