@@ -21,6 +21,7 @@ Inhalt:
    metadata.rst
    config.rst
    favorite.rst
+   recently_touched.rst
    examples/index.rst
    docs_changelog.rst
 
