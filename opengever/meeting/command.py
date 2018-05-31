@@ -411,7 +411,7 @@ class CreateSubmittedProposalCommand(object):
         self.submitted_proposal_path = None
         self.admin_unit_id = self.proposal.get_committee_admin_unit().id()
 
-    def execute(self):
+    def execute(self, text=None):
         model = self.proposal.load_model()
         jsondata = {'committee_oguid': model.committee.oguid.id,
                     'proposal_oguid': model.oguid.id}
@@ -427,7 +427,7 @@ class CreateSubmittedProposalCommand(object):
             'contentType': blob.contentType,
             'data': base64.encodestring(blob.data)}
 
-        record = IHistory(self.proposal).append_record(u'submitted')
+        record = IHistory(self.proposal).append_record(u'submitted', text=text)
         history_data = advancedjson.dumps({'uuid': record.uuid})
 
         request_data = {

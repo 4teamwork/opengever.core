@@ -132,7 +132,7 @@ class BaseHistoryRecord(object):
         record.data = data
         return record
 
-    def __init__(self, context, timestamp=None, uuid=None):
+    def __init__(self, context, timestamp=None, uuid=None, text=None):
         timestamp = timestamp or utcnow_tz_aware()
         if uuid is None:
             uuid = uuid4()
@@ -145,7 +145,8 @@ class BaseHistoryRecord(object):
             created=timestamp,
             userid=unicode(api.user.get_current().getId()),
             history_type=self.history_type,
-            uuid=uuid)
+            uuid=uuid,
+            text=text)
 
     def append_to(self, history):
         if self.timestamp in history:

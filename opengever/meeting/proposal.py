@@ -210,8 +210,8 @@ class ProposalBase(ModelContainer):
 
         return self.workflow.can_execute_transition(self.load_model(), name)
 
-    def execute_transition(self, name):
-        self.workflow.execute_transition(self, self.load_model(), name)
+    def execute_transition(self, name, text=None):
+        self.workflow.execute_transition(self, self.load_model(), name, text=text)
 
     def get_transitions(self):
         if not api.user.has_permission('Modify portal content', obj=self):
@@ -576,7 +576,7 @@ class Proposal(ProposalBase):
         command.execute()
         return command
 
-    def submit(self):
+    def submit(self, text=None):
         self.date_of_submission = date.today()
 
         documents = self.get_documents()
@@ -586,7 +586,7 @@ class Proposal(ProposalBase):
                 self, document, parent_action=create_command)
             for document in documents]
 
-        create_command.execute()
+        create_command.execute(text)
         for copy_command in copy_commands:
             copy_command.execute()
 

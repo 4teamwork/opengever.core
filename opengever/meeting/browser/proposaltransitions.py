@@ -2,9 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.meeting import _
 from plone import api
-from plone.protect.utils import addTokenToUrl
 from plone.z3cform import layout
-from Products.Five.browser import BrowserView
 from z3c.form.field import Fields
 from z3c.form.form import button
 from z3c.form.form import Form
@@ -13,14 +11,19 @@ from zope import schema
 from zope.interface import Interface
 
 
-class ProposalTransitionController(BrowserView):
+class ProposalTransitionController(object):
 
     @classmethod
     def url_for(cls, context, transition):
-        return addTokenToUrl("{}/@@proposaltransitioncontroller?transition={}".format(
-            context.absolute_url(), transition))
+        return '%s/addcomment?form.widgets.transition=%s' % (
+            context.absolute_url(),
+            transition)
 
-    def __call__(self):
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def execute_transition(self, transition, text=None):
         if self.context.contains_checked_out_documents():
             msg = _(u'error_must_checkin_documents_for_transition',
                     default=u'Cannot change the state because the proposal contains checked'
@@ -30,11 +33,9 @@ class ProposalTransitionController(BrowserView):
                                     type='error')
             return self.redirect_to_proposal()
 
-        transition = self.request.get('transition')
         if not self.is_valid_transition(transition):
             raise NotFound
-
-        self.execute_transition(transition)
+        self.context.execute_transition(transition, text)
         return self.redirect_to_proposal()
 
     def is_valid_transition(self, transition_name):
@@ -42,9 +43,6 @@ class ProposalTransitionController(BrowserView):
             return False
 
         return self.context.can_execute_transition(transition_name)
-
-    def execute_transition(self, transition_name):
-        return self.context.execute_transition(transition_name)
 
     def redirect_to_proposal(self):
         response = self.request.RESPONSE
