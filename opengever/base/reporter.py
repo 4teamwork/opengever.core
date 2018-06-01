@@ -96,6 +96,8 @@ class XLSReporter(object):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=row, column=column)
                 value = getattr(obj, attr.get('id'))
+                if attr.get('callable'):
+                    value = value()
                 if attr.get('transform'):
                     value = attr.get('transform')(value)
                 if value == MissingValue:
