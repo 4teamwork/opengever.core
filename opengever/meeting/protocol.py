@@ -1,6 +1,8 @@
+from datetime import datetime
 from opengever.meeting import _
 from opengever.meeting.model.membership import Membership
 from opengever.ogds.base.utils import get_current_admin_unit
+from plone import api
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import json
@@ -36,6 +38,7 @@ class ProtocolData(object):
         self.add_meeting()
         self.add_commitee()
         self.add_agenda_items()
+        self.add_general_metadata()
 
     def add_settings(self):
         if not self.meeting.protocol_start_page_number:
@@ -144,6 +147,12 @@ class ProtocolData(object):
                     include_disclose_to=self.include_disclose_to,
                     include_copy_for_attention=self.include_copy_for_attention
                 ))
+
+    def add_general_metadata(self):
+        self.data['document'] = {
+            'generated': api.portal.get_localized_time(
+                datetime=datetime.now()),
+        }
 
     def as_json(self, pretty=False):
         indent = 4 if pretty else None

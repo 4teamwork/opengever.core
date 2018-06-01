@@ -15,6 +15,13 @@ Worddokument zu erzeugen.
 
 Die folgenden Seriendruckfelder können standardmässig verwendet werden:
 
+Generelle Metadaten:
+~~~~~~~~~~~~~~~~~~~~
+
+- ``document.generated``
+
+  Generierungsdatum des Dokuments (String)
+
 Metadaten zur Sitzung:
 ~~~~~~~~~~~~~~~~~~~~~~
 

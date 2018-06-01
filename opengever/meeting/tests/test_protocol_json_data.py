@@ -1,11 +1,14 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.meeting.browser.sablontemplate import SAMPLE_MEETING_DATA
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.testing import FunctionalTestCase
+import copy
 
 
 class TestProtocolJsonData(FunctionalTestCase):
@@ -111,8 +114,11 @@ class TestProtocolJsonData(FunctionalTestCase):
                 decision_number=1))
 
     def test_protocol_json(self):
-        data = ProtocolData(self.meeting).data
-        self.assertDictEqual(SAMPLE_MEETING_DATA, data)
+        with freeze(datetime(2018, 5, 4)):
+            data = ProtocolData(self.meeting).data
+        expected_data = copy.deepcopy(SAMPLE_MEETING_DATA)
+        expected_data.update({'document': {'generated': u'May 04, 2018'}})
+        self.assertDictEqual(expected_data, data)
 
     def test_add_members_handles_participants_are_no_longer_committee_memberships(self):
         create_session().delete(self.membership_anna)
@@ -148,10 +154,13 @@ class TestExcerptJsonData(FunctionalTestCase):
             meeting_number=11,))
 
     def test_excerpt_json_does_not_contain_start_page(self):
-        data = ExcerptProtocolData(self.meeting).data
+        with freeze(datetime(2018, 5, 4)):
+            data = ExcerptProtocolData(self.meeting).data
+
         self.assertEqual({
             'agenda_items': [],
             'protocol': {'type': u'Protocol-Excerpt'},
+            'document': {'generated': u'May 04, 2018'},
             'participants': {'other': [], 'members': []},
             'committee': {'name': u'Gemeinderat'},
             'mandant': {'name': u'Client1'},
