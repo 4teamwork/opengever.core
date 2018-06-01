@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-11-16 20:06+0000\n"
+"POT-Creation-Date: 2018-06-06 07:02+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -635,6 +635,16 @@ msgstr "Zuletzt Bearbeitet"
 #: ./opengever/dossier/widget.py
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
+
+#. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_proposal"
+msgstr "Das Dokument «${name}» befindet sich in einem Antrag und ist nicht verschiebbar. Verschieben sie den Antrag."
+
+#. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_task"
+msgstr "Das Dokument «${name}» befindet sich in einer Aufgabe und ist nicht verschiebbar. Verschieben Sie die Aufgabe."
 
 #. Default: "Number of Containers"
 #: ./opengever/dossier/behaviors/dossier.py

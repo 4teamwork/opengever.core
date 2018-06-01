@@ -152,7 +152,7 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
             obj=self.taskdocument, target=self.empty_dossier)
 
         self.assertEqual(
-            'Document {} is not movable.'.format(self.taskdocument.title),
+            'Document {} is inside a task and therefore not movable. Move the task instead'.format(self.taskdocument.title),
             error_messages()[0])
         self.assertIn(self.taskdocument, self.task.objectValues())
         self.assertNotIn(self.taskdocument, self.empty_dossier.objectValues())
