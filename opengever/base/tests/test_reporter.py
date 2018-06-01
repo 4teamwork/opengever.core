@@ -31,11 +31,12 @@ class TestReporter(IntegrationTestCase, ReporterTestingMixin):
             {'id': 'title', 'title': _('label_title', default='Title')},
             {'id': 'classification', 'title': u'fooclass', 'transform': base_translater},
             {'id': 'Title', 'title': u'footitle', 'callable': True},
+            {'id': 'unicorn', 'title': _('label_unicorn', default='Pony'), 'default': u'Rainbows!'},
             )
         self.login(self.regular_user)
         reporter = XLSReporter(self.request, columns, (self.document, ))
         workbook = self.get_workbook(reporter())
-        expected_row = [u'Vertr\xe4gsentwurf', u'Nicht klassifiziert', u'Vertr\xe4gsentwurf']
+        expected_row = [u'Vertr\xe4gsentwurf', u'Nicht klassifiziert', u'Vertr\xe4gsentwurf', u'Rainbows!']
         self.assertEquals(expected_row, [cell.value for cell in list(workbook.active.rows)[-1]])
 
     def test_set_sheet_title_for_active_workbook_sheet(self):

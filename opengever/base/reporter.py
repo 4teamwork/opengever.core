@@ -95,7 +95,11 @@ class XLSReporter(object):
         for row, obj in enumerate(self.results, 2):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=row, column=column)
-                value = getattr(obj, attr.get('id'))
+
+                if 'default' in attr:
+                    value = getattr(obj, attr.get('id'), attr.get('default'))
+                else:
+                    value = getattr(obj, attr.get('id'))
                 if attr.get('callable'):
                     value = value()
                 if attr.get('transform'):
