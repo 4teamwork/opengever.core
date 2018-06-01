@@ -145,7 +145,7 @@ class ProposalCommentAddForm(form.AddForm, AutoExtensibleForm):
         else:
             comment = data.get('text')
             self.context.comment(comment)
-            return self.request.RESPONSE.redirect('.')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
                              name='cancel', )

@@ -23,13 +23,20 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     def get_history_entries_text(self, browser):
         return browser.css('div.answers .answer h3').text
 
+    def get_history_entries_comment(self, browser):
+        return browser.css('div.answers .answer .text').text
+
+    def get_latest_history_entry_comment(self, browser):
+        return browser.css('div.answers .answer .text').first.text
+
     def assert_proposal_history_records(
             self,
             expected_records,
             proposal=None,
             browser=default_browser,
-            with_submitted=False
-        ):
+            with_submitted=False,
+            expected_comments=None
+            ):
         """Assert that the last history entries of a proposal are correct.
 
         The parameter expected_records can be a string to assert for only the
@@ -45,11 +52,20 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
 
         # assert proposal record(s)
         self.open_overview(browser, proposal)
+        # First the record texts
         if isinstance(expected_records, basestring):
             self.assertEqual(expected_records, self.get_latest_history_entry_text(browser))
         else:
             nof_records = len(expected_records)
             self.assertSequenceEqual(expected_records, self.get_history_entries_text(browser)[:nof_records])
+
+        # Now the record comments
+        if not expected_comments is None:
+            if isinstance(expected_comments, basestring):
+                self.assertEqual(expected_comments, self.get_latest_history_entry_comment(browser))
+            else:
+                nof_records = len(expected_comments)
+                self.assertSequenceEqual(expected_comments, self.get_history_entries_comment(browser)[:nof_records])
 
         if not with_submitted:
             return
@@ -58,11 +74,19 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         proposal_model = proposal.load_model()
         submitted_proposal = proposal_model.resolve_submitted_proposal()
         self.open_overview(browser, submitted_proposal)
+        # First the record texts
         if isinstance(expected_records, basestring):
             self.assertEqual(expected_records, self.get_latest_history_entry_text(browser))
         else:
             nof_records = len(expected_records)
             self.assertSequenceEqual(expected_records, self.get_history_entries_text(browser)[:nof_records])
+        # Now the record comments
+        if not expected_comments is None:
+            if isinstance(expected_comments, basestring):
+                self.assertEqual(expected_comments, self.get_latest_history_entry_comment(browser))
+            else:
+                nof_records = len(expected_comments)
+                self.assertSequenceEqual(expected_comments, self.get_history_entries_comment(browser)[:nof_records])
 
         # assert uuid of proposal and submitted proposal record match
         proposal_history = IHistory(proposal)
@@ -86,10 +110,13 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, self.draft_proposal)
         # submit proposal
         browser.css('#pending-submitted').first.click()
-        browser.css('#form-buttons-save').first.click()
-        expected_history = [u'Submitted by B\xe4rfuss K\xe4thi (kathi.barfuss)']
+        browser.fill({'Comment': u'Bitte \xfcbernehmen'}).submit()
+        expected_history = u'Submitted by B\xe4rfuss K\xe4thi (kathi.barfuss)'
+        expected_comment = u'Bitte \xfcbernehmen'
         with self.login(self.meeting_user, browser):
-            self.assert_proposal_history_records(expected_history, self.draft_proposal, browser, with_submitted=True)
+            self.assert_proposal_history_records(
+                    expected_history, self.draft_proposal, browser,
+                    with_submitted=True, expected_comments=expected_comment)
 
     @browsing
     def test_rejecting_proposals_creates_history_entries(self, browser):
@@ -101,28 +128,69 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             self.open_overview(browser, submitted_proposal)
             browser.find('Reject').click()
             browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
-        self.assert_proposal_history_records(u'Rejected by M\xfcller Fr\xe4nzi (franzi.muller)', self.proposal, browser)
+        expected_history = u'Rejected by M\xfcller Fr\xe4nzi (franzi.muller)'
+        expected_comment = u'Bitte \xfcberarbeiten'
+        self.assert_proposal_history_records(
+                    expected_history, self.proposal, browser,
+                    expected_comments=expected_comment)
 
     @browsing
     def test_cancelling_and_reactivating_proposal_creates_history_entry(self, browser):
         self.login(self.regular_user, browser)
         self.open_overview(browser, self.draft_proposal)
         # cancel proposal
-        browser.css('#pending-cancelled').first.click()
-        browser.css('#form-buttons-save').first.click()
+        browser.click_on("Cancel")
+        browser.fill({'Comment': u'Unn\xf6tig'}).submit()
 
         self.assert_proposal_history_records(
             u'Proposal cancelled by B\xe4rfuss K\xe4thi (kathi.barfuss)',
             self.draft_proposal,
             browser,
+            expected_comments=u'Unn\xf6tig'
             )
         # reactivate proposal
-        browser.css('#cancelled-pending').first.click()
-        browser.css('#form-buttons-save').first.click()
+        browser.click_on("Reactivate")
+        browser.fill({'Comment': u'N\xf6tig'}).submit()
         self.assert_proposal_history_records(
             u'Proposal reactivated by B\xe4rfuss K\xe4thi (kathi.barfuss)',
             self.draft_proposal,
             browser,
+            expected_comments=u'N\xf6tig'
+            )
+
+    @browsing
+    def test_commenting_proposal_creates_history_entry(self, browser):
+        self.login(self.regular_user, browser)
+        self.open_overview(browser, self.proposal)
+
+        # comment proposal
+        comment = u'Bevor einreichen noch erg\xe4nzen'
+        browser.click_on("Comment")
+        browser.fill({'Comment': comment}).submit()
+        with self.login(self.meeting_user, browser):
+            self.assert_proposal_history_records(
+                u'Proposal commented by B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                self.proposal,
+                browser,
+                expected_comments=comment,
+                with_submitted=True
+                )
+
+    @browsing
+    def test_commenting_submitted_proposal_creates_history_entry(self, browser):
+        self.login(self.committee_responsible, browser)
+        submitted_proposal = self.proposal.load_model().resolve_submitted_proposal()
+        self.open_overview(browser, submitted_proposal)
+        # comment proposal
+        comment = u'Im n\xe4chsten meeting besprechen?'
+        browser.click_on("Comment")
+        browser.fill({'Comment': comment}).submit()
+        self.assert_proposal_history_records(
+            u'Proposal commented by M\xfcller Fr\xe4nzi (franzi.muller)',
+            self.proposal,
+            browser,
+            expected_comments=comment,
+            with_submitted=True
             )
 
     @browsing
