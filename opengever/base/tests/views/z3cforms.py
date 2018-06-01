@@ -1,12 +1,10 @@
 from datetime import date
 from datetime import datetime
 from opengever.base.schema import TableChoice
-from opengever.base.widgets import TrixFieldWidget
 from plone.z3cform.layout import FormWrapper
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
-from zope import schema
 from zope.interface import Interface
 from zope.schema.vocabulary import SimpleVocabulary
 import json
@@ -32,7 +30,6 @@ def get_radio_table_vocabulary():
 
 class IWidgetTestFormSchema(Interface):
 
-    trix_field = schema.Text(title=u"trix_field", required=False)
     # field with default columns
     default_radio_table_field = TableChoice(
         required=False,
@@ -61,10 +58,6 @@ class WidgetTestForm(Form):
     def __init__(self, *args, **kwargs):
         super(WidgetTestForm, self).__init__(*args, **kwargs)
         self.result_data = None
-
-    def update(self):
-        self.fields['trix_field'].widgetFactory = TrixFieldWidget
-        return super(WidgetTestForm, self).update()
 
     @buttonAndHandler(u'Submit')
     def handle_submit(self, action):

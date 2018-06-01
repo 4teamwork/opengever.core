@@ -132,51 +132,5 @@
       </dl>
     </metal:define>
 
-    <tal:comment tal:replace="nothing">
-      Render a trix editor based input field.
-      The following variables must/can be defined when the makro is included:
-
-      id: string, id used for the input field
-      name: string, name used for the input field
-      value: string, value of the input field
-      autofocus: optional, boolean, whether the field is autofocused initially
-      class: optional, string, class used for the toolbar
-    </tal:comment>
-    <metal:define define-macro="render_trix_editor"
-                  tal:define="autofocus autofocus | nothing;
-                              class class | nothing;">
-
-      <input type="text"
-             class="trix-input"
-             tal:attributes="id id;
-                             name name;
-                             value value"
-      />
-
-      <trix-toolbar tal:attributes="id string:${id}-toolbar; class class">
-        <div class="button-group">
-          <button type="button" class="button bold" data-trix-attribute="bold"></button>
-          <button type="button" class="button italic" data-trix-attribute="italic"></button>
-        </div>
-        <div class="button-group">
-          <button type="button" class="button bullet" data-trix-attribute="bullet"></button>
-          <button type="button" class="button number" data-trix-attribute="number"></button>
-        </div>
-        <div class="button-group">
-          <button type="button" class="button increaseBlockLevel" data-trix-action="increaseBlockLevel"></button>
-          <button type="button" class="button decreaseBlockLevel" data-trix-action="decreaseBlockLevel"></button>
-        </div>
-        <div class="button-group">
-          <button type="button" class="button undo" data-trix-action="undo"></button>
-          <button type="button" class="button redo" data-trix-action="redo"></button>
-        </div>
-      </trix-toolbar>
-      <div class="trix-editor-proxy"
-           tal:content="structure value"
-           tal:attributes="data-editor-id id;
-                           data-autofocus python: '' if autofocus else nothing;
-                           id string:proxy-${id}"></div>
-    </metal:define>
-
   </body>
 </html>

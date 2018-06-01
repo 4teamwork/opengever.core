@@ -45,39 +45,6 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.base/MeetingStorage.js"
-      inline="False"
-      insert-after="++resource++opengever.base/Storage.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
-      id="++resource++opengever.meeting/Pin.js"
-      inline="False"
-      insert-after="++resource++opengever.base/MeetingStorage.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
-      id="++resource++opengever.base/Synchronizer.js"
-      inline="False"
-      insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.base/unorm.js"
       inline="False"
       insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
@@ -144,17 +111,6 @@
       />
 
   <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
-      id="++resource++opengever.meeting/Scrollspy.js"
-      inline="False"
-      insert-after="++resource++opengever.base/Controller.js"
-      />
-
-  <javascript
       id="inline_validation.js"
       enabled="False"
       insert-after="dropdown.js"
@@ -193,20 +149,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.meeting/protocol.js"
-      inline="False"
-      insert-after="++resource++opengever.base/SelectAutocomplete.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.base/prepoverlay.js"
       inline="False"
-      insert-after="++resource++opengever.meeting/protocol.js"
+      insert-after="++resource++opengever.base/SelectAutocomplete.js"
       />
 
   <javascript
@@ -259,20 +204,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.meeting/Editor.js"
-      inline="False"
-      insert-after="++resource++opengever.base/livesearch.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.meeting/Editbox.js"
       inline="False"
-      insert-after="++resource++opengever.meeting/Editor.js"
+      insert-after="++resource++opengever.base/livesearch.js"
       />
 
   <javascript
@@ -306,28 +240,6 @@
       id="++resource++opengever.base/quickupload.js"
       inline="False"
       insert-after="++resource++opengever.base/base.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="none"
-      cookable="True"
-      enabled="on"
-      expression=""
-      id="++resource++opengever.base/trix.js"
-      inline="False"
-      insert-after="++resource++opengever.base/quickupload.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="none"
-      cookable="True"
-      enabled="on"
-      expression=""
-      id="++resource++opengever.base/trix-custom.js"
-      inline="False"
-      insert-after="++resource++opengever.base/trix.js"
       />
 
   <javascript
