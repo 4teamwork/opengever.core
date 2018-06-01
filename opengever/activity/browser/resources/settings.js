@@ -1,4 +1,4 @@
-(function(global, $, Controller, EditboxController, Pin, HBS) {
+(function(global, $, Controller, HBS) {
 
   "use strict";
 
@@ -149,4 +149,4 @@
 
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));
+}(window, window.jQuery, window.Controller, window.Handlebars));
