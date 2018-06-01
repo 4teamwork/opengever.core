@@ -5,7 +5,6 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
-- Team add portal action permissions: Administrators to add. [Rotonen]
 - Omit parentheses if no abbreviation for directorate or department available. [tarnap]
 - Allow attaching documents of sibling proposals to proposals. [Rotonen]
 - Add today to the data passed to the sablon template. [tarnap]
@@ -25,6 +24,12 @@ Changelog
 - Add a tasktemplatefolder to GEVER examplecontent. [phgross]
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
+
+
+2018.3.2 (2018-06-01)
+---------------------
+
+- Team add portal action permissions: Administrators to add. [Rotonen]
 
 
 2018.3.1 (2018-05-23)
