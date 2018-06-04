@@ -1,11 +1,17 @@
 <div id="favorite-action"
+     i18n:domain="opengever.base"
      tal:condition="view/available"
      tal:define="favorite view/get_favorite"
      tal:attributes="data-oguid python: view.oguid().id;
                      data-url view/url">
 
-  <a href="#" id="mark-as-favorite"
-     tal:attributes="class python:'is-favorite' if favorite else '';
-                     data-favorite-id python: favorite and favorite.favorite_id" />
+  <a href="#"
+     id="mark-as-favorite"
+     class="is-favorite"
+     tal:attributes="title python: view.get_unmark_favorite_title() if favorite else view.get_mark_favorite_title();
+                     class python: 'is-favorite' if favorite else None;
+                     data-mark-favorite-title view/get_mark_favorite_title;
+                     data-unmark-favorite-title view/get_unmark_favorite_title;
+                     data-favorite-id python: favorite.favorite_id if favorite else ''" />
 
 </div>

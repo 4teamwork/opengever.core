@@ -1,3 +1,4 @@
+from opengever.base import _
 from opengever.base import is_favorites_feature_enabled
 from opengever.base.favorite import FavoriteManager
 from opengever.base.oguid import Oguid
@@ -19,6 +20,14 @@ class FavoriteAction(common.ViewletBase):
     def get_favorite(self):
         return FavoriteManager().get_favorite(
             self.context, api.user.get_current())
+
+    def get_mark_favorite_title(self):
+        return _('tooltip_mark_favorite_action',
+                 default=u'Mark as favorite')
+
+    def get_unmark_favorite_title(self):
+        return _('tooltip_remove_favorite_action',
+                 default=u'Remove from favorites')
 
     def oguid(self):
         return Oguid.for_object(self.context)
