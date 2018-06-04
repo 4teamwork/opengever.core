@@ -116,6 +116,10 @@
   @extend .gv-comment;
 }
 
+.actionButtons .proposalCommented {
+  @extend .gv-comment;
+}
+
 #tabbedview-body {
   .file-action-buttons, .editActions, .updateActions {
     margin-left: 0;

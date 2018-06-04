@@ -54,7 +54,7 @@
             </tal:block>
             <li>
               <a tal:condition="view/is_comment_allowed" tal:attributes="href view/comment_url"
-                 id="comment"
+                 id="comment_proposal" class="proposalCommented"
                  title="Comment"
                  i18n:attributes="title">
                   <span i18n:translate="" class="subMenuTitle actionText">
