@@ -33,13 +33,15 @@ class ObjectTouchedEvent(ObjectEvent):
 
 
 def handle_object_touched(context, event):
-    # Only log touches for tracked types
-    if not any(iface.providedBy(context)
-               for iface in RECENTLY_TOUCHED_INTERFACES_TO_TRACK):
-        return
-
     handler = ObjectTouchedHandler()
     handler.log_touched_object(context, event)
+
+
+def should_track_touches(obj):
+    """Return True if touches for this type should be tracked, False otherwise.
+    """
+    return any(iface.providedBy(obj)
+               for iface in RECENTLY_TOUCHED_INTERFACES_TO_TRACK)
 
 
 class ObjectTouchedHandler(object):
@@ -62,6 +64,10 @@ class ObjectTouchedHandler(object):
             ann[RECENTLY_TOUCHED_KEY][user_id] = PersistentList()
 
     def log_touched_object(self, context, event):
+        # Only log touches for tracked types
+        if not should_track_touches(context):
+            return
+
         logger.info("Object touched: %r (UID: %s)" % (context, IUUID(context)))
         current_user_id = api.user.get_current().id
 

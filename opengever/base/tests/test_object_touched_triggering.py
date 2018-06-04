@@ -2,6 +2,7 @@ from opengever.base.touched import IObjectTouchedEvent
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_last_recorded_event
 from opengever.testing.event_recorder import register_event_recorder
+from plone import api
 from zope.event import notify
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -54,3 +55,12 @@ class TestObjectTouchedTriggering(IntegrationTestCase):
 
         event = get_last_recorded_event()
         self.assertTrue(IObjectTouchedEvent.providedBy(event))
+
+    def test_doesnt_get_fired_for_object_moved(self):
+        self.login(self.regular_user)
+
+        register_event_recorder(IObjectTouchedEvent)
+        api.content.move(self.document, self.subdossier)
+
+        event = get_last_recorded_event()
+        self.assertIsNone(event)
