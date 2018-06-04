@@ -204,9 +204,6 @@ class ProposalBase(ModelContainer):
 
         return attributes
 
-    def can_comment(self):
-        return api.user.has_permission('Modify portal content', obj=self)
-
     def can_execute_transition(self, name):
         if not api.user.has_permission('Modify portal content', obj=self):
             return False
@@ -306,6 +303,9 @@ class SubmittedProposal(ProposalBase):
 
         """
         return self.load_model().is_editable_in_committee()
+
+    def can_comment(self):
+        return api.user.has_permission('Modify portal content', obj=self)
 
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
@@ -474,6 +474,9 @@ class Proposal(ProposalBase):
 
         """
         return self.load_model().is_editable_in_dossier()
+
+    def can_comment(self):
+        return api.user.has_permission('opengever.meeting: Add Proposal Comment', obj=self)
 
     def get_documents(self):
         return sorted(
