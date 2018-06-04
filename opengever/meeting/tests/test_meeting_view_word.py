@@ -9,7 +9,7 @@ import pytz
 
 
 class TestWordMeetingView(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_displays_correct_edit_bar_actions(self, browser):

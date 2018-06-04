@@ -10,7 +10,7 @@ from opengever.testing.pages import byline
 
 
 class TestEditMeeting(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_edit_meeting_visibile_to_committe_responsible(self, browser):

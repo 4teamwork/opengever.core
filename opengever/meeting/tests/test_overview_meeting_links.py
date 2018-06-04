@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from operator import attrgetter
@@ -7,7 +5,7 @@ from operator import attrgetter
 
 class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_overview_displays_link_to_proposal(self, browser):

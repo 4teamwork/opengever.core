@@ -10,7 +10,7 @@ ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
 
 
 class TestWordMeeting(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_add_meeting_and_dossier(self, browser):

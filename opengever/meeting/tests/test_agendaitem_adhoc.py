@@ -7,7 +7,7 @@ from plone.protect import createToken
 
 class TestWordAgendaItem(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_ad_hoc_document_is_created_from_template(self, browser):

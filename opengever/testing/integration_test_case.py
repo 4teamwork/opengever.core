@@ -58,7 +58,6 @@ FEATURE_FLAGS = {
     'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
     'oneoffixx': 'opengever.oneoffixx.interfaces.IOneoffixxSettings.is_feature_enabled',
-    'word-meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',

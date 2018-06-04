@@ -10,7 +10,7 @@ def get_doc_properties(document, prefix='ogg.meeting.'):
 
 
 class TestMeetingDocxProperties(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     def test_non_meeting_document_should_not_have_meeting_properties(self):
         self.login(self.dossier_responsible)

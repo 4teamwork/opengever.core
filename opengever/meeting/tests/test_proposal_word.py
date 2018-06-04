@@ -22,7 +22,7 @@ VIEW_PERMISSIONS = (
 
 
 class TestProposalWithWord(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_creating_proposal_from_proposal_template(self, browser):

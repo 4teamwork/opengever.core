@@ -48,7 +48,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_header_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee.protocol_header_template = self.as_relation_value(
             self.sablon_template)
 
@@ -57,7 +57,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_header_template_falls_back_to_container(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.assertIsNone(self.committee.protocol_header_template)
         self.assertIsNotNone(self.committee_container.protocol_header_template)
 
@@ -66,7 +66,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_suffix_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee.protocol_suffix_template = self.as_relation_value(
             self.sablon_template)
 
@@ -75,7 +75,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_suffix_template_falls_back_to_container_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee_container.protocol_suffix_template = self.as_relation_value(
             self.sablon_template)
 

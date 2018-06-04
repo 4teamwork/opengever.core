@@ -5,7 +5,7 @@ from opengever.testing import IntegrationTestCase
 
 class TestProtocolWithWord(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_word_protocols_can_be_created_and_updated(self, browser):

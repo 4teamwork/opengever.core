@@ -10,7 +10,7 @@ from plone.uuid.interfaces import IUUID
 
 class TestCommitteeWord(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_can_configure_ad_hoc_template(self, browser):

@@ -9,7 +9,7 @@ from opengever.trash.trash import ITrashed
 
 class TestWordAgendaItem(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_delete_agenda_item_does_not_trash_proposal(self, browser):
