@@ -66,4 +66,13 @@
     <permission value="Modify portal content" />
   </action>
 
+  <action
+      title="Download Excel"
+      action_id="download_excel"
+      category="object"
+      url_expr="string:${object_url}/download_excel"
+      visible="True">
+    <permission value="opengever.repository.AddRepositoryFolder" />
+  </action>
+
 </object>
