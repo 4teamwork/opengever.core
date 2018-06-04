@@ -68,7 +68,8 @@ class XLSReporter(object):
     """
 
     def __init__(self, request, attributes, results,
-                 sheet_title=u' ', footer=u'', portrait_format=False):
+                 sheet_title=u' ', footer=u'', portrait_format=False,
+                 blank_header_rows=0):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -81,6 +82,7 @@ class XLSReporter(object):
         self.sheet_title = sheet_title
         self.footer = footer
         self.portrait_format = portrait_format
+        self.blank_header_rows = blank_header_rows
 
     def __call__(self):
         workbook = self.prepare_workbook()
@@ -112,14 +114,14 @@ class XLSReporter(object):
     def insert_label_row(self, sheet):
         title_font = Font(bold=True)
         for i, attr in enumerate(self.attributes, 1):
-            cell = sheet.cell(row=1, column=i)
+            cell = sheet.cell(row=self.blank_header_rows + 1, column=i)
             cell.value = translate(attr.get('title', ''), context=self.request)
             cell.font = title_font
 
     def insert_value_rows(self, sheet):
         for row, obj in enumerate(self.results, 2):
             for column, attr in enumerate(self.attributes, 1):
-                cell = sheet.cell(row=row, column=column)
+                cell = sheet.cell(row=self.blank_header_rows + row, column=column)
 
                 if 'default' in attr:
                     value = getattr(obj, attr.get('id'), attr.get('default'))

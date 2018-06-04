@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-16 13:43+0000\n"
+"POT-Creation-Date: 2018-06-04 11:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.repository\n"
+
+#: ./opengever/repository/browser/excel_export.py
+msgid "Could not generate the report."
+msgstr ""
 
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "In use"
@@ -71,6 +75,11 @@ msgstr ""
 msgid "label_addable_dossier_types"
 msgstr ""
 
+#. Default: "Blocked inheritance"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_blocked_inheritance"
+msgstr ""
+
 #. Default: "Protected Objects"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_blocked_local_roles"
@@ -106,9 +115,44 @@ msgstr ""
 msgid "label_dossiers"
 msgstr ""
 
+#. Default: "No"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_false"
+msgstr ""
+
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_former_reference"
+msgstr ""
+
+#. Default: "Create dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_contributor_role"
+msgstr ""
+
+#. Default: "Edit dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_editor_role"
+msgstr ""
+
+#. Default: "Manage dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_manager_role"
+msgstr ""
+
+#. Default: "Reactivate dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_publisher_role"
+msgstr ""
+
+#. Default: "Read dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reader_role"
+msgstr ""
+
+#. Default: "Close dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reviewer_role"
 msgstr ""
 
 #. Default: "Info"
@@ -141,6 +185,26 @@ msgstr ""
 msgid "label_referenced_activity"
 msgstr ""
 
+#. Default: "Repository number"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repository_number"
+msgstr ""
+
+#. Default: "Repositoryfolder description"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_description"
+msgstr ""
+
+#. Default: "Repositoryfolder title (German)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_de"
+msgstr ""
+
+#. Default: "Repositoryfolder title (French)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_fr"
+msgstr ""
+
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
@@ -149,6 +213,11 @@ msgstr ""
 #. Default: "Tasks"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_tasks"
+msgstr ""
+
+#. Default: "Yes"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_true"
 msgstr ""
 
 #. Default: "Valid from"

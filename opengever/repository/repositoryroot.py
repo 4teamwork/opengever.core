@@ -1,6 +1,7 @@
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
+from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity.content import Container
 from plone.supermodel import model
@@ -29,11 +30,35 @@ class IRepositoryRoot(model.Schema):
         )
 
 
-class RepositoryRoot(Container, TranslatedTitleMixin):
+class RepositoryRoot(Container, RepositoryMixin, TranslatedTitleMixin):
     """A Repositoryroot.
     """
 
     Title = TranslatedTitleMixin.Title
+
+    # XXX - a dummy stub for the excel export
+    def get_repository_number(self):
+        return u''
+
+    # XXX - a dummy stub for the excel export
+    def get_retention_period(self):
+        return u''
+
+    # XXX - a dummy stub for the excel export
+    def get_retention_period_annotation(self):
+        return u''
+
+    # XXX - a dummy stub for the excel export
+    def get_archival_value(self):
+        return u''
+
+    # XXX - a dummy stub for the excel export
+    def get_archival_value_annotation(self):
+        return u''
+
+    # XXX - a dummy stub for the excel export
+    def get_custody_period(self):
+        return u''
 
 
 @implementer(INameFromTitle)

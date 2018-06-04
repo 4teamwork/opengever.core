@@ -3,6 +3,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform import directives as form
 from plone.dexterity import content
@@ -12,6 +13,7 @@ from zope import schema
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
+
 
 REPOSITORY_FOLDER_STATE_INACTIVE = 'repositoryfolder-state-inactive'
 
@@ -93,7 +95,7 @@ class IRepositoryFolderSchema(model.Schema):
     )
 
 
-class RepositoryFolder(content.Container):
+class RepositoryFolder(content.Container, RepositoryMixin):
 
     implements(IRepositoryFolder)
 
@@ -104,6 +106,24 @@ class RepositoryFolder(content.Container):
         if isinstance(title, unicode):
             return title.encode('utf-8')
         return title or ''
+
+    def get_retention_period(self):
+        return ILifeCycle(self).retention_period
+
+    def get_retention_period_annotation(self):
+        return ILifeCycle(self).retention_period_annotation
+
+    def get_archival_value_annotation(self):
+        return ILifeCycle(self).archival_value_annotation
+
+    def get_custody_period(self):
+        return ILifeCycle(self).custody_period
+
+    def get_repository_number(self):
+        return IReferenceNumber(self).get_repository_number()
+
+    def get_repository_number_separator(self):
+        return IReferenceNumber(self).get_active_formatter().repository_title_seperator
 
     def get_prefixed_title_de(self):
         title = self.title_de
@@ -119,10 +139,9 @@ class RepositoryFolder(content.Container):
         return ILifeCycle(self).archival_value
 
     def _prefix_with_reference_number(self, title):
-        reference_adapter = IReferenceNumber(self)
         return u'{number}{sep} {title}'.format(
-            number=reference_adapter.get_repository_number(),
-            sep=reference_adapter.get_active_formatter().repository_title_seperator,
+            number=self.get_repository_number(),
+            sep=self.get_repository_number_separator(),
             title=title)
 
     def is_leaf_node(self):
