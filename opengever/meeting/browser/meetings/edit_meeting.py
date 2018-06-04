@@ -3,7 +3,6 @@ from opengever.base import _ as _base
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.date_time import as_utc
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.protocol import IMeetingMetadata
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
@@ -46,7 +45,6 @@ class EditMeetingView(ModelEditForm):
         """
         return self.model.is_editable()
 
-    @require_word_meeting_feature
     def update(self):
         super(EditMeetingView, self).update()
         if self.actions.executedActions:

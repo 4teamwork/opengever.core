@@ -1,7 +1,6 @@
 from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.model.membership import Membership
 from Products.Five.browser import BrowserView
 from zope.interface import Interface
@@ -44,7 +43,6 @@ class ParticipantsView(BrowserView):
         super(ParticipantsView, self).__init__(context, request)
         self.meeting = self.context.model
 
-    @require_word_meeting_feature
     @require_meeting_edit_permission
     def change_role(self):
         """Change the role of a participant.
@@ -66,7 +64,6 @@ class ParticipantsView(BrowserView):
             self.meeting.secretary = member
         return response.proceed().dump()
 
-    @require_word_meeting_feature
     @require_meeting_edit_permission
     def change_presence(self):
         """Change the presence of a participant.

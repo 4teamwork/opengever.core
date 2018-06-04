@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
@@ -323,14 +322,12 @@ class Committee(ModelContainer):
 
         return self.get_committee_container().get_toc_template()
 
-    @require_word_meeting_feature
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
             return self.ad_hoc_template.to_object
 
         return self.get_committee_container().get_ad_hoc_template()
 
-    @require_word_meeting_feature
     def get_paragraph_template(self):
         if self.paragraph_template:
             return self.paragraph_template.to_object

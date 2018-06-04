@@ -10,7 +10,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
@@ -410,7 +409,6 @@ class Meeting(Base, SQLFormSupport):
 
         return api.portal.get_localized_time(datetime=date, time_only=True)
 
-    @require_word_meeting_feature
     def get_data_for_zip_export(self):
         meeting_data = {
             'title': safe_unicode(self.title),
@@ -452,7 +450,6 @@ class Meeting(Base, SQLFormSupport):
                                             is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 
-    @require_word_meeting_feature
     def schedule_ad_hoc(self, title):
         committee = self.committee.resolve_committee()
         ad_hoc_template = committee.get_ad_hoc_template()

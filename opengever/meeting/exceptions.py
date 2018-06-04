@@ -18,12 +18,6 @@ class ProtocolAlreadyGenerated(Exception):
     """
 
 
-class WordMeetingImplementationDisabledError(Exception):
-    """The word meeting implementation feature is not enabled but a method
-    was called which requires this feature.
-    """
-
-
 class MissingMeetingDossierPermissions(Exception):
     """The user has access to a meeting but no access to the meeting's dossier.
     """

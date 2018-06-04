@@ -1,6 +1,5 @@
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.model import Member
 from opengever.meeting.sources import proposal_template_source
 from opengever.meeting.sources import sablon_template_source
@@ -148,14 +147,12 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
 
         return None
 
-    @require_word_meeting_feature
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
             return self.ad_hoc_template.to_object
 
         return None
 
-    @require_word_meeting_feature
     def get_paragraph_template(self):
         if self.paragraph_template:
             return self.paragraph_template.to_object

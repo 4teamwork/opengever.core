@@ -7,7 +7,6 @@ from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.model import Period
@@ -214,7 +213,6 @@ class AgendaItem(Base):
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
 
-    @require_word_meeting_feature
     def get_data_for_zip_export(self):
         agenda_item_data = {
             'title': safe_unicode(self.get_title()),
@@ -282,7 +280,6 @@ class AgendaItem(Base):
 
         return self.ad_hoc_document_oguid.resolve_object()
 
-    @require_word_meeting_feature
     def checkin_document(self):
         document = self.resolve_document()
         if not document:
@@ -369,7 +366,6 @@ class AgendaItem(Base):
     def return_excerpt(self, document):
         self.proposal.return_excerpt(document)
 
-    @require_word_meeting_feature
     def generate_excerpt(self, title):
         """Generate an excerpt from the agenda items document.
 
@@ -417,7 +413,6 @@ class AgendaItem(Base):
 
         return self.get_state() == self.STATE_DECIDED
 
-    @require_word_meeting_feature
     def get_excerpt_documents(self, unrestricted=False):
         """Return a list of excerpt documents.
 
@@ -436,7 +431,6 @@ class AgendaItem(Base):
 
         return documents
 
-    @require_word_meeting_feature
     def get_source_dossier_excerpt(self):
         if not self.has_proposal:
             return None

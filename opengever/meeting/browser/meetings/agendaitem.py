@@ -4,7 +4,6 @@ from functools import wraps
 from opengever.base.response import JSONResponse
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
@@ -194,7 +193,6 @@ class AgendaItemsView(BrowserView):
         if excerpt:
             return IContentListingObject(excerpt).render_link()
 
-    @require_word_meeting_feature
     def _serialize_excerpts(self, meeting, item):
         excerpt_data = []
 
@@ -224,11 +222,9 @@ class AgendaItemsView(BrowserView):
         return excerpt_data
 
     @view.memoize
-    @require_word_meeting_feature
     def _can_add_task_to_meeting_dossier(self):
         return self.meeting.get_dossier().is_addable('opengever.task.task')
 
-    @require_word_meeting_feature
     def _get_edit_document_options(self, document, agenda_item, meeting):
         """Return the agenda item options for the template regarding
         editing the document and its lock.

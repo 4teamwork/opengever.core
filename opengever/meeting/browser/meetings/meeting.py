@@ -8,7 +8,6 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -380,7 +379,6 @@ class MeetingView(BrowserView):
                            default='An unexpected error has occurred'),
                          context=self.request)
 
-    @require_word_meeting_feature
     def get_participants(self):
         result = []
         participants = self.model.participants
@@ -413,7 +411,6 @@ class MeetingView(BrowserView):
         result.sort(key=itemgetter('fullname'))
         return result
 
-    @require_word_meeting_feature
     def get_closing_infos(self):
         transition_controller = self.model.workflow.transition_controller
         infos = {'is_closed': False,
@@ -442,7 +439,6 @@ class MeetingView(BrowserView):
 
         return infos
 
-    @require_word_meeting_feature
     def get_close_transition(self):
         for transition in self.model.workflow.get_transitions(self.model.get_state()):
             if transition.state_to == 'closed' and transition.visible:
@@ -450,7 +446,6 @@ class MeetingView(BrowserView):
 
         return None
 
-    @require_word_meeting_feature
     def get_cancel_transition(self):
         for transition in self.model.workflow.get_transitions(self.model.get_state()):
             if transition.state_to == 'cancelled' and transition.visible:
