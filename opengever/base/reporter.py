@@ -136,3 +136,6 @@ class XLSReporter(object):
 
                 if 'number_format' in attr:
                     cell.number_format = attr.get('number_format')
+
+                if 'fold_by_method' in attr:
+                    sheet.row_dimensions[cell.row].outlineLevel = attr.get('fold_by_method')(value)
