@@ -1,9 +1,7 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.tabbedview import GeverTabbedView
 from plone import api
 
@@ -134,7 +132,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
 
     @property
     def proposal_templates_tab(self):
-        if is_word_meeting_implementation_enabled():
+        if is_meeting_feature_enabled():
             return {
                 'id': 'proposaltemplates-proxy',
                 'title': _(u'label_proposal_templates', default=u'Proposal Templates'),

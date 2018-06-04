@@ -6,7 +6,6 @@ from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.dossier.templatefolder import ITemplateFolder
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting import is_word_meeting_implementation_enabled
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
@@ -48,7 +47,7 @@ class TemplateFolder(Container, TranslatedTitleMixin):
                 return is_meeting_feature_enabled()
 
             if factory_type in [u'opengever.meeting.proposaltemplate']:
-                return is_word_meeting_implementation_enabled()
+                return is_meeting_feature_enabled()
 
             if factory_type in [u'opengever.dossier.dossiertemplate']:
                 return is_dossier_template_feature_enabled()
