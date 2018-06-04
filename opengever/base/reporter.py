@@ -1,7 +1,9 @@
+from math import floor
 from Missing import Value as MissingValue
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
+from openpyxl.utils import get_column_letter
 from plone.api.portal import get_localized_time
 from StringIO import StringIO
 from zope.i18n import translate
@@ -28,6 +30,21 @@ def readable_author(author):
 def readable_date(date):
     """Helper method to return a localized date"""
     return get_localized_time(date) if date else None
+
+
+def heuristic_for_11pt_calibri(charcount):
+    # Adapted from:
+    # https://msdn.microsoft.com/en-us/library/documentformat.openxml.spreadsheet.column.aspx
+    max_digit_width = 7.0
+    cell_padding = 5.0
+    return floor((charcount * max_digit_width + cell_padding) / max_digit_width * 256) / 256
+
+
+def approximate_column_width(cells):
+    return heuristic_for_11pt_calibri(max(
+        len(unicode(cell.value)) if cell.value else 0
+        for cell in cells
+        ))
 
 
 class StringTranslater(object):
@@ -81,6 +98,14 @@ class XLSReporter(object):
 
         self.insert_label_row(sheet)
         self.insert_value_rows(sheet)
+
+        column_widths = {
+            get_column_letter(i + 1): approximate_column_width(col)
+            for i, col in enumerate(sheet.columns)
+            }
+
+        for index, width in column_widths.iteritems():
+            sheet.column_dimensions[index].width = width
 
         return workbook
 
