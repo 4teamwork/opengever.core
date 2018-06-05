@@ -56,7 +56,9 @@ function init() {
         this.isOpen = false;
       },
       fetchData: function () {
-        return this.requester.get(this.endpoint)
+        // Make sure IE 11 does not cache the fetch request
+        var url = this.endpoint + '?_t=' + Date.now().toString();
+        return this.requester.get(url)
           .then(function (response) {
             this.recentlyTouched = response.data['recently_touched'];
             this.checkedOut = response.data['checked_out'];
