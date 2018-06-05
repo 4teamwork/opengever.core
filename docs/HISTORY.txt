@@ -12,6 +12,8 @@ Changelog
 - Document generation of policies in internal docs. [tarnap]
 - Add registry field to customize date format for sablon templates. [njohner]
 - Implement recently touched menu that lists checked out documents and recently touched objects. [lgraf]
+- Comment transitions for proposals. [njohner]
+- Comment action for proposals. [njohner]
 - Sort the entries of the reference browser widget. [tarnap]
 - Drop non-word meeting feature. [deiferni]
 - Improve the validation of "preserved as paper" for related documents. [tarnap]

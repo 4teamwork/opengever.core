@@ -613,3 +613,4 @@ class Proposal(ProposalBase):
     def is_submitted(self):
         model = self.load_model()
         return bool(model.submitted_physical_path)
+
