@@ -3,15 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
+from requests_toolbelt.utils import formdata
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
-import transaction
 
 
 class TestMoveItems(IntegrationTestCase):
@@ -107,7 +104,6 @@ class TestMoveItems(IntegrationTestCase):
 
 
 class TestMoveItemsWithTestbrowser(IntegrationTestCase):
-
 
     def move_items(self, browser, src, obj=None, task=None, target=None):
         path = None
@@ -340,3 +336,35 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
                           browser.css('.reference_number').first.text,
                           'When moving back, the old reference_number should be'
                           ' recycled.')
+
+    @browsing
+    def test_reference_widgets_content_is_sorted(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        repo = create(Builder('repository')
+                      .having(title_de=u'drittes repo')
+                      .within(self.repository_root))
+
+        self.repository_root.moveObjectsUp(repo.id)
+        self.repository_root.moveObjectsUp(repo.id)
+
+        contenttree_url = '/'.join((
+            self.dossier.absolute_url(),
+            '@@move_items',
+            '++widget++form.widgets.destination_folder',
+            '@@contenttree-fetch',
+        ))
+        browser.open(
+            contenttree_url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode({
+                'href': '/'.join(self.repository_root.getPhysicalPath()),
+                'rel': 0,
+            }),
+        )
+
+        selectables = browser.css('li.selectable').text
+
+        self.assertEquals(
+            ['fuhrung', 'rechnungsprufungskommission', 'drittes-repo'],
+            selectables)

@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Sort the entries of the reference browser widget. [tarnap]
 - Improve the validation of "preserved as paper" for related documents. [tarnap]
 - Display flyup menues above the selected list items. [tarnap]
 - Omit parentheses if no abbreviation for directorate or department available. [tarnap]

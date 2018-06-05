@@ -23,6 +23,13 @@ class SolrObjPathSource(ObjPathSource):
     """
     def __init__(self, context, selectable_filter, navigation_tree_query=None,
                  default=None, defaultFactory=None):
+
+        if navigation_tree_query is not None:
+            navigation_tree_query.update({
+                'sort_on': navigation_tree_query.get('sort_on',
+                                                     'sortable_title'),
+            })
+
         super(SolrObjPathSource, self).__init__(
                 context, selectable_filter,
                 navigation_tree_query=navigation_tree_query,
