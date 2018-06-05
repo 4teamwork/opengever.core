@@ -2,17 +2,28 @@ from ftw.upgrade.helpers import update_security_for
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.touched import ObjectTouchedEvent
+from opengever.base.touched import should_track_touches
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.CMFCatalogAware import CatalogAware
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
 from zope.container.interfaces import IContainerModifiedEvent
+from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
+from zope.lifecycleevent import ObjectAddedEvent
 from zope.sqlalchemy.datamanager import mark_changed
 
 
 def object_moved_or_added(context, event):
+    if isinstance(event, ObjectAddedEvent):
+        # Don't consider moving or removing an object a "touch". Mass-moves
+        # would immediately fill up the touched log, and removals should not
+        # be tracked anyway.
+        if should_track_touches(context):
+            notify(ObjectTouchedEvent(context))
+
     if IObjectRemovedEvent.providedBy(event):
         return
 
@@ -57,6 +68,13 @@ def is_title_changed(descriptions):
             if attr in ['IOpenGeverBase.title', 'title']:
                 return True
     return False
+
+
+def object_modified(context, event):
+    update_favorites_title(context, event)
+
+    if should_track_touches(context):
+        notify(ObjectTouchedEvent(context))
 
 
 def update_favorites_title(context, event):

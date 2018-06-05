@@ -74,3 +74,11 @@ class TestConfig(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'max_repositoryfolder_levels'), 3)
+
+    @browsing
+    def test_config_contains_recently_touched_limit(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'recently_touched_limit'), 10)

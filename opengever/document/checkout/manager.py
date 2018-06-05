@@ -2,6 +2,7 @@ from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
 from datetime import date
 from datetime import datetime
+from opengever.base.handlers import ObjectTouchedEvent
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.events import ObjectBeforeCheckInEvent
@@ -84,16 +85,20 @@ class CheckinCheckoutManager(object):
 
         # finally, reindex the object
         catalog = api.portal.get_tool('portal_catalog')
+        # update last modified timestamp for recently modified menu
+        self.context.setModificationDate()
         catalog.reindexObject(
             self.context,
             idxs=(
                 'checked_out',
+                'modified',
                 ),
             update_metadata=True,
             )
 
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
+        notify(ObjectTouchedEvent(self.context))
 
     def is_simple_checkin_allowed(self):
         return self.is_checkin_allowed() and not self.is_locked()
@@ -156,16 +161,20 @@ class CheckinCheckoutManager(object):
 
         # finally, reindex the object
         catalog = api.portal.get_tool('portal_catalog')
+        # update last modified timestamp for recently modified menu
+        self.context.setModificationDate()
         catalog.reindexObject(
             self.context,
             idxs=(
                 'checked_out',
+                'modified',
                 ),
             update_metadata=True,
             )
 
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))
+        notify(ObjectTouchedEvent(self.context))
 
     def is_cancel_allowed(self):
         """Checks whether the user is able to cancel a checkout."""

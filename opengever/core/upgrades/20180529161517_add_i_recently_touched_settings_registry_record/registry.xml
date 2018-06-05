@@ -1,0 +1,8 @@
+<registry>
+
+  <records interface="opengever.base.interfaces.IRecentlyTouchedSettings">
+    <value key="limit">10</value>
+  </records>
+
+</registry>
+

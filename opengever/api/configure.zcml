@@ -146,4 +146,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@recently-touched"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".recently_touched.RecentlyTouchedGet"
+      permission="zope2.View"
+      />
+
 </configure>

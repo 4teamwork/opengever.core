@@ -17,6 +17,7 @@ Release 2018.1
    tippsundtricks
    benachrichtigung
    favoriten
+   kuerzlich_bearbeitet
    dossiers/index
    dokumente/index
    kontakte

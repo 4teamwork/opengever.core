@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 15:47+0000\n"
+"POT-Creation-Date: 2018-06-04 07:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,6 +193,11 @@ msgstr ""
 msgid "label_change_public_trial"
 msgstr ""
 
+#. Default: "Checked out"
+#: ./opengever/base/viewlets/recently_touched_menu.py
+msgid "label_checked_out"
+msgstr ""
+
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_classification"
@@ -243,9 +248,19 @@ msgstr ""
 msgid "label_last_modified"
 msgstr ""
 
+#. Default: "No checked out documents"
+#: ./opengever/base/viewlets/recently_touched_menu.py
+msgid "label_no_checked_out_docs"
+msgstr ""
+
 #. Default: "No favorites exists."
 #: ./opengever/base/viewlets/favorites_menu.py
 msgid "label_no_favorites"
+msgstr ""
+
+#. Default: "No recently touched documents yet"
+#: ./opengever/base/viewlets/recently_touched_menu.py
+msgid "label_no_recently_touched_docs"
 msgstr ""
 
 #. Default: "Overview"
@@ -266,6 +281,11 @@ msgstr ""
 #. Default: "Public trial statement"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_public_trial_statement"
+msgstr ""
+
+#. Default: "Recently touched"
+#: ./opengever/base/viewlets/recently_touched_menu.py
+msgid "label_recently_touched"
 msgstr ""
 
 #. Default: "Retention period (years)"
@@ -435,11 +455,12 @@ msgid "title_manage_favorites"
 msgstr ""
 
 #. Default: "Mark as favorite"
-#: ./opengever/base/viewlets/favorite_action.pt
+#: ./opengever/base/viewlets/favorite_action.py
 msgid "tooltip_mark_favorite_action"
 msgstr ""
 
-#: ./opengever/base/viewlets/favorite_action.pt
+#. Default: "Remove from favorites"
+#: ./opengever/base/viewlets/favorite_action.py
 msgid "tooltip_remove_favorite_action"
 msgstr ""
 

@@ -288,6 +288,8 @@ dl.portlet ul.navTree li {
 
 }
 
+/* @end */
+
 /* @group tabbedview */
 
 .tabbedview_view #tabbedview-body #overview_overview table.listing {
@@ -1105,6 +1107,13 @@ body.template-team-details #content{
   @include align-items(center);
   @include justify-content(flex-start);
   @include flex-direction(row-reverse);
+}
+
+#gever-portal-controls {
+  @include flexbox();
+  @include align-items(center);
+  @include justify-content(flex-start);
+  @include flex-direction(row);
 }
 
 /* @end */

@@ -335,3 +335,12 @@ class IFavoritesSettings(Interface):
         title=u'Enable favorites feature',
         description=u'Whether favorite feature is enabled',
         default=True)
+
+
+class IRecentlyTouchedSettings(Interface):
+
+    limit = schema.Int(
+        title=u'Max number of recently touched objs to store and display',
+        description=u'How many entries to keep for a users recently touched '
+                    u'items list.',
+        default=10)
