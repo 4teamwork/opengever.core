@@ -8,7 +8,6 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.inbox.container import IInboxContainer
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
-from unittest import skip
 
 
 class TestInboxContainer(FunctionalTestCase):
@@ -83,8 +82,6 @@ class TestInboxView(FunctionalTestCase):
             ['Your not allowed to access the inbox of Client1.'],
             statusmessages.messages().get('warning'))
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])

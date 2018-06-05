@@ -28,7 +28,6 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
-from unittest import skip
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -636,8 +635,6 @@ class TestTemplateFolder(FunctionalTestCase):
             ['Document', 'TaskTemplateFolder', 'Template Folder'],
             factoriesmenu.addable_types())
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])

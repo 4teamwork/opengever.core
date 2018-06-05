@@ -9,7 +9,6 @@ from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
-from unittest import skip
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import transaction
@@ -62,8 +61,6 @@ class TestInbox(FunctionalTestCase):
         self.assertEqual(None, inbox.get_sequence_number())
         transaction.commit()
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_supports_translated_title(self, browser):
         add_languages(['de-ch', 'fr-ch'])
