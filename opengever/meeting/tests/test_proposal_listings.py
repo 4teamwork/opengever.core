@@ -67,6 +67,51 @@ class TestDossierProposalListing(IntegrationTestCase):
             proposal_dicts(browser))
 
     @browsing
+    def test_listing_shows_translated_state(self, browser):
+        # Switch to french to tests for encoding errors
+        self.enable_languages()
+        self.login(self.dossier_responsible, browser)
+        browser.open()
+        browser.click_on(u'Fran\xe7ais')
+
+        browser.open(self.dossier,
+                     view='tabbedview_view-proposals',
+                     data={'proposal_state_filter': 'filter_proposals_all'})
+
+        self.assertEquals(
+            [{u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
+              'Etat': 'Soumis',
+              u'Num\xe9ro de d\xe9cision': '',
+              u'R\xe9union': '',
+              'Soumis le': '31.08.2016',
+              'Titre': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
+             {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
+              'Etat': 'En modification',
+              u'Num\xe9ro de d\xe9cision': '',
+              u'R\xe9union': '',
+              'Soumis le': '',
+              'Titre': u'Antrag f\xfcr Kreiselbau'},
+             {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
+              'Etat': u'Cl\xf4tur\xe9',
+              u'Num\xe9ro de d\xe9cision': '1',
+              u'R\xe9union': u'8. Sitzung der Rechnungspr\xfcfungskommission',
+              'Soumis le': '31.08.2016',
+              'Titre': u'Initialvertrag f\xfcr Bearbeitung'},
+             {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
+              'Etat': 'Soumis',
+              u'Num\xe9ro de d\xe9cision': '',
+              u'R\xe9union': '',
+              'Soumis le': '31.08.2016',
+              'Titre': u'\xc4nderungen am Personalreglement'},
+             {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
+              'Etat': 'En modification',
+              u'Num\xe9ro de d\xe9cision': '',
+              u'R\xe9union': '',
+              'Soumis le': '',
+              'Titre': u'\xdcberarbeitung der GAV'}],
+            browser.css('.listing').first.dicts())
+
+    @browsing
     def test_proposals_are_linked_correctly(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')
