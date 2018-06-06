@@ -1,7 +1,10 @@
+from ftw import bumblebee
+from ftw.bumblebee.usersalt import get_user_salt
+from ftw.bumblebee.utils import get_cookie_name
+from ftw.bumblebee.viewlets.cookie import encode_cookie
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from netsight.async.browser.BaseAsyncView import BaseAsyncView
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import MergeDocxProtocolCommand
@@ -11,10 +14,12 @@ from opengever.meeting.interfaces import IMeetingWrapper
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
+from tempfile import TemporaryFile
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 import pytz
+import requests
 import shutil
 import tempfile
 
@@ -85,6 +90,35 @@ class MeetingZipExport(BrowserView):
 
             return filestream_iterator(zip_file.name, 'rb')
 
+    def get_bumblebee_cookie(self):
+        return {get_cookie_name(): encode_cookie({'salt': get_user_salt()})}
+
+    def get_pdf_for_document(self, doc, filename):
+        """Fetch the pdf document from the bumblebee service. If the
+        PDF document ist not yet created, the original document is returned.
+        """
+        pdf_url = bumblebee.get_service_v3().get_representation_url(doc, 'pdf')
+
+        # Disallow redirects to not handle the fallback image for not existing
+        # pdfs as a converted pdf
+        r = requests.get(pdf_url,
+                         stream=True,
+                         cookies=self.get_bumblebee_cookie(),
+                         allow_redirects=False)
+
+        if r.status_code == 200:
+            tmpfile = TemporaryFile()
+            for chunk in r:
+                tmpfile.write(chunk)
+
+            tmpfile.seek(0)
+            filename, ext = os.path.splitext(filename)
+            new_filename = u'{}.pdf'.format(filename)
+            return new_filename, tmpfile
+
+        # Fallback if the pdf request was not sucessfull
+        return filename, doc.file.open()
+
     def get_protocol(self):
         if self.model.has_protocol_document():
             protocol = self.model.protocol_document.resolve_document()
@@ -93,8 +127,8 @@ class MeetingZipExport(BrowserView):
 
             if self.model.modified < protocol_modified:
                 # Return current protocol
-                return (u'{}.docx'.format(safe_unicode(protocol.Title())),
-                        protocol.file.open())
+                filename = u'{}.docx'.format(safe_unicode(protocol.Title()))
+                return self.get_pdf_for_document(protocol, filename)
 
         # Create new protocol
         operations = ProtocolOperations()
@@ -116,8 +150,8 @@ class MeetingZipExport(BrowserView):
             if not document:
                 continue
 
-            path = agenda_item.get_document_filename_for_zip(document)
-            generator.add_file(path, document.file.open())
+            filename = agenda_item.get_document_filename_for_zip(document)
+            generator.add_file(*self.get_pdf_for_document(document, filename))
 
     def add_agenda_items_attachments(self, generator):
         for agenda_item in self.model.agenda_items:
@@ -125,8 +159,8 @@ class MeetingZipExport(BrowserView):
                 continue
 
             for document in agenda_item.proposal.resolve_submitted_documents():
-                path = agenda_item.get_document_filename_for_zip(document)
-                generator.add_file(path, document.file.open())
+                filename = agenda_item.get_document_filename_for_zip(document)
+                generator.add_file(*self.get_pdf_for_document(document, filename))
 
     def get_agendaitem_list(self):
         if self.model.has_agendaitem_list_document():
@@ -136,8 +170,9 @@ class MeetingZipExport(BrowserView):
 
             if self.model.modified < agendaitem_list_modified:
                 # Return current protocol
-                return (u'{}.docx'.format(safe_unicode(agendaitem_list.Title())),
-                        agendaitem_list.file.open())
+
+                filename = u'{}.docx'.format(safe_unicode(agendaitem_list.Title()))
+                return self.get_pdf_for_document(agendaitem_list, filename)
 
         # Create new protocol
         operations = AgendaItemListOperations()
