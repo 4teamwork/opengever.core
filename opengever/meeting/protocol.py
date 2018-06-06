@@ -10,23 +10,7 @@ import json
 
 class ProtocolData(object):
 
-    def __init__(self, meeting, agenda_items=None,
-                 include_initial_position=True, include_legal_basis=True,
-                 include_considerations=True, include_proposed_action=True,
-                 include_discussion=True, include_decision=True,
-                 include_publish_in=True, include_disclose_to=True,
-                 include_copy_for_attention=True):
-
-        self.include_initial_position = include_initial_position
-        self.include_legal_basis = include_legal_basis
-        self.include_considerations = include_considerations
-        self.include_proposed_action = include_proposed_action
-        self.include_discussion = include_discussion
-        self.include_decision = include_decision
-        self.include_publish_in = include_publish_in
-        self.include_disclose_to = include_disclose_to
-        self.include_copy_for_attention = include_copy_for_attention
-
+    def __init__(self, meeting, agenda_items=None):
         self.meeting = meeting
         self.agenda_items = agenda_items or self.meeting.agenda_items
 
@@ -136,17 +120,7 @@ class ProtocolData(object):
         self.data['agenda_items'] = []
         for agenda_item in self.agenda_items:
             self.data['agenda_items'].append(
-                agenda_item.get_field_data(
-                    include_initial_position=self.include_initial_position,
-                    include_legal_basis=self.include_legal_basis,
-                    include_considerations=self.include_considerations,
-                    include_proposed_action=self.include_proposed_action,
-                    include_discussion=self.include_discussion,
-                    include_decision=self.include_decision,
-                    include_publish_in=self.include_publish_in,
-                    include_disclose_to=self.include_disclose_to,
-                    include_copy_for_attention=self.include_copy_for_attention
-                ))
+                agenda_item.get_agenda_item_data())
 
     def add_general_metadata(self):
         self.data['document'] = {

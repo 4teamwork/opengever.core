@@ -6,7 +6,7 @@ from ftw.testbrowser.pages import factoriesmenu
 
 class TestCommitteeContainer(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_can_configure_ad_hoc_template(self, browser):

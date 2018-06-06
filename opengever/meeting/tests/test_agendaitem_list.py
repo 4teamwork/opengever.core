@@ -29,8 +29,6 @@ class TestAgendaItemList(FunctionalTestCase):
 
         self.container = create(
             Builder('committee_container').having(
-                protocol_template=self.sablon_template,
-                excerpt_template=self.sablon_template,
                 agendaitem_list_template=self.sablon_template))
 
         self.committee = create(Builder('committee')
@@ -68,7 +66,8 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
+
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
 
         self.assertEqual(browser.url, meeting.get_url())
         self.assertEqual(
@@ -83,8 +82,9 @@ class TestAgendaItemList(FunctionalTestCase):
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
-        browser.css('.download-agendaitem-list-btn').first.click()
+
+        browser.css('.document-actions .action.generate').first.click()
+        browser.css('.document-actions .action.download').first.click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
@@ -94,44 +94,25 @@ class TestAgendaItemList(FunctionalTestCase):
             browser.headers)
 
     @browsing
-    def test_agendaitem_list_cannot_be_regenerated(self, browser):
-        meeting = create(Builder('meeting')
-                         .having(committee=self.committee_model)
-                         .link_with(self.meeting_dossier))
-
-        browser.login().open(meeting.get_url())
-
-        generate_url = browser.css('.generate-agendaitem-list').first.get('href')
-        browser.open(generate_url)
-        self.assertIn('has been generated successfully', browser.css('.portalMessage.info')[-1].text)
-
-        generated_document = meeting.agendaitem_list_document.resolve_document()
-        browser.open(generate_url)
-        self.assertIn('has already been generated', browser.css('.portalMessage.error').first.text)
-        self.assertTrue(meeting.agendaitem_list_document.resolve_document() == generated_document,
-                        'Unexpectedly generated a new document.')
-        self.assertEqual(None, generated_document.get_current_version_id())
-
-    @browsing
     def test_updated_agendaitem_list_can_be_downloaded(self, browser):
         meeting = create(Builder('meeting')
                          .having(committee=self.committee_model)
                          .link_with(self.meeting_dossier))
 
         browser.login().open(meeting.get_url())
-        browser.css('.generate-agendaitem-list').first.click()
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
         generated_document = meeting.agendaitem_list_document.resolve_document()
         self.assertEqual(None, generated_document.get_current_version_id(),
                          'Did not generate a new fresh document.')
 
-        browser.css('.refresh-agendaitem-list').first.click()
+        browser.css('.agenda-item-list-doc .action.generate').first.click()
         refreshed_document = meeting.agendaitem_list_document.resolve_document()
         self.assertTrue(generated_document == refreshed_document,
                         'Unexpectedly generated a new document instead of a document version when refreshing an agenda item.')
         self.assertNotEqual(0, refreshed_document.version_id,
                             'Unexpectedly generated a new fresh document.')
 
-        browser.css('.download-agendaitem-list-btn').first.click()
+        browser.css('.agenda-item-list-doc .action.download').first.click()
 
         self.assertDictContainsSubset(
             {
@@ -173,18 +154,12 @@ class TestAgendaItemList(FunctionalTestCase):
         proposal = create(Builder('submitted_proposal')
                           .within(committee)
                           .having(title='Mach doch',
-                                  committee=committee,
-                                  legal_basis=u'We may do it',
-                                  decision_draft=u'Proposal approved',
-                                  initial_position=u'We should do it.',
-                                  proposed_action=u'Do it.',
-                                  considerations=u'Uhm....'))
+                                  committee=committee))
 
         create(Builder('agenda_item')
                .having(title=u'foo', number=u'2', meeting=meeting))
         create(Builder('agenda_item')
-               .having(meeting=meeting, proposal=proposal,
-                       discussion=u'I say Nay!', number=u'1'))
+               .having(meeting=meeting, proposal=proposal))
 
         browser.login().open(meeting.get_url(view='agenda_item_list/as_json'))
 
@@ -192,16 +167,6 @@ class TestAgendaItemList(FunctionalTestCase):
             [{u'decision_number': None,
               u'description': u'Mach doch',
               u'dossier_reference_number': u'123',
-              u'html:considerations': u'Uhm....',
-              u'html:copy_for_attention': None,
-              u'html:decision': u'Proposal approved',
-              u'html:decision_draft': u'Proposal approved',
-              u'html:disclose_to': None,
-              u'html:discussion': u'I say Nay!',
-              u'html:initial_position': u'We should do it.',
-              u'html:legal_basis': u'We may do it',
-              u'html:proposed_action': u'Do it.',
-              u'html:publish_in': None,
               u'is_paragraph': False,
               u'number': u'1.',
               u'repository_folder_title': u'repo',
@@ -209,16 +174,6 @@ class TestAgendaItemList(FunctionalTestCase):
              {u'decision_number': None,
               u'description': u'foo',
               u'dossier_reference_number': None,
-              u'html:considerations': None,
-              u'html:copy_for_attention': None,
-              u'html:decision': None,
-              u'html:decision_draft': None,
-              u'html:disclose_to': None,
-              u'html:discussion': None,
-              u'html:initial_position': None,
-              u'html:legal_basis': None,
-              u'html:proposed_action': None,
-              u'html:publish_in': None,
               u'is_paragraph': False,
               u'number': u'2.',
               u'repository_folder_title': None,

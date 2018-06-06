@@ -49,7 +49,7 @@ class TestProposalTemplatesVocabulary(IntegrationTestCase):
 
 
 class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     def test_consists_of_all_templates_by_default(self):
         self.login(self.committee_responsible)

@@ -3,6 +3,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.meeting.model import GeneratedProtocol
+from opengever.meeting.model import Meeting
 from opengever.testing import MEMORY_DB_LAYER
 from unittest import TestCase
 import pytz
@@ -31,6 +32,11 @@ class TestUnitMeeting(TestCase):
         self.meeting.protocol_document = GeneratedProtocol(
             admin_unit_id='foo', int_id=1, generated_version=42)
         self.assertTrue(self.meeting.has_protocol_document())
+
+    def test_meeting_title(self):
+        self.assertEqual(
+            u'My Title',
+            Meeting(title="My Title").get_title())
 
     def test_reorder_agenda_items(self):
         para = create(Builder('agenda_item')

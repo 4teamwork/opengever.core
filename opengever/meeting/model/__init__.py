@@ -16,7 +16,6 @@ tables = [
     'agendaitems',
     'committees',
     'generateddocuments',
-    'meeting_excerpts',
     'meeting_participants',
     'meetings',
     'members',

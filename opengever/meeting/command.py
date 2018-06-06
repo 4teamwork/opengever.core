@@ -11,7 +11,6 @@ from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
@@ -102,9 +101,6 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
 class ProtocolOperations(object):
     """Protocol generation workflow."""
 
-    def get_sablon_template(self, meeting):
-        return meeting.get_protocol_template()
-
     def get_meeting_data(self, meeting):
         return ProtocolData(meeting)
 
@@ -173,115 +169,6 @@ class AgendaItemListOperations(object):
         return _(u'Protocol for meeting ${title} has been updated '
                  'successfully.',
                  mapping=dict(title=meeting.get_title()))
-
-
-class ExcerptOperations(object):
-    """Protocol exceprt generation workflow."""
-
-    def __init__(self, agenda_item):
-        self.agenda_item = agenda_item
-        self.proposal = agenda_item.proposal
-
-    def get_sablon_template(self, meeting):
-        return meeting.get_excerpt_template()
-
-    def get_meeting_data(self, meeting):
-        return ExcerptProtocolData(meeting, [self.agenda_item])
-
-    def create_database_entry(self, meeting, document):
-        version = document.get_current_version_id(missing_as_zero=True)
-        excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document), generated_version=version)
-
-        self.proposal.submitted_excerpt_document = excerpt
-
-        return excerpt
-
-    def get_generated_message(self, meeting):
-        return _(u'Excerpt for agenda item ${title} has been generated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_updated_message(self, meeting):
-        return _(u'Excerpt for agenda item ${title} has been updated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_title(self, meeting):
-        return u"{} - {}".format(
-            self.proposal.resolve_submitted_proposal().title,
-            meeting.get_title())
-
-    def get_filename(self, meeting):
-        normalizer = getUtility(IIDNormalizer)
-        return u"{}-{}.docx".format(
-            normalizer.normalize(
-                self.proposal.resolve_submitted_proposal().title),
-            normalizer.normalize(
-                meeting.get_title()))
-
-
-class ManualExcerptOperations(object):
-    """Manual protocol excerpt redaction workflow."""
-
-    def __init__(self, agenda_items, title,
-                 include_initial_position=True, include_legal_basis=True,
-                 include_considerations=True, include_proposed_action=True,
-                 include_discussion=True, include_decision=True,
-                 include_publish_in=True, include_disclose_to=True,
-                 include_copy_for_attention=True):
-        self.agenda_items = agenda_items
-        self.title = title
-        self.include_initial_position = include_initial_position
-        self.include_legal_basis = include_legal_basis
-        self.include_considerations = include_considerations
-        self.include_proposed_action = include_proposed_action
-        self.include_discussion = include_discussion
-        self.include_decision = include_decision
-        self.include_publish_in = include_publish_in
-        self.include_disclose_to = include_disclose_to
-        self.include_copy_for_attention = include_copy_for_attention
-
-    def get_sablon_template(self, meeting):
-        return meeting.get_excerpt_template()
-
-    def get_meeting_data(self, meeting):
-        return ExcerptProtocolData(
-            meeting, self.agenda_items,
-            include_initial_position=self.include_initial_position,
-            include_legal_basis=self.include_legal_basis,
-            include_considerations=self.include_considerations,
-            include_proposed_action=self.include_proposed_action,
-            include_discussion=self.include_discussion,
-            include_decision=self.include_decision,
-            include_publish_in=self.include_publish_in,
-            include_disclose_to=self.include_disclose_to,
-            include_copy_for_attention=self.include_copy_for_attention)
-
-    def create_database_entry(self, meeting, document):
-        version = document.get_current_version_id(missing_as_zero=True)
-        excerpt = GeneratedExcerpt(
-            oguid=Oguid.for_object(document), generated_version=version)
-
-        meeting.excerpt_documents.append(excerpt)
-        return excerpt
-
-    def get_generated_message(self, meeting):
-        return _(u'Excerpt for meeting ${title} has been generated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_updated_message(self, meeting):
-        return _(u'Excerpt for meeting ${title} has been updated '
-                 'successfully',
-                 mapping=dict(title=meeting.get_title()))
-
-    def get_title(self, meeting):
-        return self.title
-
-    def get_filename(self, meeting):
-        normalizer = getUtility(IIDNormalizer)
-        return u"{}.docx".format(normalizer.normalize(self.get_title(meeting)))
 
 
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
@@ -534,12 +421,11 @@ class CreateSubmittedProposalCommand(object):
                                     name='field-data')
         jsondata['field-data'] = collector.extract()
 
-        if is_word_meeting_implementation_enabled():
-            blob = self.proposal.get_proposal_document().file
-            jsondata['file'] = {
-                'filename': blob.filename,
-                'contentType': blob.contentType,
-                'data': base64.encodestring(blob.data)}
+        blob = self.proposal.get_proposal_document().file
+        jsondata['file'] = {
+            'filename': blob.filename,
+            'contentType': blob.contentType,
+            'data': base64.encodestring(blob.data)}
 
         record = IHistory(self.proposal).append_record(u'submitted')
         history_data = advancedjson.dumps({'uuid': record.uuid})

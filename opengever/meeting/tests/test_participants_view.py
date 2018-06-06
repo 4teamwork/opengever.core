@@ -4,7 +4,7 @@ import json
 
 
 class TestParticipantsView(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_change_role(self, browser):

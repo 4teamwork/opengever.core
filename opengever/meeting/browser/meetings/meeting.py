@@ -8,21 +8,16 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
-from opengever.meeting.browser.protocol import GenerateProtocol
 from opengever.meeting.browser.protocol import MergeDocxProtocol
-from opengever.meeting.browser.protocol import UpdateProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
 from operator import itemgetter
 from path import Path
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.supermodel import model
@@ -219,24 +214,19 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
 
 class MeetingView(BrowserView):
 
-    noword_template = ViewPageTemplateFile('templates/meeting-noword.pt')
-    word_template = ViewPageTemplateFile('templates/meeting-word.pt')
+    template = ViewPageTemplateFile('templates/meeting.pt')
 
     def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)
         self.model = self.context.model
 
     def __call__(self):
-        if is_word_meeting_implementation_enabled():
-            # Enable border to show the zip export action also for
-            # committee members. Because the plone_view's `showEditableBorder`
-            # checks for `ModifyPortalContent`, we have to enable the border
-            # manually.
-            self.request.set('enable_border', True)
-
-            return self.word_template()
-        else:
-            return self.noword_template()
+        # Enable border to show the zip export action also for
+        # committee members. Because the plone_view's `showEditableBorder`
+        # checks for `ModifyPortalContent`, we have to enable the border
+        # manually.
+        self.request.set('enable_border', True)
+        return self.template()
 
     def get_css_class(self, document):
         """Provide CSS classes for icons."""
@@ -276,18 +266,6 @@ class MeetingView(BrowserView):
                                             default=u'Agenda item list'),
                                     show_icon=False)
 
-    def url_protocol(self):
-        return self.model.get_url(view='protocol')
-
-    def url_generate_protocol(self):
-        if is_word_meeting_implementation_enabled():
-            return self.url_merge_docx_protocol()
-
-        if not self.model.has_protocol_document():
-            return GenerateProtocol.url_for(self.model)
-        else:
-            return UpdateProtocol.url_for(self.model)
-
     def url_merge_docx_protocol(self):
         return MergeDocxProtocol.url_for(self.model)
 
@@ -325,57 +303,9 @@ class MeetingView(BrowserView):
         else:
             return UpdateAgendaItemList.url_for(self.model)
 
-    def url_agendaitem_list(self):
-        return self.model.get_url(view='agenda_item_list')
-
-    def url_zipexport(self):
-        return self.model.get_url(view='export-meeting-zip')
-
-    def url_manually_generate_excerpt(self):
-        return self.model.get_url(view='generate_excerpt')
-
-    def transitions(self):
-        return self.model.get_state().get_transitions()
-
-    def agenda_items(self):
-        return self.model.agenda_items
-
-    def manually_generated_excerpts(self):
-        docs = [excerpt.resolve_document()
-                for excerpt in self.model.excerpt_documents]
-
-        return IContentListing(docs)
-
     def render_handlebars_agendaitems_template(self):
-        if is_word_meeting_implementation_enabled():
-            return self.render_handlebars_agendaitems_template_word()
-        else:
-            return self.render_handlebars_agendaitems_template_noword()
-
-    def render_handlebars_navigation_template(self):
         return prepare_handlebars_template(
-            TEMPLATES_DIR.joinpath('navigation-word.html'))
-
-    def render_handlebars_agendaitems_template_noword(self):
-        return prepare_handlebars_template(
-            TEMPLATES_DIR.joinpath('agendaitems-noword.html'),
-            translations=(
-                _('label_edit_cancel', default='Cancel'),
-                _('label_edit_save', default='Save'),
-                _('label_decide_action', default='Decide this agenda item'),
-                _('label_reopen_action', default='Reopen this agenda item'),
-                _('label_revise_action', default='Revise this agenda item'),
-                _('action_rename_agenda_item', default='Rename agenda item'),
-                _('action_rename_agenda_paragraph', default='Rename paragraph'),
-                _('action_remove_agenda_item', default='Remove agenda item'),
-                _('action_remove_agenda_paragraph', default='Remove paragraph'),
-
-            ),
-            max_proposal_title_length=ISubmittedProposal['title'].max_length)
-
-    def render_handlebars_agendaitems_template_word(self):
-        return prepare_handlebars_template(
-            TEMPLATES_DIR.joinpath('agendaitems-word.html'),
+            TEMPLATES_DIR.joinpath('agendaitems.html'),
             translations=(
                 _('label_edit_cancel', default='Cancel'),
                 _('label_edit_save', default='Save'),
@@ -405,6 +335,10 @@ class MeetingView(BrowserView):
                   ' this excerpt.')
             ),
             max_proposal_title_length=ISubmittedProposal['title'].max_length)
+
+    def render_handlebars_navigation_template(self):
+        return prepare_handlebars_template(
+            TEMPLATES_DIR.joinpath('navigation.html'))
 
     def render_handlebars_proposals_template(self):
         return prepare_handlebars_template(
@@ -445,7 +379,6 @@ class MeetingView(BrowserView):
                            default='An unexpected error has occurred'),
                          context=self.request)
 
-    @require_word_meeting_feature
     def get_participants(self):
         result = []
         participants = self.model.participants
@@ -478,7 +411,6 @@ class MeetingView(BrowserView):
         result.sort(key=itemgetter('fullname'))
         return result
 
-    @require_word_meeting_feature
     def get_closing_infos(self):
         transition_controller = self.model.workflow.transition_controller
         infos = {'is_closed': False,
@@ -507,7 +439,6 @@ class MeetingView(BrowserView):
 
         return infos
 
-    @require_word_meeting_feature
     def get_close_transition(self):
         for transition in self.model.workflow.get_transitions(self.model.get_state()):
             if transition.state_to == 'closed' and transition.visible:
@@ -515,7 +446,6 @@ class MeetingView(BrowserView):
 
         return None
 
-    @require_word_meeting_feature
     def get_cancel_transition(self):
         for transition in self.model.workflow.get_transitions(self.model.get_state()):
             if transition.state_to == 'cancelled' and transition.visible:

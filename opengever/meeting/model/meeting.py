@@ -10,8 +10,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
@@ -51,21 +49,11 @@ meeting_participants = Table(
 )
 
 
-meeting_excerpts = Table(
-    'meeting_excerpts', Base.metadata,
-    Column('meeting_id', Integer, ForeignKey('meetings.id')),
-    Column('document_id', Integer, ForeignKey('generateddocuments.id'))
-)
-
-
 class CloseTransition(Transition):
     """Used by pending-closed and held-closed transitions.
     """
 
     def get_validation_errors(self, model):
-        if not is_word_meeting_implementation_enabled():
-            return ()
-
         if model.get_undecided_agenda_items():
             return [_(u'label_close_error_has_undecided_agenda_items',
                       u'The meeting cannot be closed because it has undecided'
@@ -126,11 +114,9 @@ class Meeting(Base, SQLFormSupport):
              'held', 'closed',
              title=_('close_meeting', default='Close meeting')),
          Transition('closed', 'held',
-                    title=_('reopen', default='Reopen'),
-                    condition=is_word_meeting_implementation_enabled),
+                    title=_('reopen', default='Reopen')),
          CancelTransition('pending', 'cancelled',
-                          title=_('cancel', default='Cancel'),
-                          condition=is_word_meeting_implementation_enabled),
+                          title=_('cancel', default='Cancel')),
          ],
         show_in_actions_menu=True,
         transition_controller=MeetingTransitionController,
@@ -183,12 +169,6 @@ class Meeting(Base, SQLFormSupport):
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedAgendaItemList.document_id==Meeting.agendaitem_list_document_id")
 
-    # define relationship here using a secondary table to keep
-    # GeneratedDocument as simple as possible and avoid that it actively
-    # knows about all its relationships
-    excerpt_documents = relationship('GeneratedExcerpt',
-                                     secondary=meeting_excerpts,)
-
     def get_other_participants_list(self):
         if self.other_participants is not None:
             return filter(len, map(lambda value: value.strip(),
@@ -232,10 +212,8 @@ class Meeting(Base, SQLFormSupport):
 
     def update_protocol_document(self):
         """Update or create meeting's protocol."""
-        from opengever.meeting.command import CreateGeneratedDocumentCommand
         from opengever.meeting.command import MergeDocxProtocolCommand
         from opengever.meeting.command import ProtocolOperations
-        from opengever.meeting.command import UpdateGeneratedDocumentCommand
 
         if self.has_protocol_document() and not self.protocol_document.is_locked():
             # The protocol should never be changed when it is no longer locked:
@@ -243,20 +221,9 @@ class Meeting(Base, SQLFormSupport):
             return
 
         operations = ProtocolOperations()
-
-        if is_word_meeting_implementation_enabled():
-            command = MergeDocxProtocolCommand(
-                self.get_dossier(), self, operations,
-                lock_document_after_creation=True)
-        else:
-            if self.has_protocol_document():
-                command = UpdateGeneratedDocumentCommand(
-                    self.protocol_document, self, operations)
-            else:
-                command = CreateGeneratedDocumentCommand(
-                    self.get_dossier(), self, operations,
-                    lock_document_after_creation=True)
-
+        command = MergeDocxProtocolCommand(
+            self.get_dossier(), self, operations,
+            lock_document_after_creation=True)
         command.execute()
 
     def unlock_protocol_document(self):
@@ -282,14 +249,8 @@ class Meeting(Base, SQLFormSupport):
         - update and unlock the protocol document
         """
         self.hold()
-
-        if is_word_meeting_implementation_enabled():
-            assert not self.get_undecided_agenda_items(), \
-                'All agenda items must be decided before a meeting is closed.'
-
-        else:
-            for agenda_item in self.agenda_items:
-                agenda_item.close()
+        assert not self.get_undecided_agenda_items(), \
+            'All agenda items must be decided before a meeting is closed.'
 
         self.update_protocol_document()
         self.unlock_protocol_document()
@@ -360,9 +321,6 @@ class Meeting(Base, SQLFormSupport):
         return self._get_filename(
             _(u'label_agendaitem_list', default=u'Agendaitem list'))
 
-    def get_protocol_template(self):
-        return self.committee.get_protocol_template()
-
     def get_protocol_header_template(self):
         return self.committee.get_protocol_header_template()
 
@@ -374,9 +332,6 @@ class Meeting(Base, SQLFormSupport):
 
     def get_agenda_item_suffix_template(self):
         return self.committee.get_agenda_item_suffix_template()
-
-    def get_excerpt_template(self):
-        return self.committee.get_excerpt_template()
 
     def get_agendaitem_list_template(self):
         return self.committee.get_agendaitem_list_template()
@@ -454,7 +409,6 @@ class Meeting(Base, SQLFormSupport):
 
         return api.portal.get_localized_time(datetime=date, time_only=True)
 
-    @require_word_meeting_feature
     def get_data_for_zip_export(self):
         meeting_data = {
             'title': safe_unicode(self.title),
@@ -496,7 +450,6 @@ class Meeting(Base, SQLFormSupport):
                                             is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 
-    @require_word_meeting_feature
     def schedule_ad_hoc(self, title):
         committee = self.committee.resolve_committee()
         ad_hoc_template = committee.get_ad_hoc_template()

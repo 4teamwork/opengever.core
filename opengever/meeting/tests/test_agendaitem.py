@@ -1,20 +1,14 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.locking.interfaces import ILockable
 from plone.protect import createToken
-from z3c.relationfield.relation import RelationValue
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
 import json
 import re
 import transaction
@@ -34,10 +28,11 @@ class TestAgendaItem(FunctionalTestCase):
             Builder('dossier').within(self.repository_folder))
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
-        self.excerpt_template = create(Builder('sablontemplate')
-                                       .with_asset_file('excerpt_template.docx'))
+        self.template = create(Builder('sablontemplate')
+                                       .with_asset_file('empty.docx'))
         self.container = create(Builder('committee_container')
-                                .having(excerpt_template=self.excerpt_template))
+                                .having(ad_hoc_template=self.template))
+
         self.committee = create(Builder('committee').within(self.container))
         self.grant('CommitteeResponsible', on=self.committee)
         self.meeting = create(Builder('meeting')
@@ -69,16 +64,6 @@ class TestAgendaItem(FunctionalTestCase):
         browser.login().open(self.meeting_wrapper, view=view)
 
         return AgendaItem.query.first()
-
-    def setup_excerpt_template(self):
-        templates = create(Builder('templatefolder'))
-        sablon_template = create(
-            Builder('sablontemplate')
-            .within(templates)
-            .with_asset_file('sablon_template.docx'))
-
-        self.container.excerpt_template = RelationValue(
-            getUtility(IIntIds).getId(sablon_template))
 
 
 class TestAgendaItemList(TestAgendaItem):
@@ -129,25 +114,7 @@ class TestAgendaItemList(TestAgendaItem):
 
     @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
-        self.setup_excerpt_template()
         item = self.setup_proposal(related_document_titles=["a document"])
-        item = self.schedule_proposal(item, browser)
-        browser.login().open(
-            self.meeting_wrapper, {'_authenticator': createToken()},
-            view='agenda_items/{}/decide'.format(item.agenda_item_id))
-
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/list'.format(item.agenda_item_id),
-            data={'title': 'bar'})
-        item = browser.json.get('items')[0]
-
-        self.assertTrue(item.get('has_documents'))
-
-    @browsing
-    def test_agendaitem_with_excerpts_has_documents(self, browser):
-        self.setup_excerpt_template()
-        item = self.setup_proposal()
         item = self.schedule_proposal(item, browser)
         browser.login().open(
             self.meeting_wrapper, {'_authenticator': createToken()},
@@ -333,7 +300,6 @@ class TestAgendaItemDecide(TestAgendaItem):
 
     @browsing
     def test_decide_proposal_agenda_item(self, browser):
-        self.setup_excerpt_template()
         proposal = self.setup_proposal()
 
         # schedule
@@ -344,66 +310,6 @@ class TestAgendaItemDecide(TestAgendaItem):
 
         item = AgendaItem.query.first()
         browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id),
-            data={'_authenticator': createToken()})
-
-        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
-        self.assertEquals(
-            [{u'message': u'Agenda Item decided and excerpt generated.',
-              u'messageClass': u'info',
-              u'messageTitle': u'Information'}],
-            browser.json.get('messages'))
-
-    @browsing
-    def test_decide_agenda_item_creates_locked_excerpt_in_dossier(self, browser):
-        self.setup_excerpt_template()
-        proposal = self.setup_proposal()
-        # schedule
-        view = 'unscheduled_proposals/{}/schedule'.format(
-            proposal.load_model().proposal_id)
-
-        browser.login().open(self.meeting_wrapper, view=view)
-        agenda_item = AgendaItem.query.first()
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(agenda_item.agenda_item_id),
-            data={'_authenticator': createToken()})
-
-        agenda_item = AgendaItem.query.first()  # refresh
-        proposal = agenda_item.proposal
-        excerpt_in_dossier = proposal.excerpt_document.resolve_document()
-        lockable = ILockable(excerpt_in_dossier)
-        self.assertTrue(lockable.locked())
-        self.assertTrue(lockable.can_safely_unlock(MEETING_EXCERPT_LOCK))
-
-        browser.open(excerpt_in_dossier)
-        self.assertEqual(u'This document is a copy of the excerpt Fooo - '
-                         u'C\xf6mmunity meeting from the meeting C\xf6mmunity '
-                         u'meeting and cannot be edited directly.',
-                         info_messages()[0])
-        message_links = browser.css('.portalMessage.info a')
-        self.assertEqual(
-            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1/document-3',
-            message_links[0].get('href'))
-        self.assertEqual(
-            'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/view',
-            message_links[1].get('href'))
-
-    @browsing
-    def test_decide_proposal_agenda_item_without_dossier_permission(self, browser):
-        self.setup_excerpt_template()
-        proposal = self.setup_proposal()
-
-        # schedule
-        view = 'unscheduled_proposals/{}/schedule'.format(
-            proposal.load_model().proposal_id)
-
-        self.login_as_user_without_dossier_permission(browser)
-
-        browser.open(self.meeting_wrapper, view=view)
-        item = AgendaItem.query.first()
-        browser.open(
             self.meeting_wrapper,
             view='agenda_items/{}/decide'.format(item.agenda_item_id),
             data={'_authenticator': createToken()})
@@ -519,59 +425,6 @@ class TestAgendaItemReopen(TestAgendaItem):
 class TestAgendaItemRevise(TestAgendaItem):
 
     @browsing
-    def test_revise_agenda_item(self, browser):
-        excerpt_document = create(Builder('document')
-                                  .titled(u'Excerpt')
-                                  .attach_file_containing(u"excerpt",
-                                                          u"excerpt.docx")
-                                  .within(self.dossier))
-        submitted_excerpt_document = create(Builder('document')
-                                            .titled(u'Excerpt')
-                                            .attach_file_containing(
-                                                u"excerpt", u"excerpt.docx")
-                                            .within(self.dossier))
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(committee=self.committee.load_model())
-                          .as_submitted())
-
-        excerpt = create(Builder('generated_excerpt')
-                         .for_document(excerpt_document))
-        submitted_excerpt = create(Builder('generated_excerpt')
-                                   .for_document(submitted_excerpt_document))
-        proposal_model = proposal.load_model()
-        proposal_model.workflow_state = 'decided'
-        proposal_model.excerpt_document = excerpt
-        proposal_model.submitted_excerpt_document = submitted_excerpt
-
-        item = create(Builder('agenda_item').having(
-            title=u'foo',
-            meeting=self.meeting,
-            workflow_state='revision',
-            proposal=proposal.load_model()))
-
-        self.assertEqual(None, excerpt_document.get_current_version_id())
-        self.assertEqual(None, submitted_excerpt_document.get_current_version_id())
-
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/revise'.format(item.agenda_item_id),
-            data={'_authenticator': createToken()})
-
-        self.assertEquals(AgendaItem.STATE_DECIDED,
-                          AgendaItem.query.first().get_state())
-        self.assertEquals(Proposal.STATE_DECIDED,
-                          Proposal.query.first().get_state())
-        self.assertEquals([{u'message': u'Agenda Item revised successfully.',
-                            u'messageClass': u'info',
-                            u'messageTitle': u'Information'}],
-                          browser.json.get('messages'))
-        self.assertEqual(1, excerpt_document.get_current_version_id(),
-                         "Excerpt document should be updated with a new version.")
-        self.assertEqual(1, submitted_excerpt_document.get_current_version_id(),
-                         "Submitted excerpt document should be updated with a new version.")
-
-    @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
         with browser.expect_http_error(reason='Not Found'):
             browser.login().open(self.meeting_wrapper,
@@ -668,18 +521,6 @@ class TestScheduleParagraph(TestAgendaItem):
 
 
 class TestScheduleText(TestAgendaItem):
-
-    @browsing
-    def test_schedule_text(self, browser):
-        browser.login().open(self.meeting_wrapper,
-                             view='agenda_items/schedule_text',
-                             data={'title': u'Baugesuch Herr Maier'})
-
-        agenda_items = Meeting.get(self.meeting.meeting_id).agenda_items
-
-        self.assertEquals(1, len(agenda_items))
-        self.assertEqual(u'Baugesuch Herr Maier', agenda_items[0].title)
-        self.assertFalse(agenda_items[0].is_paragraph)
 
     @browsing
     def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):

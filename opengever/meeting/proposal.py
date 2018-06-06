@@ -13,8 +13,6 @@ from opengever.base.utils import get_preferred_language_code
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
@@ -82,48 +80,6 @@ class IProposal(model.Schema):
         defaultFactory=default_title
         )
 
-    dexteritytextindexer.searchable('legal_basis')
-    legal_basis = schema.Text(
-        title=_('label_legal_basis', default=u"Legal basis"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('initial_position')
-    initial_position = schema.Text(
-        title=_('label_initial_position', default=u"Initial position"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('proposed_action')
-    proposed_action = schema.Text(
-        title=_('label_proposed_action', default=u"Proposed action"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('decision_draft')
-    decision_draft = schema.Text(
-        title=_('label_decision_draft', default=u"Decision draft"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('publish_in')
-    publish_in = schema.Text(
-        title=_('label_publish_in', default=u"Publish in"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('disclose_to')
-    disclose_to = schema.Text(
-        title=_('label_disclose_to', default=u"Disclose to"),
-        required=False,
-        )
-
-    dexteritytextindexer.searchable('copy_for_attention')
-    copy_for_attention = schema.Text(
-        title=_('label_copy_for_attention', default=u"Copy for attention"),
-        required=False,
-        )
-
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
         default=[],
@@ -166,12 +122,6 @@ class IProposal(model.Schema):
 
 class ISubmittedProposal(IProposal):
 
-    dexteritytextindexer.searchable('considerations')
-    considerations = schema.Text(
-        title=_('label_considerations', default=u"Considerations"),
-        required=False,
-        )
-
     excerpts = RelationList(
         title=_(u'label_excerpts', default=u'Excerpts'),
         default=[],
@@ -213,57 +163,13 @@ class ProposalBase(ModelContainer):
              'is_html': True},
         ]
 
-        if is_word_meeting_implementation_enabled():
-            proposal_document = self.get_proposal_document()
-            if proposal_document:
-                attributes.append({
-                    'label': _('proposal_document',
-                               default=u'Proposal document'),
-                    'value': DocumentLinkWidget(proposal_document).render(),
-                    'is_html': True})
-
-        else:
-            attributes.extend([
-                {'label': _('label_legal_basis',
-                            default=u'Legal basis'),
-                 'value': self.legal_basis,
-                 'is_html': True},
-
-                {'label': _('label_initial_position',
-                            default=u'Initial position'),
-                 'value': self.initial_position,
-                 'is_html': True},
-
-                {'label': _('label_proposed_action',
-                            default=u'Proposed action'),
-                 'value': self.proposed_action,
-                 'is_html': True},
-
-                {'label': _('label_decision_draft',
-                            default=u'Decision draft'),
-                 'value': self.decision_draft,
-                 'is_html': True},
-
-                {'label': _('label_decision',
-                            default=u'Decision'),
-                 'value': model.get_decision(),
-                 'is_html': True},
-
-                {'label': _('label_publish_in',
-                            default=u'Publish in'),
-                 'value': self.publish_in,
-                 'is_html': True},
-
-                {'label': _('label_disclose_to',
-                            default=u'Disclose to'),
-                 'value': self.disclose_to,
-                 'is_html': True},
-
-                {'label': _('label_copy_for_attention',
-                            default=u'Copy for attention'),
-                 'value': self.copy_for_attention,
-                 'is_html': True},
-            ])
+        proposal_document = self.get_proposal_document()
+        if proposal_document:
+            attributes.append({
+                'label': _('proposal_document',
+                           default=u'Proposal document'),
+                'value': DocumentLinkWidget(proposal_document).render(),
+                'is_html': True})
 
         attributes.extend([
             {'label': _('label_workflow_state', default=u'State'),
@@ -275,27 +181,26 @@ class ProposalBase(ModelContainer):
              'is_html': True},
         ])
 
-        if is_word_meeting_implementation_enabled():
-            if self.predecessor_proposal and self.predecessor_proposal.to_object:
-                predecessor_model = self.predecessor_proposal.to_object.load_model()
-                attributes.append({
-                    'label': _('label_predecessor', default=u'Predecessor'),
-                    'value': predecessor_model.get_link(),
-                    'is_html': True})
+        if self.predecessor_proposal and self.predecessor_proposal.to_object:
+            predecessor_model = self.predecessor_proposal.to_object.load_model()
+            attributes.append({
+                'label': _('label_predecessor', default=u'Predecessor'),
+                'value': predecessor_model.get_link(),
+                'is_html': True})
 
-            catalog = getUtility(ICatalog)
-            doc_id = getUtility(IIntIds).getId(aq_inner(self))
-            successor_html_items = []
-            for relation in catalog.findRelations({
-                    'to_id': doc_id,
-                    'from_attribute': 'predecessor_proposal'}):
-                successor_html_items.append(u'<li>{}</li>'.format(
-                    relation.from_object.load_model().get_link()))
-            if successor_html_items:
-                attributes.append({
-                    'label': _('label_successors', default=u'Successors'),
-                    'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
-                    'is_html': True})
+        catalog = getUtility(ICatalog)
+        doc_id = getUtility(IIntIds).getId(aq_inner(self))
+        successor_html_items = []
+        for relation in catalog.findRelations({
+                'to_id': doc_id,
+                'from_attribute': 'predecessor_proposal'}):
+            successor_html_items.append(u'<li>{}</li>'.format(
+                relation.from_object.load_model().get_link()))
+        if successor_html_items:
+            attributes.append({
+                'label': _('label_successors', default=u'Successors'),
+                'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
+                'is_html': True})
 
         return attributes
 
@@ -325,7 +230,6 @@ class ProposalBase(ModelContainer):
         admin_unit_id = self.load_model().committee.admin_unit_id
         return ogds_service().fetch_admin_unit(admin_unit_id)
 
-    @require_word_meeting_feature
     def get_proposal_document(self):
         """If the word meeting implementation feature is enabled,
         this method returns the proposal document, containing the actual
@@ -343,7 +247,6 @@ class ProposalBase(ModelContainer):
 
         return document
 
-    @require_word_meeting_feature
     def create_proposal_document(self, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
         proposal.
@@ -400,7 +303,6 @@ class SubmittedProposal(ProposalBase):
 
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
-        model = self.load_model()
 
         # Insert dossier link if dossier exists after committee
         data.insert(
@@ -410,25 +312,6 @@ class SubmittedProposal(ProposalBase):
                 'is_html': True,
             }
         )
-
-        if not is_word_meeting_implementation_enabled():
-            # Insert considerations after proposed_action
-            data.insert(
-                7, {
-                    'label': _('label_considerations',
-                               default=u"Considerations"),
-                    'value': self.considerations,
-                }
-            )
-
-            # Insert discussion after considerations
-            agenda = model.agenda_item
-            data.insert(
-                8, {
-                    'label': _('label_discussion', default=u"Discussion"),
-                    'value': agenda and agenda.discussion or ''
-                }
-            )
 
         return data
 
@@ -477,8 +360,7 @@ class SubmittedProposal(ProposalBase):
             )
 
         ignored_documents = [self.get_excerpt()]
-        if is_word_meeting_implementation_enabled():
-            ignored_documents.append(self.get_proposal_document())
+        ignored_documents.append(self.get_proposal_document())
 
         all_docs = [document.getObject() for document in documents]
         return [doc for doc in all_docs if doc not in ignored_documents]
@@ -516,7 +398,6 @@ class SubmittedProposal(ProposalBase):
             dossier.absolute_url(),
             dossier.title)
 
-    @require_word_meeting_feature
     def get_excerpts(self, unrestricted=False):
         """Return a restricted list of document objects which are excerpts
         of the current proposal.
@@ -530,7 +411,6 @@ class SubmittedProposal(ProposalBase):
 
         return excerpts
 
-    @require_word_meeting_feature
     def append_excerpt(self, excerpt_document):
         """Add a relation to a new excerpt document.
         """

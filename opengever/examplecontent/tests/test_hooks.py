@@ -1,4 +1,3 @@
-from ftw.builder import session
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
@@ -9,7 +8,7 @@ from plone.app.testing import applyProfile
 
 class TestHooks(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     def test_execute_examplecontent_hooks(self):
         """Test that examplecontent hooks are executed successfully."""
@@ -20,6 +19,6 @@ class TestHooks(IntegrationTestCase):
         applyProfile(api.portal.get(), 'opengever.examplecontent:municipality_content')
         applyProfile(api.portal.get(), 'opengever.examplecontent:init')
 
-        self.assertEqual(11, Proposal.query.count())
-        self.assertEqual(8, AgendaItem.query.count())
-        self.assertEqual(14, Meeting.query.count())
+        self.assertEqual(7, Proposal.query.count())
+        self.assertEqual(4, AgendaItem.query.count())
+        self.assertEqual(9, Meeting.query.count())

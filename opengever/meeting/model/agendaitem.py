@@ -4,13 +4,9 @@ from ftw.zipexport.utils import normalize_path
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
-from opengever.base.transforms import trix2sablon
-from opengever.base.widgets import trix_strip_whitespace
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.model import Period
@@ -83,18 +79,8 @@ class AgendaItem(Base):
 
     meeting_id = Column(Integer, ForeignKey('meetings.id'), nullable=False)
 
-    discussion = Column(UnicodeCoercingText)
-    decision = Column(UnicodeCoercingText)
-
     def __init__(self, *args, **kwargs):
-        """Prefill the decision attributes with proposal's decision_draft.
-        """
         proposal = kwargs.get('proposal')
-        if proposal and not kwargs.get('decision'):
-            submitted_proposal = proposal.resolve_submitted_proposal()
-            decision_draft = submitted_proposal.decision_draft
-            kwargs.update({'decision': decision_draft})
-
         document = kwargs.pop('document', None)
         if document:
             assert not proposal, 'must only have one of proposal and document'
@@ -103,40 +89,7 @@ class AgendaItem(Base):
 
         super(AgendaItem, self).__init__(*args, **kwargs)
 
-    def update(self, request):
-        """Update with changed data."""
-
-        data = request.get(self.name)
-        if not data:
-            return
-
-        def to_safe_html(markup):
-            # keep empty data (whatever it is), it makes transform unhappy
-            if not markup:
-                return markup
-
-            markup = markup.decode('utf-8')
-            markup = trix2sablon.convert(markup)
-            return trix_strip_whitespace(markup)
-
-        if self.has_proposal:
-            self.submitted_proposal.legal_basis = to_safe_html(data.get('legal_basis'))
-            self.submitted_proposal.initial_position = to_safe_html(data.get('initial_position'))
-            self.submitted_proposal.considerations = to_safe_html(data.get('considerations'))
-            self.submitted_proposal.proposed_action = to_safe_html(data.get('proposed_action'))
-            self.submitted_proposal.publish_in = to_safe_html(data.get('publish_in'))
-            self.submitted_proposal.disclose_to = to_safe_html(data.get('disclose_to'))
-            self.submitted_proposal.copy_for_attention = to_safe_html(data.get('copy_for_attention'))
-
-        self.discussion = to_safe_html(data.get('discussion'))
-        self.decision = to_safe_html(data.get('decision'))
-
-    def get_field_data(self, include_initial_position=True,
-                       include_legal_basis=True, include_considerations=True,
-                       include_proposed_action=True, include_discussion=True,
-                       include_decision=True, include_publish_in=True,
-                       include_disclose_to=True,
-                       include_copy_for_attention=True):
+    def get_agenda_item_data(self):
         data = {
             'number': self.number,
             'description': self.description,
@@ -144,35 +97,8 @@ class AgendaItem(Base):
             'dossier_reference_number': self.get_dossier_reference_number(),
             'repository_folder_title': self.get_repository_folder_title(),
             'is_paragraph': self.is_paragraph,
-            'decision_number': self.decision_number,
-            'html:decision_draft': self._sanitize_text(
-                self.get_decision_draft())}
-
-        if include_initial_position:
-            data['html:initial_position'] = self._sanitize_text(
-                self.initial_position)
-        if include_legal_basis:
-            data['html:legal_basis'] = self._sanitize_text(
-                self.legal_basis)
-        if include_considerations:
-            data['html:considerations'] = self._sanitize_text(
-                self.considerations)
-        if include_proposed_action:
-            data['html:proposed_action'] = self._sanitize_text(
-                self.proposed_action)
-        if include_discussion:
-            data['html:discussion'] = self._sanitize_text(self.discussion)
-        if include_decision:
-            data['html:decision'] = self._sanitize_text(self.decision)
-        if include_publish_in:
-            data['html:publish_in'] = self._sanitize_text(self.publish_in)
-        if include_disclose_to:
-            data['html:disclose_to'] = self._sanitize_text(
-                self.disclose_to)
-        if include_copy_for_attention:
-            data['html:copy_for_attention'] = self._sanitize_text(
-                self.copy_for_attention)
-
+            'decision_number': self.decision_number
+        }
         self._add_attachment_data(data)
         return data
 
@@ -192,12 +118,6 @@ class AgendaItem(Base):
                 attachment['filename'] = filename
             attachment_data.append(attachment)
         data['attachments'] = attachment_data
-
-    def _sanitize_text(self, text):
-        if not text:
-            return None
-
-        return text
 
     @property
     def submitted_proposal(self):
@@ -220,14 +140,8 @@ class AgendaItem(Base):
         else:
             self.title = title
 
-    def get_decision_draft(self):
-        if self.has_proposal:
-            return self.submitted_proposal.decision_draft
-
     def get_decision_number(self):
-        if not is_word_meeting_implementation_enabled():
-            return self.decision_number
-
+        # XXX huh? what is this?
         if not self.decision_number:
             return self.decision_number
 
@@ -299,7 +213,6 @@ class AgendaItem(Base):
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
 
-    @require_word_meeting_feature
     def get_data_for_zip_export(self):
         agenda_item_data = {
             'title': safe_unicode(self.get_title()),
@@ -367,7 +280,6 @@ class AgendaItem(Base):
 
         return self.ad_hoc_document_oguid.resolve_object()
 
-    @require_word_meeting_feature
     def checkin_document(self):
         document = self.resolve_document()
         if not document:
@@ -376,34 +288,6 @@ class AgendaItem(Base):
         checkout_manager = getMultiAdapter((document, document.REQUEST),
                                            ICheckinCheckoutManager)
         checkout_manager.checkin()
-
-    @property
-    def legal_basis(self):
-        return self.submitted_proposal.legal_basis if self.has_proposal else None
-
-    @property
-    def initial_position(self):
-        return self.submitted_proposal.initial_position if self.has_proposal else None
-
-    @property
-    def considerations(self):
-        return self.submitted_proposal.considerations if self.has_proposal else None
-
-    @property
-    def proposed_action(self):
-        return self.submitted_proposal.proposed_action if self.has_proposal else None
-
-    @property
-    def publish_in(self):
-        return self.submitted_proposal.publish_in if self.has_proposal else None
-
-    @property
-    def disclose_to(self):
-        return self.submitted_proposal.disclose_to if self.has_proposal else None
-
-    @property
-    def copy_for_attention(self):
-        return self.submitted_proposal.copy_for_attention if self.has_proposal else None
 
     @property
     def name(self):
@@ -482,7 +366,6 @@ class AgendaItem(Base):
     def return_excerpt(self, document):
         self.proposal.return_excerpt(document)
 
-    @require_word_meeting_feature
     def generate_excerpt(self, title):
         """Generate an excerpt from the agenda items document.
 
@@ -530,7 +413,6 @@ class AgendaItem(Base):
 
         return self.get_state() == self.STATE_DECIDED
 
-    @require_word_meeting_feature
     def get_excerpt_documents(self, unrestricted=False):
         """Return a list of excerpt documents.
 
@@ -549,7 +431,6 @@ class AgendaItem(Base):
 
         return documents
 
-    @require_word_meeting_feature
     def get_source_dossier_excerpt(self):
         if not self.has_proposal:
             return None

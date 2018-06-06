@@ -46,43 +46,9 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_toc_template())
 
-    def test_get_excerpt_template_returns_committee_template_if_available(self):
-        self.login(self.administrator)
-        self.committee.excerpt_template = self.as_relation_value(
-            self.sablon_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_excerpt_template())
-
-    def test_get_excerpt_template_falls_back_to_container(self):
-        self.login(self.administrator)
-
-        self.assertIsNone(self.committee.excerpt_template)
-        self.assertIsNotNone(self.committee_container.excerpt_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_excerpt_template())
-
-    def test_get_protocol_template_returns_committee_template_if_available(self):
-        self.login(self.administrator)
-        self.committee.protocol_template = self.as_relation_value(
-            self.sablon_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_protocol_template())
-
-    def test_get_protocol_template_falls_back_to_container(self):
-        self.login(self.administrator)
-
-        self.assertIsNone(self.committee.protocol_template)
-        self.assertIsNotNone(self.committee_container.protocol_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_protocol_template())
-
     def test_get_protocol_header_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee.protocol_header_template = self.as_relation_value(
             self.sablon_template)
 
@@ -91,7 +57,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_header_template_falls_back_to_container(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.assertIsNone(self.committee.protocol_header_template)
         self.assertIsNotNone(self.committee_container.protocol_header_template)
 
@@ -100,7 +66,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_suffix_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee.protocol_suffix_template = self.as_relation_value(
             self.sablon_template)
 
@@ -109,7 +75,7 @@ class TestCommittee(IntegrationTestCase):
 
     def test_get_protocol_suffix_template_falls_back_to_container_if_available(self):
         self.login(self.administrator)
-        self.activate_feature('word-meeting')
+        self.activate_feature('meeting')
         self.committee_container.protocol_suffix_template = self.as_relation_value(
             self.sablon_template)
 
@@ -147,8 +113,9 @@ class TestCommittee(IntegrationTestCase):
 
         browser.fill(
             {'Title': u'A c\xf6mmittee',
-             'Protocol template': self.sablon_template,
-             'Excerpt template': self.sablon_template,
+             'Protocol header template': self.sablon_template,
+             'Protocol suffix template': self.sablon_template,
+             'Excerpt header template': self.sablon_template,
              'Table of contents template': self.sablon_template,
              'Linked repository folder': self.leaf_repofolder,
              self.group_field_name: 'committee_rpk_group'})
@@ -167,10 +134,6 @@ class TestCommittee(IntegrationTestCase):
             dict(committee.get_local_roles()).get('committee_rpk_group'))
         self.assertEqual(self.leaf_repofolder,
                          committee.get_repository_folder())
-        self.assertEqual(self.sablon_template,
-                         committee.get_protocol_template())
-        self.assertEqual(self.sablon_template,
-                         committee.get_excerpt_template())
         self.assertEqual(self.sablon_template,
                          committee.get_toc_template())
 
@@ -300,13 +263,21 @@ class TestCommitteeWorkflow(IntegrationTestCase):
         disabled.
         Therefore we test the appearance of all fields.
         """
+
         fields = ['Title',
                   'Committeeresponsible',
-                  'Protocol template',
-                  'Excerpt template',
+                  'Protocol header template',
+                  'Protocol suffix template',
+                  'Agenda item header template for the protocol',
+                  'Agenda item suffix template for the protocol',
+                  'Excerpt header template',
+                  'Excerpt suffix template',
                   'Agendaitem list template',
                   'Table of contents template',
-                  'Linked repository folder']
+                  'Linked repository folder',
+                  'Ad hoc agenda item template',
+                  'Paragraph template',
+                  'Allowed proposal templates']
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
             factoriesmenu.add('Committee')

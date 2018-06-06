@@ -19,24 +19,9 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="protocol"
-      class=".protocol.EditProtocol"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="edit-meeting"
       class=".edit_meeting.EditMeetingView"
       permission="cmf.ModifyPortalContent"
-      />
-
-  <!-- registered for admin use only, not available in the UI -->
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="download_generated_protocol"
-      class=".protocol.DownloadGeneratedProtocol"
-      permission="zope2.View"
       />
 
   <!-- registered for admin use only, not available in the UI -->
@@ -52,13 +37,6 @@
       name="download_protocol_json"
       class=".protocol.DownloadProtocolJson"
       permission="cmf.ManagePortal"
-      />
-
-  <browser:page
-      for="opengever.meeting.interfaces.IMeetingWrapper"
-      name="generate_excerpt"
-      class=".excerpt.GenerateExcerpt"
-      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page

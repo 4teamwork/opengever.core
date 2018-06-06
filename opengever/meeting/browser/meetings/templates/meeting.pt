@@ -266,7 +266,7 @@
                   <div class="document-actions">
                     <a class="action generate"
                        tal:condition="meeting/is_editable"
-                       tal:attributes="href view/url_generate_protocol"
+                       tal:attributes="href view/url_merge_docx_protocol"
                        i18n:attributes="title action_generate_document"></a>
 
                     <a class="action download"

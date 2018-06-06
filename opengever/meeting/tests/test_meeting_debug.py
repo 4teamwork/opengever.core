@@ -4,9 +4,9 @@ from opengever.testing import IntegrationTestCase
 from StringIO import StringIO
 
 
-class TestMeetingZipExportView(IntegrationTestCase):
+class TestMeetingDebugViews(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_smoke_debug_docxcompose(self, browser):

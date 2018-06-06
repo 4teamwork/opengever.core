@@ -244,11 +244,18 @@ class TestCommitteesTab(IntegrationTestCase):
         disabled.
         Therefore we test the appearance of all fields.
         """
-        fields = [u'Title',
-                  u'Protocol template',
-                  u'Excerpt template',
-                  u'Agendaitem list template',
-                  u'Table of contents template']
+        fields = ['Title',
+                  'Protocol header template',
+                  'Protocol suffix template',
+                  'Agenda item header template for the protocol',
+                  'Agenda item suffix template for the protocol',
+                  'Excerpt header template',
+                  'Excerpt suffix template',
+                  'Agendaitem list template',
+                  'Table of contents template',
+                  'Ad hoc agenda item template',
+                  'Paragraph template']
+
         self.login(self.manager, browser)
 
         browser.open()

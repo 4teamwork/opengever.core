@@ -2,7 +2,7 @@ from opengever.testing import IntegrationTestCase
 
 
 class TestDocumentProposal(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     def test_get_proposal_returns_None_for_regular_document(self):
         self.login(self.dossier_responsible)

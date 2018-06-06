@@ -6,7 +6,7 @@ from opengever.testing import IntegrationTestCase
 
 class TestSablonTemplateValidation(IntegrationTestCase):
 
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_invalid_template_is_not_rejected_but_status_is_shown(self, browser):

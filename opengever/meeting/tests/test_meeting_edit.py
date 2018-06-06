@@ -10,7 +10,7 @@ from opengever.testing.pages import byline
 
 
 class TestEditMeeting(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_edit_meeting_visibile_to_committe_responsible(self, browser):
@@ -129,13 +129,3 @@ class TestEditMeeting(IntegrationTestCase):
         self.assertNotIn('Edit', editbar.contentviews())
         with browser.expect_unauthorized():
             browser.open(self.decided_meeting, view='edit-meeting')
-
-    @browsing
-    def test_action_is_only_visible_when_word_feature_enabled(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting)
-        self.assertIn('Edit', editbar.contentviews())
-
-        self.deactivate_feature('word-meeting')
-        browser.reload()
-        self.assertNotIn('Edit', editbar.contentviews())

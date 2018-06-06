@@ -4,7 +4,7 @@ from opengever.testing.pages import byline
 
 
 class TestMeetingByline(IntegrationTestCase):
-    features = ('meeting', 'word-meeting')
+    features = ('meeting',)
 
     @browsing
     def test_items(self, browser):

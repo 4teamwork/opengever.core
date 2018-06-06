@@ -76,6 +76,5 @@ class GeverSettingsAdpaterV1(object):
         features['repositoryfolder_tasks_tab'] = api.portal.get_registry_record('show_tasks_tab', interface=IRepositoryFolderRecords)  # noqa
         features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
-        features['word_meetings'] = api.portal.get_registry_record('is_word_implementation_enabled', interface=IMeetingSettings)  # noqa
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         return features

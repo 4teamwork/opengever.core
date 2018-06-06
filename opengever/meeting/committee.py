@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.model import Committee as CommitteeModel
@@ -53,12 +52,6 @@ class ICommittee(model.Schema):
     """Base schema for the committee.
     """
 
-    protocol_template = RelationChoice(
-        title=_('Protocol template'),
-        source=sablon_template_source,
-        required=False,
-    )
-
     protocol_header_template = RelationChoice(
         title=_('label_protocol_header_template',
                 default='Protocol header template'),
@@ -97,12 +90,6 @@ class ICommittee(model.Schema):
     excerpt_suffix_template = RelationChoice(
         title=_('label_excerpt_suffix_template',
                 default='Excerpt suffix template'),
-        source=sablon_template_source,
-        required=False,
-    )
-
-    excerpt_template = RelationChoice(
-        title=_('Excerpt template'),
         source=sablon_template_source,
         required=False,
     )
@@ -287,12 +274,6 @@ class Committee(ModelContainer):
     def get_committee_container(self):
         return aq_parent(aq_inner(self))
 
-    def get_protocol_template(self):
-        if self.protocol_template:
-            return self.protocol_template.to_object
-
-        return self.get_committee_container().get_protocol_template()
-
     def get_protocol_header_template(self):
         if self.protocol_header_template:
             return self.protocol_header_template.to_object
@@ -329,12 +310,6 @@ class Committee(ModelContainer):
 
         return self.get_committee_container().get_excerpt_suffix_template()
 
-    def get_excerpt_template(self):
-        if self.excerpt_template:
-            return self.excerpt_template.to_object
-
-        return self.get_committee_container().get_excerpt_template()
-
     def get_agendaitem_list_template(self):
         if self.agendaitem_list_template:
             return self.agendaitem_list_template.to_object
@@ -347,14 +322,12 @@ class Committee(ModelContainer):
 
         return self.get_committee_container().get_toc_template()
 
-    @require_word_meeting_feature
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
             return self.ad_hoc_template.to_object
 
         return self.get_committee_container().get_ad_hoc_template()
 
-    @require_word_meeting_feature
     def get_paragraph_template(self):
         if self.paragraph_template:
             return self.paragraph_template.to_object

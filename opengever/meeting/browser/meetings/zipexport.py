@@ -1,6 +1,5 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import AgendaItemListOperations
 from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import MergeDocxProtocolCommand
@@ -31,11 +30,9 @@ class MeetingZipExport(BrowserView):
         """Returns ``True`` when the zip export action should be displayed
         in the actions menu.
 
-        The action should only appear when we are on a meeting view and the
-        word-meeting feature is enabled.
+        The action should only appear when we are on a meeting view..
         """
-        return IMeetingWrapper.providedBy(self.context) and \
-            is_word_meeting_implementation_enabled()
+        return IMeetingWrapper.providedBy(self.context)
 
     def generate_zip(self):
         response = self.request.response
@@ -46,8 +43,7 @@ class MeetingZipExport(BrowserView):
 
             # Agenda items
             self.add_agenda_items_attachments(generator)
-            if is_word_meeting_implementation_enabled():
-                self.add_agenda_item_proposal_documents(generator)
+            self.add_agenda_item_proposal_documents(generator)
 
             # Agenda items list
             try:
@@ -55,8 +51,7 @@ class MeetingZipExport(BrowserView):
             except AgendaItemListMissingTemplate:
                 pass
 
-            if is_word_meeting_implementation_enabled():
-                generator.add_file(*self.get_meeting_json())
+            generator.add_file(*self.get_meeting_json())
 
             # Return zip
             zip_file = generator.generate()
@@ -85,11 +80,7 @@ class MeetingZipExport(BrowserView):
 
         # Create new protocol
         operations = ProtocolOperations()
-        if is_word_meeting_implementation_enabled():
-            command_class = MergeDocxProtocolCommand
-        else:
-            command_class = CreateGeneratedDocumentCommand
-        command = command_class(
+        command = MergeDocxProtocolCommand(
             self.context,
             self.model,
             operations,

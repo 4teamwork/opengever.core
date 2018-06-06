@@ -3,12 +3,9 @@ from opengever.base import _ as _base
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.date_time import as_utc
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
-from opengever.meeting import require_word_meeting_feature
 from opengever.meeting.browser.meetings.protocol import IMeetingMetadata
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.user import User
 from plone.locking.interfaces import ILockable
@@ -46,11 +43,8 @@ class EditMeetingView(ModelEditForm):
     def action_visible(self):
         """Returns ``True`` when the "Edit" action should be visible.
         """
-        if not is_word_meeting_implementation_enabled():
-            return False
         return self.model.is_editable()
 
-    @require_word_meeting_feature
     def update(self):
         super(EditMeetingView, self).update()
         if self.actions.executedActions:
@@ -166,16 +160,6 @@ class EditMeetingView(ModelEditForm):
 
     def nextURL(self):
         return self.model.get_url()
-
-    def is_field_visible(self, field, agenda_item):
-        field_value = getattr(agenda_item, field.get('name'))
-        if agenda_item.is_decided() and not field_value:
-            return False
-
-        if field['needs_proposal']:
-            return agenda_item.has_proposal
-        else:
-            return not agenda_item.is_paragraph
 
     @property
     def server_timestamp(self):

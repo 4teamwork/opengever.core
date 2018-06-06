@@ -35,7 +35,6 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('repositoryfolder_tasks_tab', True),
                 ('resolver_name', 'strict'),
                 ('solr', False),
-                ('word_meetings', False),
                 ('workspace', False),
                 ])),
             ])

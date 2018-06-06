@@ -37,6 +37,7 @@ class TestFavoriteAction(IntegrationTestCase):
 
     @browsing
     def test_favorite_action_is_disabled_on_wrapper_objects(self, browser):
+        self.activate_feature('meeting')
         self.login(self.meeting_user, browser=browser)
         browser.open(self.meeting)
 

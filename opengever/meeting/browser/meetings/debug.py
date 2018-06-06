@@ -1,13 +1,11 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
-from zExceptions import Forbidden
 from ZPublisher.Iterators import filestream_iterator
 import os
 
@@ -23,9 +21,6 @@ class DebugDocxCompose(BrowserView):
         self.meeting = context.model
 
     def __call__(self):
-        if not is_word_meeting_implementation_enabled():
-            raise Forbidden
-
         with ZipGenerator() as generator:
             self.add_header_sablon(generator)
             for index, agenda_item in enumerate(self.meeting.agenda_items, 1):

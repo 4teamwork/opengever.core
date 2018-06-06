@@ -2,7 +2,6 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import escape_html
 from opengever.base.viewlets.byline import BylineBase
 from opengever.meeting import _
-from opengever.meeting import is_word_meeting_implementation_enabled
 from opengever.tabbedview.helper import linked
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
@@ -67,9 +66,6 @@ class MeetingByline(BylineBase):
                     'content': ' '}
 
     def get_items(self):
-        if not is_word_meeting_implementation_enabled():
-            return []
-
         items = []
 
         for item in self.byline_items():
