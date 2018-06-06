@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
@@ -94,6 +95,18 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             '/@@user-details/robert.ziegler',
             user_details_link.first.attrib['href'],
             )
+
+    @browsing
+    def test_keywords_are_listed_on_overview(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        IDocumentSchema(self.document).keywords = u'secret', u'special'
+
+        browser.open(self.document,
+                     view='tabbedview_view-overview')
+
+        self.assertEquals([u'secret', u'special'],
+                          browser.css('.keywords a').text)
 
     @browsing
     def test_overview_has_download_copy_link(self, browser):
