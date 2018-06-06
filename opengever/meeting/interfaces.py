@@ -11,6 +11,11 @@ class IMeetingSettings(Interface):
         description=u'Whether features from opengever.meeting are enabled',
         default=False)
 
+    sablon_date_format_string = schema.TextLine(
+        title=u'Date formatting string for sablon templates',
+        description=u'Formatting string used to format date fields for sablon templates',
+        default=u'%d.%m.%Y')
+
 
 class IMeetingWrapper(ISQLObjectWrapper):
     """Marker interface for meeting object wrappers."""

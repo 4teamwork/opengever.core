@@ -137,7 +137,7 @@ class TestAgendaItemList(FunctionalTestCase):
              u'participants': {u'other': [], u'members': []},
              u'committee': {u'name': u'My Committee'},
              u'mandant': {u'name': u'Client1'},
-             u'meeting': {u'date': u'Dec 13, 2011',
+             u'meeting': {u'date': u'13.12.2011',
                           u'start_time': u'09:30 AM',
                           u'end_time': u'11:45 AM',
                           u'number': None,

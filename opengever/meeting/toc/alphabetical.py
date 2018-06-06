@@ -4,6 +4,8 @@ from datetime import timedelta
 from itertools import groupby
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
+from opengever.meeting.utils import format_date
+from opengever.meeting.utils import JsonDataProcessor
 from operator import itemgetter
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
@@ -70,19 +72,22 @@ class AlphabeticalToc(object):
         return query
 
     def get_json(self):
+        processor = JsonDataProcessor()
+        data_fields = (("meeting_date", ),)
+        transforms = (format_date,)
         unordered_items = []
         for agenda_item in self.build_query():
             meeting = agenda_item.meeting
-            unordered_items.append({
-                'title': agenda_item.get_title(),
-                'dossier_reference_number': agenda_item.get_dossier_reference_number(),
-                'repository_folder_title': agenda_item.get_repository_folder_title(),
-                'decision_number': agenda_item.decision_number,
-                'has_proposal': agenda_item.has_proposal,
-                'meeting_date': meeting.get_date(),
-                'meeting_start_page_number': meeting.protocol_start_page_number,
-            })
-
+            unordered_items.append(processor.process(
+                {
+                 'title': agenda_item.get_title(),
+                 'dossier_reference_number': agenda_item.get_dossier_reference_number(),
+                 'repository_folder_title': agenda_item.get_repository_folder_title(),
+                 'decision_number': agenda_item.decision_number,
+                 'has_proposal': agenda_item.has_proposal,
+                 'meeting_date': meeting.start,
+                 'meeting_start_page_number': meeting.protocol_start_page_number,
+                }, data_fields, transforms))
         sorted_items = self.sort_items(unordered_items)
         grouped_results = self.group_items(sorted_items)
         return {'toc': self.sort_groups(grouped_results)}
