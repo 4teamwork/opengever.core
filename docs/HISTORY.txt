@@ -20,6 +20,7 @@ Changelog
 - Remove no longer used plonetheme.teamraum uninstall profile since it's integrated into opengever.core. [elioschmutz]
 - Add the ability to export repositories as excel files. [Rotonen]
 - Autosize columns on excel exports. [Rotonen]
+- Disallow reopen tasks in closed dossiers. [elioschmutz]
 - Implement recently touched menu that lists checked out documents and recently touched objects. [lgraf]
 - Comment transitions for proposals. [njohner]
 - Comment action for proposals. [njohner]
