@@ -33,15 +33,6 @@
       />
 
   <genericsetup:registerProfile
-      name="uninstall"
-      title="Uninstall plonetheme.teamraum"
-      directory="profiles/uninstall"
-      description=""
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
-      />
-
-  <genericsetup:registerProfile
       name="gever"
       title="plonetheme.teamraum: gever"
       directory="profiles/gever"
