@@ -268,8 +268,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                          'file': '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
                          'modified': '2016-08-31T15:21:44+02:00'
                      },
-                     'title': u'\xc4nderungen am Personalreglement'}
-                 ],
+                     'title': u'\xc4nderungen am Personalreglement'}],
                  'committee': {'oguid': 'plone:1009233300',
                                'title': u'Rechnungspr\xfcfungskommission'},
                  'end': '2016-09-12T17:00:00+00:00',
@@ -280,10 +279,9 @@ class TestMeetingZipExportView(IntegrationTestCase):
                      'modified': '2017-12-13T23:00:00+01:00'
                  },
                  'start': '2016-09-12T15:30:00+00:00',
-                 'title': u'9. Sitzung der Rechnungspr\xfcfungskommission'}
-                ],
-            'version': '1.0.0'
-            }, meeting_json)
+                 'title': u'9. Sitzung der Rechnungspr\xfcfungskommission'}],
+             'version': '1.0.0'},
+            meeting_json)
 
         file_names = zip_file.namelist()
 
