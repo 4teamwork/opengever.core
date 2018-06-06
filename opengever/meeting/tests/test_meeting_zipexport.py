@@ -253,7 +253,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     {'number': '1.',
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': '1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.docx',
+                         'file': '1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.pdf',
                          'modified': '2017-12-12T23:00:00+01:00'
                      },
                      'title': u'Ad-hoc Traktand\xfem'},
@@ -265,7 +265,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                      'number': '2.',
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
+                         'file': '2. Anderungen am Personalreglement/Anderungen am Personalreglement.pdf',
                          'modified': '2016-08-31T15:21:44+02:00'
                      },
                      'title': u'\xc4nderungen am Personalreglement'}],
@@ -275,7 +275,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                  'location': u'B\xfcren an der Aare',
                  'protocol': {
                      'checksum': 'unpredictable',
-                     'file': 'Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
+                     'file': u'Protocol-9. Sitzung der Rechnungspr\xfcfungskommission.pdf',
                      'modified': '2017-12-13T23:00:00+01:00'
                  },
                  'start': '2016-09-12T15:30:00+00:00',

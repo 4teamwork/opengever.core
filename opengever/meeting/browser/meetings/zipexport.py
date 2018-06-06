@@ -50,6 +50,8 @@ class MeetingZipExport(BrowserView):
         response = self.request.response
 
         with ZipGenerator() as generator:
+            self.json_data = self.context.get_data_for_zip_export()
+
             # Protocol
             generator.add_file(*self.get_protocol())
 
@@ -128,7 +130,9 @@ class MeetingZipExport(BrowserView):
             if self.model.modified < protocol_modified:
                 # Return current protocol
                 filename = u'{}.docx'.format(safe_unicode(protocol.Title()))
-                return self.get_pdf_for_document(protocol, filename)
+                filename, _file = self.get_pdf_for_document(protocol, filename)
+                self.json_data['protocol']['file'] = filename
+                return filename, _file
 
         # Create new protocol
         operations = ProtocolOperations()
@@ -142,7 +146,10 @@ class MeetingZipExport(BrowserView):
         return (filename, StringIO(command.generate_file_data()))
 
     def add_agenda_item_proposal_documents(self, generator):
-        for agenda_item in self.model.agenda_items:
+        """Adds proposal documents and attachments
+        """
+        for counter, agenda_item in enumerate(self.model.agenda_items):
+            item_json = self.json_data['agenda_items'][counter]
             if not agenda_item.has_document:
                 continue
 
@@ -151,16 +158,23 @@ class MeetingZipExport(BrowserView):
                 continue
 
             filename = agenda_item.get_document_filename_for_zip(document)
-            generator.add_file(*self.get_pdf_for_document(document, filename))
+            filename, _file = self.get_pdf_for_document(document, filename)
+            item_json['proposal']['file'] = filename
+            generator.add_file(*(filename, _file))
 
     def add_agenda_items_attachments(self, generator):
-        for agenda_item in self.model.agenda_items:
+        for counter, agenda_item in enumerate(self.model.agenda_items):
             if not agenda_item.has_submitted_documents():
                 continue
 
-            for document in agenda_item.proposal.resolve_submitted_documents():
-                filename = agenda_item.get_document_filename_for_zip(document)
-                generator.add_file(*self.get_pdf_for_document(document, filename))
+            item_json = self.json_data['agenda_items'][counter]
+
+            for att_counter, attachment in enumerate(
+                    agenda_item.proposal.resolve_submitted_documents()):
+                filename = agenda_item.get_document_filename_for_zip(attachment)
+                filename, _file = self.get_pdf_for_document(attachment, filename)
+                item_json['attachments'][att_counter]['file'] = filename
+                generator.add_file(*(filename, _file))
 
     def get_agendaitem_list(self):
         if self.model.has_agendaitem_list_document():
@@ -170,9 +184,9 @@ class MeetingZipExport(BrowserView):
 
             if self.model.modified < agendaitem_list_modified:
                 # Return current protocol
-
                 filename = u'{}.docx'.format(safe_unicode(agendaitem_list.Title()))
-                return self.get_pdf_for_document(agendaitem_list, filename)
+                filename, _file = self.get_pdf_for_document(agendaitem_list, filename)
+                return filename, _file
 
         # Create new protocol
         operations = AgendaItemListOperations()
@@ -188,7 +202,7 @@ class MeetingZipExport(BrowserView):
     def get_meeting_json(self):
         json_data = {
             'version': '1.0.0',
-            'meetings': [self.context.get_data_for_zip_export()],
+            'meetings': [self.json_data],
         }
         return 'meeting.json', StringIO(json.dumps(json_data,
                                                    sort_keys=True,
