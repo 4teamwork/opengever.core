@@ -621,7 +621,7 @@ class TestDocumentValidatorsInAddForm(IntegrationTestCase):
         error_field = browser.css(selector).first
         self.assertIn(
             "It's not possible to add E-mails here, please send it to",
-            error_field.normalized_text())
+            error_field.text)
 
         self.assertEqual(
             1, len(browser.css('#formfield-form-widgets-file input')),

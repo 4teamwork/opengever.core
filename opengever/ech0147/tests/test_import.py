@@ -16,7 +16,7 @@ class TestImport(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
-            ).normalized_text()
+            ).text
         self.assertNotIn('eCH-0147 Import', actions)
 
     @browsing
@@ -26,7 +26,7 @@ class TestImport(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         actions = browser.css(
             '#plone-contentmenu-actions .actionMenuContent .subMenuTitle'
-            ).normalized_text()
+            ).text
         self.assertIn('eCH-0147 Import', actions)
 
     @browsing
