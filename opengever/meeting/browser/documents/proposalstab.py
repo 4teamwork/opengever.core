@@ -32,7 +32,7 @@ def proposal_link(item, value):
 
 
 def translated_state(item, value):
-    wrapper = '<span class="wf-proposal-state-{0}">{1}</span>'
+    wrapper = u'<span class="wf-proposal-state-{0}">{1}</span>'
     return wrapper.format(
         item.get_state().title,
         translate(item.get_state().title, context=getRequest()))

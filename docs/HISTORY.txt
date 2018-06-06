@@ -5,7 +5,7 @@ Changelog
 2018.3.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix unicode error on proposal listings. [phgross]
 
 
 2018.3.2 (2018-06-01)
