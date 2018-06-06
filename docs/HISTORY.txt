@@ -14,6 +14,7 @@ Changelog
 - Add today to the data passed to the sablon template. [tarnap]
 - Display a tooltip for the favorite action. [tarnap]
 - Make document mimetype lookups case insensitive. [Rotonen]
+- Fix unicode error on proposal listings. [phgross]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Do not apply the current date to meeting titles. [Rotonen]
 - Rename cancelled task in German from "storniert" to "abgebrochen" .
