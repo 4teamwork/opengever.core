@@ -23,12 +23,12 @@ class TaskAddedActivity(BaseActivity):
     @property
     def label(self):
         return self.translate_to_all_languages(
-            _('transition_label_default', u'Task added'))
+            _('transition_label_default', u'Task opened'))
 
     @property
     def summary(self):
         actor = Actor.lookup(self.context.Creator())
-        msg = _('label_task_added', u'New task added by ${user}',
+        msg = _('label_task_added', u'New task opened by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
         return self.translate_to_all_languages(msg)
 

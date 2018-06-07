@@ -49,6 +49,25 @@
         </tal:condition>
       </div>
 
+      <div id="sequence_taskBox" class="box">
+        <tal:condition tal:condition="view/is_part_of_sequential_process">
+          <h2 i18n:translate="label_sequence">Sequence</h2>
+
+          <div class="previous_task" tal:define="previous_task view/previous_task_link"
+               tal:condition="previous_task">
+            <span class="discret" i18n:translate="label_previous_task">Previous task</span>
+            <div class="task" tal:content="structure previous_task" />
+          </div>
+
+          <div class="next_task" tal:define="next_task view/next_task_link"
+               tal:condition="next_task">
+            <span class="discret" i18n:translate="label_next_task">Next task</span>
+            <div class="task" tal:content="structure next_task" />
+          </div>
+
+        </tal:condition>
+      </div>
+
       <div id="sub_taskBox" class="box">
         <tal:condition tal:condition="sub_tasks">
           <h2 i18n:translate="label_sub_task">Sub tasks</h2>

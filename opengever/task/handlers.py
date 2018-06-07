@@ -89,3 +89,13 @@ def cancel_subtasks(task, event):
         return
 
     task.cancel_subtasks()
+
+
+def start_next_task(task, event):
+    # todo also handle skipped tasks
+    if event.action not in ['task-transition-open-resolved',
+                            'task-transition-in-progress-resolved']:
+        return
+
+    if task.is_from_sequential_tasktemplate:
+        task.open_next_task()

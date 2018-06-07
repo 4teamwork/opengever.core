@@ -110,12 +110,21 @@ class Task(Base):
         )
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
-
     successors = relationship(
         "Task",
+        foreign_keys=[predecessor_id],
         backref=backref('predecessor', remote_side=task_id),
         cascade="delete",
         )
+
+    tasktemplate_predecessor_id = Column(Integer, ForeignKey('tasks.id'))
+    tasktemplate_successor = relationship(
+        "Task",
+        foreign_keys=[tasktemplate_predecessor_id],
+        backref=backref('tasktemplate_predecessor', remote_side=task_id),
+        cascade="delete",
+        uselist=False
+    )
 
     _principals = relation(
         'TaskPrincipal',
@@ -206,6 +215,10 @@ class Task(Base):
             plone_task.get_containing_subdossier(),
             )
 
+        predecessor = plone_task.get_tasktemplate_predecessor()
+        if predecessor:
+            self.tasktemplate_predecessor = predecessor.get_sql_object()
+
     # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):
         if not (admin_unit_id or pred_init_id):
@@ -282,6 +295,18 @@ class Task(Base):
         admin_unit (assign org unit's admin_unit) are not equal.__add__()
         """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
+
+    def get_previous_task(self):
+        """If the task is part of a sequence it returns previous task of the
+        sequence otherwise None."""
+
+        return self.tasktemplate_predecessor
+
+    def get_next_task(self):
+        """If the task is part of a sequence it returns the next task of the
+        sequence otherwise None."""
+
+        return self.tasktemplate_successor
 
     def get_css_class(self):
         """Returns css_class for the special task icons:

@@ -196,6 +196,45 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             'task-container parallel',
             browser.css('#sub_taskBox div').first.get('class'))
 
+    @browsing
+    def test_subtask_contains_sequence_type_class(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        previous_task = create(Builder('task')
+                               .titled(u'Vorherige Aufgabe')
+                               .within(self.task)
+                               .having(responsible_client='fa',
+                                       responsible=self.regular_user.getId(),
+                                       issuer=self.dossier_responsible.getId(),
+                                       task_type='correction',
+                                       deadline=date(2016, 11, 1)))
+
+        next_task = create(Builder('task')
+                           .within(self.task)
+                           .titled(u'N\xe4chste Aufgabe')
+                           .having(responsible_client='fa',
+                                   responsible=self.regular_user.getId(),
+                                   issuer=self.dossier_responsible.getId(),
+                                   task_type='correction',
+                                   deadline=date(2016, 11, 1))
+                           .in_state('task-state-open'))
+
+        # fake tasktemplate process
+        tasktemplate_tasks = [previous_task, self.subtask, next_task]
+        alsoProvides(self.task, IFromSequentialTasktemplate)
+        self.task.set_tasktemplate_order(tasktemplate_tasks)
+        for task in tasktemplate_tasks:
+            alsoProvides(task, IFromSequentialTasktemplate)
+            task.sync()
+
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        self.assertEquals(
+            [u'Vorherige Aufgabe'],
+            browser.css('#sequence_taskBox .previous_task .task').text)
+
+        self.assertEquals(
+            [u'N\xe4chste Aufgabe'],
+            browser.css('#sequence_taskBox .next_task .task').text)
 
 
 class TestTaskTextTransformation(IntegrationTestCase):

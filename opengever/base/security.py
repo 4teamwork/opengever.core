@@ -3,8 +3,11 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
 from contextlib import contextmanager
+from opengever.base.interfaces import IInternalWorkflowTransition
 from plone import api
 from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 
 class UnrestrictedUser(BaseUnrestrictedUser):
@@ -43,3 +46,21 @@ def elevated_privileges():
     finally:
         # Restore the old security manager
         setSecurityManager(old_manager)
+
+
+@contextmanager
+def as_internal_workflow_transition():
+    """This contextmanager allows to temporarily mark the request as an
+    internal workflow transition request.
+
+    Some transitions are only available when be triggered by code,
+    for example the `planned to open` transition of tasks.
+    """
+    try:
+        # mark request with marker interface
+        alsoProvides(getRequest(), IInternalWorkflowTransition)
+
+        yield
+    finally:
+        # remove marker interface
+        noLongerProvides(getRequest(), IInternalWorkflowTransition)

@@ -46,7 +46,7 @@ class ResponseDescription(object):
     def label(self):
         """Returns a short description of the executed transition.
         """
-        return _('transition_label_default', u'Task added')
+        return _('transition_label_default', u'Task opened')
 
     @property
     def _msg_mapping(self):

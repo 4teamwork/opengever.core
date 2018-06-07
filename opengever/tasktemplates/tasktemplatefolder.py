@@ -2,6 +2,7 @@ from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import INTERACTIVE_USERS
@@ -82,9 +83,15 @@ class TaskTemplateFolderTrigger(object):
         return main_task
 
     def create_subtasks(self, main_task):
+        predecessor = None
+
+        subtasks = []
         for template in self.selected_templates:
-            self.create_subtask(
+            subtask = self.create_subtask(
                 main_task, template, self.values.get(template.id))
+            subtasks.append(subtask)
+
+        main_task.set_tasktemplate_order(subtasks)
 
     def set_initial_state(self, task, template):
         """Set the initial states to planned for tasks of a sequential
@@ -118,10 +125,14 @@ class TaskTemplateFolderTrigger(object):
         task = self.add_task(main_task, data)
         self.set_initial_state(task, template)
         task.reindexObject()
+        task.get_sql_object().sync_with(task)
 
         # add activity record for subtask
-        activity = TaskAddedActivity(task, getRequest(), main_task)
-        activity.record()
+        if api.content.get_state(task) != TASK_STATE_PLANNED:
+            activity = TaskAddedActivity(task, getRequest(), main_task)
+            activity.record()
+
+        return task
 
     def get_main_task_deadline(self):
         highest_deadline = max(
@@ -158,3 +169,10 @@ class TaskTemplateFolderTrigger(object):
 
         else:
             return principal
+
+    def set_tasktemplate_predecessor(self, task, predecessor):
+        if not self.context.is_sequential:
+            return
+
+        if predecessor:
+            task.set_tasktemplate_predecessor(predecessor)

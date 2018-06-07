@@ -18,6 +18,12 @@ class IDuringContentCreation(Interface):
     """
 
 
+class IInternalWorkflowTransition(Interface):
+    """Request layer to indicate workflow transitions triggered by
+    other actions.
+    """
+
+
 class IDontIssueDossierReferenceNumber(Interface):
     """Request layer to indicate that no reference number should be issued
     when creating new dossiers.

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-23 15:07+0000\n"
+"POT-Creation-Date: 2018-05-28 06:31+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -505,6 +505,11 @@ msgstr "Attributs"
 msgid "label_new_deadline"
 msgstr "Nouveau délai"
 
+#. Default: "Next task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_next_task"
+msgstr ""
+
 #. Default: "Parallel process"
 #: ./opengever/task/browser/overview.py
 msgid "label_parallel_process"
@@ -524,6 +529,11 @@ msgstr "Prédécesseur"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_predecessor_task"
 msgstr "Tâche initiale"
+
+#. Default: "Previous task"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_previous_task"
+msgstr ""
 
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py
@@ -556,6 +566,11 @@ msgstr "Mandataire"
 msgid "label_return_to_issue"
 msgstr "Retour à la tâche"
 
+#. Default: "Sequence"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_sequence"
+msgstr ""
+
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
 msgid "label_sequence_number"
@@ -576,10 +591,10 @@ msgstr "Sous-tâche"
 msgid "label_successor_task"
 msgstr "Tâche copiée"
 
-#. Default: "New task added by ${user}"
+#. Default: "New task opened by ${user}"
 #: ./opengever/task/activities.py
 msgid "label_task_added"
-msgstr "Nouvelle tâche ajoutée par ${user}"
+msgstr ""
 
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py
@@ -786,11 +801,11 @@ msgstr "Täche fermée"
 msgid "transition_label_created"
 msgstr "Créé par ${user}"
 
-#. Default: "Task added"
+#. Default: "Task opened"
 #: ./opengever/task/activities.py
 #: ./opengever/task/response_description.py
 msgid "transition_label_default"
-msgstr "Tâche ajoutée"
+msgstr ""
 
 #. Default: "Task deadline modified"
 #: ./opengever/task/response_description.py

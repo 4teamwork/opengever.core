@@ -371,3 +371,44 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(
             ['task-state-open', 'task-state-planned'],
             [api.content.get_state(task) for task in main_task.objectValues()])
+
+    @browsing
+    def test_sets_task_templatefolder_predecessor(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.tasktemplatefolder.sequence_type = u'sequential'
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+        .within(self.tasktemplatefolder))
+
+        create(Builder('tasktemplate')
+               .titled(u'User Accounts erstellen.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        self.trigger_tasktemplatefolder(
+            browser, templates=[u'Arbeitsplatz einrichten.',
+                                u'Notebook einrichten.',
+                                u'User Accounts erstellen.'])
+
+        main_task = self.dossier.listFolderContents()[-1]
+        ids = main_task.objectIds()
+        task1, task2, task3 = [main_task.get(_id) for _id in ids]
+
+        self.assertEquals(
+            [task1, task2, task3],
+            [oguid.resolve_object() for oguid in main_task.get_tasktemplate_order()])
+
+        self.assertEquals(task1.get_sql_object(),
+                          task2.get_sql_object().get_previous_task())
+        self.assertEquals(task3.get_sql_object(),
+                          task2.get_sql_object().get_next_task())
