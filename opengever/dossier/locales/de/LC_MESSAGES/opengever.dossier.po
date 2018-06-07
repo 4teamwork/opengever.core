@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-06-06 07:02+0000\n"
+"POT-Creation-Date: 2018-06-07 14:03+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -44,10 +44,6 @@ msgstr "Report konnte nicht generiert werden."
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
 msgstr "Beschreibung"
-
-#: ./opengever/dossier/move_items.py
-msgid "Document ${name} is not movable."
-msgstr "Das Dokument «${name}» ist nicht verschiebbar."
 
 #: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"

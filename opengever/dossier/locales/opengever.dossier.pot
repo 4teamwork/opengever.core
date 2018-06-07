@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-06 07:02+0000\n"
+"POT-Creation-Date: 2018-06-07 14:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,10 +43,6 @@ msgstr ""
 
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
-msgstr ""
-
-#: ./opengever/dossier/move_items.py
-msgid "Document ${name} is not movable."
 msgstr ""
 
 #: ./opengever/dossier/browser/templates/overview.pt
