@@ -67,6 +67,7 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.assertTrue(
             get_checker(self.task).current_user.in_responsible_orgunits_inbox_group)
 
+        # test as well without agency
         checker = Checker(self.task.get_sql_object(), self.request, self.secretariat_user)
         self.assertFalse(
             checker.current_user.in_responsible_orgunits_inbox_group)
@@ -81,6 +82,10 @@ class TestTaskControllerChecker(IntegrationTestCase):
 
     def test_all_subtasks_is_NOT_finished_when_cancelled_or_resolved(self):
         self.login(self.dossier_responsible)
+
+        self.set_workflow_state('task-state-resolved', self.task)
+        self.assertFalse(get_checker(self.task).task.all_subtasks_finished)
+
         self.set_workflow_state('task-state-cancelled', self.task)
         self.assertFalse(get_checker(self.task).task.all_subtasks_finished)
 
@@ -125,8 +130,5 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.set_workflow_state('task-state-in-progress', self.archive_task)
         self.register_successor(self.task, self.archive_task)
 
-        sql_successor_task = ISuccessorTaskController(
-            self.task).get_successors()[0]
-
-        task_checker = TaskChecker(sql_successor_task)
+        task_checker = TaskChecker(self.archive_task.get_sql_object())
         self.assertFalse(task_checker.all_subtasks_finished)
