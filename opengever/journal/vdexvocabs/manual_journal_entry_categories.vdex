@@ -10,6 +10,7 @@
             <langstring language="de-ch">Telefongespräch</langstring>
             <langstring language="de">Telefongespräch</langstring>
             <langstring language="fr">Conversation téléphonique</langstring>
+            <langstring language="fr-ch">Conversation téléphonique</langstring>
         </caption>
     </term>
     <term>
@@ -19,6 +20,7 @@
             <langstring language="de-ch">Sitzung</langstring>
             <langstring language="de">Sitzung</langstring>
             <langstring language="fr">Séances</langstring>
+            <langstring language="fr-ch">Séances</langstring>
         </caption>
     </term>
     <term>
@@ -28,6 +30,7 @@
             <langstring language="de-ch">Information</langstring>
             <langstring language="de">Information</langstring>
             <langstring language="fr">Information</langstring>
+            <langstring language="fr-ch">Information</langstring>
         </caption>
     </term>
     <term>
@@ -37,6 +40,7 @@
             <langstring language="de-ch">Sonstiges</langstring>
             <langstring language="de">Sonstiges</langstring>
             <langstring language="fr">Divers</langstring>
+            <langstring language="fr-ch">Divers</langstring>
         </caption>
     </term>
 </vdex>
