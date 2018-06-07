@@ -10,6 +10,7 @@ Changelog
 - Drop non-word meeting feature. [deiferni]
 - Improve the validation of "preserved as paper" for related documents. [tarnap]
 - Display flyup menues above the selected list items. [tarnap]
+- Make error messages for unmovable documents more granular. [tarnap]
 - Omit parentheses if no abbreviation for directorate or department available. [tarnap]
 - Allow attaching documents of sibling proposals to proposals. [Rotonen]
 - Add today to the data passed to the sablon template. [tarnap]

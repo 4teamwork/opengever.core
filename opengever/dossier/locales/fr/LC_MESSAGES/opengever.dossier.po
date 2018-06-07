@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-16 20:06+0000\n"
+"POT-Creation-Date: 2018-06-07 14:03+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-dossier/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/dossier/move_items.py
 msgid "${copied_items} Elements were moved successfully"
@@ -44,10 +43,6 @@ msgstr "Impossible de générer l'affichage."
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
 msgstr "Description"
-
-#: ./opengever/dossier/move_items.py
-msgid "Document ${name} is not movable."
-msgstr "Le document «${name}» n'est pas déplaçable."
 
 #: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"
@@ -645,6 +640,16 @@ msgstr "Dernière modification"
 #: ./opengever/dossier/widget.py
 msgid "label_no_reference_number"
 msgstr "Le numéro de classement est seulement généré lors de la création du document."
+
+#. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_proposal"
+msgstr ""
+
+#. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_inside_task"
+msgstr ""
 
 #. Default: "Number of Containers"
 #: ./opengever/dossier/behaviors/dossier.py

@@ -111,8 +111,25 @@ class MoveItemsForm(form.Form):
                 parent = aq_parent(aq_inner(obj))
 
                 if IDocumentSchema.providedBy(obj) and not obj.is_movable():
-                    msg = _(u'Document ${name} is not movable.',
+                    if obj.is_inside_a_task():
+                        msg = _(
+                            'label_not_movable_since_inside_task',
+                            default=u'Document ${name} is inside a task and '
+                                    u'therefore not movable. Move the task '
+                                    u'instead',
                             mapping=dict(name=obj.title))
+                    elif obj.is_inside_a_proposal():
+                        msg = _(
+                            'label_not_movable_since_inside_proposal',
+                            default=u'Document ${name} is inside a proposal '
+                                    u'and therefore not movable. Move the '
+                                    u'proposal instead',
+                            mapping=dict(name=obj.title))
+                    else:
+                        raise Exception(
+                            'Failed to determine the reason for unmovable document. '
+                            'Did IDocumentSchema.is_moveable change?'
+                        )
                     IStatusMessage(self.request).addStatusMessage(msg, type='error')
                     continue
 
