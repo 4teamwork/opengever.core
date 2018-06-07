@@ -139,42 +139,6 @@ class TestCommitteeWord(IntegrationTestCase):
         self.committee_container.paragraph_template = self.as_relation_value(
             self.sablon_template)
         self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
-
-    @browsing
-    def test_visible_fields_in_forms(self, browser):
-        """Some fields should only be displayed when the word feature is
-        enabled.
-        Therefore we test the appearance of all fields.
-        """
-        fields = ['Title',
-                  'Committeeresponsible',
-                  'Protocol header template',
-                  'Protocol suffix template',
-                  'Agenda item header template for the protocol',
-                  'Agenda item suffix template for the protocol',
-                  'Excerpt header template',
-                  'Excerpt suffix template',
-                  'Agendaitem list template',
-                  'Table of contents template',
-                  'Linked repository folder',
-                  'Ad hoc agenda item template',
-                  'Paragraph template',
-                  'Allowed proposal templates']
-        with self.login(self.administrator, browser):
-            browser.open(self.committee_container)
-            factoriesmenu.add('Committee')
-            self.assertEquals(
-                fields,
-                map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > div.field > label')))
-
-        with self.login(self.committee_responsible, browser):
-            browser.open(self.committee, view='edit')
-            self.assertEquals(
-                fields,
-                map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > div.field > label')))
-
     @browsing
     def test_configure_allowed_proposal_templates(self, browser):
         with self.login(self.administrator):
