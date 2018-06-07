@@ -110,11 +110,7 @@ class TestCommitteeContainer(IntegrationTestCase):
                          browser.context.get_excerpt_suffix_template())
 
     @browsing
-    def test_visible_fields_in_forms(self, browser):
-        """Some fields should only be displayed when the word feature is
-        enabled.
-        Therefore we test the appearance of all fields.
-        """
+    def test_visible_fields_order_in_form(self, browser):
         fields = [u'Title',
                   u'Protocol header template',
                   u'Protocol suffix template',
