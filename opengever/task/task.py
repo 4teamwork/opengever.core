@@ -7,10 +7,10 @@ from datetime import timedelta
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.base.interfaces import IInternalWorkflowTransition
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.security import as_internal_workflow_transition
 from opengever.base.source import DossierPathSourceBinder
 from opengever.dossier.utils import get_containing_dossier
 from opengever.globalindex.model.task import Task as TaskModel
@@ -53,7 +53,6 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
 
@@ -541,9 +540,10 @@ class Task(Container):
 
         next_task = next_task.oguid.resolve_object()
         if api.content.get_state(obj=next_task) == TASK_STATE_PLANNED:
-            alsoProvides(getRequest(), IInternalWorkflowTransition)
-            api.content.transition(
-                obj=next_task, transition='task-transition-planned-open')
+            with as_internal_workflow_transition():
+                api.content.transition(
+                    obj=next_task, transition='task-transition-planned-open')
+
             next_task.sync()
 
             activity = TaskAddedActivity(
