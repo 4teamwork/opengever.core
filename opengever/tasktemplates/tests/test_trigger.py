@@ -404,9 +404,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         ids = main_task.objectIds()
         task1, task2, task3 = [main_task.get(_id) for _id in ids]
 
-        self.assertIsNone(task1.get_tasktemplate_predecessor())
-        self.assertEquals(task1, task2.get_tasktemplate_predecessor())
-        self.assertEquals(task2, task3.get_tasktemplate_predecessor())
+        self.assertEquals(
+            [task1, task2, task3],
+            [oguid.resolve_object() for oguid in main_task.get_tasktemplate_order()])
 
         self.assertEquals(task1.get_sql_object(),
                           task2.get_sql_object().get_previous_task())

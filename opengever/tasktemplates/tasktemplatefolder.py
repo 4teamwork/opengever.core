@@ -85,9 +85,13 @@ class TaskTemplateFolderTrigger(object):
     def create_subtasks(self, main_task):
         predecessor = None
 
+        subtasks = []
         for template in self.selected_templates:
-            predecessor = self.create_subtask(
-                main_task, template, self.values.get(template.id), predecessor)
+            subtask = self.create_subtask(
+                main_task, template, self.values.get(template.id))
+            subtasks.append(subtask)
+
+        main_task.set_tasktemplate_order(subtasks)
 
     def set_initial_state(self, task, template):
         """Set the initial states to planned for tasks of a sequential
@@ -103,7 +107,7 @@ class TaskTemplateFolderTrigger(object):
                                    transition='task-transition-open-planned')
             task.get_sql_object().sync_with(task)
 
-    def create_subtask(self, main_task, template, values, predecessor):
+    def create_subtask(self, main_task, template, values):
         data = dict(
             title=template.title,
             issuer=template.issuer,
@@ -120,7 +124,6 @@ class TaskTemplateFolderTrigger(object):
 
         task = self.add_task(main_task, data)
         self.set_initial_state(task, template)
-        self.set_tasktemplate_predecessor(task, predecessor)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 

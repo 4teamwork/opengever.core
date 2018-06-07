@@ -200,22 +200,40 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
     def test_subtask_contains_sequence_type_class(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.subtask.set_tasktemplate_predecessor(self.archive_task)
-        self.subtask.get_sql_object().sync_with(self.subtask)
+        previous_task = create(Builder('task')
+                               .titled(u'Vorherige Aufgabe')
+                               .within(self.task)
+                               .having(responsible_client='fa',
+                                       responsible=self.regular_user.getId(),
+                                       issuer=self.dossier_responsible.getId(),
+                                       task_type='correction',
+                                       deadline=date(2016, 11, 1)))
 
-        self.inactive_task.set_tasktemplate_predecessor(self.subtask)
-        self.inactive_task.get_sql_object().sync_with(self.inactive_task)
+        next_task = create(Builder('task')
+                           .within(self.task)
+                           .titled(u'N\xe4chste Aufgabe')
+                           .having(responsible_client='fa',
+                                   responsible=self.regular_user.getId(),
+                                   issuer=self.dossier_responsible.getId(),
+                                   task_type='correction',
+                                   deadline=date(2016, 11, 1))
+                           .in_state('task-state-open'))
 
-        # sequential
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
+        # fake tasktemplate process
+        tasktemplate_tasks = [previous_task, self.subtask, next_task]
+        alsoProvides(self.task, IFromSequentialTasktemplate)
+        self.task.set_tasktemplate_order(tasktemplate_tasks)
+        for task in tasktemplate_tasks:
+            alsoProvides(task, IFromSequentialTasktemplate)
+            task.sync()
 
         browser.open(self.subtask, view='tabbedview_view-overview')
         self.assertEquals(
-            [self.archive_task.title],
+            [u'Vorherige Aufgabe'],
             browser.css('#sequence_taskBox .previous_task .task').text)
 
         self.assertEquals(
-            [self.inactive_task.title],
+            [u'N\xe4chste Aufgabe'],
             browser.css('#sequence_taskBox .next_task .task').text)
 
 
