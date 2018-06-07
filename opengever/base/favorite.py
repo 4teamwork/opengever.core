@@ -7,6 +7,7 @@ from plone.uuid.interfaces import IUUID
 from sqlalchemy import and_
 from zExceptions import NotFound
 
+import peter
 
 class FavoriteManager(object):
 
