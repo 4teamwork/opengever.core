@@ -3,16 +3,11 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
-from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages import statusmessages
 from opengever.base.date_time import utcnow_tz_aware
-from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
-from unittest import skip
 
 
-
-class TestCommitteesTab(IntegrationTestCase):
+class TestCommitteeContainerCommitteeTab(IntegrationTestCase):
 
     features = ('meeting',)
 
