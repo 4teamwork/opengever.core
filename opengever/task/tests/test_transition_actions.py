@@ -147,7 +147,7 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
             (u'task_issuer', u'robert.ziegler', ),
             (u'task_responsible', u'robert.ziegler', ),
             ]
-        self.assertEqual(expected_subscriptions, [(s.role, s.watcher.actorid, ) for s in subscriptions])
+        self.assertItemsEqual(expected_subscriptions, [(s.role, s.watcher.actorid, ) for s in subscriptions])
 
     @browsing
     def test_resolving(self, browser):
