@@ -269,7 +269,7 @@ OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
     bases=(z2.ZSERVER_FIXTURE,
            OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(functional_session_factory)),
-    name="opengever.core:functional:zserver")
+    name="opengever.core:zserver")
 
 
 def activate_filing_number(portal):
