@@ -118,11 +118,12 @@ class Task(Base):
         )
 
     tasktemplate_predecessor_id = Column(Integer, ForeignKey('tasks.id'))
-    tasktemplate_successors = relationship(
+    tasktemplate_successor = relationship(
         "Task",
         foreign_keys=[tasktemplate_predecessor_id],
         backref=backref('tasktemplate_predecessor', remote_side=task_id),
         cascade="delete",
+        uselist=False
     )
 
     _principals = relation(
@@ -305,8 +306,7 @@ class Task(Base):
         """If the task is part of a sequence it returns the next task of the
         sequence otherwise None."""
 
-        if self.tasktemplate_successors:
-            return self.tasktemplate_successors[0]
+        return self.tasktemplate_successor
 
     def get_css_class(self):
         """Returns css_class for the special task icons:
