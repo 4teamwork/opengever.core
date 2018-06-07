@@ -10,12 +10,27 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
     @browsing
     def test_overview_displays_link_to_proposal(self, browser):
         expected_fields = sorted([
-            'Title', 'Document Date', 'Document Type', 'Author', 'creator',
-            'Description', 'Foreign Reference', 'Checked out', 'File',
-            'Digital Available', 'Preserved as paper', 'Date of receipt',
-            'Date of delivery', 'Related Documents', 'Classification',
-            'Privacy layer', 'Public Trial', 'Public trial statement',
-            'Submitted with', 'Proposal',
+            'Title',
+            'Document Date',
+            'Document Type',
+            'Author',
+            'creator',
+            'Description',
+            'Foreign Reference',
+            'Keywords',
+            'Checked out',
+            'File',
+            'Digital Available',
+            'Preserved as paper',
+            'Date of receipt',
+            'Date of delivery',
+            'Related Documents',
+            'Classification',
+            'Privacy layer',
+            'Public Trial',
+            'Public trial statement',
+            'Submitted with',
+            'Proposal',
         ])
 
         self.login(self.secretariat_user, browser)
@@ -40,12 +55,28 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
     @browsing
     def test_overview_displays_link_to_meeting(self, browser):
         expected_fields = sorted([
-            'Title', 'Document Date', 'Document Type', 'Author', 'creator',
-            'Description', 'Foreign Reference', 'Checked out', 'File',
-            'Digital Available', 'Preserved as paper', 'Date of receipt',
-            'Date of delivery', 'Related Documents', 'Classification',
-            'Privacy layer', 'Public Trial', 'Public trial statement',
-            'Submitted with', 'Proposal', 'Meeting',
+            'Title',
+            'Document Date',
+            'Document Type',
+            'Author',
+            'creator',
+            'Description',
+            'Foreign Reference',
+            'Keywords',
+            'Checked out',
+            'File',
+            'Digital Available',
+            'Preserved as paper',
+            'Date of receipt',
+            'Date of delivery',
+            'Related Documents',
+            'Classification',
+            'Privacy layer',
+            'Public Trial',
+            'Public trial statement',
+            'Submitted with',
+            'Proposal',
+            'Meeting',
         ])
         with self.login(self.committee_responsible, browser):
             self.word_proposal.load_model().schedule(self.meeting.model)
