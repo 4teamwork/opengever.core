@@ -1,3 +1,5 @@
+/* Content type schemas */
+
 .required-marker:after {
     font-size: 11px;
     visibility: visible;
@@ -15,10 +17,6 @@ div.body li.toctree-l2 ul {
 }
 
 
-h3 {
-    margin-top: 1em !important;
-}
-
 h3 img {
     margin-bottom: -7px;
     padding-right: 5px;
@@ -30,15 +28,6 @@ dl.class {
 
 dl.attribute {
     padding-top: 0.5em;
-}
-
-hr {
-    margin-top: 2em;
-    margin-bottom: 2em;
-    border: 0;
-    height: 1px;
-    background: #333;
-    background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
 
 .field-title {
