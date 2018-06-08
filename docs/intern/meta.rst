@@ -244,3 +244,17 @@ davon ein PDF. Beispiel:
 
    bin/docs-build-intern latexpdf
    open docs/intern/_build/latex/OneGovGEVERIntern.pdf
+
+Aktualisierung der französischen Dokumentation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Die französische Dokumentation ist komplett von der deutschen Dokumentation
+losgelöst und verfolgt daher auch einen eigenen Aktualisierungs-Zyklus.
+
+Nach dem initialen Einpflegen der französischen Inhalte wird halbjährlich eine
+Aktualisierung der Dokumentation vorgenommen. Dabei werden via Diff-Datei der
+deutschen Dokumentation die relevanten, grossen Änderungen an den
+Grundfunktionalitäten identifiziert. Diese werden dann einem Übersetzer
+(intern/extern) zugespielt und anschliessend eingepflegt.
+
+Anpassungsinputs von Kunden, welche dazwischen eintreffen, werden aufgenommen,
+aber erst am nächsten, halbjährlichen Termin umgesetzt.
