@@ -10,6 +10,7 @@
             <langstring language="de-ch">Ordner</langstring>
             <langstring language="de">Ordner</langstring>
             <langstring language="fr">Classeur</langstring>
+            <langstring language="fr-ch">Classeur</langstring>
         </caption>
     </term>
     <term>
@@ -19,6 +20,7 @@
             <langstring language="de-ch">Schachtel</langstring>
             <langstring language="de">Schachtel</langstring>
             <langstring language="fr">Boîte</langstring>
+            <langstring language="fr-ch">Boîte</langstring>
         </caption>
     </term>
     <term>
@@ -28,6 +30,7 @@
             <langstring language="de-ch">Dossier</langstring>
             <langstring language="de">Dossier</langstring>
             <langstring language="fr">Dossier</langstring>
+            <langstring language="fr-ch">Dossier</langstring>
         </caption>
     </term>
 </vdex>

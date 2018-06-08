@@ -10,6 +10,7 @@
             <langstring language="de-ch">Zur Stellungnahme</langstring>
             <langstring language="de">Zur Stellungnahme</langstring>
             <langstring language="fr">Pour prise de position</langstring>
+            <langstring language="fr-ch">Pour prise de position</langstring>
         </caption>
     </term>
 
@@ -20,6 +21,7 @@
             <langstring language="de">Zur Genehmigung</langstring>
             <langstring language="de-ch">Zur Genehmigung</langstring>
             <langstring language="fr">Pour accord</langstring>
+            <langstring language="fr-ch">Pour accord</langstring>
         </caption>
     </term>
 
@@ -30,6 +32,7 @@
             <langstring language="de-ch">Zur Prüfung / Korrektur</langstring>
             <langstring language="de">Zur Prüfung / Korrektur</langstring>
             <langstring language="fr">Pour contrôle / correction</langstring>
+            <langstring language="fr-ch">Pour contrôle / correction</langstring>
         </caption>
     </term>
 
@@ -40,6 +43,7 @@
             <langstring language="de-ch">Zum Bericht / Antrag</langstring>
             <langstring language="de">Zum Bericht / Antrag</langstring>
             <langstring language="fr">Pour rapport / demande</langstring>
+            <langstring language="fr-ch">Pour rapport / demande</langstring>
         </caption>
     </term>
 

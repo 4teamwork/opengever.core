@@ -10,6 +10,7 @@
             <langstring language="de-ch">Antrag</langstring>
             <langstring language="de">Antrag</langstring>
             <langstring language="fr">Requête</langstring>
+            <langstring language="fr-ch">Requête</langstring>
         </caption>
     </term>
     <term>
@@ -19,6 +20,7 @@
             <langstring language="de-ch">Anfrage</langstring>
             <langstring language="de">Anfrage</langstring>
             <langstring language="fr">Demande</langstring>
+            <langstring language="fr-ch">Demande</langstring>
         </caption>
     </term>
     <term>
@@ -28,6 +30,7 @@
             <langstring language="de-ch">Bericht</langstring>
             <langstring language="de">Bericht</langstring>
             <langstring language="fr">Rapport</langstring>
+            <langstring language="fr-ch">Rapport</langstring>
         </caption>
     </term>
     <term>
@@ -37,6 +40,7 @@
             <langstring language="de">Offerte</langstring>
             <langstring language="de-ch">Offerte</langstring>
             <langstring language="fr">Offre</langstring>
+            <langstring language="fr-ch">Offre</langstring>
         </caption>
     </term>
     <term>
@@ -46,6 +50,7 @@
             <langstring language="de-ch">Protokoll</langstring>
             <langstring language="de">Protokoll</langstring>
             <langstring language="fr">Procès-verbal</langstring>
+            <langstring language="fr-ch">Procès-verbal</langstring>
         </caption>
     </term>
     <term>
@@ -55,6 +60,7 @@
             <langstring language="de-ch">Vertrag</langstring>
             <langstring language="de">Vertrag</langstring>
             <langstring language="fr">Contrat</langstring>
+            <langstring language="fr-ch">Contrat</langstring>
         </caption>
     </term>
     <term>
@@ -64,6 +70,7 @@
             <langstring language="de-ch">Weisung</langstring>
             <langstring language="de">Weisung</langstring>
             <langstring language="fr">Directive</langstring>
+            <langstring language="fr-ch">Directive</langstring>
         </caption>
     </term>
     <term>
@@ -73,6 +80,7 @@
             <langstring language="de-ch">Reglement</langstring>
             <langstring language="de">Reglement</langstring>
             <langstring language="fr">Règlement</langstring>
+            <langstring language="fr-ch">Règlement</langstring>
         </caption>
     </term>
 </vdex>
