@@ -57,8 +57,8 @@
                  id="comment_proposal" class="proposalCommented"
                  title="Comment"
                  i18n:attributes="title">
-                  <span i18n:translate="" class="subMenuTitle actionText">
-                    Comment
+                  <span i18n:translate="label_comment" class="subMenuTitle actionText">
+                    comment
                   </span>
               </a>
             </li>
