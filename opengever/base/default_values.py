@@ -114,6 +114,9 @@ def get_persisted_value_for_field(context, field):
     fallbacks (to default or missing value) in place. If it does, we need to
     bypass them and only return the actually persisted value, or raise an
     AttributeError.
+
+    We also deal with fields that are implemented as properties (which are
+    to be found in the class dict instead of the instance dict).
     """
     name = field.getName()
     if not IPersistent.providedBy(context):
@@ -153,6 +156,11 @@ def get_persisted_value_for_field(context, field):
             # fallback in DexterityContent.__getattr__
             value = storage_impl.__dict__[name]
         except KeyError:
+            # Check whether the field is a property
+            descriptor = storage_impl.__class__.__dict__.get(name)
+            if isinstance(descriptor, property):
+                # Invoke the property's getter
+                return descriptor.fget(storage_impl)
             raise AttributeError(name)
         return value
     elif classname(storage_impl) in ('TranslatedTitle', 'OGMailBase'):
@@ -164,6 +172,11 @@ def get_persisted_value_for_field(context, field):
         try:
             value = storage_impl.context.__dict__[name]
         except KeyError:
+            # Check whether the field is a property
+            descriptor = storage_impl.__class__.__dict__.get(name)
+            if isinstance(descriptor, property):
+                # Invoke the property's getter
+                return descriptor.fget(storage_impl)
             raise AttributeError(name)
         return value
     elif classname(storage_impl) == 'Versionable':
