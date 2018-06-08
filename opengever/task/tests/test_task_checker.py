@@ -1,153 +1,134 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.browser.transitioncontroller import Checker
 from opengever.task.browser.transitioncontroller import get_checker
-from opengever.testing import FunctionalTestCase
+from opengever.task.browser.transitioncontroller import TaskChecker
+from opengever.task.interfaces import ISuccessorTaskController
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
-import transaction
+from unittest import skip
 
 
-class TestTaskControllerChecker(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestTaskControllerChecker, self).setUp()
-
-        self.hugo = create(Builder('ogds_user')
-                           .having(userid='hugo.boss',
-                                   firstname='Hugo',
-                                   lastname='Boss',
-                                   email='hugo@boss.ch')
-                           .in_group(self.org_unit.users_group))
-        transaction.commit()
+class TestTaskControllerChecker(IntegrationTestCase):
 
     def test_is_issuer(self):
-        task1 = create(Builder('task').having(issuer=TEST_USER_ID))
-        task2 = create(Builder('task').having(issuer='hugo.boss'))
+        self.login(self.dossier_responsible)
+        self.task.issuer = self.dossier_responsible.getId()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertTrue(get_checker(self.task).current_user.is_issuer)
 
-        self.assertTrue(get_checker(task1).current_user.is_issuer)
-        self.assertFalse(get_checker(task2).current_user.is_issuer)
+        self.task.issuer = self.secretariat_user.getId()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertFalse(get_checker(self.task).current_user.is_issuer)
 
     def test_is_issuer_checks_inbox_members_if_issuer_is_a_inbox(self):
-        task1 = create(Builder('task')
-                       .having(issuer=self.org_unit.inbox().id()))
+        self.login(self.regular_user)
+        self.task.issuer = get_current_org_unit().inbox().id()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertFalse(get_checker(self.task).current_user.is_issuer)
 
-        self.assertTrue(get_checker(task1).current_user.is_issuer)
-
-        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(checker.current_user.is_issuer)
+        self.login(self.secretariat_user)
+        self.assertTrue(get_checker(self.task).current_user.is_issuer)
 
     def test_is_responsible(self):
-        task1 = create(Builder('task').having(responsible=TEST_USER_ID))
-        task2 = create(Builder('task').having(responsible='hugo.boss'))
+        self.login(self.dossier_responsible)
+        self.task.responsible = self.dossier_responsible.getId()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertTrue(get_checker(self.task).current_user.is_responsible)
 
-        self.assertTrue(get_checker(task1).current_user.is_responsible)
-        self.assertFalse(get_checker(task2).current_user.is_responsible)
+        self.task.responsible = self.regular_user.getId()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertFalse(get_checker(self.task).current_user.is_responsible)
 
     def test_is_responsible_checks_inbox_members_if_issuer_is_a_inbox(self):
-        task1 = create(Builder('task')
-                       .having(responsible=self.org_unit.inbox().id()))
+        self.login(self.regular_user)
+        self.task.responsible = get_current_org_unit().inbox().id()
+        self.task.get_sql_object().sync_with(self.task)
+        self.assertFalse(get_checker(self.task).current_user.is_responsible)
 
-        self.assertTrue(get_checker(task1).current_user.is_responsible)
-
-        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
-        self.assertFalse(checker.current_user.is_responsible)
+        self.login(self.secretariat_user)
+        self.assertTrue(get_checker(self.task).current_user.is_responsible)
 
     def test_issuing_orgunit_agency_member(self):
         """Checks if the current user is member of the issuing
         orgunit's inbox_group"""
-
-        task1 = create(Builder('task').having(issuer=TEST_USER_ID))
-
+        self.login(self.secretariat_user)
         self.assertTrue(
-            get_checker(task1).current_user.in_issuing_orgunits_inbox_group)
-
-        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+            get_checker(self.task).current_user.in_issuing_orgunits_inbox_group)
+        checker = Checker(self.task.get_sql_object(), self.request, self.secretariat_user)
         self.assertFalse(checker.current_user.in_issuing_orgunits_inbox_group)
 
     def test_responsible_orgunit_agency_member(self):
         """Checks if the current user is member of the responsible
         orgunit's inbox_group"""
-
-        task1 = create(Builder('task').having(responsible_client='client1'))
-
+        self.login(self.secretariat_user)
         self.assertTrue(
-            get_checker(task1).current_user.in_responsible_orgunits_inbox_group)
+            get_checker(self.task).current_user.in_responsible_orgunits_inbox_group)
 
-        checker = Checker(task1.get_sql_object(), self.request, self.hugo)
+        # test as well without agency
+        checker = Checker(self.task.get_sql_object(), self.request, self.secretariat_user)
         self.assertFalse(
             checker.current_user.in_responsible_orgunits_inbox_group)
 
     def test_all_subtasks_finished(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-        create(Builder('task')
-               .within(task)
-               .in_state('task-state-tested-and-closed'))
-        create(Builder('task')
-               .within(task)
-               .in_state('task-state-rejected'))
-        create(Builder('task')
-               .within(task)
-               .in_state('task-state-cancelled'))
-
-        self.assertTrue(get_checker(task).task.all_subtasks_finished)
+        self.login(self.dossier_responsible)
+        for state in ('task-state-rejected',
+                      'task-state-cancelled',
+                      'task-state-tested-and-closed'):
+            self.set_workflow_state(state, self.subtask)
+            self.assertTrue(get_checker(self.task).task.all_subtasks_finished)
 
     def test_all_subtasks_is_NOT_finished_when_cancelled_or_resolved(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-        create(Builder('task')
-               .within(task)
-               .in_state('task-state-resolved'))
-        create(Builder('task')
-               .within(task)
-               .in_state('task-state-cancelled'))
+        self.login(self.dossier_responsible)
 
-        self.assertFalse(get_checker(task).task.all_subtasks_finished)
+        self.set_workflow_state('task-state-resolved', self.task)
+        self.assertFalse(get_checker(self.task).task.all_subtasks_finished)
+
+        self.set_workflow_state('task-state-cancelled', self.task)
+        self.assertFalse(get_checker(self.task).task.all_subtasks_finished)
 
     def test_all_subtasks_finished_is_allways_true_when_no_subtask_exists(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-
-        self.assertTrue(get_checker(task).task.all_subtasks_finished)
+        self.login(self.dossier_responsible)
+        self.assertTrue(get_checker(self.archive_task).task.all_subtasks_finished)
 
     def test_has_successors(self):
-        task_with_successor = create(Builder('task'))
-        task_without_successor = create(Builder('task'))
-        create(Builder('task').successor_from(task_with_successor))
+        self.login(self.dossier_responsible)
+        self.register_successor(self.task, self.subtask)
 
-        self.assertTrue(get_checker(task_with_successor).task.has_successors)
-        self.assertFalse(get_checker(task_without_successor).task.has_successors)
+        self.assertTrue(get_checker(self.task).task.has_successors)
+        self.assertFalse(get_checker(self.subtask).task.has_successors)
 
     def test_is_remote_request_checks_ogds_plugin_flag(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-
-        self.assertFalse(get_checker(task).request.is_remote)
-
-        task.REQUEST.environ['X_OGDS_AUID'] = 'rr'
-
-        self.assertTrue(get_checker(task).request.is_remote)
+        self.login(self.regular_user)
+        self.assertFalse(get_checker(self.task).request.is_remote)
+        self.task.REQUEST.environ['X_OGDS_AUID'] = 'rr'
+        self.assertTrue(get_checker(self.task).request.is_remote)
 
     def test_is_successor_process_checks_request_for_succesor_flag(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
-
-        self.assertFalse(get_checker(task).request.is_successor_process)
-
-        task.REQUEST.set('X-CREATING-SUCCESSOR', True)
-
-        self.assertTrue(get_checker(task).request.is_successor_process)
+        self.login(self.regular_user)
+        self.assertFalse(get_checker(self.task).request.is_successor_process)
+        self.task.REQUEST.set('X-CREATING-SUCCESSOR', True)
+        self.assertTrue(get_checker(self.task).request.is_successor_process)
 
     def test_is_assigned_to_current_admin_unit(self):
-        admin_unit = create(Builder('admin_unit')
-                            .id('additional'))
+        self.login(self.secretariat_user)
+        self.assertTrue(get_checker(self.inbox_forwarding).task.is_assigned_to_current_admin_unit)
+        additional = create(Builder('admin_unit').id(u'additional'))
         create(Builder('org_unit')
-               .id('additional')
-               .with_default_groups()
-               .having(title='Additional',
-                       admin_unit=admin_unit))
+               .id(u'additional')
+               .having(admin_unit=additional))
+        self.inbox_forwarding.responsible_client = 'additional'
+        self.inbox_forwarding.get_sql_object().sync_with(self.inbox_forwarding)
+        self.assertFalse(get_checker(self.inbox_forwarding).task.is_assigned_to_current_admin_unit)
 
-        task1 = create(Builder('forwarding')
-                       .having(responsible_client='client1'))
-        task2 = create(Builder('forwarding')
-                       .having(responsible=TEST_USER_ID,
-                               issuer=TEST_USER_ID,
-                               responsible_client='additional'))
+    def test_all_subtasks_finished_if_predecessor_has_subtasks(self):
+        self.login(self.secretariat_user)
 
-        self.assertTrue(get_checker(task1).task.is_assigned_to_current_admin_unit)
-        self.assertFalse(get_checker(task2).task.is_assigned_to_current_admin_unit)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+        self.set_workflow_state('task-state-in-progress', self.archive_task)
+        self.register_successor(self.task, self.archive_task)
+
+        task_checker = TaskChecker(self.archive_task.get_sql_object())
+        self.assertFalse(task_checker.all_subtasks_finished)
