@@ -1,5 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.meeting.interfaces import IHistory
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -165,7 +168,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
 
         # comment proposal
         comment = u'Bevor einreichen noch erg\xe4nzen'
-        browser.click_on("Comment")
+        browser.click_on("comment")
         browser.fill({'Comment': comment}).submit()
         with self.login(self.meeting_user, browser):
             self.assert_proposal_history_records(
@@ -183,11 +186,31 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, submitted_proposal)
         # comment proposal
         comment = u'Im n\xe4chsten meeting besprechen?'
-        browser.click_on("Comment")
+        browser.click_on("comment")
         browser.fill({'Comment': comment}).submit()
         self.assert_proposal_history_records(
             u'Proposal commented by M\xfcller Fr\xe4nzi (franzi.muller)',
             self.proposal,
+            browser,
+            expected_comments=comment,
+            with_submitted=True
+            )
+
+    @browsing
+    def test_commenting_decided_proposal_creates_history_entry_in_closed_dossier(self, browser):
+        self.login(self.committee_responsible, browser)
+        submitted_proposal = self.decided_proposal
+        proposal = submitted_proposal.load_model().resolve_proposal()
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+
+        self.open_overview(browser, submitted_proposal)
+        # comment proposal
+        comment = u'Can comment a decided proposal.'
+        browser.click_on("comment")
+        browser.fill({'Comment': comment}).submit()
+        self.assert_proposal_history_records(
+            u'Proposal commented by M\xfcller Fr\xe4nzi (franzi.muller)',
+            proposal,
             browser,
             expected_comments=comment,
             with_submitted=True
