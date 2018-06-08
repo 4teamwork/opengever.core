@@ -28,10 +28,6 @@ Ansicht einer vorbereiteten Sitzung:
 3. In diesem Feld kann die Protokollführende Person ausgewählt werden.
 4. Der Beginn der Seitennummerierung kann hier festgelegt werden.
 
-Mitglieder erfassen und Gremium zuweisen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 .. |img-spvupdate-20| image:: ../img/media/img-spvupdate-20.png
 .. |img-spvupdate-21| image:: ../img/media/img-spvupdate-21.png
 .. |img-spvupdate-22| image:: ../img/media/img-spvupdate-22.png
