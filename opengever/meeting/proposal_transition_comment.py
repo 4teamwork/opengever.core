@@ -58,7 +58,7 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         transition = self.context.workflow.get_transition(self.transition)
         transition_title = translate(transition.title, domain='plone',
                                context=self.request)
-        return u'{} {}'.format(title, transition_title)
+        return u'{}: {}'.format(title, transition_title)
 
     @property
     def transition(self):
@@ -123,7 +123,10 @@ class ProposalCommentAddForm(form.AddForm, AutoExtensibleForm):
 
     @property
     def label(self):
-        return self.context.Title().decode('utf-8')
+        comment_label = translate('label_comment', domain='opengever.meeting',
+                                  context=self.request)
+        return u"{}: {}".format(self.context.Title().decode('utf-8'),
+                                comment_label)
 
     def updateActions(self):
         super(ProposalCommentAddForm, self).updateActions()
