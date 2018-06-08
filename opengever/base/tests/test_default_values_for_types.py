@@ -25,15 +25,6 @@ FROZEN_TODAY = FROZEN_NOW.date()
 DEFAULT_TITLE = u'My title'
 DEFAULT_CLIENT = u'client1'
 
-OMITTED_FORM_FIELDS = [
-    'creators', 'predecessor', 'preview', 'archival_file_state',
-    'thumbnail', 'former_reference_number', 'reference_number',
-    'temporary_former_reference_number'
-]
-DISPLAY_MODE_FORM_FIELDS = [
-    'message_source', 'original_message',
-]
-
 REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
 }
@@ -271,12 +262,6 @@ class TestDefaultsBase(FunctionalTestCase):
         defaults.update(self.type_defaults)
         defaults.update(self.form_defaults)
         defaults.update(self.requireds)
-
-        for key in OMITTED_FORM_FIELDS:
-            defaults.pop(key, None)
-
-        for key in DISPLAY_MODE_FORM_FIELDS:
-            defaults.pop(key, None)
 
         return defaults
 
