@@ -70,7 +70,7 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         return self._transition
 
     def updateWidgets(self):
-        form.AddForm.updateWidgets(self)
+        super(ProposalTransitionCommentAddForm, self).updateWidgets()
         self.widgets['transition'].mode = HIDDEN_MODE
 
     def updateActions(self):
@@ -82,19 +82,13 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
-            errorMessage = '<ul>'
-            for error in errors:
-                if errorMessage.find(error.message):
-                    errorMessage += '<li>' + error.message + '</li>'
-            errorMessage += '</ul>'
-            self.status = errorMessage
-            return None
+            self.status = self.formErrorsMessage
+            return
 
-        else:
-            transition = data['transition']
-            comment = data.get('text')
-            controller = ProposalTransitionController(self.context, self.request)
-            return controller.execute_transition(transition, comment)
+        transition = data['transition']
+        comment = data.get('text')
+        controller = ProposalTransitionController(self.context, self.request)
+        return controller.execute_transition(transition, comment)
 
     @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
                              name='cancel', )
@@ -137,18 +131,11 @@ class ProposalCommentAddForm(form.AddForm, AutoExtensibleForm):
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
-            errorMessage = '<ul>'
-            for error in errors:
-                if errorMessage.find(error.message):
-                    errorMessage += '<li>' + error.message + '</li>'
-            errorMessage += '</ul>'
-            self.status = errorMessage
-            return None
-
-        else:
-            comment = data.get('text')
-            self.context.comment(comment)
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
+            self.status = self.formErrorsMessage
+            return
+        comment = data.get('text')
+        self.context.comment(comment)
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
                              name='cancel', )
