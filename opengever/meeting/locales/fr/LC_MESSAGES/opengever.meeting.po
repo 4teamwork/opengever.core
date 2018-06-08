@@ -1298,7 +1298,7 @@ msgstr "La réunion ${title} a été annulée avec succès"
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_closed"
-msgstr "La réunion ${title} a été clôturée avec succès, les extraits de protocole ont été générés et renvoyés aux dossiers initiaux."
+msgstr "La réunion ${title} a été clôturée avec succès."
 
 #. Default: "The membership was deleted successfully."
 #: ./opengever/meeting/browser/memberships.py
@@ -1536,7 +1536,7 @@ msgstr "${count} participants"
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
-msgstr "Texte libre ajouté avec succès."
+msgstr "Texte libre ajouté à l'ordre du jour avec succès."
 
 #. Default: "Ad hoc agenda item ${title}"
 #: ./opengever/meeting/model/meeting.py

@@ -1296,7 +1296,7 @@ msgstr "Die Sitzung ${title} wurde erfolgreich storniert."
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_closed"
-msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen, die Protokollauszüge wurden generiert und an die Urprungsdossiers zurückgespielt."
+msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen."
 
 #. Default: "The membership was deleted successfully."
 #: ./opengever/meeting/browser/memberships.py
@@ -1534,7 +1534,7 @@ msgstr "${count} Teilnehmende"
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
-msgstr "Freitext erfolgreich hinzugefügt"
+msgstr "Traktandum erfolgreich hinzugefügt"
 
 #. Default: "Ad hoc agenda item ${title}"
 #: ./opengever/meeting/model/meeting.py
