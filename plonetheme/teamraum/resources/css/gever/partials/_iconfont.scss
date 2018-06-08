@@ -608,6 +608,7 @@ div.answer.addDocument div.answerType:before { content: $addDocument;}
 div.answer.created div.answerType:before { content: $created; }
 div.answer.modifyDeadline div.answerType:before { content: $modifyDeadline; }
 div.answer.reactivated div.answerType:before { content: $reactivate; }
+div.answer.skip div.answerType:before { font-family: 'FontAwesome'; content: $fa-var-step-forward; }
 
 /* @group language selector in personaltools */
 

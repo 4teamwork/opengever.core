@@ -249,6 +249,15 @@ msgstr ""
 msgid "task-transition-rejected-open"
 msgstr ""
 
+msgid "task-transition-rejected-skipped"
+msgstr ""
+
+msgid "task-transition-planned-skipped"
+msgstr ""
+
+msgid "task-transition-skipped-open"
+msgstr ""
+
 msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
 
@@ -277,6 +286,9 @@ msgid "task-state-tested-and-closed"
 msgstr ""
 
 msgid "task-state-planned"
+msgstr ""
+
+msgid "task-state-skipped"
 msgstr ""
 
 msgid "task-transition-in-progress-tested-and-closed"

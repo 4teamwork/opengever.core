@@ -649,6 +649,10 @@ ul.member_listing li {
   @extend .icon-status-canceled;
 }
 
+.wf-task-state-skipped {
+  @extend .icon-status-canceled;
+}
+
 .wf-meeting-state-pending,
 .byline-meeting-wf-state-pending span.value {
   @extend .icon-status-open;

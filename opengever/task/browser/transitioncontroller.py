@@ -434,6 +434,48 @@ class TaskTransitionController(BrowserView):
     def rejected_to_open_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
+    @guard('task-transition-rejected-skipped')
+    def rejected_to_skipped_guard(self, c, include_agency):
+        """Checks if:
+        - The current user is the issuer of the task"""
+
+        if include_agency:
+            return c.current_user.is_issuer or c.current_user.is_administrator
+
+        return c.current_user.is_issuer
+
+    @action('task-transition-rejected-skipped')
+    def rejected_to_skipped_action(self, transition, c):
+        return self._addresponse_form_url(transition)
+
+    @guard('task-transition-planned-skipped')
+    def planned_to_skipped_guard(self, c, include_agency):
+        """Checks if:
+        - The current user is the issuer of the task"""
+
+        if include_agency:
+            return c.current_user.is_issuer or c.current_user.is_administrator
+
+        return c.current_user.is_issuer
+
+    @action('task-transition-planned-skipped')
+    def planned_to_skipped_action(self, transition, c):
+        return self._addresponse_form_url(transition)
+
+    @guard('task-transition-skipped-open')
+    def skipped_to_open_guard(self, c, include_agency):
+        """Checks if:
+        - The current user is the issuer of the task"""
+
+        if include_agency:
+            return c.current_user.is_issuer or c.current_user.is_administrator
+
+        return c.current_user.is_issuer
+
+    @action('task-transition-skipped-open')
+    def skipped_to_open_action(self, transition, c):
+        return self._addresponse_form_url(transition)
+
     @guard('task-transition-resolved-tested-and-closed')
     def resolved_to_closed_guard(self, c, include_agency):
         """Checks if:

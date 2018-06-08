@@ -300,6 +300,9 @@ msgstr "Refusé"
 msgid "task-state-resolved"
 msgstr "Tâche accomplie"
 
+msgid "task-state-skipped"
+msgstr "Omis"
+
 msgid "task-state-tested-and-closed"
 msgstr "Fermé"
 
@@ -342,17 +345,26 @@ msgstr "Fermer"
 msgid "task-transition-planned-open"
 msgstr ""
 
+msgid "task-transition-planned-skipped"
+msgstr "Omettre"
+
 msgid "task-transition-reassign"
 msgstr "Attribuer à nouveau"
 
 msgid "task-transition-rejected-open"
 msgstr "Rouvrir"
 
+msgid "task-transition-rejected-skipped"
+msgstr "Omettre"
+
 msgid "task-transition-resolved-in-progress"
 msgstr "Réviser"
 
 msgid "task-transition-resolved-tested-and-closed"
 msgstr "Fermer"
+
+msgid "task-transition-skipped-open"
+msgstr "Rouvrir"
 
 msgid "tasktemplate-state-active"
 msgstr "Actif"

@@ -67,6 +67,11 @@
   @extend .gv-reassign;
 }
 
+#content .actionButtons .skip {
+  @include button($iconset: fa);
+  @extend .fa-step-forward;
+}
+
 .actionButtons .revise {
   @extend .gv-pencil;
 }

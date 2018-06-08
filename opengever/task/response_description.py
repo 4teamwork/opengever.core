@@ -269,6 +269,22 @@ class Delegate(ResponseDescription):
 ResponseDescription.add_description(Delegate)
 
 
+class Skip(ResponseDescription):
+    transitions = ['task-transition-rejected-skipped',
+                   'task-transition-planned-skipped']
+    css_class = 'skip'
+
+    def msg(self):
+        return _('transition_msg_skip', u'Skipped by ${user}',
+                 mapping=self._msg_mapping)
+
+    def label(self):
+        return _('transition_label_skip', u'Task skipped')
+
+
+ResponseDescription.add_description(Skip)
+
+
 class Refuse(ResponseDescription):
 
     transition = 'forwarding-transition-refuse'
