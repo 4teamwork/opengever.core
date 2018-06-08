@@ -14,7 +14,9 @@ from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
+from plone.dexterity.utils import iterSchemataForType
 from plone.namedfile.file import NamedBlobFile
+from zope.schema import getFieldsInOrder
 import textwrap
 import transaction
 
@@ -162,10 +164,11 @@ MAIL_MISSING_VALUES = {
     'delivery_date': None,
     'document_type': None,
     'foreign_reference': None,
+    'message': None,  # needs to be updated with NamedBlobFile in actual test
+    'message_source': None,
+    'original_message': None,
     'preview': None,
     'thumbnail': None,
-    'original_message': None,
-    'message_source': None,
 }
 
 
@@ -229,6 +232,8 @@ CONTACT_MISSING_VALUES = {
 class TestDefaultsBase(FunctionalTestCase):
     """Test our base classes have expected default values."""
 
+    portal_type = None
+
     requireds = None
     type_defaults = None
     form_defaults = None
@@ -262,12 +267,44 @@ class TestDefaultsBase(FunctionalTestCase):
         defaults.update(self.type_defaults)
         defaults.update(self.form_defaults)
         defaults.update(self.requireds)
-
         return defaults
+
+    def get_field_names_for_type(self, portal_type):
+        names = []
+        for schema in iterSchemataForType(self.portal_type):
+            for name, field in getFieldsInOrder(schema):
+                if name == 'changeNote':
+                    # The changeNote field from p.a.versioningbehavior
+                    # is a "fake" field - it never gets persisted, but
+                    # written to request annotations instead
+                    continue
+
+                if name == 'reference_number':
+                    # reference_number is a special field. It never gets
+                    # set directly, but instead acts as a computed field
+                    # for all intents and purposes.
+                    continue
+
+                names.append(name)
+        return names
+
+    def test_type_defaults_cover_all_schema_fields(self):
+        if self.portal_type is not None:
+            actual = self.get_type_defaults().keys()
+            expected = self.get_field_names_for_type(self.portal_type)
+            self.assertEqual(set(expected), set(actual))
+
+    def test_z3c_form_defaults_cover_all_schema_fields(self):
+        if self.portal_type is not None:
+            actual = self.get_z3c_form_defaults().keys()
+            expected = self.get_field_names_for_type(self.portal_type)
+            self.assertEqual(set(expected), set(actual))
 
 
 class TestRepositoryRootDefaults(TestDefaultsBase):
     """Test our repository roots come with expected default values."""
+
+    portal_type = 'opengever.repository.repositoryroot'
 
     requireds = REPOROOT_REQUIREDS
     type_defaults = REPOROOT_DEFAULTS
@@ -317,6 +354,8 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
 class TestRepositoryFolderDefaults(TestDefaultsBase):
     """Test our repository folders come with expected default values."""
+
+    portal_type = 'opengever.repository.repositoryfolder'
 
     requireds = REPOFOLDER_REQUIREDS
     type_defaults = REPOFOLDER_DEFAULTS
@@ -375,6 +414,8 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
 class TestDossierDefaults(TestDefaultsBase):
     """Test dossiers come with expected default values."""
+
+    portal_type = 'opengever.dossier.businesscasedossier'
 
     requireds = DOSSIER_REQUIREDS
     type_defaults = DOSSIER_DEFAULTS
@@ -490,6 +531,8 @@ class TestDossierDefaults(TestDefaultsBase):
 class TestDocumentDefaults(TestDefaultsBase):
     """Test documents come with expected default values."""
 
+    portal_type = 'opengever.document.document'
+
     requireds = DOCUMENT_REQUIREDS
     type_defaults = DOCUMENT_DEFAULTS
     form_defaults = DOCUMENT_FORM_DEFAULTS
@@ -582,6 +625,8 @@ class TestDocumentDefaults(TestDefaultsBase):
 class TestMailDefaults(TestDefaultsBase):
     """Test mails come with expected default values."""
 
+    portal_type = 'ftw.mail.mail'
+
     requireds = MAIL_REQUIREDS
     type_defaults = MAIL_DEFAULTS
     form_defaults = MAIL_FORM_DEFAULTS
@@ -661,6 +706,8 @@ class TestMailDefaults(TestDefaultsBase):
 class TestTaskDefaults(TestDefaultsBase):
     """Test tasks come with expected default values."""
 
+    portal_type = 'opengever.task.task'
+
     requireds = TASK_REQUIREDS
     type_defaults = TASK_DEFAULTS
     form_defaults = TASK_FORM_DEFAULTS
@@ -726,6 +773,8 @@ class TestTaskDefaults(TestDefaultsBase):
 
 class TestContactDefaults(TestDefaultsBase):
     """Test contacts come with expected default values."""
+
+    portal_type = 'opengever.contact.contact'
 
     requireds = CONTACT_REQUIREDS
     type_defaults = CONTACT_DEFAULTS
