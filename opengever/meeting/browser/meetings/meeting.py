@@ -15,6 +15,7 @@ from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.vocabulary import ProposalTemplatesForCommitteeVocabulary
 from operator import itemgetter
 from path import Path
 from plone import api
@@ -447,3 +448,21 @@ class MeetingView(BrowserView):
                 return transition
 
         return None
+
+    @property
+    def has_many_proposal_templates(self):
+        return bool(len(self.proposal_templates) > 1)
+
+    @property
+    def proposal_templates(self):
+        vocabulary_factory = ProposalTemplatesForCommitteeVocabulary()
+        committee = self.context.aq_parent
+        vocabulary = vocabulary_factory(committee)
+        templates = [term.value for term in vocabulary]
+        default_template = committee.get_ad_hoc_template()
+        return [{
+            'title': template.title,
+            'modified': template.modified().strftime('%d.%m.%Y'),
+            'author': template.getOwner().getId(),
+            'selected': template == default_template,
+        } for template in templates]
