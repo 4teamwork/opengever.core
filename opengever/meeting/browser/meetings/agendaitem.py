@@ -490,7 +490,8 @@ class AgendaItemsView(BrowserView):
                     _('empty_proposal', default=u"Proposal must not be empty.")
                 ).proceed().dump()
 
-        self.meeting.schedule_ad_hoc(title)
+        template = safe_unicode(self.request.get('template_id'))
+        self.meeting.schedule_ad_hoc(title, template)
 
         return JSONResponse(self.request).info(
             _('text_added', default=u"Text successfully added.")).proceed().dump()
