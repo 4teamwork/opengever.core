@@ -432,6 +432,20 @@ class OpengeverContentFixture(object):
                 .within(self.templates)
                 ))
 
+            self.register('ad_hoc_agenda_item_template', create(
+                Builder('proposaltemplate')
+                .titled(u'Freitext Traktandum')
+                .with_asset_file(u'freitext_traktandum.docx')
+                .within(self.templates)
+                ))
+
+            self.register('recurring_agenda_item_template', create(
+                Builder('proposaltemplate')
+                .titled(u'Wiederkehrendes Traktandum')
+                .with_asset_file(u'wiederkehrendes_traktandum.docx')
+                .within(self.templates)
+                ))
+
         self.tasktemplatefolder = self.register('tasktemplatefolder', create(
             Builder('tasktemplatefolder')
             .titled(u'Verfahren Neuanstellung')

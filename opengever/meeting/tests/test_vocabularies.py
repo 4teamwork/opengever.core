@@ -70,11 +70,15 @@ class TestProposalTemplatesVocabulary(IntegrationTestCase):
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.ProposalTemplatesVocabulary')
         self.assertItemsEqual(
-            [self.proposal_template.Title()],
+            [self.proposal_template.Title(),
+             self.ad_hoc_agenda_item_template.Title(),
+             self.recurring_agenda_item_template.Title()],
             [term.title for term in factory(context=None)])
 
         self.assertItemsEqual(
-            [IUUID(self.proposal_template)],
+            [IUUID(self.proposal_template),
+             IUUID(self.ad_hoc_agenda_item_template),
+             IUUID(self.recurring_agenda_item_template)],
             [term.value for term in factory(context=None)])
 
 
@@ -92,7 +96,10 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
             IVocabularyFactory,
             name='opengever.meeting.ProposalTemplatesForCommitteeVocabulary')
         self.assertItemsEqual(
-            [self.proposal_template, baubewilligungen],
+            [self.proposal_template,
+             baubewilligungen,
+             self.ad_hoc_agenda_item_template,
+             self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
 
     def test_reduce_allowed_templates_with_committee_settings(self):
@@ -106,7 +113,10 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
             IVocabularyFactory,
             name='opengever.meeting.ProposalTemplatesForCommitteeVocabulary')
         self.assertItemsEqual(
-            [self.proposal_template, baubewilligungen],
+            [self.proposal_template,
+             baubewilligungen,
+             self.ad_hoc_agenda_item_template,
+             self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
 
         self.committee.allowed_proposal_templates = [IUUID(baubewilligungen)]
@@ -121,13 +131,18 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
         factory = getUtility(
             IVocabularyFactory,
             name='opengever.meeting.ProposalTemplatesForCommitteeVocabulary')
-        self.assertEquals(
-            [self.proposal_template],
+        self.assertItemsEqual(
+            [self.proposal_template,
+             self.ad_hoc_agenda_item_template,
+             self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
 
         self.request.form['form.widgets.predecessor_proposal'] = '/'.join(
             self.word_proposal.getPhysicalPath()).replace('/plone', '')
-        self.assertEquals(
-            [self.word_proposal.get_proposal_document(), self.proposal_template],
+        self.assertItemsEqual(
+            [self.word_proposal.get_proposal_document(),
+             self.proposal_template,
+             self.ad_hoc_agenda_item_template,
+             self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
 

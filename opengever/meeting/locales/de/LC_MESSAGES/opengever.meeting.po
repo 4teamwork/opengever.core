@@ -191,6 +191,11 @@ msgstr "Protokoll für die Sitzung ${title} wurde nicht aktualisiert. Das Protok
 msgid "Sablon Template"
 msgstr "Sablon Vorlage"
 
+#. Default: "Save"
+#: ./opengever/meeting/browser/committeeforms.py
+msgid "Save"
+msgstr "Speichern"
+
 #: ./opengever/meeting/browser/meetings/unscheduled_proposals.py
 msgid "Scheduled Successfully"
 msgstr "Erfolgreich traktandiert"
@@ -605,6 +610,11 @@ msgstr "Der Abschnitt darf nicht leer sein."
 msgid "empty_proposal"
 msgstr "Der Freitext darf nicht leer sein."
 
+#. Default: "The default ad-hoc agenda item template has to be amongst the allowed ones for this committee."
+#: ./opengever/meeting/committee.py
+msgid "error_default_template_is_in_allowed_templates"
+msgstr "Die Standardvorlage für Traktanden ohne Antrag sollte bei den erlaubten Vorlagen ausgewählt sein."
+
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "error_must_checkin_documents_for_transition"
@@ -670,6 +680,11 @@ msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 msgid "held"
 msgstr "Durchgeführt"
 
+#. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_ad_hoc_agenda_item_templates"
+msgstr "Wählen Sie alle Vorlagen für Traktanden ohne Antrag aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Vorlage aus, um alle zu erlauben."
+
 #. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_proposal_templates"
@@ -709,7 +724,7 @@ msgstr "Diese Aktion kann im aktuellen Zustand des Traktandums nicht durchgefüh
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
-msgstr "Vorlage für Traktanden ohne Antrag"
+msgstr "Standardvorlage für Traktanden ohne Antrag"
 
 #. Default: "Decided"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -744,6 +759,11 @@ msgstr "Traktandenliste"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
+
+#. Default: "Allowed ad-hoc agenda item templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_ad_hoc_agenda_item_templates"
+msgstr "Erlaubte Vorlagen für Traktanden ohne Antrag"
 
 #. Default: "Allowed proposal templates"
 #: ./opengever/meeting/committee.py

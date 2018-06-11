@@ -65,6 +65,70 @@ def get_committee_member_vocabulary(meetingwrapper):
 
 
 @implementer(IVocabularyFactory)
+class AdHocAgendaItemTemplatesForCommitteeVocabulary(object):
+    """The AdHocAgendaItemTemplatesForCommitteeVocabulary is used in the
+    proposal add form for selecting an ad-hoc agenda item template.
+
+    The ad-hoc agenda item template field is configured so that the list of
+    templates is re-rendered whenever the user changes the committee.
+    This allows this vocubulary to ask the selected committee whether the
+    list of templates is limited. If so, the templates are reduced to the
+    allowed templates.
+    """
+
+    def __call__(self, context):
+        template_folder = get_template_folder()
+        if template_folder is None:
+            # this may happen when the user does not have permissions to
+            # view templates and/or during ++widget++ traversal
+            return SimpleVocabulary([])
+
+        allowed_uids = self.get_allowed_ad_hoc_agenda_item_templates_UIDS(context)
+        objects = self.get_ad_hoc_agenda_item_templates(template_folder, allowed_uids)
+        return self.make_vocabulary_from_objects(objects)
+
+    def get_ad_hoc_agenda_item_templates(self, template_folder, allowed_uids):
+        """Return a list of regular ad-hoc agenda item templates.
+        This list includes all visible ad-hoc agenda item templates.
+        When a list of "allowed_uids" is passed in, it is used as filter
+        so that documents without a listed UID are removed.
+        """
+        query = {'context': template_folder,
+                 'depth': -1,
+                 'portal_type': "opengever.meeting.proposaltemplate",
+                 'sort_on': 'sortable_title',
+                 'sort_order': 'ascending'}
+
+        if allowed_uids:
+            query['UID'] = allowed_uids
+
+        return [brain.getObject() for brain in api.content.find(**query)]
+
+    def get_allowed_ad_hoc_agenda_item_templates_UIDS(self, context):
+        committee = self.get_committee(context)
+        if not committee:
+            return None
+
+        return committee.resolve_committee().allowed_ad_hoc_agenda_item_templates
+
+    def get_committee(self, context):
+        committees = context.REQUEST.form.get('form.widgets.committee', None)
+        if committees:
+            return Committee.query.filter_by(committee_id=int(committees[0])).one()
+
+        return None
+
+    def make_vocabulary_from_objects(self, objects):
+        terms = []
+        for template in objects:
+            terms.append(SimpleVocabulary.createTerm(
+                template,
+                IUUID(template),
+                safe_unicode(template.Title())))
+        return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
 class ProposalTemplatesForCommitteeVocabulary(object):
     """The ProposalTemplatesForCommitteeVocabulary is used in the
     proposal add form for selecting a proposal template.
