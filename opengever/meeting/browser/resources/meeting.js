@@ -813,7 +813,10 @@
     this.render = function(data) { return self.template({ proposals: data.items }); };
 
     this.schedule = function(target) {
-      return $.post(target.attr("href")).done(function() { $("#filter-proposals").val(""); });
+      return $.post(
+          target.attr('href'),
+          {time_span: $('input[type=time]', target[0].parentNode.parentNode).attr('value')}
+      ).done(function() { $("#filter-proposals").val(""); });
     };
 
     this.addParagraph = function() {
