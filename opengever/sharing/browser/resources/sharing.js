@@ -80,7 +80,8 @@ var app = new Vue({
         inherit: this.inherit };
 
       this.requester.post(this.endpoint, payload).then(function (response) {
-        console.info('SAVED!!!');
+        // redirect to context and show statusmessage
+        window.location = this.context_url + '/sharing/saved';
       }.bind(this));
     },
   },

@@ -9,6 +9,25 @@ ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
 
 
+class RoleAssignment(object):
+
+    def __init__(self, principal, roles, cause, reference=None):
+        self.principal = principal
+        self.roles = roles
+        self.cause = cause
+        self.reference = reference
+
+
+class SharingRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_SHARING
+
+    def __init__(self, principal, roles):
+        self.principal = principal
+        self.roles = roles
+        self.reference = None
+
+
 class RoleAssignmentStorage(object):
 
     key = 'ROLE_ASSIGNMENTS'
@@ -30,6 +49,15 @@ class RoleAssignmentStorage(object):
                     return item
                 elif item['reference'] == reference:
                     return item
+
+    def drop_all(self, cause):
+        to_remove = [item for item in
+                     self._storage() if item['cause'] == cause]
+        for item in to_remove:
+            self._storage().remove(item)
+
+    def get_all(self, cause):
+        return [item for item in self._storage() if item['cause'] == cause]
 
     def add_or_update(self, principal, roles, cause, reference):
         """Add or update a role assignment
@@ -68,6 +96,23 @@ class RoleAssignmentManager(object):
 
     def add(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
+        self._upate_local_roles()
+
+    def get_assignments(self, cause):
+        self.storage.get_all(cause)
+
+    def set(self, assignments):
+        cause = assignments[0].cause
+        if len(set([asg.cause for asg in assignments])) > 1:
+            raise ValueError('All assignments need to have the same cause')
+
+        self.storage.drop_all(cause)
+
+        for assignment in assignments:
+            self.storage.add_or_update(
+                assignment.principal, assignment.roles, assignment.cause,
+                assignment.reference)
+
         self._upate_local_roles()
 
     def _upate_local_roles(self):

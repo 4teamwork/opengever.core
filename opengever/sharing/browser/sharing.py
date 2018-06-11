@@ -4,6 +4,8 @@ from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
 from opengever.base.handlebars import get_handlebars_template
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.sharing import _
@@ -16,6 +18,7 @@ from pkg_resources import resource_filename
 from plone import api
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
+from plone.memoize.instance import clearafter
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
@@ -86,6 +89,16 @@ class NewSharingView(BrowserView):
             'label_acquired': _(u'label_acquired', default=u'Acuired')
         })
 
+    def saved(self):
+        """Redirects to absolute_url and adds statusmessage.
+        """
+        message = _(u'label_roles_successfully_changed',
+                    default=u'Local roles successfully changed')
+        api.portal.show_message(
+            message=message, request=self.request, type='info')
+
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
 
 class OpengeverSharingView(SharingView):
     """Special Opengever Sharing View, which display different roles
@@ -95,38 +108,19 @@ class OpengeverSharingView(SharingView):
     index = ViewPageTemplateFile('sharing.pt')
 
     @memoize
-    def roles(self, check_permission=True):
-        """Get a list of roles that can be managed.
+    def roles(self):
+        super_roles = super(OpengeverSharingView, self).roles()
 
-        Returns a list of dicts with keys:
-
-        - id
-        - title
-        """
-        context = self.context
-        portal_membership = getToolByName(context, 'portal_membership')
-
-        pairs = []
-        for name, utility in getUtilitiesFor(ISharingPageRole):
-            permission = utility.required_permission
-            if not check_permission or permission is None or \
-                    portal_membership.checkPermission(permission, context):
-                pairs.append(dict(id=name, title=utility.title))
-
-        pairs.sort(key=lambda x: x["id"])
-        return pairs
-
-    def available_roles(self):
         if get_specification_for(self.context) is not None:
             # In lawgiver workflow specifications we can configure the
             # "visible roles", therefore we dont need to overwrite the
             # behavior here.
-            return self.roles()
+            return super_roles
 
         result = []
         for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:
-                roles = [r.get('id') for r in self.roles()]
+                roles = [r.get('id') for r in super_roles]
                 for role_id, title in value:
                     if role_id in roles:
                         result.append(
@@ -135,7 +129,7 @@ class OpengeverSharingView(SharingView):
 
                 return result
 
-        return self.roles()
+        return super_roles
 
     def role_settings(self):
         """The standard role_settings method,
@@ -228,14 +222,34 @@ class OpengeverSharingView(SharingView):
 
         return True
 
+    @clearafter
+    def _update_role_settings(self, new_settings, reindex=True):
+        """Replaced becasue we need our own permission manager stuff.
+        """
+        changed = False
+        assignments = []
+
+        for s in new_settings:
+            principal = s['id']
+            selected_roles = frozenset(s['roles'])
+            if not selected_roles:
+                continue
+
+            assignments.append(SharingRoleAssignment(principal, selected_roles))
+
+        if assignments:
+            manager = RoleAssignmentManager(self.context)
+            manager.set(assignments)
+
+        return changed
+
     def update_role_settings(self, new_settings, reindex=True):
         """Method Wrapper for the super method, to allow notify a
         LocalRolesModified event. Needed for adding a Journalentry after a
         role_settings change
         """
         old_local_roles = dict(self.context.get_local_roles())
-        changed = super(OpengeverSharingView, self).update_role_settings(
-            new_settings, reindex)
+        changed = self._update_role_settings(new_settings, reindex)
 
         if changed:
             notify(LocalRolesModified(
@@ -255,6 +269,7 @@ class OpengeverSharingView(SharingView):
         """A mapper for the original method, to constraint the users
         list to only the users which are assigned to the current client
         """
+
         all_principals = super(OpengeverSharingView, self)._principal_search_results(
             search_for_principal,
             get_principal_by_id,
