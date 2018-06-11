@@ -50,7 +50,7 @@ class SablonTemplate(Document):
             None)
 
     def as_file(self, path):
-        """Store template-file data in a file named 'template.doxc' on the
+        """Store template-file data in a file named 'template.docx' on the
         filesystem under path.
 
         It is the caller's responsibility to remove the file when it is not

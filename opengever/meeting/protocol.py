@@ -1,10 +1,12 @@
 from datetime import datetime
 from opengever.meeting import _
 from opengever.meeting.model.membership import Membership
+from opengever.meeting.utils import format_date
+from opengever.meeting.utils import JsonDataProcessor
 from opengever.ogds.base.utils import get_current_admin_unit
-from plone import api
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import copy
 import json
 
 
@@ -104,7 +106,7 @@ class ProtocolData(object):
 
     def add_meeting(self):
         self.data['meeting'] = {
-            'date': self.meeting.get_date(),
+            'date': self.meeting.start,
             'start_time': self.meeting.get_start_time(),
             'end_time': self.meeting.get_end_time(),
             'number': self.meeting.meeting_number,
@@ -124,13 +126,19 @@ class ProtocolData(object):
 
     def add_general_metadata(self):
         self.data['document'] = {
-            'generated': api.portal.get_localized_time(
-                datetime=datetime.now()),
+            'generated': datetime.now(),
         }
 
     def as_json(self, pretty=False):
         indent = 4 if pretty else None
-        return json.dumps(self.data, indent=indent)
+        return json.dumps(self.get_processed_data(), indent=indent)
+
+    def get_processed_data(self):
+        data_fields = (("meeting", "date"), ("document", "generated"))
+        transforms = (format_date for field in data_fields)
+        processed_data = copy.deepcopy(self.data)
+        processor = JsonDataProcessor()
+        return processor.process(processed_data, data_fields, transforms)
 
 
 class ExcerptProtocolData(ProtocolData):

@@ -54,6 +54,7 @@ class TestConfig(IntegrationTestCase):
                 u'repositoryfolder_documents_tab': True,
                 u'repositoryfolder_tasks_tab': True,
                 u'resolver_name': u'strict',
+                u'sablon_date_format': u'%d.%m.%Y',
                 u'solr': False,
                 u'workspace': False,
             })

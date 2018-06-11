@@ -5,9 +5,11 @@ from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.meeting.browser.sablontemplate import SAMPLE_MEETING_DATA
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.meeting.protocol import ExcerptProtocolData
 from opengever.meeting.protocol import ProtocolData
 from opengever.testing import FunctionalTestCase
+from plone import api
 import copy
 
 
@@ -103,9 +105,19 @@ class TestProtocolJsonData(FunctionalTestCase):
 
     def test_protocol_json(self):
         with freeze(datetime(2018, 5, 4)):
-            data = ProtocolData(self.meeting).data
+            data = ProtocolData(self.meeting).get_processed_data()
         expected_data = copy.deepcopy(SAMPLE_MEETING_DATA)
-        expected_data.update({'document': {'generated': u'May 04, 2018'}})
+        expected_data.update({'document': {'generated': '04.05.2018'}})
+        expected_data['meeting']['date'] = '13.12.2011'
+        self.assertDictEqual(expected_data, data)
+
+    def test_date_formatting_string_affects_protocol_json(self):
+        api.portal.set_registry_record("sablon_date_format_string", u'%Y %m %d', interface=IMeetingSettings)
+        with freeze(datetime(2018, 5, 4)):
+            data = ProtocolData(self.meeting).get_processed_data()
+        expected_data = copy.deepcopy(SAMPLE_MEETING_DATA)
+        expected_data.update({'document': {'generated': '2018 05 04'}})
+        expected_data['meeting']['date'] = '2011 12 13'
         self.assertDictEqual(expected_data, data)
 
     def test_add_members_handles_participants_are_no_longer_committee_memberships(self):
@@ -143,16 +155,16 @@ class TestExcerptJsonData(FunctionalTestCase):
 
     def test_excerpt_json_does_not_contain_start_page(self):
         with freeze(datetime(2018, 5, 4)):
-            data = ExcerptProtocolData(self.meeting).data
+            data = ExcerptProtocolData(self.meeting).get_processed_data()
 
         self.assertEqual({
             'agenda_items': [],
             'protocol': {'type': u'Protocol-Excerpt'},
-            'document': {'generated': u'May 04, 2018'},
+            'document': {'generated': u'04.05.2018'},
             'participants': {'other': [], 'members': []},
             'committee': {'name': u'Gemeinderat'},
             'mandant': {'name': u'Client1'},
-            'meeting': {'date': u'Dec 13, 2011',
+            'meeting': {'date': u'13.12.2011',
                         'start_time': u'09:30 AM',
                         'end_time': u'11:45 AM',
                         'number': 11,
