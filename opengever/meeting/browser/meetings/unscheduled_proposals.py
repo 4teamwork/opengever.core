@@ -45,6 +45,15 @@ class UnscheduledProposalsView(BrowserView):
         if not proposal:
             raise NotFound
 
+        # proposal is the sql representation of the proposal
+
+        # what if the proposal has already a time span defined?
+        time_span = self.request.form.get('time_span', None)
+
+        if time_span is not None:
+            plone_proposal = proposal.resolve_proposal()
+            plone_proposal.time_span = time_span
+
         self.meeting.schedule_proposal(proposal)
         return JSONResponse(self.request).info(
             _('Scheduled Successfully')).proceed().dump()
