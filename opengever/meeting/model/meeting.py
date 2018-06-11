@@ -450,9 +450,21 @@ class Meeting(Base, SQLFormSupport):
                                             is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 
-    def schedule_ad_hoc(self, title):
+    def schedule_ad_hoc(self, title, template_id=None):
         committee = self.committee.resolve_committee()
-        ad_hoc_template = committee.get_ad_hoc_template()
+
+        if template_id is None:
+            ad_hoc_template = committee.get_ad_hoc_template()
+        else:
+            from opengever.meeting.vocabulary import ProposalTemplatesForCommitteeVocabulary
+            vocabulary_factory = ProposalTemplatesForCommitteeVocabulary()
+            vocabulary = vocabulary_factory(committee)
+            templates = [term.value
+                         for term in vocabulary
+                         if term.value.getId() == template_id]
+            assert 1 == len(templates)
+            ad_hoc_template = templates[0]
+
         if not ad_hoc_template:
             raise MissingAdHocTemplate
 
