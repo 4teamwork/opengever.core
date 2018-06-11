@@ -40,6 +40,7 @@ REPOROOT_REQUIREDS = {
 REPOROOT_DEFAULTS = {}
 REPOROOT_FORM_DEFAULTS = {}
 REPOROOT_MISSING_VALUES = {
+    'title_fr': None,
     'valid_from': None,
     'valid_until': None,
     'version': None,
@@ -72,6 +73,7 @@ REPOFOLDER_MISSING_VALUES = {
     'location': None,
     'referenced_activity': None,
     'retention_period_annotation': None,
+    'title_fr': None,
     'valid_from': None,
     'valid_until': None,
 }
@@ -160,6 +162,7 @@ MAIL_DEFAULTS = {
     'public_trial': u'unchecked',
     'public_trial_statement': '',
     'receipt_date': FROZEN_TODAY,
+    'title': 'Lorem Ipsum',
 }
 MAIL_FORM_DEFAULTS = {}
 MAIL_MISSING_VALUES = {
@@ -630,6 +633,8 @@ class TestMailDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
 
+        expected['message'] = mail._message
+
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
@@ -642,6 +647,8 @@ class TestMailDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
+
+        expected['message'] = mail._message
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -657,6 +664,8 @@ class TestMailDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_z3c_form_defaults()
+
+        expected['message'] = mail._message
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
