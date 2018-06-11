@@ -95,6 +95,7 @@ class TestProposal(IntegrationTestCase):
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Dossier', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
              ['Meeting', ''],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document',
               u'\xc4nderungen am Personalreglement'],
              ['State', 'Submitted'],
@@ -124,6 +125,7 @@ class TestProposal(IntegrationTestCase):
             [['Title', u'Baugesuch Kreuzachkreisel'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document', 'Baugesuch Kreuzachkreisel'],
              ['State', 'Pending'],
              ['Decision number', ''],
@@ -135,7 +137,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
         self.assertIsNone(model.submitted_title)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
-        self.assertEqual('robert.ziegler', model.creator)
+        self.assertEqual('robert.ziegler', model.issuer)
         self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
                          model.repository_folder_title)
         self.assertEqual(u'en', model.language)
@@ -206,6 +208,7 @@ class TestProposal(IntegrationTestCase):
             [['Title', u'Another pr\xf6posal'],
              ['Committee', u'Kommission f\xfcr Verkehr'],
              ['Meeting', ''],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document', u'Antrag f\xfcr Kreiselbau'],
              ['State', 'Pending'],
              ['Decision number', ''],
@@ -600,6 +603,7 @@ class TestProposal(IntegrationTestCase):
             [u'label_title',
              u'label_committee',
              u'label_meeting',
+             u'label_issuer',
              u'proposal_document',
              u'label_workflow_state',
              u'label_decision_number'],
@@ -712,6 +716,7 @@ class TestProposal(IntegrationTestCase):
             [['Title', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document',
               u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['State', 'Pending'],
@@ -729,6 +734,7 @@ class TestProposal(IntegrationTestCase):
             [['Title', u'\xc4nderungen am Personalreglement'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+             ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document', u'\xc4nderungen am Personalreglement'],
              ['State', 'Decided'],
              ['Decision number', '2016 / 2'],
@@ -743,6 +749,41 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.proposal, view='tabbedview_view-overview')
         self.assertEqual('&lt;p&gt;qux&lt;/p&gt;',
                          browser.css('.listing td').first.innerHTML)
+
+    @browsing
+    def test_issuer_is_prefilled_with_the_currently_logged_in_user(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+
+        field = browser.find_field_by_text('Issuer')
+        self.assertEqual(self.committee_responsible.id, field.value)
+        self.assertEqual(u'M\xfcller Fr\xe4nzi (franzi.muller)', field.text)
+
+    @browsing
+    def test_issuer_can_be_changed(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+
+        browser.fill(
+            {'Title': u'Baugesuch Kreuzachkreisel',
+             'Committee': u'Rechnungspr\xfcfungskommission',
+             'Proposal template': u'Geb\xfchren',
+             'Edit after creation': False})
+
+        form = browser.find_form_by_field('Issuer')
+        form.find_widget('Issuer').fill(self.dossier_responsible.id)
+        form.save()
+
+        self.assertEqual(self.dossier_responsible.id, browser.context.issuer)
+
+    @browsing
+    def test_issuer_is_not_visible_on_submitted_proposal_edit_form(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.submitted_word_proposal, view="edit")
+
+        self.assertIsNone(browser.find_field_by_text('Issuer'))
 
     def assertSubmittedDocumentCreated(self, proposal, document, submitted_document):
         submitted_document_model = SubmittedDocument.query.get_by_source(

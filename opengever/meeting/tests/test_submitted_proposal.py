@@ -81,6 +81,7 @@ class TestSubmittedProposal(IntegrationTestCase):
              u'label_committee',
              u'label_dossier',
              u'label_meeting',
+             u'label_issuer',
              u'proposal_document',
              u'label_workflow_state',
              u'label_decision_number'],

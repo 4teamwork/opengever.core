@@ -44,6 +44,9 @@ class ProposalEditForm(ModelProxyEditForm,
         if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
 
+        if self.context.get_state() is not self.context.load_model().STATE_PENDING:
+            self.widgets['issuer'].mode = HIDDEN_MODE
+
 
 class SubmittedProposalEditForm(ModelProxyEditForm,
                                 edit.DefaultEditForm):
@@ -58,6 +61,9 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
         self.widgets['relatedItems'].mode = HIDDEN_MODE
+
+        if self.context.get_state() is not self.context.load_model().STATE_PENDING:
+            self.widgets['issuer'].mode = HIDDEN_MODE
 
 
 class IAddProposal(IProposal):
@@ -90,6 +96,7 @@ class IAddProposal(IProposal):
 class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
     content_type = Proposal
     fields = field.Fields(Proposal.model_schema)
+    allow_prefill_from_GET_request = True
 
     def __init__(self, *args, **kwargs):
         super(ProposalAddForm, self).__init__(*args, **kwargs)
@@ -105,6 +112,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
 
     def update(self):
         self.prefillPredecessorDefaults()
+        self.prefill_issuer()
         return super(ProposalAddForm, self).update()
 
     def updateFields(self):
@@ -157,6 +165,14 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
 
         for name, value in defaults.items():
             self.request.form['form.widgets.' + name] = value
+
+    def prefill_issuer(self):
+        """Adds a default value for `issuer` to the request so the
+        field is prefilled with the current user.
+        """
+        issuer = api.user.get_current().getId()
+        if not self.request.form.get('form.widgets.issuer', None):
+            self.request['form.widgets.issuer'] = issuer
 
     def createAndAdd(self, data):
         proposal_template = data.pop('proposal_template')

@@ -232,11 +232,15 @@ CONTACT_MISSING_VALUES = {
 
 
 PROPOSAL_REQUIREDS = {
+    'issuer': TEST_USER_ID,
 }
 PROPOSAL_DEFAULTS = {
     'title': u'Containing Dossier Title',
+    'issuer': TEST_USER_ID,
 }
-PROPOSAL_FORM_DEFAULTS = {}
+PROPOSAL_FORM_DEFAULTS = {
+    'issuer': TEST_USER_ID,
+}
 PROPOSAL_MISSING_VALUES = {
     'relatedItems': [],
     'predecessor_proposal': None,
@@ -911,6 +915,7 @@ class TestProposalDefaults(TestDefaultsBase):
         proposal = createContentInContainer(
             self.dossier,
             'opengever.meeting.proposal',
+            issuer=PROPOSAL_REQUIREDS['issuer'],
         )
 
         persisted_values = get_persisted_values_for_obj(proposal)
@@ -922,6 +927,7 @@ class TestProposalDefaults(TestDefaultsBase):
         new_id = self.dossier.invokeFactory(
             'opengever.meeting.proposal',
             'proposal-1',
+            issuer=PROPOSAL_REQUIREDS['issuer'],
         )
         proposal = self.dossier[new_id]
 

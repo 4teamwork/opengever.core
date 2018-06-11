@@ -332,7 +332,8 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
         self.arguments = {'title': 'Fooo',
-                          'language': TranslatedTitle.FALLBACK_LANGUAGE}
+                          'language': TranslatedTitle.FALLBACK_LANGUAGE,
+                          'issuer': TEST_USER_ID}
         self.model_arguments = None
         self._transition = None
         self._proposal_file_data = assets.load('empty.docx')
@@ -420,7 +421,7 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
                           'workflow_state': 'invalid',
                           'dossier_reference_number': '123',
                           'repository_folder_title': 'repo',
-                          'creator': TEST_USER_ID}
+                          'issuer': TEST_USER_ID}
         self.model_arguments = None
 
     def before_create(self):
@@ -433,6 +434,7 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
 
     def after_create(self, obj):
         self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
+        self.model_arguments['issuer'] = TEST_USER_ID
         model = obj.create_model(self.model_arguments, self.container)
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)

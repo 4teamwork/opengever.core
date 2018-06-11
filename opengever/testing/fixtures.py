@@ -878,6 +878,7 @@ class OpengeverContentFixture(object):
                 .having(
                     title=u'\xc4nderungen am Personalreglement',
                     committee=self.committee.load_model(),
+                    issuer=self.dossier_responsible.getId(),
                     )
                 .relate_to(self.document)
                 .with_proposal_file(assets.load('vertragsentwurf.docx'))
