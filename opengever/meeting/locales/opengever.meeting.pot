@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-11 09:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1563,6 +1563,11 @@ msgstr ""
 #. Default: "Add section header:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_add_section_header"
+msgstr ""
+
+#. Default: "Time span:"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_agenda_item_time_span"
 msgstr ""
 
 #. Default: "Agenda items"

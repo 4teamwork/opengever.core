@@ -429,11 +429,20 @@
               </div>
 
               <div class="input-group">
-                <label i18n:translate="view_label_schedule_ad_hoc"
-                       for="schedule-text">
-                  Schedule ad hoc agenda item:
-                </label>
-                <input id="schedule-text" type="text" />
+                <div class="inline-group">
+                    <label i18n:translate="view_label_schedule_ad_hoc"
+                           for="schedule-text">
+                      Schedule ad hoc agenda item:
+                    </label>
+                    <input id="schedule-text" type="text" />
+                </div>
+                <div class="inline-group">
+                    <label i18n:translate="view_label_agenda_item_time_span"
+                           for="agenda-item-time-span">
+                      Time span:
+                    </label>
+                    <input id="agenda-item-time-span" type="time" />
+                </div>
                 <div class="button-group">
                   <button class="schedule-text button"
                           tal:attributes="data-url view/url_schedule_text"

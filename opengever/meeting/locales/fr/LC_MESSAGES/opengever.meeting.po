@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-11 09:22+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1567,6 +1567,11 @@ msgstr "Ajouter"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_add_section_header"
 msgstr "Insérer l'intertitre:"
+
+#. Default: "Time span:"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "view_label_agenda_item_time_span"
+msgstr ""
 
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt

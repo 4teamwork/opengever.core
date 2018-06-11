@@ -9,7 +9,9 @@ body.feature-word-meeting .template-opengever-meeting-proposal {
   #opengever_meeting_protocol,
   #content {
 
-    input[type="text"], input[type="search"] {
+    input[type="text"],
+    input[type="time"],
+    input[type="search"] {
       @include component();
     }
 
@@ -57,6 +59,17 @@ body.feature-word-meeting .template-opengever-meeting-proposal {
         border-top-right-radius: 0;
         width: 100%;
         display: table-cell;
+      }
+      > .inline-group {
+        display: inline-block;
+        + .button-group {
+          position: relative;
+          > button {
+              position: absolute;
+              bottom: 0;
+              right: 0;
+          }
+        }
       }
       > .button-group {
         width: 1%;
