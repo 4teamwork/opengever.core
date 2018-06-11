@@ -9,7 +9,17 @@ class SomethingWithWorkflow(object):
 
     def __init__(self, initial_state):
         self.workflow_state = initial_state
+        self.history = []
 
+class Retract(Transition):
+
+    def __init__(self):
+        super(Retract, self).__init__('published', 'pending')
+
+    def execute(self, obj, model, reason=None, **kwargs):
+        super(Retract, self).execute(obj, model, **kwargs)
+        if reason:
+            model.history.append(reason)
 
 class TestUnitWorkflow(TestCase):
 
@@ -21,7 +31,7 @@ class TestUnitWorkflow(TestCase):
         self.submit = Transition('private', 'pending')
         self.publish = Transition('pending', 'published')
         self.reject = Transition('pending', 'private')
-        self.retract = Transition('published', 'pending')
+        self.retract = Retract()
 
         self.workflow = Workflow([
             self.private, self.pending, self.published
@@ -92,6 +102,25 @@ class TestUnitWorkflow(TestCase):
         self.workflow.execute_transition(None, obj, self.publish.name)
 
         self.assertEqual(self.published.name, obj.workflow_state)
+
+    def test_transitions_handle_kwargs(self):
+        """ As the workflow passes kwargs to the transition execute method,
+        these whould handle kwargs
+        """
+        obj = SomethingWithWorkflow(initial_state=self.pending.name)
+        self.workflow.execute_transition(None, obj, self.publish.name, useless=True)
+
+        self.assertEqual(self.published.name, obj.workflow_state)
+
+    def test_workflow_handles_kwargs(self):
+        """ Workflows needs to handle kwargs as some transitions have
+        take additional arguments when executed (e.g. Proposal transitions
+        also take a comment that is added to the history)
+        """
+        obj = SomethingWithWorkflow(initial_state=self.published.name)
+        self.workflow.execute_transition(None, obj, self.retract.name, useless=True, reason="A comment")
+        self.assertEqual(self.pending.name, obj.workflow_state)
+        self.assertListEqual(["A comment"], obj.history)
 
     def test_does_not_perform_unavailable_transition(self):
         obj = SomethingWithWorkflow(initial_state=self.pending.name)
