@@ -443,6 +443,27 @@
                 </div>
               </div>
 
+              <table id="ad-hoc-agenda-item-proposal-templates"
+                  tal:condition="view/has_many_proposal_templates">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Titel</th>
+                    <th>Ersteller</th>
+                    <th>Zuletzt bearbeitet</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr tal:repeat="template view/proposal_templates">
+                    <td><input type="radio" name="selected_proposal_template"
+                               tal:attributes="checked python: template['selected'] and 'checked' or None" /></td>
+                    <td tal:content="template/title"></td>
+                    <td tal:content="template/author"></td>
+                    <td tal:content="template/modified"></td>
+                  </tr>
+                </tbody>
+              </table>
+
               <div class="input-group">
                 <label i18n:translate="view_label_add_section_header"
                        for="schedule-paragraph">
