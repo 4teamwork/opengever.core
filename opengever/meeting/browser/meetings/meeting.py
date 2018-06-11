@@ -470,4 +470,5 @@ class MeetingView(BrowserView):
             'modified': template.modified().strftime('%d.%m.%Y'),
             'author': template.getOwner().getId(),
             'selected': template == default_template,
+            'value': template.getId(),
         } for template in templates]

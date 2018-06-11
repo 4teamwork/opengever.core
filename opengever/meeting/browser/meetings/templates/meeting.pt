@@ -456,7 +456,8 @@
                 <tbody>
                   <tr tal:repeat="template view/proposal_templates">
                     <td><input type="radio" name="selected_proposal_template"
-                               tal:attributes="checked python: template['selected'] and 'checked' or None" /></td>
+                               tal:attributes="checked python: template['selected'] and 'checked' or None;
+                                               value template/value" /></td>
                     <td tal:content="template/title"></td>
                     <td tal:content="template/author"></td>
                     <td tal:content="template/modified"></td>
