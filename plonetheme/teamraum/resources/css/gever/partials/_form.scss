@@ -62,6 +62,9 @@ body.feature-word-meeting .template-opengever-meeting-proposal {
       }
       > .inline-group {
         display: inline-block;
+        a {
+          display: inline-block;
+        }
         + .button-group {
           position: relative;
           > button {
