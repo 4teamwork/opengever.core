@@ -53,7 +53,10 @@ ROLE_MAPPING = (
     )
 
 
-class NewSharingView(BrowserView):
+class OpengeverSharingView(SharingView):
+    """Special Opengever Sharing View, which display different roles
+    depending on the sharing behavior which is context
+    """
 
     template = ViewPageTemplateFile('templates/sharing.pt')
 
@@ -98,14 +101,6 @@ class NewSharingView(BrowserView):
             message=message, request=self.request, type='info')
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-
-class OpengeverSharingView(SharingView):
-    """Special Opengever Sharing View, which display different roles
-    depending on the sharing behavior which is context
-    """
-
-    index = ViewPageTemplateFile('sharing.pt')
 
     @memoize
     def roles(self):

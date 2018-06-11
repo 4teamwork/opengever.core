@@ -8,14 +8,6 @@
       class=".sharing.OpengeverSharingView"
       permission="plone.DelegateRoles"
       layer="opengever.sharing.interfaces.IOpengeverSharing"
-      />
-
-  <browser:page
-      name="new_sharing"
-      for="*"
-      class=".sharing.NewSharingView"
-      permission="plone.DelegateRoles"
-      layer="opengever.sharing.interfaces.IOpengeverSharing"
       allowed_attributes="saved"
       />
 
