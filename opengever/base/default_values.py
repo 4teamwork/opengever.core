@@ -281,13 +281,16 @@ def set_default_values(content, container, values):
                  into consideration when determining whether defaults should
                  apply or not.
     """
+    # Canonicalize field names to short form (no prefix)
+    fields_with_value = [k.split('.')[-1] for k in values.keys()]
+
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
 
             if field.readonly:
                 continue
 
-            if name in values:
+            if name in fields_with_value:
                 # Only set default if no *actual* value was supplied as
                 # an argument to object construction
                 continue
