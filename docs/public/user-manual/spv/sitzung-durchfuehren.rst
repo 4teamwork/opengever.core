@@ -3,8 +3,7 @@ Sitzung durchführen
 -------------------
 Unter dem Reiter «Teilnehmende» sind die dem Gremium zugewiesenen Mitglieder
 aufgeführt. An der Sitzung können die abwesenden Mitglieder entsprechend
-vermerkt werden (ankreuzen). Ebenfalls kann die Rollen Protokollführung und
-Vorsitz hinterlegt werden.
+vermerkt werden. Ebenfalls kann die Rolle Vorsitz hinterlegt werden.
 
 |img-spvupdate-24|
 

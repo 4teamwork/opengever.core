@@ -25,7 +25,8 @@ Ansicht einer vorbereiteten Sitzung:
 
 1. Die Ansicht der Anhänge pro Antrag lässt sich ein- und ausklappen.
 2. Über «Bearbeiten» können weitere Teilnehmende (Gäste) hinzugefügt werden.
-3. Der Beginn der Seitennummerierung kann hier festgelegt werden.
+3. In diesem Feld kann die Protokollführende Person ausgewählt werden.
+4. Der Beginn der Seitennummerierung kann hier festgelegt werden.
 
 .. |img-spvupdate-20| image:: ../img/media/img-spvupdate-20.png
 .. |img-spvupdate-21| image:: ../img/media/img-spvupdate-21.png
