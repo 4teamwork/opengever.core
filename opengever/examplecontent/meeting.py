@@ -123,8 +123,10 @@ class MeetingExampleContentCreator(object):
             api.portal.get_localized_time(datetime=start))
 
         dossier = create(Builder('meeting_dossier')
-                         .having(title=u'Meeting {}'.format(
-                             api.portal.get_localized_time(start)),)
+                         .having(
+                             responsible=u'lukas.graf',
+                             title=u'Meeting {}'.format(
+                                 api.portal.get_localized_time(start)),)
                          .within(self.repository_folder_meeting_word))
         meeting = create(Builder('meeting')
                          .having(title=title,
