@@ -227,3 +227,16 @@ class TestWordMeetingView(IntegrationTestCase):
         selected_template_id = selected_templates[0].value
         self.assertEquals(self.committee.get_ad_hoc_template().getId(),
                           selected_template_id)
+
+    @browsing
+    def test_no_options_displayed_if_only_one_proposal_template_available(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        self.assertFalse(self.committee.allowed_proposal_templates)
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Allowed proposal templates': u'Freitext Traktandum'}).save()
+
+        browser.open(self.meeting)
+        self.assertEquals(
+            0,
+            len(browser.css('#ad-hoc-agenda-item-proposal-templates')))
