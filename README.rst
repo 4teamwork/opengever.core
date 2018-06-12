@@ -609,6 +609,7 @@ Objects
             - self.meeting_subtask
     - self.empty_repofolder
   - self.templates
+    - self.ad_hoc_agenda_item_template
     - self.asset_template
     - self.docprops_template
     - self.dossiertemplate
@@ -616,6 +617,7 @@ Objects
     - self.empty_template
     - self.normal_template
     - self.proposal_template
+    - self.recurring_agenda_item_template
     - self.sablon_template
     - self.subtemplates
       - self.subtemplate
