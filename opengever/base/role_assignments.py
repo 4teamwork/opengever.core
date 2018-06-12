@@ -1,12 +1,14 @@
 from Acquisition import aq_chain
 from Acquisition import aq_inner
 from opengever.base.oguid import Oguid
+from opengever.sharing import _
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from Products.CMFPlone.utils import base_hasattr
 from zope.annotation.interfaces import IAnnotations
-
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 ASSIGNNMENT_VIA_TASK = 1
 ASSIGNNMENT_VIA_TASK_AGENCY = 2
@@ -15,11 +17,28 @@ ASSIGNNMENT_VIA_SHARING = 3
 
 class RoleAssignment(object):
 
+    registry = None
+
     def __init__(self, principal, roles, cause, reference=None):
         self.principal = principal
         self.roles = roles
         self.cause = cause
         self.reference = reference
+
+    @classmethod
+    def register(cls, subcls):
+        if not cls.registry:
+            cls.registry = {}
+        cls.registry[subcls.cause] = subcls
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        cause = kwargs.pop('cause')
+        assignment = cls.registry.get(cause)
+        if not assignment:
+            assignment = cls
+
+        return assignment(**kwargs)
 
     def cause_title(self):
         return self.cause
@@ -29,9 +48,9 @@ class RoleAssignment(object):
                 'roles': self.roles,
                 'cause': {
                     'id': self.cause,
-                    'title': self.cause_title(),
-                },
-         'reference': None}
+                    'title': translate(
+                        self.cause_title(), context=getRequest())},
+                'reference': None}
 
         if self.reference:
             reference_obj = Oguid.parse(self.reference).resolve_object()
@@ -46,10 +65,51 @@ class SharingRoleAssignment(RoleAssignment):
 
     cause = ASSIGNNMENT_VIA_SHARING
 
-    def __init__(self, principal, roles):
+    def __init__(self, principal, roles, reference=None):
         self.principal = principal
         self.roles = roles
         self.reference = None
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_sharing',
+                 default=u'Roles assigned via sharing')
+
+
+RoleAssignment.register(SharingRoleAssignment)
+
+
+class TaskRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_TASK
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_task',
+                 default=u'Roles assigned by task')
+
+
+RoleAssignment.register(TaskRoleAssignment)
+
+
+class TaskAgencyRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_TASK_AGENCY
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_task',
+                 default=u'Roles assigned by task')
+
+
+RoleAssignment.register(TaskAgencyRoleAssignment)
 
 
 class RoleAssignmentStorage(object):
@@ -122,6 +182,13 @@ class RoleAssignmentManager(object):
         self.context = context
         self.storage = RoleAssignmentStorage(self.context)
 
+    def add_assignment(self, assignment):
+        self.storage.add_or_update(assignment.principal,
+                                   assignment.roles,
+                                   assignment.cause,
+                                   assignment.reference)
+        self._upate_local_roles()
+
     def add(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
         self._upate_local_roles()
@@ -151,7 +218,7 @@ class RoleAssignmentManager(object):
         return assignments
 
     def get_assignments_by_principal_id(self, principal_id):
-        return [RoleAssignment(**data) for data
+        return [RoleAssignment.get(**data) for data
                 in self.storage.get_all_by_principal(principal_id)]
 
     def set(self, assignments):
@@ -169,6 +236,10 @@ class RoleAssignmentManager(object):
         self._upate_local_roles()
 
     def _upate_local_roles(self):
+        current_principals = [
+            principal for principal, roles in self.context.get_local_roles()]
+        self.context.manage_delLocalRoles(current_principals)
+
         for principal, roles in self.storage.summarize():
             self.context.manage_setLocalRoles(
                 principal, [role for role in roles])

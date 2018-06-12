@@ -1,7 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK_AGENCY
+from opengever.base.role_assignments import TaskRoleAssignment
+from opengever.base.role_assignments import TaskAgencyRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
@@ -62,11 +62,11 @@ class LocalRolesSetter(object):
         {'peter': ('Reader', 'Editor')}
         """
 
-        cause = ASSIGNNMENT_VIA_TASK
+        assignment = TaskRoleAssignment(principal, roles, self.task)
         if is_agency:
-            cause = ASSIGNNMENT_VIA_TASK_AGENCY
+            assignment = TaskAgencyRoleAssignment(principal, roles, self.task)
 
-        RoleAssignmentManager(context).add(principal, roles, cause, self.task)
+        RoleAssignmentManager(context).add_assignment(assignment)
 
     def set_roles_on_task(self):
         """Set local roles on task

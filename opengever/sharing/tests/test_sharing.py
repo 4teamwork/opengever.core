@@ -143,7 +143,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNNMENT_VIA_TASK,
-                u'title': ASSIGNNMENT_VIA_TASK},
+                u'title': u'Roles assigned by task'},
               u'roles': [u'Editor'],
               u'reference': {
                   u'url': self.task.absolute_url(),
@@ -151,7 +151,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
               u'principal': u'kathi.barfuss'},
              {u'cause': {
                  u'id': ASSIGNNMENT_VIA_SHARING,
-                 u'title': ASSIGNNMENT_VIA_SHARING},
+                 u'title': u'Roles assigned via sharing'},
               u'roles': [u'Reader'],
               u'reference': None,
               u'principal': u'kathi.barfuss'}],
@@ -176,7 +176,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNNMENT_VIA_TASK,
-                u'title': ASSIGNNMENT_VIA_TASK},
+                u'title': u'Roles assigned by task'},
               u'roles': [u'Editor'],
               u'reference': {
                   u'url': self.task.absolute_url(),
@@ -184,7 +184,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
               u'principal': u'kathi.barfuss'},
              {u'cause': {
                  u'id': ASSIGNNMENT_VIA_SHARING,
-                 u'title': ASSIGNNMENT_VIA_SHARING},
+                 u'title': u'Roles assigned via sharing'},
               u'roles': [u'Reader'],
               u'reference': None,
               u'principal': u'kathi.barfuss'}],
@@ -198,7 +198,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNNMENT_VIA_TASK,
-                u'title': ASSIGNNMENT_VIA_TASK},
+                u'title': u'Roles assigned by task'},
               u'roles': [u'Editor'],
               u'reference': {
                   u'url': self.task.absolute_url(),
