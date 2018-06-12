@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import ASSIGNNMENT_VIA_SHARING
+from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 import json
@@ -121,4 +122,86 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
                   u'login': u'robert.ziegler',
                   u'type': u'user',
                   u'id': u'robert.ziegler'}]},
+            browser.json)
+
+
+class TestRoleAssignmentsGet(IntegrationTestCase):
+
+    @browsing
+    def test_returns_serialized_assignments(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add(self.regular_user.id, ['Editor'],
+                    ASSIGNNMENT_VIA_TASK, reference=self.task)
+        manager.add(self.regular_user.id, ['Reader'],
+                    ASSIGNNMENT_VIA_SHARING)
+
+        browser.open(self.empty_dossier,
+                     view='@role-assignments/{}'.format(self.regular_user.id),
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertEquals(
+            [{u'cause': {
+                u'id': ASSIGNNMENT_VIA_TASK,
+                u'title': ASSIGNNMENT_VIA_TASK},
+              u'roles': [u'Editor'],
+              u'reference': {
+                  u'url': self.task.absolute_url(),
+                  u'title': self.task.title},
+              u'principal': u'kathi.barfuss'},
+             {u'cause': {
+                 u'id': ASSIGNNMENT_VIA_SHARING,
+                 u'title': ASSIGNNMENT_VIA_SHARING},
+              u'roles': [u'Reader'],
+              u'reference': None,
+              u'principal': u'kathi.barfuss'}],
+            browser.json)
+
+    @browsing
+    def test_lookup_recursively_till_blocked_flag(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        RoleAssignmentManager(self.empty_dossier).add(
+            self.regular_user.id, ['Editor'],
+            ASSIGNNMENT_VIA_TASK, reference=self.task)
+
+        RoleAssignmentManager(self.leaf_repofolder).add(
+            self.regular_user.id, ['Reader'],
+            ASSIGNNMENT_VIA_SHARING)
+
+        # with local_roles inheritance
+        browser.open(self.empty_dossier,
+                     view='@role-assignments/{}'.format(self.regular_user.id),
+                     method='Get', headers={'Accept': 'application/json'})
+        self.assertEquals(
+            [{u'cause': {
+                u'id': ASSIGNNMENT_VIA_TASK,
+                u'title': ASSIGNNMENT_VIA_TASK},
+              u'roles': [u'Editor'],
+              u'reference': {
+                  u'url': self.task.absolute_url(),
+                  u'title': self.task.title},
+              u'principal': u'kathi.barfuss'},
+             {u'cause': {
+                 u'id': ASSIGNNMENT_VIA_SHARING,
+                 u'title': ASSIGNNMENT_VIA_SHARING},
+              u'roles': [u'Reader'],
+              u'reference': None,
+              u'principal': u'kathi.barfuss'}],
+            browser.json)
+
+        # with blocked local_roles inheritance
+        self.empty_dossier.__ac_local_roles_block__ = True
+        browser.open(self.empty_dossier,
+                     view='@role-assignments/{}'.format(self.regular_user.id),
+                     method='Get', headers={'Accept': 'application/json'})
+        self.assertEquals(
+            [{u'cause': {
+                u'id': ASSIGNNMENT_VIA_TASK,
+                u'title': ASSIGNNMENT_VIA_TASK},
+              u'roles': [u'Editor'],
+              u'reference': {
+                  u'url': self.task.absolute_url(),
+                  u'title': self.task.title},
+              u'principal': u'kathi.barfuss'}],
             browser.json)

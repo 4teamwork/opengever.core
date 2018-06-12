@@ -1,6 +1,10 @@
+from Acquisition import aq_chain
+from Acquisition import aq_inner
 from opengever.base.oguid import Oguid
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
+from plone.app.layout.navigation.interfaces import INavigationRoot
+from Products.CMFPlone.utils import base_hasattr
 from zope.annotation.interfaces import IAnnotations
 
 
@@ -16,6 +20,26 @@ class RoleAssignment(object):
         self.roles = roles
         self.cause = cause
         self.reference = reference
+
+    def cause_title(self):
+        return self.cause
+
+    def serialize(self):
+        data = {'principal': self.principal,
+                'roles': self.roles,
+                'cause': {
+                    'id': self.cause,
+                    'title': self.cause_title(),
+                },
+         'reference': None}
+
+        if self.reference:
+            reference_obj = Oguid.parse(self.reference).resolve_object()
+            data['reference'] = {
+                'url': reference_obj.absolute_url(),
+                'title': reference_obj.Title().decode('utf-8')}
+
+        return data
 
 
 class SharingRoleAssignment(RoleAssignment):
@@ -56,8 +80,12 @@ class RoleAssignmentStorage(object):
         for item in to_remove:
             self._storage().remove(item)
 
-    def get_all(self, cause):
+    def get_all_by_cause(self, cause):
         return [item for item in self._storage() if item['cause'] == cause]
+
+    def get_all_by_principal(self, principal_id):
+        return [item for item in
+                self._storage() if item['principal'] == principal_id]
 
     def add_or_update(self, principal, roles, cause, reference):
         """Add or update a role assignment
@@ -98,8 +126,33 @@ class RoleAssignmentManager(object):
         self.storage.add_or_update(principal, roles, cause, reference)
         self._upate_local_roles()
 
-    def get_assignments(self, cause):
-        self.storage.get_all(cause)
+    def get_assignments_by_cause(self, cause):
+        return self.storage.get_all_by_cause(cause)
+
+    def get_assignments_chain(self, principal_id):
+        """Recursively returns assignments till the local_roles
+        inheritance is blocked.
+        """
+
+        assignments = []
+
+        for obj in aq_chain(aq_inner(self.context)):
+            manager = RoleAssignmentManager(obj)
+            assignments += manager.get_assignments_by_principal_id(
+                principal_id)
+
+            if INavigationRoot.providedBy(obj):
+                break
+
+            if base_hasattr(self.context, '__ac_local_roles_block__') \
+               and self.context.__ac_local_roles_block__:
+                break
+
+        return assignments
+
+    def get_assignments_by_principal_id(self, principal_id):
+        return [RoleAssignment(**data) for data
+                in self.storage.get_all_by_principal(principal_id)]
 
     def set(self, assignments):
         cause = assignments[0].cause

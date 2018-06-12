@@ -194,4 +194,13 @@
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+
+  <plone:service
+      method="GET"
+      name="@role-assignments"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".sharing.RoleAssignmentsGet"
+      permission="zope2.View"
+      />
+
 </configure>
