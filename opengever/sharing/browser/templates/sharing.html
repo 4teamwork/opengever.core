@@ -9,11 +9,28 @@
 
     <table class="sharing-table" class="listing">
       <tr>
-        <th>{{i18n.label_name}}</th>
-        <th v-for="role in available_roles">{{role}}</th>
+        <th class="principal_header">{{i18n.label_name}}</th>
+        <th class="role_header" v-for="role in available_roles">{{role}}</th>
       </tr>
       <tr v-for="entry in entries" :key="entry.id">
-        <td><a class="link_overlay" :href="entry.url">{{entry.title}}</a></td>
+        <td>
+          <a class="principal link_overlay"
+             :class="entry.type"
+             :href="entry.url">{{entry.title}}</a>
+          <a class="assignments_info_button"
+             v-bind:class="{ folded: entry.assignments}"
+             @click="(event) => {toggle_assignments(event, entry, )}"/>
+
+          <ul class="assignments_info">
+            <li v-for="assignment in entry.assignments">
+              <span class="cause">{{assignment.cause.title}}</span>
+              <a v-if="assignment.reference"
+                 @href="assignment.reference.url"
+                 class="reference">{{assignment.reference.title}}</a>
+            </li>
+          </ul>
+
+        </td>
         <td v-for="role in available_roles">
           <span class="aquired" :title="i18n.label_acquired"
                 v-if="entry.roles[role] == 'acquired'" />

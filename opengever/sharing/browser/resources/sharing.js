@@ -45,7 +45,6 @@ var app = new Vue({
         this.available_roles = response.data['available_roles'];
         this.entries = response.data['entries'];
         this.inherit = response.data['inherit'];
-
       }.bind(this));
     },
 
@@ -56,8 +55,19 @@ var app = new Vue({
       // Mark entry as changed, by setting disabled to false, so it
       // gets not replaced when searching for other principal
       entry.disabled = false;
-      // this.entries[principal].roles[role] = checkbox.checked;
+    },
 
+    toggle_assignments: function (event, entry) {
+      if (!entry.assignments){
+        var params = { _t: Date.now().toString()};
+        var url = this.context_url + '/@role-assignments/' + entry.id;
+        this.requester.get(url, params).then(function (response) {
+          Vue.set(entry, 'assignments', response.data);
+        }.bind(this));
+      }
+      else {
+        entry.assignments = null;
+      }
     },
 
     search: function() {
@@ -68,7 +78,6 @@ var app = new Vue({
         this.entries = Object.values(this.entries).filter(i => i.disabled == false);
         this.entries = this.entries.concat(
           response.data['entries'].filter(i => i.disabled != false));
-
         this.inherit = response.data['inherit'];
 
       }.bind(this));
