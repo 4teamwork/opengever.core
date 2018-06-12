@@ -24,6 +24,12 @@
       mask: { loadSpeed: 0 },
     }).data("overlay");
 
+    var generateProtocolDialog = $( "#confirm_generate_protocol" ).overlay({
+      speed: 0,
+      closeSpeed: 0,
+      mask: { loadSpeed: 0 },
+    }).data("overlay");
+
     this.openModal = function(target) {
       self.currentItem = target;
       dialog.load();
@@ -58,6 +64,19 @@
           window.location = data.redirectUrl;
         }
       });
+    };
+
+    this.showGenerateProtocolDialog = function(target) {
+      self.currentItem = target;
+      generateProtocolDialog.load();
+    };
+
+    this.closeGenerateProtocolDialog = function() {
+      generateProtocolDialog.close();
+    };
+
+    this.generateProtocol = function() {
+      window.location = self.currentItem.attr("href");
     };
 
     this.reopenMeeting = function(target) {
@@ -257,6 +276,32 @@
         method: "click",
         target: "#pending-cancelled, .cancel-meeting a",
         callback: this.showCancelMeetingDialog,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_generate_protocol .confirm",
+        callback: this.generateProtocol,
+        options: {
+          prevent: false,
+          update: true,
+          loading: true
+        }
+      },
+      {
+        method: "click",
+        target: "#confirm_generate_protocol .decline",
+        callback: this.closeGenerateProtocolDialog,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".document-actions #generate_protocol_with_confirm",
+        callback: this.showGenerateProtocolDialog,
         options: {
           update: true
         }
