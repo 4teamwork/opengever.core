@@ -191,7 +191,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'title': u'\xc4nderungen am Personalreglement',
             }],
             'committee': {
-                'oguid': u'plone:1009233300',
+                'oguid': u'plone:1009273300',
                 'title': u'Rechnungspr\xfcfungskommission',
             },
             'end': u'2016-09-12T17:00:00+00:00',
@@ -249,7 +249,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                      },
                      'title': u'\xc4nderungen am Personalreglement'}
                  ],
-                 'committee': {'oguid': 'plone:1009233300',
+                 'committee': {'oguid': 'plone:1009273300',
                                'title': u'Rechnungspr\xfcfungskommission'},
                  'end': '2016-09-12T17:00:00+00:00',
                  'location': u'B\xfcren an der Aare',
