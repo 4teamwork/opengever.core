@@ -192,6 +192,9 @@
           <p i18n:translate="">
             The protocol has been modified manually. These modifications will be lost if you regenerate the protocol.
           </p>
+          <p i18n:translate="">
+            Are you sure you want to regenerate the protocol?
+          </p>
           <div class="button-group">
             <button class="button destructive confirm"
                     i18n:translate="label_confirm_generate_protocol">Generate Protocol</button>

@@ -74,6 +74,10 @@ msgid "Are you sure you want to close this meeting?"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to regenerate the protocol?"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to return this excerpt to the proposer?"
 msgstr ""
 
@@ -178,6 +182,10 @@ msgstr ""
 msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr ""
 
+#: ./opengever/meeting/command.py
+msgid "Protocol for meeting ${title} has not been updated. The protocol has been modified manually and these modifications will be lost if you regenerate the protocol."
+msgstr ""
+
 #: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"
 msgstr ""
@@ -192,6 +200,10 @@ msgstr ""
 
 #: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "The protocol has been modified manually. These modifications will be lost if you regenerate the protocol."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -774,6 +786,11 @@ msgstr ""
 #. Default: "Committeeresponsible"
 #: ./opengever/meeting/committee.py
 msgid "label_committee_responsible"
+msgstr ""
+
+#. Default: "Generate Protocol"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_confirm_generate_protocol"
 msgstr ""
 
 #. Default: "Create Excerpt"

@@ -75,6 +75,10 @@ msgid "Are you sure you want to close this meeting?"
 msgstr "Wollen Sie diese Sitzung wirklich abschliessen?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "Are you sure you want to regenerate the protocol?"
+msgstr "Wollen sie das Protokoll wirklich neu generieren?"
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to return this excerpt to the proposer?"
 msgstr "Wollen Sie diesen Protokollauszug wirklich an den Antragsteller zurücksenden?"
 
@@ -179,6 +183,10 @@ msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich erstellt."
 msgid "Protocol for meeting ${title} has been updated successfully."
 msgstr "Protokoll für die Sitzung ${title} wurde erfolgreich aktualisiert."
 
+#: ./opengever/meeting/command.py
+msgid "Protocol for meeting ${title} has not been updated. The protocol has been modified manually and these modifications will be lost if you regenerate the protocol."
+msgstr "Protokoll für die Sitzung ${title} wurde nicht aktualisiert. Das Protokoll beinhaltet manuelle Änderungen, die beim erneuten generieren des Protokolls überschrieben wären."
+
 #: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"
 msgstr "Sablon Vorlage"
@@ -194,6 +202,10 @@ msgstr "Die Sitzung und das dazugehörige Sitzungsdossier wurden erfolgreich ers
 #: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
 msgstr "Der Antrag wurde erfolgreich zurückgewiesen."
+
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "The protocol has been modified manually. These modifications will be lost if you regenerate the protocol."
+msgstr "Das Protokoll beinhaltet manuelle Änderungen. Beim erneuten generieren des Protokolls werden diese Änderungen überschrieben."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Unschedule"
@@ -776,6 +788,11 @@ msgstr "Gremium"
 #: ./opengever/meeting/committee.py
 msgid "label_committee_responsible"
 msgstr "Gremien-Verantwortliche"
+
+#. Default: "Generate Protocol"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "label_confirm_generate_protocol"
+msgstr "Generieren"
 
 #. Default: "Create Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
