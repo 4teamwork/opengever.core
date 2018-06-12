@@ -12,6 +12,7 @@ import json
 
 class TestMeetingZipExportView(IntegrationTestCase):
     features = ('meeting',)
+    maxDiff = None
 
     @browsing
     def test_zip_export_generate_protocol_if_there_is_none(self, browser):
