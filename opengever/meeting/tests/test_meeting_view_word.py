@@ -193,3 +193,23 @@ class TestWordMeetingView(IntegrationTestCase):
         return transition_controller.url_for(self.meeting,
                                              self.meeting.model,
                                              transition_name)
+
+    @browsing
+    def test_all_proposal_templates_are_listed(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        self.assertEquals(
+            [{'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': 'Freitext Traktandum',
+              'Ersteller': 'nicole.kohler'},
+             {'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': u'Geb\xfchren',
+              'Ersteller': 'nicole.kohler'},
+             {'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': 'Wiederkehrendes Traktandum',
+              'Ersteller': 'nicole.kohler'}],
+            browser.css('#ad-hoc-agenda-item-proposal-templates').first.dicts()
+        )
