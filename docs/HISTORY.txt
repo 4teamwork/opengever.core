@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix default value persistence for title and description fields. [lgraf]
 - Ensure default values get set by patching DX DefaultAddForm.create(). [lgraf]
 - Add support for properties to get_persisted_value_for_field() helper. [lgraf]
 - Update ftw.mobilenavigation to fix Unicode error. [tarnap]

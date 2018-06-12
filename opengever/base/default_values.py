@@ -93,6 +93,7 @@ from persistent.interfaces import IPersistent
 from plone.app.dexterity.behaviors import metadata
 from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.dexterity.utils import iterSchemata
+from plone.dexterity.utils import iterSchemataForType
 from zope.schema import getFieldsInOrder
 from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
 
@@ -311,3 +312,44 @@ def set_default_values(content, container, values):
                 value = field.missing_value
 
             field.set(field.interface(content), value)
+
+
+def inject_title_and_description_defaults(kw, portal_type, container):
+    """If 'title' or 'description' fields have defaults, inject them into `kw`.
+
+    These fields need special handling because they get set to an empty string
+    in a hardcoded fashion in the P.CMFCore.PortalFolder.PortalFolderBase
+    constructor if no *actual* value has been provided for them.
+
+    This will later fool our set_default_values() because it thinks a
+    legitimate value for these fields has already been persisted on the object,
+    and will therefore not attempt to determine and set defaults for those
+    fields.
+
+    We therefore handle title and description differently by determining their
+    defaults ahead of object construction time, and inject them into `kw` (
+    unless *actual* values are already provided in `kw` of course).
+    """
+    to_check = ['title', 'description']
+
+    # Don't do anything for fields that have an *actual* value provided
+    for field_name in kw:
+        if field_name in to_check:
+            to_check.remove(field_name)
+
+    schemas = iterSchemataForType(portal_type)
+    for schema in schemas:
+        for name, field in getFieldsInOrder(schema):
+            # Return early if no more fields are left to check. No need to
+            # iterate over dozens of irrelevant fields.
+            if not to_check:
+                return
+
+            for fn_to_check in to_check:
+                if fn_to_check == name:
+                    dv = determine_default_value(field, container)
+                    # If there is a default, and there is no *actual* value
+                    # in `kw` that should be set, inject the default into `kw`
+                    if dv is not NO_DEFAULT_MARKER:
+                        kw[fn_to_check] = dv
+                        to_check.remove(name)
