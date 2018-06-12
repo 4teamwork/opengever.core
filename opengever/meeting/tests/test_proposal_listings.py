@@ -214,10 +214,10 @@ class TestMyProposals(IntegrationTestCase):
     maxDiff = None
 
     @browsing
-    def test_lists_only_proposals_created_by_current_user(self, browser):
+    def test_lists_only_proposals_issued_by_the_current_user(self, browser):
         with self.login(self.dossier_responsible):
             userid = self.regular_user.getId()
-            self.draft_proposal.load_model().creator = userid
+            self.draft_proposal.load_model().issuer = userid
 
         self.login(self.regular_user, browser)
         browser.open(view='tabbedview_view-myproposals')

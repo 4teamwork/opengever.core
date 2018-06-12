@@ -547,7 +547,7 @@ class Proposal(ProposalBase):
                          physical_path=aq_wrapped_self.get_physical_path(),
                          dossier_reference_number=reference_number,
                          repository_folder_title=repository_folder_title,
-                         creator=aq_wrapped_self.Creator()))
+                         issuer=self.issuer))
         return data
 
     def update_model(self, data):

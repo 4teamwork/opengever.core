@@ -180,7 +180,7 @@ class ProposalModelBuilder(SqlObjectBuilder):
         self.arguments['dossier_reference_number'] = 'FD 1.2.3 / 1'
         self.arguments['language'] = 'en'
         self.arguments['repository_folder_title'] = 'Just a Repo-Folder'
-        self.arguments['creator'] = TEST_USER_ID
+        self.arguments['issuer'] = TEST_USER_ID
 
     def id(self, identifier):
         """Proposals have a composite primary key, admin_unit_id and int_id.

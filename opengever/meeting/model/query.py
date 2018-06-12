@@ -60,8 +60,8 @@ class ProposalQuery(BaseQuery):
         return self.filter(Proposal.workflow_state.in_(
             [state.name for state in states]))
 
-    def by_creator(self, creator_id):
-        return self.filter(Proposal.creator == creator_id)
+    def by_issuer(self, issuer_id):
+        return self.filter(Proposal.issuer == issuer_id)
 
 
 Proposal.query_cls = ProposalQuery
