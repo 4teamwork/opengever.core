@@ -8,7 +8,6 @@ from opengever.task.browser.transitioncontroller import TaskChecker
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
-from unittest import skip
 
 
 class TestTaskControllerChecker(IntegrationTestCase):
