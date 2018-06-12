@@ -196,15 +196,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
-            'Document.SequenceNumber': '31',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 33',
+            'Document.SequenceNumber': '33',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 9, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
-            'ogg.document.sequence_number': '31',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 33',
+            'ogg.document.sequence_number': '33',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
@@ -254,15 +254,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
-            'Document.SequenceNumber': '31',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 33',
+            'Document.SequenceNumber': '33',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 10, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
-            'ogg.document.sequence_number': '31',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 33',
+            'ogg.document.sequence_number': '33',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
@@ -950,7 +950,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
         browser.open(self.templates, view='tabbedview_view-proposaltemplates')
 
         templates = browser.css('table.listing').first.dicts(as_text=False)
-        self.assertEqual(1, len(templates))
+        self.assertEqual(3, len(templates))
 
         document_link = templates[0]['Title'].css('a').first.get('href')
         self.assertEqual(self.proposal_template.absolute_url(), document_link)

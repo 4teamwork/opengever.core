@@ -47,4 +47,4 @@ class TestMailIndexers(IntegrationTestCase):
             u'IDocumentSchema',
             )
 
-        self.assertEquals('Client1 1.1 / 1 / 25 25', extender())
+        self.assertEquals('Client1 1.1 / 1 / 27 27', extender())

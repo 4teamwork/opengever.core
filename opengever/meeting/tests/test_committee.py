@@ -226,13 +226,17 @@ class TestCommittee(IntegrationTestCase):
 
         browser.open(self.committee, view='edit')
         self.assertItemsEqual(
-            ['Baubewilligung', u'Geb\xfchren'],
+            [
+                'Baubewilligung',
+                u'Geb\xfchren',
+                u'Freitext Traktandum',
+                u'Wiederkehrendes Traktandum',
+            ],
             browser.find('Allowed proposal templates').options)
         browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
         self.assertItemsEqual(
             [IUUID(self.proposal_template)],
             self.committee.allowed_proposal_templates)
-
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
@@ -418,7 +422,12 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         browser.open(self.committee, view='edit')
         self.assertItemsEqual(
-            ['Baubewilligung', u'Geb\xfchren'],
+            [
+                u'Baubewilligung',
+                u'Geb\xfchren',
+                u'Freitext Traktandum',
+                u'Wiederkehrendes Traktandum',
+            ],
             browser.find('Allowed proposal templates').options)
         browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
         self.assertItemsEqual(

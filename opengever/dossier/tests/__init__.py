@@ -59,11 +59,11 @@ EXPECTED_DOSSIER_PROPERTIES = {
 }
 
 EXPECTED_DOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 10',
-    'Document.SequenceNumber': '10',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 12',
+    'Document.SequenceNumber': '12',
     'ogg.document.title': u'Vertr\xe4gsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 10',
-    'ogg.document.sequence_number': '10',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 12',
+    'ogg.document.sequence_number': '12',
     'ogg.document.document_author': TEST_USER_ID,
     'ogg.document.document_date': datetime(2010, 1, 3),
     'ogg.document.document_type': u'Contract',
