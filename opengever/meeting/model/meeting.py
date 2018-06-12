@@ -508,11 +508,19 @@ class Meeting(Base, SQLFormSupport):
                               self.submitted_physical_path)
 
     def get_link(self):
-        url = self.get_url()
-        if api.user.has_permission('View',
-                                   obj=self.committee.resolve_committee()):
+        """Only render a clickable link if the user has 'View' on:
+        * The meeting
+        * The meeting dossier
+        * The committee
+        """
+        allowed = all(
+            api.user.has_permission('View', obj=object)
+            for object in (self._get_wrapper(), self.get_dossier(), self.committee.resolve_committee(), )
+            )
+
+        if allowed:
             link = u'<a href="{0}" title="{1}" class="{2}">{1}</a>'.format(
-                url, escape_html(self.get_title()), self.css_class)
+                self.get_url(), escape_html(self.get_title()), self.css_class)
         else:
             link = u'<span title="{0}" class="{1}">{0}</a>'.format(
                 escape_html(self.get_title()), self.css_class)
@@ -530,3 +538,7 @@ class Meeting(Base, SQLFormSupport):
 
     def get_dossier(self):
         return self.dossier_oguid.resolve_object()
+
+    def _get_wrapper(self):
+        # XXX - Only here for the security check in self.get_link()
+        return api.portal.get().unrestrictedTraverse(str(self.physical_path))
