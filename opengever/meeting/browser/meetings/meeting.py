@@ -458,7 +458,18 @@ class MeetingView(BrowserView):
         vocabulary_factory = ProposalTemplatesForCommitteeVocabulary()
         committee = self.context.aq_parent
         vocabulary = vocabulary_factory(committee)
-        templates = [term.value for term in vocabulary]
+
+        allowed_templates = committee.allowed_ad_hoc_agenda_item_templates
+        if allowed_templates is not None and len(allowed_templates):
+            templates = [
+                term.value
+                for term in vocabulary
+                if term.token in committee.allowed_proposal_templates
+            ]
+        else:
+            templates = [term.value
+                         for term in vocabulary]
+
         default_template = committee.get_ad_hoc_template()
         return [{
             'title': template.title,
