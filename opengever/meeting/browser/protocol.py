@@ -20,8 +20,7 @@ class MergeDocxProtocol(BrowserView):
     def __call__(self):
         meeting = self.context.get_meeting()
         command = MergeDocxProtocolCommand(
-            self.context, meeting, self.operations,
-            lock_document_after_creation=True)
+            self.context, meeting, self.operations)
         command.execute()
         command.show_message()
 

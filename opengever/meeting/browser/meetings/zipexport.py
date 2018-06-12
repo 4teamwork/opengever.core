@@ -83,8 +83,7 @@ class MeetingZipExport(BrowserView):
         command = MergeDocxProtocolCommand(
             self.context,
             self.model,
-            operations,
-            lock_document_after_creation=False)
+            operations)
 
         filename = u'{}.docx'.format(operations.get_title(self.model))
         return (filename, StringIO(command.generate_file_data()))
