@@ -266,8 +266,8 @@ class MeetingView(BrowserView):
                                             default=u'Agenda item list'),
                                     show_icon=False)
 
-    def url_merge_docx_protocol(self):
-        return MergeDocxProtocol.url_for(self.model)
+    def url_merge_docx_protocol(self, overwrite=False):
+        return MergeDocxProtocol.url_for(self.model, overwrite)
 
     def has_agendaitem_list_document(self):
         return self.model.has_agendaitem_list_document()

@@ -282,7 +282,7 @@
                   <div class="document-actions">
                     <a class="action generate" id="generate_protocol_with_confirm"
                        tal:condition="python:meeting.is_editable() and meeting.was_protocol_manually_edited()"
-                       tal:attributes="href view/url_merge_docx_protocol"
+                       tal:attributes="href python:view.url_merge_docx_protocol(overwrite=True)"
                        i18n:attributes="title action_generate_document"></a>
 
                     <a class="action generate"
