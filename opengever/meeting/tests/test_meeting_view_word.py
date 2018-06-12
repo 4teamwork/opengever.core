@@ -213,3 +213,17 @@ class TestWordMeetingView(IntegrationTestCase):
               'Ersteller': 'nicole.kohler'}],
             browser.css('#ad-hoc-agenda-item-proposal-templates').first.dicts()
         )
+
+    @browsing
+    def test_default_template_is_checked(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        selected_templates = [
+            template
+            for template in browser.css('#ad-hoc-agenda-item-proposal-templates input[name=selected_proposal_template]')
+            if template.checked
+        ]
+        assert 1 == len(selected_templates)
+        selected_template_id = selected_templates[0].value
+        self.assertEquals(self.committee.get_ad_hoc_template().getId(),
+                          selected_template_id)
