@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import NoElementFound
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestProposalOverview(IntegrationTestCase):
@@ -48,3 +49,18 @@ class TestProposalOverview(IntegrationTestCase):
         statusmessages.assert_no_error_messages()
         with self.assertRaises(NoElementFound):
             browser.css('#excerptBox a').first.click()
+
+    @browsing
+    def test_meeting_link_rendered_with_proper_permissions(self, browser):
+        self.login(self.meeting_user, browser)
+        browser.open(self.decided_proposal, view='tabbedview_view-overview')
+        self.assertIn(self.decided_meeting.get_title(), browser.css('a').text)
+        self.assertNotIn(self.decided_meeting.get_title(), browser.css('span').text)
+
+    @browsing
+    def test_meeting_link_not_rendered_without_view_on_dossier(self, browser):
+        self.login(self.meeting_user, browser)
+        api.content.disable_roles_acquisition(self.decided_meeting_dossier)
+        browser.open(self.decided_proposal, view='tabbedview_view-overview')
+        self.assertNotIn(self.decided_meeting.get_title(), browser.css('a').text)
+        self.assertIn(self.decided_meeting.get_title(), browser.css('span').text)
