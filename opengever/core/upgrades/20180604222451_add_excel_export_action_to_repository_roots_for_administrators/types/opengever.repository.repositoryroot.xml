@@ -1,0 +1,11 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryroot" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+  <!-- Actions -->
+  <action
+      title="Download Excel"
+      action_id="download_excel"
+      category="object"
+      url_expr="string:${object_url}/download_excel"
+      visible="True">
+    <permission value="opengever.repository.AddRepositoryFolder" />
+  </action>
+</object>

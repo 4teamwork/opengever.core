@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-01-16 13:43+0000\n"
+"POT-Creation-Date: 2018-06-04 11:35+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 "X-Is-Fallback-For: de-at de-li de-lu de-ch de-de\n"
+
+#: ./opengever/repository/browser/excel_export.py
+msgid "Could not generate the report."
+msgstr "Rapport konnte nicht generiert werden."
 
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "In use"
@@ -71,6 +75,11 @@ msgstr "Eine kurze Beschreibung des Inhalts."
 msgid "label_addable_dossier_types"
 msgstr "Erlaubte Spezialdossiers"
 
+#. Default: "Blocked inheritance"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_blocked_inheritance"
+msgstr "Unterbruch Vererbung"
+
 #. Default: "Protected Objects"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_blocked_local_roles"
@@ -106,10 +115,45 @@ msgstr "Dokumente"
 msgid "label_dossiers"
 msgstr "Dossiers"
 
+#. Default: "No"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_false"
+msgstr "nein"
+
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
+
+#. Default: "Create dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_contributor_role"
+msgstr "Dossiers hinzufügen"
+
+#. Default: "Edit dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_editor_role"
+msgstr "Dossiers bearbeiten"
+
+#. Default: "Manage dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_manager_role"
+msgstr "Dossiers verwalten"
+
+#. Default: "Reactivate dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_publisher_role"
+msgstr "Dossiers reaktivieren"
+
+#. Default: "Read dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reader_role"
+msgstr "Dossiers lesen"
+
+#. Default: "Close dossiers"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_reviewer_role"
+msgstr "Dossiers abschliessen"
 
 #. Default: "Info"
 #: ./opengever/repository/browser/tabbed.py
@@ -141,6 +185,26 @@ msgstr "Präfix des Aktenzeichens"
 msgid "label_referenced_activity"
 msgstr "Leistung"
 
+#. Default: "Repository number"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repository_number"
+msgstr "Ordnungspositionsnummer"
+
+#. Default: "Repositoryfolder description"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_description"
+msgstr "Beschreibung (optional)"
+
+#. Default: "Repositoryfolder title (German)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_de"
+msgstr "Titel der Ordnungsposition"
+
+#. Default: "Repositoryfolder title (French)"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_title_fr"
+msgstr "Titel der Ordnungsposition (französisch)"
+
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py
 msgid "label_successfully_deleted"
@@ -150,6 +214,11 @@ msgstr "Die Ordnungsposition wurde erfolgreich gelöscht."
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_tasks"
 msgstr "Aufgaben"
+
+#. Default: "Yes"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_true"
+msgstr "ja"
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py
