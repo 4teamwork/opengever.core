@@ -5,11 +5,8 @@ from ftw.bumblebee.viewlets.cookie import encode_cookie
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from netsight.async.browser.BaseAsyncView import BaseAsyncView
-from opengever.meeting.command import AgendaItemListOperations
-from opengever.meeting.command import CreateGeneratedDocumentCommand
-from opengever.meeting.command import MergeDocxProtocolCommand
-from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.exceptions import AgendaItemListMissingTemplate
+from opengever.base.response import JSONResponse
+from opengever.meeting import _
 from opengever.meeting.interfaces import IMeetingWrapper
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -46,6 +43,19 @@ class MeetingZipExport(BrowserView):
         """
         return IMeetingWrapper.providedBy(self.context)
 
+    def is_protocol_outdated(self):
+        protocol = self.model.protocol_document.resolve_document()
+        protocol_modified = protocol.modified().asdatetime().astimezone(
+            pytz.utc)
+        return self.model.modified > protocol_modified
+
+    def is_agendaitem_list_outdated(self):
+        agendaitem_list = self.model.agendaitem_list_document.resolve_document()
+        agendaitem_list_modified = agendaitem_list.modified().asdatetime().astimezone(
+            pytz.utc)
+
+        return self.model.modified > agendaitem_list_modified
+
     def generate_zip(self, process_id=None):
         response = self.request.response
 
@@ -53,17 +63,16 @@ class MeetingZipExport(BrowserView):
             self.json_data = self.context.get_data_for_zip_export()
 
             # Protocol
-            generator.add_file(*self.get_protocol())
+            if self.model.has_protocol_document():
+                generator.add_file(*self.get_protocol())
 
             # Agenda items
             self.add_agenda_items_attachments(generator)
             self.add_agenda_item_proposal_documents(generator)
 
             # Agenda items list
-            try:
+            if self.model.has_agendaitem_list_document():
                 generator.add_file(*self.get_agendaitem_list())
-            except AgendaItemListMissingTemplate:
-                pass
 
             generator.add_file(*self.get_meeting_json())
 
@@ -122,28 +131,11 @@ class MeetingZipExport(BrowserView):
         return filename, doc.file.open()
 
     def get_protocol(self):
-        if self.model.has_protocol_document():
-            protocol = self.model.protocol_document.resolve_document()
-            protocol_modified = protocol.modified().asdatetime().astimezone(
-                pytz.utc)
-
-            if self.model.modified < protocol_modified:
-                # Return current protocol
-                filename = u'{}.docx'.format(safe_unicode(protocol.Title()))
-                filename, _file = self.get_pdf_for_document(protocol, filename)
-                self.json_data['protocol']['file'] = filename
-                return filename, _file
-
-        # Create new protocol
-        operations = ProtocolOperations()
-        command = MergeDocxProtocolCommand(
-            self.context,
-            self.model,
-            operations,
-            lock_document_after_creation=False)
-
-        filename = u'{}.docx'.format(operations.get_title(self.model))
-        return (filename, StringIO(command.generate_file_data()))
+        protocol = self.model.protocol_document.resolve_document()
+        filename = u'{}.docx'.format(safe_unicode(protocol.Title()))
+        filename, _file = self.get_pdf_for_document(protocol, filename)
+        self.json_data['protocol']['file'] = filename
+        return filename, _file
 
     def add_agenda_item_proposal_documents(self, generator):
         """Adds proposal documents and attachments
@@ -177,27 +169,10 @@ class MeetingZipExport(BrowserView):
                 generator.add_file(*(filename, _file))
 
     def get_agendaitem_list(self):
-        if self.model.has_agendaitem_list_document():
-            agendaitem_list = self.model.agendaitem_list_document.resolve_document()
-            agendaitem_list_modified = agendaitem_list.modified().asdatetime().astimezone(
-                pytz.utc)
-
-            if self.model.modified < agendaitem_list_modified:
-                # Return current protocol
-                filename = u'{}.docx'.format(safe_unicode(agendaitem_list.Title()))
-                filename, _file = self.get_pdf_for_document(agendaitem_list, filename)
-                return filename, _file
-
-        # Create new protocol
-        operations = AgendaItemListOperations()
-        command = CreateGeneratedDocumentCommand(
-            self.context,
-            self.model,
-            operations,
-        )
-
-        filename = u'{}.docx'.format(operations.get_title(self.model))
-        return (filename, StringIO(command.generate_file_data()))
+        agendaitem_list = self.model.agendaitem_list_document.resolve_document()
+        filename = u'{}.docx'.format(safe_unicode(agendaitem_list.Title()))
+        filename, _file = self.get_pdf_for_document(agendaitem_list, filename)
+        return filename, _file
 
     def get_meeting_json(self):
         json_data = {
@@ -222,6 +197,18 @@ class AsyncMeetingZipExport(BaseAsyncView, MeetingZipExport):
         self.model = self.context.model
 
     def __call__(self):
+        if self.is_protocol_outdated():
+            error_msg = _(
+                u'msg_protocol_outdated',
+                default=u'The Protocol is outdated, please update.')
+            return JSONResponse(self.request).error(error_msg).dump()
+
+        if self.is_agendaitem_list_outdated():
+            error_msg = _(
+                u'msg_agendalist_outdated',
+                default=u'The agenda-list document is outdated, please update.')
+            return JSONResponse(self.request).error(error_msg).dump()
+
         process_id = self._run()
         self.request.response.setHeader('Content-Type', 'application/json')
         self.request.response.setHeader('X-Theme-Disabled', 'True')

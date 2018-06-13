@@ -38,18 +38,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
     features = ('meeting',)
 
     @browsing
-    def test_zip_export_generate_protocol_if_there_is_none(self, browser):
-        self.login(self.committee_responsible, browser)
-
-        with patch('requests.get', side_effect=mocked_bumblebee_request):
-            browser.open(self.meeting, view='export-meeting-zip')
-            zip_file = ZipFile(StringIO(browser.contents), 'r')
-
-        self.assertFalse(self.meeting.model.has_protocol_document())
-        self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-                      zip_file.namelist())
-
-    @browsing
     def test_zip_export_includes_generated_protocol(self, browser):
         self.login(self.committee_responsible, browser)
         self.meeting.model.update_protocol_document()
@@ -60,27 +48,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
             zip_file = ZipFile(StringIO(browser.contents), 'r')
 
         self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.pdf',
-                      zip_file.namelist())
-
-    @browsing
-    def test_zip_export_generate_protocol_if_outdated(self, browser):
-        self.login(self.committee_responsible, browser)
-
-        with patch('requests.get', side_effect=mocked_bumblebee_request):
-            browser.open(self.meeting, view='export-meeting-zip')
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-                      zip_file.namelist())
-
-        browser.open(self.meeting, view='edit-meeting')
-        browser.fill({'Title': 'New Meeting Title'}).save()
-
-        with patch('requests.get', side_effect=mocked_bumblebee_request):
-            browser.open(self.meeting, view='export-meeting-zip')
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Agendaitem list-New Meeting Title.docx',
                       zip_file.namelist())
 
     @browsing
@@ -122,22 +89,9 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertEquals(
-            ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-             '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
+            ['1. Anderungen am Personalreglement/Vertragsentwurf.docx',
              '1. Anderungen am Personalreglement/Anderungen am Personalreglement.pdf',
-             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
              'meeting.json'],
-            zip_file.namelist())
-
-    @browsing
-    def test_zip_export_agenda_items_list(self, browser):
-        self.login(self.committee_responsible, browser)
-        with patch('requests.get', side_effect=mocked_bumblebee_request):
-            browser.open(self.meeting, view='export-meeting-zip')
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn(
-            'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
             zip_file.namelist())
 
     @browsing
@@ -169,13 +123,15 @@ class TestMeetingZipExportView(IntegrationTestCase):
     @browsing
     def test_exported_meeting_contains_json(self, browser):
         self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='export-meeting-zip')
+        self.meeting.model.update_protocol_document()
+
+        with patch('requests.get', side_effect=mocked_bumblebee_request):
+            browser.open(self.meeting, view='export-meeting-zip')
         self.assertEquals('application/zip', browser.contenttype)
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertEquals(
-            ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
+            ['Protocol-9. Sitzung der Rechnungsprufungskommission.pdf',
              'meeting.json'],
             zip_file.namelist())
 

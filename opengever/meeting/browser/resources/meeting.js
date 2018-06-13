@@ -957,10 +957,7 @@
         var container = $('.async-zip-generation');
         $('.progress', container).html(response.progress);
         if (response.progress !== 100)  {
-          console.info(response);
-          setTimeout(function(){
-            poller(processId);
-          }, 500);
+          setTimeout(function(){ poller(processId); }, 500);
         } else {
           generateLink.removeClass('fa-spin');
           downloadLink.show().attr('href', downloadLink.attr('href') + '&process_id=' + processId);
@@ -972,10 +969,15 @@
     generateLink.on('click', function(event){
       event.stopPropagation();
       event.preventDefault();
-      $.get($(this).attr('href')).always(function() {
-        generateLink.addClass('fa-spin');
-      }).done(function(response){
-        poller(response.process_id);
+      $.get($(this).attr('href')).done(function(response){
+        if (response.messages){
+          MessageFactory.getInstance().shout(response.messages);
+        }
+        else {
+          downloadLink.hide();
+          generateLink.addClass('fa-spin');
+          poller(response.process_id);
+        }
       });
     });
   }
@@ -1007,4 +1009,4 @@
     asyncZipDownloadHandler();
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));
+}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars, window.MessageFactory));
