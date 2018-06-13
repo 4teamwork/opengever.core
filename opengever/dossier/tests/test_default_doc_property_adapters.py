@@ -3,6 +3,8 @@ from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
 from opengever.dossier.tests import EXPECTED_DOCUMENT_PROPERTIES
 from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
+from opengever.dossier.tests import EXPECTED_PROPOSALDOC_PROPERTIES
+from opengever.dossier.tests import EXPECTED_TASKDOC_PROPERTIES
 from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
 from opengever.testing import IntegrationTestCase
 from zope.component import getAdapter
@@ -20,6 +22,24 @@ class TestDocProperties(IntegrationTestCase):
             (self.document, self.portal.REQUEST), IDocProperties)
         all_properties = docprops.get_properties()
         self.assertEqual(EXPECTED_DOC_PROPERTIES, all_properties)
+
+    def test_default_doc_properties_adapter_for_taskdocument(self):
+        self.login(self.regular_user)
+
+        docprops = getMultiAdapter(
+            (self.taskdocument, self.portal.REQUEST), IDocProperties)
+
+        all_properties = docprops.get_properties()
+        self.assertEqual(EXPECTED_TASKDOC_PROPERTIES, all_properties)
+
+    def test_default_doc_properties_adapter_for_proposaldocument(self):
+        self.login(self.regular_user)
+
+        docprops = getMultiAdapter(
+            (self.proposaldocument, self.portal.REQUEST), IDocProperties)
+
+        all_properties = docprops.get_properties()
+        self.assertEqual(EXPECTED_PROPOSALDOC_PROPERTIES, all_properties)
 
     def test_default_document_doc_properties_provider(self):
         self.login(self.regular_user)

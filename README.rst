@@ -591,6 +591,7 @@ Objects
           - self.mail
           - self.mail_msg
           - self.proposal
+            - self.proposaldocument
           - self.subdossier
             - self.subdocument
           - self.subdossier2

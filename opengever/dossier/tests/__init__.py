@@ -28,6 +28,7 @@ EXPECTED_USER_DOC_PROPERTIES = {
     'ogg.user.country': u'Schweiz',
 }
 
+
 OGDS_USER_ATTRIBUTES = {
     'firstname': u'Peter',
     'lastname': u'M\xfcller',
@@ -58,6 +59,7 @@ EXPECTED_DOSSIER_PROPERTIES = {
     'ogg.dossier.sequence_number': '1',
 }
 
+
 EXPECTED_DOCUMENT_PROPERTIES = {
     'Document.ReferenceNumber': 'Client1 1.1 / 1 / 10',
     'Document.SequenceNumber': '10',
@@ -72,9 +74,48 @@ EXPECTED_DOCUMENT_PROPERTIES = {
     'ogg.document.version_number': 0,
 }
 
+EXPECTED_TASKDOCUMENT_PROPERTIES = {
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 11',
+    'Document.SequenceNumber': '11',
+    'ogg.document.title': u'Feedback zum Vertragsentwurf',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 11',
+    'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
+    'ogg.document.sequence_number': '11',
+    'ogg.document.version_number': 0
+}
+
+EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 15',
+    'Document.SequenceNumber': '15',
+    'ogg.document.title': u'Kommentar zum Vertragsentwurf',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 15',
+    'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
+    'ogg.document.sequence_number': '15',
+    'ogg.document.version_number': 0
+}
+
+EXPECTED_MEETING_PROPERTIES = {
+    'ogg.meeting.agenda_item_number': '',
+    'ogg.meeting.decision_number': '',
+    'ogg.meeting.proposal_state': 'Submitted',
+    'ogg.meeting.proposal_title': 'Vertragsentwurf f\xc3\xbcr weitere Bearbeitung bewilligen'
+}
 
 EXPECTED_DOC_PROPERTIES = dict(
     EXPECTED_USER_DOC_PROPERTIES.items() +
     EXPECTED_DOSSIER_PROPERTIES.items() +
     EXPECTED_DOCUMENT_PROPERTIES.items()
+)
+
+EXPECTED_TASKDOC_PROPERTIES = dict(
+    EXPECTED_USER_DOC_PROPERTIES.items() +
+    EXPECTED_DOSSIER_PROPERTIES.items() +
+    EXPECTED_TASKDOCUMENT_PROPERTIES.items()
+)
+
+EXPECTED_PROPOSALDOC_PROPERTIES = dict(
+    EXPECTED_USER_DOC_PROPERTIES.items() +
+    EXPECTED_DOSSIER_PROPERTIES.items() +
+    EXPECTED_MEETING_PROPERTIES.items() +
+    EXPECTED_PROPOSALDOCUMENT_PROPERTIES.items()
 )
