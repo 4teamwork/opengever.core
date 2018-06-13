@@ -196,15 +196,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
-            'Document.SequenceNumber': '31',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 32',
+            'Document.SequenceNumber': '32',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 9, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
-            'ogg.document.sequence_number': '31',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 32',
+            'ogg.document.sequence_number': '32',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
@@ -254,15 +254,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'test-docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 31',
-            'Document.SequenceNumber': '31',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 32',
+            'Document.SequenceNumber': '32',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 10, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 31',
-            'ogg.document.sequence_number': '31',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 32',
+            'ogg.document.sequence_number': '32',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
