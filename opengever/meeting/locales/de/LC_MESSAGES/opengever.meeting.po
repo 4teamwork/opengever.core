@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-13 13:35+0000\n"
+"POT-Creation-Date: 2018-06-13 14:30+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -655,6 +655,11 @@ msgstr "Inhaltsverzeichnis ${period} ${committee} nach Ordnungsposition"
 msgid "held"
 msgstr "Durchgeführt"
 
+#. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
+#: ./opengever/meeting/committee.py
+msgid "help_allowed_ad_hoc_agenda_item_templates"
+msgstr "Wählen Sie alle Freitext-Traktandenvorlagen aus, die in diesem Gremium erlaubt sind. Wählen Sie keine Vorlage aus, um alle zu erlauben."
+
 #. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_proposal_templates"
@@ -729,6 +734,11 @@ msgstr "Traktandenliste"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
+
+#. Default: "Allowed ad-hoc agenda item templates"
+#: ./opengever/meeting/committee.py
+msgid "label_allowed_ad_hoc_agenda_item_templates"
+msgstr "Erlaubte Freitext-Traktandumsvorlagen"
 
 #. Default: "Allowed proposal templates"
 #: ./opengever/meeting/committee.py
