@@ -76,7 +76,7 @@
           <h2 i18n:translate="close_meeting">Close meeting</h2>
           <p tal:condition="view/will_closing_regenerate_protocol"
              i18n:translate="">
-            Closing the meeting the first time will automatically (re-)create the protocol.
+            Closing the meeting will automatically (re-)create the protocol.
           </p>
           <p tal:condition="not:view/will_closing_regenerate_protocol"
              i18n:translate="">

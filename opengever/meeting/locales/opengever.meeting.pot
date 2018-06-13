@@ -106,7 +106,7 @@ msgid "Close period"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
-msgid "Closing the meeting the first time will automatically (re-)create the protocol."
+msgid "Closing the meeting will automatically (re-)create the protocol."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt

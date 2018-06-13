@@ -109,8 +109,8 @@ msgid "Close period"
 msgstr "Clôturer la période"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
-msgid "Closing the meeting the first time will automatically (re-)create the protocol."
-msgstr "Le procès-verbal est automatiquement regénéré, parce que la séance est fermée pour la première fois."
+msgid "Closing the meeting will automatically (re-)create the protocol."
+msgstr "Le procès-verbal est automatiquement regénéré, parce que la séance ne contient pas de modifications manuelles."
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Closing the meeting will not update the protocol automatically. <br /> Make sure to transfer your changes or recreate the protocol."
