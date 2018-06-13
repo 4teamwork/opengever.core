@@ -11,6 +11,7 @@ Changelog
 - Add fr-ch translations to vdex files. [tarnap]
 - Document generation of policies in internal docs. [tarnap]
 - Add registry field to customize date format for sablon templates. [njohner]
+- Remove no longer used plonetheme.teamraum uninstall profile since it's integrated into opengever.core. [elioschmutz]
 - Implement recently touched menu that lists checked out documents and recently touched objects. [lgraf]
 - Sort the entries of the reference browser widget. [tarnap]
 - Drop non-word meeting feature. [deiferni]
