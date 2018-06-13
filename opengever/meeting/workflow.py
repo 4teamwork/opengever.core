@@ -52,7 +52,7 @@ class Transition(object):
     def visible(self):
         return self._visible and self.condition()
 
-    def execute(self, obj, model):
+    def execute(self, obj, model, **kwargs):
         if not self.can_execute(model):
             raise CannotExecuteTransition(
                 "Cannot execute transition {} from {} to {}".format(
@@ -112,10 +112,10 @@ class Workflow(object):
     def get_state(self, name):
         return self.states[name]
 
-    def execute_transition(self, obj, model, name):
+    def execute_transition(self, obj, model, name, **kwargs):
         transition = self.transitions.get(name)
         assert transition, 'no such transition: {}'.format(name)
-        transition.execute(obj, model)
+        transition.execute(obj, model, **kwargs)
 
     def can_execute_transition(self, model, name):
         transition = self.transitions.get(name)

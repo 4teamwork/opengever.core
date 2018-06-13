@@ -293,20 +293,6 @@
       />
 
   <browser:page
-      for="opengever.meeting.proposal.IProposal"
-      class=".proposaltransitions.ProposalTransitionController"
-      name="proposaltransitioncontroller"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="opengever.meeting.proposal.IProposal"
-      class=".proposaltransitions.RejectProposalView"
-      name="reject_proposal"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       for="opengever.meeting.sablontemplate.ISablonTemplate"
       class=".sablontemplate.FillMeetingTemplate"
       name="fill_meeting_template"
@@ -395,6 +381,20 @@
       class=".proposalforms.ProposalEditForm"
       name="edit"
       permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      name="addtransitioncomment"
+      class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
+      for="opengever.meeting.proposal.IProposal"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
+      name="addcomment"
+      class="opengever.meeting.proposal_transition_comment.ProposalCommentAddFormView"
+      for="opengever.meeting.proposal.IProposal"
+      permission="cmf.AddPortalContent"
       />
 
 </configure>

@@ -115,6 +115,7 @@ class TestProposalWithWord(IntegrationTestCase):
 
         browser.open(self.draft_word_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Proposal successfully submitted.')
         self.assertEqual(Proposal.STATE_SUBMITTED,
@@ -182,6 +183,7 @@ class TestProposalWithWord(IntegrationTestCase):
         self.assertTrue(self.draft_word_proposal.contains_checked_out_documents())
         browser.open(self.draft_word_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
         statusmessages.assert_message(
             'Cannot change the state because the proposal'
             ' contains checked out documents.')

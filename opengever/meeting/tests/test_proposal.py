@@ -212,6 +212,7 @@ class TestProposal(IntegrationTestCase):
         self.set_related_items(self.draft_proposal, [self.mail])
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
 
         self.login(self.committee_responsible)
         # submitted proposal created
@@ -256,6 +257,7 @@ class TestProposal(IntegrationTestCase):
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Proposal successfully submitted.')
 
@@ -311,6 +313,7 @@ class TestProposal(IntegrationTestCase):
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Proposal successfully submitted.')
 
@@ -325,6 +328,8 @@ class TestProposal(IntegrationTestCase):
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Cancel')
+        browser.click_on("Confirm")
+
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Proposal cancelled successfully.')
 
@@ -339,6 +344,7 @@ class TestProposal(IntegrationTestCase):
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Reactivate')
+        browser.click_on("Confirm")
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
 
     @browsing
@@ -351,6 +357,7 @@ class TestProposal(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
 
         statusmessages.assert_message(
             u'The selected committeee has been deactivated, the proposal '
@@ -367,6 +374,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
         browser.visit(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
+        browser.click_on("Confirm")
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
 
     def test_copying_proposals_is_prevented(self):

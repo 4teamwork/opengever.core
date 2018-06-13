@@ -60,7 +60,7 @@
               </td>
             </tr>
           </table>
-          <metal:use use-macro="context/@@meeting-macros/workflow_actions" />
+          <metal:use use-macro="context/@@meeting-macros/workflow_actions_and_comment" />
 
           <div class="actionButtons">
             <ul class="regular_buttons">

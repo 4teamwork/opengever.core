@@ -7,10 +7,11 @@ from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.meeting import _
 from opengever.meeting.model import Meeting
+from opengever.meeting.proposal import Proposal
+from opengever.meeting.proposal import SubmittedProposal
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
-from plone.app.contentlisting.interfaces import IContentListingObject
 from uuid import UUID
 from uuid import uuid4
 from zope.annotation.interfaces import IAnnotations
@@ -65,19 +66,18 @@ class ProposalHistory(object):
         record.append_to(history)
 
         if record.needs_syncing:
-            # currently we only sync from the submitted side
-            # to the dossier
-            path = self.context.load_model().physical_path
+            path = self.context.get_sync_target_path()
+            admin_unit_id = self.context.get_sync_admin_unit_id()
+
             request_data = {'data': advancedjson.dumps({
                 'timestamp': record.timestamp,
                 'data': record.data,
             })}
             dispatch_request(
-                self.context.get_source_admin_unit_id(),
+                admin_unit_id,
                 '@@receive-proposal-history',
                 path=path,
                 data=request_data,)
-
         return record
 
     def receive_record(self, timestamp, data):
@@ -132,7 +132,7 @@ class BaseHistoryRecord(object):
         record.data = data
         return record
 
-    def __init__(self, context, timestamp=None, uuid=None):
+    def __init__(self, context, timestamp=None, uuid=None, text=None):
         timestamp = timestamp or utcnow_tz_aware()
         if uuid is None:
             uuid = uuid4()
@@ -145,7 +145,8 @@ class BaseHistoryRecord(object):
             created=timestamp,
             userid=unicode(api.user.get_current().getId()),
             history_type=self.history_type,
-            uuid=uuid)
+            uuid=uuid,
+            text=text)
 
     def append_to(self, history):
         if self.timestamp in history:
@@ -186,6 +187,18 @@ class ProposalCreated(BaseHistoryRecord):
     def message(self):
         return _(u'proposal_history_label_created',
                  u'Created by ${user}',
+                 mapping={'user': self.get_actor_link()})
+
+
+@ProposalHistory.register
+class ProposalCommented(BaseHistoryRecord):
+
+    history_type = u'commented'
+    needs_syncing = True
+
+    def message(self):
+        return _(u'proposal_history_label_commented',
+                 u'Proposal commented by ${user}',
                  mapping={'user': self.get_actor_link()})
 
 

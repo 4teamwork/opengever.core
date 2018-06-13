@@ -177,6 +177,12 @@
                    "
       />
 
+  <!-- "opengever.meeting: Add Proposal Comment" is not used in lawgiver managed workflows -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.meeting: Add Proposal Comment,
+                   "
+      />
 
   <!-- Ignore default Plone permissions. This means we are not managing in the
        workflows. This does not mean that the permissions are disabled: disabling

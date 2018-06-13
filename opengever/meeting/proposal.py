@@ -210,8 +210,8 @@ class ProposalBase(ModelContainer):
 
         return self.workflow.can_execute_transition(self.load_model(), name)
 
-    def execute_transition(self, name):
-        self.workflow.execute_transition(self, self.load_model(), name)
+    def execute_transition(self, name, text=None):
+        self.workflow.execute_transition(self, self.load_model(), name, text=text)
 
     def get_transitions(self):
         if not api.user.has_permission('Modify portal content', obj=self):
@@ -279,6 +279,9 @@ class ProposalBase(ModelContainer):
 
         return False
 
+    def comment(self, text, uuid=None):
+        return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -291,8 +294,11 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
 
-    def get_source_admin_unit_id(self):
+    def get_sync_admin_unit_id(self):
         return self.load_model().admin_unit_id
+
+    def get_sync_target_path(self):
+        return self.load_model().physical_path
 
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
@@ -300,6 +306,9 @@ class SubmittedProposal(ProposalBase):
 
         """
         return self.load_model().is_editable_in_committee()
+
+    def can_comment(self):
+        return api.user.has_permission('Modify portal content', obj=self)
 
     def get_overview_attributes(self):
         data = super(SubmittedProposal, self).get_overview_attributes()
@@ -451,6 +460,12 @@ class Proposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
+    def get_sync_admin_unit_id(self):
+        return self.load_model().submitted_admin_unit_id
+
+    def get_sync_target_path(self):
+        return self.load_model().submitted_physical_path
+
     def _after_model_created(self, model_instance):
         IHistory(self).append_record(u'created')
 
@@ -468,6 +483,9 @@ class Proposal(ProposalBase):
 
         """
         return self.load_model().is_editable_in_dossier()
+
+    def can_comment(self):
+        return api.user.has_permission('opengever.meeting: Add Proposal Comment', obj=self)
 
     def get_documents(self):
         return sorted(
@@ -576,7 +594,7 @@ class Proposal(ProposalBase):
         command.execute()
         return command
 
-    def submit(self):
+    def submit(self, text=None):
         self.date_of_submission = date.today()
 
         documents = self.get_documents()
@@ -586,7 +604,7 @@ class Proposal(ProposalBase):
                 self, document, parent_action=create_command)
             for document in documents]
 
-        create_command.execute()
+        create_command.execute(text)
         for copy_command in copy_commands:
             copy_command.execute()
 
@@ -600,3 +618,7 @@ class Proposal(ProposalBase):
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
+
+    def is_submitted(self):
+        model = self.load_model()
+        return model.is_submitted()

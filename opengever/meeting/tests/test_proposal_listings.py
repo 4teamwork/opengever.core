@@ -146,7 +146,8 @@ class TestDossierProposalListing(IntegrationTestCase):
     def test_default_filter_hides_cancelled_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.find('Cancel').click()
+        browser.click_on('Cancel')
+        browser.click_on("Confirm")
 
         browser.open(self.dossier, view='tabbedview_view-proposals')
         self.assertEquals(
@@ -158,7 +159,8 @@ class TestDossierProposalListing(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.find('Cancel').click()
+        browser.click_on('Cancel')
+        browser.click_on("Confirm")
         browser.open(self.dossier,
                      view='tabbedview_view-proposals',
                      data={'proposal_state_filter': 'filter_proposals_all'})
@@ -243,7 +245,8 @@ class TestMyProposals(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.find('Cancel').click()
+        browser.click_on('Cancel')
+        browser.click_on("Confirm")
         browser.open(view='tabbedview_view-myproposals',
                      data={'proposal_state_filter': 'filter_proposals_all'})
 
@@ -329,7 +332,8 @@ class TestSubmittedProposals(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.find('Cancel').click()
+        browser.click_on('Cancel')
+        browser.click_on("Confirm")
 
         self.login(self.committee_responsible, browser)
         browser.open(self.committee,

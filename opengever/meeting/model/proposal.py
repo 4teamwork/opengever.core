@@ -34,7 +34,7 @@ MAX_TITLE_LENGTH = 256
 
 class Submit(Transition):
 
-    def execute(self, obj, model):
+    def execute(self, obj, model, text=None, **kwargs):
         assert obj, 'submitting requires a plone context object.'
 
         if not model.committee.is_active():
@@ -47,7 +47,7 @@ class Submit(Transition):
 
         super(Submit, self).execute(obj, model)
         api.content.transition(obj=obj, transition='proposal-transition-submit')
-        obj.submit()
+        obj.submit(text=text)
 
         msg = _(u'msg_proposal_submitted',
                 default=u'Proposal successfully submitted.')
@@ -56,16 +56,17 @@ class Submit(Transition):
 
 class Reject(Transition):
 
-    def execute(self, obj, model):
-        url = "{}/reject_proposal".format(obj.absolute_url())
-        return getRequest().RESPONSE.redirect(url)
+    def execute(self, obj, model, text=None, **kwargs):
+        obj.reject(text)
+        msg = _(u"The proposal has been rejected successfully")
+        api.portal.show_message(msg, request=getRequest(), type='info')
 
 
 class Cancel(Transition):
 
-    def execute(self, obj, model):
+    def execute(self, obj, model, text=None, **kwargs):
         super(Cancel, self).execute(obj, model)
-        model.cancel()
+        model.cancel(text=text)
 
         msg = _(u'msg_proposal_cancelled',
                 default=u'Proposal cancelled successfully.')
@@ -74,9 +75,9 @@ class Cancel(Transition):
 
 class Reactivate(Transition):
 
-    def execute(self, obj, model):
+    def execute(self, obj, model, text=None, **kwargs):
         super(Reactivate, self).execute(obj, model)
-        model.reactivate()
+        model.reactivate(text)
 
         msg = _(u'msg_proposal_reactivated',
                 default=u'Proposal reactivated successfully.')
@@ -176,8 +177,12 @@ class Proposal(Base):
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
 
-    def execute_transition(self, name):
-        self.workflow.execute_transition(None, self, name)
+    def is_submitted(self):
+        submitted_states = (self.STATE_SUBMITTED, self.STATE_SCHEDULED, self.STATE_DECIDED)
+        return self.get_state() in submitted_states
+
+    def execute_transition(self, name, text=None):
+        self.workflow.execute_transition(None, self, name, text=text)
 
     def get_admin_unit(self):
         return ogds_service().fetch_admin_unit(self.admin_unit_id)
@@ -328,11 +333,11 @@ class Proposal(Base):
         assert self.get_state() == self.STATE_DECIDED
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
-    def cancel(self):
-        IHistory(self.resolve_proposal()).append_record(u'cancelled')
+    def cancel(self, text=None):
+        IHistory(self.resolve_proposal()).append_record(u'cancelled', text=text)
 
-    def reactivate(self):
-        IHistory(self.resolve_proposal()).append_record(u'reactivated')
+    def reactivate(self, text=None):
+        IHistory(self.resolve_proposal()).append_record(u'reactivated', text=text)
 
     def decide(self, agenda_item):
         document = self.resolve_submitted_proposal().get_proposal_document()

@@ -45,7 +45,7 @@ class CreateSubmittedProposal(BrowserView):
 
             history_data = advancedjson.loads(self.request.get('history_data'))
             IHistory(submitted_proposal).append_record(
-                u'submitted', uuid=history_data['uuid'])
+                u'submitted', uuid=history_data['uuid'], text=history_data.get("text"))
 
             self.request.response.setHeader("Content-type", "application/json")
             return json.dumps(

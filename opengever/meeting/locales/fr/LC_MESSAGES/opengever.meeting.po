@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-06 13:41+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -193,7 +193,7 @@ msgstr "Joint à l'ordre du jour avec succès"
 msgid "The meeting and its dossier were created successfully"
 msgstr "La réunion et le dossier y associé ont été créés avec succès."
 
-#: ./opengever/meeting/browser/proposaltransitions.py
+#: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
 msgstr "La proposition a été rejetée avec succès."
 
@@ -381,6 +381,11 @@ msgstr "Annuler"
 #: ./opengever/meeting/browser/periods.py
 msgid "button_close_period"
 msgstr "Clôturer une période"
+
+#. Default: "Confirm"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "button_confirm"
+msgstr "Confirmer"
 
 #. Default: "Continue"
 #: ./opengever/meeting/browser/committeeforms.py
@@ -635,11 +640,6 @@ msgstr "Table de matière ${period} ${committee} alphabétique"
 msgid "filename_repository_toc"
 msgstr "Table de matière ${period} ${committee} selon l'ordre des points"
 
-#. Default: "Reject proposal"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "heading_reject_proposal_form"
-msgstr "Rejeter la proposition"
-
 #. Default: "Held"
 #: ./opengever/meeting/model/meeting.py
 msgid "held"
@@ -654,11 +654,6 @@ msgstr "Choisissez tous les modèles de proposition autorisés dans ce comité. 
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_create_task"
 msgstr "Etablir une nouvelle tâche dans le dossier de réunion et y joindre cet extrait de protocole."
-
-#. Default: "Describe, why the proposal is rejected"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "help_reject_proposal_text"
-msgstr "Décrivez la raison pour laquelle la proposition a été rejetée."
 
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -756,6 +751,11 @@ msgstr "La réunion ne peut pas être clôturée avant que tous les points de l'
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
 msgstr "Réunions passées"
+
+#. Default: "Comment"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_comment"
+msgstr "Commentaire"
 
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
@@ -1078,11 +1078,6 @@ msgstr "Modèle pour la partie finale du protocole"
 msgid "label_reactivate"
 msgstr "Réactiver le comité"
 
-#. Default: "Comment"
-#: ./opengever/meeting/browser/proposaltransitions.py
-msgid "label_reject_proposal_text"
-msgstr "Commentaire"
-
 #. Default: "Remove"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_remove"
@@ -1158,6 +1153,11 @@ msgstr "Modèle de la table de matière"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_toggle_attachments"
 msgstr "Afficher / cacher les pièces jointes"
+
+#. Default: "Transition"
+#: ./opengever/meeting/proposal_transition_comment.py
+msgid "label_transition"
+msgstr "Transition"
 
 #. Default: "Transition ${transition} executed"
 #: ./opengever/meeting/browser/meetings/transitions.py
@@ -1382,6 +1382,11 @@ msgstr "Document de proposition"
 msgid "proposal_history_label_cancelled"
 msgstr "Annulé par ${user}"
 
+#. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/proposalhistory.py
+msgid "proposal_history_label_commented"
+msgstr "Commenté par ${user}"
+
 #. Default: "Created by ${user}"
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_created"
@@ -1458,7 +1463,6 @@ msgid "reactivate"
 msgstr "Réactiver"
 
 #. Default: "Reject"
-#: ./opengever/meeting/browser/proposaltransitions.py
 #: ./opengever/meeting/model/proposal.py
 msgid "reject"
 msgstr "Rejeter"
