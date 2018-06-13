@@ -452,9 +452,9 @@ class TestCommitteeWorkflow(IntegrationTestCase):
                   'Agendaitem list template',
                   'Table of contents template',
                   'Linked repository folder',
-                  'Ad hoc agenda item template',
                   'Paragraph template',
                   'Allowed proposal templates',
+                  'Ad hoc agenda item template',
                   'Allowed ad-hoc agenda item templates']
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
