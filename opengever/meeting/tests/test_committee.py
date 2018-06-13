@@ -10,6 +10,7 @@ from opengever.base.oguid import Oguid
 from opengever.meeting.model import Committee
 from opengever.testing import IntegrationTestCase
 from operator import methodcaller
+from plone.uuid.interfaces import IUUID
 
 
 class TestCommittee(IntegrationTestCase):
@@ -84,6 +85,154 @@ class TestCommittee(IntegrationTestCase):
 
         self.assertEqual(
             self.sablon_template, self.committee.get_protocol_suffix_template())
+
+    @browsing
+    def test_can_configure_ad_hoc_template(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.assertIsNone(self.committee.ad_hoc_template)
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Ad hoc agenda item template': self.proposal_template})
+        browser.find('Save').click()
+
+        statusmessages.assert_message('Changes saved')
+
+        self.assertIsNotNone(self.committee.ad_hoc_template)
+        self.assertEqual(self.proposal_template,
+                         self.committee.get_ad_hoc_template())
+
+    def test_get_ad_hoc_template_returns_committee_template_if_available(self):
+        self.login(self.committee_responsible)
+        self.committee.ad_hoc_template = self.as_relation_value(
+            self.proposal_template)
+
+        self.assertEqual(
+            self.proposal_template, self.committee.get_ad_hoc_template())
+
+    def test_get_ad_hoc_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee_container.ad_hoc_template = self.as_relation_value(
+            self.proposal_template)
+
+        self.assertIsNone(self.committee.ad_hoc_template)
+        self.assertEqual(
+            self.proposal_template, self.committee.get_ad_hoc_template())
+
+    @browsing
+    def test_can_configure_paragraph_template(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.committee_container.paragraph_template = None
+        self.committee.paragraph_template = None
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Paragraph template': self.sablon_template}).save()
+        statusmessages.assert_message('Changes saved')
+
+        self.assertIsNotNone(self.committee.paragraph_template)
+        self.assertEqual(self.sablon_template,
+                         self.committee.get_paragraph_template())
+
+    def test_get_paragraph_template_returns_committee_template_if_available(self):
+        self.login(self.committee_responsible)
+        self.committee.paragraph_template = self.as_relation_value(self.sablon_template)
+        self.committee_container.paragraph_template = None
+        self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
+
+    def test_get_paragraph_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee.paragraph_template = None
+        self.committee_container.paragraph_template = self.as_relation_value(
+            self.sablon_template)
+        self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
+
+    def test_get_agenda_item_header_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee_container.agenda_item_header_template = self.as_relation_value(
+            self.sablon_template)
+        self.assertIsNone(self.committee.agenda_item_header_template)
+
+        self.assertEqual(
+            self.sablon_template,
+            self.committee.get_excerpt_header_template())
+
+    def test_get_agenda_item_header_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.agenda_item_header_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_agenda_item_header_template())
+
+    def test_get_agenda_item_suffix_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.committee_container.agenda_item_suffix_template = self.as_relation_value(
+            self.sablon_template)
+        self.assertIsNone(self.committee.agenda_item_suffix_template)
+
+        self.assertEqual(
+            self.sablon_template,
+            self.committee.get_excerpt_suffix_template())
+
+    def test_get_agenda_item_suffix_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.agenda_item_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_agenda_item_suffix_template())
+
+    def test_get_excerpt_header_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.assertIsNone(self.committee.excerpt_header_template)
+        self.assertIsNotNone(self.committee_container.excerpt_header_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_header_template())
+
+    def test_get_excerpt_header_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.excerpt_header_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_header_template())
+
+    def test_get_excerpt_suffix_template_falls_back_to_container(self):
+        self.login(self.administrator)
+        self.assertIsNone(self.committee.excerpt_suffix_template)
+        self.assertIsNotNone(self.committee_container.excerpt_suffix_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_suffix_template())
+
+    def test_get_excerpt_suffix_template_returns_committee_template_if_available(self):
+        self.login(self.administrator)
+        self.committee.excerpt_suffix_template = self.as_relation_value(
+            self.sablon_template)
+
+        self.assertEqual(
+            self.sablon_template, self.committee.get_excerpt_suffix_template())
+
+    @browsing
+    def test_configure_allowed_proposal_templates(self, browser):
+        with self.login(self.administrator):
+            create(Builder('proposaltemplate')
+                   .titled(u'Baubewilligung')
+                   .within(self.templates))
+
+        self.login(self.committee_responsible, browser)
+        self.assertFalse(self.committee.allowed_proposal_templates)
+
+        browser.open(self.committee, view='edit')
+        self.assertItemsEqual(
+            ['Baubewilligung', u'Geb\xfchren'],
+            browser.find('Allowed proposal templates').options)
+        browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
+        self.assertItemsEqual(
+            [IUUID(self.proposal_template)],
+            self.committee.allowed_proposal_templates)
+
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
@@ -256,6 +405,25 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         editbar.menu_option('Actions', 'deactivate').click()
         self.assertEqual([u'Actions'], editbar.menus())
+
+    @browsing
+    def test_configure_allowed_proposal_templates(self, browser):
+        with self.login(self.administrator):
+            create(Builder('proposaltemplate')
+                   .titled(u'Baubewilligung')
+                   .within(self.templates))
+
+        self.login(self.committee_responsible, browser)
+        self.assertFalse(self.committee.allowed_proposal_templates)
+
+        browser.open(self.committee, view='edit')
+        self.assertItemsEqual(
+            ['Baubewilligung', u'Geb\xfchren'],
+            browser.find('Allowed proposal templates').options)
+        browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
+        self.assertItemsEqual(
+            [IUUID(self.proposal_template)],
+            self.committee.allowed_proposal_templates)
 
     @browsing
     def test_visible_fields_in_forms(self, browser):
