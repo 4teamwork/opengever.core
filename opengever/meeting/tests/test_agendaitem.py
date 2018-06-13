@@ -1,147 +1,88 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
-from opengever.meeting.model import Meeting
+from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
-from opengever.meeting.model.agendaitem import AgendaItem
-from opengever.meeting.wrapper import MeetingWrapper
-from opengever.testing import FunctionalTestCase
-from plone import api
+from opengever.testing import IntegrationTestCase
 from plone.protect import createToken
-import json
 import re
-import transaction
+import json
 
 
-class TestAgendaItem(FunctionalTestCase):
+class TestDisplayAgendaItems(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestAgendaItem, self).setUp()
-        self.admin_unit.public_url = 'http://nohost/plone'
-
-        self.repository_root, self.repository_folder = create(
-            Builder('repository_tree'))
-        self.dossier = create(
-            Builder('dossier').within(self.repository_folder))
-        self.meeting_dossier = create(
-            Builder('meeting_dossier').within(self.repository_folder))
-        self.template = create(Builder('sablontemplate')
-                                       .with_asset_file('empty.docx'))
-        self.container = create(Builder('committee_container')
-                                .having(ad_hoc_template=self.template))
-
-        self.committee = create(Builder('committee').within(self.container))
-        self.grant('CommitteeResponsible', on=self.committee)
-        self.meeting = create(Builder('meeting')
-                              .having(committee=self.committee.load_model())
-                              .link_with(self.meeting_dossier))
-
-        self.meeting_wrapper = MeetingWrapper.wrap(self.committee, self.meeting)
-
-        self.grant('Contributor', 'Editor', 'Reader', 'MeetingUser')
-
-    def setup_proposal(self, related_document_titles=None):
-        builder = (Builder('proposal')
-                   .within(self.dossier)
-                   .having(committee=self.committee.load_model())
-                   .as_submitted())
-
-        if related_document_titles:
-            documents = []
-            for title in related_document_titles:
-                documents.append(create(Builder('document').within(self.dossier).titled(title)))
-            builder = builder.relate_to(*documents)
-
-        return create(builder)
-
-    def schedule_proposal(self, proposal, browser):
-        view = 'unscheduled_proposals/{}/schedule'.format(
-            proposal.load_model().proposal_id)
-
-        browser.login().open(self.meeting_wrapper, view=view)
-
-        return AgendaItem.query.first()
-
-
-class TestAgendaItemList(TestAgendaItem):
+    features = ('meeting',)
 
     @browsing
     def test_agendaitem_without_attachements_has_no_documents(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'Foo')
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/list'.format(item.agenda_item_id),
-            data={'title': 'bar'})
+        browser.open(self.agenda_item_url(agenda_item, 'list'))
         item = browser.json.get('items')[0]
-
         self.assertFalse(item.get('has_documents'))
 
     @browsing
     def test_agendaitem_with_attachements_has_documents(self, browser):
-        item = self.setup_proposal(related_document_titles=["a document"])
-        item = self.schedule_proposal(item, browser)
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/list'.format(item.agenda_item_id),
-            data={'title': 'bar'})
+        browser.open(self.agenda_item_url(agenda_item, 'list'))
         item = browser.json.get('items')[0]
-
         self.assertTrue(item.get('has_documents'))
 
     @browsing
     def test_agendaitem_attachements_are_sorted(self, browser):
-        titles = ["abc", "Abd", "bcd"]
-        item = self.setup_proposal(related_document_titles=reversed(titles))
-        item = self.schedule_proposal(item, browser)
+        self.login(self.committee_responsible, browser)
+        documents = [
+            create(Builder('document')
+                   .within(self.dossier)
+                   .titled(title))
+            for title in ('XXX', 'aBd', 'abc',)
+        ]
+        proposal, submitted_proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(committee=self.committee.load_model())
+                          .with_submitted()
+                          .relate_to(*documents))
+        agenda_item = self.schedule_proposal(self.meeting, submitted_proposal)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/list'.format(item.agenda_item_id),
-            data={'title': 'bar'})
+        browser.open(self.agenda_item_url(agenda_item, 'list'))
         item = browser.json.get('items')[0]
-
         self.assertTrue(item.get('has_documents'))
 
         pattern = re.compile('<a class="document_link.*?>(.*?)</a>')
         browser_titles = [pattern.search(el).groups()[0] for el in item.get('documents')]
-        self.assertEquals(titles, browser_titles)
+        self.assertEquals([u'abc', u'aBd', u'XXX'], browser_titles)
 
     @browsing
     def test_agendaitem_with_excerpts_and_documents_has_documents(self, browser):
-        item = self.setup_proposal(related_document_titles=["a document"])
-        item = self.schedule_proposal(item, browser)
-        browser.login().open(
-            self.meeting_wrapper, {'_authenticator': createToken()},
-            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        agenda_item.generate_excerpt('excerpt')
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/list'.format(item.agenda_item_id),
-            data={'title': 'bar'})
+        browser.open(self.agenda_item_url(agenda_item, 'list'))
         item = browser.json.get('items')[0]
 
         self.assertTrue(item.get('has_documents'))
 
 
-class TestAgendaItemEdit(TestAgendaItem):
+class TestEditAgendaItems(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_update_agenda_item(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/edit'.format(item.agenda_item_id),
-            data={'title': 'bar'})
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'hax')
+        browser.open(self.agenda_item_url(agenda_item, 'edit'),
+                     data={'title': 'bar'})
 
-        self.assertEqual(AgendaItem.get(item.agenda_item_id).title, 'bar')
+        self.assertEqual(agenda_item.title, 'bar')
         self.assertEquals([{u'message': u'Agenda Item updated.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
@@ -150,12 +91,11 @@ class TestAgendaItemEdit(TestAgendaItem):
 
     @browsing
     def test_when_title_is_missing_returns_json_error(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/edit'.format(item.agenda_item_id))
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        browser.open(self.agenda_item_url(agenda_item, 'edit'), data={})
 
         self.assertEquals([{u'message': u'Agenda Item title must not be empty.',
                             u'messageClass': u'error',
@@ -165,15 +105,12 @@ class TestAgendaItemEdit(TestAgendaItem):
 
     @browsing
     def test_when_title_is_too_long_returns_json_error(self, browser):
-        committee = create(Builder('committee'))
-        proposal = create(Builder('submitted_proposal').within(committee))
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting, proposal=proposal))
+        self.login(self.committee_responsible, browser)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/edit'.format(item.agenda_item_id),
-            data={'title': 257 * u'a'})
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        browser.open(self.agenda_item_url(agenda_item, 'edit'),
+                     data={'title': 257 * u'a'})
 
         self.assertEquals([{u'message': u'Agenda Item title is too long.',
                             u'messageClass': u'error',
@@ -183,36 +120,38 @@ class TestAgendaItemEdit(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(self.meeting_wrapper,
+        self.login(self.committee_responsible, browser)
+
+        with browser.expect_http_error(404):
+            browser.open(self.meeting,
                                  view='agenda_items/12345/edit')
 
     @browsing
     def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
 
-        self.meeting.workflow_state = 'closed'
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/edit'.format(item.agenda_item_id),
-                data={'title': 'bar'})
+            browser.open(self.agenda_item_url(agenda_item, 'edit'),
+                         data={'title': 'qux'})
 
 
-class TestAgendaItemDelete(TestAgendaItem):
+class TestDeleteAgendaItems(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_delete_agenda_item(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/delete'.format(item.agenda_item_id))
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        browser.open(self.agenda_item_url(agenda_item, 'delete'))
 
-        self.assertEquals(0, AgendaItem.query.count())
         self.assertEquals([{u'message': u'Agenda Item Successfully deleted',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
@@ -220,183 +159,133 @@ class TestAgendaItemDelete(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/12345/delete')
+        self.login(self.committee_responsible, browser)
+
+        with browser.expect_http_error(404):
+            browser.open(self.meeting,
+                         view='agenda_items/12345/delete')
 
     @browsing
     def test_raise_not_found_if_agenda_item_is_not_linked_to_the_given_context(self, browser):
-        create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
 
+        # create a new meeting with an agenda item
         other_meeting = create(Builder('meeting')
                                .having(committee=self.committee.load_model())
                                .link_with(self.meeting_dossier))
-
         other_item = create(Builder('agenda_item').having(
             title=u'foo', meeting=other_meeting))
 
         with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(
-                self.meeting_wrapper,
+            browser.open(
+                self.meeting,
                 view='agenda_items/{}/delete'.format(other_item.agenda_item_id))
 
     @browsing
     def test_update_agenda_item_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
 
-        self.meeting.workflow_state = 'held'
-
-        with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/delete'.format(item.agenda_item_id))
-
-    @browsing
-    def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
-
-        self.meeting.workflow_state = 'closed'
+        self.meeting.model.hold()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/delete'.format(item.agenda_item_id))
+            browser.open(self.agenda_item_url(agenda_item, 'delete'))
 
 
-class TestAgendaItemDecide(TestAgendaItem):
+class TestDecideAgendaItem(IntegrationTestCase):
+
+    features = ('meeting',)
 
     def test_meeting_is_held_when_deciding_an_agendaitem(self):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible)
 
-        item.decide()
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
 
-        self.assertEquals('held', self.meeting.workflow_state)
+        self.assertEquals('held', self.meeting.model.workflow_state)
 
     def test_decide_an_decided_agenda_item_is_ignored(self):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
-        item.decide()
+        self.login(self.committee_responsible)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
 
-        item.decide()
+        agenda_item.decide()
+        agenda_item.decide()
 
     @browsing
-    def test_decide_agenda_item(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
+    def test_decide_proposal_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id))
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
 
-        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
+        self.assertEquals('decided', agenda_item.workflow_state)
+        self.assertEquals([{u'message': u'Agenda Item decided and excerpt '
+                                        u'generated.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_decide_ad_hoc_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'Gugus')
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEquals('decided', agenda_item.workflow_state)
         self.assertEquals([{u'message': u'Agenda Item decided.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
 
     @browsing
-    def test_decide_proposal_agenda_item(self, browser):
-        proposal = self.setup_proposal()
-
-        # schedule
-        view = 'unscheduled_proposals/{}/schedule'.format(
-            proposal.load_model().proposal_id)
-
-        browser.login().open(self.meeting_wrapper, view=view)
-
-        item = AgendaItem.query.first()
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item.agenda_item_id),
-            data={'_authenticator': createToken()})
-
-        self.assertEquals('decided', AgendaItem.query.first().workflow_state)
-        self.assertEquals(
-            [{u'message': u'Agenda Item decided and excerpt generated.',
-              u'messageClass': u'info',
-              u'messageTitle': u'Information'}],
-            browser.json.get('messages'))
-
-    @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/12345/decide')
+        self.login(self.committee_responsible, browser)
 
-    @browsing
-    def test_update_agenda_item_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
-
-        self.meeting.workflow_state = 'closed'
-
-        with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/decide'.format(item.agenda_item_id))
+        with browser.expect_http_error(404):
+            browser.open(self.meeting,
+                         view='agenda_items/12345/decide')
 
     @browsing
     def test_redirect_to_current_view_when_meeting_has_to_be_decided_as_well(self, browser):
-        item1 = create(Builder('agenda_item')
-                       .having(title=u'foo', meeting=self.meeting))
-        item2 = create(Builder('agenda_item')
-                       .having(title=u'foo', meeting=self.meeting))
+        self.login(self.committee_responsible, browser)
+        agenda_item_1 = self.schedule_ad_hoc(self.meeting, 'Gugus')
+        agenda_item_2 = self.schedule_ad_hoc(self.meeting, 'Kux')
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item1.agenda_item_id))
-        self.assertEquals(self.meeting_wrapper.absolute_url(),
+        browser.open(self.agenda_item_url(agenda_item_1, 'decide'),
+                     data={'_authenticator': createToken()})
+        self.assertEquals(self.meeting.absolute_url(),
                           browser.json.get('redirectUrl'))
 
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/decide'.format(item2.agenda_item_id))
-
+        browser.open(self.agenda_item_url(agenda_item_2, 'decide'),
+                     data={'_authenticator': createToken()})
         self.assertEquals(None, browser.json.get('redirectUrl'))
 
-    def login_as_user_without_dossier_permission(self, browser):
-        create(Builder('user').named('Hugo', 'Boss'))
-        api.user.grant_roles(
-            username=u'hugo.boss', obj=self.committee,
-            roles=['Contributor', 'Editor', 'Reader', 'CommitteeResponsible'])
-        transaction.commit()
 
-        self.login(user_id=u'hugo.boss')
-        browser.login(username=u'hugo.boss')
-        with browser.expect_unauthorized():
-            browser.open(self.dossier)
+class TestReopenAgendaItem(IntegrationTestCase):
 
-
-class TestAgendaItemReopen(TestAgendaItem):
+    features = ('meeting',)
 
     @browsing
     def test_reopen_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
 
-        proposal = create(Builder('proposal')
-                          .within(self.dossier)
-                          .having(committee=self.committee.load_model())
-                          .as_submitted())
-        proposal.load_model().workflow_state = 'decided'
-
-        item = create(Builder('agenda_item').having(
-            title=u'foo',
-            meeting=self.meeting,
-            workflow_state='decided',
-            proposal=proposal.load_model()))
-
-        browser.login().open(
-            self.meeting_wrapper,
-            view='agenda_items/{}/reopen'.format(item.agenda_item_id),
-            data={'_authenticator': createToken()})
+        browser.open(self.agenda_item_url(agenda_item, 'reopen'),
+                     data={'_authenticator': createToken()})
 
         self.assertEquals(AgendaItem.STATE_REVISION,
-                          AgendaItem.query.first().get_state())
+                          agenda_item.get_state())
         self.assertEquals(Proposal.STATE_DECIDED,
-                          Proposal.query.first().get_state())
+                          agenda_item.proposal.get_state())
         self.assertEquals([{u'message': u'Agenda Item successfully reopened.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
@@ -404,68 +293,100 @@ class TestAgendaItemReopen(TestAgendaItem):
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/12345/reopen')
+        self.login(self.committee_responsible, browser)
+
+        with browser.expect_http_error(404):
+            browser.open(self.meeting,
+                         view='agenda_items/98765/reopen')
 
     @browsing
     def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
-        item.decide()
-
-        self.meeting.workflow_state = 'closed'
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/reopen'.format(item.agenda_item_id))
+            browser.open(self.agenda_item_url(agenda_item, 'reopen'),
+                         data={'_authenticator': createToken()})
 
 
-class TestAgendaItemRevise(TestAgendaItem):
+class TestReviseAgendaItem(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_revise_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        agenda_item.reopen()
+
+        browser.open(self.agenda_item_url(agenda_item, 'revise'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEquals(AgendaItem.STATE_DECIDED,
+                          agenda_item.get_state())
+        self.assertEquals(Proposal.STATE_DECIDED,
+                          agenda_item.proposal.get_state())
+        self.assertEquals([{u'message': u'Agenda Item revised successfully.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
 
     @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
-        with browser.expect_http_error(reason='Not Found'):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/12345/revise')
+        self.login(self.committee_responsible, browser)
+
+        with browser.expect_http_error(404):
+            browser.open(self.meeting,
+                         view='agenda_items/98761/revise')
 
     @browsing
     def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        item = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting))
-        item.decide()
-
-        self.meeting.workflow_state = 'closed'
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(
-                self.meeting_wrapper,
-                view='agenda_items/{}/revise'.format(item.agenda_item_id))
+            browser.open(self.agenda_item_url(agenda_item, 'revise'),
+                         data={'_authenticator': createToken()})
 
 
-class TestAgendaItemUpdateOrder(TestAgendaItem):
+class TestUpdateAgendaItemOrder(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_update_agenda_item_order(self, browser):
-        item1 = create(Builder('agenda_item').having(
-            title=u'foo', meeting=self.meeting, sort_order=1))
-        item2 = create(Builder('agenda_item').having(
-            title=u'bar', meeting=self.meeting, sort_order=2))
-        item3 = create(Builder('agenda_item').having(
-            title=u'bar', meeting=self.meeting, sort_order=3))
+        self.login(self.committee_responsible, browser)
+        agenda_item_1 = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        agenda_item_2 = self.schedule_ad_hoc(
+            self.meeting, u'Zw\xf6i')
+        agenda_item_3 = self.schedule_ad_hoc(
+            self.meeting, u'Fine')
 
-        self.assertEqual(1, item1.sort_order)
-        self.assertEqual(2, item2.sort_order)
-        self.assertEqual(3, item3.sort_order)
+        self.assertEqual(1, agenda_item_1.sort_order)
+        self.assertEqual(2, agenda_item_2.sort_order)
+        self.assertEqual(3, agenda_item_3.sort_order)
 
-        browser.login().open(self.meeting_wrapper,
-                             view='agenda_items/update_order',
-                             data={"sortOrder": json.dumps([1, 3, 2])})
+        new_order = [
+            agenda_item_1.agenda_item_id,
+            agenda_item_3.agenda_item_id,
+            agenda_item_2.agenda_item_id,
+        ]
+        browser.open(self.meeting,
+                     view='agenda_items/update_order',
+                     data={"sortOrder": json.dumps(new_order)})
 
-        self.assertEqual(1, AgendaItem.get(1).sort_order)
-        self.assertEqual(3, AgendaItem.get(2).sort_order)
-        self.assertEqual(2, AgendaItem.get(3).sort_order)
+        self.assertEqual(1, agenda_item_1.sort_order)
+        self.assertEqual(3, agenda_item_2.sort_order)
+        self.assertEqual(2, agenda_item_3.sort_order)
 
         self.assertEquals([{u'message': u'Agenda Item order updated.',
                             u'messageClass': u'info',
@@ -473,69 +394,81 @@ class TestAgendaItemUpdateOrder(TestAgendaItem):
                           browser.json.get('messages'))
 
     @browsing
-    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'closed'
+    def test_raise_forbidden_when_meeting_is_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
+            browser.open(self.meeting,
                                  view='agenda_items/update_order')
 
     @browsing
-    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'closed'
+    def test_raise_forbidden_when_meeting_is_held(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.hold()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
+            browser.open(self.meeting,
                                  view='agenda_items/update_order')
 
 
-class TestScheduleParagraph(TestAgendaItem):
+class TestScheduleParagraph(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
     def test_schedule_paragraph(self, browser):
-        browser.login().open(self.meeting_wrapper,
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting,
                              view='agenda_items/schedule_paragraph',
-                             data={'title': 'Abschnitt A'})
+                             data={'title': u'Abschnitt A'})
 
-        agenda_items = Meeting.get(self.meeting.meeting_id).agenda_items
-
+        agenda_items = self.meeting.model.agenda_items
         self.assertEquals(1, len(agenda_items))
         self.assertEqual(u'Abschnitt A', agenda_items[0].title)
         self.assertTrue(agenda_items[0].is_paragraph)
 
     @browsing
-    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'held'
+    def test_raise_forbidden_when_meeting_is_held(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.hold()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/schedule_paragraph')
+            browser.open(self.meeting,
+                                 view='agenda_items/schedule_paragraph',
+                                 data={'title': u'Abschnitt A'})
 
     @browsing
-    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'closed'
+    def test_raise_forbidden_when_meeting_is_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
-                                 view='agenda_items/schedule_paragraph')
+            browser.open(self.meeting,
+                                 view='agenda_items/schedule_paragraph',
+                                 data={'title': u'Abschnitt A'})
 
 
-class TestScheduleText(TestAgendaItem):
+class TestScheduleText(IntegrationTestCase):
+
+    features = ('meeting',)
 
     @browsing
-    def test_raise_forbidden_when_agenda_list_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'held'
+    def test_raise_forbidden_when_meeting_is_held(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.hold()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
+            browser.open(self.meeting,
                                  view='agenda_items/schedule_text',
                                  data={'title': u'Baugesuch Herr Maier'})
 
     @browsing
-    def test_raise_forbidden_when_meeting_is_not_editable(self, browser):
-        self.meeting.workflow_state = 'closed'
+    def test_raise_forbidden_when_meeting_is_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
-            browser.login().open(self.meeting_wrapper,
-                                     view='agenda_items/schedule_text',
-                                     data={'title': u'Baugesuch Herr Maier'})
+            browser.open(self.meeting,
+                                 view='agenda_items/schedule_text',
+                                 data={'title': u'Baugesuch Herr Maier'})
