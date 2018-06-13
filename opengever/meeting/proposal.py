@@ -294,8 +294,11 @@ class SubmittedProposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['submitted-pending'])
 
-    def get_source_admin_unit_id(self):
+    def get_sync_admin_unit_id(self):
         return self.load_model().admin_unit_id
+
+    def get_sync_target_path(self):
+        return self.load_model().physical_path
 
     def is_editable(self):
         """A proposal in a meeting/committee is editable when submitted but not
@@ -457,6 +460,12 @@ class Proposal(ProposalBase):
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
 
+    def get_sync_admin_unit_id(self):
+        return self.load_model().submitted_admin_unit_id
+
+    def get_sync_target_path(self):
+        return self.load_model().submitted_physical_path
+
     def _after_model_created(self, model_instance):
         IHistory(self).append_record(u'created')
 
@@ -612,4 +621,4 @@ class Proposal(ProposalBase):
 
     def is_submitted(self):
         model = self.load_model()
-        return bool(model.submitted_physical_path)
+        return model.is_submitted()

@@ -11,6 +11,7 @@ class SomethingWithWorkflow(object):
         self.workflow_state = initial_state
         self.history = []
 
+
 class Retract(Transition):
 
     def __init__(self):
@@ -20,6 +21,7 @@ class Retract(Transition):
         super(Retract, self).execute(obj, model, **kwargs)
         if reason:
             model.history.append(reason)
+
 
 class TestUnitWorkflow(TestCase):
 

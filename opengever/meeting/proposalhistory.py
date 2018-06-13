@@ -66,18 +66,8 @@ class ProposalHistory(object):
         record.append_to(history)
 
         if record.needs_syncing:
-            if isinstance(self.context, SubmittedProposal):
-                # sync from the submitted side to the dossier
-                path = self.context.load_model().physical_path
-                admin_unit_id = self.context.get_source_admin_unit_id()
-
-            elif isinstance(self.context, Proposal) and self.context.is_submitted():
-                # sync from the dossier to the submitted side
-                path = self.context.load_model().submitted_physical_path
-                admin_unit_id = self.context.get_committee_admin_unit().id()
-
-            else:
-                return record
+            path = self.context.get_sync_target_path()
+            admin_unit_id = self.context.get_sync_admin_unit_id()
 
             request_data = {'data': advancedjson.dumps({
                 'timestamp': record.timestamp,

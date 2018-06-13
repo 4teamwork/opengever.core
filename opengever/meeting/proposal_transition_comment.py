@@ -1,5 +1,7 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.meeting import _
-from opengever.meeting.browser.proposaltransitions import ProposalTransitionController
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
 from Products.CMFPlone import PloneMessageFactory as PMF
@@ -9,6 +11,7 @@ from z3c.form import form
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope import schema
 from zope.interface import Interface
 from zope.interface import provider
@@ -18,7 +21,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 @provider(IContextSourceBinder)
-def getTransitionVocab(context):
+def get_transition_vocab(context):
     transitions = []
     for transition in context.get_transitions():
         transitions.append(SimpleVocabulary.createTerm(
@@ -34,7 +37,7 @@ class IProposalTransitionCommentFormSchema(Interface):
     """
     transition = schema.Choice(
         title=_("label_transition", default="Transition"),
-        source=getTransitionVocab,
+        source=get_transition_vocab,
         required=False,
         )
 
@@ -52,12 +55,51 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
 
+    @classmethod
+    def url_for(cls, context, transition):
+        return '%s/addtransitioncomment?form.widgets.transition=%s' % (
+            context.absolute_url(),
+            transition)
+
+    def execute_transition(self, transition, text=None):
+        if self.context.contains_checked_out_documents():
+            msg = _(u'error_must_checkin_documents_for_transition',
+                    default=u'Cannot change the state because the proposal contains checked'
+                    u' out documents.')
+            api.portal.show_message(message=msg,
+                                    request=self.request,
+                                    type='error')
+            return self.redirect()
+
+        if not self.is_valid_transition(transition):
+            raise NotFound
+        self.context.execute_transition(transition, text)
+        if transition == 'submitted-pending':
+            return self.redirect(to_parent=True)
+        else:
+            return self.redirect()
+
+    def is_valid_transition(self, transition_name):
+        if not api.user.has_permission('Modify portal content', obj=self.context):
+            return False
+
+        return self.context.can_execute_transition(transition_name)
+
+    def redirect(self, to_parent=False):
+        if to_parent:
+            url = aq_parent(aq_inner(self.context)).absolute_url()
+        else:
+            url = self.context.absolute_url()
+        response = self.request.RESPONSE
+        if response.status != 302:  # only redirect if not already redirecting
+            return response.redirect(url)
+
     @property
     def label(self):
         title = self.context.Title().decode('utf-8')
         transition = self.context.workflow.get_transition(self.transition)
         transition_title = translate(transition.title, domain='plone',
-                               context=self.request)
+                                     context=self.request)
         return u'{}: {}'.format(title, transition_title)
 
     @property
@@ -87,8 +129,7 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
 
         transition = data['transition']
         comment = data.get('text')
-        controller = ProposalTransitionController(self.context, self.request)
-        return controller.execute_transition(transition, comment)
+        return self.execute_transition(transition, comment)
 
     @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
                              name='cancel', )
