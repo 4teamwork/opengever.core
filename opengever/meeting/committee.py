@@ -117,13 +117,6 @@ class ICommittee(model.Schema):
         source=repository_folder_source,
         required=True)
 
-    ad_hoc_template = RelationChoice(
-        title=_('label_ad_hoc_template',
-                default=u'Ad hoc agenda item template'),
-        source=proposal_template_source,
-        required=False,
-    )
-
     paragraph_template = RelationChoice(
         title=_('label_paragraph_template',
                 default=u'Paragraph template'),
@@ -144,6 +137,13 @@ class ICommittee(model.Schema):
         required=False,
         default=None,
         missing_value=None)
+
+    ad_hoc_template = RelationChoice(
+        title=_('label_ad_hoc_template',
+                default=u'Ad hoc agenda item template'),
+        source=proposal_template_source,
+        required=False,
+    )
 
     form.widget('allowed_ad_hoc_agenda_item_templates', CheckBoxFieldWidget)
     allowed_ad_hoc_agenda_item_templates = schema.List(
