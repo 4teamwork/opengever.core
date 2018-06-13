@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 08:37+0000\n"
+"POT-Creation-Date: 2018-06-13 12:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,11 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/activity/browser/listing.py
 msgid "column_title"
+msgstr ""
+
+#. Default: "Committee responsible"
+#: ./opengever/activity/roles.py
+msgid "committee_responsible"
 msgstr ""
 
 #. Default: "Created"
@@ -136,6 +141,11 @@ msgstr ""
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/center.py
 msgid "msg_error_not_notified"
+msgstr ""
+
+#. Default: "Proposal issuer"
+#: ./opengever/activity/roles.py
+msgid "proposal_issuer"
 msgstr ""
 
 #. Default: "Records Manager"

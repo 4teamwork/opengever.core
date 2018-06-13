@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 08:37+0000\n"
+"POT-Creation-Date: 2018-06-13 12:06+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,11 @@ msgstr "Typ"
 #: ./opengever/activity/browser/listing.py
 msgid "column_title"
 msgstr "Titel"
+
+#. Default: "Committee responsible"
+#: ./opengever/activity/roles.py
+msgid "committee_responsible"
+msgstr "Gremium verantwortlicher"
 
 #. Default: "Created"
 #: ./opengever/activity/browser/listing.py
@@ -137,6 +142,11 @@ msgstr "Alle Benachrichtigungen"
 #: ./opengever/activity/center.py
 msgid "msg_error_not_notified"
 msgstr "Während dem Erzeugen der Benachrichtigung ist ein Fehler aufgetreten. Die Benachrichtigung wurde deshalb nicht oder nur zum Teil ausgelöst."
+
+#. Default: "Proposal issuer"
+#: ./opengever/activity/roles.py
+msgid "proposal_issuer"
+msgstr "Antragssteller"
 
 #. Default: "Records Manager"
 #: ./opengever/activity/roles.py
