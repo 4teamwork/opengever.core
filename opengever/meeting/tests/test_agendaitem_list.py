@@ -1,9 +1,12 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import IntegrationTestCase
+import pytz
 
 
 class TestAgendaItemList(IntegrationTestCase):
@@ -67,7 +70,8 @@ class TestAgendaItemList(IntegrationTestCase):
         self.schedule_proposal(self.meeting, self.proposal)
         self.schedule_ad_hoc(self.meeting, 'ad-hoc')
 
-        browser.open(self.meeting, view='agenda_item_list/as_json')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
 
         expected_agenda_items = [
             {u'attachments': [{u'filename': u'vertragsentwurf.docx',
@@ -111,7 +115,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         expected_metadata = {
             u'committee': {u'name': u'Rechnungspr\xfcfungskommission'},
-            u'document': {u'generated': u'12.06.2018'},
+            u'document': {u'generated': u'10.11.2017'},
             u'mandant': {u'name': u'Hauptmandant'},
             u'meeting': {u'date': u'12.09.2016',
                          u'end_time': u'07:00 PM',
