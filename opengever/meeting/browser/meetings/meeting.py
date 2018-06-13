@@ -15,7 +15,7 @@ from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.vocabulary import ProposalTemplatesForCommitteeVocabulary
+from opengever.meeting.vocabulary import AdHocAgendaItemTemplatesForCommitteeVocabulary
 from operator import itemgetter
 from path import Path
 from plone import api
@@ -455,12 +455,12 @@ class MeetingView(BrowserView):
         return None
 
     @property
-    def has_many_proposal_templates(self):
-        return bool(len(self.proposal_templates) > 1)
+    def has_many_ad_hoc_agenda_item_templates(self):
+        return bool(len(self.ad_hoc_agenda_item_templates) > 1)
 
     @property
-    def proposal_templates(self):
-        vocabulary_factory = ProposalTemplatesForCommitteeVocabulary()
+    def ad_hoc_agenda_item_templates(self):
+        vocabulary_factory = AdHocAgendaItemTemplatesForCommitteeVocabulary()
         committee = self.context.aq_parent
         vocabulary = vocabulary_factory(committee)
 
@@ -469,7 +469,7 @@ class MeetingView(BrowserView):
             templates = [
                 term.value
                 for term in vocabulary
-                if term.token in committee.allowed_proposal_templates
+                if term.token in committee.allowed_ad_hoc_agenda_item_templates
             ]
         else:
             templates = [term.value

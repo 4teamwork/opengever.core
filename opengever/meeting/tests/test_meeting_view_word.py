@@ -220,7 +220,7 @@ class TestWordMeetingView(IntegrationTestCase):
         browser.open(self.meeting)
         selected_templates = [
             template
-            for template in browser.css('#ad-hoc-agenda-item-proposal-templates input[name=selected_proposal_template]')
+            for template in browser.css('#ad-hoc-agenda-item-proposal-templates input[name=selected_ad_hoc_agenda_item_template]')
             if template.checked
         ]
         assert 1 == len(selected_templates)
@@ -234,7 +234,7 @@ class TestWordMeetingView(IntegrationTestCase):
         self.assertFalse(self.committee.allowed_proposal_templates)
 
         browser.open(self.committee, view='edit')
-        browser.fill({'Allowed proposal templates': u'Freitext Traktandum'}).save()
+        browser.fill({'Allowed ad-hoc agenda item templates': u'Freitext Traktandum'}).save()
 
         browser.open(self.meeting)
         self.assertEquals(
