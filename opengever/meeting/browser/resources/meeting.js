@@ -901,6 +901,87 @@
 
   }
 
+  function CommitteeController() {
+
+    Controller.call(this);
+
+    var title = $("#form-widgets-title");
+    var autoUpdate = true;
+    var initialTitle = title.val();
+
+    var formatDate = function(date) { return $.datepicker.formatDate("dd.mm.yy", date); };
+
+    var applyTimezone = function(date) {
+      return new Date(date.setTime(date.getTime() + (date.getTimezoneOffset() * 60 * 1000)));
+    };
+
+    function applyDate(date) {
+      if (!autoUpdate) {
+        return false;
+      }
+      title.val(initialTitle + ", " + formatDate(date));
+      return true;
+    }
+
+    this.trackDate = function(target, event) { applyDate(applyTimezone(event.date)); };
+
+    this.unbindDate = function() { autoUpdate = false; };
+
+    this.events = [
+      {
+        method: "changeDate",
+        target: "#formfield-form-widgets-start .spv-datetime-widget",
+        callback: this.trackDate
+      },
+      {
+        method: "input",
+        target: "#form-widgets-title",
+        callback: this.unbindDate
+      }
+    ];
+
+    this.init();
+    applyDate(new Date());
+
+  }
+
+  function asyncZipDownloadHandler() {
+
+    var generateLink = $('.meeting-zip .document-actions .generate');
+    var downloadLink = $('.meeting-zip .document-actions .download');
+
+    function poller(processId){
+      var url = generateLink.data('pollurl');
+
+      $.get(url, {process_id: processId, output_json: true}).done(function(response){
+        var container = $('.async-zip-generation');
+        $('.progress', container).html(response.progress);
+        if (response.progress !== 100)  {
+          setTimeout(function(){ poller(processId); }, 500);
+        } else {
+          generateLink.removeClass('fa-spin');
+          downloadLink.show().attr('href', downloadLink.attr('href') + '&process_id=' + processId);
+          $('.meeting-zip .document-created.zip').hide();
+        }
+      });
+    }
+
+    generateLink.on('click', function(event){
+      event.stopPropagation();
+      event.preventDefault();
+      $.get($(this).attr('href')).done(function(response){
+        if (response.messages){
+          MessageFactory.getInstance().shout(response.messages);
+        }
+        else {
+          downloadLink.hide();
+          generateLink.addClass('fa-spin');
+          poller(response.process_id);
+        }
+      });
+    });
+  }
+
   $(function() {
 
     if($("#opengever_meeting_meeting").length) {
@@ -924,6 +1005,8 @@
       notifyContainer.onPin(function() { $(".notifyjs-corner").addClass("sticky"); });
       notifyContainer.onRelease(function() { $(".notifyjs-corner").removeClass("sticky"); });
     });
+
+    asyncZipDownloadHandler();
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));
+}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars, window.MessageFactory));

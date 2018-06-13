@@ -73,6 +73,7 @@ Changelog
 - Fix content displayed in the templatefolder's gallery view. [phgross]
 - Add Subject index to solr. [phgross]
 - Add new task transition in-progress to cancel. [phgross]
+- Impement async zip export for meetings [mathias.leimgruber]
 - Set document date of generated journal pdfs to dossier end-date. [deiferni]
 - Make sure IE 11 does not cache favorites fetch requets. [phgross]
 - Enable favorites feature by default. [phgross]

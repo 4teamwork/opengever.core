@@ -237,17 +237,6 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.meeting/proposal.js"
-      inline="False"
-      insert-after="++resource++opengever.base/SelectAutocomplete.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.base/base.js"
       inline="False"
       insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"

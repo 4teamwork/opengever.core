@@ -84,6 +84,14 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="async-export-meeting-zip"
+      class=".zipexport.AsyncMeetingZipExport"
+      permission="zope2.View"
+      allowed_attributes="processing result completed download"
+      />
+
+  <browser:page
       for="opengever.repository.interfaces.IRepositoryFolder"
       name="add-meeting-dossier"
       class=".meeting.AddMeetingDossierView"
