@@ -468,7 +468,7 @@
               </div>
 
               <table id="ad-hoc-agenda-item-proposal-templates"
-                  tal:condition="view/has_many_proposal_templates">
+                  tal:condition="view/has_many_ad_hoc_agenda_item_templates">
                 <thead>
                   <tr>
                     <th></th>
@@ -478,8 +478,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr tal:repeat="template view/proposal_templates">
-                    <td><input type="radio" name="selected_proposal_template"
+                  <tr tal:repeat="template view/ad_hoc_agenda_item_templates">
+                    <td><input type="radio" name="selected_ad_hoc_agenda_item_template"
                                tal:attributes="checked python: template['selected'] and 'checked' or None;
                                                value template/value" /></td>
                     <td tal:content="template/title"></td>

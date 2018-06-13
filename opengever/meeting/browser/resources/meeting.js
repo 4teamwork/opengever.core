@@ -849,7 +849,7 @@
 
     this.addText = function() {
       var template_id = $(
-          "#ad-hoc-agenda-item-proposal-templates input[name=selected_proposal_template]:checked"
+          "#ad-hoc-agenda-item-proposal-templates input[name=selected_ad_how_agenda_item_template]:checked"
       ).attr('value');
       var input = $("#schedule-text");
       var button = $(".schedule-text");

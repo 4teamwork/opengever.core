@@ -145,6 +145,20 @@ class ICommittee(model.Schema):
         default=None,
         missing_value=None)
 
+    form.widget('allowed_ad_hoc_agenda_item_templates', CheckBoxFieldWidget)
+    allowed_ad_hoc_agenda_item_templates = schema.List(
+        title=_(u'label_allowed_ad_hoc_agenda_item_templates',
+                default=u'Allowed ad-hoc agenda item templates'),
+        description=_(u'help_allowed_ad_hoc_agenda_item_templates',
+                      default=u'Select the ad-hoc agenda item templates'
+                      u' allowed for this commitee, or select no'
+                      u' templates for allowing all templates.'),
+        value_type=schema.Choice(
+            source='opengever.meeting.ProposalTemplatesVocabulary'),
+        required=False,
+        default=None,
+        missing_value=None)
+
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass

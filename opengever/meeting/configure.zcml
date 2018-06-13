@@ -107,6 +107,11 @@
   <adapter factory=".docprops.ProposalDocPropertyProvider" />
 
   <utility
+      factory=".vocabulary.AdHocAgendaItemTemplatesForCommitteeVocabulary"
+      name="opengever.meeting.AdHocAgendaItemTemplatesForCommitteeVocabulary"
+      />
+
+  <utility
       factory=".vocabulary.ProposalTemplatesForCommitteeVocabulary"
       name="opengever.meeting.ProposalTemplatesForCommitteeVocabulary"
       />
