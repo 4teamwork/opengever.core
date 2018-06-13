@@ -972,7 +972,7 @@ msgstr "Etat de validité"
 #. Default: "Issuer"
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
-msgstr ""
+msgstr "Mandant"
 
 #. Default: "Last Meeting:"
 #: ./opengever/meeting/browser/templates/committee.pt
