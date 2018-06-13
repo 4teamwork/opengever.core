@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-05 09:58+0000\n"
+"POT-Creation-Date: 2018-06-13 05:17+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -265,7 +265,7 @@ msgstr "Dokument neu generieren"
 msgid "action_generate_excerpt"
 msgstr "Protokollauszug generieren"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_generate_zip"
 msgstr "ZIP-Datei von der kompletten Sitzung generieren."
 
@@ -304,7 +304,7 @@ msgstr "Sitzung wieder öffnen"
 msgid "action_return_excerpt"
 msgstr "Protokollauszug zurücksenden"
 
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_zip_download"
 msgstr "ZIP-Datei herunterladen"
 
@@ -1006,7 +1006,7 @@ msgid "label_meeting_has_agenda_items"
 msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
 
 #. Default: "Komplettes ZIP vom Meeting"
-#: ./opengever/meeting/browser/meetings/templates/meeting-word.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_meeting_zip_file"
 msgstr "ZIP-Datei herunterladen"
 
@@ -1271,6 +1271,11 @@ msgstr "Die Änderungen konnten nicht gespeichert werden, das Protokoll wurde in
 msgid "missing_ad_hoc_template"
 msgstr "Es konnte keine Vorlage für ein Traktandum gefunden werden."
 
+#. Default: "The agenda-list document is outdated, please update."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_agendalist_outdated"
+msgstr "Die Traktandenliste ist nicht aktuell, bitte aktualisieren Sie die Traktandenliste."
+
 #. Default: "Choose a meaningful title to distinguish the created excerpts better."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_confirm_create_excerpt_dialog"
@@ -1340,6 +1345,11 @@ msgstr "Der Antrag wurde wieder eröffnet."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_proposal_submitted"
 msgstr "Antrag erfolgreich eingereicht."
+
+#. Default: "The Protocol is outdated, please update."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_protocol_outdated"
+msgstr "Das Protokol ist nicht aktuell, bitte aktualisieren Sie das Protokol."
 
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
