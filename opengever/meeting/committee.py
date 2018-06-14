@@ -26,6 +26,8 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
@@ -158,6 +160,26 @@ class ICommittee(model.Schema):
         required=False,
         default=None,
         missing_value=None)
+
+    @invariant
+    def default_template_is_in_allowed_templates(data):
+        """ Validate ad-hoc agenda item templates
+        """
+
+        default_template = data.ad_hoc_template
+        allowed_templates = data.allowed_ad_hoc_agenda_item_templates
+
+        if default_template is None:
+            return
+
+        if not len(allowed_templates):
+            return
+
+        if default_template.getId() not in allowed_templates:
+            raise Invalid(_(
+                u'error_default_template_is_in_allowed_templates',
+                default=u'The default ad-hoc agenda item template has to be '
+                        u'amongst the allowed ones for this committee.'))
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
