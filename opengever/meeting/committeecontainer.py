@@ -1,3 +1,4 @@
+from opengever.base import _ as bmf
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.meeting import _
 from opengever.meeting.model import Member
@@ -12,6 +13,23 @@ from z3c.relationfield.schema import RelationChoice
 class ICommitteeContainer(model.Schema):
     """Base schema for a the committee container.
     """
+
+    model.fieldset(
+        u'common',
+        label=bmf(u'fieldset_common', default=u'Common'),
+        fields=[
+            u'protocol_header_template',
+            u'protocol_suffix_template',
+            u'agenda_item_header_template',
+            u'agenda_item_suffix_template',
+            u'excerpt_header_template',
+            u'excerpt_suffix_template',
+            u'agendaitem_list_template',
+            u'toc_template',
+            u'ad_hoc_template',
+            u'paragraph_template',
+        ],
+    )
 
     protocol_header_template = RelationChoice(
         title=_('label_protocol_header_template',

@@ -126,7 +126,7 @@ class TestCommitteeContainer(IntegrationTestCase):
 
         browser.open()
         factoriesmenu.add('Committee Container')
-        self.assertEquals(fields, browser.css('form#form > div.field > label').text)
+        self.assertEquals(fields, filter(len, browser.css('form#form div.field > label').text))
 
         browser.open(self.committee_container, view='edit')
-        self.assertEquals(fields, browser.css('form#form > div.field > label').text)
+        self.assertEquals(fields, filter(len, browser.css('form#form div.field > label').text))

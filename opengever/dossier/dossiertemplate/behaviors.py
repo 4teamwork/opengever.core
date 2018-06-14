@@ -105,6 +105,14 @@ class DossierTemplateNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
 
 class IRestrictAddableDossierTemplates(model.Schema):
 
+    model.fieldset(
+        u'common',
+        label=base_mf(u'fieldset_common', default=u'Common'),
+        fields=[
+            u'addable_dossier_templates',
+        ],
+    )
+
     addable_dossier_templates = RelationList(
         title=_(u'label_addable_dossier_templates',
                 default=u'Addable dossier templates'),
