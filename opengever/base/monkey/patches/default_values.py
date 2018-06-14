@@ -246,20 +246,39 @@ class PatchZ3CFormChangedField(MonkeyPatch):
 
 
 class PatchDexterityDefaultAddForm(MonkeyPatch):
-    """Patch DefaultAddForm.update() to have the request provide
-    IDuringContentCreation while content creation is in progress.
+    """Patch DefaultAddForm:
+
+    - Patch update() to have the request provide IDuringContentCreation
+      while content creation is in progress.
+    - Patch create() to make sure default values are set when creating content
+      via z3c.form add forms. This affects:
+      - Fields where the current user lacks write permission
+      - Fields omitted from the form
+      - Fields whose widgets are in DISPLAY_MODE even in AddForms
     """
 
     def __call__(self):
+        from Acquisition import aq_inner
+        from opengever.base.default_values import set_default_values
 
         def update(self):
             alsoProvides(self.request, IDuringContentCreation)
             return original_update(self)
 
+        def create(self, data):
+            container = aq_inner(self.context)
+            obj = original_create(self, data)
+            set_default_values(obj, container, data)
+            return obj
+
         from plone.dexterity.browser.add import DefaultAddForm
         locals()['__patch_refs__'] = False
+
         original_update = DefaultAddForm.update
         self.patch_refs(DefaultAddForm, 'update', update)
+
+        original_create = DefaultAddForm.create
+        self.patch_refs(DefaultAddForm, 'create', create)
 
 
 class PatchBuilderCreate(MonkeyPatch):
