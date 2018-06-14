@@ -9,6 +9,8 @@ from ftw.testing import freeze
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.core.testing import toggle_feature
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
+from opengever.private import enable_opengever_private
+from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import setRoles
@@ -239,6 +241,23 @@ PROPOSAL_MISSING_VALUES = {
     'relatedItems': [],
     'predecessor_proposal': None,
     'date_of_submission': None,
+}
+
+
+PRIVATEFOLDER_REQUIREDS = {
+}
+PRIVATEFOLDER_DEFAULTS = {
+    'allow_add_businesscase_dossier': True,
+}
+PRIVATEFOLDER_FORM_DEFAULTS = {}
+PRIVATEFOLDER_MISSING_VALUES = {
+    'addable_dossier_types': None,
+    'description': '',
+    'former_reference': None,
+    'location': None,
+    'referenced_activity': None,
+    'valid_from': None,
+    'valid_until': None,
 }
 
 
@@ -924,5 +943,36 @@ class TestProposalDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_z3c_form_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+
+class TestPrivateFolderDefaults(TestDefaultsBase):
+    """Test private folders come with expected default values."""
+
+    portal_type = 'opengever.private.folder'
+
+    requireds = PRIVATEFOLDER_REQUIREDS
+    type_defaults = PRIVATEFOLDER_DEFAULTS
+    form_defaults = PRIVATEFOLDER_FORM_DEFAULTS
+    missing_values = PRIVATEFOLDER_MISSING_VALUES
+
+    def setUp(self):
+        super(TestPrivateFolderDefaults, self).setUp()
+        enable_opengever_private()
+
+        self.private_root = create(
+            Builder('private_root')
+            .titled(u'Private')
+        )
+
+    def test_private_folder_defaults(self):
+        # This will trigger member folder creation by MembershipTool
+        create_members_folder(self.private_root)
+
+        private_folder = self.portal.private[api.user.get_current().id]
+
+        persisted_values = get_persisted_values_for_obj(private_folder)
+        expected = self.get_type_defaults()
 
         self.assertDictEqual(expected, persisted_values)

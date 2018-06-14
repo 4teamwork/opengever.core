@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Make sure members folders (private roots) get persisted default values. [lgraf]
 - Make proposal title defaultFactory more robust. [lgraf]
 - Fix default value persistence for title and description fields. [lgraf]
 - Ensure default values get set by patching DX DefaultAddForm.create(). [lgraf]
