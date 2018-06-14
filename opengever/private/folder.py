@@ -1,3 +1,4 @@
+from opengever.base.default_values import set_default_values
 from opengever.ogds.base.actor import Actor
 from opengever.private.interfaces import IPrivateContainer
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
@@ -32,3 +33,8 @@ class PrivateFolder(Container):
         """
         api.user.grant_roles(username=self.getOwner().getId(), obj=self,
                              roles=PRIVATE_FOLDER_DEFAULT_ROLES)
+
+        # MembershipTool.createMemberarea() uses yet another way for content
+        # creation, that doesn't properly set default values. We therefore
+        # apply them here after creation.
+        set_default_values(self, self.aq_parent, {})
