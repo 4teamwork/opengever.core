@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]
 - Make proposal title defaultFactory more robust. [lgraf]
 - Fix default value persistence for title and description fields. [lgraf]
