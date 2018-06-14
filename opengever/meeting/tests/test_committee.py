@@ -102,6 +102,23 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(self.proposal_template,
                          self.committee.get_ad_hoc_template())
 
+    @browsing
+    def test_not_allowed_default_ad_hoc_template_is_rejected(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Allowed ad-hoc agenda item templates': u'Freitext Traktandum'})
+        browser.fill({'Ad hoc agenda item template': self.proposal_template})
+        browser.find('Save').click()
+        self.assertItemsEqual(['There were some errors.'],
+                              statusmessages.error_messages())
+
+        invariance_errors = browser.css('#content-core div.error').text
+        self.assertItemsEqual(
+            [u'The default ad-hoc agenda item template has to be amongst the '
+             u'allowed ones for this committee.'],
+            invariance_errors)
+
     def test_get_ad_hoc_template_returns_committee_template_if_available(self):
         self.login(self.committee_responsible)
         self.committee.ad_hoc_template = self.as_relation_value(
