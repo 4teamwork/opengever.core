@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-13 14:30+0000\n"
+"POT-Creation-Date: 2018-06-14 19:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -602,6 +602,11 @@ msgstr ""
 #. Default: "Proposal must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "empty_proposal"
+msgstr ""
+
+#. Default: "The default ad-hoc agenda item template has to be amongst the allowed ones for this committee."
+#: ./opengever/meeting/committee.py
+msgid "error_default_template_is_in_allowed_templates"
 msgstr ""
 
 #. Default: "Cannot change the state because the proposal contains checked out documents."
