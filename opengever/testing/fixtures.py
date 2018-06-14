@@ -836,6 +836,16 @@ class OpengeverContentFixture(object):
                 proposal.load_model().submitted_physical_path.encode('utf-8'),
                 )
 
+            self.register('proposaldocument', create(
+                Builder('document')
+                .within(proposal)
+                .titled(u'Kommentar zum Vertragsentwurf')
+                .attach_file_containing(
+                    'Komentar text',
+                    u'vertr\xe4g sentwurf.docx',
+                    )
+                ))
+
             self.register('draft_proposal', create(
                 Builder('proposal')
                 .within(self.dossier)

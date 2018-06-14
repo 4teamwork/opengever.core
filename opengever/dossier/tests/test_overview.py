@@ -26,7 +26,7 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def tested_document(self):
-        return self.document
+        return self.taskdocument
 
     @property
     def tested_task(self):

@@ -1,4 +1,3 @@
-from Acquisition import aq_parent
 from datetime import datetime
 from datetime import time
 from ooxml_docprops import is_supported_mimetype
@@ -327,7 +326,7 @@ class DefaultDocProperties(object):
 
     def get_properties(self, recipient_data=tuple()):
         document = self.context
-        dossier = aq_parent(document)
+        dossier = document.get_parent_dossier()
         repofolder = self.get_repofolder(dossier)
         repo = self.get_repo(dossier)
         site = self.get_site(dossier)
