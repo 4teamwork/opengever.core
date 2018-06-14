@@ -229,6 +229,19 @@ CONTACT_MISSING_VALUES = {
 }
 
 
+PROPOSAL_REQUIREDS = {
+}
+PROPOSAL_DEFAULTS = {
+    'title': u'Containing Dossier Title',
+}
+PROPOSAL_FORM_DEFAULTS = {}
+PROPOSAL_MISSING_VALUES = {
+    'relatedItems': [],
+    'predecessor_proposal': None,
+    'date_of_submission': None,
+}
+
+
 class TestDefaultsBase(FunctionalTestCase):
     """Test our base classes have expected default values."""
 
@@ -830,6 +843,86 @@ class TestContactDefaults(TestDefaultsBase):
             contact = browser.context
 
         persisted_values = get_persisted_values_for_obj(contact)
+        expected = self.get_z3c_form_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+
+class TestProposalDefaults(TestDefaultsBase):
+    """Test proposals come with expected default values."""
+
+    portal_type = 'opengever.meeting.proposal'
+
+    requireds = PROPOSAL_REQUIREDS
+    type_defaults = PROPOSAL_DEFAULTS
+    form_defaults = PROPOSAL_FORM_DEFAULTS
+    missing_values = PROPOSAL_MISSING_VALUES
+
+    def setUp(self):
+        super(TestProposalDefaults, self).setUp()
+
+        api.portal.set_registry_record(
+            'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+            True)
+
+        self.container = create(Builder('committee_container'))
+        self.committee = create(Builder('committee').within(self.container))
+        self.repofolder = create(Builder('repository'))
+
+        self.dossier = create(Builder('dossier')
+                              .titled(u'Containing Dossier Title')
+                              .within(self.repofolder))
+
+        self.templates = create(
+            Builder('templatefolder')
+            .titled(u'Vorlagen')
+            .having(id='vorlagen')
+        )
+
+        self.proposal_template = create(
+            Builder('proposaltemplate')
+            .titled(u'Geb\xfchren')
+            .with_asset_file(u'vertragsentwurf.docx')
+            .within(self.templates)
+        )
+
+        transaction.commit()
+
+    def test_create_content_in_container(self):
+        proposal = createContentInContainer(
+            self.dossier,
+            'opengever.meeting.proposal',
+        )
+
+        persisted_values = get_persisted_values_for_obj(proposal)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_invoke_factory(self):
+        new_id = self.dossier.invokeFactory(
+            'opengever.meeting.proposal',
+            'proposal-1',
+        )
+        proposal = self.dossier[new_id]
+
+        persisted_values = get_persisted_values_for_obj(proposal)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    @browsing
+    def test_z3c_add_form(self, browser):
+
+        browser.login().open(self.dossier)
+        factoriesmenu.add(u'Proposal')
+        browser.forms['form'].fill({
+            'Committee': self.committee.title,
+            'Proposal template': self.proposal_template.title,
+        }).save()
+        proposal = browser.context
+
+        persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_z3c_form_defaults()
 
         self.assertDictEqual(expected, persisted_values)

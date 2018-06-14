@@ -103,6 +103,7 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
     """
 
     def __call__(self):
+        from opengever.base.default_values import inject_title_and_description_defaults  # noqa
         from opengever.base.default_values import set_default_values
         from plone.dexterity.interfaces import IDexterityFTI
         from plone.dexterity.utils import addContentToContainer
@@ -113,6 +114,11 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
 
         def createContentWithDefaults(portal_type, container, **kw):
             fti = getUtility(IDexterityFTI, name=portal_type)
+
+            # Consider possible default values for title and description,
+            # and inject them into kw if necessary.
+            inject_title_and_description_defaults(kw, portal_type, container)
+
             content = createObject(fti.factory)
             set_default_values(content, container, kw)
 
@@ -152,6 +158,7 @@ class PatchInvokeFactory(MonkeyPatch):
     """
 
     def __call__(self):
+        from opengever.base.default_values import inject_title_and_description_defaults  # noqa
         from opengever.base.default_values import set_default_values
         from Products.CMFCore.utils import getToolByName
 
@@ -165,6 +172,10 @@ class PatchInvokeFactory(MonkeyPatch):
             if myType is not None:
                 if not myType.allowType( type_name ):
                     raise ValueError('Disallowed subobject type: %s' % type_name)
+
+            # Consider possible default values for title and description,
+            # and inject them into kw if necessary.
+            inject_title_and_description_defaults(kw, type_name, self)
 
             new_id = pt.constructContent(type_name, self, id, RESPONSE, *args, **kw)
             content = self[new_id]

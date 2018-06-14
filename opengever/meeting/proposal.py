@@ -11,6 +11,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
 from opengever.document.widgets.document_link import DocumentLinkWidget
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.command import CopyProposalDocumentCommand
@@ -47,7 +48,14 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 
 @provider(IContextAwareDefaultFactory)
 def default_title(context):
-    return context.title
+    # At this point, only proposals (not submitted proposals) should acquire
+    # an actual default. This is indicated by the parent being a dossier.
+    if not IDossierMarker.providedBy(context):
+        return u''
+
+    # Use Title() accessor to make this defaultFactor robust in regard to
+    # objects with ITranslatedTitle behavior or titles stored in SQL
+    return context.Title().decode('utf-8')
 
 
 class IProposalModel(Interface):
