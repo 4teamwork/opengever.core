@@ -367,14 +367,14 @@ class TestProposalAgendaItem(IntegrationTestCase):
 
         browser.open(self.meeting, view='agenda_items/list')
         self.assertDictContainsSubset(
-            {'title': u'\xc4nderungen am Personalreglement',
+            {'title': u'&Auml;nderungen am Personalreglement',
              'decision_number': None},
             browser.json['items'][0])
 
         agenda_item.decide()
         browser.reload()
         self.assertDictContainsSubset(
-            {'title': u'\xc4nderungen am Personalreglement',
+            {'title': u'&Auml;nderungen am Personalreglement',
              'decision_number': '2016 / 2'},
             browser.json['items'][0])
 

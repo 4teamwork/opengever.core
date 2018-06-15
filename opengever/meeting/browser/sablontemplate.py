@@ -24,7 +24,7 @@ SAMPLE_MEETING_DATA = {
             "title": "Strafbefehl"
             }]
     }, {
-        'description': u'R\xfccktritt Grund',
+        'description': 'R&uuml;cktritt Grund',
         'dossier_reference_number': None,
         'repository_folder_title': None,
         'number': '2.',

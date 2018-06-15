@@ -292,7 +292,7 @@ msgstr "Supprimer l'intertitre"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_item"
-msgstr "Renommer le point de l'ordre du jour"
+msgstr "Editer le point de l'ordre du jour"
 
 #. Default: "Rename paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1609,7 +1609,7 @@ msgstr "Supprimer élément"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "title_rename_agenda_item"
-msgstr "Modifier le titre"
+msgstr "Modifier le titre et la description"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py

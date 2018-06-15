@@ -403,7 +403,9 @@
       self.url = null;
       self.row = null;
       self.titlePane = null;
-      self.field = $('#agenda_item_title_field');
+      self.descriptionPane = null;
+      self.title_field = $('#agenda_item_title_field');
+      self.description_field = $('#agenda_item_description_field');
       self.overlay = $('#rename_agenda_item_dialog').overlay({
         speed: 0,
         closeSpeed: 0,
@@ -411,12 +413,13 @@
         closeOnClick: false,
         closeOnEsc: true,
         onLoad: function() {
-          self.field.focus();
+          self.title_field.focus();
         },
         onClose: function() {
           self.row = null;
           self.titlePane = null;
-          self.field.val('');
+          self.title_field.val('');
+          self.description_field.val('');
         }
       }).data("overlay");
 
@@ -424,12 +427,14 @@
         self.url = target.attr('href');
         self.row = target.parents('tr:first');
         self.titlePane = $('.proposal_title>a, .proposal_title', self.row);
-        self.field.val(self.titlePane.first().text().trim());
+        self.descriptionPane = $('.proposal_description', self.row);
+        self.title_field.val(self.titlePane.first().text().trim());
+        self.description_field.val(self.descriptionPane.first().text().trim());
         self.overlay.load();
       };
 
       self.submit = function() {
-        var data = {title: self.field.val().trim()};
+        var data = {title: self.title_field.val().trim(), description: self.description_field.val().trim()};
         return $.post(self.url, data).always(function(response) {
           self.overlay.close();
         });
@@ -851,14 +856,19 @@
       var template_id = $(
           "#ad-hoc-agenda-item-proposal-templates input[name=selected_ad_hoc_agenda_item_template]:checked"
       ).attr('value');
-      var input = $("#schedule-text");
+      var title = $("#schedule-title");
+      var description = $("#schedule-description");
       var button = $(".schedule-text");
       button.addClass("loading");
       return $.post(button.first().data().url, {
-          title: input.val(),
+          title: title.val(),
+          description: description.val(),
           template_id: template_id,
         }).done(function() {
-            input.val("");
+            if(title.val()){
+              title.val("");
+              description.val("");
+              }
             self.updateConnected();
         }).always(function() {
             button.removeClass("loading");
@@ -907,7 +917,7 @@
       },
       {
         method: "keyup",
-        target: "#schedule-text",
+        target: "#schedule-title",
         callback: this.trackText
       },
       {

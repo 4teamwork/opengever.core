@@ -150,6 +150,13 @@ class AgendaItem(Base):
                        else self.description)
         return to_html_xweb_intelligent(description) or None
 
+    def set_description(self, description):
+        if self.has_proposal:
+            self.submitted_proposal.description = description
+            self.submitted_proposal.sync_model()
+        else:
+            self.description = description
+
     def get_decision_number(self):
         # XXX huh? what is this?
         if not self.decision_number:
