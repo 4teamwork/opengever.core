@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-14 19:59+0000\n"
+"POT-Creation-Date: 2018-06-15 13:08+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -192,6 +192,11 @@ msgstr "Le protocole pour la séance ${title} n'a pas été actualisé. Le proto
 #: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"
 msgstr "Modèle Sablon"
+
+#. Default: "Save"
+#: ./opengever/meeting/browser/committeeforms.py
+msgid "Save"
+msgstr "Enregistrer"
 
 #: ./opengever/meeting/browser/meetings/unscheduled_proposals.py
 msgid "Scheduled Successfully"

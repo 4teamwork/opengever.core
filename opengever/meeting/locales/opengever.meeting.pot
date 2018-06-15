@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-14 19:59+0000\n"
+"POT-Creation-Date: 2018-06-15 13:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,6 +188,11 @@ msgstr ""
 
 #: ./opengever/meeting/upgrades/profiles/4301/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"
+msgstr ""
+
+#. Default: "Save"
+#: ./opengever/meeting/browser/committeeforms.py
+msgid "Save"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/unscheduled_proposals.py
