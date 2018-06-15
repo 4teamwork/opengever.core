@@ -11,6 +11,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.utils import get_preferred_language_code
+from opengever.base.utils import to_html_xweb_intelligent
 from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
@@ -92,6 +93,14 @@ class IProposal(model.Schema):
         defaultFactory=default_title
         )
 
+    dexteritytextindexer.searchable('description')
+    description = schema.Text(
+        title=_(u'label_description', default=u'Description'),
+        required=False,
+        missing_value=u'',
+        default=u'',
+        )
+
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
         default=[],
@@ -165,6 +174,9 @@ class ProposalBase(ModelContainer):
     def Title(self):
         return self.title.encode('utf-8')
 
+    def get_description(self):
+        return to_html_xweb_intelligent(self.description)
+
     def get_overview_attributes(self):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
@@ -172,6 +184,10 @@ class ProposalBase(ModelContainer):
         attributes = [
             {'label': _(u"label_title", default=u'Title'),
              'value': self.title},
+
+            {'label': _(u"label_description", default=u'Description'),
+             'value': self.get_description(),
+             'is_html': True},
 
             {'label': _('label_committee', default=u'Committee'),
              'value': model.committee.get_link(),
@@ -374,6 +390,7 @@ class SubmittedProposal(ProposalBase):
         proposal_model.submitted_physical_path = self.get_physical_path()
         proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
         proposal_model.submitted_title = self.title
+        proposal_model.submitted_description = self.description
         proposal_model.date_of_submission = self.date_of_submission
 
     def load_model(self):
@@ -468,6 +485,27 @@ class SubmittedProposal(ProposalBase):
         excerpts.append(RelationValue(intid))
         self.excerpts = excerpts
         addRelations(self, None)
+
+    def get_edit_values(self, fieldnames):
+        """
+        This is used by the 'inject_initial_data' method to prefill the edit
+        form. The values are taken from the attributes of the model with
+        the corresponding names. For a SubmittedProposal we want to prefill
+        the form 'title' and 'description' fields with the 'submitted_title' and
+        'submitted_description' attributes of the model, hence the replacement
+        of the fieldname here.
+        """
+        fieldnames_to_modify = ['title', 'description']
+        for fieldname in fieldnames_to_modify:
+            if fieldname not in fieldnames:
+                continue
+            fieldnames[fieldnames.index(fieldname)] = 'submitted_' + fieldname
+        values = super(SubmittedProposal, self).get_edit_values(fieldnames)
+        for fieldname in fieldnames_to_modify:
+            if 'submitted_' + fieldname not in fieldnames:
+                continue
+            values[fieldname] = values.pop('submitted_' + fieldname, '')
+        return values
 
 
 class Proposal(ProposalBase):
@@ -569,6 +607,7 @@ class Proposal(ProposalBase):
         proposal_model.repository_folder_title = repository_folder_title
         proposal_model.title = self.title
         proposal_model.issuer = self.issuer
+        proposal_model.description = self.description
         proposal_model.date_of_submission = self.date_of_submission
 
     def is_submit_additional_documents_allowed(self):

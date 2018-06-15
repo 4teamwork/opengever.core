@@ -470,6 +470,11 @@ msgstr "Soumis le"
 msgid "column_date_to"
 msgstr "Jusqu'à"
 
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr "Description"
+
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_email"
@@ -871,6 +876,12 @@ msgstr "Numéro de décision"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
 msgstr "Êtes-vous sûr de vouloir supprimer cet élément?"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
+msgstr "Description"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py

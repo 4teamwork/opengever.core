@@ -472,6 +472,11 @@ msgstr ""
 msgid "column_date_to"
 msgstr ""
 
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr ""
+
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_email"
@@ -887,6 +892,12 @@ msgstr ""
 #. Default: "Are you sure you want to delete this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
+msgstr ""
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
 msgstr ""
 
 #. Default: "Dossier"

@@ -7,7 +7,7 @@ import json
 SAMPLE_MEETING_DATA = {
     '_sablon': {'properties': {'start_page_number': 42}},
     'agenda_items': [{
-        'description': u'Strafbefehl wegen Bauens ohne Bewilligung',
+        'description': u'Bau Beschreibung',
         'dossier_reference_number': u'Client1 1 / 1',
         'repository_folder_title': u'Strafwesen',
         'number': '1.',
@@ -24,7 +24,7 @@ SAMPLE_MEETING_DATA = {
             "title": "Strafbefehl"
             }]
     }, {
-        'description': u'R\xfccktritt Hans Muster',
+        'description': u'R\xfccktritt Grund',
         'dossier_reference_number': None,
         'repository_folder_title': None,
         'number': '2.',

@@ -118,8 +118,9 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'\xc4nderungen am Personalreglement'],
-             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Description', ''],
              ['Dossier', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Issuer', 'Ziegler Robert (robert.ziegler)'],
              ['Proposal document',
@@ -136,11 +137,13 @@ class TestProposal(IntegrationTestCase):
         factoriesmenu.add('Proposal')
         browser.fill(
             {'Title': u'Baugesuch Kreuzachkreisel',
+             'Description': u'Ein n\xf6tiger Bau',
              'Committee': u'Rechnungspr\xfcfungskommission',
              'Proposal template': u'Geb\xfchren',
              'Edit after creation': True,
              'Attachments': [self.document]},
              ).save()
+
         statusmessages.assert_no_error_messages()
         self.assertIn('external_edit', browser.css('.redirector').first.text,
                       'External editor should have been triggered.')
@@ -149,6 +152,7 @@ class TestProposal(IntegrationTestCase):
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'Baugesuch Kreuzachkreisel'],
+             ['Description', u'Ein n\xf6tiger Bau'],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Issuer', 'Ziegler Robert (robert.ziegler)'],
@@ -161,7 +165,9 @@ class TestProposal(IntegrationTestCase):
 
         model = proposal.load_model()
         self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
+        self.assertEqual(u'Ein n\xf6tiger Bau', model.description)
         self.assertIsNone(model.submitted_title)
+        self.assertIsNone(model.submitted_description)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual('robert.ziegler', model.issuer)
         self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
@@ -169,8 +175,9 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(u'en', model.language)
         self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
 
-        self.assertTrue(set(['baugesuch', 'kreuzachkreisel']).issubset(set(
-                            index_data_for(proposal)['SearchableText'])))
+        self.assertTrue(set(['baugesuch', 'kreuzachkreisel',
+                             'ein', 'notiger', 'bau']).issubset(
+            set(index_data_for(proposal)['SearchableText'])))
 
         browser.click_on('Baugesuch Kreuzachkreisel')
         browser.open(browser.context, view='tabbedview_view-overview')
@@ -283,6 +290,7 @@ class TestProposal(IntegrationTestCase):
         factoriesmenu.add('Proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
+            'Description': u'With a c\xf6mment',
             'Committee': u'Rechnungspr\xfcfungskommission',
             'Proposal template': u'Geb\xfchren',
         }).save()
@@ -307,6 +315,7 @@ class TestProposal(IntegrationTestCase):
 
         browser.fill({
             'Title': u'Another pr\xf6posal',
+            'Description': u'With another c\xf6mment',
             'Attachments': [self.document]}).save()
         statusmessages.assert_no_error_messages()
         statusmessages.assert_message('Changes saved')
@@ -315,6 +324,7 @@ class TestProposal(IntegrationTestCase):
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'Another pr\xf6posal'],
+             ['Description', u'With another c\xf6mment'],
              ['Committee', u'Kommission f\xfcr Verkehr'],
              ['Meeting', ''],
              ['Issuer', 'Ziegler Robert (robert.ziegler)'],
@@ -327,11 +337,13 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(1, len(proposal.relatedItems))
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
         self.assertEqual(u'Another pr\xf6posal', proposal.title)
+        self.assertEqual(u'With another c\xf6mment', proposal.description)
 
         model = proposal.load_model()
         self.assertIsNotNone(model)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual(u'Another pr\xf6posal', proposal.title)
+        self.assertEqual(u'With another c\xf6mment', proposal.description)
 
     @browsing
     def test_proposal_language_field_with_multiple_languages(self, browser):
@@ -710,6 +722,7 @@ class TestProposal(IntegrationTestCase):
         attributes = self.proposal.get_overview_attributes()
         self.assertEqual(
             [u'label_title',
+             u'label_description',
              u'label_committee',
              u'label_meeting',
              u'label_issuer',
@@ -823,6 +836,7 @@ class TestProposal(IntegrationTestCase):
         browser.open(proposal, view='tabbedview_view-overview')
         self.assertEquals(
             [['Title', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Description', ''],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', ''],
              ['Issuer', 'Ziegler Robert (robert.ziegler)'],
@@ -841,6 +855,7 @@ class TestProposal(IntegrationTestCase):
                       browser.css('.answers .answerBody h3').text)
         self.assertEquals(
             [['Title', u'\xc4nderungen am Personalreglement'],
+             ['Description', ''],
              ['Committee', u'Rechnungspr\xfcfungskommission'],
              ['Meeting', u'9. Sitzung der Rechnungspr\xfcfungskommission'],
              ['Issuer', 'Ziegler Robert (robert.ziegler)'],

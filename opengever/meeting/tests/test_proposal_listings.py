@@ -9,7 +9,8 @@ SUBMITTED_PROPOSAL = {
     'Meeting': '',
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
-    'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+    'Title': u'Vertr\xe4ge',
+    'Description': u'F\xfcr weitere Bearbeitung bewilligen',
     'Date of submission': '31.08.2016',
     'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
@@ -20,7 +21,8 @@ DRAFT_PROPOSAL = {
      'Comittee': u'Kommission f\xfcr Verkehr',
      'Title': u'Antrag f\xfcr Kreiselbau',
      'Date of submission': '',
-     'Issuer': 'Ziegler Robert (robert.ziegler)'}
+     'Issuer': 'Ziegler Robert (robert.ziegler)',
+     'Description': ''}
 
 DECIDED_PROPOSAL = {
     'Decision number': '2016 / 1',
@@ -29,7 +31,8 @@ DECIDED_PROPOSAL = {
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'Initialvertrag f\xfcr Bearbeitung',
     'Date of submission': '31.08.2016',
-    'Issuer': 'Ziegler Robert (robert.ziegler)'}
+    'Issuer': 'Ziegler Robert (robert.ziegler)',
+    'Description': ''}
 
 SUBMITTED_WORD_PROPOSAL = {
     'Decision number': '',
@@ -38,7 +41,8 @@ SUBMITTED_WORD_PROPOSAL = {
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'\xc4nderungen am Personalreglement',
     'Date of submission': '31.08.2016',
-    'Issuer': 'Ziegler Robert (robert.ziegler)'}
+    'Issuer': 'Ziegler Robert (robert.ziegler)',
+    'Description': ''}
 
 DRAFT_WORD_PROPOSAL = {
     'Decision number': '',
@@ -47,7 +51,8 @@ DRAFT_WORD_PROPOSAL = {
     'Comittee': u'Kommission f\xfcr Verkehr',
     'Title': u'\xdcberarbeitung der GAV',
     'Date of submission': '',
-    'Issuer': 'Ziegler Robert (robert.ziegler)'}
+    'Issuer': 'Ziegler Robert (robert.ziegler)',
+    'Description': ''}
 
 
 def proposals_table(browser):
@@ -92,35 +97,40 @@ class TestDossierProposalListing(IntegrationTestCase):
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '31.08.2016',
-              'Titre': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
+              'Titre': u'Vertr\xe4ge',
+              'Description': u'F\xfcr weitere Bearbeitung bewilligen'},
              {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
               'Etat': 'En modification',
               'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '',
-              'Titre': u'Antrag f\xfcr Kreiselbau'},
+              'Titre': u'Antrag f\xfcr Kreiselbau',
+              'Description': ''},
              {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': u'Cl\xf4tur\xe9',
               'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '2016 / 1',
               u'R\xe9union': u'8. Sitzung der Rechnungspr\xfcfungskommission',
               'Soumis le': '31.08.2016',
-              'Titre': u'Initialvertrag f\xfcr Bearbeitung'},
+              'Titre': u'Initialvertrag f\xfcr Bearbeitung',
+              'Description': ''},
              {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': 'Soumis',
               'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '31.08.2016',
-              'Titre': u'\xc4nderungen am Personalreglement'},
+              'Titre': u'\xc4nderungen am Personalreglement',
+              'Description': ''},
              {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
               'Etat': 'En modification',
               'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '',
-              'Titre': u'\xdcberarbeitung der GAV'}],
+              'Titre': u'\xdcberarbeitung der GAV',
+              'Description': ''}],
             browser.css('.listing').first.dicts())
 
     @browsing
@@ -131,7 +141,7 @@ class TestDossierProposalListing(IntegrationTestCase):
         first_link = proposals_table(browser).rows[1].css('a').first
 
         self.assertEquals(
-            u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+            u'Vertr\xe4ge',
             first_link.text)
         self.assertEquals(
             'http://nohost/plone/ordnungssystem/fuhrung/'
@@ -302,7 +312,7 @@ class TestSubmittedProposals(IntegrationTestCase):
         first_link = proposals_table(browser).rows[1].css('a').first
 
         self.assertEquals(
-            u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+            u'Vertr\xe4ge',
             first_link.text)
         self.assertEquals(
             'http://nohost/plone/opengever-meeting-committeecontainer/'
@@ -365,6 +375,6 @@ class TestSubmittedProposals(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.committee,
                      view='tabbedview_view-submittedproposals',
-                     data={'searchable_text': 'Vertragsentwurf'})
+                     data={'searchable_text': u'Vertr\xe4ge'})
 
         self.assertEquals([SUBMITTED_PROPOSAL], proposal_dicts(browser))

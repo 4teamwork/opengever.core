@@ -473,6 +473,11 @@ msgstr "Eingereicht am"
 msgid "column_date_to"
 msgstr "Bis"
 
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr "Beschreibung"
+
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
 msgid "column_email"
@@ -889,6 +894,12 @@ msgstr "Beschlussnummer"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
 msgstr "Wollen Sie dieses Element wirklich streichen?"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
+msgstr "Beschreibung"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
