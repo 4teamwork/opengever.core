@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashed
 from plone import api
+from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
 from plone.uuid.interfaces import IUUID
 
@@ -10,6 +11,35 @@ class TestProposalAgendaItem(IntegrationTestCase):
 
     features = ('meeting',)
 
+    @browsing
+    def test_decide_proposal_agenda_item(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEquals('decided', agenda_item.workflow_state)
+        self.assertEquals([{u'message': u'Agenda Item decided and excerpt '
+                                        u'generated.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_decide_proposal_agenda_item_generates_numbers(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEqual(2, agenda_item.decision_number)
+        self.assertEqual(2, self.meeting.model.meeting_number)
+
+    @browsing
     def test_delete_agenda_item_does_not_trash_proposal_document(self, browser):
         self.login(self.committee_responsible, browser)
 
