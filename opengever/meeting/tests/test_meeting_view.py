@@ -8,7 +8,7 @@ from opengever.testing.pages import byline
 import pytz
 
 
-class TestWordMeetingView(IntegrationTestCase):
+class TestMeetingView(IntegrationTestCase):
     features = ('meeting',)
 
     @browsing
