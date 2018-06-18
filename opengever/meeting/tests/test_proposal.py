@@ -7,19 +7,25 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
+from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import ISubmittedProposal
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
 from requests_toolbelt.utils import formdata
+from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
+from zope.component import getUtility
 
 
 class TestProposalViewsDisabled(IntegrationTestCase):
@@ -81,37 +87,83 @@ class TestProposal(IntegrationTestCase):
             self.assertIn(document.title, selectables)
 
     @browsing
-    def test_proposal_can_be_created_in_browser_and_strips_whitespace(self, browser):
+    def test_proposal_document_is_visible_on_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Dossier', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
+             ['Meeting', ''],
+             ['Proposal document',
+              u'\xc4nderungen am Personalreglement'],
+             ['State', 'Submitted'],
+             ['Decision number', ''],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())
+
+    @browsing
+    def test_creating_proposal_from_proposal_template(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier)
         factoriesmenu.add('Proposal')
-        browser.fill({
-            'Title': u'A pr\xf6posal',
-            'Committee': u'Rechnungspr\xfcfungskommission',
-            'Proposal template': u'Geb\xfchren',
-            'Attachments': [self.document],
-        }).save()
+        browser.fill(
+            {'Title': u'Baugesuch Kreuzachkreisel',
+             'Committee': u'Rechnungspr\xfcfungskommission',
+             'Proposal template': u'Geb\xfchren',
+             'Edit after creation': True,
+             'Attachments': [self.document]},
+             ).save()
         statusmessages.assert_no_error_messages()
-        statusmessages.assert_message('Item created')
+        self.assertIn('external_edit', browser.css('.redirector').first.text,
+                      'External editor should have been triggered.')
 
         proposal = browser.context
-        self.assertEqual(1, len(proposal.relatedItems))
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'Baugesuch Kreuzachkreisel'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', ''],
+             ['Proposal document', 'Baugesuch Kreuzachkreisel'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
-        self.assertEqual(u'A pr\xf6posal', proposal.title)
 
         model = proposal.load_model()
-        self.assertIsNotNone(model)
-        self.assertEqual(u'A pr\xf6posal', model.title)
+        self.assertEqual(u'Baugesuch Kreuzachkreisel', model.title)
         self.assertIsNone(model.submitted_title)
         self.assertEqual(Oguid.for_object(proposal), model.oguid)
         self.assertEqual('robert.ziegler', model.creator)
         self.assertEqual(u'Vertr\xe4ge und Vereinbarungen',
                          model.repository_folder_title)
         self.assertEqual(u'en', model.language)
-
-        self.assertTrue(set(['a', 'proposal']).issubset(set(
-                            index_data_for(proposal)['SearchableText'])))
         self.assertEqual(u'Client1 1.1 / 1', model.dossier_reference_number)
+
+        self.assertTrue(set(['baugesuch', 'kreuzachkreisel']).issubset(set(
+                            index_data_for(proposal)['SearchableText'])))
+
+        browser.click_on('Baugesuch Kreuzachkreisel')
+        browser.open(browser.context, view='tabbedview_view-overview')
+        self.assertDictContainsSubset(
+            {'Title': u'Baugesuch Kreuzachkreisel'},
+            dict(browser.css('table.listing').first.lists()))
+
+        self.assertEquals(
+            self.proposal_template.file.data,
+            proposal.get_proposal_document().file.data)
+
+        self.assertFalse(
+            is_officeconnector_checkout_feature_enabled(),
+            'Office connector checkout feature is now active: this means'
+            ' that the document will no longer be checked out in the proposal'
+            ' creation wizard and therefore the assertion "document is checked'
+            ' out" will therefore fail.')
+        self.assertEquals(
+            self.dossier_responsible.getId(),
+            self.get_checkout_manager(
+                proposal.get_proposal_document()).get_checked_out_by())
 
     @browsing
     def test_create_proposal_in_subdossier(self, browser):
@@ -205,6 +257,67 @@ class TestProposal(IntegrationTestCase):
         self.assertNotIn('Edit', editbar.contentviews())
         with browser.expect_unauthorized():
             browser.open(self.proposal, view='edit')
+
+    @browsing
+    def test_document_of_draft_proposal_can_be_edited(self, browser):
+        self.login(self.dossier_responsible, browser)
+        document = self.draft_word_proposal.get_proposal_document()
+        browser.open(document, view='edit')
+        self.assertEquals('Edit Document', plone.first_heading(),
+                          'Document should be editable.')
+
+    @browsing
+    def test_document_of_proposal_cannot_be_edited_when_submitted(self, browser):
+        self.login(self.dossier_responsible, browser)
+        document = self.word_proposal.get_proposal_document()
+        with browser.expect_unauthorized():
+            browser.open(document, view='edit')
+
+    @browsing
+    def test_document_of_rejected_proposal_can_be_edited(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        browser.find('Reject').click()
+        browser.fill({'Comment': u'Bitte \xfcberarbeiten'}).submit()
+
+        self.login(self.dossier_responsible, browser)
+        document = self.word_proposal.get_proposal_document()
+        browser.open(self.word_proposal.get_proposal_document(), view='edit')
+        browser.open(document, view='edit')
+        self.assertEquals('Edit Document', plone.first_heading(),
+                          'Document should be editable.')
+
+    @browsing
+    def test_proposal_cannot_change_state_when_documents_checked_out(self, browser):
+        self.login(self.dossier_responsible, browser)
+        document = self.draft_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        self.assertTrue(self.draft_word_proposal.contains_checked_out_documents())
+        browser.open(self.draft_word_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        browser.click_on("Confirm")
+        statusmessages.assert_message(
+            'Cannot change the state because the proposal'
+            ' contains checked out documents.')
+
+    def test_decide_not_allowed_when_documents_checked_out(self):
+        """When deciding the proposal on the proposal model, the proposal
+        document must already be checked in.
+        This also applies to the current user: the auto-checkin-feature is
+        the job of the agenda item controller, not of the proposal model.
+        """
+        self.login(self.committee_responsible)
+        item = self.schedule_proposal(self.meeting,
+                                      self.submitted_word_proposal)
+        self.checkout_document(self.submitted_word_proposal.get_proposal_document())
+
+        model = self.submitted_word_proposal.load_model()
+        with self.assertRaises(ValueError) as cm:
+            model.decide(item)
+
+        self.assertEquals(
+            'Cannot decide proposal when proposal document is checked out.',
+            str(cm.exception))
 
     @browsing
     def test_regression_proposal_submission_with_mails(self, browser):
@@ -376,6 +489,19 @@ class TestProposal(IntegrationTestCase):
         browser.click_on('Submit')
         browser.click_on("Confirm")
         self.assertEqual(Proposal.STATE_SUBMITTED, self.draft_proposal.get_state())
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Proposal successfully submitted.')
+        self.assertEqual('proposal-state-submitted',
+                         api.content.get_state(self.draft_proposal))
+
+        self.login(self.administrator)
+        model = self.draft_proposal.load_model()
+        submitted_proposal = model.resolve_submitted_proposal()
+        proposal_file = self.draft_proposal.get_proposal_document().file
+        submitted_proposal_file = submitted_proposal.get_proposal_document().file
+        with proposal_file.open() as expected:
+            with submitted_proposal_file.open() as got:
+                self.assertEquals(expected.read(), got.read())
 
     def test_copying_proposals_is_prevented(self):
         self.login(self.administrator)
@@ -387,6 +513,20 @@ class TestProposal(IntegrationTestCase):
         copied_dossier = api.content.copy(
             source=self.empty_dossier, target=self.empty_repofolder)
         self.assertItemsEqual([], copied_dossier.getFolderContents())
+
+    @browsing
+    def test_prevent_trashing_proposal_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.assertFalse(
+            api.user.has_permission(
+                'opengever.trash: Trash content',
+                obj=self.word_proposal.get_proposal_document()),
+            'The proposal document should not be trashable.')
+        self.assertFalse(
+            api.user.has_permission(
+                'opengever.trash: Trash content',
+                obj=self.draft_word_proposal.get_proposal_document()),
+            'The proposal document should not be trashable.')
 
     def test_is_submission_allowed(self):
         self.login(self.administrator)
@@ -480,6 +620,121 @@ class TestProposal(IntegrationTestCase):
             proposal_model.get_meeting_link(),
             self.meeting.model.get_link(),
             "The method should return the meeting link.")
+
+    def test_generate_excerpt_copies_document_to_target(self):
+        self.login(self.administrator)
+        self.assertEquals(
+            [],
+            ISubmittedProposal(self.submitted_word_proposal).excerpts)
+
+        agenda_item = self.schedule_proposal(self.meeting,
+                              self.submitted_word_proposal)
+        agenda_item.decide()
+
+        with self.observe_children(self.meeting_dossier) as children:
+            agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
+
+        self.assertEquals(1, len(children['added']),
+                          'An excerpt document should have been added to the'
+                          ' meeting dossier.')
+
+        # The document should contain a copy of the proposal document file.
+        excerpt_document, = children['added']
+        self.assertEquals('Excerpt \xc3\x84nderungen',
+                          excerpt_document.Title())
+        self.assertEquals(u'excerpt-anderungen.docx',
+                          excerpt_document.file.filename)
+        self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
+        self.assertIsNotNone(excerpt_document.file.data)
+
+        # The excerpt document should be referenced as relation.
+        excerpts = ISubmittedProposal(self.submitted_word_proposal).excerpts
+        self.assertEquals(1, len(excerpts))
+        relation, = excerpts
+        self.assertEquals(excerpt_document, relation.to_object)
+
+        # The relation catalog should have catalogued the new relation.
+        self.assertIn(relation,
+                      tuple(getUtility(ICatalog).findRelations(
+                          {'to_id': relation.to_id})))
+
+    @browsing
+    def test_create_successor_proposal(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        button_label = 'Create successor proposal'
+
+        self.assertEquals('submitted', self.word_proposal.get_state().title)
+        self.assertFalse(browser.find(button_label))
+
+        with self.login(self.committee_responsible):
+            agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+            self.assertEquals('scheduled', self.submitted_word_proposal.get_state().title)
+
+        self.assertEquals('scheduled', self.word_proposal.get_state().title)
+        self.assertFalse(browser.reload().find(button_label))
+
+        with self.login(self.committee_responsible):
+            agenda_item.decide()
+            self.assertEquals('decided', self.submitted_word_proposal.get_state().title)
+
+        self.assertEquals('decided', self.word_proposal.get_state().title)
+        self.assertTrue(browser.reload().find(button_label))
+
+        browser.click_on(button_label)
+
+        self.assertEquals(
+            self.word_proposal.Title().decode('utf-8'),
+            browser.find('Title').value)
+        self.assertEquals(
+            str(self.word_proposal.get_committee().load_model().committee_id),
+            browser.find('Committee').value)
+        self.assertEquals(
+            [rel.to_path for rel in self.word_proposal.relatedItems],
+            [node.value for node
+             in browser.find('Attachments').css('input[type=checkbox]')])
+
+        self.assertIn(
+            self.word_proposal.get_proposal_document().UID(),
+            browser.find('Proposal template').options,
+            'The proposal document of the predecessor should be selectable'
+            ' as proposal template.')
+
+        browser.fill({
+            'Title': u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung',
+            'Proposal template': self.word_proposal.get_proposal_document().Title(),
+        }).save()
+        statusmessages.assert_no_error_messages()
+
+        proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', ''],
+             ['Proposal document',
+              u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['State', 'Pending'],
+             ['Decision number', ''],
+             ['Predecessor', u'\xc4nderungen am Personalreglement'],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())
+
+        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        self.assertIn(u'Successor proposal '
+                      u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung '
+                      u'created by Ziegler Robert (robert.ziegler)',
+                      browser.css('.answers .answerBody h3').text)
+        self.assertEquals(
+            [['Title', u'\xc4nderungen am Personalreglement'],
+             ['Committee', u'Rechnungspr\xfcfungskommission'],
+             ['Meeting', u'9. Sitzung der Rechnungspr\xfcfungskommission'],
+             ['Proposal document', u'\xc4nderungen am Personalreglement'],
+             ['State', 'Decided'],
+             ['Decision number', '2016 / 2'],
+             ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
+             ['Attachments', u'Vertr\xe4gsentwurf']],
+            browser.css('table.listing').first.lists())
 
     @browsing
     def test_proposal_title_is_displayed_xss_safe(self, browser):
