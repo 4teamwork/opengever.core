@@ -1,9 +1,14 @@
-Französische Dokumentation
-==========================
+Guide d'utilisation
+===================
 
-Inhalt:
+Index:
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
-   example.rst
+   chapitre1-overview
+   chapitre2-base
+   chapitre3-trucs
+   documents/index
+   chapitre7-contacts
+   chapitre8-recherches

@@ -80,8 +80,13 @@ den weiteren Bearbeitungsmöglichkeiten angezeigt.
 
 |img-dokumente-10|
 
-1. **Einchecken:** Durch “Einchecken“ wird das Dokument wieder für die übrigen Sachbearbeitenden frei. Dies kann mit oder ohne Kommentar und entweder bei 1a. oder 1b. erfolgen.
-2. **Checkout widerrufen:** Die vorgenommenen Änderungen am Dokument werden rückgängig gemacht und die Datei auf den zuletzt eingecheckten Zustand (= Version vor dem Auschecken) zurückgesetzt. Die Aktion muss doppelt bestätigt werden.
+1. **Einchecken:** Durch “Einchecken“ wird das Dokument wieder für die übrigen
+   Sachbearbeitenden frei. Dies kann mit oder ohne Kommentar und entweder
+   bei 1a. oder 1b. erfolgen.
+
+2. **Checkout widerrufen:** Die vorgenommenen Änderungen am Dokument werden
+   rückgängig gemacht und die Datei auf den zuletzt eingecheckten Zustand
+   (= Version vor dem Auschecken) zurückgesetzt. Die Aktion muss doppelt bestätigt werden.
 
 Mit Mailprogramm versenden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
