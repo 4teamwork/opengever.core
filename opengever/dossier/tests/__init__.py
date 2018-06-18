@@ -99,6 +99,7 @@ EXPECTED_MEETING_PROPERTIES = {
     'ogg.meeting.decision_number': '',
     'ogg.meeting.proposal_state': 'Submitted',
     'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+    'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen'
 }
 
 EXPECTED_DOC_PROPERTIES = dict(

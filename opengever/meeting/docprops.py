@@ -19,6 +19,7 @@ class ProposalDocPropertyProvider(object):
             'decision_number': '',
             'agenda_item_number': '',
             'proposal_title': proposal.Title(),
+            'proposal_description': proposal.Description(),
             'proposal_state': translate(proposal.get_state().title,
                                         context=self.context.REQUEST),
         }

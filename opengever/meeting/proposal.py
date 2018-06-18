@@ -177,6 +177,9 @@ class ProposalBase(ModelContainer):
     def get_description(self):
         return to_html_xweb_intelligent(self.description)
 
+    def Description(self):
+        return self.description.encode('utf-8')
+
     def get_overview_attributes(self):
         model = self.load_model()
         assert model, 'missing db-model for {}'.format(self)
