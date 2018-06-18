@@ -10,7 +10,7 @@ from pyquery import PyQuery
 ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
 
 
-class TestWordMeeting(IntegrationTestCase):
+class TestMeeting(IntegrationTestCase):
     features = ('meeting',)
 
     @browsing
