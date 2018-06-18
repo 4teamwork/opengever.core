@@ -1,41 +1,37 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from opengever.base.model import create_session
 
 
-class TestFormatParticipant(FunctionalTestCase):
+class TestMember(IntegrationTestCase):
 
     def test_return_fullname_if_no_email(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-
-        self.assertEqual(u'M\xfcller Hans', member.get_title())
-
-    def test_return_fullname_with_email(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans',
-            lastname=u'M\xfcller',
-            email=u'hans.mueller@example.com'))
+        self.login(self.meeting_user)
+        self.committee_president.model.email = None
 
         self.assertEqual(
-            u'M\xfcller Hans (<a href="mailto:hans.mueller@example.com">hans.mueller@example.com</a>)',
-            member.get_title())
+            u'Sch\xf6ller Heidrun',
+            self.committee_president.model.get_title())
 
-    def test_return_fullname_without_linked_email(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans',
-            lastname=u'M\xfcller',
-            email=u'hans.mueller@example.com'))
+    def test_return_linked_email_by_default(self):
+        self.login(self.meeting_user)
 
         self.assertEqual(
-            u'M\xfcller Hans (hans.mueller@example.com)',
-            member.get_title(show_email_as_link=False))
+            u'Sch\xf6ller Heidrun (<a href="mailto:h.schoeller@web.de">h.schoeller@web.de</a>)',
+            self.committee_president.model.get_title())
+
+    def test_return_unlinked_title_if_desired(self):
+        self.login(self.meeting_user)
+
+        self.assertEqual(
+            u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
+            self.committee_president.model.get_title(show_email_as_link=False))
 
     def test_result_is_html_escaped(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans',
-            lastname=u'<script></script>M\xfcller'))
+        self.login(self.meeting_user)
+        self.committee_president.model.lastname = u'<script></script>Sch\xf6ller'
+        self.committee_president.model.email = None
 
+        create_session().flush()  # the fullname property needs a nudge
         self.assertEqual(
-            u'&lt;script&gt;&lt;/script&gt;M\xfcller Hans',
-            member.get_title())
+            u'&lt;script&gt;&lt;/script&gt;Sch\xf6ller Heidrun',
+            self.committee_president.model.get_title())
