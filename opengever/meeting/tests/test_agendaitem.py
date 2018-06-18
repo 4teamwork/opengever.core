@@ -267,6 +267,20 @@ class TestDecideAgendaItem(IntegrationTestCase):
                      data={'_authenticator': createToken()})
         self.assertEquals(None, browser.json.get('redirectUrl'))
 
+    @browsing
+    def test_closing_proposal_adds_proposalhistory(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_word_proposal)
+        agenda_item.close()
+
+        browser.open(self.submitted_word_proposal, view=u'tabbedview_view-overview')
+        entry = browser.css('.answer').first
+
+        self.assertEquals(u'Proposal decided by M\xfcller Fr\xe4nzi (franzi.muller)',
+                          entry.css('h3').first.text)
+        self.assertEquals('answer decided', entry.get('class'))
+
 
 class TestReopenAgendaItem(IntegrationTestCase):
 

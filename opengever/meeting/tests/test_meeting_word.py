@@ -6,6 +6,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
 from pyquery import PyQuery
 
+
 ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
 
 
@@ -139,6 +140,21 @@ class TestWordMeeting(IntegrationTestCase):
             browser.json.get('messages')[0])
 
     @browsing
+    def test_closing_meeting_redirects_to_meeting_and_show_statusmessage(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+        browser.find('Close meeting').click()
+
+        self.assertDictContainsSubset(
+          {
+            "messages": [{
+              "messageTitle": "Information",
+              "message": "Transition Close meeting executed",
+              "messageClass": "info"}]
+          }, browser.json
+        )
+
+    @browsing
     def test_reopen_closed_meeting(self, browser):
         self.login(self.committee_responsible, browser)
         self.assertEquals(u'closed', self.decided_meeting.model.workflow_state)
@@ -231,7 +247,6 @@ class TestWordMeeting(IntegrationTestCase):
         model.close()
         self.assertEquals(1, model.protocol_document.generated_version)
         self.assertEquals(u'closed', model.workflow_state)
-
 
     @browsing
     def test_closing_meeting_with_undecided_items_is_not_allowed(self, browser):
