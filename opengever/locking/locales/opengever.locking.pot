@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2018-06-11 08:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.locking\n"
-
-#. Default: "This protocol will remain locked until the meeting ${meeting} is closed."
-#: ./opengever/locking/templates/meeting_lock.pt
-msgid "description_locked_by_meeting"
-msgstr ""
 
 #. Default: "This document is a copy of an excerpt from a meeting and cannot be edited directly."
 #: ./opengever/locking/templates/excerpt_document_lock_template.pt
@@ -41,4 +36,3 @@ msgstr ""
 #: ./opengever/locking/templates/submitted_document_lock_template.pt
 msgid "description_locked_submitted_document"
 msgstr ""
-

@@ -169,6 +169,13 @@ class Meeting(Base, SQLFormSupport):
         backref=backref('meeting', uselist=False),
         primaryjoin="GeneratedAgendaItemList.document_id==Meeting.agendaitem_list_document_id")
 
+    def was_protocol_manually_edited(self):
+        """checks whether the protocol has been manually edited or not"""
+        if not self.has_protocol_document():
+            return False
+        document = self.protocol_document.resolve_document()
+        return not self.protocol_document.is_up_to_date(document)
+
     def get_other_participants_list(self):
         if self.other_participants is not None:
             return filter(len, map(lambda value: value.strip(),
@@ -215,22 +222,15 @@ class Meeting(Base, SQLFormSupport):
         from opengever.meeting.command import MergeDocxProtocolCommand
         from opengever.meeting.command import ProtocolOperations
 
-        if self.has_protocol_document() and not self.protocol_document.is_locked():
-            # The protocol should never be changed when it is no longer locked:
-            # the user probably has made changes manually.
+        if self.was_protocol_manually_edited():
+            # If a user has made manual changes, we do not update the protocol
+            # to avoid losing the changes
             return
 
         operations = ProtocolOperations()
         command = MergeDocxProtocolCommand(
-            self.get_dossier(), self, operations,
-            lock_document_after_creation=True)
+            self.get_dossier(), self, operations)
         command.execute()
-
-    def unlock_protocol_document(self):
-        if not self.protocol_document:
-            return
-
-        self.protocol_document.unlock_document()
 
     def hold(self):
         if self.workflow_state == 'held':
@@ -246,14 +246,13 @@ class Meeting(Base, SQLFormSupport):
         - generate and set the meeting number
         - generate decision numbers for each agenda_item
         - close each agenda item (generates proposal excerpt and change workflow state)
-        - update and unlock the protocol document
+        - generate or update the protocol if necessary
         """
         self.hold()
         assert not self.get_undecided_agenda_items(), \
             'All agenda items must be decided before a meeting is closed.'
 
         self.update_protocol_document()
-        self.unlock_protocol_document()
         self.workflow_state = 'closed'
 
     @property

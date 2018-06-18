@@ -10,19 +10,19 @@ class MergeDocxProtocol(BrowserView):
     operations = ProtocolOperations()
 
     @classmethod
-    def url_for(cls, meeting):
+    def url_for(cls, meeting, overwrite=False):
         dossier = meeting.get_dossier()
 
-        url = '{}/@@merge_docx_protocol?meeting-id={}'.format(
-            dossier.absolute_url(), meeting.meeting_id)
+        url = '{}/@@merge_docx_protocol?meeting-id={};overwrite={}'.format(
+            dossier.absolute_url(), meeting.meeting_id, overwrite)
         return addTokenToUrl(url)
 
     def __call__(self):
         meeting = self.context.get_meeting()
         command = MergeDocxProtocolCommand(
-            self.context, meeting, self.operations,
-            lock_document_after_creation=True)
-        command.execute()
+            self.context, meeting, self.operations)
+        overwrite = self.request.get("overwrite") == "True"
+        command.execute(overwrite)
         command.show_message()
 
         return self.request.RESPONSE.redirect(meeting.get_url())

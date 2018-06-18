@@ -14,8 +14,6 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     """Locking Info Viewlet which renders different templates
     for different locking types.
     """
-    meeting_lock_template = ViewPageTemplateFile(
-        'templates/meeting_lock.pt')
     submitted_document_lock_template = ViewPageTemplateFile(
         'templates/submitted_document_lock_template.pt')
     excerpt_document_lock_template = ViewPageTemplateFile(
@@ -27,7 +25,6 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     # magic, thus we cannot put the ViewPageTemplateFile instances directly
     # into the mapping
     custom_templates = {
-        LOCK_TYPE_SYS_LOCK: 'meeting_lock_template',
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
         LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template',
         "office_connector_lock": 'oc_document_lock_template'

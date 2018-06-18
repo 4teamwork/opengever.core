@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2018-06-11 08:27+0000\n"
 "PO-Revision-Date: 2016-08-10 05:14+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-locking/fr/>\n"
@@ -15,11 +15,6 @@ msgstr ""
 "Domain: DOMAIN\n"
 "Language: fr\n"
 "X-Generator: Weblate 2.7-dev\n"
-
-#. Default: "This protocol will remain locked until the meeting ${meeting} is closed."
-#: ./opengever/locking/templates/meeting_lock.pt
-msgid "description_locked_by_meeting"
-msgstr "Le protocole reste verrouillé jusqu'à la clôture de la séance ${meeting}."
 
 #. Default: "This document is a copy of an excerpt from a meeting and cannot be edited directly."
 #: ./opengever/locking/templates/excerpt_document_lock_template.pt
@@ -40,4 +35,3 @@ msgstr "Ce document a été déposé en tant que copie de ${document} et ne peut
 #: ./opengever/locking/templates/submitted_document_lock_template.pt
 msgid "description_locked_submitted_document"
 msgstr "Ce document a été déposé en tant que copie et ne peut être directement modifié"
-

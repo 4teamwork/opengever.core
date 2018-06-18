@@ -76,7 +76,7 @@
           <h2 i18n:translate="close_meeting">Close meeting</h2>
           <p tal:condition="view/will_closing_regenerate_protocol"
              i18n:translate="">
-            Closing the meeting the first time will automatically (re-)create the protocol.
+            Closing the meeting will automatically (re-)create the protocol.
           </p>
           <p tal:condition="not:view/will_closing_regenerate_protocol"
              i18n:translate="">
@@ -184,6 +184,25 @@
           </form>
         </div>
 
+        <div class="overlay" id="confirm_generate_protocol">
+          <div class="close">
+            <a href="#" class="hiddenStructure" title="Close this box">Close this box.</a>
+          </div>
+          <h2 i18n:translate="label_confirm_generate_protocol">Generate Protocol</h2>
+          <p i18n:translate="">
+            The protocol has been modified manually. These modifications will be lost if you regenerate the protocol.
+          </p>
+          <p i18n:translate="">
+            Are you sure you want to regenerate the protocol?
+          </p>
+          <div class="button-group">
+            <button class="button destructive confirm"
+                    i18n:translate="label_confirm_generate_protocol">Generate Protocol</button>
+            <button class="button decline"
+                    i18n:translate="label_cancel">Cancel</button>
+          </div>
+        </div>
+
         <div class="sidebar"
              tal:define="participants view/get_participants">
           <ul class="formTabs">
@@ -264,8 +283,13 @@
                      tal:define="protocol_document view/get_protocol_document">
 
                   <div class="document-actions">
+                    <a class="action generate" id="generate_protocol_with_confirm"
+                       tal:condition="python:meeting.is_editable() and meeting.was_protocol_manually_edited()"
+                       tal:attributes="href python:view.url_merge_docx_protocol(overwrite=True)"
+                       i18n:attributes="title action_generate_document"></a>
+
                     <a class="action generate"
-                       tal:condition="meeting/is_editable"
+                       tal:condition="python:meeting.is_editable() and not meeting.was_protocol_manually_edited()"
                        tal:attributes="href view/url_merge_docx_protocol"
                        i18n:attributes="title action_generate_document"></a>
 

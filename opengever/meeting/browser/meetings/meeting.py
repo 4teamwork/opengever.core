@@ -266,8 +266,8 @@ class MeetingView(BrowserView):
                                             default=u'Agenda item list'),
                                     show_icon=False)
 
-    def url_merge_docx_protocol(self):
-        return MergeDocxProtocol.url_for(self.model)
+    def url_merge_docx_protocol(self, overwrite=False):
+        return MergeDocxProtocol.url_for(self.model, overwrite)
 
     def has_agendaitem_list_document(self):
         return self.model.has_agendaitem_list_document()
@@ -279,19 +279,14 @@ class MeetingView(BrowserView):
         if self.has_protocol_document:
             return self.model.protocol_document.get_download_url()
 
-    def will_closing_regenerate_protocol(self):
-        """This method can tell whether we will regenerate the protocol when
-        closing the meething.
+    def was_protocol_manually_edited(self):
+        return self.model.was_protocol_manually_edited()
 
-        The protocol will be generated while it is locked or not yet existing.
-        When the user reopens the meeting the document will be left unlocked
-        because the user may have made changes at this point.
-        The protocol is no longer regenerated automatically when it
-        may have been changed.
+    def will_closing_regenerate_protocol(self):
         """
-        if not self.has_protocol_document():
-            return True
-        return self.model.protocol_document.is_locked()
+        The protocol will be generated if it has not been manually edited
+        """
+        return not self.was_protocol_manually_edited()
 
     def url_download_agendaitem_list(self):
         if self.has_agendaitem_list_document:

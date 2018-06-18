@@ -1,10 +1,10 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
 from pyquery import PyQuery
-
 
 ZIP_EXPORT_ACTION_LABEL = 'Export as Zip'
 
@@ -147,6 +147,74 @@ class TestWordMeeting(IntegrationTestCase):
         self.assertEquals(u'held', self.decided_meeting.model.workflow_state)
 
     @browsing
+    def test_closing_meeting_generates_the_protocol(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+
+        self.assertFalse(model.has_protocol_document())
+
+        # When closing the meeting, we should end up with a protocol
+        browser.open(self.meeting)
+
+        self.assertEquals(
+            ['Closing the meeting will automatically (re-)create the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
+        model.close()
+        self.assertTrue(model.has_protocol_document())
+        self.assertEquals(0, model.protocol_document.generated_version)
+        self.assertEquals(u'closed', model.workflow_state)
+
+    @browsing
+    def test_closing_meeting_regenerates_the_protocol(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+
+        # Make sure there is already a protocol generated:
+        model.update_protocol_document()
+        self.assertEquals(0, model.protocol_document.generated_version)
+
+        # When closing the meeting, we should end up with a new version
+        browser.open(self.meeting)
+
+        self.assertEquals(
+            ['Closing the meeting will automatically (re-)create the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
+        model.close()
+
+        self.assertEquals(1, model.protocol_document.generated_version)
+        self.assertEquals(u'closed', model.workflow_state)
+
+    @browsing
+    def test_closing_meeting_does_not_regenerate_edited_protocol(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+
+        # Make sure there is already a protocol generated:
+        model.update_protocol_document()
+        self.assertEquals(0, model.protocol_document.generated_version)
+
+        # Fake editing the protocol
+        document = model.protocol_document.resolve_document()
+        versioner = Versioner(document)
+        versioner.create_initial_version()
+        versioner.create_version("bumb version")
+
+        # When closing the meeting, we should end up with a new version
+        browser.open(self.meeting)
+
+        self.assertEquals(
+            ['Closing the meeting will not update the protocol automatically.'
+             '\nMake sure to transfer your changes or recreate the protocol.',
+             'Are you sure you want to close this meeting?'],
+            browser.css('#confirm_close_meeting p').text)
+        model.close()
+
+        self.assertEquals(0, model.protocol_document.generated_version)
+        self.assertEquals(u'closed', model.workflow_state)
+
+    @browsing
     def test_closing_meeting_the_first_time_regenerates_the_protocol(self, browser):
         self.login(self.committee_responsible, browser)
         model = self.meeting.model
@@ -157,37 +225,13 @@ class TestWordMeeting(IntegrationTestCase):
         # When closing the meeting, we should end up with a new version
         browser.open(self.meeting)
         self.assertEquals(
-            ['Closing the meeting the first time will automatically'
-             ' (re-)create the protocol.',
+            ['Closing the meeting will automatically (re-)create the protocol.',
              'Are you sure you want to close this meeting?'],
             browser.css('#confirm_close_meeting p').text)
         model.close()
         self.assertEquals(1, model.protocol_document.generated_version)
         self.assertEquals(u'closed', model.workflow_state)
 
-    @browsing
-    def test_re_closing_meeting_regenerates_the_protocol(self, browser):
-        self.login(self.committee_responsible, browser)
-        model = self.meeting.model
-        # Closing the meeting generates and unlocks the protocol:
-        model.close()
-        self.assertEquals(0, model.protocol_document.generated_version)
-
-        # The user may have made changes to the protocol now.
-        # Reopen the protocol:
-        model.execute_transition('closed-held')
-        self.assertEquals(0, model.protocol_document.generated_version)
-
-        # Re-closing the meeting must not regenerate the protocol because
-        # it would potentially overwrite user-changes.
-        browser.open(self.meeting)
-        self.assertEquals(
-            ['Closing the meeting will not update the protocol automatically.'
-             '\nMake sure to transfer your changes or recreate the protocol.',
-             'Are you sure you want to close this meeting?'],
-            browser.css('#confirm_close_meeting p').text)
-        model.close()
-        self.assertEquals(0, model.protocol_document.generated_version)
 
     @browsing
     def test_closing_meeting_with_undecided_items_is_not_allowed(self, browser):

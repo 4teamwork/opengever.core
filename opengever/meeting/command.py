@@ -9,7 +9,6 @@ from opengever.base.request import dispatch_request
 from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
-from opengever.locking.lock import SYS_LOCK
 from opengever.meeting import _
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
@@ -18,7 +17,6 @@ from opengever.meeting.exceptions import ProtocolAlreadyGenerated
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.mergetool import DocxMergeTool
 from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
-from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
 from opengever.meeting.protocol import AgendaItemListProtocolData
@@ -27,11 +25,8 @@ from opengever.meeting.protocol import ProtocolData
 from opengever.meeting.sablon import Sablon
 from opengever.ogds.base.utils import decode_for_json
 from plone import api
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-from plone.locking.interfaces import ILockable
 from plone.memoize import instance
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import base64
@@ -123,6 +118,12 @@ class ProtocolOperations(object):
                  'successfully.',
                  mapping=dict(title=meeting.get_title()))
 
+    def get_not_updated_message(self, meeting):
+        return _(u'Protocol for meeting ${title} has not been updated. '
+                 'The protocol has been modified manually and these modifications '
+                 'will be lost if you regenerate the protocol.',
+                 mapping=dict(title=meeting.get_title()))
+
     def get_title(self, meeting):
         return meeting.get_protocol_title()
 
@@ -174,15 +175,13 @@ class AgendaItemListOperations(object):
 class CreateGeneratedDocumentCommand(CreateDocumentCommand):
     """Document generation workflow."""
 
-    def __init__(self, context, meeting, document_operations,
-                 lock_document_after_creation=False):
+    def __init__(self, context, meeting, document_operations):
         """Data will be initialized lazily since it is only available after the
         document has been generated in `execute`.
 
         """
         self.meeting = meeting
         self.document_operations = document_operations
-        self.lock_document_after_creation = lock_document_after_creation
 
         super(CreateGeneratedDocumentCommand, self).__init__(
             context, filename=None, data=None,
@@ -203,15 +202,8 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             )
 
         document = super(CreateGeneratedDocumentCommand, self).execute()
-        self.lock_document(document)
         self.add_database_entry(document)
         return document
-
-    def lock_document(self, document):
-        if not self.lock_document_after_creation:
-            return
-
-        ILockable(document).lock(SYS_LOCK)
 
     def add_database_entry(self, document):
         session = create_session()
@@ -221,10 +213,9 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             session.add(generated_document)
 
     def show_message(self):
-        portal = api.portal.get()
         api.portal.show_message(
             self.document_operations.get_generated_message(self.meeting),
-            portal.REQUEST)
+            self.context.REQUEST)
 
 
 class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
@@ -236,31 +227,36 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
     Then append all partial protocols for each agenda item in sequential order.
     """
 
-    def __init__(self, context, meeting, document_operations,
-                 lock_document_after_creation=False):
+    def __init__(self, context, meeting, document_operations):
         super(MergeDocxProtocolCommand, self).__init__(
-            context, meeting, document_operations,
-            lock_document_after_creation=lock_document_after_creation)
+            context, meeting, document_operations)
 
         self.has_protocol = meeting.protocol_document is not None
+        self.protocol_updated = False
 
-    def execute(self):
+    def execute(self, overwrite=False):
         if self.has_protocol:
-            return self.update_protocol_document()
+            return self.update_protocol_document(overwrite)
 
         return super(MergeDocxProtocolCommand, self).execute()
 
     def show_message(self):
-        if self.has_protocol:
-            portal = api.portal.get()
+        if not self.has_protocol:
+            return super(MergeDocxProtocolCommand, self).show_message()
+
+        if self.protocol_updated:
             api.portal.show_message(
                 self.document_operations.get_updated_message(self.meeting),
-                portal.REQUEST)
+                self.context.REQUEST)
+        else:
+            api.portal.show_message(
+                self.document_operations.get_not_updated_message(self.meeting),
+                self.context.REQUEST)
+
+    def update_protocol_document(self, overwrite=False):
+        if self.meeting.was_protocol_manually_edited() and not overwrite:
             return
 
-        return super(MergeDocxProtocolCommand, self).show_message()
-
-    def update_protocol_document(self):
         document = self.meeting.protocol_document.resolve_document()
         document.update_file(self.generate_file_data())
 
@@ -274,7 +270,7 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         self.meeting.protocol_document.generated_version = new_version
         document.setModificationDate(DateTime())
         document.reindexObject(idxs=['modified'])
-
+        self.protocol_updated = True
         return document
 
     def generate_file_data(self):
