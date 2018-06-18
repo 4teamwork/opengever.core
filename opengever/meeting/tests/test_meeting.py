@@ -1,79 +1,32 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
-from opengever.meeting.wrapper import MeetingWrapper
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestCommitteeMemberVocabulary(FunctionalTestCase):
+class TestCommitteeMemberVocabulary(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-
-    def setUp(self):
-        super(TestCommitteeMemberVocabulary, self).setUp()
-
-        self.admin_unit.public_url = 'http://nohost/plone'
-
-        self.repo = create(Builder('repository_root'))
-        self.repository_folder = create(Builder('repository')
-                                        .within(self.repo))
-
-        self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee')
-                                .within(self.container)
-                                .link_with(self.repository_folder))
-
-        self.committee_model = self.committee.load_model()
-
-        self.meeting = create(Builder('meeting').having(
-            committee=self.committee_model))
-
-        self.wrapper = MeetingWrapper(self.committee, self.meeting)
-
-    def test_return_member_as_value(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-
-        create(Builder('membership').having(
-            committee=self.committee_model,
-            member=member))
-
-        vocabulary = get_committee_member_vocabulary(
-            MeetingWrapper(self.committee, self.meeting))
+    def test_return_fullname_with_email_as_title(self):
+        self.login(self.meeting_user)
+        vocabulary = get_committee_member_vocabulary(self.meeting)
 
         self.assertEqual(
-            member,
-            vocabulary._terms[0].value)
+            [u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
+             u'W\xf6lfl Gerda (g.woelfl@hotmail.com)',
+             u'Wendler Jens (jens-wendler@gmail.com)'],
+            [term.title for term in vocabulary])
 
-    def test_return_fullname_as_title(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-
-        create(Builder('membership').having(
-            committee=self.committee_model,
-            member=member))
-
-        vocabulary = get_committee_member_vocabulary(
-            MeetingWrapper(self.committee, self.meeting))
+    def test_returns_member_as_value(self):
+        self.login(self.meeting_user)
+        vocabulary = get_committee_member_vocabulary(self.meeting)
 
         self.assertEqual(
-            u'M\xfcller Hans',
-            vocabulary._terms[0].title)
+            [self.committee_president.model,
+             self.committee_participant_1.model,
+             self.committee_participant_2.model],
+            [term.value for term in vocabulary])
 
-    def test_return_fullname_with_email_as_value(self):
-        member = create(Builder('member').having(
-            firstname=u'Hans',
-            lastname=u'M\xfcller',
-            email=u'mueller@example.com'))
+    def test_omits_braces_when_no_email_is_available(self):
+        self.login(self.meeting_user)
+        self.committee_president.model.email = None
 
-        create(Builder('membership').having(
-            committee=self.committee_model,
-            member=member))
-
-        vocabulary = get_committee_member_vocabulary(
-            MeetingWrapper(self.committee, self.meeting))
-
-        self.assertEqual(
-            u'M\xfcller Hans (mueller@example.com)',
-            vocabulary._terms[0].title)
+        vocabulary = get_committee_member_vocabulary(self.meeting)
+        self.assertEqual(u'Sch\xf6ller Heidrun', vocabulary._terms[0].title)
