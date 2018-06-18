@@ -5,8 +5,8 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from plone.protect import createToken
-import re
 import json
+import re
 
 
 class TestDisplayAgendaItems(IntegrationTestCase):
