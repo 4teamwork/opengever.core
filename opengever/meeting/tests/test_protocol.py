@@ -4,7 +4,7 @@ from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 
 
-class TestProtocolWithWord(IntegrationTestCase):
+class TestProtocol(IntegrationTestCase):
 
     features = ('meeting',)
 
