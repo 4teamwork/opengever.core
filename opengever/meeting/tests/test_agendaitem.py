@@ -5,8 +5,8 @@ from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from plone.protect import createToken
-import re
 import json
+import re
 
 
 class TestDisplayAgendaItems(IntegrationTestCase):
@@ -215,36 +215,6 @@ class TestDecideAgendaItem(IntegrationTestCase):
         agenda_item.decide()
 
     @browsing
-    def test_decide_proposal_agenda_item(self, browser):
-        self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_proposal(
-            self.meeting, self.submitted_proposal)
-
-        browser.open(self.agenda_item_url(agenda_item, 'decide'),
-                     data={'_authenticator': createToken()})
-
-        self.assertEquals('decided', agenda_item.workflow_state)
-        self.assertEquals([{u'message': u'Agenda Item decided and excerpt '
-                                        u'generated.',
-                            u'messageClass': u'info',
-                            u'messageTitle': u'Information'}],
-                          browser.json.get('messages'))
-
-    @browsing
-    def test_decide_ad_hoc_agenda_item(self, browser):
-        self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_ad_hoc(self.meeting, 'Gugus')
-
-        browser.open(self.agenda_item_url(agenda_item, 'decide'),
-                     data={'_authenticator': createToken()})
-
-        self.assertEquals('decided', agenda_item.workflow_state)
-        self.assertEquals([{u'message': u'Agenda Item decided.',
-                            u'messageClass': u'info',
-                            u'messageTitle': u'Information'}],
-                          browser.json.get('messages'))
-
-    @browsing
     def test_raises_not_found_for_invalid_agenda_item_id(self, browser):
         self.login(self.committee_responsible, browser)
 
@@ -266,6 +236,20 @@ class TestDecideAgendaItem(IntegrationTestCase):
         browser.open(self.agenda_item_url(agenda_item_2, 'decide'),
                      data={'_authenticator': createToken()})
         self.assertEquals(None, browser.json.get('redirectUrl'))
+
+    @browsing
+    def test_closing_proposal_adds_proposalhistory(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_word_proposal)
+        agenda_item.close()
+
+        browser.open(self.submitted_word_proposal, view=u'tabbedview_view-overview')
+        entry = browser.css('.answer').first
+
+        self.assertEquals(u'Proposal decided by M\xfcller Fr\xe4nzi (franzi.muller)',
+                          entry.css('h3').first.text)
+        self.assertEquals('answer decided', entry.get('class'))
 
 
 class TestReopenAgendaItem(IntegrationTestCase):

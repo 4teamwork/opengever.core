@@ -3,11 +3,48 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Member
 from opengever.meeting.wrapper import MemberWrapper
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from pyquery import PyQuery
+
+
+class TestMember(IntegrationTestCase):
+
+    def test_return_fullname_if_no_email(self):
+        self.login(self.meeting_user)
+        self.committee_president.model.email = None
+
+        self.assertEqual(
+            u'Sch\xf6ller Heidrun',
+            self.committee_president.model.get_title())
+
+    def test_return_linked_email_by_default(self):
+        self.login(self.meeting_user)
+
+        self.assertEqual(
+            u'Sch\xf6ller Heidrun (<a href="mailto:h.schoeller@web.de">h.schoeller@web.de</a>)',
+            self.committee_president.model.get_title())
+
+    def test_return_unlinked_title_if_desired(self):
+        self.login(self.meeting_user)
+
+        self.assertEqual(
+            u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
+            self.committee_president.model.get_title(show_email_as_link=False))
+
+    def test_result_is_html_escaped(self):
+        self.login(self.meeting_user)
+        self.committee_president.model.lastname = u'<script></script>Sch\xf6ller'
+        self.committee_president.model.email = None
+
+        create_session().flush()  # the fullname property needs a nudge
+        self.assertEqual(
+            u'&lt;script&gt;&lt;/script&gt;Sch\xf6ller Heidrun',
+            self.committee_president.model.get_title())
 
 
 class TestMemberListing(FunctionalTestCase):
@@ -43,7 +80,7 @@ class TestMemberListing(FunctionalTestCase):
         self.assertEqual(u'foo@example.com', hans.email)
 
     @browsing
-    def test_memers_can_be_edited_in_browser(self, browser):
+    def test_members_can_be_edited_in_browser(self, browser):
         browser.login()
         browser.open(self.member.get_edit_url(self.container))
 

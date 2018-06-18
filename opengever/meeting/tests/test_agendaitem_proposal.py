@@ -1,46 +1,59 @@
-from contextlib import nested
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashed
 from plone import api
+from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
 from plone.uuid.interfaces import IUUID
-from opengever.trash.trash import ITrashed
 
 
-class TestWordAgendaItem(IntegrationTestCase):
+class TestProposalAgendaItem(IntegrationTestCase):
 
     features = ('meeting',)
 
     @browsing
-    def test_delete_agenda_item_does_not_trash_proposal(self, browser):
+    def test_decide_proposal_agenda_item(self, browser):
         self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEquals('decided', agenda_item.workflow_state)
+        self.assertEquals([{u'message': u'Agenda Item decided and excerpt '
+                                        u'generated.',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
+
+    @browsing
+    def test_decide_proposal_agenda_item_generates_numbers(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+
+        self.assertEqual(2, agenda_item.decision_number)
+        self.assertEqual(2, self.meeting.model.meeting_number)
+
+    @browsing
+    def test_delete_agenda_item_does_not_trash_proposal_document(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
         document = agenda_item.resolve_document()
 
-        browser.open(
-            self.meeting,
-            view='agenda_items/{}/delete'.format(agenda_item.agenda_item_id))
+        browser.open(self.agenda_item_url(agenda_item, 'delete'))
 
+        self.assertEquals([{u'message': u'Agenda Item Successfully deleted',
+                            u'messageClass': u'info',
+                            u'messageTitle': u'Information'}],
+                          browser.json.get('messages'))
         self.assertFalse(ITrashed.providedBy(document))
-
-    def test_deciding_meeting_item_does_not_create_an_excerpt(self):
-        """When the word meeting feature is enabled, deciding a meeting item
-        does not create and return a excerpt document automatically;
-        this must now be done by hand.
-        """
-        self.login(self.administrator)
-        agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-
-        with nested(self.observe_children(self.dossier),
-                    self.observe_children(self.meeting_dossier)) as \
-                    (dossier_children,
-                     meeting_dossier_children):
-            agenda_item.decide()
-
-        self.assertEquals((), tuple(dossier_children['added']))
-        self.assertEquals((), tuple(meeting_dossier_children['added']))
 
     @browsing
     def test_proposal_document_in_meeting_item_data(self, browser):
