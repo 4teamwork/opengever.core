@@ -1,4 +1,4 @@
-(function(global, $, Controller, EditboxController, Pin, HBS) {
+(function(global, $, Controller, Pin, HBS) {
 
   "use strict";
 
@@ -525,27 +525,6 @@
                     });
     };
 
-    this.showEditbox = function(target) {
-      /** no-word version only */
-      var row = target.parents("tr");
-      row.removeClass("expanded");
-      var source_selectors = [
-            /* Non-word: */
-            ".title > span > a",
-            ".title > span"
-      ];
-      var source_selector = source_selectors.filter(function(selector) {
-        return $(selector, row).length > 0;
-      })[0];
-      var source = $(source_selector, row);
-
-      new EditboxController({
-        editbox: $(".edit-box", row),
-        source: source,
-        trigger: target
-      });
-    };
-
     this.onRender = function() {
       this.outlet.sortable(sortableSettings);
       $(document).trigger("agendaItemsReady");
@@ -693,11 +672,6 @@
         method: "click",
         target: ".delete-agenda-item",
         callback: this.openModal
-      },
-      {
-        method: "click",
-        target: ".edit-agenda-item",
-        callback: this.showEditbox
       },
       {
         method: "click",
@@ -971,4 +945,4 @@
     });
   });
 
-}(window, window.jQuery, window.Controller, window.EditboxController, window.Pin, window.Handlebars));
+}(window, window.jQuery, window.Controller, window.Pin, window.Handlebars));
