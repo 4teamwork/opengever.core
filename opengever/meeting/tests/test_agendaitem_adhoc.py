@@ -5,7 +5,7 @@ from plone import api
 from plone.protect import createToken
 
 
-class TestWordAgendaItem(IntegrationTestCase):
+class TestAdHocAgendaItem(IntegrationTestCase):
 
     features = ('meeting',)
 
