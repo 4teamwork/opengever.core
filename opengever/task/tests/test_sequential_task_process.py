@@ -65,6 +65,42 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
+    def test_starts_next_task_when_task_gets_skipped(self):
+        self.login(self.dossier_responsible)
+
+        # create subtask
+        subtask2 = create(Builder('task')
+                          .within(self.task)
+                          .having(responsible_client='fa',
+                                  responsible=self.regular_user.getId(),
+                                  issuer=self.dossier_responsible.getId(),
+                                  task_type='correction',
+                                  deadline=date(2016, 11, 1))
+                          .in_state('task-state-planned'))
+
+        self.set_workflow_state('task-state-planned', self.subtask)
+        alsoProvides(self.subtask, IFromSequentialTasktemplate)
+        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        self.task.set_tasktemplate_order([self.subtask, subtask2])
+
+        api.content.transition(
+            obj=self.subtask, transition='task-transition-planned-skipped')
+
+        self.assertEquals(
+            'task-state-skipped', api.content.get_state(self.subtask))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subtask2))
+
+        self.set_workflow_state('task-state-rejected', self.subtask)
+        self.set_workflow_state('task-state-planned', subtask2)
+        api.content.transition(
+            obj=self.subtask, transition='task-transition-rejected-skipped')
+
+        self.assertEquals(
+            'task-state-skipped', api.content.get_state(self.subtask))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subtask2))
+
     def test_handles_already_opened_tasks(self):
         self.login(self.regular_user)
 
