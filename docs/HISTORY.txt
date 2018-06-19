@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Open successor task when predecessor is skipped or closed. [njohner]
 - Make protocol editable even if meeting is open. [njohner]
 - Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]
