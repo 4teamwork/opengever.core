@@ -204,20 +204,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.meeting/Editbox.js"
-      inline="False"
-      insert-after="++resource++opengever.base/livesearch.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.meeting/meeting.js"
       inline="False"
-      insert-after="++resource++opengever.meeting/Editbox.js"
+      insert-after="++resource++opengever.base/livesearch.js"
       />
 
   <javascript
