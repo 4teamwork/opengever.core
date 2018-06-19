@@ -4,7 +4,7 @@
     tal:define="css view/css"
     tal:omit-tag="python: True">
 
-  <style type="text/css" media="all"
+  <style id="colorization" type="text/css" media="all"
          tal:condition="css"
          tal:content="css"
          />
