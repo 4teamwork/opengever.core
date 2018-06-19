@@ -8,7 +8,7 @@ class ExposatorViewlet(ViewletBase):
     """
 
     REMOTE_CLIENT_JS = '''
-<script type="text/javascript">
+<script type="text/javascript" id="exposator">
 $(function() {
     $('#column-content, #portal-column-content').expose({closeOnClick: false, closeOnEsc: false, zIndex: 7000});
     $('#portal-breadcrumbs').css('z-index', '7001');

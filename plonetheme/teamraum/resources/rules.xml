@@ -81,6 +81,9 @@
       <!-- insert colorization viewlet styles into #portal-top -->
       <after css:content="style#colorization" css:theme-children="#portal-top" />
 
+      <!-- insert exposator <script /> into #portal-top -->
+      <after css:content="script#exposator" css:theme-children="#portal-top" />
+
       <!-- notifications -->
       <replace css:content-children="#portal-notifications" css:theme-children="#portal-notifications" />
       <replace css:content-children=".gever-portal-control" css:theme-children="#gever-portal-controls" />
