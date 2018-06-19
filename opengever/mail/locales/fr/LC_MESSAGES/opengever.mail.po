@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:52+0000\n"
+"POT-Creation-Date: 2018-06-19 16:36+0000\n"
 "PO-Revision-Date: 2017-09-04 06:15+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/fr/>\n"
@@ -197,10 +197,10 @@ msgstr "Téléchargement drag & drop"
 msgid "label_message_source_mailin"
 msgstr "Mail-In"
 
-#. Default: "Original message"
+#. Default: "Message"
 #: ./opengever/mail/browser/mail.py
 msgid "label_org_message"
-msgstr "Message original"
+msgstr "Message"
 
 #. Default: "Raw *.msg message before conversion"
 #: ./opengever/mail/mail.py
@@ -244,4 +244,3 @@ msgstr "E-mails"
 #: ./opengever/mail/browser/send_document.py
 msgid "receiver"
 msgstr "Destinataire"
-

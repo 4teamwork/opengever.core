@@ -6,7 +6,7 @@
     "properties": {
         "message": {
             "type": "string",
-            "title": "Orginalnachricht",
+            "title": "Nachricht",
             "description": "",
             "_zope_schema_type": "NamedBlobFile"
         },
