@@ -74,10 +74,6 @@
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2, minimum-scale=1" />
       </replace>
 
-      <!-- copy styles and javascripts in portal-top -->
-      <replace css:content="#portal-top style, #portal-top script"
-               css:theme-children="#portal-top" />
-
       <!-- insert colorization viewlet styles into #portal-top -->
       <after css:content="style#colorization" css:theme-children="#portal-top" />
 

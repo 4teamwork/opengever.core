@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Open successor task when predecessor is skipped or closed. [njohner]
+- Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
 - Make protocol editable even if meeting is open. [njohner]
 - Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]
