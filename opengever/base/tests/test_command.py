@@ -1,3 +1,4 @@
+from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
 from opengever.testing import IntegrationTestCase
 
@@ -22,3 +23,17 @@ class TestCreateEmailCommand(IntegrationTestCase):
 
         self.assertEqual(u'testm\xe4il.msg', mail.original_message.filename)
         self.assertEqual('mock-msg-body', mail.original_message.data)
+
+
+class TestCreateDocumentCommand(IntegrationTestCase):
+
+    def test_create_document_from_command(self):
+        self.login(self.regular_user)
+        command = CreateDocumentCommand(
+            self.dossier, 'testm\xc3\xa4il.txt', 'buh!', title='\xc3\x9cnicode')
+        document = command.execute()
+
+        self.assertIsInstance(document.title, unicode)
+        self.assertEqual(u'\xdcnicode', document.title)
+        self.assertEqual('buh!', document.file.data)
+        self.assertEqual('text/plain', document.file.contentType)
