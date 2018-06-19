@@ -45,6 +45,17 @@
       cookable="True"
       expression=""
       enabled="True"
+      id="++resource++opengever.meeting/Pin.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Storage.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
       id="++resource++opengever.base/unorm.js"
       inline="False"
       insert-after="++resource++ftw.keywordwidget/js/keywordwidget.js"
