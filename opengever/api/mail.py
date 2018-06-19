@@ -41,7 +41,11 @@ class DeserializeMailFromJson(DeserializeFromJson):
         context = super(DeserializeMailFromJson, self).__call__(
             validate_all=validate_all, data=data)
 
-        context._update_title_from_message_subject()
-        initialize_metadata(context, None)
-        initalize_title(context, None)
+        if 'message' in data:
+            if not data.get('title'):
+                context._update_title_from_message_subject()
+                initalize_title(context, None)
+
+            initialize_metadata(context, None)
+
         return context
