@@ -510,8 +510,8 @@ class AgendaItemsView(BrowserView):
         """
         self.require_editable()
 
-        self.agenda_item.generate_excerpt(
-            title=self.request.form['excerpt_title'])
+        title = safe_unicode(self.request.form['excerpt_title'])
+        self.agenda_item.generate_excerpt(title=title)
 
         return (JSONResponse(self.request)
                 .info(_('excerpt_generated',
