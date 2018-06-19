@@ -1,9 +1,31 @@
 # -*- coding: utf-8 -*-
 from ftw.testbrowser import browsing
+from opengever.mail.mail import IOGMail
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
+from plone.namedfile.file import NamedBlobFile
 import base64
 import json
+
+
+class TestGetMail(IntegrationTestCase):
+
+    @browsing
+    def test_contains_also_original_message(self, browser):
+        self.login(self.regular_user, browser)
+        IOGMail(self.mail).original_message = NamedBlobFile(
+            data='__DATA__', filename=u'testmail.msg')
+
+        browser.open(self.mail.absolute_url(), method='GET',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            {u'content-type': u'application/vnd.ms-outlook',
+             u'download': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-26/@@download/original_message',
+             u'filename': u'testmail.msg',
+             u'size': 8},
+            browser.json.get('original_message'))
 
 
 class TestCreateMail(IntegrationTestCase):
