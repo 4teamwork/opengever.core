@@ -9,6 +9,7 @@ Changelog
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
 - Fix an issue with excerpts title not being unicode. [deiferni]
 - Fix updating mail title via API. [phgross]
+- Fix exporting meetings with proposals with related mails. [tarnap]
 - Make protocol editable even if meeting is open. [njohner]
 - Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]

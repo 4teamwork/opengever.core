@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
@@ -112,6 +114,27 @@ class TestMeetingZipExportView(IntegrationTestCase):
             '9. Sitzung der Rechnungsprufungskommission.zip',
             cgi.parse_header(browser.headers['content-disposition'])[1]['filename'],
             'Wrong zip filename.')
+
+    @browsing
+    def test_meeting_can_be_exported_to_zip_when_proposal_related_to_mail(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        submitted_proposal = create(
+            Builder('proposal')
+            .within(self.dossier)
+            .having(
+                title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                committee=self.committee.load_model(),
+            )
+            .relate_to(self.mail_eml)
+            .as_submitted()
+        )
+
+        self.schedule_proposal(self.meeting, submitted_proposal)
+
+        browser.open(self.meeting, view='export-meeting-zip')
+        statusmessages.assert_no_error_messages()
+        self.assertEquals('application/zip', browser.contenttype)
 
     @browsing
     def test_meeting_can_be_exported_to_zip_when_agenda_item_list_template_is_missing(self, browser):
