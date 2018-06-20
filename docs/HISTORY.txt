@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Add REST API endpoint for creating bumblebee sessions. [buchi]
 - Bump ftw.casauth to 1.2.0 which provides a `@caslogin` endpoint. [buchi] 
 - Make lock info visible even when a document can be safely unlocked. [njohner]
 - Bump ftw.tokenauth to 1.1.0 which provides support for impersonation. [buchi]
