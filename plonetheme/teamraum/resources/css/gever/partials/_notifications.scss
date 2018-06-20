@@ -103,8 +103,38 @@
     margin: 0;
   }
 
-.template-personal-preferences .documentByLine {
-  display: none;
+.template-personal-preferences {
+  .documentByLine {
+    display: none;
+  }
+
+  #notification-settings-form {
+    margin-top: 1em;
+  }
+
+  .panes {
+    margin-top: 1em;
+  }
+
+  table {
+    width: 100%;
+
+    th:nth-child(1) {
+      width: 20%;
+    }
+    th:nth-child(2) {
+      width: 15%;
+    }
+    th:nth-child(3) {
+      width: 15%;
+    }
+    th:nth-child(4) {
+      width: 15%;
+    }
+    th:nth-child(5) {
+      width: 35%;
+    }
+  }
 }
 
 .notification-settings-description {
