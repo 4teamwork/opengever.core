@@ -49,7 +49,7 @@ class TestOverview(FunctionalTestCase):
                   ['creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
                   ['Foreign Reference', ''],
-                  ['Original message',
+                  ['Message',
                    u'mehrere-anhange.eml \u2014 32 KB '
                    u'Checkout and edit Download copy'],
                   ['Attachments',

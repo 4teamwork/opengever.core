@@ -5,6 +5,7 @@ Changelog
 2018.3.5 (unreleased)
 ---------------------
 
+- Include original_message data in mail API GET requests. [phgross]
 - Fix updating mail title via API. [phgross]
 - Fix exporting meetings with proposals with related mails. [tarnap]
 

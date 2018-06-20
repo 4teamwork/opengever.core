@@ -94,7 +94,6 @@ class IOGMail(model.Schema):
     )
 
     form.mode(original_message=DISPLAY_MODE)
-    form.read_permission(original_message='cmf.ManagePortal')
     form.write_permission(original_message='cmf.ManagePortal')
     original_message = field.NamedBlobFile(
         title=_(u'label_original_message',
