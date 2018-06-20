@@ -109,5 +109,19 @@ ACTIVITY_TRANSLATIONS = {
         'forwarding-transition-reassign-refused',
         default=u'Forwarding reassigned and refused'),
     'forwarding-transition-refuse': _(
-        'forwarding-transition-refuse', default=u'Forwarding refused')
+        'forwarding-transition-refuse', default=u'Forwarding refused'),
+    'proposal-transition-reject': _(
+        'proposal-transition-reject', default=u'Proposal rejected'),
+    'proposal-transition-schedule': _(
+        'proposal-transition-schedule', default=u'Proposal scheduled'),
+    'proposal-transition-decide': _(
+        'proposal-transition-decide', default=u'Proposal decided'),
+    'proposal-transition-submit': _(
+        'proposal-transition-submit', default=u'Proposal submitted'),
+    'proposal-commented': _('proposal-commented', default=u'Proposal commented'),
+    'proposal-attachment-updated': _('proposal-attachment-updated',
+                                     default=u'Attachment updated'),
+    'proposal-additional-documents-submitted': _(
+        'proposal-additional-documents-submitted',
+        default=u'Additional documents submitted'),
 }

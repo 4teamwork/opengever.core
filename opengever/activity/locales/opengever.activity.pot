@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-13 12:06+0000\n"
+"POT-Creation-Date: 2018-06-21 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,6 +141,41 @@ msgstr ""
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/center.py
 msgid "msg_error_not_notified"
+msgstr ""
+
+#. Default: "Additional documents submitted"
+#: ./opengever/activity/__init__.py
+msgid "proposal-additional-documents-submitted"
+msgstr ""
+
+#. Default: "Attachment updated"
+#: ./opengever/activity/__init__.py
+msgid "proposal-attachment-updated"
+msgstr ""
+
+#. Default: "Proposal commented"
+#: ./opengever/activity/__init__.py
+msgid "proposal-commented"
+msgstr ""
+
+#. Default: "Proposal decided"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-decide"
+msgstr ""
+
+#. Default: "Proposal rejected"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-reject"
+msgstr ""
+
+#. Default: "Proposal scheduled"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-schedule"
+msgstr ""
+
+#. Default: "Proposal submitted"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-submit"
 msgstr ""
 
 #. Default: "Proposal issuer"
