@@ -1,4 +1,6 @@
 from opengever.activity.model import NotificationDefault
+from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
+from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.model import create_session
@@ -63,6 +65,21 @@ DEFAULT_SETTINGS = [
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'forwarding-transition-refuse', 'mail_notification': False,
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
+    {'kind': 'proposal-transition-submit',
+     'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
+    {'kind': 'proposal-transition-reject',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+    {'kind': 'proposal-transition-schedule',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+    {'kind': 'proposal-transition-decide',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+    {'kind': 'proposal-commented',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE,
+                                  COMMITTEE_RESPONSIBLE_ROLE]},
+    {'kind': 'proposal-attachment-updated',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+    {'kind': 'proposal-additional-documents-submitted',
+     'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
 ]
 
 
