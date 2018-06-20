@@ -126,7 +126,8 @@ html_theme_options = {
     'fixed_sidebar': False,
     'extra_nav_links': {'Produktseite': 'https://onegovgever.ch',
                         'Feedback Forum': 'https://feedback.onegovgever.ch',
-                        'Online Demo': 'https://demo.onegovgever.ch'},
+                        'Online Demo': 'https://demo.onegovgever.ch',
+                        u'Franz\xf6sische Dokumentation': 'https://docs-fr.onegovgever.ch'},
     'sidebar_width': '280px',
     'page_width': '1040px',
 }

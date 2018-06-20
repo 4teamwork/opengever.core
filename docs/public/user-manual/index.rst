@@ -6,8 +6,8 @@
 Anwender-Dokumentation
 ======================
 
-Release 2018.1
-14. März 2018
+Release 2018.3
+18. Mai 2018
 
 .. toctree::
    :maxdepth: 2
