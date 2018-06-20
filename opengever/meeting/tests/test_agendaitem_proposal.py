@@ -283,6 +283,8 @@ class TestProposalAgendaItem(IntegrationTestCase):
         excerpt_document, = children['added']
         self.assertEquals('Excerption \xc3\x84nderungen',
                           excerpt_document.Title())
+        self.assertEquals('Excerption \xc3\x84nderungen', excerpt_document.Title())
+        self.assertIsInstance(excerpt_document.title, unicode)
         self.assertIsNotNone(excerpt_document.file.data)
 
     @browsing

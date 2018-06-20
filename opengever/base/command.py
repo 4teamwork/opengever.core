@@ -12,7 +12,7 @@ class BaseObjectCreatorCommand(object):
 
     def __init__(self, context, title, **kwargs):
         self.context = context
-        self.title = title
+        self.title = safe_unicode(title)
         self.additional_args = kwargs
 
     def execute(self):
