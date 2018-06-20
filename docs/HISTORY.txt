@@ -8,9 +8,6 @@ Changelog
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
 - Fix an issue with excerpts title not being unicode. [deiferni]
-- Fix updating mail title via API. [phgross]
-- Fix exporting meetings with proposals with related mails. [tarnap]
-- Include original_message data in mail API GET requests. [phgross]
 - Make protocol editable even if meeting is open. [njohner]
 - Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]
@@ -41,7 +38,6 @@ Changelog
 - Display a tooltip for the favorite action. [tarnap]
 - Display keywords in the document overview. [tarnap]
 - Make document mimetype lookups case insensitive. [Rotonen]
-- Fix unicode error on proposal listings. [phgross]
 - Add new task state "skipped". [njohner]
 - Reset task responsible to the task issuer upon task rejection. [Rotonen]
 - Do not apply the current date to meeting titles. [Rotonen]
@@ -61,6 +57,26 @@ Changelog
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 - Fix handling of decomposed unicode (aka NFD, NFKD) in Solr. [buchi]
+
+
+2018.3.5 (2018-06-20)
+---------------------
+
+- Include original_message data in mail API GET requests. [phgross]
+- Fix updating mail title via API. [phgross]
+- Fix exporting meetings with proposals with related mails. [tarnap]
+
+
+2018.3.4 (2018-06-07)
+---------------------
+
+- Bumped ftw.recipe.solr to fix permission issues. [deiferni]
+
+
+2018.3.3 (2018-06-06)
+---------------------
+
+- Fix unicode error on proposal listings. [phgross]
 
 
 2018.3.2 (2018-06-01)
