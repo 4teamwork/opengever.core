@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.3.5 (unreleased)
+2018.3.5 (2018-06-20)
 ---------------------
 
 - Include original_message data in mail API GET requests. [phgross]
