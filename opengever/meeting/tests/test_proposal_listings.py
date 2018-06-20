@@ -1,6 +1,7 @@
 from copy import deepcopy
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from copy import deepcopy
 
 
 SUBMITTED_PROPOSAL = {
@@ -9,7 +10,8 @@ SUBMITTED_PROPOSAL = {
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
-    'Date of submission': '31.08.2016'}
+    'Date of submission': '31.08.2016',
+    'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
 DRAFT_PROPOSAL = {
      'Decision number': '',
@@ -17,7 +19,8 @@ DRAFT_PROPOSAL = {
      'State': 'Pending',
      'Comittee': u'Kommission f\xfcr Verkehr',
      'Title': u'Antrag f\xfcr Kreiselbau',
-     'Date of submission': ''}
+     'Date of submission': '',
+     'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
 DECIDED_PROPOSAL = {
     'Decision number': '2016 / 1',
@@ -25,7 +28,8 @@ DECIDED_PROPOSAL = {
     'State': 'Decided',
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'Initialvertrag f\xfcr Bearbeitung',
-    'Date of submission': '31.08.2016'}
+    'Date of submission': '31.08.2016',
+    'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
 SUBMITTED_WORD_PROPOSAL = {
     'Decision number': '',
@@ -33,7 +37,8 @@ SUBMITTED_WORD_PROPOSAL = {
     'State': 'Submitted',
     'Comittee': u'Rechnungspr\xfcfungskommission',
     'Title': u'\xc4nderungen am Personalreglement',
-    'Date of submission': '31.08.2016'}
+    'Date of submission': '31.08.2016',
+    'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
 DRAFT_WORD_PROPOSAL = {
     'Decision number': '',
@@ -41,7 +46,8 @@ DRAFT_WORD_PROPOSAL = {
     'State': 'Pending',
     'Comittee': u'Kommission f\xfcr Verkehr',
     'Title': u'\xdcberarbeitung der GAV',
-    'Date of submission': ''}
+    'Date of submission': '',
+    'Issuer': 'Ziegler Robert (robert.ziegler)'}
 
 
 def proposals_table(browser):
@@ -82,30 +88,35 @@ class TestDossierProposalListing(IntegrationTestCase):
         self.assertEquals(
             [{u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': 'Soumis',
+              'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '31.08.2016',
               'Titre': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
              {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
               'Etat': 'En modification',
+              'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '',
               'Titre': u'Antrag f\xfcr Kreiselbau'},
              {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': u'Cl\xf4tur\xe9',
+              'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '2016 / 1',
               u'R\xe9union': u'8. Sitzung der Rechnungspr\xfcfungskommission',
               'Soumis le': '31.08.2016',
               'Titre': u'Initialvertrag f\xfcr Bearbeitung'},
              {u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
               'Etat': 'Soumis',
+              'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '31.08.2016',
               'Titre': u'\xc4nderungen am Personalreglement'},
              {u'Comit\xe9': u'Kommission f\xfcr Verkehr',
               'Etat': 'En modification',
+              'Mandant': 'Ziegler Robert (robert.ziegler)',
               u'Num\xe9ro de d\xe9cision': '',
               u'R\xe9union': '',
               'Soumis le': '',
@@ -214,14 +225,17 @@ class TestMyProposals(IntegrationTestCase):
     maxDiff = None
 
     @browsing
-    def test_lists_only_proposals_created_by_current_user(self, browser):
+    def test_lists_only_proposals_issued_by_the_current_user(self, browser):
+        REGULAR_USER_DRAFT_PROPOSAL = deepcopy(DRAFT_PROPOSAL)
+        REGULAR_USER_DRAFT_PROPOSAL['Issuer'] = u'B\xe4rfuss K\xe4thi (kathi.barfuss)'
+
         with self.login(self.dossier_responsible):
             userid = self.regular_user.getId()
-            self.draft_proposal.load_model().creator = userid
+            self.draft_proposal.load_model().issuer = userid
 
         self.login(self.regular_user, browser)
         browser.open(view='tabbedview_view-myproposals')
-        self.assertEquals([DRAFT_PROPOSAL], proposal_dicts(browser))
+        self.assertEquals([REGULAR_USER_DRAFT_PROPOSAL], proposal_dicts(browser))
 
     @browsing
     def test_listing_shows_active_proposals_by_default(self, browser):

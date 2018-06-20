@@ -8,6 +8,7 @@ from opengever.tabbedview import FilteredListingTab
 from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
+from opengever.tabbedview.helper import linked_ogds_author
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -114,6 +115,14 @@ class ProposalListingTab(FilteredListingTab):
              'sortable': True,
              'groupable': True,
              'width': 120},
+
+            {'column': 'issuer',
+             'column_title': _(u'label_issuer',
+                               default=u'Issuer'),
+             'transform': linked_ogds_author,
+             'sortable': True,
+             'groupable': True,
+             'width': 200},
 
         )
 

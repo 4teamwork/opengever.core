@@ -265,7 +265,7 @@ class IssuedTasks(GlobalTaskListingTab):
 class MyProposals(ProposalListingTab):
 
     def get_base_query(self):
-        return Proposal.query.by_creator(api.user.get_current().getId())
+        return Proposal.query.by_issuer(api.user.get_current().getId())
 
 
 class AllTasks(GlobalTaskListingTab):

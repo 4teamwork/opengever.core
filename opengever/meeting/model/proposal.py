@@ -99,7 +99,7 @@ class Proposal(Base):
     int_id = Column(Integer, nullable=False)
     oguid = composite(Oguid, admin_unit_id, int_id)
     physical_path = Column(UnicodeCoercingText, nullable=False)
-    creator = Column(String(USER_ID_LENGTH), nullable=False)
+    issuer = Column(String(USER_ID_LENGTH), nullable=False)
 
     title = Column(String(MAX_TITLE_LENGTH), index=True)
     submitted_title = Column(String(MAX_TITLE_LENGTH), index=True)

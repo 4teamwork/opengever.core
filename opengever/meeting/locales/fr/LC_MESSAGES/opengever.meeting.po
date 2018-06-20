@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-06 13:41+0000\n"
+"POT-Creation-Date: 2018-06-13 13:35+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -608,7 +608,7 @@ msgid "empty_proposal"
 msgstr "Ce texte libre ne doit pas être vide."
 
 #. Default: "Cannot change the state because the proposal contains checked out documents."
-#: ./opengever/meeting/browser/proposaltransitions.py
+#: ./opengever/meeting/proposal_transition_comment.py
 msgid "error_must_checkin_documents_for_transition"
 msgstr "L'état ne peut pas être changé tant que la proposition contient des documents qui ont été extraits."
 
@@ -968,6 +968,11 @@ msgstr "Insérer"
 #: ./opengever/meeting/browser/templates/sablon_validation_state.pt
 msgid "label_invalid_sablon_template"
 msgstr "Etat de validité"
+
+#. Default: "Issuer"
+#: ./opengever/meeting/proposal.py
+msgid "label_issuer"
+msgstr "Mandant"
 
 #. Default: "Last Meeting:"
 #: ./opengever/meeting/browser/templates/committee.pt

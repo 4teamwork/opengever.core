@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.oguid import Oguid
@@ -23,12 +24,15 @@ from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
+from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
 from plone.autoform.directives import omitted
+from plone.autoform.directives import widget
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
@@ -109,6 +113,13 @@ class IProposal(model.Schema):
         required=False,
         )
 
+    widget('issuer', KeywordFieldWidget, async=True)
+    issuer = schema.Choice(
+        title=_(u"label_issuer", default="Issuer"),
+        source=AssignedUsersSourceBinder(),
+        required=True,
+    )
+
     mode(predecessor_proposal='hidden')
     predecessor_proposal = RelationChoice(
         title=u'Predecessor proposal',
@@ -168,6 +179,10 @@ class ProposalBase(ModelContainer):
 
             {'label': _('label_meeting', default=u'Meeting'),
              'value': model.get_meeting_link(),
+             'is_html': True},
+
+            {'label': _('label_issuer', default=u'Issuer'),
+             'value': Actor.lookup(self.issuer).get_label(),
              'is_html': True},
         ]
 
@@ -532,7 +547,7 @@ class Proposal(ProposalBase):
                          physical_path=aq_wrapped_self.get_physical_path(),
                          dossier_reference_number=reference_number,
                          repository_folder_title=repository_folder_title,
-                         creator=aq_wrapped_self.Creator()))
+                         issuer=self.issuer))
         return data
 
     def update_model(self, data):
@@ -553,6 +568,7 @@ class Proposal(ProposalBase):
         proposal_model.dossier_reference_number = reference_number
         proposal_model.repository_folder_title = repository_folder_title
         proposal_model.title = self.title
+        proposal_model.issuer = self.issuer
         proposal_model.date_of_submission = self.date_of_submission
 
     def is_submit_additional_documents_allowed(self):
