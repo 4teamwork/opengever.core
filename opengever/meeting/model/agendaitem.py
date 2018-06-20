@@ -291,7 +291,7 @@ class AgendaItem(Base):
             self.number,
             safe_unicode(self.get_title()),
             safe_unicode(document.Title()),
-            os.path.splitext(document.file.filename)[1]))
+            os.path.splitext(document.get_file().filename)[1]))
 
     def get_proposal_link(self, include_icon=True):
         if not self.has_proposal:
@@ -509,7 +509,7 @@ class AgendaItem(Base):
         excerpt_document = MergeDocxExcerptCommand(
             context=meeting_dossier,
             agenda_item=self,
-            filename=source_document.file.filename,
+            filename=source_document.get_file().filename,
             title=title,
         ).execute()
 

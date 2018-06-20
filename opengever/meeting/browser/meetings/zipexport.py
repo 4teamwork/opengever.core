@@ -108,7 +108,7 @@ class MeetingZipExport(BrowserView):
                 continue
 
             path = agenda_item.get_document_filename_for_zip(document)
-            generator.add_file(path, document.file.open())
+            generator.add_file(path, document.get_file().open())
 
     def add_agenda_items_attachments(self, generator):
         for agenda_item in self.model.agenda_items:
@@ -117,7 +117,7 @@ class MeetingZipExport(BrowserView):
 
             for document in agenda_item.proposal.resolve_submitted_documents():
                 path = agenda_item.get_document_filename_for_zip(document)
-                generator.add_file(path, document.file.open())
+                generator.add_file(path, document.get_file().open())
 
     def get_agendaitem_list(self):
         if self.model.has_agendaitem_list_document():
