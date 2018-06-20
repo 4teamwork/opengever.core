@@ -4,8 +4,10 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.task.util import update_reponsible_field_data
 from opengever.tasktemplates import _
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
@@ -308,8 +310,11 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
                 context=self.request)
 
             if template.responsible:
-                widget.value = (u'{}:{}'.format(
-                    template.responsible_client, template.responsible), )
+                actor_lookup = ActorLookup(template.responsible)
+                if actor_lookup.is_inbox() or actor_lookup.is_team():
+                    widget.value = (u'{}'.format(actor_lookup.identifier), )
+                else:
+                    widget.value = (u'{}:{}'.format(template.responsible_client, actor_lookup.identifier), )
 
     def get_selected_task_templatefolder(self):
         uid = get_wizard_data(self.context, 'tasktemplatefolder')
@@ -358,8 +363,9 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
 
     def get_responsible(self, template, data):
         form_identifier = '{}.responsible'.format(template.id)
-        value = data.get(form_identifier)
-        return value.split(':')
+        data = {"responsible": data.get(form_identifier)}
+        update_reponsible_field_data(data)
+        return data['responsible_client'], data['responsible']
 
 
 class SelectResponsiblesView(FormWrapper):

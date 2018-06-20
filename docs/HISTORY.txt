@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add new notification roles for proposal activities. [elioschmutz]
+- Fix triggering TaskTemplateFolders with inboxes as task responsibles. [njohner]
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
 - Fix an issue with excerpts title not being unicode. [deiferni]
