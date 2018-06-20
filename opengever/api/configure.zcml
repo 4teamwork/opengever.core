@@ -184,4 +184,12 @@
       permission="zope.Public"
       />
 
+  <plone:service
+      method="POST"
+      name="@preview-session"
+      for="*"
+      factory=".bumblebee.BumblebeeSession"
+      permission="zope2.View"
+      />
+
 </configure>
