@@ -1,5 +1,7 @@
 from Acquisition import aq_parent
 from opengever.base.interfaces import IInternalWorkflowTransition
+from opengever.dossier.base import DOSSIER_STATES_OPEN
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -165,7 +167,13 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):
         """Checks if:
-        - The current user is the issuer of the current task(context)"""
+        - The containing dossier's state is not whitelisted
+        - The current user is the issuer of the current task(context)
+        """
+        whitelisted_dossier_states = DOSSIER_STATES_OPEN
+        containing_dossier = self.context.get_containing_dossier()
+        if api.content.get_state(containing_dossier) not in whitelisted_dossier_states:
+            return False
 
         if include_agency:
             return (c.current_user.is_issuer

@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.interface import alsoProvides
 import unittest
 
@@ -55,33 +56,65 @@ class BaseTransitionGuardTests(unittest.TestCase):
         return TaskTransitionController(task, None)
 
 
-class TestCancelledOpenGuard(BaseTransitionGuardTests):
+class TestCancelledOpenGuard(IntegrationTestCase):
     transition = 'task-transition-cancelled-open'
 
     def test_only_available_when_user_is_issuer(self):
-        checker = FakeChecker(is_issuer=True)
+        self.login(self.regular_user)
+        self.set_workflow_state('task-state-cancelled', self.task)
 
-        self.assertTrue(
-            self.controller._is_transition_possible(
-                self.transition, False, checker))
+        # not issuer
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
 
-        checker = FakeChecker(is_issuer=False)
-        self.assertFalse(
-            self.controller._is_transition_possible(
-                self.transition, False, checker))
+        # issuer
+        self.login(self.dossier_responsible)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
 
-    def test_issuing_inbox_group_has_agency_permission(self):
-        checker = FakeChecker(is_issuer=False, issuing_agency=True)
-        self.assertTrue(
-            self.controller._is_transition_possible(
-                self.transition, True, checker))
+    @browsing
+    def test_issuing_inbox_group_has_agency_permission(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.set_workflow_state('task-state-cancelled', self.task)
 
-    def test_administrator_has_agency_permission(self):
-        checker = FakeChecker(
-            is_issuer=False, issuing_agency=False, is_administrator=True)
+        browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertTrue(self.controller._is_transition_possible(
-            self.transition, True, checker))
+        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            self.transition, browser.css('.regular_buttons a').text)
+
+    @browsing
+    def test_administrator_has_agency_permission(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-cancelled', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(self.transition, browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            self.transition, browser.css('.regular_buttons a').text)
+
+    def test_not_available_if_dossier_is_closed(self):
+        self.login(self.administrator)
+
+        self.set_workflow_state('task-state-cancelled', self.task)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+    def test_not_available_on_subtasks_if_dossier_is_closed(self):
+        self.login(self.dossier_responsible)
+
+        self.set_workflow_state('task-state-cancelled', self.subtask)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.subtask))
+
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.subtask))
 
 
 class TestOpenCancelledGuard(IntegrationTestCase):
