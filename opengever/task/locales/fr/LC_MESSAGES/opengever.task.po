@@ -384,6 +384,11 @@ msgstr "Type de dossier"
 msgid "label_accept_select_repositoryfolder"
 msgstr "Numéro de classement"
 
+#. Default: "Add task to sequence"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_add_task_to_sequence"
+msgstr ""
+
 #. Default: "Agency"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
@@ -613,6 +618,11 @@ msgstr "Titre de la tâche"
 #: ./opengever/task/task.py
 msgid "label_task_type"
 msgstr "Type de mandat"
+
+#. Default: "Tasktemplate Position"
+#: ./opengever/task/task.py
+msgid "label_tasktemplate_position"
+msgstr ""
 
 #. Default: "Text"
 #: ./opengever/task/activities.py

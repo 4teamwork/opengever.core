@@ -382,6 +382,11 @@ msgstr "Dossier Typ"
 msgid "label_accept_select_repositoryfolder"
 msgstr "Ordnungsposition"
 
+#. Default: "Add task to sequence"
+#: ./opengever/task/browser/templates/overview.pt
+msgid "label_add_task_to_sequence"
+msgstr "Aufgabe zum Prozess hinzufügen"
+
 #. Default: "Agency"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
@@ -611,6 +616,11 @@ msgstr "Aufgabentitel"
 #: ./opengever/task/task.py
 msgid "label_task_type"
 msgstr "Auftragstyp"
+
+#. Default: "Tasktemplate Position"
+#: ./opengever/task/task.py
+msgid "label_tasktemplate_position"
+msgstr "Standardablauf Position"
 
 #. Default: "Text"
 #: ./opengever/task/activities.py
