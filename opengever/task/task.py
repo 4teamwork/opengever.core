@@ -555,6 +555,14 @@ class Task(Container):
         """
         return self.get_sql_object().sync_with(self)
 
+    def set_to_planned_state(self):
+        """Syncs the corresponding SQL task (globalindex).
+        """
+        with as_internal_workflow_transition():
+            api.content.transition(
+                obj=self, transition='task-transition-open-planned')
+            self.sync()
+
 
 def related_document(context):
     intids = getUtility(IIntIds)
