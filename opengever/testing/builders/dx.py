@@ -14,6 +14,7 @@ from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.tasktemplates import INTERACTIVE_USERS
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
@@ -24,6 +25,7 @@ from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -171,6 +173,7 @@ class TaskBuilder(DexterityBuilder):
         super(TaskBuilder, self).__init__(session)
         self.transitions = []
         self.predecessor = None
+        self._as_sequential_task = False
         self.arguments = {
             'responsible_client': 'client1',
             'responsible': TEST_USER_ID,
@@ -187,6 +190,9 @@ class TaskBuilder(DexterityBuilder):
 
         if self.predecessor:
             ISuccessorTaskController(obj).set_predecessor(self.predecessor)
+
+        if self._as_sequential_task:
+            alsoProvides(obj, IFromSequentialTasktemplate)
 
         super(TaskBuilder, self).after_create(obj)
 
@@ -213,6 +219,10 @@ class TaskBuilder(DexterityBuilder):
     def set_modification_date(self, obj):
         super(TaskBuilder, self).set_modification_date(obj)
         sync_task(obj, None)
+
+    def as_sequential_task(self):
+        self._as_sequential_task = True
+        return self
 
 
 builder_registry.register('task', TaskBuilder)

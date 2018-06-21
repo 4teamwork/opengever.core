@@ -164,7 +164,7 @@ class TestDossierChecks(IntegrationTestCase):
 
     def test_has_active_tasks_checks_are_recursive(self):
         self.login(self.dossier_responsible)
-        first, second = self.dossier_tasks
+        first, second = self.dossier_tasks[:2]
         self.set_workflow_state('task-state-resolved', first)
         self.set_workflow_state('task-state-tested-and-closed', second)
         self.assertTrue(self.dossier.has_active_tasks())

@@ -43,7 +43,9 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def task_titles(self):
-        return [u'Vertragsentwurf \xdcberpr\xfcfen',
+        return [u'Personaleintritt',
+                u'Mitarbeiter Dossier generieren',
+                u'Vertragsentwurf \xdcberpr\xfcfen',
                 u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen']
 
     @IntegrationTestCase.clock
@@ -156,7 +158,8 @@ class TestOverview(IntegrationTestCase):
         self.assertEquals(
             [],
             browser.css('span.contenttype-opengever-task-task script'))
-        node = browser.css('span.contenttype-opengever-task-task').first
+        link = browser.find("Foo <script>alert('foo')</script>")
+        node = link.css('span').first
         self.assertEquals(
             '<span class="contenttype-opengever-task-task">' +
             test_title_safe + ';</span>',

@@ -819,6 +819,59 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        self.sequential_task = self.register('sequential_task', create(
+            Builder('task')
+            .within(self.dossier)
+            .titled(u'Personaleintritt')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.regular_user.getId(),
+                    task_type='direct-execution',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-in-progress')
+            .as_sequential_task()
+        ))
+        self.seq_subtask_1 = self.register('seq_subtask_1', create(
+            Builder('task')
+            .within(self.sequential_task)
+            .titled(u'Mitarbeiter Dossier generieren')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.secretariat_user.getId(),
+                    task_type='direct-execution',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-open')
+            .as_sequential_task()
+        ))
+        self.seq_subtask_2 = self.register('seq_subtask_2', create(
+            Builder('task')
+            .within(self.sequential_task)
+            .titled(u'Arbeitsplatz vorbereiten')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.secretariat_user.getId(),
+                    task_type='direct-execution',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-planned')
+            .as_sequential_task()
+        ))
+        self.seq_subtask_3 = self.register('seq_subtask_3', create(
+            Builder('task')
+            .within(self.sequential_task)
+            .titled(u'Vorstellungsrunde bei anderen Mitarbeitern')
+            .having(responsible_client=self.org_unit.id(),
+                    responsible=self.regular_user.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='direct-execution',
+                    deadline=date(2016, 11, 1))
+            .in_state('task-state-planned')
+            .as_sequential_task()
+        ))
+
+        subtasks = [self.seq_subtask_1, self.seq_subtask_2, self.seq_subtask_3]
+        self.sequential_task.set_tasktemplate_order(subtasks)
+        [task.sync() for task in subtasks]
+
         with self.features('meeting'):
             proposal = self.register('proposal', create(
                 Builder('proposal')
