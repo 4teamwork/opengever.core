@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-04 07:54+0000\n"
+"POT-Creation-Date: 2018-06-23 12:30+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -130,6 +130,7 @@ msgstr "Sichtbarkeit"
 
 #. Default: "Common"
 #: ./opengever/base/behaviors/base.py
+#: ./opengever/base/behaviors/translated_title.py
 msgid "fieldset_common"
 msgstr "Allgemein"
 
@@ -265,6 +266,11 @@ msgstr "Es existieren keine Favoriten"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_recently_touched_docs"
 msgstr "Keine kürzlich bearbeiteten Dokumente"
+
+#. Default: "None"
+#: ./opengever/base/widgets.py
+msgid "label_none"
+msgstr "Keine Werte"
 
 #. Default: "Overview"
 #: ./opengever/base/viewlets/favorites_menu.py
