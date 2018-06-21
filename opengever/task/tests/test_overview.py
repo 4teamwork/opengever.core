@@ -315,3 +315,30 @@ class TestTaskTextTransformation(IntegrationTestCase):
         result = (browser.css('table.listing').find('Text').first.row
                   .css('td').first.innerHTML)
         self.assertEqual(expected, result)
+
+
+class TestSequentialTaskSubtask(IntegrationTestCase):
+
+    @browsing
+    def test_shows_add_task_action_between_tasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        task_add_form = '{}/++add++opengever.task.task'.format(
+            self.sequential_task.absolute_url())
+
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEqual(
+            ['{}?position=0'.format(task_add_form),
+             '{}?position=1'.format(task_add_form),
+             '{}?position=2'.format(task_add_form),
+             task_add_form],
+            [link.get('href') for link in browser.css('.task-list .add-task')])
+
+        # set first task to in progress, no position 0 link is displayed
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEqual(
+            ['{}?position=1'.format(task_add_form),
+             '{}?position=2'.format(task_add_form),
+             task_add_form],
+            [link.get('href') for link in browser.css('.task-list .add-task')])
