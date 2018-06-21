@@ -255,8 +255,12 @@ default_responsible_client = widget.ComputedWidgetAttribute(
 
 class IAddTaskSchema(ITask):
     """Define a schema for adding tasks."""
-
     form.widget('responsible', KeywordFieldWidget, async=True)
+
+    model.fieldset(
+        u'additional',
+        fields=[u'tasktemplate_position'],
+    )
 
     responsible = schema.List(
         title=_(u"label_responsible", default=u"Responsible"),
@@ -268,6 +272,12 @@ class IAddTaskSchema(ITask):
         missing_value=[],
         default=[]
         )
+
+    tasktemplate_position = schema.Int(
+        title=_(u"label_tasktemplate_position",
+                default=u"Tasktemplate Position"),
+        required=False,
+    )
 
 
 class Task(Container):
@@ -513,6 +523,13 @@ class Task(Container):
         annotations = IAnnotations(self)
         if annotations:
             return annotations.get(TASK_PROCESS_ORDER_KEY)
+
+    def add_task_to_tasktemplate_order(self, position, task):
+        subtasks = self.get_tasktemplate_order()
+        subtasks.insert(position, Oguid.for_object(task))
+
+        self.set_tasktemplate_order(
+            [oguid.resolve_object() for oguid in subtasks])
 
     def get_tasktemplate_predecessor(self):
         if not self.is_from_sequential_tasktemplate:
