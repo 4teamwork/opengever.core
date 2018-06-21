@@ -11,7 +11,6 @@ from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
-from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five import BrowserView
@@ -158,7 +157,7 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-open-planned')
     def planned_guard(self, transition, c):
-        return IDuringTaskTemplateFolderTriggering.providedBy(getRequest())
+        return IInternalWorkflowTransition.providedBy(getRequest())
 
     @guard('task-transition-planned-open')
     def open_guard(self, transition, c):
