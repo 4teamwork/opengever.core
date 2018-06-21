@@ -6,6 +6,21 @@ import hashlib
 import json
 
 
+class NullObject(object):
+    def __getattribute__(self, name):
+        if name != '__dict__' and name not in self.__dict__:
+            return lambda: u''
+        return object.__getattribute__(self, name)
+
+    def __iter__(self):
+        yield u''
+        for key in self.__dict__:
+            yield key
+
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+
 def language_cache_key(method, context, request):
     """
     Generates cache key used for functions with different output depending on
