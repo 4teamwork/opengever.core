@@ -168,6 +168,89 @@ class TestProposal(IntegrationTestCase):
                 proposal.get_proposal_document()).get_checked_out_by())
 
     @browsing
+    def test_proposal_can_be_created_in_browser_from_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+        }).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Item created')
+        self.assertEqual(
+            browser.context.getChildNodes()._data[0].file.data,
+            self.document.file.data,
+            u'Did not succesfully copy the file over from self.document.',
+            )
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_without_document_and_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_from_excel_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.subdocument.getPhysicalPath()),
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Only .docx files allowed as proposal documents.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_from_old_word_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.document.file.contentType = 'application/msword'
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Only .docx files allowed as proposal documents.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_with_both_document_and_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+            'Proposal template': u'Geb\xfchren',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document, but not both, is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
     def test_create_proposal_in_subdossier(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.subdossier)
