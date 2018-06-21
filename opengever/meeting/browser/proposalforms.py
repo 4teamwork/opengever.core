@@ -3,6 +3,8 @@ from opengever.base.schema import TableChoice
 from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
+from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
+from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
 from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.proposal import IProposal
@@ -50,6 +52,14 @@ class ProposalEditForm(ModelProxyEditForm,
 
         if self.context.get_state() is not self.context.load_model().STATE_PENDING:
             self.widgets['issuer'].mode = HIDDEN_MODE
+
+    def update_watcher(self, obj, new_issuer):
+        if obj.issuer != new_issuer:
+            change_watcher_on_proposal_edited(obj, new_issuer)
+
+    def applyChanges(self, data):
+        self.update_watcher(self.context, data.get('issuer'))
+        return super(ProposalEditForm, self).applyChanges(data)
 
 
 class SubmittedProposalEditForm(ModelProxyEditForm,
@@ -243,6 +253,8 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         proposal_doc = proposal.create_proposal_document(proposal_template.file)
         if edit_after_creation:
             self.checkout_and_external_edit(proposal_doc)
+
+        add_watcher_on_proposal_created(proposal)
         return proposal
 
     def checkout_and_external_edit(self, document):
