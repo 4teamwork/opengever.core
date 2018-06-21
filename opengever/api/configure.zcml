@@ -85,7 +85,7 @@
   <plone:service
       method="GET"
       name="@config"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="*"
       factory=".config.Config"
       permission="zope2.View"
       />

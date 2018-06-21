@@ -19,13 +19,13 @@ from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.workspace.interfaces import IWorkspaceSettings
 from pkg_resources import get_distribution
 from plone import api
-from Products.CMFCore.interfaces import ISiteRoot
 from zope.component import adapter
 from zope.interface import implementer
+from zope.interface import Interface
 
 
 @implementer(IGeverSettings)
-@adapter(ISiteRoot)
+@adapter(Interface)
 class GeverSettingsAdpaterV1(object):
     """Returns the current site configuration in the API v1 format."""
 
@@ -37,6 +37,7 @@ class GeverSettingsAdpaterV1(object):
         config = self.get_info()
         config.update(self.get_settings())
         config['features'] = self.get_features()
+        config['root'] = api.portal.get().absolute_url()
         return config
 
     def get_info(self):
