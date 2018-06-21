@@ -3,6 +3,8 @@ from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
+from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
+from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
@@ -52,7 +54,20 @@ ACTIVITY_GROUPS = [
          'forwarding-transition-close',
          'forwarding-transition-reassign',
          'forwarding-transition-reassign-refused',
-         'forwarding-transition-refuse']}
+         'forwarding-transition-refuse'
+     ]},
+
+    {'id': 'proposal',
+     'roles': [PROPOSAL_ISSUER_ROLE, COMMITTEE_RESPONSIBLE_ROLE],
+     'activities': [
+         'proposal-transition-submit',
+         'proposal-transition-reject',
+         'proposal-transition-schedule',
+         'proposal-transition-decide',
+         'proposal-commented',
+         'proposal-attachment-updated',
+         'proposal-additional-documents-submitted',
+     ]},
 ]
 
 

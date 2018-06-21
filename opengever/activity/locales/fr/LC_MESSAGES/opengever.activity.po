@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 08:37+0000\n"
+"POT-Creation-Date: 2018-06-21 09:46+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -53,6 +53,11 @@ msgstr "type"
 #: ./opengever/activity/browser/listing.py
 msgid "column_title"
 msgstr "Titre"
+
+#. Default: "Committee responsible"
+#: ./opengever/activity/roles.py
+msgid "committee_responsible"
+msgstr ""
 
 #. Default: "Created"
 #: ./opengever/activity/browser/listing.py
@@ -139,6 +144,46 @@ msgstr "Toutes les notifications"
 #: ./opengever/activity/center.py
 msgid "msg_error_not_notified"
 msgstr "Un problème a apparu pendant la création de la notification. La notification n’a pas pu être produite ou seulement partiellement."
+
+#. Default: "Additional documents submitted"
+#: ./opengever/activity/__init__.py
+msgid "proposal-additional-documents-submitted"
+msgstr ""
+
+#. Default: "Attachment updated"
+#: ./opengever/activity/__init__.py
+msgid "proposal-attachment-updated"
+msgstr ""
+
+#. Default: "Proposal commented"
+#: ./opengever/activity/__init__.py
+msgid "proposal-commented"
+msgstr ""
+
+#. Default: "Proposal decided"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-decide"
+msgstr ""
+
+#. Default: "Proposal rejected"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-reject"
+msgstr ""
+
+#. Default: "Proposal scheduled"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-schedule"
+msgstr ""
+
+#. Default: "Proposal submitted"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-submit"
+msgstr ""
+
+#. Default: "Proposal issuer"
+#: ./opengever/activity/roles.py
+msgid "proposal_issuer"
+msgstr ""
 
 #. Default: "Records Manager"
 #: ./opengever/activity/roles.py
