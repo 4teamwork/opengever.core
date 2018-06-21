@@ -15,6 +15,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
@@ -409,6 +410,9 @@ class SubmittedProposal(ProposalBase):
         RejectProposalCommand(self).execute()
         proposal = self.load_model()
         proposal.reject(text)
+
+        remove_watchers_on_submitted_proposal_deleted(
+            self, proposal.committee.group_id)
 
         with elevated_privileges():
             api.content.delete(self)
