@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Register watchers for proposals. [elioschmutz]
 - Implement tabs for personal activity-settings view. [elioschmutz]
 - Add new notification roles for proposal activities. [elioschmutz]
 - Open successor task when predecessor is skipped or closed. [njohner]
