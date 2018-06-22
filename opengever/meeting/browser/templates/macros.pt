@@ -8,33 +8,6 @@
 
   <body>
 
-    <tal:comment replace="nothing">
-    Workflow actions.
-
-    Display workflow actions for meeting's SQL-model based workflow implementation.
-    </tal:comment>
-
-    <metal:define define-macro="workflow_actions">
-      <div tal:condition="view/transitions" class="actionButtons">
-        <ul class="regular_buttons">
-            <tal:block repeat="transition view/transitions">
-              <li tal:condition="transition/visible">
-                <a tal:attributes="href python: view.transition_url(transition);
-                                   title transition/title;
-                                   id transition/name;
-                                   class string: ${transition/name};"
-                   i18n:attributes="title">
-                    <span tal:content="transition/title"
-                          i18n:translate=""
-                          class="subMenuTitle actionText">
-                    </span>
-                </a>
-              </li>
-            </tal:block>
-        </ul>
-      </div>
-    </metal:define>
-
     <metal:define define-macro="workflow_actions_and_comment">
       <div class="actionButtons">
         <ul class="regular_buttons">
@@ -64,20 +37,6 @@
             </li>
         </ul>
       </div>
-    </metal:define>
-
-    <tal:comment tal:replace="nothing">
-      This seems to be the only way to disable kss inline validation.
-
-      In our case it does not work because we are editing an input form without plone content.
-
-      See http://stackoverflow.com/questions/27515472/how-can-you-disable-inline-validation-for-a-z3c-form-on-plone
-    </tal:comment>
-
-    <metal:define define-macro="disable_kss_inline_validation">
-      <script type="text/javascript">
-        $('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
-      </script>
     </metal:define>
 
   </body>
