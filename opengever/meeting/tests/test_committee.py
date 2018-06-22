@@ -18,6 +18,7 @@ class TestCommittee(IntegrationTestCase):
     features = ('meeting',)
 
     group_field_name = 'Committeeresponsible'
+    maxDiff = None
 
     def test_committee_id_is_generated(self):
         self.login(self.administrator)
@@ -101,6 +102,23 @@ class TestCommittee(IntegrationTestCase):
         self.assertIsNotNone(self.committee.ad_hoc_template)
         self.assertEqual(self.proposal_template,
                          self.committee.get_ad_hoc_template())
+
+    @browsing
+    def test_not_allowed_default_ad_hoc_template_is_rejected(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Allowed ad-hoc agenda item templates': u'Freitext Traktandum'})
+        browser.fill({'Ad hoc agenda item template': self.proposal_template})
+        browser.find('Save').click()
+        self.assertItemsEqual(['There were some errors.'],
+                              statusmessages.error_messages())
+
+        invariance_errors = browser.css('#content-core div div div.error').text
+        self.assertItemsEqual(
+            [u'The default ad-hoc agenda item template has to be amongst the '
+             u'allowed ones for this committee.'],
+            invariance_errors)
 
     def test_get_ad_hoc_template_returns_committee_template_if_available(self):
         self.login(self.committee_responsible)
@@ -226,13 +244,17 @@ class TestCommittee(IntegrationTestCase):
 
         browser.open(self.committee, view='edit')
         self.assertItemsEqual(
-            ['Baubewilligung', u'Geb\xfchren'],
+            [
+                'Baubewilligung',
+                u'Geb\xfchren',
+                u'Freitext Traktandum',
+                u'Wiederkehrendes Traktandum',
+            ],
             browser.find('Allowed proposal templates').options)
         browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
         self.assertItemsEqual(
             [IUUID(self.proposal_template)],
             self.committee.allowed_proposal_templates)
-
 
     @browsing
     def test_committee_repository_is_validated(self, browser):
@@ -418,7 +440,12 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         browser.open(self.committee, view='edit')
         self.assertItemsEqual(
-            ['Baubewilligung', u'Geb\xfchren'],
+            [
+                u'Baubewilligung',
+                u'Geb\xfchren',
+                u'Freitext Traktandum',
+                u'Wiederkehrendes Traktandum',
+            ],
             browser.find('Allowed proposal templates').options)
         browser.fill({'Allowed proposal templates': u'Geb\xfchren'}).save()
         self.assertItemsEqual(
@@ -443,9 +470,10 @@ class TestCommitteeWorkflow(IntegrationTestCase):
                   'Agendaitem list template',
                   'Table of contents template',
                   'Linked repository folder',
-                  'Ad hoc agenda item template',
                   'Paragraph template',
-                  'Allowed proposal templates']
+                  'Allowed proposal templates',
+                  'Ad hoc agenda item template',
+                  'Allowed ad-hoc agenda item templates']
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
             factoriesmenu.add('Committee')

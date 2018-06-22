@@ -106,3 +106,14 @@ input[type='checkbox']:disabled ~ label > span {
 #form-widgets-other_participants {
   height: 90px;
 }
+
+body.portaltype-opengever-meeting-committee.template-edit {
+  #content-core {
+      div.error {
+        background-color: #fdc;
+        border: 1px solid red;
+        padding: 0.5em;
+        margin: 1em 0;
+      }
+  }
+}

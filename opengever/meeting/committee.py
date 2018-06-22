@@ -26,6 +26,8 @@ from z3c.relationfield.schema import RelationChoice
 from zope import schema
 from zope.component import getUtility
 from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
@@ -117,13 +119,6 @@ class ICommittee(model.Schema):
         source=repository_folder_source,
         required=True)
 
-    ad_hoc_template = RelationChoice(
-        title=_('label_ad_hoc_template',
-                default=u'Ad hoc agenda item template'),
-        source=proposal_template_source,
-        required=False,
-    )
-
     paragraph_template = RelationChoice(
         title=_('label_paragraph_template',
                 default=u'Paragraph template'),
@@ -144,6 +139,47 @@ class ICommittee(model.Schema):
         required=False,
         default=None,
         missing_value=None)
+
+    ad_hoc_template = RelationChoice(
+        title=_('label_ad_hoc_template',
+                default=u'Ad hoc agenda item template'),
+        source=proposal_template_source,
+        required=False,
+    )
+
+    form.widget('allowed_ad_hoc_agenda_item_templates', CheckBoxFieldWidget)
+    allowed_ad_hoc_agenda_item_templates = schema.List(
+        title=_(u'label_allowed_ad_hoc_agenda_item_templates',
+                default=u'Allowed ad-hoc agenda item templates'),
+        description=_(u'help_allowed_ad_hoc_agenda_item_templates',
+                      default=u'Select the ad-hoc agenda item templates'
+                      u' allowed for this commitee, or select no'
+                      u' templates for allowing all templates.'),
+        value_type=schema.Choice(
+            source='opengever.meeting.ProposalTemplatesVocabulary'),
+        required=False,
+        default=None,
+        missing_value=None)
+
+    @invariant
+    def default_template_is_in_allowed_templates(data):
+        """ Validate ad-hoc agenda item templates
+        """
+
+        default_template = data.ad_hoc_template
+        allowed_templates = data.allowed_ad_hoc_agenda_item_templates
+
+        if default_template is None:
+            return
+
+        if not len(allowed_templates):
+            return
+
+        if default_template.getId() not in allowed_templates:
+            raise Invalid(_(
+                u'error_default_template_is_in_allowed_templates',
+                default=u'The default ad-hoc agenda item template has to be '
+                        u'amongst the allowed ones for this committee.'))
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):
