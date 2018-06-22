@@ -11,3 +11,4 @@ Inhalt:
    systemadmin-manual/index.rst
    dev-manual/index.rst
    user-manual/glossary.rst
+   release-notes/index.rst
