@@ -1,4 +1,6 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.role_assignments import ProtectDossierRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.dossier import _
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from plone import api
@@ -237,15 +239,16 @@ class DossierProtection(AnnotationsFactoryImpl):
         return bool(self.reading or self.reading_and_writing)
 
     def update_role_settings(self):
+        assignments = []
         for principal, roles in self.generate_role_settings().items():
-            self.context.manage_setLocalRoles(principal, roles)
+            assignments.append(ProtectDossierRoleAssignment(principal, roles))
+
+        if assignments:
+            manager = RoleAssignmentManager(self.context)
+            manager.set(assignments)
 
     def clear_local_roles(self):
-        roles = tuple(
-            principal[0]
-            for principal in self.context.get_local_roles()
-            )
-        self.context.manage_delLocalRoles(roles)
+        RoleAssignmentManager(self.context).clear_all()
 
     def generate_role_settings(self):
         role_settings = {}
@@ -289,6 +292,9 @@ class DossierProtection(AnnotationsFactoryImpl):
         role_settings = self.generate_role_settings()
 
         for principal, roles in self.context.get_local_roles():
+            # Ignore owner role
+            roles = tuple(role for role in roles if role != 'Owner')
+
             role_setting = role_settings.get(principal)
             if not role_setting:
                 # A new principal have been added to the localroles

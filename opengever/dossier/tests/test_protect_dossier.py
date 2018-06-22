@@ -1,3 +1,5 @@
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
@@ -26,8 +28,9 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_dossier_protect_permission_if_it_has_dossier_manager_on_repo_root(self):
         self.login(self.regular_user)
 
-        self.repository_root.manage_setLocalRoles(
-            self.regular_user.getId(), ['DossierManager'])
+        RoleAssignmentManager(self.repository_root).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['DossierManager']))
 
         self.assertTrue(
             api.user.has_permission('opengever.dossier: Protect dossier',
@@ -36,8 +39,9 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_permission_if_dossier_manager_on_repo(self):
         self.login(self.regular_user)
 
-        self.leaf_repofolder.manage_setLocalRoles(
-            self.regular_user.getId(), ['DossierManager'])
+        RoleAssignmentManager(self.leaf_repofolder).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['DossierManager']))
 
         self.assertTrue(
             api.user.has_permission('opengever.dossier: Protect dossier',
@@ -68,7 +72,9 @@ class TestProtectDossier(IntegrationTestCase):
         form.find_widget('Reading and writing').fill([self.regular_user.getId()])
         browser.click_on('Save')
         new_dossier = browser.context
-        new_dossier.manage_setLocalRoles('projekt_a', ['Contributor'])
+
+        RoleAssignmentManager(new_dossier).add_assignment(
+            SharingRoleAssignment('projekt_a', ['Contributor']))
 
         self.assert_local_roles(
             IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
@@ -95,8 +101,10 @@ class TestProtectDossier(IntegrationTestCase):
         form = browser.find_form_by_field('Reading')
         form.find_widget('Reading and writing').fill(self.regular_user.getId())
         browser.click_on('Save')
+
         new_dossier = browser.context
-        new_dossier.manage_setLocalRoles('projekt_a', ['Contributor'])
+        RoleAssignmentManager(new_dossier).add_assignment(
+            SharingRoleAssignment('projekt_a', ['Contributor']))
 
         self.assert_local_roles(
             IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
@@ -312,10 +320,18 @@ class TestProtectDossier(IntegrationTestCase):
     def test_check_protect_dossier_consistency_returns_no_messages_if_no_inconsistency(self):
         self.login(self.dossier_manager)
 
-        dossier_protector = IProtectDossier(self.dossier)
-        dossier_protector.reading = [self.regular_user.getId()]
+        RoleAssignmentManager(self.empty_dossier).add_assignment(
+            SharingRoleAssignment(self.dossier_responsible.id, ['Reader']))
+        RoleAssignmentManager(self.empty_dossier).add_assignment(
+            SharingRoleAssignment(
+                self.dossier_responsible.id,
+                ['Reader', 'Editor', 'Contributor', 'Reviewer',
+                 'Publisher', 'DossierManager', 'Owner']))
+
+        dossier_protector = IProtectDossier(self.empty_dossier)
+        dossier_protector.reading = [self.dossier_responsible.id]
         dossier_protector.protect()
-        view = getMultiAdapter((self.dossier, self.request),
+        view = getMultiAdapter((self.empty_dossier, self.request),
                                name="check_protect_dossier_consistency")
 
         self.assertIsNone(json.loads(view()).get('messages'))
@@ -326,9 +342,12 @@ class TestProtectDossier(IntegrationTestCase):
         dossier_protector = IProtectDossier(self.dossier)
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
-        self.dossier.manage_setLocalRoles(self.regular_user.getId(), ['DossierManager'])
+
+        RoleAssignmentManager(self.dossier).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['DossierManager']))
+
         view = getMultiAdapter((self.dossier, self.request),
                                name="check_protect_dossier_consistency")
 
         self.assertEqual(1, len(json.loads(view()).get('messages')))
-

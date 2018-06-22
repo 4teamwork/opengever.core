@@ -13,6 +13,7 @@ from zope.i18n import translate
 ASSIGNNMENT_VIA_TASK = 1
 ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
+ASSIGNNMENT_VIA_PROTECT_DOSSIER = 4
 
 
 class RoleAssignment(object):
@@ -41,7 +42,7 @@ class RoleAssignment(object):
         return assignment(**kwargs)
 
     def cause_title(self):
-        return self.cause
+        raise NotImplementedError()
 
     def serialize(self):
         data = {'principal': self.principal,
@@ -110,6 +111,23 @@ class TaskAgencyRoleAssignment(RoleAssignment):
 RoleAssignment.register(TaskAgencyRoleAssignment)
 
 
+class ProtectDossierRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_PROTECT_DOSSIER
+
+    def __init__(self, principal, roles, reference=None):
+        self.principal = principal
+        self.roles = roles
+        self.reference = None
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_protect_dossier',
+                 default=u'By protect dossier')
+
+
+RoleAssignment.register(ProtectDossierRoleAssignment)
+
+
 class RoleAssignmentStorage(object):
 
     key = 'ROLE_ASSIGNMENTS'
@@ -132,11 +150,13 @@ class RoleAssignmentStorage(object):
                 elif item['reference'] == reference:
                     return item
 
-    def drop_all(self, cause):
-        to_remove = [item for item in
-                     self._storage() if item['cause'] == cause]
-        for item in to_remove:
+    def clear_all_by_cause(self, cause):
+        for item in self.get_all_by_cause(cause):
             self._storage().remove(item)
+
+    def clear_all(self):
+        ann = IAnnotations(self.context)
+        ann[self.key] = PersistentList()
 
     def get_all_by_cause(self, cause):
         return [item for item in self._storage() if item['cause'] == cause]
@@ -224,13 +244,19 @@ class RoleAssignmentManager(object):
         if len(set([asg.cause for asg in assignments])) > 1:
             raise ValueError('All assignments need to have the same cause')
 
-        self.storage.drop_all(cause)
+        self.storage.clear_all_by_cause(cause)
 
         for assignment in assignments:
             self.storage.add_or_update(
                 assignment.principal, assignment.roles, assignment.cause,
                 assignment.reference)
 
+        self._upate_local_roles()
+
+    def clear_all(self):
+        """Remove all assignments.
+        """
+        self.storage.clear_all()
         self._upate_local_roles()
 
     def _upate_local_roles(self):
