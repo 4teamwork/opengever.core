@@ -1,37 +1,39 @@
 <script type="text/x-template" id="sharing-form">
 
   <div class="sharing-form">
-    <form @submit.prevent="search">
+    <form @submit.prevent="search" class="search-form">
       <input type="text" class="search_box" v-model="principal_search"
              :placeholder="i18n.principal_search_placeholder" />
       <a class="button" @click="search">{{i18n.label_search}}</a>
     </form>
 
-    <table class="sharing-table" class="listing">
+    <table class="sharing-table listing">
       <tr>
         <th class="principal_header">{{i18n.label_name}}</th>
         <th class="role_header" v-for="role in available_roles">{{role}}</th>
       </tr>
       <tr v-for="entry in entries" :key="entry.id">
         <td>
-          <a class="principal link_overlay"
+          <a class="principal link-overlay"
              :class="entry.type"
              :href="entry.url">{{entry.title}}</a>
           <a class="assignments_info_button"
              v-bind:class="{ folded: entry.assignments}"
              @click="(event) => {toggle_assignments(event, entry, )}"/>
-
-          <ul class="assignments_info">
-            <li v-for="assignment in entry.assignments">
-              <span class="cause">{{assignment.cause.title}}</span>
-              <a v-if="assignment.reference"
-                 @href="assignment.reference.url"
-                 class="reference">{{assignment.reference.title}}</a>
-            </li>
-          </ul>
+          <div v-if="entry.assignments" class="assignments_info">
+            <span>{{i18n.label_cause}}</span>
+            <ul class="assignments_listing">
+              <li v-for="assignment in entry.assignments">
+                <span class="cause">{{assignment.cause.title}}</span>
+                <a v-if="assignment.reference"
+                   :href="assignment.reference.url"
+                   class="reference">{{assignment.reference.title}}</a>
+              </li>
+            </ul>
+          </div>
 
         </td>
-        <td v-for="role in available_roles">
+        <td v-for="role in available_roles" class="role_cell">
           <span class="aquired" :title="i18n.label_acquired"
                 v-if="entry.roles[role] == 'acquired'" />
           <input type="checkbox" v-if="entry.roles[role] != 'acquired'"
@@ -43,11 +45,12 @@
     <input type="checkbox" v-model="inherit" />
     <label for="inherit">{{i18n.label_inherit_local_roles}}</label>
     <div class="formHelp">{{i18n.help_inherit_local_roles}}
-    <span class="function-ok"></span> {{i18n.image_confirm_icon}}
     </div>
 
-    <a class="button context" @click="save">Save</a>
-    <a class="button" :href="context_url">Cancel</a>
+    <div class="formControls">
+      <a class="button context" @click="save">{{i18n.label_save}}</a>
+      <a class="button" :href="context_url">{{i18n.label_cancel}}</a>
+    </div>
 
   </div>
 

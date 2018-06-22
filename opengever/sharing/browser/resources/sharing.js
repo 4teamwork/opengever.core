@@ -15,6 +15,10 @@ var app = new Vue({
   },
 
   beforeMount: function () {
+    if (!this.$el.attributes['data-contexturl']){
+      return;
+    }
+
     this.context_url = this.$el.attributes['data-contexturl'].value;
     this.portal_url = this.$el.attributes['data-portalurl'].value;
     this.endpoint = this.context_url + '/@sharing';
@@ -32,12 +36,6 @@ var app = new Vue({
   },
 
   methods: {
-    errorMessage: function (){
-      return this.messenger.shout([{
-        'messageTitle': this.i18n.message_title,
-        'message': this.i18n.message_not_saved, 'messageClass': 'error'}]);
-    },
-
     fetchData: function () {
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString()};

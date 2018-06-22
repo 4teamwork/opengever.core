@@ -54,9 +54,6 @@ ROLE_MAPPING = (
 
 
 class OpengeverSharingView(SharingView):
-    """Special Opengever Sharing View, which display different roles
-    depending on the sharing behavior which is context
-    """
 
     template = ViewPageTemplateFile('templates/sharing.pt')
 
@@ -82,14 +79,25 @@ class OpengeverSharingView(SharingView):
         return json.dumps({
             'label_search': self.plone_translate('label_search'),
             'label_inherit_local_roles': self.plone_translate('label_inherit_local_roles'),
-            'help_inherit_local_roles': self.plone_translate('help_inherit_local_roles'),
+            'help_inherit_local_roles': self.translate(
+                _(u'help_inherit_local_roles',
+                  default=u'By default, permissions from the container of this '
+                  u'item are inherited. If you disable this, only the '
+                  u'explicitly defined sharing permissions will be valid. '
+                  u'Inherited roles are marked green.')),
             'image_link_icon': self.plone_translate('image_link_icon'),
             'image_confirm_icon': self.plone_translate('image_confirm_icon'),
             'principal_search_placeholder': self.translate(
                 _(u'principal_search_placeholder',
                   default=u'Search for Users and Groups')),
             'label_name': self.plone_translate('label_name'),
-            'label_acquired': _(u'label_acquired', default=u'Acuired')
+            'label_acquired': self.translate(
+                _(u'label_acquired_permission', default=u'Acquired permission')),
+            'label_local': self.translate(
+                _(u'label_local_permission', default=u'Local permission')),
+            'label_save': self.translate(PMF(u'Save')),
+            'label_cancel': self.translate(PMF(u'Cancel')),
+            'label_cause': self.translate(_(u'label_cause', default=u'Cause'))
         })
 
     def saved(self):
@@ -221,7 +229,6 @@ class OpengeverSharingView(SharingView):
     def _update_role_settings(self, new_settings, reindex=True):
         """Replaced becasue we need our own permission manager stuff.
         """
-        changed = False
         assignments = []
 
         for s in new_settings:
@@ -236,24 +243,21 @@ class OpengeverSharingView(SharingView):
             manager = RoleAssignmentManager(self.context)
             manager.set(assignments)
 
-        return changed
-
     def update_role_settings(self, new_settings, reindex=True):
         """Method Wrapper for the super method, to allow notify a
         LocalRolesModified event. Needed for adding a Journalentry after a
         role_settings change
         """
         old_local_roles = dict(self.context.get_local_roles())
-        changed = self._update_role_settings(new_settings, reindex)
+        self._update_role_settings(new_settings, reindex)
 
-        if changed:
-            notify(LocalRolesModified(
-                self.context,
-                old_local_roles,
-                self.context.get_local_roles(),
-                ))
+        if old_local_roles != dict(self.context.get_local_roles()):
+            notify(
+                LocalRolesModified(self.context, old_local_roles,
+                                   self.context.get_local_roles()))
+            return True
 
-        return changed
+        return False
 
     def _principal_search_results(self,
                                   search_for_principal,

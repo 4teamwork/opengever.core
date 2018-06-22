@@ -1,7 +1,7 @@
 from Acquisition import aq_chain
 from Acquisition import aq_inner
+from opengever.base import _
 from opengever.base.oguid import Oguid
-from opengever.sharing import _
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone.app.layout.navigation.interfaces import INavigationRoot
@@ -71,8 +71,7 @@ class SharingRoleAssignment(RoleAssignment):
         self.reference = None
 
     def cause_title(self):
-        return _(u'label_assignnment_via_sharing',
-                 default=u'Roles assigned via sharing')
+        return _(u'label_assignnment_via_sharing', default=u'Via sharing')
 
 
 RoleAssignment.register(SharingRoleAssignment)
@@ -88,8 +87,7 @@ class TaskRoleAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_task',
-                 default=u'Roles assigned by task')
+        return _(u'label_assignnment_via_task', default=u'By task')
 
 
 RoleAssignment.register(TaskRoleAssignment)
@@ -105,8 +103,8 @@ class TaskAgencyRoleAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_task',
-                 default=u'Roles assigned by task')
+        return _(u'label_assignnment_via_task_agency',
+                 default=u'By task agency')
 
 
 RoleAssignment.register(TaskAgencyRoleAssignment)
