@@ -1,18 +1,78 @@
-.sharing-form {
+#content {
+  .sharing-form {
+    .search-form {
+      padding: 1em 0em;
+    }
+    .search_box {
+      min-width: 200px;
+    }
 
-  .search_box {
-    min-width: 200px;
+    .sharing-table {
+      margin-bottom: 1em;
+
+      .principal_header {
+        width: 400px;
+      }
+
+      .role_header {
+        width: 90px;
+      }
+
+      .principal {
+        &:before {
+          @extend .fa;
+          font-size: 16px;
+          padding-left: 6px;
+          padding-right: 6px;
+          color: $icon-color;
+        }
+        &.group:before {
+          @extend .fa-users;
+        }
+        &.user:before {
+          @extend .fa-user;
+        }
+      }
+
+      td {
+        padding-right: 10px;
+      }
+
+    }
+
+    .aquired:before {
+      @extend .fa;
+      @extend .fa-check-circle;
+      font-size: 16px;
+      color: $green;
+    }
+
+    .assignments_info_button {
+      &:hover {
+        text-decoration: none;
+      }
+      &:before {
+        @extend .fa;
+        @extend .fa-question-circle;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      &.folded {
+        &:before {
+          color: grey;
+        }
+      }
+    }
+
+    .assignments_info{
+      margin-left: 10px;
+      margin-top: 5px;
+
+      li {
+        list-style-type: none;
+      }
+    }
+
   }
-
-  .sharing-table td {
-    padding-right: 10px;
-  }
-
-  .aquired:before {
-    @extend .fa;
-    @extend .fa-check-circle;
-    font-size: 16px;
-    color: $green;
-  }
-
 }
