@@ -4,6 +4,7 @@ from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.connector.actions import CommentAction
 from opengever.meeting.connector.connector import Connector
 from opengever.meeting.connector.connector import ConnectorPath
 from opengever.meeting.interfaces import IHistory
@@ -411,6 +412,9 @@ class Proposal(Base):
             return u''
 
         return agenda_item.meeting.get_link()
+
+    def comment(self, **kwargs):
+        self.connector.dispatch(CommentAction, **kwargs)
 
     @property
     def connector(self):
