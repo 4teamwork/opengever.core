@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.activity.model import Activity
 from opengever.activity.model.subscription import Subscription
+from opengever.meeting.activity.activities import actor_link
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.app.intid.interfaces import IIntIds
@@ -84,6 +86,22 @@ class TestMeetingActivities(IntegrationTestCase):
 
         self.assertSubscribersForResource([self.dossier_responsible], proposal)
         self.assertSubscribersLength(1)
+
+    @browsing
+    def test_record_activity_on_comment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.proposal.comment(u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-commented', activity.kind)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Commented by {}'.format(actor_link()),
+                activity.summary)
 
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
