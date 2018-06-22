@@ -4,6 +4,8 @@ from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.connector.connector import Connector
+from opengever.meeting.connector.connector import ConnectorPath
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -398,3 +400,12 @@ class Proposal(Base):
             return u''
 
         return agenda_item.meeting.get_link()
+
+    @property
+    def connector(self):
+        connector = Connector()
+        connector.connect_path(ConnectorPath(self.admin_unit_id, self.physical_path))
+        if self.is_submitted():
+            connector.connect_path(ConnectorPath(self.submitted_admin_unit_id, self.submitted_physical_path))
+
+        return connector
