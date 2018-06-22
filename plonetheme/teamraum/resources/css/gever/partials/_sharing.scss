@@ -11,11 +11,8 @@
       margin-bottom: 1em;
 
       .principal_header {
-        width: 400px;
-      }
-
-      .role_header {
-        width: 90px;
+        min-width: 300px;
+        max-width: 300px;
       }
 
       .principal {
@@ -34,6 +31,10 @@
         }
       }
 
+      .role_cell {
+        text-align: center;
+      }
+
       td {
         padding-right: 10px;
       }
@@ -47,7 +48,16 @@
       color: $green;
     }
 
+    .local:before {
+      @extend .fa;
+      @extend .fa-check-circle;
+      font-size: 16px;
+      color: $green;
+    }
+
     .assignments_info_button {
+      float: right;
+
       &:hover {
         text-decoration: none;
       }
@@ -65,12 +75,16 @@
       }
     }
 
-    .assignments_info{
-      margin-left: 10px;
+    .assignments_info {
+      max-width: 292px;
+      margin-left: 6px;
+    }
+
+    .assignments_listing {
       margin-top: 5px;
 
       li {
-        list-style-type: none;
+        list-style-type: disc;
       }
     }
 
