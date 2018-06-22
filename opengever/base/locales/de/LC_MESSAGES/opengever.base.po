@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-23 12:30+0000\n"
+"POT-Creation-Date: 2018-07-27 09:31+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -193,7 +193,7 @@ msgstr "Durch Mitgliedschaft in Gremiumsgruppe"
 #. Default: "By protect dossier"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_protect_dossier"
-msgstr "Durch Dossier schützen"
+msgstr "Durch «Dossier schützen»"
 
 #. Default: "Via sharing"
 #: ./opengever/base/role_assignments.py
@@ -213,7 +213,7 @@ msgstr "Durch Aufgabe (Stellvertretung)"
 #. Default: "By workspace invitation"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_workspace_invitation"
-msgstr "Durch eine Teamraum Einladung"
+msgstr "Durch eine Teamraum-Einladung"
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/favorites.py

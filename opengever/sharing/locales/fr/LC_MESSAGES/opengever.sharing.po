@@ -1,31 +1,60 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-15 18:06+0000\n"
+"POT-Creation-Date: 2018-07-27 09:31+0000\n"
 "PO-Revision-Date: 2017-12-03 11:34+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-sharing/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-sharing/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
+
+#. Default: "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
+#: ./opengever/sharing/browser/sharing.py
+msgid "help_inherit_local_roles"
+msgstr ""
+
+#. Default: "Acquired permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_acquired_permission"
+msgstr ""
+
+#. Default: "Automatic permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_automatic_permission"
+msgstr ""
 
 #. Default: "Protected Objects"
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_blocked_local_roles"
 msgstr "objets protégés"
 
+#. Default: "Local permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_local_permission"
+msgstr ""
+
 #. Default: "No protected objects were found within this scope."
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_no_blocked_local_roles"
 msgstr "Aucun objet protégé n'a été trouvé dans ce domaine."
+
+#. Default: "Local roles successfully changed"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_roles_successfully_changed"
+msgstr ""
+
+#. Default: "Search for Users and Groups"
+#: ./opengever/sharing/browser/sharing.py
+msgid "principal_search_placeholder"
+msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_contributor"
