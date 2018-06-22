@@ -41,6 +41,7 @@ Changelog
 - Implement proposal notifications. [elioschmutz]
 - Register watchers for proposals. [elioschmutz]
 - Implement tabs for personal activity-settings view. [elioschmutz]
+- Add meetings templates to simplify recurring paragraphs. [tarnap]
 - Add new notification roles for proposal activities. [elioschmutz]
 - Fix triggering TaskTemplateFolders with inboxes as task responsibles. [njohner]
 - Open successor task when predecessor is skipped or closed. [njohner]

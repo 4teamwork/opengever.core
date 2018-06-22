@@ -59,6 +59,43 @@ class TemplateFolderDocumentsGallery(BumblebeeGalleryMixin, TemplateFolderDocume
     depth = 1
 
 
+class TemplateFolderMeetingTemplatesProxy(BaseTabProxy):
+    """This proxyview is looking for the last used documents
+    view (list or gallery) and reopens this view.
+    """
+
+
+class TemplateFolderMeetingTemplates(Documents):
+
+    types = ['opengever.meeting.meetingtemplate']
+
+    depth = 1
+
+    @property
+    def columns(self):
+        return drop_columns(
+            super(TemplateFolderMeetingTemplates, self).columns)
+
+    @property
+    def enabled_actions(self):
+        actions = filter(
+            lambda x: x not in self.disabled_actions,
+            super(TemplateFolderMeetingTemplates, self).enabled_actions)
+
+        return actions + ['folder_delete_confirmation']
+
+    disabled_actions = [
+        'cancel',
+        'checkin',
+        'checkout',
+        'create_task',
+        'trashed',
+        'move_items',
+        'send_as_email',
+        'submit_additional_documents',
+    ]
+
+
 class TemplateFolderSablonTemplatesProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.

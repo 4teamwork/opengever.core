@@ -1,3 +1,4 @@
+from opengever.base import _ as bmf
 from opengever.base.interfaces import ISQLObjectWrapper
 from plone.supermodel import model
 from zope import schema
@@ -15,6 +16,16 @@ class IMeetingSettings(Interface):
         title=u'Date formatting string for sablon templates',
         description=u'Formatting string used to format date fields for sablon templates',
         default=u'%d.%m.%Y')
+
+
+class IMeetingTemplate(model.Schema):
+
+    pass
+
+
+class IParagraphTemplate(model.Schema):
+
+    pass
 
 
 class IMeetingWrapper(ISQLObjectWrapper):

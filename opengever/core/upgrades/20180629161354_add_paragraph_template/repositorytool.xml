@@ -1,0 +1,7 @@
+<repositorytool>
+  <policymap purge="false">
+    <type name="opengever.meeting.paragraphtemplate">
+      <policy name="version_on_revert" />
+    </type>
+  </policymap>
+</repositorytool>
