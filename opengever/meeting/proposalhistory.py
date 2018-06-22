@@ -6,6 +6,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.meeting import _
+from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
@@ -90,6 +91,9 @@ class ProposalHistory(object):
 
         history = self._get_history_for_writing()
         history[timestamp] = data
+
+        self.record_classes[data.get('history_type')].receive(
+            self.context, self.context.REQUEST, data)
 
     def _get_history_for_writing(self):
         """Return the history for writing and make sure a default is also
@@ -177,6 +181,10 @@ class BaseHistoryRecord(object):
     def get_actor_link(self):
         return Actor.lookup(self.data['userid']).get_link()
 
+    @classmethod
+    def receive(cls, context, request, data):
+        pass
+
 
 @ProposalHistory.register
 class ProposalCreated(BaseHistoryRecord):
@@ -200,6 +208,10 @@ class ProposalCommented(BaseHistoryRecord):
         return _(u'proposal_history_label_commented',
                  u'Proposal commented by ${user}',
                  mapping={'user': self.get_actor_link()})
+
+    @classmethod
+    def receive(cls, context, request, data):
+        ProposalCommentedActivitiy(context, request).record()
 
 
 @ProposalHistory.register
