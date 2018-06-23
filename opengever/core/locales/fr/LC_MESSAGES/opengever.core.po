@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-03-27 09:30+0000\n"
+"POT-Creation-Date: 2018-06-23 12:31+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -27,6 +27,7 @@ msgid "Business Case Dossier"
 msgstr "Dossier"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180403175143_add_confirmation_to_cancel_checkout/actions.xml
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -77,6 +78,11 @@ msgstr "Couverture (PDF)"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Disposition"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
+msgid "Create Proposal"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
@@ -261,6 +267,7 @@ msgid "YearFolder"
 msgstr "Classeur pour l'année"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180327114419_homogenize_e_ch_0147_import_export_action_titles/actions.xml
 msgid "eCH-0147 Export"
 msgstr ""
 

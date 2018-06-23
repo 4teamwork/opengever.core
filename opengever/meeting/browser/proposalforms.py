@@ -163,6 +163,10 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         return self.instance_schema
 
     def update(self):
+        # XXX - tabbedview -> form injections should get reengineered
+        paths = self.request.get('paths', [])
+        if paths:
+            self.request.set('form.widgets.relatedItems', paths)
         self.prefillPredecessorDefaults()
         self.prefill_issuer()
         return super(ProposalAddForm, self).update()
