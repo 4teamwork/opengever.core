@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.meeting.committee import get_group_vocabulary
 from opengever.meeting.committeeroles import CommitteeRoles
 from opengever.testing import FunctionalTestCase
@@ -31,10 +33,11 @@ class TestCommitteeTabs(FunctionalTestCase):
                          local_roles['foo'])
 
     def test_update_roles_preserves_unmanaged_roles(self):
-        self.committee.manage_addLocalRoles('foo',
-            ['Contributor', 'Administrator'])
-        self.committee.manage_addLocalRoles(
-            'org-unit-1_users', ['Contributor'])
+        assignnments = [
+            SharingRoleAssignment('foo', ['Contributor', 'Administrator']),
+            SharingRoleAssignment('org-unit-1_users', ['Contributor'])
+        ]
+        RoleAssignmentManager(self.committee).set(assignnments)
 
         CommitteeRoles(self.committee).update(
             'foo', previous_principal='org-unit-1_users')

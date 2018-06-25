@@ -16,6 +16,7 @@ ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
 ASSIGNNMENT_VIA_PROTECT_DOSSIER = 4
 ASSIGNNMENT_VIA_INVITATION = 5
+ASSIGNNMENT_VIA_COMMITTEE_GROUP = 5
 
 
 class RoleAssignment(object):
@@ -161,6 +162,23 @@ class InvitationRoleAssignment(RoleAssignment):
 
 
 RoleAssignment.register(InvitationRoleAssignment)
+
+
+class CommitteeGroupAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_COMMITTEE_GROUP
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_committee_group',
+                 default=u'By committee group')
+
+
+RoleAssignment.register(CommitteeGroupAssignment)
 
 
 class RoleAssignmentStorage(object):
