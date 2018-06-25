@@ -511,7 +511,6 @@ class OpengeverContentFixture(object):
             Builder('committee_container')
             .titled(u'Sitzungen')
             .having(
-                ad_hoc_template=self.proposal_template,
                 agendaitem_list_template=self.sablon_template,
                 protocol_header_template=self.sablon_template,
                 excerpt_header_template=self.sablon_template,
@@ -1515,6 +1514,7 @@ class OpengeverContentFixture(object):
             .titled(title)
             .within(self.committee_container)
             .having(
+                ad_hoc_template=self.proposal_template,
                 repository_folder=repository_folder,
                 group_id=group_id,
                 )

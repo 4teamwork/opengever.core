@@ -362,8 +362,7 @@ class Committee(ModelContainer):
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
             return self.ad_hoc_template.to_object
-
-        return self.get_committee_container().get_ad_hoc_template()
+        return None
 
     def get_paragraph_template(self):
         if self.paragraph_template:

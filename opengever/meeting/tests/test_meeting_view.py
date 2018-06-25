@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
@@ -229,12 +230,13 @@ class TestMeetingView(IntegrationTestCase):
                           selected_template_id)
 
     @browsing
-    def test_no_options_displayed_if_only_one_proposal_template_available(self, browser):
+    def test_no_options_displayed_if_only_one_ad_hoc_template_available(self, browser):
         self.login(self.committee_responsible, browser=browser)
-        self.assertFalse(self.committee.allowed_proposal_templates)
+        self.assertFalse(self.committee.allowed_ad_hoc_agenda_item_templates)
 
         browser.open(self.committee, view='edit')
-        browser.fill({'Allowed ad-hoc agenda item templates': u'Freitext Traktandum'}).save()
+        browser.fill({'Allowed ad-hoc agenda item templates': u'Geb\xfchren'}).save()
+        statusmessages.assert_no_error_messages()
 
         browser.open(self.meeting)
         self.assertEquals(

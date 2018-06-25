@@ -26,7 +26,6 @@ class ICommitteeContainer(model.Schema):
             u'excerpt_suffix_template',
             u'agendaitem_list_template',
             u'toc_template',
-            u'ad_hoc_template',
             u'paragraph_template',
         ],
     )
@@ -84,13 +83,6 @@ class ICommitteeContainer(model.Schema):
         title=_('label_toc_template',
                 default=u'Table of contents template'),
         source=sablon_template_source,
-        required=False,
-    )
-
-    ad_hoc_template = RelationChoice(
-        title=_('label_ad_hoc_template',
-                default=u'Ad hoc agenda item template'),
-        source=proposal_template_source,
         required=False,
     )
 
@@ -162,12 +154,6 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
     def get_toc_template(self):
         if self.toc_template:
             return self.toc_template.to_object
-
-        return None
-
-    def get_ad_hoc_template(self):
-        if self.ad_hoc_template:
-            return self.ad_hoc_template.to_object
 
         return None
 

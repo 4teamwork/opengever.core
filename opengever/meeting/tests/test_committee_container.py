@@ -49,24 +49,6 @@ class TestCommitteeContainer(IntegrationTestCase):
             'plone.leftcolumn', self.committee_container)
 
     @browsing
-    def test_can_configure_ad_hoc_template(self, browser):
-        self.login(self.administrator, browser)
-        self.committee_container.ad_hoc_template = None
-
-        self.assertIsNone(self.committee_container.ad_hoc_template)
-        self.assertIsNone(self.committee_container.get_ad_hoc_template())
-
-        browser.open(self.committee_container, view='edit')
-        browser.fill({'Ad hoc agenda item template': self.proposal_template}).save()
-        statusmessages.assert_no_error_messages()
-
-        statusmessages.assert_message('Changes saved')
-
-        self.assertIsNotNone(self.committee_container.ad_hoc_template)
-        self.assertEqual(self.proposal_template,
-                         self.committee_container.get_ad_hoc_template())
-
-    @browsing
     def test_can_configure_paragraph_template(self, browser):
         self.login(self.administrator, browser)
         self.committee_container.paragraph_template = None
@@ -96,12 +78,9 @@ class TestCommitteeContainer(IntegrationTestCase):
                       'Agenda item suffix template for the protocol': self.sablon_template,
                       'Excerpt header template': self.sablon_template,
                       'Excerpt suffix template': self.sablon_template,
-                      'Paragraph template': self.sablon_template,
-                      'Ad hoc agenda item template': self.proposal_template}).save()
+                      'Paragraph template': self.sablon_template}).save()
         statusmessages.assert_no_error_messages()
 
-        self.assertEqual(self.proposal_template,
-                         browser.context.get_ad_hoc_template())
         self.assertEqual(self.sablon_template,
                          browser.context.get_paragraph_template())
         self.assertEqual(self.sablon_template,
@@ -120,7 +99,6 @@ class TestCommitteeContainer(IntegrationTestCase):
                   u'Excerpt suffix template',
                   u'Agendaitem list template',
                   u'Table of contents template',
-                  u'Ad hoc agenda item template',
                   u'Paragraph template']
         self.login(self.manager, browser)
 

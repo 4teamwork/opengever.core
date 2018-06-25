@@ -91,7 +91,7 @@ class TestCommittee(IntegrationTestCase):
     def test_can_configure_ad_hoc_template(self, browser):
         self.login(self.committee_responsible, browser)
 
-        self.assertIsNone(self.committee.ad_hoc_template)
+        self.committee.ad_hoc_template = None
 
         browser.open(self.committee, view='edit')
         browser.fill({'Ad hoc agenda item template': self.proposal_template})
@@ -125,15 +125,6 @@ class TestCommittee(IntegrationTestCase):
         self.committee.ad_hoc_template = self.as_relation_value(
             self.proposal_template)
 
-        self.assertEqual(
-            self.proposal_template, self.committee.get_ad_hoc_template())
-
-    def test_get_ad_hoc_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.committee_container.ad_hoc_template = self.as_relation_value(
-            self.proposal_template)
-
-        self.assertIsNone(self.committee.ad_hoc_template)
         self.assertEqual(
             self.proposal_template, self.committee.get_ad_hoc_template())
 
