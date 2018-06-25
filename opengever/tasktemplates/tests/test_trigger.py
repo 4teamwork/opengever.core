@@ -193,6 +193,11 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         create(Builder('tasktemplate')
+               .titled(u'Eintrittsgespr\xe4ch vorbereiten und planen.')
+               .having(issuer='responsible', responsible='inbox:fa',
+                       deadline=10, preselected=True)
+               .within(self.tasktemplatefolder))
+        create(Builder('tasktemplate')
                .titled(u'Notebook einrichten.')
                .having(issuer='responsible', deadline=10, preselected=True)
                .within(self.tasktemplatefolder))
@@ -205,20 +210,22 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         browser.open(self.dossier, view='add-tasktemplate')
         browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
         browser.click_on('Continue')
-        browser.fill({'Tasktemplates': ['User Accounts erstellen.',
+        browser.fill({'Tasktemplates': [u'Eintrittsgespr\xe4ch vorbereiten und planen.',
+                                        'User Accounts erstellen.',
                                         'Arbeitsplatz einrichten.']})
         browser.click_on('Continue')
 
         # labels
         self.assertItemsEqual(
-            [u'Responsible \xabUser Accounts erstellen.\xbb',
+            [u'Responsible \xabEintrittsgespr\xe4ch vorbereiten und planen.\xbb',
+             u'Responsible \xabUser Accounts erstellen.\xbb',
              u'Responsible \xabArbeitsplatz einrichten.\xbb'],
             browser.forms['form'].css('label').text)
 
         # Default values
         fields = browser.css('select')
         self.assertItemsEqual(
-            ['fa:robert.ziegler', None],
+            ['inbox:fa', 'fa:robert.ziegler', None],
             [field.value for field in fields])
 
         field_name = u'Responsible \xabUser Accounts erstellen.\xbb'
@@ -229,13 +236,16 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(['tasks created'], info_messages())
         main_task = self.dossier.listFolderContents()[-1]
         ids = main_task.objectIds()
-        task1, task2 = [main_task.get(_id) for _id in ids]
+        task1, task2, task3 = [main_task.get(_id) for _id in ids]
+
+        self.assertEquals(u'Eintrittsgespr\xe4ch vorbereiten und planen.', task2.title)
+        self.assertEquals(u'inbox:fa', task2.responsible)
 
         self.assertEquals(u'Arbeitsplatz einrichten.', task1.title)
         self.assertEquals(u'robert.ziegler', task1.responsible)
 
-        self.assertEquals(u'User Accounts erstellen.', task2.title)
-        self.assertEquals(u'jurgen.konig', task2.responsible)
+        self.assertEquals(u'User Accounts erstellen.', task3.title)
+        self.assertEquals(u'jurgen.konig', task3.responsible)
 
     @browsing
     def test_step3_responsible_fields_are_required(self, browser):
