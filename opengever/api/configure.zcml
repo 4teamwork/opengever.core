@@ -87,7 +87,7 @@
       name="@config"
       for="*"
       factory=".config.Config"
-      permission="zope2.View"
+      permission="zope.Public"
       />
 
   <plone:service

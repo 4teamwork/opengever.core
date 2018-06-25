@@ -7,3 +7,6 @@ class Config(Service):
 
     def reply(self):
         return IGeverSettings(self.context).get_config()
+
+    def check_permission(self):
+        return
