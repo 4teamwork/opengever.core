@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Add MS publisher to the list of OfficeConnector editables. [tarnap]
 - Add new notification roles for proposal activities. [elioschmutz]
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
