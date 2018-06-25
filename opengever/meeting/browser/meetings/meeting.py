@@ -15,7 +15,6 @@ from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.vocabulary import AdHocAgendaItemTemplatesForCommitteeVocabulary
 from operator import itemgetter
 from path import Path
 from plone import api
@@ -35,6 +34,7 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from zope.schema.interfaces import IVocabularyFactory
 import json
 
 
@@ -455,7 +455,10 @@ class MeetingView(BrowserView):
 
     @property
     def ad_hoc_agenda_item_templates(self):
-        vocabulary_factory = AdHocAgendaItemTemplatesForCommitteeVocabulary()
+        vocabulary_factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.meeting.AdHocAgendaItemTemplatesForCommitteeVocabulary')
+
         committee = self.context.aq_parent
         vocabulary = vocabulary_factory(committee)
 
