@@ -1,3 +1,5 @@
+from opengever.base.role_assignments import InitialRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 
 
 def assign_owner_role_on_creation(workspace, event):
@@ -5,6 +7,5 @@ def assign_owner_role_on_creation(workspace, event):
     so that the she / he can access the workspace.
     """
     owner_userid = workspace.Creator()
-    roles = set(dict(workspace.get_local_roles()).get('owner_userid', ()))
-    roles.add('WorkspaceOwner')
-    workspace.manage_setLocalRoles(owner_userid, sorted(list(roles)))
+    assignment = InitialRoleAssignment(owner_userid, ['WorkspaceOwner'])
+    RoleAssignmentManager(workspace).add_assignment(assignment)

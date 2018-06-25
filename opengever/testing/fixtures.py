@@ -14,6 +14,8 @@ from ftw.testing import staticuid
 from functools import wraps
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
+from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
@@ -1594,21 +1596,14 @@ class OpengeverContentFixture(object):
             .within(self.workspace_root)
             ))
 
-        self.workspace.manage_setLocalRoles(
-            self.workspace_admin.getId(),
-            ['WorkspaceAdmin'],
-            )
-
-        self.workspace.manage_setLocalRoles(
-            self.workspace_member.getId(),
-            ['WorkspaceMember'],
-            )
-
-        self.workspace.manage_setLocalRoles(
-            self.workspace_guest.getId(),
-            ['WorkspaceGuest'],
-            )
-        self.workspace.reindexObjectSecurity()
+        RoleAssignmentManager(self.workspace).set([
+            InvitationRoleAssignment(
+                self.workspace_admin.id, ['WorkspaceAdmin'], self.workspace),
+            InvitationRoleAssignment(
+                self.workspace_member.id, ['WorkspaceMember'], self.workspace),
+            InvitationRoleAssignment(
+                self.workspace_guest.id, ['WorkspaceGuest'], self.workspace)
+        ])
 
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder')

@@ -1,3 +1,5 @@
+from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.workspace.participation.storage import IInvitationStorage
@@ -144,7 +146,9 @@ class ManageParticipants(BrowserView):
             user_roles = api.user.get_roles(username=token, obj=self.context,
                                             inherit=False)
             if user_roles and 'WorkspaceOwner' not in user_roles:
-                self.context.manage_setLocalRoles(token, [role])
+                assignment = InvitationRoleAssignment(token, [role], self.context)
+                RoleAssignmentManager(self.context).add_assignment(assignment)
+
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)

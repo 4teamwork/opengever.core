@@ -10,10 +10,12 @@ from zope.annotation.interfaces import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
+ASSIGNNMENT_INITIAL = 0
 ASSIGNNMENT_VIA_TASK = 1
 ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
 ASSIGNNMENT_VIA_PROTECT_DOSSIER = 4
+ASSIGNNMENT_VIA_INVITATION = 5
 
 
 class RoleAssignment(object):
@@ -60,6 +62,22 @@ class RoleAssignment(object):
                 'title': reference_obj.Title().decode('utf-8')}
 
         return data
+
+
+class InitialRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_INITIAL
+
+    def __init__(self, principal, roles):
+        self.principal = principal
+        self.roles = roles
+        self.reference = None
+
+    def cause_title(self):
+        return _(u'label_initial_assignnment', default=u'Initial assignment')
+
+
+RoleAssignment.register(InitialRoleAssignment)
 
 
 class SharingRoleAssignment(RoleAssignment):
@@ -126,6 +144,23 @@ class ProtectDossierRoleAssignment(RoleAssignment):
 
 
 RoleAssignment.register(ProtectDossierRoleAssignment)
+
+
+class InvitationRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNNMENT_VIA_INVITATION
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignnment_via_workspace_invitation',
+                 default=u'By workspace invitation')
+
+
+RoleAssignment.register(InvitationRoleAssignment)
 
 
 class RoleAssignmentStorage(object):

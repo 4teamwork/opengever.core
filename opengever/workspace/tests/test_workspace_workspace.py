@@ -6,6 +6,8 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.base.browser import edit_public_trial
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.role_assignments import ASSIGNNMENT_INITIAL
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
@@ -29,6 +31,12 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.assertEquals((('gunther.frohlich', ('WorkspaceOwner',)),),
                           workspace.get_local_roles())
+        self.assertEquals(
+            [{'cause': ASSIGNNMENT_INITIAL,
+              'roles': ['WorkspaceOwner'],
+              'reference': None,
+              'principal': 'gunther.frohlich'}],
+            RoleAssignmentManager(workspace).storage._storage())
 
     def test_sequence_number(self):
         self.login(self.workspace_member)
