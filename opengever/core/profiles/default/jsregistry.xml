@@ -549,4 +549,15 @@
       insert-after="++resource++opengever.base/es6_promise_polyfill.min.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.sharing/sharing.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
 </object>

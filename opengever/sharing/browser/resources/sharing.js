@@ -1,4 +1,4 @@
-var app = new Vue({
+var sharingApp = {
   template: '#sharing-form',
   el: '#sharing-view-vue-app',
   data: {
@@ -92,4 +92,21 @@ var app = new Vue({
       }.bind(this));
     },
   },
+};
+
+function initSharingApp() { return new Vue(sharingApp); }
+
+$(document).on('reload', function() {
+  if (window.tabbedview) {
+    var viewName = window.tabbedview.prop('view_name');
+    if (viewName && viewName === 'sharing') {
+      initSharingApp();
+    }
+  }
+});
+
+$(function() {
+  if (document.querySelector('.template-sharing')) {
+    initSharingApp();
+  }
 });
