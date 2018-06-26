@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-05-28 06:31+0000\n"
+"POT-Creation-Date: 2018-06-26 14:31+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -900,10 +900,10 @@ msgstr "Neu zugewiesen von ${responsible_old} an ${responsible_new} durch ${user
 msgid "transition_msg_refuse"
 msgstr "Abgelehnt durch ${user}"
 
-#. Default: "Rejected by ${user}"
+#. Default: "Rejected by ${old_responsible}. Task assigned to responsible ${new_responsible}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_reject"
-msgstr "Abgelehnt durch ${user}"
+msgstr "Abgelehnt durch ${old_responsible}. Aufgabe an Auftragnehmer ${new_responsible} zugewiesen."
 
 #. Default: "Reopened by ${user}"
 #: ./opengever/task/response_description.py

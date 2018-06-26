@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-28 06:31+0000\n"
+"POT-Creation-Date: 2018-06-26 14:31+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -902,10 +902,10 @@ msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${u
 msgid "transition_msg_refuse"
 msgstr "Refusé par ${user}"
 
-#. Default: "Rejected by ${user}"
+#. Default: "Rejected by ${old_responsible}. Task assigned to responsible ${new_responsible}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_reject"
-msgstr "Refusé par ${user}"
+msgstr "Refusé par ${old_responsible}. La tâche a été réattribuée au responsable ${new_responsible}"
 
 #. Default: "Reopened by ${user}"
 #: ./opengever/task/response_description.py
