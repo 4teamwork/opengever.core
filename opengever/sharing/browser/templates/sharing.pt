@@ -25,6 +25,7 @@
                              data-portalurl here/portal_url;
                              data-i18n view/translations;
                              data-userid view/get_userid;
+                             data-is-editable string:true;
                              data-authtoken context/@@authenticator/token"></div>
 
         <script tal:attributes="src string:${here/portal_url}/++resource++opengever.sharing/sharing.js"></script>

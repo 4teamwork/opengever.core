@@ -311,11 +311,4 @@ class SharingTab(OpengeverSharingView):
     but wihtout the form.
     """
 
-    index = ViewPageTemplateFile('sharing_tab.pt')
-
-    @memoize
-    def roles(self):
-        return super(SharingTab, self).roles(check_permission=False)
-
-    def get_css_classes(self):
-        return ['searchform-hidden']
+    template = ViewPageTemplateFile('templates/sharing_tab.pt')
