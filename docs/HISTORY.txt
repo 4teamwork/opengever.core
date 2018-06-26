@@ -10,6 +10,7 @@ Changelog
 - Fix physical_path schema migration for oracle backends. [phgross]
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Also make active committee vocabularies sorted by title. [Rotonen]
+- Sort user groups. [Rotonen]
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
 - Add csv, wav, wmf and xml to the mimetypes for file icons. [tarnap]
 - Display the comment in a title attribute in case it gets truncated. [tarnap]
