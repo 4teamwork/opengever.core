@@ -1,7 +1,7 @@
 <script type="text/x-template" id="sharing-form">
 
   <div class="sharing-form">
-    <form @submit.prevent="search" class="search-form">
+    <form @submit.prevent="search" class="search-form" v-if="isEditable">
       <input type="text" class="search_box" v-model="principal_search"
              :placeholder="i18n.principal_search_placeholder" />
       <a class="button" @click="search">{{i18n.label_search}}</a>
@@ -36,21 +36,33 @@
         <td v-for="role in available_roles" class="role_cell">
           <span class="aquired" :title="i18n.label_acquired"
                 v-if="entry.roles[role] == 'acquired'" />
-          <input type="checkbox" v-if="entry.roles[role] != 'acquired'"
-                 :checked="entry.roles[role]" :class="role"
-                 @click="(event) => {toggle_checkbox(event, entry, role)}"/>
+
+          <template v-if="isEditable">
+            <input type="checkbox" v-if="entry.roles[role] != 'acquired'"
+                   :checked="entry.roles[role]" :class="role"
+                   @click="(event) => {toggle_checkbox(event, entry, role)}"/>
+          </template>
+
+          <template v-if="!isEditable">
+            <span class="local" :title="i18n.label_local"
+                  v-if="entry.roles[role] === true" />
+          </template>
+
         </td>
       </tr>
     </table>
-    <input type="checkbox" v-model="inherit" />
-    <label for="inherit">{{i18n.label_inherit_local_roles}}</label>
-    <div class="formHelp">{{i18n.help_inherit_local_roles}}
-    </div>
 
-    <div class="formControls">
-      <a class="button context" @click="save">{{i18n.label_save}}</a>
-      <a class="button" :href="context_url">{{i18n.label_cancel}}</a>
-    </div>
+    <template v-if="isEditable">
+      <input type="checkbox" v-model="inherit" />
+      <label for="inherit">{{i18n.label_inherit_local_roles}}</label>
+      <div class="formHelp">{{i18n.help_inherit_local_roles}}
+      </div>
+
+      <div class="formControls">
+        <a class="button context" @click="save">{{i18n.label_save}}</a>
+        <a class="button" :href="context_url">{{i18n.label_cancel}}</a>
+      </div>
+    </template>
 
   </div>
 
