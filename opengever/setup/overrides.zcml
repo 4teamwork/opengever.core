@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:transmogrifier="http://namespaces.plone.org/transmogrifier"
+    i18n_domain="opengever.setup">
+
+  <utility
+      component=".sections.local_roles.LocalRolesSetter"
+      name="collective.blueprint.jsonmigrator.ac_local_roles"
+      />
+
+</configure>

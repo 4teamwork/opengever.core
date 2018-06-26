@@ -1,6 +1,10 @@
+from AccessControl.interfaces import IRoleManager
+from collective.blueprint.jsonmigrator.blueprint import LocalRoles
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Expression
+from opengever.base.role_assignments import InitialRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from zope.interface import classProvides, implements
 import logging
 
@@ -31,7 +35,6 @@ class BlockLocalRoleInheritance(object):
 
     def __iter__(self):
         for item in self.previous:
-
             self.row_name = self.fields(item)[0]
 
             # Look for the rows value.
@@ -99,3 +102,30 @@ class InsertLocalRolesSection(object):
         leading and trailing spaces.
         """
         return [group.strip() for group in item.get(field, '').split(',')]
+
+
+class LocalRolesSetter(LocalRoles):
+
+    classProvides(ISectionBlueprint)
+    implements(ISection)
+
+    def __iter__(self):
+        for item in self.previous:
+            pathkey = self.pathkey(*item.keys())[0]
+            roleskey = self.roleskey(*item.keys())[0]
+
+            if not pathkey or not roleskey or \
+               roleskey not in item:    # not enough info
+                yield item; continue
+
+            obj = self.context.unrestrictedTraverse(item[pathkey].lstrip('/'), None)
+            if obj is None:             # path doesn't exist
+                yield item; continue
+
+            if IRoleManager.providedBy(obj):
+                for principal, roles in item[roleskey].items():
+                    if roles:
+                        RoleAssignmentManager(obj).add_assignment(
+                            InitialRoleAssignment(principal, roles))
+
+            yield item
