@@ -433,7 +433,6 @@
           </table>
 
 
-
           <div class="collapsible add-agenda-items"
                tal:condition="meeting/is_agendalist_editable">
             <div class="collapsible-header">
@@ -459,60 +458,59 @@
                 </div>
               </div>
 
+              <hr>
+
               <div class="input-group">
                 <label i18n:translate="view_label_schedule_ad_hoc"
                        for="schedule-title">
                   Schedule ad hoc agenda item:
                 </label>
-                <div i18n:translate="label_title">Title</div>
-                <input id="schedule-title" type="text" />
-                <div i18n:translate="label_description">Description</div>
-                <textarea id="schedule-description" type="text" />
-              </div>
+                <div i18n:translate="label_title" class="input-label">Title</div>
+                <input id="schedule-title" type="text" class="input-field"/>
+                <div i18n:translate="label_description" class="input-label">Description</div>
+                <textarea id="schedule-description" type="text" class="input-field"/>
 
-              <table id="ad-hoc-agenda-item-proposal-templates"
-                  tal:condition="view/has_many_ad_hoc_agenda_item_templates">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Titel</th>
-                    <th>Ersteller</th>
-                    <th>Zuletzt bearbeitet</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr tal:repeat="template view/ad_hoc_agenda_item_templates">
-                    <td><input type="radio" name="selected_ad_hoc_agenda_item_template"
-                               tal:attributes="checked python: template['selected'] and 'checked' or None;
-                                               value template/value" /></td>
-                    <td tal:content="template/title"></td>
-                    <td tal:content="template/author"></td>
-                    <td tal:content="template/modified"></td>
-                  </tr>
-                </tbody>
-              </table>
+                <table id="ad-hoc-agenda-item-proposal-templates"
+                    tal:condition="view/has_many_ad_hoc_agenda_item_templates">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Titel</th>
+                      <th>Ersteller</th>
+                      <th>Zuletzt bearbeitet</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr tal:repeat="template view/ad_hoc_agenda_item_templates">
+                      <td><input type="radio" name="selected_ad_hoc_agenda_item_template"
+                                 tal:attributes="checked python: template['selected'] and 'checked' or None;
+                                                 value template/value" /></td>
+                      <td tal:content="template/title"></td>
+                      <td tal:content="template/author"></td>
+                      <td tal:content="template/modified"></td>
+                    </tr>
+                  </tbody>
+                </table>
 
-              <div class="button-group">
-                <button class="schedule-text button"
+                <button class="schedule-text button submit"
                         tal:attributes="data-url view/url_schedule_text"
                         i18n:translate="label_schedule">
                   Schedule
                 </button>
               </div>
 
+              <hr>
               <div class="input-group">
                 <label i18n:translate="view_label_add_section_header"
                        for="schedule-paragraph">
                   Add section header:
                 </label>
                 <input id="schedule-paragraph" type="text" />
-                <div class="button-group">
-                  <button class="schedule-paragraph button"
-                          tal:attributes="data-url view/url_schedule_paragraph"
-                          i18n:translate="label_insert">
-                    Insert
-                  </button>
-                </div>
+                <button class="schedule-paragraph button submit"
+                        tal:attributes="data-url view/url_schedule_paragraph"
+                        i18n:translate="label_insert">
+                  Insert
+                </button>
               </div>
 
             </div>

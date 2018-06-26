@@ -2565,6 +2565,11 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants .other_participants .other_participants_label { margin-top: 2em; color: #969696; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants .other_participants ul.participant-list li.participant .fullname { display: inline-block; max-width: 100%; }
 #opengever_meeting_meeting.word-feature .add-agenda-items { margin-top: 1em; }
+#opengever_meeting_meeting.word-feature .add-agenda-items label { font-size: 130%; margin-bottom: 2pt; color: #5C646A; }
+#opengever_meeting_meeting.word-feature .add-agenda-items .input-label { font-weight: bold; margin-top: 4pt; margin-bottom: 4pt; color: #5C646A; }
+#opengever_meeting_meeting.word-feature .add-agenda-items .input-field { margin-bottom: 8pt !important; }
+#opengever_meeting_meeting.word-feature .add-agenda-items .submit { margin-top: 4pt; margin-bottom: 4pt; }
+#opengever_meeting_meeting.word-feature .add-agenda-items table { margin-top: 2pt; margin-bottom: 2pt; }
 #opengever_meeting_meeting.word-feature #agenda_items th { padding: 6px 10px; }
 #opengever_meeting_meeting.word-feature .agenda_item td { border-top: 1px solid #e6e6e6; border-bottom: none; }
 #opengever_meeting_meeting.word-feature .agenda_item:first-child td { border-top: 2px solid white; }
@@ -2631,6 +2636,7 @@ table#agenda_items tbody tr .title .attachements, table#agenda_items tbody tr .t
 table#agenda_items tbody tr .title .summary { margin: 16px 0; float: right; display: none; }
 table#agenda_items tbody tr .title .proposal_document.checked-out { position: relative; }
 table#agenda_items tbody tr .title .proposal_document.checked-out:before { position: absolute; content: ""; color: #aaa; margin-left: -15px; }
+table#agenda_items tbody tr .title .proposal_description { clear: both; }
 table#agenda_items tbody tr .toggle-attachements { width: 10px; }
 table#agenda_items tbody tr .toggle-attachements .toggle-attachements-btn { font-size: 20px; }
 table#agenda_items tbody tr .toggle-attachements .toggle-attachements-btn:hover { text-decoration: none; }
@@ -2651,6 +2657,8 @@ table#agenda_items tbody .paragraph .proposal_title { font-weight: bold; padding
 #committees_view .unscheduled_proposals .number:hover, #committees_view .unscheduled_proposals .number:visited { text-decoration: none; }
 #committees_view .unscheduled_proposals .unscheduled_number { background: #ff7070; }
 #committees_view .meetings { list-style-type: none; margin-top: 2em; margin-left: 0em; }
+
+#unscheduled_porposals.list-group .title { font-weight: bold; margin-top: 1em; }
 
 #content #period_listing { list-style-type: none; vertical-align: middle; }
 #content #period_listing li.period { padding-left: 10px; padding-right: 10px; }
