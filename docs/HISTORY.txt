@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
+- Add csv, wav, wmf and xml to the mimetypes for file icons. [tarnap]
 - Add new notification roles for proposal activities. [elioschmutz]
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
