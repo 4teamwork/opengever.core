@@ -2450,6 +2450,8 @@ body.template-team-details #content .members { list-style-type: none; padding: 0
 #content .documentByLine ul li > *, #content #plone-document-byline ul li > * { margin: 0; padding: 0; }
 #content .documentByLine ul .label, #content #plone-document-byline ul .label { color: #333; }
 
+#content-core .error { background-color: #fdc; border: 1px solid red; padding: 0.5em; margin: 1em 0; }
+
 .portaltype-opengever-meeting-committeecontainer #plone-document-byline, .portaltype-opengever-meeting-committee #plone-document-byline { display: none; }
 
 body.feature-word-meeting.model-meeting #content #plone-document-byline { display: block; }

@@ -82,7 +82,7 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
 
         self.assertEquals(expected_actions, tabbedview.minor_actions().text)
 
-        self.assertEquals([], tabbedview.major_actions().text)
+        self.assertEquals(['Create Proposal'], tabbedview.major_actions().text)
 
     @browsing
     def test_columns(self, browser):

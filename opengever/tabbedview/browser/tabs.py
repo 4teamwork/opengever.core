@@ -172,6 +172,7 @@ class Documents(BaseCatalogListingTab):
 
     major_actions = [
         'create_task',
+        'create_proposal',
         ]
 
     bumblebee_template = ViewPageTemplateFile(
@@ -197,6 +198,7 @@ class Documents(BaseCatalogListingTab):
             'checkin_without_comment',
             'cancel',
             'create_task',
+            'create_proposal',
             'submit_additional_documents',
             'trashed',
             'move_items',

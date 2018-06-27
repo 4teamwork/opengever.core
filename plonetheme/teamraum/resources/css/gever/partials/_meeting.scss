@@ -1,3 +1,10 @@
+#content-core .error {
+  background-color: #fdc;
+  border:  1px solid red;
+  padding: 0.5em;
+  margin:  1em 0;
+}
+
 #meeting_location {
   @extend .fa;
   @extend .fa-map-marker;

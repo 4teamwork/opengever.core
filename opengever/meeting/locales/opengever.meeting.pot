@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-13 13:35+0000\n"
+"POT-Creation-Date: 2018-06-23 12:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -614,9 +614,24 @@ msgstr ""
 msgid "error_no_permission_to_add_document"
 msgstr ""
 
+#. Default: "Only .docx files allowed as proposal documents."
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "error_only_docx_files_allowed_as_proposal_documents"
+msgstr ""
+
 #. Default: "Only word files (.docx) can be added here."
 #: ./opengever/meeting/proposaltemplate.py
 msgid "error_prosal_template_not_docx"
+msgstr ""
+
+#. Default: "Either a proposal template or a proposal document, but not both, is required."
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "error_template_or_document_but_not_both_required_for_creation"
+msgstr ""
+
+#. Default: "Either a proposal template or a proposal document is required."
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "error_template_or_document_required_for_creation"
 msgstr ""
 
 #. Default: "Excerpt ${title}"
@@ -967,6 +982,7 @@ msgid "label_invalid_sablon_template"
 msgstr ""
 
 #. Default: "Issuer"
+#: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/proposal.py
 msgid "label_issuer"
 msgstr ""
@@ -1068,6 +1084,11 @@ msgstr ""
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_presidency"
+msgstr ""
+
+#. Default: "Proposal Document"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_proposal_document"
 msgstr ""
 
 #. Default: "Proposal template"

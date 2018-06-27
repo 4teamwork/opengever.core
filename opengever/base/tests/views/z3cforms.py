@@ -36,6 +36,7 @@ class IWidgetTestFormSchema(Interface):
         title=u"default_table",
         show_filter=True,
         vocabulary=get_radio_table_vocabulary(),)
+
     # field with custom columns
     custom_radio_table_field = TableChoice(
         required=False,
@@ -88,3 +89,21 @@ class WidgetTestView(FormWrapper):
             return json.dumps(self.form_instance.result_data)
         else:
             return super(WidgetTestView, self).render()
+
+
+class IWidgetTestRequiredFormSchema(Interface):
+    # field with required default columns
+    required_radio_table_field = TableChoice(
+        required=True,
+        title=u"default_table",
+        show_filter=True,
+        vocabulary=get_radio_table_vocabulary(),
+        )
+
+
+class WidgetTestRequiredForm(WidgetTestForm):
+    fields = Fields(IWidgetTestRequiredFormSchema)
+
+
+class WidgetTestRequiredView(WidgetTestView):
+    form = WidgetTestRequiredForm

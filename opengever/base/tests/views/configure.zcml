@@ -12,6 +12,13 @@
       />
 
   <browser:page
+      name="test-z3cform-required-widget"
+      class=".z3cforms.WidgetTestRequiredView"
+      for="*"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
       name="test-traversal-unauthorized"
       class=".unauthorized.TraversalUnauthorized"
       for="*"

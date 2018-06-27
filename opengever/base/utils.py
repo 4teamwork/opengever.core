@@ -6,6 +6,21 @@ import hashlib
 import json
 
 
+class NullObject(object):
+    def __getattribute__(self, name):
+        if name != '__dict__' and name not in self.__dict__:
+            return lambda: u''
+        return object.__getattribute__(self, name)
+
+    def __iter__(self):
+        yield u''
+        for key in self.__dict__:
+            yield key
+
+    def __getitem__(self, key):
+        return getattr(self, key)
+
+
 def language_cache_key(method, context, request):
     """
     Generates cache key used for functions with different output depending on
@@ -41,7 +56,7 @@ def set_profile_version(portal, profile_id, version):
 
 def ok_response(request=None):
     if request is None:
-        request =  api.portal.get().REQUEST
+        request = api.portal.get().REQUEST
     request.response.setHeader("Content-type", "text/plain")
     return 'OK'
 

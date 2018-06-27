@@ -22,6 +22,7 @@ from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
+from plone.protect import createToken
 from requests_toolbelt.utils import formdata
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
@@ -56,6 +57,31 @@ class TestProposalViewsDisabled(IntegrationTestCase):
 class TestProposal(IntegrationTestCase):
 
     features = ('meeting',)
+
+    @browsing
+    def test_create_proposal_visible_in_dossier_actions_for_regular_user(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='tabbedview_view-documents-proxy')
+        self.assertEqual(browser.css('.tabbedview-menu-create_proposal').text, ['Create Proposal'])
+
+    @browsing
+    def test_creating_proposal_from_tabbedview_sets_attachments(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='tabbedview_view-documents-proxy')
+        original_template = ('orig_template', '#'.join((self.dossier.absolute_url(), 'documents')), )
+        authenticator = ('_authenticator', createToken(), )
+        document_10_path = ('paths:list', browser.css('#document-10').first.node.attrib.get('value'), )
+        document_11_path = ('paths:list', browser.css('#document-11').first.node.attrib.get('value'), )
+        method = ('++add++opengever.meeting.proposal:method', '1', )
+        browser.open(
+            self.dossier.absolute_url(),
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode((original_template, authenticator, document_10_path, document_11_path, method, )),
+            )
+        self.assertEqual(
+            [u'Vertr\xe4gsentwurf', 'Feedback zum Vertragsentwurf'],
+            browser.css('#form-widgets-relatedItems span.label').text,
+            )
 
     @browsing
     def test_dossier_title_is_default_value_for_proposal_title(self, browser):
@@ -166,6 +192,89 @@ class TestProposal(IntegrationTestCase):
             self.dossier_responsible.getId(),
             self.get_checkout_manager(
                 proposal.get_proposal_document()).get_checked_out_by())
+
+    @browsing
+    def test_proposal_can_be_created_in_browser_from_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+        }).save()
+        statusmessages.assert_no_error_messages()
+        statusmessages.assert_message('Item created')
+        self.assertEqual(
+            browser.context.getChildNodes()._data[0].file.data,
+            self.document.file.data,
+            u'Did not succesfully copy the file over from self.document.',
+            )
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_without_document_and_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_from_excel_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.subdocument.getPhysicalPath()),
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Only .docx files allowed as proposal documents.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_from_old_word_document(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.document.file.contentType = 'application/msword'
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Only .docx files allowed as proposal documents.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
+    def test_proposal_cannot_be_created_in_browser_with_both_document_and_template(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+            'Proposal template': u'Geb\xfchren',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document, but not both, is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
     def test_create_proposal_in_subdossier(self, browser):

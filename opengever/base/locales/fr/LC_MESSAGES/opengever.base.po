@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-04 07:54+0000\n"
+"POT-Creation-Date: 2018-06-23 12:30+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -131,6 +131,7 @@ msgstr "Visibilité"
 
 #. Default: "Common"
 #: ./opengever/base/behaviors/base.py
+#: ./opengever/base/behaviors/translated_title.py
 msgid "fieldset_common"
 msgstr "En général"
 
@@ -263,6 +264,11 @@ msgstr "Il n'y a aucun favoris"
 #. Default: "No recently touched documents yet"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_recently_touched_docs"
+msgstr ""
+
+#. Default: "None"
+#: ./opengever/base/widgets.py
+msgid "label_none"
 msgstr ""
 
 #. Default: "Overview"

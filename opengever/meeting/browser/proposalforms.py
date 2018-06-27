@@ -1,5 +1,6 @@
 from ftw.table import helper
 from opengever.base.schema import TableChoice
+from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting.form import ModelProxyAddForm
@@ -22,8 +23,11 @@ from Products.CMFPlone.utils import safe_unicode
 from z3c.form import field
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.relationfield.schema import RelationChoice
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 
@@ -68,10 +72,25 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
 
 class IAddProposal(IProposal):
 
+    proposal_document = RelationChoice(
+        title=_(u'label_proposal_document', default=u'Proposal Document'),
+        required=False,
+        source=DossierPathSourceBinder(
+            portal_type=("opengever.document.document", ),
+            navigation_tree_query={
+                'object_provides': [
+                    'opengever.document.document.IDocumentSchema',
+                    'opengever.dossier.behaviors.dossier.IDossierMarker',
+                    'opengever.meeting.proposal.IProposal',
+                    'opengever.task.task.ITask',
+                    ],
+            }),
+        )
+
     proposal_template = TableChoice(
         title=_('label_proposal_template', default=u'Proposal template'),
         vocabulary='opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
-        required=True,
+        required=False,
         show_filter=True,
         vocabulary_depends_on=['form.widgets.committee'],
         columns=(
@@ -92,6 +111,39 @@ class IAddProposal(IProposal):
         default=True,
         required=False)
 
+    @invariant
+    def template_or_document_required_for_creation(data):
+        proposal_template = data.proposal_template
+        proposal_document = data.proposal_document
+        if not proposal_template and not proposal_document:
+            raise Invalid(_(
+                u'error_template_or_document_required_for_creation',
+                default=u'Either a proposal template or a proposal document is required.',
+                ))
+
+    @invariant
+    def only_one_of_proposal_template_or_proposal_document_required_for_creation(data):
+        proposal_template = data.proposal_template
+        proposal_document = data.proposal_document
+        if proposal_template and proposal_document:
+            raise Invalid(_(
+                u'error_template_or_document_but_not_both_required_for_creation',
+                default=u'Either a proposal template or a proposal document, but not both, is required.',
+                ))
+
+    @invariant
+    def proposal_document_must_be_docx(data):
+        # XXX - this should get removed once we have a mimetype index based on which we can filter at source
+        proposal_document = data.proposal_document
+        if proposal_document:
+            proposal_document_mimetype = proposal_document.file.contentType
+            docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            if not proposal_document_mimetype == docx_mimetype:
+                raise Invalid(_(
+                    u'error_only_docx_files_allowed_as_proposal_documents',
+                    default=u'Only .docx files allowed as proposal documents.',
+                    ))
+
 
 class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
     content_type = Proposal
@@ -111,6 +163,10 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         return self.instance_schema
 
     def update(self):
+        # XXX - tabbedview -> form injections should get reengineered
+        paths = self.request.get('paths', [])
+        if paths:
+            self.request.set('form.widgets.relatedItems', paths)
         self.prefillPredecessorDefaults()
         self.prefill_issuer()
         return super(ProposalAddForm, self).update()
@@ -121,6 +177,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         finally:
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
+                move(self, 'proposal_document', before='proposal_template')
             move(self, 'title', before='*')
 
     def updateWidgets(self):
@@ -175,7 +232,10 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             self.request['form.widgets.issuer'] = issuer
 
     def createAndAdd(self, data):
+        # We need to pop the form related extras before hitting the super call
         proposal_template = data.pop('proposal_template')
+        proposal_document = data.pop('proposal_document')
+        proposal_template = proposal_template or proposal_document
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
         noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)

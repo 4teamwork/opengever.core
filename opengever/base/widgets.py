@@ -1,6 +1,7 @@
 from ftw.table.interfaces import ITableGenerator
 from opengever.base import _
 from opengever.base.utils import escape_html
+from opengever.base.utils import NullObject
 from plone.app.z3cform.templates import RenderWidget
 from plone.z3cform.textlines.textlines import TextLinesFieldWidget
 from z3c.form import util
@@ -101,9 +102,11 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
             'column_title': _(u'label_title', default=u'Title'),
             'transform': self.render_default_title,
         },)
-        return generator.generate(
-            [term.value for term in self.terms],
-            radio_column + (self.field.columns or default_title_colum))
+        columns = radio_column + (self.field.columns or default_title_colum)
+        rows = [term.value for term in self.terms]
+        if not self.field.required:
+            rows = [NullObject()] + rows
+        return generator.generate(rows, columns)
 
     def ajax_render(self):
         """Render and return the widget HTML so that it can be replaced
@@ -117,6 +120,18 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
 
     def render_token_radiobutton(self, item, value):
         """Render the radio-button input element for an item."""
+        if isinstance(item, NullObject):
+            # XXX - the checkedness persistency does not work as this is not a real value being passed in
+            return (
+                u'<input id="{id}" name="{name}" value="{value}" title="{title}" type="radio" "{checked}" />'
+                .format(
+                    id=u'-'.join((self.id, u'empty-marker')),
+                    name=self.name,
+                    value=u'--NOVALUE--',
+                    checked=u'checked="checked"' if u'--NOVALUE--' in self.value else u'',
+                    title=_(u'label_none', default=u'None'),
+                    )
+                )
 
         term = self.terms.getTerm(item)
 
@@ -134,6 +149,8 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
 
     def render_default_title(self, item, value):
         """Render the default title colum with the term's title."""
+        if isinstance(item, NullObject):
+            return _(u'label_none', default=u'None')
 
         term = self.terms.getTerm(item)
 
