@@ -375,6 +375,7 @@ class VersionsTab(BaseListingTab):
         {'column': 'comment',
          'column_title': _(u'label_comment', default=u'Comment'),
          'transform': tooltip_helper,
+         'sortable': False,
          },
 
         {'column': 'download_link',
