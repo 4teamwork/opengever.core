@@ -11,6 +11,7 @@ Changelog
 - Fix a bug with modern emojis while rendering task responses. [deiferni]
 - Fix physical_path schema migration for oracle backends. [phgross]
 - Ensure creator sets get to the paster upon pasting content. [Rotonen]
+- Improve Checkout/Edit button labels. [njohner]
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Also make active committee vocabularies sorted by title. [Rotonen]
 - Sort user groups. [Rotonen]

@@ -24,6 +24,7 @@
 
         <tal:file tal:condition="context/has_file"
             tal:define="preview_supported view/is_preview_supported;
+            checked_out view/is_checked_out;
             checkout_and_edit_available view/is_checkout_and_edit_available;
             office_connector_editable view/is_office_connector_editable;
             copy_download_available view/is_download_copy_available;
@@ -35,37 +36,65 @@
             <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
                 <tal:oc_editable tal:condition="office_connector_editable">
                     <tal:oc_checkout tal:condition="new_external_edit_enabled">
-                        <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
-                                           data-document-url context/absolute_url"
-                            class="function-edit oc-checkout"
-                            href="#"
-                            i18n:translate="label_checkout_and_edit">
-                            Checkout and edit
-                        </a>
+                        <tal:checkedout tal:condition="checked_out">
+                            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
+                                               data-document-url context/absolute_url"
+                                class="function-edit oc-checkout"
+                                href="#"
+                                i18n:translate="label_edit">
+                                Edit
+                            </a>
+                        </tal:checkedout>
+                        <tal:notcheckedout tal:condition="not: checked_out">
+                            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
+                                               data-document-url context/absolute_url"
+                                class="function-edit oc-checkout"
+                                href="#"
+                                i18n:translate="label_checkout_and_edit">
+                                Checkout and edit
+                            </a>
+                        </tal:notcheckedout>
                     </tal:oc_checkout>
 
                     <tal:zem_checkout tal:condition="not: new_external_edit_enabled">
-                        <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
-                            class="function-edit"
-                            href="#"
-                            i18n:translate="label_checkout_and_edit">
-                            Checkout and edit
-                        </a>
+                        <tal:checkedout tal:condition="checked_out">
+                            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
+                                class="function-edit"
+                                href="#"
+                                i18n:translate="label_edit">
+                                Edit
+                            </a>
+                        </tal:checkedout>
+                        <tal:notcheckedout tal:condition="not: checked_out">
+                            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
+                                class="function-edit"
+                                href="#"
+                                i18n:translate="label_checkout_and_edit">
+                                Checkout and edit
+                            </a>
+                        </tal:notcheckedout>
                     </tal:zem_checkout>
                 </tal:oc_editable>
 
                 <tal:oc_uneditable tal:condition="not: office_connector_editable">
-                    <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Checkout and edit"
-                    i18n:attributes="title oc_unsupported_message" i18n:translate="label_checkout_and_edit">
-                        Checkout and edit
-                    </span>
-
-                    <a tal:attributes="href string:${context/absolute_url}/@@checkout_documents?_authenticator=${context/@@authenticator/token}"
-                        class="function-edit"
-                        href="#"
-                        i18n:translate="label_checkout">
-                        Checkout
-                    </a>
+                    <tal:checkedout tal:condition="checked_out">
+                        <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Edit"
+                        i18n:attributes="title oc_unsupported_message" i18n:translate="label_edit">
+                            Edit
+                        </span>
+                    </tal:checkedout>
+                    <tal:notcheckedout tal:condition="not: checked_out">
+                        <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Checkout and edit"
+                        i18n:attributes="title oc_unsupported_message" i18n:translate="label_checkout_and_edit">
+                            Checkout and edit
+                        </span>
+                        <a tal:attributes="href string:${context/absolute_url}/@@checkout_documents?_authenticator=${context/@@authenticator/token}"
+                            class="function-edit"
+                            href="#"
+                            i18n:translate="label_checkout">
+                            Checkout
+                        </a>
+                    </tal:notcheckedout>
                 </tal:oc_uneditable>
             </tal:checkout_and_edit_enabled>
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-04-06 06:16+0000\n"
+"POT-Creation-Date: 2018-06-27 08:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -430,6 +430,11 @@ msgstr ""
 msgid "label_download_copy"
 msgstr ""
 
+#. Default: "Edit"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_edit"
+msgstr ""
+
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
@@ -443,6 +448,7 @@ msgstr ""
 
 #. Default: "Keywords"
 #: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/overview.py
 msgid "label_keywords"
 msgstr ""
 
