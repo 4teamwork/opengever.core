@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "Enabling automatic fetching of LFS resources for $(pwd)"
+git config --local lfs.fetchexclude ''
+echo "Success."
+
+echo "Fetching LFS resources for current branch..."
+git lfs pull
+echo "All done."
