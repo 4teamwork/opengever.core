@@ -8,3 +8,11 @@ class CommentAction(ConnectorAction):
         text = self.data.get('text')
         uuid = self.data.get('uuid')
         self.context._comment(text, uuid)
+
+
+@Connector.register
+class SubmitAction(ConnectorAction):
+    def execute(self):
+        text = self.data.get('text')
+        uuid = self.data.get('uuid')
+        self.context._submit(text, uuid)

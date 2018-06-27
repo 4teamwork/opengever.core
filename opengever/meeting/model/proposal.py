@@ -5,6 +5,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.connector.actions import CommentAction
+from opengever.meeting.connector.actions import SubmitAction
 from opengever.meeting.connector.connector import Connector
 from opengever.meeting.connector.connector import ConnectorPath
 from opengever.meeting.interfaces import IHistory
@@ -406,6 +407,10 @@ class Proposal(Base):
     def comment(self, **kwargs):
         kwargs.update({'uuid': uuid4()})
         self.connector.dispatch(CommentAction, **kwargs)
+
+    def submit(self, **kwargs):
+        kwargs.update({'uuid': uuid4()})
+        self.connector.dispatch(SubmitAction, **kwargs)
 
     @property
     def connector(self):

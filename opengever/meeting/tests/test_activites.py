@@ -103,6 +103,23 @@ class TestMeetingActivities(IntegrationTestCase):
                 u'Commented by {}'.format(actor_link()),
                 activity.summary)
 
+    @browsing
+    def test_record_activity_on_submtitting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.submit_proposal(self.draft_proposal, browser, comment=u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-submit', activity.kind)
+            self.assertEquals('Proposal submitted', activity.label)
+            self.assertEquals(self.draft_proposal.title, activity.title)
+            self.assertEquals(
+                u'Submitted by {}'.format(actor_link()),
+                activity.summary)
+
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
             [subscriber.id for subscriber in subscribers],
@@ -132,14 +149,16 @@ class TestMeetingActivities(IntegrationTestCase):
     def get_group_members(self, group_id):
         return api.user.get_users(groupname=group_id)
 
-    def execute_transition(self, obj, transition, browser):
+    def execute_transition(self, obj, transition, browser, comment=''):
         browser.visit(
             obj, view="addtransitioncomment?form.widgets.transition={}".format(
                 transition))
+        if comment:
+            browser.fill({'Comment': comment})
         browser.find('Confirm').click()
 
-    def submit_proposal(self, proposal, browser):
-        self.execute_transition(proposal, 'pending-submitted', browser)
+    def submit_proposal(self, proposal, browser, comment=''):
+        self.execute_transition(proposal, 'pending-submitted', browser, comment)
 
     def reject_proposal(self, proposal, browser):
         self.execute_transition(proposal, 'submitted-pending', browser)
