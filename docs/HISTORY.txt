@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix physical_path schema migration for oracle backends. [phgross]
+- Ensure creator sets get to the paster upon pasting content. [Rotonen]
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
 - Add csv, wav, wmf and xml to the mimetypes for file icons. [tarnap]

@@ -98,6 +98,17 @@ class TestCopyPaste(IntegrationTestCase):
         self.assertEquals('document-{}'.format(sequence_number), copy.getId())
 
     @browsing
+    def test_creates_objects_with_correct_creator(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertNotEqual(self.document.Creator(), self.regular_user.id)
+        data = self.make_path_param(self.document)
+        browser.open(self.empty_dossier, view="copy_items", data=data)
+        browser.css('#contentActionMenus a#paste').first.click()
+        copy = self.empty_dossier.objectValues()[-1]
+        self.assertEqual(copy.Creator(), self.regular_user.id)
+        self.assertEqual(len(copy.creators), 1)
+
+    @browsing
     def test_pasting_handles_multiple_items_in_clipboard(self, browser):
         self.login(self.regular_user, browser=browser)
 
