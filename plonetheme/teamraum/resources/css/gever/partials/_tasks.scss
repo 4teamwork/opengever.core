@@ -90,6 +90,22 @@
     @include flex-shrink(0);
   }
 
+  .add-task {
+    &:before{
+      @extend .fa;
+      @extend .fa-plus-circle;
+      color: $gray-darker;
+      font-size: 10px;
+      padding-left: 10px;
+    }
+
+    &:hover:before {
+      font-size: 16px;
+      color: $blue;
+    }
+
+  }
+
   .sequential {
 
     .task-sequence-line-container {

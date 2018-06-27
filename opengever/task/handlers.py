@@ -9,7 +9,10 @@ from opengever.task import _
 from opengever.task.adapters import IResponseContainer
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone import api
+from zope.globalrequest import getRequest
 
 
 def create_subtask_response(context, event):
@@ -107,3 +110,17 @@ def start_next_task(task, event):
 
     if task.is_from_sequential_tasktemplate:
         task.open_next_task()
+
+
+def set_initial_state(task, event):
+    """When adding a subtask to a sequential task process, the new task should
+    be in the planned state.
+    """
+    if IDuringTaskTemplateFolderTriggering.providedBy(getRequest()):
+        return
+
+    parent = aq_parent(aq_inner(task))
+    if ITask.providedBy(parent) \
+       and IFromSequentialTasktemplate.providedBy(parent):
+
+        task.set_to_planned_state()

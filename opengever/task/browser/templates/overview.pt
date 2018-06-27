@@ -68,26 +68,57 @@
         </tal:condition>
       </div>
 
-      <div id="sub_taskBox" class="box">
-        <tal:condition tal:condition="sub_tasks">
-          <h2 i18n:translate="label_sub_task">Sub tasks</h2>
+      <!-- subtasks box -->
+      <div id="sub_taskBox" class="box"
+           tal:define="is_sequential context/is_from_sequential_tasktemplate">
 
+        <!-- regular subtasks -->
+        <tal:condition tal:condition="python: sub_tasks and not is_sequential">
+          <h2 i18n:translate="label_sub_task">Sub tasks</h2>
           <span class="sequence_type" tal:condition="context/is_from_tasktemplate"
                 tal:content="view/get_sequence_type_label"/>
-
           <div tal:attributes="class string:task-container ${view/get_sequence_type}">
-            <div class="task-sequence-line-container">
-              <div class="task-sequence-line" />
-              <div class="task-sequence-arrow" />
-            </div>
             <div class="task-list">
               <tal:tasks tal:repeat="task sub_tasks">
                 <div class="task" tal:content="structure python:view.render_task(task)"></div>
               </tal:tasks>
             </div>
           </div>
-
         </tal:condition>
+
+        <!-- sequential subtasks -->
+        <tal:condition tal:condition="python: sub_tasks and is_sequential">
+          <h2 i18n:translate="label_sub_task">Sub tasks</h2>
+          <span class="sequence_type" tal:condition="context/is_from_tasktemplate"
+                tal:content="view/get_sequence_type_label"/>
+          <div tal:attributes="class string:task-container ${view/get_sequence_type}">
+            <div class="task-sequence-line-container">
+              <div class="task-sequence-line" />
+              <div class="task-sequence-arrow" />
+            </div>
+            <div class="task-list">
+              <tal:tasks tal:repeat="item python:enumerate(sub_tasks)">
+                <tal:task tal:define="position python:item[0];
+                                      task python:item[1]">
+
+                  <a href="#" class="add-task"
+                     title="Add task to sequence"
+                     i18n:attributes="title label_add_task_to_sequence"
+                     tal:condition="python: task.adding_next_task_possible()"
+                     tal:attributes="href string:${context/absolute_url}/++add++opengever.task.task?position=${position}" />
+
+                  <div class="task"
+                       tal:content="structure python:view.render_task(task)"></div>
+                </tal:task>
+              </tal:tasks>
+              <a href="#" class="add-task"
+                 title="Add task to sequence"
+                 i18n:attributes="title label_add_task_to_sequence"
+                 tal:attributes="href string:${context/absolute_url}/++add++opengever.task.task" />
+            </div>
+          </div>
+        </tal:condition>
+
       </div>
 
       <div id="predecessor_taskBox" class="box">

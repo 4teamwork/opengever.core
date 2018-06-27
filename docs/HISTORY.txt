@@ -14,6 +14,7 @@ Changelog
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]
 - Fix an issue with excerpts title not being unicode. [deiferni]
+- Extend subtask listing with link to add a task to sequential process. [phgross]
 - Make protocol editable even if meeting is open. [njohner]
 - Include Dossier Doc-Properties for Documents inside Proposals and Tasks. [njohner]
 - Make sure members folders (private roots) get persisted default values. [lgraf]

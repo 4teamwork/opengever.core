@@ -6,6 +6,7 @@ from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import update_reponsible_field_data
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
 from plone.dexterity.browser.edit import DefaultEditForm
@@ -47,7 +48,18 @@ class TaskAddForm(DefaultAddForm):
         member = portal_state.member()
         if not self.request.get('form.widgets.issuer', None):
             self.request.set('form.widgets.issuer', [member.getId()])
+
         super(TaskAddForm, self).update()
+
+        # hide tasktemplate_position field and insert value
+        # if it was passed by.
+        position = self.request.get('position')
+        additional_group = [group for group in self.groups
+                            if group.__name__ == u'additional'][0]
+        if position:
+            additional_group.widgets['tasktemplate_position'].value = position
+
+        additional_group.widgets['tasktemplate_position'].mode = HIDDEN_MODE
 
     def createAndAdd(self, data):
         created = []
@@ -62,6 +74,16 @@ class TaskAddForm(DefaultAddForm):
 
         # Restore responsible in data
         data['responsible'] = all_responsible_users
+
+        # Set tasktemplate order and move to planned state if it's part
+        # of a sequential process
+        if IFromSequentialTasktemplate.providedBy(self.context):
+            position = data['tasktemplate_position']
+            if not position:
+                position = len(self.context.get_tasktemplate_order())
+
+            for task in created:
+                self.context.add_task_to_tasktemplate_order(position, task)
 
         self._set_immediate_view(created)
         return created

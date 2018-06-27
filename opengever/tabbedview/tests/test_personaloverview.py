@@ -178,9 +178,11 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')
@@ -195,9 +197,11 @@ class TestGlobalTaskListings(IntegrationTestCase):
         expected_tasks = [
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')
@@ -303,11 +307,13 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')
@@ -323,11 +329,13 @@ class TestGlobalTaskListings(IntegrationTestCase):
         expected_tasks = [
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')
@@ -348,11 +356,13 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')
@@ -377,11 +387,13 @@ class TestGlobalTaskListings(IntegrationTestCase):
         expected_tasks = [
             u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            ]
+        ]
 
         found_tasks = [
             row.get('Title')

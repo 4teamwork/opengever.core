@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
+from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
 from opengever.task.task import ITask
@@ -129,12 +130,20 @@ class Overview(GeverTabMixin):
         return '%s %s' % ("rollover-breadcrumb", css)
 
     def get_sub_tasks(self):
-        """Return the subtasks."""
+        """Returns all subtasks. On sequential process tasks, it returns
+        the subtask in the process order.
+        """
+        if self.context.is_from_sequential_tasktemplate:
+            oguids = self.context.get_tasktemplate_order()
+            if not oguids:
+                return []
+
+            return [Task.query.by_oguid(oguid) for oguid in oguids]
+
         tasks = self.context.getFolderContents(
             full_objects=True,
             contentFilter={'portal_type': 'opengever.task.task'},
-            )
-
+        )
         return [each.get_sql_object() for each in tasks]
 
     def get_sequence_type(self):

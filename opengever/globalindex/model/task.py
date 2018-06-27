@@ -308,6 +308,12 @@ class Task(Base):
 
         return self.tasktemplate_successor
 
+    def adding_next_task_possible(self):
+        """Check if adding a new task inside the process is possible.
+        It checks it the previous task is still in progress or planed state.
+        """
+        return self.review_state in ['task-state-open', 'task-state-planned']
+
     def get_css_class(self):
         """Returns css_class for the special task icons:
 

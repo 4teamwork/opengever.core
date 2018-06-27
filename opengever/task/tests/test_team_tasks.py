@@ -19,15 +19,15 @@ class TestTeamTasks(IntegrationTestCase):
     def test_select_a_team_as_responsible_is_possible(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.dossier)
-        factoriesmenu.add('Task')
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier)
+            factoriesmenu.add('Task')
+            browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill('team:1')
+            browser.find('Save').click()
 
-        browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('team:1')
-        browser.find('Save').click()
-
-        task = self.dossier.get('task-7')
+        task = children.get('added').pop()
 
         self.assertEquals('Team Task', task.title)
         self.assertEquals('team:1', task.responsible)
@@ -63,17 +63,17 @@ class TestTeamTasks(IntegrationTestCase):
     @browsing
     def test_all_team_members_are_notified_for_a_new_team_task(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.dossier)
-        factoriesmenu.add('Task')
 
-        browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('team:2')
-        browser.find('Save').click()
-        create_session().flush()
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier)
+            factoriesmenu.add('Task')
+            browser.fill({'Title': u'Team Task', 'Task Type': 'To comment'})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill('team:2')
+            browser.find('Save').click()
+            create_session().flush()
 
-        task = self.dossier.get('task-7')
-
+        task = children.get('added').pop()
         center = notification_center()
         # Assign watchers to a local variable in order to avoid having
         # a "stale association proxy" when the GC collects within the

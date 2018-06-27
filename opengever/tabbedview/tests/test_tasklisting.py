@@ -13,7 +13,9 @@ class TestTaskListing(IntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-tasks')
 
         table = browser.css('.listing').first
-        self.assertEquals([u'Vertragsentwurf \xdcberpr\xfcfen'],
+        self.assertEquals([u'Vertragsentwurf \xdcberpr\xfcfen',
+                           u'Mitarbeiter Dossier generieren',
+                           u'Personaleintritt'],
                           [row.get('Title') for row in table.dicts()])
 
     @browsing
@@ -27,7 +29,11 @@ class TestTaskListing(IntegrationTestCase):
         table = browser.css('.listing').first
         self.assertEquals(
             [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-             u'Vertragsentwurf \xdcberpr\xfcfen'],
+             u'Vertragsentwurf \xdcberpr\xfcfen',
+             'Mitarbeiter Dossier generieren',
+             'Arbeitsplatz vorbereiten',
+             'Personaleintritt',
+             'Vorstellungsrunde bei anderen Mitarbeitern'],
             [row.get('Title') for row in table.dicts()])
 
     @browsing

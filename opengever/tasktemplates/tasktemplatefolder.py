@@ -103,9 +103,7 @@ class TaskTemplateFolderTrigger(object):
 
         if not self.start_immediately \
            or template != self.selected_templates[0]:
-            api.content.transition(obj=task,
-                                   transition='task-transition-open-planned')
-            task.get_sql_object().sync_with(task)
+            task.set_to_planned_state()
 
     def create_subtask(self, main_task, template, values):
         data = dict(

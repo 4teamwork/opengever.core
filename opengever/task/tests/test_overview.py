@@ -5,12 +5,10 @@ from ftw.testbrowser import browsing
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 from StringIO import StringIO
 from zope.interface import alsoProvides
-from zope.interface import noLongerProvides
 
 
 class TestTaskOverview(IntegrationTestCase):
@@ -33,7 +31,7 @@ class TestTaskOverview(IntegrationTestCase):
                           browser.css('.issuer a').first.text)
 
     @browsing
-    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser): # noqa
+    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):  # noqa
         self.login(self.regular_user, browser=browser)
         create(Builder('org_unit').id('client2')
                .having(admin_unit=get_current_admin_unit()))
@@ -52,7 +50,7 @@ class TestTaskOverview(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
 
-        main_attributes_table = browser.css('#main_attributesBox .listing').first  #noqa
+        main_attributes_table = browser.css('#main_attributesBox .listing').first  # noqa
         date_of_completion_row = main_attributes_table.lists()[-1]
         self.assertEquals(['Date of completion', 'Feb 02, 2015'],
                           date_of_completion_row)
@@ -133,7 +131,6 @@ class TestTaskOverview(IntegrationTestCase):
         self.assertSequenceEqual(
             [], browser.css("predecessor_taskBox div.task").text)
 
-
         browser.open(self.archive_task, view='tabbedview_view-overview')
         self.assertSequenceEqual(
             [u'Vertragsentwurf \xdcberpr\xfcfen'],
@@ -162,15 +159,12 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
     def test_subtask_box_contains_sequence_type_label(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        # sequential
-        alsoProvides(self.task, IFromSequentialTasktemplate)
-        browser.open(self.task, view='tabbedview_view-overview')
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
         self.assertEquals(
             [u'Sequential process'],
             browser.css('#sub_taskBox .sequence_type').text)
 
         # parallel
-        noLongerProvides(self.task, IFromSequentialTasktemplate)
         alsoProvides(self.task, IFromParallelTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
@@ -182,14 +176,12 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         # sequential
-        alsoProvides(self.task, IFromSequentialTasktemplate)
-        browser.open(self.task, view='tabbedview_view-overview')
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
         self.assertEquals(
             'task-container sequential',
             browser.css('#sub_taskBox div').first.get('class'))
 
         # parallel
-        noLongerProvides(self.task, IFromSequentialTasktemplate)
         alsoProvides(self.task, IFromParallelTasktemplate)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
@@ -197,43 +189,20 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             browser.css('#sub_taskBox div').first.get('class'))
 
     @browsing
-    def test_subtask_contains_sequence_type_class(self, browser):
+    def test_shows_previous_and_next_task(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        previous_task = create(Builder('task')
-                               .titled(u'Vorherige Aufgabe')
-                               .within(self.task)
-                               .having(responsible_client='fa',
-                                       responsible=self.regular_user.getId(),
-                                       issuer=self.dossier_responsible.getId(),
-                                       task_type='correction',
-                                       deadline=date(2016, 11, 1)))
+        subtask_1, subtask_2, subtask_3 = [
+            oguid.resolve_object() for oguid in
+            self.sequential_task.get_tasktemplate_order()]
 
-        next_task = create(Builder('task')
-                           .within(self.task)
-                           .titled(u'N\xe4chste Aufgabe')
-                           .having(responsible_client='fa',
-                                   responsible=self.regular_user.getId(),
-                                   issuer=self.dossier_responsible.getId(),
-                                   task_type='correction',
-                                   deadline=date(2016, 11, 1))
-                           .in_state('task-state-open'))
-
-        # fake tasktemplate process
-        tasktemplate_tasks = [previous_task, self.subtask, next_task]
-        alsoProvides(self.task, IFromSequentialTasktemplate)
-        self.task.set_tasktemplate_order(tasktemplate_tasks)
-        for task in tasktemplate_tasks:
-            alsoProvides(task, IFromSequentialTasktemplate)
-            task.sync()
-
-        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.open(subtask_2, view='tabbedview_view-overview')
         self.assertEquals(
-            [u'Vorherige Aufgabe'],
+            [subtask_1.title],
             browser.css('#sequence_taskBox .previous_task .task').text)
 
         self.assertEquals(
-            [u'N\xe4chste Aufgabe'],
+            [subtask_3.title],
             browser.css('#sequence_taskBox .next_task .task').text)
 
 
@@ -346,3 +315,30 @@ class TestTaskTextTransformation(IntegrationTestCase):
         result = (browser.css('table.listing').find('Text').first.row
                   .css('td').first.innerHTML)
         self.assertEqual(expected, result)
+
+
+class TestSequentialTaskSubtask(IntegrationTestCase):
+
+    @browsing
+    def test_shows_add_task_action_between_tasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        task_add_form = '{}/++add++opengever.task.task'.format(
+            self.sequential_task.absolute_url())
+
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEqual(
+            ['{}?position=0'.format(task_add_form),
+             '{}?position=1'.format(task_add_form),
+             '{}?position=2'.format(task_add_form),
+             task_add_form],
+            [link.get('href') for link in browser.css('.task-list .add-task')])
+
+        # set first task to in progress, no position 0 link is displayed
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEqual(
+            ['{}?position=1'.format(task_add_form),
+             '{}?position=2'.format(task_add_form),
+             task_add_form],
+            [link.get('href') for link in browser.css('.task-list .add-task')])

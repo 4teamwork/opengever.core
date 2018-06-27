@@ -592,6 +592,10 @@ Objects
           - self.mail_msg
           - self.proposal
             - self.proposaldocument
+          - self.sequential_task
+            - self.seq_subtask_1
+            - self.seq_subtask_2
+            - self.seq_subtask_3
           - self.subdossier
             - self.subdocument
           - self.subdossier2
