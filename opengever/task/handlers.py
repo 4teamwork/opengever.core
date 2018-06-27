@@ -79,7 +79,12 @@ def set_responsible_to_issuer_on_reject(task, event):
         notification_center().remove_watcher_from_resource(task.oguid, task.responsible, TASK_RESPONSIBLE_ROLE)
         notification_center().add_watcher_to_resource(task.oguid, task.issuer, TASK_ISSUER_ROLE)
         notification_center().add_watcher_to_resource(task.oguid, task.issuer, TASK_RESPONSIBLE_ROLE)
+        old_responsible = ITask(task).responsible
         task.responsible = task.issuer
+        IResponseContainer(task)[-1].add_change(
+            'responsible',
+            _(u"label_responsible", default=u"Responsible"),
+            old_responsible, ITask(task).responsible)
 
 
 def cancel_subtasks(task, event):

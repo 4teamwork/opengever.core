@@ -76,11 +76,21 @@ class Reject(ResponseDescription):
     css_class = 'refuse'
 
     def msg(self):
-        return _('transition_msg_reject', u'Rejected by ${user}',
+        return _('transition_msg_reject',
+                 u'Rejected by ${old_responsible}. Task assigned to responsible ${new_responsible}',
                  mapping=self._msg_mapping)
 
     def label(self):
         return _('transition_label_reject', u'Task rejected')
+
+    @property
+    def _msg_mapping(self):
+        mapping = super(Reject, self)._msg_mapping
+        change = self.response.get_change('responsible')
+        if change:
+            mapping['old_responsible'] = Actor.lookup(change.get('before')).get_link()
+            mapping['new_responsible'] = Actor.lookup(change.get('after')).get_link()
+        return mapping
 
 
 ResponseDescription.add_description(Reject)

@@ -95,7 +95,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'refuse')
 
         self.assertEqual(
-            u'Rejected by M\xfcller Hans (test_user_1_)',
+            u'Rejected by M\xfcller Hans (test_user_1_). Task assigned to responsible M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
 
     @browsing
