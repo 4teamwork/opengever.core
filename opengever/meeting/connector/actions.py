@@ -7,3 +7,10 @@ class CommentAction(ConnectorAction):
     def execute(self):
         text = self.data.get('text')
         self.context._comment(text)
+
+
+@Connector.register
+class SubmitAction(ConnectorAction):
+    def execute(self):
+        text = self.data.get('text')
+        self.context._submit(text)
