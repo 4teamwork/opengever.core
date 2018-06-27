@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix physical_path schema migration for oracle backends. [phgross]
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
 - Add csv, wav, wmf and xml to the mimetypes for file icons. [tarnap]
