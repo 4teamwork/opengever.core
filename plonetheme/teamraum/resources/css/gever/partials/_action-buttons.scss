@@ -136,15 +136,15 @@
 }
 
 .function-edit, .function-edit-inactive {
-  @include inline-cell-icon(pencil);
+  @include inline-cell-icon(pencil-alt);
 }
 
 .function-edit-metadata, .function-edit-metadata-inactive {
-  @include inline-cell-icon(file-text);
+  @include inline-cell-icon(file-alt);
 }
 
 .function-checkin {
-    @include inline-cell-icon(floppy-o);
+    @include inline-cell-icon(save);
 }
 
 .function-download-copy, .function-download-copy-inactive {
@@ -156,7 +156,7 @@
 }
 
 .function-preview-pdf, .function-preview-pdf-inactive, .function-download-pdf, .function-download-pdf-inactive {
-  @include inline-cell-icon(file-pdf-o);
+  @include inline-cell-icon(file-pdf);
 }
 
 .function-attach, .function-attach-inactive  {
@@ -168,7 +168,7 @@
 }
 
 .function-pdf-preview {
-    @include inline-cell-icon(file-pdf-o);
+    @include inline-cell-icon(file-pdf);
 }
 
 .function-view-details {
@@ -180,7 +180,7 @@
 }
 
 .oc-loading {
-  @include inline-cell-icon-spin(circle-o-notch);
+  @include inline-cell-icon-spin(circle-notch);
 }
 
 .document-proposal-outdated::before {

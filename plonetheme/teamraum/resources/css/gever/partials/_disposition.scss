@@ -18,7 +18,7 @@
 
       &:before {
         @extend .fa;
-        @extend .fa-pencil;
+        @extend .fa-pencil-alt;
       }
     }
   }
@@ -35,7 +35,7 @@
         content: $created;
       }
       &.edit .answerType:before {
-        @extend .fa-pencil;
+        @extend .fa-pencil-alt;
       }
       &.appraise .answerType:before {
         @extend .fa-gavel;
@@ -50,7 +50,7 @@
         @extend .fa-trash;
       }
       &.refuse .answerType:before {
-        @extend .fa-thumbs-o-down;
+        @extend .fa-thumbs-down;
       }
     }
     .details.collapsible {

@@ -11,7 +11,7 @@ $favorites-icon-size: 1em;
 
     &:before {
       @extend .fa;
-      @extend .fa-star-o;
+      @extend .fa-star;
     }
 
     &.is-favorite {

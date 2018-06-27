@@ -17,12 +17,12 @@
 
 #meeting_time {
   @extend .fa;
-  @extend .fa-clock-o;
+  @extend .fa-clock;
 }
 
 #meeting_secretary {
   @extend .fa;
-  @extend .fa-pencil;
+  @extend .fa-pencil-alt;
 }
 
 #meeting_number {
@@ -185,7 +185,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
       }
       .refresh-agendaitem-list {
         @extend .fa;
-        @extend .fa-refresh;
+        @extend .fa-sync-alt;
         float: right;
         font-size: 15px;
         &:hover {
@@ -194,7 +194,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
       }
       .refresh-protocol {
         @extend .fa;
-        @extend .fa-refresh;
+        @extend .fa-sync-alt;
         float: right;
         font-size: 15px;
         &:hover {
@@ -338,7 +338,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
           .document-label {
             &:before {
               @extend .fa;
-              @extend .fa-file-word-o;
+              @extend .fa-file-word;
               position: absolute;
               font-size: 130%;
               background-color: white;
@@ -362,7 +362,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
                 padding: 5px 7px;
               }
               &.generate {
-                @extend .fa-refresh;
+                @extend .fa-sync-alt;
                 right: 60px;
               }
               &.download {
@@ -679,7 +679,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
           }
           .return-excerpt a:before {
             @extend .fa;
-            @extend .fa-check-circle-o;
+            @extend .fa-check-circle;
             margin-right: 5px;
             color: $black;
           }
@@ -796,7 +796,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             margin-right: 5px;
           }
           &.edit-document:before {
-            @extend .fa-file-word-o;
+            @extend .fa-file-word;
           }
           &.decide-agenda-item:before,
           &.revise-agenda-item:before {
@@ -866,7 +866,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
               color: lighten($black, 10%);
             }
             &.rename-agenda-item:before {
-              @extend .fa-pencil;
+              @extend .fa-pencil-alt;
             }
             &.delete-agenda-item:before {
               @extend .fa-times;
@@ -1024,15 +1024,15 @@ table#agenda_items {
         .edit-document {
           position: relative;
           @extend .fa;
-          @extend .fa-file-word-o;
+          @extend .fa-file-word;
         }
         .delete-agenda-item {
           @extend .fa;
-          @extend .fa-trash-o;
+          @extend .fa-trash;
         }
         .edit-agenda-item {
           @extend .fa;
-          @extend .fa-pencil;
+          @extend .fa-pencil-alt;
         }
         .decide-agenda-item, .revise-agenda-item {
           > span {
@@ -1172,7 +1172,7 @@ $spacing: 8px;
       }
 
       &.edit_period:before {
-        @extend .fa-pencil;
+        @extend .fa-pencil-alt;
       }
 
       &.download_toc:before {
@@ -1183,7 +1183,7 @@ $spacing: 8px;
         pointer-events: none;
         &:before {
           @extend .fa;
-          @extend .fa-circle-o-notch;
+          @extend .fa-circle-notch;
           @extend .fa-spin;
         }
       }

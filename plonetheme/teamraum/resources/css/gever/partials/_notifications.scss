@@ -6,13 +6,13 @@
 
   .badge-title:before{
     @extend .fa;
-    @extend .fa-bell-o;
+    @extend .fa-bell;
     padding-right: 5px;
   }
 
   .mail-title:before{
     @extend .fa;
-    @extend .fa-envelope-o;
+    @extend .fa-envelope;
     padding-right: 5px;
   }
 
@@ -82,7 +82,7 @@
 
   .reset-setting:before {
     @extend .fa;
-    @extend .fa-trash-o;
+    @extend .fa-trash;
   }
 
   .cancel-setting:before {

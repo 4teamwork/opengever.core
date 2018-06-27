@@ -9,7 +9,7 @@
       position: relative;
       &:before {
         @extend .fa;
-        @extend .fa-square-o;
+        @extend .fa-square;
         position: absolute;
         top: 0;
         left: 0;
@@ -21,7 +21,7 @@
       + input + label, + label {
         color: $black;
         &:before {
-          @extend .fa-check-square-o;
+          @extend .fa-check-square;
         }
       }
     }

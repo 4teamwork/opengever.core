@@ -96,14 +96,19 @@ $collapsed: "\e630";
 $reject: "\e60f";
 /* @end */
 
+/* @group Workspace icons dispoition  */
+$workspace: $fa-var-question-circle;
+$workspace-folder: $fa-var-folder-open;
+/* @end */
+
 /* @group Additional icons disposition */
-$sip_download: $fa-var-file-archive-o;
+$sip_download: $fa-var-file-archive;
 $appraisal_list: $fa-var-list-ul;
 $appraise: $fa-var-gavel;
 $dispose: $fa-var-briefcase;
 $archive: $fa-var-database;
 $disposition-close: $fa-var-trash;
-$disposition-refuse: $fa-var-thumbs-o-down;
+$disposition-refuse: $fa-var-thumbs-down;
 /* @end */
 
 /* @group notifications */
@@ -166,99 +171,110 @@ $rotate: 20deg;
   }
 }
 
-body.template-tabbed_view.portaltype-opengever-repository-repositoryfolder,
-body.template-view.portaltype-opengever-repository-repositoryfolder {
-  @include heading-icon($repository_folder);
-  @include watermark-icon($repository_folder);
+body.template-tabbed_view,
+body.template-view,
+{
+  &.portaltype-opengever-repository-repositoryfolder {
+    @include heading-icon($repository_folder);
+    @include watermark-icon($repository_folder);
+  }
+  &.portaltype-opengever-repository-repositoryroot,
+  &.portaltype-opengever-repository-repositoryroot {
+    @include heading-icon($repository_root);
+    @include watermark-icon($repository_root);
+  }
+  &.portaltype-opengever-inbox-inbox,
+  &.portaltype-opengever-inbox-inbox {
+    @include heading-icon($inbox);
+    @include watermark-icon($inbox);
+  }
+  &.portaltype-opengever-inbox-yearfolder,
+  &.portaltype-opengever-inbox-yearfolder {
+    @include heading-icon($folder);
+    @include watermark-icon($folder);
+  }
+  &.portaltype-ftw-mail-mail,
+  &.portaltype-ftw-mail-mail {
+    @include heading-icon($mail);
+    @include watermark-icon($mail);
+  }
+  &.portaltype-ftw-mail-mail.removed,
+  &.portaltype-ftw-mail-mail.removed {
+    @include heading-icon($mail);
+    @include watermark-icon($mail, red);
+  }
+  &.portaltype-opengever-meeting-sablontemplate,
+  &.portaltype-opengever-meeting-sablontemplate {
+    @include heading-icon($document);
+    @include watermark-icon($document);
+  }
+  &.portaltype-opengever-workspace-root,
+  &.portaltype-opengever-workspace-workspace {
+    @include heading-icon($char: $workspace, $iconset: 'Font Awesome 5 Free');
+    @include watermark-icon($char: $workspace, $iconset: 'Font Awesome 5 Free');
+  }
+  &.portaltype-opengever-workspace-folder {
+    @include heading-icon($char: $workspace-folder, $iconset: 'Font Awesome 5 Free');
+    @include watermark-icon($char: $workspace-folder, $iconset: 'Font Awesome 5 Free');
+  }
+  &.portaltype-opengever-dossier-businesscasedossier,
+  &.portaltype-opengever-dossier-businesscasedossier,
+  &.portaltype-opengever-dossier-templatefolder,
+  &.portaltype-opengever-dossier-templatefolder,
+  &.portaltype-opengever-dossier-dossiertemplate,
+  &.portaltype-opengever-dossier-dossiertemplate,
+  &.portaltype-opengever-meeting-proposaltemplate,
+  &.portaltype-opengever-meeting-proposaltemplate,
+  &.portaltype-opengever-meeting-meetingdossier,
+  &.portaltype-opengever-meeting-meetingdossier,
+  &.portaltype-opengever-zug-bdarp-casedossier2,
+  &.portaltype-opengever-zug-bdarp-casedossier2,
+  &.portaltype-opengever-zug-bdbds-bdbdscasebddossier,
+  &.portaltype-opengever-zug-bdbds-bdbdscasebddossier,
+  &.portaltype-opengever-zug-bdbds-bdbdscasedossier2,
+  &.portaltype-opengever-zug-bdbds-bdbdscasedossier2,
+  &.portaltype-opengever-zug-bdbds-bdbdscasevgbgdossier,
+  &.portaltype-opengever-zug-bdbds-bdbdscasevgbgdossier,
+  &.portaltype-opengever-zug-digva-orderdossier,
+  &.portaltype-opengever-zug-digva-orderdossier,
+  &.portaltype-opengever-zug-komsko-skocase,
+  &.portaltype-opengever-zug-komsko-skocase,
+  &.portaltype-opengever-zug-skakr-businesscasedossier,
+  &.portaltype-opengever-zug-skakr-businesscasedossier {
+    @include heading-icon($dossier);
+    @include watermark-icon($dossier);
+  }
+  &.portaltype-opengever-private-dossier,
+  &.portaltype-opengever-private-dossier {
+    @include heading-icon($private_dossier);
+    @include watermark-icon($private_dossier);
+  }
+  &.portaltype-opengever-private-folder,
+  &.portaltype-opengever-private-folder {
+    @include heading-icon($private_folder);
+    @include watermark-icon($private_folder);
+  }
+  &.portaltype-opengever-private-root,
+  &.portaltype-opengever-private-root {
+    @include heading-icon($private_root);
+    @include watermark-icon($private_root);
+  }
 }
 
-body.template-tabbed_view.portaltype-opengever-repository-repositoryroot,
-body.template-view.portaltype-opengever-repository-repositoryroot {
-  @include heading-icon($repository_root);
-  @include watermark-icon($repository_root);
-}
+body.template-tabbed_view.portaltype-opengever-zug-skakr-businesscasedossier,
+body.template-tabbedview.portaltype-opengever-zug-skakr-businesscasedossier {
+    @include heading-icon($dossier);
+    @include watermark-icon($dossier);
+  }
 
-body.template-tabbed_view.portaltype-opengever-inbox-inbox,
-body.template-view.portaltype-opengever-inbox-inbox {
-  @include heading-icon($inbox);
-  @include watermark-icon($inbox);
-}
-
-body.template-tabbed_view.portaltype-opengever-inbox-yearfolder,
-body.template-view.portaltype-opengever-inbox-yearfolder {
-  @include heading-icon($folder);
-  @include watermark-icon($folder);
-}
-
-body.template-view.portaltype-ftw-mail-mail,
-body.template-tabbed_view.portaltype-ftw-mail-mail {
-  @include heading-icon($mail);
-  @include watermark-icon($mail);
-}
-
-body.template-view.portaltype-ftw-mail-mail.removed,
-body.template-tabbed_view.portaltype-ftw-mail-mail.removed {
-  @include heading-icon($mail);
-  @include watermark-icon($mail, red);
-}
 body.template-opengever.tasktemplates.tasktemplatefolder {
   @include heading-icon($tasktemplate);
   @include watermark-icon($tasktemplate);
 }
-body.template-tabbed_view.portaltype-opengever-meeting-sablontemplate,
-body.template-view.portaltype-opengever-meeting-sablontemplate {
-  @include heading-icon($document);
-  @include watermark-icon($document);
-}
+
 body.portaltype-opengever-disposition-disposition {
-  @include heading-icon($char: $disposition, $iconset: 'FontAwesome');
-  @include watermark-icon($char: $disposition, $iconset: 'FontAwesome');
-}
-
-body.template-tabbed_view.portaltype-opengever-dossier-businesscasedossier,
-body.template-view.portaltype-opengever-dossier-businesscasedossier,
-body.template-tabbed_view.portaltype-opengever-dossier-templatefolder,
-body.template-view.portaltype-opengever-dossier-templatefolder,
-body.template-tabbed_view.portaltype-opengever-dossier-dossiertemplate,
-body.template-view.portaltype-opengever-dossier-dossiertemplate,
-body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate,
-body.template-view.portaltype-opengever-meeting-proposaltemplate,
-body.template-tabbed_view.portaltype-opengever-meeting-meetingdossier,
-body.template-view.portaltype-opengever-meeting-meetingdossier,
-body.template-tabbed_view.portaltype-opengever-zug-bdarp-casedossier2,
-body.template-view.portaltype-opengever-zug-bdarp-casedossier2,
-body.template-tabbed_view.portaltype-opengever-zug-bdbds-bdbdscasebddossier,
-body.template-view.portaltype-opengever-zug-bdbds-bdbdscasebddossier,
-body.template-tabbed_view.portaltype-opengever-zug-bdbds-bdbdscasedossier2,
-body.template-view.portaltype-opengever-zug-bdbds-bdbdscasedossier2,
-body.template-tabbed_view.portaltype-opengever-zug-bdbds-bdbdscasevgbgdossier,
-body.template-view.portaltype-opengever-zug-bdbds-bdbdscasevgbgdossier,
-body.template-tabbed_view.portaltype-opengever-zug-digva-orderdossier,
-body.template-view.portaltype-opengever-zug-digva-orderdossier,
-body.template-tabbed_view.portaltype-opengever-zug-komsko-skocase,
-body.template-view.portaltype-opengever-zug-komsko-skocase,
-body.template-tabbed_view.portaltype-opengever-zug-skakr-businesscasedossier,
-body.template-tabbedview.portaltype-opengever-zug-skakr-businesscasedossier {
-  @include heading-icon($dossier);
-  @include watermark-icon($dossier);
-}
-
-body.template-tabbed_view.portaltype-opengever-private-dossier,
-body.template-view.portaltype-opengever-private-dossier {
-  @include heading-icon($private_dossier);
-  @include watermark-icon($private_dossier);
-}
-
-body.template-tabbed_view.portaltype-opengever-private-folder,
-body.template-view.portaltype-opengever-private-folder {
-  @include heading-icon($private_folder);
-  @include watermark-icon($private_folder);
-}
-
-body.template-tabbed_view.portaltype-opengever-private-root,
-body.template-view.portaltype-opengever-private-root {
-  @include heading-icon($private_root);
-  @include watermark-icon($private_root);
+  @include heading-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
+  @include watermark-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
 }
 
 body.template-user-details,
@@ -306,8 +322,8 @@ body.template-personal_overview {
 }
 
 body.template-favorites-view {
-  @include heading-icon($char: $favorite, $iconset: 'FontAwesome');
-  @include watermark-icon($char: $favorite, $iconset: 'FontAwesome');
+  @include heading-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
+  @include watermark-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
 }
 
 body.template-tabbed_view.portaltype-opengever-meeting-committee {
@@ -339,32 +355,32 @@ body.meeting-view{
 
 /* @end */
 
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-inbox-container:before {
-  content: $inbox;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-inbox-inbox:before {
-  content: $inbox;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-contact-contactfolder:before {
-  content: $contactfolder;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-contact-contact:before {
-  content: $contact;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-committeecontainer:before {
-  content: $committeecontainer;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-repository-repositoryroot:before {
-  content: $repository_root;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-repository-repositoryfolder:before {
-  content: $repository_folder;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatefolder:before,
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatedossier:before {
-  content: $dossier;
-}
 #plone-contentmenu-factories dd.actionMenuContent {
+  a#opengever-inbox-container:before {
+    content: $inbox;
+  }
+  a#opengever-inbox-inbox:before {
+    content: $inbox;
+  }
+  a#opengever-contact-contactfolder:before {
+    content: $contactfolder;
+  }
+  a#opengever-contact-contact:before {
+    content: $contact;
+  }
+  a#opengever-meeting-committeecontainer:before {
+    content: $committeecontainer;
+  }
+  a#opengever-repository-repositoryroot:before {
+    content: $repository_root;
+  }
+  a#opengever-repository-repositoryfolder:before {
+    content: $repository_folder;
+  }
+  a#opengever-dossier-templatefolder:before,
+  a#opengever-dossier-templatedossier:before {
+    content: $dossier;
+  }
   a#opengever-dossier-businesscasedossier,
   a#opengever-zug-bdarp-casedossier2,
   a#opengever-zug-bdbds-bdbdscasebddossier,
@@ -378,94 +394,104 @@ body.meeting-view{
       content: $dossier;
     }
   }
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-private-dossier:before {
-  content: $private_dossier;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-private-folder:before {
-  content: $private_folder;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-private-root:before {
-  content: $private_root;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#ftw-ftw-mail:before {
-  content: $mail;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-disposition-disposition:before {
-  @extend .fa;
-  @extend .fa-archive;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-document-document:before {
-  content: $document;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#document_with_template:before {
-  content: $document;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#document_with_oneoffixx_template:before {
-  content: $document;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#document_from_officeatwork:before {
-  content: $document;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#add_participant:before {
-  content: $contact;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-task-task {
-  &:before {
-     content: $task;
+  a#opengever-private-dossier:before {
+    content: $private_dossier;
   }
-  &.icon-task-subtask:before {
-    content: $subtask;
+   a#opengever-private-folder:before {
+    content: $private_folder;
   }
- }
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-inbox-forwarding:before {
-  content: $forwarding;
+  a#opengever-private-root:before {
+    content: $private_root;
+  }
+  a#ftw-ftw-mail:before {
+    content: $mail;
+  }
+  a#opengever-disposition-disposition:before {
+    @extend .fa;
+    @extend .fa-archive;
+  }
+  a#opengever-document-document:before {
+    content: $document;
+  }
+  a#document_with_template:before {
+    content: $document;
+  }
+  a#document_with_oneoffixx_template:before {
+    content: $document;
+  }
+  a#document_from_officeatwork:before {
+    content: $document;
+  }
+  a#add_participant:before {
+    content: $contact;
+  }
+  a#opengever-task-task {
+    &:before {
+      content: $task;
+    }
+    &.icon-task-subtask:before {
+      content: $subtask;
+    }
+  }
+  a#opengever-inbox-forwarding:before {
+    content: $forwarding;
+  }
+  a#opengever-tasktemplates-tasktemplatefolder:before {
+    content: $tasktemplate;
+  }
+  a#opengever-tasktemplates-tasktemplate:before,
+  a#add_tasktemplate:before{
+    content: $tasktemplate;
+  }
+  a#opengever-dossier-templatefolder:before,
+  a#opengever-dossier-templatedossier:before,
+  a#dossier_with_template:before {
+    content: $dossier;
+  }
+  a#opengever-meeting-proposal:before {
+    content: $proposal;
+  }
+  a#opengever-meeting-committee:before{
+    content: $committee;
+  }
+  a#opengever-meeting-sablontemplate:before{
+    content: $document;
+  }
+  a#add-member:before{
+    content: $member;
+  }
+  a#add-membership:before{
+    content: $membership;
+  }
+  a#add-meeting:before{
+    content: $meeting;
+  }
+  a#ftw-mail-mail:before {
+    content: $mail;
+  }
+  a#opengever-dossier-dossiertemplate:before {
+    content: $dossier;
+  }
+  a#opengever-meeting-proposaltemplate:before {
+    content: $proposal;
+  }
+  a#opengever-workspace-root,
+  a#opengever-workspace-workspace {
+    &:before {
+      content: $workspace;
+      font-family: 'Font Awesome 5 Free';
+    }
+  }
+  a#opengever-workspace-folder {
+    &:before {
+      content: $workspace-folder;
+      font-family: 'Font Awesome 5 Free';
+    }
+  }
+  a#add_team:before {
+    content: $team;
+  }
 }
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-tasktemplates-tasktemplatefolder:before {
-  content: $tasktemplate;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-tasktemplates-tasktemplate:before,
-#plone-contentmenu-factories dd.actionMenuContent a#add_tasktemplate:before{
-  content: $tasktemplate;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatefolder:before,
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-templatedossier:before,
-#plone-contentmenu-factories dd.actionMenuContent a#dossier_with_template:before {
-  content: $dossier;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-proposal:before {
-  content: $proposal;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-committee:before{
-  content: $committee;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-sablontemplate:before{
-  content: $document;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#add-member:before{
-  content: $member;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#add-membership:before{
-  content: $membership;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#add-meeting:before{
-  content: $meeting;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#ftw-mail-mail:before {
-  content: $mail;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-dossier-dossiertemplate:before {
-  content: $dossier;
-}
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-proposaltemplate:before {
-  content: $proposal;
-}
-
-#plone-contentmenu-factories dd.actionMenuContent a#add_team:before {
-  content: $team;
-}
-
-
 /* @end */
 
 /* @group contenttype icons */
@@ -518,11 +544,11 @@ body.meeting-view{
 .contenttype-opengever-contact-contactfolder:before {content: $contactfolder}
 .contenttype-opengever-disposition-disposition:before {
   content: $fa-var-archive;
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
 }
 .contenttype-plone-site:before {
   content: $fa-var-home;
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
 }
 .contenttype-opengever-meeting-committeecontainer:before {content: $committeecontainer;}
 .contenttype-opengever-meeting-committee:before {content: $committee;}
@@ -552,6 +578,19 @@ body.meeting-view{
 .contenttype-opengever-meeting-sablontemplate:before {content: $document;}
 .contenttype-opengever-actor:before {content: $actor;}
 .contenttype-ftw-mail-mail:before {content: $mail;}
+.contenttype-opengever-workspace-root,
+.contenttype-opengever-workspace-workspace,
+{
+  &:before {
+    content: $workspace;
+    font-family: 'Font Awesome 5 Free';
+  }
+}
+
+.contenttype-opengever-workspace-folder:before {
+    content: $workspace-folder;
+    font-family: 'Font Awesome 5 Free';
+}
 
 .contenttype-opengever-dossier-businesscasedossier,
 .contenttype-opengever-zug-bdarp-casedossier2,
@@ -608,7 +647,7 @@ div.answer.addDocument div.answerType:before { content: $addDocument;}
 div.answer.created div.answerType:before { content: $created; }
 div.answer.modifyDeadline div.answerType:before { content: $modifyDeadline; }
 div.answer.reactivated div.answerType:before { content: $reactivate; }
-div.answer.skip div.answerType:before { font-family: 'FontAwesome'; content: $fa-var-step-forward; }
+div.answer.skip div.answerType:before { font-family: 'Font Awesome 5 Free'; content: $fa-var-step-forward; }
 
 /* @group language selector in personaltools */
 

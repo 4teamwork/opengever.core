@@ -1,12 +1,20 @@
 /*!
- *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
- *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ * Font Awesome Free 5.1.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
+@import 'variables';
+@import 'mixins';
+@import 'core';
+@import 'larger';
+@import 'fixed-width';
+@import 'list';
+@import 'bordered-pulled';
+@import 'animated';
+@import 'rotated-flipped';
+@import 'stacked';
+@import 'fontawesome';
+@import 'screen-reader';
+@import 'opengever-mixins';
+@import 'opengever';
+@import 'sprites';
 
-@import "variables";
-@import "animated";
-@import "mixins";
-@import "path";
-@import "fontawesome";
-@import "opengever";
-@import "sprites";

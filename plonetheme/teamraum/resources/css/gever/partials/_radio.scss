@@ -8,7 +8,7 @@
       padding-left: 25px;
       position: relative;
       @extend .fa;
-      @extend .fa-circle-o;
+      @extend .fa-circle;
       &:before {
         position: absolute;
         top: 0;
@@ -21,7 +21,7 @@
       + input + label, + label {
         color: $black;
         &:before {
-          @extend .fa-dot-circle-o;
+          @extend .fa-dot-circle;
         }
       }
     }

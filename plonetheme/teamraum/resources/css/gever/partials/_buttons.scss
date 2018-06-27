@@ -56,7 +56,7 @@ body.feature-word-meeting .add-agenda-items,
       pointer-events: none;
       &:before {
         @extend .fa;
-        @extend .fa-circle-o-notch;
+        @extend .fa-circle-notch;
         @extend .fa-spin;
         margin-right: 5px;
         font-size: $button-font-size;
@@ -74,7 +74,7 @@ body.feature-word-meeting .add-agenda-items,
   }
 
   div.actionButtons a:before {
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
   }
 
   div.actionButtons {
