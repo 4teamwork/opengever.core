@@ -194,7 +194,7 @@ class ProposalCreated(BaseHistoryRecord):
 class ProposalCommented(BaseHistoryRecord):
 
     history_type = u'commented'
-    needs_syncing = True
+    needs_syncing = False
 
     def message(self):
         return _(u'proposal_history_label_commented',

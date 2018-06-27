@@ -306,12 +306,12 @@ class ProposalBase(ModelContainer):
 
     def comment(self, text, uuid=None):
         self.load_model().comment(text=text, uuid=uuid)
-        return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
     def _comment(self, text, uuid=None):
         """Called by the connector-action CommentAction
         """
         ProposalCommentedActivitiy(self, self.REQUEST).record()
+        IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
 
 class SubmittedProposal(ProposalBase):

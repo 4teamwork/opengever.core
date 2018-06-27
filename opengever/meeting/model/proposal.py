@@ -28,6 +28,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+from uuid import uuid4
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 
@@ -403,6 +404,7 @@ class Proposal(Base):
         return agenda_item.meeting.get_link()
 
     def comment(self, **kwargs):
+        kwargs.update({'uuid': uuid4()})
         self.connector.dispatch(CommentAction, **kwargs)
 
     @property
