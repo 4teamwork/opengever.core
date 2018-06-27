@@ -2,6 +2,7 @@ from Acquisition import aq_base
 from ftw import bumblebee
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
+from opengever.base.helpers import display_name
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.document import Document
@@ -11,6 +12,7 @@ from plone.app.contentlisting.catalog import CatalogContentListingObject
 from plone.app.contentlisting.realobject import RealContentListingObject
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 
 
 class OpengeverCatalogContentListingObject(CatalogContentListingObject):
@@ -39,6 +41,15 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     def is_removed(self):
         removed_states = [Document.removed_state, OGMail.removed_state]
         return self.review_state() in removed_states
+
+    @property
+    def responsible_name(self):
+        return display_name(self._brain.responsible)
+
+    @property
+    def review_state_name(self):
+        return translate(
+            self._brain.review_state, domain='plone', context=self.request)
 
     def ContentTypeClass(self):
         """Here we set the correct content type class so that documents with
