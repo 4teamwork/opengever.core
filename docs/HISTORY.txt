@@ -8,6 +8,7 @@ Changelog
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
 - Add csv, wav, wmf and xml to the mimetypes for file icons. [tarnap]
+- Display the comment in a title attribute in case it gets truncated. [tarnap]
 - Add new notification roles for proposal activities. [elioschmutz]
 - Open successor task when predecessor is skipped or closed. [njohner]
 - Theme: Remove diazo rule that duplicated some JS scripts. [lgraf]

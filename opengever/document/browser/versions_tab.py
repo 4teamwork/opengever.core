@@ -10,6 +10,7 @@ from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.journal.tab import tooltip_helper
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
@@ -373,6 +374,7 @@ class VersionsTab(BaseListingTab):
 
         {'column': 'comment',
          'column_title': _(u'label_comment', default=u'Comment'),
+         'transform': tooltip_helper,
          },
 
         {'column': 'download_link',
