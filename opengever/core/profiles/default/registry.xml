@@ -158,9 +158,6 @@
       <element>application/vnd.openxmlformats-officedocument.presentationml.template</element>
       <element>application/vnd.openxmlformats-officedocument.presentationml.slideshow</element>
 
-      <!-- MS Publisher -->
-      <element>application/x-mspublisher</element>
-
       <!-- MS Word -->
       <element>application/msword</element>
       <element>application/vnd.ms-word.document.macroEnabled.12</element>
