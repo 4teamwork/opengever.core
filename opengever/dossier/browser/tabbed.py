@@ -150,12 +150,22 @@ class TemplateFolderTabbedView(GeverTabbedView):
 
         return None
 
+    @property
+    def meeting_templates_tab(self):
+        if is_meeting_feature_enabled():
+            return {
+                'id': 'meetingtemplates-proxy',
+                'title': _(u'label_meeting_templates', default=u'Meeting Templates'),
+            }
+        return None
+
     def _get_tabs(self):
         return filter(None, [
             self.template_tab,
             self.dossiertemplate_tab,
             self.sablon_tab,
             self.proposal_templates_tab,
+            self.meeting_templates_tab,
             self.tasktemplate_folders_tab
         ])
 
