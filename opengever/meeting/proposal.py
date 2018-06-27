@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
@@ -679,6 +680,8 @@ class Proposal(ProposalBase):
         create_command.execute(text)
         for copy_command in copy_commands:
             copy_command.execute()
+
+        ProposalSubmittedActivity(self, self.REQUEST).record()
 
     def reject(self):
         """Reject the proposal.

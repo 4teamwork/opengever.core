@@ -27,3 +27,29 @@ class ProposalCommentedActivitiy(BaseActivity):
     @property
     def description(self):
         return {}
+
+
+class ProposalTransitionActivity(BaseActivity):
+    """Activity which represents a proposal transition change.
+    """
+
+    def __init__(self, context, request):
+        super(ProposalTransitionActivity, self).__init__(context, request)
+
+    @property
+    def description(self):
+        return {}
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(ACTIVITY_TRANSLATIONS[self.kind])
+
+
+class ProposalSubmittedActivity(ProposalTransitionActivity):
+    kind = 'proposal-transition-submit'
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('proposal_history_label_submitted', u'Submitted by ${user}',
+              mapping={'user': actor_link()}))
