@@ -8,6 +8,7 @@ Changelog
 - Fix unicode error in versions tab comments. [lgraf]
 - Increase size of the favorites plone_uid column. [phgross]
 - Display the checkin comment on bumblebee overlays. [Rotonen]
+- Fix a bug with modern emojis while rendering task responses. [deiferni]
 - Fix physical_path schema migration for oracle backends. [phgross]
 - Ensure creator sets get to the paster upon pasting content. [Rotonen]
 - Indicate change of responsible in response when task is rejected. [njohner]
