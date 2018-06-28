@@ -318,6 +318,7 @@ class ProposalBase(ModelContainer):
         """Called by the connector-action SubmitAction
         """
         ProposalSubmittedActivity(self, self.REQUEST).record()
+        IHistory(self).append_record(u'submitted', uuid=uuid, text=text)
 
 
 class SubmittedProposal(ProposalBase):

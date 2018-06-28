@@ -1,11 +1,9 @@
 from datetime import date
-from opengever.base import advancedjson
 from opengever.base.interfaces import IDataCollector
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import REQUEST_KEY
 from opengever.meeting.activity.watchers import add_watchers_on_submitted_proposal_created
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.meeting.service import meeting_service
 from opengever.ogds.base.utils import encode_after_json
@@ -43,10 +41,6 @@ class CreateSubmittedProposal(BrowserView):
                 filename=data['file']['filename'],
                 content_type=data['file']['contentType'].encode('utf-8'),
                 data=base64.decodestring(data['file']['data']))
-
-            history_data = advancedjson.loads(self.request.get('history_data'))
-            IHistory(submitted_proposal).append_record(
-                u'submitted', uuid=history_data['uuid'], text=history_data.get("text"))
 
             add_watchers_on_submitted_proposal_created(submitted_proposal)
 

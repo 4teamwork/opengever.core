@@ -423,12 +423,7 @@ class CreateSubmittedProposalCommand(object):
             'contentType': blob.contentType,
             'data': base64.encodestring(blob.data)}
 
-        record = IHistory(self.proposal).append_record(u'submitted', text=text)
-        history_data = advancedjson.dumps({'uuid': record.uuid, 'text': text})
-
-        request_data = {
-            REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
-            'history_data': history_data}
+        request_data = {REQUEST_KEY: json.dumps(decode_for_json(jsondata))}
         response = dispatch_json_request(
             self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
 
