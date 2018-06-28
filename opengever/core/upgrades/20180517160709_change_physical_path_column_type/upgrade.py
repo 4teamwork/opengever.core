@@ -80,8 +80,9 @@ class ChangePhysicalPathColumnType(SchemaMigration):
             )
 
         # make column non nullable
-        self.op.alter_column(
-            table_name, column_name, existing_type=type_, nullable=existing_nullable)
+        if not existing_nullable:
+            self.op.alter_column(
+                table_name, column_name, existing_type=type_, nullable=False)
 
         # drop_tmp_column
         self.op.drop_column(table_name, tmp_column_name)
