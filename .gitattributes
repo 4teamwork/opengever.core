@@ -1,1 +1,10 @@
 docs/HISTORY.txt merge=union
+docs/public/**/*.png filter=lfs diff=lfs merge=lfs -text
+docs/intern/**/*.png filter=lfs diff=lfs merge=lfs -text
+docs/public-fr/**/*.png filter=lfs diff=lfs merge=lfs -text
+docs/public-fr/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/public/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/intern/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+docs/intern/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+docs/public/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+docs/public-fr/**/*.jpeg filter=lfs diff=lfs merge=lfs -text

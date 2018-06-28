@@ -10,6 +10,20 @@ Dieser Bereich enthält Informationen *über* das Erstellen von Dokumentation f�
 Arbeiten an der Dokumentation
 -----------------------------
 
+git-lfs installieren
+^^^^^^^^^^^^^^^^^^^^
+
+Für das Arbeiten an der Dokumentation muss einmal systemweit ``git-lfs``
+installiert werden, damit die Screenshots via ``git-lfs`` heruntergeladen
+werden können. Dies muss pro Gerät nur ein einziges Mal gemacht werden, und
+muss nicht für jedes neue Build-Environment wiederholt werden:
+
+.. code-block:: bash
+
+   brew install git-lfs
+   git lfs install
+
+
 Erstellen eines Build-Environments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -25,6 +39,7 @@ Das initiale Einrichten eines Build-Environments geschieht wie folgt:
    cd ~/projects
    git clone git@github.com:4teamwork/opengever.core.git opengever.core-docs
    cd opengever.core-docs
+   bin/enable-lfs
    ln -s sphinx-standalone.cfg buildout.cfg
    python bootstrap.py && bin/buildout
 
