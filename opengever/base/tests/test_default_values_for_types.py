@@ -6,7 +6,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
+from opengever.api.testing import RelativeSession
 from opengever.base.default_values import get_persisted_values_for_obj
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
 from opengever.core.testing import toggle_feature
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
 from opengever.private import enable_opengever_private
@@ -14,6 +16,8 @@ from opengever.private.tests import create_members_folder
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import setRoles
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemataForType
@@ -277,10 +281,19 @@ class TestDefaultsBase(FunctionalTestCase):
 
     maxDiff = None
 
+    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+
     def setUp(self):
         super(TestDefaultsBase, self).setUp()
         self.portal = self.layer.get('portal')
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.api = RelativeSession(self.portal.absolute_url())
+        self.api.headers.update({
+            'Accept': 'application/json',
+            'Accept-Language': 'de-ch',
+        })
+        self.api.auth = (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
 
         # Set 'de-ch' and 'en' as supported languages to have title field show
         # up at all for ITranslatedTitle, but still have the UI in english
@@ -288,6 +301,7 @@ class TestDefaultsBase(FunctionalTestCase):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('en')
         lang_tool.supported_langs = ['de-ch', 'en']
+        lang_tool.use_request_negotiation = True
         transaction.commit()
 
     def get_type_defaults(self):
@@ -387,6 +401,25 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    def test_rest_api(self):
+        payload = {
+            u'@type': u'opengever.repository.repositoryroot',
+            u'title_de': REPOFOLDER_REQUIREDS['title_de'],
+            u'title_fr': u'French Title',
+        }
+        response = self.api.post(self.portal.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        folder = self.portal.restrictedTraverse('my-title')
+
+        persisted_values = get_persisted_values_for_obj(folder)
+        expected = self.get_type_defaults()
+        expected['title_fr'] = u'French Title'
+
+        self.assertDictEqual(expected, persisted_values)
+
 
 class TestRepositoryFolderDefaults(TestDefaultsBase):
     """Test our repository folders come with expected default values."""
@@ -447,6 +480,27 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    def test_rest_api(self):
+        root = create(Builder('repository_root'))
+        payload = {
+            u'@type': u'opengever.repository.repositoryfolder',
+            u'title_de': REPOFOLDER_REQUIREDS['title_de'],
+            u'title_fr': u'French Title',
+        }
+        response = self.api.post(root.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        folder = root.restrictedTraverse('my-title')
+
+        persisted_values = get_persisted_values_for_obj(folder)
+        expected = self.get_type_defaults()
+        expected['addable_dossier_types'] = None
+        expected['title_fr'] = u'French Title'
+
+        self.assertDictEqual(expected, persisted_values)
+
 
 class TestDossierDefaults(TestDefaultsBase):
     """Test dossiers come with expected default values."""
@@ -498,6 +552,31 @@ class TestDossierDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_rest_api(self):
+        repo = create(Builder('repository'))
+
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'title': DOSSIER_REQUIREDS['title'],
+            u'responsible': DOSSIER_FORM_DEFAULTS['responsible'],
+        }
+        response = self.api.post(repo.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        dossier = repo.restrictedTraverse('dossier-1')
+
+        persisted_values = get_persisted_values_for_obj(dossier)
+        expected = self.get_type_defaults()
+        expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible']
+
+        # plone.restapi incorrectly fires an ObjectMoved event during creation
+        expected['former_reference_number'] = 'Client1 1 / 1'
+        expected['temporary_former_reference_number'] = ''
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -626,6 +705,28 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
+    def test_rest_api(self):
+        dossier = create(Builder('dossier'))
+        payload = {
+            u'@type': u'opengever.document.document',
+            u'title': DOCUMENT_REQUIREDS['title'],
+        }
+        response = self.api.post(dossier.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        doc = dossier.restrictedTraverse('document-1')
+
+        # XXX: Doesn't currently work of event order during creation
+        # checksum = IBumblebeeDocument(doc).get_checksum()
+        # self.assertIsNotNone(checksum)
+
+        persisted_values = get_persisted_values_for_obj(doc)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
     @browsing
     def test_document_from_dossiertemplate(self, browser):
         toggle_feature(IDossierTemplateSettings, enabled=True)
@@ -735,6 +836,34 @@ class TestMailDefaults(TestDefaultsBase):
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_rest_api(self):
+        dossier = create(Builder('dossier'))
+        payload = {
+            u'@type': u'ftw.mail.mail',
+            u'message': {
+                u'data': TestMailDefaults.SAMPLE_MAIL.encode('base64'),
+                u'encoding': u'base64',
+                u'filename': u'msg.eml',
+                u'content-type': u'message/rfc822'},
+        }
+        response = self.api.post(dossier.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        mail = dossier.restrictedTraverse('document-1')
+
+        # XXX: Doesn't currently work of event order during creation
+        # checksum = IBumblebeeDocument(mail).get_checksum()
+        # self.assertIsNotNone(checksum)
+
+        persisted_values = get_persisted_values_for_obj(mail)
+        expected = self.get_type_defaults()
+
+        expected['message'] = mail._message
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -867,6 +996,25 @@ class TestContactDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_z3c_form_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_rest_api(self):
+        contactfolder = create(Builder('contactfolder'))
+        payload = {
+            u'@type': u'opengever.contact.contact',
+            u'firstname': CONTACT_REQUIREDS['firstname'],
+            u'lastname': CONTACT_REQUIREDS['lastname'],
+        }
+        response = self.api.post(contactfolder.absolute_url(), json=payload)
+        transaction.commit()
+
+        self.assertEqual(201, response.status_code)
+
+        contact = contactfolder.restrictedTraverse('doe-john')
+
+        persisted_values = get_persisted_values_for_obj(contact)
+        expected = self.get_type_defaults()
 
         self.assertDictEqual(expected, persisted_values)
 
