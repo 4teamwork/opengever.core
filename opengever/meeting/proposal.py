@@ -21,7 +21,6 @@ from opengever.meeting.activity.watchers import remove_watchers_on_submitted_pro
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
-from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
@@ -320,6 +319,11 @@ class ProposalBase(ModelContainer):
         ProposalSubmittedActivity(self, self.REQUEST).record()
         IHistory(self).append_record(u'submitted', uuid=uuid, text=text)
 
+    def _reject(self, text):
+        """Called by the connector-action RejectAction
+        """
+        IHistory(self).append_record(u'rejected', text=text)
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -420,13 +424,14 @@ class SubmittedProposal(ProposalBase):
 
     def reject(self, text):
         """Reject the submitted proposal."""
+        self.load_model().reject(text)
 
-        RejectProposalCommand(self).execute()
-        proposal = self.load_model()
-        proposal.reject(text)
-
+    def _reject(self, text):
+        """Called by the connector-action RejectAction
+        """
+        super(SubmittedProposal, self)._reject(text)
         remove_watchers_on_submitted_proposal_deleted(
-            self, proposal.committee.group_id)
+            self, self.load_model().committee.group_id)
 
         with elevated_privileges():
             api.content.delete(self)
@@ -652,13 +657,11 @@ class Proposal(ProposalBase):
 
         self.load_model().submit(text=text)
 
-    def reject(self):
-        """Reject the proposal.
-
-        Called via remote-request after the proposal has been rejected on the
-        committee side.
+    def _reject(self, text):
+        """Called by the connector-action RejectAction after the proposal has
+        been rejected on the committee side.
         """
-
+        super(Proposal, self)._reject(text)
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')

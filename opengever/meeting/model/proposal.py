@@ -5,6 +5,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.connector.actions import CommentAction
+from opengever.meeting.connector.actions import RejectAction
 from opengever.meeting.connector.actions import SubmitAction
 from opengever.meeting.connector.connector import Connector
 from opengever.meeting.connector.connector import ConnectorPath
@@ -312,7 +313,8 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
+
+        self.connector.dispatch(RejectAction, text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')

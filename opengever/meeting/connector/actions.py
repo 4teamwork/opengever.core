@@ -16,3 +16,10 @@ class SubmitAction(ConnectorAction):
         text = self.data.get('text')
         uuid = self.data.get('uuid')
         self.context._submit(text, uuid)
+
+
+@Connector.register
+class RejectAction(ConnectorAction):
+    def execute(self):
+        text = self.data.get('text')
+        self.context._reject(text)
