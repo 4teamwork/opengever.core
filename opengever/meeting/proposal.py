@@ -16,6 +16,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
@@ -322,6 +323,7 @@ class ProposalBase(ModelContainer):
     def _reject(self, text):
         """Called by the connector-action RejectAction
         """
+        ProposalRejectedActivity(self, self.REQUEST).record()
         IHistory(self).append_record(u'rejected', text=text)
 
 

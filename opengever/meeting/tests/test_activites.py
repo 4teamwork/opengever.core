@@ -120,6 +120,23 @@ class TestMeetingActivities(IntegrationTestCase):
                 u'Submitted by {}'.format(actor_link()),
                 activity.summary)
 
+    @browsing
+    def test_record_activity_on_rejecting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.reject_proposal(self.submitted_proposal, browser, comment=u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-reject', activity.kind)
+            self.assertEquals('Proposal rejected', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Rejected by {}'.format(actor_link()),
+                activity.summary)
+
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
             [subscriber.id for subscriber in subscribers],
@@ -160,8 +177,8 @@ class TestMeetingActivities(IntegrationTestCase):
     def submit_proposal(self, proposal, browser, comment=''):
         self.execute_transition(proposal, 'pending-submitted', browser, comment)
 
-    def reject_proposal(self, proposal, browser):
-        self.execute_transition(proposal, 'submitted-pending', browser)
+    def reject_proposal(self, proposal, browser, comment=''):
+        self.execute_transition(proposal, 'submitted-pending', browser, comment)
 
     def create_proposal_with_issuer(self, issuer, committee, browser):
         browser.open(self.dossier)

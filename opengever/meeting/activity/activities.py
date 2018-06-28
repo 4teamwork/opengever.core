@@ -56,3 +56,13 @@ class ProposalSubmittedActivity(ProposalTransitionActivity):
         return self.translate_to_all_languages(
             _('proposal_history_label_submitted', u'Submitted by ${user}',
               mapping={'user': actor_link()}))
+
+
+class ProposalRejectedActivity(ProposalTransitionActivity):
+    kind = 'proposal-transition-reject'
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('proposal_history_label_rejected', u'Rejected by ${user}',
+              mapping={'user': actor_link()}))
