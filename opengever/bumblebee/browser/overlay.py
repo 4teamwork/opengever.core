@@ -1,7 +1,7 @@
 from Acquisition import aq_parent
 from ftw import bumblebee
-from ftw.bumblebee.mimetypes import is_mimetype_supported
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -12,6 +12,7 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
+from opengever.document.browser.versions_tab import LazyHistoryMetadataProxy
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
@@ -50,6 +51,15 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
+    def get_checkin_comment(self):
+        version_id = self.version_id
+        if version_id is None:
+            version_id = getattr(self.context, 'version_id', None)
+        if version_id is not None:
+            version_metadata = Versioner(self.context).get_version_metadata(version_id)
+            return version_metadata['sys_metadata']['comment']
+        return u''
 
     def is_latest_version(self):
         """A documentish without versions is always the latest version."""

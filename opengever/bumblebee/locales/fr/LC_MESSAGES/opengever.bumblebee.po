@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-22 08:05+0000\n"
+"POT-Creation-Date: 2018-06-28 13:31+0000\n"
 "PO-Revision-Date: 2017-10-16 16:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
+msgid "Checkin comment:"
+msgstr ""
 
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Creator:"

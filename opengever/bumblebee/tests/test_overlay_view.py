@@ -22,6 +22,43 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertEqual(1, len(browser.css('#file-preview')))
 
     @browsing
+    def test_bumblebee_overlay_does_not_render_empty_comment(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='bumblebee-overlay-listing')
+        self.assertNotIn('Checkin comment:', browser.css('.metadata .title').text)
+
+    @browsing
+    def test_bumblebee_overlay_renders_comment(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, version_id=0)
+        browser.open(self.document, view='bumblebee-overlay-listing')
+        self.assertIn('Checkin comment: This is Version 0', browser.css('.metadata tr').text)
+
+    @browsing
+    def test_bumblebee_overlay_renders_comments_correctly_on_versioned_documents(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, version_id=0)
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        browser.open(
+            self.document.absolute_url() + '/@checkin',
+            method='POST',
+            headers={'Accept': 'application/json'},
+            )
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        browser.open(
+            self.document.absolute_url() + '/@checkin',
+            data='{"comment": "Foo bar."}',
+            method='POST',
+            headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
+            )
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=0')
+        self.assertIn('Checkin comment: This is Version 0', browser.css('.metadata tr').text)
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=1')
+        self.assertNotIn('Checkin comment:', browser.css('.metadata .title').text)
+        browser.open(self.document, view='bumblebee-overlay-document?version_id=2')
+        self.assertIn('Checkin comment: Foo bar.', browser.css('.metadata tr').text)
+
+    @browsing
     def test_render_download_link(self, browser):
         self.login(self.regular_user, browser)
 
