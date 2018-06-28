@@ -5,7 +5,7 @@ Changelog
 2018.3.6 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix physical_path schema migration for oracle backends. [phgross]
 
 
 2018.3.5 (2018-06-20)
