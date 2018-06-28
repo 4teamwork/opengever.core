@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
@@ -437,6 +438,8 @@ class SubmittedProposal(ProposalBase):
         remove_watchers_on_submitted_proposal_deleted(
             self, proposal.committee.group_id)
 
+        ProposalRejectedActivity(self, self.REQUEST).record()
+
         with elevated_privileges():
             api.content.delete(self)
 
@@ -690,6 +693,7 @@ class Proposal(ProposalBase):
         committee side.
         """
 
+        ProposalRejectedActivity(self, self.REQUEST).record()
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
