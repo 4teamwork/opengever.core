@@ -14,3 +14,10 @@ class SubmitAction(ConnectorAction):
     def execute(self):
         text = self.data.get('text')
         self.context._submit(text)
+
+
+@Connector.register
+class RejectAction(ConnectorAction):
+    def execute(self):
+        text = self.data.get('text')
+        self.context._reject(text)
