@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Increase size of the favorites plone_uid column. [phgross]
 - Fix physical_path schema migration for oracle backends. [phgross]
 - Indicate change of responsible in response when task is rejected. [njohner]
 - Add MS publisher to the list of OfficeConnector editables. [tarnap]
