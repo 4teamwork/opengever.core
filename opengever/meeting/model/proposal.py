@@ -315,6 +315,8 @@ class Proposal(Base):
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
 
+        self.connector.dispatch(RejectAction, text=text)
+
         self.submitted_physical_path = None
         self.submitted_admin_unit_id = None
         self.submitted_int_id = None
@@ -323,8 +325,6 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-
-        self.connector.dispatch(RejectAction, text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
