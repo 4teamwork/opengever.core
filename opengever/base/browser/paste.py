@@ -79,10 +79,12 @@ class PasteClipboardView(BrowserView):
             # https://github.com/plone/plone.api/commit/79bec69932ca87a4a5cd675db8b0bd9437dddcdf
             # the following code should be replaced with plone.api after the
             # plone update.
-            copy_info = self.context.manage_pasteObjects(
-                obj.aq_parent.manage_copyObjects(obj.getId()))
+            copy_info = self.context.manage_pasteObjects(obj.aq_parent.manage_copyObjects(obj.getId()))
             new_id = copy_info[0]['new_id']
-            self.rename_object(self.context[new_id])
+            copied_obj = self.context[new_id]
+            # XXX - ensure the new object is listed as created by the paster
+            copied_obj.creators = (api.user.get_current().id, )
+            self.rename_object(copied_obj)
 
     def rename_object(self, copy):
         return self._recursive_rename(copy)
