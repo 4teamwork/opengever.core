@@ -1,6 +1,7 @@
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity.base import BaseActivity
 from opengever.meeting import _
+from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
 from plone import api
 
@@ -63,3 +64,23 @@ class ProposalRejectedActivity(ProposalTransitionActivity):
         return self.translate_to_all_languages(
             _('proposal_history_label_rejected', u'Rejected by ${user}',
               mapping={'user': actor_link()}))
+
+
+class ProposalScheduledActivity(ProposalTransitionActivity):
+    kind = 'proposal-transition-schedule'
+
+    def __init__(self, context, request, meeting_id):
+        super(ProposalTransitionActivity, self).__init__(context, request)
+        self.meeting_id = meeting_id
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('proposal_history_label_scheduled',
+              u'Scheduled for meeting ${meeting} by ${user}',
+              mapping={'meeting': self.get_meeting_title(self.meeting_id),
+                       'user': actor_link()}))
+
+    def get_meeting_title(self, meeting_id):
+        meeting = Meeting.query.get(meeting_id)
+        return meeting.get_title() if meeting else u''
