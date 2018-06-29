@@ -5,6 +5,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.connector.actions import CommentAction
+from opengever.meeting.connector.actions import DecideAction
 from opengever.meeting.connector.actions import RejectAction
 from opengever.meeting.connector.actions import ScheduleAction
 from opengever.meeting.connector.actions import SubmitAction
@@ -357,6 +358,8 @@ class Proposal(Base):
 
         IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
+
+        self.connector.dispatch(DecideAction)
 
     def register_excerpt(self, document_intid):
         """Adds a GeneratedExcerpt database entry and a corresponding

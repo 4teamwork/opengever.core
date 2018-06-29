@@ -31,3 +31,9 @@ class ScheduleAction(ConnectorAction):
         meeting_id = self.data.get('meeting_id')
         uuid = self.data.get('uuid')
         self.context._schedule(meeting_id, uuid)
+
+
+@Connector.register
+class DecideAction(ConnectorAction):
+    def execute(self):
+        self.context._decide()
