@@ -1,5 +1,6 @@
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base import _ as bmf
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.model import create_session
@@ -172,3 +173,7 @@ class EditForm(ModelProxyEditForm, edit.DefaultEditForm):
             self.widgets['ad_hoc_template'].error = True
 
         return super(EditForm, self).handleApply(self, action)
+
+    @button.buttonAndHandler(bmf(u'label_cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
