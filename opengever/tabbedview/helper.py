@@ -15,6 +15,7 @@ from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone.utils import safe_unicode
+from Products.CMFPlone.utils import safe_unicode
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import getUtility
@@ -24,9 +25,10 @@ from zope.i18n import translate
 
 
 def tooltip_helper(item, value):
-    text = ''.join(
+    value = safe_unicode(value)
+    text = u''.join(
         BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
-    return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
+    return (u'<span title="%s">%s</span>' % (text, value)).encode('utf-8')
 
 
 def org_unit_title_helper(item, value):
