@@ -7,6 +7,7 @@ from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.model import Meeting
 from opengever.meeting.proposal import Proposal
@@ -345,6 +346,10 @@ class ProposalDecided(BaseHistoryRecord):
         return _(u'proposal_history_label_decided',
                  u'Proposal decided by ${user}',
                  mapping={'user': self.get_actor_link()})
+
+    @classmethod
+    def receive(cls, context, request, data):
+        ProposalDecideActivity(context, request).record()
 
 
 @ProposalHistory.register

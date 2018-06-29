@@ -4,6 +4,7 @@ from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
@@ -362,7 +363,9 @@ class Proposal(Base):
             raise ValueError(
                 'Cannot decide proposal when proposal document is checked out.')
 
-        IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
+        submitted_proposal = self.resolve_submitted_proposal()
+        ProposalDecideActivity(submitted_proposal, getRequest()).record()
+        IHistory(submitted_proposal).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
     def register_excerpt(self, document_intid):

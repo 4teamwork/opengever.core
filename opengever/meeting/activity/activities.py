@@ -84,3 +84,13 @@ class ProposalScheduledActivity(ProposalTransitionActivity):
     def get_meeting_title(self, meeting_id):
         meeting = Meeting.query.get(meeting_id)
         return meeting.get_title() if meeting else u''
+
+
+class ProposalDecideActivity(ProposalTransitionActivity):
+    kind = 'proposal-transition-decide'
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('proposal_history_label_decided', u'Proposal decided by ${user}',
+              mapping={'user': actor_link()}))
