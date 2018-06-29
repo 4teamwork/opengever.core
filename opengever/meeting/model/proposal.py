@@ -6,6 +6,7 @@ from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
 from opengever.meeting.connector.actions import CommentAction
 from opengever.meeting.connector.actions import RejectAction
+from opengever.meeting.connector.actions import ScheduleAction
 from opengever.meeting.connector.actions import SubmitAction
 from opengever.meeting.connector.connector import Connector
 from opengever.meeting.connector.connector import ConnectorPath
@@ -301,6 +302,8 @@ class Proposal(Base):
 
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'scheduled', meeting_id=meeting.meeting_id)
+
+        self.connector.dispatch(ScheduleAction, meeting_id=meeting.meeting_id)
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')

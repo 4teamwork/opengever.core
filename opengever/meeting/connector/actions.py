@@ -23,3 +23,10 @@ class RejectAction(ConnectorAction):
     def execute(self):
         text = self.data.get('text')
         self.context._reject(text)
+
+
+@Connector.register
+class ScheduleAction(ConnectorAction):
+    def execute(self):
+        meeting_id = self.data.get('meeting_id')
+        self.context._schedule(meeting_id)

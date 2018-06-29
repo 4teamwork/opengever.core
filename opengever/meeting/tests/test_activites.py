@@ -137,6 +137,24 @@ class TestMeetingActivities(IntegrationTestCase):
                 u'Rejected by {}'.format(actor_link()),
                 activity.summary)
 
+    @browsing
+    def test_record_activity_on_schedule_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        meeting = self.meeting.model
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.submitted_proposal.load_model().schedule(meeting)
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-schedule', activity.kind)
+            self.assertEquals('Proposal scheduled', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Scheduled for meeting {} by {}'.format(meeting.get_title(), actor_link()),
+                activity.summary)
+
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
             [subscriber.id for subscriber in subscribers],
