@@ -35,7 +35,8 @@ class TestVersionsTab(FunctionalTestCase):
     def _create_doc_with_versions(self, n=3):
         doc = self._create_doc()
         for version_id in range(1, n + 1):
-            create_document_version(doc, version_id)
+            create_document_version(doc, version_id,
+                                    comment=u'Kommentar mit Uml\xe4ut')
         return doc
 
     def _create_doc(self):

@@ -144,7 +144,7 @@ class TestJournalTabSorting(FunctionalTestCase):
             {'action': {'visible': True,
                         'type': 'Dossier changed',
                         'title': title},
-             'comments': '',
+             'comments': 'Kommentar mit Uml\xc3\xa4ut',
              'actor': actor,
              'time': time})
 

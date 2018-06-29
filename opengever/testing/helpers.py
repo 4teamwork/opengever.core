@@ -98,11 +98,14 @@ def add_languages(codes, support_combined=True):
     transaction.commit()
 
 
-def create_document_version(doc, version_id, data=None):
+def create_document_version(doc, version_id, data=None, comment=None):
     vdata = data or 'VERSION {} DATA'.format(version_id)
     doc.file.data = vdata
 
-    Versioner(doc).create_version("This is Version %s" % version_id)
+    if comment is None:
+        comment = u'This is Version %s' % version_id
+
+    Versioner(doc).create_version(comment)
 
 
 def css_to_xpath(css):
