@@ -1,3 +1,4 @@
+from BeautifulSoup import BeautifulSoup
 from datetime import datetime
 from ftw.mail.utils import get_header
 from ftw.solr.document import SolrDocument
@@ -20,6 +21,12 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+
+
+def tooltip_helper(item, value):
+    text = ''.join(
+        BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
+    return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
 def org_unit_title_helper(item, value):

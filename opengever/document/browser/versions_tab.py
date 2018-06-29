@@ -10,11 +10,11 @@ from opengever.document import _
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
-from opengever.journal.tab import tooltip_helper
 from opengever.ogds.base.actor import Actor
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_version_preview
+from opengever.tabbedview.helper import tooltip_helper
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.CMFPlone.utils import safe_unicode
