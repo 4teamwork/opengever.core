@@ -335,10 +335,11 @@ class ProposalBase(ModelContainer):
         IHistory(self).append_record(
             u'scheduled', uuid=uuid, meeting_id=meeting_id)
 
-    def _decide(self):
+    def _decide(self, uuid):
         """Called by the connector-action DecideAction
         """
         ProposalDecideActivity(self, self.REQUEST).record()
+        IHistory(self).append_record(u'decided', uuid=uuid)
 
 
 class SubmittedProposal(ProposalBase):

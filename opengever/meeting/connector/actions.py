@@ -36,4 +36,5 @@ class ScheduleAction(ConnectorAction):
 @Connector.register
 class DecideAction(ConnectorAction):
     def execute(self):
-        self.context._decide()
+        uuid = self.data.get('uuid')
+        self.context._decide(uuid)

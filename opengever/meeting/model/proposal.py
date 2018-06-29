@@ -356,10 +356,9 @@ class Proposal(Base):
             raise ValueError(
                 'Cannot decide proposal when proposal document is checked out.')
 
-        IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
 
-        self.connector.dispatch(DecideAction)
+        self.connector.dispatch(DecideAction, uuid=uuid4())
 
     def register_excerpt(self, document_intid):
         """Adds a GeneratedExcerpt database entry and a corresponding

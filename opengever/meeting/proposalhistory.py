@@ -321,7 +321,7 @@ class ProposalScheduled(BaseHistoryRecord):
 class ProposalDecided(BaseHistoryRecord):
 
     history_type = u'decided'
-    needs_syncing = True
+    needs_syncing = False
 
     def message(self):
         return _(u'proposal_history_label_decided',
