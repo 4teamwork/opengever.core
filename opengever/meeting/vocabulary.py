@@ -33,7 +33,7 @@ class CommitteeVocabulary(object):
 class ActiveCommitteeVocabulary(CommitteeVocabulary):
 
     def get_committees(self):
-        return Committee.query.active().all()
+        return Committee.query.active().order_by('title').all()
 
 
 @implementer(IVocabularyFactory)
