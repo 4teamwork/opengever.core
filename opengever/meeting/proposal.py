@@ -327,10 +327,12 @@ class ProposalBase(ModelContainer):
         ProposalRejectedActivity(self, self.REQUEST).record()
         IHistory(self).append_record(u'rejected', text=text)
 
-    def _schedule(self, meeting_id):
+    def _schedule(self, meeting_id, uuid):
         """Called by the connector-action ScheduleAction
         """
         ProposalScheduledActivity(self, self.REQUEST, meeting_id).record()
+        IHistory(self).append_record(
+            u'scheduled', uuid=uuid, meeting_id=meeting_id)
 
 
 class SubmittedProposal(ProposalBase):

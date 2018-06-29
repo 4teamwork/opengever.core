@@ -296,7 +296,7 @@ class ProposalReopened(BaseHistoryRecord):
 class ProposalScheduled(BaseHistoryRecord):
 
     history_type = u'scheduled'
-    needs_syncing = True
+    needs_syncing = False
 
     def __init__(self, context, meeting_id, timestamp=None, uuid=None):
         super(ProposalScheduled, self).__init__(

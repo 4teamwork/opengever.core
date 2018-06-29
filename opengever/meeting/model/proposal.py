@@ -300,10 +300,8 @@ class Proposal(Base):
         self.execute_transition('submitted-scheduled')
         meeting.agenda_items.append(AgendaItem(proposal=self))
 
-        IHistory(self.resolve_submitted_proposal()).append_record(
-            u'scheduled', meeting_id=meeting.meeting_id)
-
-        self.connector.dispatch(ScheduleAction, meeting_id=meeting.meeting_id)
+        self.connector.dispatch(
+            ScheduleAction, meeting_id=meeting.meeting_id, uuid=uuid4())
 
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')

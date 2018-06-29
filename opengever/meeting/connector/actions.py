@@ -29,4 +29,5 @@ class RejectAction(ConnectorAction):
 class ScheduleAction(ConnectorAction):
     def execute(self):
         meeting_id = self.data.get('meeting_id')
-        self.context._schedule(meeting_id)
+        uuid = self.data.get('uuid')
+        self.context._schedule(meeting_id, uuid)
