@@ -17,9 +17,10 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
-from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
+from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
@@ -349,6 +350,11 @@ class ProposalBase(ModelContainer):
         """Called by the connector-action ScheduleAction
         """
         ProposalScheduledActivity(self, self.REQUEST, meeting_id).record()
+
+    def _decide(self):
+        """Called by the connector-action DecideAction
+        """
+        ProposalDecideActivity(self, self.REQUEST).record()
 
 
 class SubmittedProposal(ProposalBase):
