@@ -81,3 +81,13 @@ class TestInitialVersionCreation(IntegrationTestCase):
             u'custom initial version', version.sys_metadata['comment'])
 
         self.assertIsNone(versioner.get_custom_initial_version_comment())
+
+    def test_fetching_version_metadata(self):
+        self.login(self.regular_user)
+        versioner = Versioner(self.document)
+        versioner.set_custom_initial_version_comment(u'custom initial version')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        sys_metadata = versioner.get_version_metadata(0).get('sys_metadata')
+        self.assertEqual(u'custom initial version', sys_metadata.get('comment'))
+        self.assertEqual('kathi.barfuss', sys_metadata.get('principal'))
+        self.assertEqual('document-state-draft', sys_metadata.get('review_state'))
