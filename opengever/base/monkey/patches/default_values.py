@@ -2,11 +2,11 @@ from copy import deepcopy
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.monkey.patching import MonkeyPatch
 from plone.dexterity.content import _marker
+from plone.registry.recordsproxy import RecordsProxy
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.schema.interfaces import IContextAwareDefaultFactory
-
 
 def _default_from_schema(context, schema, fieldname):
     """Helper to look up default value of a field
@@ -224,6 +224,7 @@ class PatchZ3CFormChangedField(MonkeyPatch):
                 # instance from Plone's TTW registry editor.
                 assert any((
                     isinstance(context, QueryContext),
+                    isinstance(context, RecordsProxy),
                     isinstance(context, ImplicitAcquisitionWrapper) and
                     isinstance(aq_base(context), dict),
                 ))
