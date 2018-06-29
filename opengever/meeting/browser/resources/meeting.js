@@ -848,15 +848,21 @@
     };
 
     this.addText = function() {
+      var template_id = $(
+          "#ad-hoc-agenda-item-proposal-templates input[name=selected_ad_hoc_agenda_item_template]:checked"
+      ).attr('value');
       var input = $("#schedule-text");
       var button = $(".schedule-text");
       button.addClass("loading");
-      return $.post(button.first().data().url, { title: input.val() }).done(function() {
-        input.val("");
-        self.updateConnected();
-      }).always(function() {
-        button.removeClass("loading");
-      });
+      return $.post(button.first().data().url, {
+          title: input.val(),
+          template_id: template_id,
+        }).done(function() {
+            input.val("");
+            self.updateConnected();
+        }).always(function() {
+            button.removeClass("loading");
+        });
     };
 
     this.trackText = function(target, event) {

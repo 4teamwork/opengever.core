@@ -8,7 +8,6 @@
         "protocol_suffix_template": "resolvePath::/vorlagen/sablon-template-7",
         "excerpt_header_template": "resolvePath::/vorlagen/sablon-template-8",
         "excerpt_suffix_template": "resolvePath::/vorlagen/sablon-template-9",
-        "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
         "agendaitem_list_template": "resolvePath::/vorlagen/sablon-template-3",
         "toc_template": "resolvePath::/vorlagen/sablon-template-4",
         "paragraph_template": "resolvePath::/vorlagen/sablon-template-5",
@@ -19,6 +18,7 @@
                 "_type": "opengever.meeting.committee",
                 "title": "Kommission für Rechtsfragen",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/kommission-fuer-rechtsfragen/sitzungen",
+                "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
                 "group_id": "og_demo-ftw_users"
             },
             {
@@ -26,6 +26,7 @@
                 "_type": "opengever.meeting.committee",
                 "title": "Rechnungsprüfungskommission",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/kommissionen-mit-selbstaendigen-verwaltungsbefugnissen/rechnungspruefungskommission/sitzungen",
+                "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
                 "group_id": "og_demo-ftw_users"
             },
             {
@@ -33,6 +34,7 @@
                 "_type": "opengever.meeting.committee",
                 "title": "Gemeindeversammlung",
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen",
+                "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
                 "group_id": "og_demo-ftw_users"
             }
 

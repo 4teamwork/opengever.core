@@ -34,6 +34,7 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from zope.schema.interfaces import IVocabularyFactory
 import json
 
 
@@ -447,3 +448,36 @@ class MeetingView(BrowserView):
                 return transition
 
         return None
+
+    @property
+    def has_many_ad_hoc_agenda_item_templates(self):
+        return bool(len(self.ad_hoc_agenda_item_templates) > 1)
+
+    @property
+    def ad_hoc_agenda_item_templates(self):
+        vocabulary_factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.meeting.AdHocAgendaItemTemplatesForCommitteeVocabulary')
+
+        committee = self.context.aq_parent
+        vocabulary = vocabulary_factory(committee)
+
+        allowed_templates = committee.allowed_ad_hoc_agenda_item_templates
+        if allowed_templates is not None and len(allowed_templates):
+            templates = [
+                term.value
+                for term in vocabulary
+                if term.token in committee.allowed_ad_hoc_agenda_item_templates
+            ]
+        else:
+            templates = [term.value
+                         for term in vocabulary]
+
+        default_template = committee.get_ad_hoc_template()
+        return [{
+            'title': template.title,
+            'modified': template.modified().strftime('%d.%m.%Y'),
+            'author': template.getOwner().getId(),
+            'selected': template == default_template,
+            'value': template.getId(),
+        } for template in templates]

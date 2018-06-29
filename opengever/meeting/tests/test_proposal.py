@@ -70,13 +70,13 @@ class TestProposal(IntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-documents-proxy')
         original_template = ('orig_template', '#'.join((self.dossier.absolute_url(), 'documents')), )
         authenticator = ('_authenticator', createToken(), )
-        document_10_path = ('paths:list', browser.css('#document-10').first.node.attrib.get('value'), )
-        document_11_path = ('paths:list', browser.css('#document-11').first.node.attrib.get('value'), )
+        document_12_path = ('paths:list', browser.css('#document-12').first.node.attrib.get('value'), )
+        document_13_path = ('paths:list', browser.css('#document-13').first.node.attrib.get('value'), )
         method = ('++add++opengever.meeting.proposal:method', '1', )
         browser.open(
             self.dossier.absolute_url(),
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            data=formdata.urlencode((original_template, authenticator, document_10_path, document_11_path, method, )),
+            data=formdata.urlencode((original_template, authenticator, document_12_path, document_13_path, method, )),
             )
         self.assertEqual(
             [u'Vertr\xe4gsentwurf', 'Feedback zum Vertragsentwurf'],

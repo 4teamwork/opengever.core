@@ -61,11 +61,11 @@ EXPECTED_DOSSIER_PROPERTIES = {
 
 
 EXPECTED_DOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 10',
-    'Document.SequenceNumber': '10',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 12',
+    'Document.SequenceNumber': '12',
     'ogg.document.title': u'Vertr\xe4gsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 10',
-    'ogg.document.sequence_number': '10',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 12',
+    'ogg.document.sequence_number': '12',
     'ogg.document.document_author': TEST_USER_ID,
     'ogg.document.document_date': datetime(2010, 1, 3),
     'ogg.document.document_type': u'Contract',
@@ -75,22 +75,22 @@ EXPECTED_DOCUMENT_PROPERTIES = {
 }
 
 EXPECTED_TASKDOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 11',
-    'Document.SequenceNumber': '11',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 13',
+    'Document.SequenceNumber': '13',
     'ogg.document.title': u'Feedback zum Vertragsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 11',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 13',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
-    'ogg.document.sequence_number': '11',
+    'ogg.document.sequence_number': '13',
     'ogg.document.version_number': 0
 }
 
 EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 15',
-    'Document.SequenceNumber': '15',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 17',
+    'Document.SequenceNumber': '17',
     'ogg.document.title': u'Kommentar zum Vertragsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 15',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 17',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
-    'ogg.document.sequence_number': '15',
+    'ogg.document.sequence_number': '17',
     'ogg.document.version_number': 0
 }
 

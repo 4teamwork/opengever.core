@@ -432,6 +432,20 @@ class OpengeverContentFixture(object):
                 .within(self.templates)
                 ))
 
+            self.register('ad_hoc_agenda_item_template', create(
+                Builder('proposaltemplate')
+                .titled(u'Freitext Traktandum')
+                .with_asset_file(u'freitext_traktandum.docx')
+                .within(self.templates)
+                ))
+
+            self.register('recurring_agenda_item_template', create(
+                Builder('proposaltemplate')
+                .titled(u'Wiederkehrendes Traktandum')
+                .with_asset_file(u'wiederkehrendes_traktandum.docx')
+                .within(self.templates)
+                ))
+
         self.tasktemplatefolder = self.register('tasktemplatefolder', create(
             Builder('tasktemplatefolder')
             .titled(u'Verfahren Neuanstellung')
@@ -497,7 +511,6 @@ class OpengeverContentFixture(object):
             Builder('committee_container')
             .titled(u'Sitzungen')
             .having(
-                ad_hoc_template=self.proposal_template,
                 agendaitem_list_template=self.sablon_template,
                 protocol_header_template=self.sablon_template,
                 excerpt_header_template=self.sablon_template,
@@ -1501,6 +1514,7 @@ class OpengeverContentFixture(object):
             .titled(title)
             .within(self.committee_container)
             .having(
+                ad_hoc_template=self.proposal_template,
                 repository_folder=repository_folder,
                 group_id=group_id,
                 )

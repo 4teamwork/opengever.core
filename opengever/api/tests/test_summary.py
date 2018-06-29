@@ -100,7 +100,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
             summary,
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
-                        u'und-vereinbarungen/dossier-1/document-10',
+                        u'und-vereinbarungen/dossier-1/document-12',
                 u'created': u'2016-08-31T15:07:33+02:00',
                 u'creator': u'robert.ziegler',
                 u'filename': u'vertragsentwurf.docx',
@@ -123,6 +123,6 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
             summary,
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
-                        u'und-vereinbarungen/dossier-1/document-10',
-                u'reference_number': u'Client1 1.1 / 1 / 10',
+                        u'und-vereinbarungen/dossier-1/document-12',
+                u'reference_number': u'Client1 1.1 / 1 / 12',
             })

@@ -8,6 +8,9 @@ import os
 
 
 class TestRepositoryRootExcelExport(IntegrationTestCase):
+
+    maxDiff = None
+
     def test_importability_of_exported_repository_root(self):
         self.login(self.regular_user)
         report_data = generate_report(api.portal.get().REQUEST, self.repository_root)

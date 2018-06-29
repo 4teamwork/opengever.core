@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
@@ -193,3 +194,51 @@ class TestMeetingView(IntegrationTestCase):
         return transition_controller.url_for(self.meeting,
                                              self.meeting.model,
                                              transition_name)
+
+    @browsing
+    def test_all_proposal_templates_are_listed(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        self.assertEquals(
+            [{'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': 'Freitext Traktandum',
+              'Ersteller': 'nicole.kohler'},
+             {'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': u'Geb\xfchren',
+              'Ersteller': 'nicole.kohler'},
+             {'': '',
+              'Zuletzt bearbeitet': '31.08.2016',
+              'Titel': 'Wiederkehrendes Traktandum',
+              'Ersteller': 'nicole.kohler'}],
+            browser.css('#ad-hoc-agenda-item-proposal-templates').first.dicts()
+        )
+
+    @browsing
+    def test_default_template_is_checked(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        selected_templates = [
+            template
+            for template in browser.css('#ad-hoc-agenda-item-proposal-templates input[name=selected_ad_hoc_agenda_item_template]')
+            if template.checked
+        ]
+        assert 1 == len(selected_templates)
+        selected_template_id = selected_templates[0].value
+        self.assertEquals(self.committee.get_ad_hoc_template().getId(),
+                          selected_template_id)
+
+    @browsing
+    def test_no_options_displayed_if_only_one_ad_hoc_template_available(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+        self.assertFalse(self.committee.allowed_ad_hoc_agenda_item_templates)
+
+        browser.open(self.committee, view='edit')
+        browser.fill({'Allowed ad-hoc agenda item templates': u'Geb\xfchren'}).save()
+        statusmessages.assert_no_error_messages()
+
+        browser.open(self.meeting)
+        self.assertEquals(
+            0,
+            len(browser.css('#ad-hoc-agenda-item-proposal-templates')))

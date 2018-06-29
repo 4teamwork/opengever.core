@@ -1441,6 +1441,8 @@ Main file for all gever styles. */
 #opengever_meeting_meeting input[type="radio"] + input + label:before, #opengever_meeting_meeting input[type="radio"] + label:before, #opengever_meeting_protocol input[type="radio"] + input + label:before, #opengever_meeting_protocol input[type="radio"] + label:before { position: absolute; top: 0; left: 0; display: block; font-size: 20px; }
 #opengever_meeting_meeting input[type="radio"]:checked + input + label, #opengever_meeting_meeting input[type="radio"]:checked + label, #opengever_meeting_protocol input[type="radio"]:checked + input + label, #opengever_meeting_protocol input[type="radio"]:checked + label { color: #444; }
 
+#ad-hoc-agenda-item-proposal-templates input[type="radio"] { position: relative; opacity: 1; }
+
 .dossier-detail-listing .dossier-detail-listing-title { font-weight: bold; text-align: left; padding: 10px; background-color: #f5f5f5; }
 
 #opengever_meeting_meeting table { width: 100%; border-radius: 2px; }
@@ -1507,6 +1509,8 @@ body.feature-word-meeting .template-add-membership #opengever_meeting_meeting .i
 input[type='checkbox']:disabled ~ label > span { color: #ccc; }
 
 #form-widgets-IDocumentMetadata-description, #form-widgets-description, #form-widgets-IOpenGeverBase-description, #form-widgets-text, #form-widgets-IDocumentMetadata-description, #form-widgets-IDossier-comments, #form-widgets-other_participants { height: 90px; }
+
+body.portaltype-opengever-meeting-committee.template-edit #content-core div.error { background-color: #fdc; border: 1px solid red; padding: 0.5em; margin: 1em 0; }
 
 #opengever_meeting_meeting .collapsible, #opengever_meeting_protocol .collapsible, .portaltype-opengever-contact-organization .collapsible, .portaltype-opengever-contact-person .collapsible { width: 100%; margin-bottom: 8px; border-radius: 2px; box-sizing: border-box; }
 #opengever_meeting_meeting .collapsible .collapsible-header, #opengever_meeting_protocol .collapsible .collapsible-header, .portaltype-opengever-contact-organization .collapsible .collapsible-header, .portaltype-opengever-contact-person .collapsible .collapsible-header { display: table; width: 100%; background-color: #437795; border-radius: 4px; color: #fff; border-right: 1px solid #437795; }
