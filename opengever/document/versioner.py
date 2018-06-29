@@ -27,6 +27,9 @@ class Versioner(object):
     def get_history_metadata(self):
         return self.repository.getHistoryMetadata(self.document)
 
+    def get_version_metadata(self, version_id):
+            return self.get_history_metadata().retrieve(version_id)['metadata']
+
     def create_version(self, comment):
         """Creates a new version in CMFEditions.
         """

@@ -29,6 +29,12 @@
           </span>
         </td>
       </tr>
+      <tr tal:define="checkin_comment view/overlay/get_checkin_comment" tal:condition="nocall: checkin_comment">
+        <td class="title" i18n:translate="">Checkin comment:</td>
+        <td class="value">
+          <div tal:content="checkin_comment" />
+        </td>
+      </tr>
       <tr tal:condition="view/overlay/get_description">
         <td class="title" i18n:translate="">Description:</td>
         <td class="value">
