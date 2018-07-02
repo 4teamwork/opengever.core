@@ -10,7 +10,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
-ASSIGNNMENT_INITIAL = 0
 ASSIGNNMENT_VIA_TASK = 1
 ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
@@ -63,22 +62,6 @@ class RoleAssignment(object):
                 'title': reference_obj.Title().decode('utf-8')}
 
         return data
-
-
-class InitialRoleAssignment(RoleAssignment):
-
-    cause = ASSIGNNMENT_INITIAL
-
-    def __init__(self, principal, roles):
-        self.principal = principal
-        self.roles = roles
-        self.reference = None
-
-    def cause_title(self):
-        return _(u'label_initial_assignnment', default=u'Initial assignment')
-
-
-RoleAssignment.register(InitialRoleAssignment)
 
 
 class SharingRoleAssignment(RoleAssignment):
@@ -315,10 +298,10 @@ class RoleAssignmentManager(object):
     def _upate_local_roles(self):
         current_principals = [
             principal for principal, roles in self.context.get_local_roles()]
-        self.context.manage_delLocalRoles(current_principals)
+        self.context.manage_delLocalRoles(current_principals, verified=True)
 
         for principal, roles in self.storage.summarize():
             self.context.manage_setLocalRoles(
-                principal, [role for role in roles])
+                principal, [role for role in roles], verified=True)
 
         self.context.reindexObjectSecurity()

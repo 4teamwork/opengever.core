@@ -3,7 +3,7 @@ from collective.blueprint.jsonmigrator.blueprint import LocalRoles
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Expression
-from opengever.base.role_assignments import InitialRoleAssignment
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from zope.interface import classProvides, implements
 import logging
@@ -126,6 +126,6 @@ class LocalRolesSetter(LocalRoles):
                 for principal, roles in item[roleskey].items():
                     if roles:
                         RoleAssignmentManager(obj).add_assignment(
-                            InitialRoleAssignment(principal, roles))
+                            SharingRoleAssignment(principal, roles))
 
             yield item
