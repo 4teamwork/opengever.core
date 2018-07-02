@@ -163,7 +163,7 @@ class TestExcerptJsonData(FunctionalTestCase):
             'document': {'generated': u'04.05.2018'},
             'participants': {'other': [], 'members': []},
             'committee': {'name': u'Gemeinderat'},
-            'mandant': {'name': u'Client1'},
+            'mandant': {'name': u'Admin Unit 1'},
             'meeting': {'date': u'13.12.2011',
                         'start_time': u'09:30 AM',
                         'end_time': u'11:45 AM',

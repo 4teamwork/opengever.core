@@ -42,7 +42,7 @@ class TestForwardingActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:hugo.boss')
+        form.find_widget('Responsible').fill('org-unit-1:hugo.boss')
 
         browser.find('Save').click()
 
@@ -58,7 +58,7 @@ class TestForwardingActivites(FunctionalTestCase):
         inbox = create(Builder('inbox').titled(u'Inbox'))
         forwarding = create(Builder('forwarding')
                             .within(inbox)
-                            .having(issuer='inbox:client2',
+                            .having(issuer='inbox:org-unit-2',
                                     responsible='hugo.boss')
                             .titled(u'Anfrage XY'))
 
@@ -68,7 +68,7 @@ class TestForwardingActivites(FunctionalTestCase):
         resource = notification_center().fetch_resource(task)
         self.assertItemsEqual(
             [(u'hugo.boss', u'task_responsible'),
-             (u'inbox:client1', u'task_issuer')],
+             (u'inbox:org-unit-1', u'task_issuer')],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in resource.subscriptions])
 
@@ -96,7 +96,7 @@ class TestForwardingActivites(FunctionalTestCase):
 
         self.assertItemsEqual(
             [(u'test_user_1_', u'task_responsible'),
-             (u'inbox:client1', u'task_issuer')],
+             (u'inbox:org-unit-1', u'task_issuer')],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in successor_resource.subscriptions])
 
@@ -157,7 +157,7 @@ class TestForwardingReassignActivity(FunctionalTestCase):
                              view='++add++opengever.inbox.forwarding')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:jon.meier')
+        form.find_widget('Responsible').fill('org-unit-1:jon.meier')
         form.find_widget('Issuer').fill(u'hugo.boss')
 
         browser.css('#form-buttons-save').first.click()

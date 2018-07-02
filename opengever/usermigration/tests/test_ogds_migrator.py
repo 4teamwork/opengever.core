@@ -20,7 +20,7 @@ class TestOGDSMigrator(FunctionalTestCase):
     def test_users_group_gets_migrated(self):
         org_unit_id = self.org_unit.unit_id
         migrator = OGDSMigrator(
-            self.portal, {'client1_users': 'new_users_group'}, 'move')
+            self.portal, {'org-unit-1_users': 'new_users_group'}, 'move')
         migrator.migrate()
 
         org_unit = ogds_service().fetch_org_unit(org_unit_id)
@@ -29,7 +29,7 @@ class TestOGDSMigrator(FunctionalTestCase):
     def test_inbox_group_gets_migrated(self):
         org_unit_id = self.org_unit.unit_id
         migrator = OGDSMigrator(
-            self.portal, {'client1_inbox_users': 'new_inbox_group'}, 'move')
+            self.portal, {'org-unit-1_inbox_users': 'new_inbox_group'}, 'move')
         migrator.migrate()
 
         org_unit = ogds_service().fetch_org_unit(org_unit_id)
@@ -37,27 +37,27 @@ class TestOGDSMigrator(FunctionalTestCase):
 
     def test_raises_if_group_doesnt_exist(self):
         migrator = OGDSMigrator(
-            self.portal, {'client1_users': 'doesnt.exist'}, 'move')
+            self.portal, {'org-unit-1_users': 'doesnt.exist'}, 'move')
 
         with self.assertRaises(UserMigrationException):
             migrator.migrate()
 
     def test_returns_proper_results_for_moving_users_group(self):
         migrator = OGDSMigrator(
-            self.portal, {'client1_users': 'new_users_group'}, 'move')
+            self.portal, {'org-unit-1_users': 'new_users_group'}, 'move')
         results = migrator.migrate()
 
         self.assertEquals(
-            [('<OrgUnit client1>', 'client1_users', 'new_users_group')],
+            [('<OrgUnit org-unit-1>', 'org-unit-1_users', 'new_users_group')],
             results['users_groups']['moved']
         )
 
     def test_returns_proper_results_for_moving_inbox_group(self):
         migrator = OGDSMigrator(
-            self.portal, {'client1_inbox_users': 'new_inbox_group'}, 'move')
+            self.portal, {'org-unit-1_inbox_users': 'new_inbox_group'}, 'move')
         results = migrator.migrate()
 
         self.assertEquals(
-            [('<OrgUnit client1>', 'client1_inbox_users', 'new_inbox_group')],
+            [('<OrgUnit org-unit-1>', 'org-unit-1_inbox_users', 'new_inbox_group')],
             results['inbox_groups']['moved']
         )

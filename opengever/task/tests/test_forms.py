@@ -36,7 +36,7 @@ class TestTaskEditForm(FunctionalTestCase):
         browser.login().open(task, view='edit')
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:james.meier')
+        form.find_widget('Responsible').fill('org-unit-1:james.meier')
         browser.find('Save').click()
 
         browser.open(task, view='tabbedview_view-overview')
@@ -54,13 +54,13 @@ class TestTaskEditForm(FunctionalTestCase):
                       'Task Type': 'comment',
                       'Text': 'Lorem ipsum'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:peter.meier')
+        form.find_widget('Responsible').fill('org-unit-1:peter.meier')
 
         browser.find('Save').click()
 
         browser.open(browser.context.get('task-1'), view='edit')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:james.meier')
+        form.find_widget('Responsible').fill('org-unit-1:james.meier')
 
         browser.find('Save').click()
 

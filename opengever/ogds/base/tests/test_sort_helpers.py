@@ -31,7 +31,7 @@ class TestUserSortDict(FunctionalTestCase):
         self.assertEqual(
             {u'albert.peter': u'Peter Albert',
              u'test_user_1_': u'Test User',
-             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:org-unit-1': u'Inbox: Org Unit 1',
              u'inbox:arch': u'Inbox: Landesarchiv',
              u'hugo.boss': u'Boss Hugo',
              u'james.bond': u'Bond James'},
@@ -53,7 +53,7 @@ class TestUserSortDict(FunctionalTestCase):
              u'contact:croft-lara': u'Croft Lara',
              u'contact:man-super': u'M\xe4n Super',
              u'test_user_1_': u'Test User',
-             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:org-unit-1': u'Inbox: Org Unit 1',
              u'inbox:arch': u'Inbox: Landesarchiv',
              u'hugo.boss': u'Boss Hugo',
              u'james.bond': u'Bond James'},
@@ -64,7 +64,7 @@ class TestUserSortDict(FunctionalTestCase):
         self.assertEqual(
             {u'albert.peter': u'Peter Albert',
              u'test_user_1_': u'Test User',
-             u'inbox:client1': u'Inbox: Client1',
+             u'inbox:org-unit-1': u'Inbox: Org Unit 1',
              u'inbox:arch': u'Inbox: Landesarchiv',
              u'hugo.boss': u'Boss Hugo',
              u'james.bond': u'Bond James'},

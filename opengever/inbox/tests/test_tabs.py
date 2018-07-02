@@ -74,7 +74,7 @@ class TestInboxTaskTabs(FunctionalTestCase):
         self.org_unit_2 = create(Builder('org_unit')
                                  .having(admin_unit=self.admin_unit)
                                  .assign_users([self.user])
-                                 .id('client2'))
+                                 .id('org-unit-2'))
 
         self.inbox = create(Builder('inbox').titled(u'Testinbox'))
 
@@ -94,25 +94,25 @@ class TestAssignedInboxTaskTab(TestInboxTaskTabs):
     def test_lists_only_tasks_assigned_to_the_current_org_units_inbox(self):
         forwarding_1 = create(Builder('forwarding')
                               .within(self.inbox)
-                              .having(responsible='inbox:client1'))
+                              .having(responsible='inbox:org-unit-1'))
         forwarding_2 = create(Builder('forwarding')
                               .within(self.inbox)
-                              .having(responsible='inbox:client2'))
+                              .having(responsible='inbox:org-unit-2'))
 
         self.assert_listing_results([forwarding_1])
 
-        select_current_org_unit('client2')
+        select_current_org_unit('org-unit-2')
         self.assert_listing_results([forwarding_2])
 
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
                       .within(self.inbox)
-                      .having(responsible='inbox:client1',
+                      .having(responsible='inbox:org-unit-1',
                               modification_date=DateTime(2013, 6, 10)))
 
         forwarding = create(Builder('forwarding')
                             .within(self.inbox)
-                            .having(responsible='inbox:client1',
+                            .having(responsible='inbox:org-unit-1',
                                     modification_date=DateTime(2013, 6, 11)))
 
         self.assert_listing_results([task, forwarding])
@@ -125,36 +125,36 @@ class TestIssuedInboxTaskTab(TestInboxTaskTabs):
     def test_list_tasks_and_forwardings(self):
         task = create(Builder('task')
                       .within(self.inbox)
-                      .having(issuer='inbox:client1'))
+                      .having(issuer='inbox:org-unit-1'))
 
         forwarding = create(Builder('forwarding')
                             .within(self.inbox)
-                            .having(issuer='inbox:client1'))
+                            .having(issuer='inbox:org-unit-1'))
 
         self.assert_listing_results([task, forwarding])
 
     def test_list_only_task_with_current_org_units_inbox_as_a_issuer(self):
         task1 = create(Builder('task')
                       .within(self.inbox)
-                      .having(issuer='inbox:client1'))
+                      .having(issuer='inbox:org-unit-1'))
 
         task2 = create(Builder('task')
                       .within(self.inbox)
-                      .having(issuer='inbox:client2'))
+                      .having(issuer='inbox:org-unit-2'))
 
         self.assert_listing_results([task1])
 
-        select_current_org_unit('client2')
+        select_current_org_unit('org-unit-2')
         self.assert_listing_results([task2])
 
     def test_list_also_tasks_outside_of_the_inbox(self):
         task_inside = create(Builder('task')
               .within(self.inbox)
-              .having(issuer='inbox:client1',
+              .having(issuer='inbox:org-unit-1',
                       modification_date=DateTime(2013, 6, 10)))
 
         task_outside = create(Builder('task')
-              .having(issuer='inbox:client1',
+              .having(issuer='inbox:org-unit-1',
                       modification_date=DateTime(2013, 6, 11)))
 
         self.assert_listing_results([task_inside, task_outside])

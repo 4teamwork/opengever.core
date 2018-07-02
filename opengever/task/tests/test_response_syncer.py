@@ -80,11 +80,11 @@ class TestBaseResponseSyncerSender(FunctionalTestCase):
             [
                 {'data': {'text': 't\xc3\xa4st', 'transition': 'test-transition'},
                  'path': u'task-2',
-                 'target_admin_unit_id': u'client1',
+                 'target_admin_unit_id': u'admin-unit-1',
                  'viewname': 'SYNC_TASK'},
                 {'data': {'text': 't\xc3\xa4st', 'transition': 'test-transition'},
                  'path': u'task-3',
-                 'target_admin_unit_id': u'client1',
+                 'target_admin_unit_id': u'admin-unit-1',
                  'viewname': 'SYNC_TASK'}
             ],
             mock_request.requests
@@ -120,7 +120,7 @@ class TestBaseResponseSyncerSender(FunctionalTestCase):
                           'transition': 'test-transition',
                           'firstname': 'james'},
                  'path': u'task-2',
-                 'target_admin_unit_id': u'client1',
+                 'target_admin_unit_id': u'admin-unit-1',
                  'viewname': 'SYNC_TASK'},
             ],
             mock_request.requests
@@ -191,7 +191,7 @@ class TestCommentResponseSyncerSender(FunctionalTestCase):
                 'comment-transition', 'some text')
 
         self.assertEqual(
-            'Could not add comment on task on remote admin unit client1 (task-1)',
+            'Could not add comment on task on remote admin unit admin-unit-1 (task-1)',
             str(exception.exception))
 
 
@@ -211,7 +211,7 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
                 'publish', 'some text')
 
         self.assertEqual(
-            'Could not execute workflow transition (publish) on remote admin unit client1 (task-1)',
+            'Could not execute workflow transition (publish) on remote admin unit admin-unit-1 (task-1)',
             str(exception.exception))
 
     def test_forwarding_predecessors_are_ignored(self):
@@ -254,7 +254,7 @@ class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):
                 'modify-deadline-transition', 'some text')
 
         self.assertEqual(
-            'Updating deadline on remote client client1. failed (task-1)',
+            'Updating deadline on remote client admin-unit-1. failed (task-1)',
             str(exception.exception))
 
     def test_extend_payload_safes_the_deadline_ordinal_number(self):
@@ -326,7 +326,9 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         activate_request_layer(task.REQUEST, IInternalOpengeverRequestLayer)
 
     def test_changes_workflow_state(self):
-        task = create(Builder('task').in_state('task-state-in-progress'))
+        task = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client='org-unit-1'))
 
         self.prepare_request(task, text=u'I am done!',
                              transition= 'task-transition-in-progress-resolved')
@@ -337,19 +339,21 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
 
     def test_does_not_reset_responsible_if_no_new_value_is_given(self):
         task = create(Builder('task')
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client='org-unit-1'))
 
         self.prepare_request(task, text=u'I am done!',
                              transition= 'task-transition-in-progress-resolved')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('client1', task.responsible_client)
+        self.assertEquals('org-unit-1', task.responsible_client)
         self.assertEquals(TEST_USER_ID, task.responsible)
 
     def test_updates_responsible_if_new_value_is_given(self):
         create(Builder('ogds_user').id('hugo.boss'))
         task = create(Builder('task')
-                      .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client='org-unit-1'))
 
         self.prepare_request(task, text=u'I am done!',
                              transition='task-transition-reassign',
@@ -365,6 +369,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         task = create(Builder('task')
                       .in_state('task-state-in-progress')
                       .having(issuer=TEST_USER_ID,
+                              responsible_client='org-unit-1',
                               responsible='hugo.boss'))
 
         self.prepare_request(task, text=u'I am done!',

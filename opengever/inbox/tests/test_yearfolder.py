@@ -15,41 +15,41 @@ class TestYearFolderGetter(FunctionalTestCase):
         super(TestYearFolderGetter, self).setUp()
 
         self.inbox_container = create(Builder('inbox_container'))
-        self.client1_inbox = create(Builder('inbox')
-                                    .within(self.inbox_container)
-                                    .having(responsible_org_unit='client1'))
-        self.client2_inbox = create(Builder('inbox')
-                                    .within(self.inbox_container)
-                                    .having(responsible_org_unit='client2'))
+        self.org_unit_1_inbox = create(Builder('inbox')
+                                       .within(self.inbox_container)
+                                       .having(responsible_org_unit='org-unit-1'))
+        self.org_unit_2_inbox = create(Builder('inbox')
+                                       .within(self.inbox_container)
+                                       .having(responsible_org_unit='org-unit-2'))
 
         self.current_year = unicode(date.today().year)
 
     def test_returns_yearfolder_of_the_current_year(self):
         yearfolder = create(Builder('yearfolder')
-                            .within(self.client1_inbox)
+                            .within(self.org_unit_1_inbox)
                             .having(id=self.current_year))
 
         self.assertEquals(self.current_year, yearfolder.getId())
         self.assertEquals(yearfolder,
-                          get_current_yearfolder(inbox=self.client1_inbox))
+                          get_current_yearfolder(inbox=self.org_unit_1_inbox))
 
     def test_creates_yearfolder_of_the_current_year_when_not_exists(self):
-        yearfolder = get_current_yearfolder(inbox=self.client1_inbox)
+        yearfolder = get_current_yearfolder(inbox=self.org_unit_1_inbox)
 
         self.assertEquals(self.current_year, yearfolder.getId())
         self.assertEquals('Closed {}'.format(self.current_year),
                           yearfolder.Title())
 
     def test_observe_current_inbox_when_context_is_given(self):
-        client1_yearfolder = create(Builder('yearfolder')
-                                    .within(self.client1_inbox)
-                                    .having(id=self.current_year))
+        org_unit_1_yearfolder = create(Builder('yearfolder')
+                                       .within(self.org_unit_1_inbox)
+                                       .having(id=self.current_year))
 
         create(Builder('yearfolder')
-               .within(self.client2_inbox)
+               .within(self.org_unit_2_inbox)
                .having(id=self.current_year))
 
-        self.assertEquals(client1_yearfolder,
+        self.assertEquals(org_unit_1_yearfolder,
                           get_current_yearfolder(context=self.portal))
 
     def test_raises_when_both_context_and_inbox_are_missing(self):

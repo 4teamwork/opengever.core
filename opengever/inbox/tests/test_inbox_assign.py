@@ -18,32 +18,32 @@ class TestAssingForwarding(FunctionalTestCase):
 
         create(Builder('org_unit')
                .with_default_groups()
-               .id('client2')
-               .having(title='Client2',
+               .id('org-unit-2')
+               .having(title='Org Unit 2',
                        admin_unit=self.admin_unit))
 
         self.forwarding = create(
             Builder('forwarding')
             .having(title=u'Test forwarding',
-                    responsible_client=u'client1',
-                    responsible=u'inbox:client1')
+                    responsible_client=u'org-unit-1',
+                    responsible=u'inbox:org-unit-1')
             .in_state('forwarding-state-refused'))
 
     @browsing
     def test_updates_responsible_and_responsible_client(self, browser):
-        self.assign_forwarding('client2', 'Fake Response')
+        self.assign_forwarding('org-unit-2', 'Fake Response')
 
-        self.assertEquals('client2', self.forwarding.responsible_client)
-        self.assertEquals('client2',
+        self.assertEquals('org-unit-2', self.forwarding.responsible_client)
+        self.assertEquals('org-unit-2',
                           self.forwarding.get_sql_object().assigned_org_unit)
 
-        self.assertEquals('inbox:client2', self.forwarding.responsible)
-        self.assertEquals('inbox:client2',
+        self.assertEquals('inbox:org-unit-2', self.forwarding.responsible)
+        self.assertEquals('inbox:org-unit-2',
                           self.forwarding.get_sql_object().responsible)
 
     @browsing
     def test_assign_sets_forwarding_in_open_state(self, browser):
-        self.assign_forwarding('client2', 'Fake Response')
+        self.assign_forwarding('org-unit-2', 'Fake Response')
 
         wf_tool = getToolByName(self.portal, 'portal_workflow')
         self.assertEquals('forwarding-state-open',
@@ -54,33 +54,33 @@ class TestAssingForwarding(FunctionalTestCase):
 
     @browsing
     def test_assign_add_corresonding_response(self, browser):
-        self.assign_forwarding('client2', 'Fake Response')
+        self.assign_forwarding('org-unit-2', 'Fake Response')
 
         response = IResponseContainer(self.forwarding)[-1]
 
         responsible_change = {'id': 'responsible',
                               'name': u'label_responsible',
-                              'before': u'inbox:client1',
-                              'after': u'inbox:client2'}
+                              'before': u'inbox:org-unit-1',
+                              'after': u'inbox:org-unit-2'}
 
         responsible_client_change = {'id': 'responsible_client',
                                      'name': u'label_resonsible_client',
-                                     'before': u'client1',
-                                     'after': u'client2'}
+                                     'before': u'org-unit-1',
+                                     'after': u'org-unit-2'}
 
         self.assertEquals([responsible_change, responsible_client_change],
                           response.changes)
 
     @browsing
     def test_activity_is_recorded_correctly(self, browser):
-        self.assign_forwarding('client2', 'Fake Response')
+        self.assign_forwarding('org-unit-2', 'Fake Response')
 
-        self.assertEquals('client2', self.forwarding.responsible_client)
-        self.assertEquals('client2',
+        self.assertEquals('org-unit-2', self.forwarding.responsible_client)
+        self.assertEquals('org-unit-2',
                           self.forwarding.get_sql_object().assigned_org_unit)
 
-        self.assertEquals('inbox:client2', self.forwarding.responsible)
-        self.assertEquals('inbox:client2',
+        self.assertEquals('inbox:org-unit-2', self.forwarding.responsible)
+        self.assertEquals('inbox:org-unit-2',
                           self.forwarding.get_sql_object().responsible)
 
         self.assertEquals(1, len(Activity.query.all()))

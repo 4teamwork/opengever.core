@@ -16,8 +16,8 @@ class TestTaskCssClass(FunctionalTestCase):
         forwarding = create(Builder('globalindex_task')
                             .having(int_id=123, sequence_number=123,
                                     task_type='forwarding_task_type',
-                                    assigned_org_unit='client1',
-                                    issuing_org_unit='client1',
+                                    assigned_org_unit='org-unit-1',
+                                    issuing_org_unit='org-unit-1',
                                     admin_unit_id='foo'))
 
         self.assertEqual('contenttype-opengever-inbox-forwarding',
@@ -26,9 +26,9 @@ class TestTaskCssClass(FunctionalTestCase):
     def test_remote_forwardings_has_forwarding_class(self):
         remote_forwarding = create(Builder('globalindex_task')
                                    .having(int_id=123, sequence_number=123,
-                                           admin_unit_id='client1',
+                                           admin_unit_id='admin-unit-1',
                                            task_type='forwarding_task_type',
-                                           issuing_org_unit='client1',
+                                           issuing_org_unit='org-unit-1',
                                            assigned_org_unit=u'additional'))
 
         self.assertEqual('contenttype-opengever-inbox-forwarding',
@@ -37,9 +37,9 @@ class TestTaskCssClass(FunctionalTestCase):
     def test_subtask_class(self):
         subtask = create(Builder('globalindex_task')
                          .having(int_id=123, sequence_number=123,
-                                 admin_unit_id='client1',
-                                 assigned_org_unit='client1',
-                                 issuing_org_unit='client1',
+                                 admin_unit_id='admin-unit-1',
+                                 assigned_org_unit='org-unit-1',
+                                 issuing_org_unit='org-unit-1',
                                  is_subtask=True))
 
         self.assertEqual('contenttype-opengever-task-sub-task', subtask.get_css_class())
@@ -49,7 +49,7 @@ class TestTaskCssClass(FunctionalTestCase):
                              .having(int_id=123, sequence_number=123,
                                      admin_unit_id='additional',
                                      issuing_org_unit='additional',
-                                     assigned_org_unit='client1'))
+                                     assigned_org_unit='org-unit-1'))
 
         self.assertEqual('contenttype-opengever-task-remote-task', remote_task.get_css_class())
 
@@ -57,8 +57,8 @@ class TestTaskCssClass(FunctionalTestCase):
         remote_task = create(Builder('globalindex_task')
                              .having(int_id=123, sequence_number=123,
                                      is_subtask=True,
-                                     admin_unit_id='client1',
-                                     issuing_org_unit='client1',
+                                     admin_unit_id='admin-unit-1',
+                                     issuing_org_unit='org-unit-1',
                                      assigned_org_unit='additional'))
 
         self.assertEqual('contenttype-opengever-task-sub-task', remote_task.get_css_class())
@@ -69,15 +69,15 @@ class TestTaskCssClass(FunctionalTestCase):
                                      is_subtask=True,
                                      admin_unit_id='additional',
                                      issuing_org_unit='additional',
-                                     assigned_org_unit='client1'))
+                                     assigned_org_unit='org-unit-1'))
         self.assertEqual('contenttype-opengever-task-remote-task', remote_task.get_css_class())
 
     def test_normal_task_classk(self):
         task = create(Builder('globalindex_task')
                       .having(int_id=123, sequence_number=123,
-                              admin_unit_id='client1',
-                              issuing_org_unit='client1',
-                              assigned_org_unit='client1'))
+                              admin_unit_id='admin-unit-1',
+                              issuing_org_unit='org-unit-1',
+                              assigned_org_unit='org-unit-1'))
 
         self.assertEqual('contenttype-opengever-task-task',
                          task.get_css_class())

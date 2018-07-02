@@ -26,7 +26,7 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
                                    deadline=datetime(2010, 1, 1),
                                    issuer=TEST_USER_ID,
                                    responsible=TEST_USER_ID,
-                                   responsible_client='client1'))
+                                   responsible_client='org-unit-1'))
 
     def click_task_button(self, browser, button_class, save_and_reload=True):
         """Visits the overview view on `self.task`, clicks the button
@@ -108,7 +108,8 @@ class TestTaskWorkflow(FunctionalTestCase):
     def test_document_in_a_closed_tasks_are_still_editable(self, browser):
         task = create(Builder('task')
                       .having(issuer=TEST_USER_ID,
-                              responsible=TEST_USER_ID)
+                              responsible_client=u'org-unit-1',
+                              responsible=TEST_USER_ID,)
                       .in_state('task-state-tested-and-closed'))
 
         document = create(Builder('document')
@@ -128,7 +129,9 @@ class TestTaskWorkflow(FunctionalTestCase):
 
         task = create(Builder('task')
                       .within(dossier)
-                      .having(issuer=TEST_USER_ID, responsible=TEST_USER_ID)
+                      .having(issuer=TEST_USER_ID,
+                              responsible_client=u'org-unit-1',
+                              responsible=TEST_USER_ID)
                       .in_state('task-state-tested-and-closed'))
 
         document = create(Builder('document')
@@ -142,7 +145,8 @@ class TestTaskWorkflow(FunctionalTestCase):
             browser.login().open(document, view='edit')
 
     def test_deleting_task_is_only_allowed_for_managers(self):
-        task = create(Builder('task'))
+        task = create(Builder('task')
+                      .having(responsible_client=u'org-unit-1'))
 
         acl_users = api.portal.get_tool('acl_users')
         valid_roles = list(acl_users.portal_role_manager.valid_roles())

@@ -95,6 +95,7 @@ class TestOpenTaskReport(FunctionalTestCase):
                            .having(task_type='comment',
                                    issuer='peter.peter',
                                    responsible='hans.meier',
+                                   responsible_client='org-unit-1',
                                    deadline=date(2014, 07, 01)))
 
         provide_request_layer(self.task.REQUEST, IOpenTaskReportLayer)
@@ -156,6 +157,7 @@ class TestOpenTaskReport(FunctionalTestCase):
                            .having(task_type='comment',
                                    issuer='peter.peter',
                                    responsible='hans.meier',
+                                   responsible_client='org-unit-1',
                                    deadline=date(2014, 07, 01)))
         successor.get_sql_object().admin_unit_id = 'additional'
 
