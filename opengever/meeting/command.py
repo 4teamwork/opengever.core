@@ -9,6 +9,7 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.meeting import _
+from opengever.meeting.connector.actions import UpdateSubmittedDocumentAction
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
@@ -476,6 +477,11 @@ class UpdateSubmittedDocumentCommand(object):
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
         submitted_document.submitted_version = submitted_version
+
+        self.proposal.load_model().connector.dispatch(
+            UpdateSubmittedDocumentAction,
+            document_title=self.document.title,
+            submitted_version=submitted_version)
 
     def show_message(self):
         portal = api.portal.get()

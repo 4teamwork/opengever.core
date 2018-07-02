@@ -38,3 +38,13 @@ class DecideAction(ConnectorAction):
     def execute(self):
         uuid = self.data.get('uuid')
         self.context._decide(uuid)
+        self.context._decide()
+
+
+@Connector.register
+class UpdateSubmittedDocumentAction(ConnectorAction):
+    def execute(self):
+        document_title = self.data.get('document_title')
+        submitted_version = self.data.get('submitted_version')
+        self.context._update_submitted_document(
+            document_title, submitted_version)

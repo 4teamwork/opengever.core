@@ -17,6 +17,7 @@ from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
@@ -340,6 +341,13 @@ class ProposalBase(ModelContainer):
         """
         ProposalDecideActivity(self, self.REQUEST).record()
         IHistory(self).append_record(u'decided', uuid=uuid)
+
+
+    def _update_submitted_document(self, document_title, submitted_version, uuid):
+        """Called by the connector-action UpdateSubmittedDocumentAction
+        """
+        ProposalDocumentUpdatedActivity(
+            self, self.REQUEST, document_title, submitted_version).record()
 
 
 class SubmittedProposal(ProposalBase):
