@@ -167,7 +167,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         self.assertIn(
-            'Checkout and edit',
+            'Edit',
             file_actions,
             )
 
@@ -496,7 +496,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
 
         file_actions = [
-            'Checkout and edit',
+            'Edit',
             'Checkin with comment',
             'Download copy',
             'PDF Preview',

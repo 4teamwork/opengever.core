@@ -119,6 +119,9 @@ class ActionButtonRendererMixin(object):
 
         return not self.is_checked_out_by_another_user()
 
+    def is_checked_out(self):
+        return self.context.is_checked_out()
+
     def is_checked_out_by_another_user(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)

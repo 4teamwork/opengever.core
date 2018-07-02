@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-04-06 06:16+0000\n"
+"POT-Creation-Date: 2018-06-27 08:29+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -433,6 +433,11 @@ msgstr "Herunterladen"
 msgid "label_download_copy"
 msgstr "Kopie herunterladen"
 
+#. Default: "Edit"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_edit"
+msgstr "Erneut Bearbeiten"
+
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
@@ -446,6 +451,7 @@ msgstr "Fremdzeichen"
 
 #. Default: "Keywords"
 #: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/overview.py
 msgid "label_keywords"
 msgstr "Schlagwörter"
 
