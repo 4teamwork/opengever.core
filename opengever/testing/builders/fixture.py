@@ -8,8 +8,8 @@ class FixtureBuilder(object):
 
     For now  this should be considered an experiment that might go away in the
     future.
-
     """
+
     def __init__(self, session):
         self.session = session
         self._with_user = False
@@ -28,12 +28,12 @@ class FixtureBuilder(object):
             'email': 'hugo@boss.ch',
         }
         self._org_unit_args = {
-            'title': u'Client1',
-            'unit_id': u'client1',
+            'title': u'Org Unit 1',
+            'unit_id': u'org-unit-1',
         }
         self._admin_unit_args = {
-            'title': u'Client1',
-            'unit_id': u'client1',
+            'title': u'Admin Unit 1',
+            'unit_id': u'admin-unit-1',
             'public_url': 'http://example.com',
         }
 
@@ -105,10 +105,6 @@ class FixtureBuilder(object):
         builder = Builder('admin_unit').having(
             **self._admin_unit_args).as_current_admin_unit()
 
-        # wrapping org-unit
-        if self._with_org_unit:
-            builder = builder.having(unit_id=self._org_unit_args['unit_id'],
-                                     title=self._org_unit_args['title'])
         return create(builder)
 
     def _create_hugo_boss(self):
@@ -116,5 +112,6 @@ class FixtureBuilder(object):
             return None
 
         return create(Builder('ogds_user').having(**self._hugo_boss_args))
+
 
 builder_registry.register('fixture', FixtureBuilder)
