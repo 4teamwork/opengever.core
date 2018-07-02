@@ -192,19 +192,41 @@ class TestMeetingActivities(IntegrationTestCase):
 
         self.proposal.submit_additional_document(document)
 
+        self.assertEqual(2, Activity.query.count())
+
         # create version 1
         rtool.save(document)
+
+        self.proposal.submit_additional_document(document)
+
+        self.assertEqual(4, Activity.query.count())
+
+        for activity in Activity.query.all()[-2:]:
+            self.assertEquals('proposal-attachment-updated', activity.kind)
+            self.assertEquals('Attachment updated', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Submitted document {} updated to version 1'.format(document.title),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_submit_attachment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        document = self.subdocument
+
+        self.assertEqual(0, Activity.query.count())
 
         self.proposal.submit_additional_document(document)
 
         self.assertEqual(2, Activity.query.count())
 
         for activity in Activity.query.all():
-            self.assertEquals('proposal-attachment-updated', activity.kind)
-            self.assertEquals('Attachment updated', activity.label)
+            self.assertEquals('proposal-additional-documents-submitted', activity.kind)
+            self.assertEquals('Additional documents submitted', activity.label)
             self.assertEquals(self.proposal.title, activity.title)
             self.assertEquals(
-                u'Submitted document {} updated to version 1'.format(document.title),
+                u'Document {} submitted'.format(document.title),
                 activity.summary)
 
     def assertSubscribersForResource(self, subscribers, resource):

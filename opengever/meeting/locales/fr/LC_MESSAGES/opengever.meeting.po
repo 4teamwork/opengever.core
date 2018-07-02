@@ -1449,6 +1449,11 @@ msgstr "En modification"
 msgid "periods"
 msgstr "Périodes"
 
+#. Default: "Document ${title} submitted"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_submitted"
+msgstr ""
+
 #. Default: "Submitted document ${title} updated to version ${version}"
 #: ./opengever/meeting/activity/activities.py
 msgid "proposal_activity_label_document_updated"

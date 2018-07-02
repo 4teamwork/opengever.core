@@ -10,6 +10,7 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.meeting import _
+from opengever.meeting.activity.activities import ProposalDocumentSubmittedActivity
 from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
@@ -574,6 +575,9 @@ class CopyProposalDocumentCommand(object):
             document_title=self.document.title,
             submitted_version=submitted_version,
         )
+
+        ProposalDocumentSubmittedActivity(
+            self.proposal, self.proposal.REQUEST, self.document.title).record()
 
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
