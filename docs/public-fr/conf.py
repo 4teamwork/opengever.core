@@ -124,9 +124,10 @@ html_theme_options = {
     'logo': 'img/gever_logo.png',
     'analytics_id': 'UA-7414398-7',
     'fixed_sidebar': False,
-    'extra_nav_links': {'Produktseite': 'https://onegovgever.ch',
-                        'Feedback Forum': 'https://feedback.onegovgever.ch',
-                        'Online Demo': 'https://demo.onegovgever.ch'},
+    'extra_nav_links': {u'Site du produit': 'https://onegovgever.ch',
+                        u'Forum de feedback': 'https://feedback.onegovgever.ch',
+                        u'Démo en ligne': 'https://demo.onegovgever.ch',
+                        u'Documentation en allemand': 'https://docs.onegovgever.ch'},
     'sidebar_width': '280px',
     'page_width': '1040px',
 }
