@@ -94,3 +94,30 @@ class ProposalDecideActivity(ProposalTransitionActivity):
         return self.translate_to_all_languages(
             _('proposal_history_label_decided', u'Proposal decided by ${user}',
               mapping={'user': actor_link()}))
+
+
+class ProposalDocumentUpdatedActivity(BaseActivity):
+    """Activity representation for updating a proposals document.
+    """
+    kind = 'proposal-attachment-updated'
+
+    def __init__(self, context, request, document_title, submitted_version):
+        super(ProposalDocumentUpdatedActivity, self).__init__(context, request)
+        self.document_title = document_title
+        self.submitted_version = submitted_version
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _(u'proposal_activity_label_document_updated',
+              u'Submitted document ${title} updated to version ${version}',
+              mapping={'title': self.document_title or '',
+                       'version': self.submitted_version}))
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(ACTIVITY_TRANSLATIONS[self.kind])
+
+    @property
+    def description(self):
+        return {}

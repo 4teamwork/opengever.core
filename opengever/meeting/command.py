@@ -10,6 +10,7 @@ from opengever.base.transport import REQUEST_KEY
 from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.meeting import _
+from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
@@ -492,6 +493,10 @@ class UpdateSubmittedDocumentCommand(object):
             'submitted_version': submitted_version,
             'uuid': record.uuid,
             })
+
+        ProposalDocumentUpdatedActivity(
+            self.proposal, self.proposal.REQUEST,
+            self.document.title, submitted_version).record()
 
         Transporter().transport_to(
             self.document,
