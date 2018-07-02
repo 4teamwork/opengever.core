@@ -11,9 +11,10 @@ from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
+from Products.Five.browser import BrowserView
 
 
-class Overview(GeverTabMixin):
+class Overview(BrowserView, GeverTabMixin):
     """Provide / override tabbedview methods for task overviews."""
 
     def documents(self):

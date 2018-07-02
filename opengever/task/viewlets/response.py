@@ -30,9 +30,10 @@ class ResponseView(ViewletBase, Base):
                 response=response,
                 text=transforms.convertTo(
                     'text/html', response.text,
-                    mimetype='text/x-web-intelligent'),
+                    mimetype='text/x-web-intelligent').getData(),
                 edit_link=self.edit_link(id),
-                delete_link=self.delete_link(id))
+                delete_link=self.delete_link(id)
+            )
 
             responses.append(info)
 
