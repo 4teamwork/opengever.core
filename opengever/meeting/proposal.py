@@ -18,6 +18,7 @@ from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalDocumentSubmittedActivity
 from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
@@ -363,6 +364,12 @@ class ProposalBase(ModelContainer):
         ProposalDocumentUpdatedActivity(
             self, self.REQUEST, document_title, submitted_version).record()
 
+    def _submit_document(self, document_title):
+        """Called by the connector-action SubmitDocumentAction
+        """
+        ProposalDocumentSubmittedActivity(
+            self, self.REQUEST, document_title).record()
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -680,6 +687,8 @@ class Proposal(ProposalBase):
                 document,
                 target_path=proposal_model.submitted_physical_path,
                 target_admin_unit_id=proposal_model.submitted_admin_unit_id)
+
+            proposal_model.copy_proposal_document(document)
 
             if not self.relatedItems:
                 # The missing_value attribute of a z3c-form field is used

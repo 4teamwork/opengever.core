@@ -43,3 +43,10 @@ class UpdateSubmittedDocumentAction(ConnectorAction):
         submitted_version = self.data.get('submitted_version')
         self.context._update_submitted_document(
             document_title, submitted_version)
+
+
+@Connector.register
+class SubmitDocumentAction(ConnectorAction):
+    def execute(self):
+        document_title = self.data.get('document_title')
+        self.context._submit_document(document_title)

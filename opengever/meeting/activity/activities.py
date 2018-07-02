@@ -124,3 +124,28 @@ class ProposalDocumentUpdatedActivity(BaseActivity):
     @property
     def description(self):
         return {}
+
+
+class ProposalDocumentSubmittedActivity(BaseActivity):
+    """Activity representation for updating a proposals document.
+    """
+    kind = 'proposal-additional-documents-submitted'
+
+    def __init__(self, context, request, document_title):
+        super(ProposalDocumentSubmittedActivity, self).__init__(context, request)
+        self.document_title = document_title
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _(u'proposal_activity_label_document_submitted',
+              u'Document ${title} submitted',
+              mapping={'title': self.document_title or ''}))
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(ACTIVITY_TRANSLATIONS[self.kind])
+
+    @property
+    def description(self):
+        return {}
