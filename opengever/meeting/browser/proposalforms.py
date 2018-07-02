@@ -64,6 +64,7 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
 
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
+        self.widgets['excerpts'].mode = HIDDEN_MODE
         self.widgets['relatedItems'].mode = HIDDEN_MODE
 
         if self.context.get_state() is not self.context.load_model().STATE_PENDING:
