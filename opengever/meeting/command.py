@@ -26,6 +26,7 @@ from opengever.meeting.sablon import Sablon
 from opengever.ogds.base.utils import decode_for_json
 from plone import api
 from plone.memoize import instance
+from uuid import uuid4
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -457,22 +458,11 @@ class UpdateSubmittedDocumentCommand(object):
     def execute(self):
         submitted_version = self.document.get_current_version_id()
 
-        record = IHistory(self.proposal).append_record(
-            u'document_updated',
-            document_title=self.document.title,
-            submitted_version=submitted_version,
-        )
-        history_data = advancedjson.dumps({
-            'submitted_version': submitted_version,
-            'uuid': record.uuid,
-            })
-
         Transporter().transport_to(
             self.document,
             self.submitted_document.submitted_admin_unit_id,
             self.submitted_document.submitted_physical_path,
-            view='update-submitted-document',
-            history_data=history_data)
+            view='update-submitted-document')
 
         submitted_document = SubmittedDocument.query.get_by_source(
             self.proposal, self.document)
@@ -481,7 +471,8 @@ class UpdateSubmittedDocumentCommand(object):
         self.proposal.load_model().connector.dispatch(
             UpdateSubmittedDocumentAction,
             document_title=self.document.title,
-            submitted_version=submitted_version)
+            submitted_version=submitted_version,
+            uuid=uuid4())
 
     def show_message(self):
         portal = api.portal.get()

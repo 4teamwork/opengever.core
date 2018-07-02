@@ -348,6 +348,11 @@ class ProposalBase(ModelContainer):
         """
         ProposalDocumentUpdatedActivity(
             self, self.REQUEST, document_title, submitted_version).record()
+        IHistory(self).append_record(
+            u'document_updated',
+            uuid=uuid,
+            document_title=document_title,
+            submitted_version=submitted_version)
 
 
 class SubmittedProposal(ProposalBase):

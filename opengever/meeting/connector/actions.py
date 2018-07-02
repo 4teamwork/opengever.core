@@ -46,5 +46,6 @@ class UpdateSubmittedDocumentAction(ConnectorAction):
     def execute(self):
         document_title = self.data.get('document_title')
         submitted_version = self.data.get('submitted_version')
+        uuid = self.data.get('uuid')
         self.context._update_submitted_document(
-            document_title, submitted_version)
+            document_title, submitted_version, uuid)

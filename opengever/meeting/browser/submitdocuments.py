@@ -190,19 +190,9 @@ class UpdateSubmittedDocumentView(BrowserView):
         if self.context.is_checked_out():
             raise Unauthorized()
 
-        submitted_proposal = aq_parent(aq_inner(self.context))
-        history_data = advancedjson.loads(self.request.get('history_data'))
-
         with elevated_privileges():
             transporter = Transporter()
             transporter.update(self.context, self.request)
-
-            IHistory(submitted_proposal).append_record(
-                u'document_updated',
-                document_title=self.context.title,
-                submitted_version=history_data['submitted_version'],
-                uuid=history_data['uuid']
-            )
 
             portal_path = '/'.join(api.portal.get().getPhysicalPath())
             intids = getUtility(IIntIds)
