@@ -69,7 +69,7 @@ class TestDispositionNotifications(FunctionalTestCase):
         activity = Activity.query.one()
         self.assertEquals('disposition-added', activity.kind)
         self.assertEquals(
-            u'New disposition added by Test User on admin unit Client1',
+            u'New disposition added by Test User on admin unit Admin Unit 1',
             activity.summary)
         self.assertEquals(u'Disposition added', activity.label)
         self.assertIsNone(activity.description)

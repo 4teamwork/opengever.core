@@ -47,7 +47,7 @@ class TestInbox(FunctionalTestCase):
 
     def test_get_responsible_org_unit_fetch_configured_org_unit(self):
         inbox = create(Builder('inbox').
-                       having(responsible_org_unit='client1'))
+                       having(responsible_org_unit='org-unit-1'))
 
         self.assertEqual(self.org_unit, inbox.get_responsible_org_unit())
 

@@ -31,7 +31,7 @@ SAMPLE_MEETING_DATA = {
         'title': u'R\xfccktritt Hans Muster',
         'is_paragraph': False,
         'decision_number': 2}],
-    'mandant': {'name': u'Client1'},
+    'mandant': {'name': u'Admin Unit 1'},
     'meeting': {'date': u'Dec 13, 2011',
                 'end_time': u'11:45 AM',
                 'start_time': u'09:30 AM',

@@ -145,7 +145,7 @@ class TestDeadlineModifierController(FunctionalTestCase):
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
         task = create(Builder('task')
-                      .having(issuer='inbox:client1', responsible=TEST_USER_ID)
+                      .having(issuer='inbox:org-unit-1', responsible=TEST_USER_ID)
                       .in_progress())
 
         modifier = IDeadlineModifier(task)

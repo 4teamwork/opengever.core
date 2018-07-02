@@ -43,7 +43,7 @@ class TestOguidFunctional(FunctionalTestCase):
         int_id = intids.getId(obj)
         oguid = Oguid.for_object(obj)
 
-        self.assertEqual('client1:{}'.format(int_id), oguid)
+        self.assertEqual('admin-unit-1:{}'.format(int_id), oguid)
 
     def test_oguid_get_url_same_admin_unit(self):
         obj = create(Builder('dossier'))

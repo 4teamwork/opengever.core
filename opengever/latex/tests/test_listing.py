@@ -56,7 +56,7 @@ class TestDossierListing(BaseLatexListingTest):
         responsible = self.listing.get_responsible(
             obj2brain(self.dossier))
 
-        self.assertEquals(u'Client1 / Boss Hugo (hugo.boss)', responsible)
+        self.assertEquals(u'Org Unit 1 / Boss Hugo (hugo.boss)', responsible)
 
     def test_get_repository_title_returns_the_title_of_the_first_parental_repository_folder(self):
         self.assertEquals(
@@ -99,21 +99,21 @@ class TestDossierListing(BaseLatexListingTest):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assert_row_values(
-            ['Client1 1.1 / 1',
+            ['Org Unit 1 1.1 / 1',
              '1',
              '1.1. Repository XY',
              'Dossier A',
-             'Client1 / Boss Hugo (hugo.boss)',
+             'Org Unit 1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
              '31.12.2013'], rows[0])
 
         self.assert_row_values(
-            ['Client1 1.1 / 1.1',
+            ['Org Unit 1 1.1 / 1.1',
              '2',
              '1.1. Repository XY',
              'Dossier B',
-             'Client1 / Boss Hugo (hugo.boss)',
+             'Org Unit 1 / Boss Hugo (hugo.boss)',
              'dossier-state-active',
              '01.11.2013',
              ''], rows[1])
@@ -193,7 +193,7 @@ class TestSubDossierListing(BaseLatexListingTest):
         self.assert_row_values(
             ['1',
              'Dossier A',
-             'Client1 / Boss Hugo (hugo.boss)',
+             'Admin Unit 1 / Boss Hugo (hugo.boss)',
              'dossier-state-resolved',
              '01.11.2013',
              '31.12.2013'], rows[0])
@@ -236,7 +236,7 @@ class TestTaskListings(BaseLatexListingTest):
 
         self.hugo = create(Builder('fixture').with_hugo_boss())
 
-        self.org_unit_2 = create(Builder('org_unit').id('client2')
+        self.org_unit_2 = create(Builder('org_unit').id('org-unit-2')
                                  .having(admin_unit=self.admin_unit))
 
         self.task = create(Builder('task')
@@ -274,8 +274,8 @@ class TestTaskListings(BaseLatexListingTest):
         self.assert_row_values(
             ['1',
              'For approval',
-             'Client1 / Boss Hugo',
-             'Client1 / Boss Hugo',
+             'Org Unit 1 / Boss Hugo',
+             'Org Unit 1 / Boss Hugo',
              'task-state-in-progress',
              'Task A',
              '06.11.2013'], rows[0])

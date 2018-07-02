@@ -217,7 +217,7 @@ class TestTaskIntegration(FunctionalTestCase):
         self.assertEquals(0, len(IResponseContainer(maintask)))
 
         maintask.REQUEST.environ['X_OGDS_AC'] = None
-        maintask.REQUEST.environ['X_OGDS_AUID'] = 'client1'
+        maintask.REQUEST.environ['X_OGDS_AUID'] = 'org-unit-1'
         create(Builder('task').within(maintask).titled('subtask'))
         self.assertEquals(0, len(IResponseContainer(maintask)))
 
@@ -241,8 +241,8 @@ class TestTaskIntegration(FunctionalTestCase):
     def test_responsible_client_for_multiple_orgunits(self, browser):
         create(Builder('org_unit')
                .with_default_groups()
-               .id('client2')
-               .having(title='Client2',
+               .id('org-unit-2')
+               .having(title='Org Unit 2',
                        admin_unit=self.admin_unit))
 
         dossier = create(Builder('dossier'))
@@ -259,7 +259,7 @@ class TestTaskIntegration(FunctionalTestCase):
 
         task = dossier.objectValues()[0]
         self.assertEquals(
-            'client1',
+            'org-unit-1',
             task.responsible_client,
             'The client should be stored after submitting the form')
         self.assertEquals(
@@ -271,8 +271,8 @@ class TestTaskIntegration(FunctionalTestCase):
     def test_create_a_task_for_every_selected_person_with_multiple_orgunits(self, browser):
         client2 = create(Builder('org_unit')
                          .with_default_groups()
-                         .id('client2')
-                         .having(title='Client2',
+                         .id('org-unit-2')
+                         .having(title='Org Unit 2',
                                  admin_unit=self.admin_unit))
         user = create(Builder('ogds_user')
                       .assign_to_org_units([client2])
@@ -302,9 +302,9 @@ class TestTaskIntegration(FunctionalTestCase):
                        dossier.objectValues())
         self.assertEquals(2, len(tasks), 'Expect 2 tasks')
         self.assertEquals(TEST_USER_ID, tasks[0].responsible)
-        self.assertEquals('client1', tasks[0].responsible_client)
+        self.assertEquals('org-unit-1', tasks[0].responsible_client)
         self.assertEquals(user.userid, tasks[1].responsible)
-        self.assertEquals('client2', tasks[1].responsible_client)
+        self.assertEquals('org-unit-2', tasks[1].responsible_client)
 
         activities = Activity.query.all()
         self.assertEquals(2, len(activities))
@@ -339,9 +339,9 @@ class TestTaskIntegration(FunctionalTestCase):
         tasks = dossier.objectValues()
         self.assertEquals(2, len(tasks), 'Expect 2 tasks')
         self.assertEquals(TEST_USER_ID, tasks[0].responsible)
-        self.assertEquals('client1', tasks[0].responsible_client)
+        self.assertEquals('org-unit-1', tasks[0].responsible_client)
         self.assertEquals(user.userid, tasks[1].responsible)
-        self.assertEquals('client1', tasks[1].responsible_client)
+        self.assertEquals('org-unit-1', tasks[1].responsible_client)
 
         activities = Activity.query.all()
         self.assertEquals(2, len(activities))

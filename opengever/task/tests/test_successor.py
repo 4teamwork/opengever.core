@@ -27,10 +27,10 @@ class TestSuccessorTaskController(FunctionalTestCase):
         task2 = create(Builder('task'))
 
         self.assertEquals(
-            u'client1:%s' % (intids.getId(task1)),
+            u'admin-unit-1:%s' % (intids.getId(task1)),
             ISuccessorTaskController(task1).get_oguid())
         self.assertEquals(
-            u'client1:%s' % (intids.getId(task2)),
+            u'admin-unit-1:%s' % (intids.getId(task2)),
             ISuccessorTaskController(task2).get_oguid())
 
     def test_oguid_by_path_returns_the_oguid_of_the_accordant_task(self):

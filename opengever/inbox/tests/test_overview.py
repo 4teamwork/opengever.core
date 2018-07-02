@@ -17,7 +17,7 @@ class TestBaseInboxOverview(FunctionalTestCase):
         self.user2, self.org_unit2, self.admin_unit2 = create(
             Builder('fixture')
             .with_user(userid='hans.muster')
-            .with_org_unit(unit_id=u'client2')
+            .with_org_unit(unit_id=u'org-unit-2')
             .with_admin_unit())
 
         self.user, self.org_unit, self.admin_unit = create(
@@ -95,14 +95,14 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
         create(Builder('task')
                .within(self.inbox)
                .with_modification_date(DateTime(2014, 1, 1))
-               .having(responsible='inbox:client1')
+               .having(responsible='inbox:org-unit-1')
                .titled(u'Task x'))
         create(Builder('forwarding')
                .within(self.inbox)
                .with_modification_date(DateTime(2014, 1, 2))
-               .having(responsible='inbox:client1')
+               .having(responsible='inbox:org-unit-1')
                .titled(u'Forwarding x'))
-        create(Builder('forwarding').having(responsible='inbox:client2')
+        create(Builder('forwarding').having(responsible='inbox:org-unit-2')
                                     .titled(u'Forwarding Invisible'))
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
@@ -115,12 +115,12 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
         for i in range(1, 6):
             create(Builder('forwarding')
                    .within(self.inbox)
-                   .having(responsible='inbox:client1')
+                   .having(responsible='inbox:org-unit-1')
                    .with_modification_date(DateTime(2010, 1, 1) + i)
                    .titled(u'Task %s' % i))
         create(Builder('task')
                .within(self.inbox)
-               .having(responsible='inbox:client1')
+               .having(responsible='inbox:org-unit-1')
                .with_modification_date(DateTime(2009, 12, 1))
                .titled(u'Task 6'))
 
@@ -132,12 +132,12 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
     @browsing
     def test_lists_only_the_local_one_when_having_predecessor_successor_couples(self, browser):
         predecessor = create(Builder('forwarding')
-                             .having(responsible='inbox:client2',
-                                     assigned_client='client2')
+                             .having(responsible='inbox:org-unit-2',
+                                     assigned_client='org-unit-2')
                              .titled(u'Predecessor'))
         create(Builder('forwarding')
-               .having(responsible='inbox:client1',
-                       assigned_client='client1')
+               .having(responsible='inbox:org-unit-1',
+                       assigned_client='org-unit-1')
                .successor_from(predecessor)
                .titled(u'Successor'))
 
@@ -149,10 +149,10 @@ class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
     @browsing
     def test_list_only_active_tasks(self, browser):
         create(Builder('forwarding')
-               .having(responsible='inbox:client1')
+               .having(responsible='inbox:org-unit-1')
                .titled('Active'))
         closed = create(Builder('forwarding')
-                        .having(responsible='inbox:client1')
+                        .having(responsible='inbox:org-unit-1')
                         .in_state('forwarding-state-closed')
                         .titled('Closed'))
         sync_task(closed, None)
@@ -171,14 +171,14 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
         create(Builder('task')
                .with_modification_date(DateTime(2014, 1, 1))
                .within(self.inbox)
-               .having(issuer='inbox:client1')
+               .having(issuer='inbox:org-unit-1')
                .titled('A Task'))
         create(Builder('forwarding')
                .with_modification_date(DateTime(2014, 2, 1))
                .within(self.inbox)
-               .having(issuer='inbox:client1')
+               .having(issuer='inbox:org-unit-1')
                .titled('A Forwarding'))
-        create(Builder('forwarding').having(issuer='inbox:client2'))
+        create(Builder('forwarding').having(issuer='inbox:org-unit-2'))
 
         browser.login().open(self.inbox, view='tabbedview_view-overview')
         self.assertSequenceEqual(
@@ -190,12 +190,12 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
         for i in range(1, 6):
             create(Builder('forwarding')
                    .within(self.inbox)
-                   .having(issuer='inbox:client1')
+                   .having(issuer='inbox:org-unit-1')
                    .with_modification_date(DateTime(2010, 1, 1) + i)
                    .titled(u'Task %s' % i))
         create(Builder('task')
                .within(self.inbox)
-               .having(issuer='inbox:client1')
+               .having(issuer='inbox:org-unit-1')
                .with_modification_date(DateTime(2009, 12, 1))
                .titled(u'Task 6'))
 
@@ -207,10 +207,10 @@ class TestInboxOverviewIssuedInboxTasks(TestBaseInboxOverview):
     @browsing
     def test_list_only_active_tasks(self, browser):
         create(Builder('forwarding')
-               .having(issuer='inbox:client1')
+               .having(issuer='inbox:org-unit-1')
                .titled('Active'))
         closed = create(Builder('forwarding')
-                        .having(issuer='inbox:client1')
+                        .having(issuer='inbox:org-unit-1')
                         .in_state('forwarding-state-closed')
                         .titled('Closed'))
         sync_task(closed, None)
