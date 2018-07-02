@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-02 09:48+0000\n"
+"POT-Creation-Date: 2018-07-02 10:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1390,6 +1390,11 @@ msgstr ""
 #. Default: "Periods"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "periods"
+msgstr ""
+
+#. Default: "Document ${title} submitted"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_submitted"
 msgstr ""
 
 #. Default: "Submitted document ${title} updated to version ${version}"

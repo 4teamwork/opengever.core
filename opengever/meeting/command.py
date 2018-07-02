@@ -10,6 +10,7 @@ from opengever.base.transport import Transporter
 from opengever.document.versioner import Versioner
 from opengever.meeting import _
 from opengever.meeting.connector.actions import UpdateSubmittedDocumentAction
+from opengever.meeting.connector.actions import SubmitDocumentAction
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.exceptions import MissingProtocolHeaderTemplate
@@ -544,6 +545,11 @@ class CopyProposalDocumentCommand(object):
             'submitted_version': submitted_version,
             'uuid': record.uuid,
             })
+
+        self.proposal.load_model().connector.dispatch(
+            SubmitDocumentAction,
+            document_title=self.document.title,
+            submitted_version=submitted_version)
 
         return SubmitDocumentCommand(
             self.document, target_admin_unit_id, target_path,
