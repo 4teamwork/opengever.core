@@ -125,3 +125,32 @@ ACTIVITY_TRANSLATIONS = {
         'proposal-additional-documents-submitted',
         default=u'Additional documents submitted'),
 }
+
+# TODO: There are too many places where the activites are defined:
+# - ACTIVITE_TRANSLATIONS
+# - ACTIVITE_ICONS
+# - activity/hooks.py
+# - activity/browser/settings.py
+# - opengever/task/response_description.py
+#
+# All the necessary information about an activity should be defined in one place
+# and should be used everywhere.
+#
+# i.e. ACTIVITIES = {
+#     'task-added': {
+#         'id': 'task-added',
+#         'css_class': 'created',
+#         'translation': _('task-added'),
+#         'category': 'task'
+#     }
+# }
+#
+ACTIVITIES_ICONS = {
+    'proposal-transition-reject': 'rejected',
+    'proposal-transition-schedule': 'scheduled',
+    'proposal-transition-decide': 'decided',
+    'proposal-transition-submit': 'submitted',
+    'proposal-commented': 'commented',
+    'proposal-attachment-updated': 'documentUpdated',
+    'proposal-additional-documents-submitted': 'documentAdded',
+}

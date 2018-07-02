@@ -56,7 +56,13 @@
     &.reactivated:before { content: $reactivate; }
     &.refuse:before { content: $refuse; }
     &.delegate:before { content: $delegate; }
-
+    &.submitted:before { content: $submit; }
+    &.rejected:before { content: $reject; }
+    &.scheduled:before { content: $schedule; }
+    &.decided:before { content: $decided; }
+    &.commented:before { content: $comment; }
+    &.documentUpdated:before { content: $updateDocument; }
+    &.documentAdded:before { content: $addDocument; }
   }
 
   .action {
