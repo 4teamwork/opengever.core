@@ -18,6 +18,7 @@ from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.activity.activities import ProposalSubmittedActivity
@@ -356,6 +357,12 @@ class ProposalBase(ModelContainer):
         """
         ProposalDecideActivity(self, self.REQUEST).record()
 
+    def _update_submitted_document(self, document_title, submitted_version):
+        """Called by the connector-action UpdateSubmittedDocumentAction
+        """
+        ProposalDocumentUpdatedActivity(
+            self, self.REQUEST, document_title, submitted_version).record()
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -665,7 +672,8 @@ class Proposal(ProposalBase):
             else:
                 command = UpdateSubmittedDocumentCommand(
                     self, document, submitted_document)
-
+                proposal_model.update_submitted_document(
+                    document, submitted_document)
         else:
             command = CopyProposalDocumentCommand(
                 self,

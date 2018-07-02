@@ -9,6 +9,7 @@ from opengever.meeting.connector.actions import DecideAction
 from opengever.meeting.connector.actions import RejectAction
 from opengever.meeting.connector.actions import ScheduleAction
 from opengever.meeting.connector.actions import SubmitAction
+from opengever.meeting.connector.actions import UpdateSubmittedDocumentAction
 from opengever.meeting.connector.connector import Connector
 from opengever.meeting.connector.connector import ConnectorPath
 from opengever.meeting.interfaces import IHistory
@@ -427,6 +428,11 @@ class Proposal(Base):
 
     def submit(self, **kwargs):
         self.connector.dispatch(SubmitAction, **kwargs)
+
+    def update_submitted_document(self, document, submitted_document):
+        self.connector.dispatch(UpdateSubmittedDocumentAction,
+                                document_title=document.title,
+                                submitted_version=document.get_current_version_id())
 
     @property
     def connector(self):

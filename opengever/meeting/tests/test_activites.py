@@ -178,6 +178,35 @@ class TestMeetingActivities(IntegrationTestCase):
                 u'Proposal decided by {}'.format(actor_link()),
                 activity.summary)
 
+    @browsing
+    def test_record_activity_on_update_attachment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        rtool = api.portal.get_tool('portal_repository')
+
+        document = self.subdocument
+
+        self.assertEqual(0, Activity.query.count())
+
+        # create init version
+        rtool.save(document)
+
+        self.proposal.submit_additional_document(document)
+
+        # create version 1
+        rtool.save(document)
+
+        self.proposal.submit_additional_document(document)
+
+        self.assertEqual(2, Activity.query.count())
+
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-attachment-updated', activity.kind)
+            self.assertEquals('Attachment updated', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Submitted document {} updated to version 1'.format(document.title),
+                activity.summary)
+
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
             [subscriber.id for subscriber in subscribers],
