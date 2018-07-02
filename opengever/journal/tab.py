@@ -1,4 +1,3 @@
-from BeautifulSoup import BeautifulSoup
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
@@ -11,6 +10,7 @@ from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
+from opengever.tabbedview.helper import tooltip_helper
 from plone import api
 from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -21,12 +21,6 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
 import cPickle
-
-
-def tooltip_helper(item, value):
-    text = ''.join(
-        BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
-    return '<span title="%s">%s</span>' % (text.encode('utf-8'), value)
 
 
 def title_helper(item, value):
