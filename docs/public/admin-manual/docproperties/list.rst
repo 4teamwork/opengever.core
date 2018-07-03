@@ -49,6 +49,14 @@ Doc-Properties Dokument:
 - ``ogg.document.delivery_date``
 - ``ogg.document.version_number``
 
+Doc-Properties Sitzung Antrag/Traktandum:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.meeting.decision_number`` - Beschlussnummer des Traktandums
+- ``ogg.meeting.agenda_item_number`` - Nummer des Traktandums in dieser Sitzung
+- ``ogg.meeting.proposal_title`` - Titel des Antrags
+- ``ogg.meeting.proposal_description`` - Beschreibung des Antrags
+- ``ogg.meeting.proposal_state`` - Status des Antrags
+
 Neu kann beim Erstellen eines Dokumentes ab Vorlage ein Empfänger angegeben werden. Dies setzt jedoch voraus, dass das neue SQL-basierte Kontaktmodul verwendet wird. Von diesem Empfänger werden die folgenden Doc-Properties geschrieben:
 
 Doc-Properties alle Empfänger:
