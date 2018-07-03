@@ -99,6 +99,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                                     .within(self.container))
         self.committee_model = self.committee.load_model()
         self.period = create(Builder('period').having(
+            title=u'2010',
             date_from=date(2010, 1, 1),
             date_to=date(2010, 12, 31),
             committee=self.committee_model))
@@ -193,6 +194,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                                           .within(self.container))
         self.other_committee_model = self.other_committee.load_model()
         self.other_period = create(Builder('period').having(
+            title=u'2010',
             date_from=date(2010, 1, 1),
             date_to=date(2010, 12, 31),
             committee=self.other_committee_model))
@@ -242,7 +244,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         self.assertDictContainsSubset(
             {'status': '200 Ok',
              'content-disposition': 'attachment; '
-                'filename="Alphabetical Toc 2016 my-committee.docx"',
+                'filename="Alphabetical Toc 2010 my-committee.docx"',
              'x-frame-options': 'SAMEORIGIN',
              'content-type': MIME_DOCX,
              'x-theme-disabled': 'True'},
@@ -353,7 +355,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
         self.assertDictContainsSubset(
             {'status': '200 Ok',
              'content-disposition': 'attachment; '
-                'filename="Repository Toc 2016 my-committee.docx"',
+                'filename="Repository Toc 2010 my-committee.docx"',
              'x-frame-options': 'SAMEORIGIN',
              'content-type': MIME_DOCX,
              'x-theme-disabled': 'True'},
