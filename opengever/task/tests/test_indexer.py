@@ -14,8 +14,8 @@ class TestTaskIndexers(FunctionalTestCase):
 
         create(Builder('org_unit')
                .with_default_groups()
-               .id('client2')
-               .having(title='Client2', admin_unit=self.admin_unit))
+               .id('org-unit-2')
+               .having(title='Org Unit 2', admin_unit=self.admin_unit))
 
         self.task = create(Builder("task")
                            .titled("Test task 1")
@@ -35,14 +35,14 @@ class TestTaskIndexers(FunctionalTestCase):
 
     def test_assigned_client(self):
         self.assertEquals(
-            obj2brain(self.task).assigned_client, 'client1')
+            obj2brain(self.task).assigned_client, 'org-unit-1')
 
         self.task.responsible = 'hugo.boss'
-        self.task.responsible_client = 'client2'
+        self.task.responsible_client = 'org-unit-2'
         self.task.reindexObject()
 
         self.assertEquals(
-            obj2brain(self.task).assigned_client, 'client2')
+            obj2brain(self.task).assigned_client, 'org-unit-2')
 
     def test_is_subtask(self):
         self.subtask = create(Builder("task").within(self.task)

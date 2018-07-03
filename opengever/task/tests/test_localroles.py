@@ -100,17 +100,17 @@ class TestLocalRolesSetter(FunctionalTestCase):
                       .within(dossier)
                       .relate_to(document)
                       .having(responsible='hugo.boss',
-                              responsible_client='client1'))
+                              responsible_client='org-unit-1'))
 
         self.assertEquals(
             ('Editor', ),
-            task.get_local_roles_for_userid('client1_inbox_users'))
+            task.get_local_roles_for_userid('org-unit-1_inbox_users'))
         self.assertEquals(
             ('Reader', ),
-            document.get_local_roles_for_userid('client1_inbox_users'))
+            document.get_local_roles_for_userid('org-unit-1_inbox_users'))
         self.assertEquals(
             ('Contributor', ),
-            dossier.get_local_roles_for_userid('client1_inbox_users'))
+            dossier.get_local_roles_for_userid('org-unit-1_inbox_users'))
 
     def test_inbox_group_has_no_additional_localroles_in_a_oneclient_setup(self):
         dossier = create(Builder('dossier'))
@@ -119,34 +119,34 @@ class TestLocalRolesSetter(FunctionalTestCase):
                       .within(dossier)
                       .relate_to(document)
                       .having(responsible='hugo.boss',
-                              responsible_client='client1'))
+                              responsible_client='org-unit-1'))
 
         self.assertEquals(
             (),
-            task.get_local_roles_for_userid('client1_inbox_users'))
+            task.get_local_roles_for_userid('org-unit-1_inbox_users'))
         self.assertEquals(
             (),
-            document.get_local_roles_for_userid('client1_inbox_users'))
+            document.get_local_roles_for_userid('org-unit-1_inbox_users'))
         self.assertEquals(
             (),
-            dossier.get_local_roles_for_userid('client1_inbox_users'))
+            dossier.get_local_roles_for_userid('org-unit-1_inbox_users'))
 
     def test_use_inbox_group_when_inbox_is_responsible(self):
         dossier = create(Builder('dossier'))
         task = create(Builder('task')
                       .within(dossier)
-                      .having(responsible='inbox:client1'))
+                      .having(responsible='inbox:org-unit-1'))
 
         self.assertEquals(
             ('Editor', ),
-            task.get_local_roles_for_userid('client1_inbox_users'))
+            task.get_local_roles_for_userid('org-unit-1_inbox_users'))
 
         self.assertEquals(
             ('Contributor', ),
-            dossier.get_local_roles_for_userid('client1_inbox_users'))
+            dossier.get_local_roles_for_userid('org-unit-1_inbox_users'))
 
         self.assertEquals(
-            (), task.get_local_roles_for_userid('inbox:client1'))
+            (), task.get_local_roles_for_userid('inbox:org-unit-1'))
 
     @browsing
     def test_responsible_can_edit_related_documents_that_are_inside_a_task(self, browser):
@@ -162,7 +162,7 @@ class TestLocalRolesSetter(FunctionalTestCase):
         create(Builder('task')
                .within(dossier)
                .relate_to(referenced_document)
-               .having(responsible='hugo.boss', responsible_client='client1'))
+               .having(responsible='hugo.boss', responsible_client='org-unit-1'))
 
         browser.login('hugo.boss')
         # this will fail if permissions are set incorrectly

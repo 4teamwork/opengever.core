@@ -31,7 +31,7 @@ FROZEN_NOW = datetime.now()
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'
-DEFAULT_CLIENT = u'client1'
+DEFAULT_CLIENT = u'org-unit-1'
 
 REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,

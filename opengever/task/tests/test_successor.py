@@ -27,10 +27,10 @@ class TestSuccessorTaskController(FunctionalTestCase):
         task2 = create(Builder('task'))
 
         self.assertEquals(
-            u'client1:%s' % (intids.getId(task1)),
+            u'admin-unit-1:%s' % (intids.getId(task1)),
             ISuccessorTaskController(task1).get_oguid())
         self.assertEquals(
-            u'client1:%s' % (intids.getId(task2)),
+            u'admin-unit-1:%s' % (intids.getId(task2)),
             ISuccessorTaskController(task2).get_oguid())
 
     def test_oguid_by_path_returns_the_oguid_of_the_accordant_task(self):
@@ -41,10 +41,10 @@ class TestSuccessorTaskController(FunctionalTestCase):
 
         controller = ISuccessorTaskController(task)
         self.assertEquals(
-            u'client1:%s' % (intids.getId(task)),
+            u'admin-unit-1:%s' % (intids.getId(task)),
             controller.get_oguid_by_path(
                 '/'.join(url_tool.getRelativeContentPath(task)),
-                'client1'))
+                'admin-unit-1'))
 
     def test_oguid_by_path_returns_none_for_invalid_admin_unit_id(self):
         task = create(Builder('task'))
@@ -52,7 +52,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
         controller = ISuccessorTaskController(task)
         self.assertEquals(
             None,
-            controller.get_oguid_by_path('/'.join(task.getPhysicalPath()), 'client2'))
+            controller.get_oguid_by_path('/'.join(task.getPhysicalPath()), 'admin-unit-2'))
 
     def test_oguid_by_path_returns_none_for_invalid_path(self):
         task = create(Builder('task'))
@@ -60,7 +60,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
         controller = ISuccessorTaskController(task)
         self.assertEquals(
             None,
-            controller.get_oguid_by_path('/plone/not-existing/', 'client1'))
+            controller.get_oguid_by_path('/plone/not-existing/', 'admin-unit-1'))
 
     def test_set_predecessor_with_valid_oguid_returns_true(self):
         task1 = create(Builder('task'))
@@ -71,21 +71,23 @@ class TestSuccessorTaskController(FunctionalTestCase):
             ISuccessorTaskController(task1).set_predecessor(task2_oguid))
 
     def test_set_predecessor_resets_issuing_org_unit_to_predecessors_one(self):
-        additional_admin_unit = create(Builder('admin_unit').id(u'additional'))
-        additional = create(Builder('org_unit')
-                            .having(admin_unit=additional_admin_unit)
-                            .id(u'additional'))
+        extra_au = create(Builder('admin_unit').id(u'extra-au'))
+        extra_ou = create(Builder('org_unit')
+                          .having(admin_unit=extra_au)
+                          .id(u'extra-ou'))
 
         create(Builder('globalindex_task')
-               .having(int_id='1234', issuing_org_unit='additional',
-                       admin_unit_id='additional'))
-        successor = create(Builder('task'))
+               .having(int_id='1234',
+                       issuing_org_unit='extra-ou',
+                       admin_unit_id='extra-au'))
+        successor = create(Builder('task')
+                           .having(responsible_client='org-unit-1'))
 
         self.assertEquals(self.org_unit,
                           successor.get_sql_object().get_issuing_org_unit())
 
-        ISuccessorTaskController(successor).set_predecessor('additional:1234')
-        self.assertEquals(additional,
+        ISuccessorTaskController(successor).set_predecessor('extra-au:1234')
+        self.assertEquals(extra_ou,
                           successor.get_sql_object().get_issuing_org_unit())
 
     def test_set_predecessor_with_invalid_oguid_returns_false(self):
@@ -94,7 +96,7 @@ class TestSuccessorTaskController(FunctionalTestCase):
         self.assertFalse(
             ISuccessorTaskController(task1).set_predecessor(u'incorrect:2'))
         self.assertFalse(
-            ISuccessorTaskController(task1).set_predecessor(u'client1:3'))
+            ISuccessorTaskController(task1).set_predecessor(u'org-unit-1:3'))
 
     def test_successors_predecessor_relation(self):
         task1 = create(Builder('task'))

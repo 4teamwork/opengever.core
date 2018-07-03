@@ -18,14 +18,14 @@ class TestCommitteeTabs(FunctionalTestCase):
     def test_committee_roles_initialized(self):
         self.assertEqual(
             ('CommitteeResponsible', ),
-            dict(self.committee.get_local_roles())['client1_users'])
+            dict(self.committee.get_local_roles())['org-unit-1_users'])
 
     def test_update_roles_removes_old_role(self):
         CommitteeRoles(self.committee).update(
-            'foo', previous_principal='client1_users')
+            'foo', previous_principal='org-unit-1_users')
 
         local_roles = dict(self.committee.get_local_roles())
-        self.assertNotIn('client1_users', local_roles)
+        self.assertNotIn('org-unit-1_users', local_roles)
         self.assertEqual(('CommitteeResponsible',),
                          local_roles['foo'])
 
@@ -33,17 +33,17 @@ class TestCommitteeTabs(FunctionalTestCase):
         self.committee.manage_addLocalRoles('foo',
             ['Contributor', 'Administrator'])
         self.committee.manage_addLocalRoles(
-            'client1_users', ['Contributor'])
+            'org-unit-1_users', ['Contributor'])
 
         CommitteeRoles(self.committee).update(
-            'foo', previous_principal='client1_users')
+            'foo', previous_principal='org-unit-1_users')
         local_roles = dict(self.committee.get_local_roles())
         self.assertItemsEqual(
             ['Administrator', 'CommitteeResponsible', 'Contributor'],
             local_roles['foo'])
         self.assertItemsEqual(
             ['Contributor'],
-            local_roles['client1_users'])
+            local_roles['org-unit-1_users'])
 
     def test_principal_of_managed_roles_is_a_bytestring(self):
         for principal, roles in self.committee.get_local_roles():

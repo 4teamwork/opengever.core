@@ -24,6 +24,7 @@ class TestResponeTransporter(FunctionalTestCase):
 
         self.task = create(Builder('task')
                            .having(responsible=u'hugo.boss',
+                                   responsible_client=u'org-unit-1',
                                    deadline=date(2016, 03, 27))
                            .in_state('task-state-in-progress'))
         add_simple_response(self.task,
@@ -31,9 +32,11 @@ class TestResponeTransporter(FunctionalTestCase):
                             transition='task-transition-open-in-progress')
 
     def test_send_responses(self):
-        copy = create(Builder('task').in_state('task-state-in-progress'))
+        copy = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client=u'org-unit-1'))
         IResponseTransporter(self.task).send_responses(
-            'client1', copy.get_physical_path())
+            'admin-unit-1', copy.get_physical_path())
 
         responses = IResponseContainer(copy)
         self.assertEquals(1, len(responses))
@@ -42,9 +45,11 @@ class TestResponeTransporter(FunctionalTestCase):
         self.assertEquals(TEST_USER_ID, responses[0].creator)
 
     def test_get_responses(self):
-        copy = create(Builder('task').in_state('task-state-in-progress'))
+        copy = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client=u'org-unit-1'))
         IResponseTransporter(copy).get_responses(
-            'client1', self.task.get_physical_path(), {})
+            'admin-unit-1', self.task.get_physical_path(), {})
 
         responses = IResponseContainer(copy)
         self.assertEquals(1, len(responses))
@@ -56,21 +61,23 @@ class TestResponeTransporter(FunctionalTestCase):
         add_simple_response(self.task,
                             text=u'Neu zugewiesen',
                             field_changes=[(ITask['responsible'], 'peter.mueller'),
-                                           (ITask['responsible_client'], 'client2')],
+                                           (ITask['responsible_client'], 'org-unit-2')],
                             transition='task-transition-reassign',)
 
-        copy = create(Builder('task').in_state('task-state-in-progress'))
+        copy = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client=u'org-unit-1'))
         IResponseTransporter(self.task).send_responses(
-            'client1', copy.get_physical_path())
+            'admin-unit-1', copy.get_physical_path())
 
         self.assertEquals([{u'after': u'peter.mueller',
                             u'id': u'responsible',
                             u'name': u'label_responsible',
                             u'before': u'hugo.boss'},
-                           {u'after': u'client2',
+                           {u'after': u'org-unit-2',
                             u'id': u'responsible_client',
                             u'name': u'label_resonsible_client',
-                            u'before': u'client1'}],
+                            u'before': u'org-unit-1'}],
                           IResponseContainer(copy)[1].changes)
 
     def test_deadline_change_synchronisation(self):
@@ -79,9 +86,11 @@ class TestResponeTransporter(FunctionalTestCase):
             u'Frist wurde verschoben.',
             u'task-transition-modify-deadline')
 
-        copy = create(Builder('task').in_state('task-state-in-progress'))
+        copy = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client=u'org-unit-1'))
         IResponseTransporter(self.task).send_responses(
-            'client1', copy.get_physical_path())
+            'admin-unit-1', copy.get_physical_path())
 
         self.assertEquals(
             [{u'after': date(2016, 03, 29),

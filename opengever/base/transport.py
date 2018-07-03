@@ -60,13 +60,13 @@ class Transporter(object):
             target_cid, '@@{}'.format(view),
             path=container_path, data=request_data)
 
-    def transport_from(self, container, source_cid, path):
-        """ Copies the object under *path* from client with *source_cid* into
-        the local folder *container*
+    def transport_from(self, container, source_admin_unit_id, path):
+        """ Copies the object under *path* from client with
+        *source_admin_unit_id* into the local folder *container*
         *path* is the relative path of the object to its plone site root.
         """
 
-        data = dispatch_json_request(source_cid,
+        data = dispatch_json_request(source_admin_unit_id,
                                      '@@transporter-extract-object-json',
                                      path=path)
 

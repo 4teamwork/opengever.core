@@ -301,7 +301,7 @@ class TestAccept(BaseTransitionActionFunctionalTest):
     @browsing
     def test_is_responseform_for_adminunit_intern_tasks(self, browser):
         task = create(Builder('task')
-                      .having(responsible_client='client1'))
+                      .having(responsible_client='org-unit-1'))
         self.do_transition(browser, task)
         self.assert_action(
             browser,

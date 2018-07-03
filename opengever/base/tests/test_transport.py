@@ -27,7 +27,7 @@ class TestTransporter(FunctionalTestCase):
                           .with_dummy_content())
 
         transported_doc = Transporter().transport_from(
-            dossier, 'client1', '/'.join(document.getPhysicalPath()))
+            dossier, 'admin-unit-1', '/'.join(document.getPhysicalPath()))
 
         self.assertEquals('Testdocument', transported_doc.title)
         self.assertEquals('Test data', transported_doc.file.data)
@@ -49,7 +49,7 @@ class TestTransporter(FunctionalTestCase):
                           .with_dummy_content())
 
         data = Transporter().transport_to(
-            document, 'client1', '/'.join(target_dossier.getPhysicalPath()))
+            document, 'admin-unit-1', '/'.join(target_dossier.getPhysicalPath()))
         transported_doc = self.portal.unrestrictedTraverse(
             data.get('path').encode('utf-8'))
 
@@ -76,7 +76,7 @@ class TestTransporter(FunctionalTestCase):
                       .having(deadline=date(2014, 7, 1)))
 
         Transporter().transport_from(
-            source_dossier, 'client1', '/'.join(task.getPhysicalPath()))
+            source_dossier, 'admin-unit-1', '/'.join(task.getPhysicalPath()))
 
     def test_transport_to_with_elevated_privileges(self):
         source = create(Builder("dossier").titled(u"Source"))
@@ -94,10 +94,10 @@ class TestTransporter(FunctionalTestCase):
         self.login(u'hugo.boss')
 
         with self.assertRaises(Unauthorized):
-            Transporter().transport_to(task, 'client1', target_path)
+            Transporter().transport_to(task, 'admin-unit-1', target_path)
 
         Transporter().transport_to(
-            task, 'client1', target_path,
+            task, 'admin-unit-1', target_path,
             view='transporter-privileged-receive-object')
 
     def test_transport_to_does_not_break_deadline_datatype(self):
@@ -110,5 +110,5 @@ class TestTransporter(FunctionalTestCase):
             .titled(u'Fo\xf6')
             .having(deadline=date(2014, 7, 1)),
             )
-        Transporter().transport_to(task, 'client1', target_path, view='transporter-privileged-receive-object')
+        Transporter().transport_to(task, 'admin-unit-1', target_path, view='transporter-privileged-receive-object')
         self.assertFalse(isinstance(target.getFirstChild().deadline, datetime))

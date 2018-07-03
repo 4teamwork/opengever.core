@@ -49,10 +49,10 @@ class TestSIPPackage(FunctionalTestCase):
         self.assertEquals(
             u'GEVER', package.ablieferung.ablieferungstyp)
         self.assertEquals(
-            'Client1, test_user_1_',
+            'Admin Unit 1, test_user_1_',
             package.ablieferung.ablieferndeStelle)
         self.assertEquals(
-            u'Client1', package.ablieferung.provenienz.aktenbildnerName)
+            u'Admin Unit 1', package.ablieferung.provenienz.aktenbildnerName)
         self.assertEquals(
             u'Ordnungssytem 2000', package.ablieferung.provenienz.registratur)
 

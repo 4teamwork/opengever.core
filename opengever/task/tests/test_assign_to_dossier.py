@@ -57,10 +57,10 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 4 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Issuer': 'inbox:client1'})
+                      'Issuer': 'inbox:org-unit-1'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 
@@ -68,7 +68,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         self.assertEquals('A letter from peter', browser.context.title,
                           'Forwarding title should be assumed to the new task')
         self.assertEquals(TEST_USER_ID, browser.context.responsible)
-        self.assertEquals('inbox:client1', browser.context.issuer)
+        self.assertEquals('inbox:org-unit-1', browser.context.issuer)
 
         self.assertEquals('The letter',
                           browser.context.listFolderContents()[0].Title(),
@@ -102,10 +102,10 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         # Step 3 - edit task form
         browser.fill({'Task Type': 'comment',
                       'Deadline': '9/24/14',
-                      'Issuer': 'inbox:client1'})
+                      'Issuer': 'inbox:org-unit-1'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 
@@ -113,7 +113,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
         self.assertEquals('A letter from peter', browser.context.title,
                           'Forwarding title should be assumed to the new task')
         self.assertEquals(TEST_USER_ID, browser.context.responsible)
-        self.assertEquals('inbox:client1', browser.context.issuer)
+        self.assertEquals('inbox:org-unit-1', browser.context.issuer)
 
         self.assertEquals('The letter',
                           browser.context.listFolderContents()[0].Title(),

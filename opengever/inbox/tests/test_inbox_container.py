@@ -61,10 +61,11 @@ class TestInboxView(FunctionalTestCase):
 
     @browsing
     def test_redirects_to_current_inbox_when_accessing_inbox_container(self, browser):
-        self.client1_inbox = create(Builder('inbox')
-                                    .titled(u'Client1 Inbox')
-                                    .within(self.container)
-                                    .having(responsible_org_unit='client1'))
+        self.client1_inbox = create(
+            Builder('inbox')
+            .titled(u'Org Unit 1 Inbox')
+            .within(self.container)
+            .having(responsible_org_unit='org-unit-1'))
 
         browser.login().open(self.container)
 
@@ -72,15 +73,16 @@ class TestInboxView(FunctionalTestCase):
 
     @browsing
     def test_stays_on_inbox_container_when_current_inbox_not_available(self, browser):
-        self.client1_inbox = create(Builder('inbox')
-                            .titled(u'Client1 Inbox')
-                            .within(self.container)
-                            .having(responsible_org_unit='client2'))
+        self.client2_inbox = create(
+            Builder('inbox')
+            .titled(u'Org Unit 2 Inbox')
+            .within(self.container)
+            .having(responsible_org_unit='org-unit-2'))
 
         browser.login().open(self.container)
         self.assertEqual(self.container.absolute_url(), browser.url)
         self.assertEquals(
-            ['Your not allowed to access the inbox of Client1.'],
+            ['Your not allowed to access the inbox of Org Unit 1.'],
             statusmessages.messages().get('warning'))
 
     @skip("This test currently fails in a flaky way on CI."

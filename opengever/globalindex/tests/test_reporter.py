@@ -35,9 +35,9 @@ class TestTaskReporter(FunctionalTestCase):
              None,
              None,
              u'Test User (test_user_1_)',
-             u'Client1',
+             u'Org Unit 1',
              u'Test User (test_user_1_)',
              u'To comment',
-             u'client1',
+             u'admin-unit-1',
              1L],
             [cell.value for cell in list(workbook.active.rows)[1]])

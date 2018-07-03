@@ -20,11 +20,11 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         attr = {
             'title': u'Do it!',
             'physical_path': "qux/dossier-1/task-2",
-            'assigned_org_unit': 'client1',
-            'issuing_org_unit': 'client1',
+            'assigned_org_unit': 'org-unit-1',
+            'issuing_org_unit': 'org-unit-1',
             'review_state': 'task-state-tested-and-closed',
             'responsible': TEST_USER_ID,
-            'admin_unit_id': 'client1',
+            'admin_unit_id': 'admin-unit-1',
             'breadcrumb_title': '0 Allgemeines > 01 SonstigesTestdossier 4tw > Testaufgabe',
             'principals': [TEST_USER_ID]}
         attr.update(**kwargs)
@@ -53,7 +53,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
                           link.xpath(css_to_xpath('span'))[0].get('class'))
         self.assertEquals('Do it!',
                           link.xpath(css_to_xpath('span'))[1].text)
-        self.assertEquals('(Client1 / Test User (test_user_1_))',
+        self.assertEquals('(Org Unit 1 / Test User (test_user_1_))',
                           link.xpath(css_to_xpath('span'))[2].text)
 
     def test_task_is_always_linked_when_user_has_administrator_role(self):
@@ -79,7 +79,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         link_tag = link.xpath(css_to_xpath('a'))[0]
 
         self.assertEquals(
-            '[Client1] > 0 Allgemeines > 01 SonstigesTestdossier 4tw > Testaufgabe',
+            '[Admin Unit 1] > 0 Allgemeines > 01 SonstigesTestdossier 4tw > Testaufgabe',
             link_tag.get('title'))
 
     def test_link_text_is_task_title(self):
@@ -110,7 +110,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         link = self.add_task_and_get_link()
         suffix = link.xpath(css_to_xpath('span'))[2]
 
-        self.assertEquals('(Client1 / Test User (test_user_1_))', suffix.text)
+        self.assertEquals('(Org Unit 1 / Test User (test_user_1_))', suffix.text)
         self.assertEquals('discreet', suffix.get('class'))
 
     def test_responsible_info_is_parametrable(self):
@@ -154,7 +154,7 @@ class TestTaskLinkGeneration(FunctionalTestCase):
         #INFO: link_tag.attr['titles'] automatically decodes html entities
         self.assertEquals(
             '<a href="http://example.com/qux/dossier-1/task-2" '
-            'title="[Client1] &gt; 0 Allg. &gt; &lt;b&gt;4tw&lt;/b&gt; &gt; '
+            'title="[Admin Unit 1] &gt; 0 Allg. &gt; &lt;b&gt;4tw&lt;/b&gt; &gt; '
             'Task"><span class="contenttype-opengever-task-task">Do it!</span>'
             '</a>  ',
             tostring(link_tag))

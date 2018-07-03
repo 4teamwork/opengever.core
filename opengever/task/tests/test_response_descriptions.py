@@ -31,7 +31,7 @@ class TestResponseDescriptions(FunctionalTestCase):
 
         create(Builder('org_unit')
                .as_current_org_unit()
-               .id('client1')
+               .id('org-unit-1')
                .having(title=u'Amt f\xfcr Umwelt', admin_unit=self.admin_unit)
                .assign_users([self.user, self.other_user]))
 
@@ -48,7 +48,7 @@ class TestResponseDescriptions(FunctionalTestCase):
                                    deadline=date(2010, 1, 1),
                                    issuer=TEST_USER_ID,
                                    responsible=TEST_USER_ID,
-                                   responsible_client='client1'))
+                                   responsible_client='org-unit-1'))
 
     def get_latest_answer(self, browser):
         latest_answer = browser.css('div.answers .answer').first
@@ -177,7 +177,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'reassign', save_and_reload=False)
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('client1:other_user')
+        form.find_widget('Responsible').fill('org-unit-1:other_user')
 
         browser.find('Assign').click()
         self.visit_overview(browser)
@@ -215,7 +215,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         # Step 1 - Select new responsible(s)
         self.click_task_button(browser, 'delegate', save_and_reload=False)
         form = browser.find_form_by_field('Responsibles')
-        form.find_widget('Responsibles').fill('client1:test_user_1_')
+        form.find_widget('Responsibles').fill('org-unit-1:test_user_1_')
 
         browser.find('Continue').click()
 

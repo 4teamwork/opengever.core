@@ -13,6 +13,7 @@ class TestForwardingAccepting(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         forwarding = create(Builder('forwarding')
                             .having(responsible=TEST_USER_ID,
+                                    responsible_client='org-unit-1',
                                     issuer='hugo.boss')
                             .within(inbox))
         task = accept_forwarding_with_successor(
@@ -28,6 +29,7 @@ class TestAssignToDossier(FunctionalTestCase):
         dossier = create(Builder('dossier'))
         forwarding = create(Builder('forwarding')
                             .having(responsible=TEST_USER_ID,
+                                    responsible_client='org-unit-1',
                                     issuer='hugo.boss')
                             .within(inbox))
         task = assign_forwarding_to_dossier(
