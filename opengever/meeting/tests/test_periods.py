@@ -43,7 +43,9 @@ class TestPeriod(FunctionalTestCase):
 
         # freeze date to make sure the default period is 2016
         with freeze(datetime(2016, 12, 26)):
-            self.committee = create(Builder('committee').within(self.container))
+            self.committee = create(Builder('committee')
+                                    .with_default_period()
+                                    .within(self.container))
 
         self.committee_model = self.committee.load_model()
 

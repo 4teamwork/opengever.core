@@ -13,6 +13,7 @@ class TestCommitteeTabs(FunctionalTestCase):
         self.container = create(Builder('committee_container'))
         self.committee = create(Builder('committee')
                                 .within(self.container)
+                                .with_default_period()
                                 .titled(u'Kleiner Burgerrat'))
         self.committee_model = self.committee.load_model()
 

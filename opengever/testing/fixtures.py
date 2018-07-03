@@ -1513,6 +1513,7 @@ class OpengeverContentFixture(object):
             Builder('committee')
             .titled(title)
             .within(self.committee_container)
+            .with_default_period()
             .having(
                 ad_hoc_template=self.proposal_template,
                 repository_folder=repository_folder,

@@ -20,7 +20,9 @@ class TestSQLLockable(FunctionalTestCase):
         super(TestSQLLockable, self).setUp()
         self.session = create_session()
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .within(self.container))
         self.meeting = create(Builder('meeting').having(
             committee=self.committee.load_model()))
 

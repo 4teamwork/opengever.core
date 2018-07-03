@@ -13,6 +13,7 @@ class TestCommitteeTabs(FunctionalTestCase):
 
         self.container = create(Builder('committee_container'))
         self.committee = create(Builder('committee')
+                                .with_default_period()
                                 .within(self.container))
 
     def test_committee_roles_initialized(self):

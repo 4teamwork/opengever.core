@@ -209,6 +209,7 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
         create(Builder('committee_container')
                .having(protocol_header_template=sablontemplate_b))
         committee = create(Builder('committee')
+                           .with_default_period()
                            .having(protocol_header_template=sablontemplate_b))
 
         proposal, submittedproposal = create(

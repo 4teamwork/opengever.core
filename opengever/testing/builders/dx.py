@@ -465,7 +465,9 @@ class CommitteeBuilder(DexterityBuilder):
 
     def __init__(self, session):
         super(CommitteeBuilder, self).__init__(session)
-        self.arguments = {'title': 'My Committee', 'group_id': u'org-unit-1_users'}
+        self.arguments = {'title': 'My Committee',
+                          'group_id': u'org-unit-1_users'}
+        self._with_default_period = False
 
     def link_with(self, repository_folder):
         self.arguments['repository_folder'] = repository_folder
@@ -489,7 +491,14 @@ class CommitteeBuilder(DexterityBuilder):
 
         super(CommitteeBuilder, self).after_create(obj)
 
+    def with_default_period(self):
+        self._with_default_period = True
+        return self
+
     def create_default_period(self, obj):
+        if not self._with_default_period:
+            return
+
         committee_model = obj.load_model()
         today = date.today()
         db_session = self.session.session

@@ -1037,7 +1037,9 @@ class TestProposalDefaults(TestDefaultsBase):
             True)
 
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .within(self.container))
         self.repofolder = create(Builder('repository'))
 
         self.dossier = create(Builder('dossier')
