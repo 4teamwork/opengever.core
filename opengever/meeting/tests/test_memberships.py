@@ -36,7 +36,9 @@ class TestMemberships(FunctionalTestCase):
     def setUp(self):
         super(TestMemberships, self).setUp()
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .within(self.container))
         self.member = create(Builder('member'))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
 

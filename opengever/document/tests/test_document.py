@@ -224,7 +224,7 @@ class TestDocument(FunctionalTestCase):
         repo, repo_folder = create(Builder('repository_tree'))
         dossier = create(Builder('dossier').within(repo_folder))
         document = create(Builder('document').within(dossier))
-        committee = create(Builder('committee'))
+        committee = create(Builder('committee').with_default_period())
         self.grant('CommitteeResponsible', on=committee)
         proposal, submitted_proposal = create(
             Builder('proposal').within(dossier)

@@ -123,7 +123,9 @@ class TestMemberView(FunctionalTestCase):
         self.member = create(Builder('member')
                              .having(email='p.meier@example.com'))
         self.member_wrapper = MemberWrapper.wrap(self.container, self.member)
-        self.committee = create(Builder('committee').within(self.container))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .within(self.container))
 
         self.membership_1 = create(Builder('membership')
                                    .having(member=self.member,

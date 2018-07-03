@@ -36,6 +36,7 @@ class TestProtocolJsonData(FunctionalTestCase):
                             .with_message("lorem", filename=u"lorem.eml")
                             .within(self.dossier))
         self.committee = create(Builder('committee')
+                                .with_default_period()
                                 .having(title=u'Gemeinderat'))
         self.proposal = create(
             Builder('proposal')

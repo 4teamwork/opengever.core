@@ -46,7 +46,9 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
         self.repo, self.repo_folder = create(Builder('repository_tree'))
         self.dossier = create(Builder('dossier').within(self.repo_folder))
-        self.committee = create(Builder('committee').titled('My committee'))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .titled('My committee'))
         self.document = create(Builder('document')
                                .within(self.dossier)
                                .titled(u'A Document')

@@ -27,7 +27,9 @@ class TestProposalAgendaItem(FunctionalTestCase):
         self.meeting_dossier = create(
             Builder('meeting_dossier').within(self.repository_folder))
         self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee').within(self.container))
+        self.committee = create(Builder('committee')
+                                .with_default_period()
+                                .within(self.container))
         self.meeting = create(Builder('meeting')
                               .having(committee=self.committee.load_model())
                               .link_with(self.meeting_dossier))

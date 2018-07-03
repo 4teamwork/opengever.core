@@ -27,6 +27,7 @@ class TestCommitteeContainerCommitteeTab(IntegrationTestCase):
         with self.login(self.administrator):
             create(Builder('committee')
                    .within(self.committee_container)
+                   .with_default_period()
                    .titled(u'Invisible'))
 
         self.login(self.meeting_user, browser)
