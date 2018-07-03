@@ -2,16 +2,47 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.locking.model import Lock
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
 from plone.locking.interfaces import STEALABLE_LOCK
 import pytz
+
+
+class TestLockInfo(IntegrationTestCase):
+
+    lock_message = u'This item was locked by B\xe4rfuss K\xe4thi 1 minute ago.'
+    unlock_message = ' If you are certain this user has abandoned the object,'
+    unlock_message += ' you may the object. You will then be able to edit it.'
+
+    @browsing
+    def test_lockinfo_is_visible_for_lock_owner(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document)
+        self.assertEquals([], info_messages())
+        lockable = ILockable(self.document)
+        lockable.lock()
+        browser.open(self.document)
+        self.assertEquals([self.lock_message], info_messages())
+
+    @browsing
+    def test_unlock_button_is_visible_for_manager(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document)
+        self.assertEquals([], info_messages())
+        lockable = ILockable(self.document)
+        lockable.lock()
+        self.login(self.manager, browser=browser)
+        browser.open(self.document)
+        self.assertEquals([self.lock_message + self.unlock_message], info_messages())
 
 
 class TestSQLLockable(FunctionalTestCase):
