@@ -1,7 +1,6 @@
 from opengever.base.oguid import Oguid
 from opengever.locking.lock import LOCK_TYPE_MEETING_EXCERPT_LOCK
 from opengever.locking.lock import LOCK_TYPE_MEETING_SUBMITTED_LOCK
-from opengever.locking.lock import LOCK_TYPE_SYS_LOCK
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import GeneratedProtocol
 from opengever.meeting.model import SubmittedDocument
@@ -20,6 +19,7 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         'templates/excerpt_document_lock_template.pt')
     oc_document_lock_template = ViewPageTemplateFile(
         'templates/oc_document_lock_template.pt')
+    default_template = ViewPageTemplateFile('templates/info.pt')
 
     # templates seem to be converted to BoundPageTemplate with acquisition
     # magic, thus we cannot put the ViewPageTemplateFile instances directly
@@ -27,16 +27,18 @@ class GeverLockInfoViewlet(LockInfoViewlet):
     custom_templates = {
         LOCK_TYPE_MEETING_SUBMITTED_LOCK: 'submitted_document_lock_template',
         LOCK_TYPE_MEETING_EXCERPT_LOCK: 'excerpt_document_lock_template',
-        "office_connector_lock": 'oc_document_lock_template'
+        "office_connector_lock": 'oc_document_lock_template',
+        'default': 'default_template'
     }
 
     def render(self):
-        custom_template_name = self.custom_templates.get(
-            self.get_lock_type_name())
-        if custom_template_name:
-            return getattr(self, custom_template_name)()
+        custom_template_name = self.get_template_name()
+        return getattr(self, custom_template_name)()
 
-        return super(GeverLockInfoViewlet, self).render()
+    def get_template_name(self):
+        custom_template_name = self.custom_templates.get(
+            self.get_lock_type_name(), self.custom_templates.get('default'))
+        return custom_template_name
 
     def get_lock_type_name(self):
         lock_info = self.lock_info()
