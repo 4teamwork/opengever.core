@@ -9,6 +9,7 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
@@ -77,7 +78,7 @@ class OpenTaskReportLaTeXView(MakoLaTeXView):
         query = query.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),
-                Task.admin_unit_id == get_current_org_unit().id()))
+                Task.admin_unit_id == get_current_admin_unit().id()))
 
         return query
 
