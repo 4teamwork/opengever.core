@@ -449,7 +449,7 @@ class Meeting(Base, SQLFormSupport):
                                             is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 
-    def schedule_ad_hoc(self, title, template_id=None):
+    def schedule_ad_hoc(self, title, template_id=None, description=None):
         committee = self.committee.resolve_committee()
 
         if template_id is None:
@@ -483,7 +483,8 @@ class Meeting(Base, SQLFormSupport):
             content_type=ad_hoc_template.file.contentType,
             title=translate(document_title, context=getRequest())).execute()
         agenda_item = AgendaItem(
-            title=title, document=ad_hoc_document, is_paragraph=False)
+            title=title, description=description,
+            document=ad_hoc_document, is_paragraph=False)
 
         self.agenda_items.append(agenda_item)
         self.reorder_agenda_items()

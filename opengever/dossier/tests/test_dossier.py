@@ -177,7 +177,7 @@ class TestDossier(IntegrationTestCase):
         self.assertIn(self.meeting_dossier.title, search_result.text)
 
         browser.visit(self.dossier, view='@@tabbedview_view-overview')
-        browser.find_link_by_text(u'Vertr\xe4ge').click()
+        browser.find_link_by_text(u'Vertr\xe4ge', within=browser.css("#keywordsBox")).click()
         search_result = browser.css('.searchResults dt a')
 
         self.assertEquals(4, len(search_result))

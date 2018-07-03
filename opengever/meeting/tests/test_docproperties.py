@@ -25,6 +25,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             {'ogg.meeting.decision_number': '',
              'ogg.meeting.agenda_item_number': '',
              'ogg.meeting.proposal_title': '\xc3\x9cberarbeitung der GAV',
+             'ogg.meeting.proposal_description': '',
              'ogg.meeting.proposal_state': 'Pending'},
             get_doc_properties(self.draft_word_proposal.get_proposal_document()))
 
@@ -34,6 +35,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Submitted'},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
@@ -42,6 +44,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Submitted'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
 
@@ -54,6 +57,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Scheduled'},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
@@ -62,6 +66,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Scheduled'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
 
@@ -74,6 +79,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(self.word_proposal.get_proposal_document()))
 
@@ -82,6 +88,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
 
@@ -99,6 +106,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(meeting_dossier_excerpt))
 
@@ -113,5 +121,6 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
+                 'ogg.meeting.proposal_description': '',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(case_dossier_excerpt))

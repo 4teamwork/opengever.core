@@ -53,6 +53,11 @@ class DecidedProposalFilter(Filter):
         return query.decided()
 
 
+def get_description(item, value):
+    """XSS safe description"""
+    return item.get_description()
+
+
 class ProposalListingTab(FilteredListingTab):
     implements(IProposalTableSourceConfig)
 
@@ -89,7 +94,14 @@ class ProposalListingTab(FilteredListingTab):
              'transform': proposal_link,
              'sortable': True,
              'groupable': False,
-             'width': 350},
+             'width': 180},
+
+            {'column': 'description',
+             'column_title': _(u'column_description', default=u'Description'),
+             'transform': get_description,
+             'sortable': True,
+             'groupable': False,
+             'width': 180},
 
             {'column': 'workflow_state',
              'column_title': _(u'column_state', default=u'State'),

@@ -44,9 +44,10 @@ class IAgendaItemActions(Interface):
         """
 
     def edit():
-        """Updates the title fo the current agendaitem, with the one given by
-        the request parameter `title`. The view expect that its called by
-        traversing over the agendaitem: `plone/meeting-3/14/edit` for example.
+        """Updates the title and description of the current agendaitem,
+        with the one given by the request parameters `title` and `description`.
+        The view expects that it is called by traversing over the agendaitem:
+        `plone/meeting-3/14/edit` for example.
         """
 
     def delete():
@@ -328,13 +329,16 @@ class AgendaItemsView(BrowserView):
         """
         self.require_agendalist_editable()
 
-        title = self.request.get('title')
+        title = safe_unicode(self.request.get('title'))
+        description = safe_unicode(self.request.get('description'))
+
         if not title:
             return JSONResponse(self.request).error(
                 _('agenda_item_update_empty_string',
                   default=u"Agenda Item title must not be empty.")).proceed().dump()
 
         title = title.decode('utf-8')
+        description = description and description.decode('utf-8')
         if self.agenda_item.has_proposal:
             if len(title) > ISubmittedProposal['title'].max_length:
                 return JSONResponse(self.request).error(
@@ -343,6 +347,7 @@ class AgendaItemsView(BrowserView):
                 ).proceed().dump()
 
         self.agenda_item.set_title(title)
+        self.agenda_item.set_description(description)
         return JSONResponse(self.request).info(
             _('agenda_item_updated',
               default=u"Agenda Item updated.")).proceed().dump()
@@ -479,19 +484,21 @@ class AgendaItemsView(BrowserView):
 
     @return_jsonified_exceptions
     def schedule_text(self):
-        """Schedule the given Text (request parameter `title`) for the current
+        """Schedule the given Text (request parameterd `title` and description) for the current
         meeting.
         """
         self.require_agendalist_editable()
 
         title = safe_unicode(self.request.get('title'))
+        description = safe_unicode(self.request.get('description'))
         if not title:
             return JSONResponse(self.request).error(
                     _('empty_proposal', default=u"Proposal must not be empty.")
                 ).proceed().dump()
 
         template = safe_unicode(self.request.get('template_id'))
-        self.meeting.schedule_ad_hoc(title, template)
+        self.meeting.schedule_ad_hoc(title, template_id=template,
+                                     description=description)
 
         return JSONResponse(self.request).info(
             _('text_added', default=u"Text successfully added.")).proceed().dump()

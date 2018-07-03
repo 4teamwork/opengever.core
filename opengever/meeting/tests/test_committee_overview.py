@@ -160,7 +160,7 @@ class TestCommitteeOverview(IntegrationTestCase):
             browser.open(self.committee, view='tabbedview_view-overview')
 
         self.assertEquals(
-            [u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen', u'\xc4nderungen am Personalreglement'],
+            [u'Vertr\xe4ge', u'\xc4nderungen am Personalreglement'],
             browser.css('#unscheduled_proposalsBox li:not(.moreLink) a').text)
 
         with freeze(localized_datetime(2016, 1, 10)):

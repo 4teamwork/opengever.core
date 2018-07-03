@@ -240,10 +240,12 @@ PROPOSAL_REQUIREDS = {
 }
 PROPOSAL_DEFAULTS = {
     'title': u'Containing Dossier Title',
+    'description': u'',
     'issuer': TEST_USER_ID,
 }
 PROPOSAL_FORM_DEFAULTS = {
     'issuer': TEST_USER_ID,
+    'description': u''
 }
 PROPOSAL_MISSING_VALUES = {
     'relatedItems': [],

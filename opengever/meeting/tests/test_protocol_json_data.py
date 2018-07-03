@@ -43,6 +43,7 @@ class TestProtocolJsonData(FunctionalTestCase):
             .within(self.dossier)
             .having(committee=self.committee,
                     title=u'Strafbefehl wegen Bauens ohne Bewilligung',
+                    description=u'Bau Beschreibung',
                     dossier_reference_number=u'FD 2.6.8/1',
                     repository_folder_title=u'Strafwesen')
             .relate_to(self.doc1, self.doc2, self.mail1)
@@ -95,6 +96,7 @@ class TestProtocolJsonData(FunctionalTestCase):
         self.agend_item_text = create(
             Builder('agenda_item').having(
                 title=u'R\xfccktritt Hans Muster',
+                description=u'R\xfccktritt Grund',
                 meeting=self.meeting,
                 decision_number=2,))
 

@@ -40,6 +40,7 @@ class ProposalEditForm(ModelProxyEditForm,
 
     def updateFields(self):
         super(ProposalEditForm, self).updateFields()
+        move(self, 'description', before='*')
         move(self, 'title', before='*')
 
     def updateWidgets(self):
@@ -69,6 +70,11 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
 
         if self.context.get_state() is not self.context.load_model().STATE_PENDING:
             self.widgets['issuer'].mode = HIDDEN_MODE
+
+    def applyChanges(self, data):
+        super(SubmittedProposalEditForm, self).applyChanges(data)
+        self.context.sync_model()
+        return True
 
 
 class IAddProposal(IProposal):
@@ -179,6 +185,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
                 move(self, 'proposal_document', before='proposal_template')
+            move(self, 'description', before='*')
             move(self, 'title', before='*')
 
     def updateWidgets(self):

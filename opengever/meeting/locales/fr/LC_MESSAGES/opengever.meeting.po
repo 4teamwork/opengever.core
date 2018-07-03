@@ -292,7 +292,7 @@ msgstr "Supprimer l'intertitre"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_item"
-msgstr "Renommer le point de l'ordre du jour"
+msgstr "Editer le point de l'ordre du jour"
 
 #. Default: "Rename paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -469,6 +469,11 @@ msgstr "Soumis le"
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "column_date_to"
 msgstr "Jusqu'à"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr "Description"
 
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
@@ -871,6 +876,12 @@ msgstr "Numéro de décision"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
 msgstr "Êtes-vous sûr de vouloir supprimer cet élément?"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
+msgstr "Description"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
@@ -1598,7 +1609,7 @@ msgstr "Supprimer élément"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "title_rename_agenda_item"
-msgstr "Modifier le titre"
+msgstr "Modifier le titre et la description"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py

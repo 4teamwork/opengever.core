@@ -4,6 +4,7 @@ from ftw.zipexport.utils import normalize_path
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.utils import to_html_xweb_intelligent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
@@ -73,6 +74,7 @@ class AgendaItem(Base):
     decision_number = Column(Integer)
 
     title = Column(UnicodeCoercingText)
+    description = Column(UnicodeCoercingText)
     number = Column('item_number', String(16))
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
@@ -92,7 +94,7 @@ class AgendaItem(Base):
     def get_agenda_item_data(self):
         data = {
             'number': self.number,
-            'description': self.description,
+            'description': self.get_description(),
             'title': self.get_title(),
             'dossier_reference_number': self.get_dossier_reference_number(),
             'repository_folder_title': self.get_repository_folder_title(),
@@ -133,12 +135,27 @@ class AgendaItem(Base):
 
         return title
 
+    def get_title_html(self, include_number=False):
+        return to_html_xweb_intelligent(self.get_title(include_number=include_number))
+
     def set_title(self, title):
         if self.has_proposal:
             self.submitted_proposal.title = title
             self.submitted_proposal.sync_model()
         else:
             self.title = title
+
+    def get_description(self):
+        description = (self.submitted_proposal.description if self.has_proposal
+                       else self.description)
+        return to_html_xweb_intelligent(description) or None
+
+    def set_description(self, description):
+        if self.has_proposal:
+            self.submitted_proposal.description = description
+            self.submitted_proposal.sync_model()
+        else:
+            self.description = description
 
     def get_decision_number(self):
         # XXX huh? what is this?
@@ -209,7 +226,7 @@ class AgendaItem(Base):
 
     def get_proposal_link(self, include_icon=True):
         if not self.has_proposal:
-            return self.get_title()
+            return self.get_title_html()
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
 
@@ -256,7 +273,8 @@ class AgendaItem(Base):
         return {
             'id': self.agenda_item_id,
             'css_class': self.get_css_class(),
-            'title': self.get_title(),
+            'title': self.get_title_html(),
+            'description': self.get_description(),
             'number': self.number,
             'has_proposal': self.has_proposal,
             'link': self.get_proposal_link(include_icon=False),
@@ -294,10 +312,6 @@ class AgendaItem(Base):
         """Currently used as name for input tags in html."""
 
         return "agenda_item-{}".format(self.agenda_item_id)
-
-    @property
-    def description(self):
-        return self.get_title()
 
     def has_submitted_documents(self):
         return self.has_proposal and self.proposal.has_submitted_documents()

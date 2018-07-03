@@ -104,6 +104,9 @@ class Proposal(Base):
     title = Column(String(MAX_TITLE_LENGTH), index=True)
     submitted_title = Column(String(MAX_TITLE_LENGTH), index=True)
 
+    description = Column(UnicodeCoercingText)
+    submitted_description = Column(UnicodeCoercingText)
+
     date_of_submission = Column(Date, index=True)
 
     submitted_admin_unit_id = Column(String(UNIT_ID_LENGTH))
@@ -222,6 +225,14 @@ class Proposal(Base):
                               self.title,
                               include_icon=include_icon,
                               as_link=as_link)
+
+    def get_description(self):
+        proposal_ = self.resolve_proposal()
+        return proposal_.get_description()
+
+    def get_submitted_description(self):
+        proposal_ = self.resolve_submitted_proposal()
+        return proposal_.get_description()
 
     def get_submitted_link(self, include_icon=True):
         proposal_ = self.resolve_submitted_proposal()

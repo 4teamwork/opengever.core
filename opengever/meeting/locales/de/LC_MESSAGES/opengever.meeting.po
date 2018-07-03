@@ -295,7 +295,7 @@ msgstr "Zwischentitel streichen"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_item"
-msgstr "Traktandum umbenennen"
+msgstr "Traktandum bearbeiten"
 
 #. Default: "Rename paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -472,6 +472,11 @@ msgstr "Eingereicht am"
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "column_date_to"
 msgstr "Bis"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/documents/proposalstab.py
+msgid "column_description"
+msgstr "Beschreibung"
 
 #. Default: "E-Mail"
 #: ./opengever/meeting/tabs/memberlisting.py
@@ -889,6 +894,12 @@ msgstr "Beschlussnummer"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_delete_agenda_item_confirm_text"
 msgstr "Wollen Sie dieses Element wirklich streichen?"
+
+#. Default: "Description"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/proposal.py
+msgid "label_description"
+msgstr "Beschreibung"
 
 #. Default: "Dossier"
 #: ./opengever/meeting/proposal.py
@@ -1616,7 +1627,7 @@ msgstr "Element streichen"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "title_rename_agenda_item"
-msgstr "Neuer Titel setzen"
+msgstr "Titel und Beschreibung modifizieren"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py

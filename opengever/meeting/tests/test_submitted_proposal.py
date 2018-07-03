@@ -78,8 +78,9 @@ class TestSubmittedProposal(IntegrationTestCase):
         attributes = self.submitted_proposal.get_overview_attributes()
         self.assertEqual(
             [u'label_title',
-             u'label_committee',
+             u'label_description',
              u'label_dossier',
+             u'label_committee',
              u'label_meeting',
              u'label_issuer',
              u'proposal_document',

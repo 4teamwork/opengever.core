@@ -134,6 +134,12 @@ def to_safe_html(markup):
     return transformer.convert('safe_html', markup).getData()
 
 
+def to_html_xweb_intelligent(text):
+    return api.portal.get_tool(name='portal_transforms').convertTo(
+                    'text/html', text,
+                    mimetype='text/x-web-intelligent').getData()
+
+
 def file_checksum(filename, chunksize=65536, algorithm=u'MD5'):
     """Calculates a checksum for the given file."""
     h = getattr(hashlib, algorithm.lower())()

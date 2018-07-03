@@ -36,6 +36,7 @@ class TestProposalAgendaItem(FunctionalTestCase):
         self.proposal, self.submitted_proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title=u'Pr\xf6posal',
+                                       description='Description',
                                        committee=self.committee.load_model())
                                .with_submitted())
         self.agenda_item = create(
@@ -58,19 +59,19 @@ class TestProposalAgendaItem(FunctionalTestCase):
             {'css_class': 'proposal',
              'number': '1.',
              'id': 1,
-             'title': u'Pr\xf6posal',
+             'title': 'Pr&ouml;posal',
+             'description': 'Description',
              'has_proposal': True,
              'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},  # noqa
             self.agenda_item.serialize())
 
 
-class TestSimpleAgendaItem(TestCase):
+class TestSimpleAgendaItem(FunctionalTestCase):
 
-    layer = MEMORY_DB_LAYER
+    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
 
     def setUp(self):
         super(TestSimpleAgendaItem, self).setUp()
-        self.session = self.layer.session
 
         self.committee = create(Builder('committee_model'))
         self.meeting = create(Builder('meeting').having(
@@ -81,6 +82,7 @@ class TestSimpleAgendaItem(TestCase):
         self.simple_agenda_item = create(
             Builder('agenda_item')
             .having(title=u'Simple',
+                    description='item description',
                     meeting=self.meeting))
 
     def test_title_falls_back_to_agenda_item_title(self):
@@ -106,6 +108,7 @@ class TestSimpleAgendaItem(TestCase):
                           'number': '1.',
                           'id': 1,
                           'title': u'Simple',
+                          'description': u'item description',
                           'has_proposal': False,
                           'link': u'Simple',
                           },

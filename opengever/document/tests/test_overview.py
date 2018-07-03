@@ -550,7 +550,7 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
         proposal = proposals.first
 
         self.assertEquals(
-            u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+            u'Vertr\xe4ge',
             proposal.text,
             )
 

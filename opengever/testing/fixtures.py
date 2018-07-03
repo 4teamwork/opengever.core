@@ -890,9 +890,10 @@ class OpengeverContentFixture(object):
                 Builder('proposal')
                 .within(self.dossier)
                 .having(
-                    title=u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen',
+                    title=u'Vertr\xe4ge',
                     committee=self.committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
+                    description=u'F\xfcr weitere Bearbeitung bewilligen',
                     )
                 .relate_to(self.document)
                 .as_submitted()

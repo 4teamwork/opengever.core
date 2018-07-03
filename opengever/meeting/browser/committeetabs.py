@@ -46,6 +46,11 @@ def proposal_title_link(item, value):
     return item.get_submitted_link()
 
 
+def get_submitted_description(item, value):
+    """XSS safe submitted description"""
+    return item.get_submitted_description()
+
+
 class SubmittedProposalListingTab(ProposalListingTab):
     implements(ISubmittedProposalTableSourceConfig)
 
@@ -61,5 +66,7 @@ class SubmittedProposalListingTab(ProposalListingTab):
         for col in columns:
             if col.get('column') == 'title':
                 col['transform'] = proposal_title_link
+            elif col.get('column') == 'description':
+                col['transform'] = get_submitted_description
 
         return columns

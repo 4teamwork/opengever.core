@@ -630,6 +630,33 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 
     .add-agenda-items {
       margin-top: 1em;
+
+      label {
+        font-size: 130%;
+        margin-bottom: 2pt;
+        color: #5C646A;
+      }
+
+      .input-label {
+        font-weight: bold;
+        margin-top: 4pt;
+        margin-bottom: 4pt;
+        color: #5C646A;
+      }
+
+      .input-field {
+        margin-bottom: 8pt !important;
+      }
+
+      .submit {
+        margin-top: 4pt;
+        margin-bottom: 4pt;
+      }
+
+      table{
+        margin-top: 2pt;
+        margin-bottom: 2pt;
+      }
     }
 
     #agenda_items {
@@ -1001,6 +1028,9 @@ table#agenda_items {
             margin-left: -15px;
           }
         }
+        .proposal_description{
+          clear: both;
+        }
       }
       .toggle-attachements {
         width: 10px;
@@ -1109,6 +1139,14 @@ table#agenda_items {
     list-style-type: none;
     margin-top: 2em;
     margin-left: 0em;
+  }
+
+}
+
+#unscheduled_porposals.list-group {
+  .title{
+    font-weight: bold;
+    margin-top: 1em;
   }
 }
 

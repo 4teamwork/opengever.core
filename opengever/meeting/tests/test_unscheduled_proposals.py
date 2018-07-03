@@ -13,12 +13,12 @@ class TestUnscheduledProposals(IntegrationTestCase):
 
         self.assertEquals(
             {u'items': [
-                {u'submitted_proposal_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1',
-                 u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/1/schedule',
-                 u'title': u'Vertragsentwurf f\xfcr weitere Bearbeitung bewilligen'},
-                {u'submitted_proposal_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-4',
-                 u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/4/schedule',
-                 u'title': u'\xc4nderungen am Personalreglement'}
+                {u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/1/schedule',
+                 u'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1" title="Vertr\xe4ge">Vertr\xe4ge</a>',
+                 'description': u'F&uuml;r weitere Bearbeitung bewilligen'},
+                {u'schedule_url': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1/unscheduled_proposals/4/schedule',
+                 u'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-4" title="\xc4nderungen am Personalreglement">\xc4nderungen am Personalreglement</a>',
+                 'description': ''}
             ]},
             browser.json
         )
