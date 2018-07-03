@@ -6,7 +6,9 @@ from opengever.task.helper import task_type_helper
 from opengever.tasktemplates import _
 from opengever.tasktemplates.browser.helper import interactive_user_helper
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
+from plone import api
 from plone.dexterity.browser.view import DefaultView
+from Products.CMFPlone.utils import safe_unicode
 from zope.component.hooks import getSite
 from zope.i18n import translate
 
@@ -75,6 +77,14 @@ class TaskTemplates(BaseCatalogListingTab):
 
 
 class View(DefaultView):
+
+    def comments(self):
+        text = ITaskTemplate(self.context).text
+        if text:
+            transformer = api.portal.get_tool(name='portal_transforms')
+            converted = transformer.convertTo(
+                'text/html', safe_unicode(text), mimetype='text/x-web-intelligent')
+            return converted.getData()
 
     def responsible_link(self):
         task = ITaskTemplate(self.context)

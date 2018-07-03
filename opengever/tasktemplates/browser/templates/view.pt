@@ -21,7 +21,7 @@
             <tr tal:repeat="widget group/widgets/values">
             <span tal:define="index repeat/widget/index"/>
 
-              <tal:block condition="python: widget.__name__ not in ('preselected','title','responsible','issuer') and widget.value">
+              <tal:block condition="python: widget.__name__ not in ('preselected','title','responsible','issuer', 'text') and widget.value">
 
                 <th tal:content="widget/label" ></th>
                 <td tal:content="structure widget/render" />
@@ -33,6 +33,10 @@
               <tal:block condition="python:widget.__name__  == 'issuer' and widget.value">
                 <th tal:content="widget/label"></th>
                 <td tal:content="structure view/issuer_link" />
+              </tal:block>
+              <tal:block condition="python:widget.__name__  == 'text' and widget.value">
+                <th tal:content="widget/label"></th>
+                <td tal:content="structure view/comments" />
               </tal:block>
               <tal:block condition="python:widget.__name__  == 'preselected' and widget.value==['selected']">
                 <th tal:content="widget/field/title"></th>
