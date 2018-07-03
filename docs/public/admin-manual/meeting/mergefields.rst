@@ -149,42 +149,6 @@ Metadaten zu einem Traktandum (AgendaItem):
 
   Gibt an, ob es sich um einen Abschnitt handelt oder nicht (Boolean).
 
-- ``legal_basis``
-
-  Rechtsgrundlage des Antrags (Text).
-
-- ``initial_position``
-
-  Ausgangslage des Antrags (Text).
-
-- ``considerations``
-
-  Erwägungen zum Antrag (Text).
-
-- ``proposed_action``
-
-  Text des Antrags (Text).
-
-- ``discussion``
-
-  Diskussion während der Sitzung zum Antrag (Text).
-
-- ``decision``
-
-  Beschluss zum Antrag gemäss Sitzung (Text).
-
-- ``disclose_to``
-
-  Zu eröffnen an (Text).
-
-- ``copy_for_attention``
-
-  Kopie geht an (Text).
-
-- ``publish_in``
-
-  Zu veröffentlichen in (Text).
-
 - ``attachments``
 
   Liste von Anhängen des Antrags (Liste von Attachment).
