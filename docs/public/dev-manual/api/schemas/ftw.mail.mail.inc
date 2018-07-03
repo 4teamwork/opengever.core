@@ -6,7 +6,7 @@
 
    .. py:attribute:: message
 
-       :Feldname: :field-title:`Orginalnachricht`
+       :Feldname: :field-title:`Nachricht`
        :Datentyp: ``NamedBlobFile``
        
        
