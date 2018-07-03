@@ -156,6 +156,7 @@ msgstr "Numéro de la réunion"
 msgid "Memberships"
 msgstr "Adhésions"
 
+#: ./opengever/meeting/browser/templates/meetingtemplate.pt
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "No content"
 msgstr "Pas de contenu"
@@ -238,6 +239,7 @@ msgstr "Le document a été écrasé par une version plus récente de l'extrait 
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Actualisé par une nouvelle version de la réunion ${title}."
 
+#: ./opengever/meeting/browser/templates/meetingtemplate.pt
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "View all"
 msgstr "afficher tous"
@@ -706,6 +708,11 @@ msgstr "Choisissez tous les modèles de proposition autorisés dans ce comité. 
 msgid "help_create_task"
 msgstr "Etablir une nouvelle tâche dans le dossier de réunion et y joindre cet extrait de protocole."
 
+#. Default: "The position of the paragraph within the meeting."
+#: ./opengever/meeting/interfaces.py
+msgid "help_paragraph_template_position"
+msgstr ""
+
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_return_excerpt"
@@ -1107,6 +1114,16 @@ msgstr "Autres participants"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_paragraph_template"
 msgstr "Modèle pour l'intertitre"
+
+#. Default: "Position in template"
+#: ./opengever/meeting/interfaces.py
+msgid "label_paragraph_template_position"
+msgstr ""
+
+#. Default: "Paragraphs"
+#: ./opengever/meeting/browser/meetingtemplate.py
+msgid "label_paragraphs"
+msgstr ""
 
 #. Default: "Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py

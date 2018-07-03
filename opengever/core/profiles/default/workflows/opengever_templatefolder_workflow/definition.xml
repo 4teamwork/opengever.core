@@ -27,7 +27,6 @@
   <permission>opengever.trash: Trash content</permission>
   <permission>opengever.trash: Untrash content</permission>
   <permission>opengever.meeting: Add Meeting Template</permission>
-  <permission>opengever.meeting: Add Paragraph Template</permission>
   <permission>opengever.meeting: Add Sablon Template</permission>
   <permission>opengever.meeting: Add Proposal Template</permission>
   <state
@@ -190,13 +189,6 @@
     </permission-map>
     <permission-map
         name="opengever.meeting: Add Meeting Template"
-        acquired="False">
-      <permission-role>Administrator</permission-role>
-      <permission-role>Contributor</permission-role>
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map
-        name="opengever.meeting: Add Paragraph Template"
         acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Contributor</permission-role>

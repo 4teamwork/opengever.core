@@ -1,4 +1,3 @@
-from opengever.base import _ as bmf
 from opengever.base.interfaces import ISQLObjectWrapper
 from plone.supermodel import model
 from zope import schema

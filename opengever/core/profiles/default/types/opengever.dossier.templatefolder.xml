@@ -15,7 +15,6 @@
     <element value="opengever.dossier.dossiertemplate" />
     <element value="opengever.meeting.proposaltemplate" />
     <element value="opengever.meeting.meetingtemplate" />
-    <element value="opengever.meeting.paragraphtemplate" />
   </property>
 
   <!-- Schema interface -->

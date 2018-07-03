@@ -132,6 +132,11 @@
       />
 
   <utility
+      factory=".vocabulary.MeetingTemplateVocabulary"
+      name="opengever.meeting.MeetingTemplateVocabulary"
+      />
+
+  <utility
       factory=".vocabulary.MemberVocabulary"
       name="opengever.meeting.MemberVocabulary"
       />
