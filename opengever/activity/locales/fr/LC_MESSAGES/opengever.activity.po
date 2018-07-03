@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-21 09:46+0000\n"
+"POT-Creation-Date: 2018-06-21 09:53+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -124,6 +124,11 @@ msgstr "Résumé quotidien"
 msgid "label_details"
 msgstr "Détails:"
 
+#. Default: "Forwardings"
+#: ./opengever/activity/browser/settings.py
+msgid "label_forwardings"
+msgstr ""
+
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
@@ -139,6 +144,16 @@ msgstr "paramètres de notification"
 #: ./opengever/activity/viewlets/notification.pt
 msgid "label_notifications_overview"
 msgstr "Toutes les notifications"
+
+#. Default: "Proposals"
+#: ./opengever/activity/browser/settings.py
+msgid "label_proposals"
+msgstr ""
+
+#. Default: "Tasks"
+#: ./opengever/activity/browser/settings.py
+msgid "label_tasks"
+msgstr ""
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/center.py

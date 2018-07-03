@@ -38,6 +38,7 @@
     };
 
     var activities;
+    var currentTab = 0;
 
     this.render = function(data) {
       if (activities) {
@@ -49,15 +50,51 @@
         });
       } else {
         // Initial rendering
-        activities = {};
 
+        activities = {};
         data.activities.forEach(function(activity) {
           activities[activity.kind] = new SettingRow(activity);
         });
       }
 
-      var values = Object.keys(activities).map(function(e) { return activities[e] })
-      return this.template({ activities: values, translations: data.translations });
+      var values = Object.values(activities)
+
+      var tabs = [
+        {tabId: 'tasks',
+         tabTitle: this.getDataAttribute('tab-title-task'),
+         activities: this.filterActivitiesByType(values, 'task')},
+        {tabId: 'forwardings',
+         tabTitle: this.getDataAttribute('tab-title-forwardings'),
+         activities: this.filterActivitiesByType(values, 'forwarding')},
+        {tabId: 'proposals',
+         tabTitle: this.getDataAttribute('tab-title-proposals'),
+         activities: this.filterActivitiesByType(values, 'proposal')},
+      ];
+
+      return this.template({
+        tabs: tabs,
+        translations: data.translations,
+      });
+    };
+
+    this.filterActivitiesByType = function(activities, typeId) {
+      return activities.filter(function(a) { return a.type_id === typeId})
+    };
+
+    this.getDataAttribute = function(id) {
+      return $('#notification-settings-form').data(id);
+    };
+
+    this.initTabs = function() {
+      $('ul.formTabs').tabs('.panes > div', {
+        current: 'selected',
+        initialIndex: currentTab,
+        onBeforeClick: function(event, index) {
+          currentTab = index}});
+    };
+
+    this.onRender = function() {
+      this.initTabs();
     };
 
     this.save_setting = function(target, event) {
@@ -92,6 +129,10 @@
       activities[row.data('kind')].changed = false;
     };
 
+    this.refresh = function() {
+      this.outlet.html(this.render(this.cache));
+      this.initTabs();
+    };
 
     this.track_settings_changes = function(target) {
       var row = activities[target.parents('tr').data().kind];

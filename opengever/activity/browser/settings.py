@@ -250,3 +250,12 @@ class NotificationSettingsForm(BrowserView):
     def reset_url(self):
         return '{}/notification-settings/reset'.format(
             api.portal.get().absolute_url())
+
+    def tab_title_task(self):
+        return _('label_tasks', default=u'Tasks')
+
+    def tab_title_forwardings(self):
+        return _('label_forwardings', default=u'Forwardings')
+
+    def tab_title_proposals(self):
+        return _('label_proposals', default=u'Proposals')

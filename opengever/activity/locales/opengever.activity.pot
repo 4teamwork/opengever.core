@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-21 09:46+0000\n"
+"POT-Creation-Date: 2018-06-21 09:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,6 +122,11 @@ msgstr ""
 msgid "label_details"
 msgstr ""
 
+#. Default: "Forwardings"
+#: ./opengever/activity/browser/settings.py
+msgid "label_forwardings"
+msgstr ""
+
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
@@ -136,6 +141,16 @@ msgstr ""
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt
 msgid "label_notifications_overview"
+msgstr ""
+
+#. Default: "Proposals"
+#: ./opengever/activity/browser/settings.py
+msgid "label_proposals"
+msgstr ""
+
+#. Default: "Tasks"
+#: ./opengever/activity/browser/settings.py
+msgid "label_tasks"
 msgstr ""
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
