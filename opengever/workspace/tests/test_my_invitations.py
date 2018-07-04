@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.protect import createToken
@@ -30,8 +32,9 @@ class TestMyInvitationsView(IntegrationTestCase):
             self.workspace2, self.workspace_guest.getId(),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
-        self.workspace_root.manage_setLocalRoles(self.regular_user.getId(),
-                                                 ['WorkspacesUser'])
+        RoleAssignmentManager(self.workspace_root).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['WorkspacesUser']))
 
     @browsing
     def test_list_invitations_of_logged_in_user(self, browser):

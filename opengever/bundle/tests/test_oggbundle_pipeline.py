@@ -266,9 +266,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {'privileged_users':
-                ['Reader', 'Editor', 'Contributor', 'Reviewer'],
+             ['Contributor', 'Reviewer', 'Editor', 'Reader'],
              'admin_users':
-                ['Publisher']},
+             ['Publisher']},
             folder_staff.__ac_local_roles__)
         self.assertTrue(folder_staff.__ac_local_roles_block__)
 
@@ -366,7 +366,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {'admin_users':
-                ['Publisher', 'Reader', 'Editor', 'Contributor', 'Reviewer']},
+                ['Contributor', 'Publisher', 'Reviewer', 'Editor', 'Reader']},
             dossier_peter.__ac_local_roles__)
         self.assertTrue(dossier_peter.__ac_local_roles_block__)
 

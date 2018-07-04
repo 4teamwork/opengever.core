@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from plone import api
 from requests_toolbelt.multipart.encoder import MultipartEncoder
@@ -10,14 +12,17 @@ class TestScanIn(IntegrationTestCase):
 
     def create_single_inbox(self):
         inbox = create(Builder('inbox').titled(u'Inbox'))
-        inbox.manage_setLocalRoles(self.regular_user.getId(),
-                                   ['Reader', 'Contributor', 'Editor'])
+        RoleAssignmentManager(inbox).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
         return inbox
 
     def create_org_unit_inbox(self):
         container = create(Builder('inbox_container').titled(u'Inboxes'))
-        container.manage_setLocalRoles(self.regular_user.getId(),
-                                       ['Reader', 'Contributor', 'Editor'])
+        RoleAssignmentManager(container).add_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
+
         return create(Builder('inbox')
                       .titled(u'Inbox')
                       .within(container)

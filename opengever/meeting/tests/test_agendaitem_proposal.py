@@ -1,4 +1,6 @@
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -314,11 +316,12 @@ class TestProposalAgendaItem(IntegrationTestCase):
     @browsing
     def test_error_when_no_access_to_meeting_dossier(self, browser):
         with self.login(self.administrator):
-            self.committee_container.manage_setLocalRoles(
-                self.regular_user.getId(), ['Reader'])
-            self.committee.manage_setLocalRoles(
-                self.regular_user.getId(), ['CommitteeResponsible', 'Editor'])
-            self.committee_container.reindexObjectSecurity()
+            RoleAssignmentManager(self.committee_container).add_assignment(
+                SharingRoleAssignment(self.regular_user.getId(), ['Reader']))
+            RoleAssignmentManager(self.committee).add_assignment(
+                SharingRoleAssignment(self.regular_user.getId(),
+                                      ['CommitteeResponsible', 'Editor']))
+
             # Let regular_user have no access to meeting_dossier
             self.meeting_dossier.__ac_local_roles_block__ = True
 

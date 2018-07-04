@@ -1,4 +1,6 @@
 from opengever.base.monkey.patching import MonkeyPatch
+from opengever.base.role_assignments import RoleAssignmentManager
+from Products.CMFCore.utils import _getAuthenticatedUser
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import Interface
@@ -84,3 +86,32 @@ class PatchCMFCatalogAware(MonkeyPatch):
         self.patch_refs(CMFCatalogAware, 'indexObject', indexObject)
         self.patch_refs(CMFCatalogAware, 'unindexObject', unindexObject)
         self.patch_refs(CMFCatalogAware, 'reindexObject', reindexObject)
+
+
+class PatchCMFCatalogAwareHandlers(MonkeyPatch):
+    """Customize `handleDynamicTypeCopiedEvent` to use RoleAssignmentManager
+    instead of directly delete local roles
+    """
+
+    def __call__(self):
+
+        def handleDynamicTypeCopiedEvent(ob, event):
+            # Make sure owner local role is set after pasting
+            # The standard Zope mechanisms take care of executable ownership
+            current_user = _getAuthenticatedUser(ob)
+            if current_user is None:
+                return
+
+            current_user_id = current_user.getId()
+            if current_user_id is not None:
+
+                # Customization
+                RoleAssignmentManager(ob).clear_all()
+                # end customization
+
+                ob.manage_setLocalRoles(current_user_id, ['Owner'])
+
+        from Products.CMFCore import CMFCatalogAware
+        self.patch_refs(CMFCatalogAware,
+                        'handleDynamicTypeCopiedEvent',
+                        handleDynamicTypeCopiedEvent)

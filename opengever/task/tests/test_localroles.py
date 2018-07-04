@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.event import notify
@@ -136,10 +138,10 @@ class TestLocalRolesSetter(IntegrationTestCase):
     def test_responsible_can_edit_related_documents_that_are_inside_a_task(self, browser):
         self.login(self.administrator, browser=browser)
         api.content.disable_roles_acquisition(obj=self.dossier)
-        self.dossier.manage_setLocalRoles(
-            self.administrator.getId(),
-            ['Reader', 'Contributor', 'Editor'],
-        )
+
+        RoleAssignmentManager(self.dossier).add_assignment(
+            SharingRoleAssignment(self.administrator.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
 
         self.task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.task))

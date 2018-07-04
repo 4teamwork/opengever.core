@@ -376,7 +376,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                              transition= 'task-transition-in-progress-resolved')
 
         self.grant()
-        task.manage_delLocalRoles([TEST_USER_ID])
+        task.manage_delLocalRoles([TEST_USER_ID], verified=True)
         task.__ac_local_roles_block__ = True
 
         task.restrictedTraverse(self.RECEIVER_VIEW_NAME)()

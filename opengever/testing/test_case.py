@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.keywordwidget.tests import widget  # keep!
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.journal.tests.utils import get_journal_entry
@@ -121,8 +123,8 @@ class FunctionalTestCase(TestCase):
         if context is None:
             setRoles(self.portal, user_id, list(roles))
         else:
-            context.manage_setLocalRoles(user_id, list(roles))
-            context.reindexObjectSecurity()
+            RoleAssignmentManager(context).add_assignment(
+                SharingRoleAssignment(user_id, list(roles)))
 
         transaction.commit()
 

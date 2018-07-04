@@ -1,4 +1,5 @@
 from .cmf_catalog_aware import PatchCMFCatalogAware
+from .cmf_catalog_aware import PatchCMFCatalogAwareHandlers
 from .default_values import PatchBuilderCreate
 from .default_values import PatchDexterityContentGetattr
 from .default_values import PatchDexterityDefaultAddForm
@@ -13,6 +14,7 @@ from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
+from .rolemanager import PatchOFSRoleManager
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
@@ -36,3 +38,5 @@ PatchWebDAVLockTimeout()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchCMFCatalogAware()()
+PatchOFSRoleManager()()
+PatchCMFCatalogAwareHandlers()()

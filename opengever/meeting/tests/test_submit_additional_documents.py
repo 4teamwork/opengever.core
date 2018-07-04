@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.transport import Transporter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.exceptions import NoSubmittedDocument
@@ -71,9 +73,11 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
 
     def login_as_user_without_committee_permission(self, browser):
         create(Builder('user').named('Hugo', 'Boss'))
-        api.user.grant_roles(username=u'hugo.boss',
-                             obj=self.dossier,
-                             roles=['Contributor', 'Editor', 'Reader'])
+
+        RoleAssignmentManager(self.dossier).add_assignment(
+            SharingRoleAssignment(u'hugo.boss',
+                                  ['Contributor', 'Editor', 'Reader']))
+
         transaction.commit()
         browser.login(username='hugo.boss')
         with browser.expect_unauthorized():
