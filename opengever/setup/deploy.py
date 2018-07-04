@@ -1,5 +1,7 @@
 from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.private.root import IPrivateRoot
@@ -193,9 +195,10 @@ class GeverDeployment(object):
     def configure_development_options(self):
         for obj in self.site.listFolderContents():
             if IRoleManager.providedBy(obj) and not IPrivateRoot.providedBy(obj):
-                obj.manage_addLocalRoles(
+                assignment = SharingRoleAssignment(
                     DEVELOPMENT_USERS_GROUP,
                     ["Contributor", "Editor", "Reader"])
+                RoleAssignmentManager(obj).add_assignment(assignment)
 
     def drop_sql_tables(self, session):
         """Drops all sql tables, usually for a dev-setup.
