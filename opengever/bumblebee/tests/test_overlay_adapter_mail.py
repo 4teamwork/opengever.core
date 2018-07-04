@@ -67,7 +67,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
         expected_url = (
             'http://nohost/plone/ordnungssystem/fuhrung'
             '/vertrage-und-vereinbarungen/dossier-1/document-28'
-            '/bumblebee-open-pdf?filename=die-burgschaft.pdf'
+            '/bumblebee-open-pdf?filename=Die%20Buergschaft.pdf'
             )
 
         self.assertEqual(expected_url, adapter.get_open_as_pdf_url())

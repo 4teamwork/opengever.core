@@ -71,7 +71,7 @@ class TestMessageModel(IntegrationTestCase):
         self.assertEqual(
             [u'files/dossier-1/dossier-2/Uebersicht der Vertraege von 2016.xlsx',
              u'files/dossier-1/Vertraegsentwurf.docx',
-             u'files/dossier-1/die-burgschaft.eml',
+             u'files/dossier-1/Die Buergschaft.eml',
              u'files/dossier-1/testm\xe4il.msg',
              u'files/Vertraegsentwurf.docx'],
             zipfile.arcnames)

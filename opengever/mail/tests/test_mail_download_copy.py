@@ -31,7 +31,7 @@ class TestMailDownloadCopy(FunctionalTestCase):
             'status': '200 Ok',
             'content-length': str(len(browser.contents)),
             'content-type': 'message/rfc822',
-            'content-disposition': 'attachment; filename="die-burgschaft.eml"',
+            'content-disposition': 'attachment; filename="Die Buergschaft.eml"',
             },
             browser.headers)
 

@@ -10,7 +10,7 @@ class TestMailZipExport(IntegrationTestCase):
                                          interface=IZipRepresentation)
 
         path, file_ = tuple(representation.get_files())[0]
-        self.assertEquals(u'/die-burgschaft.eml', path)
+        self.assertEquals(u'/Die Buergschaft.eml', path)
         self.assertEquals(self.mail_eml.message.open().read(),
                           file_.read())
 

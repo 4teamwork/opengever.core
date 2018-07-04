@@ -19,7 +19,7 @@ SAMPLE_MEETING_DATA = {
             "filename": u"Beweisaufnaehme.txt"
             }, {
             "title": u"L\xf6rem",
-            "filename": u"lorem.eml"
+            "filename": u"Loerem.eml"
             }, {
             "title": "Strafbefehl"
             }]

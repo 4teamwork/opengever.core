@@ -11,8 +11,8 @@ class TestMessageFilenameInitialized(FunctionalTestCase):
 
     def test_message_filename_initialized_with_builder(self):
         mail = create(Builder("mail").with_message(MAIL_DATA))
-        self.assertEquals('die-burgschaft.eml', mail.get_filename())
-        self.assertEquals('die-burgschaft.eml', mail.message.filename)
+        self.assertEquals('Die Buergschaft.eml', mail.get_filename())
+        self.assertEquals('Die Buergschaft.eml', mail.message.filename)
 
     def test_filename_is_none_when_no_file_is_present(self):
         mail = create(Builder("mail"))
@@ -29,12 +29,12 @@ class TestMessageFilenameInitialized(FunctionalTestCase):
                          data=MAIL_DATA,
                          portal_type='ftw.mail.mail')
         mail = result['success']
-        self.assertEquals('die-burgschaft.eml', mail.message.filename)
+        self.assertEquals('Die Buergschaft.eml', mail.message.filename)
 
     def test_message_filename_initialzed_with_inboud_mail(self):
         dossier = create(Builder("dossier"))
         mail = inbound.createMailInContainer(dossier, MAIL_DATA)
-        self.assertEquals('die-burgschaft.eml', mail.message.filename)
+        self.assertEquals('Die Buergschaft.eml', mail.message.filename)
 
     @browsing
     def test_message_filename_initialized_on_addview(self, browser):
@@ -45,4 +45,4 @@ class TestMessageFilenameInitialized(FunctionalTestCase):
         }).submit()
 
         mail = browser.context
-        self.assertEquals('die-burgschaft.eml', mail.message.filename)
+        self.assertEquals('Die Buergschaft.eml', mail.message.filename)

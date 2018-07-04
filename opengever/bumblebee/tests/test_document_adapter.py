@@ -38,5 +38,5 @@ class TestMailDocumentAdapter(FunctionalTestCase):
 
         bumblebee_document = IBumblebeeDocument(mail_with_original_message)
         self.assertEqual(
-            'no-subject.eml',
+            'No Subject.eml',
             bumblebee_document.get_primary_field().filename)

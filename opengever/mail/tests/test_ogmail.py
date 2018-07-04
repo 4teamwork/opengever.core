@@ -118,7 +118,7 @@ class TestOGMailAddition(FunctionalTestCase):
         mail = create(Builder('mail').with_dummy_message())
         mail.title = u'Foo B\xe4r'
         mail.update_filename()
-        self.assertEqual(u'foo-bar.eml', mail.message.filename)
+        self.assertEqual(u'Foo Baer.eml', mail.message.filename)
 
     def test_get_attachments_returns_correct_descriptor_dict(self):
         mail = create(Builder('mail')

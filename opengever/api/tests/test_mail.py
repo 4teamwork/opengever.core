@@ -78,7 +78,7 @@ class TestCreateMail(IntegrationTestCase):
 
         mail = children['added'].pop()
         self.assertEqual(mail.Title(), 'Äusseres Testmäil')
-        self.assertEqual(mail.message.filename, 'ausseres-testmail.eml')
+        self.assertEqual(mail.message.filename, 'Aeusseres Testmaeil.eml')
         self.assertEqual(mail.original_message, None)
 
     @browsing
@@ -103,7 +103,7 @@ class TestCreateMail(IntegrationTestCase):
 
         mail = children['added'].pop()
         self.assertEqual(mail.Title(), 'Separate title')
-        self.assertEqual(mail.message.filename, 'separate-title.eml')
+        self.assertEqual(mail.message.filename, 'Separate title.eml')
         self.assertEqual(mail.original_message, None)
 
 

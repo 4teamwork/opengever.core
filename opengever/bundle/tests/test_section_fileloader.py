@@ -123,7 +123,7 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual(u'Lorem Ipsum', mail.title)
         self.assertEqual(920, len(mail.message.data))
         self.assertEqual('message/rfc822', mail.message.contentType)
-        self.assertEqual('lorem-ipsum.eml', mail.message.filename)
+        self.assertEqual('Lorem Ipsum.eml', mail.message.filename)
         self.assertEqual(True, mail.digitally_available)
 
     def test_handles_msg_mails(self):
