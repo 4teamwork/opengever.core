@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-23 12:30+0000\n"
+"POT-Creation-Date: 2018-07-04 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -726,7 +726,6 @@ msgstr ""
 
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_ad_hoc_template"
 msgstr ""
 
