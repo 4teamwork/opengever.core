@@ -52,7 +52,8 @@ class TestTaskTemplates(IntegrationTestCase):
 
         self.tasktemplate.text = (u'- T\xfcsteintrag' '\n'
                                   u'- m\xfet' '\n'
-                                  u'- F\xfdrmat')
+                                  u'- F\xfdrmat'
+                                  '<script>alert("XSS!");</script>')
 
         browser.open(self.tasktemplate)
 
@@ -63,7 +64,10 @@ class TestTaskTemplates(IntegrationTestCase):
 
         self.assertEquals(1, len(cells))
 
-        self.assertEquals(u'- T\xfcsteintrag<br>- m\xfet<br>- F\xfdrmat',
+        self.assertEquals(u'- T\xfcsteintrag<br>'
+                          u'- m\xfet<br>'
+                          u'- F\xfdrmat'
+                          u'&lt;script&gt;alert("XSS!");&lt;/script&gt;',
                           cells[0].normalized_innerHTML)
 
     @browsing
