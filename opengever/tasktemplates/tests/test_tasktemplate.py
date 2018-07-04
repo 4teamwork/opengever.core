@@ -84,13 +84,54 @@ class TestTaskTemplates(IntegrationTestCase):
         self.assertEquals(10, tasktemplate.deadline)
 
     @browsing
-    def test_deleting_a_tasktemplate_is_possible(self, browser):
+    def test_deleting_a_tasktemplatefolder_is_possible(self, browser):
         self.login(self.dossier_responsible, browser=browser)
+
+        title = self.tasktemplatefolder.title
+        self.assertIn(title, [template.title for template in
+                              self.templates.listFolderContents()])
 
         browser.open(self.tasktemplatefolder)
         self.assertIn(
             'Delete',
             browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+
+        browser.click_on('Delete')
+        browser.click_on('Delete')
+
+        self.assertEquals(['Verfahren Neuanstellung has been deleted.'], info_messages())
+        self.assertNotIn(title, [template.title for template in
+                                 self.templates.listFolderContents()])
+
+    @browsing
+    def test_deleting_a_tasktemplate_is_possible(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        title = self.tasktemplate.title
+        self.assertIn(title, [template.title for template in
+                              self.tasktemplatefolder.listFolderContents()])
+
+        browser.open(self.tasktemplate)
+        self.assertIn(
+            'Delete',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+
+        browser.click_on('Delete')
+        browser.click_on('Delete')
+
+        self.assertEquals(['Arbeitsplatz einrichten. has been deleted.'], info_messages())
+        self.assertNotIn(title, [template.title for template in
+                                 self.tasktemplatefolder.listFolderContents()])
+
+    @browsing
+    def test_deleting_tasktemplates_is_possible(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.tasktemplatefolder, view="tabbed_view/listing?view_name=tasktemplates")
+
+        self.assertIn(
+            'Delete',
+            browser.css('#tabbedview-menu .tabbedview-action-list a').text)
 
         data = self.make_path_param(self.tasktemplate)
         browser.open(self.tasktemplatefolder, data,

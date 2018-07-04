@@ -8,6 +8,7 @@ Changelog
 - Hide Excerpts field in SubmittedProposal edit form. [njohner]
 - Remove deprecated sablon fields from documenation. [tarnap]
 - Fix unicode error in versions tab comments. [lgraf]
+- Restrict availability of the delete button. [njohner]
 - Increase size of the favorites plone_uid column. [phgross]
 - Display the checkin comment on bumblebee overlays. [Rotonen]
 - Fix a bug with modern emojis while rendering task responses. [deiferni]
