@@ -10,7 +10,7 @@
     <table class="sharing-table listing">
       <tr>
         <th class="principal_header">{{i18n.label_name}}</th>
-        <th class="role_header" v-for="role in available_roles">{{role}}</th>
+        <th class="role_header" v-for="role in available_roles">{{role.title}}</th>
       </tr>
       <tr v-for="entry in entries" :key="entry.id">
         <td>
@@ -20,7 +20,7 @@
           <a class="assignments_info_button"
              v-bind:class="{ folded: entry.assignments}"
              @click="(event) => {toggle_assignments(event, entry, )}"/>
-          <div v-if="entry.assignments" class="assignments_info">
+          <div v-show="entry.assignments" class="assignments_info">
             <span>{{i18n.label_cause}}</span>
             <ul class="assignments_listing">
               <li v-for="assignment in entry.assignments">
@@ -35,17 +35,17 @@
         </td>
         <td v-for="role in available_roles" class="role_cell">
           <span class="aquired" :title="i18n.label_acquired"
-                v-if="entry.roles[role] == 'acquired'" />
+                v-if="entry.roles[role.id] == 'acquired'" />
 
           <template v-if="isEditable">
-            <input type="checkbox" v-if="entry.roles[role] != 'acquired'"
-                   :checked="entry.roles[role]" :class="role"
-                   @click="(event) => {toggle_checkbox(event, entry, role)}"/>
+            <input type="checkbox" v-if="entry.roles[role.id] != 'acquired'"
+                   :checked="entry.roles[role.id]" :class="role.id"
+                   @click="(event) => {toggle_checkbox(event, entry, role.id)}"/>
           </template>
 
           <template v-if="!isEditable">
             <span class="local" :title="i18n.label_local"
-                  v-if="entry.roles[role] === true" />
+                  v-if="entry.roles[role.id] === true" />
           </template>
 
         </td>

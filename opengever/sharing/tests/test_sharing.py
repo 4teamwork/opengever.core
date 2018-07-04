@@ -19,7 +19,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
 
         self.assertEquals(
             [u'Reader', u'Contributor', u'Editor', u'Reviewer', u'Publisher'],
-            browser.json.get('available_roles'))
+            [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
     def test_available_roles_on_a_templatedossier(self, browser):
@@ -30,7 +30,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
 
         self.assertEquals(
             [u'Reader', u'Contributor', u'Editor'],
-            browser.json.get('available_roles'))
+            [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
     def test_sets_role_assignments_and_updates_local_roles(self, browser):
