@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Build missing french translations for opengever.meeting. [elioschmutz]
 - Hide Excerpts field in SubmittedProposal edit form. [njohner]
 - Remove deprecated sablon fields from documenation. [tarnap]
 - Fix unicode error in versions tab comments. [lgraf]
