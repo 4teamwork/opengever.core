@@ -64,6 +64,25 @@ class TestRoleAssignmentManager(IntegrationTestCase):
              ('robert.ziegler', ('Owner',))),
             self.empty_dossier.get_local_roles())
 
+    def test_does_not_clean_owner_roles_when_adding(self):
+        self.login(self.regular_user)
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+
+        manager.add(self.secretariat_user.id,
+                    ['Editor', 'Contributor', 'Reader'],
+                    ASSIGNNMENT_VIA_SHARING)
+        manager.add(self.secretariat_user.id,
+                    ['Reader'], ASSIGNNMENT_VIA_TASK, self.task)
+        manager.add(self.regular_user.id,
+                    ['Publisher', 'Reviewer'], ASSIGNNMENT_VIA_SHARING)
+
+        self.assertEquals(
+            (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
+             ('kathi.barfuss', ('Publisher', 'Reviewer')),
+             ('robert.ziegler', ('Owner',))),
+            self.empty_dossier.get_local_roles())
+
     def test_role_assignmets_on_tasks(self):
         self.login(self.regular_user)
         document = create(Builder('document')

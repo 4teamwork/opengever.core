@@ -10,6 +10,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
+
 ASSIGNNMENT_VIA_TASK = 1
 ASSIGNNMENT_VIA_TASK_AGENCY = 2
 ASSIGNNMENT_VIA_SHARING = 3
@@ -296,12 +297,24 @@ class RoleAssignmentManager(object):
         self._upate_local_roles()
 
     def _upate_local_roles(self):
-        current_principals = [
-            principal for principal, roles in self.context.get_local_roles()]
+        current_principals = []
+        owner_principals = []
+
+        for principal, roles in self.context.get_local_roles():
+            current_principals.append(principal)
+            if 'Owner' in roles:
+                owner_principals.append(principal)
+
+        # drop all existing local roles
         self.context.manage_delLocalRoles(current_principals, verified=True)
 
         for principal, roles in self.storage.summarize():
             self.context.manage_setLocalRoles(
                 principal, [role for role in roles], verified=True)
+
+        # re-add owner roles
+        for principal in owner_principals:
+            self.context.manage_addLocalRoles(
+                principal, ['Owner'], verified=True)
 
         self.context.reindexObjectSecurity()
