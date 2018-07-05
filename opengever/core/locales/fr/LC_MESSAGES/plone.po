@@ -21,9 +21,15 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+msgid "DossierManager"
+msgstr ""
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "Inactive"
+msgstr ""
+
+msgid "Publisher"
 msgstr ""
 
 #. Default: "deactivate"
@@ -254,4 +260,16 @@ msgstr ""
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
+msgstr ""
+
+msgid "title_can_add"
+msgstr ""
+
+msgid "title_can_edit"
+msgstr ""
+
+msgid "title_can_review"
+msgstr ""
+
+msgid "title_can_view"
 msgstr ""
