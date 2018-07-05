@@ -674,7 +674,6 @@ class OpengeverContentFixture(object):
             .with_asset_file('text.txt')
             ))
 
-
         self.set_roles(self.inbox, self.secretariat_user.getId(),
                        ['Contributor', 'Editor', 'Reader'])
 

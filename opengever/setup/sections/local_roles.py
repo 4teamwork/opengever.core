@@ -116,11 +116,13 @@ class LocalRolesSetter(LocalRoles):
 
             if not pathkey or not roleskey or \
                roleskey not in item:    # not enough info
-                yield item; continue
+                yield item
+                continue
 
             obj = self.context.unrestrictedTraverse(item[pathkey].lstrip('/'), None)
             if obj is None:             # path doesn't exist
-                yield item; continue
+                yield item
+                continue
 
             if IRoleManager.providedBy(obj):
                 for principal, roles in item[roleskey].items():
