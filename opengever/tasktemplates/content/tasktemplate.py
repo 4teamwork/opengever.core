@@ -82,6 +82,7 @@ class ITaskTemplate(model.Schema):
         required=True,
     )
 
+    # Bad naming: comments is more appropriated
     model.primary('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),

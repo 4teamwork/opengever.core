@@ -47,6 +47,30 @@ class TestTaskTemplates(IntegrationTestCase):
                           browser.css('.documentFirstHeading').text)
 
     @browsing
+    def test_view_displays_formatted_comments(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.tasktemplate.text = (u'- T\xfcsteintrag' '\n'
+                                  u'- m\xfet' '\n'
+                                  u'- F\xfdrmat'
+                                  '<script>alert("XSS!");</script>')
+
+        browser.open(self.tasktemplate)
+
+        # Get the cell of the comments
+        cells = [row.css('td').first
+                 for row in browser.css('.task-listing tr')
+                 if len(row.css('th')) and row.css('th').first.text == 'Text']
+
+        self.assertEquals(1, len(cells))
+
+        self.assertEquals(u'- T\xfcsteintrag<br>'
+                          u'- m\xfet<br>'
+                          u'- F\xfdrmat'
+                          u'&lt;script&gt;alert("XSS!");&lt;/script&gt;',
+                          cells[0].normalized_innerHTML)
+
+    @browsing
     def test_tasktemplatefolder_can_be_edited_when_activated(self, browser):
         self.login(self.administrator, browser=browser)
 

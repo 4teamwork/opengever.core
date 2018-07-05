@@ -8,6 +8,7 @@ Changelog
 - Build missing french translations for opengever.meeting. [elioschmutz]
 - Hide Excerpts field in SubmittedProposal edit form. [njohner]
 - Remove deprecated sablon fields from documenation. [tarnap]
+- Format task template comments in detail view. [tarnap]
 - Fix unicode error in versions tab comments. [lgraf]
 - Restrict availability of the delete button. [njohner]
 - Increase size of the favorites plone_uid column. [phgross]
