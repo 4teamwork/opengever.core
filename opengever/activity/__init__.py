@@ -124,6 +124,9 @@ ACTIVITY_TRANSLATIONS = {
     'proposal-additional-documents-submitted': _(
         'proposal-additional-documents-submitted',
         default=u'Additional documents submitted'),
+    'submitted-proposal-commented': _(
+        'submitted-proposal-commented',
+        default=u'Submitted proposal commented'),
 }
 
 # TODO: There are too many places where the activites are defined:

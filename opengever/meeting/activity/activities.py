@@ -23,7 +23,14 @@ class ProposalCommentedActivitiy(BaseActivity):
 
     @property
     def label(self):
-        return self.translate_to_all_languages(ACTIVITY_TRANSLATIONS[self.kind])
+        # We can't use ISubmittedProposal.providedBy(obj) because of
+        # circular imports.
+        if self.context.__class__.__name__ == 'SubmittedProposal':
+            translation = ACTIVITY_TRANSLATIONS['submitted-{}'.format(self.kind)]
+        else:
+            translation = ACTIVITY_TRANSLATIONS[self.kind]
+
+        return self.translate_to_all_languages(translation)
 
     @property
     def description(self):

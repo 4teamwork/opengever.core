@@ -103,6 +103,11 @@ class TestMeetingActivities(IntegrationTestCase):
                 u'Proposal commented by {}'.format(actor_link()),
                 activity.summary)
 
+        self.assertEqual(
+            [u'Proposal commented', u'Submitted proposal commented'],
+            [activity.label for activity in Activity.query.all()]
+        )
+
     @browsing
     def test_record_activity_on_submtitting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
         self.login(self.committee_responsible, browser)
