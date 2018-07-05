@@ -3,9 +3,11 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
+from hashlib import sha256
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
@@ -115,8 +117,9 @@ DOCUMENT_REQUIREDS = {
 DOCUMENT_DEFAULTS = {
     'classification': u'unprotected',
     'description': u'',
-    'digitally_available': False,
+    'digitally_available': True,
     'document_date': FROZEN_TODAY,
+    'file': None,  # needs to be updated with NamedBlobFile in actual test
     'keywords': (),
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
@@ -680,6 +683,16 @@ class TestDocumentDefaults(TestDefaultsBase):
 
     features = ('dossiertemplate', )
 
+    SAMPLE_FILE = 'Lorem Ipsum.\n'
+
+    @property
+    def sample_file(self):
+        file_value = NamedBlobFile(
+            data=TestDocumentDefaults.SAMPLE_FILE,
+            contentType='text/plain',
+            filename=u'b\xe4rengraben.txt')
+        return file_value
+
     def test_create_content_in_container(self):
         self.login(self.regular_user)
 
@@ -688,10 +701,17 @@ class TestDocumentDefaults(TestDefaultsBase):
                 self.dossier,
                 'opengever.document.document',
                 title=DOCUMENT_REQUIREDS['title'],
+                file=self.sample_file,
             )
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -703,12 +723,19 @@ class TestDocumentDefaults(TestDefaultsBase):
                 'opengever.document.document',
                 'document-1',
                 title=DOCUMENT_REQUIREDS['title'],
+                file=self.sample_file,
             )
 
         doc = self.dossier[new_id]
 
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
+
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -720,12 +747,22 @@ class TestDocumentDefaults(TestDefaultsBase):
             with self.observe_children(self.dossier) as children:
                 browser.open(self.dossier)
                 factoriesmenu.add(u'Document')
-                browser.fill({u'Title': DOCUMENT_REQUIREDS['title']}).save()
+                browser.fill({
+                    u'Title': DOCUMENT_REQUIREDS['title'],
+                    u'File': (
+                        TestDocumentDefaults.SAMPLE_FILE,
+                        'b\xc3\xa4rengraben.txt', 'text/plain')}).save()
 
         doc, = children.get('added')
 
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
+
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_z3c_form_defaults()
+        expected['file'] = doc.file
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
@@ -739,6 +776,11 @@ class TestDocumentDefaults(TestDefaultsBase):
         payload = {
             u'@type': u'opengever.document.document',
             u'title': DOCUMENT_REQUIREDS['title'],
+            u'file': {
+                u'data': TestDocumentDefaults.SAMPLE_FILE.encode('base64'),
+                u'encoding': u'base64',
+                u'filename': u'b\xe4rengraben.txt',
+                u'content-type': u'text/plain'},
         }
         response = browser.open(
             self.dossier.absolute_url(),
@@ -751,12 +793,14 @@ class TestDocumentDefaults(TestDefaultsBase):
         new_object_id = str(response.json['id'])
         doc = self.dossier.restrictedTraverse(new_object_id)
 
-        # XXX: Doesn't currently work of event order during creation
-        # checksum = IBumblebeeDocument(doc).get_checksum()
-        # self.assertIsNotNone(checksum)
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
@@ -832,6 +876,11 @@ class TestMailDefaults(TestDefaultsBase):
                 'ftw.mail.mail',
                 message=self.sample_msg)
 
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
+
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
 
@@ -849,6 +898,11 @@ class TestMailDefaults(TestDefaultsBase):
                 message=self.sample_msg)
 
         mail = self.dossier[new_id]
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
@@ -869,6 +923,11 @@ class TestMailDefaults(TestDefaultsBase):
                                           'msg.eml', 'message/rfc822')}).save()
 
         mail = browser.context
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_z3c_form_defaults()
@@ -903,9 +962,10 @@ class TestMailDefaults(TestDefaultsBase):
         new_object_id = str(response.json['id'])
         mail = self.dossier.restrictedTraverse(new_object_id)
 
-        # XXX: Doesn't currently work of event order during creation
-        # checksum = IBumblebeeDocument(mail).get_checksum()
-        # self.assertIsNotNone(checksum)
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
