@@ -33,6 +33,29 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
+    def test_consider_the_ignore_permissions_flag(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+        self.assertEquals(
+            {u'available_roles': [], u'inherit': True, u'entries': []},
+            browser.json)
+
+
+        browser.open(self.dossier, view='@sharing?ignore_permissions=1',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEquals(
+            [u'Reader', u'Contributor', u'Editor',
+             u'Reviewer', u'Publisher', u'DossierManager'],
+            [role['id'] for role in browser.json.get('available_roles')])
+        self.assertEquals(
+            [u'Publisher', u'DossierManager', u'Editor',
+             u'Reader', u'Contributor', u'Reviewer'],
+            browser.json['entries'][0]['roles'].keys())
+
+    @browsing
     def test_sets_role_assignments_and_updates_local_roles(self, browser):
         self.login(self.administrator, browser=browser)
 

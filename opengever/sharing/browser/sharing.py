@@ -13,6 +13,7 @@ from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
+from opengever.sharing.interfaces import IDisabledPermissionCheck
 from opengever.sharing.interfaces import ISharingConfiguration
 from pkg_resources import resource_filename
 from plone import api
@@ -23,7 +24,7 @@ from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
-from Products.Five.browser import BrowserView
+from Products.CMFPlone.utils import normalizeString
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
@@ -110,10 +111,38 @@ class OpengeverSharingView(SharingView):
 
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    def _roles(self):
+        """plone.app.workflow SharingView original roles method, but
+        with conditionally permission check.
+        """
+        is_permission_check_disabled = IDisabledPermissionCheck.providedBy(
+            self.request)
+
+        context = self.context
+        portal_membership = api.portal.get_tool('portal_membership')
+        pairs = []
+
+        for name, utility in getUtilitiesFor(ISharingPageRole):
+            permission = utility.required_permission
+            if not is_permission_check_disabled and permission is not None:
+                if not portal_membership.checkPermission(permission, context):
+                    continue
+
+            # be friendly to utilities implemented without required_interface
+            iface = getattr(utility, 'required_interface', None)
+            if iface is not None and not iface.providedBy(context):
+                continue
+
+            pairs.append(dict(id = name, title = utility.title))
+
+        pairs.sort(key=lambda x: normalizeString(
+            translate(x["title"], context=self.request)))
+
+        return pairs
+
     @memoize
     def roles(self):
-        super_roles = super(OpengeverSharingView, self).roles()
-
+        super_roles = self._roles()
         if get_specification_for(self.context) is not None:
             # In lawgiver workflow specifications we can configure the
             # "visible roles", therefore we dont need to overwrite the

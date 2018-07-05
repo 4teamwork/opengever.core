@@ -41,6 +41,10 @@ var sharingApp = {
     fetchData: function () {
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString()};
+      if (this.isEditable === false){
+        params['ignore_permissions'] = 1
+      }
+
       this.requester.get(this.endpoint, { params: params }).then(function (response) {
         this.available_roles = response.data['available_roles'];
         this.entries = response.data['entries'];
@@ -73,6 +77,10 @@ var sharingApp = {
     search: function() {
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString(), search: this.principal_search };
+      if (this.isEditable === false){
+        params['ignore_permissions'] = 1
+      }
+
       this.requester.get(this.endpoint, { params: params }).then(function (response) {
 
         this.entries = Object.values(this.entries).filter(i => i.disabled == false);

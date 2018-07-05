@@ -1,4 +1,5 @@
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.sharing.security import disabled_permission_check
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.sharing import SharingGet as APISharingGet
@@ -11,7 +12,14 @@ from zope.publisher.interfaces import IPublishTraverse
 
 
 class SharingGet(APISharingGet):
-    """Returns a serialized content object.
+    """plone.restapi sharing endpoint customization:
+
+    Disable `plone.DelegateRoles` permission check, all users should be
+    able to access sharing informations.
+
+    Add additional request parameter `ignore_permission`, which is used for
+    readonly listings of the current local roles, as it's done in the sharing
+    tab.
     """
 
     def reply(self):
@@ -25,7 +33,12 @@ class SharingGet(APISharingGet):
             self.request.response.setStatus(501)
             return dict(error=dict(message='No serializer available.'))
 
-        data = serializer(search=self.request.form.get('search'))
+        if self.request.form.get('ignore_permissions'):
+            with disabled_permission_check():
+                data = serializer(search=self.request.form.get('search'))
+        else:
+            data = serializer(search=self.request.form.get('search'))
+
         data['available_roles'] = self.extend_roles_with_title(
             data.get('available_roles'))
         return data
