@@ -4,6 +4,15 @@ from opengever.base.utils import escape_html
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
+from opengever.meeting.connector.actions import CommentAction
+from opengever.meeting.connector.actions import DecideAction
+from opengever.meeting.connector.actions import RejectAction
+from opengever.meeting.connector.actions import ScheduleAction
+from opengever.meeting.connector.actions import SubmitAction
+from opengever.meeting.connector.actions import SubmitDocumentAction
+from opengever.meeting.connector.actions import UpdateSubmittedDocumentAction
+from opengever.meeting.connector.connector import Connector
+from opengever.meeting.connector.connector import ConnectorPath
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
@@ -307,8 +316,12 @@ class Proposal(Base):
         IHistory(self.resolve_submitted_proposal()).append_record(
             u'scheduled', meeting_id=meeting.meeting_id)
 
+        self.connector.dispatch(ScheduleAction, meeting_id=meeting.meeting_id)
+
     def reject(self, text):
         assert self.workflow.can_execute_transition(self, 'submitted-pending')
+
+        self.connector.dispatch(RejectAction, text=text)
 
         self.submitted_physical_path = None
         self.submitted_admin_unit_id = None
@@ -318,7 +331,6 @@ class Proposal(Base):
         # set workflow state directly for once, the transition is used to
         # redirect to a form.
         self.workflow_state = self.STATE_PENDING.name
-        IHistory(self.resolve_proposal()).append_record(u'rejected', text=text)
 
     def remove_scheduled(self, meeting):
         self.execute_transition('scheduled-submitted')
@@ -360,6 +372,8 @@ class Proposal(Base):
 
         IHistory(self.resolve_submitted_proposal()).append_record(u'decided')
         self.execute_transition('scheduled-decided')
+
+        self.connector.dispatch(DecideAction)
 
     def register_excerpt(self, document_intid):
         """Adds a GeneratedExcerpt database entry and a corresponding
@@ -409,3 +423,27 @@ class Proposal(Base):
             return u''
 
         return agenda_item.meeting.get_link()
+
+    def comment(self, **kwargs):
+        self.connector.dispatch(CommentAction, **kwargs)
+
+    def submit(self, **kwargs):
+        self.connector.dispatch(SubmitAction, **kwargs)
+
+    def update_submitted_document(self, document, submitted_document):
+        self.connector.dispatch(UpdateSubmittedDocumentAction,
+                                document_title=document.title,
+                                submitted_version=document.get_current_version_id())
+
+    def copy_proposal_document(self, document):
+        self.connector.dispatch(SubmitDocumentAction,
+                                document_title=document.title)
+
+    @property
+    def connector(self):
+        connector = Connector()
+        connector.connect_path(ConnectorPath(self.admin_unit_id, self.physical_path))
+        if self.is_submitted():
+            connector.connect_path(ConnectorPath(self.submitted_admin_unit_id, self.submitted_physical_path))
+
+        return connector

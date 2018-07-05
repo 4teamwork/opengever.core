@@ -16,11 +16,17 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting.activity.activities import ProposalCommentedActivitiy
+from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalDocumentSubmittedActivity
+from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
+from opengever.meeting.activity.activities import ProposalRejectedActivity
+from opengever.meeting.activity.activities import ProposalScheduledActivity
+from opengever.meeting.activity.activities import ProposalSubmittedActivity
 from opengever.meeting.activity.watchers import remove_watchers_on_submitted_proposal_deleted
 from opengever.meeting.command import CopyProposalDocumentCommand
 from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
-from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
@@ -323,7 +329,46 @@ class ProposalBase(ModelContainer):
         return False
 
     def comment(self, text, uuid=None):
+        self.load_model().comment(text=text)
         return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
+
+    def _comment(self, text):
+        """Called by the connector-action CommentAction
+        """
+        ProposalCommentedActivitiy(self, self.REQUEST).record()
+
+    def _submit(self, text):
+        """Called by the connector-action SubmitAction
+        """
+        ProposalSubmittedActivity(self, self.REQUEST).record()
+
+    def _reject(self, text):
+        """Called by the connector-action RejectAction
+        """
+        ProposalRejectedActivity(self, self.REQUEST).record()
+        IHistory(self).append_record(u'rejected', text=text)
+
+    def _schedule(self, meeting_id):
+        """Called by the connector-action ScheduleAction
+        """
+        ProposalScheduledActivity(self, self.REQUEST, meeting_id).record()
+
+    def _decide(self):
+        """Called by the connector-action DecideAction
+        """
+        ProposalDecideActivity(self, self.REQUEST).record()
+
+    def _update_submitted_document(self, document_title, submitted_version):
+        """Called by the connector-action UpdateSubmittedDocumentAction
+        """
+        ProposalDocumentUpdatedActivity(
+            self, self.REQUEST, document_title, submitted_version).record()
+
+    def _submit_document(self, document_title):
+        """Called by the connector-action SubmitDocumentAction
+        """
+        ProposalDocumentSubmittedActivity(
+            self, self.REQUEST, document_title).record()
 
 
 class SubmittedProposal(ProposalBase):
@@ -426,13 +471,14 @@ class SubmittedProposal(ProposalBase):
 
     def reject(self, text):
         """Reject the submitted proposal."""
+        self.load_model().reject(text)
 
-        RejectProposalCommand(self).execute()
-        proposal = self.load_model()
-        proposal.reject(text)
-
+    def _reject(self, text):
+        """Called by the connector-action RejectAction
+        """
+        super(SubmittedProposal, self)._reject(text)
         remove_watchers_on_submitted_proposal_deleted(
-            self, proposal.committee.group_id)
+            self, self.load_model().committee.group_id)
 
         with elevated_privileges():
             api.content.delete(self)
@@ -633,13 +679,16 @@ class Proposal(ProposalBase):
             else:
                 command = UpdateSubmittedDocumentCommand(
                     self, document, submitted_document)
-
+                proposal_model.update_submitted_document(
+                    document, submitted_document)
         else:
             command = CopyProposalDocumentCommand(
                 self,
                 document,
                 target_path=proposal_model.submitted_physical_path,
                 target_admin_unit_id=proposal_model.submitted_admin_unit_id)
+
+            proposal_model.copy_proposal_document(document)
 
             if not self.relatedItems:
                 # The missing_value attribute of a z3c-form field is used
@@ -678,13 +727,13 @@ class Proposal(ProposalBase):
         for copy_command in copy_commands:
             copy_command.execute()
 
-    def reject(self):
-        """Reject the proposal.
+        self.load_model().submit(text=text)
 
-        Called via remote-request after the proposal has been rejected on the
-        committee side.
+    def _reject(self, text):
+        """Called by the connector-action RejectAction after the proposal has
+        been rejected on the committee side.
         """
-
+        super(Proposal, self)._reject(text)
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')

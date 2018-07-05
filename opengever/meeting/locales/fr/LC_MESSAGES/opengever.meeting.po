@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-04 09:46+0000\n"
+"POT-Creation-Date: 2018-07-04 09:53+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1445,6 +1445,16 @@ msgstr "En modification"
 msgid "periods"
 msgstr "Périodes"
 
+#. Default: "Document ${title} submitted"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_submitted"
+msgstr ""
+
+#. Default: "Submitted document ${title} updated to version ${version}"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_updated"
+msgstr ""
+
 #. Default: "Proposal document"
 #: ./opengever/meeting/proposal.py
 msgid "proposal_document"
@@ -1456,6 +1466,7 @@ msgid "proposal_history_label_cancelled"
 msgstr "Annulé par ${user}"
 
 #. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_commented"
 msgstr "Commenté par ${user}"
@@ -1466,6 +1477,7 @@ msgid "proposal_history_label_created"
 msgstr "Créé par ${user}"
 
 #. Default: "Proposal decided by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_decided"
 msgstr "Proposition décidée par ${user}"
@@ -1486,6 +1498,7 @@ msgid "proposal_history_label_reactivated"
 msgstr "Réactivé par ${user}"
 
 #. Default: "Rejected by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_rejected"
 msgstr "Rejeté par ${user}"
@@ -1506,11 +1519,13 @@ msgid "proposal_history_label_revised"
 msgstr "Décision de proposition révisée par ${user}"
 
 #. Default: "Scheduled for meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_scheduled"
 msgstr "Prévu pour la séance ${meeting} par ${user}"
 
 #. Default: "Submitted by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_submitted"
 msgstr "Soumis par ${user}"
