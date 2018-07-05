@@ -283,9 +283,10 @@ class TestProposalAgendaItem(IntegrationTestCase):
         excerpt_document, = children['added']
         self.assertEquals('Excerption \xc3\x84nderungen',
                           excerpt_document.Title())
-        self.assertEquals('Excerption \xc3\x84nderungen', excerpt_document.Title())
         self.assertIsInstance(excerpt_document.title, unicode)
         self.assertIsNotNone(excerpt_document.file.data)
+        self.assertEquals(u'Excerption Aenderungen.docx',
+                          excerpt_document.file.filename)
 
     @browsing
     def test_cannot_create_excerpt_when_meeting_closed(self, browser):
