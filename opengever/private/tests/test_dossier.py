@@ -2,10 +2,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashable
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.protect import createToken
@@ -102,8 +104,7 @@ class TestPrivateDossierTabbedView(IntegrationTestCase):
         self.assertEqual(
             ['Delete', 'Export as Zip', 'Properties',
              'dossier-transition-resolve'],
-            browser.css('#plone-contentmenu-actions '
-                        '.actionMenuContent li').text)
+            editbar.menu_options("Actions"))
 
     @browsing
     def test_participation_and_task_box_are_hidden_on_overview(self, browser):
@@ -164,9 +165,23 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
         data = {'paths:list': ['/'.join(self.private_document.getPhysicalPath())],
                 '_authenticator': createToken()}
 
-        browser.open(self.dossier, view="trashed", data=data)
+        browser.open(self.private_dossier, view="trashed", data=data)
         self.assertEquals([u'the object Testdokum\xe4nt trashed'],
                           info_messages())
+
+    @browsing
+    def test_remove_action_not_available_in_private_folder(self, browser):
+        self.login(self.manager, browser=browser)
+
+        ITrashable(self.document).trash()
+        browser.open(self.dossier, view="tabbed_view/listing?view_name=trash")
+        self.assertItemsEqual([u'More actions \u25bc', 'untrashed', 'remove'],
+                              browser.css('#tabbedview-menu a').text)
+
+        ITrashable(self.private_document).trash()
+        browser.open(self.private_dossier, view="tabbed_view/listing?view_name=trash")
+        self.assertItemsEqual([u'More actions \u25bc', 'untrashed'],
+                              browser.css('#tabbedview-menu a').text)
 
     @browsing
     def test_private_dossier_can_be_resolved(self, browser):
