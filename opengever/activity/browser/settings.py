@@ -1,5 +1,7 @@
-from opengever.activity import _
+from Products.Five import BrowserView
+from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
+from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
@@ -13,7 +15,6 @@ from opengever.base.response import JSONResponse
 from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api
-from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 import json
@@ -138,13 +139,12 @@ class NotificationSettings(BrowserView):
         activities = []
         for group in ACTIVITY_GROUPS:
             for kind in group.get('activities'):
-
                 kind_title = translate(
                     ACTIVITY_TRANSLATIONS[kind], context=self.request)
 
                 item = {'kind_title': kind_title,
                         'edit_mode': True,
-                        'css_class': ResponseDescription.get(transition=kind).css_class,
+                        'css_class': self._get_activity_class(kind),
                         'kind': kind,
                         'type_id': group.get('id')}
 
@@ -214,6 +214,12 @@ class NotificationSettings(BrowserView):
             item[dispatcher._id] = {role: bool(role in values) for role in roles}
 
         return item
+
+    def _get_activity_class(self, kind):
+        css_class = ACTIVITIES_ICONS.get(kind)
+        if not css_class:
+            css_class = ResponseDescription.get(transition=kind).css_class
+        return css_class
 
 
 class NotificationSettingsForm(BrowserView):
