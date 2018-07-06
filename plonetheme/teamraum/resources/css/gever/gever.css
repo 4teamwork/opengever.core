@@ -3153,6 +3153,8 @@ html { font-size: 12px; }
 .linkWrapper > .contenttype-opengever-dossier-businesscasedossier > span { vertical-align: middle; }
 .linkWrapper > .contenttype-opengever-dossier-businesscasedossier:before { vertical-align: middle; padding-bottom: 6px; }
 
+.horizontal-spacer { border: 0; margin-bottom: 1.5em; }
+
 dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-top: -1px; }
 
 .template-accept_choose_method #content textarea, .template-refuse-task #content textarea, .template-assign_choose_method #content textarea, .template-assign-task #content textarea, .template-addresponse #content textarea, .template-checkin_document #form-widgets-comment, .template-modify_deadline #form-widgets-text, .template-addcommentresponse #form-widgets-text { max-width: 600px; min-height: 15em; padding: 1.2em 1em; box-sizing: border-box; line-height: 1.6em; }
