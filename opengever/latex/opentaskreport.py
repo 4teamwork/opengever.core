@@ -9,6 +9,7 @@ from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
 from opengever.latex.utils import workflow_state
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task.helper import task_type_helper
@@ -27,7 +28,7 @@ OPEN_TASK_STATES = [
     'task-state-resolved',
     'task-state-rejected',
     'forwarding-state-open',
-    ]
+]
 
 
 class IOpenTaskReportLayer(ILandscapeLayer):
@@ -65,7 +66,6 @@ class OpenTaskReportLaTeXView(MakoLaTeXView):
     def _extend_task_query(self, query):
         """Extends a globalindex task query.
         """
-
         # sort by deadline
         query = query.order_by(asc(Task.deadline))
 
@@ -76,8 +76,8 @@ class OpenTaskReportLaTeXView(MakoLaTeXView):
         # List only the one which is assigned to this client.
         query = query.filter(
             or_(
-                and_(Task.predecessor == None, Task.successors == None),
-                Task.admin_unit_id == get_current_org_unit().id()))
+                and_(Task.predecessor == None, Task.successors == None),  # noqa: comparison to None is correct for SQLAlchemy
+                Task.admin_unit_id == get_current_admin_unit().id()))
 
         return query
 
@@ -88,7 +88,6 @@ class OpenTaskReportLaTeXView(MakoLaTeXView):
         incoming -- open tasks assigned to the current client
         outgoing -- open tasks assigned to another client
         """
-
         org_unit_id = get_current_org_unit().id()
 
         incoming_query = Session().query(Task)
@@ -162,7 +161,7 @@ class OpenTaskReportLaTeXView(MakoLaTeXView):
             responsible,
             deadline,
             review_state,
-            ]
+        ]
 
     def convert_list_to_row(self, row):
         return ' & '.join([self.convert_plain(cell) for cell in row])

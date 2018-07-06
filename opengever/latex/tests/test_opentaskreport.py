@@ -147,9 +147,6 @@ class TestOpenTaskReport(FunctionalTestCase):
         self.assertFalse(
             self.portal.unrestrictedTraverse('pdf-open-task-report-allowed')())
 
-    @unittest.skip('The code that this test tests for is actually broken and '
-                   'needs to be fixed. The condition in opentaskreport.py:80 '
-                   'is wrong, it compares IDs of admin units vs org units.')
     def test_shows_only_task_on_admin_unit(self):
         additional_admin_unit = create(Builder('admin_unit').id(u'additional'))
         create(Builder('org_unit').id(u'additional')
@@ -171,10 +168,10 @@ class TestOpenTaskReport(FunctionalTestCase):
 
         self.assertEqual(
             ['1 & Task 1 & To comment &  & Client1 & Peter Peter & '
-             'Client1 / Meier Hans & 01.07.2014 & task"=state"=open'],
+             'Org Unit 1 / Meier Hans & 01.07.2014 & task"=state"=open'],
             arguments['outgoing'])
 
         self.assertEqual(
-            ['1 & Task 1 & To comment &  & Client1 & Client1 / Peter '
+            ['1 & Task 1 & To comment &  & Client1 & Org Unit 1 / Peter '
              'Peter & Meier Hans & 01.07.2014 & task"=state"=open'],
             arguments['incoming'], )
