@@ -154,7 +154,6 @@ msgstr "Sitzungsnummer"
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
-#: ./opengever/meeting/browser/templates/meetingtemplate.pt
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "No content"
 msgstr "Keine Inhalte"
@@ -237,7 +236,6 @@ msgstr "Das Dokument wurde durch eine neuere Version des Protokollauszugs übers
 msgid "Updated with a newer generated version from meeting ${title}."
 msgstr "Mit einer neuen Version der Sitzung ${title} aktualisiert."
 
-#: ./opengever/meeting/browser/templates/meetingtemplate.pt
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "View all"
 msgstr "Alle anzeigen"
@@ -706,10 +704,10 @@ msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind
 msgid "help_create_task"
 msgstr "Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen."
 
-#. Default: "The position of the paragraph within the meeting."
-#: ./opengever/meeting/interfaces.py
-msgid "help_paragraph_template_position"
-msgstr "Position zur Sortierung in der Sitzungsvorlage"
+#. Default: "Template containing the predifined paragraphs"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_meeting_template"
+msgstr "Vorlage für vordefinierte Sitzungsinhalte"
 
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1076,6 +1074,11 @@ msgstr "Sitzung abgeschlossen"
 msgid "label_meeting_has_agenda_items"
 msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
 
+#. Default: "Meeting Template"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_meeting_template"
+msgstr "Sitzungsvorlage"
+
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py
 msgid "label_member"
@@ -1112,16 +1115,6 @@ msgstr "Weitere Teilnehmende"
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_paragraph_template"
 msgstr "Vorlage für Zwischentitel"
-
-#. Default: "Position in template"
-#: ./opengever/meeting/interfaces.py
-msgid "label_paragraph_template_position"
-msgstr "Position in Stellungsvorlage"
-
-#. Default: "Paragraphs"
-#: ./opengever/meeting/browser/meetingtemplate.py
-msgid "label_paragraphs"
-msgstr "Zwischentitel"
 
 #. Default: "Participants"
 #: ./opengever/meeting/browser/meetings/protocol.py
