@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-04 09:46+0000\n"
+"POT-Creation-Date: 2018-07-06 06:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,6 +58,10 @@ msgstr ""
 
 #: ./opengever/meeting/command.py
 msgid "Agenda item list for meeting ${title} has been generated successfully."
+msgstr ""
+
+#: ./opengever/meeting/command.py
+msgid "Agenda item list for meeting ${title} has been updated successfully."
 msgstr ""
 
 #. Default: "An unexpected error has occurred"
