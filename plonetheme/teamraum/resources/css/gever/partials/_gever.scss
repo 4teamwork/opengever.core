@@ -650,7 +650,7 @@ ul.member_listing li {
 }
 
 .wf-task-state-skipped {
-  @extend .icon-status-canceled;
+  @extend .icon-status-skipped;
 }
 
 .wf-meeting-state-pending,
