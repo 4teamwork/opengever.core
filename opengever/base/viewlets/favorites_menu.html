@@ -3,7 +3,7 @@
     <div class="favorites-menu">
         <dl>
             <dt>
-                <a :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
+                <a class="header-dropdown-button" :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
             </dt>
             <dd v-show="isOpen">
                 <ul>
