@@ -36,7 +36,7 @@ class TestMeetingTemplate(IntegrationTestCase):
         statusmessages.assert_no_error_messages()
 
         self.assertEquals(['Item created'], statusmessages.info_messages())
-        self.assertEquals(['Template'], browser.css('h1').text)
+        self.assertEquals([u'Meeting T\xc3\xb6mpl\xc3\xb6te'], browser.css('h1').text)
 
     @browsing
     def test_add_meeting_from_template(self, browser):
