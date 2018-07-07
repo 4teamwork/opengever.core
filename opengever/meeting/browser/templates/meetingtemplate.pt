@@ -10,12 +10,14 @@
 <metal:main fill-slot="content-core">
   <metal:content-core define-macro="content-core">
 
-    <div i18n:domain="opengever.meeting" id="meetingtemplate_view"
-         tal:define="paragraphs view/paragraphs">
+    <div i18n:domain="opengever.meeting" id="opengever_meeting_meetingtemplate"
+         tal:define="paragraphs view/paragraphs"
+         tal:attributes="data-update-order-url view/url_update_order">
 
-      <ul class="paragraphs_box">
+      <ul class="paragraphs-list">
         <li tal:repeat="paragraph paragraphs"
-            tal:content="paragraph/title"></li>
+            tal:content="paragraph/title"
+            tal:attributes="data-uid paragraph/id"></li>
       </ul>
 
     </div>

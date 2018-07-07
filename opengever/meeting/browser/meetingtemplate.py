@@ -8,3 +8,7 @@ class MeetingTemplateView(OGDefaultView):
 
     def paragraphs(self):
         return self.context.get_paragraphs()
+
+    @property
+    def url_update_order(self):
+        return '{}/update_order'.format(self.context.absolute_url())
