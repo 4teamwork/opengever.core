@@ -226,6 +226,17 @@
       cookable="True"
       expression=""
       enabled="True"
+      id="++resource++opengever.meeting/meetingtemplate.js"
+      inline="False"
+      insert-after="++resource++opengever.base/livesearch.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
       id="++resource++opengever.meeting/proposal.js"
       inline="False"
       insert-after="++resource++opengever.base/SelectAutocomplete.js"
