@@ -8,7 +8,6 @@ from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
-from opengever.meeting.sablontemplate import ISablonTemplate
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from plone import api
 from zope.annotation.interfaces import IAnnotations
