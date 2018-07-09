@@ -85,7 +85,13 @@ class TestFindParentDossier(FunctionalTestCase):
 
         self.assertEquals(dossier, find_parent_dossier(document))
 
-    def test_find_parent_on_nested_dossierts(self):
+    def test_find_parent_inbox(self):
+        inbox = create(Builder('inbox'))
+        document = create(Builder('document').within(inbox))
+
+        self.assertEquals(inbox, find_parent_dossier(document))
+
+    def test_find_parent_on_nested_dossiers(self):
         dossier = create(Builder('dossier'))
         subdossier = create(Builder('dossier').within(dossier))
         document = create(Builder('document').within(subdossier))

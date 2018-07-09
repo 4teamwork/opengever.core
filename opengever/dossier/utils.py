@@ -19,13 +19,13 @@ def get_containing_dossier(obj):
 
 
 def find_parent_dossier(content):
-    """Returns the first parent dossier relative to the current context.
+    """Returns the first parent dossier (or inbox) relative to the current context.
     """
 
     if IPloneSiteRoot.providedBy(content):
         raise ValueError('Site root passed as argument.')
 
-    while content and not IDossierMarker.providedBy(content):
+    while content and not (IDossierMarker.providedBy(content) or IInbox.providedBy(content)):
         content = aq_parent(aq_inner(content))
         if IPloneSiteRoot.providedBy(content):
             raise ValueError('Site root reached while searching '
