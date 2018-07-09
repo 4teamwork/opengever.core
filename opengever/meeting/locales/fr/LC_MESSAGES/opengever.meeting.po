@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-04 09:46+0000\n"
+"POT-Creation-Date: 2018-07-06 06:12+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -62,6 +62,10 @@ msgstr "Le document supplémentaire ${title} a été soumis avec succès."
 #: ./opengever/meeting/command.py
 msgid "Agenda item list for meeting ${title} has been generated successfully."
 msgstr "L'ordre du jour pour la séance ${title} a été créé avec succès."
+
+#: ./opengever/meeting/command.py
+msgid "Agenda item list for meeting ${title} has been updated successfully."
+msgstr "L'ordre du jour pour la séance ${title} a été actualisé avec succès."
 
 #. Default: "An unexpected error has occurred"
 #: ./opengever/meeting/browser/meetings/meeting.py

@@ -164,10 +164,12 @@ class AgendaItemListOperations(object):
         return agendaitem_list_document
 
     def get_generated_message(self, meeting):
-        return _(u'Agenda item list for meeting ${title} has been generated successfully.', mapping=dict(title=meeting.get_title()))
+        return _(u'Agenda item list for meeting ${title} has been generated '
+                 'successfully.',
+                 mapping=dict(title=meeting.get_title()))
 
     def get_updated_message(self, meeting):
-        return _(u'Protocol for meeting ${title} has been updated '
+        return _(u'Agenda item list for meeting ${title} has been updated '
                  'successfully.',
                  mapping=dict(title=meeting.get_title()))
 
