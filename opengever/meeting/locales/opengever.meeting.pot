@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-06 06:12+0000\n"
+"POT-Creation-Date: 2018-07-09 08:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1446,6 +1446,16 @@ msgstr ""
 msgid "periods"
 msgstr ""
 
+#. Default: "Document ${title} submitted"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_submitted"
+msgstr ""
+
+#. Default: "Submitted document ${title} updated to version ${version}"
+#: ./opengever/meeting/activity/activities.py
+msgid "proposal_activity_label_document_updated"
+msgstr ""
+
 #. Default: "Proposal document"
 #: ./opengever/meeting/proposal.py
 msgid "proposal_document"
@@ -1457,6 +1467,7 @@ msgid "proposal_history_label_cancelled"
 msgstr ""
 
 #. Default: "Proposal commented by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_commented"
 msgstr ""
@@ -1467,6 +1478,7 @@ msgid "proposal_history_label_created"
 msgstr ""
 
 #. Default: "Proposal decided by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_decided"
 msgstr ""
@@ -1487,6 +1499,7 @@ msgid "proposal_history_label_reactivated"
 msgstr ""
 
 #. Default: "Rejected by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_rejected"
 msgstr ""
@@ -1507,11 +1520,13 @@ msgid "proposal_history_label_revised"
 msgstr ""
 
 #. Default: "Scheduled for meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_scheduled"
 msgstr ""
 
 #. Default: "Submitted by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_submitted"
 msgstr ""

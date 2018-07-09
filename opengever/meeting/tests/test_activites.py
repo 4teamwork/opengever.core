@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.activity.model import Activity
 from opengever.activity.model.subscription import Subscription
+from opengever.meeting.activity.activities import actor_link
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.app.intid.interfaces import IIntIds
@@ -85,6 +87,153 @@ class TestMeetingActivities(IntegrationTestCase):
         self.assertSubscribersForResource([self.dossier_responsible], proposal)
         self.assertSubscribersLength(1)
 
+    @browsing
+    def test_record_activity_on_comment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.proposal.comment(u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-commented', activity.kind)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Proposal commented by {}'.format(actor_link()),
+                activity.summary)
+
+        self.assertEqual(
+            [u'Proposal commented', u'Submitted proposal commented'],
+            [activity.label for activity in Activity.query.all()]
+        )
+
+    @browsing
+    def test_record_activity_on_submtitting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.submit_proposal(self.draft_proposal, browser, comment=u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-submit', activity.kind)
+            self.assertEquals('Proposal submitted', activity.label)
+            self.assertEquals(self.draft_proposal.title, activity.title)
+            self.assertEquals(
+                u'Submitted by {}'.format(actor_link()),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_rejecting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.reject_proposal(self.submitted_proposal, browser, comment=u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-reject', activity.kind)
+            self.assertEquals('Proposal rejected', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Rejected by {}'.format(actor_link()),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_schedule_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        meeting = self.meeting.model
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.submitted_proposal.load_model().schedule(meeting)
+
+        self.assertEqual(2, Activity.query.count())
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-transition-schedule', activity.kind)
+            self.assertEquals('Proposal scheduled', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Scheduled for meeting {} by {}'.format(meeting.get_title(), actor_link()),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_decide_a_proposal_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        meeting = self.meeting.model
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.submitted_proposal.load_model().schedule(meeting)
+
+        self.assertEqual(2, Activity.query.count())
+
+        self.submitted_proposal.load_model().decide(meeting)
+
+        self.assertEqual(4, Activity.query.count())
+
+        for activity in Activity.query.all()[-2:]:
+            self.assertEquals('proposal-transition-decide', activity.kind)
+            self.assertEquals('Proposal decided', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Proposal decided by {}'.format(actor_link()),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_update_attachment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        rtool = api.portal.get_tool('portal_repository')
+
+        document = self.subdocument
+
+        self.assertEqual(0, Activity.query.count())
+
+        # create init version
+        rtool.save(document)
+
+        self.proposal.submit_additional_document(document)
+
+        self.assertEqual(2, Activity.query.count())
+
+        # create version 1
+        rtool.save(document)
+
+        self.proposal.submit_additional_document(document)
+
+        self.assertEqual(4, Activity.query.count())
+
+        for activity in Activity.query.all()[-2:]:
+            self.assertEquals('proposal-attachment-updated', activity.kind)
+            self.assertEquals('Attachment updated', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Submitted document {} updated to version 1'.format(document.title),
+                activity.summary)
+
+    @browsing
+    def test_record_activity_on_submit_attachment_for_proposal_and_submitted_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        document = self.subdocument
+
+        self.assertEqual(0, Activity.query.count())
+
+        self.proposal.submit_additional_document(document)
+
+        self.assertEqual(2, Activity.query.count())
+
+        for activity in Activity.query.all():
+            self.assertEquals('proposal-additional-documents-submitted', activity.kind)
+            self.assertEquals('Additional documents submitted', activity.label)
+            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(
+                u'Document {} submitted'.format(document.title),
+                activity.summary)
+
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
             [subscriber.id for subscriber in subscribers],
@@ -114,17 +263,19 @@ class TestMeetingActivities(IntegrationTestCase):
     def get_group_members(self, group_id):
         return api.user.get_users(groupname=group_id)
 
-    def execute_transition(self, obj, transition, browser):
+    def execute_transition(self, obj, transition, browser, comment=''):
         browser.visit(
             obj, view="addtransitioncomment?form.widgets.transition={}".format(
                 transition))
+        if comment:
+            browser.fill({'Comment': comment})
         browser.find('Confirm').click()
 
-    def submit_proposal(self, proposal, browser):
-        self.execute_transition(proposal, 'pending-submitted', browser)
+    def submit_proposal(self, proposal, browser, comment=''):
+        self.execute_transition(proposal, 'pending-submitted', browser, comment)
 
-    def reject_proposal(self, proposal, browser):
-        self.execute_transition(proposal, 'submitted-pending', browser)
+    def reject_proposal(self, proposal, browser, comment=''):
+        self.execute_transition(proposal, 'submitted-pending', browser, comment)
 
     def create_proposal_with_issuer(self, issuer, committee, browser):
         browser.open(self.dossier)

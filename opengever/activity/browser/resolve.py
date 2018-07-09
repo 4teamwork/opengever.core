@@ -36,11 +36,13 @@ class ResolveNotificationView(ResolveOGUIDView):
         """Redirect to the affected resource. If the resource is stored
         in an other admin_unit than the current one, it redirects to the
         resolve_oguid view on this admin_unit."""
-
         oguid = self.notification.activity.resource.oguid
 
         if oguid.is_on_current_admin_unit:
-            url = oguid.resolve_object().absolute_url()
+            try:
+                url = oguid.resolve_object().absolute_url()
+            except KeyError:
+                raise NotFound('Requested object has been deleted')
 
         else:
             admin_unit = ogds_service().fetch_admin_unit(oguid.admin_unit_id)

@@ -29,6 +29,7 @@ Changelog
 - Optionalize 'related document or template' for proposals. [Rotonen]
 - Add a no value option to the table radio widget when it's not required. [Rotonen]
 - Extend activity icons for proposal activities. [elioschmutz]
+- Implement proposal notifications. [elioschmutz]
 - Register watchers for proposals. [elioschmutz]
 - Implement tabs for personal activity-settings view. [elioschmutz]
 - Add new notification roles for proposal activities. [elioschmutz]

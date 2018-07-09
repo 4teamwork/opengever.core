@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-21 09:53+0000\n"
+"POT-Creation-Date: 2018-07-05 20:03+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -217,6 +217,11 @@ msgstr "Tageszusammenfassung vom ${date}"
 #: ./opengever/activity/mail.py
 msgid "subject_prefix"
 msgstr "GEVER Aufgabe"
+
+#. Default: "Submitted proposal commented"
+#: ./opengever/activity/__init__.py
+msgid "submitted-proposal-commented"
+msgstr "Eingereichter Antrag kommentiert"
 
 #. Default: "Task added"
 #: ./opengever/activity/__init__.py

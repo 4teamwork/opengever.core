@@ -77,7 +77,7 @@ DEFAULT_SETTINGS = [
      'badge_notification_roles': [PROPOSAL_ISSUER_ROLE,
                                   COMMITTEE_RESPONSIBLE_ROLE]},
     {'kind': 'proposal-attachment-updated',
-     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+     'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
     {'kind': 'proposal-additional-documents-submitted',
      'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
 ]

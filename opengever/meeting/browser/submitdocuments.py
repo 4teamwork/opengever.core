@@ -10,6 +10,8 @@ from opengever.document.versioner import Versioner
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.meeting.activity.activities import ProposalDocumentSubmittedActivity
+from opengever.meeting.activity.activities import ProposalDocumentUpdatedActivity
 from opengever.meeting.browser.documents.submit import ISubmitAdditionalDocument
 from opengever.meeting.exceptions import NoSubmittedDocument
 from opengever.meeting.interfaces import IHistory
@@ -204,6 +206,10 @@ class UpdateSubmittedDocumentView(BrowserView):
                 uuid=history_data['uuid']
             )
 
+            ProposalDocumentUpdatedActivity(
+                submitted_proposal, self.request,
+                self.context.title, history_data['submitted_version']).record()
+
             portal_path = '/'.join(api.portal.get().getPhysicalPath())
             intids = getUtility(IIntIds)
 
@@ -237,6 +243,9 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
                 submitted_version=history_data['submitted_version'],
                 uuid=history_data['uuid']
             )
+
+        ProposalDocumentSubmittedActivity(
+            self.context, self.request, document.title).record()
 
         ILockable(document).lock(MEETING_SUBMITTED_LOCK)
         return document
