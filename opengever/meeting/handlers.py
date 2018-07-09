@@ -19,9 +19,15 @@ from zope.intid.interfaces import IIntIds
 
 
 def document_deleted(context, event):
-    # this event is also fired when deleting a plone site. Unfortunately
-    # no deletion-order seems to be guaranteed, so it might happen that the
-    # IntId utility is removed before removing content.
+    """Fired when a document or a mail is deleted.
+
+    This happens while rejecting proposals. The entry that tracks the submitted
+    documents must also be removed to avoid issues when re-submitting.
+
+    this event is also fired when deleting a plone site. Unfortunately
+    no deletion-order seems to be guaranteed, so it might happen that the
+    IntId utility is removed before removing content.
+    """
     try:
         getUtility(IIntIds)
     except ComponentLookupError:

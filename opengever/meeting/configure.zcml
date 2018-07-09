@@ -142,7 +142,7 @@
       />
 
   <subscriber
-      for="opengever.document.document.IDocumentSchema
+      for="opengever.document.behaviors.IBaseDocument
            OFS.interfaces.IObjectWillBeRemovedEvent"
       handler=".handlers.document_deleted"
       />
