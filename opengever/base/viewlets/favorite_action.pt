@@ -13,5 +13,5 @@
                      data-mark-favorite-title view/get_mark_favorite_title;
                      data-unmark-favorite-title view/get_unmark_favorite_title;
                      data-favorite-id python: favorite.favorite_id if favorite else ''" />
-
 </div>
+<hr class="horizontal-spacer" />

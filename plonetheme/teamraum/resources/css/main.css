@@ -567,12 +567,6 @@ dl.LSTable dd {
 h1, h2, h3, h4 {
   margin: 1em 0 0.5em 0;
 }
-#content h1.documentFirstHeading {
-  margin: 0;
-  margin-bottom: 0.5em;
-  border-bottom: 1px solid #dcdcdc;
-  padding-bottom: 0.5em;
-}
 #content p {
   margin-bottom: 1em;
 }

@@ -49,7 +49,8 @@
                   </p>
                 </metal:description-slot>
 
-                <form class="hans" action="." method="post"
+                <hr class="horizontal-spacer">
+                <form action="." method="post"
                       tal:define="groups view/groups | nothing;
                                   form_name view/form_name | nothing;
                                   default_fieldset_label view/default_fieldset_label | form_name;
