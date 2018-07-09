@@ -118,23 +118,21 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
         self.assertNotIn('Checkout and edit', actions)
 
     @browsing
-    def test_tooltip_inactive_without_file(self, browser):
+    def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
 
     @browsing
-    def test_tooltip_inactive_with_file(self, browser):
+    def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -165,9 +163,8 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertNotIn('Attach selection', actions)
@@ -228,10 +225,9 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -240,9 +236,8 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_overview_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -296,10 +291,9 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -308,9 +302,8 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -341,9 +334,8 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertNotIn('Attach selection', actions)
@@ -398,10 +390,9 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_bumblebee_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -410,9 +401,8 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -478,10 +468,9 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -490,9 +479,8 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_overview_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
@@ -555,10 +543,9 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -567,9 +554,8 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
@@ -603,9 +589,8 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertIn('Attach selection', actions)
@@ -673,10 +658,9 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -685,9 +669,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_overview_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
@@ -750,10 +733,9 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -762,9 +744,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
@@ -798,9 +779,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertIn('Attach selection', actions)
@@ -861,10 +841,9 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_bumblebee_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -873,9 +852,8 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertIn('Attach to email', actions)
@@ -938,10 +916,9 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -950,9 +927,8 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_overview_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1006,10 +982,9 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1018,9 +993,8 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1052,9 +1026,8 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertNotIn('Attach selection', actions)
@@ -1116,10 +1089,9 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1128,9 +1100,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_overview_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tabbedview_view-overview')
+        browser.open(self.archive_document, view='tabbedview_view-overview')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1184,10 +1155,9 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_tooltip_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1196,9 +1166,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_tooltip_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='tooltip')
+        browser.open(self.archive_document, view='tooltip')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1229,9 +1198,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_dossier_documents_view_resolved(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.dossier, view='tabbedview_view-documents')
+        browser.open(self.archive_dossier, view='tabbedview_view-documents')
 
         actions = browser.css('.tabbedview-action-list a').text
         self.assertNotIn('Attach selection', actions)
@@ -1286,10 +1254,9 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_bumblebee_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
+        self.archive_document.file = None
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
@@ -1298,9 +1265,8 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_bumblebee_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.archive_document, view='bumblebee-overlay-listing')
 
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
