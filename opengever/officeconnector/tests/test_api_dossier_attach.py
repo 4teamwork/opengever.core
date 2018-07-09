@@ -49,20 +49,18 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_attach_to_email_inactive_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
-        self.document.file = None
+        self.inactive_document.file = None
 
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_attach_oc_url(browser, self.document)
+            oc_url = self.fetch_document_attach_oc_url(browser, self.inactive_document)
 
             self.assertIsNone(oc_url)
 
     @browsing
     def test_attach_to_email_inactive_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
 
-        oc_url = self.fetch_document_attach_oc_url(browser, self.document)
+        oc_url = self.fetch_document_attach_oc_url(browser, self.inactive_document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
@@ -70,13 +68,13 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         tokens = self.validate_attach_token(
             self.regular_user,
             oc_url,
-            (self.document, ),
+            (self.inactive_document, ),
             )
 
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         self.assertEquals(200, browser.status_code)
-        self.validate_attach_payload(payloads[0], self.document)
+        self.validate_attach_payload(payloads[0], self.inactive_document)
 
         file_contents = self.download_document(
             browser,
@@ -84,7 +82,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             payloads[0],
             )
 
-        self.assertEquals(file_contents, self.document.file.data)
+        self.assertEquals(file_contents, self.inactive_document.file.data)
 
     @browsing
     def test_attach_to_email_resolved_without_file(self, browser):
@@ -267,13 +265,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_inactive_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
-        self.document.file = None
+        self.inactive_document.file = None
 
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.document,
+                self.inactive_document,
                 )
 
             self.assertIsNone(oc_url)
@@ -281,12 +278,11 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_inactive_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
 
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.document,
+                self.inactive_document,
                 )
 
             self.assertIsNone(oc_url)

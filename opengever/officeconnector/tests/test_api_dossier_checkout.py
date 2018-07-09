@@ -32,21 +32,19 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     @browsing
     def test_attach_to_email_inactive_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
-        self.document.file = None
+        self.inactive_document.file = None
 
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_attach_oc_url(browser, self.document)
+            oc_url = self.fetch_document_attach_oc_url(browser, self.inactive_document)
 
             self.assertIsNone(oc_url)
 
     @browsing
     def test_attach_to_email_inactive_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
 
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_attach_oc_url(browser, self.document)
+            oc_url = self.fetch_document_attach_oc_url(browser, self.inactive_document)
 
             self.assertIsNone(oc_url)
 
@@ -243,13 +241,12 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_inactive_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
-        self.document.file = None
+        self.inactive_document.file = None
 
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.document,
+                self.inactive_document,
                 )
 
             self.assertIsNone(oc_url)
@@ -257,12 +254,11 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_inactive_with_file(self, browser):
         self.login(self.regular_user, browser)
-        self.set_workflow_state('dossier-state-inactive', self.dossier)
 
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.document,
+                self.inactive_document,
                 )
 
             self.assertIsNone(oc_url)
