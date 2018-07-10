@@ -505,4 +505,16 @@
       insert-after="++resource++opengever.base/Controller.js"
       />
 
+  <!-- Includes required polyfills for IE11: https://github.com/WebComponents/webcomponentsjs -->
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/webcomponents-bundle.js"
+      inline="False"
+      insert-before="*"
+      />
+
 </object>
