@@ -17,3 +17,16 @@ class TestSecurity(IntegrationTestCase):
 
         self.assertNotIn('manage', api.user.get_current().getRoles())
         self.assertEqual('kathi.barfuss', api.user.get_current().getId())
+
+    def test_elevated_privileges_allows_custom_user_id(self):
+        self.login(self.regular_user)
+
+        self.assertEqual('kathi.barfuss', api.user.get_current().getId())
+        self.assertNotIn('manage', api.user.get_current().getRoles())
+
+        with elevated_privileges(user_id='peter'):
+            self.assertEqual('peter', api.user.get_current().getId())
+            self.assertIn('manage', api.user.get_current().getRoles())
+
+        self.assertNotIn('manage', api.user.get_current().getRoles())
+        self.assertEqual('kathi.barfuss', api.user.get_current().getId())
