@@ -28,6 +28,7 @@ Changelog
 - Add skipped task icon. [Kevin Bieri]
 - Trigger proposal rejected activity before unregister watchers. [elioschmutz]
 - Fix an issue when submitting previously rejected proposals with mail attachments. [deiferni]
+- Generate bin/docxcompose script to locally compose two or more word-files. [deiferni]
 - Correct info message showed when regenerating agendaitem list. [njohner]
 - Make remove button unavailable for private dossier. [njohner]
 - Introduce generic header dropdown button. [Kevin Bieri]
