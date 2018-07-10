@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity.model import Activity
+from opengever.activity.model import Notification
 from opengever.activity.model.subscription import Subscription
 from opengever.meeting.activity.activities import actor_link
 from opengever.testing import IntegrationTestCase
@@ -53,9 +54,7 @@ class TestMeetingActivities(IntegrationTestCase):
 
         self.assertSubscribersLength(1)
 
-        self.submit_proposal(proposal, browser)
-
-        submitted_proposal = self.lookup_submitted_proposel(proposal)
+        submitted_proposal = self.submit_proposal(proposal, browser)
         committee_group_id = self.committee.load_model().group_id
 
         self.assertSubscribersLength(1 + self.count_group_members(committee_group_id))
@@ -75,9 +74,7 @@ class TestMeetingActivities(IntegrationTestCase):
 
         self.assertSubscribersLength(1)
 
-        self.submit_proposal(proposal, browser)
-
-        submitted_proposal = self.lookup_submitted_proposel(proposal)
+        submitted_proposal = self.submit_proposal(proposal, browser)
         committee_group_id = self.committee.load_model().group_id
 
         self.assertSubscribersLength(1 + self.count_group_members(committee_group_id))
@@ -89,150 +86,217 @@ class TestMeetingActivities(IntegrationTestCase):
 
     @browsing
     def test_record_activity_on_comment_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible)
+        self.login(self.manager, browser)
+        committee_group_id = self.committee.load_model().group_id
+        commented_activities = self.query_activities('proposal-commented')
 
-        self.assertEqual(0, Activity.query.count())
+        self.assertEqual(0, commented_activities.count())
 
-        self.proposal.comment(u'james b\xc3\xb6nd')
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        self.submit_proposal(proposal, browser)
 
-        self.assertEqual(2, Activity.query.count())
-        for activity in Activity.query.all():
+        proposal.comment(u'james b\xc3\xb6nd')
+
+        self.assertEqual(2, commented_activities.count())
+        for activity in commented_activities.all():
             self.assertEquals('proposal-commented', activity.kind)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Proposal commented by {}'.format(actor_link()),
                 activity.summary)
 
         self.assertEqual(
             [u'Proposal commented', u'Submitted proposal commented'],
-            [activity.label for activity in Activity.query.all()]
+            [activity.label for activity in commented_activities.all()]
         )
+
+        users = self.get_group_members(committee_group_id) + [self.dossier_responsible]
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-commented')
 
     @browsing
     def test_record_activity_on_submtitting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.manager, browser)
+        committee_group_id = self.committee.load_model().group_id
+        submitted_activities = self.query_activities('proposal-transition-submit')
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
 
-        self.submit_proposal(self.draft_proposal, browser, comment=u'james b\xc3\xb6nd')
+        self.assertEqual(0, submitted_activities.count())
 
-        self.assertEqual(2, Activity.query.count())
-        for activity in Activity.query.all():
+        self.submit_proposal(proposal, browser)
+
+        self.assertEqual(2, submitted_activities.count())
+        for activity in submitted_activities.all():
             self.assertEquals('proposal-transition-submit', activity.kind)
             self.assertEquals('Proposal submitted', activity.label)
-            self.assertEquals(self.draft_proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Submitted by {}'.format(actor_link()),
                 activity.summary)
 
+        users = self.get_group_members(committee_group_id)
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-transition-submit')
+
     @browsing
     def test_record_activity_on_rejecting_a_proposal_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.manager, browser)
+        rejected_activities = self.query_activities('proposal-transition-reject')
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        submitted_proposal = self.submit_proposal(proposal, browser)
 
-        self.reject_proposal(self.submitted_proposal, browser, comment=u'james b\xc3\xb6nd')
+        self.assertEqual(0, rejected_activities.count())
 
-        self.assertEqual(2, Activity.query.count())
-        for activity in Activity.query.all():
+        self.reject_proposal(submitted_proposal, browser)
+
+        self.assertEqual(2, rejected_activities.count())
+        for activity in rejected_activities.all():
             self.assertEquals('proposal-transition-reject', activity.kind)
             self.assertEquals('Proposal rejected', activity.label)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Rejected by {}'.format(actor_link()),
                 activity.summary)
 
+        users = [self.dossier_responsible]
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-transition-reject')
+
     @browsing
     def test_record_activity_on_schedule_a_proposal_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.manager, browser)
+        scheduled_activities = self.query_activities('proposal-transition-schedule')
         meeting = self.meeting.model
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        submitted_proposal = self.submit_proposal(proposal, browser)
 
-        self.submitted_proposal.load_model().schedule(meeting)
+        self.assertEqual(0, scheduled_activities.count())
 
-        self.assertEqual(2, Activity.query.count())
-        for activity in Activity.query.all():
+        submitted_proposal.load_model().schedule(meeting)
+
+        self.assertEqual(2, scheduled_activities.count())
+        for activity in scheduled_activities.all():
             self.assertEquals('proposal-transition-schedule', activity.kind)
             self.assertEquals('Proposal scheduled', activity.label)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Scheduled for meeting {} by {}'.format(meeting.get_title(), actor_link()),
                 activity.summary)
 
+        users = [self.dossier_responsible]
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-transition-schedule')
+
     @browsing
     def test_record_activity_on_decide_a_proposal_for_proposal_and_submitted_proposal(self, browser):
         self.login(self.committee_responsible, browser)
+        decided_activities = self.query_activities('proposal-transition-decide')
         meeting = self.meeting.model
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        submitted_proposal = self.submit_proposal(proposal, browser)
+        submitted_proposal.load_model().schedule(meeting)
 
-        self.submitted_proposal.load_model().schedule(meeting)
+        self.assertEqual(0, decided_activities.count())
 
-        self.assertEqual(2, Activity.query.count())
+        submitted_proposal.load_model().decide(meeting)
 
-        self.submitted_proposal.load_model().decide(meeting)
+        self.assertEqual(2, decided_activities.count())
 
-        self.assertEqual(4, Activity.query.count())
-
-        for activity in Activity.query.all()[-2:]:
+        for activity in decided_activities.all():
             self.assertEquals('proposal-transition-decide', activity.kind)
             self.assertEquals('Proposal decided', activity.label)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Proposal decided by {}'.format(actor_link()),
                 activity.summary)
 
+        users = [self.dossier_responsible]
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-transition-decide')
+
     @browsing
     def test_record_activity_on_update_attachment_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible, browser)
+        self.login(self.manager, browser)
+        attachment_updated_activities = self.query_activities('proposal-attachment-updated')
+        committee_group_id = self.committee.load_model().group_id
         rtool = api.portal.get_tool('portal_repository')
 
         document = self.subdocument
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        self.submit_proposal(proposal, browser)
 
         # create init version
         rtool.save(document)
+        proposal.submit_additional_document(document)
 
-        self.proposal.submit_additional_document(document)
-
-        self.assertEqual(2, Activity.query.count())
+        self.assertEqual(0, attachment_updated_activities.count())
 
         # create version 1
         rtool.save(document)
+        proposal.submit_additional_document(document)
 
-        self.proposal.submit_additional_document(document)
+        self.assertEqual(2, attachment_updated_activities.count())
 
-        self.assertEqual(4, Activity.query.count())
-
-        for activity in Activity.query.all()[-2:]:
+        for activity in attachment_updated_activities.all()[-2:]:
             self.assertEquals('proposal-attachment-updated', activity.kind)
             self.assertEquals('Attachment updated', activity.label)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Submitted document {} updated to version 1'.format(document.title),
                 activity.summary)
 
+        users = self.get_group_members(committee_group_id)
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-attachment-updated')
+
     @browsing
     def test_record_activity_on_submit_attachment_for_proposal_and_submitted_proposal(self, browser):
-        self.login(self.committee_responsible, browser)
-
+        self.login(self.manager, browser)
+        attachment_submitted_activities = self.query_activities(
+            'proposal-additional-documents-submitted')
+        committee_group_id = self.committee.load_model().group_id
         document = self.subdocument
 
-        self.assertEqual(0, Activity.query.count())
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser)
+        self.submit_proposal(proposal, browser)
 
-        self.proposal.submit_additional_document(document)
+        self.assertEqual(0, attachment_submitted_activities.count())
 
-        self.assertEqual(2, Activity.query.count())
+        proposal.submit_additional_document(document)
 
-        for activity in Activity.query.all():
+        self.assertEqual(2, attachment_submitted_activities.count())
+
+        for activity in attachment_submitted_activities.all():
             self.assertEquals('proposal-additional-documents-submitted', activity.kind)
             self.assertEquals('Additional documents submitted', activity.label)
-            self.assertEquals(self.proposal.title, activity.title)
+            self.assertEquals(proposal.title, activity.title)
             self.assertEquals(
                 u'Document {} submitted'.format(document.title),
                 activity.summary)
+
+        users = self.get_group_members(committee_group_id)
+        self.assertBadgeNotificationsForUsers(
+            users, u'proposal-additional-documents-submitted')
+
+    def assertBadgeNotificationsForUsers(self, users, activity_kind=None):
+        notifications = self.query_notifications(activity_kind).filter(
+            Notification.is_badge.is_(True))
+
+        self.assertItemsEqual(
+            [user.id for user in users],
+            [notification.userid for notification in notifications.all()])
 
     def assertSubscribersForResource(self, subscribers, resource):
         self.assertItemsEqual(
@@ -253,7 +317,7 @@ class TestMeetingActivities(IntegrationTestCase):
 
         return [subscription.watcher.actorid for subscription in query.all()]
 
-    def lookup_submitted_proposel(self, proposal):
+    def lookup_submitted_proposal(self, proposal):
         return self.portal.restrictedTraverse(
             proposal.load_model().submitted_physical_path.encode('utf-8'))
 
@@ -273,9 +337,25 @@ class TestMeetingActivities(IntegrationTestCase):
 
     def submit_proposal(self, proposal, browser, comment=''):
         self.execute_transition(proposal, 'pending-submitted', browser, comment)
+        return self.lookup_submitted_proposal(proposal)
 
     def reject_proposal(self, proposal, browser, comment=''):
         self.execute_transition(proposal, 'submitted-pending', browser, comment)
+
+    def query_notifications(self, activity_kind=None):
+        notifications_query = Notification.query
+        if activity_kind:
+            notifications_query = notifications_query.filter(
+                Notification.activity.has(kind=activity_kind))
+
+        return notifications_query
+
+    def query_activities(self, kind=None):
+        activities_query = Activity.query
+        if kind:
+            activities_query = activities_query.filter(Activity.kind == kind)
+
+        return activities_query
 
     def create_proposal_with_issuer(self, issuer, committee, browser):
         browser.open(self.dossier)
