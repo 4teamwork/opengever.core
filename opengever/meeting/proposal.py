@@ -435,10 +435,10 @@ class SubmittedProposal(ProposalBase):
         proposal = self.load_model()
         proposal.reject(text)
 
+        ProposalRejectedActivity(self, self.REQUEST).record()
+
         remove_watchers_on_submitted_proposal_deleted(
             self, proposal.committee.group_id)
-
-        ProposalRejectedActivity(self, self.REQUEST).record()
 
         with elevated_privileges():
             api.content.delete(self)
