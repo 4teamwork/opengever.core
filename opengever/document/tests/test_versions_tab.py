@@ -67,6 +67,21 @@ class TestVersionsTabWithoutPDFConverter(TestVersionsTab):
             self.assertEquals(['28.01.2015 18:30', '28.01.2015 12:00'], dates)
 
     @browsing
+    def test_handles_version_comments_that_are_none(self, browser):
+        with PDFConverterAvailability(False):
+            doc = self._create_doc()
+
+            repository = api.portal.get_tool('portal_repository')
+            repository.save(obj=doc, comment=None)
+            transaction.commit()
+
+            browser.login().open(doc, view='tabbedview_view-versions')
+            listing = browser.css('.listing').first
+            comments = [d['Kommentar'] for d in listing.dicts()]
+            self.assertEquals(
+                ['', 'Dokument erstellt (Initialversion)'], comments)
+
+    @browsing
     def test_is_sorted_by_descending_version_id(self, browser):
         with PDFConverterAvailability(False):
             browser.login().open(self.document, view='tabbedview_view-versions')

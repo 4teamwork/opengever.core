@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix issue where empty version comments caused version tab to fail. [lgraf]
 - Correct info message showed when regenerating agendaitem list. [njohner]
 - Build missing french translations for opengever.meeting. [elioschmutz]
 - Hide Excerpts field in SubmittedProposal edit form. [njohner]

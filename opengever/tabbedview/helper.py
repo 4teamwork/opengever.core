@@ -25,10 +25,19 @@ from zope.i18n import translate
 
 
 def tooltip_helper(item, value):
+    """Turn some simple text into a <span/> element with a title.
+
+    While this function accepts both unicode and bytestring for `value`, it
+    always returns an utf-8 encoded bytestring.
+    """
+    if value is None:
+        value = u''
+
     value = safe_unicode(value)
     text = u''.join(
         BeautifulSoup(value, fromEncoding='utf8').findAll(text=True))
-    return (u'<span title="%s">%s</span>' % (text, value)).encode('utf-8')
+    tooltip = (u'<span title="%s">%s</span>' % (text, value)).encode('utf-8')
+    return tooltip
 
 
 def org_unit_title_helper(item, value):
