@@ -15,9 +15,8 @@ class TestSecurity(FunctionalTestCase):
         self.assertNotIn('manage', api.user.get_current().getRoles())
 
         with elevated_privileges():
-            current_user = api.user.get_current()
-            self.assertEqual(TEST_USER_ID, current_user.getId())
-            self.assertIn('manage', current_user.getRoles())
+            self.assertEqual(TEST_USER_ID, api.user.get_current().getId())
+            self.assertIn('manage', api.user.get_current().getRoles())
 
         self.assertNotIn('manage', api.user.get_current().getRoles())
-        self.assertEqual(TEST_USER_ID, current_user.getId())
+        self.assertEqual(TEST_USER_ID, api.user.get_current().getId())
