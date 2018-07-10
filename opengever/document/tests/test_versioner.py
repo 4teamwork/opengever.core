@@ -91,3 +91,12 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.assertEqual(u'custom initial version', sys_metadata.get('comment'))
         self.assertEqual('kathi.barfuss', sys_metadata.get('principal'))
         self.assertEqual('document-state-draft', sys_metadata.get('review_state'))
+
+    def test_create_version_never_sets_none_as_version_comment(self):
+        self.login(self.regular_user)
+        versioner = Versioner(self.document)
+        versioner.create_version(comment=None)
+
+        version_metadata = versioner.get_history_metadata().retrieve(0)
+        self.assertEqual(
+            u'', version_metadata['metadata']['sys_metadata']['comment'])

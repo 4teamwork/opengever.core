@@ -33,6 +33,8 @@ class Versioner(object):
     def create_version(self, comment):
         """Creates a new version in CMFEditions.
         """
+        if comment is None:
+            comment = u''
         self.repository.save(obj=self.document, comment=comment)
 
     def has_initial_version(self):
@@ -73,6 +75,9 @@ class Versioner(object):
         self.repository._assertAuthorized(self.document, SaveNewVersion, 'save')
         sp = transaction.savepoint(optimistic=True)
         sys_metadata = self.repository._prepareSysMetadata(comment)
+
+        principal = 'zopemaster'
+        sys_metadata['principal'] = str(principal)
 
         # Set creation datetime as initial version timestamp,
         # cmfeditions stores unix timestamps without any timezone information
