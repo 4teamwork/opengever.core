@@ -1,0 +1,12 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- USER -->
+  <object name="user" meta_type="CMF Action Category" purge="False">
+
+    <object name="logout" meta_type="CMF Action" i18n:domain="plone" purge="False">
+      <property name="url_expr">python:context.restrictedTraverse('logout_url')</property>
+    </object>
+
+  </object>
+
+</object>

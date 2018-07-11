@@ -34,6 +34,7 @@ Changelog
 - Add microsoft publisher mimetype icon. [Kevin Bieri]
 - Fix styling of the update submitted documents action in proposals overview. [phgross]
 - Improve error messages in the eCH-0147 import. [phgross]
+- Remove logout step displaying the documents checked out. [tarnap]
 - Fix issue where empty version comments caused version tab to fail. [lgraf]
 - Add webcomponents-bundle which contains ie11 polyfills. The polyfills where included in trix.js. This file have been removed in commit c40bf4e. [elioschmutz]
 - Add skipped task icon. [Kevin Bieri]

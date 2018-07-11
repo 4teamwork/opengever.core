@@ -281,20 +281,9 @@
       cookable="True"
       expression=""
       enabled="True"
-      id="++resource++opengever.document/logout_overlay.js"
-      inline="False"
-      insert-after="++resource++opengever.base/logoutClient.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      expression=""
-      enabled="True"
       id="++resource++opengever.document/download_confirmation.js"
       inline="False"
-      insert-after="++resource++opengever.document/logout_overlay.js"
+      insert-after="++resource++opengever.base/logoutClient.js"
       />
 
   <javascript
@@ -459,6 +448,17 @@
       id="++resource++opengever.base/logoutClient.js"
       inline="False"
       insert-after="++resource++opengever.base/keywordwidget.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/logout.js"
+      inline="False"
+      insert-after="++resource++opengever.base/logoutClient.js"
       />
 
   <javascript

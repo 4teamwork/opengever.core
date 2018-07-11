@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+    <javascript id="++resource++opengever.document/logout_overlay.js" remove="True"/>
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/logout.js"
+      inline="False"
+      insert-after="++resource++opengever.base/logoutClient.js"
+      />
+
+</object>
