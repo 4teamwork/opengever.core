@@ -24,6 +24,9 @@
     <type name="opengever.meeting.proposaltemplate">
       <policy name="version_on_revert" />
     </type>
+    <type name="opengever.meeting.meetingtemplate">
+      <policy name="version_on_revert" />
+    </type>
   </policymap>
 
 </repositorytool>

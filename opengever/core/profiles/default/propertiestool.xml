@@ -39,6 +39,7 @@
       <element value="opengever.inbox.forwarding" />
       <element value="opengever.meeting.proposaltemplate" />
       <element value="opengever.meeting.sablontemplate" />
+      <element value="opengever.meeting.meetingtemplate" />
       <element value="opengever.private.root" />
       <element value="opengever.task.task" />
       <element value="opengever.tasktemplates.tasktemplate" />
