@@ -516,4 +516,26 @@
       insert-before="*"
       />
 
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/es6_promise_polyfill.min.js"
+      inline="False"
+      insert-after="++resource++opengever.base/event_polyfill.js"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="none"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/es6_promise_polyfill_auto.min.js"
+      inline="False"
+      insert-after="++resource++opengever.base/es6_promise_polyfill.min.js"
+      />
+
 </object>
