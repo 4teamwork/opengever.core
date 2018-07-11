@@ -31,7 +31,7 @@ class TestDossier(IntegrationTestCase):
     def test_falsy_has_subdossiers(self):
         self.login(self.dossier_responsible)
 
-        self.assertFalse(self.archive_dossier.has_subdossiers())
+        self.assertFalse(self.expired_dossier.has_subdossiers())
 
     def test_truthy_has_subdossiers(self):
         self.login(self.dossier_responsible)
@@ -183,7 +183,7 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(4, len(search_result))
         self.assertIn(self.dossier.title, search_result.text)
         self.assertIn(self.meeting_dossier.title, search_result.text)
-        self.assertIn(self.archive_dossier.title, search_result.text)
+        self.assertIn(self.expired_dossier.title, search_result.text)
 
 
 class TestMeetingFeatureTypes(IntegrationTestCase):

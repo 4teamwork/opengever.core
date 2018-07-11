@@ -87,10 +87,10 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_attach_to_email_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.archive_document.file = None
+        self.expired_document.file = None
 
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_attach_oc_url(browser, self.archive_document)
+            oc_url = self.fetch_document_attach_oc_url(browser, self.expired_document)
 
             self.assertIsNone(oc_url)
 
@@ -98,7 +98,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     def test_attach_to_email_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
 
-        oc_url = self.fetch_document_attach_oc_url(browser, self.archive_document)
+        oc_url = self.fetch_document_attach_oc_url(browser, self.expired_document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
@@ -106,13 +106,13 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         tokens = self.validate_attach_token(
             self.regular_user,
             oc_url,
-            (self.archive_document, ),
+            (self.expired_document, ),
             )
 
         payloads = self.fetch_document_attach_payloads(browser, tokens)
 
         self.assertEquals(200, browser.status_code)
-        self.validate_attach_payload(payloads[0], self.archive_document)
+        self.validate_attach_payload(payloads[0], self.expired_document)
 
         file_contents = self.download_document(
             browser,
@@ -120,7 +120,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             payloads[0],
             )
 
-        self.assertEquals(file_contents, self.archive_document.file.data)
+        self.assertEquals(file_contents, self.expired_document.file.data)
 
     @browsing
     def test_attach_many_to_email_open(self, browser):
@@ -288,12 +288,12 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.archive_document.file = None
+        self.expired_document.file = None
 
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.archive_document,
+                self.expired_document,
                 )
 
             self.assertIsNone(oc_url)
@@ -305,7 +305,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         with browser.expect_http_error(401):
             oc_url = self.fetch_document_checkout_oc_url(
                 browser,
-                self.archive_document,
+                self.expired_document,
                 )
 
             self.assertIsNone(oc_url)

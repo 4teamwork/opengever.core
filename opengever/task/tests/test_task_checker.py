@@ -91,7 +91,7 @@ class TestTaskControllerChecker(IntegrationTestCase):
 
     def test_all_subtasks_finished_is_allways_true_when_no_subtask_exists(self):
         self.login(self.dossier_responsible)
-        self.assertTrue(get_checker(self.archive_task).task.all_subtasks_finished)
+        self.assertTrue(get_checker(self.expired_task).task.all_subtasks_finished)
 
     def test_has_successors(self):
         self.login(self.dossier_responsible)
@@ -127,8 +127,8 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.login(self.secretariat_user)
 
         self.set_workflow_state('task-state-in-progress', self.subtask)
-        self.set_workflow_state('task-state-in-progress', self.archive_task)
-        self.register_successor(self.task, self.archive_task)
+        self.set_workflow_state('task-state-in-progress', self.expired_task)
+        self.register_successor(self.task, self.expired_task)
 
-        task_checker = TaskChecker(self.archive_task.get_sql_object())
+        task_checker = TaskChecker(self.expired_task.get_sql_object())
         self.assertFalse(task_checker.all_subtasks_finished)
