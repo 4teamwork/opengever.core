@@ -505,4 +505,15 @@
       insert-after="++resource++opengever.base/Controller.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/event_polyfill.js"
+      inline="False"
+      insert-before="*"
+      />
+
 </object>
