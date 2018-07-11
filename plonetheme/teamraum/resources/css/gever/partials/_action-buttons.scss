@@ -175,14 +175,15 @@
     @include inline-cell-icon(eye);
 }
 
-.document-proposal-outdated {
+.document-proposal-outdated,
+.proposal-outdated {
   @include inline-cell-icon(exclamation-triangle);
+
+  &:before {
+    color: $red;
+  }
 }
 
 .oc-loading {
   @include inline-cell-icon-spin(circle-o-notch);
-}
-
-.document-proposal-outdated::before {
-  color: $red;
 }
