@@ -21,9 +21,9 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingTemplate"
-      name="update_order"
-      class=".meetingtemplate.UpdateMeetingTemplateParagraphOrderView"
-      permission="cmf.AddPortalContent"
+      name="update_content_order"
+      class=".meetingtemplate.UpdateMeetingTemplateContentOrderView"
+      permission="cmf.ModifyPortalContent"
       />
 
   <browser:page

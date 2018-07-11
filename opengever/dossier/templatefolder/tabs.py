@@ -65,35 +65,30 @@ class TemplateFolderMeetingTemplatesProxy(BaseTabProxy):
     """
 
 
-class TemplateFolderMeetingTemplates(Documents):
+class TemplateFolderMeetingTemplates(BaseCatalogListingTab):
+
+    columns = (
+
+        {'column': '',
+         'column_title': '',
+         'transform': path_checkbox,
+         'sortable': False,
+         'groupable': False,
+         'width': 30},
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index': 'sortable_title',
+         'transform': linked},
+
+        {'column': 'Description',
+         'column_title': _(u'label_description', default=u'Description'),
+         'sortable': False,
+         'groupable': False,
+         'transform': linked},
+    )
 
     types = ['opengever.meeting.meetingtemplate']
-
-    depth = 1
-
-    @property
-    def columns(self):
-        return drop_columns(
-            super(TemplateFolderMeetingTemplates, self).columns)
-
-    @property
-    def enabled_actions(self):
-        actions = filter(
-            lambda x: x not in self.disabled_actions,
-            super(TemplateFolderMeetingTemplates, self).enabled_actions)
-
-        return actions + ['folder_delete_confirmation']
-
-    disabled_actions = [
-        'cancel',
-        'checkin',
-        'checkout',
-        'create_task',
-        'trashed',
-        'move_items',
-        'send_as_email',
-        'submit_additional_documents',
-    ]
 
 
 class TemplateFolderSablonTemplatesProxy(BaseTabProxy):

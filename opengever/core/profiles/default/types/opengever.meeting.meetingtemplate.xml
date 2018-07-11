@@ -4,6 +4,8 @@
   <property name="title" i18n:translate="">Meeting Template</property>
   <property name="description" i18n:translate="" />
   <property name="icon_expr" />
+  <property name="allow_discussion">False</property>
+  <property name="global_allow">False</property>
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="opengever.meeting.paragraphtemplate" />
@@ -20,12 +22,9 @@
 
   <!-- Enabled behaviors -->
   <property name="behaviors">
-    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
-    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
-    <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-    <element value="opengever.base.behaviors.classification.IClassification" />
+    <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
-    <element value="opengever.trash.trash.ITrashable" />
+    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>
 
@@ -40,7 +39,6 @@
   <!-- Method aliases -->
   <alias from="(Default)" to="(selected layout)" />
   <alias from="edit" to="@@edit" />
-  <alias from="sharing" to="@@sharing" />
   <alias from="view" to="@@view" />
 
   <!-- Actions -->
@@ -64,4 +62,12 @@
     <permission value="Modify portal content" />
   </action>
 
+  <action
+      title="Meeting Templates"
+      action_id="meetingtemplates"
+      category="tabbedview-tabs"
+      condition_expr=""
+      url_expr="string:#"
+      visible="True">
+  </action>
 </object>

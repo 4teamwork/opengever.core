@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from plone.protect import createToken
 import json
 
 
@@ -114,8 +115,12 @@ class TestMeetingTemplate(IntegrationTestCase):
         ]
 
         browser.open(self.meeting_template,
-                     view='update_order',
-                     data={"sortOrder": json.dumps(new_order)})
+                     view='update_content_order',
+                     data={
+                         'sortOrder': json.dumps(new_order),
+                         '_authenticator': createToken(),
+                     })
+        statusmessages.assert_no_error_messages()
 
         self.assertEquals(
             new_order,
