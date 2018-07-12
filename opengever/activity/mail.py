@@ -30,7 +30,7 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
         self.send_mail(msg)
 
     def get_subject(self, notification):
-        prefix = translate(_(u'subject_prefix', default=u'GEVER Task'),
+        prefix = translate(_(u'subject_prefix', default=u'GEVER Activity'),
                            context=self.request)
         title = notification.activity.translations[self.get_users_language()].title
         return u'{}: {}'.format(prefix, title)

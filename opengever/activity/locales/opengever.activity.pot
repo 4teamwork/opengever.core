@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-05 20:03+0000\n"
+"POT-Creation-Date: 2018-07-12 14:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,7 +213,7 @@ msgstr ""
 msgid "subject_digest"
 msgstr ""
 
-#. Default: "GEVER Task"
+#. Default: "GEVER Activity"
 #: ./opengever/activity/mail.py
 msgid "subject_prefix"
 msgstr ""
