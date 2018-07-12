@@ -359,7 +359,7 @@ LocalStorageJSONCache = function(name, url) {
 RepositoryFavorites = function(url, cache_param) {
   var base = $('.portletTreePortlet');
   var cachekey = base.data('favorites-cache-key');
-  var changedEvent = new Event('favorites-tree:changed');
+  var changedEvent = new CustomEvent('favorites-tree:changed');
 
   var api = axios.create({
     baseURL: window.portal_url + '/@repository-favorites/' + base.data('userid'),

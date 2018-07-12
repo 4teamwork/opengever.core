@@ -5,6 +5,8 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Install CustomEvent and Promise polyfill. [Kevin Bieri]
+- Uninstall webcomponents polyfill. [Kevin Bieri]
 - Fix issue where empty version comments caused version tab to fail. [lgraf]
 - Add webcomponents-bundle which contains ie11 polyfills. The polyfills where included in trix.js. This file have been removed in commit c40bf4e. [elioschmutz]
 - Add skipped task icon. [Kevin Bieri]
