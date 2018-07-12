@@ -126,6 +126,16 @@ Für das Publizieren der Dokumentation gibt es pro Projekt ein
 builder baut der für die Publizierung auf einem Webserver geeignet ist, und
 mit ``rsync`` auf den entsprechenden Webserver publiziert.
 
+
+Damit das Publizieren mit ``rsync`` funktioniert, muss der persönliche Benutzer
+für den entsprechenden Server in der  ``~/.ssh/config`` hinterlegt werden.
+
+.. code-block:: bash
+
+   Host seth.4teamwork.ch
+     User <user>
+
+
 Um z.B. die interne Doku zu publizieren:
 
 .. code-block:: bash

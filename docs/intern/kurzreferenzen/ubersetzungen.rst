@@ -12,7 +12,8 @@ Für das Aktualisieren und Bearbeiten der Übersetzungen verwenden wir die Softw
 
 Login: via GitHub
 
-Deployment: theta.4teamwork.ch/37-translations.onegovgever.ch-django
+Deployment: /apps/02-django-translations.onegovgever.ch auf seth.4teamwork.ch
+
 
 Aktualisierung der Übersetzungen:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
