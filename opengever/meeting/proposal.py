@@ -677,7 +677,9 @@ class Proposal(ProposalBase):
         create_command = CreateSubmittedProposalCommand(self)
         copy_commands = [
             CopyProposalDocumentCommand(
-                self, document, parent_action=create_command)
+                self, document,
+                parent_action=create_command,
+                record_activity=False)
             for document in documents]
 
         create_command.execute(text)

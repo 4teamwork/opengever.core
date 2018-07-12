@@ -290,6 +290,22 @@ class TestMeetingActivities(IntegrationTestCase):
         self.assertBadgeNotificationsForUsers(
             users, u'proposal-additional-documents-submitted')
 
+    @browsing
+    def test_do_not_record_activity_for_submitted_documents_on_submtitting_a_proposal_with_documents(self, browser):
+        self.login(self.manager, browser)
+        attachment_submitted_activities = self.query_activities(
+            'proposal-additional-documents-submitted')
+
+        proposal = self.create_proposal_with_issuer(
+            self.dossier_responsible, self.committee, browser,
+            Attachments=[self.document])
+
+        self.assertEqual(0, attachment_submitted_activities.count())
+
+        self.submit_proposal(proposal, browser)
+
+        self.assertEqual(0, attachment_submitted_activities.count())
+
     def assertBadgeNotificationsForUsers(self, users, activity_kind=None):
         notifications = self.query_notifications(activity_kind).filter(
             Notification.is_badge.is_(True))
@@ -357,14 +373,18 @@ class TestMeetingActivities(IntegrationTestCase):
 
         return activities_query
 
-    def create_proposal_with_issuer(self, issuer, committee, browser):
+    def create_proposal_with_issuer(
+            self, issuer, committee, browser, **kwargs):
         browser.open(self.dossier)
         factoriesmenu.add('Proposal')
 
-        browser.fill(
-            {'Committee': committee.title,
-             'Proposal template': u'Geb\xfchren',
-             'Edit after creation': False})
+        values = {
+            'Committee': committee.title,
+            'Proposal template': u'Geb\xfchren',
+            'Edit after creation': False}
+        values.update(kwargs)
+
+        browser.fill(values)
 
         form = browser.find_form_by_field('Issuer')
         form.find_widget('Issuer').fill(issuer.id)
