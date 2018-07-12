@@ -165,11 +165,6 @@ msgstr "Checkin"
 msgid "button_checkin_anyway"
 msgstr "Checkin malgré tout"
 
-#. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py
-msgid "button_pdf"
-msgstr "Aperçu pdf"
-
 #. Default: "Are you sure you want to cancel the checkout?"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt

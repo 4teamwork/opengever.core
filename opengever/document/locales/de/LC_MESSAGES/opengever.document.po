@@ -163,11 +163,6 @@ msgstr "Einchecken"
 msgid "button_checkin_anyway"
 msgstr "Trotzdem einchecken"
 
-#. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py
-msgid "button_pdf"
-msgstr "PDF-Vorschau"
-
 #. Default: "Are you sure you want to cancel the checkout?"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt

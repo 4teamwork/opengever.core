@@ -2,7 +2,6 @@ from Acquisition import aq_parent
 from datetime import datetime
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
-from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.base.protect import unprotected_write
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
@@ -131,19 +130,6 @@ class VersionDataProxy(object):
             additional_classes=['standalone', 'function-download-copy'],
             viewname='download_file_version',
             include_token=True)
-        return link
-
-    @property
-    def pdf_preview_link(self):
-        """Returns a formatted link to download the PDF preview for this
-        version (only rendered if opengever.pdfconverter is available).
-        """
-        url = '{}/download_pdf_version?version_id={}'
-        url = url.format(self.url, self.version_id)
-        url = addTokenToUrl(url)
-        link = translate_link(
-            url, _(u'button_pdf', default=u'PDF'),
-            css_class='standalone function-download-pdf')
         return link
 
     @property
@@ -382,11 +368,6 @@ class VersionsTab(BaseListingTab):
          'column_title': _(u'label_download_copy', default=u'Download copy'),
          },
 
-        # Dropped if pdfconverter is not enabled
-        {'column': 'pdf_preview_link',
-         'column_title': ' ',
-         },
-
         {'column': 'revert_link',
          'column_title': _(u'label_revert', default=u'Revert'),
          },
@@ -400,13 +381,8 @@ class VersionsTab(BaseListingTab):
 
     @property
     def columns(self):
-        """Disable pdf_preview link in deployments without pdfconverter.
-        """
         if not is_bumblebee_feature_enabled() or not is_bumblebeeable(self.context):
             self._columns = self.remove_column('preview')
-
-        if not is_pdfconverter_enabled():
-            self._columns = self.remove_column('pdf_preview_link')
 
         return self._columns
 
