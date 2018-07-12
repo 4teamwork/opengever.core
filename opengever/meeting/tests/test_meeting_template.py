@@ -103,16 +103,14 @@ class TestMeetingTemplate(IntegrationTestCase):
         self.login(self.manager, browser)
 
         self.assertEquals(
-            ['opengever-meeting-paragraphtemplate',
-             'opengever-meeting-paragraphtemplate-1',
-             'opengever-meeting-paragraphtemplate-2'],
+            ['begrussung',
+             'geschdfte',
+             'schlusswort'],
             [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
 
-        new_order = [
-            'opengever-meeting-paragraphtemplate-2',
-            'opengever-meeting-paragraphtemplate',
-            'opengever-meeting-paragraphtemplate-1',
-        ]
+        new_order = ['geschdfte',
+                     'schlusswort',
+                     'begrussung']
 
         browser.open(self.meeting_template,
                      view='update_content_order',
