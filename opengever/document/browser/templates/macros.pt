@@ -23,8 +23,7 @@
         </tal:edit_metadata_link>
 
         <tal:file tal:condition="context/has_file"
-            tal:define="preview_supported view/is_preview_supported;
-            checked_out view/is_checked_out;
+            tal:define="checked_out view/is_checked_out;
             checkout_and_edit_available view/is_checkout_and_edit_available;
             office_connector_editable view/is_office_connector_editable;
             copy_download_available view/is_download_copy_available;
