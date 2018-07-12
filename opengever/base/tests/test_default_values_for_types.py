@@ -3,35 +3,28 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
-from opengever.api.testing import RelativeSession
+from hashlib import sha256
 from opengever.base.default_values import get_persisted_values_for_obj
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
-from opengever.core.testing import toggle_feature
-from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings  # noqa
-from opengever.private import enable_opengever_private
 from opengever.private.tests import create_members_folder
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
-from plone.app.testing import setRoles
-from plone.app.testing import SITE_OWNER_NAME
-from plone.app.testing import SITE_OWNER_PASSWORD
-from plone.app.testing import TEST_USER_ID
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemataForType
 from plone.namedfile.file import NamedBlobFile
 from zope.schema import getFieldsInOrder
+import json
 import textwrap
-import transaction
 
 
 FROZEN_NOW = datetime.now()
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'
-DEFAULT_CLIENT = u'org-unit-1'
+DEFAULT_CLIENT = u'fa'
 
 REPOROOT_REQUIREDS = {
     'title_de': DEFAULT_TITLE,
@@ -95,10 +88,10 @@ DOSSIER_DEFAULTS = {
     'start': FROZEN_TODAY,
     'reading': [],
     'reading_and_writing': [],
-    'dossier_manager': None,
+    'dossier_manager': 'kathi.barfuss',
 }
 DOSSIER_FORM_DEFAULTS = {
-    'responsible': TEST_USER_ID,
+    'responsible': 'kathi.barfuss',
 }
 DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,
@@ -124,8 +117,9 @@ DOCUMENT_REQUIREDS = {
 DOCUMENT_DEFAULTS = {
     'classification': u'unprotected',
     'description': u'',
-    'digitally_available': False,
+    'digitally_available': True,
     'document_date': FROZEN_TODAY,
+    'file': None,  # needs to be updated with NamedBlobFile in actual test
     'keywords': (),
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
@@ -179,8 +173,8 @@ MAIL_MISSING_VALUES = {
 
 
 TASK_REQUIREDS = {
-    'issuer': TEST_USER_ID,
-    'responsible': TEST_USER_ID,
+    'issuer': 'kathi.barfuss',
+    'responsible': 'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
     'task_type': u'information',
     'title': DEFAULT_TITLE,
@@ -190,7 +184,7 @@ TASK_DEFAULTS = {
     'relatedItems': [],
 }
 TASK_FORM_DEFAULTS = {
-    'issuer': TEST_USER_ID,
+    'issuer': 'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
@@ -236,17 +230,16 @@ CONTACT_MISSING_VALUES = {
 
 
 PROPOSAL_REQUIREDS = {
-    'issuer': TEST_USER_ID,
+    'issuer': u'herbert.jager',
 }
 PROPOSAL_DEFAULTS = {
-    'title': u'Containing Dossier Title',
     'description': u'',
-    'issuer': TEST_USER_ID,
+    'title': u'Containing Dossier Title',
 }
 PROPOSAL_FORM_DEFAULTS = {
-    'issuer': TEST_USER_ID,
     'description': u''
 }
+PROPOSAL_FORM_DEFAULTS = {}
 PROPOSAL_MISSING_VALUES = {
     'relatedItems': [],
     'predecessor_proposal': None,
@@ -271,7 +264,7 @@ PRIVATEFOLDER_MISSING_VALUES = {
 }
 
 
-class TestDefaultsBase(FunctionalTestCase):
+class TestDefaultsBase(IntegrationTestCase):
     """Test our base classes have expected default values."""
 
     portal_type = None
@@ -283,19 +276,15 @@ class TestDefaultsBase(FunctionalTestCase):
 
     maxDiff = None
 
-    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+    api_headers = {
+        'Accept': 'application/json',
+        'Accept-Language': 'de-ch',
+        'Content-Type': 'application/json',
+    }
 
     def setUp(self):
         super(TestDefaultsBase, self).setUp()
         self.portal = self.layer.get('portal')
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
-
-        self.api = RelativeSession(self.portal.absolute_url())
-        self.api.headers.update({
-            'Accept': 'application/json',
-            'Accept-Language': 'de-ch',
-        })
-        self.api.auth = (SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
 
         # Set 'de-ch' and 'en' as supported languages to have title field show
         # up at all for ITranslatedTitle, but still have the UI in english
@@ -304,7 +293,6 @@ class TestDefaultsBase(FunctionalTestCase):
         lang_tool.setDefaultLanguage('en')
         lang_tool.supported_langs = ['de-ch', 'en']
         lang_tool.use_request_negotiation = True
-        transaction.commit()
 
     def get_type_defaults(self):
         defaults = {}
@@ -364,6 +352,8 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
     missing_values = REPOROOT_MISSING_VALUES
 
     def test_create_content_in_container(self):
+        self.login(self.manager)
+
         with freeze(FROZEN_NOW):
             reporoot = createContentInContainer(
                 self.portal,
@@ -377,10 +367,12 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.manager)
+
         with freeze(FROZEN_NOW):
             new_id = self.portal.invokeFactory(
                 'opengever.repository.repositoryroot',
-                'reporoot',
+                'new-reporoot',
                 title_de=REPOROOT_REQUIREDS['title_de'],
             )
             reporoot = self.portal[new_id]
@@ -392,31 +384,42 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.manager, browser)
+
         with freeze(FROZEN_NOW):
-            browser.login().open()
+            browser.open()
             factoriesmenu.add(u'RepositoryRoot')
             browser.fill({u'Title': REPOROOT_REQUIREDS['title_de']}).save()
-            reporoot = browser.context
+
+        reporoot = browser.context
 
         persisted_values = get_persisted_values_for_obj(reporoot)
         expected = self.get_z3c_form_defaults()
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.manager, browser)
+
         payload = {
             u'@type': u'opengever.repository.repositoryroot',
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
             u'title_fr': u'French Title',
         }
-        response = self.api.post(self.portal.absolute_url(), json=payload)
-        transaction.commit()
+
+        response = browser.open(
+            self.portal.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        folder = self.portal.restrictedTraverse('my-title')
+        new_object_id = str(response.json['id'])
+        root = self.portal.restrictedTraverse(new_object_id)
 
-        persisted_values = get_persisted_values_for_obj(folder)
+        persisted_values = get_persisted_values_for_obj(root)
         expected = self.get_type_defaults()
         expected['title_fr'] = u'French Title'
 
@@ -434,9 +437,10 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
     missing_values = REPOFOLDER_MISSING_VALUES
 
     def test_create_content_in_container(self):
+        self.login(self.administrator)
         with freeze(FROZEN_NOW):
             repofolder = createContentInContainer(
-                self.portal,
+                self.empty_repofolder,
                 'opengever.repository.repositoryfolder',
                 title_de=REPOFOLDER_REQUIREDS['title_de'],
             )
@@ -450,13 +454,15 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.administrator)
+
         with freeze(FROZEN_NOW):
-            new_id = self.portal.invokeFactory(
+            new_id = self.empty_repofolder.invokeFactory(
                 'opengever.repository.repositoryfolder',
                 'repofolder',
                 title_de=REPOFOLDER_REQUIREDS['title_de'],
             )
-            repofolder = self.portal[new_id]
+        repofolder = self.empty_repofolder[new_id]
 
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_type_defaults()
@@ -468,11 +474,14 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.administrator, browser)
+
         with freeze(FROZEN_NOW):
-            browser.login().open()
+            browser.open(self.empty_repofolder)
             factoriesmenu.add(u'RepositoryFolder')
             browser.fill({u'Title': REPOFOLDER_REQUIREDS['title_de']}).save()
-            repofolder = browser.context
+
+        repofolder = browser.context
 
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_z3c_form_defaults()
@@ -482,19 +491,25 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
-        root = create(Builder('repository_root'))
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.administrator, browser)
+
         payload = {
             u'@type': u'opengever.repository.repositoryfolder',
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
             u'title_fr': u'French Title',
         }
-        response = self.api.post(root.absolute_url(), json=payload)
-        transaction.commit()
+        response = browser.open(
+            self.empty_repofolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        folder = root.restrictedTraverse('my-title')
+        new_object_id = str(response.json['id'])
+        folder = self.empty_repofolder.restrictedTraverse(new_object_id)
 
         persisted_values = get_persisted_values_for_obj(folder)
         expected = self.get_type_defaults()
@@ -514,10 +529,14 @@ class TestDossierDefaults(TestDefaultsBase):
     form_defaults = DOSSIER_FORM_DEFAULTS
     missing_values = DOSSIER_MISSING_VALUES
 
+    features = ('dossiertemplate', )
+
     def test_create_content_in_container(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             dossier = createContentInContainer(
-                self.portal,
+                self.leaf_repofolder,
                 'opengever.dossier.businesscasedossier',
                 title=DOSSIER_REQUIREDS['title'],
             )
@@ -528,13 +547,15 @@ class TestDossierDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
-            new_id = self.portal.invokeFactory(
+            new_id = self.leaf_repofolder.invokeFactory(
                 'opengever.dossier.businesscasedossier',
-                'dossier-1',
+                'dossier-999',
                 title=DOSSIER_REQUIREDS['title'],
             )
-            dossier = self.portal[new_id]
+        dossier = self.leaf_repofolder[new_id]
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
@@ -543,11 +564,14 @@ class TestDossierDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.regular_user, browser)
+
         with freeze(FROZEN_NOW):
-            browser.login().open()
+            browser.open(self.leaf_repofolder)
             factoriesmenu.add(u'Business Case Dossier')
             browser.fill({u'Title': DOSSIER_REQUIREDS['title']}).save()
-            dossier = browser.context
+
+        dossier = browser.context
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
@@ -557,51 +581,55 @@ class TestDossierDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
-        repo = create(Builder('repository'))
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.regular_user, browser)
 
         payload = {
             u'@type': u'opengever.dossier.businesscasedossier',
             u'title': DOSSIER_REQUIREDS['title'],
             u'responsible': DOSSIER_FORM_DEFAULTS['responsible'],
         }
-        response = self.api.post(repo.absolute_url(), json=payload)
-        transaction.commit()
+        response = browser.open(
+            self.leaf_repofolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        dossier = repo.restrictedTraverse('dossier-1')
+        new_object_id = str(response.json['id'])
+        dossier = self.leaf_repofolder.restrictedTraverse(new_object_id)
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_type_defaults()
         expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible']
 
-        # plone.restapi incorrectly fires an ObjectMoved event during creation
-        expected['former_reference_number'] = 'Client1 1 / 1'
+        # plone.restapi incorrectly fires an ObjectMoved event during creation.
+        # This causes a former reference number to be computed and set.
+        expected['former_reference_number'] = 'Client1 1.1 / 9'
         expected['temporary_former_reference_number'] = ''
 
         self.assertDictEqual(expected, persisted_values)
 
     @browsing
     def test_dossier_from_template(self, browser):
-        toggle_feature(IDossierTemplateSettings, enabled=True)
-
-        root = create(Builder('repository_root'))
-        leaf_node = create(Builder('repository').within(root))
+        self.login(self.regular_user, browser)
 
         create(Builder("dossiertemplate")
                .titled(DOSSIER_REQUIREDS['title']))
 
         with freeze(FROZEN_NOW):
-            browser.login().open(leaf_node)
+            browser.open(self.leaf_repofolder)
             factoriesmenu.add(u'Dossier with template')
 
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
+                'input[title="My title"]').first.attrib.get('value')  # noqa
 
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
-            dossier = browser.context
+
+        dossier = browser.context
 
         persisted_values = get_persisted_values_for_obj(dossier)
         expected = self.get_z3c_form_defaults()
@@ -613,10 +641,8 @@ class TestDossierDefaults(TestDefaultsBase):
 
     @browsing
     def test_subdossier_from_template(self, browser):
-        toggle_feature(IDossierTemplateSettings, enabled=True)
+        self.login(self.regular_user, browser)
 
-        root = create(Builder('repository_root'))
-        leaf_node = create(Builder('repository').within(root))
         template = create(Builder("dossiertemplate")
                           .titled(u'Main template'))
         create(Builder("dossiertemplate")
@@ -624,14 +650,14 @@ class TestDossierDefaults(TestDefaultsBase):
                .titled(DOSSIER_REQUIREDS['title']))
 
         with freeze(FROZEN_NOW):
-            browser.login().open(leaf_node)
+            browser.open(self.leaf_repofolder)
             factoriesmenu.add(u'Dossier with template')
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
+                'input[title="Main template"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
 
-            subdossier = browser.context.listFolderContents()[0]
+        subdossier = browser.context.listFolderContents()[0]
 
         persisted_values = get_persisted_values_for_obj(subdossier)
         expected = self.get_type_defaults()
@@ -655,102 +681,151 @@ class TestDocumentDefaults(TestDefaultsBase):
     form_defaults = DOCUMENT_FORM_DEFAULTS
     missing_values = DOCUMENT_MISSING_VALUES
 
+    features = ('dossiertemplate', )
+
+    SAMPLE_FILE = 'Lorem Ipsum.\n'
+
+    @property
+    def sample_file(self):
+        file_value = NamedBlobFile(
+            data=TestDocumentDefaults.SAMPLE_FILE,
+            contentType='text/plain',
+            filename=u'b\xe4rengraben.txt')
+        return file_value
+
     def test_create_content_in_container(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             doc = createContentInContainer(
-                self.portal,
+                self.dossier,
                 'opengever.document.document',
                 title=DOCUMENT_REQUIREDS['title'],
+                file=self.sample_file,
             )
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
-            new_id = self.portal.invokeFactory(
+            new_id = self.dossier.invokeFactory(
                 'opengever.document.document',
                 'document-1',
                 title=DOCUMENT_REQUIREDS['title'],
+                file=self.sample_file,
             )
-            doc = self.portal[new_id]
+
+        doc = self.dossier[new_id]
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
     @browsing
     def test_z3c_add_form(self, browser):
-        # Need to create doc inside a dossier, otherwise document-redirector
-        # won't work
-        outer_dossier = createContentInContainer(
-            self.portal,
-            'opengever.dossier.businesscasedossier',
-            title=u'Outer Dossier',
-        )
-        transaction.commit()
+        self.login(self.regular_user, browser)
 
         with freeze(FROZEN_NOW):
-            browser.login().open(outer_dossier)
-            factoriesmenu.add(u'Document')
-            browser.fill({u'Title': DOCUMENT_REQUIREDS['title']}).save()
-            doc = outer_dossier['document-1']
+            with self.observe_children(self.dossier) as children:
+                browser.open(self.dossier)
+                factoriesmenu.add(u'Document')
+                browser.fill({
+                    u'Title': DOCUMENT_REQUIREDS['title'],
+                    u'File': (
+                        TestDocumentDefaults.SAMPLE_FILE,
+                        'b\xc3\xa4rengraben.txt', 'text/plain')}).save()
+
+        doc, = children.get('added')
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_z3c_form_defaults()
+        expected['file'] = doc.file
 
         # XXX: Don't know why this happens
         expected['public_trial_statement'] = None
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
-        dossier = create(Builder('dossier'))
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.regular_user, browser)
+
         payload = {
             u'@type': u'opengever.document.document',
             u'title': DOCUMENT_REQUIREDS['title'],
+            u'file': {
+                u'data': TestDocumentDefaults.SAMPLE_FILE.encode('base64'),
+                u'encoding': u'base64',
+                u'filename': u'b\xe4rengraben.txt',
+                u'content-type': u'text/plain'},
         }
-        response = self.api.post(dossier.absolute_url(), json=payload)
-        transaction.commit()
+        response = browser.open(
+            self.dossier.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        doc = dossier.restrictedTraverse('document-1')
+        new_object_id = str(response.json['id'])
+        doc = self.dossier.restrictedTraverse(new_object_id)
 
-        # XXX: Doesn't currently work of event order during creation
-        # checksum = IBumblebeeDocument(doc).get_checksum()
-        # self.assertIsNotNone(checksum)
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_FILE).hexdigest()
+        checksum = IBumblebeeDocument(doc).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+        expected['file'] = doc.file
 
         self.assertDictEqual(expected, persisted_values)
 
     @browsing
     def test_document_from_dossiertemplate(self, browser):
-        toggle_feature(IDossierTemplateSettings, enabled=True)
+        self.login(self.regular_user, browser)
 
-        root = create(Builder('repository_root'))
-        leaf_node = create(Builder('repository').within(root))
         template = create(Builder("dossiertemplate")
-                          .titled(DOSSIER_REQUIREDS['title']))
+                          .titled(DOSSIER_REQUIREDS['title'])
+                          .within(self.templates))
         create(Builder('document')
                .titled(DOCUMENT_REQUIREDS['title'])
                .within(template)
                .with_dummy_content())
 
         with freeze(FROZEN_NOW):
-            browser.login().open(leaf_node)
+            browser.open(self.leaf_repofolder)
             factoriesmenu.add(u'Dossier with template')
             token = browser.css(
-                'input[name="form.widgets.template"]').first.attrib.get('value')  # noqa
+                'input[title="My title"]').first.attrib.get('value')  # noqa
             browser.fill({'form.widgets.template': token}).submit()
             browser.click_on('Save')
 
-            doc = browser.context.listFolderContents()[0]
+        dossier = browser.context
+        doc = dossier.objectValues()[0]
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
@@ -793,11 +868,18 @@ class TestMailDefaults(TestDefaultsBase):
         return message_value
 
     def test_create_content_in_container(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             mail = createContentInContainer(
-                self.portal,
+                self.dossier,
                 'ftw.mail.mail',
                 message=self.sample_msg)
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
@@ -807,12 +889,20 @@ class TestMailDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
-            new_id = self.portal.invokeFactory(
+            new_id = self.dossier.invokeFactory(
                 'ftw.mail.mail',
                 'mail',
                 message=self.sample_msg)
-            mail = self.portal[new_id]
+
+        mail = self.dossier[new_id]
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
@@ -823,13 +913,21 @@ class TestMailDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.regular_user, browser)
+
         with freeze(FROZEN_NOW):
             # Mail is not addable via factories menu
-            browser.login().open(view='++add++ftw.mail.mail')
+            browser.open(self.dossier, view='++add++ftw.mail.mail')
             browser.fill({
                 u'form.widgets.message': (TestMailDefaults.SAMPLE_MAIL,
                                           'msg.eml', 'message/rfc822')}).save()
-            mail = browser.context
+
+        mail = browser.context
+
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_z3c_form_defaults()
@@ -841,8 +939,10 @@ class TestMailDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
-        dossier = create(Builder('dossier'))
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.regular_user, browser)
+
         payload = {
             u'@type': u'ftw.mail.mail',
             u'message': {
@@ -851,16 +951,21 @@ class TestMailDefaults(TestDefaultsBase):
                 u'filename': u'msg.eml',
                 u'content-type': u'message/rfc822'},
         }
-        response = self.api.post(dossier.absolute_url(), json=payload)
-        transaction.commit()
+        response = browser.open(
+            self.dossier.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        mail = dossier.restrictedTraverse('document-1')
+        new_object_id = str(response.json['id'])
+        mail = self.dossier.restrictedTraverse(new_object_id)
 
-        # XXX: Doesn't currently work of event order during creation
-        # checksum = IBumblebeeDocument(mail).get_checksum()
-        # self.assertIsNotNone(checksum)
+        # Ensure Bumblebee checksum got calculated correctly
+        expected_checksum = sha256(self.SAMPLE_MAIL).hexdigest()
+        checksum = IBumblebeeDocument(mail).get_checksum()
+        self.assertEqual(expected_checksum, checksum)
 
         persisted_values = get_persisted_values_for_obj(mail)
         expected = self.get_type_defaults()
@@ -881,9 +986,11 @@ class TestTaskDefaults(TestDefaultsBase):
     missing_values = TASK_MISSING_VALUES
 
     def test_create_content_in_container(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             task = createContentInContainer(
-                self.portal,
+                self.dossier,
                 'opengever.task.task',
                 title=TASK_REQUIREDS['title'],
                 issuer=TASK_REQUIREDS['issuer'],
@@ -898,17 +1005,20 @@ class TestTaskDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
-            new_id = self.portal.invokeFactory(
+            new_id = self.dossier.invokeFactory(
                 'opengever.task.task',
-                'task-1',
+                'task-999',
                 title=TASK_REQUIREDS['title'],
                 issuer=TASK_REQUIREDS['issuer'],
                 task_type=TASK_REQUIREDS['task_type'],
                 responsible=TASK_REQUIREDS['responsible'],
                 responsible_client=TASK_REQUIREDS['responsible_client'],
             )
-            task = self.portal[new_id]
+
+        task = self.dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_type_defaults()
@@ -917,20 +1027,23 @@ class TestTaskDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.regular_user, browser)
+
         with freeze(FROZEN_NOW):
-            browser.login().open()
-            factoriesmenu.add(u'Task')
-            browser.fill({
-                u'Title': TASK_REQUIREDS['title'],
-                u'Task Type': TASK_REQUIREDS['task_type']})
+            with self.observe_children(self.dossier) as children:
+                browser.open(self.dossier)
+                factoriesmenu.add(u'Task')
+                browser.fill({
+                    u'Title': TASK_REQUIREDS['title'],
+                    u'Task Type': TASK_REQUIREDS['task_type']})
 
-            form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(':'.join(
-                [TASK_REQUIREDS['responsible_client'],
-                 TASK_REQUIREDS['responsible']]))
-            form.save()
+                form = browser.find_form_by_field('Responsible')
+                form.find_widget('Responsible').fill(':'.join(
+                    [TASK_REQUIREDS['responsible_client'],
+                     TASK_REQUIREDS['responsible']]))
+                form.save()
 
-            task = self.portal['task-1']
+        task, = children.get('added')
 
         persisted_values = get_persisted_values_for_obj(task)
         expected = self.get_z3c_form_defaults()
@@ -948,16 +1061,9 @@ class TestContactDefaults(TestDefaultsBase):
     form_defaults = CONTACT_FORM_DEFAULTS
     missing_values = CONTACT_MISSING_VALUES
 
-    def setUp(self):
-        super(TestContactDefaults, self).setUp()
-        self.contactfolder = createContentInContainer(
-            self.portal,
-            'opengever.contact.contactfolder',
-            title=u'Contacts',
-        )
-        transaction.commit()
-
     def test_create_content_in_container(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             contact = createContentInContainer(
                 self.contactfolder,
@@ -972,6 +1078,8 @@ class TestContactDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.regular_user)
+
         with freeze(FROZEN_NOW):
             new_id = self.contactfolder.invokeFactory(
                 'opengever.contact.contact',
@@ -988,6 +1096,8 @@ class TestContactDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.regular_user, browser)
+
         with freeze(FROZEN_NOW):
             browser.login().open(self.contactfolder)
             factoriesmenu.add(u'Contact')
@@ -1001,19 +1111,25 @@ class TestContactDefaults(TestDefaultsBase):
 
         self.assertDictEqual(expected, persisted_values)
 
-    def test_rest_api(self):
-        contactfolder = create(Builder('contactfolder'))
+    @browsing
+    def test_rest_api(self, browser):
+        self.login(self.regular_user, browser)
+
         payload = {
             u'@type': u'opengever.contact.contact',
             u'firstname': CONTACT_REQUIREDS['firstname'],
             u'lastname': CONTACT_REQUIREDS['lastname'],
         }
-        response = self.api.post(contactfolder.absolute_url(), json=payload)
-        transaction.commit()
+        response = browser.open(
+            self.contactfolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
-        contact = contactfolder.restrictedTraverse('doe-john')
+        new_object_id = str(response.json['id'])
+        contact = self.contactfolder.restrictedTraverse(new_object_id)
 
         persisted_values = get_persisted_values_for_obj(contact)
         expected = self.get_type_defaults()
@@ -1031,39 +1147,16 @@ class TestProposalDefaults(TestDefaultsBase):
     form_defaults = PROPOSAL_FORM_DEFAULTS
     missing_values = PROPOSAL_MISSING_VALUES
 
+    features = ('meeting', )
+
     def setUp(self):
         super(TestProposalDefaults, self).setUp()
-
-        api.portal.set_registry_record(
-            'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
-            True)
-
-        self.container = create(Builder('committee_container'))
-        self.committee = create(Builder('committee')
-                                .with_default_period()
-                                .within(self.container))
-        self.repofolder = create(Builder('repository'))
-
-        self.dossier = create(Builder('dossier')
-                              .titled(u'Containing Dossier Title')
-                              .within(self.repofolder))
-
-        self.templates = create(
-            Builder('templatefolder')
-            .titled(u'Vorlagen')
-            .having(id='vorlagen')
-        )
-
-        self.proposal_template = create(
-            Builder('proposaltemplate')
-            .titled(u'Geb\xfchren')
-            .with_asset_file(u'vertragsentwurf.docx')
-            .within(self.templates)
-        )
-
-        transaction.commit()
+        self.login(self.meeting_user)
+        self.dossier.title = u'Containing Dossier Title'
 
     def test_create_content_in_container(self):
+        self.login(self.meeting_user)
+
         proposal = createContentInContainer(
             self.dossier,
             'opengever.meeting.proposal',
@@ -1076,9 +1169,11 @@ class TestProposalDefaults(TestDefaultsBase):
         self.assertDictEqual(expected, persisted_values)
 
     def test_invoke_factory(self):
+        self.login(self.meeting_user)
+
         new_id = self.dossier.invokeFactory(
             'opengever.meeting.proposal',
-            'proposal-1',
+            'proposal-999',
             issuer=PROPOSAL_REQUIREDS['issuer'],
         )
         proposal = self.dossier[new_id]
@@ -1090,8 +1185,9 @@ class TestProposalDefaults(TestDefaultsBase):
 
     @browsing
     def test_z3c_add_form(self, browser):
+        self.login(self.meeting_user, browser)
 
-        browser.login().open(self.dossier)
+        browser.open(self.dossier)
         factoriesmenu.add(u'Proposal')
         browser.forms['form'].fill({
             'Committee': self.committee.title,
@@ -1115,16 +1211,11 @@ class TestPrivateFolderDefaults(TestDefaultsBase):
     form_defaults = PRIVATEFOLDER_FORM_DEFAULTS
     missing_values = PRIVATEFOLDER_MISSING_VALUES
 
-    def setUp(self):
-        super(TestPrivateFolderDefaults, self).setUp()
-        enable_opengever_private()
-
-        self.private_root = create(
-            Builder('private_root')
-            .titled(u'Private')
-        )
+    features = ('private',)
 
     def test_private_folder_defaults(self):
+        self.login(self.regular_user)
+
         # This will trigger member folder creation by MembershipTool
         create_members_folder(self.private_root)
 
