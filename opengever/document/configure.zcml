@@ -134,6 +134,12 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.checked_in"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectBeforeCheckInEvent"
       handler=".handlers.before_documend_checked_in"
       />
