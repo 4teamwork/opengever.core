@@ -31,6 +31,7 @@ import os
 extensions = [
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.disqus',
+    'sphinx.ext.ifconfig',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -312,5 +313,25 @@ texinfo_documents = [
 
 
 def setup(app):
-   app.add_javascript("custom.js")
-   app.add_stylesheet("custom.css")
+    app.add_javascript("custom.js")
+    app.add_stylesheet("custom.css")
+
+    # The SPHINX_PUBLICATION_LEVEL environment variable (made available as
+    # Sphinx config value 'publication_level' here) controls whether a build
+    # is intended for publishing to the public, or is kept private, like
+    # local builds.
+    #
+    # The bin/docs-build-and-publish-<project> helper scripts set this to
+    # "published", in all other contexts it should be "private".
+    #
+    # This then can be used in an ifconfig directive to include an merge
+    # changes to the docs that shouldn't be published quite yet. Example:
+    #
+    # .. ifconfig:: publication_level == 'private'
+    #
+    #    This block won't be published
+
+    app.add_config_value(
+        'publication_level',
+        os.environ.get('SPHINX_PUBLICATION_LEVEL', 'private'),
+        'env')
