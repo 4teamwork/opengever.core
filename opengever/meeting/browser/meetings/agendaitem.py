@@ -337,8 +337,6 @@ class AgendaItemsView(BrowserView):
                 _('agenda_item_update_empty_string',
                   default=u"Agenda Item title must not be empty.")).proceed().dump()
 
-        title = title.decode('utf-8')
-        description = description and description.decode('utf-8')
         if self.agenda_item.has_proposal:
             if len(title) > ISubmittedProposal['title'].max_length:
                 return JSONResponse(self.request).error(
