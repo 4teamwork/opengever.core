@@ -1,6 +1,55 @@
 #!/bin/bash
 set -euo pipefail
 
+function red {
+    RED=$(tput setaf 1)
+    RESET=$(tput sgr0)
+    echo "$RED $1 $RESET"
+}
+
+# Parse options
+WARN_ONLY=0
+
+for i in "$@"
+do
+case $i in
+    --warn-only)
+    WARN_ONLY=1
+    shift
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
+
+# ----------------------------------------------------------------------
+
+if [[ $WARN_ONLY = 1 ]]; then
+
+    # Check whether git-lfs is enabled for this repo
+    REPO_ROOT=$(git rev-parse --show-toplevel)
+    set +e
+    grep -q '\[lfs\]' $REPO_ROOT/.git/config
+    LFS_DISABLED=$?
+    set -e
+
+    if [[ $LFS_DISABLED = 1 ]]; then
+        red "ERROR: git-lfs isn't enabled for this repository."
+        red ""
+        red "Please make sure you're in the correct repository, and if so,"
+        red "enable git-lfs support for this repo by running"
+        red ""
+        red "  bin/enable-lfs"
+        red ""
+        red "from the root of this repository."
+        exit 1
+    else
+        # LFS is enabled
+        exit 0
+    fi
+fi
+
 echo "Enabling automatic fetching of LFS resources for $(pwd)"
 git config --local lfs.fetchexclude ''
 echo "Success."
