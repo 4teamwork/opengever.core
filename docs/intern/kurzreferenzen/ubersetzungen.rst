@@ -14,6 +14,7 @@ Login: via GitHub
 
 Deployment: /apps/02-django-translations.onegovgever.ch auf seth.4teamwork.ch
 
+
 Aktualisierung der Übersetzungen:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
