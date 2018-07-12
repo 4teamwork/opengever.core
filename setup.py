@@ -21,7 +21,6 @@ tests_require = [
     'glob2',
     'lxml',
     'mock',
-    'opengever.pdfconverter',
     'plone.app.dexterity',
     'plone.app.testing',
     'plone.formwidget.namedfile',

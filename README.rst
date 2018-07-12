@@ -144,15 +144,6 @@ it using Perl ``local::lib`` and CPAN. You then need to install Perl,
 In the end, GEVER will look for the ``msgconvert`` executable in ``$PATH``.
 
 
-Celery, Erlang and RabbitMQ
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-If `opengever.pdfconverter <https://github.com/4teamwork/opengever.pdfconverter/>`_
-is used, we require `Celery <http://www.celeryproject.org/>`_ and
-`RabbitMQ <http://www.rabbitmq.com/>`_. In order to install RabbitMQ, you
-first need to install `Erlang <http://www.erlang.org/>`_.
-
-
 Sablon
 ^^^^^^
 
