@@ -5,21 +5,12 @@ from ftw.builder import create
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.base import pdfconverter
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.testing import FunctionalTestCase
 
 
 class TestDocumentTooltip(FunctionalTestCase):
     """Test the lazy loading document tooltip."""
-
-    def setUp(self):
-        super(TestDocumentTooltip, self).setUp()
-        self.converter_avaialable = pdfconverter.PDFCONVERTER_AVAILABLE
-
-    def tearDown(self):
-        super(TestDocumentTooltip, self).tearDown()
-        pdfconverter.PDFCONVERTER_AVAILABLE = self.converter_avaialable
 
     @browsing
     def test_tooltip_contains_linked_breadcrumb(self, browser):
