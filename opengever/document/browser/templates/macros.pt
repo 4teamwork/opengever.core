@@ -151,14 +151,6 @@
 
             </tal:attach_feature_enabled>
 
-            <tal:pdf_preview tal:condition="view/is_download_pdfpreview_available">
-                <a class="function-download-pdf" href="#"
-                    tal:attributes="href string:${context/absolute_url}/download_pdfpreview?_authenticator=${context/@@authenticator/token}"
-                    i18n:translate="label_pdf_preview">
-                    PDF Preview
-                </a>
-            </tal:pdf_preview>
-
             <tal:overlay tal:condition="view/overlay">
                 <tal:open_as_pdf
                     tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
