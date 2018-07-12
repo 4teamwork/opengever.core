@@ -43,7 +43,7 @@ class TestArchivalFile(FunctionalTestCase):
 
     def test_file_name_is_file_filename_with_pdf_extension(self):
         self.assertEquals(
-            'uberprufung-xy.pdf',
+            'Ueberpruefung XY.pdf',
             ArchivalFileConverter(self.document).get_file_name())
 
     def test_trigger_conversion_sets_state_to_converting(self):

@@ -43,5 +43,5 @@ class TestDocumentQuickupload(FunctionalTestCase):
                .within(self.document)
                .with_data('NEW DATA', filename='test.pdf'))
 
-        self.assertEquals('anfrage-herr-meier.pdf',
+        self.assertEquals('Anfrage Herr Meier.pdf',
                           self.document.file.filename)

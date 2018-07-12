@@ -792,7 +792,7 @@ class TestProposal(IntegrationTestCase):
         excerpt_document, = children['added']
         self.assertEquals('Excerpt \xc3\x84nderungen',
                           excerpt_document.Title())
-        self.assertEquals(u'excerpt-anderungen.docx',
+        self.assertEquals(u'Excerpt Aenderungen.docx',
                           excerpt_document.file.filename)
         self.assertEquals(MIME_DOCX, excerpt_document.file.contentType)
         self.assertIsNotNone(excerpt_document.file.data)

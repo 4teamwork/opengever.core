@@ -16,7 +16,7 @@ class TestTaskZipExport(IntegrationTestCase):
             ]
         expected_paths = [
             u'/Aufgabe - Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-            u'/feedback-zum-vertragsentwurf.docx',
+            u'/Feedback zum Vertragsentwurf.docx',
             ]
         self.assertEqual(paths, expected_paths)
 
@@ -30,6 +30,6 @@ class TestTaskZipExport(IntegrationTestCase):
             ]
         expected_paths = [
             u'/T\xe2che - Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-            u'/feedback-zum-vertragsentwurf.docx',
+            u'/Feedback zum Vertragsentwurf.docx',
             ]
         self.assertEqual(paths, expected_paths)

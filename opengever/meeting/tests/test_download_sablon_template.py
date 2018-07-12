@@ -22,6 +22,6 @@ class TestSablonTemplateDownloadView(FunctionalTestCase):
         browser.find('Download copy').click()
         browser.find('label_download').click()
 
-        self.assertEqual('attachment; filename="tost.txt"',
+        self.assertEqual('attachment; filename="toest.txt"',
                          browser.headers['content-disposition'])
         self.assertEqual("blub blub", browser.contents)

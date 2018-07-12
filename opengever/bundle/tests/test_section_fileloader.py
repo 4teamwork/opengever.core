@@ -54,7 +54,7 @@ class TestFileLoader(FunctionalTestCase):
 
         self.assertEqual('Lorem Ipsum\n', doc.file.data)
         self.assertEqual('application/pdf', doc.file.contentType)
-        self.assertEqual('foo-bar.pdf', doc.file.filename)
+        self.assertEqual('Foo Bar.pdf', doc.file.filename)
 
     def test_syncs_title_from_filename_if_untitled(self):
         doc = create(Builder('document').titled(None))

@@ -60,7 +60,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertDictContainsSubset(
-            {'content-disposition': 'attachment; filename="agendaitem-list-9-sitzung-der.docx"',
+            {'content-disposition': 'attachment; filename="Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx"',
              'content-type': MIME_DOCX},
             browser.headers)
 
@@ -74,7 +74,7 @@ class TestAgendaItemList(IntegrationTestCase):
             browser.open(self.meeting, view='agenda_item_list/as_json')
 
         expected_agenda_items = [
-            {u'attachments': [{u'filename': u'vertragsentwurf.docx',
+            {u'attachments': [{u'filename': u'Vertraegsentwurf.docx',
                               u'title': u'Vertr\xe4gsentwurf'}],
              u'decision_number': None,
              u'dossier_reference_number': u'Client1 1.1 / 1',

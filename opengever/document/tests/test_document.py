@@ -85,7 +85,7 @@ class TestDocument(FunctionalTestCase):
         document = create(Builder('document')
                           .titled('Foo')
                           .attach_file_containing('foo', name=u'foo.txt'))
-        self.assertEqual(u'foo.txt', document.get_filename())
+        self.assertEqual(u'Foo.txt', document.get_filename())
 
     def test_filename_getter_return_none_if_no_file_is_available(self):
         document = create(Builder('document'))

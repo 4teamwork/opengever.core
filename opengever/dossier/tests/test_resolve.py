@@ -144,7 +144,7 @@ class TestResolveJobs(IntegrationTestCase):
         main_journal_pdf, = main_children['added']
         self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
                           main_journal_pdf.title)
-        self.assertEquals(u'journal-of-dossier-an-empty-dossier-apr-25-2016-12.pdf',
+        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
                           main_journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           main_journal_pdf.file.contentType)
@@ -154,7 +154,7 @@ class TestResolveJobs(IntegrationTestCase):
         sub_journal_pdf, = sub_children['added']
         self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12:00 AM',
                           sub_journal_pdf.title)
-        self.assertEquals(u'journal-of-dossier-sub-apr-25-2016-12-00-am.pdf',
+        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12 00 AM.pdf',
                           sub_journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           sub_journal_pdf.file.contentType)
