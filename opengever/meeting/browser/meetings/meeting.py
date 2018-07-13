@@ -51,6 +51,15 @@ class IMeetingModel(model.Schema):
         defaultFactory=default_title,
         required=True)
 
+    meeting_template = schema.Choice(
+        title=_(u'label_meeting_template', default=u'Meeting Template'),
+        description=_(
+            u'help_meeting_template',
+            default=u'Template containing the predifined paragraphs'),
+        source='opengever.meeting.MeetingTemplateVocabulary',
+        required=False,
+    )
+
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
         source='opengever.meeting.CommitteeVocabulary',
@@ -189,7 +198,15 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
                 dm = getUtility(IWizardDataStorage)
                 data = dm.get_data(get_dm_key())
                 data['dossier_oguid'] = Oguid.for_object(dossier)
+                meeting_template_id = data.pop('meeting_template', None)
                 meeting = Meeting(**data)
+                if meeting_template_id is not None:
+                    templates = api.content.find(
+                        id=meeting_template_id,
+                        portal_type='opengever.meeting.meetingtemplate')
+                    assert len(templates) == 1, 'Only one template expected'
+                    template = templates[0].getObject()
+                    template.apply(meeting)
                 meeting.initialize_participants()
                 session = create_session()
                 session.add(meeting)
