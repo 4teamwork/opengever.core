@@ -9,7 +9,7 @@
 
     <dt class="notificationsMenuHeader">
 
-      <a tal:attributes="href string:#"></a>
+      <a class="header-dropdown-button" id="notifications-menu-toggler" tal:attributes="href string:#"></a>
 
       <div class="visualClear"></div>
 

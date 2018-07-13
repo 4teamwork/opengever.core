@@ -15,6 +15,7 @@ Changelog
 - Trigger proposal rejected activity before unregister watchers. [elioschmutz]
 - Correct info message showed when regenerating agendaitem list. [njohner]
 - Make remove button unavailable for private dossier. [njohner]
+- Introduce generic header dropdown button. [Kevin Bieri]
 - Build missing french translations for opengever.meeting. [elioschmutz]
 - Hide Excerpts field in SubmittedProposal edit form. [njohner]
 - Remove deprecated sablon fields from documenation. [tarnap]

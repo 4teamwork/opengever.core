@@ -159,25 +159,9 @@ dl.portlet ul.navTree li {
 
 /* @group notifications */
 
-#portal-notifications dt.notificationsMenuHeader {
-  border: 1px solid #bfbfbf;
-  background-color: #FFF;
-  box-shadow: 0 0 0.8em -0.75em #000000 inset;
-  -moz-box-shadow: 0 1px 5px -4px #bfbfbf inset;
-  -webkit-box-shadow: 0 1px 5px -4px #bfbfbf inset;
-  moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  height: 27px;
-  overflow: hidden;
-
-  a {
-    width: 26px;
-    height: 27px;
-    background: url(../../images/notifications_button.png) no-repeat right top;
-    &:hover {
-      background-position: right -113px;
-    }
+#notifications-menu-toggler {
+  &:before {
+    @extend .fa-bell;
   }
 }
 
