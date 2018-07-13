@@ -62,6 +62,20 @@ class TestCssClassHelpers(IntegrationTestCase):
         self.assertEquals('icon-docx is-checked-out-by-current-user',
                           get_css_class(self.document))
 
+    def test_document_obj_checked_out_in_context_of_another_users_id(self):
+        self.login(self.dossier_responsible)
+
+        self.assertEquals('icon-docx', get_css_class(self.document))
+
+        self.checkout_document(self.document)
+        self.assertEquals(
+            'icon-docx is-checked-out-by-current-user',
+            get_css_class(self.document, for_user=self.dossier_responsible.id))
+
+        self.assertEquals(
+            'icon-docx is-checked-out',
+            get_css_class(self.document, for_user=self.regular_user.id))
+
     def test_document_brain_checked_out_suffix(self):
         self.login(self.dossier_responsible)
 

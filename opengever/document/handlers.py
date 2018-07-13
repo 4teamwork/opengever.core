@@ -1,3 +1,6 @@
+from opengever.base.browser.helper import get_css_class
+from opengever.base.model.favorite import Favorite
+from opengever.base.oguid import Oguid
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.dossier.docprops import DocPropertyWriter
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -8,6 +11,11 @@ DISABLE_DOCPROPERTY_UPDATE_FLAG = 'disable_docproperty_update'
 
 def checked_out(context, event):
     _update_docproperties(context)
+    _update_favorites_icon_class(context)
+
+
+def checked_in(context, event):
+    _update_favorites_icon_class(context)
 
 
 def before_documend_checked_in(context, event):
@@ -49,3 +57,14 @@ def set_archival_file_state(context, event):
 
     if file_removed or file_removed_in_archival_form:
         ArchivalFileConverter(context).remove_state()
+
+
+def _update_favorites_icon_class(context):
+    """Event handler which updates the icon_class of all existing favorites for
+    the current context.
+    """
+    favorites_query = Favorite.query.filter(
+        Favorite.oguid == Oguid.for_object(context))
+
+    for favorite in favorites_query.all():
+        favorite.icon_class = get_css_class(context, for_user=favorite.userid)
