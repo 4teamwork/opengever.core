@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-05 20:03+0000\n"
+"POT-Creation-Date: 2018-07-12 14:52+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -215,10 +215,10 @@ msgstr "surveillant"
 msgid "subject_digest"
 msgstr "Résumé quotidien pour le ${date}"
 
-#. Default: "GEVER Task"
+#. Default: "GEVER Activity"
 #: ./opengever/activity/mail.py
 msgid "subject_prefix"
-msgstr "Tâche GEVER"
+msgstr "Activité GEVER"
 
 #. Default: "Submitted proposal commented"
 #: ./opengever/activity/__init__.py

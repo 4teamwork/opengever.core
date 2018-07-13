@@ -53,7 +53,7 @@ class TestEmailNotification(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.create_task_via_browser(browser)
         mail = email.message_from_string(Mailing(self.portal).pop())
-        self.assertEquals('GEVER Task: Test Task', mail.get('Subject'))
+        self.assertEquals('GEVER Activity: Test Task', mail.get('Subject'))
 
     @browsing
     def test_notification_summary_is_split_into_paragraphs(self, browser):
