@@ -163,7 +163,8 @@ class ISelectTaskTemplates(model.Schema):
         value_type=schema.Choice(
             source='opengever.tasktemplates.tasktemplates',
         ),
-        defaultFactory=get_preselected_tasktemplates
+        defaultFactory=get_preselected_tasktemplates,
+        missing_value=[]
     )
 
     start_immediately = schema.Bool(

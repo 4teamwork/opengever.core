@@ -101,6 +101,33 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser.css('#formfield-form-widgets-tasktemplates input[checked]').getparents().text)
 
     @browsing
+    def test_selecting_at_least_one_tasktemplate_is_required(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('tasktemplate')
+               .titled(u'Notebook einrichten.')
+               .having(issuer='responsible',
+                       responsible_client='fa',
+                       responsible='robert.ziegler',
+                       deadline=10,
+                       preselected=True)
+               .within(self.tasktemplatefolder))
+
+        browser.open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': 'Verfahren Neuanstellung'})
+        browser.click_on('Continue')
+
+        browser.fill({'Tasktemplates': []})
+        browser.click_on('Continue')
+
+        self.assertEquals(
+            '{}/select-tasktemplates'.format(self.dossier.absolute_url()),
+            browser.url)
+        self.assertEquals(
+            ['Required input is missing.'],
+            browser.css('.fieldErrorBox .error').text)
+
+    @browsing
     def test_creates_main_task_assigned_to_current_user(self, browser):
         self.login(self.regular_user, browser=browser)
         self.trigger_tasktemplatefolder(
