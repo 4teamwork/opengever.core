@@ -712,6 +712,11 @@ msgstr "Wählen Sie alle Antragsvorlagen aus, die in diesem Gremium erlaubt sind
 msgid "help_create_task"
 msgstr "Neue Aufgabe im Sitzungsdossier erstellen und diesen Protokollauszug beilegen."
 
+#. Default: "Template containing the predifined paragraphs"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_meeting_template"
+msgstr "Sitzungsvorlage mit vordefinierten Zwischentiteln"
+
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_return_excerpt"
@@ -1076,6 +1081,11 @@ msgstr "Sitzung abgeschlossen"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
 msgstr "Die Sitzung kann nicht storniert werden solange sie Traktanden hat."
+
+#. Default: "Meeting Template"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_meeting_template"
+msgstr "Sitzungsvorlage"
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py
