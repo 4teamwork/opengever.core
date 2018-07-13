@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-23 12:31+0000\n"
+"POT-Creation-Date: 2018-07-13 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,6 +137,10 @@ msgstr ""
 msgid "Meeting Dossier"
 msgstr ""
 
+#: ./opengever/core/profiles/default/types/opengever.meeting.meetingtemplate.xml
+msgid "Meeting Template"
+msgstr ""
+
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Move Items"
 msgstr ""
@@ -148,6 +152,10 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
+msgid "Paragraph Template"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
