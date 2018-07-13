@@ -4,6 +4,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.utils import find_parent_dossier
+from opengever.inbox.inbox import IInbox
 from plone.dexterity.browser.edit import DefaultEditForm
 from Products.CMFCore.utils import getToolByName
 from z3c.form.field import Fields
@@ -15,6 +16,7 @@ def can_access_public_trial_edit_form(user, content):
     open dossier state. And the containing dossier is
      - not a templatefolder
      - not inactive
+     - not an inbox
     """
 
     assert IBaseDocument.providedBy(
@@ -25,7 +27,8 @@ def can_access_public_trial_edit_form(user, content):
 
     if ITemplateFolder.providedBy(dossier):
         return False
-
+    if IInbox.providedBy(dossier):
+        return False
     if wftool.getInfoFor(dossier, 'review_state') == 'dossier-state-inactive':
         return False
 

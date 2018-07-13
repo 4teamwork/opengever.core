@@ -1,88 +1,56 @@
-from ftw.builder import Builder
-from ftw.builder import create
+from Acquisition import aq_parent
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser.archival_file_form import can_access_archival_file_form
-from opengever.testing import FunctionalTestCase
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
 
 
-class TestEditArchivalFormAccess(FunctionalTestCase):
+class TestEditArchivalFormAccess(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestEditArchivalFormAccess, self).setUp()
+    def test_one_of_the_parents_of_content_needs_to_be_a_dossier(self):
+        self.login(self.regular_user)
+        self.assertTrue(IDossierMarker.providedBy(aq_parent(self.document)))
+        self.assertTrue(can_access_archival_file_form(self.regular_user, self.document))
 
-        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
-        self.document = create(Builder('document')
-                               .with_dummy_content()
-                               .within(dossier))
+        self.assertFalse(IDossierMarker.providedBy(aq_parent(self.taskdocument)))
+        self.assertTrue(can_access_archival_file_form(self.regular_user, self.taskdocument))
 
-    def test_parent_of_content_needs_to_be_a_dossier(self):
-        user = self.portal.portal_membership.getAuthenticatedMember()
+        self.login(self.administrator)
+        self.assertFalse(can_access_archival_file_form(self.administrator, self.inbox_document))
 
-        self.assertTrue(can_access_archival_file_form(user, self.document))
+    def test_user_cannot_edit_when_parent_dossier_is_inactive(self):
+        self.login(self.regular_user)
+        self.assertFalse(can_access_archival_file_form(self.regular_user, self.inactive_document))
 
-        with self.assertRaises(AssertionError):
-            can_access_archival_file_form(user, self.document.aq_parent)
-
-    def test_one_of_the_parents_needs_to_be_a_dossier(self):
-        user = self.portal.portal_membership.getAuthenticatedMember()
-        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
-        task = create(Builder('task').within(dossier))
-        document = create(Builder('document')
-                          .with_dummy_content()
-                          .within(task))
-
-        self.assertTrue(can_access_archival_file_form(user, document))
-
-    def test_user_CANNOT_edit_when_parent_dossier_is_inactive(self):
-        user = self.portal.portal_membership.getAuthenticatedMember()
-        dossier = create(Builder('dossier').in_state('dossier-state-inactive'))
-        document = create(Builder('document')
-                          .with_dummy_content()
-                          .within(dossier))
-
-        self.assertFalse(can_access_archival_file_form(user, document))
-
-    def test_user_WITH_modify_permission_in_open_state_CAN_edit(self):
-        user = self.portal.portal_membership.getAuthenticatedMember()
-
-        self.assertTrue(can_access_archival_file_form(user, self.document))
-
-    def test_user_WITHOUT_modify_permission_in_open_state_CANNOT_edit(self):
-        user = create(Builder('user').with_roles('Contributor'))
-        self.assertFalse(can_access_archival_file_form(user, self.document))
+    def test_user_needs_modify_permission_in_open_state_to_edit(self):
+        self.login(self.regular_user)
+        self.assertTrue(can_access_archival_file_form(self.regular_user, self.document))
+        self.dossier.__ac_local_roles_block__ = True
+        self.dossier.reindexObjectSecurity()
+        self.assertFalse(can_access_archival_file_form(self.regular_user, self.document))
 
     def test_not_accessible_on_not_basedocumentish_objects(self):
-        user = self.portal.portal_membership.getAuthenticatedMember()
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-
+        self.login(self.regular_user)
         with self.assertRaises(AssertionError):
-            can_access_archival_file_form(user, subdossier)
+            can_access_archival_file_form(self.regular_user, self.subdossier)
 
 
-class TestArchivalFileForm(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestArchivalFileForm, self).setUp()
-
-        dossier = create(Builder('dossier').in_state('dossier-state-resolved'))
-        self.document = create(Builder('document')
-                               .with_dummy_content()
-                               .within(dossier))
+class TestArchivalFileForm(IntegrationTestCase):
 
     @browsing
-    def test_raise_unauthorized_if_the_user_CANNOT_modify(self, browser):
-        user = create(Builder('user').with_roles('Contributor'))
-
+    def test_raise_unauthorized_if_the_user_cannot_modify(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.dossier.__ac_local_roles_block__ = True
+        self.dossier.reindexObjectSecurity()
         with browser.expect_unauthorized():
-            browser.login(user.getId()).visit(self.document,
-                                              view='edit_archival_file')
+            browser.visit(self.document, view='edit_archival_file')
 
     @browsing
-    def test_user_CAN_access_edit_form(self, browser):
-        browser.login().visit(self.document, view='edit_archival_file')
+    def test_user_can_access_edit_form(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.document, view='edit_archival_file')
 
         self.assertEquals(
             '{0}/edit_archival_file'.format(self.document.absolute_url()),
@@ -92,8 +60,9 @@ class TestArchivalFileForm(FunctionalTestCase):
                         'Archival file field is not available.')
 
     @browsing
-    def test_user_CAN_change_the_archival_file(self, browser):
-        browser.login().visit(self.document, view='edit_archival_file')
+    def test_user_can_change_the_archival_file(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.document, view='edit_archival_file')
         browser.fill(
             {'Archival File': ('FILE DATA', 'archival_file.pdf')}).submit()
 
@@ -104,6 +73,8 @@ class TestArchivalFileForm(FunctionalTestCase):
 
     @browsing
     def test_user_submit_cancel_button(self, browser):
-        browser.login().visit(self.document, view='edit_archival_file')
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.document, view='edit_archival_file')
         browser.find('Cancel').click()
         self.assertEquals(self.document.absolute_url(), browser.url)
+

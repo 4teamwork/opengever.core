@@ -4,6 +4,7 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.utils import find_parent_dossier
+from opengever.inbox.inbox import IInbox
 from plone import api
 from plone.dexterity.browser.edit import DefaultEditForm
 from z3c.form.field import Fields
@@ -15,6 +16,7 @@ def can_access_archival_file_form(user, content):
     open dossier state. And the containing dossier is
      - not a templatefolder
      - not inactive
+     - not an inbox
     """
 
     assert IBaseDocument.providedBy(
@@ -22,6 +24,8 @@ def can_access_archival_file_form(user, content):
 
     dossier = find_parent_dossier(content)
     if ITemplateFolder.providedBy(dossier):
+        return False
+    if IInbox.providedBy(dossier):
         return False
     if api.content.get_state(obj=dossier) == 'dossier-state-inactive':
         return False
@@ -32,8 +36,12 @@ def can_access_archival_file_form(user, content):
 
     for open_state in DOSSIER_STATES_OPEN:
         state = wftool.get(workflow_id).states.get(open_state)
+        if state is None:
+            continue
+
         roles_with_modify = state.permission_roles['Modify portal content']
-        return bool(set(roles_with_modify).intersection(user_roles))
+        if bool(set(roles_with_modify).intersection(user_roles)):
+            return True
 
     return False
 
