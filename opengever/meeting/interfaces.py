@@ -17,6 +17,16 @@ class IMeetingSettings(Interface):
         default=u'%d.%m.%Y')
 
 
+class IMeetingTemplate(model.Schema):
+
+    pass
+
+
+class IParagraphTemplate(model.Schema):
+
+    pass
+
+
 class IMeetingWrapper(ISQLObjectWrapper):
     """Marker interface for meeting object wrappers."""
 
