@@ -333,6 +333,16 @@
                  audio/x-pn-wav"
       />
 
+  <!-- MS Publisher -->
+  <mimetype
+      name="Microsoft Publisher Document"
+      binary="True"
+      extensions="pub"
+      globs="*.pub"
+      icon_path="icon_dokument_publisher.gif"
+      mimetypes="application/x-mspublisher"
+      />
+
   <!-- Structured Formats -->
 
   <mimetype
