@@ -186,11 +186,6 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             file_actions,
             )
 
-        self.assertIn(
-            'PDF Preview',
-            file_actions,
-            )
-
     @browsing
     def test_checkout_and_edit(self, browser):
         self.login(self.regular_user, browser)
@@ -499,7 +494,6 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Edit',
             'Checkin with comment',
             'Download copy',
-            'PDF Preview',
             ]
 
         self.assertEquals(

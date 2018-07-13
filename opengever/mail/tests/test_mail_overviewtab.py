@@ -26,23 +26,6 @@ class TestOverview(FunctionalTestCase):
                           'mail_with_multiple_attachments.eml'))
         browser.login().visit(mail, view='tabbedview_view-overview')
 
-        view = mail.restrictedTraverse('tabbedview_view-overview')
-        if not view.is_preview_supported():
-            # Unexpected preconditions, print debug output for CI tests
-            print "view.is_preview_supported() is unexpectedly False!"
-
-            from opengever.base.pdfconverter import is_pdfconverter_enabled
-            print "is_pdfconverter_enabled(): %r" % is_pdfconverter_enabled()
-
-            import pkg_resources
-            dist = pkg_resources.get_distribution('opengever.pdfconverter')
-            print("pkg_resources.get_distribution"
-                  "('opengever.pdfconverter'): %r" % dist)
-
-            from opengever.bumblebee import is_bumblebee_feature_enabled
-            print ("is_bumblebee_feature_enabled(): "
-                   "%r" % is_bumblebee_feature_enabled())
-
         expect = [['Document Date', date_format_helper(get_header_date(mail))],
                   ['Document Type', ''],
                   ['Author', get_author_by_email(mail)],

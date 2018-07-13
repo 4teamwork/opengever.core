@@ -1,6 +1,4 @@
-from opengever.base.pdfconverter import is_pdfconverter_enabled
 from opengever.document.browser.download import DownloadConfirmationHelper
-from opengever.document.document import IDocumentSchema
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
@@ -45,20 +43,6 @@ class ActionButtonRendererMixin(object):
 
     def is_versioned(self):
         return self.request.get('version_id') is not None
-
-    def is_preview_supported(self):
-        # XXX TODO: should be persistent called two times
-        if is_pdfconverter_enabled():
-            return True
-        return False
-
-    def is_download_pdfpreview_available(self):
-        """PDF Preview link is only available for documents and
-        opengever.pdfconverter is installed.
-        """
-        if self.is_preview_supported():
-            return IDocumentSchema.providedBy(self.context)
-        return False
 
     def is_office_connector_editable(self):
         return self.context.is_office_connector_editable()

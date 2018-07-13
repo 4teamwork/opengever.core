@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-06-27 08:29+0000\n"
+"POT-Creation-Date: 2018-07-12 15:47+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -162,11 +162,6 @@ msgstr "Einchecken"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin_anyway"
 msgstr "Trotzdem einchecken"
-
-#. Default: "PDF"
-#: ./opengever/document/browser/versions_tab.py
-msgid "button_pdf"
-msgstr "PDF-Vorschau"
 
 #. Default: "Are you sure you want to cancel the checkout?"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
@@ -483,11 +478,6 @@ msgstr "Dokument als PDF öffnen"
 #: ./opengever/document/widgets/tooltip.pt
 msgid "label_open_document_preview"
 msgstr "Dokumentvorschau öffnen"
-
-#. Default: "PDF Preview"
-#: ./opengever/document/browser/templates/macros.pt
-msgid "label_pdf_preview"
-msgstr "PDF-Vorschau"
 
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py

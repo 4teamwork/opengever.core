@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Remove opengever.pdfconverter. [elioschmutz]
 - Fix unicode error on edit an agendaitem. [elioschmutz]
 - Adjust activity mail subject to a more generic text. [elioschmutz]
 - Install CustomEvent and Promise polyfill. [Kevin Bieri]
