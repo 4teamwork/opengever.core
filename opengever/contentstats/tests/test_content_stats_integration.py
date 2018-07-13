@@ -24,6 +24,8 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertTrue(flt.keep('opengever.document.document'))
         self.assertTrue(flt.keep('opengever.dossier.businesscasedossier'))
         self.assertTrue(flt.keep('opengever.task.task'))
+        self.assertTrue(flt.keep('opengever.meeting.meetingtemplate'))
+        self.assertTrue(flt.keep('opengever.meeting.paragraphtemplate'))
 
         # As well as ftw.mail
         self.assertTrue(flt.keep('ftw.mail.mail'))
