@@ -80,9 +80,11 @@ class TestEditAgendaItems(IntegrationTestCase):
 
         agenda_item = self.schedule_ad_hoc(self.meeting, 'hax')
         browser.open(self.agenda_item_url(agenda_item, 'edit'),
-                     data={'title': 'bar'})
+                     data={'title': u'b\xe4r',
+                           'description': u'f\xf6o'})
 
-        self.assertEqual(agenda_item.title, 'bar')
+        self.assertEqual(agenda_item.title, u'b\xe4r')
+        self.assertEqual(agenda_item.description, u'f\xf6o')
         self.assertEquals([{u'message': u'Agenda Item updated.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
