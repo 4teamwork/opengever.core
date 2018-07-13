@@ -269,3 +269,29 @@ davon ein PDF. Beispiel:
 
    bin/docs-build-intern latexpdf
    open docs/intern/_build/latex/OneGovGEVERIntern.pdf
+
+
+Nicht zu publizierende Blöcke
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Mit der folgenden Direktive kann verhindert werden, dass ein Block in der
+öffentlichen Doku publiziert wird:
+
+.. code-block:: rst
+
+    Dieser Text wird publiziert.
+
+    .. ifconfig:: publication_level == 'private'
+
+       Dieser Block wird NICHT publiziert.
+
+    Dieser Text wird auch publiziert.
+
+Blöcke innerhalb der ``.. ifconfig:: publication_level == 'private'`` Direktive
+werden nur bei einem lokalen Build (oder Tests) der Dokumentation gerendert.
+Bei der Publikation über die ``bin/docs-build-and-publish-<projekt>`` Scripts
+werden diese Blöcke hingegen übersprungen.
+
+Dies kann dazu genutzt werden, Passagen oder Bereiche die noch nicht ganz
+fertig sind trotzdem schon einzubauen, und diese Pull-Requests auch zu mergen,
+ohne dass diese Bereits publiziert werden.
