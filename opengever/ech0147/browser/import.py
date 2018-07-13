@@ -28,6 +28,7 @@ from zope.interface import implementer
 from zope.pagetemplate.interfaces import IPageTemplate
 import transaction
 
+
 class IECH0147ImportFormSchema(Schema):
 
     message = namedfile.NamedBlobFile(
@@ -103,8 +104,8 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                     self.widgets['message'])
                 return
 
-            if (IRepositoryFolder.providedBy(self.context) and
-                    message.content_.documents):
+            if IRepositoryFolder.providedBy(self.context) \
+               and message.content_.documents:
                 self.set_form_error(
                     _(u'This message contains toplevel documents. '
                       'It can only be imported within a dossier.'),
