@@ -64,6 +64,20 @@ class TemplateFolderBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('templatefolder', TemplateFolderBuilder)
 
 
+class MeetingTemplateBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.meetingtemplate'
+
+
+builder_registry.register('meetingtemplate', MeetingTemplateBuilder)
+
+
+class ParagraphTemplateBuilder(DexterityBuilder):
+    portal_type = 'opengever.meeting.paragraphtemplate'
+
+
+builder_registry.register('paragraphtemplate', ParagraphTemplateBuilder)
+
+
 class DossierTemplateBuilder(DexterityBuilder):
     portal_type = 'opengever.dossier.dossiertemplate'
 

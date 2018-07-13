@@ -14,6 +14,7 @@
     <element value="opengever.meeting.sablontemplate" />
     <element value="opengever.dossier.dossiertemplate" />
     <element value="opengever.meeting.proposaltemplate" />
+    <element value="opengever.meeting.meetingtemplate" />
   </property>
 
   <!-- Schema interface -->
