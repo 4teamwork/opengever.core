@@ -524,12 +524,14 @@ class CopyProposalDocumentCommand(object):
     """
 
     def __init__(self, proposal, document, parent_action=None,
-                 target_path=None, target_admin_unit_id=None):
+                 target_path=None, target_admin_unit_id=None,
+                 record_activity=True):
         self.proposal = proposal
         self.document = document
         self._parent_action = parent_action
         self._target_path = target_path
         self._target_admin_unit_id = target_admin_unit_id
+        self.record_activity = record_activity
 
     @property
     def target_path(self):
@@ -576,17 +578,23 @@ class CopyProposalDocumentCommand(object):
             submitted_version=submitted_version,
         )
 
-        ProposalDocumentSubmittedActivity(
-            self.proposal, self.proposal.REQUEST, self.document.title).record()
+        if self.record_activity:
+            ProposalDocumentSubmittedActivity(
+                self.proposal, self.proposal.REQUEST, self.document.title).record()
 
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
             'uuid': record.uuid,
             })
 
+        activity = advancedjson.dumps({
+            'record_activity': self.record_activity,
+            })
+
         return SubmitDocumentCommand(
             self.document, target_admin_unit_id, target_path,
-            history_data=history_data).execute()
+            history_data=history_data,
+            activity=activity).execute()
 
 
 class OgCopyCommand(object):

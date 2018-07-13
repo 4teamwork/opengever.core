@@ -244,8 +244,10 @@ class RecieveSubmittedDocumentView(PrivilegedReceiveObject):
                 uuid=history_data['uuid']
             )
 
-        ProposalDocumentSubmittedActivity(
-            self.context, self.request, document.title).record()
+        activity = advancedjson.loads(self.request.get('activity'))
+        if activity['record_activity']:
+            ProposalDocumentSubmittedActivity(
+                self.context, self.request, document.title).record()
 
         ILockable(document).lock(MEETING_SUBMITTED_LOCK)
         return document
