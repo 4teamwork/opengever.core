@@ -21,6 +21,7 @@ Changelog
 - Fix unicode error on edit an agendaitem. [elioschmutz]
 - Adjust activity mail subject to a more generic text. [elioschmutz]
 - Do no longer record `document submitted` activity while submitting a proposal with attachments. [elioschmutz]
+- New filename normalizer to more closely match document and E-mail titles. [njohner]
 - Install CustomEvent and Promise polyfill. [Kevin Bieri]
 - Uninstall webcomponents polyfill. [Kevin Bieri]
 - Update favorite-icon after checking-out or checking-in a document. [elioschmutz]
