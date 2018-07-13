@@ -1,6 +1,11 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import obj2brain
+from plone import api
 import os.path
 
 
@@ -118,3 +123,39 @@ class TestImport(IntegrationTestCase):
                 'File': file_,
             }).submit()
         self.assertIn('Invalid content.', browser.contents)
+
+
+class TestImportErrorHandling(FunctionalTestCase):
+    """Because the transaction is aborted during error handling, we need to
+    use a FunctionalTestCase.
+    """
+
+    @browsing
+    def test_import_with_invalid_field_data(self, browser):
+        api.portal.set_registry_record(
+            name='ech0147_import_enabled', value=True,
+            interface=IECH0147Settings)
+
+        root = create(Builder('repository_root')
+                      .having(title_de=u'Ordnungssystem',
+                              title_fr=u'Syst\xe8me de classement'))
+
+        # Set classification to classified on repositoryfolder,
+        # to make classification value `confidential`, as it's defined in
+        # the ech0147 sample, invalid.
+        folder = create(Builder('repository')
+                        .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
+                                title_fr=u'Contrats et accords',
+                                classification='classified')
+                        .within(root))
+
+        browser.login().open(folder, view='ech0147_import')
+        with open(get_path('message.zip')) as file_:
+            browser.forms['form'].fill({'File': file_})
+            browser.click_on('Import')
+
+        self.assertEqual(
+            [u'Error Message import failed. The object My eCH Dossier has '
+             u'invalid field data.\nField `classification`: Constraint not '
+             u'satisfied'],
+            browser.css('.error').text)
