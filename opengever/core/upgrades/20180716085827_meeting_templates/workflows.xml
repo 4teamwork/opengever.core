@@ -1,0 +1,163 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <object name="opengever_committee_workflow" meta_type="Workflow" />
+  <object name="opengever_committeecontainer_workflow" meta_type="Workflow" />
+  <object name="opengever_contact_workflow" meta_type="Workflow" />
+  <object name="opengever_contactfolder_workflow" meta_type="Workflow" />
+  <object name="opengever_disposition_workflow" meta_type="Workflow" />
+  <object name="opengever_document_workflow" meta_type="Workflow" />
+  <object name="opengever_dossier_workflow" meta_type="Workflow" />
+  <object name="opengever_forwarding_workflow" meta_type="Workflow" />
+  <object name="opengever_inbox_workflow" meta_type="Workflow" />
+  <object name="opengever_mail_workflow" meta_type="Workflow" />
+  <object name="opengever_private_dossier_workflow" meta_type="Workflow" />
+  <object name="opengever_private_folder_workflow" meta_type="Workflow" />
+  <object name="opengever_private_root_workflow" meta_type="Workflow" />
+  <object name="opengever_private_document_workflow" meta_type="Workflow" />
+  <object name="opengever_private_mail_workflow" meta_type="Workflow" />
+  <object name="opengever_proposal_workflow" meta_type="Workflow" />
+  <object name="opengever_repository_workflow" meta_type="Workflow" />
+  <object name="opengever_repositoryroot_workflow" meta_type="Workflow" />
+  <object name="opengever_submitted_proposal_workflow" meta_type="Workflow" />
+  <object name="opengever_task_workflow" meta_type="Workflow" />
+  <object name="opengever_tasktemplate_workflow" meta_type="Workflow" />
+  <object name="opengever_tasktemplatefolder_workflow" meta_type="Workflow" />
+  <object name="opengever_template_workflow" meta_type="Workflow" />
+  <object name="opengever_templatefolder_workflow" meta_type="Workflow" />
+  <object name="opengever_workspace" meta_type="Workflow" />
+  <object name="opengever_workspace_folder" meta_type="Workflow" />
+  <object name="opengever_workspace_root" meta_type="Workflow" />
+
+  <bindings>
+
+    <default>
+      <bound-workflow workflow_id="simple_publication_workflow" />
+    </default>
+
+    <type type_id="ftw.mail.mail">
+      <bound-workflow workflow_id="opengever_mail_workflow" />
+    </type>
+
+    <type type_id="opengever.contact.contact">
+      <bound-workflow workflow_id="opengever_contact_workflow" />
+    </type>
+
+    <type type_id="opengever.contact.contactfolder">
+      <bound-workflow workflow_id="opengever_contactfolder_workflow" />
+    </type>
+
+    <type type_id="opengever.disposition.disposition">
+      <bound-workflow workflow_id="opengever_disposition_workflow" />
+    </type>
+
+    <type type_id="opengever.document.document">
+      <bound-workflow workflow_id="opengever_document_workflow" />
+    </type>
+
+    <type type_id="opengever.dossier.businesscasedossier">
+      <bound-workflow workflow_id="opengever_dossier_workflow" />
+    </type>
+
+    <type type_id="opengever.dossier.dossiertemplate" />
+
+    <type type_id="opengever.dossier.templatefolder">
+      <bound-workflow workflow_id="opengever_templatefolder_workflow" />
+    </type>
+
+    <type type_id="opengever.inbox.container">
+      <bound-workflow workflow_id="opengever_inbox_workflow" />
+    </type>
+
+    <type type_id="opengever.inbox.forwarding">
+      <bound-workflow workflow_id="opengever_forwarding_workflow" />
+    </type>
+
+    <type type_id="opengever.inbox.inbox">
+      <bound-workflow workflow_id="opengever_inbox_workflow" />
+    </type>
+
+    <type type_id="opengever.inbox.yearfolder" />
+
+    <type type_id="opengever.meeting.committee">
+      <bound-workflow workflow_id="opengever_committee_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.committeecontainer">
+      <bound-workflow workflow_id="opengever_committeecontainer_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.meetingdossier">
+      <bound-workflow workflow_id="opengever_dossier_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.meetingtemplate">
+      <bound-workflow workflow_id="opengever_template_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.paragraphtemplate">
+      <bound-workflow workflow_id="opengever_template_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.proposal">
+      <bound-workflow workflow_id="opengever_proposal_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.proposaltemplate">
+      <bound-workflow workflow_id="opengever_document_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.sablontemplate">
+      <bound-workflow workflow_id="opengever_document_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.submittedproposal">
+      <bound-workflow workflow_id="opengever_submitted_proposal_workflow" />
+    </type>
+
+    <type type_id="opengever.private.dossier">
+      <bound-workflow workflow_id="opengever_private_dossier_workflow" />
+    </type>
+
+    <type type_id="opengever.private.folder">
+      <bound-workflow workflow_id="opengever_private_folder_workflow" />
+    </type>
+
+    <type type_id="opengever.private.root">
+      <bound-workflow workflow_id="opengever_private_root_workflow" />
+    </type>
+
+    <type type_id="opengever.repository.repositoryfolder">
+      <bound-workflow workflow_id="opengever_repository_workflow" />
+    </type>
+
+    <type type_id="opengever.repository.repositoryroot">
+      <bound-workflow workflow_id="opengever_repositoryroot_workflow" />
+    </type>
+
+    <type type_id="opengever.task.task">
+      <bound-workflow workflow_id="opengever_task_workflow" />
+    </type>
+
+    <type type_id="opengever.tasktemplates.tasktemplate">
+      <bound-workflow workflow_id="opengever_tasktemplate_workflow" />
+    </type>
+
+    <type type_id="opengever.tasktemplates.tasktemplatefolder">
+      <bound-workflow workflow_id="opengever_tasktemplatefolder_workflow" />
+    </type>
+
+    <type type_id="opengever.workspace.root">
+      <bound-workflow workflow_id="opengever_workspace_root" />
+    </type>
+
+    <type type_id="opengever.workspace.workspace">
+      <bound-workflow workflow_id="opengever_workspace" />
+    </type>
+
+    <type type_id="opengever.workspace.folder">
+      <bound-workflow workflow_id="opengever_workspace_folder" />
+    </type>
+
+  </bindings>
+
+</object>

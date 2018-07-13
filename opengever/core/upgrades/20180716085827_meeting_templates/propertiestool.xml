@@ -1,0 +1,10 @@
+<object name="portal_properties" meta_type="Plone Properties Tool">
+
+  <!-- NAVTREE PROPERTIES -->
+  <object name="navtree_properties" meta_type="Plone Property Sheet">
+    <property name="metaTypesNotToList" type="lines" purge="False">
+      <element value="opengever.meeting.meetingtemplate" />
+    </property>
+  </object>
+
+</object>

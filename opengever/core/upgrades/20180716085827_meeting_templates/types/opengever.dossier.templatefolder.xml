@@ -1,0 +1,8 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.dossier.templatefolder" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- Basic metadata -->
+  <property name="allowed_content_types" purge="False">
+    <element value="opengever.meeting.meetingtemplate" />
+  </property>
+
+</object>
