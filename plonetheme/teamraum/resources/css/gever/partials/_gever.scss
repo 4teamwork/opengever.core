@@ -1108,6 +1108,7 @@ body.template-team-details #content{
 
 /* @group status messages */
 dl.portalMessage {
+  @include flexbox();
   margin: 1em 0;
   border: 1px solid #ee;
   -webkit-border-radius: 4px;
@@ -1117,6 +1118,7 @@ dl.portalMessage {
   clear: both;
 }
 dl.portalMessage dt {
+  @include flexbox();
   align-items: center;
   background-color: #9dca27;
   line-height: 1.25em;
