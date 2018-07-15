@@ -20,6 +20,13 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IMeetingTemplate"
+      name="update_content_order"
+      class=".meetingtemplate.UpdateMeetingTemplateContentOrderView"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
       for="opengever.meeting.interfaces.IMeetingDossier"
       name="merge_docx_protocol"
       class=".protocol.MergeDocxProtocol"

@@ -2,6 +2,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from plone.protect import createToken
+import json
 
 
 class TestMeetingTemplate(IntegrationTestCase):
@@ -95,3 +97,29 @@ class TestMeetingTemplate(IntegrationTestCase):
             for agenda_item in meeting.agenda_items
             if agenda_item.is_paragraph
         ])
+
+    @browsing
+    def test_update_paragraph_order(self, browser):
+        self.login(self.manager, browser)
+
+        self.assertEquals(
+            ['begrussung',
+             'geschdfte',
+             'schlusswort'],
+            [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
+
+        new_order = ['geschdfte',
+                     'schlusswort',
+                     'begrussung']
+
+        browser.open(self.meeting_template,
+                     view='update_content_order',
+                     data={
+                         'sortOrder': json.dumps(new_order),
+                         '_authenticator': createToken(),
+                     })
+        statusmessages.assert_no_error_messages()
+
+        self.assertEquals(
+            new_order,
+            [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
