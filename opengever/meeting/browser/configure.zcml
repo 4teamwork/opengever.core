@@ -13,6 +13,13 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IMeetingTemplate"
+      name="view"
+      class=".meetingtemplate.MeetingTemplateView"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="opengever.meeting.interfaces.IMeetingDossier"
       name="merge_docx_protocol"
       class=".protocol.MergeDocxProtocol"
