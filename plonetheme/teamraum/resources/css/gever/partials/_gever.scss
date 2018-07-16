@@ -658,7 +658,7 @@ ul.member_listing li {
 }
 
 
-.task-overdue, .proposal-outdated {
+.task-overdue {
   @extend .icon-status-overdue;
   background-position: left center;
   padding-left: 20px;
