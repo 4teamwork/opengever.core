@@ -69,6 +69,8 @@ class TaskTemplates(BaseCatalogListingTab):
          'transform': preselected_helper},
         )
 
+    sort_on = 'draggable'
+
     types = ['opengever.tasktemplates.tasktemplate', ]
 
     enabled_actions = ['folder_delete_confirmation']

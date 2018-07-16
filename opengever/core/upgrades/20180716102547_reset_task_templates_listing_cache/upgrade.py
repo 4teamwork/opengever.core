@@ -33,6 +33,8 @@ class ResetTaskTemplatesListingCache(UpgradeStep):
                          "- skipping record!" % record.key)
                 continue
 
+            data[u'sort'] = {u'field': u'draggable', u'direction': u'ASC'}
+
             columns = data.get('columns')
             for column in columns:
                 column["sortable"] = False
