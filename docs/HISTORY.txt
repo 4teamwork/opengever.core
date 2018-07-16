@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bump ftw.tokenauth to 1.1.0 which provides support for impersonation. [buchi]
+- Adjust table styling for small screens for the activity-settings view. [elioschmutz]
 - Update german translation for "committeee responsible" used within the activity settings tab. [elioschmutz]
 - Remove opengever.pdfconverter. [elioschmutz]
 - Fix unicode error on edit an agendaitem. [elioschmutz]
