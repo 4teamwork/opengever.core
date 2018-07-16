@@ -1108,7 +1108,7 @@ body.template-team-details #content{
 
 /* @group status messages */
 dl.portalMessage {
-  @include flexbox();
+  display: flex;
   margin: 1em 0;
   border: 1px solid #ee;
   -webkit-border-radius: 4px;
@@ -1116,31 +1116,35 @@ dl.portalMessage {
   border-radius: 4px;
   background-color: #eee;
   clear: both;
-}
-dl.portalMessage dt {
-  @include flexbox();
-  align-items: center;
-  background-color: #9dca27;
-  line-height: 1.25em;
-  float: left;
-  margin-right: 0.75em;
-  padding: 0.5em 0.75em;
-  color: white;
-  -webkit-border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
-  border-radius: 4px 0 0 4px;
-}
-dl.portalMessage dd {
-  padding: 0.5em 0.5em;
-  margin: 0;
-  line-height: 1.25em;
-  color: #7f7f7f;
-}
-dl.warning dt {
-  background-color: #D69B29;
-}
-dl.error dt {
-  background-color: #D65829;
+
+  dt {
+    display: flex;
+    align-items: center;
+    background-color: #9dca27;
+    line-height: 1.25em;
+    float: left;
+    margin-right: 0.75em;
+    padding: 0.5em 0.75em;
+    color: white;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  dd {
+    padding: 0.5em 0.5em;
+    margin: 0;
+    line-height: 1.25em;
+    color: #7f7f7f;
+  }
+
+  &.warning dt {
+    background-color: #D69B29;
+  }
+
+  &.error dt {
+    background-color: #D65829;
+  }
 }
 
 /* Additional specificity for when status is shown inside #content */
