@@ -212,7 +212,7 @@ respective user in our development LDAP tree.
 Installing and activating Solr
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
+Extend the Solr configuration in your `buildout.cfg` and add the Solr directive or use the `buildout-solr.cfg`:
 
 .. code::
 
