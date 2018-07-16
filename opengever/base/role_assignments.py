@@ -242,11 +242,11 @@ class RoleAssignmentManager(object):
                                    assignment.roles,
                                    assignment.cause,
                                    assignment.reference)
-        self._upate_local_roles()
+        self._update_local_roles()
 
     def add(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
-        self._upate_local_roles()
+        self._update_local_roles()
 
     def get_assignments_by_cause(self, cause):
         return self.storage.get_all_by_cause(cause)
@@ -288,15 +288,15 @@ class RoleAssignmentManager(object):
                 assignment.principal, assignment.roles, assignment.cause,
                 assignment.reference)
 
-        self._upate_local_roles()
+        self._update_local_roles()
 
     def clear_all(self):
         """Remove all assignments.
         """
         self.storage.clear_all()
-        self._upate_local_roles()
+        self._update_local_roles()
 
-    def _upate_local_roles(self):
+    def _update_local_roles(self):
         current_principals = []
         owner_principals = []
 
