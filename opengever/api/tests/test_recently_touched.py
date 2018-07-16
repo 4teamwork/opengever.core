@@ -103,7 +103,7 @@ class TestRecentlyModifiedGet(IntegrationTestCase):
         self._clear_recently_touched_log(user_id)
 
         # Touch a couple documents (more than the current limit)
-        docs = [self.document, self.private_document, self.archive_document,
+        docs = [self.document, self.private_document, self.expired_document,
                 self.subdocument, self.taskdocument]
 
         with freeze(datetime(2018, 4, 30)) as freezer:

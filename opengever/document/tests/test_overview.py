@@ -392,7 +392,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
     def test_archival_file_is_only_available_for_managers_by_default(self, browser):  # noqa
         self.login(self.regular_user, browser)
 
-        browser.open(self.archive_document, view='tabbedview_view-overview')
+        browser.open(self.expired_document, view='tabbedview_view-overview')
 
         document_attributes = [
             'Title',
@@ -421,9 +421,9 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
     @browsing
     def test_edit_archival_file_link_NOT_shown_on_open_dossier(self, browser):
         self.login(self.manager, browser)
-        self.set_workflow_state('dossier-state-active', self.archive_dossier)
+        self.set_workflow_state('dossier-state-active', self.expired_dossier)
 
-        browser.open(self.archive_document, view='tabbedview_view-overview')
+        browser.open(self.expired_document, view='tabbedview_view-overview')
 
         self.assertFalse(
             browser.css('#archival_file_edit_link'),
@@ -434,7 +434,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
     def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):  # noqa
         self.login(self.manager, browser)
 
-        browser.open(self.archive_document, view='tabbedview_view-overview')
+        browser.open(self.expired_document, view='tabbedview_view-overview')
 
         self.assertIn(
             '/edit_archival_file',
@@ -458,7 +458,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
     def test_archival_file_is_extended_with_mimetype_class(self, browser):
         self.login(self.manager, browser)
 
-        browser.open(self.archive_document, view='tabbedview_view-overview')
+        browser.open(self.expired_document, view='tabbedview_view-overview')
 
         archival_file_row = browser.css('.listing tr')[-1]
 

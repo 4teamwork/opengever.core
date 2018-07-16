@@ -75,6 +75,8 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(14):
             with self.login(self.dossier_responsible):
                 self.create_treaty_dossiers()
+                self.create_expired_dossier()
+                self.create_inactive_dossier()
                 self.create_empty_dossier()
 
         with self.freeze_at_hour(15):
@@ -997,43 +999,47 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        archive_dossier = self.register('archive_dossier', create(
+    @staticuid()
+    def create_expired_dossier(self):
+        expired_dossier = self.register('expired_dossier', create(
             Builder('dossier')
             .within(self.repofolder00)
-            .titled(u'Archiv Vertr\xe4ge')
+            .titled(u'Abgeschlossene Vertr\xe4ge')
             .having(
-                description=u'Archiv der Vertr\xe4ge vor 2016.',
+                description=u'Abgeschlossene Vertr\xe4ge vor 2000.',
                 keywords=(u'Vertr\xe4ge'),
-                start=date(2000, 1, 1),
-                end=date(2015, 12, 31),
+                start=date(1995, 1, 1),
+                end=date(2000, 12, 31),
                 responsible=self.dossier_responsible.getId(),
                 )
             .in_state('dossier-state-resolved')
             ))
 
-        archive_document = self.register('archive_document', create(
+        expired_document = self.register('expired_document', create(
             Builder('document')
-            .within(archive_dossier)
-            .titled(u'\xdcbersicht der Vertr\xe4ge vor 2016')
+            .within(expired_dossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge vor 2000')
             .attach_archival_file_containing('TEST', name=u'test.pdf')
             .with_dummy_content()
             ))
 
-        self.register('archive_task', create(
+        self.register('expired_task', create(
             Builder('task')
-            .within(archive_dossier)
+            .within(expired_dossier)
             .titled(u'Vertr\xe4ge abschliessen')
             .having(
                 responsible_client=self.org_unit.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
-                deadline=date(2015, 12, 31),
+                deadline=date(2000, 12, 31),
                 )
             .in_state('task-state-resolved')
-            .relate_to(archive_document)
+            .relate_to(expired_document)
             ))
 
+    @staticuid()
+    def create_inactive_dossier(self):
         inactive_dossier = self.register('inactive_dossier', create(
             Builder('dossier')
             .within(self.repofolder00)

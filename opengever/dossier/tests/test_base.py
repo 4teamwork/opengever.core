@@ -99,7 +99,7 @@ class TestDossierContainer(IntegrationTestCase):
             'dossier': 1,
             'subdossier': 2,
             'subdossier2': 3,
-            'archive_dossier': 4,
+            'expired_dossier': 4,
             'empty_dossier': 6}
         got = {name: getattr(self, name).get_sequence_number()
                for name in expected.keys()}
@@ -119,7 +119,7 @@ class TestDossierContainer(IntegrationTestCase):
             'dossier': 'Client1 1.1 / 1',
             'subdossier': 'Client1 1.1 / 1.1',
             'subdossier2': 'Client1 1.1 / 1.2',
-            'archive_dossier': 'Client1 1.1 / 2',
+            'expired_dossier': 'Client1 1.1 / 2',
             'empty_dossier': 'Client1 1.1 / 4'}
         got = {name: getattr(self, name).get_reference_number()
                for name in expected.keys()}
@@ -327,4 +327,4 @@ class TestDateCalculations(IntegrationTestCase):
     def test_is_addable(self):
         self.login(self.dossier_responsible)
         self.assertTrue(self.dossier.is_addable('opengever.document.document'))
-        self.assertFalse(self.archive_dossier.is_addable('opengever.document.document'))
+        self.assertFalse(self.expired_dossier.is_addable('opengever.document.document'))

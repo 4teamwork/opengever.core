@@ -90,4 +90,4 @@ class TestTestingFixture(IntegrationTestCase):
         self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
                           self.dossier.Title())
         self.assertEquals('2016', self.subdossier.Title())
-        self.assertEquals('Archiv Vertr\xc3\xa4ge', self.archive_dossier.Title())
+        self.assertEquals('Abgeschlossene Vertr\xc3\xa4ge', self.expired_dossier.Title())

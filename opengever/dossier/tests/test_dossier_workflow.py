@@ -24,7 +24,7 @@ class TestDossierWorkflow(IntegrationTestCase):
     @browsing
     def test_offer_transition_is_hidden_in_action_menu(self, browser):
         self.login(self.manager, browser)
-        browser.visit(self.archive_dossier)
+        browser.visit(self.expired_dossier)
         expected = ['Cover (PDF)', 'Export as Zip',
                     'Print details (PDF)', 'Properties', 'Sharing',
                     'Policy...']

@@ -569,9 +569,6 @@ Objects
   - self.repository_root
     - self.branch_repofolder
       - self.leaf_repofolder
-        - self.archive_dossier
-          - self.archive_document
-          - self.archive_task
         - self.cancelled_meeting_dossier
         - self.closed_meeting_dossier
         - self.decided_meeting_dossier
@@ -595,6 +592,9 @@ Objects
             - self.taskdocument
           - self.word_proposal
         - self.empty_dossier
+        - self.expired_dossier
+          - self.expired_document
+          - self.expired_task
         - self.inactive_dossier
           - self.inactive_document
           - self.inactive_task

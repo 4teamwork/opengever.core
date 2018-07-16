@@ -122,7 +122,7 @@ class TestTaskOverview(IntegrationTestCase):
     def test_predecessor_successor_tasks_are_shown(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.register_successor(self.task, self.archive_task)
+        self.register_successor(self.task, self.expired_task)
 
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertSequenceEqual(
@@ -131,7 +131,7 @@ class TestTaskOverview(IntegrationTestCase):
         self.assertSequenceEqual(
             [], browser.css("predecessor_taskBox div.task").text)
 
-        browser.open(self.archive_task, view='tabbedview_view-overview')
+        browser.open(self.expired_task, view='tabbedview_view-overview')
         self.assertSequenceEqual(
             [u'Vertragsentwurf \xdcberpr\xfcfen'],
             browser.css("#predecessor_taskBox div.task").text)
