@@ -55,7 +55,7 @@ msgstr "Titel"
 #. Default: "Committee responsible"
 #: ./opengever/activity/roles.py
 msgid "committee_responsible"
-msgstr "Gremium verantwortlicher"
+msgstr "Gremien-Verantwortlicher"
 
 #. Default: "Created"
 #: ./opengever/activity/browser/listing.py
