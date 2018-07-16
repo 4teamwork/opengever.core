@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Bump ftw.tokenauth to 1.1.0 which provides support for impersonation. [buchi]
 - Remove opengever.pdfconverter. [elioschmutz]
 - Fix unicode error on edit an agendaitem. [elioschmutz]
 - Adjust activity mail subject to a more generic text. [elioschmutz]
