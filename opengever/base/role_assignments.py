@@ -219,7 +219,7 @@ class RoleAssignmentStorage(object):
         else:
             self._storage().append(PersistentMapping(data))
 
-    def summarize(self):
+    def compute_effective(self):
         data = {}
         for assignment in self._storage():
             if assignment['principal'] not in data.keys():
@@ -308,7 +308,7 @@ class RoleAssignmentManager(object):
         # drop all existing local roles
         self.context.manage_delLocalRoles(current_principals, verified=True)
 
-        for principal, roles in self.storage.summarize():
+        for principal, roles in self.storage.compute_effective():
             self.context.manage_setLocalRoles(
                 principal, [role for role in roles], verified=True)
 
