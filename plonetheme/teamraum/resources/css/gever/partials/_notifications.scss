@@ -106,6 +106,7 @@
     &.commented:before { content: $comment; }
     &.documentUpdated:before { content: $updateDocument; }
     &.documentAdded:before { content: $addDocument; }
+    &.taskReminder:before { font-family: 'Font Awesome 5 Free'; content: fa-content($fa-var-clock); }
   }
 
   .action {

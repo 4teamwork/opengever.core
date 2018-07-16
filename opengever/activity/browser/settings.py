@@ -1,7 +1,6 @@
-from Products.Five import BrowserView
+from opengever.activity import _
 from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
-from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
@@ -9,8 +8,10 @@ from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
+from Products.Five import BrowserView
 from opengever.base.response import JSONResponse
 from opengever.task.response_description import ResponseDescription
 from path import Path
@@ -67,6 +68,12 @@ ACTIVITY_GROUPS = [
          'proposal-commented',
          'proposal-attachment-updated',
          'proposal-additional-documents-submitted',
+     ]},
+
+    {'id': 'reminder',
+     'roles': [WATCHER_ROLE],
+     'activities': [
+         'task-reminder',
      ]},
 ]
 
@@ -269,3 +276,6 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_proposals(self):
         return _('label_proposals', default=u'Proposals')
+
+    def tab_title_reminders(self):
+        return _('label_reminders', default=u'Reminders')

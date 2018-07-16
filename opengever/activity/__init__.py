@@ -95,6 +95,8 @@ ACTIVITY_TRANSLATIONS = {
         'task-transition-rejected-skipped', default=u'Task skipped'),
     'task-transition-planned-skipped': _(
         'task-transition-planned-skipped', default=u'Task skipped'),
+    'task-reminder': _(
+        'task-reminder', default=u'Task reminder'),
     'forwarding-added': _(
         'forwarding-added', default=u'Forwarding added'),
     'forwarding-transition-accept': _(
@@ -159,4 +161,5 @@ ACTIVITIES_ICONS = {
     'proposal-commented': 'commented',
     'proposal-attachment-updated': 'documentUpdated',
     'proposal-additional-documents-submitted': 'documentAdded',
+    'task-reminder': 'taskReminder'
 }

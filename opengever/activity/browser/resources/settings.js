@@ -69,6 +69,9 @@
         {tabId: 'proposals',
          tabTitle: this.getDataAttribute('tab-title-proposals'),
          activities: this.filterActivitiesByType(values, 'proposal')},
+        {tabId: 'reminders',
+         tabTitle: this.getDataAttribute('tab-title-reminders'),
+         activities: this.filterActivitiesByType(values, 'reminder')},
       ];
 
       return this.template({

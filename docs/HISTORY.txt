@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Add task-reminder activity settings. [elioschmutz]
 - Support adding tasks via REST API. [phgross]
 - Reindex issuer of all proposals. [phgross]
 - Correct info messages in meetings. [njohner]

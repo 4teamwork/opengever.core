@@ -29,7 +29,8 @@
                            data-reset-url view/reset_url;
                            data-tab-title-task view/tab_title_task;
                            data-tab-title-forwardings view/tab_title_forwardings;
-                           data-tab-title-proposals view/tab_title_proposals">
+                           data-tab-title-proposals view/tab_title_proposals;
+                           data-tab-title-reminders view/tab_title_reminders">
 
         <tbody>
           <tal:block tal:replace="structure view/render_form_template"></tal:block>
