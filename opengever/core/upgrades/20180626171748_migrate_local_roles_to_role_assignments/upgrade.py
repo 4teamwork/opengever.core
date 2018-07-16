@@ -1,5 +1,5 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_SHARING
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 
 
@@ -19,4 +19,4 @@ class MigrateLocalRolesToRoleAssignments(UpgradeStep):
         storage = RoleAssignmentManager(obj).storage
         for principal, roles in obj.get_local_roles():
             storage.add_or_update(
-                principal, roles, ASSIGNNMENT_VIA_SHARING, None)
+                principal, roles, ASSIGNMENT_VIA_SHARING, None)

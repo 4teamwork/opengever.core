@@ -185,6 +185,36 @@ msgstr "Archivwürdigkeit"
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
 
+#. Default: "By committee group"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_committee_group"
+msgstr "Durch Mitgliedschaft in Gremiumsgruppe"
+
+#. Default: "By protect dossier"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_protect_dossier"
+msgstr "Durch Dossier schützen"
+
+#. Default: "Via sharing"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_sharing"
+msgstr "Durch manuelle Freigabe"
+
+#. Default: "By task"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task"
+msgstr "Durch Aufgabe"
+
+#. Default: "By task agency"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task_agency"
+msgstr "Durch Aufgabe (Stellvertretung)"
+
+#. Default: "By workspace invitation"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_workspace_invitation"
+msgstr "Durch eine Teamraum Einladung"
+
 #. Default: "Cancel"
 #: ./opengever/base/browser/favorites.py
 #: ./opengever/base/browser/modelforms.py

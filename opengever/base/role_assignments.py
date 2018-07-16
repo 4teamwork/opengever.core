@@ -11,12 +11,12 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
-ASSIGNNMENT_VIA_TASK = 1
-ASSIGNNMENT_VIA_TASK_AGENCY = 2
-ASSIGNNMENT_VIA_SHARING = 3
-ASSIGNNMENT_VIA_PROTECT_DOSSIER = 4
-ASSIGNNMENT_VIA_INVITATION = 5
-ASSIGNNMENT_VIA_COMMITTEE_GROUP = 5
+ASSIGNMENT_VIA_TASK = 1
+ASSIGNMENT_VIA_TASK_AGENCY = 2
+ASSIGNMENT_VIA_SHARING = 3
+ASSIGNMENT_VIA_PROTECT_DOSSIER = 4
+ASSIGNMENT_VIA_INVITATION = 5
+ASSIGNMENT_VIA_COMMITTEE_GROUP = 5
 
 
 class RoleAssignment(object):
@@ -67,7 +67,7 @@ class RoleAssignment(object):
 
 class SharingRoleAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_SHARING
+    cause = ASSIGNMENT_VIA_SHARING
 
     def __init__(self, principal, roles, reference=None):
         self.principal = principal
@@ -75,7 +75,7 @@ class SharingRoleAssignment(RoleAssignment):
         self.reference = None
 
     def cause_title(self):
-        return _(u'label_assignnment_via_sharing', default=u'Via sharing')
+        return _(u'label_assignment_via_sharing', default=u'Via sharing')
 
 
 RoleAssignment.register(SharingRoleAssignment)
@@ -83,7 +83,7 @@ RoleAssignment.register(SharingRoleAssignment)
 
 class TaskRoleAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_TASK
+    cause = ASSIGNMENT_VIA_TASK
 
     def __init__(self, principal, roles, reference):
         self.principal = principal
@@ -91,7 +91,7 @@ class TaskRoleAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_task', default=u'By task')
+        return _(u'label_assignment_via_task', default=u'By task')
 
 
 RoleAssignment.register(TaskRoleAssignment)
@@ -99,7 +99,7 @@ RoleAssignment.register(TaskRoleAssignment)
 
 class TaskAgencyRoleAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_TASK_AGENCY
+    cause = ASSIGNMENT_VIA_TASK_AGENCY
 
     def __init__(self, principal, roles, reference):
         self.principal = principal
@@ -107,7 +107,7 @@ class TaskAgencyRoleAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_task_agency',
+        return _(u'label_assignment_via_task_agency',
                  default=u'By task agency')
 
 
@@ -116,7 +116,7 @@ RoleAssignment.register(TaskAgencyRoleAssignment)
 
 class ProtectDossierRoleAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_PROTECT_DOSSIER
+    cause = ASSIGNMENT_VIA_PROTECT_DOSSIER
 
     def __init__(self, principal, roles, reference=None):
         self.principal = principal
@@ -124,7 +124,7 @@ class ProtectDossierRoleAssignment(RoleAssignment):
         self.reference = None
 
     def cause_title(self):
-        return _(u'label_assignnment_via_protect_dossier',
+        return _(u'label_assignment_via_protect_dossier',
                  default=u'By protect dossier')
 
 
@@ -133,7 +133,7 @@ RoleAssignment.register(ProtectDossierRoleAssignment)
 
 class InvitationRoleAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_INVITATION
+    cause = ASSIGNMENT_VIA_INVITATION
 
     def __init__(self, principal, roles, reference):
         self.principal = principal
@@ -141,7 +141,7 @@ class InvitationRoleAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_workspace_invitation',
+        return _(u'label_assignment_via_workspace_invitation',
                  default=u'By workspace invitation')
 
 
@@ -150,7 +150,7 @@ RoleAssignment.register(InvitationRoleAssignment)
 
 class CommitteeGroupAssignment(RoleAssignment):
 
-    cause = ASSIGNNMENT_VIA_COMMITTEE_GROUP
+    cause = ASSIGNMENT_VIA_COMMITTEE_GROUP
 
     def __init__(self, principal, roles, reference):
         self.principal = principal
@@ -158,7 +158,7 @@ class CommitteeGroupAssignment(RoleAssignment):
         self.reference = reference
 
     def cause_title(self):
-        return _(u'label_assignnment_via_committee_group',
+        return _(u'label_assignment_via_committee_group',
                  default=u'By committee group')
 
 

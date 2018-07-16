@@ -2,9 +2,9 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_SHARING
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK_AGENCY
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 
@@ -17,12 +17,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNNMENT_VIA_TASK, self.task)
+                    ASSIGNMENT_VIA_TASK, self.task)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
               'roles': ['Editor', 'Contributor', 'Reader'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(self.task).id}],
             manager.storage._storage())
 
@@ -32,17 +32,17 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNNMENT_VIA_SHARING)
+                    ASSIGNMENT_VIA_SHARING)
 
         # update
         manager.add(self.secretariat_user.id,
                     ['Reader'],
-                    ASSIGNNMENT_VIA_SHARING)
+                    ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
               'roles': ['Reader', ],
-              'cause': ASSIGNNMENT_VIA_SHARING,
+              'cause': ASSIGNMENT_VIA_SHARING,
               'reference': None}],
             manager.storage._storage())
 
@@ -52,11 +52,11 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager.add(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNNMENT_VIA_SHARING)
+                    ASSIGNMENT_VIA_SHARING)
         manager.add(self.secretariat_user.id,
-                    ['Reader'], ASSIGNNMENT_VIA_TASK, self.task)
+                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNNMENT_VIA_SHARING)
+                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -71,11 +71,11 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager.add(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNNMENT_VIA_SHARING)
+                    ASSIGNMENT_VIA_SHARING)
         manager.add(self.secretariat_user.id,
-                    ['Reader'], ASSIGNNMENT_VIA_TASK, self.task)
+                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNNMENT_VIA_SHARING)
+                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -103,21 +103,21 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         self.assertEquals(
             [{'principal': self.regular_user.id,
               'roles': ['Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(task).storage._storage())
 
         self.assertEquals(
             [{'principal': self.regular_user.id,
               'roles': ['Reader', 'Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(document).storage._storage())
 
         self.assertEquals(
             [{'principal': self.regular_user.id,
               'roles': ['Contributor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
 
@@ -143,32 +143,32 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         self.assertItemsEqual(
             [{'principal': self.regular_user.id,
               'roles': ['Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id},
              {'principal': u'fa_inbox_users',
               'roles': ['Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK_AGENCY,
+              'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(task).storage._storage())
 
         self.assertItemsEqual(
             [{'principal': self.regular_user.id,
               'roles': ['Reader', 'Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id},
              {'principal': u'fa_inbox_users',
               'roles': ['Reader', 'Editor'],
-              'cause': ASSIGNNMENT_VIA_TASK_AGENCY,
+              'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(document).storage._storage())
 
         self.assertItemsEqual(
             [{'principal': self.regular_user.id,
               'roles': ['Contributor'],
-              'cause': ASSIGNNMENT_VIA_TASK,
+              'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id},
              {'principal': u'fa_inbox_users',
               'roles': ['Contributor'],
-              'cause': ASSIGNNMENT_VIA_TASK_AGENCY,
+              'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())

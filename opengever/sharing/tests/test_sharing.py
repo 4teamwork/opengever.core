@@ -1,8 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_SHARING
-from opengever.base.role_assignments import ASSIGNNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 import json
@@ -89,11 +89,11 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
             self.empty_dossier.get_local_roles())
 
         self.assertEquals(
-            [{'cause': ASSIGNNMENT_VIA_SHARING,
+            [{'cause': ASSIGNMENT_VIA_SHARING,
               'roles': [u'Reader'],
               'reference': None,
               'principal': self.regular_user.id},
-             {'cause': ASSIGNNMENT_VIA_SHARING,
+             {'cause': ASSIGNMENT_VIA_SHARING,
               'roles': [u'Contributor', u'Editor', u'Reader'],
               'reference': None,
               'principal': self.secretariat_user.id}],
@@ -155,9 +155,9 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         self.login(self.secretariat_user, browser=browser)
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add(self.regular_user.id, ['Editor'],
-                    ASSIGNNMENT_VIA_TASK, reference=self.task)
+                    ASSIGNMENT_VIA_TASK, reference=self.task)
         manager.add(self.regular_user.id, ['Reader'],
-                    ASSIGNNMENT_VIA_SHARING)
+                    ASSIGNMENT_VIA_SHARING)
 
         browser.open(self.empty_dossier,
                      view='@role-assignments/{}'.format(self.regular_user.id),
@@ -165,7 +165,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
 
         self.assertEquals(
             [{u'cause': {
-                u'id': ASSIGNNMENT_VIA_TASK,
+                u'id': ASSIGNMENT_VIA_TASK,
                 u'title': u'By task'},
               u'roles': [u'Editor'],
               u'reference': {
@@ -173,7 +173,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                   u'title': self.task.title},
               u'principal': u'kathi.barfuss'},
              {u'cause': {
-                 u'id': ASSIGNNMENT_VIA_SHARING,
+                 u'id': ASSIGNMENT_VIA_SHARING,
                  u'title': u'Via sharing'},
               u'roles': [u'Reader'],
               u'reference': None,
@@ -186,11 +186,11 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
 
         RoleAssignmentManager(self.empty_dossier).add(
             self.regular_user.id, ['Editor'],
-            ASSIGNNMENT_VIA_TASK, reference=self.task)
+            ASSIGNMENT_VIA_TASK, reference=self.task)
 
         RoleAssignmentManager(self.leaf_repofolder).add(
             self.regular_user.id, ['Reader'],
-            ASSIGNNMENT_VIA_SHARING)
+            ASSIGNMENT_VIA_SHARING)
 
         # with local_roles inheritance
         browser.open(self.empty_dossier,
@@ -199,7 +199,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
 
         self.assertEquals(
             [{u'cause': {
-                u'id': ASSIGNNMENT_VIA_TASK,
+                u'id': ASSIGNMENT_VIA_TASK,
                 u'title': u'By task'},
               u'roles': [u'Editor'],
               u'reference': {
@@ -207,7 +207,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                   u'title': self.task.title},
               u'principal': u'kathi.barfuss'},
              {u'cause': {
-                 u'id': ASSIGNNMENT_VIA_SHARING,
+                 u'id': ASSIGNMENT_VIA_SHARING,
                  u'title': u'Via sharing'},
               u'roles': [u'Reader'],
               u'reference': None,
@@ -221,7 +221,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
             [{u'cause': {
-                u'id': ASSIGNNMENT_VIA_TASK,
+                u'id': ASSIGNMENT_VIA_TASK,
                 u'title': u'By task'},
               u'roles': [u'Editor'],
               u'reference': {

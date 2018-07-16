@@ -33,11 +33,11 @@ class TestCommitteeTabs(FunctionalTestCase):
                          local_roles['foo'])
 
     def test_update_roles_preserves_unmanaged_roles(self):
-        assignnments = [
+        assignments = [
             SharingRoleAssignment('foo', ['Contributor', 'Administrator']),
             SharingRoleAssignment('org-unit-1_users', ['Contributor'])
         ]
-        RoleAssignmentManager(self.committee).set(assignnments)
+        RoleAssignmentManager(self.committee).set(assignments)
 
         CommitteeRoles(self.committee).update(
             'foo', previous_principal='org-unit-1_users')
