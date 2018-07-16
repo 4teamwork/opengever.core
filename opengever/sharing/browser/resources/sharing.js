@@ -53,6 +53,7 @@ var sharingApp = {
     },
 
     toggle_checkbox: function (event, entry, role) {
+      // Handler which is called when a checkbox gets changed (checked or unchecked)
       var checkbox = event.target;
       entry.roles[role] = checkbox.checked;
 

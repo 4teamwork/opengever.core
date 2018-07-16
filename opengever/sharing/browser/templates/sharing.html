@@ -34,7 +34,7 @@
 
         </td>
         <td v-for="role in available_roles" class="role_cell">
-          <span class="aquired" :title="i18n.label_acquired"
+          <span class="acquired" :title="i18n.label_acquired"
                 v-if="entry.roles[role.id] == 'acquired'" />
 
           <template v-if="isEditable">

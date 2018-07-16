@@ -184,7 +184,7 @@ Main file for all gever styles. */
 
 .fa-times-circle:before, .removed_document:before, .no_access.removed_document:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.not_archive_all:before { content: ""; }
 
-.fa-check-circle:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.archive_all:before, #content .sharing-form .aquired:before, #content .sharing-form .local:before { content: ""; }
+.fa-check-circle:before, #content #disposition_overview .repository-list-item .repository_cell .action-cell .icon_button.archive_all:before, #content .sharing-form .acquired:before, #content .sharing-form .local:before { content: ""; }
 
 .fa-question-circle:before, #content .sharing-form .assignments_info_button:before { content: ""; }
 
@@ -3390,7 +3390,7 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .sharing-table .principal:before { font-size: 16px; padding-left: 6px; padding-right: 6px; color: #bababa; }
 #content .sharing-form .sharing-table .role_cell { text-align: center; }
 #content .sharing-form .sharing-table td { padding-right: 10px; }
-#content .sharing-form .aquired:before { font-size: 16px; color: #51a351; }
+#content .sharing-form .acquired:before { font-size: 16px; color: #51a351; }
 #content .sharing-form .local:before { font-size: 16px; color: #51a351; }
 #content .sharing-form .assignments_info_button { float: right; }
 #content .sharing-form .assignments_info_button:hover { text-decoration: none; }
