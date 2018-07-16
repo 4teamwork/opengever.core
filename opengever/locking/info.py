@@ -7,6 +7,7 @@ from opengever.meeting.model import SubmittedDocument
 from plone import api
 from plone.locking.browser.info import LockInfoViewlet
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from z3c.form.interfaces import IEditForm
 
 
 class GeverLockInfoViewlet(LockInfoViewlet):
@@ -52,6 +53,9 @@ class GeverLockInfoViewlet(LockInfoViewlet):
 
     def current_user_can_unlock_document(self):
         return "Manager" in api.user.get_roles()
+
+    def is_edit_form(self):
+        return IEditForm.providedBy(self.view)
 
     def get_related_meeting_from_protocol(self):
         oguid = Oguid.for_object(self.context)
