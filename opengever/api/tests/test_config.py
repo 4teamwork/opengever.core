@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
+from ftw.casauth.plugin import CASAuthenticationPlugin
 
 
 class TestConfig(IntegrationTestCase):
@@ -82,3 +83,24 @@ class TestConfig(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'recently_touched_limit'), 10)
+
+    @browsing
+    def test_config_contains_cas_url(self, browser):
+        # Install CAS plugin
+        uf = self.portal.acl_users
+        plugin = CASAuthenticationPlugin(
+            'cas_auth', cas_server_url='https://cas.server.local')
+        uf._setObject(plugin.getId(), plugin)
+        plugin = uf['cas_auth']
+        plugin.manage_activateInterfaces([
+            'IAuthenticationPlugin',
+            'IChallengePlugin',
+            'IExtractionPlugin',
+        ])
+
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'cas_url'), 'https://cas.server.local')
