@@ -187,6 +187,10 @@ class RoleAssignmentStorage(object):
                 elif item['reference'] == reference:
                     return item
 
+    def clear_by_cause_and_principal(self, cause, principal):
+        item = self.get_by_cause_and_principal(cause, principal)
+        self._storage().remove(item)
+
     def clear_all_by_cause(self, cause):
         for item in self.get_all_by_cause(cause):
             self._storage().remove(item)
@@ -201,6 +205,11 @@ class RoleAssignmentStorage(object):
     def get_all_by_principal(self, principal_id):
         return [item for item in
                 self._storage() if item['principal'] == principal_id]
+
+    def get_by_cause_and_principal(self, cause, principal):
+        for item in self._storage():
+            if item['cause'] == cause and item['principal'] == principal:
+                return item
 
     def add_or_update(self, principal, roles, cause, reference):
         """Add or update a role assignment
@@ -294,6 +303,12 @@ class RoleAssignmentManager(object):
         """Remove all assignments.
         """
         self.storage.clear_all()
+        self._update_local_roles()
+
+    def clear_by_cause_and_principal(self, cause, principal):
+        """Remove all assignments.
+        """
+        self.storage.clear_by_cause_and_principal(cause, principal)
         self._update_local_roles()
 
     def _update_local_roles(self):

@@ -1,3 +1,4 @@
+from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.base.actor import PloneUserActor
@@ -122,8 +123,8 @@ class ManageParticipants(BrowserView):
             return self.__call__()
 
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
-            self.context.manage_delLocalRoles([token])
-            self.context.reindexObjectSecurity()
+            RoleAssignmentManager(self.context).clear_by_cause_and_principal(
+                ASSIGNMENT_VIA_INVITATION, token)
             return self.__call__()
         else:
             raise BadRequest('Oh my, something went wrong')
