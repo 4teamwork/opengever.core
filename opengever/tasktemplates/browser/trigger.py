@@ -12,8 +12,8 @@ from opengever.tasktemplates import _
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone import api
-from plone.autoform.widgets import ParameterizedWidget
 from plone.app.uuid.utils import uuidToObject
+from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel import model
 from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.layout import FormWrapper
@@ -32,8 +32,6 @@ from zope import schema
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.i18n import translate
-from zope.interface import provider
-from zope.schema.interfaces import IContextAwareDefaultFactory
 import copy
 import re
 
@@ -144,17 +142,6 @@ class TriggerTaskTemlateFolderView(FormWrapper):
     form = SelectTaskTemplateFolderWizardStep
 
 
-@provider(IContextAwareDefaultFactory)
-def get_preselected_tasktemplates(context):
-    uid = get_wizard_data(context, 'tasktemplatefolder')
-    templatefolder = api.content.get(UID=uid)
-    templates = api.content.find(
-        context=templatefolder,
-        portal_type='opengever.tasktemplates.tasktemplate')
-    return [template.UID for template in templates
-            if template.getObject().preselected]
-
-
 class ISelectTaskTemplates(model.Schema):
 
     tasktemplates = schema.List(
@@ -163,7 +150,7 @@ class ISelectTaskTemplates(model.Schema):
         value_type=schema.Choice(
             source='opengever.tasktemplates.tasktemplates',
         ),
-        defaultFactory=get_preselected_tasktemplates
+        missing_value=[]
     )
 
     start_immediately = schema.Bool(
@@ -190,6 +177,8 @@ class SelectTaskTemplatesWizardStep(BaseWizardStepForm, Form):
         super(SelectTaskTemplatesWizardStep, self).updateWidgets()
         if not self.get_selected_task_templatefolder().is_sequential:
             self.widgets['start_immediately'].mode = HIDDEN_MODE
+
+        self.widgets['tasktemplates'].value = self.get_preselected_tasktemplates()
 
     def updateActions(self):
         super(SelectTaskTemplatesWizardStep, self).updateActions()
