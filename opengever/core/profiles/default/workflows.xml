@@ -22,6 +22,7 @@
   <object name="opengever_task_workflow" meta_type="Workflow" />
   <object name="opengever_tasktemplate_workflow" meta_type="Workflow" />
   <object name="opengever_tasktemplatefolder_workflow" meta_type="Workflow" />
+  <object name="opengever_template_workflow" meta_type="Workflow" />
   <object name="opengever_templatefolder_workflow" meta_type="Workflow" />
   <object name="opengever_workspace" meta_type="Workflow" />
   <object name="opengever_workspace_folder" meta_type="Workflow" />
@@ -87,6 +88,14 @@
 
     <type type_id="opengever.meeting.meetingdossier">
       <bound-workflow workflow_id="opengever_dossier_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.meetingtemplate">
+      <bound-workflow workflow_id="opengever_template_workflow" />
+    </type>
+
+    <type type_id="opengever.meeting.paragraphtemplate">
+      <bound-workflow workflow_id="opengever_template_workflow" />
     </type>
 
     <type type_id="opengever.meeting.proposal">

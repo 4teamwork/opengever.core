@@ -10,7 +10,7 @@ class TestMeetingTemplate(IntegrationTestCase):
 
     @browsing
     def test_adding_meetingtemplate_works_properly(self, browser):
-        self.login(self.administrator, browser=browser)
+        self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.templates)
         factoriesmenu.add('Meeting Template')
@@ -30,7 +30,7 @@ class TestMeetingTemplate(IntegrationTestCase):
 
     @browsing
     def test_adding_paragraphtemplate_works_properly(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.dossier_responsible, browser=browser)
 
         browser.open(self.meeting_template)
         factoriesmenu.add('Paragraph Template')
@@ -100,7 +100,7 @@ class TestMeetingTemplate(IntegrationTestCase):
 
     @browsing
     def test_update_paragraph_order(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.dossier_responsible, browser=browser)
 
         self.assertEquals(
             ['begrussung',

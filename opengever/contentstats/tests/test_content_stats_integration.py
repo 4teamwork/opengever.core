@@ -115,6 +115,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'tasktemplate-state-active',
             'tasktemplatefolder-state-activ',
             'tasktemplatefolder-state-inactiv',
+            'template-state-active',
         ]
 
         states_to_ignore = [
