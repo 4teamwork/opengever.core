@@ -170,9 +170,16 @@ class OpengeverSharingView(SharingView):
         results = super(OpengeverSharingView, self).role_settings()
         member = self.context.portal_membership.getAuthenticatedMember()
 
+        auth_group_index = [r.get('id') for r in results].index('AuthenticatedUsers')
         if member and 'Manager' not in member.getRolesInContext(self.context):
-            # remove the group AuthenticatedUsers
-            results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
+            # Remove the group AuthenticatedUsers if its not a manager
+            results.pop(auth_group_index)
+        else:
+            # Translate `Logged-In users` label, currently the plone.restapi
+            # sharing endpoint does not translate this label
+            results[auth_group_index]['title'] = translate(
+                results[auth_group_index]['title'],
+                domain='plone', context=self.request)
 
         # Use group title attribute if exists, because our LDAP stack does
         # not support mapping additional attributes, we fetch the information
