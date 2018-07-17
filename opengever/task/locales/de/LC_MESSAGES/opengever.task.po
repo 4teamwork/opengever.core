@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-29 09:28+0000\n"
+"POT-Creation-Date: 2018-09-19 14:54+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -686,6 +686,26 @@ msgstr "Abgelehnt durch ${user}."
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
 msgstr "Verlauf"
+
+#. Default: "At the beginning of the week of the deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_beginning_of_week"
+msgstr "Zu Beginn der Woche"
+
+#. Default: "One day before deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_one_day_before"
+msgstr "Am Tag vorher"
+
+#. Default: "One week before deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_one_week_before"
+msgstr "Eine Woche vorher"
+
+#. Default: "At the morging of the deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_today"
+msgstr "Am Morgen"
 
 #. Default: "Response"
 #: ./opengever/task/templates/edit_response.pt
