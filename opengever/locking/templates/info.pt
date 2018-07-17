@@ -1,9 +1,7 @@
 <div id="plone-lock-status"
      i18n:domain="plone"
-     tal:define="locked view/info/is_locked;
-                 stealable view/lock_is_stealable;
-                 lock_details view/lock_info;">
-  <tal:block condition="locked">
+     tal:define="lock_details view/lock_info">
+  <tal:block condition="python: view.info.is_locked() and not view.is_edit_form()">
     <dl class="portalMessage info">
       <dt i18n:translate="label_locked">Locked</dt>
       <dd>

@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Make lock info visible even when a document can be safely unlocked. [njohner]
 - Bump ftw.tokenauth to 1.1.0 which provides support for impersonation. [buchi]
 - Adjust table styling for small screens for the activity-settings view. [elioschmutz]
 - Update german translation for "committeee responsible" used within the activity settings tab. [elioschmutz]
