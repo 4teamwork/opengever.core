@@ -38,6 +38,19 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('solr', False),
                 ('workspace', False),
                 ])),
+            ('root_url', 'http://nohost/plone'),
+            ('cas_url', None),
+            ])
+        with self.login(self.regular_user):
+            configuration = IGeverSettings(self.portal).get_config()
+        self.assertEqual(configuration, expected_configuration)
+
+    def test_configuration_for_anonymous(self):
+        expected_configuration = OrderedDict([
+            ('@id', 'http://nohost/plone/@config'),
+            ('version', get_distribution('opengever.core').version),
+            ('root_url', 'http://nohost/plone'),
+            ('cas_url', None),
             ])
         configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(configuration, expected_configuration)
