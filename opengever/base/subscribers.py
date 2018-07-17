@@ -12,6 +12,7 @@ from zope.publisher.interfaces.browser import IBrowserView
 
 
 ALLOWED_ENDPOINTS = set([
+    'POST_application_json_@caslogin',
     'POST_application_json_@login',
     'POST_application_json_@logout',
     'POST_application_json_@login-renew',
