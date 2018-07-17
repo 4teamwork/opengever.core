@@ -22,27 +22,38 @@ GEVER-Mandanten abgefragt werden.
 
       {
           "@id": "http://localhost:8080/fd/@config",
+          "cas_url": "https://cas.server.net/",
           "features": {
               "activity": true,
+              "archival_file_conversion": false,
               "contacts": false,
               "doc_properties": true,
               "dossier_templates": true,
               "ech0147_export": true,
               "ech0147_import": true,
+              "favorites": true,
+              "journal_pdf": false,
               "meetings": true,
               "officeatwork": true,
-              "officeconnector_attach": false,
+              "officeconnector_attach": true,
               "officeconnector_checkout": true,
+              "oneoffixx": false,
               "preview": false,
+              "preview_auto_refresh": false,
               "preview_open_pdf_in_new_window": false,
+              "purge_trash": false,
               "repositoryfolder_documents_tab": true,
               "repositoryfolder_tasks_tab": true,
+              "resolver_name": "strict",
+              "sablon_date_format": "%d.%m.%Y",
               "solr": true,
-              "word_meetings": false,
               "workspace": false
           },
-          "max_dossier_levels": 2,
-          "max_repositoryfolder_levels": 3
+          "max_dossier_levels": 5,
+          "max_repositoryfolder_levels": 3,
+          "recently_touched_limit": 10,
+          "root_url": "http://localhost:8080/fd",
+          "version": "2018.4.0.dev0"
       }
 
 
