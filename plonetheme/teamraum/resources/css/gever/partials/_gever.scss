@@ -1105,3 +1105,58 @@ body.template-team-details #content{
 }
 
 /* @end */
+
+/* @group status messages */
+dl.portalMessage {
+  display: flex;
+  margin: 1em 0;
+  border: 1px solid #ee;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #eee;
+  clear: both;
+
+  dt {
+    display: flex;
+    align-items: center;
+    background-color: #9dca27;
+    line-height: 1.25em;
+    float: left;
+    margin-right: 0.75em;
+    padding: 0.5em 0.75em;
+    color: white;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  dd {
+    padding: 0.5em 0.5em;
+    margin: 0;
+    line-height: 1.25em;
+    color: #7f7f7f;
+  }
+
+  &.warning dt {
+    background-color: #D69B29;
+  }
+
+  &.error dt {
+    background-color: #D65829;
+  }
+}
+
+/* Additional specificity for when status is shown inside #content */
+#content dl.portalMessage {
+  font-size: 100%;
+}
+#content dl.portalMessage dt {
+  margin: 0 0.5em 0 0;
+  padding: 0.5em 0.75em;
+}
+#content dl.portalMessage dd {
+  margin: 0;
+}
+
+/* @end */

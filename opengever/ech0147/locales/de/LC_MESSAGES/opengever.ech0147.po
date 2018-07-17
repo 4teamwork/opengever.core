@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-27 09:31+0000\n"
+"POT-Creation-Date: 2018-07-11 13:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgid "Message has been imported"
 msgstr "Nachricht wurde importiert."
 
 #: ./opengever/ech0147/browser/import.py
-msgid "Message import failed. ${details}"
-msgstr "Import fehlgeschlagen. ${details}"
+msgid "Message import failed. The object ${title} has invalid field data. <br /> ${details}"
+msgstr "Nachricht-Import fehlgeschlagen. Das Objekt ${title} beinhaltet ungültige Feldwerte. <br /> ${details}"
 
 #: ./opengever/ech0147/browser/import.py
 msgid "This message contains toplevel documents. It can only be imported within a dossier."
@@ -98,6 +98,11 @@ msgstr "Exportieren"
 #: ./opengever/ech0147/browser/export.py
 msgid "label_exported_as_ech0147"
 msgstr "Als eCH-0147 Nachricht exportiert"
+
+#. Default: "Field"
+#: ./opengever/ech0147/browser/import.py
+msgid "label_field"
+msgstr "Feld"
 
 #. Default: "Import"
 #: ./opengever/ech0147/browser/import.py

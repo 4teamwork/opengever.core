@@ -23,6 +23,7 @@ from zipfile import ZipFile
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.pagetemplate.interfaces import IPageTemplate
 import transaction
@@ -103,8 +104,8 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                     self.widgets['message'])
                 return
 
-            if (IRepositoryFolder.providedBy(self.context) and
-                    message.content_.documents):
+            if IRepositoryFolder.providedBy(self.context) \
+               and message.content_.documents:
                 self.set_form_error(
                     _(u'This message contains toplevel documents. '
                       'It can only be imported within a dossier.'),
@@ -116,7 +117,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                     try:
                         create_document(self.context, document, zipfile)
                     except BadRequest as exc:
-                        return self._import_error(exc)
+                        return self._import_error(document, exc)
 
             if message.content_.dossiers:
                 for dossier in message.content_.dossiers.dossier:
@@ -125,7 +126,7 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
                             self.context, dossier, zipfile,
                             data['responsible'])
                     except BadRequest as exc:
-                        return self._import_error(exc)
+                        return self._import_error(dossier, exc)
 
         self.import_successful = True
 
@@ -183,12 +184,21 @@ class ECH0147ImportForm(AutoExtensibleForm, form.Form):
         widget.error = view
         self.widgets.errors = (view,)
 
-    def _import_error(self, exc):
+    def _import_error(self, item, exc):
         transaction.abort()
-        error_msg = ''
+
+        errors = []
         for error in exc.message:
-            error_msg += '%s: %s' % (
-                error['field'], error['message'])
-        self.status = _(u'Message import failed. ${details}',
-                        mapping={'details': error_msg})
+            msg = u'{} `{}`: {}'.format(
+                translate(_(u'label_field', default=u'Field'), context=self.request),
+                error['field'],
+                translate(error['message'], domain='plone', context=self.request))
+            errors.append(msg)
+
+        self.rendered_error_message = _(
+            u"Message import failed. The object ${title} has invalid "
+            "field data. <br /> ${details}",
+            mapping={'title': item.titles.title[0].value(),
+                     'details': u'<br />'.join(errors)})
+
         return
