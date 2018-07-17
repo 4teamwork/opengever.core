@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
+from opengever.base.casauth import get_cas_server_url
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IRecentlyTouchedSettings
@@ -36,8 +37,9 @@ class GeverSettingsAdpaterV1(object):
     def get_config(self):
         config = self.get_info()
         config.update(self.get_settings())
+        config['root_url'] = api.portal.get().absolute_url()
+        config['cas_url'] = get_cas_server_url()
         config['features'] = self.get_features()
-        config['root'] = api.portal.get().absolute_url()
         return config
 
     def get_info(self):
