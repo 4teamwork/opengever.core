@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -6,148 +7,159 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNCHECKED
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.interfaces import IAppraisal
-from opengever.testing import FunctionalTestCase
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.testing import IntegrationTestCase
 from plone.protect import createToken
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import json
 
 
-class TestAppraisal(FunctionalTestCase):
+class TestAppraisal(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestAppraisal, self).setUp()
-        self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.root))
+    @browsing
+    def test_added_dossiers(self, browser):
+        self.login(self.records_manager, browser=browser)
+        self.set_workflow_state("dossier-state-resolved", self.dossier, self.empty_dossier)
         self.dossier1 = create(Builder('dossier')
                                .having(archival_value=ARCHIVAL_VALUE_UNWORTHY)
                                .as_expired()
-                               .within(self.repository))
+                               .within(self.leaf_repofolder))
         self.dossier2 = create(Builder('dossier')
-                               .having(archival_value=ARCHIVAL_VALUE_WORTHY)
+                               .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                                .as_expired()
-                               .within(self.repository))
+                               .within(self.leaf_repofolder))
+        ILifeCycle(self.expired_dossier).archival_value = ARCHIVAL_VALUE_WORTHY
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_UNCHECKED
+        ILifeCycle(self.dossier).archival_value = ARCHIVAL_VALUE_PROMPT
 
-        self.grant(
-            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
+        dossiers = [self.dossier, self.expired_dossier,
+                    self.empty_dossier, self.inactive_dossier, self.dossier1]
+        disposition = create(Builder('disposition').having(dossiers=dossiers)
+                             .within(self.repository_root))
 
-    def test_added_dossiers(self):
-        dossier3 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
-                          .as_expired()
-                          .within(self.repository))
-        dossier4 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_UNCHECKED)
-                          .as_expired()
-                          .within(self.repository))
-        dossier5 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_PROMPT)
-                          .as_expired()
-                          .within(self.repository))
-
-        disposition = create(Builder('disposition')
-                             .having(dossiers=[self.dossier1, self.dossier2,
-                                               dossier3, dossier4, dossier5])
-                             .within(self.root))
-
+        self.assertItemsEqual(dossiers, disposition.get_dossiers())
         self.assertFalse(IAppraisal(disposition).get(self.dossier1))
-        self.assertTrue(IAppraisal(disposition).get(self.dossier2))
-        self.assertIsNone(IAppraisal(disposition).get(dossier3))
-        self.assertIsNone(IAppraisal(disposition).get(dossier4))
-        self.assertIsNone(IAppraisal(disposition).get(dossier5))
+        self.assertTrue(IAppraisal(disposition).get(self.expired_dossier))
+        self.assertIsNone(IAppraisal(disposition).get(self.empty_dossier))
+        self.assertIsNone(IAppraisal(disposition).get(self.dossier2))
+        self.assertIsNone(IAppraisal(disposition).get(self.dossier))
 
     def test_inactive_dossiers_are_always_not_archival_worthy(self):
-        dossier1 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
-                          .as_expired()
-                          .in_state('dossier-state-inactive')
-                          .within(self.repository))
-        dossier2 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_WORTHY)
-                          .as_expired()
-                          .in_state('dossier-state-inactive')
-                          .within(self.repository))
+        self.login(self.records_manager)
+        self.set_workflow_state("dossier-state-inactive", self.empty_dossier)
+        ILifeCycle(self.inactive_dossier).archival_value = ARCHIVAL_VALUE_WORTHY
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_SAMPLING
 
         disposition = create(Builder('disposition')
-                             .having(dossiers=[dossier1, dossier2])
-                             .within(self.root))
+                             .having(dossiers=[self.inactive_dossier, self.expired_dossier])
+                             .within(self.repository_root))
 
-        self.assertFalse(IAppraisal(disposition).get(dossier1))
-        self.assertFalse(IAppraisal(disposition).get(dossier2))
+        self.assertFalse(IAppraisal(disposition).get(self.inactive_dossier))
+        self.assertFalse(IAppraisal(disposition).get(self.empty_dossier))
 
     @browsing
     def test_is_updated_when_editing_the_dossier_list(self, browser):
-        disposition = create(Builder('disposition')
-                             .having(dossiers=[self.dossier1])
-                             .within(self.root))
+        self.login(self.records_manager, browser=browser)
+        self.set_workflow_state("dossier-state-resolved", self.empty_dossier)
+        IDossier(self.empty_dossier).end = date(2000, 1, 1)
+        ILifeCycle(self.expired_dossier).archival_value = ARCHIVAL_VALUE_WORTHY
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_UNWORTHY
 
-        browser.login().open(disposition, view='edit')
-        browser.fill({'Dossiers': [self.dossier1, self.dossier2]})
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[self.expired_dossier])
+                             .within(self.repository_root))
+
+        self.assertEqual([self.expired_dossier], disposition.get_dossiers())
+
+        browser.open(disposition, view='edit')
+        browser.fill({'Dossiers': [self.expired_dossier, self.empty_dossier]})
         browser.find('Save').click()
 
-        self.assertFalse(IAppraisal(disposition).get(self.dossier1))
-        self.assertTrue(IAppraisal(disposition).get(self.dossier2))
+        self.assertEqual([self.expired_dossier, self.empty_dossier],
+                         disposition.get_dossiers())
 
     @browsing
     def test_update_appraisal_via_update_view(self, browser):
+        self.login(self.records_manager, browser=browser)
+        self.set_workflow_state("dossier-state-resolved", self.empty_dossier)
+        ILifeCycle(self.expired_dossier).archival_value = ARCHIVAL_VALUE_SAMPLING
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_UNWORTHY
+
         disposition = create(Builder('disposition')
-                             .having(dossiers=[self.dossier1, self.dossier2])
-                             .within(self.root))
+                             .having(dossiers=[self.expired_dossier, self.empty_dossier])
+                             .within(self.repository_root))
 
-        self.assertFalse(IAppraisal(disposition).get(self.dossier1))
+        self.assertFalse(IAppraisal(disposition).get(self.expired_dossier))
+        self.assertFalse(IAppraisal(disposition).get(self.empty_dossier))
 
-        intid = getUtility(IIntIds).getId(self.dossier1)
-        browser.login().open(disposition, view='update_appraisal_view',
-                             data={'_authenticator': createToken(),
-                                   'dossier-id': json.dumps(intid),
-                                   'should_be_archived': json.dumps(True)})
+        intid = getUtility(IIntIds).getId(self.expired_dossier)
+        browser.open(disposition, view='update_appraisal_view',
+                     data={'_authenticator': createToken(),
+                           'dossier-id': json.dumps(intid),
+                           'should_be_archived': json.dumps(True)})
 
-        self.assertTrue(IAppraisal(disposition).get(self.dossier1))
+        self.assertTrue(IAppraisal(disposition).get(self.expired_dossier))
+        self.assertFalse(IAppraisal(disposition).get(self.empty_dossier))
 
     @browsing
     def test_update_appraisal_for_multiple_dossiers_via_update_view(self, browser):
-        repository2 = create(Builder('repository').within(self.root))
-        dossier3 = create(Builder('dossier')
+        self.login(self.records_manager, browser=browser)
+        self.set_workflow_state("dossier-state-resolved", self.empty_dossier)
+        ILifeCycle(self.expired_dossier).archival_value = ARCHIVAL_VALUE_SAMPLING
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_UNWORTHY
+
+        repository2 = create(Builder('repository').within(self.repository_root))
+        dossier1 = create(Builder('dossier')
                           .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                           .as_expired()
                           .within(repository2))
-        dossier4 = create(Builder('dossier')
+        dossier2 = create(Builder('dossier')
                           .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
                           .as_expired()
                           .within(repository2))
+
         disposition = create(Builder('disposition')
-                             .within(self.root)
-                             .having(dossiers=[self.dossier1, self.dossier2,
-                                               dossier3, dossier4]))
+                             .within(self.repository_root)
+                             .having(dossiers=[self.expired_dossier, self.empty_dossier,
+                                               dossier1, dossier2]))
+
+        self.assertFalse(IAppraisal(disposition).get(self.expired_dossier))
+        self.assertFalse(IAppraisal(disposition).get(self.empty_dossier))
+        self.assertFalse(IAppraisal(disposition).get(dossier1))
+        self.assertFalse(IAppraisal(disposition).get(dossier2))
 
         intids = getUtility(IIntIds)
-        dossier_ids = [intids.getId(self.dossier1),
-                       intids.getId(dossier3),
-                       intids.getId(dossier4)]
-        browser.login().open(disposition, view='update_appraisal_view',
-                             data={'_authenticator': createToken(),
-                                   'dossier-ids': json.dumps(dossier_ids),
-                                   'should_be_archived': json.dumps(True)})
+        dossier_ids = [intids.getId(self.expired_dossier),
+                       intids.getId(dossier1),
+                       intids.getId(dossier2)]
+        browser.open(disposition, view='update_appraisal_view',
+                     data={'_authenticator': createToken(),
+                           'dossier-ids': json.dumps(dossier_ids),
+                           'should_be_archived': json.dumps(True)})
 
-        self.assertTrue(IAppraisal(disposition).get(self.dossier1))
-        self.assertTrue(IAppraisal(disposition).get(dossier3))
-        self.assertTrue(IAppraisal(disposition).get(dossier4))
+        self.assertTrue(IAppraisal(disposition).get(self.expired_dossier))
+        self.assertFalse(IAppraisal(disposition).get(self.empty_dossier))
+        self.assertTrue(IAppraisal(disposition).get(dossier1))
+        self.assertTrue(IAppraisal(disposition).get(dossier2))
 
-    def test_appraisal_is_in_complete_when_not_all_dossiers_are_appraised(self):
-        dossier3 = create(Builder('dossier')
-                          .having(archival_value=ARCHIVAL_VALUE_SAMPLING)
-                          .as_expired()
-                          .within(self.repository))
+    def test_appraisal_is_incomplete_when_not_all_dossiers_are_appraised(self):
+        self.login(self.records_manager)
+        self.set_workflow_state("dossier-state-resolved", self.dossier, self.empty_dossier)
+        ILifeCycle(self.expired_dossier).archival_value = ARCHIVAL_VALUE_WORTHY
+        ILifeCycle(self.empty_dossier).archival_value = ARCHIVAL_VALUE_UNWORTHY
+        ILifeCycle(self.dossier).archival_value = ARCHIVAL_VALUE_SAMPLING
 
         disposition = create(Builder('disposition')
-                             .having(dossiers=[self.dossier1,
-                                               self.dossier2,
-                                               dossier3])
-                             .within(self.root))
+                             .having(dossiers=[self.expired_dossier,
+                                               self.empty_dossier,
+                                               self.dossier])
+                             .within(self.repository_root))
 
         appraisal = IAppraisal(disposition)
         self.assertFalse(appraisal.is_complete())
 
-        appraisal.update(dossier=dossier3, archive=True)
+        appraisal.update(dossier=self.dossier, archive=True)
         self.assertTrue(appraisal.is_complete())
