@@ -246,14 +246,14 @@ class RoleAssignmentManager(object):
         self.context = context
         self.storage = RoleAssignmentStorage(self.context)
 
-    def add_assignment(self, assignment):
+    def add_or_update_assignment(self, assignment):
         self.storage.add_or_update(assignment.principal,
                                    assignment.roles,
                                    assignment.cause,
                                    assignment.reference)
         self._update_local_roles()
 
-    def add(self, principal, roles, cause, reference=None):
+    def add_or_update(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
         self._update_local_roles()
 

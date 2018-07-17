@@ -247,9 +247,9 @@ class TestAdHocAgendaItem(IntegrationTestCase):
     @browsing
     def test_error_when_no_access_to_meeting_dossier(self, browser):
         with self.login(self.administrator):
-            RoleAssignmentManager(self.committee_container).add_assignment(
+            RoleAssignmentManager(self.committee_container).add_or_update_assignment(
                 SharingRoleAssignment(self.regular_user.getId(), ['Reader']))
-            RoleAssignmentManager(self.committee).add_assignment(
+            RoleAssignmentManager(self.committee).add_or_update_assignment(
                 SharingRoleAssignment(self.regular_user.getId(),
                                       ['CommitteeResponsible', 'Editor']))
 

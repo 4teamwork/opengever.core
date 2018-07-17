@@ -42,9 +42,9 @@ class TestAllUsersInboxesAndTeamsSourceForWorkspace(IntegrationTestCase):
     def set_permissions_on_workspace(self):
         self.workspace.manage_permission('View', roles=['Contributor', ])
 
-        RoleAssignmentManager(self.workspace).add_assignment(
+        RoleAssignmentManager(self.workspace).add_or_update_assignment(
             SharingRoleAssignment(self.hugo.userid, ['Contributor']))
-        RoleAssignmentManager(self.workspace).add_assignment(
+        RoleAssignmentManager(self.workspace).add_or_update_assignment(
             SharingRoleAssignment(self.john.userid, ['Contributor']))
 
     def test_is_within_workspace(self):

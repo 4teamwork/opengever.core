@@ -8,4 +8,4 @@ def assign_owner_role_on_creation(workspace, event):
     """
     owner_userid = workspace.Creator()
     assignment = SharingRoleAssignment(owner_userid, ['WorkspaceOwner'])
-    RoleAssignmentManager(workspace).add_assignment(assignment)
+    RoleAssignmentManager(workspace).add_or_update_assignment(assignment)

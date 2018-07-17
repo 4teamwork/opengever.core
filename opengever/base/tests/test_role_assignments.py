@@ -15,7 +15,7 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         self.login(self.regular_user)
 
         manager = RoleAssignmentManager(self.empty_dossier)
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
                     ASSIGNMENT_VIA_TASK, self.task)
 
@@ -30,12 +30,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         self.login(self.regular_user)
 
         manager = RoleAssignmentManager(self.empty_dossier)
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
                     ASSIGNMENT_VIA_SHARING)
 
         # update
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Reader'],
                     ASSIGNMENT_VIA_SHARING)
 
@@ -50,12 +50,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         self.login(self.regular_user)
         manager = RoleAssignmentManager(self.empty_dossier)
 
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
                     ASSIGNMENT_VIA_SHARING)
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
-        manager.add(self.regular_user.id,
+        manager.add_or_update(self.regular_user.id,
                     ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
@@ -69,12 +69,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.empty_dossier)
 
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Editor', 'Contributor', 'Reader'],
                     ASSIGNMENT_VIA_SHARING)
-        manager.add(self.secretariat_user.id,
+        manager.add_or_update(self.secretariat_user.id,
                     ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
-        manager.add(self.regular_user.id,
+        manager.add_or_update(self.regular_user.id,
                     ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(

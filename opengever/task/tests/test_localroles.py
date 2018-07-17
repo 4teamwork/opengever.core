@@ -139,7 +139,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         api.content.disable_roles_acquisition(obj=self.dossier)
 
-        RoleAssignmentManager(self.dossier).add_assignment(
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
             SharingRoleAssignment(self.administrator.getId(),
                                   ['Reader', 'Contributor', 'Editor']))
 

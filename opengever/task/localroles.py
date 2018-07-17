@@ -66,7 +66,7 @@ class LocalRolesSetter(object):
         if is_agency:
             assignment = TaskAgencyRoleAssignment(principal, roles, self.task)
 
-        RoleAssignmentManager(context).add_assignment(assignment)
+        RoleAssignmentManager(context).add_or_update_assignment(assignment)
 
     def set_roles_on_task(self):
         """Set local roles on task

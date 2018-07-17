@@ -12,14 +12,14 @@ class TestScanIn(IntegrationTestCase):
 
     def create_single_inbox(self):
         inbox = create(Builder('inbox').titled(u'Inbox'))
-        RoleAssignmentManager(inbox).add_assignment(
+        RoleAssignmentManager(inbox).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['Reader', 'Contributor', 'Editor']))
         return inbox
 
     def create_org_unit_inbox(self):
         container = create(Builder('inbox_container').titled(u'Inboxes'))
-        RoleAssignmentManager(container).add_assignment(
+        RoleAssignmentManager(container).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['Reader', 'Contributor', 'Editor']))
 

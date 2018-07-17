@@ -148,7 +148,7 @@ class ManageParticipants(BrowserView):
                                             inherit=False)
             if user_roles and 'WorkspaceOwner' not in user_roles:
                 assignment = InvitationRoleAssignment(token, [role], self.context)
-                RoleAssignmentManager(self.context).add_assignment(assignment)
+                RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])

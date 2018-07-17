@@ -127,7 +127,7 @@ class LocalRolesSetter(LocalRoles):
             if IRoleManager.providedBy(obj):
                 for principal, roles in item[roleskey].items():
                     if roles:
-                        RoleAssignmentManager(obj).add_assignment(
+                        RoleAssignmentManager(obj).add_or_update_assignment(
                             SharingRoleAssignment(principal, roles))
 
             yield item

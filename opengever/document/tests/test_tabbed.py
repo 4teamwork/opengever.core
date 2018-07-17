@@ -47,7 +47,7 @@ class TestDocumentQuickupload(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         self.set_workflow_state('task-state-tested-and-closed', self.task)
-        RoleAssignmentManager(self.dossier).add_assignment(
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
             SharingRoleAssignment('kathi.barfuss',
                                   ['Reader', 'Contributor', 'Editor']))
 

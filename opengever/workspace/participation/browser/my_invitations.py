@@ -69,7 +69,7 @@ class MyWorkspaceInvitations(BrowserView):
 
             assignment = InvitationRoleAssignment(
                 invitation['recipient'], [invitation['role']], target)
-            RoleAssignmentManager(target).add_assignment(assignment)
+            RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().remove_invitation(invitation['iid'])
 
         return self.request.RESPONSE.redirect(target.absolute_url())

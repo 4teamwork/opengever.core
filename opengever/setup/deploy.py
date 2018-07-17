@@ -198,7 +198,7 @@ class GeverDeployment(object):
                 assignment = SharingRoleAssignment(
                     DEVELOPMENT_USERS_GROUP,
                     ["Contributor", "Editor", "Reader"])
-                RoleAssignmentManager(obj).add_assignment(assignment)
+                RoleAssignmentManager(obj).add_or_update_assignment(assignment)
 
     def drop_sql_tables(self, session):
         """Drops all sql tables, usually for a dev-setup.

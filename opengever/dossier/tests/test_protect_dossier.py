@@ -28,7 +28,7 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_dossier_protect_permission_if_it_has_dossier_manager_on_repo_root(self):
         self.login(self.regular_user)
 
-        RoleAssignmentManager(self.repository_root).add_assignment(
+        RoleAssignmentManager(self.repository_root).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['DossierManager']))
 
@@ -39,7 +39,7 @@ class TestProtectDossier(IntegrationTestCase):
     def test_user_has_permission_if_dossier_manager_on_repo(self):
         self.login(self.regular_user)
 
-        RoleAssignmentManager(self.leaf_repofolder).add_assignment(
+        RoleAssignmentManager(self.leaf_repofolder).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['DossierManager']))
 
@@ -73,7 +73,7 @@ class TestProtectDossier(IntegrationTestCase):
         browser.click_on('Save')
         new_dossier = browser.context
 
-        RoleAssignmentManager(new_dossier).add_assignment(
+        RoleAssignmentManager(new_dossier).add_or_update_assignment(
             SharingRoleAssignment('projekt_a', ['Contributor']))
 
         self.assert_local_roles(
@@ -103,7 +103,7 @@ class TestProtectDossier(IntegrationTestCase):
         browser.click_on('Save')
 
         new_dossier = browser.context
-        RoleAssignmentManager(new_dossier).add_assignment(
+        RoleAssignmentManager(new_dossier).add_or_update_assignment(
             SharingRoleAssignment('projekt_a', ['Contributor']))
 
         self.assert_local_roles(
@@ -320,9 +320,9 @@ class TestProtectDossier(IntegrationTestCase):
     def test_check_protect_dossier_consistency_returns_no_messages_if_no_inconsistency(self):
         self.login(self.dossier_manager)
 
-        RoleAssignmentManager(self.empty_dossier).add_assignment(
+        RoleAssignmentManager(self.empty_dossier).add_or_update_assignment(
             SharingRoleAssignment(self.dossier_responsible.id, ['Reader']))
-        RoleAssignmentManager(self.empty_dossier).add_assignment(
+        RoleAssignmentManager(self.empty_dossier).add_or_update_assignment(
             SharingRoleAssignment(
                 self.dossier_responsible.id,
                 ['Reader', 'Editor', 'Contributor', 'Reviewer',
@@ -343,7 +343,7 @@ class TestProtectDossier(IntegrationTestCase):
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
 
-        RoleAssignmentManager(self.dossier).add_assignment(
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['DossierManager']))
 

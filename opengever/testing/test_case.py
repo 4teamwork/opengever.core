@@ -123,7 +123,7 @@ class FunctionalTestCase(TestCase):
         if context is None:
             setRoles(self.portal, user_id, list(roles))
         else:
-            RoleAssignmentManager(context).add_assignment(
+            RoleAssignmentManager(context).add_or_update_assignment(
                 SharingRoleAssignment(user_id, list(roles)))
 
         transaction.commit()

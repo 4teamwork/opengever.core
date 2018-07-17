@@ -24,7 +24,7 @@ class CommitteeRoles(object):
 
         assignment = CommitteeGroupAssignment(
             principal, self.managed_roles, self.context)
-        RoleAssignmentManager(self.context).add_assignment(assignment)
+        RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
     def initialize(self, principal):
         """Initialize local roles by adding managed roles for principal."""

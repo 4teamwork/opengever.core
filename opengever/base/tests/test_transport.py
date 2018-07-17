@@ -89,7 +89,7 @@ class TestTransporter(FunctionalTestCase):
                       .having(deadline=date(2014, 7, 1)))
 
         create(Builder('user').named('Hugo', 'Boss'))
-        RoleAssignmentManager(source).add_assignment(
+        RoleAssignmentManager(source).add_or_update_assignment(
             SharingRoleAssignment(u'hugo.boss',
                                   ['Contributor', 'Editor', 'Reader']))
 

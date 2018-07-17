@@ -74,7 +74,7 @@ class TestSubmitAdditionalDocuments(FunctionalTestCase):
     def login_as_user_without_committee_permission(self, browser):
         create(Builder('user').named('Hugo', 'Boss'))
 
-        RoleAssignmentManager(self.dossier).add_assignment(
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
             SharingRoleAssignment(u'hugo.boss',
                                   ['Contributor', 'Editor', 'Reader']))
 

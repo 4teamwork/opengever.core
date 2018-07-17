@@ -154,9 +154,9 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
     def test_returns_serialized_assignments(self, browser):
         self.login(self.secretariat_user, browser=browser)
         manager = RoleAssignmentManager(self.empty_dossier)
-        manager.add(self.regular_user.id, ['Editor'],
+        manager.add_or_update(self.regular_user.id, ['Editor'],
                     ASSIGNMENT_VIA_TASK, reference=self.task)
-        manager.add(self.regular_user.id, ['Reader'],
+        manager.add_or_update(self.regular_user.id, ['Reader'],
                     ASSIGNMENT_VIA_SHARING)
 
         browser.open(self.empty_dossier,
@@ -184,11 +184,11 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
     def test_lookup_recursively_till_blocked_flag(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        RoleAssignmentManager(self.empty_dossier).add(
+        RoleAssignmentManager(self.empty_dossier).add_or_update(
             self.regular_user.id, ['Editor'],
             ASSIGNMENT_VIA_TASK, reference=self.task)
 
-        RoleAssignmentManager(self.leaf_repofolder).add(
+        RoleAssignmentManager(self.leaf_repofolder).add_or_update(
             self.regular_user.id, ['Reader'],
             ASSIGNMENT_VIA_SHARING)
 

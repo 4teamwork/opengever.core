@@ -107,7 +107,7 @@ class OpengeverContentFixture(object):
         return self._lookup_table
 
     def set_roles(self, obj, principal, roles):
-        RoleAssignmentManager(obj).add_assignment(
+        RoleAssignmentManager(obj).add_or_update_assignment(
             SharingRoleAssignment(principal, roles))
 
     def create_units(self):

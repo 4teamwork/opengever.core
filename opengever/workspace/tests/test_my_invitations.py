@@ -32,7 +32,7 @@ class TestMyInvitationsView(IntegrationTestCase):
             self.workspace2, self.workspace_guest.getId(),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
-        RoleAssignmentManager(self.workspace_root).add_assignment(
+        RoleAssignmentManager(self.workspace_root).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(),
                                   ['WorkspacesUser']))
 
