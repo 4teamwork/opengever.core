@@ -1,3 +1,5 @@
+from AccessControl import getSecurityManager
+from AccessControl.users import nobody
 from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
 from opengever.base.casauth import get_cas_server_url
@@ -36,10 +38,12 @@ class GeverSettingsAdpaterV1(object):
 
     def get_config(self):
         config = self.get_info()
-        config.update(self.get_settings())
+        # Only expose essential configuration for unauthenticated requests
+        if getSecurityManager().getUser() != nobody:
+            config.update(self.get_settings())
+            config['features'] = self.get_features()
         config['root_url'] = api.portal.get().absolute_url()
         config['cas_url'] = get_cas_server_url()
-        config['features'] = self.get_features()
         return config
 
     def get_info(self):
