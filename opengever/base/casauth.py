@@ -46,6 +46,8 @@ def get_cas_server_url():
     """Get the CAS server URL from the ftw.casauth plugin.
     """
     acl_users = api.portal.get_tool('acl_users')
+    if 'cas_auth' not in acl_users:
+        return None
     cas_auth = acl_users.cas_auth
     url = getattr(cas_auth, 'cas_server_url', None)
     return url
