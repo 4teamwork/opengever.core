@@ -48,9 +48,20 @@ class SubmitAdditionalDocument(AutoExtensibleForm, Form):
     """
     ignoreContext = True
     allow_prefill_from_GET_request = True  # XXX
-    label = _(u'label_submit_additional_documents', default=u'Submit Updated Documents')
 
     schema = ISubmitAdditionalDocument
+
+    @property
+    def label(self):
+        proposal = self.extractData()[0]['proposal']
+        document = self.context
+
+        if SubmittedDocument.query.get_by_source(proposal, document).is_up_to_date(document):
+            label = _(u'label_submit_additional_documents', default=u'Submit Additional Documents')
+        else:
+            label = _(u'label_submit_updated_documents', default=u'Submit Updated Documents')
+
+        return label
 
     def update(self):
         self._preselect_proposal()
