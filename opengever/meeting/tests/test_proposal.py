@@ -603,6 +603,30 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(Proposal.STATE_PENDING, self.draft_proposal.get_state())
 
     @browsing
+    def test_resubmit_rejected_proposal_with_mail_attachments(self, browser):
+        with self.login(self.dossier_responsible, browser):
+            self.draft_proposal.relatedItems.append(
+                self.as_relation_value(self.mail))
+
+            browser.visit(self.draft_proposal, view='tabbedview_view-overview')
+            browser.click_on('Submit')
+            browser.click_on('Confirm')
+
+            submitted_proposal = self.draft_proposal.load_model().resolve_submitted_proposal()
+
+        with self.login(self.committee_responsible, browser):
+            browser.visit(submitted_proposal, view='tabbedview_view-overview')
+            browser.click_on('Reject')
+            browser.click_on('Confirm')
+
+        with self.login(self.dossier_responsible, browser):
+            browser.visit(self.draft_proposal, view='tabbedview_view-overview')
+            browser.click_on('Submit')
+            browser.click_on('Confirm')
+
+            statusmessages.assert_message('Proposal successfully submitted.')
+
+    @browsing
     def test_proposal_can_be_submitted_without_permission_on_commitee(self, browser):
         self.login(self.dossier_responsible, browser)
         # https://github.com/4teamwork/opengever.ftw/issues/41

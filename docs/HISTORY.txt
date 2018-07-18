@@ -27,6 +27,7 @@ Changelog
 - Add webcomponents-bundle which contains ie11 polyfills. The polyfills where included in trix.js. This file have been removed in commit c40bf4e. [elioschmutz]
 - Add skipped task icon. [Kevin Bieri]
 - Trigger proposal rejected activity before unregister watchers. [elioschmutz]
+- Fix an issue when submitting previously rejected proposals with mail attachments. [deiferni]
 - Correct info message showed when regenerating agendaitem list. [njohner]
 - Make remove button unavailable for private dossier. [njohner]
 - Introduce generic header dropdown button. [Kevin Bieri]
