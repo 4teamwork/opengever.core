@@ -55,14 +55,7 @@ class BaseActivity(object):
         """
         self.before_recording()
 
-        self.center.add_activity(
-            self.context,
-            self.kind,
-            self.title,
-            self.label,
-            self.summary,
-            self.actor_id,
-            self.description)
+        self.add_activity()
 
         self.after_recording()
 
@@ -75,6 +68,16 @@ class BaseActivity(object):
 
     def translate(self, msg, language):
         return translate(msg, context=self.request, target_language=language)
+
+    def add_activity(self):
+        self.center.add_activity(
+            self.context,
+            self.kind,
+            self.title,
+            self.label,
+            self.summary,
+            self.actor_id,
+            self.description)
 
     def _get_supported_languages(self):
         """Returns a list of codes of all supported language.

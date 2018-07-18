@@ -746,6 +746,11 @@ msgstr "Schritt 3"
 msgid "step_4"
 msgstr "Schritt 4"
 
+#. Default: "Deadline is on ${deadline}"
+#: ./opengever/task/activities.py
+msgid "task_reminder_activity_summary"
+msgstr "Die Aufgaben-Frist endet am ${deadline}"
+
 #. Default: "Accept forwarding"
 #: ./opengever/task/browser/accept/main.py
 msgid "title_accept_forwarding"

@@ -11,8 +11,10 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.task.activities import TaskReminderActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from sqlalchemy import desc
 import email
@@ -429,3 +431,18 @@ class TestSuccesssorHandling(FunctionalTestCase):
             [(u'peter.meier', u'task_responsible')],
             [(subscription.watcher.actorid, subscription.role)
              for subscription in successor_resource.subscriptions])
+
+
+class TestTaskReminderActivity(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_activity_attributes(self):
+        self.login(self.regular_user)
+        TaskReminderActivity(self.task.get_sql_object(), self.request).record()
+        activity = Activity.query.first()
+
+        self.assertEquals('task-reminder', activity.kind)
+        self.assertEquals('Task reminder', activity.label)
+        self.assertEquals(self.task.title, activity.title)
+        self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)

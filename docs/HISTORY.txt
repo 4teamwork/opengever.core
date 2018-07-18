@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Add TaskReminderActivity object. [elioschmutz]
 - Add ReminderSetting SQL Model. [elioschmutz]
 - Add task-reminder activity settings. [elioschmutz]
 - Support adding tasks via REST API. [phgross]
