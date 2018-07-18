@@ -13,8 +13,7 @@ werden. Diese vordefinierten Aufgabenketten bzw. Aufgabenfolgen werden
 Standardabläufe genannt.
 
 Standardabläufe können normalerweise (je nach Berechtigungen) durch Personen mit
-Administrator-Rolle definiert werden. Daher wird die Erstellung von
-Standardabläufen in der :ref:`Admin-Dokumentation <label-standardablauf-admin>` behandelt.
+Administrator-Rolle definiert werden. Daher wird die Erstellung von Standardabläufen in der :ref:`Admin-Dokumentation <label-standardablauf-admin>` behandelt.
 
 |img-standardablauf-1|
 
@@ -47,7 +46,8 @@ abgeschlossen wurde.
 Der Ersteller der Standardablauf-Vorlage kann zu Beginn eines neuen
 Standardablaufs wählen, welche Ablaufart er möchte. Der Benutzer, welcher die
 Standardablauf-Vorlage dann in einem Dossier einsetzt, übernimmt diese Ablaufart
-automatisch.
+automatisch. Auf die Unterschiede der beiden Ablauf-Typen wird weiter unten
+noch genauer eingegangen.
 
 Einen Standardablauf auslösen
 -----------------------------
@@ -68,44 +68,47 @@ Aufgaben hinzu- oder weggeklickt werden.
 
 |img-standardablauf-34|
 
-Bei Bedarf können nun die Eigenschaften der Aufgaben angepasst werden
-(Frist, Auftragnehmer etc.). Öffnen Sie dazu die Aufgabe und klicken Sie
-auf *Bearbeiten*. Falls noch nicht vorhanden, muss in diesem Schritt zwingend
+Falls noch nicht vorhanden, muss in diesem Schritt zwingend
 für jede Aufgabe einen Auftragnehmer (Team oder Person) erfasst werden.
-
-Wird in diesem Schritt die Frist der Unteraufgabe geändert, wird
-gegebenenfalls auch die Frist der Hauptgabe automatisch angepasst
-(letzte Frist plus 5 Tage).
 
 |img-standardablauf-35|
 
 Mit *Speichern* werden die ausgewählten Aufgaben ins Dossier übernommen.
-Der Titel des Standardablaufs wird als Hauptaufgabe vom Typ „Zur
-direkten Erledigung“ dargestellt und automatisch auf den Status *In Arbeit*
-gesetzt. Die Frist der Hauptaufgabe wird aus dem spätesten Termin der
-Unteraufgaben plus 5 Tage angegeben. Aus den einzelnen Aufgabenschritten werden
-Unteraufgaben erstellt; diese befinden sich im Status *Offen*.
+Nun stehen die Aufgaben wie gewohnt zur weiteren Bearbeitung bereit (siehe
+:ref:`kapitel-aufgaben`). Ab hier werden auch die Unterschiede von einem
+parallelen zu sequentiellen Ablauf vorallem beim Status und der Frist deutlich.
 
+**Status**
 
-Anschliessend stehen die Aufgaben zur weiteren Bearbeitung bereit (siehe
-:ref:`kapitel-aufgaben`).
+Beim Auslösen eines parallelen Standardablaufs wird eine Hauptaufgabe mit
+mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass es
+sich um einen parallelen Standardablauf handelt. Wird ein paralleler
+Standardablauf ausgelöst, so werden alle Aufgaben automatisch in den Status
+"Offen" versetzt und somit gleichzeitig ausgelöst.
+
+Beim Auslösen eines sequentiellen Standardablaufs wird auch eine Hauptaufgabe
+mit mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass
+es sich um einen sequenziellen Standardablauf handelt. Wird ein sequenzieller
+Standardablauf ausgelöst, so wird die erste Aufgabe im Ablauf automatisch
+geöffnet, alle weiteren werden im Zustand «Geplant» initialisiert, sind aber zu
+diesem Zeitpunkt noch nicht sichtbar. Wird eine Aufgabe erledigt, so wird die
+nächste Aufgabe im Ablauf automatisch geöffnet resp. in den Status "Offen"
+versetzt und somit sichtbar.
+
+**Frist**
+
+Bei einem parallelen Ablauf wird die Frist der Hauptaufgabe aus dem spätesten
+Termin der Unteraufgaben plus 10 Tage gesetzt.
+
+Bei einem sequentiellen Ablauf wird die Frist der ersten Aufgabe plus 10 Tage ab
+Auslöse-Datum gesetzt. Wird diese geschlossen und die nächste Aufgabe so
+automatisch ausgelöst, erhält auch diese eine Frist plus 10 Tagen ab dem
+Abschluss der vorherigen Aufgabe.
 
 |img-standardablauf-36|
 
-Bei einem parallelen Aufgabenablauf erscheinen alle Aufgaben auf einmal. Bei
-einem sequentiellen Ablauf werden
-
-
 Zu beachten bei sequentiellen Aufgaben
 --------------------------------------
-
--   Beim Auslösen eines Standardablaufs wird eine Hauptaufgabe mit mehreren
-    Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass es sich
-    um einen sequenziellen Standardablauf handelt. Wird ein sequenzieller
-    Standardablauf ausgelöst, so wird die erste Aufgabe im Ablauf automatisch
-    geöffnet, alle weiteren werden im Zustand «Geplant» initialisiert. Wird eine
-    Aufgabe erledigt, so wird die nächste Aufgabe im Ablauf automatisch
-    geöffnet.
 
 -   Wird eine Aufgabe abgelehnt, wird sie dem Auftraggeber zugewiesen. Dieser
     hat die Möglichkeit, die Aufgabe wieder zu öffnen (und dann «Neu zuweisen»,
@@ -117,8 +120,7 @@ Zu beachten bei sequentiellen Aufgaben
 -   Auf der Ansicht der Hauptaufgabe eines sequenziellen Standardablaufs kann in
     der Auflistung der Teilaufgaben direkt eine neue Aufgabe eingefügt werden.
     Der Standardablauf kann also individuell ergänzt werden. Das anschliessend
-    geöffnete Hinzufügen-Formular der Aufgabe verhält sich wie das normale
-    Aufgaben-Formular und klinkt sich automatisch in den Standardablauf ein.
+    geöffnete Hinzufügen-Formular der Aufgabe verhält sich wie das :ref:`normale Aufgaben-Formular <label-aufgaben_erstellen>` und klinkt sich automatisch in den Standardablauf ein.
 
 |img-standardablauf-37|
 

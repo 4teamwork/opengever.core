@@ -40,7 +40,7 @@ Die Eingabemaske ist analog der :ref:`normale Aufgaben <label-aufgaben_erstellen
 
 |img-standardablauf-23|
 
-Bei der Eingabe von Auftraggeber und Auftraggeber steht aber neben den
+Bei der Eingabe von Auftraggeber und Auftraggeber steht neben den
 registrierten Benutzern und Eingangskörben der OneGov GEVER Installation auch
 ein sogenannter *interaktiver Benutzer* zur Verfügung.
 
