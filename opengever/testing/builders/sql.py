@@ -24,6 +24,7 @@ from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
 from opengever.meeting.interfaces import IMeetingDossier
@@ -45,6 +46,7 @@ from opengever.ogds.models.tests.builders import AdminUnitBuilder
 from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
+from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.helpers import localized_datetime
 from opengever.testing.model import TransparentModelLoader
@@ -633,3 +635,29 @@ class FavoriteBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('favorite', FavoriteBuilder)
+
+
+class ReminderSettingsBuilder(SqlObjectBuilder):
+
+    mapped_class = ReminderSetting
+    id_argument_name = 'reminder_setting_id'
+
+    def for_object(self, obj, option=TASK_REMINDER_SAME_DAY):
+        self.arguments['task_id'] = obj.get_sql_object().task_id
+        self.arguments['option_type'] = option.option_type
+        self.arguments['remind_day'] = option.calculate_remind_on(obj.deadline)
+
+        return self
+
+    def for_actor(self, actor):
+        self.arguments['actor_id'] = actor.getId()
+
+        return self
+
+    def remind_on(self, remind_day):
+        self.arguments['remind_day'] = remind_day
+
+        return self
+
+
+builder_registry.register('reminder_setting_model', ReminderSettingsBuilder)
