@@ -1,5 +1,8 @@
+from AccessControl import getSecurityManager
+from AccessControl.users import nobody
 from collections import OrderedDict
 from opengever.activity.interfaces import IActivitySettings
+from opengever.base.casauth import get_cas_server_url
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IRecentlyTouchedSettings
@@ -19,13 +22,13 @@ from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.workspace.interfaces import IWorkspaceSettings
 from pkg_resources import get_distribution
 from plone import api
-from Products.CMFCore.interfaces import ISiteRoot
 from zope.component import adapter
 from zope.interface import implementer
+from zope.interface import Interface
 
 
 @implementer(IGeverSettings)
-@adapter(ISiteRoot)
+@adapter(Interface)
 class GeverSettingsAdpaterV1(object):
     """Returns the current site configuration in the API v1 format."""
 
@@ -35,8 +38,12 @@ class GeverSettingsAdpaterV1(object):
 
     def get_config(self):
         config = self.get_info()
-        config.update(self.get_settings())
-        config['features'] = self.get_features()
+        # Only expose essential configuration for unauthenticated requests
+        if getSecurityManager().getUser() != nobody:
+            config.update(self.get_settings())
+            config['features'] = self.get_features()
+        config['root_url'] = api.portal.get().absolute_url()
+        config['cas_url'] = get_cas_server_url()
         return config
 
     def get_info(self):

@@ -57,6 +57,9 @@ class TestCASServerURL(IntegrationTestCase):
         applyProfile(self.layer['portal'], 'opengever.setup:casauth')
         self.assertEquals('http://example.com/portal', get_cas_server_url())
 
+    def test_cas_server_url_is_none_if_cas_plugin_is_missing(self):
+        self.assertEquals(None, get_cas_server_url())
+
 
 class TestGEVERPortalURL(IntegrationTestCase):
 
