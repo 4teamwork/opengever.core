@@ -22,6 +22,7 @@ Inhalt:
    config.rst
    favorite.rst
    recently_touched.rst
+   preview.rst
    examples/index.rst
    docs_changelog.rst
 
