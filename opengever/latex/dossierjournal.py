@@ -17,7 +17,7 @@ from zope.interface import Interface
 
 
 class IDossierJournalLayer(ILandscapeLayer):
-    """Dossier listing request layer.
+    """Dossier journal request layer.
     - Select landsacpe layout by subclassing ILandscapeLayer
     - Select view
     """
@@ -29,13 +29,13 @@ class DossierJournalPDFView(ExportPDFView):
 
     def __call__(self):
         # use the landscape layout
-        # let the request provide IDossierListingLayer
+        # let the request provide IDossierJournalLayer
         provide_request_layer(self.request, self.request_layer)
 
         return super(DossierJournalPDFView, self).__call__()
 
     def get_data(self):
-        # let the request provide IDossierListingLayer
+        # let the request provide IDossierJournalLayer
         provide_request_layer(self.request, self.request_layer)
 
         assembler = getMultiAdapter((self.context, self.request),

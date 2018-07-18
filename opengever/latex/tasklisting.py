@@ -15,8 +15,8 @@ from zope.interface import Interface
 
 
 class ITaskListingLayer(ILandscapeLayer):
-    """Dossier listing request layer.
-    - Select landsacpe layout by subclassing ITaskListingLayer
+    """Task listing request layer.
+    - Select landsacpe layout by subclassing ILandscapeLayer
     - Select view
     """
 
