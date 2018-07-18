@@ -35,8 +35,9 @@ class GeverLiveSearchGet(SearchGet):
                 for entry in OGSolrContentListing(view.results())]
 
         else:
+            del self.request.form['q']
             self.request.form.update({
-                'SearchableText': search_term,
+                'SearchableText': search_term + '*',
                 'sort_limit': limit,
                 'path': path
             })
