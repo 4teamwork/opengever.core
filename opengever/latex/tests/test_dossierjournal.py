@@ -30,21 +30,6 @@ class TestDossierJournalPDFView(MockTestCase):
         view = getMultiAdapter((context, request), name='pdf-dossier-journal')
         self.assertTrue(isinstance(view, dossierjournal.DossierJournalPDFView))
 
-    def test_render_adds_browser_layer(self):
-        context = request = self.create_dummy()
-
-        view = self.mocker.patch(
-            dossierjournal.DossierJournalPDFView(context, request))
-
-        self.expect(view.allow_alternate_output()).result(False)
-        self.expect(view.export())
-
-        self.replay()
-
-        view()
-        self.assertTrue(
-            dossierjournal.IDossierJournalLayer.providedBy(request))
-
 
 class TestJournalListingLaTeXView(FunctionalTestCase):
 

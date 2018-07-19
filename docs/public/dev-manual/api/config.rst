@@ -33,6 +33,7 @@ GEVER-Mandanten abgefragt werden.
               "ech0147_import": true,
               "favorites": true,
               "journal_pdf": false,
+              "tasks_pdf": false,
               "meetings": true,
               "officeatwork": true,
               "officeconnector_attach": true,

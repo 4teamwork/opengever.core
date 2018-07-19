@@ -24,6 +24,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('gever_ui_enabled', False),
                 ('gever_ui_path', 'http://localhost:8081/#/'),
                 ('journal_pdf', False),
+                ('tasks_pdf', False),
                 ('meetings', False),
                 ('officeatwork', False),
                 ('officeconnector_attach', False),

@@ -180,11 +180,14 @@ class StrictDossierResolver(object):
         - Remove all trashed documents.
         - (Trigger PDF-A conversion).
         - Generate a PDF output of the journal.
+        - For a main dossier, Generate a PDF listing the tasks.
         """
 
         self.trash_shadowed_docs()
         self.purge_trash()
         self.create_journal_pdf()
+        if not self.context.is_subdossier():
+            self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
 
     def trash_shadowed_docs(self):
@@ -192,8 +195,8 @@ class StrictDossierResolver(object):
         """
         portal_catalog = api.portal.get_tool('portal_catalog')
         query = {'path': {'query': self.context.absolute_url_path(), 'depth': -1},
-                'object_provides': [IBaseDocument.__identifier__],
-                'review_state': "document-state-shadow"}
+                 'object_provides': [IBaseDocument.__identifier__],
+                 'review_state': "document-state-shadow"}
         shadowed_docs = portal_catalog.unrestrictedSearchResults(query)
 
         if shadowed_docs:
@@ -235,6 +238,39 @@ class StrictDossierResolver(object):
         filename = u'Journal {}.pdf'.format(today)
         title = _(u'title_dossier_journal',
                   default=u'Journal of dossier ${title}, ${timestamp}',
+                  mapping={'title': self.context.title,
+                           'timestamp': today})
+        kwargs = {
+            'preserved_as_paper': False,
+        }
+        dossier = IDossier(self.context)
+        if dossier and dossier.end:
+            kwargs['document_date'] = dossier.end
+
+        with elevated_privileges():
+            CreateDocumentCommand(
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf',
+                **kwargs).execute()
+
+    def create_tasks_listing_pdf(self):
+        """Creates a pdf representation of the dossier tasks, and add it to
+        the dossier as a normal document.
+
+        If the dossiers has an end date use that date as the document date.
+        This prevents the dossier from entering an invalid state with a
+        document date outside the dossiers start-end range.
+        """
+        if not self.get_property('tasks_pdf_enabled'):
+            return
+
+        view = self.context.unrestrictedTraverse('pdf-dossier-tasks')
+        today = api.portal.get_localized_time(
+            datetime=datetime.today(), long_format=True)
+        filename = u'Tasks {}.pdf'.format(today)
+        title = _(u'title_dossier_tasks',
+                  default=u'Task list of dossier ${title}, ${timestamp}',
                   mapping={'title': self.context.title,
                            'timestamp': today})
         kwargs = {
@@ -352,9 +388,9 @@ class ResolveConditions(object):
 
         errors = []
 
-        if (self.strict and
-                not self.context.is_all_supplied() and
-                not self.context.is_subdossier()):
+        if (self.strict
+                and not self.context.is_all_supplied()
+                and not self.context.is_subdossier()):
             errors.append(NOT_SUPPLIED_OBJECTS)
         if not self.context.is_all_checked_in():
             errors.append(NOT_CHECKED_IN_DOCS)

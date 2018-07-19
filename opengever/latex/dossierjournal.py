@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from copy import deepcopy
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
@@ -14,6 +15,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import Interface
+from zope.interface import noLongerProvides
 
 
 class IDossierJournalLayer(ILandscapeLayer):
@@ -23,24 +25,29 @@ class IDossierJournalLayer(ILandscapeLayer):
     """
 
 
-class DossierJournalPDFView(ExportPDFView):
+@contextmanager
+def provide_dossier_journal_layer(request):
+    try:
+        provide_request_layer(request, IDossierJournalLayer)
+        yield
+    finally:
+        noLongerProvides(request, IDossierJournalLayer)
 
-    request_layer = IDossierJournalLayer
+
+class DossierJournalPDFView(ExportPDFView):
 
     def __call__(self):
         # use the landscape layout
         # let the request provide IDossierJournalLayer
-        provide_request_layer(self.request, self.request_layer)
-
-        return super(DossierJournalPDFView, self).__call__()
+        with provide_dossier_journal_layer(self.request):
+            return super(DossierJournalPDFView, self).__call__()
 
     def get_data(self):
         # let the request provide IDossierJournalLayer
-        provide_request_layer(self.request, self.request_layer)
-
-        assembler = getMultiAdapter((self.context, self.request),
-                                    IPDFAssembler)
-        return assembler.build_pdf()
+        with provide_dossier_journal_layer(self.request):
+            assembler = getMultiAdapter((self.context, self.request),
+                                        IPDFAssembler)
+            return assembler.build_pdf()
 
 
 @adapter(Interface, IDossierJournalLayer, ILaTeXLayout)

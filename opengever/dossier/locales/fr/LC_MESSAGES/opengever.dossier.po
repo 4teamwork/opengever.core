@@ -907,6 +907,11 @@ msgstr "Périmé"
 msgid "title_dossier_journal"
 msgstr "Journal du dossier ${title}, ${timestamp}"
 
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr "Liste des tâches du dossier ${title}, ${timestamp}"
+
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/browser/forms.py
 msgid "warning_no_participants_selected"

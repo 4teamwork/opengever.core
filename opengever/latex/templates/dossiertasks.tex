@@ -1,0 +1,18 @@
+\section*{${label}}\\%%
+\vspace{\baselineskip}
+%for task_data in task_data_list:
+\vspace{2\baselineskip}
+\normalsize
+{\bf Title: ${task_data.get("title")} }\\%%
+{\bf Beschreibung}: ${task_data.get("description")}\\%%
+{\bf Auftragstyp}: ${task_data.get("type")}\\%%
+{\bf Frist}: ${task_data.get("deadline")}\\%%
+{\bf Auftraggeber}: ${task_data.get("responsible")}\\%%
+{\bf Auftragnehmer}: ${task_data.get("responsible_client")}\\%%
+{\bf Erledigungsdatum}: ${task_data.get("completion_date")}\\%%
+
+\small
+\vspace{\baselineskip}
+${task_data.get("history")}
+%endfor
+

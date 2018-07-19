@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2018-07-30 13:38+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,6 +14,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
+#. Default: "Changed by"
+#: ./opengever/latex/listing.py
+msgid "label_creator"
+msgstr "Geändert von"
+
 #. Default: "Deadline"
 #: ./opengever/latex/listing.py
 msgid "label_deadline"
@@ -23,6 +28,11 @@ msgstr "Zu erledigen bis"
 #: ./opengever/latex/listing.py
 msgid "label_delivery_date"
 msgstr "Ausgangsdatum"
+
+#. Default: "Description"
+#: ./opengever/latex/listing.py
+msgid "label_description"
+msgstr "Beschreibung"
 
 #. Default: "Document author"
 #: ./opengever/latex/listing.py
@@ -43,6 +53,11 @@ msgstr "Dokumente"
 #: ./opengever/latex/dossierjournal.py
 msgid "label_dossier_journal"
 msgstr "Journal zu Dossier ${title} (${reference_number})"
+
+#. Default: "Task list for dossier ${title} (${reference_number})"
+#: ./opengever/latex/dossiertasks.py
+msgid "label_dossier_tasks"
+msgstr "Aufgabenliste zu Dossier ${title} (${reference_number})"
 
 #. Default: "End"
 #: ./opengever/latex/dossierdetails.py
@@ -129,14 +144,23 @@ msgstr "Art"
 msgid "label_tasks"
 msgstr "Aufgaben"
 
+#. Default: "Time"
+#: ./opengever/latex/listing.py
+msgid "label_time"
+msgstr "Zeitpunkt"
+
 #. Default: "Title"
 #: ./opengever/latex/dossierdetails.py
 #: ./opengever/latex/listing.py
 msgid "label_title"
 msgstr "Titel"
 
+#. Default: "Transition"
+#: ./opengever/latex/listing.py
+msgid "label_transition"
+msgstr "Aktion"
+
 #. Default: "No."
 #: ./opengever/latex/listing.py
 msgid "short_label_sequence_number"
 msgstr "Nr."
-

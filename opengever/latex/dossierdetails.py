@@ -264,7 +264,7 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
         return sort_on, sort_order
 
     def convert_list(self, items):
-        """Returns a new list, containing all values in `items` convertend
+        """Returns a new list, containing all values in `items` converted
         into LaTeX.
         """
         data = []

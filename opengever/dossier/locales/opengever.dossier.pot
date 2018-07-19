@@ -908,6 +908,11 @@ msgstr ""
 msgid "title_dossier_journal"
 msgstr ""
 
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr ""
+
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/browser/forms.py
 msgid "warning_no_participants_selected"

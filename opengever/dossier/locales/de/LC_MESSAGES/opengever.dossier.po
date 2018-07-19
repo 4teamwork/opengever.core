@@ -909,6 +909,11 @@ msgstr "abgelaufen"
 msgid "title_dossier_journal"
 msgstr "Dossier Journal ${title}, ${timestamp}"
 
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr "Aufgabenliste des Dossiers ${title}, ${timestamp}"
+
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/browser/forms.py
 msgid "warning_no_participants_selected"
