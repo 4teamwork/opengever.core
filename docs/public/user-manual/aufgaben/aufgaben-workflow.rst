@@ -32,9 +32,9 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 
 **Spezialfälle**
 
--   Auftragnehmer lehnt eine Aufgabe ab: Status *Zurückgewiesen*
+-   Auftragnehmer lehnt eine Aufgabe ab. Die Aufgabe wird automatisch dem Auftraggeber zurück zugewiesen: Status *Abgelehnt*
 
--   Auftraggeber storniert eine Aufgabe: Status *Storniert*
+-   Auftraggeber storniert/bricht eine Aufgabe ab: Status *Abgebrochen*
 
 -   Auftragsgeber öffnet eine Aufgabe nochmals, nachdem sie bereits
     erledigt war oder zurückgewiesen worden ist: Status *Offen*

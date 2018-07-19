@@ -12,8 +12,10 @@ in OneGov GEVER unter der Anwendungskomponente Vorlagen hinterlegt
 werden. Diese vordefinierten Aufgabenketten bzw. Aufgabenfolgen werden
 Standardabläufe genannt.
 
-Standardabläufe können normalerweise (je nach Berechtigungen) durch Personen mit
-Administrator-Rolle definiert werden. Daher wird die Erstellung von Standardabläufen in der :ref:`Admin-Dokumentation <label-standardablauf-admin>` behandelt.
+Die Erstellung und Bearbeitung von Standardabläufen ist Benutzern, welche für
+die Vorlagen-Verwaltung berechtigt sind, vorbehalten. Oft sind dies gleichzeitig
+auch die Administratoren. Daher wird die Erstellung von Standardabläufen in der
+:ref:`Admin-Dokumentation <label-standardablauf-admin>` behandelt.
 
 |img-standardablauf-1|
 
@@ -39,15 +41,15 @@ Parallele und sequentielle Abläufe
 -----------------------------------
 Es wird zwischen parallelen und sequentiellen Standardabläufen unterschieden.
 Parallel bedeutet in diesem Fall, dass mehrere Aufgaben gleichzeitig ausgelöst
-werden. Sequentiell bedeutet, dass Aufgaben nacheinander ausgelöst werden. Dabei
-gilt, dass die nächste Aufgabe erst ausgelöst wird, wenn die Aufgabe davor
-abgeschlossen wurde.
+werden. Sequentiell bedeutet, dass alle Aufgaben erstellt, aber nacheinander
+ausgelöst werden. Dabei gilt, dass die nächste Aufgabe erst ausgelöst wird, wenn
+die Aufgabe davor abgeschlossen wurde. Der Benutzer kann im Dropdown wählen,
+welchen Ablauftyp er benutzen möchte.
 
-Der Ersteller der Standardablauf-Vorlage kann zu Beginn eines neuen
-Standardablaufs wählen, welche Ablaufart er möchte. Der Benutzer, welcher die
-Standardablauf-Vorlage dann in einem Dossier einsetzt, übernimmt diese Ablaufart
-automatisch. Auf die Unterschiede der beiden Ablauf-Typen wird weiter unten
-noch genauer eingegangen.
+Der Ablauftyp (sequentiell oder parallel) wird durch den Ersteller des
+Standardablaufs definiert und kann bei der Auslösung nicht übersteuert werden.
+Auf die Unterschiede der beiden Ablauf-Typen wird weiter unten noch genauer
+eingegangen.
 
 Einen Standardablauf auslösen
 -----------------------------
@@ -68,42 +70,33 @@ Aufgaben hinzu- oder weggeklickt werden.
 
 |img-standardablauf-34|
 
-Falls noch nicht vorhanden, muss in diesem Schritt zwingend
-für jede Aufgabe einen Auftragnehmer (Team oder Person) erfasst werden.
+In einem weiteren Schritt müssen die Auftragnehmer der einzelnen Aufgaben
+definiert werden. Enthält die Aufgabenvorlage bereits einen Vorschlag für den
+Auftragnehmer, wird dieser selektiert. Dieser kann aber auch übersteuert werden.
 
 |img-standardablauf-35|
 
 Mit *Speichern* werden die ausgewählten Aufgaben ins Dossier übernommen.
 Nun stehen die Aufgaben wie gewohnt zur weiteren Bearbeitung bereit (siehe
 :ref:`kapitel-aufgaben`). Ab hier werden auch die Unterschiede von einem
-parallelen zu sequentiellen Ablauf vorallem beim Status und der Frist deutlich.
-
-**Status**
+parallelen zu sequentiellen Ablauf vorallem beim Status deutlich.
 
 Beim Auslösen eines parallelen Standardablaufs wird eine Hauptaufgabe mit
 mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass es
 sich um einen parallelen Standardablauf handelt. Wird ein paralleler
 Standardablauf ausgelöst, so werden alle Aufgaben automatisch in den Status
-"Offen" versetzt und somit gleichzeitig ausgelöst.
+"Offen" versetzt und und stehen somit zur gleichzeitigen Bearbeitung bereit.
 
 Beim Auslösen eines sequentiellen Standardablaufs wird auch eine Hauptaufgabe
 mit mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass
 es sich um einen sequenziellen Standardablauf handelt. Wird ein sequenzieller
 Standardablauf ausgelöst, so wird die erste Aufgabe im Ablauf automatisch
 geöffnet, alle weiteren werden im Zustand «Geplant» initialisiert, sind aber zu
-diesem Zeitpunkt noch nicht sichtbar. Wird eine Aufgabe erledigt, so wird die
+diesem Zeitpunkt noch nicht sichtbar. Die Aufgaben sind schon sichtbar, aber
+werden nicht als pendent aufgelistet. Wird eine Aufgabe erledigt, so wird die
 nächste Aufgabe im Ablauf automatisch geöffnet resp. in den Status "Offen"
 versetzt und somit sichtbar.
 
-**Frist**
-
-Bei einem parallelen Ablauf wird die Frist der Hauptaufgabe aus dem spätesten
-Termin der Unteraufgaben plus 10 Tage gesetzt.
-
-Bei einem sequentiellen Ablauf wird die Frist der ersten Aufgabe plus 10 Tage ab
-Auslöse-Datum gesetzt. Wird diese geschlossen und die nächste Aufgabe so
-automatisch ausgelöst, erhält auch diese eine Frist plus 10 Tagen ab dem
-Abschluss der vorherigen Aufgabe.
 
 |img-standardablauf-36|
 
@@ -113,7 +106,7 @@ Zu beachten bei sequentiellen Aufgaben
 -   Wird eine Aufgabe abgelehnt, wird sie dem Auftraggeber zugewiesen. Dieser
     hat die Möglichkeit, die Aufgabe wieder zu öffnen (und dann «Neu zuweisen»,
     «Abschliessen»). Bei sequentiellen Aufgaben hat er aber zudem auch die
-    Möglichkeit, die Aufgabe zu «überspringen» oder den «Ablauf abbrechen».
+    Möglichkeit, die Aufgabe zu «überspringen».
 
 |img-standardablauf-38|
 
