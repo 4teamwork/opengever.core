@@ -1,8 +1,11 @@
+from opengever.base.helpers import display_name
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
+from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.ZCTextIndex.ParseTree import ParseError
+from zope.i18n import translate
 
 
 QUERIES = {
@@ -39,7 +42,8 @@ class Listing(Service):
             start = 0
             rows = 25
 
-        query['sort_on'] = self.request.form.get('sort_on', 'modified')
+        sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
+        query['sort_on'] = COLUMNS.get(sort_on, (None, DEFAULT_SORT_INDEX))[1]
         query['sort_order'] = self.request.form.get('sort_order', 'descending')
 
         searchable_text = self.request.form.get('search', '').strip()
@@ -54,20 +58,22 @@ class Listing(Service):
         if not items:
             return {}
 
-        headers = self.request.form.get('headers')
+        columns = self.request.form.get('columns', [])
         res = {'items': []}
         for item in items[start:start + rows]:
             obj = IContentListingObject(item)
             data = {}
-            for header in headers:
-                accessor = FIELD_ACCESSORS.get(header, header)
+            for column in columns:
+                if column not in COLUMNS:
+                    continue
+                accessor = COLUMNS[column][0]
                 if isinstance(accessor, str):
                     value = getattr(obj, accessor, None)
                     if callable(value):
                         value = value()
                 else:
                     value = accessor(obj)
-                data[header] = json_compatible(value)
+                data[column] = json_compatible(value)
 
             data['@id'] = item.getURL()
             res['items'].append(data)
@@ -79,17 +85,60 @@ class Listing(Service):
         return res
 
 
-FIELD_ACCESSORS = {
-    '@type': 'PortalType',
-    'created': 'created',
-    'creator': 'Creator',
-    'description': 'Description',
-    # 'filename': filename,
-    # 'filesize': filesize,
-    'mimetype': 'getContentType',
-    'modified': 'modified',
-    # 'reference_number': reference_number,
-    'review_state': 'review_state',
-    'title': 'Title',
-    'thumbnail': 'get_preview_image_url',
+def responsible_name(obj):
+    return display_name(obj.responsible)
+
+
+def checked_out(obj):
+    return display_name(obj.checked_out)
+
+
+def translated_review_state(obj):
+    return translate(obj.review_state(), domain='plone', context=obj.request)
+
+
+def filesize(obj):
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return 0
+    if info.value is None:
+        return 0
+    return info.value.size
+
+
+def filename(obj):
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return None
+    if info.value is None:
+        return None
+    return info.value.filename
+
+
+DEFAULT_SORT_INDEX = 'modified'
+COLUMNS = {
+    'checked_out': (checked_out, 'checked_out'),
+    'containing_dossier': ('containing_dossier', 'containing_dossier'),
+    'containing_subdossier': ('containing_subdossier', 'containing_subdossier'),
+    'created': ('created', 'created'),
+    'creator': ('Creator', 'Creator'),
+    'delivery_date': ('delivery_date', 'delivery_date'),
+    'document_author': ('document_author', 'document_author'),
+    'document_date': ('document_date', 'document_date'),
+    'end': ('end', 'end'),
+    'mimetype': ('getContentType', 'mimetype'),
+    'modified': ('modified', 'modified'),
+    'receipt_date': ('receipt_date', 'receipt_date'),
+    'reference': ('reference', 'reference'),
+    'responsible': (responsible_name, 'responsible'),
+    'review_state': (translated_review_state, 'review_state'),
+    'sequence_number': ('sequence_number', 'sequence_number'),
+    'start': ('start', 'start'),
+    'thumbnail': ('get_preview_image_url', DEFAULT_SORT_INDEX),
+    'title': ('Title', 'sortable_title'),
+    'type': ('PortalType', 'portal_type'),
+    'filesize': (filesize, 'filesize'),
+    'filename': (filename, 'filename'),
 }
