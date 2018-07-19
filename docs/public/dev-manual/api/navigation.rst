@@ -1,0 +1,81 @@
+.. _navigation:
+
+Navigation
+==========
+
+Über den ``/@navigation`` Endpoint kann der Ordnungssystem-Baum des
+GEVER-Mandanten abgefragt werden.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /@navigation HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "@id": "http://localhost:8080/fd/ordnungssystem/@navigation",
+          "tree": [
+              {
+                  "active": true,
+                  "description": "",
+                  "nodes": [
+                      {
+                          "active": true,
+                          "description": "",
+                          "nodes": [
+                              {
+                                  "active": true,
+                                  "description": "",
+                                  "nodes": [],
+                                  "text": "9.5.0. Allgemeines",
+                                  "uid": "103f443655c64b01b9cec25b09f6192a",
+                                  "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict/allgemeines"
+                              },
+                              {
+                                  "active": true,
+                                  "description": "",
+                                  "nodes": [],
+                                  "text": "9.5.1. Informatik",
+                                  "uid": "c68e1ebba5204d67b1c38e20aebfba7e",
+                                  "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict/informatik"
+                              },
+                              {
+                                  "active": true,
+                                  "description": "",
+                                  "nodes": [],
+                                  "text": "9.5.2. Telefonie",
+                                  "uid": "9da54abbd5f4406f837a976fc20670a7",
+                                  "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict/telefonie"
+                              }
+                          ],
+                          "text": "9.5. ICT",
+                          "uid": "2cc58378c6bd4be985d4c7fe1d1067fb",
+                          "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict"
+                      }
+                  ],
+                  "text": "9. Ressourcen und Support",
+                  "uid": "c4ef803020d145c8a282ee65a081d00c",
+                  "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support"
+              }
+          ]
+      }
+
+Bei mehreren Ordnungssystemen wird jeweils das dem URL-Kontext entsprechende zurückgegeben.
+
+Die Navigation kann beim Abfragen eines Inhaltes über den ``expand``-Parameter eingebettet werden,
+so dass keinezusätzliche Abfrage nötig ist.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /ordnungssystem?expand=navigation HTTP/1.1
+       Accept: application/json

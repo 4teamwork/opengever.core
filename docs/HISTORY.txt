@@ -7,6 +7,7 @@ Changelog
 
 - Add REST API endpoint for creating bumblebee sessions. [buchi]
 - Bump ftw.casauth to 1.2.0 which provides a `@caslogin` endpoint. [buchi] 
+- Customize `@navigation` endpoint to return repository tree. [buchi]
 - Make lock info visible even when a document can be safely unlocked. [njohner]
 - Make `@config` endpoint accessible for anonymous on every context. [buchi]
 - Return root and CAS URL in `@config` endpoint. [buchi]

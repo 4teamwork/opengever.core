@@ -162,4 +162,18 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".navigation.Navigation"
+      name="navigation"
+      />
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".navigation.NavigationGet"
+      name="@navigation"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
