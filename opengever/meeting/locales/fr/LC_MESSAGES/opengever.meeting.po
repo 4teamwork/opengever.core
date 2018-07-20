@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-09 08:29+0000\n"
+"POT-Creation-Date: 2018-07-17 09:06+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1202,6 +1202,16 @@ msgstr "Secrétaire"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
 msgstr "Début"
+
+#. Default: "Submit Additional Documents"
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "label_submit_additional_documents"
+msgstr ""
+
+#. Default: "Submit Updated Documents"
+#: ./opengever/meeting/browser/documents/submit.py
+msgid "label_submit_updated_documents"
+msgstr ""
 
 #. Default: "Successors"
 #: ./opengever/meeting/proposal.py

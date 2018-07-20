@@ -66,6 +66,7 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
     """
     ignoreContext = True
     allow_prefill_from_GET_request = True  # XXX
+    label = _(u'label_submit_additional_documents', default=u'Submit Additional Documents')
 
     schema = ISubmitAdditionalDocuments
 
@@ -82,7 +83,8 @@ class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
             self.context.is_submit_additional_documents_allowed()
 
     @buttonAndHandler(_(u'button_submit_attachments',
-                        default=u'Submit Attachments'))
+                        default=u'Submit Attachments'),
+                      name='save')
     def submit_documents(self, action):
         data, errors = self.extractData()
         if errors:

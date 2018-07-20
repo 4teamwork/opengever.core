@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-09 08:29+0000\n"
+"POT-Creation-Date: 2018-07-17 09:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1198,6 +1198,16 @@ msgstr ""
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_start"
+msgstr ""
+
+#. Default: "Submit Additional Documents"
+#: ./opengever/meeting/browser/submitdocuments.py
+msgid "label_submit_additional_documents"
+msgstr ""
+
+#. Default: "Submit Updated Documents"
+#: ./opengever/meeting/browser/documents/submit.py
+msgid "label_submit_updated_documents"
 msgstr ""
 
 #. Default: "Successors"
