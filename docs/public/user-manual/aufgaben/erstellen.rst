@@ -1,3 +1,5 @@
+.. _label-aufgaben_erstellen:
+
 Eine Aufgabe erstellen
 ----------------------
 

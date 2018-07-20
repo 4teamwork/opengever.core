@@ -15,6 +15,7 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 
 -   Auftraggeber schliesst die Aufgabe ab: Status Abgeschlossen
 
+
 .. note::
    Bei den Auftragstypen "Zur Kenntnisnahme" sowie "Zur direkten Erledigung"
    ist der Workflow abgekürzt, da der Auftraggeber in diesen Fällen keine
@@ -31,14 +32,25 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 
 **Spezialfälle**
 
--   Auftragnehmer lehnt eine Aufgabe ab: Status Zurückgewiesen
+-   Auftragnehmer lehnt eine Aufgabe ab. Die Aufgabe wird automatisch dem Auftraggeber zurück zugewiesen: Status *Abgelehnt*
 
--   Auftraggeber storniert eine Aufgabe: Status Storniert
+-   Auftraggeber storniert/bricht eine Aufgabe ab: Status *Abgebrochen*
 
 -   Auftragsgeber öffnet eine Aufgabe nochmals, nachdem sie bereits
-    erledigt war oder zurückgewiesen worden ist: Status Offen
+    erledigt war oder zurückgewiesen worden ist: Status *Offen*
 
--   Auftraggeber weist Aufgabe neuer Person zu: Status Offen
+-   Auftraggeber weist Aufgabe neuer Person zu: Status *Offen*
+
+**Sequentieller Aufgabenablauf**
+
+Wird ein Standardablauf mit sequentiellen Ablauftyp ausgelöst, kommen noch die
+Status *Geplant* und *Übersprungen* dazu. Wird ein solcher Standardablauf
+ausgelöst, werden die Aufgaben nacheinander ausgelöst. Das bedeutet, dass sich
+die nächste Aufagbe erst aktiviert, wenn jene davor abgeschlossen wurde. Die
+erste Aufgabe wird dadurch automatisch in den Status *Offen* gesetzt. Alle
+weiteren, nachfolgenden Aufgabe erhalten den Status *Geplant* bis diese dann an
+der Reihe sind. Solche Aufgaben können auch *Übersprungen* werden und erhalten
+entsprechend auch diesen Status.
 
 **Berechtigung bei den verschiedenen Auftragstypen**
 

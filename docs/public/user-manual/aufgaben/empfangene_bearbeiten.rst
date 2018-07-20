@@ -20,13 +20,12 @@ Aufgabe ablehnen
 ~~~~~~~~~~~~~~~~
 
 Wird die Aufgabe abgelehnt (z.B. wegen Ferien) wechselt der Status auf
-"Abgelehnt".
+"Abgelehnt". Die Aufgabe wird dadurch automatisch dem Auftraggeber zurück
+zugewiesen. Dadurch hat der Auftraggeber die Möglichkeit, die Aufgabe wieder zu
+öffnen und einem neuen Sachbearbeiter zuzuweisen.
 
 |img-aufgaben-22|
 |img-aufgaben-23|
-
-Der Auftraggeber hat die Möglichkeit, die Aufgabe wieder zu öffnen und
-einem neuen Sachbearbeiter zuzuweisen.
 
 Aufgabe neu zuweisen
 ~~~~~~~~~~~~~~~~~~~~
