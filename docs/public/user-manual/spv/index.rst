@@ -16,6 +16,8 @@ können Sie in den untenstehenden Kapiteln nachlesen.
    :maxdepth: 2
 
    antrag-erfassen
+   antrag-traktandieren
+   antrags-benachrichtigungen
    kommission_gremium_erfassen
    sitzung-vorbereiten
    sitzung-durchfuehren

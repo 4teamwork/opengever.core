@@ -1,3 +1,5 @@
+.. _label-benachrichtigungen:
+
 Benachrichtigungs-Einstellungen
 ===============================
 
@@ -29,10 +31,18 @@ Individualisierte Einstellungen können mit der Aktion *Auf Standard zurücksetz
 
 |img-benachrichtigungs-einstellungen-4|
 
+Benachrichtigungen für Weiterleitungen und Anträge
+--------------------------------------------------
+Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Weiterleitungen*
+sowie *Anträge* die Benachrichtigungen für diese Aktivitäten eingestellt werden.
+
+|img-benachrichtigungs-einstellungen-5|
+
 .. |img-benachrichtigungs-einstellungen-1| image:: img/media/img-benachrichtigungs-einstellungen-1.png
 .. |img-benachrichtigungs-einstellungen-2| image:: img/media/img-benachrichtigungs-einstellungen-2.png
 .. |img-benachrichtigungs-einstellungen-3| image:: img/media/img-benachrichtigungs-einstellungen-3.png
 .. |img-benachrichtigungs-einstellungen-4| image:: img/media/img-benachrichtigungs-einstellungen-4.png
+.. |img-benachrichtigungs-einstellungen-5| image:: img/media/img-benachrichtigungs-einstellungen-5.png
 
 
 .. disqus::
