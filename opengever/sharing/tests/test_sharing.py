@@ -4,6 +4,8 @@ from ftw.testbrowser import browsing
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -137,15 +139,59 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         browser.open(self.empty_dossier, view='@sharing?search=Robert',
                      method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
-            {u'available_roles': [], u'inherit': True,
+            {u'available_roles': [],
+             u'inherit': True,
              u'entries': [
                  {u'roles': {},
+                  u'computed_roles': {},
+                  u'automatic_roles': {},
                   u'title': u'Ziegler Robert',
                   u'url': u'http://nohost/plone/@@user-details/robert.ziegler',
                   u'login': u'robert.ziegler',
                   u'type': u'user',
                   u'id': u'robert.ziegler'}]},
             browser.json)
+
+    @browsing
+    def test_sharing_view_extends_information(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(
+            TaskRoleAssignment(
+                self.regular_user.id, ['Contributor'], self.task))
+        manager.add_or_update_assignment(
+            SharingRoleAssignment(
+                self.regular_user.id, ['Reader', 'Editor', 'Contributor']))
+
+        browser.open(self.empty_dossier, view='@sharing',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        entries = browser.json['entries']
+
+        self.assertEquals(
+            {u'automatic_roles': {u'Contributor': True,
+                                  u'Editor': False,
+                                  u'Publisher': False,
+                                  u'Reader': False,
+                                  u'Reviewer': False},
+             u'computed_roles': {u'Contributor': True,
+                                 u'Editor': True,
+                                 u'Publisher': False,
+                                 u'Reader': True,
+                                 u'Reviewer': False},
+             u'disabled': False,
+             u'id': u'kathi.barfuss',
+             u'login': u'kathi.barfuss',
+             u'roles': {u'Contributor': True,
+                        u'Editor': True,
+                        u'Publisher': False,
+                        u'Reader': True,
+                        u'Reviewer': False},
+             u'title': u'B\xe4rfuss K\xe4thi',
+             u'type': u'user',
+             u'url': u'http://nohost/plone/@@user-details/kathi.barfuss'},
+            [item for item in entries if item['id'] == self.regular_user.id][0])
 
 
 class TestRoleAssignmentsGet(IntegrationTestCase):

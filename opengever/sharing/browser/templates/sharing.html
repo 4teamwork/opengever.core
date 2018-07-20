@@ -34,18 +34,37 @@
 
         </td>
         <td v-for="role in available_roles" class="role_cell">
-          <span class="acquired" :title="i18n.label_acquired"
-                v-if="entry.roles[role.id] == 'acquired'" />
 
           <template v-if="isEditable">
-            <input type="checkbox" v-if="entry.roles[role.id] != 'acquired'"
-                   :checked="entry.roles[role.id]" :class="role.id"
-                   @click="(event) => {toggle_checkbox(event, entry, role.id)}"/>
-          </template>
+            <!-- acquired -->
+            <input type="checkbox" disabled="disabled" checked="checked"
+                   :title="i18n.label_acquired"
+                   v-if="entry.computed_roles[role.id] == 'acquired'" />
 
+            <!-- checkbox -->
+            <input type="checkbox" v-if="entry.computed_roles[role.id] != 'acquired'"
+                   :checked="entry.roles[role.id]"
+                   :class="role.id"
+                   @click="(event) => {toggle_checkbox(event, entry, role.id)}"/>
+
+            <!-- automatic roles -->
+            <div class="automatic"
+                  v-if="entry.automatic_roles[role.id]"
+                  :title="i18n.label_automatic_permission" />
+
+          </template>
           <template v-if="!isEditable">
-            <span class="local" :title="i18n.label_local"
-                  v-if="entry.roles[role.id] === true" />
+            <span class="acquired"
+                  v-if="entry.computed_roles[role.id] == 'acquired'"
+                  :title="i18n.label_acquired" />
+
+            <span class="local"
+                  v-if="entry.roles[role.id] && entry.computed_roles[role.id] != 'acquired'"
+                  :title="i18n.label_local_permission" />
+
+            <span class="automatic"
+                  v-if="entry.automatic_roles[role.id]"
+                  :title="i18n.label_automatic_permission" />
           </template>
 
         </td>
@@ -53,8 +72,8 @@
     </table>
 
     <template v-if="isEditable">
-      <input type="checkbox" v-model="inherit" />
-      <label for="inherit">{{i18n.label_inherit_local_roles}}</label>
+      <input id="inherit_local_roles" type="checkbox" v-model="inherit" />
+      <label for="inherit_local_roles">{{i18n.label_inherit_local_roles}}</label>
       <div class="formHelp">{{i18n.help_inherit_local_roles}}
       </div>
 

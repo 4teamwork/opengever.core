@@ -84,8 +84,7 @@ class OpengeverSharingView(SharingView):
                 _(u'help_inherit_local_roles',
                   default=u'By default, permissions from the container of this '
                   u'item are inherited. If you disable this, only the '
-                  u'explicitly defined sharing permissions will be valid. '
-                  u'Inherited roles are marked green.')),
+                  u'explicitly defined sharing permissions will be valid.')),
             'image_link_icon': self.plone_translate('image_link_icon'),
             'image_confirm_icon': self.plone_translate('image_confirm_icon'),
             'principal_search_placeholder': self.translate(
@@ -98,7 +97,11 @@ class OpengeverSharingView(SharingView):
                 _(u'label_local_permission', default=u'Local permission')),
             'label_save': self.translate(PMF(u'Save')),
             'label_cancel': self.translate(PMF(u'Cancel')),
-            'label_cause': self.translate(_(u'label_cause', default=u'Cause'))
+            'label_cause': self.translate(_(u'label_cause', default=u'Cause')),
+            'label_automatic_permission': self.translate(
+                _(u'label_automatic_permission', default=u'Automatic permission')),
+            'label_local_permission': self.translate(
+                _(u'label_local_permission', default=u'Local permission'))
         })
 
     def saved(self):
@@ -181,11 +184,16 @@ class OpengeverSharingView(SharingView):
                 results[auth_group_index]['title'],
                 domain='plone', context=self.request)
 
-        # Use group title attribute if exists, because our LDAP stack does
-        # not support mapping additional attributes, we fetch the information
-        # from ogds.
+        manager = RoleAssignmentManager(self.context)
         for result in results:
             result['url'] = self.get_detail_view_url(result)
+            result['computed_roles'] = result['roles']
+            self.extend_with_assignment_infos(result, manager)
+            self.update_computed_info(result)
+
+            # Use group title attribute if exists, because our LDAP stack does
+            # not support mapping additional attributes, we fetch the information
+            # from ogds.
             if not result.get('type') == 'group':
                 continue
             group = ogds_service().fetch_group(result['id'])
@@ -204,6 +212,34 @@ class OpengeverSharingView(SharingView):
         else:
             return '{}/@@user-details/{}'.format(
                 api.portal.get().absolute_url(), item['id'])
+
+    def extend_with_assignment_infos(self, item, manager):
+        local_roles = {role['id']: False for role in self.roles()}
+        automatic_roles = {role['id']: False for role in self.roles()}
+
+        assignments = manager.get_assignments_by_principal_id(item['id'])
+        for assignment in assignments:
+            if isinstance(assignment, SharingRoleAssignment):
+                for role in assignment.roles:
+                    local_roles[role] = True
+            else:
+                for role in assignment.roles:
+                    automatic_roles[role] = True
+
+        item['roles'] = local_roles
+        item['automatic_roles'] = automatic_roles
+
+    def update_computed_info(self, item):
+        """Set acquired for all acquired roles in the `computed_roles`,
+        even if autoamtic local roles exists.
+        """
+
+        _inherited_roles = {
+            name: roles
+            for (name, roles, rtype, rid) in self._inherited_roles()}
+
+        for role in _inherited_roles.get(item['id'], []):
+            item['computed_roles'][role] = 'acquired'
 
     def update_inherit(self, status=True, reindex=True):
         """Method Wrapper for the super method, to allow notify a
@@ -263,7 +299,7 @@ class OpengeverSharingView(SharingView):
 
     @clearafter
     def _update_role_settings(self, new_settings, reindex=True):
-        """Replaced becasue we need our own permission manager stuff.
+        """Replaced because we need our own permission manager stuff.
         """
         assignments = []
 

@@ -36,8 +36,7 @@ class RoleAssignment(object):
         cls.registry[subcls.cause] = subcls
 
     @classmethod
-    def get(cls, *args, **kwargs):
-        cause = kwargs.pop('cause')
+    def get(cls, cause, **kwargs):
         assignment = cls.registry.get(cause)
         if not assignment:
             assignment = cls

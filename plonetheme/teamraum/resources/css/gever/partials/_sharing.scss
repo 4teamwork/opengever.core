@@ -32,27 +32,31 @@
       }
 
       .role_cell {
-        text-align: center;
+        text-align: left;
       }
 
       td {
-        padding-right: 10px;
+        padding: 10px 10px 10px 10px;
       }
 
     }
 
+    .local:before,
     .acquired:before {
       @extend .fa;
       @extend .fa-check-circle;
       font-size: 16px;
-      color: $green;
+      color: $green-light;
     }
 
-    .local:before {
-      @extend .fa;
-      @extend .fa-check-circle;
-      font-size: 16px;
-      color: $green;
+    .automatic {
+      float: right;
+      &:before {
+        @extend .fa;
+        @extend .fa-check-circle;
+        font-size: 16px;
+        color: $gray-darker;
+      }
     }
 
     .assignments_info_button {
