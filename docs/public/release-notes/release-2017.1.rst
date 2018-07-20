@@ -15,7 +15,7 @@ eine noch stärkere Integration in die Office Umgebung des Benutzers.
 Schlagwörter
 ------------
 
-|img-release-notes-2017.1|
+|img-release-notes-2017.1-1|
 
 Das Tagging von Dossiers (oder Dossiervorlagen) kann neu deutlich komfortabler
 vorgenommen werden. Dabei werden bereits vergebene Schlagwörter automatisch zur
@@ -26,7 +26,7 @@ Dossiers gesucht werden. Die Schlagwörter eines Dossiers werden neu auch im
 Dossiervorlagen
 ---------------
 
-|img-release-notes-2017.2|
+|img-release-notes-2017.1-2|
 
 Vordefinierte **Dossiervorlagen** eröffnen neue Möglichkeiten, um gleichartige Geschäfte
 auf die gleiche Art und Weise zu erfassen und zu strukturieren. So können für typische
@@ -57,7 +57,7 @@ Dossiervorlagen erstellt werden können.
 Dossierkommentare
 -----------------
 
-|img-release-notes-2017.3|
+|img-release-notes-2017.1-3|
 
 Kommentare und kurze persönliche Notizen zu einem Geschäft können neu sehr rasch
 über den Reiter Dossier-Übersicht erfasst werden. Das Notizblock-Symbol neben
@@ -97,7 +97,7 @@ die `Online-Dokumentation <https://docs.onegovgever.ch/admin-manual/aussonderung
 Sitzungs- und Protokollverwaltung
 ---------------------------------
 
-|img-release-notes-2017.4|
+|img-release-notes-2017.1-4|
 
 Alle Unterlagen zu einer Sitzung können neu als Zip-Datei heruntergeladen werden.
 Die Zip-Datei beinhaltet neben der Traktandenliste das Vorprotokoll sowie
@@ -138,9 +138,9 @@ Der Release enthält weitere zahlreiche kleinere Anpassungen und Bugfixes, u.a.:
 - Wird ein bereits abgeschlossenes Dossier wieder eröffnet oder ein storniertes
   Dossier reaktiviert, so wird das End-Datum wieder zurückgesetzt.
 
-.. |img-release-notes-2017.1| image:: ../_static/img/img-release-notes-2017.1.png
-.. |img-release-notes-2017.2| image:: ../_static/img/img-release-notes-2017.2.png
-.. |img-release-notes-2017.3| image:: ../_static/img/img-release-notes-2017.3.png
-.. |img-release-notes-2017.4| image:: ../_static/img/img-release-notes-2017.4.png
+.. |img-release-notes-2017.1-1| image:: ../_static/img/img-release-notes-2017.1-1.png
+.. |img-release-notes-2017.1-2| image:: ../_static/img/img-release-notes-2017.1-2.png
+.. |img-release-notes-2017.1-3| image:: ../_static/img/img-release-notes-2017.1-3.png
+.. |img-release-notes-2017.1-4| image:: ../_static/img/img-release-notes-2017.1-4.png
 
 .. disqus::
