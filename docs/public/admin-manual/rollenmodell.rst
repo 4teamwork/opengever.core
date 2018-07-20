@@ -49,7 +49,7 @@ Dossiers wahrgenommen werden können, in welchen die Person durch andere
 Berechtigungen über mindestens Sichtrechte verfügen.
 
 
-Rollen innerhalb der Ordnungsstruktur
+Rechte innerhalb der Ordnungsstruktur
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Innerhalb der Ordnungsstruktur können Rechte zugewiesen werden für
@@ -77,5 +77,19 @@ Entsprechende Rollen (Best Practice) sind:
 -   Sachbearbeitende: Zuweisung der Benutzer zu Mandant(en) Rechte für lesen, hinzufügen, bearbeiten und abschliessen von Dossiers
 
 -   GEVER-Verantwortliche: Zuweisung der Benutzer zu Mandant(en). Alle Rechte (lesen, hinzufügen, bearbeiten, abschliessen, reaktivieren von Dossiers)
+
+Anschauen der Rechte auf Dossierstufe
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Im Dossier Info-Tab sowie unter Aktionen --> Freigabe findet sich eine Übersicht
+über die Rollen und deren Rechte pro Dossier.  Der Tool-Tipp mit einem blauen
+„?“ gibt bei Klick darauf Auskunft, warum der Benutzende resp. die Gruppe eine
+Berechtigung erhalten hat. Nebst initialer Berechtigung via LDAP oder manueller
+Anpassung, besteht auch die Möglichkeit, dass für die Dauer einer Aufgabe,
+eine Berechtigung erteilt werden kann. Mehr dazu können Sie unter :ref:`label-aufgaben-workflow` lesen.
+
+|img-rollenmodell-1|
+
+.. |img-rollenmodell-1| image:: img/media/img-rollenmodell-1.png
+
 
 .. disqus::

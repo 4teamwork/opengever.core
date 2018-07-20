@@ -167,6 +167,15 @@ pro Seite dargestellt werden.
 
 |img-grundlagen-9|
 
+Emojis bei Aufgaben
+-------------------
+OneGov GEVER bietet bei den Aufgaben sowie bei Aufgaben-Kommentaren die
+Möglichkeit, Emojis einzusetzen, um die Kommunikation etwas persönlicher zu
+gestalten. Dazu können die Emojis ganz einfach aus der Menüleiste ins GEVER
+reingezogen werden.
+
+|img-grundlagen-40|
+
 .. |img-grundlagen-1| image:: img/media/img-grundlagen-1.png
 .. |img-grundlagen-2| image:: img/media/img-grundlagen-2.png
 .. |img-grundlagen-3| image:: img/media/img-grundlagen-3.png
@@ -180,5 +189,6 @@ pro Seite dargestellt werden.
 .. |img-grundlagen-25| image:: img/media/img-grundlagen-25.png
 .. |img-grundlagen-26| image:: img/media/img-grundlagen-26.png
 .. |img-grundlagen-27| image:: img/media/img-grundlagen-27.png
+.. |img-grundlagen-40| image:: img/media/img-grundlagen-40.png
 
 .. disqus::
