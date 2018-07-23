@@ -28,6 +28,7 @@ OneGov GEVER (vor 2017).
 
    2.9   <release-2.9>
    2.8   <release-2.8>
+   2.7.1 <release-2.7.1>
    2.7   <release-2.7>
    2.6   <release-2.6>
    2.5.3 <release-2.5.3>
