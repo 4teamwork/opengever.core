@@ -62,7 +62,7 @@ class TestGetOpenAsPdfLink(FunctionalTestCase):
 
         self.assertEqual(
             'http://nohost/plone/dossier-1/document-1/'
-            'bumblebee-open-pdf?filename=testdokumant.pdf',
+            'bumblebee-open-pdf?filename=Testdokumaent.pdf',
             adapter.get_open_as_pdf_url())
 
     def test_returns_none_if_no_mimetype_is_available(self):
@@ -99,8 +99,8 @@ class TestGetPdfFilename(FunctionalTestCase):
 
         adapter = getMultiAdapter((document, self.request), IBumblebeeOverlay)
 
-        self.assertEqual('testdokumant.docx', document.file.filename)
-        self.assertEqual('testdokumant.pdf', adapter._get_pdf_filename())
+        self.assertEqual('Testdokumaent.docx', document.file.filename)
+        self.assertEqual('Testdokumaent.pdf', adapter._get_pdf_filename())
 
     def test_returns_none_if_no_file_is_given(self):
         dossier = create(Builder('dossier'))

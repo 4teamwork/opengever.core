@@ -19,7 +19,7 @@ class TestCreateEmailCommand(IntegrationTestCase):
         mail = command.execute()
 
         self.assertEqual('message/rfc822', mail.message.contentType)
-        self.assertEqual('no-subject.eml', mail.message.filename)
+        self.assertEqual('No Subject.eml', mail.message.filename)
 
         self.assertEqual(u'testm\xe4il.msg', mail.original_message.filename)
         self.assertEqual('mock-msg-body', mail.original_message.data)

@@ -103,7 +103,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                         u'und-vereinbarungen/dossier-1/document-12',
                 u'created': u'2016-08-31T15:07:33+02:00',
                 u'creator': u'robert.ziegler',
-                u'filename': u'vertragsentwurf.docx',
+                u'filename': u'Vertraegsentwurf.docx',
                 u'filesize': 27413,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                              u'wordprocessingml.document',

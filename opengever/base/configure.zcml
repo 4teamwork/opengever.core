@@ -313,4 +313,11 @@
       permission="zope2.View"
       />
 
+  <utility
+      name="gever_filename_normalizer"
+      provides="plone.i18n.normalizer.interfaces.IFileNameNormalizer"
+      component=".filename.filenamenormalizer"
+      permission="zope.Public"
+      />
+
 </configure>

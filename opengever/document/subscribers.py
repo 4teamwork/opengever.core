@@ -1,6 +1,6 @@
 from opengever.document import _
 from opengever.ogds.base.utils import ogds_service
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -33,7 +33,8 @@ def sync_title_and_filename_handler(doc, event):
     - If there is a title and a file, use the normalized title as filename
 
     """
-    normalizer = getUtility(IIDNormalizer)
+    normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+
     if not doc.file:
         return
 
@@ -41,12 +42,10 @@ def sync_title_and_filename_handler(doc, event):
     if not doc.title:
         # use the filename without extension as title
         doc.title = basename
-        doc.file.filename = u''.join(
-            [normalizer.normalize(basename), ext])
+        doc.file.filename = normalizer.normalize(basename, extension=ext)
     elif doc.title:
         # use the title as filename
-        doc.file.filename = u''.join(
-            [normalizer.normalize(doc.title), ext])
+        doc.file.filename = normalizer.normalize(doc.title, extension=ext)
 
 
 def set_copyname(doc, event):

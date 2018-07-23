@@ -22,7 +22,7 @@ from opengever.ogds.models.user import User
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.namedfile import field
 from plone.namedfile import NamedBlobFile
 from plone.supermodel import model
@@ -277,7 +277,7 @@ class OGMail(Mail, BaseDocumentMixin):
         if not isinstance(filename, unicode):
             filename = filename.decode('utf-8')
         # remove line breaks from the filename
-        filename = re.sub('\s{1,}', ' ', filename)
+        filename = re.sub(r'\s{1,}', ' ', filename)
 
         content_type = attachment.get_content_type()
         if content_type == 'message/rfc822':
@@ -323,8 +323,8 @@ class OGMail(Mail, BaseDocumentMixin):
         if not self.message:
             return
 
-        normalizer = getUtility(IIDNormalizer)
-        normalized_subject = normalizer.normalize(self.title)
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+        normalized_subject = normalizer.normalize_name(self.title)
         self.message.filename = u'{}.eml'.format(normalized_subject)
 
     def get_file(self):
@@ -398,9 +398,9 @@ def initalize_title(mail, event):
 # belongs.
 
 EMAILPATTERN = re.compile(
-    ("([a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`"
-     "{|}~-]+)*(@|\sat\s)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(\.|"
-     "\sdot\s))+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)"))
+    (r"([a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`"
+     r"{|}~-]+)*(@|\sat\s)(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(\.|"
+     r"\sdot\s))+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)"))
 
 
 def extract_email(header_from):

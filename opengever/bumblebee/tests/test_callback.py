@@ -31,7 +31,7 @@ class TestStoreArchivalFile(FunctionalTestCase):
             view()
 
         archival_file = IDocumentMetadata(self.document).archival_file
-        self.assertEquals('uberprufung-xy.pdf', archival_file.filename)
+        self.assertEquals('Ueberpruefung XY.pdf', archival_file.filename)
         self.assertTrue(isinstance(archival_file, NamedBlobFile))
         self.assertEquals('application/pdf', archival_file.contentType)
         self.assertEquals('Test String', archival_file.data)

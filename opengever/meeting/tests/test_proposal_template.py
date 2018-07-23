@@ -24,7 +24,7 @@ class TestProposalTemplate(IntegrationTestCase):
         baugesuch = self.templates.objectValues()[-1]
         browser.open(baugesuch, view='tabbedview_view-overview')
         self.assertDictContainsSubset({'Title': 'Baugesuch'}, dict(browser.css('.documentMetadata table').first.lists()))
-        self.assertEquals('baugesuch.docx', browser.css('.documentMetadata span.filename').first.text)
+        self.assertEquals('Baugesuch.docx', browser.css('.documentMetadata span.filename').first.text)
 
     @browsing
     def test_uploading_non_docx_files_is_not_allowed(self, browser):

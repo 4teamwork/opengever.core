@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.meeting.command import MIME_DOCX
@@ -51,6 +52,34 @@ class TestAgendaItemList(IntegrationTestCase):
             error_messages()[0])
 
     @browsing
+    def test_agendaitem_list_can_be_created_and_updated(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+
+        meeting = self.meeting.model
+        self.assertIsNone(meeting.agendaitem_list_document)
+
+        browser.css('.document-actions .action.generate').first.click()
+
+        statusmessages.assert_message(
+            u'Agenda item list for meeting 9. Sitzung der '
+            u'Rechnungspr\xfcfungskommission has been generated '
+            u'successfully.')
+
+        self.assertIsNotNone(meeting.agendaitem_list_document)
+        self.assertEqual(u'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
+                         meeting.agendaitem_list_document.resolve_document().file.filename)
+        self.assertEqual(0, meeting.agendaitem_list_document.generated_version)
+
+        # update already generated agendaitem list
+        browser.css('.document-actions .action.generate').first.click()
+        statusmessages.assert_message(
+            u'Agenda item list for meeting 9. Sitzung der '
+            u'Rechnungspr\xfcfungskommission has been updated successfully.')
+        self.assertIsNotNone(meeting.agendaitem_list_document)
+        self.assertEqual(1, meeting.agendaitem_list_document.generated_version)
+
+    @browsing
     def test_agendaitem_list_can_be_downloaded(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
@@ -60,7 +89,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertDictContainsSubset(
-            {'content-disposition': 'attachment; filename="agendaitem-list-9-sitzung-der.docx"',
+            {'content-disposition': 'attachment; filename="Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx"',
              'content-type': MIME_DOCX},
             browser.headers)
 
@@ -74,7 +103,7 @@ class TestAgendaItemList(IntegrationTestCase):
             browser.open(self.meeting, view='agenda_item_list/as_json')
 
         expected_agenda_items = [
-            {u'attachments': [{u'filename': u'vertragsentwurf.docx',
+            {u'attachments': [{u'filename': u'Vertraegsentwurf.docx',
                               u'title': u'Vertr\xe4gsentwurf'}],
              u'decision_number': None,
              u'dossier_reference_number': u'Client1 1.1 / 1',

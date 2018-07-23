@@ -85,7 +85,7 @@ class TestTaskOverview(IntegrationTestCase):
 
         self.assertEquals(
             [u'Task - Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen/',
-             'feedback-zum-vertragsentwurf.docx'],
+             'Feedback zum Vertragsentwurf.docx'],
             zipfile.namelist())
 
         data = {'zip_selected:method': 1,

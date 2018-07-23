@@ -25,7 +25,7 @@ from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.ogds.models.user import User
 from operator import methodcaller
 from plone import api
-from plone.i18n.normalizer.interfaces import IIDNormalizer
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -295,7 +295,7 @@ class Meeting(Base, SQLFormSupport):
             translate(prefix, context=getRequest()), self.get_title())
 
     def _get_filename(self, prefix):
-        normalizer = getUtility(IIDNormalizer)
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
         return u"{}-{}.docx".format(
             translate(prefix, context=getRequest()),
             normalizer.normalize(self.get_title()))

@@ -54,7 +54,7 @@ class TestFileLoader(FunctionalTestCase):
 
         self.assertEqual('Lorem Ipsum\n', doc.file.data)
         self.assertEqual('application/pdf', doc.file.contentType)
-        self.assertEqual('foo-bar.pdf', doc.file.filename)
+        self.assertEqual('Foo Bar.pdf', doc.file.filename)
 
     def test_syncs_title_from_filename_if_untitled(self):
         doc = create(Builder('document').titled(None))
@@ -123,7 +123,7 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual(u'Lorem Ipsum', mail.title)
         self.assertEqual(920, len(mail.message.data))
         self.assertEqual('message/rfc822', mail.message.contentType)
-        self.assertEqual('lorem-ipsum.eml', mail.message.filename)
+        self.assertEqual('Lorem Ipsum.eml', mail.message.filename)
         self.assertEqual(True, mail.digitally_available)
 
     def test_handles_msg_mails(self):

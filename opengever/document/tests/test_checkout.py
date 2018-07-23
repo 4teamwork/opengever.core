@@ -820,7 +820,7 @@ class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
         # document isn't checked out and the old object is in the history
         self.assertIsNone(manager.get_checked_out_by())
 
-        self.assertEquals(u'document1.doc',
+        self.assertEquals(u'Document1.doc',
                           pr.retrieve(self.doc1, 0).object.file.filename)
         self.assertEquals(u'blubb.txt', self.doc1.file.filename)
 

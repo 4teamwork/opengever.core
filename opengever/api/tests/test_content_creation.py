@@ -73,7 +73,7 @@ class TestContentCreation(IntegrationTestCase):
         new_object_id = str(response.json['id'])
         doc = self.dossier.restrictedTraverse(new_object_id)
         self.assertEqual(u'Sanierung B\xe4rengraben 2016', doc.title)
-        self.assertEqual(u'sanierung-barengraben-2016.txt', doc.file.filename)
+        self.assertEqual(u'Sanierung Baerengraben 2016.txt', doc.file.filename)
 
         checksum = IBumblebeeDocument(doc).get_checksum()
         self.assertIsNotNone(checksum)

@@ -143,7 +143,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         with TemporaryDocFile(document.file) as tmpfile:
             self.assertItemsEqual([], read_properties(tmpfile.path))
@@ -193,7 +193,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
             'Document.ReferenceNumber': 'Client1 1.1 / 1 / 34',
@@ -251,7 +251,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
             'Document.ReferenceNumber': 'Client1 1.1 / 1 / 34',
@@ -415,7 +415,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_person_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
@@ -502,7 +502,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
         expected_org_role_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
@@ -551,7 +551,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'test-docx.docx', document.file.filename)
+        self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_org_role_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',

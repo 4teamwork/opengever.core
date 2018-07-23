@@ -26,6 +26,8 @@ class TestProtocol(IntegrationTestCase):
             u'Rechnungspr\xfcfungskommission has been generated '
             u'successfully.')
         self.assertIsNotNone(meeting.protocol_document)
+        self.assertEqual(u'Protocol-9. Sitzung der Rechnungspruefungskommission.docx',
+                         meeting.protocol_document.resolve_document().file.filename)
         self.assertEqual(0, meeting.protocol_document.generated_version)
 
         # update already generated protocol

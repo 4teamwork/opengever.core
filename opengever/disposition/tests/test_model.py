@@ -337,14 +337,14 @@ class TestFolderAndFileModel(FunctionalTestCase):
         subdossier_model = dossier_model_a.folders[0]
         self.assertEquals(1, len(subdossier_model.files))
         file_model_a = subdossier_model.files[0]
-        self.assertEquals(u'testdokumant.doc', file_model_a.filename)
+        self.assertEquals(u'Testdokumaent.doc', file_model_a.filename)
         self.assertEquals(document_a.file._blob.committed(), file_model_a.filepath)
 
         # dossier b
         self.assertEquals([], dossier_model_b.folders)
         self.assertEquals(1, len(dossier_model_b.files))
         file_model_b = dossier_model_b.files[0]
-        self.assertEquals(u'testdokumant.doc', file_model_b.filename)
+        self.assertEquals(u'Testdokumaent.doc', file_model_b.filename)
         self.assertEquals(document_b.file._blob.committed(), file_model_b.filepath)
 
 
@@ -369,7 +369,7 @@ class TestFileModel(FunctionalTestCase):
         document = create(Builder('document').with_dummy_content())
         model = File(self.toc, Document(document))
 
-        self.assertEquals(u'testdokumant.doc', model.filename)
+        self.assertEquals(u'Testdokumaent.doc', model.filename)
         self.assertEquals(document.file._blob.committed(), model.filepath)
 
     def test_named_next_file_number_prefixed_with_p(self):

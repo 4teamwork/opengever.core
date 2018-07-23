@@ -22,4 +22,4 @@ class TestSubscribers(FunctionalTestCase):
         browser.login().open(mail, view='edit')
         browser.fill({'Title': 'My new mail Title'}).submit()
 
-        self.assertEqual(u'my-new-mail-title.eml', mail.message.filename)
+        self.assertEqual(u'My new mail Title.eml', mail.message.filename)
