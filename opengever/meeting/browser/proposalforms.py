@@ -23,8 +23,10 @@ from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import field
+from z3c.form.browser import radio
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -32,6 +34,9 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
+from zope.schema import Choice
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class ProposalEditForm(ModelProxyEditForm,
@@ -87,7 +92,20 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
         return True
 
 
+proposal_document_types = SimpleVocabulary(
+    [SimpleTerm(value=u'template', title=_(u'Ab Vorlage')),
+     SimpleTerm(value=u'existing', title=_(u'Bestehendes Dokument'))])
+
+
 class IAddProposal(IProposal):
+
+    proposal_document_type = Choice(
+        title=_(u'label_template_or_existing_document',
+                default=u'Antragsdokument:'),
+        vocabulary=proposal_document_types,
+        required=True,
+        default='template',
+    )
 
     proposal_document = RelationChoice(
         title=_(u'label_proposal_document', default=u'Proposal Document'),
@@ -194,9 +212,15 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         finally:
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
+                move(self, 'proposal_document_type', before='proposal_template')
                 move(self, 'proposal_document', before='proposal_template')
+                move(self, 'edit_after_creation', after='proposal_template')
             move(self, 'description', before='*')
             move(self, 'title', before='*')
+            move(self, 'issuer', after='description')
+
+            self.fields['proposal_document_type'].widgetFactory[INPUT_MODE] \
+                = radio.RadioFieldWidget
 
     def updateWidgets(self):
         super(ProposalAddForm, self).updateWidgets()
