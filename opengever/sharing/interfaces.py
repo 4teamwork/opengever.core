@@ -7,7 +7,7 @@ class IOpengeverSharing(Interface):
     """Browserlayer Interface"""
 
 
-#Events
+# Events
 class ILocalRolesAcquisitionBlocked(IObjectEvent):
     """Local Roles acquisition has been blocked"""
 

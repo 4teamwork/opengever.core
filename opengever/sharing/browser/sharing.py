@@ -136,7 +136,7 @@ class OpengeverSharingView(SharingView):
             if iface is not None and not iface.providedBy(context):
                 continue
 
-            pairs.append(dict(id = name, title = utility.title))
+            pairs.append(dict(id=name, title=utility.title))
 
         pairs.sort(key=lambda x: normalizeString(
             translate(x["title"], context=self.request)))
