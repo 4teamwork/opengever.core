@@ -60,7 +60,7 @@ class TemplateFolderDocumentsGallery(BumblebeeGalleryMixin, TemplateFolderDocume
 
 
 class TemplateFolderMeetingTemplatesProxy(BaseTabProxy):
-    """This proxyview is looking for the last used documents
+    """This proxyview is looking for meeting templates
     view (list or gallery) and reopens this view.
     """
 
