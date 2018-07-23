@@ -11,12 +11,14 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
+# Those numbers get persisted in the RoleAssignmentStorage (annotations)
+# Do not remove them without migration
 ASSIGNMENT_VIA_TASK = 1
 ASSIGNMENT_VIA_TASK_AGENCY = 2
 ASSIGNMENT_VIA_SHARING = 3
 ASSIGNMENT_VIA_PROTECT_DOSSIER = 4
 ASSIGNMENT_VIA_INVITATION = 5
-ASSIGNMENT_VIA_COMMITTEE_GROUP = 5
+ASSIGNMENT_VIA_COMMITTEE_GROUP = 6
 
 
 class RoleAssignment(object):
@@ -39,7 +41,8 @@ class RoleAssignment(object):
     def get(cls, cause, **kwargs):
         assignment = cls.registry.get(cause)
         if not assignment:
-            assignment = cls
+            raise ValueError(
+                'No assignment class registered for `{}`'.format(cause))
 
         return assignment(**kwargs)
 
@@ -236,7 +239,7 @@ class RoleAssignmentStorage(object):
                 data[assignment['principal']] += assignment['roles']
 
         for principal, roles in data.items():
-            yield principal, [role for role in set(roles)]
+            yield principal, tuple(set(roles))
 
 
 class RoleAssignmentManager(object):
@@ -284,7 +287,7 @@ class RoleAssignmentManager(object):
         return [RoleAssignment.get(**data) for data
                 in self.storage.get_all_by_principal(principal_id)]
 
-    def set(self, assignments):
+    def reset(self, assignments):
         cause = assignments[0].cause
         if len(set([asg.cause for asg in assignments])) > 1:
             raise ValueError('All assignments need to have the same cause')
@@ -324,7 +327,7 @@ class RoleAssignmentManager(object):
 
         for principal, roles in self.storage.compute_effective():
             self.context.manage_setLocalRoles(
-                principal, [role for role in roles], verified=True)
+                principal, list(roles), verified=True)
 
         # re-add owner roles
         for principal in owner_principals:

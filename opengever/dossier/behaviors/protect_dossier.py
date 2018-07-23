@@ -245,7 +245,7 @@ class DossierProtection(AnnotationsFactoryImpl):
 
         if assignments:
             manager = RoleAssignmentManager(self.context)
-            manager.set(assignments)
+            manager.reset(assignments)
 
     def clear_local_roles(self):
         RoleAssignmentManager(self.context).clear_all()

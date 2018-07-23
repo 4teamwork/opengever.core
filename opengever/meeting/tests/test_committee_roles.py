@@ -37,7 +37,7 @@ class TestCommitteeTabs(FunctionalTestCase):
             SharingRoleAssignment('foo', ['Contributor', 'Administrator']),
             SharingRoleAssignment('org-unit-1_users', ['Contributor'])
         ]
-        RoleAssignmentManager(self.committee).set(assignments)
+        RoleAssignmentManager(self.committee).reset(assignments)
 
         CommitteeRoles(self.committee).update(
             'foo', previous_principal='org-unit-1_users')

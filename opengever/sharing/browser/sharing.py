@@ -313,7 +313,7 @@ class OpengeverSharingView(SharingView):
 
         if assignments:
             manager = RoleAssignmentManager(self.context)
-            manager.set(assignments)
+            manager.reset(assignments)
 
     def update_role_settings(self, new_settings, reindex=True):
         """Method Wrapper for the super method, to allow notify a

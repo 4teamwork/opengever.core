@@ -1579,7 +1579,7 @@ class OpengeverContentFixture(object):
             .within(self.workspace_root)
             ))
 
-        RoleAssignmentManager(self.workspace).set([
+        RoleAssignmentManager(self.workspace).reset([
             InvitationRoleAssignment(
                 self.workspace_admin.id, ['WorkspaceAdmin'], self.workspace),
             InvitationRoleAssignment(

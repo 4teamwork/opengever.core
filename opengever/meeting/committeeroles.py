@@ -45,4 +45,4 @@ class CommitteeRoles(object):
         assignments = [CommitteeGroupAssignment(
             principal, self.managed_roles, self.context)
         ]
-        RoleAssignmentManager(self.context).set(assignments)
+        RoleAssignmentManager(self.context).reset(assignments)
