@@ -13,6 +13,7 @@ class MeetingTemplate(Container):
     def get_paragraphs(self):
         return [
             paragraph
-            for _, paragraph in self.contentItems()
-            if isinstance(paragraph, ParagraphTemplate)
+            for _, paragraph in self.contentItems(filter={
+                'portal_type': 'opengever.meeting.paragraphtemplate',
+            })
         ]
