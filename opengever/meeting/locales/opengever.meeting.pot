@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-17 09:06+0000\n"
+"POT-Creation-Date: 2018-07-24 11:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,12 +125,20 @@ msgstr ""
 msgid "Document ${title} has already been submitted in that version."
 msgstr ""
 
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "Existing document"
+msgstr ""
+
 #: ./opengever/meeting/browser/meetings/participants.py
 msgid "Failed to save."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Filter participants"
+msgstr ""
+
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "From template"
 msgstr ""
 
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1201,6 +1209,7 @@ msgid "label_start"
 msgstr ""
 
 #. Default: "Submit Additional Documents"
+#: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "label_submit_additional_documents"
 msgstr ""
@@ -1213,6 +1222,11 @@ msgstr ""
 #. Default: "Successors"
 #: ./opengever/meeting/proposal.py
 msgid "label_successors"
+msgstr ""
+
+#. Default: "Proposal document type"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_template_or_existing_document"
 msgstr ""
 
 #. Default: "Title"
