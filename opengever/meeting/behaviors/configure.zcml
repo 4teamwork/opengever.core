@@ -7,6 +7,22 @@
 
   <!-- name from title behaviors -->
   <plone:behavior
+      title="meeting template name from title"
+      description=""
+      provides="opengever.meeting.behaviors.namefromtitle.IMeetingTemplateNameFromTitle"
+      factory=".namefromtitle.MeetingTemplateNameFromTitle"
+      for="opengever.meeting.interfaces.IMeetingTemplate"
+      />
+
+  <plone:behavior
+      title="paragraph template name from title"
+      description=""
+      provides="opengever.meeting.behaviors.namefromtitle.IParagraphTemplateNameFromTitle"
+      factory=".namefromtitle.ParagraphTemplateNameFromTitle"
+      for="opengever.meeting.interfaces.IParagraphTemplate"
+      />
+
+  <plone:behavior
       title="proposal name from title"
       description=""
       provides="opengever.meeting.behaviors.namefromtitle.IProposalNameFromTitle"

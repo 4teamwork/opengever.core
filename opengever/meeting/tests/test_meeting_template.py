@@ -103,14 +103,14 @@ class TestMeetingTemplate(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
 
         self.assertEquals(
-            ['begrussung',
-             'geschdfte',
-             'schlusswort'],
+            ['paragraphtemplate-1',
+             'paragraphtemplate-2',
+             'paragraphtemplate-3'],
             [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
 
-        new_order = ['geschdfte',
-                     'schlusswort',
-                     'begrussung']
+        new_order = ['paragraphtemplate-2',
+                     'paragraphtemplate-1',
+                     'paragraphtemplate-3']
 
         browser.open(self.meeting_template,
                      view='update_content_order',
@@ -123,3 +123,10 @@ class TestMeetingTemplate(IntegrationTestCase):
         self.assertEquals(
             new_order,
             [paragraph.getId() for paragraph in self.meeting_template.get_paragraphs()])
+
+    @browsing
+    def test_meeting_template_name_from_title_behaviour(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.assertEquals(
+            'meetingtemplate-1',
+            self.meeting_template.getId())
