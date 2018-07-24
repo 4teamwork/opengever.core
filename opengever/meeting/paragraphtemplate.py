@@ -1,6 +1,6 @@
-from plone.dexterity.content import Item
+from plone.dexterity.content import Container
 
 
-class ParagraphTemplate(Item):
+class ParagraphTemplate(Container):
 
     pass
