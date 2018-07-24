@@ -1,6 +1,6 @@
 [buildout]
 extends =
-    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-deployment.cfg
+    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-deployment-v2.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ogds-postgres.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/tika-standalone.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/zeoclients/2.cfg
@@ -8,9 +8,11 @@ extends =
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
 {{% endif %}}
     versions.cfg
+    https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/production-v2.cfg
+
 
 deployment-number = {{{base.deployment_number}}}
-ogds-db-name = gever-{{{package.name}}}
+ogds-db-name = ogds_{{{package.name}}}
 client-policy = opengever.{{{package.name}}}
 usernamelogger_ac_cookie_name = __ac_{{{adminunit.ac_cookie_name}}}
 instance-eggs += opengever.{{{package.name}}}
