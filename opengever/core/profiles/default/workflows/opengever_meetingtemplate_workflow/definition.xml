@@ -1,5 +1,5 @@
 <dc-workflow
-    workflow_id="opengever_template_workflow"
+    workflow_id="opengever_meetingtemplate_workflow"
     title="One State MeetingTemplate Workflow"
     description=""
     state_variable="review_state"
