@@ -14,7 +14,10 @@ class TestMeetingTemplate(IntegrationTestCase):
 
         browser.open(self.templates)
         factoriesmenu.add('Meeting Template')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({
+            'Title': 'Template',
+            'Description': u'Template for m\xfc\xfcting',
+        }).submit()
 
         self.assertEquals(['Item created'], statusmessages.info_messages())
         self.assertEquals(['Template'], browser.css('h1').text)
@@ -34,7 +37,10 @@ class TestMeetingTemplate(IntegrationTestCase):
 
         browser.open(self.meeting_template)
         factoriesmenu.add('Paragraph Template')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({
+            'Title': 'Template',
+            'Description': u'Paragraphtemplate for m\xfc\xfcting',
+        }).submit()
         statusmessages.assert_no_error_messages()
 
         self.assertEquals(['Item created'], statusmessages.info_messages())
