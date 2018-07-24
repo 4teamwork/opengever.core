@@ -53,6 +53,30 @@ class TestInitialVersionCreation(IntegrationTestCase):
             datetime.fromtimestamp(version.sys_metadata.get('timestamp')))
 
     @browsing
+    def test_initial_version_principal_is_documents_original_creator(self, browser):
+        self.login(self.regular_user)
+
+        # Guard assertion to make sure creatore of the fixture-document is
+        # what we expect it to be.
+        self.assertEqual('robert.ziegler', self.document.Creator())
+
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+
+        versioner = Versioner(self.document)
+        versioner.create_version(comment='')
+
+        initial_version_md = versioner.get_version_metadata(0)
+        first_version_md = versioner.get_version_metadata(1)
+
+        self.assertEqual(
+            'robert.ziegler',
+            initial_version_md['sys_metadata']['principal'])
+
+        self.assertEqual(
+            'kathi.barfuss',
+            first_version_md['sys_metadata']['principal'])
+
+    @browsing
     def test_updating_a_document_via_webdav_creates_initial_version_too(self, browser):
         self.login(self.regular_user)
 
@@ -89,5 +113,5 @@ class TestInitialVersionCreation(IntegrationTestCase):
         self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
         sys_metadata = versioner.get_version_metadata(0).get('sys_metadata')
         self.assertEqual(u'custom initial version', sys_metadata.get('comment'))
-        self.assertEqual('kathi.barfuss', sys_metadata.get('principal'))
+        self.assertEqual('robert.ziegler', sys_metadata.get('principal'))
         self.assertEqual('document-state-draft', sys_metadata.get('review_state'))
