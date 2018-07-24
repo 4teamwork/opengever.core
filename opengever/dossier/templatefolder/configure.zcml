@@ -41,13 +41,6 @@
 
   <browser:page
       for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
-      name="tabbedview_view-meetingtemplates-proxy"
-      class=".tabs.TemplateFolderMeetingTemplatesProxy"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
       name="tabbedview_view-meetingtemplates"
       class=".tabs.TemplateFolderMeetingTemplates"
       permission="zope2.View"

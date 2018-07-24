@@ -154,7 +154,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
     def meeting_templates_tab(self):
         if is_meeting_feature_enabled():
             return {
-                'id': 'meetingtemplates-proxy',
+                'id': 'meetingtemplates',
                 'title': _(u'label_meeting_templates', default=u'Meeting Templates'),
             }
         return None

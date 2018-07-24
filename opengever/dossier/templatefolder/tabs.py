@@ -59,12 +59,6 @@ class TemplateFolderDocumentsGallery(BumblebeeGalleryMixin, TemplateFolderDocume
     depth = 1
 
 
-class TemplateFolderMeetingTemplatesProxy(BaseTabProxy):
-    """This proxyview is looking for meeting templates
-    view (list or gallery) and reopens this view.
-    """
-
-
 class TemplateFolderMeetingTemplates(BaseCatalogListingTab):
 
     columns = (
