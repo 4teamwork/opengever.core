@@ -147,20 +147,15 @@ class IAddProposal(IProposal):
     def template_or_document_required_for_creation(data):
         proposal_template = data.proposal_template
         proposal_document = data.proposal_document
-        if not proposal_template and not proposal_document:
+        proposal_document_type = data.proposal_document_type
+
+        selected_document_type_choosen = proposal_template \
+            if proposal_document_type == 'template' else proposal_document
+
+        if not selected_document_type_choosen:
             raise Invalid(_(
                 u'error_template_or_document_required_for_creation',
                 default=u'Either a proposal template or a proposal document is required.',
-                ))
-
-    @invariant
-    def only_one_of_proposal_template_or_proposal_document_required_for_creation(data):
-        proposal_template = data.proposal_template
-        proposal_document = data.proposal_document
-        if proposal_template and proposal_document:
-            raise Invalid(_(
-                u'error_template_or_document_but_not_both_required_for_creation',
-                default=u'Either a proposal template or a proposal document, but not both, is required.',
                 ))
 
     @invariant
@@ -271,13 +266,14 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             self.request['form.widgets.issuer'] = issuer
 
     def createAndAdd(self, data):
-        # We don't need to store the document-type.
-        data.pop('proposal_document_type')
-
         # We need to pop the form related extras before hitting the super call
         proposal_template = data.pop('proposal_template')
         proposal_document = data.pop('proposal_document')
-        proposal_template = proposal_template or proposal_document
+        proposal_document_type = data.pop('proposal_document_type')
+
+        proposal_template = proposal_template \
+            if proposal_document_type == 'template' else proposal_document
+
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
         noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)
