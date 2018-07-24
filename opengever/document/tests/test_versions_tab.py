@@ -111,6 +111,22 @@ class TestVersionsTab(BaseVersionsTab):
                           actor_link.attrib['href'])
 
     @browsing
+    def test_lists_original_creator_as_actor_for_initial_version(self, browser):
+        create(Builder('ogds_user')
+               .id('original-document-creator')
+               .having(firstname=u'Firstname', lastname=u'Lastname'))
+        self.document.creators = ('original-document-creator', )
+        transaction.commit()
+
+        browser.login().open(self.document, view='tabbedview_view-versions')
+        listing = browser.css('.listing').first
+        last_row = listing.css('tr')[-1]
+        actor_link = last_row.css('td a').first
+
+        self.assertEquals(
+            'Lastname Firstname (original-document-creator)', actor_link.text)
+
+    @browsing
     def test_revert_link_is_properly_constructed(self, browser):
         browser.login().open(self.document,
                              view='tabbedview_view-versions')

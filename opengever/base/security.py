@@ -21,8 +21,12 @@ class UnrestrictedUser(BaseUnrestrictedUser):
 
 
 @contextmanager
-def elevated_privileges():
+def elevated_privileges(user_id=None):
     """Temporarily elevate current user's privileges.
+
+    If the `user_id` argument is set, it will be user as the ID of the
+    temporary user with elevated_privileges, otherwise the current user's ID
+    will be used.
 
     See http://docs.plone.org/develop/plone/security/permissions.html#bypassing-permission-checks
     for more documentation on this code.
@@ -34,9 +38,10 @@ def elevated_privileges():
         # Note that the username (getId()) is left in exception
         # tracebacks in the error_log,
         # so it is an important thing to store.
-        tmp_user = UnrestrictedUser(
-            api.user.get_current().getId(), '', ('manage', 'Manager'), ''
-            )
+        if user_id is None:
+            user_id = api.user.get_current().getId()
+
+        tmp_user = UnrestrictedUser(user_id, '', ('manage', 'Manager'), '')
 
         # Wrap the user in the acquisition context of the portal
         tmp_user = tmp_user.__of__(api.portal.get().acl_users)

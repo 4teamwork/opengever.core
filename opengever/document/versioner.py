@@ -1,3 +1,4 @@
+from opengever.base.security import elevated_privileges
 from opengever.document import _
 from plone import api
 from Products.CMFEditions.interfaces.IModifier import ModifierException
@@ -81,10 +82,23 @@ class Versioner(object):
         sys_metadata['timestamp'] = time.mktime(created.timetuple())
         metadata = {}
 
+        creator = self.document.Creator()
+
         try:
-            self.repository._recursiveSave(
-                self.document, metadata, sys_metadata,
-                autoapply=self.repository.autoapply)
+            # Create the initial version using a temporary security manager
+            # that claims a user ID of the user that was the creator of the
+            # document.
+            #
+            # This will execute the version creation with Manager privileges,
+            # but the given user_id.
+            #
+            # We need to do this this way because setting
+            # sys_metadata['principal'] to the current user ID is hardcoded
+            # in Products.CMFEditions.ArchivistTool.PreparedObject.__init__
+            with elevated_privileges(user_id=creator):
+                self.repository._recursiveSave(
+                    self.document, metadata, sys_metadata,
+                    autoapply=self.repository.autoapply)
         except ModifierException:
             # modifiers can abort save operations under certain conditions
             sp.rollback()
