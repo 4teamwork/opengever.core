@@ -57,7 +57,8 @@ class TestMeetingTemplate(IntegrationTestCase):
 
         self.assertEquals(
             [u'Title',
-             u'Meeting Template',
+             u'form.widgets.meeting_template',
+             u'form.widgets.meeting_template',
              u'form.widgets.meeting_template-empty-marker',
              u'form.widgets.committee:list',
              u'form.widgets.committee-empty-marker',
