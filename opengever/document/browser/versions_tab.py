@@ -101,6 +101,10 @@ class VersionDataProxy(object):
     def actor(self):
         """Returns a formatted link to the actor that created this version.
         """
+        if self.version == 0:
+            # Always return document's original creator for initial version
+            return Actor.user(self._context.Creator()).get_link()
+
         principal = self.sys_metadata['principal']
         actor = Actor.user(principal)
         return actor.get_link()
