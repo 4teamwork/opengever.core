@@ -1,10 +1,12 @@
+from datetime import date
 from opengever.base.model import create_session
 from opengever.globalindex.model.reminder_settings import ReminderSetting
+from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from persistent.dict import PersistentDict
 from plone import api
 from zope.annotation import IAnnotations
-
+from zope.globalrequest import getRequest
 
 TASK_REMINDER_ANNOTATIONS_KEY = 'opengever.task.task_reminder'
 
@@ -61,6 +63,13 @@ class TaskReminder(object):
         user_id = user_id or api.user.get_current().getId()
         self._clear_reminder_setting_in_annotation(obj, user_id)
         self._clear_reminder_setting_in_sql(obj, user_id)
+
+    def create_reminder_notifications(self):
+        """Creates an activity and the related notification for set reminders.
+        """
+        for reminder in ReminderSetting.query.filter(
+                ReminderSetting.remind_day == date.today()).all():
+            TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
 
     def _set_reminder_setting_in_annotation(self, obj, user_id, option):
         self._set_user_annotation(obj, user_id, option.option_type)

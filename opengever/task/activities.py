@@ -2,6 +2,7 @@ from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import base_notification_center
 from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.base import BaseActivity
+from opengever.activity.model.notification import Notification
 from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
@@ -200,10 +201,24 @@ class TaskReminderActivity(BaseActivity):
         return api.portal.get_localized_time(
             self.context.deadline, long_format=True)
 
+    def record(self, notify_for_user_id):
+        """Adds the activity and the related notification for the given user-id.
+
+        Let the notification-center handle creating the activity and
+        notifications will not work. The notification-center would create
+        notifications for all watchers of a given resource. But we only want
+        to create one notification for the current acitvity-object and the given
+        user-id.
+        """
+        activity = self.add_activity()
+        Notification(userid=notify_for_user_id, activity=activity)
+        map(lambda dispatcher: dispatcher.dispatch_notifications(activity),
+            self.center.dispatchers)
+
     def add_activity(self):
         # Because we use the default NotificationCenter, we need to provide
-        # the oguid instead the object itself.
-        self.center.add_activity(
+        # the oguid instead the object itself. See __init__ for more information.
+        return self.center._add_activity(
             self.context.oguid,
             self.kind,
             self.title,

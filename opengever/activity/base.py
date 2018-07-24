@@ -70,7 +70,7 @@ class BaseActivity(object):
         return translate(msg, context=self.request, target_language=language)
 
     def add_activity(self):
-        self.center.add_activity(
+        return self.center.add_activity(
             self.context,
             self.kind,
             self.title,
