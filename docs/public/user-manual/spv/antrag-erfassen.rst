@@ -13,14 +13,14 @@ Alle notwendigen Dokumente und Informationen sind im Geschäftsdossier erfasst.
 Zum Erfassen eines Antrags gibt es zwei Möglichkeiten:
 
 -   Unter «Hinzufügen» kann der Antrag an den Gemeinderat Musterhausen erfasst
-    werden. (Dieser Weg wird weiter untern im Detail beschrieben)
+    werden. (Dieser Weg wird nachfolgend im Detail beschrieben)
 
 |img-spvupdate-8|
 
 -   Im Dokumenten-Tab eines Dossiers findet sich zuunterst der Button
-    "Antrag erstellen". Dieser Weg bietet den Vorteil, dass Dokumente, welche
-    dem Antrag angehängt werden möchten, direkt in der Auflistung angewählt
-    werden können.
+    "Antrag erstellen". Diese Variante bietet den Vorteil, dass Dokumente,
+    welche dem Antrag angehängt werden möchten, direkt in der Auflistung
+    angewählt werden können.
 
 |img-spvupdate-41|
 
