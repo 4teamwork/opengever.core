@@ -17,7 +17,8 @@
       <ul class="paragraphs-list">
         <li tal:repeat="paragraph paragraphs"
             tal:content="paragraph/title"
-            tal:attributes="data-uid paragraph/id"></li>
+            tal:attributes="data-uid paragraph/id;
+                            title paragraph/description;"></li>
       </ul>
 
     </div>
