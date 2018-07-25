@@ -4,15 +4,15 @@
 Mit Standardabläufen arbeiten
 =============================
 
-Was ist ein Standardablauf
---------------------------
+Was ist ein Standardablauf?
+---------------------------
 
 Wiederkehrende Aufgabenketten (z.B. vorgegebene Projektschritte) können
 in OneGov GEVER unter der Anwendungskomponente Vorlagen hinterlegt
 werden. Diese vordefinierten Aufgabenketten bzw. Aufgabenfolgen werden
 Standardabläufe genannt.
 
-Die Erstellung und Bearbeitung von Standardabläufen ist Benutzern, welche für
+Die Erstellung und Bearbeitung von Standardabläufen ist Benutzenden, welche für
 die Vorlagen-Verwaltung berechtigt sind, vorbehalten. Oft sind dies gleichzeitig
 auch die Administratoren. Daher wird die Erstellung von Standardabläufen in der
 :ref:`Admin-Dokumentation <label-standardablauf-admin>` behandelt.
@@ -37,16 +37,16 @@ f) Vorselektion: Angabe, ob die Aufgabe automatisch ausgewählt werden
 
 |img-standardablauf-2|
 
-Parallele und sequentielle Abläufe
------------------------------------
-Es wird zwischen parallelen und sequentiellen Standardabläufen unterschieden.
+Parallele und sequenzielle Abläufe
+----------------------------------
+Es wird zwischen parallelen und sequenziellen Standardabläufen unterschieden.
 Parallel bedeutet in diesem Fall, dass mehrere Aufgaben gleichzeitig ausgelöst
-werden. Sequentiell bedeutet, dass alle Aufgaben erstellt, aber nacheinander
+werden. Sequenziell bedeutet, dass alle Aufgaben erstellt, aber nacheinander
 ausgelöst werden. Dabei gilt, dass die nächste Aufgabe erst ausgelöst wird, wenn
 die Aufgabe davor abgeschlossen wurde. Der Benutzer kann im Dropdown wählen,
 welchen Ablauftyp er benutzen möchte.
 
-Der Ablauftyp (sequentiell oder parallel) wird durch den Ersteller des
+Der Ablauftyp (sequenziell oder parallel) wird durch den Ersteller des
 Standardablaufs definiert und kann bei der Auslösung nicht übersteuert werden.
 Auf die Unterschiede der beiden Ablauf-Typen wird weiter unten noch genauer
 eingegangen.
@@ -65,7 +65,7 @@ Wählen Sie den gewünschten Standardablauf aus und klicken Sie
 |img-standardablauf-33|
 
 Die in der Vorlage mit *Vorselektiert* bezeichneten Aufgaben sind
-bereits ausgewählt. Mit der gedrückten :kbd:`Ctrl` können weitere
+bereits ausgewählt. Mit der gedrückten :kbd:`Ctrl`-Taste können weitere
 Aufgaben hinzu- oder weggeklickt werden.
 
 |img-standardablauf-34|
@@ -79,7 +79,7 @@ Auftragnehmer, wird dieser selektiert. Dieser kann aber auch übersteuert werden
 Mit *Speichern* werden die ausgewählten Aufgaben ins Dossier übernommen.
 Nun stehen die Aufgaben wie gewohnt zur weiteren Bearbeitung bereit (siehe
 :ref:`kapitel-aufgaben`). Ab hier werden auch die Unterschiede von einem
-parallelen zu sequentiellen Ablauf vorallem beim Status deutlich.
+parallelen zu sequenziellen Ablauf vorallem beim Status deutlich.
 
 Beim Auslösen eines parallelen Standardablaufs wird eine Hauptaufgabe mit
 mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass es
@@ -87,33 +87,32 @@ sich um einen parallelen Standardablauf handelt. Wird ein paralleler
 Standardablauf ausgelöst, so werden alle Aufgaben automatisch in den Status
 "Offen" versetzt und und stehen somit zur gleichzeitigen Bearbeitung bereit.
 
-Beim Auslösen eines sequentiellen Standardablaufs wird auch eine Hauptaufgabe
-mit mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass
-es sich um einen sequenziellen Standardablauf handelt. Wird ein sequenzieller
-Standardablauf ausgelöst, so wird die erste Aufgabe im Ablauf automatisch
-geöffnet, alle weiteren werden im Zustand «Geplant» initialisiert, sind aber zu
-diesem Zeitpunkt noch nicht sichtbar. Die Aufgaben sind schon sichtbar, aber
-werden nicht als pendent aufgelistet. Wird eine Aufgabe erledigt, so wird die
-nächste Aufgabe im Ablauf automatisch geöffnet resp. in den Status "Offen"
-versetzt und somit sichtbar.
+Beim Auslösen eines sequenziellen Standardablaufs wird ebenfalls eine
+Hauptaufgabe mit mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist
+ersichtlich, dass es sich um einen sequenziellen Standardablauf handelt. Wird
+ein sequenzieller Standardablauf ausgelöst, so wird die erste Aufgabe im Ablauf
+automatisch geöffnet, alle weiteren werden im Zustand «Geplant» initialisiert-
+Die geplanten Aufgaben sind schon sichtbar, aber werden nicht als pendent
+aufgelistet. Wird eine Aufgabe erledigt, so wird die nächste Aufgabe im Ablauf
+automatisch geöffnet resp. in den Status "Offen" versetzt und somit sichtbar.
 
 
 |img-standardablauf-36|
 
-Zu beachten bei sequentiellen Aufgaben
+Zu beachten bei sequenziellen Aufgaben
 --------------------------------------
 
 -   Wird eine Aufgabe abgelehnt, wird sie dem Auftraggeber zugewiesen. Dieser
     hat die Möglichkeit, die Aufgabe wieder zu öffnen (und dann «Neu zuweisen»,
-    «Abschliessen»). Bei sequentiellen Aufgaben hat er aber zudem auch die
-    Möglichkeit, die Aufgabe zu «überspringen».
+    «Abschliessen»). Bei sequenziellen Aufgaben besteht zudem die Möglichkeit,
+    die Aufgabe zu «überspringen».
 
 |img-standardablauf-38|
 
 -   Auf der Ansicht der Hauptaufgabe eines sequenziellen Standardablaufs kann in
     der Auflistung der Teilaufgaben direkt eine neue Aufgabe eingefügt werden.
     Der Standardablauf kann also individuell ergänzt werden. Das anschliessend
-    geöffnete Hinzufügen-Formular der Aufgabe verhält sich wie das :ref:`normale Aufgaben-Formular <label-aufgaben_erstellen>` und klinkt sich automatisch in den Standardablauf ein.
+    geöffnete Hinzufügen-Formular der Aufgabe verhält sich wie das :ref:`normale Aufgaben-Formular <label-aufgaben_erstellen>` und fügt sich automatisch in den Standardablauf ein.
 
 |img-standardablauf-37|
 

@@ -14,7 +14,7 @@ der :ref:`Benutzerdokumentation <label-standardablauf-benutzer>`.
 
 Standardablauf erstellen
 ------------------------
-Dazu kann wie gewohnt unter *Vorlagen->Hinzufügen* einen neuen Standardablauf
+Dazu kann wie gewohnt unter *Vorlagen->Hinzufügen* ein neuer Standardablauf
 erstellt werden.
 
 |img-standardablauf-20|
@@ -22,9 +22,9 @@ erstellt werden.
 In der allgemeinen Maske wird dem Standardablauf einen Titel gegeben sowie ein
 kurzer, optionaler Beschrieb hinzugefügt.
 
-Es wird zwischen parallelen und sequentiellen Standardabläufen unterschieden.
+Es wird zwischen parallelen und sequenziellen Standardabläufen unterschieden.
 Parallel bedeutet in diesem Fall, dass mehrere Aufgaben gleichzeitig ausgelöst
-werden. Sequentiell bedeutet, dass alle Aufgaben erstellt, aber nacheinander
+werden. Sequenziell bedeutet, dass alle Aufgaben erstellt, aber nacheinander
 ausgelöst werden. Dabei gilt, dass die nächste Aufgabe erst ausgelöst wird, wenn
 die Aufgabe davor abgeschlossen wurde. Der Benutzer kann im Dropdown wählen,
 welchen Ablauftyp er benutzen möchte.
@@ -46,7 +46,7 @@ Bei der Eingabe von Auftraggeber und Auftragnehmer stehen neben den
 registrierten Benutzern und Eingangskörben der OneGov GEVER Installation auch
 sogenannte Rollen zur Verfügung. Das bietet den Vorteil, dass bei der
 Vorlagen-Erfassung noch keine konkrete Person hinterlegt werden muss, sondern in
-einem ersten Schritt nur eine Rolle wie *Federführend* oder *Sachbearbeiter*.
+einem ersten Schritt nur eine Rolle wie *Federführend* oder *Sachbearbeitung*.
 
 Erst beim Auslösen des Standardablaufs in einem Dossier werden dann die Rollen
 automatisch durch konkrete Benutzer ersetzt. Die federführende Person
@@ -63,7 +63,7 @@ kein Auftragnehmer zu definieren.
 
 Nachdem die Aufgabenvorlage gespeichert wurde, erscheint diese automatisch im
 Standardablauf. Danach können beliebg viele weitere Aufgabenvorlagen erstellt
-werden. Per Drag'n'Drop kann die Reihenfolge (primär relevant bei sequentiellen
+werden. Per Drag'n'Drop kann die Reihenfolge (primär relevant bei sequenziellen
 Abläufen) verändert werden.
 
 |img-standardablauf-24|
