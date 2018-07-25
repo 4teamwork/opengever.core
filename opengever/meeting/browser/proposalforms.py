@@ -23,8 +23,10 @@ from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import field
+from z3c.form.browser import radio
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
+from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -32,6 +34,9 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
+from zope.schema import Choice
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class ProposalEditForm(ModelProxyEditForm,
@@ -89,6 +94,16 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
 
 class IAddProposal(IProposal):
 
+    proposal_document_type = Choice(
+        title=_(u'label_template_or_existing_document',
+                default=u'Proposal document type'),
+        vocabulary=SimpleVocabulary([
+            SimpleTerm(value=u'template', title=_(u'From template')),
+            SimpleTerm(value=u'existing', title=_(u'Existing document'))]),
+        required=False,
+        default='template',
+    )
+
     proposal_document = RelationChoice(
         title=_(u'label_proposal_document', default=u'Proposal Document'),
         required=False,
@@ -132,20 +147,15 @@ class IAddProposal(IProposal):
     def template_or_document_required_for_creation(data):
         proposal_template = data.proposal_template
         proposal_document = data.proposal_document
-        if not proposal_template and not proposal_document:
+        proposal_document_type = data.proposal_document_type
+
+        selected_document_type_choosen = proposal_template \
+            if proposal_document_type == 'template' else proposal_document
+
+        if not selected_document_type_choosen:
             raise Invalid(_(
                 u'error_template_or_document_required_for_creation',
                 default=u'Either a proposal template or a proposal document is required.',
-                ))
-
-    @invariant
-    def only_one_of_proposal_template_or_proposal_document_required_for_creation(data):
-        proposal_template = data.proposal_template
-        proposal_document = data.proposal_document
-        if proposal_template and proposal_document:
-            raise Invalid(_(
-                u'error_template_or_document_but_not_both_required_for_creation',
-                default=u'Either a proposal template or a proposal document, but not both, is required.',
                 ))
 
     @invariant
@@ -194,9 +204,15 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         finally:
             if self.schema is IAddProposal:
                 move(self, 'proposal_template', after='committee')
+                move(self, 'proposal_document_type', before='proposal_template')
                 move(self, 'proposal_document', before='proposal_template')
+                move(self, 'edit_after_creation', after='proposal_template')
             move(self, 'description', before='*')
             move(self, 'title', before='*')
+            move(self, 'issuer', after='description')
+
+            self.fields['proposal_document_type'].widgetFactory[INPUT_MODE] \
+                = radio.RadioFieldWidget
 
     def updateWidgets(self):
         super(ProposalAddForm, self).updateWidgets()
@@ -253,7 +269,11 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         # We need to pop the form related extras before hitting the super call
         proposal_template = data.pop('proposal_template')
         proposal_document = data.pop('proposal_document')
-        proposal_template = proposal_template or proposal_document
+        proposal_document_type = data.pop('proposal_document_type')
+
+        proposal_template = proposal_template \
+            if proposal_document_type == 'template' else proposal_document
+
         edit_after_creation = data.pop('edit_after_creation')
         self.instance_schema = IProposal
         noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)

@@ -208,6 +208,7 @@ class TestProposal(IntegrationTestCase):
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal document type': 'Existing document',
             'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
         }).save()
         statusmessages.assert_no_error_messages()
@@ -234,6 +235,37 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
+    def test_proposal_cannot_be_created_in_browser_if_false_document_type_is_selected(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Proposal document type': 'Existing document',
+            'Proposal template': u'Geb\xfchren',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Proposal document type': 'From template',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+            'Committee': u'Rechnungspr\xfcfungskommission',
+        }).save()
+        expected_errors = [
+            'Error There were some errors.',
+            'Either a proposal template or a proposal document is required.',
+            ]
+        self.assertEqual(expected_errors, browser.css('.error').text)
+
+    @browsing
     def test_proposal_cannot_be_created_in_browser_from_excel_document(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier)
@@ -241,6 +273,7 @@ class TestProposal(IntegrationTestCase):
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal document type': 'Existing document',
             'Proposal Document': u'/'.join(self.subdocument.getPhysicalPath()),
         }).save()
         expected_errors = [
@@ -258,6 +291,7 @@ class TestProposal(IntegrationTestCase):
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal document type': 'Existing document',
             'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
         }).save()
         expected_errors = [
@@ -267,21 +301,38 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
-    def test_proposal_cannot_be_created_in_browser_with_both_document_and_template(self, browser):
+    def test_choose_selected_type_for_document(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier)
         factoriesmenu.add('Proposal')
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal document type': 'Existing document',
             'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
             'Proposal template': u'Geb\xfchren',
         }).save()
-        expected_errors = [
-            'Error There were some errors.',
-            'Either a proposal template or a proposal document, but not both, is required.',
-            ]
-        self.assertEqual(expected_errors, browser.css('.error').text)
+
+        self.assertEqual(
+            browser.context.getChildNodes()._data[0].file.data,
+            self.document.file.data
+            )
+
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        browser.fill({
+            'Title': u'A pr\xf6posal',
+            'Committee': u'Rechnungspr\xfcfungskommission',
+            'Proposal document type': 'From template',
+            'Proposal Document': u'/'.join(self.document.getPhysicalPath()),
+            'Proposal template': self.proposal_template.Title(),
+        }).save()
+
+        statusmessages.assert_no_error_messages()
+
+        self.assertEqual(
+            self.proposal_template.file.data,
+            browser.context.getChildNodes()._data[0].file.data)
 
     @browsing
     def test_create_proposal_in_subdossier(self, browser):

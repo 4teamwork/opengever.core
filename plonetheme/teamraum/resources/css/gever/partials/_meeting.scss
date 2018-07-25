@@ -1228,3 +1228,24 @@ $spacing: 8px;
     }
   }
 }
+
+.template-opengever-meeting-proposal {
+
+  // Hiding the empty rows for optional choice fields in the proposal add form.
+  //
+  // The fields are optional, thus the empty lines gets displayed by the widgets.
+  // Because the fields are only partial optinoal, means, that one of the two
+  // fields have to be selected, we don't want to display the empty rows.
+  //
+  // Overriding the widgets itself for this edgecase would be overkill.
+  // So we just hiding the empty-rows by css.
+  #formfield-form-widgets-proposal_document, .option:first-child,
+  #formfield-form-widgets-proposal_template tbody tr:first-child   {
+    display: none;
+  }
+
+  #formfield-form-widgets-proposal_document label,
+  #formfield-form-widgets-proposal_template label{
+    display: none;
+  }
+}
