@@ -221,8 +221,6 @@ body.template-tabbed_view.portaltype-opengever-dossier-templatefolder,
 body.template-view.portaltype-opengever-dossier-templatefolder,
 body.template-tabbed_view.portaltype-opengever-dossier-dossiertemplate,
 body.template-view.portaltype-opengever-dossier-dossiertemplate,
-body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate,
-body.template-view.portaltype-opengever-meeting-proposaltemplate,
 body.template-tabbed_view.portaltype-opengever-meeting-meetingdossier,
 body.template-view.portaltype-opengever-meeting-meetingdossier,
 body.template-tabbed_view.portaltype-opengever-zug-bdarp-casedossier2,
@@ -320,6 +318,8 @@ body.template-tabbed_view.portaltype-opengever-meeting-committeecontainer {
   @include watermark-icon($committeecontainer);
 }
 
+body.template-view.portaltype-opengever-meeting-proposaltemplate,
+body.template-tabbed_view.portaltype-opengever-meeting-proposaltemplate,
 body.template-tabbed_view.portaltype-opengever-meeting-proposal,
 body.template-tabbed_view.portaltype-opengever-meeting-submittedproposal{
   @include heading-icon($proposal);
