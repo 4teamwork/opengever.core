@@ -3328,6 +3328,8 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 
 .notification-settings-description { max-width: 850px; margin-bottom: 30px; }
 
+.portaltype-opengever-meeting-meetingtemplate #viewlet-below-content-title { display: inline; }
+
 #favorite-action { display: inline-block; vertical-align: 2px; margin-left: 4px; }
 #favorite-action #mark-as-favorite { color: #3387a1; font-size: 16px; }
 #favorite-action #mark-as-favorite.loading { cursor: default; }
