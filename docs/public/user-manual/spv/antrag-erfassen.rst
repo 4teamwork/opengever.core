@@ -25,7 +25,7 @@ Das Feld „Antragssteller“ enthält standardmässig den aktuellen Benutzenden
 Es besteht auch die Möglichkeit, einen anderen Benutzenden des aktuellen
 Mandantden auszuwählen. Damit ist es möglich, Anträge im Namen anderer
 Benutzenden zu erstellen. Dabei ist zu beachten, dass nur jener Benutzende,
-welcher im Feld „Antragssteller“ hinterleget ist, die :ref:`label-antrags-benachrichtigungen` erhält.
+welcher im Feld „Antragssteller“ hinterlegt ist, die :ref:`label-antrags-benachrichtigungen` erhält.
 
 Wenn die Option «Nach dem Hinzufügen bearbeiten» angewählt bleibt
 (Standardeinstellung), wird das Dokument zur weiteren Bearbeitung in Word

@@ -22,10 +22,11 @@ Verantwortlichen eines Gremiums ausgelöst:
 
 -   Neuer Antrag eingereicht
 -   Eingereichter Antrag kommentiert
--   Anhänge eingereichter Antrag aktualisiert
+-   Neue Anhänge eingereicht
+-   Bestehende Anhänge aktualisiert
 
 Diese oben erwähnten Aktionen werden auch in den Benachrichtigungs-Einstellungen
 sichtbar und können von den Benutzern einzeln konfiguriert werden. Mehr
-dazu können Sie hier nachlesen: :ref:`label-benachrichtigungen`.
+dazu können Sie unter :ref:`label-benachrichtigungen`nachlesen .
 
 .. disqus::

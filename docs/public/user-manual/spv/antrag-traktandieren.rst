@@ -2,7 +2,7 @@ Antrag traktandieren
 --------------------
 
 Nach der Erfassung des Antrags wird dieser über «Einreichen» ins Gremium
-eingereicht. Der Status des Antrags ändert sich von «in Bearbeitung» in
+eingereicht. Der Status des Antrags ändert sich von «in Bearbeitung» zu
 «Eingereicht».
 
 |img-spvupdate-15|
