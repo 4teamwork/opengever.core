@@ -12,6 +12,7 @@ Inhalt:
    development/index.rst
    policies/index.rst
    releasemanagement/index.rst
+   schnittstellen.rst
    operations/index.rst
    notizen.rst
    meta.rst
