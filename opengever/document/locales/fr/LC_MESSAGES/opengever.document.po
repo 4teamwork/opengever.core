@@ -288,7 +288,7 @@ msgstr "Document créé (version initiale)"
 #. Default: "Changed by"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_actor"
-msgstr "Modifier par"
+msgstr "Modifié par"
 
 #. Default: "Archival File"
 #: ./opengever/document/behaviors/metadata.py
