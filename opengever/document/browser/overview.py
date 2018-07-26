@@ -276,6 +276,10 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
         return get_css_class(context or self.context)
 
     def show_modfiy_public_trial_link(self):
+        parent_dossier = self.context.get_parent_dossier()
+        if not parent_dossier:
+            return False
+
         try:
             can_edit = edit_public_trial.can_access_public_trial_edit_form(
                 getSecurityManager().getUser(),
@@ -283,8 +287,7 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
         except (AssertionError, ValueError):
             return False
 
-        state = api.content.get_state(
-            self.context.get_parent_dossier(), default=None)
+        state = api.content.get_state(parent_dossier, default=None)
         return can_edit and state in DOSSIER_STATES_CLOSED
 
     def show_preview(self):

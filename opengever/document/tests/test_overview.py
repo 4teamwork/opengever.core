@@ -367,6 +367,16 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Public trial edit link should be visible.')
 
     @browsing
+    def test_modify_public_trial_link_NOT_shown_on_inbox_documents(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.inbox_document, view='tabbedview_view-overview')
+
+        self.assertFalse(
+            browser.css('#form-widgets-IClassification-public_trial_statement').first.text,
+            'Public trial edit link should not be visible.')
+
+    @browsing
     def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa
         self.login(self.regular_user, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
@@ -440,6 +450,16 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             '/edit_archival_file',
             browser.css('#archival_file_edit_link').first.get('href'),
             )
+
+    @browsing
+    def test_edit_archival_file_link_is_disabled_on_inbox_documents(self, browser):  # noqa
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.inbox_document, view='tabbedview_view-overview')
+
+        self.assertFalse(
+            browser.css('#archival_file_edit_link'),
+            'Archival file edit link should not be visible.')
 
     @browsing
     def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa

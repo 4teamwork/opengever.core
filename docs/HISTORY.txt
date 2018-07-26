@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix archival_file and public_trial checks on documents overview. [phgross]
 - Add placeful workflow policy for inbox-area. Let inbox users edit and checkout documents but not the inbox itself. [phgross]
 - Fix base URL for contentish objects. [njohner]
 - Bump Chameleon to 3.3 in order to fix edge case in exception handler causing recursion. [lgraf]
