@@ -1,0 +1,6 @@
+<object name="portal_types" meta_type="Plone Types Tool">
+
+  <object name="opengever.meeting.meetingtemplate" meta_type="Dexterity FTI" />
+  <object name="opengever.meeting.paragraphtemplate" meta_type="Dexterity FTI" />
+
+</object>

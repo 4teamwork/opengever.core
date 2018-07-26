@@ -448,6 +448,13 @@ body.meeting-view{
 #plone-contentmenu-factories dd.actionMenuContent a#add-membership:before{
   content: $membership;
 }
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-meetingtemplate:before{
+  content: $meeting;
+}
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-paragraphtemplate:before{
+  content: $fa-var-paragraph;
+  font-family: 'FontAwesome';
+}
 #plone-contentmenu-factories dd.actionMenuContent a#add-meeting:before{
   content: $meeting;
 }
@@ -546,6 +553,11 @@ body.meeting-view{
 .contenttype-opengever-tasktemplates-tasktemplatefolder:before {content: $tasktemplate;}
 .contenttype-opengever-tasktemplates-tasktemplate:before {content: $tasktemplate;}
 .contenttype-opengever-meeting-proposal:before {content: $proposal;}
+.contenttype-opengever-meeting-meetingtemplate:before {content: $meeting;}
+.contenttype-opengever-meeting-paragraphtemplate:before {
+  content: $fa-var-paragraph;
+  font-family: 'FontAwesome';
+}
 .contenttype-opengever-meeting-meeting:before {content: $meeting;}
 .contenttype-opengever-meeting-member:before {content: $member;}
 .contenttype-opengever-meeting-membership:before {content: $membership;}

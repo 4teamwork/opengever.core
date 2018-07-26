@@ -19,6 +19,7 @@ Changelog
 - Adjust table styling for small screens for the activity-settings view. [elioschmutz]
 - Update german translation for "committeee responsible" used within the activity settings tab. [elioschmutz]
 - Make sure selecting at least one task template is required. [phgross]
+- Add meeting templates. [tarnap]
 - Remove opengever.pdfconverter. [elioschmutz]
 - Fix unicode error on edit an agendaitem. [elioschmutz]
 - Adjust activity mail subject to a more generic text. [elioschmutz]

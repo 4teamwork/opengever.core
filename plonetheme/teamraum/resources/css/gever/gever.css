@@ -1741,6 +1741,10 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 
 #plone-contentmenu-factories dd.actionMenuContent a#add-membership:before { content: ""; }
 
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-meetingtemplate:before { content: ""; }
+
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-paragraphtemplate:before { content: ""; font-family: 'FontAwesome'; }
+
 #plone-contentmenu-factories dd.actionMenuContent a#add-meeting:before { content: ""; }
 
 #plone-contentmenu-factories dd.actionMenuContent a#ftw-mail-mail:before { content: ""; }
@@ -1820,6 +1824,10 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 .contenttype-opengever-tasktemplates-tasktemplate:before { content: ""; }
 
 .contenttype-opengever-meeting-proposal:before { content: ""; }
+
+.contenttype-opengever-meeting-meetingtemplate:before { content: ""; }
+
+.contenttype-opengever-meeting-paragraphtemplate:before { content: ""; font-family: 'FontAwesome'; }
 
 .contenttype-opengever-meeting-meeting:before { content: ""; }
 
@@ -2694,6 +2702,10 @@ table#agenda_items tbody .paragraph .proposal_title { font-weight: bold; padding
 .template-opengever-meeting-proposal #formfield-form-widgets-proposal_document, .template-opengever-meeting-proposal .option:first-child, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template tbody tr:first-child { display: none; }
 .template-opengever-meeting-proposal #formfield-form-widgets-proposal_document label, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template label { display: none; }
 
+#opengever_meeting_meetingtemplate ul { padding: 0; margin: 15px 0 0; }
+#opengever_meeting_meetingtemplate ul li { padding: 8px 10px; list-style: none; background: #e6e6e6; font-weight: bold; font-size: 130%; }
+#opengever_meeting_meetingtemplate ul li:before { font-family: 'FontAwesome'; content: '\f0c9'; margin-left: 5px; margin-right: 35px; font-size: 76%; }
+
 body.template-protocol #plone-document-byline { display: none; }
 body.template-protocol #button-value-discard { display: none !important; }
 body.template-protocol #changes-hint { display: none; }
@@ -3315,6 +3327,8 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 .template-personal-preferences table th:nth-child(5) { width: auto; min-width: 130px; }
 
 .notification-settings-description { max-width: 850px; margin-bottom: 30px; }
+
+.portaltype-opengever-meeting-meetingtemplate #viewlet-below-content-title { display: inline; }
 
 #favorite-action { display: inline-block; vertical-align: 2px; margin-left: 4px; }
 #favorite-action #mark-as-favorite { color: #3387a1; font-size: 16px; }

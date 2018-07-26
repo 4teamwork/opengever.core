@@ -59,6 +59,31 @@ class TemplateFolderDocumentsGallery(BumblebeeGalleryMixin, TemplateFolderDocume
     depth = 1
 
 
+class TemplateFolderMeetingTemplates(BaseCatalogListingTab):
+
+    columns = (
+
+        {'column': '',
+         'column_title': '',
+         'transform': path_checkbox,
+         'sortable': False,
+         'groupable': False,
+         'width': 30},
+
+        {'column': 'Title',
+         'column_title': _(u'label_title', default=u'Title'),
+         'sort_index': 'sortable_title',
+         'transform': linked},
+
+        {'column': 'Description',
+         'column_title': _(u'label_description', default=u'Description'),
+         'sortable': False,
+         'groupable': False},
+    )
+
+    types = ['opengever.meeting.meetingtemplate']
+
+
 class TemplateFolderSablonTemplatesProxy(BaseTabProxy):
     """This proxyview is looking for the last used documents
     view (list or gallery) and reopens this view.

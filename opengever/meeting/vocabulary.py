@@ -37,6 +37,25 @@ class ActiveCommitteeVocabulary(CommitteeVocabulary):
 
 
 @implementer(IVocabularyFactory)
+class MeetingTemplateVocabulary(object):
+
+    def __call__(self, context):
+        terms = []
+
+        meeting_templates = api.content.find(
+            portal_type='opengever.meeting.meetingtemplate')
+
+        for brain in meeting_templates:
+            template = brain.getObject()
+            terms.append(SimpleTerm(
+                value=template,
+                token=template.id,
+                title=safe_unicode(template.title)))
+
+        return SimpleVocabulary(terms)
+
+
+@implementer(IVocabularyFactory)
 class MemberVocabulary(object):
 
     def __call__(self, context):

@@ -1,4 +1,5 @@
 from ftw.datepicker.widget import DatePickerFieldWidget
+from ftw.table import helper
 from opengever.base.browser.helper import get_css_class
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
@@ -6,6 +7,7 @@ from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.schema import TableChoice
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
@@ -50,6 +52,25 @@ class IMeetingModel(model.Schema):
         title=_(u"label_title", default=u"Title"),
         defaultFactory=default_title,
         required=True)
+
+    meeting_template = TableChoice(
+        title=_(u'label_meeting_template', default=u'Meeting Template'),
+        description=_(
+            u'help_meeting_template',
+            default=u'Template containing the predifined paragraphs'),
+        vocabulary='opengever.meeting.MeetingTemplateVocabulary',
+        columns=(
+            {'column': 'title',
+             'column_title': _(u'label_title', default=u'Title'),
+             'sort_index': 'sortable_title'},
+            {'column': 'Creator',
+             'column_title': _(u'label_creator', default=u'Creator'),
+             'sort_index': 'document_author'},
+            {'column': 'modified',
+             'column_title': _(u'label_modified', default=u'Modified'),
+             'transform': helper.readable_date}),
+        required=False,
+    )
 
     committee = schema.Choice(
         title=_('label_committee', default=u'Committee'),
@@ -189,7 +210,10 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
                 dm = getUtility(IWizardDataStorage)
                 data = dm.get_data(get_dm_key())
                 data['dossier_oguid'] = Oguid.for_object(dossier)
+                meeting_template = data.pop('meeting_template', None)
                 meeting = Meeting(**data)
+                if meeting_template is not None:
+                    meeting_template.apply(meeting)
                 meeting.initialize_participants()
                 session = create_session()
                 session.add(meeting)

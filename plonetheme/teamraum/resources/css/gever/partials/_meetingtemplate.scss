@@ -1,0 +1,23 @@
+#opengever_meeting_meetingtemplate {
+    ul {
+
+        padding: 0;
+        margin: 15px 0 0;
+
+        li {
+            padding: 8px 10px;
+            list-style: none;
+            background: #e6e6e6;
+            font-weight: bold;
+            font-size: 130%;
+
+            &:before {
+                font-family: 'FontAwesome';
+                content: '\f0c9';
+                margin-left: 5px; 
+                margin-right: 35px; 
+                font-size: 76%;
+            }
+        }
+    }
+}

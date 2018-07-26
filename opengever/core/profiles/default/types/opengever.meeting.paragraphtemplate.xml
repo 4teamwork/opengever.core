@@ -1,0 +1,61 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.paragraphtemplate" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- Basic metadata -->
+  <property name="title" i18n:translate="">Paragraph Template</property>
+  <property name="description" i18n:translate="" />
+  <property name="icon_expr" />
+  <property name="allowed_content_types">
+  </property>
+
+  <!-- Schema interface -->
+  <property name="schema">opengever.meeting.interfaces.IParagraphTemplate</property>
+
+  <!-- Class used for content items -->
+  <property name="klass">opengever.meeting.paragraphtemplate.ParagraphTemplate</property>
+
+  <!-- Add permission -->
+  <property name="add_permission">opengever.meeting.AddParagraphTemplate</property>
+
+  <!-- Enabled behaviors -->
+  <property name="behaviors">
+    <element value="opengever.meeting.behaviors.namefromtitle.IParagraphTemplateNameFromTitle" />
+    <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
+    <element value="opengever.base.behaviors.base.IOpenGeverBase" />
+    <element value="plone.app.lockingbehavior.behaviors.ILocking" />
+  </property>
+
+  <!-- View information -->
+  <property name="immediate_view">../view</property>
+  <property name="default_view">view</property>
+  <property name="default_view_fallback">False</property>
+  <property name="view_methods">
+    <element value="view" />
+  </property>
+
+  <!-- Method aliases -->
+  <alias from="(Default)" to="(selected layout)" />
+  <alias from="edit" to="@@edit" />
+  <alias from="view" to="@@view" />
+
+  <!-- Actions -->
+  <action
+      action_id="view"
+      visible="False"
+      title="View"
+      category="object"
+      url_expr="string:${object_url}"
+      condition_expr="">
+    <permission value="View" />
+  </action>
+
+  <action
+      action_id="edit"
+      visible="True"
+      title="Edit"
+      category="object"
+      url_expr="string:${object_url}/edit"
+      condition_expr="not:object/@@plone_lock_info/is_locked_for_current_user|python:True">
+    <permission value="Modify portal content" />
+  </action>
+
+</object>

@@ -418,6 +418,31 @@ class OpengeverContentFixture(object):
                 .within(self.templates)
                 ))
 
+        with self.features('meeting', ):
+            self.meeting_template = self.register('meeting_template', create(
+                Builder('meetingtemplate')
+                .titled(u'Meeting T\xc3\xb6mpl\xc3\xb6te')
+                .within(self.templates)
+                ))
+            create(
+                Builder('paragraphtemplate')
+                .titled(u'Begr\xfcssung')
+                .having(position=1)
+                .within(self.meeting_template)
+                )
+            create(
+                Builder('paragraphtemplate')
+                .titled(u'Gesch\xf0fte')
+                .having(position=2)
+                .within(self.meeting_template)
+                )
+            create(
+                Builder('paragraphtemplate')
+                .titled(u'Schlusswort')
+                .having(position=3)
+                .within(self.meeting_template)
+                )
+
     @staticuid()
     def create_special_templates(self):
         self.sablon_template = self.register('sablon_template', create(

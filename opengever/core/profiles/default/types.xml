@@ -42,6 +42,8 @@
   <object name="opengever.meeting.committeecontainer" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.sablontemplate" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.meetingdossier" meta_type="Dexterity FTI" />
+  <object name="opengever.meeting.meetingtemplate" meta_type="Dexterity FTI" />
+  <object name="opengever.meeting.paragraphtemplate" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.proposaltemplate" meta_type="Dexterity FTI" />
 
   <!-- PRIVATE -->

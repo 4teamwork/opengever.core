@@ -1,5 +1,11 @@
 $favorites-icon-size: 1em;
 
+.portaltype-opengever-meeting-meetingtemplate {
+    #viewlet-below-content-title {
+        display: inline;
+    }
+}
+
 #favorite-action {
   display: inline-block;
   vertical-align: 2px;

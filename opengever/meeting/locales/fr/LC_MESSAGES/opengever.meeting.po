@@ -714,6 +714,11 @@ msgstr "Choisissez tous les modèles de proposition autorisés dans ce comité. 
 msgid "help_create_task"
 msgstr "Etablir une nouvelle tâche dans le dossier de réunion et y joindre cet extrait de protocole."
 
+#. Default: "Template containing the predifined paragraphs"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "help_meeting_template"
+msgstr ""
+
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_return_excerpt"
@@ -1078,6 +1083,11 @@ msgstr "Réunion clôturée"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
 msgstr "Cette réunion ne peut pas être annulée tant qu'elle contient des points de l'ordre du jour."
+
+#. Default: "Meeting Template"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_meeting_template"
+msgstr ""
 
 #. Default: "Member"
 #: ./opengever/meeting/browser/memberships.py

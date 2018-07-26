@@ -202,6 +202,8 @@
                    Add portal folders,
                    Add portal topics,
                    plone.app.collection: Add Collection,
+                   opengever.meeting: Add Meeting Template,
+                   opengever.meeting: Add Paragraph Template,
                    "
       />
 
