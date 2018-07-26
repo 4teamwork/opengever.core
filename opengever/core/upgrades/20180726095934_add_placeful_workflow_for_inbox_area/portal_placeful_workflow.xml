@@ -1,0 +1,3 @@
+<object name="portal_placeful_workflow" meta_type="Placeful Workflow Tool" purge="False">
+  <object name="opengever_inbox_policy" meta_type="WorkflowPolicy" />
+</object>

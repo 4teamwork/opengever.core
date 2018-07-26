@@ -1,0 +1,232 @@
+<dc-workflow
+    workflow_id="opengever_inbox_workflow"
+    title="Inbox Workflow"
+    description=""
+    state_variable="review_state"
+    initial_state="inbox-state-default"
+    manager_bypass="False">
+  <permission>Access contents information</permission>
+  <permission>Add portal content</permission>
+  <permission>List folder contents</permission>
+  <permission>Manage properties</permission>
+  <permission>Modify portal content</permission>
+  <permission>Sharing page: Delegate roles</permission>
+  <permission>View</permission>
+  <permission>ftw.mail: Add Inbound Mail</permission>
+  <permission>ftw.mail: Add Mail</permission>
+  <permission>opengever.document: Add document</permission>
+  <permission>opengever.dossier: Add businesscasedossier</permission>
+  <permission>opengever.inbox: Add Forwarding</permission>
+  <permission>opengever.task: Add task</permission>
+  <permission>opengever.trash: Trash content</permission>
+  <permission>opengever.trash: Untrash content</permission>
+  <permission>opengever.document: Cancel</permission>
+  <permission>opengever.document: Checkin</permission>
+  <permission>opengever.document: Checkout</permission>
+  <permission>opengever.inbox: Scan In</permission>
+  <state
+      state_id="inbox-state-default"
+      title="inbox-state-default">
+    <exit-transition transition_id="dossier-transition-deactivate" />
+    <exit-transition transition_id="dossier-transition-resolve" />
+    <permission-map
+        name="Access contents information"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Add portal content"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="List folder contents"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="Manage properties"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="ftw.mail: Add Inbound Mail"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="ftw.mail: Add Mail"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.document: Add document"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.document: Cancel"
+        acquired="False">
+  </permission-map>
+    <permission-map
+        name="opengever.document: Checkin"
+        acquired="False">
+  </permission-map>
+    <permission-map
+        name="opengever.document: Checkout"
+        acquired="False">
+  </permission-map>
+    <permission-map
+        name="opengever.dossier: Add businesscasedossier"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.inbox: Add Forwarding"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.inbox: Scan In"
+        acquired="True">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.task: Add task"
+        acquired="False">
+  </permission-map>
+    <permission-map
+        name="opengever.trash: Trash content"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.trash: Untrash content"
+        acquired="False">
+      <permission-role>Contributor</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+  </state>
+  <worklist
+      worklist_id="reviewer_queue"
+      title="">
+    <description>Reviewer tasks</description>
+    <action
+        url="%(portal_url)s/search?review_state=pending"
+        category="global"
+        icon="">Pending (%(count)d)</action>
+    <guard>
+      <guard-permission>Review portal content</guard-permission>
+    </guard>
+    <match
+        name="review_state"
+        values="pending"
+        />
+  </worklist>
+  <variable
+      variable_id="action"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>The last transition</description>
+    <default>
+
+      <expression>transition/getId|nothing</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+  <variable
+      variable_id="actor"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>The ID of the user who performed the last transition</description>
+    <default>
+
+      <expression>user/getId</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+  <variable
+      variable_id="comments"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>Comments about the last transition</description>
+    <default>
+
+      <expression>python:state_change.kwargs.get('comment', '')</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+  <variable
+      variable_id="review_history"
+      for_catalog="False"
+      for_status="False"
+      update_always="False">
+    <description>Provides access to workflow history</description>
+    <default>
+
+      <expression>state_change/getHistory</expression>
+    </default>
+    <guard>
+      <guard-permission>View</guard-permission>
+    </guard>
+  </variable>
+  <variable
+      variable_id="time"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>Time of the last transition</description>
+    <default>
+
+      <expression>state_change/getDateTime</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+</dc-workflow>
