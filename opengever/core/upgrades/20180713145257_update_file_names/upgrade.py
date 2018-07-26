@@ -6,6 +6,8 @@ class UpdateFileNames(UpgradeStep):
     """Update file names for documents and E-mails
     """
 
+    deferrable = True
+
     def __call__(self):
         # Sync document filenames with title
         for obj in self.objects({'portal_type': 'opengever.document.document'},
