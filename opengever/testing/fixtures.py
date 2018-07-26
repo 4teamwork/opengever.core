@@ -683,6 +683,15 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        # Enable inbox_policy placeful workflow
+        inbox_policy_id = 'opengever_inbox_policy'
+        self.inbox.manage_addProduct[
+            'CMFPlacefulWorkflow'].manage_addWorkflowPolicyConfig()
+        pwf_tool = api.portal.get_tool('portal_placeful_workflow')
+        policy_config = pwf_tool.getWorkflowPolicyConfig(self.inbox)
+        policy_config.setPolicyIn(inbox_policy_id, update_security=False)
+        policy_config.setPolicyBelow(inbox_policy_id, update_security=False)
+
         self.register('inbox_document', create(
             Builder('document')
             .within(self.inbox)
