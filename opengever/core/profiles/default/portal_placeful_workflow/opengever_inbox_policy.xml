@@ -1,0 +1,10 @@
+<object name="opengever_inbox" meta_type="WorkflowPolicy">
+  <property name="title">Opengever inbox policy</property>
+  <bindings>
+
+    <type type_id="opengever.document.document">
+      <bound-workflow workflow_id="opengever_inbox_document_workflow" />
+    </type>
+
+  </bindings>
+</object>
