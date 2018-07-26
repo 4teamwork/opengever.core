@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Bump ftw.upgrade for deferrable upgrade support. [deiferni]
 - Create initial version with the original document creator as the principal. [lgraf]
 - Improve usability of proposal add form. [elioschmutz]
 - Add REST API endpoint for creating bumblebee sessions. [buchi]
