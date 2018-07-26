@@ -1,6 +1,6 @@
 <dc-workflow
     workflow_id="opengever_inbox_workflow"
-    title="Dossier Workflow"
+    title="Inbox Workflow"
     description=""
     state_variable="review_state"
     initial_state="inbox-state-default"
@@ -59,8 +59,6 @@
         name="Modify portal content"
         acquired="False">
       <permission-role>Manager</permission-role>
-      <permission-role>Editor</permission-role>
-      <permission-role>Administrator</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
