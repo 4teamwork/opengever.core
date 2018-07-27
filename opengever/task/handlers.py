@@ -6,6 +6,7 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task import _
+from opengever.task import FINAL_TRANSITIONS
 from opengever.task.adapters import IResponseContainer
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
@@ -130,9 +131,5 @@ def set_initial_state(task, event):
 def revoke_permissions(task, event):
     """Revoke temporary local roles on task and its related objects.
     """
-    if event.action in ['task-transition-open-cancelled',
-                        'task-transition-open-tested-and-closed',
-                        'task-transition-resolved-tested-and-closed',
-                        'task-transition-planned-skipped']:
-
+    if event.action in FINAL_TRANSITIONS:
         return LocalRolesSetter(task).revoke_roles()
