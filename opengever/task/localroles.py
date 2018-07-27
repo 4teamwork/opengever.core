@@ -23,6 +23,9 @@ class LocalRolesSetter(object):
         self._inbox_group = None
 
     def set_roles(self, event):
+        if self.task.is_in_final_state:
+            return
+
         self.event = event
         self.set_roles_on_task()
         self.globalindex_reindex_task()
