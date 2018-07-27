@@ -1,3 +1,4 @@
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.sharing.security import disabled_permission_check
 from plone.app.workflow.interfaces import ISharingPageRole
@@ -61,6 +62,7 @@ class SharingGet(APISharingGet):
 class RoleAssignmentsGet(APISharingGet):
     """API Endpoint which returns a list of all role assignments of
     the current context for a particular user.
+    Sharing assignments are skipped.
 
     GET /@role-assignments/principal_id HTTP/1.1
     """
@@ -82,7 +84,8 @@ class RoleAssignmentsGet(APISharingGet):
         manager = RoleAssignmentManager(self.context)
         assignments = manager.get_assignments_by_principal_id(principal_id)
 
-        return [assignment.serialize() for assignment in assignments]
+        return [assignment.serialize() for assignment in assignments
+                if assignment.cause != ASSIGNMENT_VIA_SHARING]
 
     def read_params(self):
         """Returns principal_id passed in via traversal parameters.
