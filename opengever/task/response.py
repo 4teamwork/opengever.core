@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.utils import disable_edit_bar
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
@@ -195,6 +196,8 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
     def update(self):
         super(TaskTransitionResponseAddForm, self).update()
+
+        disable_edit_bar()
 
         if self.is_final_transition:
             self.status = _(
