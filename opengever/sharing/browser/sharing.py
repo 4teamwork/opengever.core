@@ -97,7 +97,6 @@ class OpengeverSharingView(SharingView):
                 _(u'label_local_permission', default=u'Local permission')),
             'label_save': self.translate(PMF(u'Save')),
             'label_cancel': self.translate(PMF(u'Cancel')),
-            'label_cause': self.translate(_(u'label_cause', default=u'Cause')),
             'label_automatic_permission': self.translate(
                 _(u'label_automatic_permission', default=u'Automatic permission')),
             'label_local_permission': self.translate(

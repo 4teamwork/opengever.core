@@ -21,7 +21,6 @@
              v-bind:class="{ folded: entry.assignments}"
              @click="(event) => {toggle_assignments(event, entry, )}"/>
           <div v-show="entry.assignments" class="assignments_info">
-            <span>{{i18n.label_cause}}</span>
             <ul class="assignments_listing">
               <li v-for="assignment in entry.assignments">
                 <span class="cause">{{assignment.cause.title}}</span>
