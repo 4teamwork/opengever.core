@@ -4,6 +4,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview.helper import linked
 from opengever.task import _
+from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
 from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
@@ -11,6 +12,7 @@ from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.response_syncer import sync_task_response
+from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
 from plone.z3cform import layout
@@ -191,6 +193,15 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
     fields['transition'].widgetFactory = radio.RadioFieldWidget
     fields = fields.omit('date_of_completion')
 
+    def update(self):
+        super(TaskTransitionResponseAddForm, self).update()
+
+        if self.is_final_transition:
+            self.status = _(
+                u'msg_revoking_permissions',
+                default=u'This transtion revokes temporary permissions for '
+                'the responsible user and agency group.')
+
     @property
     def label(self):
         label = self.context.Title().decode('utf-8')
@@ -206,6 +217,10 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             if not self._transition:
                 raise BadRequest("A transition is required")
         return self._transition
+
+    @property
+    def is_final_transition(self):
+        return self.transition in FINAL_TRANSITIONS
 
     def updateActions(self):
         super(TaskTransitionResponseAddForm, self).updateActions()
