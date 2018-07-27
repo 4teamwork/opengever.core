@@ -166,9 +166,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
               'reference': Oguid.for_object(self.task),
               'principal': 'kathi.barfuss'}], storage._storage())
 
-        api.content.transition(
-            obj=self.task,
-            transition='task-transition-resolved-tested-and-closed')
+        # close
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
 
         self.assertEquals([], storage._storage())
 
@@ -183,9 +185,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [Oguid.for_object(self.task).id, Oguid.for_object(self.subtask).id],
             [item.get('reference') for item in storage._storage()])
 
-        api.content.transition(
-            obj=self.task,
-            transition='task-transition-resolved-tested-and-closed')
+        # close
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
 
         self.assertEquals(
             [Oguid.for_object(self.subtask).id],
@@ -202,10 +206,43 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             Oguid.for_object(self.task).id,
             [aa.get('reference') for aa in storage._storage()])
 
-        api.content.transition(
-            obj=self.task,
-            transition='task-transition-resolved-tested-and-closed')
+        # close
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
 
         self.assertNotIn(
             Oguid.for_object(self.task).id,
             [aa.get('reference') for aa in storage._storage()])
+
+    @browsing
+    def test_cancelling_a_task_revokes_roles(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-open', self.subtask)
+
+        # cancel
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-open-cancelled')
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.subtask).storage
+        self.assertEquals([], storage._storage())
+
+    @browsing
+    def test_skip_a_task_revokes_roles(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        storage = RoleAssignmentManager(self.seq_subtask_2).storage
+        self.assertEquals(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.seq_subtask_2),
+              'principal': 'kathi.barfuss'}], storage._storage())
+
+        # skip
+        browser.open(self.seq_subtask_2, view='tabbedview_view-overview')
+        browser.click_on('task-transition-planned-skipped')
+        browser.click_on('Save')
+
+        self.assertEquals([], storage._storage())

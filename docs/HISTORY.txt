@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Revoke local roles for responsible and agency when finishing a task. [phgross]
 - Add RoleAssignment manager layer including a new sharing form. [phgross]
 - Fix teamraum styles import / export for right logo. [tarnap]
 - Bump ftw.upgrade for deferrable upgrade support. [deiferni]
