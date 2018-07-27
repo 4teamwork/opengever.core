@@ -1,3 +1,7 @@
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import CommitteeGroupAssignment
+
+
 class CommitteeRoles(object):
     """Sets local roles committees for a principal.
 
@@ -18,20 +22,9 @@ class CommitteeRoles(object):
         if isinstance(principal, unicode):
             principal = principal.encode('utf8')
 
-        self.context.manage_addLocalRoles(principal, self.managed_roles)
-
-    def _drop_managed_local_roles(self, principal):
-        """Removes managed roles from context but preserves other, manually
-        added roles for principal.
-
-        """
-        current_roles = dict(self.context.get_local_roles()).get(principal, ())
-        new_roles = list(set([role for role in current_roles
-                              if role not in self.managed_roles]))
-        if new_roles:
-            self.context.manage_setLocalRoles(principal, new_roles)
-        else:
-            self.context.manage_delLocalRoles([principal])
+        assignment = CommitteeGroupAssignment(
+            principal, self.managed_roles, self.context)
+        RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
     def initialize(self, principal):
         """Initialize local roles by adding managed roles for principal."""
@@ -40,7 +33,6 @@ class CommitteeRoles(object):
             return
 
         self._add_managed_local_roles(principal)
-        self.context.reindexObjectSecurity()
 
     def update(self, principal, previous_principal):
         """Update local roles by adding managed roles for principal and dropping
@@ -50,7 +42,7 @@ class CommitteeRoles(object):
         if principal == previous_principal:
             return
 
-        if previous_principal:
-            self._drop_managed_local_roles(previous_principal)
-        self._add_managed_local_roles(principal)
-        self.context.reindexObjectSecurity()
+        assignments = [CommitteeGroupAssignment(
+            principal, self.managed_roles, self.context)
+        ]
+        RoleAssignmentManager(self.context).reset(assignments)

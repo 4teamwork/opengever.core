@@ -14,6 +14,9 @@ from ftw.testing import staticuid
 from functools import wraps
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
+from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.ogds.base.utils import ogds_service
@@ -102,6 +105,10 @@ class OpengeverContentFixture(object):
 
     def __call__(self):
         return self._lookup_table
+
+    def set_roles(self, obj, principal, roles):
+        RoleAssignmentManager(obj).add_or_update_assignment(
+            SharingRoleAssignment(principal, roles))
 
     def create_units(self):
         self.admin_unit = create(
@@ -278,15 +285,12 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.root.manage_setLocalRoles(
-            self.org_unit.users_group_id,
-            ['Reader', 'Contributor', 'Editor'],
-            )
-
-        self.root.manage_setLocalRoles(
-            self.secretariat_user.getId(),
-            ['Reviewer', 'Publisher'],
-            )
+        self.set_roles(
+            self.root, self.org_unit.users_group_id,
+            ['Reader', 'Contributor', 'Editor'])
+        self.set_roles(
+            self.root, self.secretariat_user.getId(),
+            ['Reviewer', 'Publisher'])
 
         self.root.reindexObjectSecurity()
 
@@ -300,10 +304,9 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.repofolder0.manage_setLocalRoles(
-            self.dossier_manager.getId(),
-            ['DossierManager'],
-            )
+        self.set_roles(
+            self.repofolder0, self.dossier_manager.getId(),
+            ['DossierManager'])
 
         self.repofolder0.reindexObjectSecurity()
 
@@ -336,15 +339,13 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id,
-            ['Reader'],
-            )
+        self.set_roles(
+            self.contactfolder, self.org_unit.users_group_id,
+            ['Reader'])
 
-        self.contactfolder.manage_setLocalRoles(
-            self.org_unit.users_group_id,
-            ['Reader', 'Contributor', 'Editor'],
-            )
+        self.set_roles(
+            self.contactfolder, self.org_unit.users_group_id,
+            ['Reader', 'Contributor', 'Editor'])
 
         self.contactfolder.reindexObjectSecurity()
 
@@ -384,10 +385,14 @@ class OpengeverContentFixture(object):
             .having(id='vorlagen')
             ))
 
-        self.templates.manage_setLocalRoles(self.org_unit.users_group_id, ['Reader'])
-        self.templates.manage_setLocalRoles(self.administrator.getId(), ['Reader', 'Contributor', 'Editor'])
-        self.templates.manage_setLocalRoles(self.dossier_responsible.getId(), ['Reader', 'Contributor', 'Editor'])
-        self.templates.reindexObjectSecurity()
+        self.set_roles(
+            self.templates, self.org_unit.users_group_id, ['Reader'])
+        self.set_roles(
+            self.templates, self.administrator.getId(),
+            ['Reader', 'Contributor', 'Editor'])
+        self.set_roles(
+            self.templates, self.dossier_responsible.getId(),
+            ['Reader', 'Contributor', 'Editor'])
 
         self.register('asset_template', create(
             Builder('document')
@@ -519,10 +524,12 @@ class OpengeverContentFixture(object):
             .having(id='vorlagen-neu')
             .within(self.templates)
             ))
-        subtemplates.manage_setLocalRoles(self.org_unit.users_group_id, ['Reader'])
-        subtemplates.manage_setLocalRoles(self.administrator.getId(), ['Reader', 'Contributor', 'Editor'])
-        subtemplates.manage_setLocalRoles(self.dossier_responsible.getId(), ['Reader', 'Contributor', 'Editor'])
-        subtemplates.reindexObjectSecurity()
+
+        self.set_roles(subtemplates, self.org_unit.users_group_id, ['Reader'])
+        self.set_roles(subtemplates, self.administrator.getId(),
+                       ['Reader', 'Contributor', 'Editor'])
+        self.set_roles(subtemplates, self.dossier_responsible.getId(),
+                       ['Reader', 'Contributor', 'Editor'])
 
         self.register('subtemplate', create(
             Builder('document')
@@ -546,21 +553,15 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.committee_container.manage_setLocalRoles(
-            self.committee_responsible.getId(),
-            ['MeetingUser'],
-            )
-
-        self.committee_container.manage_setLocalRoles(
-            self.meeting_user.getId(),
-            ['MeetingUser'],
-            )
-
-        self.committee_container.manage_setLocalRoles(
-            self.administrator.getId(),
-            ['CommitteeAdministrator'],
-            )
-
+        self.set_roles(
+            self.committee_container, self.committee_responsible.getId(),
+            ['MeetingUser'])
+        self.set_roles(
+            self.committee_container, self.meeting_user.getId(),
+            ['MeetingUser'])
+        self.set_roles(
+            self.committee_container, self.administrator.getId(),
+            ['CommitteeAdministrator'])
         self.committee_container.reindexObjectSecurity()
 
         self.committee = self.register('committee', self.create_committee(
@@ -579,10 +580,8 @@ class OpengeverContentFixture(object):
             self.committee.load_model().committee_id,
             )
 
-        self.committee.manage_setLocalRoles(
-            self.meeting_user.getId(),
-            ['CommitteeMember'],
-            )
+        self.set_roles(
+            self.committee, self.meeting_user.getId(), ['CommitteeMember'])
 
         self.committee_president = self.create_committee_membership(
             self.committee,
@@ -650,10 +649,9 @@ class OpengeverContentFixture(object):
             self.empty_committee.load_model().committee_id,
             )
 
-        self.empty_committee.manage_setLocalRoles(
-            self.meeting_user.getId(),
-            ['CommitteeMember'],
-            )
+        self.set_roles(
+            self.empty_committee, self.meeting_user.getId(),
+            ['CommitteeMember'])
 
         self.empty_committee.reindexObjectSecurity()
 
@@ -676,10 +674,8 @@ class OpengeverContentFixture(object):
             .with_asset_file('text.txt')
             ))
 
-        self.inbox.manage_setLocalRoles(
-            self.secretariat_user.getId(),
-            ['Contributor', 'Editor', 'Reader'],
-            )
+        self.set_roles(self.inbox, self.secretariat_user.getId(),
+                       ['Contributor', 'Editor', 'Reader'])
 
         inbox_forwarding = self.register('inbox_forwarding', create(
             Builder('forwarding')
@@ -753,17 +749,14 @@ class OpengeverContentFixture(object):
             .within(self.private_dossier)
         ))
 
-        self.private_folder.manage_setLocalRoles(
-            self.regular_user.getId(),
-            [
-                'Publisher',
-                'Contributor',
-                'Reader',
-                'Owner',
-                'Reviewer',
-                'Editor',
-                ],
-            )
+        self.set_roles(
+            self.private_folder, self.regular_user.getId(),
+            ['Publisher',
+             'Contributor',
+             'Reader',
+             'Owner',
+             'Reviewer',
+             'Editor'])
 
         self.private_folder.reindexObjectSecurity()
 
@@ -1094,7 +1087,7 @@ class OpengeverContentFixture(object):
                 responsible_client=self.org_unit.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
-                task_type='correction',
+                task_type='direct-execution',
                 deadline=date(2016, 11, 1),
                 )
             .in_state('task-state-in-progress')
@@ -1565,26 +1558,18 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.workspace_root.manage_setLocalRoles(
-            self.workspace_owner.getId(),
-            ['WorkspacesUser', 'WorkspacesCreator'],
-            )
-
-        self.workspace_root.manage_setLocalRoles(
-            self.workspace_admin.getId(),
-            ['WorkspacesUser', 'WorkspacesCreator'],
-            )
-
-        self.workspace_root.manage_setLocalRoles(
-            self.workspace_member.getId(),
-            ['WorkspacesUser'],
-            )
-
-        self.workspace_root.manage_setLocalRoles(
-            self.workspace_guest.getId(),
-            ['WorkspacesUser'],
-            )
-
+        self.set_roles(
+            self.workspace_root, self.workspace_owner.getId(),
+            ['WorkspacesUser', 'WorkspacesCreator'])
+        self.set_roles(
+            self.workspace_root, self.workspace_admin.getId(),
+            ['WorkspacesUser', 'WorkspacesCreator'])
+        self.set_roles(
+            self.workspace_root, self.workspace_member.getId(),
+            ['WorkspacesUser'])
+        self.set_roles(
+            self.workspace_root, self.workspace_guest.getId(),
+            ['WorkspacesUser'])
         self.workspace_root.reindexObjectSecurity()
 
     def create_workspace(self):
@@ -1594,21 +1579,14 @@ class OpengeverContentFixture(object):
             .within(self.workspace_root)
             ))
 
-        self.workspace.manage_setLocalRoles(
-            self.workspace_admin.getId(),
-            ['WorkspaceAdmin'],
-            )
-
-        self.workspace.manage_setLocalRoles(
-            self.workspace_member.getId(),
-            ['WorkspaceMember'],
-            )
-
-        self.workspace.manage_setLocalRoles(
-            self.workspace_guest.getId(),
-            ['WorkspaceGuest'],
-            )
-        self.workspace.reindexObjectSecurity()
+        RoleAssignmentManager(self.workspace).reset([
+            InvitationRoleAssignment(
+                self.workspace_admin.id, ['WorkspaceAdmin'], self.workspace),
+            InvitationRoleAssignment(
+                self.workspace_member.id, ['WorkspaceMember'], self.workspace),
+            InvitationRoleAssignment(
+                self.workspace_guest.id, ['WorkspaceGuest'], self.workspace)
+        ])
 
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder')

@@ -3,9 +3,10 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.transport import Transporter
 from opengever.testing import FunctionalTestCase
-from plone import api
 from plone.app.testing import TEST_USER_ID
 from zExceptions import Unauthorized
 
@@ -88,9 +89,10 @@ class TestTransporter(FunctionalTestCase):
                       .having(deadline=date(2014, 7, 1)))
 
         create(Builder('user').named('Hugo', 'Boss'))
-        api.user.grant_roles(username=u'hugo.boss',
-                             obj=source,
-                             roles=['Contributor', 'Editor', 'Reader'])
+        RoleAssignmentManager(source).add_or_update_assignment(
+            SharingRoleAssignment(u'hugo.boss',
+                                  ['Contributor', 'Editor', 'Reader']))
+
         self.login(u'hugo.boss')
 
         with self.assertRaises(Unauthorized):

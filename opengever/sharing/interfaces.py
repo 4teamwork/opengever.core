@@ -7,7 +7,7 @@ class IOpengeverSharing(Interface):
     """Browserlayer Interface"""
 
 
-#Events
+# Events
 class ILocalRolesAcquisitionBlocked(IObjectEvent):
     """Local Roles acquisition has been blocked"""
 
@@ -38,3 +38,9 @@ class ISharingConfiguration(Interface):
         description=u"The prrefix pattern, for groups wich shouldn't be "
         "displayed in the sharing view. For example another client group.",
         default=u"^$")
+
+
+class IDisabledPermissionCheck(Interface):
+    """Marker interface for disabled permisison check when fetching
+    role_settings from the sharing view.
+    """

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-23 12:30+0000\n"
+"POT-Creation-Date: 2018-07-27 09:31+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -183,6 +183,36 @@ msgstr "Valeur archivistique"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_archival_value_annotation"
 msgstr "Commentaire concernant la valeur archivistique"
+
+#. Default: "By committee group"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_committee_group"
+msgstr ""
+
+#. Default: "By protect dossier"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_protect_dossier"
+msgstr ""
+
+#. Default: "Via sharing"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_sharing"
+msgstr ""
+
+#. Default: "By task"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task"
+msgstr ""
+
+#. Default: "By task agency"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task_agency"
+msgstr ""
+
+#. Default: "By workspace invitation"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_workspace_invitation"
+msgstr ""
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/favorites.py

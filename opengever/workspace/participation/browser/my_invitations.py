@@ -1,7 +1,9 @@
+from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
+from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
-from opengever.ogds.base.actor import PloneUserActor
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -64,9 +66,10 @@ class MyWorkspaceInvitations(BrowserView):
         invitation = self.get_invitation_and_validate_payload()
         with elevated_privileges():
             target = uuidToObject(invitation['target_uuid'])
-            target.manage_setLocalRoles(invitation['recipient'],
-                                        [invitation['role']])
-            target.reindexObjectSecurity()
+
+            assignment = InvitationRoleAssignment(
+                invitation['recipient'], [invitation['role']], target)
+            RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().remove_invitation(invitation['iid'])
 
         return self.request.RESPONSE.redirect(target.absolute_url())

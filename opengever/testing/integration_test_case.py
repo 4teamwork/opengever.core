@@ -1,6 +1,8 @@
 from AccessControl import getSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.flamegraph import flamegraph
 from ftw.mail.mail import IMail
 from ftw.solr.connection import SolrResponse
@@ -17,6 +19,8 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
@@ -56,7 +60,7 @@ FEATURE_FLAGS = {
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
-    'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
+    'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',  # noqa
     'oneoffixx': 'opengever.oneoffixx.interfaces.IOneoffixxSettings.is_feature_enabled',
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
@@ -609,6 +613,13 @@ class IntegrationTestCase(TestCase):
         solr.search = MagicMock(name='search', return_value=SolrResponse(
             body=search_resp, status=200))
         return solr
+
+    def add_additional_org_unit(self):
+        create(Builder('org_unit').id("additional")
+               .having(admin_unit=get_current_admin_unit()))
+
+        # Reset org_unit strategy, we need now a MultipleOrgUnitsStrategy
+        get_current_org_unit()._chosen_strategy = None
 
     def assert_solr_called(self, solr, text, **kwargs):
         query = (

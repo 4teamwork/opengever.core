@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-15 18:06+0000\n"
+"POT-Creation-Date: 2018-07-27 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,14 +17,44 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.sharing\n"
 
+#. Default: "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
+#: ./opengever/sharing/browser/sharing.py
+msgid "help_inherit_local_roles"
+msgstr ""
+
+#. Default: "Acquired permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_acquired_permission"
+msgstr ""
+
+#. Default: "Automatic permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_automatic_permission"
+msgstr ""
+
 #. Default: "Protected Objects"
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_blocked_local_roles"
 msgstr ""
 
+#. Default: "Local permission"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_local_permission"
+msgstr ""
+
 #. Default: "No protected objects were found within this scope."
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_no_blocked_local_roles"
+msgstr ""
+
+#. Default: "Local roles successfully changed"
+#: ./opengever/sharing/browser/sharing.py
+msgid "label_roles_successfully_changed"
+msgstr ""
+
+#. Default: "Search for Users and Groups"
+#: ./opengever/sharing/browser/sharing.py
+msgid "principal_search_placeholder"
 msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py

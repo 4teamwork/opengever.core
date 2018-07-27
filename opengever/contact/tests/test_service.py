@@ -31,7 +31,9 @@ class TestContactService(FunctionalTestCase):
                            .having(firstname=u'James',
                                    lastname=u'Bond',
                                    email=None))
-        jamesbond.manage_delLocalRoles(TEST_USER_ID)
+
+        jamesbond.__ac_local_roles_block__ = True
+        jamesbond.reindexObjectSecurity()
 
         brains = contact_service().all_contact_brains()
         self.assertEquals(

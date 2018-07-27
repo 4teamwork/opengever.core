@@ -980,21 +980,6 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
         self.assertEqual(u'Document added: T\xc3\xb6mpl\xc3\xb6te Normal', journal_entries[0]['Title'])
 
     @browsing
-    def test_template_info_tab(self, browser):
-        self.login(self.manager, browser)
-
-        browser.open(self.normal_template, view='tabbedview_view-sharing')
-
-        expected_sharing_tab_data = [
-            ['Logged-in users', False, False, False],
-            ['fa_users', True, False, False],
-            ['Kohler Nicole (nicole.kohler)', True, True, True],
-            ['Ziegler Robert (robert.ziegler)', True, True, True],
-            ]
-
-        self.assertEquals(expected_sharing_tab_data, sharing_tab_data())
-
-    @browsing
     def test_documents_tab_shows_only_docs_directly_inside_the_folder(self, browser):
         self.login(self.regular_user, browser=browser)
 

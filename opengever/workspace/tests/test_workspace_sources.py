@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
@@ -39,8 +41,11 @@ class TestAllUsersInboxesAndTeamsSourceForWorkspace(IntegrationTestCase):
 
     def set_permissions_on_workspace(self):
         self.workspace.manage_permission('View', roles=['Contributor', ])
-        self.workspace.manage_setLocalRoles(self.john.userid, ['Contributor'])
-        self.workspace.manage_setLocalRoles(self.hugo.userid, ['Contributor'])
+
+        RoleAssignmentManager(self.workspace).add_or_update_assignment(
+            SharingRoleAssignment(self.hugo.userid, ['Contributor']))
+        RoleAssignmentManager(self.workspace).add_or_update_assignment(
+            SharingRoleAssignment(self.john.userid, ['Contributor']))
 
     def test_is_within_workspace(self):
         self.assertFalse(is_within_workspace(self.dossier),

@@ -252,3 +252,21 @@ msgstr ""
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
 msgstr ""
+
+msgid "title_can_view"
+msgstr ""
+
+msgid "title_can_edit"
+msgstr ""
+
+msgid "title_can_add"
+msgstr ""
+
+msgid "title_can_review"
+msgstr ""
+
+msgid "Publisher"
+msgstr ""
+
+msgid "DossierManager"
+msgstr ""

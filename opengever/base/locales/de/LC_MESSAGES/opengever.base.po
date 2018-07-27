@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-23 12:30+0000\n"
+"POT-Creation-Date: 2018-07-27 09:31+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -184,6 +184,36 @@ msgstr "Archivwürdigkeit"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_archival_value_annotation"
 msgstr "Kommentar zur Archivwürdigkeit"
+
+#. Default: "By committee group"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_committee_group"
+msgstr "Durch Mitgliedschaft in Gremiumsgruppe"
+
+#. Default: "By protect dossier"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_protect_dossier"
+msgstr "Durch «Dossier schützen»"
+
+#. Default: "Via sharing"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_sharing"
+msgstr "Durch manuelle Freigabe"
+
+#. Default: "By task"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task"
+msgstr "Durch Aufgabe"
+
+#. Default: "By task agency"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_task_agency"
+msgstr "Durch Aufgabe (Stellvertretung)"
+
+#. Default: "By workspace invitation"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_workspace_invitation"
+msgstr "Durch eine Teamraum-Einladung"
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/favorites.py

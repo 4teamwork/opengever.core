@@ -8,6 +8,7 @@
       class=".sharing.OpengeverSharingView"
       permission="plone.DelegateRoles"
       layer="opengever.sharing.interfaces.IOpengeverSharing"
+      allowed_attributes="saved"
       />
 
   <browser:page
@@ -32,5 +33,11 @@
       class=".admin_list.BlockedLocalRolesList"
       permission="opengever.document.ListProtectedObjects"
       />
+
+  <browser:resourceDirectory
+      name="opengever.sharing"
+      directory="resources"
+      />
+
 
 </configure>

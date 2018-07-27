@@ -25,7 +25,7 @@ class TestRepositoryCreation(FunctionalTestCase):
             (('admin', ('Owner',)),
              (u'administratoren', ('Publisher',)),
              (u'gever eingangskorb',
-              ('Contributor', 'Editor', 'Reviewer', 'Publisher')),
+              ('Contributor', 'Reviewer', 'Editor', 'Publisher')),
              (u'gever_users',
-              ('Reader', 'Contributor', 'Editor', 'Reviewer', 'Publisher'))),
+              ('Contributor', 'Reviewer', 'Publisher', 'Editor', 'Reader'))),
             self.portal['repo'].get_local_roles())

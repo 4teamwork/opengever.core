@@ -1,3 +1,6 @@
+from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
+from opengever.base.role_assignments import InvitationRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.base.actor import PloneUserActor
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.workspace.participation.storage import IInvitationStorage
@@ -120,8 +123,8 @@ class ManageParticipants(BrowserView):
             return self.__call__()
 
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
-            self.context.manage_delLocalRoles([token])
-            self.context.reindexObjectSecurity()
+            RoleAssignmentManager(self.context).clear_by_cause_and_principal(
+                ASSIGNMENT_VIA_INVITATION, token)
             return self.__call__()
         else:
             raise BadRequest('Oh my, something went wrong')
@@ -144,7 +147,9 @@ class ManageParticipants(BrowserView):
             user_roles = api.user.get_roles(username=token, obj=self.context,
                                             inherit=False)
             if user_roles and 'WorkspaceOwner' not in user_roles:
-                self.context.manage_setLocalRoles(token, [role])
+                assignment = InvitationRoleAssignment(token, [role], self.context)
+                RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
+
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)

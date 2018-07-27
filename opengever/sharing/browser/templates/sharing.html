@@ -1,0 +1,93 @@
+<script type="text/x-template" id="sharing-form">
+
+  <div class="sharing-form">
+    <form @submit.prevent="search" class="search-form" v-if="isEditable">
+      <input type="text" class="search_box" v-model="principal_search"
+             :placeholder="i18n.principal_search_placeholder" />
+      <a class="button" @click="search">{{i18n.label_search}}</a>
+    </form>
+
+    <table class="sharing-table listing">
+      <tr>
+        <th class="principal_header">{{i18n.label_name}}</th>
+        <th class="role_header" v-for="role in available_roles">{{role.title}}</th>
+      </tr>
+      <tr v-for="entry in entries" :key="entry.id">
+        <td>
+          <a class="principal link-overlay"
+             :class="entry.type"
+             :href="entry.url">{{entry.title}}</a>
+          <a class="assignments_info_button"
+             v-bind:class="{ folded: entry.assignments}"
+             @click="(event) => {toggle_assignments(event, entry, )}"/>
+          <div v-show="entry.assignments" class="assignments_info">
+            <ul class="assignments_listing">
+              <li v-for="assignment in entry.assignments"
+                  @mouseover="highlight_roles(event, entry, assignment)"
+                  @mouseleave="unhighlight_roles(event, entry, assignment)">
+                <span class="cause">
+                  {{assignment.cause.title}}
+                </span>
+                <a v-if="assignment.reference"
+                   :href="assignment.reference.url"
+                   class="reference">{{assignment.reference.title}}</a>
+              </li>
+            </ul>
+          </div>
+
+        </td>
+        <td v-for="role in available_roles" class="role_cell">
+
+          <template v-if="isEditable">
+            <!-- acquired -->
+            <input type="checkbox" disabled="disabled" checked="checked"
+                   :title="i18n.label_acquired"
+                   v-if="entry.computed_roles[role.id] == 'acquired'" />
+
+            <!-- checkbox -->
+            <input type="checkbox" v-if="entry.computed_roles[role.id] != 'acquired'"
+                   :checked="entry.roles[role.id]"
+                   :class="role.id"
+                   @click="(event) => {toggle_checkbox(event, entry, role.id)}"/>
+
+            <!-- automatic roles -->
+            <div class="automatic"
+                 v-if="entry.automatic_roles[role.id]"
+                 :class="entry.automatic_roles[role.id]"
+                 :title="i18n.label_automatic_permission" />
+
+          </template>
+          <template v-if="!isEditable">
+            <span class="acquired"
+                  v-if="entry.computed_roles[role.id] == 'acquired'"
+                  :title="i18n.label_acquired" />
+
+            <span class="local"
+                  v-if="entry.roles[role.id] && entry.computed_roles[role.id] != 'acquired'"
+                  :title="i18n.label_local_permission" />
+
+            <span class="automatic"
+                  v-if="entry.automatic_roles[role.id]"
+                  :class="entry.automatic_roles[role.id]"
+                  :title="i18n.label_automatic_permission" />
+          </template>
+
+        </td>
+      </tr>
+    </table>
+
+    <template v-if="isEditable">
+      <input id="inherit_local_roles" type="checkbox" v-model="inherit" />
+      <label for="inherit_local_roles">{{i18n.label_inherit_local_roles}}</label>
+      <div class="formHelp">{{i18n.help_inherit_local_roles}}
+      </div>
+
+      <div class="formControls">
+        <a class="button context" @click="save">{{i18n.label_save}}</a>
+        <a class="button" :href="context_url">{{i18n.label_cancel}}</a>
+      </div>
+    </template>
+
+  </div>
+
+</script>

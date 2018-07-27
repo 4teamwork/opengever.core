@@ -1,4 +1,6 @@
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from plone.locking.interfaces import IRefreshableLockable
@@ -45,9 +47,9 @@ class TestDocumentQuickupload(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         self.set_workflow_state('task-state-tested-and-closed', self.task)
-        self.dossier.manage_setLocalRoles(
-            'kathi.barfuss', ['Reader', 'Contributor', 'Editor'])
-        self.dossier.reindexObjectSecurity()
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
+            SharingRoleAssignment('kathi.barfuss',
+                                  ['Reader', 'Contributor', 'Editor']))
 
         manager = queryMultiAdapter(
             (self.taskdocument, self.request), ICheckinCheckoutManager)

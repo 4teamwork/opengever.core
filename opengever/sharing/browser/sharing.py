@@ -3,6 +3,9 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
+from opengever.base.handlebars import get_handlebars_template
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.sharing import _
@@ -10,18 +13,25 @@ from opengever.sharing.behaviors import IDossier, IStandard
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
+from opengever.sharing.interfaces import IDisabledPermissionCheck
 from opengever.sharing.interfaces import ISharingConfiguration
+from pkg_resources import resource_filename
 from plone import api
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
+from plone.memoize.instance import clearafter
 from plone.memoize.instance import memoize
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as PMF
+from Products.CMFPlone.utils import normalizeString
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.event import notify
+from zope.i18n import translate
+import json
 import re
 
 
@@ -45,45 +55,106 @@ ROLE_MAPPING = (
 
 
 class OpengeverSharingView(SharingView):
-    """Special Opengever Sharing View, which display different roles
-    depending on the sharing behavior which is context
-    """
 
-    index = ViewPageTemplateFile('sharing.pt')
+    template = ViewPageTemplateFile('templates/sharing.pt')
 
-    @memoize
-    def roles(self, check_permission=True):
-        """Get a list of roles that can be managed.
+    @property
+    def vuejs_template(self):
+        return get_handlebars_template(
+            resource_filename('opengever.sharing.browser',
+                              'templates/sharing.html'))
 
-        Returns a list of dicts with keys:
+    def __call__(self):
+        return self.template()
 
-        - id
-        - title
+    def get_userid(self):
+        return api.user.get_current().getId()
+
+    def translate(self, msg):
+        return translate(msg, context=self.request)
+
+    def plone_translate(self, msgid):
+        return self.translate(PMF(msgid))
+
+    def translations(self):
+        return json.dumps({
+            'label_search': self.plone_translate('label_search'),
+            'label_inherit_local_roles': self.plone_translate('label_inherit_local_roles'),
+            'help_inherit_local_roles': self.translate(
+                _(u'help_inherit_local_roles',
+                  default=u'By default, permissions from the container of this '
+                  u'item are inherited. If you disable this, only the '
+                  u'explicitly defined sharing permissions will be valid.')),
+            'image_link_icon': self.plone_translate('image_link_icon'),
+            'image_confirm_icon': self.plone_translate('image_confirm_icon'),
+            'principal_search_placeholder': self.translate(
+                _(u'principal_search_placeholder',
+                  default=u'Search for Users and Groups')),
+            'label_name': self.plone_translate('label_name'),
+            'label_acquired': self.translate(
+                _(u'label_acquired_permission', default=u'Acquired permission')),
+            'label_local': self.translate(
+                _(u'label_local_permission', default=u'Local permission')),
+            'label_save': self.translate(PMF(u'Save')),
+            'label_cancel': self.translate(PMF(u'Cancel')),
+            'label_automatic_permission': self.translate(
+                _(u'label_automatic_permission', default=u'Automatic permission')),
+            'label_local_permission': self.translate(
+                _(u'label_local_permission', default=u'Local permission'))
+        })
+
+    def saved(self):
+        """Redirects to absolute_url and adds statusmessage.
         """
-        context = self.context
-        portal_membership = getToolByName(context, 'portal_membership')
+        message = _(u'label_roles_successfully_changed',
+                    default=u'Local roles successfully changed')
+        api.portal.show_message(
+            message=message, request=self.request, type='info')
 
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def _roles(self):
+        """plone.app.workflow SharingView original roles method, but
+        with conditionally permission check.
+        """
+        is_permission_check_disabled = IDisabledPermissionCheck.providedBy(
+            self.request)
+
+        context = self.context
+        portal_membership = api.portal.get_tool('portal_membership')
         pairs = []
+
         for name, utility in getUtilitiesFor(ISharingPageRole):
             permission = utility.required_permission
-            if not check_permission or permission is None or \
-                    portal_membership.checkPermission(permission, context):
-                pairs.append(dict(id=name, title=utility.title))
+            if not is_permission_check_disabled and permission is not None:
+                if not portal_membership.checkPermission(permission, context):
+                    continue
 
-        pairs.sort(key=lambda x: x["id"])
+            # be friendly to utilities implemented without required_interface
+            iface = getattr(utility, 'required_interface', None)
+            if iface is not None and not iface.providedBy(context):
+                continue
+
+            pairs.append(dict(id=name, title=utility.title))
+
+        pairs.sort(key=lambda x: normalizeString(
+            translate(x["title"], context=self.request)))
+
         return pairs
 
-    def available_roles(self):
+    @memoize
+    def roles(self):
+        super_roles = self._roles()
         if get_specification_for(self.context) is not None:
             # In lawgiver workflow specifications we can configure the
             # "visible roles", therefore we dont need to overwrite the
             # behavior here.
-            return self.roles()
+            return super_roles
 
         result = []
         for key, value in ROLE_MAPPING:
             if key.providedBy(self.context) or key is IStandard:
-                roles = [r.get('id') for r in self.roles()]
+                roles = [r.get('id') for r in super_roles]
                 for role_id, title in value:
                     if role_id in roles:
                         result.append(
@@ -92,7 +163,7 @@ class OpengeverSharingView(SharingView):
 
                 return result
 
-        return self.roles()
+        return super_roles
 
     def role_settings(self):
         """The standard role_settings method,
@@ -101,14 +172,27 @@ class OpengeverSharingView(SharingView):
         results = super(OpengeverSharingView, self).role_settings()
         member = self.context.portal_membership.getAuthenticatedMember()
 
+        auth_group_index = [r.get('id') for r in results].index('AuthenticatedUsers')
         if member and 'Manager' not in member.getRolesInContext(self.context):
-            # remove the group AuthenticatedUsers
-            results.pop([r.get('id') for r in results].index('AuthenticatedUsers'))
+            # Remove the group AuthenticatedUsers if its not a manager
+            results.pop(auth_group_index)
+        else:
+            # Translate `Logged-In users` label, currently the plone.restapi
+            # sharing endpoint does not translate this label
+            results[auth_group_index]['title'] = translate(
+                results[auth_group_index]['title'],
+                domain='plone', context=self.request)
 
-        # Use group title attribute if exists, because our LDAP stack does
-        # not support mapping additional attributes, we fetch the information
-        # from ogds.
+        manager = RoleAssignmentManager(self.context)
         for result in results:
+            result['url'] = self.get_detail_view_url(result)
+            result['computed_roles'] = result['roles']
+            self.extend_with_assignment_infos(result, manager)
+            self.update_computed_info(result)
+
+            # Use group title attribute if exists, because our LDAP stack does
+            # not support mapping additional attributes, we fetch the information
+            # from ogds.
             if not result.get('type') == 'group':
                 continue
             group = ogds_service().fetch_group(result['id'])
@@ -117,6 +201,44 @@ class OpengeverSharingView(SharingView):
             result['title'] = group.label()
 
         return results
+
+    def get_detail_view_url(self, item):
+        """Returns the url to the detail view for users or group.
+        """
+        if item.get('type') == 'group':
+            return '{}/@@list_groupmembers?group={}'.format(
+                api.portal.get().absolute_url(), item['id'])
+        else:
+            return '{}/@@user-details/{}'.format(
+                api.portal.get().absolute_url(), item['id'])
+
+    def extend_with_assignment_infos(self, item, manager):
+        local_roles = {role['id']: False for role in self.roles()}
+        automatic_roles = {role['id']: False for role in self.roles()}
+
+        assignments = manager.get_assignments_by_principal_id(item['id'])
+        for assignment in assignments:
+            if isinstance(assignment, SharingRoleAssignment):
+                for role in assignment.roles:
+                    local_roles[role] = True
+            else:
+                for role in assignment.roles:
+                    automatic_roles[role] = True
+
+        item['roles'] = local_roles
+        item['automatic_roles'] = automatic_roles
+
+    def update_computed_info(self, item):
+        """Set acquired for all acquired roles in the `computed_roles`,
+        even if autoamtic local roles exists.
+        """
+
+        _inherited_roles = {
+            name: roles
+            for (name, roles, rtype, rid) in self._inherited_roles()}
+
+        for role in _inherited_roles.get(item['id'], []):
+            item['computed_roles'][role] = 'acquired'
 
     def update_inherit(self, status=True, reindex=True):
         """Method Wrapper for the super method, to allow notify a
@@ -174,23 +296,39 @@ class OpengeverSharingView(SharingView):
 
         return True
 
+    @clearafter
+    def _update_role_settings(self, new_settings, reindex=True):
+        """Replaced because we need our own permission manager stuff.
+        """
+        assignments = []
+
+        for s in new_settings:
+            principal = s['id']
+            selected_roles = frozenset(s['roles'])
+            if not selected_roles:
+                continue
+
+            assignments.append(SharingRoleAssignment(principal, selected_roles))
+
+        if assignments:
+            manager = RoleAssignmentManager(self.context)
+            manager.reset(assignments)
+
     def update_role_settings(self, new_settings, reindex=True):
         """Method Wrapper for the super method, to allow notify a
         LocalRolesModified event. Needed for adding a Journalentry after a
         role_settings change
         """
         old_local_roles = dict(self.context.get_local_roles())
-        changed = super(OpengeverSharingView, self).update_role_settings(
-            new_settings, reindex)
+        self._update_role_settings(new_settings, reindex)
 
-        if changed:
-            notify(LocalRolesModified(
-                self.context,
-                old_local_roles,
-                self.context.get_local_roles(),
-                ))
+        if old_local_roles != dict(self.context.get_local_roles()):
+            notify(
+                LocalRolesModified(self.context, old_local_roles,
+                                   self.context.get_local_roles()))
+            return True
 
-        return changed
+        return False
 
     def _principal_search_results(self,
                                   search_for_principal,
@@ -201,6 +339,7 @@ class OpengeverSharingView(SharingView):
         """A mapper for the original method, to constraint the users
         list to only the users which are assigned to the current client
         """
+
         all_principals = super(OpengeverSharingView, self)._principal_search_results(
             search_for_principal,
             get_principal_by_id,
@@ -243,11 +382,4 @@ class SharingTab(OpengeverSharingView):
     but wihtout the form.
     """
 
-    index = ViewPageTemplateFile('sharing_tab.pt')
-
-    @memoize
-    def roles(self):
-        return super(SharingTab, self).roles(check_permission=False)
-
-    def get_css_classes(self):
-        return ['searchform-hidden']
+    template = ViewPageTemplateFile('templates/sharing_tab.pt')

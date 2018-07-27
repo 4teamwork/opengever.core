@@ -1,0 +1,9 @@
+<div tal:replace="structure view/vuejs_template" />
+
+<div id="sharing-view-vue-app"
+     tal:attributes="data-contexturl context/absolute_url;
+                     data-portalurl here/portal_url;
+                     data-i18n view/translations;
+                     data-userid view/get_userid;
+                     data-is-editable string:false;
+                     data-authtoken context/@@authenticator/token"></div>

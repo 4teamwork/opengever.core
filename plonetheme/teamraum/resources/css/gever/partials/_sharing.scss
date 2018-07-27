@@ -1,0 +1,101 @@
+#content {
+  .sharing-form {
+    .search-form {
+      padding: 1em 0em;
+    }
+    .search_box {
+      min-width: 200px;
+    }
+
+    .sharing-table {
+      margin-bottom: 1em;
+
+      .principal_header {
+        min-width: 300px;
+        max-width: 300px;
+      }
+
+      .principal {
+        &:before {
+          @extend .fa;
+          font-size: 16px;
+          padding-left: 6px;
+          padding-right: 6px;
+          color: $icon-color;
+        }
+        &.group:before {
+          @extend .fa-users;
+        }
+        &.user:before {
+          @extend .fa-user;
+        }
+      }
+
+      .role_cell {
+        text-align: left;
+      }
+
+      td {
+        padding: 10px 10px 10px 10px;
+      }
+
+    }
+
+    .local:before,
+    .acquired:before {
+      @extend .fa;
+      @extend .fa-check-circle;
+      font-size: 16px;
+      color: $green-light;
+    }
+
+    .automatic {
+      float: right;
+      &:before {
+        @extend .fa;
+        @extend .fa-check-circle;
+        font-size: 16px;
+        color: $gray-darker;
+      }
+      &.highlight:before {
+        color: $shadow-blue-color;
+      }
+    }
+
+    .assignments_info_button {
+      float: right;
+
+      &:hover {
+        text-decoration: none;
+      }
+      &:before {
+        @extend .fa;
+        @extend .fa-question-circle;
+        font-size: 16px;
+        cursor: pointer;
+        color: $gray-darker;
+      }
+
+      &.folded {
+        &:before {
+          color: $gray-dark;
+        }
+      }
+    }
+
+    .assignments_info {
+      max-width: 292px;
+      margin-left: 6px;
+    }
+
+    .assignments_listing {
+      margin-top: 5px;
+      margin-left: 1em;
+
+      li {
+        list-style-type: none;
+      }
+    }
+
+  }
+}
