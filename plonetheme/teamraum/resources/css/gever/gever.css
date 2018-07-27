@@ -3063,8 +3063,8 @@ body.portaltype-opengever-contact-person #content .orgrole_listing.persons .name
 #content .actionButtons > ul { list-style-type: none; padding: 0; margin: 0; margin-top: 1em; display: inline-block; }
 #content .actionButtons > ul > li { line-height: normal; margin: 0; display: inline-block; }
 
-ul.tabbedview-action-list li { float: left; margin-left: 0; margin-right: 1em; }
-ul.tabbedview-action-list li dl.actionMenu { margin-left: 0; }
+ul.tabbedview-action-list > li { float: left; margin-left: 0; margin-right: 1em; }
+ul.tabbedview-action-list > li dl.actionMenu { margin-left: 0; }
 
 #content div.actionButtons .button, #content div.actionButtons a { display: inline-block; line-height: normal !important; padding: 8px 12px; border: 1px solid #e6e6e6; margin-bottom: 1em; margin-right: 5px; border-radius: 2px; transition: background-color .2s ease-out; background-color: #fff; color: #000; background-image: none; text-shadow: none; }
 #content div.actionButtons .button:hover, #content div.actionButtons a:hover { background-color: #f5f5f5; text-decoration: none; }

@@ -13,14 +13,14 @@
 }
 
 ul.tabbedview-action-list {
-  li { float: left;
-       margin-left: 0;
-       margin-right: 1em;
+  >li { float: left;
+        margin-left: 0;
+        margin-right: 1em;
 
-       dl.actionMenu {
+        dl.actionMenu {
           margin-left:0;
         }
-     }
+      }
 }
 
 #content div.actionButtons {
