@@ -189,18 +189,18 @@ class RoleAssignmentStorage(object):
         item = self.get_by_cause_and_principal(cause, principal)
         self._storage().remove(item)
 
-    def clear_all_by_cause(self, cause):
-        for item in self.get_all_by_cause(cause):
+    def clear_by_cause(self, cause):
+        for item in self.get_by_cause(cause):
             self._storage().remove(item)
 
     def clear_all(self):
         ann = IAnnotations(self.context)
         ann[self.key] = PersistentList()
 
-    def get_all_by_cause(self, cause):
+    def get_by_cause(self, cause):
         return [item for item in self._storage() if item['cause'] == cause]
 
-    def get_all_by_principal(self, principal_id):
+    def get_by_principal(self, principal_id):
         return [item for item in
                 self._storage() if item['principal'] == principal_id]
 
@@ -256,18 +256,18 @@ class RoleAssignmentManager(object):
         self._update_local_roles()
 
     def get_assignments_by_cause(self, cause):
-        return self.storage.get_all_by_cause(cause)
+        return self.storage.get_by_cause(cause)
 
     def get_assignments_by_principal_id(self, principal_id):
         return [RoleAssignment.get(**data) for data
-                in self.storage.get_all_by_principal(principal_id)]
+                in self.storage.get_by_principal(principal_id)]
 
     def reset(self, assignments):
         cause = assignments[0].cause
         if len(set([asg.cause for asg in assignments])) > 1:
             raise ValueError('All assignments need to have the same cause')
 
-        self.storage.clear_all_by_cause(cause)
+        self.storage.clear_by_cause(cause)
 
         for assignment in assignments:
             self.storage.add_or_update(
@@ -283,7 +283,7 @@ class RoleAssignmentManager(object):
         self._update_local_roles()
 
     def clear_by_cause_and_principal(self, cause, principal):
-        """Remove all assignments.
+        """Remove all assignments of the given cause by the given principal.
         """
         self.storage.clear_by_cause_and_principal(cause, principal)
         self._update_local_roles()
