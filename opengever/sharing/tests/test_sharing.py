@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
@@ -43,7 +44,6 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         self.assertEquals(
             {u'available_roles': [], u'inherit': True, u'entries': []},
             browser.json)
-
 
         browser.open(self.dossier, view='@sharing?ignore_permissions=1',
                      method='GET', headers={'Accept': 'application/json'})
@@ -203,7 +203,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
         manager.add_or_update(self.regular_user.id, ['Editor'],
                     ASSIGNMENT_VIA_TASK, reference=self.task)
         manager.add_or_update(self.regular_user.id, ['Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ASSIGNMENT_VIA_TASK_AGENCY)
 
         browser.open(self.empty_dossier,
                      view='@role-assignments/{}'.format(self.regular_user.id),
@@ -219,52 +219,26 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                   u'title': self.task.title},
               u'principal': u'kathi.barfuss'},
              {u'cause': {
-                 u'id': ASSIGNMENT_VIA_SHARING,
-                 u'title': u'Via sharing'},
+                 u'id': ASSIGNMENT_VIA_TASK_AGENCY,
+                 u'title': u'By task agency'},
               u'roles': [u'Reader'],
               u'reference': None,
               u'principal': u'kathi.barfuss'}],
             browser.json)
 
     @browsing
-    def test_lookup_recursively_till_blocked_flag(self, browser):
-        self.login(self.regular_user, browser=browser)
+    def test_sharing_assignments_get_sipped(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update(self.regular_user.id, ['Editor'],
+                              ASSIGNMENT_VIA_TASK, reference=self.task)
+        manager.add_or_update(self.regular_user.id, ['Reader'],
+                              ASSIGNMENT_VIA_SHARING)
 
-        RoleAssignmentManager(self.empty_dossier).add_or_update(
-            self.regular_user.id, ['Editor'],
-            ASSIGNMENT_VIA_TASK, reference=self.task)
-
-        RoleAssignmentManager(self.leaf_repofolder).add_or_update(
-            self.regular_user.id, ['Reader'],
-            ASSIGNMENT_VIA_SHARING)
-
-        # with local_roles inheritance
         browser.open(self.empty_dossier,
                      view='@role-assignments/{}'.format(self.regular_user.id),
                      method='Get', headers={'Accept': 'application/json'})
 
-        self.assertEquals(
-            [{u'cause': {
-                u'id': ASSIGNMENT_VIA_TASK,
-                u'title': u'By task'},
-              u'roles': [u'Editor'],
-              u'reference': {
-                  u'url': self.task.absolute_url(),
-                  u'title': self.task.title},
-              u'principal': u'kathi.barfuss'},
-             {u'cause': {
-                 u'id': ASSIGNMENT_VIA_SHARING,
-                 u'title': u'Via sharing'},
-              u'roles': [u'Reader'],
-              u'reference': None,
-              u'principal': u'kathi.barfuss'}],
-            browser.json)
-
-        # with blocked local_roles inheritance
-        self.empty_dossier.__ac_local_roles_block__ = True
-        browser.open(self.empty_dossier,
-                     view='@role-assignments/{}'.format(self.regular_user.id),
-                     method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
             [{u'cause': {
                 u'id': ASSIGNMENT_VIA_TASK,

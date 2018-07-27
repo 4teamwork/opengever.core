@@ -1,11 +1,7 @@
-from Acquisition import aq_chain
-from Acquisition import aq_inner
 from opengever.base import _
 from opengever.base.oguid import Oguid
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
-from plone.app.layout.navigation.interfaces import INavigationRoot
-from Products.CMFPlone.utils import base_hasattr
 from zope.annotation.interfaces import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -261,27 +257,6 @@ class RoleAssignmentManager(object):
 
     def get_assignments_by_cause(self, cause):
         return self.storage.get_all_by_cause(cause)
-
-    def get_assignments_chain(self, principal_id):
-        """Recursively returns assignments till the local_roles
-        inheritance is blocked.
-        """
-
-        assignments = []
-
-        for obj in aq_chain(aq_inner(self.context)):
-            manager = RoleAssignmentManager(obj)
-            assignments += manager.get_assignments_by_principal_id(
-                principal_id)
-
-            if INavigationRoot.providedBy(obj):
-                break
-
-            if base_hasattr(self.context, '__ac_local_roles_block__') \
-               and self.context.__ac_local_roles_block__:
-                break
-
-        return assignments
 
     def get_assignments_by_principal_id(self, principal_id):
         return [RoleAssignment.get(**data) for data

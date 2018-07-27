@@ -59,8 +59,8 @@ class SharingGet(APISharingGet):
 
 
 class RoleAssignmentsGet(APISharingGet):
-    """API Endpoint which returns a list of all role assignments for a
-    particular user.
+    """API Endpoint which returns a list of all role assignments of
+    the current context for a particular user.
 
     GET /@role-assignments/principal_id HTTP/1.1
     """
@@ -80,7 +80,7 @@ class RoleAssignmentsGet(APISharingGet):
         principal_id = self.read_params()
 
         manager = RoleAssignmentManager(self.context)
-        assignments = manager.get_assignments_chain(principal_id)
+        assignments = manager.get_assignments_by_principal_id(principal_id)
 
         return [assignment.serialize() for assignment in assignments]
 
