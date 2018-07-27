@@ -1,8 +1,11 @@
+from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from opengever.base.role_assignments import TaskRoleAssignment
-from opengever.base.role_assignments import TaskAgencyRoleAssignment
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import TaskAgencyRoleAssignment
+from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
 from zope.container.interfaces import IContainerModifiedEvent
@@ -19,12 +22,18 @@ class LocalRolesSetter(object):
         self.event = None
         self._inbox_group = None
 
-    def __call__(self, event):
+    def set_roles(self, event):
         self.event = event
         self.set_roles_on_task()
         self.globalindex_reindex_task()
         self.set_roles_on_related_items()
         self.set_roles_on_distinct_parent()
+
+    def revoke_roles(self):
+        self.revoke_roles_on_task()
+        self.globalindex_reindex_task()
+        self.revoke_on_related_items()
+        self.revoke_on_distinct_parent()
 
     @property
     def responsible_permission_identfier(self):
@@ -88,11 +97,16 @@ class LocalRolesSetter(object):
         """
         sync_task(self.task, self.event)
 
-    def set_roles_on_distinct_parent(self):
-        """Set local roles on next parent having a different content type."""
+    def get_distinct_parent(self):
         context = self.task
         while context.Type() == self.task.Type():
             context = aq_parent(aq_inner(context))
+
+        return context
+
+    def set_roles_on_distinct_parent(self):
+        """Set local roles on next parent having a different content type."""
+        context = self.get_distinct_parent()
 
         self._add_local_roles(
             context,
@@ -110,7 +124,7 @@ class LocalRolesSetter(object):
         if self.task.task_type_category == 'bidirectional_by_reference':
             roles.append('Editor')
 
-        for item in getattr(self.task, 'relatedItems', []):
+        for item in getattr(aq_base(self.task), 'relatedItems', []):
             self._add_local_roles(
                 item.to_object,
                 self.responsible_permission_identfier,
@@ -121,13 +135,35 @@ class LocalRolesSetter(object):
                 self._add_local_roles(
                     item.to_object, self.inbox_group_id, roles, is_agency=True)
 
+    def revoke_roles_on_task(self):
+        manager = RoleAssignmentManager(self.task)
+        manager.clear(ASSIGNMENT_VIA_TASK,
+                      self.responsible_permission_identfier, self.task)
+        manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
+                      self.inbox_group_id, self.task)
+
+    def revoke_on_related_items(self):
+        for item in getattr(aq_base(self.task), 'relatedItems', []):
+            manager = RoleAssignmentManager(item.to_object)
+            manager.clear(ASSIGNMENT_VIA_TASK,
+                          self.responsible_permission_identfier, self.task)
+            manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
+                          self.inbox_group_id, self.task)
+
+    def revoke_on_distinct_parent(self):
+        manager = RoleAssignmentManager(self.get_distinct_parent())
+        manager.clear(ASSIGNMENT_VIA_TASK,
+                      self.responsible_permission_identfier, self.task)
+        manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
+                      self.inbox_group_id, self.task)
+
 
 def set_roles_after_adding(context, event):
-    LocalRolesSetter(context)(event)
+    LocalRolesSetter(context).set_roles(event)
 
 
 def set_roles_after_modifying(context, event):
     if IContainerModifiedEvent.providedBy(event):
         return
 
-    LocalRolesSetter(context)(event)
+    LocalRolesSetter(context).set_roles(event)

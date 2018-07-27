@@ -138,6 +138,12 @@
 
   <subscriber
       for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.revoke_permissions"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.set_initial_state"
       />
