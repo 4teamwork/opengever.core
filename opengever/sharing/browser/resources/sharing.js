@@ -75,6 +75,18 @@ var sharingApp = {
       }
     },
 
+    highlight_roles: function (event, entry, assignment) {
+      assignment.roles.forEach(function(role) {
+        entry.automatic_roles[role] = 'highlight';
+      });
+    },
+
+    unhighlight_roles: function (event, entry, assignment) {
+      assignment.roles.forEach(function(role) {
+        entry.automatic_roles[role] = true;
+      });
+    },
+
     search: function() {
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString(), search: this.principal_search };
@@ -91,6 +103,7 @@ var sharingApp = {
 
       }.bind(this));
     },
+
 
     save: function(event){
       payload = {

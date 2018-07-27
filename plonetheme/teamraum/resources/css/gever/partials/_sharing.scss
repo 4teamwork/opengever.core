@@ -57,6 +57,9 @@
         font-size: 16px;
         color: $gray-darker;
       }
+      &.highlight:before {
+        color: $shadow-blue-color;
+      }
     }
 
     .assignments_info_button {
@@ -70,11 +73,12 @@
         @extend .fa-question-circle;
         font-size: 16px;
         cursor: pointer;
+        color: $gray-darker;
       }
 
       &.folded {
         &:before {
-          color: grey;
+          color: $gray-dark;
         }
       }
     }
@@ -86,9 +90,10 @@
 
     .assignments_listing {
       margin-top: 5px;
+      margin-left: 1em;
 
       li {
-        list-style-type: disc;
+        list-style-type: none;
       }
     }
 

@@ -3393,12 +3393,13 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .local:before, #content .sharing-form .acquired:before { font-size: 16px; color: #62c462; }
 #content .sharing-form .automatic { float: right; }
 #content .sharing-form .automatic:before { font-size: 16px; color: #969696; }
+#content .sharing-form .automatic.highlight:before { color: rgba(32, 92, 144, 0.8); }
 #content .sharing-form .assignments_info_button { float: right; }
 #content .sharing-form .assignments_info_button:hover { text-decoration: none; }
-#content .sharing-form .assignments_info_button:before { font-size: 16px; cursor: pointer; }
-#content .sharing-form .assignments_info_button.folded:before { color: grey; }
+#content .sharing-form .assignments_info_button:before { font-size: 16px; cursor: pointer; color: #969696; }
+#content .sharing-form .assignments_info_button.folded:before { color: #e6e6e6; }
 #content .sharing-form .assignments_info { max-width: 292px; margin-left: 6px; }
-#content .sharing-form .assignments_listing { margin-top: 5px; }
-#content .sharing-form .assignments_listing li { list-style-type: disc; }
+#content .sharing-form .assignments_listing { margin-top: 5px; margin-left: 1em; }
+#content .sharing-form .assignments_listing li { list-style-type: none; }
 
 /*# sourceMappingURL=gever.css.map */

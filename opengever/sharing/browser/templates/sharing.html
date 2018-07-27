@@ -22,8 +22,12 @@
              @click="(event) => {toggle_assignments(event, entry, )}"/>
           <div v-show="entry.assignments" class="assignments_info">
             <ul class="assignments_listing">
-              <li v-for="assignment in entry.assignments">
-                <span class="cause">{{assignment.cause.title}}</span>
+              <li v-for="assignment in entry.assignments"
+                  @mouseover="highlight_roles(event, entry, assignment)"
+                  @mouseleave="unhighlight_roles(event, entry, assignment)">
+                <span class="cause">
+                  {{assignment.cause.title}}
+                </span>
                 <a v-if="assignment.reference"
                    :href="assignment.reference.url"
                    class="reference">{{assignment.reference.title}}</a>
@@ -48,8 +52,9 @@
 
             <!-- automatic roles -->
             <div class="automatic"
-                  v-if="entry.automatic_roles[role.id]"
-                  :title="i18n.label_automatic_permission" />
+                 v-if="entry.automatic_roles[role.id]"
+                 :class="entry.automatic_roles[role.id]"
+                 :title="i18n.label_automatic_permission" />
 
           </template>
           <template v-if="!isEditable">
@@ -63,6 +68,7 @@
 
             <span class="automatic"
                   v-if="entry.automatic_roles[role.id]"
+                  :class="entry.automatic_roles[role.id]"
                   :title="i18n.label_automatic_permission" />
           </template>
 
