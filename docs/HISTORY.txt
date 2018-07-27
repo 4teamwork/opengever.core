@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Add RoleAssignment manager layer including a new sharing form. [phgross]
 - Bump ftw.upgrade for deferrable upgrade support. [deiferni]
 - Create initial version with the original document creator as the principal. [lgraf]
 - Improve usability of proposal add form. [elioschmutz]
