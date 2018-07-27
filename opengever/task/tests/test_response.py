@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from persistent import Persistent
@@ -23,3 +24,24 @@ class TestTaskResponses(IntegrationTestCase):
         self.assertIsInstance(response, Persistent)
         self.assertIsInstance(response.changes, PersistentList)
         self.assertIsInstance(response.changes[0], PersistentMapping)
+
+
+class TestTaskResponseForm(IntegrationTestCase):
+
+    @browsing
+    def test_shows_revoke_warn_message_only_on_final_transitions(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+
+        self.assertEquals(
+            ['This transtion revokes temporary permissions for the responsible '
+             'user and agency group.'],
+            info_messages())
+
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-in-progress-resolved')
+
+        self.assertEquals([], info_messages())
