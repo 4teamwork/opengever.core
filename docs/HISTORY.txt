@@ -7,6 +7,7 @@ Changelog
 
 - Revoke local roles for responsible and agency when finishing a task. [phgross]
 - Allow administrators to export the repository as excel file. [njohner]
+- Document generated meeting documents. [tarnap]
 - Add RoleAssignment manager layer including a new sharing form. [phgross]
 - Fix teamraum styles import / export for right logo. [tarnap]
 - Bump ftw.upgrade for deferrable upgrade support. [deiferni]
