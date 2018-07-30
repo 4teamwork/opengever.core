@@ -761,7 +761,7 @@
     <object name="logout" meta_type="CMF Action" i18n:domain="plone">
       <property name="title" i18n:translate="">Log out</property>
       <property name="description" i18n:translate="" />
-      <property name="url_expr">string:${globals_view/navigationRootUrl}/logout_overlay</property>
+      <property name="url_expr">python:context.restrictedTraverse('logout_url')</property>
       <property name="link_target" />
       <property name="icon_expr" />
       <property name="available_expr">python:member is not None</property>

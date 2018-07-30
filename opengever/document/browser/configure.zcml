@@ -108,13 +108,6 @@
 
   <browser:page
       for="*"
-      name="logout_overlay"
-      class=".logout_overlay.LogoutOverlay"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
       name="redirect_to_parent_dossier"
       class=".redirect_to_parent_dossier.RedirectToParentDossier"
       permission="zope2.View"
