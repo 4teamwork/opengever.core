@@ -217,4 +217,11 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      for="*"
+      name="manage-role-assignments"
+      class=".manage_role_assignments.ManageRoleAssignmentsView"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

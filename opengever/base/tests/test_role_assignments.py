@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
@@ -172,3 +173,65 @@ class TestRoleAssignmentManager(IntegrationTestCase):
               'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+
+class TestManageRoleAssignmentsView(IntegrationTestCase):
+
+    @browsing
+    def test_is_only_visible_for_managers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        with browser.expect_unauthorized():
+            browser.open(self.dossier, view='manage-role-assignments')
+
+        self.login(self.administrator, browser=browser)
+        with browser.expect_unauthorized():
+            browser.open(self.dossier, view='manage-role-assignments')
+
+        self.login(self.manager, browser=browser)
+        browser.open(self.dossier, view='manage-role-assignments')
+        self.assertEquals(200, browser.status_code)
+
+    @browsing
+    def test_returns_all_assignments_of_the_current_user(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.dossier, view='manage-role-assignments')
+
+        self.assertEquals(
+            [{
+                u'cause': {u'id': 1, u'title': u'By task'},
+                u'roles': [u'Contributor'],
+                u'reference': {u'url': self.task.absolute_url(),
+                               u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
+                u'principal': u'kathi.barfuss'},
+             {
+                 u'cause': {u'id': 1, 'title': u'By task'},
+                 u'roles': [u'Contributor'],
+                 u'reference': {u'url': self.subtask.absolute_url(),
+                                u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
+                 u'principal': u'kathi.barfuss'},
+             {
+                 u'cause': {u'id': 1, u'title': u'By task'},
+                 u'roles': [u'Contributor'],
+                 u'reference': {u'url': self.sequential_task.absolute_url(),
+                                u'title': u'Personaleintritt'},
+                 u'principal': u'kathi.barfuss'},
+             {
+                 u'cause': {u'id': 1, u'title': u'By task'},
+                 u'roles': [u'Contributor'],
+                 u'reference': {u'url': self.seq_subtask_1.absolute_url(),
+                                u'title': u'Mitarbeiter Dossier generieren'},
+                 u'principal': u'kathi.barfuss'},
+             {
+                 u'cause': {u'id': 1, u'title': u'By task'},
+                 u'roles': [u'Contributor'],
+                 u'reference': {u'url': self.seq_subtask_2.absolute_url(),
+                                u'title': u'Arbeitsplatz vorbereiten'},
+                 u'principal': u'kathi.barfuss'},
+             {
+                 u'cause': {u'id': 1, u'title': u'By task'},
+                 u'roles': [u'Contributor'],
+                 u'reference': {u'url': self.seq_subtask_3.absolute_url(),
+                                u'title': u'Vorstellungsrunde bei anderen Mitarbeitern'},
+                 u'principal': u'kathi.barfuss'}],
+            browser.json)
