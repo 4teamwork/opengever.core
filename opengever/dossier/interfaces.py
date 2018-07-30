@@ -228,3 +228,11 @@ class IDossierResolveProperties(Interface):
         vocabulary=u'opengever.dossier.ValidResolverNamesVocabulary',
         default='strict'
     )
+
+
+class IDossierTasksPdfMarker(Interface):
+    """Marker Interface for dossier tasks list document."""
+
+
+class IDossierJournalPdfMarker(Interface):
+    """Marker Interface for dossier journal document."""

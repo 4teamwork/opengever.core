@@ -206,6 +206,10 @@ msgstr ""
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr ""
 
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr ""
+
 #: ./opengever/dossier/archive.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""

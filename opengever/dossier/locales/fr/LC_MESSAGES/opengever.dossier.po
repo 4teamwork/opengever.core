@@ -205,6 +205,10 @@ msgstr "Le sous-dossier a été clôturé avec succès."
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier principal a été annulé."
 
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr "Actualisé par une nouvelle version du dossier ${title}."
+
 #: ./opengever/dossier/archive.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution du numéro d'inventaire, tous les champs sont obligatoires."

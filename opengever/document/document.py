@@ -306,7 +306,8 @@ class Document(Item, BaseDocumentMixin):
         """Return the current document history version."""
         return Versioner(self).get_current_version_id(missing_as_zero)
 
-    def update_file(self, data, content_type=None, filename=None):
+    def update_file(self, data, content_type=None, filename=None,
+                    create_version=False, comment=''):
         content_type = content_type or self.file.contentType
         filename = filename or self.file.filename
 
@@ -314,6 +315,9 @@ class Document(Item, BaseDocumentMixin):
             data=data,
             filename=filename,
             contentType=content_type)
+        if create_version:
+            Versioner(self).create_version(comment)
+        self.setModificationDate()
         self.reindexObject()
 
     def has_file(self):
