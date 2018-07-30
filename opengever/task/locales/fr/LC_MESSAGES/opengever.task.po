@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-26 14:31+0000\n"
+"POT-Creation-Date: 2018-07-24 15:03+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -658,6 +658,11 @@ msgstr "Etat"
 #: ./opengever/task/browser/modify_deadline.py
 msgid "msg_deadline_change_successfull"
 msgstr "Le délai a été modifié avec succès."
+
+#. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
+#: ./opengever/task/response.py
+msgid "msg_revoking_permissions"
+msgstr ""
 
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py

@@ -24,3 +24,15 @@ FINISHED_TASK_STATES = [
 ]
 
 TASK_STATE_PLANNED = 'task-state-planned'
+
+FINAL_TASK_STATES = [
+    'task-state-tested-and-closed',
+    'task-state-cancelled',
+    'task-state-skipped'
+]
+
+FINAL_TRANSITIONS = [
+    'task-transition-open-cancelled',
+    'task-transition-open-tested-and-closed',
+    'task-transition-resolved-tested-and-closed',
+    'task-transition-planned-skipped']

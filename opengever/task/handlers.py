@@ -6,7 +6,9 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.task import _
+from opengever.task import FINAL_TRANSITIONS
 from opengever.task.adapters import IResponseContainer
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
@@ -124,3 +126,10 @@ def set_initial_state(task, event):
        and IFromSequentialTasktemplate.providedBy(parent):
 
         task.set_to_planned_state()
+
+
+def revoke_permissions(task, event):
+    """Revoke temporary local roles on task and its related objects.
+    """
+    if event.action in FINAL_TRANSITIONS:
+        return LocalRolesSetter(task).revoke_roles()
