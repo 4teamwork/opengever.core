@@ -24,6 +24,11 @@ msgstr "Aktiv"
 msgid "DossierManager"
 msgstr "Verwalten"
 
+#. Default: "Download Excel"
+#: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "Download Excel"
+msgstr "Als Excel exportieren"
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "Inactive"
