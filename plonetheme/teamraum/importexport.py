@@ -146,7 +146,7 @@ class CustomStylesUtility(object):
             if key == LOGO_KEY:
                 logo = self.get_logo(value)
                 styles[LOGO_KEY] = logo
-            elif key == LOGO_RIGHT_KEY:
+            elif key == LOGO_RIGHT_KEY and value:
                 logo_right = self.get_logo_right(value)
                 styles[LOGO_RIGHT_KEY] = logo_right
             elif key == LOGO_TITLE_KEY:
@@ -171,7 +171,7 @@ class CustomStylesUtility(object):
             styles[LOGO_KEY] = base64.b64encode(
                 self.annotations['customstyles'][LOGO_KEY].data)
 
-        if LOGO_RIGHT_KEY in styles:
+        if LOGO_RIGHT_KEY in styles and styles[LOGO_RIGHT_KEY]:
             # copy blob directly from annotations
             styles[LOGO_RIGHT_KEY] = base64.b64encode(
                 self.annotations['customstyles'][LOGO_RIGHT_KEY].data)
@@ -185,7 +185,7 @@ class CustomStylesUtility(object):
             styles[LOGO_KEY] = StringIO(
                 base64.b64decode(styles[LOGO_KEY]))
 
-        if LOGO_RIGHT_KEY in styles:
+        if LOGO_RIGHT_KEY in styles and styles[LOGO_RIGHT_KEY]:
             styles[LOGO_RIGHT_KEY] = StringIO(
                 base64.b64decode(styles[LOGO_RIGHT_KEY]))
 

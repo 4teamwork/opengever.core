@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add RoleAssignment manager layer including a new sharing form. [phgross]
+- Fix teamraum styles import / export for right logo. [tarnap]
 - Bump ftw.upgrade for deferrable upgrade support. [deiferni]
 - Create initial version with the original document creator as the principal. [lgraf]
 - Improve usability of proposal add form. [elioschmutz]
