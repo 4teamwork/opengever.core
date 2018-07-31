@@ -9,6 +9,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.dossier.widget import referenceNumberWidgetFactory
+from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
@@ -38,7 +39,10 @@ class DossierAddForm(add.DefaultAddForm):
         return super(DossierAddForm, self).render()
 
     def update(self):
+        # XXX: These methods will later be refactored to use a common helper
+        # function to access group widgets in z3c forms.
         self.prefill_responsible()
+        self.prefill_dossier_manager()
         super(DossierAddForm, self).update()
 
     def prefill_responsible(self):
@@ -52,6 +56,33 @@ class DossierAddForm(add.DefaultAddForm):
 
         current_user = api.user.get_current().getId()
         self.request.set('form.widgets.IDossier.responsible', [current_user])
+
+    def prefill_dossier_manager(self):
+        """Prefill current user as dossier_manager in add forms.
+        """
+        if 'form.widgets.IProtectDossier.dossier_manager' in self.request.form:
+            # Only prefill if no value set already - even if it's None / ''
+            # Specifically, we don't want to override an empty value on the
+            # save request (the one triggered when submitting the form)
+            return
+
+        current_user = api.user.get_current().getId()
+        if not current_user:
+            return
+
+        try:
+            AllUsersAndGroupsSourceBinder()(self.context).getTerm(current_user)
+        except LookupError:
+            # The current logged in user does not exist in the
+            # field-source.
+            return
+
+        if 'Manager' in api.user.get_roles():
+            # We don't want to prefill managers.
+            return
+
+        self.request.set('form.widgets.IProtectDossier.dossier_manager',
+                         [current_user])
 
     def updateFields(self):
         super(DossierAddForm, self).updateFields()

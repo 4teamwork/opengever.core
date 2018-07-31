@@ -88,7 +88,7 @@ DOSSIER_DEFAULTS = {
     'start': FROZEN_TODAY,
     'reading': [],
     'reading_and_writing': [],
-    'dossier_manager': 'kathi.barfuss',
+    'dossier_manager': None,
 }
 DOSSIER_FORM_DEFAULTS = {
     'responsible': 'kathi.barfuss',

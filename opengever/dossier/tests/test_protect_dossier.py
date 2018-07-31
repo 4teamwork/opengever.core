@@ -189,6 +189,48 @@ class TestProtectDossier(IntegrationTestCase):
             IProtectDossier(browser.context).dossier_manager)
 
     @browsing
+    def test_user_without_field_permission_doesnt_get_added_as_dossier_manager_by_default(self, browser):
+        """The current user must only be set as dossier_manager if they have
+        the write permission for the dossier_manager field. Our regular_user,
+        which doesn't have it, should not end up as dossier_manager after
+        saving.
+        """
+        self.login(self.regular_user, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+
+        browser.fill({'Title': 'My Dossier'})
+        browser.click_on('Save')
+
+        self.assertEqual(
+            None,
+            IProtectDossier(browser.context).dossier_manager)
+
+    @browsing
+    def test_prefilled_dossier_manager_can_be_removed(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+
+        # Guard assertion - make sure the widget's value has been prefilled
+        dossier_manager_widget = form.find_widget('Dossier manager')
+        select = dossier_manager_widget.xpath('select').first
+        self.assertEqual('faivel.fruhling', select.value)
+
+        # Reset the widget's value
+        dossier_manager_widget.fill('')
+
+        browser.click_on('Save')
+        new_dossier = browser.context
+
+        # No dossier manager should have been saved
+        self.assertIsNone(IProtectDossier(new_dossier).dossier_manager)
+
+    @browsing
     def test_add_dossier_will_enable_dossier_protection(self, browser):
         self.login(self.dossier_manager, browser)
 
@@ -223,6 +265,7 @@ class TestProtectDossier(IntegrationTestCase):
         self.assertFalse(getattr(self.dossier, '__ac_local_roles_block__', False))
 
         dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.reading = ['kathi.barfuss']
         dossier_protector.protect()
 
@@ -237,6 +280,7 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
 
@@ -248,6 +292,7 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.reading_and_writing = [self.regular_user.getId()]
         dossier_protector.protect()
 
@@ -329,6 +374,7 @@ class TestProtectDossier(IntegrationTestCase):
                  'Publisher', 'DossierManager', 'Owner']))
 
         dossier_protector = IProtectDossier(self.empty_dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.reading = [self.dossier_responsible.id]
         dossier_protector.protect()
         view = getMultiAdapter((self.empty_dossier, self.request),
