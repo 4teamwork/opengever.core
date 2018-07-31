@@ -64,6 +64,11 @@ Grafisch dargestellt sieht dies so aus::
 
 Die mit (*) markierten Vorlagen sind optional.
 
+**Wichtig**
+Vor der Zusammenstellung werden die Vorlagen mit den Metadaten via Sablon abgefüllt.
+Ebenfalls wird den Antrags- resp. Beschlussdokumenten die Kopf- und Fusszeile entfernt.
+Die Formatvorlagen der Protokoll-Kopf-Vorlage werden beim resultierendem Dokument verwendet.
+
 Protokollauszug
 ---------------
 
@@ -92,3 +97,8 @@ Grafisch dargestellt sieht dies so aus::
     +---------------------------------------------+
 
 Die mit (*) markierten Vorlagen sind optional.
+
+**Wichtig**
+Vor der Zusammenstellung werden die Vorlagen mit den Metadaten via Sablon abgefüllt.
+Ebenfalls wird dem Beschlussdokumenten die Kopf- und Fusszeile entfernt.
+Die Formatvorlagen der Protokollauszug-Kopf-Vorlage werden beim resultierendem Dokument verwendet.
