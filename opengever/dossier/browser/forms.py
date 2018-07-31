@@ -1,4 +1,3 @@
-from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
@@ -10,6 +9,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.dossier.widget import referenceNumberWidgetFactory
+from plone import api
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.browser import add
 from plone.dexterity.browser import edit
@@ -38,16 +38,20 @@ class DossierAddForm(add.DefaultAddForm):
         return super(DossierAddForm, self).render()
 
     def update(self):
+        self.prefill_responsible()
+        super(DossierAddForm, self).update()
+
+    def prefill_responsible(self):
         """Adds a default value for `responsible` to the request so the
         field is prefilled with the current user, or the parent dossier's
         responsible in the case of a subdossier.
         """
-        responsible = getSecurityManager().getUser().getId()
+        if self.request.get('form.widgets.IDossier.responsible'):
+            # Only prefill if no value set already
+            return
 
-        if not self.request.get('form.widgets.IDossier.responsible', None):
-            self.request.set('form.widgets.IDossier.responsible',
-                             [responsible])
-        super(DossierAddForm, self).update()
+        current_user = api.user.get_current().getId()
+        self.request.set('form.widgets.IDossier.responsible', [current_user])
 
     def updateFields(self):
         super(DossierAddForm, self).updateFields()
