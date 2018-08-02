@@ -100,7 +100,6 @@
                    "
       />
 
-
   <lawgiver:map_permissions
       action_group="dispose"
       permissions="
@@ -167,6 +166,13 @@
   <lawgiver:ignore
       permissions="
                    Remove GEVER content,
+                   "
+      />
+
+  <!-- Export repository is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.repository: Export repository,
                    "
       />
 

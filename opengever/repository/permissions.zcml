@@ -2,6 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="opengever.repository">
 
+  <permission id="opengever.repository.ExportRepository" title="opengever.repository: Export repository" />
+
   <permission id="opengever.repository.AddRepositoryFolder" title="opengever.repository: Add repositoryfolder" />
 
   <permission id="opengever.repository.AddRepositoryRoot" title="opengever.repository: Add repositoryroot" />

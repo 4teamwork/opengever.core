@@ -203,6 +203,11 @@
       <role name="Manager" />
     </permission>
 
+    <permission name="opengever.repository: Export repository" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
     <permission name="opengever.repository: Unlock Reference Prefix" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />

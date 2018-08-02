@@ -69,10 +69,10 @@
   <action
       title="Download Excel"
       action_id="download_excel"
-      category="object"
+      category="object_buttons"
       url_expr="string:${object_url}/download_excel"
       visible="True">
-    <permission value="opengever.repository.AddRepositoryFolder" />
+    <permission value="opengever.repository: Export repository" />
   </action>
 
 </object>
