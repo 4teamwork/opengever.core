@@ -33,6 +33,17 @@ class TestInboxTabbedview(IntegrationTestCase):
              'Public Trial'],
             browser.css('.listing th').text)
 
+    @browsing
+    def test_add_task_and_proposal_action_are_hidden(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        browser.open(self.inbox, view='tabbedview_view-documents')
+
+        self.assertNotIn(
+            'Create Proposal', browser.css('#tabbedview-menu a').text)
+        self.assertNotIn(
+            'Create Task', browser.css('#tabbedview-menu a').text)
+
 
 class TestAssignedInboxTaskTab(IntegrationTestCase):
 
