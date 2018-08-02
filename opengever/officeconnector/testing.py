@@ -80,7 +80,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
 
         return email
 
-    def fetch_dossier_multiattach_oc_url(self, browser, dossier, documents, bcc):  # noqa
+    def fetch_dossier_multiattach_oc_url(self, browser, dossier, documents, bcc):
         headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -219,6 +219,8 @@ class OCIntegrationTestCase(IntegrationTestCase):
         return payloads
 
     def validate_checkout_payload(self, payload, document):
+        self.assertEqual(api.content.get_uuid(document), payload.get('uuid'))
+
         checkin_with_comment = payload.get('checkin-with-comment', None)
         self.assertEquals('@@checkin_document', checkin_with_comment)
 
