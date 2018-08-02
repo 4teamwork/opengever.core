@@ -5,6 +5,7 @@ Changelog
 2018.3.6 (unreleased)
 ---------------------
 
+- Bump docxcompose. [phgross]
 - Increase size of the favorites plone_uid column. [phgross]
 - Fix physical_path schema migration for oracle backends. [phgross]
 
