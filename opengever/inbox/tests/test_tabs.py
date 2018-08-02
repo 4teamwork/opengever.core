@@ -1,182 +1,130 @@
-from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.testing import FunctionalTestCase
+from ftw.testbrowser import browsing
+from opengever.testing import IntegrationTestCase
 from opengever.testing import select_current_org_unit
+from opengever.trash.trash import Trasher
 
 
-class TestInboxTabbedview(FunctionalTestCase):
+class TestInboxTabbedview(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestInboxTabbedview, self).setUp()
-        self.inbox = create(Builder('inbox').titled(u'Testinbox'))
+    @browsing
+    def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self, browser):
+        self.login(self.secretariat_user, browser=browser)
 
-    def test_trash_listing_does_not_contain_subdossier_and_checked_out_column(self):
-        trash = self.inbox.restrictedTraverse('tabbedview_view-trash')
+        Trasher(self.inbox_document).trash()
+        browser.open(self.inbox, view='tabbedview_view-trash')
 
-        columns = [col.get('column') for col in trash.columns if isinstance(col, dict)]
-        self.assertNotIn('containing_subdossier', columns)
-        self.assertNotIn('checked_out', columns)
+        self.assertEquals(
+            ['', 'Sequence Number', 'Title', 'Document Author',
+             'Document Date', 'Receipt Date', 'Delivery Date', 'Public Trial',
+             'Reference Number'],
+            browser.css('.listing th').text)
 
-    def test_trash_lists_only_documents_from_the_current_inbox(self):
-        second_inbox = create(Builder('inbox'))
+    @browsing
+    def test_document_listings_does_not_contain_subdossier_checked_out_and_reference_column(self, browser):
+        self.login(self.secretariat_user, browser=browser)
 
-        create(Builder('document')
-               .within(second_inbox)
-               .titled('Doc 1')
-               .trashed())
+        browser.open(self.inbox, view='tabbedview_view-documents')
 
-        document_2 = create(Builder('document')
-                            .within(self.inbox)
-                            .titled('Doc 2')
-                            .trashed())
-
-        view = self.inbox.restrictedTraverse('tabbedview_view-trash')
-        view.update()
-
-        self.assertEquals([document_2],
-                          [brain.getObject() for brain in view.contents])
-
-    def test_document_listings_does_not_contain_subdossier_checked_out_and_reference_column(self):
-        document_view = self.inbox.restrictedTraverse('tabbedview_view-documents')
-
-        columns = [col.get('column') for col in document_view.columns
-                   if isinstance(col, dict)]
-
-        self.assertNotIn('containing_subdossier', columns)
-        self.assertNotIn('checked_out', columns)
-        self.assertNotIn('reference', columns)
-
-    def test_documents_listing_only_show_documents_from_the_current_inbox(self):
-        second_inbox = create(Builder('inbox'))
-        create(Builder('document')
-               .within(second_inbox)
-               .titled('Doc 1'))
-
-        document_2 = create(Builder('document')
-                            .within(self.inbox)
-                            .titled('Doc 2'))
-
-        view = self.inbox.restrictedTraverse('tabbedview_view-documents')
-        view.update()
-
-        self.assertEquals([document_2],
-                          [brain.getObject() for brain in view.contents])
+        self.assertEquals(
+            ['', 'Sequence Number', 'Title', 'Document Author',
+             'Document Date', 'Receipt Date', 'Delivery Date',
+             'Public Trial'],
+            browser.css('.listing th').text)
 
 
-class TestInboxTaskTabs(FunctionalTestCase):
-
-    viewname = ''
-
-    def setUp(self):
-        super(TestInboxTaskTabs, self).setUp()
-
-        self.org_unit_2 = create(Builder('org_unit')
-                                 .having(admin_unit=self.admin_unit)
-                                 .assign_users([self.user])
-                                 .id('org-unit-2'))
-
-        self.inbox = create(Builder('inbox').titled(u'Testinbox'))
-
-    def assert_listing_results(self, results):
-        view = self.inbox.restrictedTraverse(
-            'tabbedview_view-{}'.format(self.viewname))
-        view.update()
-
-        self.assertEquals([obj.get_sql_object() for obj in results],
-                          view.contents)
-
-
-class TestAssignedInboxTaskTab(TestInboxTaskTabs):
+class TestAssignedInboxTaskTab(IntegrationTestCase):
 
     viewname = 'assigned_inbox_tasks'
 
     def test_lists_only_tasks_assigned_to_the_current_org_units_inbox(self):
-        forwarding_1 = create(Builder('forwarding')
-                              .within(self.inbox)
-                              .having(responsible='inbox:org-unit-1'))
-        forwarding_2 = create(Builder('forwarding')
-                              .within(self.inbox)
-                              .having(responsible='inbox:org-unit-2'))
+        self.login(self.secretariat_user)
 
-        self.assert_listing_results([forwarding_1])
+        self.add_additional_org_unit()
 
-        select_current_org_unit('org-unit-2')
-        self.assert_listing_results([forwarding_2])
+        self.inbox_forwarding.responsible = 'inbox:fa'
+        self.inbox_forwarding.sync()
 
-    def test_list_tasks_and_forwardings(self):
-        task = create(Builder('task')
-                      .within(self.inbox)
-                      .having(responsible='inbox:org-unit-1',
-                              modification_date=DateTime(2013, 6, 10)))
+        view = self.inbox.restrictedTraverse(
+            'tabbedview_view-{}'.format(self.viewname))
+        view.update()
 
-        forwarding = create(Builder('forwarding')
-                            .within(self.inbox)
-                            .having(responsible='inbox:org-unit-1',
-                                    modification_date=DateTime(2013, 6, 11)))
+        self.assertEquals(
+            [self.inbox_forwarding.get_sql_object()], view.contents)
 
-        self.assert_listing_results([task, forwarding])
+        select_current_org_unit('additional')
+        view.update()
+        self.assertEquals([], view.contents)
+
+    def test_list_tasks_assigned_to_current_inbox(self):
+        self.login(self.secretariat_user)
+
+        self.task.responsible = 'inbox:fa'
+        self.task.sync()
+
+        view = self.inbox.restrictedTraverse(
+            'tabbedview_view-{}'.format(self.viewname))
+        view.update()
+
+        self.assertEquals([self.task.get_sql_object()], view.contents)
 
 
-class TestIssuedInboxTaskTab(TestInboxTaskTabs):
+class TestIssuedInboxTaskTab(IntegrationTestCase):
 
     viewname = 'issued_inbox_tasks'
 
     def test_list_tasks_and_forwardings(self):
-        task = create(Builder('task')
-                      .within(self.inbox)
-                      .having(issuer='inbox:org-unit-1'))
+        self.login(self.secretariat_user)
 
-        forwarding = create(Builder('forwarding')
-                            .within(self.inbox)
-                            .having(issuer='inbox:org-unit-1'))
+        self.task.issuer = 'inbox:fa'
+        self.task.sync()
 
-        self.assert_listing_results([task, forwarding])
+        self.inbox_forwarding.issuer = 'inbox:fa'
+        self.inbox_forwarding.sync()
 
-    def test_list_only_task_with_current_org_units_inbox_as_a_issuer(self):
-        task1 = create(Builder('task')
-                      .within(self.inbox)
-                      .having(issuer='inbox:org-unit-1'))
-
-        task2 = create(Builder('task')
-                      .within(self.inbox)
-                      .having(issuer='inbox:org-unit-2'))
-
-        self.assert_listing_results([task1])
-
-        select_current_org_unit('org-unit-2')
-        self.assert_listing_results([task2])
-
-    def test_list_also_tasks_outside_of_the_inbox(self):
-        task_inside = create(Builder('task')
-              .within(self.inbox)
-              .having(issuer='inbox:org-unit-1',
-                      modification_date=DateTime(2013, 6, 10)))
-
-        task_outside = create(Builder('task')
-              .having(issuer='inbox:org-unit-1',
-                      modification_date=DateTime(2013, 6, 11)))
-
-        self.assert_listing_results([task_inside, task_outside])
-
-
-class TestClosedForwardings(FunctionalTestCase):
-
-    viewname = 'closed-forwardings'
-
-    def setUp(self):
-        super(TestClosedForwardings, self).setUp()
-
-        self.yearfolder = create(Builder('yearfolder'))
-        self.forwarding = create(Builder('forwarding')
-                                 .within(self.yearfolder)
-                                 .in_state('forwarding-state-closed'))
-
-    def test_state_filter_is_deactivated(self):
-        view = self.yearfolder.restrictedTraverse(
+        view = self.inbox.restrictedTraverse(
             'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
-        self.assertFalse(view.filterlist_available)
+        self.assertItemsEqual(
+            [self.task.get_sql_object(), self.inbox_forwarding.get_sql_object()],
+            view.contents)
+
+    def test_list_only_task_with_current_org_units_inbox_as_a_issuer(self):
+        self.login(self.secretariat_user)
+
+        view = self.inbox.restrictedTraverse(
+            'tabbedview_view-{}'.format(self.viewname))
+        view.update()
+
+        self.assertEquals([], view.contents)
+
+        self.inbox_forwarding.issuer = 'inbox:fa'
+        self.inbox_forwarding.sync()
+        view.update()
+
         self.assertEquals(
-            [self.forwarding.get_sql_object()], view.contents)
+            [self.inbox_forwarding.get_sql_object()],
+            view.contents)
+
+
+class TestClosedForwardings(IntegrationTestCase):
+
+    @browsing
+    def test_state_filter_is_deactivated(self, browser):
+        self.login(self.manager)
+        yearfolder = create(Builder('yearfolder').titled(u'2018'))
+        create(Builder('forwarding')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId())
+               .within(yearfolder)
+               .in_state('forwarding-state-closed')
+               .titled('Closed Forwarding'))
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(yearfolder, view='tabbedview_view-closed-forwardings')
+
+        self.assertEquals([], browser.css('.state_filters'))
+        self.assertEquals(u'Closed Forwarding', browser.css('.listing a').first.text)
