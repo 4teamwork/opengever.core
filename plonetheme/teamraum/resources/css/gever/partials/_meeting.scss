@@ -6,32 +6,32 @@
 }
 
 #meeting_location {
-  @extend .fa;
+  @extend .fas;
   @extend .fa-map-marker;
 }
 
 #meeting_date {
-  @extend .fa;
+  @extend .fas;
   @extend .fa-calendar;
 }
 
 #meeting_time {
-  @extend .fa;
-  @extend .fa-clock-o;
+  @extend .fas;
+  @extend .fa-clock;
 }
 
 #meeting_secretary {
-  @extend .fa;
-  @extend .fa-pencil;
+  @extend .fas;
+  @extend .fa-pen;
 }
 
 #meeting_number {
-  @extend .fa;
+  @extend .fas;
   @extend .fa-hashtag;
 }
 
 #meeting_presidency {
-  @extend .fa;
+  @extend .fas;
   @extend .fa-user-secret;
 }
 
@@ -85,13 +85,13 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
     float: left;
 
     .pending-held {
-      @extend .fa;
+      @extend .fas;
       @extend .fa-gavel;
     }
 
     .pending-closed,
     .held-closed{
-      @extend .fa;
+      @extend .fas;
       @extend .fa-check;
     }
 
@@ -166,7 +166,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         padding-top: 21px;
       }
       .generate-agendaitem-list {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-cogs;
         float: right;
         font-size: 15px;
@@ -175,7 +175,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         }
       }
       .generate-protocol {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-cogs;
         float: right;
         font-size: 15px;
@@ -184,8 +184,8 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         }
       }
       .refresh-agendaitem-list {
-        @extend .fa;
-        @extend .fa-refresh;
+        @extend .fas;
+        @extend .fa-sync;
         float: right;
         font-size: 15px;
         &:hover {
@@ -193,8 +193,8 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         }
       }
       .refresh-protocol {
-        @extend .fa;
-        @extend .fa-refresh;
+        @extend .fas;
+        @extend .fa-sync;
         float: right;
         font-size: 15px;
         &:hover {
@@ -204,7 +204,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
       .download-agendaitem-list-btn,
       .download-protocol-btn,
       .download-zipexport-btn {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-download;
         float: right;
         margin-left: 8px;
@@ -240,7 +240,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         padding-top: 6px;
       }
       .generate-manual-excerpt {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-plus;
         float: right;
         font-size: 15px;
@@ -291,7 +291,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
                 margin-left: 20px;
               }
               &.decided:before {
-                @extend .fa;
+                @extend .fas;
                 @extend .fa-check;
                 float: right;
                 color: $black;
@@ -337,8 +337,8 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 
           .document-label {
             &:before {
-              @extend .fa;
-              @extend .fa-file-word-o;
+              @extend .far;
+              @extend .fa-file-word;
               position: absolute;
               font-size: 130%;
               background-color: white;
@@ -356,13 +356,13 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             .action {
               position: absolute;
               &:before {
-                @extend .fa;
+                @extend .fas;
                 visibility: visible;
                 font-size: 150%;
                 padding: 5px 7px;
               }
               &.generate {
-                @extend .fa-refresh;
+                @extend .fa-sync;
                 right: 60px;
               }
               &.download {
@@ -449,7 +449,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             margin-right: 40px;
             text-align: center;
             &:before {
-              @extend .fa;
+              @extend .fas;
               @extend .fa-undo;
               padding-right: 4px;
               color: $black;
@@ -462,7 +462,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         position: relative;
 
         a#clear-participants-filter {
-          @extend .fa;
+          @extend .fas;
           @extend .fa-times;
           position: absolute;
           right: 0;
@@ -526,7 +526,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             }
 
             .email {
-              @extend .fa;
+              @extend .fas;
               @extend .fa-envelope;
               color: $gever-gray;
               padding: 0px 5px;
@@ -579,7 +579,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
               &:before {
                 position: absolute;
                 left: -20px;
-                @extend .fa;
+                @extend .fas;
               }
               &.saving:before {
                 @extend .fa-spinner;
@@ -705,13 +705,13 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             float: right;
           }
           .return-excerpt a:before {
-            @extend .fa;
-            @extend .fa-check-circle-o;
+            @extend .fas;
+            @extend .fa-check-circle;
             margin-right: 5px;
             color: $black;
           }
           .return-excerpt span.returned:before {
-            @extend .fa;
+            @extend .fas;
             @extend .fa-check;
             color: lighten($black, 10%);
           }
@@ -806,7 +806,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
           vertical-align: bottom;
           color: $discreet;
           &:before {
-            @extend .fa;
+            @extend .fas;
             @extend .fa-check;
             padding-right: 5px;
             color: lighten($discreet, 10%);
@@ -819,11 +819,11 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
         .button {
           color: #555;
           &:before {
-            @extend .fa;
+            @extend .fas;
             margin-right: 5px;
           }
           &.edit-document:before {
-            @extend .fa-file-word-o;
+            @extend .fa-file-word;
           }
           &.decide-agenda-item:before,
           &.revise-agenda-item:before {
@@ -888,12 +888,12 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             }
 
             &:before {
-              @extend .fa;
+              @extend .fas;
               padding-right: 7px;
               color: lighten($black, 10%);
             }
             &.rename-agenda-item:before {
-              @extend .fa-pencil;
+              @extend .fa-pen;
             }
             &.delete-agenda-item:before {
               @extend .fa-times;
@@ -934,7 +934,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             background-color: #e6e6e6;
             pointer-events: none;
             &:before {
-              @extend .fa;
+              @extend .fas;
               @extend .fa-spinner;
               @extend .fa-spin;
               margin-right: 5px;
@@ -990,7 +990,7 @@ table#agenda_items {
       }
       .sortable-handle {
         width: 10px;
-        @extend .fa;
+        @extend .fas;
         @extend .fa-bars;
         display: table-cell;
         &:hover {
@@ -1022,7 +1022,7 @@ table#agenda_items {
           position: relative;
           &:before {
             position: absolute;
-            @extend .fa;
+            @extend .fas;
             content: $fa-var-lock;
             color: #aaa;
             margin-left: -15px;
@@ -1035,7 +1035,7 @@ table#agenda_items {
       .toggle-attachements {
         width: 10px;
         .toggle-attachements-btn {
-          @extend .fa;
+          @extend .fas;
           @extend .fa-caret-right;
           font-size: 20px;
           &:hover {
@@ -1053,29 +1053,29 @@ table#agenda_items {
         }
         .edit-document {
           position: relative;
-          @extend .fa;
-          @extend .fa-file-word-o;
+          @extend .fas;
+          @extend .fa-file-word;
         }
         .delete-agenda-item {
-          @extend .fa;
-          @extend .fa-trash-o;
+          @extend .fas;
+          @extend .fa-trash;
         }
         .edit-agenda-item {
-          @extend .fa;
-          @extend .fa-pencil;
+          @extend .fas;
+          @extend .fa-pen;
         }
         .decide-agenda-item, .revise-agenda-item {
           > span {
-            @extend .fa;
+            @extend .fas;
             @extend .fa-check;
           }
         }
         .reopen-agenda-item > span {
-          @extend .fa;
+          @extend .fas;
           @extend .fa-reply;
         }
         .generate-excerpt {
-          @extend .fa;
+          @extend .fas;
           @extend .fa-clone;
         }
       }
@@ -1202,7 +1202,7 @@ $spacing: 8px;
       }
 
       &:before {
-        @extend .fa;
+        @extend .fas;
         font-size: 16px;
         display: inline-block;
         vertical-align: middle;
@@ -1210,7 +1210,7 @@ $spacing: 8px;
       }
 
       &.edit_period:before {
-        @extend .fa-pencil;
+        @extend .fa-pencil-alt;
       }
 
       &.download_toc:before {
@@ -1220,8 +1220,8 @@ $spacing: 8px;
       &.loading {
         pointer-events: none;
         &:before {
-          @extend .fa;
-          @extend .fa-circle-o-notch;
+          @extend .fas;
+          @extend .fa-circle-notch;
           @extend .fa-spin;
         }
       }

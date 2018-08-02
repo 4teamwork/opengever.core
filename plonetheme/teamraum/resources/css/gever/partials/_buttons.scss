@@ -55,8 +55,8 @@ body.feature-word-meeting .add-agenda-items,
       font-size: 0;
       pointer-events: none;
       &:before {
-        @extend .fa;
-        @extend .fa-circle-o-notch;
+        @extend .fas;
+        @extend .fa-circle-notch;
         @extend .fa-spin;
         margin-right: 5px;
         font-size: $button-font-size;
@@ -184,7 +184,7 @@ body.feature-word-meeting .add-agenda-items,
   height: 27px;
 
   &:before {
-    @extend .fa;
+    @extend .fas;
     color: #606060;
     font-size: 15px;
   }

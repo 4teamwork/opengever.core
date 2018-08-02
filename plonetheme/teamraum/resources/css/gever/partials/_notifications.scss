@@ -5,14 +5,14 @@
   }
 
   .badge-title:before{
-    @extend .fa;
-    @extend .fa-bell-o;
+    @extend .far;
+    @extend .fa-bell;
     padding-right: 5px;
   }
 
   .mail-title:before{
-    @extend .fa;
-    @extend .fa-envelope-o;
+    @extend .far;
+    @extend .fa-envelope;
     padding-right: 5px;
   }
 
@@ -82,17 +82,17 @@
   }
 
   .save-setting:before {
-    @extend .fa;
+    @extend .fas;
     @extend .fa-check;
   }
 
   .reset-setting:before {
-    @extend .fa;
-    @extend .fa-trash-o;
+    @extend .fas;
+    @extend .fa-trash-alt;
   }
 
   .cancel-setting:before {
-    @extend .fa;
+    @extend .fas;
     @extend .fa-times;
   }
 

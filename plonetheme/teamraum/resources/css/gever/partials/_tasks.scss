@@ -92,7 +92,7 @@
 
   .add-task {
     &:before{
-      @extend .fa;
+      @extend .fas;
       @extend .fa-plus-circle;
       color: $gray-darker;
       font-size: 10px;
@@ -115,7 +115,7 @@
     }
 
     .task-sequence-arrow {
-      @extend .fa;
+      @extend .fas;
       @extend .fa-arrow-down;
       color: $gray-darker;
     }

@@ -30,8 +30,7 @@ $showroom-gray-light: #4f4f4f;
 
 .ftw-showroom-button {
   @extend .ftw-showroom-header-tile;
-  @extend .fa;
-  font-weight: normal;
+  @extend .fas;
   font-size: 16px;
 
   &.selected,
@@ -380,7 +379,7 @@ $showroom-gray-light: #4f4f4f;
     }
 
     .documentsList, .documentsGallery {
-      @extend .fa;
+      @extend .fas;
       text-align: center;
       display: inline-block;
       text-indent: 0;
