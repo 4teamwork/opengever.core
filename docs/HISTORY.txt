@@ -5,7 +5,6 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
-- Bump docxcompose. [phgross]
 - Revoke local roles for responsible and agency when finishing a task. [phgross]
 - Allow administrators to export the repository as excel file. [njohner]
 - Document generated meeting documents. [tarnap]
@@ -56,10 +55,8 @@ Changelog
 - Open task report: Fix condition to report admin-unit local tasks only. [lgraf]
 - Fix unicode error in versions tab comments. [lgraf]
 - Restrict availability of the delete button. [njohner]
-- Increase size of the favorites plone_uid column. [phgross]
 - Display the checkin comment on bumblebee overlays. [Rotonen]
 - Fix a bug with modern emojis while rendering task responses. [deiferni]
-- Fix physical_path schema migration for oracle backends. [phgross]
 - Ensure creator sets get to the paster upon pasting content. [Rotonen]
 - Improve Checkout/Edit button labels. [njohner]
 - Indicate change of responsible in response when task is rejected. [njohner]
@@ -133,6 +130,14 @@ Changelog
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 - Fix handling of decomposed unicode (aka NFD, NFKD) in Solr. [buchi]
+
+
+2018.3.6 (2018-08-02)
+---------------------
+
+- Bump docxcompose. [phgross]
+- Increase size of the favorites plone_uid column. [phgross]
+- Fix physical_path schema migration for oracle backends. [phgross]
 
 
 2018.3.5 (2018-06-20)
