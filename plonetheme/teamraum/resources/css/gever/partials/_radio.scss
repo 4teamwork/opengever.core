@@ -1,33 +1,3 @@
-#opengever_meeting_meeting, #opengever_meeting_protocol {
-  input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    + input + label, + label {
-      display: inline-block;
-      color: $black;
-      padding-left: 25px;
-      position: relative;
-      @extend .fa;
-      @extend .fa-circle-o;
-      &:before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: block;
-        font-size: 20px;
-      }
-    }
-    &:checked {
-      + input + label, + label {
-        color: $black;
-        &:before {
-          @extend .fa-dot-circle-o;
-        }
-      }
-    }
-  }
-}
-
 #ad-hoc-agenda-item-proposal-templates {
   input[type="radio"] {
     position: relative;
