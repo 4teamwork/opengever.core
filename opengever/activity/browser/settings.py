@@ -41,9 +41,7 @@ ACTIVITY_GROUPS = [
          'task-commented',
          'task-transition-reassign',
          'task-transition-resolved-in-progress',
-         'task-transition-skipped-open',
          'task-transition-rejected-skipped',
-         'task-transition-planned-skipped',
      ]},
 
     {'id': 'forwarding',
@@ -85,7 +83,12 @@ ALIASES = {
     'task-transition-cancelled-open': (
         'task-transition-cancelled-open',
         'task-transition-rejected-open',
+        'task-transition-skipped-open',
     ),
+    'task-transition-rejected-skipped': (
+        'task-transition-rejected-skipped',
+        'task-transition-planned-skipped',
+    )
 }
 
 
