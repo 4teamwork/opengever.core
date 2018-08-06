@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-07-24 15:03+0000\n"
+"POT-Creation-Date: 2018-08-06 15:59+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -323,22 +323,14 @@ msgstr "Kosten in CHF"
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
 
+#: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
 msgid "help_responsible"
-msgstr "Wählen Sie die verantwortliche Person aus."
+msgstr "Wählen Sie die verantwortlichen Personen aus."
 
 #: ./opengever/task/task.py
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer."
-
-#: ./opengever/task/task.py
-msgid "help_responsible_multiple"
-msgstr "Wählen Sie die verantwortlichen Personen aus."
-
-#: ./opengever/task/browser/assign.py
-#: ./opengever/task/browser/forms.py
-msgid "help_responsible_single_client_setup"
-msgstr "Wählen Sie die verantwortliche Person aus"
 
 #: ./opengever/task/task.py
 msgid "help_task_type"

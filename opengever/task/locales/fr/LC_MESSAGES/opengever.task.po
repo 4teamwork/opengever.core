@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-24 15:03+0000\n"
+"POT-Creation-Date: 2018-08-06 15:59+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -325,22 +325,14 @@ msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
 #. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
+#: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
 msgid "help_responsible"
-msgstr "Sélectionnez la personne responsable."
+msgstr "Sélectionnez les personnes responsables."
 
 #: ./opengever/task/task.py
 msgid "help_responsible_client"
 msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire."
-
-#: ./opengever/task/task.py
-msgid "help_responsible_multiple"
-msgstr "Sélectionnez les personnes responsables."
-
-#: ./opengever/task/browser/assign.py
-#: ./opengever/task/browser/forms.py
-msgid "help_responsible_single_client_setup"
-msgstr "Choix de la personne responsable"
 
 #: ./opengever/task/task.py
 msgid "help_task_type"

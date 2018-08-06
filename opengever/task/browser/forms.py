@@ -1,5 +1,3 @@
-from opengever.ogds.base.utils import ogds_service
-from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
@@ -139,20 +137,8 @@ class TaskEditForm(DefaultEditForm):
     """The standard dexterity EditForm with the following customizations:
 
      - Require the Edit Task permission
-     - Omit `responsible` and `responsible_client` fields and adjust field
-       description for single orgunit deployments
      - Records reassign activity when the responsible has changed.
     """
-
-    def update(self):
-        super(TaskEditForm, self).update()
-
-        # omit the responsible_client field and adjust the field description
-        # of the responsible field if there is only one client configured.
-        if not ogds_service().has_multiple_org_units():
-            self.groups[0].widgets['responsible_client'].mode = HIDDEN_MODE
-            self.groups[0].widgets['responsible'].field.description = _(
-                u"help_responsible_single_client_setup", default=u"")
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
