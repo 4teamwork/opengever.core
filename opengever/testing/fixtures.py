@@ -1602,7 +1602,11 @@ class OpengeverContentFixture(object):
         old_manager = getSecurityManager()
 
         try:
-            login(getSite(), user.getId())
+            try:
+                login(getSite(), user.getId())
+            # XXX - Allow (early) lookups from the Zope acl_users as well
+            except ValueError:
+                login(getSite().getPhysicalRoot(), user.getId())
             yield
 
         finally:
