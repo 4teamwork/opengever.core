@@ -1,7 +1,10 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from hashlib import sha256
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
+import jwt
 
 
 class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase):
@@ -13,28 +16,38 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
     def test_attach_to_email_open_with_file(self, browser):
         self.login(self.manager, browser)
 
-        oc_url = self.fetch_document_attach_oc_url(browser, self.document)
+        with freeze(datetime(2100, 8, 3, 15, 25)):
+            oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_attach_token(
-            self.manager,
-            oc_url,
-            (self.document, ),
-            )
+        expected_token = {
+            u'action': u'attach',
+            u'documents': [u'createtreatydossiers000000000002'],
+            u'exp': 4121033100,
+            u'sub': u'admin',
+            u'url': u'http://nohost/plone/oc_attach',
+            }
+        raw_token = oc_url.split(':')[-1]
+        token = jwt.decode(raw_token, verify=False)
+        self.assertEqual(token, expected_token)
 
-        payloads = self.fetch_document_attach_payloads(browser, tokens)
-
+        expected_payloads = [{
+            u'bcc': u'1014013300@example.org',
+            u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+            u'download': u'download',
+            u'filename': u'Vertraegsentwurf.docx',
+            u'title': u'Vertr\xe4gsentwurf',
+            u'uuid': u'createtreatydossiers000000000002',
+            }]
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
-        self.validate_attach_payload(payloads[0], self.document)
+        self.assertEqual(payloads, expected_payloads)
 
-        file_contents = self.download_document(
-            browser,
-            tokens,
-            payloads[0],
-            )
-
+        file_contents = self.download_document(browser, raw_token, payloads[0])
         self.assertEquals(file_contents, self.document.file.data)
 
 
@@ -47,33 +60,58 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
     def test_checkout_checkin_open_with_file_without_comment(self, browser):
         self.login(self.manager, browser)
 
-        oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
+        with freeze(datetime(2100, 8, 3, 15, 25)):
+            oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(self.manager, oc_url, self.document)
-        payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
+        expected_token = {
+            u'action': u'checkout',
+            u'documents': [u'createtreatydossiers000000000002'],
+            u'exp': 4121033100,
+            u'sub': u'admin',
+            u'url': u'http://nohost/plone/oc_checkout',
+            }
+        raw_token = oc_url.split(':')[-1]
+        token = jwt.decode(raw_token, verify=False)
+        self.assertEqual(token, expected_token)
 
-        self.validate_checkout_payload(payload, self.document)
+        expected_payloads = [{
+            u'checkin-with-comment': u'@@checkin_document',
+            u'checkin-without-comment': u'checkin_without_comment',
+            u'checkout': u'@@checkout_documents',
+            u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+            u'download': u'download',
+            u'filename': u'Vertraegsentwurf.docx',
+            u'upload-api': None,
+            u'upload-form': u'file_upload',
+            u'uuid': u'createtreatydossiers000000000002',
+            }]
+        payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
+        self.assertEquals(200, browser.status_code)
+        for payload, expected_payload in zip(payloads, expected_payloads):
+            self.assertTrue(payload.get('csrf-token'))
+            self.assertDictContainsSubset(expected_payload, payload)
 
-        self.checkout_document(browser, tokens, payload, self.document)
+        self.checkout_document(browser, raw_token, payloads[0], self.document)
 
-        lock_token = self.lock_document(browser, tokens, self.document)
+        lock_token = self.lock_document(browser, raw_token, self.document)
 
         original_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document(browser, tokens, payload, self.document, f)
+            self.upload_document(browser, raw_token, payloads[0], self.document, f)
 
         new_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         self.assertNotEquals(new_checksum, original_checksum)
 
-        self.unlock_document(browser, tokens, self.document, lock_token)
+        self.unlock_document(browser, raw_token, self.document, lock_token)
 
-        self.checkin_document(browser, tokens, payload, self.document)
+        self.checkin_document(browser, raw_token, payloads[0], self.document)
