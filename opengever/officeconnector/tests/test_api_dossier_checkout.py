@@ -1,8 +1,11 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from hashlib import sha256
 from opengever.document.document import Document
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
+import jwt
 
 
 class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
@@ -164,74 +167,122 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     def test_checkout_checkin_open_with_file_without_comment(self, browser):
         self.login(self.regular_user, browser)
 
-        oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
+        with freeze(datetime(2100, 8, 3, 15, 25)):
+            oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(self.regular_user, oc_url, self.document)
-        payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
+        expected_token = {
+            u'action': u'checkout',
+            u'documents': [u'createtreatydossiers000000000002'],
+            u'exp': 4121033100,
+            u'sub': u'kathi.barfuss',
+            u'url': u'http://nohost/plone/oc_checkout',
+            }
+        raw_token = oc_url.split(':')[-1]
+        token = jwt.decode(raw_token, verify=False)
+        self.assertEqual(token, expected_token)
 
-        self.validate_checkout_payload(payload, self.document)
+        expected_payloads = [{
+            u'checkin-with-comment': u'@@checkin_document',
+            u'checkin-without-comment': u'checkin_without_comment',
+            u'checkout': u'@@checkout_documents',
+            u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+            u'download': u'download',
+            u'filename': u'Vertraegsentwurf.docx',
+            u'upload-api': None,
+            u'upload-form': u'file_upload',
+            u'uuid': u'createtreatydossiers000000000002',
+            }]
+        payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
+        self.assertEquals(200, browser.status_code)
+        for payload, expected_payload in zip(payloads, expected_payloads):
+            self.assertTrue(payload.get('csrf-token'))
+            self.assertDictContainsSubset(expected_payload, payload)
 
-        self.checkout_document(browser, tokens, payload, self.document)
+        self.checkout_document(browser, raw_token, payloads[0], self.document)
 
-        lock_token = self.lock_document(browser, tokens, self.document)
+        lock_token = self.lock_document(browser, raw_token, self.document)
 
         original_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document(browser, tokens, payload, self.document, f)
+            self.upload_document(browser, raw_token, payloads[0], self.document, f)
 
         new_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         self.assertNotEquals(new_checksum, original_checksum)
 
-        self.unlock_document(browser, tokens, self.document, lock_token)
-
-        self.checkin_document(browser, tokens, payload, self.document)
+        self.unlock_document(browser, raw_token, self.document, lock_token)
+        self.checkin_document(browser, raw_token, payloads[0], self.document)
 
     @browsing
     def test_checkout_checkin_open_with_file_with_comment(self, browser):
         self.login(self.regular_user, browser)
 
-        oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
+        with freeze(datetime(2100, 8, 3, 15, 25)):
+            oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
-        tokens = self.validate_checkout_token(self.regular_user, oc_url, self.document)
-        payload = self.fetch_document_checkout_payloads(browser, tokens)[0]
+        expected_token = {
+            u'action': u'checkout',
+            u'documents': [u'createtreatydossiers000000000002'],
+            u'exp': 4121033100,
+            u'sub': u'kathi.barfuss',
+            u'url': u'http://nohost/plone/oc_checkout',
+            }
+        raw_token = oc_url.split(':')[-1]
+        token = jwt.decode(raw_token, verify=False)
+        self.assertEqual(token, expected_token)
 
-        self.validate_checkout_payload(payload, self.document)
+        expected_payloads = [{
+            u'checkin-with-comment': u'@@checkin_document',
+            u'checkin-without-comment': u'checkin_without_comment',
+            u'checkout': u'@@checkout_documents',
+            u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+            u'download': u'download',
+            u'filename': u'Vertraegsentwurf.docx',
+            u'upload-api': None,
+            u'upload-form': u'file_upload',
+            u'uuid': u'createtreatydossiers000000000002',
+            }]
+        payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
+        self.assertEquals(200, browser.status_code)
+        for payload, expected_payload in zip(payloads, expected_payloads):
+            self.assertTrue(payload.get('csrf-token'))
+            self.assertDictContainsSubset(expected_payload, payload)
 
-        self.checkout_document(browser, tokens, payload, self.document)
+        self.checkout_document(browser, raw_token, payloads[0], self.document)
 
-        lock_token = self.lock_document(browser, tokens, self.document)
+        lock_token = self.lock_document(browser, raw_token, self.document)
 
         original_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
         with open(path_to_asset('addendum.docx')) as f:
-            self.upload_document(browser, tokens, payload, self.document, f)
+            self.upload_document(browser, raw_token, payloads[0], self.document, f)
 
         new_checksum = sha256(
-            self.download_document(browser, tokens, payload),
+            self.download_document(browser, raw_token, payloads[0]),
             ).hexdigest()
 
-        self.assertNotEquals(new_checksum, original_checksum)
+        self.assertNotEqual(new_checksum, original_checksum)
 
-        self.unlock_document(browser, tokens, self.document, lock_token)
-
+        self.unlock_document(browser, raw_token, self.document, lock_token)
         self.checkin_document(
             browser,
-            tokens,
-            payload,
+            raw_token,
+            payloads[0],
             self.document,
             comment='foobar',
             )
