@@ -78,7 +78,8 @@ class InboxDocuments(Documents):
     # do not list documents in forwardings
     depth = 1
 
-    disabled_actions = ['create_task',
+    disabled_actions = ['create_proposal',
+                        'create_task',
                         'submit_additional_documents']
 
     @property
