@@ -45,6 +45,7 @@
     &.accept:before { content: $accept; }
     &.reassign:before { content: $reassign; }
     &.revise:before { content: $revise; }
+    &.skip:before { font-family: 'Font Awesome 5 Free'; content: fa-content($fa-var-step-forward); }
     &.taskCommented:before { content: $comment; }
     &.assignDossier:before { content: $assignDossier; }
     &.complete:before { content: $complete; }
