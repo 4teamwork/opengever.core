@@ -148,6 +148,8 @@ MS Project                x
 
 MS OneNote                x
 
+MS Publisher              x
+
 
 Open office                          x
 

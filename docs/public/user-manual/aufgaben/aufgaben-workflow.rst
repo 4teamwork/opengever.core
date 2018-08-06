@@ -1,4 +1,4 @@
-.. _aufgaben-workflow:
+.. _label-aufgaben-workflow:
 
 Übersicht über den typischen Aufgabenworkflow
 ---------------------------------------------
@@ -55,7 +55,9 @@ entsprechend auch diesen Status.
 **Berechtigung bei den verschiedenen Auftragstypen**
 
 Die nachfolgend über Aufgaben definierten Rechte an Dokumenten ergänzen die
-bestehenden Berechtigungen auf Stufe Ordnungsposition und Dossier.
+bestehenden Berechtigungen auf Stufe Ordnungsposition und Dossier während
+der Dauer einer Aufgabe. Sobald die Aufgabe abgeschlossen wird, werden auch
+diese Rechte dem Auftragnehmer wieder entzogen.
 
 ======================== =================
 Auftragstyp               Auftragnehmende
@@ -79,13 +81,14 @@ Zur Stellungnahme         zu überarbeiten
 
 ======================== =================
 
-Die oben beschriebenen Rechte bleiben auch nach Abschluss der Aufgabe bestehen.
-
 Mit der auftragnehmenden Person wird auch die Eingangskorbgruppe des
 auftragnehmenden Mandanten mitberechtigt. Dies im Sinne der
 Stellvertreter-Regelung.
 
 **Aufgaben-Workflow-Diagramm**
+
+Nachstehend ist das Zusammenspiel aller Status bei Aufgaben grafisch
+dargestellt.
 
 |img-aufgaben-workflow-1|
 
