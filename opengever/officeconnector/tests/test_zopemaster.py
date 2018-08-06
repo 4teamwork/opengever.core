@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
+from opengever.officeconnector.testing import JWT_SIGNING_SECRET_ZOPE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
 import jwt
@@ -30,7 +31,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
         self.assertEqual(token, expected_token)
 
         expected_payloads = [{
@@ -74,7 +75,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             u'url': u'http://nohost/plone/oc_checkout',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
         self.assertEqual(token, expected_token)
 
         expected_payloads = [{

@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 import jwt
 
@@ -41,7 +42,7 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
         self.assertEqual(token, expected_token)
 
         expected_payloads = [{

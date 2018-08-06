@@ -19,6 +19,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
+from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.base.utils import ogds_service
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
@@ -34,6 +35,9 @@ import logging
 import pytz
 
 
+JWT_SECRET = 'topsecret'
+
+
 class OpengeverContentFixture(object):
     """Provide a basic content fixture for integration tests."""
 
@@ -43,6 +47,18 @@ class OpengeverContentFixture(object):
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME),
             }
+
+        # Set up a static secret for the Zope acl_users JWT plugin
+        # XXX - the __call__ based _lookup_table cannot be used within __init__
+        with self.login(api.user.get(SITE_OWNER_NAME)):
+            jwt_plugin = get_auth_plugin(api.portal.get().getPhysicalRoot())
+            jwt_plugin.use_keyring = False
+            jwt_plugin._secret = JWT_SECRET
+
+        # Set up a static secret for the Plone acl_users JWT plugin
+        jwt_plugin = get_auth_plugin(api.portal.get())
+        jwt_plugin.use_keyring = False
+        jwt_plugin._secret = JWT_SECRET
 
         with self.freeze_at_hour(4):
             self.create_units()

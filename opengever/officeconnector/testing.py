@@ -4,12 +4,17 @@ from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.journal.handlers import DOCUMENT_CHECKED_OUT
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import IntegrationTestCase
+from opengever.testing.fixtures import JWT_SECRET
 from os.path import basename
 from plone import api
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from xml.etree import ElementTree as ET
 from zope.component import getMultiAdapter
 import json
+
+
+JWT_SIGNING_SECRET_PLONE = '/'.join((JWT_SECRET, 'plone', 'acl_users', 'jwt_auth'))
+JWT_SIGNING_SECRET_ZOPE = '/'.join((JWT_SECRET, 'acl_users', 'jwt_auth'))
 
 
 class OCIntegrationTestCase(IntegrationTestCase):

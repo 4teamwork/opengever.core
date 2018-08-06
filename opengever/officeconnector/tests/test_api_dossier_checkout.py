@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
 from opengever.document.document import Document
+from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
 import jwt
@@ -181,7 +182,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_checkout',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
         self.assertEqual(token, expected_token)
 
         expected_payloads = [{
@@ -240,7 +241,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_checkout',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, verify=False)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
         self.assertEqual(token, expected_token)
 
         expected_payloads = [{
