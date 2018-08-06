@@ -15,8 +15,8 @@
     button.delete {
       float: right;
 
-      @extend .fa;
-      @extend .fa-trash;
+      @extend .fas;
+      @extend .fa-trash-alt;
     }
   }
 
@@ -50,8 +50,8 @@
   }
 
   .editNoteIcon {
-    @extend .fa;
-    @extend .fa-pencil;
+    @extend .fas;
+    @extend .fa-pencil-alt;
   }
 }
 
@@ -76,7 +76,7 @@
 
   .visualHint {
     font-size: 16px;
-    @extend .fa;
+    @extend .fas;
     @extend .fa-sticky-note;
     color: #FED568;
     vertical-align: .5em;

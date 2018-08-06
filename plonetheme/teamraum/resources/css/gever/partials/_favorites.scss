@@ -16,13 +16,13 @@ $favorites-icon-size: 1em;
     font-size: 16px;
 
     &:before {
-      @extend .fa;
-      @extend .fa-star-o;
+      @extend .far;
+      @extend .fa-star;
     }
 
     &.is-favorite {
       &:before {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-star;
       }
     }
@@ -31,7 +31,7 @@ $favorites-icon-size: 1em;
       cursor: default;
 
       &:before {
-        @extend .fa;
+        @extend .far;
         @extend .fa-spin;
         @extend .fa-star;
       }

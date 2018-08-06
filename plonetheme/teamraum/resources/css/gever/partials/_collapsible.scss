@@ -17,7 +17,7 @@
         border-right: 1px solid $gray-dark;
         border-top-left-radius: $border-radius;
         border-bottom-left-radius: $border-radius;
-        @extend .fa;
+        @extend .fas;
         @extend .fa-plus;
         &:focus {
           box-shadow: none;

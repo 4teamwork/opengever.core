@@ -17,8 +17,8 @@
       margin-left: 10px;
 
       &:before {
-        @extend .fa;
-        @extend .fa-pencil;
+        @extend .fas;
+        @extend .fa-pencil-alt;
       }
     }
   }
@@ -27,7 +27,7 @@
     .answer {
 
       .answerType:before {
-        @extend .fa;
+        @extend .fas;
       }
 
       &.add .answerType:before {
@@ -35,7 +35,7 @@
         content: $created;
       }
       &.edit .answerType:before {
-        @extend .fa-pencil;
+        @extend .fa-pencil-alt;
       }
       &.appraise .answerType:before {
         @extend .fa-gavel;
@@ -50,7 +50,7 @@
         @extend .fa-trash;
       }
       &.refuse .answerType:before {
-        @extend .fa-thumbs-o-down;
+        @extend .fa-thumbs-down;
       }
     }
     .details.collapsible {
@@ -58,7 +58,7 @@
         cursor: pointer;
 
         span:before {
-          @extend .fa;
+          @extend .fas;
           @extend .fa-caret-right;
           padding-right: 5px;
         }
@@ -102,7 +102,7 @@
       }
 
       .collapsible-header>span:before {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-caret-down;
         padding-right: 5px;
       }
@@ -117,7 +117,7 @@
       cursor: pointer;
 
       >span:before {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-caret-right;
         padding-right: 3px;
         margin-left: 3px;
@@ -155,7 +155,7 @@
             color: black;
           }
           &:before {
-            @extend .fa;
+            @extend .fas;
             font-size: 19px;
             padding-left: 6px;
             padding-right: 12px;
@@ -237,7 +237,7 @@
       }
       &:before {
         content: "";
-        @extend .fa;
+        @extend .fas;
         font-size: 19px;
         padding-left: 6px;
         padding-right: 12px;
@@ -254,17 +254,23 @@
   .actionButtons {
     a {
       &:before {
-        @extend .fa;
+        @extend .fas;
       }
 
-      &.disposition-transition-appraise:before { content: $appraise; }
-      &.disposition-transition-dispose:before { content: $dispose; }
-      &.disposition-transition-archive:before { content: $archive; }
-      &.disposition-transition-close:before { content: $disposition-close; }
-      &.disposition-transition-appraised-to-closed:before { content: $disposition-close; }
-      &.disposition-transition-refuse:before { content: $disposition-refuse; }
-      &.sip_download:before { content: $sip_download; }
-      &.appraisal_list:before { content: $appraisal_list; }
+      &.disposition-transition-appraise:before { content: fa-content($appraise); }
+      &.disposition-transition-dispose:before { content: fa-content($dispose); }
+      &.disposition-transition-archive:before { content: fa-content($archive); }
+      &.disposition-transition-close:before { content: fa-content($disposition-close); }
+      &.disposition-transition-appraised-to-closed:before { content: fa-content($disposition-close); }
+      &.disposition-transition-refuse:before {
+        @extend .far;
+        content: fa-content($disposition-refuse);
+      }
+      &.sip_download:before {
+        @extend .far;
+        content: fa-content($sip_download);
+      }
+      &.appraisal_list:before { content: fa-content($appraisal_list); }
       &.removal_protocol:before { @extend .fa-download; }
     }
 

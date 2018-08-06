@@ -362,12 +362,6 @@ dl.portlet ul.navTree li {
 /* @end */
 
 /* @group document */
-@mixin fa-icon($fa-class) {
-  @extend .fa;
-  @extend .fa-#{$fa-class};
-  margin-right: 0.5em;
-  font-size: 1.2em;
-}
 
 #proposals_box {
   .proposal {

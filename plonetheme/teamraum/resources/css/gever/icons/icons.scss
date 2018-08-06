@@ -3,10 +3,10 @@
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
  */
 
+@import "../fontawesome/fontawesome";
+@import "../fontawesome/regular";
+@import "../fontawesome/solid";
 @import "variables";
-@import "animated";
 @import "mixins";
-@import "path";
-@import "fontawesome";
 @import "opengever";
 @import "sprites";

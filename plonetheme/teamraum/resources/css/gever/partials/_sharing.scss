@@ -17,14 +17,14 @@
 
       .principal {
         &:before {
-          @extend .fa;
+          @extend .fas;
           font-size: 16px;
           padding-left: 6px;
           padding-right: 6px;
           color: $icon-color;
         }
         &.group:before {
-          @extend .fa-users;
+          @extend .fa-user-friends;
         }
         &.user:before {
           @extend .fa-user;
@@ -43,7 +43,7 @@
 
     .local:before,
     .acquired:before {
-      @extend .fa;
+      @extend .fas;
       @extend .fa-check-circle;
       font-size: 16px;
       color: $green-light;
@@ -52,7 +52,7 @@
     .automatic {
       float: right;
       &:before {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-check-circle;
         font-size: 16px;
         color: $gray-darker;
@@ -69,7 +69,7 @@
         text-decoration: none;
       }
       &:before {
-        @extend .fa;
+        @extend .fas;
         @extend .fa-question-circle;
         font-size: 16px;
         cursor: pointer;

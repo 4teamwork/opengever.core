@@ -17,7 +17,7 @@
     transition: background-color .2s ease-out;
 
     &:before {
-      @extend .fa;
+      @extend .fas;
       @extend .fa-plus;
       font-size: 1.6em;
       display: inline-block;

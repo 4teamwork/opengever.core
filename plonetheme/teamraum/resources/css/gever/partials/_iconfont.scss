@@ -97,13 +97,13 @@ $reject: "\e60f";
 /* @end */
 
 /* @group Additional icons disposition */
-$sip_download: $fa-var-file-archive-o;
+$sip_download: $fa-var-file-archive;
 $appraisal_list: $fa-var-list-ul;
 $appraise: $fa-var-gavel;
 $dispose: $fa-var-briefcase;
 $archive: $fa-var-database;
-$disposition-close: $fa-var-trash;
-$disposition-refuse: $fa-var-thumbs-o-down;
+$disposition-close: $fa-var-trash-alt;
+$disposition-refuse: $fa-var-thumbs-down;
 /* @end */
 
 /* @group notifications */
@@ -123,7 +123,7 @@ $rotate: 20deg;
   h1.documentFirstHeading:before {
     font-family: $iconset;
     font-size: 80%;
-    content: $char;
+    content: fa-content($char);
     padding-right: $padding;
   }
 }
@@ -132,7 +132,8 @@ $rotate: 20deg;
   #watermark-header:after,
   #tabbedview-header:after {
     font-family: $iconset;
-    content: $char;
+    font-weight: 900;
+    content: fa-content($char);
     font-size: 110px;
     line-height: 1em;
     position: absolute;
@@ -211,8 +212,8 @@ body.template-view.portaltype-opengever-meeting-sablontemplate {
   @include watermark-icon($document);
 }
 body.portaltype-opengever-disposition-disposition {
-  @include heading-icon($char: $disposition, $iconset: 'FontAwesome');
-  @include watermark-icon($char: $disposition, $iconset: 'FontAwesome');
+  @include heading-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
+  @include watermark-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
 }
 
 body.template-tabbed_view.portaltype-opengever-dossier-businesscasedossier,
@@ -304,8 +305,8 @@ body.template-personal_overview {
 }
 
 body.template-favorites-view {
-  @include heading-icon($char: $favorite, $iconset: 'FontAwesome');
-  @include watermark-icon($char: $favorite, $iconset: 'FontAwesome');
+  @include heading-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
+  @include watermark-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
 }
 
 body.template-tabbed_view.portaltype-opengever-meeting-committee {
@@ -392,7 +393,7 @@ body.meeting-view{
   content: $mail;
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-disposition-disposition:before {
-  @extend .fa;
+  @extend .fas;
   @extend .fa-archive;
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-document-document:before {
@@ -453,7 +454,7 @@ body.meeting-view{
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-paragraphtemplate:before{
   content: $fa-var-paragraph;
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
 }
 #plone-contentmenu-factories dd.actionMenuContent a#add-meeting:before{
   content: $meeting;
@@ -505,31 +506,20 @@ body.meeting-view{
 .contenttype-ftw-mail-mail:hover:before {text-decoration:none;}
 
 /* @group contentmenu icons */
-#plone-contentmenu-factories dd.actionMenuContent a {
-  &:before {
-    font-family: 'opengever';
-    content: "x";
-    display: inline-block;
-    color: #bababa;
-    font-size: 16px;
-    min-width: 22px;
-  }
-  > span {
-    margin-left: 0;
-  }
-}
 
 .contenttype-opengever-inbox-container:before {content: $inbox;}
 .contenttype-opengever-inbox-inbox:before {content: $inbox;}
 .contenttype-opengever-contact-contact:before {content: $contact;}
 .contenttype-opengever-contact-contactfolder:before {content: $contactfolder}
 .contenttype-opengever-disposition-disposition:before {
-  content: $fa-var-archive;
-  font-family: 'FontAwesome';
+  content: fa-content($fa-var-archive);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
 }
 .contenttype-plone-site:before {
   content: $fa-var-home;
-  font-family: 'FontAwesome';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
 }
 .contenttype-opengever-meeting-committeecontainer:before {content: $committeecontainer;}
 .contenttype-opengever-meeting-committee:before {content: $committee;}
@@ -555,8 +545,21 @@ body.meeting-view{
 .contenttype-opengever-meeting-proposal:before {content: $proposal;}
 .contenttype-opengever-meeting-meetingtemplate:before {content: $meeting;}
 .contenttype-opengever-meeting-paragraphtemplate:before {
-  content: $fa-var-paragraph;
-  font-family: 'FontAwesome';
+  content: fa-content($fa-var-paragraph);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+.contenttype-opengever-workspace-root:before,
+.contenttype-opengever-workspace-workspace:before {
+  content: fa-content($fa-var-project-diagram);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 12px;
+}
+.contenttype-opengever-workspace-folder:before {
+  content: fa-content($fa-var-folder-open);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
 }
 .contenttype-opengever-meeting-meeting:before {content: $meeting;}
 .contenttype-opengever-meeting-member:before {content: $member;}
@@ -620,7 +623,7 @@ div.answer.addDocument div.answerType:before { content: $addDocument;}
 div.answer.created div.answerType:before { content: $created; }
 div.answer.modifyDeadline div.answerType:before { content: $modifyDeadline; }
 div.answer.reactivated div.answerType:before { content: $reactivate; }
-div.answer.skip div.answerType:before { font-family: 'FontAwesome'; content: $fa-var-step-forward; }
+div.answer.skip div.answerType:before { font-family: 'Font Awesome 5 Free'; content: $fa-var-step-forward; }
 
 /* @group language selector in personaltools */
 
@@ -706,7 +709,7 @@ div.actionButtons .held-closed:before { content: $close;}
 .no_access {
   position: relative;
   &:before {
-    @extend .fa;
+    @extend .far;
     color: $red;
     padding-right: 4px;
     font-size: 120%;

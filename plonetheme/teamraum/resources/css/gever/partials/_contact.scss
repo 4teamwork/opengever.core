@@ -1,10 +1,10 @@
-$organization: $fa-var-building-o;
+$organization: $fa-var-building;
 $person: $fa-var-user;
 $spacing: 8px;
 
 body.portaltype-opengever-contact-person {
-  @include heading-icon($person, $iconset:'FontAwesome');
-  @include watermark-icon($person, $iconset:'FontAwesome');
+  @include heading-icon($person, $iconset:'Font Awesome 5 Free');
+  @include watermark-icon($person, $iconset:'Font Awesome 5 Free');
 
   &.state-inactive {
     @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
@@ -12,8 +12,8 @@ body.portaltype-opengever-contact-person {
 }
 
 body.portaltype-opengever-contact-organization {
-  @include heading-icon($organization, $iconset:'FontAwesome');
-  @include watermark-icon($organization, $iconset:'FontAwesome');
+  @include heading-icon($organization, $iconset:'Font Awesome 5 Free');
+  @include watermark-icon($organization, $iconset:'Font Awesome 5 Free');
 
   &.state-inactive {
     @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
@@ -22,15 +22,15 @@ body.portaltype-opengever-contact-organization {
 }
 
 a.contenttype-person:before {
-  @extend .fa;
-  content: $person;
+  @extend .fas;
+  @extend .fa-user;
   padding-right: 0.4em;
   font-size: 16px;
 }
 
 a.contenttype-organization:before {
-  @extend .fa;
-  content: $organization;
+  @extend .far;
+  @extend .fa-building;
   padding-right: 0.4em;
   font-size: 16px;
 }
@@ -103,7 +103,7 @@ body.portaltype-opengever-contact-organization {
             }
 
             &:before {
-              @extend .fa;
+              @extend .far;
               padding-right: 0.4em;
               font-size: 16px;
             }
@@ -138,13 +138,14 @@ body.portaltype-opengever-contact-organization {
 
       &.organizations {
         .name a:before {
-          content: $organization;
+          content: fa-content($organization);
         }
       }
 
       &.persons {
         .name a:before {
-          content: $person;
+          @extend .fas;
+          content: fa-content($person);
         }
       }
     }
@@ -224,7 +225,7 @@ body.portaltype-opengever-contact-organization {
       }
 
       &:before {
-        @extend .fa;
+        @extend .fas;
         font-size: 16px;
         display: inline-block;
         vertical-align: middle;
@@ -232,11 +233,11 @@ body.portaltype-opengever-contact-organization {
       }
 
       &.edit-action:before {
-        @extend .fa-pencil;
+        @extend .fa-pen;
       }
 
       &.remove-action:before {
-        @extend .fa-trash;
+        @extend .fa-trash-alt;
       }
 
     }
