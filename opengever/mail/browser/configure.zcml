@@ -75,13 +75,6 @@
       permission="zope2.View"
       />
 
-  <browser:page
-      name="edit"
-      for="opengever.mail.mail.IOGMailMarker"
-      class=".mail_forms.EditForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
   <configure package="opengever.document.browser">
     <browser:page
         name="tabbedview_view-overview"
