@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-21 10:45+0000\n"
+"POT-Creation-Date: 2018-08-07 11:01+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1664,6 +1664,16 @@ msgstr "${count} participants"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Texte libre ajouté à l'ordre du jour avec succès."
+
+#. Default: "Ad hoc agenda item ${title}"
+#: ./opengever/meeting/model/meeting.py
+msgid "title_ad_hoc_document"
+msgstr "Point ${title} de l'ordre du jour"
+
+#. Default: "Agenda item ${number}"
+#: ./opengever/meeting/model/agendaitem.py
+msgid "title_agenda_item"
+msgstr ""
 
 #. Default: "Delete proposal"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
