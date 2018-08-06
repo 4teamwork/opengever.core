@@ -55,7 +55,8 @@ class GeverLockInfoViewlet(LockInfoViewlet):
         return "Manager" in api.user.get_roles()
 
     def is_edit_form(self):
-        return IEditForm.providedBy(self.view)
+        return (IEditForm.providedBy(self.view)
+                or IEditForm.providedBy(getattr(self.view, "form_instance", None)))
 
     def get_related_meeting_from_protocol(self):
         oguid = Oguid.for_object(self.context)
