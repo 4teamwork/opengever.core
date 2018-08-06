@@ -41,7 +41,7 @@
   <browser:page
       name="edit"
       for="ftw.mail.mail.IMail"
-      class=".edit.MailEditView"
+      class=".edit.MailEditForm"
       permission="cmf.ModifyPortalContent"
       />
 
