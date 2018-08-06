@@ -265,7 +265,7 @@ class IAddTaskSchema(ITask):
 
     responsible = schema.List(
         title=_(u"label_responsible", default=u"Responsible"),
-        description=_(u"help_responsible_multiple", default=""),
+        description=_(u"help_responsible", default=""),
         value_type=schema.Choice(
             source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
             ),

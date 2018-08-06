@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Task forms: Drop unnecessary distinction between single/multi org unit setups. [lgraf]
 - Fix styling of dossier manager field, when a group is selected.[phgross]
 - Update fontawesome to version 5.2. [Kevin Bieri]
 - Revoke local roles for responsible and agency when finishing a task. [phgross]

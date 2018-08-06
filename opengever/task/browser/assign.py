@@ -39,7 +39,7 @@ class IAssignSchema(Schema):
 
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
-        description=_(u"help_responsible_single_client_setup", default=""),
+        description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(
             only_current_inbox=True,
             only_current_orgunit=True,
