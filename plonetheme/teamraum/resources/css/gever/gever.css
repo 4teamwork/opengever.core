@@ -3849,8 +3849,8 @@ table#agenda_items tbody .paragraph .proposal_title { font-weight: bold; padding
 #content #period_listing .actions a:before { font-size: 16px; display: inline-block; vertical-align: middle; margin-right: 5px; }
 #content #period_listing .actions a.loading { pointer-events: none; }
 
-.template-opengever-meeting-proposal #formfield-form-widgets-proposal_document, .template-opengever-meeting-proposal .option:first-child, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template tbody tr:first-child { display: none; }
-.template-opengever-meeting-proposal #formfield-form-widgets-proposal_document label, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template label { display: none; }
+.template-opengever-meeting-proposal #formfield-form-widgets-proposal_template tbody tr:first-child { display: none; }
+.template-opengever-meeting-proposal #formfield-form-widgets-proposal_document label.horizontal, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template label.horizontal33 { display: none; }
 
 #opengever_meeting_meetingtemplate ul { padding: 0; margin: 15px 0 0; }
 #opengever_meeting_meetingtemplate ul li { padding: 8px 10px; list-style: none; background: #e6e6e6; font-weight: bold; font-size: 130%; }
