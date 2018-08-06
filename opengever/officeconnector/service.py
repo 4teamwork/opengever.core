@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -118,13 +119,13 @@ class OfficeConnectorPayload(Service):
     def get_base_payloads(self):
         # Require an authenticated user
         if not api.user.is_anonymous():
-            documents = []
+            documents = OrderedDict()
 
             for uuid in self.uuids:
                 document = api.content.get(UID=uuid)
 
                 if self.document_is_valid(document):
-                    documents.append(document)
+                    documents[uuid] = document
 
         else:
             # Fail per default
@@ -133,12 +134,13 @@ class OfficeConnectorPayload(Service):
         if documents:
             payloads = []
 
-            for document in documents:
+            for uuid, document in documents.items():
                 payloads.append(
                     {
                         'csrf-token': createToken(),
                         'document-url': document.absolute_url(),
                         'document': document,
+                        'uuid': uuid,
                         }
                     )
 
