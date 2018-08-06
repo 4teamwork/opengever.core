@@ -1,0 +1,9 @@
+<registry>
+
+  <record name="plone.app.caching.weakCaching.plone.content.folderView.etags">
+    <value purge="False">
+      <element>clipboard</element>
+    </value>
+  </record>
+
+</registry>

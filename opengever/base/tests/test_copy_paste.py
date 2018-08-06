@@ -5,6 +5,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import IntegrationTestCase
+from plone.protect import createToken
 from zope.component import getUtility
 
 
@@ -213,3 +214,19 @@ class TestCopyPaste(IntegrationTestCase):
         self.assertEqual(
             ["Can't paste items, the context does not allow pasting items."],
             error_messages())
+
+
+class TestClipboardCaching(IntegrationTestCase):
+
+    @browsing
+    def test_paste_action_occurance_is_not_cached(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier)
+        browser.open(self.document, view='copy_item',
+                     data={'_authenticator': createToken()})
+
+        browser.open(self.dossier)
+        self.assertIn(
+            'Paste',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
