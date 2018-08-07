@@ -10,33 +10,9 @@ from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.behavior.annotation import AnnotationStorage
 from plone.behavior.interfaces import ISchemaAwareFactory
 from plone.supermodel import model
-from Products.CMFPlone.utils import safe_unicode
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import Interface
-from zope.interface import provider
-from zope.schema.interfaces import IContextAwareDefaultFactory
-
-
-@provider(IContextAwareDefaultFactory)
-def current_user(context):
-    userid = api.user.get_current().getId()
-
-    if not userid:
-        return None
-
-    try:
-        AllUsersAndGroupsSourceBinder()(context).getTerm(userid)
-    except LookupError:
-        # The current logged in user does not exist in the
-        # field-source.
-        return None
-
-    if 'Manager' in api.user.get_roles():
-        # We don't want to prefill managers.
-        return None
-
-    return safe_unicode(userid)
 
 
 class IProtectDossierMarker(Interface):
@@ -147,7 +123,6 @@ class IProtectDossier(model.Schema):
                 )
             ),
         source=AllUsersAndGroupsSourceBinder(),
-        defaultFactory=current_user,
         required=False,
         missing_value=None,
         )
