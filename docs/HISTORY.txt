@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix officeconnector issue when invoked from url with trailing view name. [njohner]
 - Task forms: Drop unnecessary distinction between single/multi org unit setups. [lgraf]
 - Add the document UUID to the OC document payloads. [Rotonen]
 - Fix styling of dossier manager field, when a group is selected.[phgross]

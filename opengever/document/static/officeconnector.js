@@ -135,7 +135,7 @@ function officeConnectorMultiAttach(url) {
         dossier_config.headers = {};
         dossier_config.headers['Accept'] = 'application/json';
         dossier_config.type = 'GET';
-        dossier_config.url = window.location.pathname + '/attributes';
+        dossier_config.url = document.getElementsByTagName('base')[0].href + '/attributes';
 
         dossier_attributes = $.ajax(dossier_config);
 
