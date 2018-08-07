@@ -3,8 +3,12 @@ $person: $fa-var-user;
 $spacing: 8px;
 
 body.portaltype-opengever-contact-person {
-  @include heading-icon($person, $iconset:'Font Awesome 5 Free');
-  @include watermark-icon($person, $iconset:'Font Awesome 5 Free');
+  @include heading-icon($person, $iconset:'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+  @include watermark-icon($person, $iconset:'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
 
   &.state-inactive {
     @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
@@ -12,8 +16,12 @@ body.portaltype-opengever-contact-person {
 }
 
 body.portaltype-opengever-contact-organization {
-  @include heading-icon($organization, $iconset:'Font Awesome 5 Free');
-  @include watermark-icon($organization, $iconset:'Font Awesome 5 Free');
+  @include heading-icon($organization, $iconset:'Font Awesome 5 Free') {
+    font-weight: 400;
+  };
+  @include watermark-icon($organization, $iconset:'Font Awesome 5 Free') {
+    font-weight: 400;
+  };
 
   &.state-inactive {
     @include watermark-state-icon($fa-var-times, $right: 75px, $bottom: -65px);
