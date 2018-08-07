@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from opengever.base.formutils import field_by_name
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
@@ -46,15 +47,10 @@ class DocumentEditForm(DefaultEditForm):
         if not manager:
             return
 
-        filefields = [
-            g.fields.get('file')
-            for g in self.groups
-            if 'file' in g.fields
-            ]
+        # XXX: Maybe use IPrimaryFieldInfo here instead?
+        file_field = field_by_name(self, 'file')
 
-        if filefields > 0:
-            file_field = filefields[0]
-
+        if file_field:
             current_user_id = getSecurityManager().getUser().getId()
             if self.context.digitally_available:
                 if manager.get_checked_out_by() == current_user_id:

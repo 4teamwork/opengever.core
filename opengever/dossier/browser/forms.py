@@ -1,7 +1,9 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
-from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.formutils import field_by_name
+from opengever.base.formutils import group_by_name
+from opengever.base.formutils import hide_field_by_name
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -51,9 +53,8 @@ class DossierAddForm(add.DefaultAddForm):
 
     def updateFields(self):
         super(DossierAddForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        hide_field_by_name(self, 'IClassification.public_trial')
+        hide_field_by_name(self, 'IClassification.public_trial_statement')
 
     @property
     def label(self):
@@ -89,16 +90,15 @@ class DossierEditForm(edit.DefaultEditForm):
         # Add read-only field 'reference_number'
         # plone.autoform ingores read-only fields, but we want to display it in
         # the edit form.
-        for group in self.groups:
-            if group.label == u'fieldset_filing':
-                group.fields += Fields(
-                    IDossier['reference_number'], prefix='IDossier')
-                group.fields['IDossier.reference_number'].widgetFactory = referenceNumberWidgetFactory
-                group.fields['IDossier.reference_number'].mode = 'display'
+        group = group_by_name(self, 'filing')
+        group.fields += Fields(IDossier['reference_number'], prefix='IDossier')
 
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        field = field_by_name(self, 'IDossier.reference_number')
+        field.widgetFactory = referenceNumberWidgetFactory
+        field.mode = 'display'
+
+        hide_field_by_name(self, 'IClassification.public_trial')
+        hide_field_by_name(self, 'IClassification.public_trial_statement')
 
     @property
     def label(self):

@@ -1,6 +1,6 @@
-from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
+from opengever.base.formutils import hide_field_by_name
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository import _
 from plone import api
@@ -34,9 +34,8 @@ class AddForm(TranslatedTitleAddForm):
 
     def updateFields(self):
         super(AddForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        hide_field_by_name(self, 'IClassification.public_trial')
+        hide_field_by_name(self, 'IClassification.public_trial_statement')
 
 
 @adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
@@ -48,6 +47,5 @@ class EditForm(TranslatedTitleEditForm):
 
     def updateFields(self):
         super(EditForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        hide_field_by_name(self, 'IClassification.public_trial')
+        hide_field_by_name(self, 'IClassification.public_trial_statement')

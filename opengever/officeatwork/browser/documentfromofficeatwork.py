@@ -1,5 +1,5 @@
-from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.form import WizzardWrappedAddForm
+from opengever.base.formutils import hide_field_by_name
 from opengever.base.interfaces import IRedirector
 from opengever.officeatwork import _
 from plone import api
@@ -31,7 +31,7 @@ class DocumentFromOfficeatwork(WizzardWrappedAddForm):
 
                 """
                 super(WrappedForm, self).updateFields()
-                hide_fields_from_behavior(self, ['file'])
+                hide_field_by_name(self, 'file')
 
             @buttonAndHandler(_(u'Create with officeatwork'), name='save')
             def handleAdd(self, action):

@@ -1,3 +1,4 @@
+from opengever.base.formutils import field_by_name
 from opengever.document.interfaces import NO_DOWNLOAD_DISPLAY_MODE
 from plone.dexterity.browser.edit import DefaultEditForm
 
@@ -10,6 +11,6 @@ class MailEditForm(DefaultEditForm):
     def updateWidgets(self):
         super(MailEditForm, self).updateWidgets()
 
-        field = self.groups[0].fields.get('message')
-        if field:
-            field.mode = NO_DOWNLOAD_DISPLAY_MODE
+        # XXX: Maybe use IPrimaryFieldInfo here instead?
+        field = field_by_name(self, 'message')
+        field.mode = NO_DOWNLOAD_DISPLAY_MODE

@@ -1,6 +1,5 @@
 from plone.namedfile.utils import get_contenttype
 from urllib import quote
-from z3c.form.interfaces import HIDDEN_MODE
 import re
 
 
@@ -33,12 +32,3 @@ def set_attachment_content_disposition(request, filename, file=None):
     else:
         request.response.setHeader(
             "Content-disposition", 'attachment; filename="%s"' % filename)
-
-
-def hide_fields_from_behavior(form, fieldnames):
-    """Hide fields defined in behaviors.
-    """
-    for group in form.groups:
-        for fieldname in fieldnames:
-            if fieldname in group.fields:
-                group.fields[fieldname].mode = HIDDEN_MODE
