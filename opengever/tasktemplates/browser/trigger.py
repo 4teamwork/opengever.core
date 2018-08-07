@@ -4,6 +4,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.oguid import Oguid
 from opengever.base.source import DossierPathSourceBinder
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
@@ -299,11 +300,31 @@ class SelectResponsiblesWizardStep(BaseWizardStepForm, Form):
                 context=self.request)
 
             if template.responsible:
-                actor_lookup = ActorLookup(template.responsible)
-                if actor_lookup.is_inbox() or actor_lookup.is_team():
-                    widget.value = (u'{}'.format(actor_lookup.identifier), )
-                else:
-                    widget.value = (u'{}:{}'.format(template.responsible_client, actor_lookup.identifier), )
+                widget.value = self.get_responsible_widget_value(template)
+
+    def get_responsible_widget_value(self, template):
+        org_unit_id, responsible = self.replace_interactive_actors(template)
+        actor_lookup = ActorLookup(responsible)
+        if actor_lookup.is_inbox() or actor_lookup.is_team():
+            return (u'{}'.format(actor_lookup.identifier), )
+        else:
+            return (u'{}:{}'.format(org_unit_id, actor_lookup.identifier), )
+
+    def replace_interactive_actors(self, template):
+        """The current systems knows two interactive users:
+
+        `responsible`: the reponsible of the main dossier.
+        `current_user`: the currently logged in user.
+        """
+        if template.responsible_client == INTERACTIVE_USERS:
+            if template.responsible == 'responsible':
+                principal = IDossier(self.context.get_main_dossier()).responsible
+            elif template.responsible == 'current_user':
+                principal = api.user.get_current().getId()
+
+            return get_current_org_unit().id(), principal
+
+        return template.responsible_client, template.responsible
 
     def get_selected_task_templatefolder(self):
         uid = get_wizard_data(self.context, 'tasktemplatefolder')

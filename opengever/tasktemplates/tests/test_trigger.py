@@ -221,8 +221,8 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
         create(Builder('tasktemplate')
                .titled(u'Eintrittsgespr\xe4ch vorbereiten und planen.')
-               .having(issuer='responsible', responsible='inbox:fa',
-                       deadline=10, preselected=True)
+               .having(issuer='responsible', responsible_client='fa',
+                       responsible='inbox:fa', deadline=10, preselected=True)
                .within(self.tasktemplatefolder))
         create(Builder('tasktemplate')
                .titled(u'Notebook einrichten.')
@@ -296,6 +296,24 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
         self.assertEquals(
             {u'Responsible \xabArbeitsplatz einrichten.\xbb': ['Required input is missing.']},
             erroneous_fields())
+
+    @browsing
+    def test_step3_interactive_responsibles_are_already_resolved(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.tasktemplate.responsible = 'responsible'
+        self.tasktemplate.responsible_client = INTERACTIVE_USERS
+
+        browser.open(self.dossier, view='add-tasktemplate')
+        browser.fill({'Tasktemplatefolder': u'Verfahren Neuanstellung'})
+        browser.click_on('Continue')
+        browser.fill({'Tasktemplates': ['Arbeitsplatz einrichten.']})
+        browser.click_on('Continue')
+
+        fields =  browser.forms['form'].fields
+        self.assertEquals(
+            'fa:{}'.format(self.dossier_responsible),
+            fields['form.widgets.opengever-tasktemplates-tasktemplate.responsible'])
 
     @browsing
     def test_replace_interactive_responsible(self, browser):
