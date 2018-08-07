@@ -2,6 +2,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -397,3 +398,50 @@ class TestProtectDossier(IntegrationTestCase):
                                name="check_protect_dossier_consistency")
 
         self.assertEqual(1, len(json.loads(view()).get('messages')))
+
+    @browsing
+    def test_dossier_manager_is_not_mandatory_when_not_protecting_dossier(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Dossier manager').fill('')
+        browser.click_on('Save')
+
+        self.assertNotIn('There were some errors.', error_messages())
+
+    @browsing
+    def test_cannot_set_dossier_read_protection_without_setting_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading').fill(self.regular_user.getId())
+        form.find_widget('Dossier manager').fill('')
+        browser.click_on('Save')
+        self.assertIn('There were some errors.', error_messages())
+        form = browser.find_form_by_fields("Reading")
+        self.assertIn('A dossier manager must be selected when protecting a dossier',
+                      form.text)
+
+    @browsing
+    def test_cannot_set_dossier_read_write_protection_without_setting_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+
+        form = browser.find_form_by_field('Reading')
+        form.find_widget('Reading and writing').fill(self.regular_user.getId())
+        form.find_widget('Dossier manager').fill('')
+        browser.click_on('Save')
+        self.assertIn('There were some errors.', error_messages())
+        form = browser.find_form_by_fields("Reading")
+        self.assertIn('A dossier manager must be selected when protecting a dossier',
+                      form.text)

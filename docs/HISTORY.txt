@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Only prefill dossier_manager as a form level default (instead of schema level). [lgraf]
+- Make sure dossier manager field is set when protecting a dossier. [njohner]
 - Fix officeconnector issue when invoked from url with trailing view name. [njohner]
 - Task forms: Drop unnecessary distinction between single/multi org unit setups. [lgraf]
 - Add the document UUID to the OC document payloads. [Rotonen]
