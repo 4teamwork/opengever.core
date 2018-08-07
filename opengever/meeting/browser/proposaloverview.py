@@ -81,7 +81,10 @@ class OverviewBase(object):
         return model.get_state() == model.STATE_DECIDED
 
     def render_protocol_excerpt_document_link(self):
-        return DocumentLinkWidget(self.context.get_excerpt()).render()
+        excerpt = self.context.get_excerpt()
+        if excerpt:
+            return DocumentLinkWidget(excerpt).render()
+        return u''
 
 
 class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):

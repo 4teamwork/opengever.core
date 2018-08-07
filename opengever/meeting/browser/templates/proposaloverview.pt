@@ -59,6 +59,10 @@
                 </ul>
               </td>
             </tr>
+            <tr>
+              <th i18n:translate="label_excerpt">Excerpt</th>
+              <td><span tal:replace="structure view/render_protocol_excerpt_document_link" /></td>
+            </tr>
           </table>
           <metal:use use-macro="context/@@meeting-macros/workflow_actions_and_comment" />
 
@@ -88,17 +92,6 @@
                              src view/get_preview_image_url;
                              alt context/title" />
       </div>
-    </div>
-
-     <div id="excerptBox" class="box">
-      <tal:condition tal:condition="excerpt">
-        <h2 i18n:translate="label_excerpt">Excerpt</h2>
-        <ul>
-          <li>
-            <span tal:replace="structure view/render_protocol_excerpt_document_link" />
-          </li>
-        </ul>
-      </tal:condition>
     </div>
 
     <div class="visualClear"><!----></div>
