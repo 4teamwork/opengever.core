@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from plone import api
+from zope.component import getMultiAdapter
 
 
 class TestGeverLayoutPolicy(IntegrationTestCase):
@@ -45,3 +47,14 @@ class TestGeverLayoutPolicy(IntegrationTestCase):
         self.activate_feature('meeting')
         browser.open(self.meeting)
         self.assertIn('model-meeting', browser.css('body').first.classes)
+
+    def test_render_base_returns_correct_url(self):
+        self.login(self.manager)
+        portal = api.portal.get()
+        contents = api.content.find(context=portal)
+        portal_types = set(el.portal_type for el in contents)
+        for portal_type in portal_types:
+            brains = api.content.find(portal_type=portal_type)
+            obj = brains[0].getObject()
+            layout = getMultiAdapter((obj, self.request), name=u'plone_layout')
+            self.assertEqual(layout.renderBase(), obj.absolute_url().rstrip("/") + "/")
