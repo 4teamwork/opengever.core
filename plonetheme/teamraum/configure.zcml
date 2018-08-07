@@ -68,4 +68,9 @@
       handler=".setuphandlers.import_styles_configuration"
       />
 
+  <subscriber
+      for="zope.processlifetime.IProcessStarting"
+      handler=".handlers.compile_scss"
+      />
+
 </configure>
