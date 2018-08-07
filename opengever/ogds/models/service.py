@@ -3,6 +3,7 @@ from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
+from sqlalchemy.sql.expression import true
 
 
 class OGDSService(object):
@@ -11,9 +12,10 @@ class OGDSService(object):
         self.session = session
 
     def find_user(self, userid):
-        """returns a User by its userid. When no User is found, this method raises.
-           a ValueError.
-           See #fetch_user for similar behavior.
+        """Returns a User by its userid. When no User is found, this method raises.
+        a ValueError.
+
+        See #fetch_user for similar behavior.
         """
         user = self.fetch_user(userid)
         if not user:
@@ -21,8 +23,9 @@ class OGDSService(object):
         return user
 
     def fetch_user(self, userid):
-        """returns a User by it's userid. None is returned when no user is found.
-           See #find_user for similar behavior.
+        """Returns a User by it's userid. None is returned when no user is found.
+
+        See #find_user for similar behavior.
         """
         return self._query_user().get(userid)
 
@@ -38,7 +41,7 @@ class OGDSService(object):
     def assigned_org_units(self, userid):
         query = self._query_org_units().join(OrgUnit.users_group)
         query = query.join(Group.users).filter(User.userid == userid)
-        query = query.filter(OrgUnit.enabled==True)
+        query = query.filter(OrgUnit.enabled == true())
         return query.all()
 
     def assigned_groups(self, userid):

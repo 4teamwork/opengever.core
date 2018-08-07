@@ -64,10 +64,9 @@ class DatabaseLayer(Layer):
         if not self._session:
             return False
 
-        else:
-            self.session.close()
-            self._session = None
-            return True
+        self.session.close()
+        self._session = None
+        return True
 
     def commit(self):
         self.session.commit()

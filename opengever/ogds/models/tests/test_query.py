@@ -59,11 +59,11 @@ class TestUserQuery(unittest2.TestCase):
 
     def test_by_searchable_text(self):
         self.assertEqual(
-            [self.hugo,],
+            [self.hugo],
             User.query.by_searchable_text(['hu', ]).all())
 
         self.assertEqual(
-            [self.jason,],
+            [self.jason],
             User.query.by_searchable_text(['bro']).all())
 
         self.assertEqual(

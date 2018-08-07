@@ -35,6 +35,7 @@ class Team(BASE):
 
     A team can be used as a task responsible when assigning a task to a group.
     """
+
     query_cls = TeamQuery
 
     __tablename__ = 'teams'
@@ -43,7 +44,7 @@ class Team(BASE):
     title = Column(String(UNIT_TITLE_LENGTH), nullable=False)
     active = Column(Boolean, default=True)
     groupid = Column(String(GROUP_ID_LENGTH),
-                      ForeignKey('groups.groupid'), nullable=False)
+                     ForeignKey('groups.groupid'), nullable=False)
     group = relationship("Group", back_populates="teams")
     org_unit_id = Column(String(UNIT_ID_LENGTH),
                          ForeignKey('org_units.unit_id'), nullable=False)

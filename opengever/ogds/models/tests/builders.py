@@ -64,6 +64,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
 
     def __init__(self, session):
         super(AdminUnitBuilder, self).__init__(session)
+        self._as_current_admin_unit = False
         self.arguments[self.id_argument_name] = u'foo'
         self.arguments['ip_address'] = '1.2.3.4'
         self.arguments['site_url'] = 'http://example.com'
@@ -91,6 +92,7 @@ class AdminUnitBuilder(SqlObjectBuilder):
         if self.org_unit:
             self.org_unit.assign_to_admin_unit(obj)
         return obj
+
 
 builder_registry.register('admin_unit', AdminUnitBuilder)
 
@@ -164,6 +166,7 @@ class OrgUnitBuilder(SqlObjectBuilder):
                                      users=list(self._inbox_users)))
         self.arguments['inbox_group'] = inbox_group
 
+
 builder_registry.register('org_unit', OrgUnitBuilder)
 
 
@@ -194,6 +197,7 @@ class UserBuilder(SqlObjectBuilder):
             obj.groups.extend(self.groups)
         return obj
 
+
 builder_registry.register('ogds_user', UserBuilder)
 
 
@@ -207,6 +211,7 @@ class GroupBuilder(SqlObjectBuilder):
         self.arguments['groupid'] = 'testgroup'
         self.arguments['title'] = 'Test Group'
 
+
 builder_registry.register('ogds_group', GroupBuilder)
 
 
@@ -214,5 +219,6 @@ class TeamBuilder(SqlObjectBuilder):
 
     mapped_class = Team
     id_argument_name = 'team_id'
+
 
 builder_registry.register('ogds_team', TeamBuilder)

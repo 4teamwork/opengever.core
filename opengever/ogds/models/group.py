@@ -10,7 +10,6 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy import Table
-from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship

@@ -9,7 +9,6 @@ def alter_column_length(session, tbl_name, col_name, new_length):
     Takes an SQLAlchemy session, table name, column name and the new column
     length as arguments.
     """
-
     engine = session.bind
 
     # Check if column has already been updated

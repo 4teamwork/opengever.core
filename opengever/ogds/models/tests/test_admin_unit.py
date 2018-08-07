@@ -47,7 +47,7 @@ class TestAdminUnit(OGDSTestCase):
                                  .id('canton')
                                  .having(title='Canton Unit')
                                  .assign_org_units([self.org_unit_a,
-                                                   self.org_unit_b]))
+                                                    self.org_unit_b]))
         self.commit()
 
     def test_equality(self):

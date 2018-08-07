@@ -6,7 +6,7 @@ from sqlalchemy.orm import exc as orm_exc
 
 def query_property():
     class query(object):
-        def __get__(s, instance, owner):
+        def __get__(self, instance, owner):
             try:
                 mapper = class_mapper(owner)
                 if mapper:
@@ -16,8 +16,8 @@ def query_property():
                     if query_cls:
                         return query_cls(mapper, session=session.registry())
                     # session's configured query class
-                    else:
-                        return session.registry().query(mapper)
+                    return session.registry().query(mapper)
+                return None
             except orm_exc.UnmappedClassError:
                 return None
     return query()
@@ -25,7 +25,6 @@ def query_property():
 
 def query_base(session=None):
     """Create a base class that queries the provided session."""
-
     class QueryBase(object):
         """Class that contains query functions."""
 
@@ -68,7 +67,6 @@ def query_base(session=None):
         @classmethod
         def _count_attribute(cls):
             """Return an attribute used for the improved count queries."""
-
             prim_key = class_mapper(cls).primary_key
             assert prim_key, 'no primary key for class {}'.format(cls.__name__)
             return prim_key[0]
@@ -76,7 +74,6 @@ def query_base(session=None):
         @classmethod
         def count(cls):
             """Helper for a nice count without a subquery."""
-
             return cls.session.query(
                 func.count(cls._count_attribute())).scalar()
 
