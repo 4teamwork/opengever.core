@@ -1,3 +1,4 @@
+from opengever.base.model import SQLFormSupport
 from opengever.ogds.models import BASE
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
@@ -30,7 +31,7 @@ class TeamQuery(BaseQuery):
         return self.filter_by(team_id=team_id).one()
 
 
-class Team(BASE):
+class Team(BASE, SQLFormSupport):
     """Team model.
 
     A team can be used as a task responsible when assigning a task to a group.
@@ -58,32 +59,3 @@ class Team(BASE):
 
     def label(self):
         return u'{} ({})'.format(self.title, self.org_unit.title)
-
-    # TODO: the following methods should be removed when moving
-    # opengever.ogds.models to opengever.core and inherit from
-    # `opengever.base.model.SQLFormSupport` instead.
-
-    def is_editable_by_current_user(self, container):
-        return False
-
-    def is_editable(self):
-        return True
-
-    def get_edit_values(self, fieldnames):
-        _marker = object()
-
-        values = {}
-        for fieldname in fieldnames:
-            value = getattr(self, fieldname, _marker)
-            if value is _marker:
-                continue
-
-            values[fieldname] = value
-        return values
-
-    def get_edit_url(self, context):
-        return self.get_url(context, view='edit')
-
-    def update_model(self, data):
-        for key, value in data.items():
-            setattr(self, key, value)
