@@ -69,6 +69,24 @@ class TestDisplayAgendaItems(IntegrationTestCase):
 
         self.assertTrue(item.get('has_documents'))
 
+    @browsing
+    def test_agendaitem_sorts_excerpts_alphabetically(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        agenda_item.generate_excerpt('b excerpt')
+        agenda_item.generate_excerpt('c excerpt')
+        agenda_item.generate_excerpt('a excerpt')
+
+        excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
+        excerpt_links = ' '.join([excerpt.get('link') for excerpt in excerpts])
+
+        browser.open_html(excerpt_links)
+
+        expected_excerpt_order = ['a excerpt', 'b excerpt', 'c excerpt']
+        excerpt_order = browser.open_html(excerpt_links).css('a').text
+        self.assertEqual(excerpt_order, expected_excerpt_order)
+
 
 class TestEditAgendaItems(IntegrationTestCase):
 
