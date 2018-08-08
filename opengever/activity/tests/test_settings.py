@@ -23,7 +23,9 @@ class TestListSettings(IntegrationTestCase):
         aliased = ['task-transition-open-tested-and-closed',
                    'task-transition-resolved-tested-and-closed',
                    'task-transition-open-resolved',
-                   'task-transition-rejected-open']
+                   'task-transition-rejected-open',
+                   'task-transition-skipped-open',
+                   'task-transition-planned-skipped']
 
         self.assertItemsEqual(
             [item.get('kind') for item in activities],

@@ -3850,7 +3850,7 @@ table#agenda_items tbody .paragraph .proposal_title { font-weight: bold; padding
 #content #period_listing .actions a.loading { pointer-events: none; }
 
 .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template tbody tr:first-child { display: none; }
-.template-opengever-meeting-proposal #formfield-form-widgets-proposal_document label.horizontal, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template label.horizontal33 { display: none; }
+.template-opengever-meeting-proposal #formfield-form-widgets-proposal_document label.horizontal, .template-opengever-meeting-proposal #formfield-form-widgets-proposal_template label.horizontal { display: none; }
 
 #opengever_meeting_meetingtemplate ul { padding: 0; margin: 15px 0 0; }
 #opengever_meeting_meetingtemplate ul li { padding: 8px 10px; list-style: none; background: #e6e6e6; font-weight: bold; font-size: 130%; }
@@ -4437,6 +4437,7 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 .notifications-settings-form .notification-settings-kind span.accept:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.reassign:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.revise:before { content: ""; }
+.notifications-settings-form .notification-settings-kind span.skip:before { font-family: 'Font Awesome 5 Free'; content: "\f051"; }
 .notifications-settings-form .notification-settings-kind span.taskCommented:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.assignDossier:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.complete:before { content: ""; }
