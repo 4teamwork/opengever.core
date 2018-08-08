@@ -45,7 +45,7 @@ def create_dossier(container, dossier, zipfile, responsible):
 
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=metadata)
+    deserializer(validate_all=True, data=metadata, create=True)
 
     # Rename dossier
     chooser = INameChooser(container)
@@ -96,7 +96,7 @@ def create_document(container, document, zipfile):
 
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=metadata)
+    deserializer(validate_all=True, data=metadata, create=True)
 
     if document.files:
         file_ = document.files.file[0]
