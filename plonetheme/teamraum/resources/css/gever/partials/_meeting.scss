@@ -1239,13 +1239,12 @@ $spacing: 8px;
   //
   // Overriding the widgets itself for this edgecase would be overkill.
   // So we just hiding the empty-rows by css.
-  #formfield-form-widgets-proposal_document, .option:first-child,
   #formfield-form-widgets-proposal_template tbody tr:first-child   {
     display: none;
   }
 
-  #formfield-form-widgets-proposal_document label,
-  #formfield-form-widgets-proposal_template label{
+  #formfield-form-widgets-proposal_document label.horizontal,
+  #formfield-form-widgets-proposal_template label.horizontal{
     display: none;
   }
 }
