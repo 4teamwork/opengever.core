@@ -18,7 +18,7 @@ msgstr ""
 
 #: ./opengever/repository/browser/excel_export.py
 msgid "Could not generate the report."
-msgstr ""
+msgstr "Rapport n'a pas pu être généré"
 
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
 msgid "In use"
@@ -77,7 +77,7 @@ msgstr "Types de dossiers à ajouter"
 #. Default: "Blocked inheritance"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_blocked_inheritance"
-msgstr ""
+msgstr "Interruption de l'héritage"
 
 #. Default: "Protected Objects"
 #: ./opengever/repository/browser/tabbed.py
@@ -117,7 +117,7 @@ msgstr "Dossiers"
 #. Default: "No"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_false"
-msgstr ""
+msgstr "non"
 
 #. Default: "Former reference"
 #: ./opengever/repository/repositoryfolder.py
@@ -127,32 +127,32 @@ msgstr "Ancien numéro de référence"
 #. Default: "Create dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_contributor_role"
-msgstr ""
+msgstr "Ajouter dossiers"
 
 #. Default: "Edit dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_editor_role"
-msgstr ""
+msgstr "Modifier dossiers"
 
 #. Default: "Manage dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_manager_role"
-msgstr ""
+msgstr "Administrer dossiers"
 
 #. Default: "Reactivate dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_publisher_role"
-msgstr ""
+msgstr "Réactiver dossiers"
 
 #. Default: "Read dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_reader_role"
-msgstr ""
+msgstr "Lire dossiers"
 
 #. Default: "Close dossiers"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_reviewer_role"
-msgstr ""
+msgstr "Clôturer dossiers"
 
 #. Default: "Info"
 #: ./opengever/repository/browser/tabbed.py
@@ -187,22 +187,22 @@ msgstr "Performance"
 #. Default: "Repository number"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repository_number"
-msgstr ""
+msgstr "Numéro de classement"
 
 #. Default: "Repositoryfolder description"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_description"
-msgstr ""
+msgstr "Description (optionnel)"
 
 #. Default: "Repositoryfolder title (German)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_de"
-msgstr ""
+msgstr "Titre du numéro de classement (allemand)"
 
 #. Default: "Repositoryfolder title (French)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_fr"
-msgstr ""
+msgstr "Titre du numéro de classement"
 
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py
@@ -217,7 +217,7 @@ msgstr "Tâches"
 #. Default: "Yes"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_true"
-msgstr ""
+msgstr "oui"
 
 #. Default: "Valid from"
 #: ./opengever/repository/repositoryfolder.py

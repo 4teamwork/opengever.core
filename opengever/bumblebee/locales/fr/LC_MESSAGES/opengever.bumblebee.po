@@ -16,7 +16,7 @@ msgstr ""
 
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Checkin comment:"
-msgstr ""
+msgstr "Commenter la modification"
 
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt
 msgid "Creator:"

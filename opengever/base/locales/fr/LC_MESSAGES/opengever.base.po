@@ -229,7 +229,7 @@ msgstr "Modifier le 'statut public'"
 #. Default: "Checked out"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_checked_out"
-msgstr ""
+msgstr "En checkout"
 
 #. Default: "Classification"
 #: ./opengever/base/behaviors/classification.py
@@ -284,7 +284,7 @@ msgstr "Dernière modification"
 #. Default: "No checked out documents"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_checked_out_docs"
-msgstr ""
+msgstr "Aucun document en checkout"
 
 #. Default: "No favorites exists."
 #: ./opengever/base/viewlets/favorites_menu.py
@@ -294,12 +294,12 @@ msgstr "Il n'y a aucun favoris"
 #. Default: "No recently touched documents yet"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_no_recently_touched_docs"
-msgstr ""
+msgstr "Aucun document modifié récemment"
 
 #. Default: "None"
 #: ./opengever/base/widgets.py
 msgid "label_none"
-msgstr ""
+msgstr "Aucune valeur"
 
 #. Default: "Overview"
 #: ./opengever/base/viewlets/favorites_menu.py
@@ -324,7 +324,7 @@ msgstr "Justification pour le retrait du statut public"
 #. Default: "Recently touched"
 #: ./opengever/base/viewlets/recently_touched_menu.py
 msgid "label_recently_touched"
-msgstr ""
+msgstr "Modifié récemment"
 
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -496,12 +496,12 @@ msgstr "Favoris"
 #. Default: "Mark as favorite"
 #: ./opengever/base/viewlets/favorite_action.py
 msgid "tooltip_mark_favorite_action"
-msgstr ""
+msgstr "Marquer comme favori"
 
 #. Default: "Remove from favorites"
 #: ./opengever/base/viewlets/favorite_action.py
 msgid "tooltip_remove_favorite_action"
-msgstr ""
+msgstr "Supprimer des favoris"
 
 #. Default: "You are not allowed to see this reference"
 #: ./opengever/base/browser/folder_delete_confirmation.py

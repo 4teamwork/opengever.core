@@ -57,7 +57,7 @@ msgstr "Titre"
 #. Default: "Committee responsible"
 #: ./opengever/activity/roles.py
 msgid "committee_responsible"
-msgstr ""
+msgstr "Responsable de commission"
 
 #. Default: "Created"
 #: ./opengever/activity/browser/listing.py
@@ -67,37 +67,37 @@ msgstr "Créé"
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
-msgstr "un transfert à été ajouté"
+msgstr "une transmission à été ajoutée"
 
 #. Default: "Forwarding accepted"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-accept"
-msgstr "transfert accepté"
+msgstr "transmission acceptée"
 
 #. Default: "Forwarding assigned to dossier"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-assign-to-dossier"
-msgstr "transfert assigné à un dossier"
+msgstr "transmission assignée à un dossier"
 
 #. Default: "Forwarding closed"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-close"
-msgstr "transfert terminé"
+msgstr "transmission terminée"
 
 #. Default: "Forwarding reassigned"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-reassign"
-msgstr "transfert réassigné"
+msgstr "transmission réassignée"
 
 #. Default: "Forwarding reassigned and refused"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-reassign-refused"
-msgstr "transfert réassigné et refusé"
+msgstr "transmission réassignée et refusée"
 
 #. Default: "Forwarding refused"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-transition-refuse"
-msgstr "transfert refusé"
+msgstr "transmission refusée"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -127,7 +127,7 @@ msgstr "Détails:"
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py
 msgid "label_forwardings"
-msgstr ""
+msgstr "Transmissions"
 
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
@@ -148,12 +148,12 @@ msgstr "Toutes les notifications"
 #. Default: "Proposals"
 #: ./opengever/activity/browser/settings.py
 msgid "label_proposals"
-msgstr ""
+msgstr "Propositions"
 
 #. Default: "Tasks"
 #: ./opengever/activity/browser/settings.py
 msgid "label_tasks"
-msgstr ""
+msgstr "Tâches"
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/center.py
@@ -163,47 +163,47 @@ msgstr "Un problème a apparu pendant la création de la notification. La notifi
 #. Default: "Additional documents submitted"
 #: ./opengever/activity/__init__.py
 msgid "proposal-additional-documents-submitted"
-msgstr ""
+msgstr "Pièces jointes supplémentaires soumises"
 
 #. Default: "Attachment updated"
 #: ./opengever/activity/__init__.py
 msgid "proposal-attachment-updated"
-msgstr ""
+msgstr "Pièce jointe actualisée"
 
 #. Default: "Proposal commented"
 #: ./opengever/activity/__init__.py
 msgid "proposal-commented"
-msgstr ""
+msgstr "Proposition commentée"
 
 #. Default: "Proposal decided"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-decide"
-msgstr ""
+msgstr "Proposition décidée"
 
 #. Default: "Proposal rejected"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-reject"
-msgstr ""
+msgstr "Proposition rejetée"
 
 #. Default: "Proposal scheduled"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-schedule"
-msgstr ""
+msgstr "Proposition mise à l'ordre du jour"
 
 #. Default: "Proposal submitted"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-submit"
-msgstr ""
+msgstr "Proposition soumise"
 
 #. Default: "Proposal issuer"
 #: ./opengever/activity/roles.py
 msgid "proposal_issuer"
-msgstr ""
+msgstr "Auteur de la proposition"
 
 #. Default: "Records Manager"
 #: ./opengever/activity/roles.py
 msgid "records_manager"
-msgstr "Manager records"
+msgstr "Records Manager"
 
 #. Default: "Watcher"
 #: ./opengever/activity/roles.py

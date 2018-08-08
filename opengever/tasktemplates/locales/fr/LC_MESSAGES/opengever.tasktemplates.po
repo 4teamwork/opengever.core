@@ -21,11 +21,11 @@ msgstr "Description"
 
 #: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "Parallel"
-msgstr ""
+msgstr "Parallèle"
 
 #: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "Sequential"
-msgstr ""
+msgstr "Séquentiel"
 
 msgid "Title"
 msgstr "Titre"
@@ -61,7 +61,7 @@ msgstr "Utilisateur interactif"
 #. Default: "Immediately open the first task after creation."
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "description_start_immediately"
-msgstr ""
+msgstr "Commencer la première tâche immédiatement après la création"
 
 #. Default: "Common"
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -157,7 +157,7 @@ msgstr "Mandataire"
 #. Default: "Responsible «${template_title}»"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_responsible_for_task"
-msgstr ""
+msgstr "Mandataire «${template_title}»"
 
 #. Default: "Responsible"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
@@ -167,7 +167,7 @@ msgstr "Mandataire"
 #. Default: "Responsibles selection"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_responsibles_selection"
-msgstr ""
+msgstr "Choix Mandataires"
 
 #. Default: "Review state"
 #: ./opengever/tasktemplates/browser/templatefolders.py
@@ -177,7 +177,7 @@ msgstr "Etat"
 #. Default: "Select responsibles"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_select_responsibles"
-msgstr ""
+msgstr "Choix Mandataires"
 
 #. Default: "Select tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -193,12 +193,12 @@ msgstr "Sélectionner les modèles de tâches"
 #: ./opengever/tasktemplates/content/templatefoldersschema.py
 #: ./opengever/tasktemplates/viewlets/byline.py
 msgid "label_sequence_type"
-msgstr ""
+msgstr "Type de déroulement"
 
 #. Default: "Start immediately"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_start_immediately"
-msgstr ""
+msgstr "Enclencher immédiatement"
 
 #. Default: "Task Type"
 #: ./opengever/tasktemplates/content/tasktemplate.py

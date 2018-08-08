@@ -649,12 +649,12 @@ msgstr "Le numéro de classement est seulement généré lors de la création du
 #. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_inside_proposal"
-msgstr ""
+msgstr "Le document «${name}» est dans une proposition et ne peut pas être déplacé. Déplacez la proposition."
 
 #. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_inside_task"
-msgstr ""
+msgstr "Le document «${name}» est dans une tâche et ne peut pas être déplacé. Déplacez la tâche."
 
 #. Default: "Number of Containers"
 #: ./opengever/dossier/behaviors/dossier.py
