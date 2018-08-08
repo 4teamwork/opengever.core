@@ -1,13 +1,10 @@
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.sharing.security import disabled_permission_check
-from plone.app.workflow.interfaces import ISharingPageRole
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.sharing import SharingGet as APISharingGet
 from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
-from zope.component import queryUtility
-from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -40,23 +37,7 @@ class SharingGet(APISharingGet):
         else:
             data = serializer(search=self.request.form.get('search'))
 
-        data['available_roles'] = self.extend_roles_with_title(
-            data.get('available_roles'))
         return data
-
-    def extend_roles_with_title(self, role_ids):
-        # TODO: remove this method after updating to plone.restapi 3.x
-        # which includes https://github.com/plone/plone.restapi/pull/559
-        roles = []
-
-        for role in role_ids:
-            util = queryUtility(ISharingPageRole, name=role)
-            title = util.title
-            roles.append({
-                'id': role,
-                'title': translate(title, context=self.request)})
-
-        return roles
 
 
 class RoleAssignmentsGet(APISharingGet):
