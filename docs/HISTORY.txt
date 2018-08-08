@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Move excerpts to the file info box on proposal overviews. [Rotonen]
 - Only prefill dossier_manager as a form level default (instead of schema level). [lgraf]
 - Fix officeconnector issue when invoked from url with trailing view name. [njohner]
 - Task forms: Drop unnecessary distinction between single/multi org unit setups. [lgraf]

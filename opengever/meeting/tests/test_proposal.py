@@ -127,7 +127,8 @@ class TestProposal(IntegrationTestCase):
               u'\xc4nderungen am Personalreglement'],
              ['State', 'Submitted'],
              ['Decision number', ''],
-             ['Attachments', u'Vertr\xe4gsentwurf']],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
             browser.css('table.listing').first.lists())
 
     @browsing
@@ -159,7 +160,8 @@ class TestProposal(IntegrationTestCase):
              ['Proposal document', 'Baugesuch Kreuzachkreisel'],
              ['State', 'Pending'],
              ['Decision number', ''],
-             ['Attachments', u'Vertr\xe4gsentwurf']],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
             browser.css('table.listing').first.lists())
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
 
@@ -382,7 +384,8 @@ class TestProposal(IntegrationTestCase):
              ['Proposal document', u'Antrag f\xfcr Kreiselbau'],
              ['State', 'Pending'],
              ['Decision number', ''],
-             ['Attachments', u'Vertr\xe4gsentwurf']],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
             browser.css('table.listing').first.lists())
 
         self.assertEqual(1, len(proposal.relatedItems))
@@ -920,7 +923,8 @@ class TestProposal(IntegrationTestCase):
              ['State', 'Pending'],
              ['Decision number', ''],
              ['Predecessor', u'\xc4nderungen am Personalreglement'],
-             ['Attachments', u'Vertr\xe4gsentwurf']],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
             browser.css('table.listing').first.lists())
 
         browser.open(self.word_proposal, view='tabbedview_view-overview')
@@ -938,7 +942,8 @@ class TestProposal(IntegrationTestCase):
              ['State', 'Decided'],
              ['Decision number', '2016 / 2'],
              ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
-             ['Attachments', u'Vertr\xe4gsentwurf']],
+             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Excerpt', '']],
             browser.css('table.listing').first.lists())
 
     @browsing
