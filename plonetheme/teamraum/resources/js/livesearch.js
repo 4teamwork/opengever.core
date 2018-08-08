@@ -156,7 +156,6 @@ var livesearch = (function () {
 
       if (!$next.length) {$next = $shadow.find('dd:first, li:first');}
       $next.addClass(_LSHighlight);
-      console.info($next);
       return false;
     }
 

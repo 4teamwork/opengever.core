@@ -125,6 +125,7 @@ $rotate: 20deg;
     font-size: 80%;
     content: fa-content($char);
     padding-right: $padding;
+    @content;
   }
 }
 
@@ -132,7 +133,6 @@ $rotate: 20deg;
   #watermark-header:after,
   #tabbedview-header:after {
     font-family: $iconset;
-    font-weight: 900;
     content: fa-content($char);
     font-size: 110px;
     line-height: 1em;
@@ -145,6 +145,7 @@ $rotate: 20deg;
 
     -webkit-transform:rotate($rotate);
     transform:rotate($rotate);
+    @content;
   }
 }
 
@@ -212,8 +213,12 @@ body.template-view.portaltype-opengever-meeting-sablontemplate {
   @include watermark-icon($document);
 }
 body.portaltype-opengever-disposition-disposition {
-  @include heading-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
-  @include watermark-icon($char: $disposition, $iconset: 'Font Awesome 5 Free');
+  @include heading-icon($char: $disposition, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+  @include watermark-icon($char: $disposition, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
 }
 
 body.template-tabbed_view.portaltype-opengever-dossier-businesscasedossier,
@@ -305,8 +310,12 @@ body.template-personal_overview {
 }
 
 body.template-favorites-view {
-  @include heading-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
-  @include watermark-icon($char: $favorite, $iconset: 'Font Awesome 5 Free');
+  @include heading-icon($char: $favorite, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+  @include watermark-icon($char: $favorite, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
 }
 
 body.template-tabbed_view.portaltype-opengever-meeting-committee {
@@ -453,7 +462,7 @@ body.meeting-view{
   content: $meeting;
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-meeting-paragraphtemplate:before{
-  content: $fa-var-paragraph;
+  content: fa-content($fa-var-paragraph);
   font-family: 'Font Awesome 5 Free';
 }
 #plone-contentmenu-factories dd.actionMenuContent a#add-meeting:before{
@@ -507,6 +516,20 @@ body.meeting-view{
 
 /* @group contentmenu icons */
 
+#plone-contentmenu-factories dd.actionMenuContent a {
+  &:before {
+    font-family: 'opengever';
+    content: "x";
+    display: inline-block;
+    color: #bababa;
+    font-size: 16px;
+    min-width: 22px;
+  }
+  > span {
+    margin-left: 0;
+  }
+}
+
 .contenttype-opengever-inbox-container:before {content: $inbox;}
 .contenttype-opengever-inbox-inbox:before {content: $inbox;}
 .contenttype-opengever-contact-contact:before {content: $contact;}
@@ -517,7 +540,7 @@ body.meeting-view{
   font-weight: 900;
 }
 .contenttype-plone-site:before {
-  content: $fa-var-home;
+  content: fa-content($fa-var-home);
   font-family: 'Font Awesome 5 Free';
   font-weight: 900;
 }
@@ -623,7 +646,11 @@ div.answer.addDocument div.answerType:before { content: $addDocument;}
 div.answer.created div.answerType:before { content: $created; }
 div.answer.modifyDeadline div.answerType:before { content: $modifyDeadline; }
 div.answer.reactivated div.answerType:before { content: $reactivate; }
-div.answer.skip div.answerType:before { font-family: 'Font Awesome 5 Free'; content: $fa-var-step-forward; }
+div.answer.skip div.answerType:before {
+  font-family: 'Font Awesome 5 Free';
+  content: fa-content($fa-var-step-forward);
+  font-weight: 900;
+}
 
 /* @group language selector in personaltools */
 
