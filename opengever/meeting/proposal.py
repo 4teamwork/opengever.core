@@ -463,6 +463,8 @@ class SubmittedProposal(ProposalBase):
     def get_excerpts(self, unrestricted=False):
         """Return a restricted list of document objects which are excerpts
         of the current proposal.
+
+        Sorted per excerpt title_or_id().
         """
         excerpts = []
         checkPermission = getSecurityManager().checkPermission
@@ -471,7 +473,7 @@ class SubmittedProposal(ProposalBase):
             if unrestricted or checkPermission('View', obj):
                 excerpts.append(obj)
 
-        return excerpts
+        return sorted(excerpts, key=lambda excerpt: excerpt.title_or_id())
 
     def append_excerpt(self, excerpt_document):
         """Add a relation to a new excerpt document.
