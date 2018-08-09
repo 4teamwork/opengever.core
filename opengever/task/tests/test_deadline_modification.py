@@ -4,6 +4,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
@@ -115,6 +117,28 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
+
+    @browsing
+    def test_recalculate_remind_on_for_set_reminders_if_deadline_changed(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        task_reminder = TaskReminder()
+        today = datetime.date.today()
+        tomorrow = today + datetime.timedelta(days=1)
+
+        self._change_deadline(self.task, today)
+
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_SAME_DAY, self.regular_user.id)
+
+        self.assertEqual(
+            today,
+            task_reminder.get_sql_reminder(self.task, self.regular_user.id).remind_day)
+
+        self._change_deadline(self.task, tomorrow)
+
+        self.assertEqual(
+            tomorrow,
+            task_reminder.get_sql_reminder(self.task, self.regular_user.id).remind_day)
 
 
 class TestDeadlineModifierController(IntegrationTestCase):
