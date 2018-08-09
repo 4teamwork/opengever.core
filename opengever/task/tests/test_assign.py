@@ -7,6 +7,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
+from opengever.task.reminder import TASK_REMINDER_SAME_DAY
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
@@ -58,6 +60,21 @@ class TestAssignTask(IntegrationTestCase):
                           self.task.get_sql_object().responsible)
         self.assertEqual(['Task successfully reassigned.'], info_messages())
         self.assertEqual(self.task, browser.context)
+
+    @browsing
+    def test_remove_task_reminder_of_old_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        task_reminder = TaskReminder()
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_SAME_DAY)
+
+        self.assertIsNotNone(task_reminder.get_reminder(self.task))
+
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        self.assertIsNone(task_reminder.get_reminder(self.task))
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):

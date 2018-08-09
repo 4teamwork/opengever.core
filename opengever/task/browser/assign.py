@@ -5,6 +5,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.localroles import LocalRolesSetter
+from opengever.task.reminder.reminder import get_task_reminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -132,6 +133,8 @@ class AssignTaskForm(Form):
         response = self.add_response(**kwargs)
         # Revoke local roles for current responsible
         LocalRolesSetter(self.context).revoke_roles()
+
+        get_task_reminder().clear_reminder(self.context, self.context.responsible)
 
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
