@@ -3196,13 +3196,13 @@ dl.portlet.portletTreePortlet { min-height: 100px; border: none; }
 
 dl.portlet.portletTreePortlet .portletHeader { padding: 0; border: none; border-right: 1px solid #CCC; background-color: transparent; }
 
-dl.portlet.portletTreePortlet .portlet-header-tabs { display: table; list-style: none; width: 100%; border-bottom: 1px solid #ccc; }
+dl.portlet.portletTreePortlet .portlet-header-tabs { display: flex; list-style: none; width: 100%; border-bottom: 1px solid #ccc; }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li { display: table-cell; width: 50%; text-align: center; padding: 0; padding-left: 1px; }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child { padding-left: 0; }
 
-dl.portlet.portletTreePortlet .portlet-header-tabs li a { display: block; padding: 0.3333em 0.75em; text-decoration: none; border: 1px solid #ccc; border-radius: 4px 4px 0 0; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; margin: 0; margin-bottom: -1px; color: #333; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); background-color: #eee; background-image: -moz-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -ms-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#e6e6e6)); background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: linear-gradient(top, #f5f5f5, #e6e6e6); }
+dl.portlet.portletTreePortlet .portlet-header-tabs li a { padding: 0.3333em 0.75em; text-decoration: none; border: 1px solid #ccc; border-radius: 4px 4px 0 0; -moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; margin: 0; margin-bottom: -1px; color: #333; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); background-color: #eee; background-image: -moz-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -ms-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f5f5f5), to(#e6e6e6)); background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6); background-image: linear-gradient(top, #f5f5f5, #e6e6e6); height: 100%; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border-bottom: 0; }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li:last-child a { border-right: none; }
 

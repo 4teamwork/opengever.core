@@ -82,7 +82,7 @@ dl.portlet.portletTreePortlet .portletHeader {
 }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs {
-  display: table;
+  display: flex;
   list-style: none;
   width: 100%;
   border-bottom: 1px solid #ccc;
@@ -100,7 +100,6 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child {
 }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li a {
-  display: block;
   padding: 0.3333em 0.75em;
   text-decoration: none;
   border: 1px solid #ccc;
@@ -118,6 +117,12 @@ dl.portlet.portletTreePortlet .portlet-header-tabs li a {
   background-image: -webkit-linear-gradient(top, #f5f5f5, #e6e6e6);
   background-image: -o-linear-gradient(top, #f5f5f5, #e6e6e6);
   background-image: linear-gradient(top, #f5f5f5, #e6e6e6);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-bottom: 0;
 }
 dl.portlet.portletTreePortlet .portlet-header-tabs li:last-child a {
   border-right: none;
