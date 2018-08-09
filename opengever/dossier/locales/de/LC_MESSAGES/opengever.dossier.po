@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-07-13 15:27+0000\n"
+"POT-Creation-Date: 2018-08-07 14:25+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -19,6 +19,10 @@ msgstr ""
 #: ./opengever/dossier/move_items.py
 msgid "${copied_items} Elements were moved successfully"
 msgstr "${copied_items} Elemente wurden erfolgreich verschoben"
+
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "A dossier manager must be selected  when protecting a dossier"
+msgstr "Ein Dossier-Verwalter muss ausgewählt werden um das Dossier schützen zu können."
 
 #. Default: "Geschäftsdossier"
 msgid "Add Business Case Dossier"
@@ -295,7 +299,7 @@ msgid "documents"
 msgstr "Dokumente"
 
 #. Default: "The local roles do not match with the current dossier protection settings. If you save this form, the local roles will be overridden."
-#: ./opengever/dossier/browser/forms.py
+#: ./opengever/dossier/browser/protect_dossier.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr "Die lokalen Berechtigungen stimmen nicht mit den Dossier-Schutz Einstellungen überein. Wenn Sie dieses Formular speichern, werden die aktuellen lokalen Berechtigungen mit den Dossier-Schutz Einstellungen überschrieben."
 
@@ -510,7 +514,6 @@ msgid "label_creator"
 msgstr "Erstellt von"
 
 #. Default: "Description"
-#: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/templatefolder/tabs.py
 msgid "label_description"
 msgstr "Beschreibung"

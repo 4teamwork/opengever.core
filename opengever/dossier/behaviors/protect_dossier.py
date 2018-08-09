@@ -13,6 +13,8 @@ from plone.supermodel import model
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 
 
 class IProtectDossierMarker(Interface):
@@ -126,6 +128,13 @@ class IProtectDossier(model.Schema):
         required=False,
         missing_value=None,
         )
+
+    @invariant
+    def dossier_manager_filled_if_protection(self):
+        if ((self.reading_and_writing or self.reading)
+                and not self.dossier_manager):
+            raise Invalid(_("A dossier manager must be selected "
+                            " when protecting a dossier"))
 
 
 alsoProvides(IProtectDossier, IFormFieldProvider)
