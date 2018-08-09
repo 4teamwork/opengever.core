@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Bump Chameleon to 3.3 in order to fix edge case in exception handler causing recursion. [lgraf]
 - Move excerpts to the file info box on proposal overviews. [Rotonen]
 - Only prefill dossier_manager as a form level default (instead of schema level). [lgraf]
 - Fix officeconnector issue when invoked from url with trailing view name. [njohner]
