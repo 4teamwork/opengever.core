@@ -199,6 +199,11 @@ msgstr "Sie haben keine Objekte ausgewählt."
 msgid "error_proposal_document_type"
 msgstr "Antragsdokumente müssen immer eine Word-Datei sein, andere Dateiformate sind nicht erlaubt."
 
+#. Default: "It's not possible to have no file in proposal documents."
+#: ./opengever/document/document.py
+msgid "error_proposal_no_document"
+msgstr "Antragsdokumente ohne Datei sind nicht erlaubt."
+
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py
 msgid "error_title_or_file_required"

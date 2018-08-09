@@ -461,6 +461,18 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(error, expected_error)
 
     @browsing
+    def test_proposal_document_cannot_be_removed(self, browser):
+        self.login(self.dossier_responsible, browser)
+        document = self.draft_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        browser.open(document, view='edit')
+        browser.fill({'form.widgets.file.action': 'remove'})
+        browser.find('Save').click()
+        expected_error = ["It's not possible to have no file in proposal documents."]
+        error = browser.css('#formfield-form-widgets-file .fieldErrorBox').text
+        self.assertEqual(error, expected_error)
+
+    @browsing
     def test_document_of_proposal_cannot_be_edited_when_submitted(self, browser):
         self.login(self.dossier_responsible, browser)
         document = self.word_proposal.get_proposal_document()

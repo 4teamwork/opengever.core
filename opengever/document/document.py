@@ -109,6 +109,8 @@ class UploadValidator(validator.SimpleFieldValidator):
         it should be added as Mail object (see opengever.mail).
 
         Only .docx files are accepted into proposal documents.
+
+        Removing a file is not an option for proposal documents.
         """
         if self.request.form.get('form.widgets.file.action') == 'remove':
             if self.is_proposal_upload():

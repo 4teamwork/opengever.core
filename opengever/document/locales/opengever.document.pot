@@ -201,6 +201,11 @@ msgstr ""
 msgid "error_proposal_document_type"
 msgstr ""
 
+#. Default: "It's not possible to have no file in proposal documents."
+#: ./opengever/document/document.py
+msgid "error_proposal_no_document"
+msgstr ""
+
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py
 msgid "error_title_or_file_required"
