@@ -11,7 +11,7 @@ OneGov GEVER (vor 2017).
    3.8   <release-3.8>
    3.7   <release-3.7>
    3.6   <release-3.6>
-   3.5.1 <release-3.5.1>
+   3.5.3 <release-3.5.3>
    3.5   <release-3.5>
    3.4   <release-3.4>
    3.3   <release-3.3>
