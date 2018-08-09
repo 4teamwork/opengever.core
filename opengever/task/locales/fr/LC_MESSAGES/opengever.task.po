@@ -379,7 +379,7 @@ msgstr "Numéro de classement"
 #. Default: "Add task to sequence"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_add_task_to_sequence"
-msgstr ""
+msgstr "Ajouter tâche au processus"
 
 #. Default: "Agency"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
@@ -505,12 +505,12 @@ msgstr "Nouveau délai"
 #. Default: "Next task"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_next_task"
-msgstr ""
+msgstr "Tâche suivante"
 
 #. Default: "Parallel process"
 #: ./opengever/task/browser/overview.py
 msgid "label_parallel_process"
-msgstr ""
+msgstr "Déroulement en parallèle"
 
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py
@@ -530,7 +530,7 @@ msgstr "Tâche initiale"
 #. Default: "Previous task"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_previous_task"
-msgstr ""
+msgstr "Tâche précédente"
 
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py
@@ -566,7 +566,7 @@ msgstr "Retour à la tâche"
 #. Default: "Sequence"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_sequence"
-msgstr ""
+msgstr "Déroulement"
 
 #. Default: "Sequence Number"
 #: ./opengever/task/viewlets/byline.py
@@ -576,7 +576,7 @@ msgstr "Numéro courant"
 #. Default: "Sequential process"
 #: ./opengever/task/browser/overview.py
 msgid "label_sequential_process"
-msgstr ""
+msgstr "Déroulement séquentiel"
 
 #. Default: "Sub tasks"
 #: ./opengever/task/browser/templates/overview.pt
@@ -591,7 +591,7 @@ msgstr "Tâche copiée"
 #. Default: "New task opened by ${user}"
 #: ./opengever/task/activities.py
 msgid "label_task_added"
-msgstr ""
+msgstr "Nouvelle tâche ouverte par ${user}"
 
 #. Default: "Task commented"
 #: ./opengever/task/response_description.py
@@ -614,7 +614,7 @@ msgstr "Type de mandat"
 #. Default: "Tasktemplate Position"
 #: ./opengever/task/task.py
 msgid "label_tasktemplate_position"
-msgstr ""
+msgstr "Position dans le déroulement standard"
 
 #. Default: "Text"
 #: ./opengever/task/activities.py
@@ -812,7 +812,7 @@ msgstr "Créé par ${user}"
 #: ./opengever/task/activities.py
 #: ./opengever/task/response_description.py
 msgid "transition_label_default"
-msgstr ""
+msgstr "Tâche ouverte"
 
 #. Default: "Task deadline modified"
 #: ./opengever/task/response_description.py
