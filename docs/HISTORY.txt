@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Fix base URL for contentish objects. [njohner]
 - Bump Chameleon to 3.3 in order to fix edge case in exception handler causing recursion. [lgraf]
 - Move excerpts to the file info box on proposal overviews. [Rotonen]
 - Bump plone.restapi to 3.4.1 version. [phgross]
