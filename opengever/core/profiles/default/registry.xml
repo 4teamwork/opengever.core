@@ -48,6 +48,7 @@
       <element>redirector</element>
       <element>repository-favorites</element>
       <element>favorite</element>
+      <element>clipboard</element>
     </value>
   </record>
 

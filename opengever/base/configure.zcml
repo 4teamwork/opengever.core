@@ -63,6 +63,11 @@
       name="favorite"
       />
 
+  <adapter
+      factory=".clipboard.ClipboardETagValue"
+      name="clipboard"
+      />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"

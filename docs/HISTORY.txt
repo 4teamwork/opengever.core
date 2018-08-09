@@ -11,6 +11,7 @@ Changelog
 - Sort excerpts by title. [Rotonen]
 - Task forms: Drop unnecessary distinction between single/multi org unit setups. [lgraf]
 - Add the document UUID to the OC document payloads. [Rotonen]
+- Add eTag adapter for the clipboard. [phgross]
 - Fix styling of dossier manager field, when a group is selected.[phgross]
 - Update fontawesome to version 5.2. [Kevin Bieri]
 - Add missing icon in Activity settings. [njohner]
