@@ -196,6 +196,11 @@ msgstr "Il n'est pas possible d'insérer des Email à cet endroit. Pour le faire
 msgid "error_no_items"
 msgstr "Vous n'avez sélectionné aucun élément."
 
+#. Default: "It's not possible to have non-.docx documents as proposal documents."
+#: ./opengever/document/document.py
+msgid "error_proposal_document_type"
+msgstr ""
+
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py
 msgid "error_title_or_file_required"

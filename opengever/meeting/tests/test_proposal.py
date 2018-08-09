@@ -17,7 +17,7 @@ from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -447,6 +447,18 @@ class TestProposal(IntegrationTestCase):
         browser.open(document, view='edit')
         self.assertEquals('Edit Document', plone.first_heading(),
                           'Document should be editable.')
+
+    @browsing
+    def test_proposal_document_must_be_docx(self, browser):
+        self.login(self.dossier_responsible, browser)
+        document = self.draft_word_proposal.get_proposal_document()
+        self.checkout_document(document)
+        browser.open(document, view='edit')
+        browser.fill({'form.widgets.file.action': 'replace', 'File': ('asdf', 'foo.xlsx' 'application/fake')})
+        browser.find('Save').click()
+        expected_error = ["It's not possible to have non-.docx documents as proposal documents."]
+        error = browser.css('#formfield-form-widgets-file .fieldErrorBox').text
+        self.assertEqual(error, expected_error)
 
     @browsing
     def test_document_of_proposal_cannot_be_edited_when_submitted(self, browser):
