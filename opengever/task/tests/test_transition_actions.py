@@ -8,6 +8,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 import re
+import unittest
 
 
 URL_WIHOUT_TOKEN_RE = re.compile(r'(.*)([\?, &]_authenticator=.*)')
@@ -157,6 +158,7 @@ class TestTaskTransitionActionsForOpen(BaseTransitionActionIntegrationTest):
         expected_transition_action = 'addresponse?form.widgets.transition=task-transition-open-rejected'
         self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
 
+    @unittest.skip("This test is flaky and fails erratically - but only on Jenkins.")
     @browsing
     def test_rejecting_sets_responsible_to_issuer(self, browser):
         self.login(self.regular_user, browser)
