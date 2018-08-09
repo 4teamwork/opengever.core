@@ -2,8 +2,8 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
 from plone import api
 from plone.restapi.services import Service
+from plone.restapi.services.content.utils import add
 from plone.restapi.services.content.utils import create
-from plone.restapi.services.content.utils import rename
 from zope.interface import alsoProvides
 import plone.protect.interfaces
 
@@ -76,11 +76,10 @@ class ScanIn(Service):
                     return dossiers[0].getObject()
 
                 # No dossier found, create a new one
-                obj = create(
-                    private_folder,
+                obj = create(private_folder,
                     'opengever.private.dossier',
                     title='Scaneingang')
-                rename(obj)
+                obj = add(private_folder, obj, rename=True)
                 return obj
 
         return self.error(

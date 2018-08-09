@@ -385,3 +385,33 @@ class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
         self.patch_refs(
             DexterityUpdateSection, 'update_field',
             update_field)
+
+
+class PatchDeserializeFromJson(MonkeyPatch):
+    """Patch default JSON deserializer from plone.restapi, to make sure not
+    set values are prefilled with default or missing values.
+    """
+
+    def __call__(self):
+        from Acquisition import aq_inner
+        from Acquisition import aq_parent
+        from opengever.base.default_values import set_default_values
+        from plone.restapi.deserializer import json_body
+
+        def __call__(self, validate_all=False, data=None, create=False):
+            if data is None:
+                data = json_body(self.request)
+
+            # set default values
+            if create:
+                container = aq_parent(aq_inner(self.context))
+                set_default_values(self.context, container, data)
+
+            # super call
+            return original___call__(self, validate_all, data, create)
+
+        from plone.restapi.deserializer.dxcontent import DeserializeFromJson
+        locals()['__patch_refs__'] = False
+        original___call__ = DeserializeFromJson.__call__
+
+        self.patch_refs(DeserializeFromJson, '__call__', __call__)

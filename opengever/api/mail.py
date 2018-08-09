@@ -18,7 +18,7 @@ from zope.interface import Interface
 @adapter(IMail, Interface)
 class DeserializeMailFromJson(DeserializeFromJson):
 
-    def __call__(self, validate_all=False, data=None):
+    def __call__(self, validate_all=False, data=None, create=False):
         if data is None:
             data = json_body(self.request)
 
@@ -39,9 +39,9 @@ class DeserializeMailFromJson(DeserializeFromJson):
                 }
 
         context = super(DeserializeMailFromJson, self).__call__(
-            validate_all=validate_all, data=data)
+            validate_all=validate_all, data=data, create=create)
 
-        if 'message' in data:
+        if create and 'message' in data:
             if not data.get('title'):
                 context._update_title_from_message_subject()
                 initalize_title(context, None)

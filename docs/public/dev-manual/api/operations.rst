@@ -58,7 +58,7 @@ children des Objekts).
         "comments": null,
         "container_location": null,
         "container_type": null,
-        "created": "2016-01-08T09:51:40+01:00",
+        "created": "2016-01-08T10:51:40+00:00",
         "custody_period": 30,
         "date_of_cassation": null,
         "date_of_submission": null,
@@ -81,7 +81,7 @@ children des Objekts).
             "title": "Ein weiteres Dokument"
           }
         ],
-        "modified": "2016-01-19T11:15:22+01:00",
+        "modified": "2016-01-19T11:15:22+00:00",
         "number_of_containers": null,
         "parent": {
           "@id": "https://example.org/ordnungssystem/fuehrung",

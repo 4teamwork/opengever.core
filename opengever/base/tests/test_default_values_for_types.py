@@ -605,11 +605,6 @@ class TestDossierDefaults(TestDefaultsBase):
         expected = self.get_type_defaults()
         expected['responsible'] = DOSSIER_FORM_DEFAULTS['responsible']
 
-        # plone.restapi incorrectly fires an ObjectMoved event during creation.
-        # This causes a former reference number to be computed and set.
-        expected['former_reference_number'] = 'Client1 1.1 / 9'
-        expected['temporary_former_reference_number'] = ''
-
         self.assertDictEqual(expected, persisted_values)
 
     @browsing

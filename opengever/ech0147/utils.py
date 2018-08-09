@@ -4,6 +4,7 @@ from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
 from plone.restapi.interfaces import IDeserializeFromJson
+from pyxb.binding.datatypes import date as pyxb_date
 from random import randint
 from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
@@ -11,6 +12,16 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 import os.path
 import transaction
+
+
+def convert_dates(data):
+    """convert pyxb dates to real python datetime dates, otherwise field
+    validation for date fields will raise.
+    """
+
+    for key, value in data.items():
+        if isinstance(value, pyxb_date):
+            data[key] = value.date()
 
 
 def create_dossier(container, dossier, zipfile, responsible):
@@ -43,9 +54,11 @@ def create_dossier(container, dossier, zipfile, responsible):
         metadata['comments'] = u'\n'.join(
             [k.value() for k in dossier.comments.comment])
 
+    convert_dates(metadata)
+
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=metadata)
+    deserializer(validate_all=True, data=metadata, create=True)
 
     # Rename dossier
     chooser = INameChooser(container)
@@ -94,9 +107,11 @@ def create_document(container, document, zipfile):
     if document.keywords:
         metadata['keywords'] = [k.value() for k in document.keywords.keyword]
 
+    convert_dates(metadata)
+
     deserializer = queryMultiAdapter((obj, obj.REQUEST),
                                      IDeserializeFromJson)
-    deserializer(validate_all=True, data=metadata)
+    deserializer(validate_all=True, data=metadata, create=True)
 
     if document.files:
         file_ = document.files.file[0]
