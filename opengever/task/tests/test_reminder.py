@@ -180,3 +180,49 @@ class TestTaskReminder(IntegrationTestCase):
         self.assertItemsEqual(
             [self.regular_user.getId(), self.dossier_responsible.getId()],
             [notification.userid for notification in notifications])
+
+    def test_recalculate_remind_day_for_obj_updates_the_remind_day(self):
+        self.login(self.administrator)
+        today = date.today()
+        tomorrow = today + timedelta(days=1)
+        yesterday = today + timedelta(days=-1)
+
+        self.task.deadline = today
+        self.task.sync()
+
+        task_reminder = TaskReminder()
+
+        with self.login(self.regular_user):
+            task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
+
+        with self.login(self.dossier_responsible):
+            task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
+
+        self.assertEqual(
+            today,
+            task_reminder.get_sql_reminder(
+                self.task,
+                user_id=self.regular_user.getId()).remind_day)
+
+        self.assertEqual(
+            yesterday,
+            task_reminder.get_sql_reminder(
+                self.task,
+                user_id=self.dossier_responsible.getId()).remind_day)
+
+        self.task.deadline = tomorrow
+        self.task.sync()
+
+        task_reminder.recalculate_remind_day_for_obj(self.task)
+
+        self.assertEqual(
+            tomorrow,
+            task_reminder.get_sql_reminder(
+                self.task,
+                user_id=self.regular_user.getId()).remind_day)
+
+        self.assertEqual(
+            today,
+            task_reminder.get_sql_reminder(
+                self.task,
+                user_id=self.dossier_responsible.getId()).remind_day)

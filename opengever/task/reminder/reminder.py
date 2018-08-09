@@ -71,6 +71,13 @@ class TaskReminder(object):
                 ReminderSetting.remind_day == date.today()).all():
             TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
 
+    def recalculate_remind_day_for_obj(self, obj):
+        """If the duedate of a task will change, we have to update the
+        reminde-day of all reminders set for this object.
+        """
+        map(lambda reminder: reminder.update_remind_day(),
+            obj.get_sql_object().reminder_settings)
+
     def _set_reminder_setting_in_annotation(self, obj, user_id, option):
         self._set_user_annotation(obj, user_id, option.option_type)
 
