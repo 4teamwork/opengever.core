@@ -4554,4 +4554,16 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .assignments_listing { margin-top: 5px; margin-left: 1em; }
 #content .sharing-form .assignments_listing li { list-style-type: none; }
 
+#content div.wizard { background-color: transparent; }
+#content div.wizard .wizardSteps { display: flex; justify-content: space-between; background-color: #f5f5f5; }
+#content div.wizard .wizardSteps > li { margin: 0; width: 100%; text-align: center; }
+#content div.wizard .wizardSteps > li::before { content: none; }
+#content div.wizard .wizardSteps > li:first-child > a::before, #content div.wizard .wizardSteps > li:first-child > a::after { content: none; }
+#content div.wizard .wizardSteps > li:last-child > a { border-right: 0; }
+#content div.wizard .wizardSteps > li > a { display: block; line-height: 20px; font-weight: normal; margin: 0; padding: 10px 30px; position: relative; border-right: 2px solid #e6e6e6; }
+#content div.wizard .wizardSteps > li > a::before { content: ''; border-radius: 50%; background: #f5f5f5; border: 2px solid #e6e6e6; width: 26px; height: 26px; position: absolute; left: -16px; top: 50%; margin-top: -15px; }
+#content div.wizard .wizardSteps > li > a::after { position: absolute; left: -6px; top: 50%; margin-top: -10px; content: "\f061"; font-weight: 900; font-family: 'Font Awesome 5 Free'; }
+#content div.wizard .wizardSteps > .selected > a { font-weight: normal; }
+#content div.wizard .wizardSteps > .visited > a::after { content: "\f00c"; }
+
 /*# sourceMappingURL=gever.css.map */
