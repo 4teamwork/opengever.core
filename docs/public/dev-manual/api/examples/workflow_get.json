@@ -8,14 +8,14 @@ Content-Type: application/json
       "actor": "john.doe",
       "comments": "",
       "review_state": "dossier-state-active",
-      "time": "2016-08-02T15:08:50+02:00"
+      "time": "2016-08-02T17:08:50+00:00"
     },
     {
       "action": "dossier-transition-resolve",
       "actor": "john.doe",
       "comments": "",
       "review_state": "dossier-state-resolved",
-      "time": "2016-08-02T15:08:54+02:00"
+      "time": "2016-08-02T17:08:54+00:00"
     }
   ],
   "transitions": [

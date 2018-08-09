@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2018-08-09
+----------
+
+- REST API: datetime-Felder werden neu in UTC :doc:`serialisiert <serialization>` statt Lokalzeit.
+
 2018-07-17
 ----------
 
