@@ -12,7 +12,9 @@
         "_type": "opengever.inbox.inbox",
         "title_de": "Eingangskorb",
         "title_fr": "Boîte de réception",
-        "inbox_group": "og_mandant1_eingangskorb"
+        "inbox_group": "og_mandant1_eingangskorb",
+        "_placefulworkflow": ["opengever_inbox_policy",
+                              "opengever_inbox_policy"]
     },
     {
         "_path": "vorlagen",
