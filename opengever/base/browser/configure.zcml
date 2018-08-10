@@ -231,4 +231,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="get_setting"
+      class=".config.GetSettingView"
+      permission="zope2.View"
+      />
+
 </configure>
