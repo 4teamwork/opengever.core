@@ -24,6 +24,7 @@ from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from requests_toolbelt.utils import formdata
+from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
 from zope.component import getUtility
@@ -471,6 +472,28 @@ class TestProposal(IntegrationTestCase):
         expected_error = ["It's not possible to have no file in proposal documents."]
         error = browser.css('#formfield-form-widgets-file .fieldErrorBox').text
         self.assertEqual(error, expected_error)
+
+    @browsing
+    def test_proposal_document_must_be_docx_via_quickupload(self, browser):
+        self.login(self.dossier_responsible, browser)
+        filename = 'foo.xlsx'
+        headers = {
+            'X-File-Name': filename,
+            'Content-Type': 'application/octet-stream',
+            'X-Requested-With': 'XMLHttpRequest',
+            }
+        fileish = StringIO('foobar')
+        proposal_document = self.draft_word_proposal.get_proposal_document()
+        self.checkout_document(proposal_document)
+        expected_error = {u'error': u"It's not possible to have non-.docx documents as proposal documents."}
+        browser.open(
+            proposal_document,
+            data={'file': fileish},
+            headers=headers,
+            view='@@quick_upload_file?qqfile={}'.format(filename),
+            )
+        fileish.close()
+        self.assertEqual(browser.json, expected_error)
 
     @browsing
     def test_document_of_proposal_cannot_be_edited_when_submitted(self, browser):
