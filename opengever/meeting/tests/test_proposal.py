@@ -1049,3 +1049,11 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(0, submitted_document_model.submitted_version)
         self.assertEqual(proposal.load_model(),
                          submitted_document_model.proposal)
+
+    @browsing
+    def test_proposal_shows_native_language_names_on_form(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Proposal')
+        expected_languages = ['Deutsch', 'English']
+        self.assertEqual(expected_languages, browser.css('#form-widgets-language option').text)
