@@ -35,6 +35,9 @@ import json
 import re
 
 
+ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
+               'Publisher', 'DossierManager']
+
 ROLE_MAPPING = (
     (IDossier, (
         (u'Reader', _('sharing_dossier_reader')),

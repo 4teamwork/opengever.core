@@ -1,5 +1,6 @@
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.sharing.browser.sharing import ROLES_ORDER
 from opengever.sharing.security import disabled_permission_check
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.sharing import SharingGet as APISharingGet
@@ -27,6 +28,7 @@ class SharingGet(APISharingGet):
         serializer = queryMultiAdapter((self.context, self.request),
                                        interface=ISerializeToJson,
                                        name='local_roles')
+
         if serializer is None:
             self.request.response.setStatus(501)
             return dict(error=dict(message='No serializer available.'))
@@ -36,6 +38,11 @@ class SharingGet(APISharingGet):
                 data = serializer(search=self.request.form.get('search'))
         else:
             data = serializer(search=self.request.form.get('search'))
+
+        # sort available roles
+        data['available_roles'].sort(
+            lambda a, b: cmp(ROLES_ORDER.index(a['id']),
+                             ROLES_ORDER.index(b['id'])))
 
         return data
 

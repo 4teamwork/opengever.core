@@ -20,7 +20,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         browser.open(self.dossier, view='@sharing',
                      method='GET', headers={'Accept': 'application/json'})
 
-        self.assertItemsEqual(
+        self.assertEqual(
             [u'Reader', u'Contributor', u'Editor', u'Reviewer', u'Publisher'],
             [role['id'] for role in browser.json.get('available_roles')])
 
@@ -31,7 +31,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         browser.open(self.templates, view='@sharing',
                      method='GET', headers={'Accept': 'application/json'})
 
-        self.assertItemsEqual(
+        self.assertEqual(
             [u'Reader', u'Contributor', u'Editor'],
             [role['id'] for role in browser.json.get('available_roles')])
 
@@ -48,11 +48,11 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         browser.open(self.dossier, view='@sharing?ignore_permissions=1',
                      method='GET', headers={'Accept': 'application/json'})
 
-        self.assertItemsEqual(
+        self.assertEqual(
             [u'Reader', u'Contributor', u'Editor',
              u'Reviewer', u'Publisher', u'DossierManager'],
             [role['id'] for role in browser.json.get('available_roles')])
-        self.assertItemsEqual(
+        self.assertEqual(
             [u'Publisher', u'DossierManager', u'Editor',
              u'Reader', u'Contributor', u'Reviewer'],
             browser.json['entries'][0]['roles'].keys())
