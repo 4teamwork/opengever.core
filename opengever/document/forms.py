@@ -48,17 +48,17 @@ class DocumentEditForm(DefaultEditForm):
             return
 
         # XXX: Maybe use IPrimaryFieldInfo here instead?
-        file_field = field_by_name(self, 'file')
+        # file_field = field_by_name(self, 'file')
 
-        if file_field:
-            current_user_id = getSecurityManager().getUser().getId()
-            if self.context.digitally_available:
-                if manager.get_checked_out_by() == current_user_id:
-                    file_field.mode = NO_DOWNLOAD_INPUT_MODE
-                else:
-                    file_field.mode = NO_DOWNLOAD_DISPLAY_MODE
-            else:
-                file_field.mode = NO_DOWNLOAD_INPUT_MODE
+        # if file_field:
+        #     current_user_id = getSecurityManager().getUser().getId()
+        #     if self.context.digitally_available:
+        #         if manager.get_checked_out_by() == current_user_id:
+        #             file_field.mode = NO_DOWNLOAD_INPUT_MODE
+        #         else:
+        #             file_field.mode = NO_DOWNLOAD_DISPLAY_MODE
+        #     else:
+        #         file_field.mode = NO_DOWNLOAD_INPUT_MODE
 
 
 DocumentEditView = layout.wrap_form(DocumentEditForm)
