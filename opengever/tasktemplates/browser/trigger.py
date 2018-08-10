@@ -42,7 +42,7 @@ TRIGGER_TASKTEMPLATE_STEPS = (
      _(u'label_tasktemplatefolder_selection',
        default=u'Tasktemplatefolder selection')),
 
-    ('select-tasktemplate',
+    ('select-tasktemplates',
      _(u'label_tasktemplate_selection', default=u'Tasktemplate selection')),
 
     ('select-responsibles',

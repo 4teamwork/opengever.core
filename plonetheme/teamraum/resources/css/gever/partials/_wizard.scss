@@ -1,0 +1,67 @@
+#content div.wizard {
+  background-color: transparent;
+
+  .wizardSteps {
+    display: flex;
+    justify-content: space-between;
+    background-color: $gray-light;
+
+    > li {
+      margin: 0;
+      width: 100%;
+      text-align: center;
+
+      &::before { content: none; }
+
+      &:first-child > a {
+        &::before, &::after {
+          content: none;
+        }
+      }
+
+      &:last-child > a {
+        border-right: 0;
+      }
+    }
+
+    > li > a {
+      display: block;
+      line-height: 20px;
+      font-weight: normal;
+      margin: 0;
+      padding: 10px 30px;
+      position: relative;
+      border-right: 2px solid $gray-dark;
+
+      &::before {
+        content: '';
+        border-radius: 50%;
+        background: $gray-light;
+        border: 2px solid $gray-dark;
+        width: 26px;
+        height: 26px;
+        position: absolute;
+        left: -16px;
+        top: 50%;
+        margin-top: -15px;
+      }
+      &::after {
+        position: absolute;
+        left: -6px;
+        top: 50%;
+        margin-top: -10px;
+        content: fa-content($fa-var-arrow-right);
+        font-weight: 900;
+        font-family: 'Font Awesome 5 Free';
+      }
+    }
+
+    > .selected > a {
+      font-weight: normal;
+    }
+
+    > .visited > a::after {
+      content: fa-content($fa-var-check);
+    }
+  }
+}
