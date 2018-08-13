@@ -2,6 +2,7 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models.exceptions import RecordNotFound
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zExceptions import NotFound
 from zope.component.hooks import getSite
@@ -19,6 +20,10 @@ class UserDetails(BrowserView):
         portal = getSite()
         return '/'.join((portal.portal_url(), '@@user-details',
                          userid))
+
+    def user_details_table(self):
+        template = ViewPageTemplateFile('templates/userdetails_table.pt')
+        return template(self, self.request)
 
     def get_userdata(self):
         """Returns a dict of information about a specific user

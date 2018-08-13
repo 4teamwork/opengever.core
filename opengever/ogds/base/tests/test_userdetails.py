@@ -97,3 +97,31 @@ class TestUserDetails(IntegrationTestCase):
              'http://nohost/plone/@@list_groupmembers?group=projekt_a',
              'http://nohost/plone/@@list_groupmembers?group=with+spaces'],
             group_links)
+
+
+class TestUserDetailsPlain(IntegrationTestCase):
+
+    @browsing
+    def test_contains_only_metadata_table(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal, view='@@user-details-plain/kathi.barfuss')
+
+        metadata = dict(browser.css('.vertical').first.lists())
+        self.assertDictContainsSubset({
+            'Address': 'Kappelenweg 13 Postfach 1234 1234 Vorkappelen Schweiz',
+            'Department': 'Staatskanzlei (SK)',
+            'Description': 'nix',
+            'Directorate': 'Staatsarchiv (Arch)',
+            'Email': 'foo@example.com',
+            'Email 2': 'bar@example.com',
+            'Fax': '012 34 56 77',
+            'Mobile phone': '012 34 56 76',
+            'Name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+            'Office phone': '012 34 56 78',
+            'Salutation': 'Prof. Dr.',
+            'Teams': u'Projekt \xdcberbaung Dorfmatte',
+            'URL': 'http://www.example.com',
+        }, metadata)
+
+        self.assertEquals([], browser.css('h1'))
