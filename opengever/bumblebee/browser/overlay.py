@@ -12,7 +12,6 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
-from opengever.document.browser.versions_tab import LazyHistoryMetadataProxy
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
@@ -79,7 +78,10 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
         return Actor.user(self.context.Creator()).get_link()
 
     def get_document_date(self):
-        return api.portal.get_localized_time(self.context.document_date)
+        document_date = self.context.document_date
+        if not document_date:
+            return None
+        return api.portal.get_localized_time(document_date)
 
     def get_containing_dossier(self):
         return self.context.get_parent_dossier()

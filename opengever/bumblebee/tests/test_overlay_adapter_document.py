@@ -140,9 +140,15 @@ class TestGetDocumentDate(IntegrationTestCase):
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
         self.assertEqual(u'Jan 03, 2010', adapter.get_document_date())
 
-    def test_returns_none_if_no_document_date_is_set(self):
+    def test_returns_none_if_document_date_is_empty_string(self):
         self.login(self.regular_user)
         self.document.document_date = ''
+        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
+        self.assertIsNone(adapter.get_document_date())
+
+    def test_returns_none_if_document_date_is_none(self):
+        self.login(self.regular_user)
+        self.document.document_date = None
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
         self.assertIsNone(adapter.get_document_date())
 
