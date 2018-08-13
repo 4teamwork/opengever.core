@@ -18,6 +18,7 @@ Changelog
 - Only show create proposal button if meeting feature is enabled. [njohner]
 - Add action to switch to new GEVER UI. [njohner]
 - Add generic view to retrieve the value of a setting. [njohner]
+- Exclude PreconditionFailed from Error log. [njohner]
 - Lock oder of avaialbe roles in sharing endpoint. [phgross]
 - Fix archival_file and public_trial checks on documents overview. [phgross]
 - Add placeful workflow policy for inbox-area. Let inbox users edit and checkout documents but not the inbox itself. [phgross]
