@@ -82,6 +82,14 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
 
         self.assertEquals(expected_actions, tabbedview.minor_actions().text)
 
+        self.assertEquals([], tabbedview.major_actions().text)
+
+    @browsing
+    def test_create_proposal_visible_when_meeting_feature_enabled(self, browser):
+        self.activate_feature('meeting')
+        self.login(self.manager, browser)
+        browser.open(self.branch_repofolder)
+        tabbedview.open('Documents')
         self.assertEquals(['Create Proposal'], tabbedview.major_actions().text)
 
     @browsing

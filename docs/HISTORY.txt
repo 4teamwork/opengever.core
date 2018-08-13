@@ -10,6 +10,7 @@ Changelog
 - Fix sharing form for IE 11. [phgross]
 - Fix display of None on the bumblebee document overlay adapter as a document date. [Rotonen]
 - Fix pdf conversion for mails when resolving a dossier (ArchivalFileConverter). [njohner]
+- Only show create proposal button if meeting feature is enabled. [njohner]
 - Add action to switch to new GEVER UI. [njohner]
 - Add generic view to retrieve the value of a setting. [njohner]
 - Lock oder of avaialbe roles in sharing endpoint. [phgross]
