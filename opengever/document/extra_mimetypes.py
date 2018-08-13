@@ -39,6 +39,9 @@ ADDITIONAL_TYPES = [
     # MS Project
     ('application/vnd.ms-project', '.mpp'),
 
+    # MS Publisher
+    ('application/x-mspublisher', '.pub'),
+
     # MS OneNote
     ('application/onenote', '.one'),
 
