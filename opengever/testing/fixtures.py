@@ -1042,6 +1042,15 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        self.register('empty_document', create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'L\xe4\xe4r')
+            .having(
+                preserved_as_paper=True,
+                )
+            ))
+
     @staticuid()
     def create_expired_dossier(self):
         expired_dossier = self.register('expired_dossier', create(

@@ -22,7 +22,7 @@ class TestGetMail(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEqual(
             {u'content-type': u'application/vnd.ms-outlook',
-             u'download': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-28/@@download/original_message',
+             u'download': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-29/@@download/original_message',
              u'filename': u'testmail.msg',
              u'size': 8},
             browser.json.get('original_message'))

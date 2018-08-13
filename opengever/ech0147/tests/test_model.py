@@ -108,12 +108,19 @@ class TestDossierModel(IntegrationTestCase):
             base_path + '/' + self.dossier.getId(), dossier.path)
 
     def test_dossier_contains_documents_and_mails(self):
-        documentish_types = ['opengever.document.document', 'ftw.mail.mail']
         dossier = Dossier(self.dossier, u'files')
-        self.assertItemsEqual(
-            [d for d in self.dossier.objectValues()
-             if d.portal_type in documentish_types],
-            [d.obj for d in dossier.documents])
+        dossier_objects = self.dossier.objectValues()
+        expected_mails = [
+            d for d
+            in dossier_objects
+            if d.portal_type == 'ftw.mail.mail'
+            ]
+        expected_documents = [
+            d for d
+            in dossier_objects
+            if d.portal_type == 'opengever.document.document' and d.file
+            ]
+        self.assertItemsEqual(expected_mails + expected_documents, [d.obj for d in dossier.documents])
 
     def test_documents_without_a_file_are_skipped(self):
         self.document.file = None

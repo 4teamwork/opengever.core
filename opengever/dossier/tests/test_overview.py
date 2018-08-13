@@ -26,7 +26,8 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def tested_document(self):
-        return self.taskdocument
+        # XXX - this needs to be within the 10 latest documents
+        return self.empty_document
 
     @property
     def tested_task(self):
@@ -168,15 +169,12 @@ class TestOverview(IntegrationTestCase):
     @browsing
     def test_documents_in_overview_are_linked(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        browser.open(self.tested_dossier,
-                     view='tabbedview_view-overview')
-
-        link = browser.css(
-            '#newest_documentsBox li:not(.moreLink) a.document_link')[-1]
-        self.assertEquals(self.tested_document.title, link.text)
-        self.assertEqual(
-            self.tested_document.absolute_url(), link.get('href'))
+        browser.open(self.tested_dossier, view='tabbedview_view-overview')
+        links = browser.css('#newest_documentsBox li:not(.moreLink) a.document_link')
+        titles = links.text
+        anchors = [link.get('href') for link in links]
+        self.assertIn(self.tested_document.title, titles)
+        self.assertIn(self.tested_document.absolute_url(), anchors)
 
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_modified(self, browser):
