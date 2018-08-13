@@ -21,6 +21,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('ech0147_export', False),
                 ('ech0147_import', False),
                 ('favorites', True),
+                ('gever_ui_enabled', False),
+                ('gever_ui_path', 'http://localhost:8081/#/'),
                 ('journal_pdf', False),
                 ('meetings', False),
                 ('officeatwork', False),

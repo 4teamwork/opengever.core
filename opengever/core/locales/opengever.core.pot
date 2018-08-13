@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-13 15:30+0000\n"
+"POT-Creation-Date: 2018-08-13 06:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,6 +138,7 @@ msgid "Meeting Dossier"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingtemplate.xml
+#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.meetingtemplate.xml
 msgid "Meeting Template"
 msgstr ""
 
@@ -155,6 +156,7 @@ msgid "My repository"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
+#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.paragraphtemplate.xml
 msgid "Paragraph Template"
 msgstr ""
 
@@ -233,6 +235,11 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180809152739_add_gever_ui_action/actions.xml
+msgid "Switch to new UI"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.task.task.xml

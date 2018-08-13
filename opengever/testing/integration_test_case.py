@@ -58,6 +58,7 @@ FEATURE_FLAGS = {
     'ech0147-export': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_export_enabled',
     'ech0147-import': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_import_enabled',
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
+    'gever_ui': 'opengever.base.interfaces.IGeverUI.is_feature_enabled',
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',  # noqa
