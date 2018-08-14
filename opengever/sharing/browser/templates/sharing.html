@@ -19,7 +19,9 @@
              :href="entry.url">{{entry.title}}</a>
           <a class="assignments_info_button"
              v-bind:class="{ folded: entry.assignments}"
-             @click="(event) => {toggle_assignments(event, entry, )}"/>
+             @click="toggle_assignments(entry)"
+             v-show="show_info_assignment_button(entry)" />
+
           <div v-show="entry.assignments" class="assignments_info">
             <ul class="assignments_listing">
               <li v-for="assignment in entry.assignments"
@@ -48,7 +50,7 @@
             <input type="checkbox" v-if="entry.computed_roles[role.id] != 'acquired'"
                    :checked="entry.roles[role.id]"
                    :class="role.id"
-                   @click="(event) => {toggle_checkbox(event, entry, role.id)}"/>
+                   @click="toggle_checkbox($event, entry, role.id)"/>
 
             <!-- automatic roles -->
             <div class="automatic"

@@ -28,8 +28,6 @@
                              data-is-editable string:true;
                              data-authtoken context/@@authenticator/token"></div>
 
-        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.sharing/sharing.js"></script>
-
       </metal:core-macro>
     </div>
   </body>
