@@ -212,7 +212,7 @@ class OpengeverSharingView(SharingView):
             return '{}/@@list_groupmembers?group={}'.format(
                 api.portal.get().absolute_url(), item['id'])
         else:
-            return '{}/@@user-details/{}'.format(
+            return '{}/@@user-details-plain/{}'.format(
                 api.portal.get().absolute_url(), item['id'])
 
     def extend_with_assignment_infos(self, item, manager):

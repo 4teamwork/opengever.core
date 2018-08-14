@@ -146,7 +146,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
                   u'computed_roles': {},
                   u'automatic_roles': {},
                   u'title': u'Ziegler Robert',
-                  u'url': u'http://nohost/plone/@@user-details/robert.ziegler',
+                  u'url': u'http://nohost/plone/@@user-details-plain/robert.ziegler',
                   u'login': u'robert.ziegler',
                   u'type': u'user',
                   u'id': u'robert.ziegler'}]},
@@ -190,7 +190,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
                         u'Reviewer': False},
              u'title': u'B\xe4rfuss K\xe4thi',
              u'type': u'user',
-             u'url': u'http://nohost/plone/@@user-details/kathi.barfuss'},
+             u'url': u'http://nohost/plone/@@user-details-plain/kathi.barfuss'},
             [item for item in entries if item['id'] == self.regular_user.id][0])
 
 
