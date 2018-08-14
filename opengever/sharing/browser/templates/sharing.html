@@ -19,7 +19,8 @@
              :href="entry.url">{{entry.title}}</a>
           <a class="assignments_info_button"
              v-bind:class="{ folded: entry.assignments}"
-             @click="toggle_assignments(entry)"/>
+             @click="toggle_assignments(entry)"
+             v-show="show_info_assignment_button(entry)" />
 
           <div v-show="entry.assignments" class="assignments_info">
             <ul class="assignments_listing">

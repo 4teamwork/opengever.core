@@ -87,6 +87,14 @@ var sharingApp = {
       });
     },
 
+    show_info_assignment_button: function (entry) {
+      return Object.keys(entry.automatic_roles)
+        .map(function(key) { return entry.automatic_roles[key]; })
+        .reduce(function(a, b) {
+          return a || b;
+        }, false);
+    },
+
     search: function() {
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString(), search: this.principal_search };
