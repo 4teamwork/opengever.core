@@ -56,3 +56,19 @@ Die Daily Digest mails können via zopectl handler `send_digest` generiert und v
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
 der Daily Digest nur einmal durchgeführt werden! Es ist zu empfehlen die gleiche Konvention wie bei der OGDS Synchronisierung zu verwenden, also jeweils auf dem ersten Mandanten / Deployment des Verbunds durchführen.
+
+
+Aufgaben-Erinnerungen erstellen
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Aufgaben-Erinnerungen können via zopectl handler `generate_remind_notifications` generiert werden.
+Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte somit so früh wie möglich an einem neuen Tag ausgeführt werden und in jedem fall **vor** dem "Daily Digest"-Job.
+
+.. code:: bash
+
+    # GEVER Demo: Generate remind notifications
+    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
+
+
+**Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
+der Job "Aufgaben-Erinnerungen erstellen" nur einmal durchgeführt werden! Es ist zu empfehlen die gleiche Konvention wie bei der OGDS Synchronisierung zu verwenden, also jeweils auf dem ersten Mandanten / Deployment des Verbunds durchführen.

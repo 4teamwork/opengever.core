@@ -202,6 +202,7 @@ setup(name='opengever.core',
       dump_schemas = opengever.base.schemadump:dump_schemas_zopectl_handler
       import = opengever.bundle.console:import_oggbundle
       send_digest = opengever.activity:send_digest_zopectl_handler
+      generate_remind_notifications = opengever.task.reminder.cronjobs:generate_remind_notifications_zopectl_handler
 
 
       [console_scripts]
