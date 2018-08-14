@@ -257,6 +257,98 @@ class PatchZ3CFormChangedField(MonkeyPatch):
         self.patch_refs(util, 'changedField', changedField)
 
 
+class PatchZ3CFormWidgetUpdate(MonkeyPatch):
+    """
+    """
+
+    def __call__(self):
+        import zope.interface
+        import zope.component
+        import zope.location
+        import zope.schema.interfaces
+        from z3c.form import interfaces
+        from z3c.form.widget import PLACEHOLDER
+
+        def update(self):
+            """See z3c.form.interfaces.IWidget."""
+            # Step 1: Determine the value.
+            value = interfaces.NO_VALUE
+            lookForDefault = False
+            # Step 1.1: If possible, get a value from the request
+            if not self.ignoreRequest:
+                #at this turn we do not need errors to be set on widgets
+                #errors will be set when extract gets called from form.extractData
+                self.setErrors = False
+                widget_value = self.extract()
+                if widget_value is not interfaces.NO_VALUE:
+                    # Once we found the value in the request, it takes precendence
+                    # over everything and nothing else has to be done.
+                    self.value = widget_value
+                    value = PLACEHOLDER
+            # Step 1.2: If we have a widget with a field and we have no value yet,
+            #           we have some more possible locations to get the value
+            if (interfaces.IFieldWidget.providedBy(self) and
+                value is interfaces.NO_VALUE and
+                value is not PLACEHOLDER):
+                # Step 1.2.1: If the widget knows about its context and the
+                #              context is to be used to extract a value, get
+                #              it now via a data manager.
+                if (interfaces.IContextAware.providedBy(self) and
+                    not self.ignoreContext):
+                    value = zope.component.getMultiAdapter(
+                        (self.context, self.field),
+                        interfaces.IDataManager).query()
+                # Step 1.2.2: If we still do not have a value, we can always use
+                #             the default value of the field, if set
+                # NOTE: It should check field.default is not missing_value, but
+                # that requires fixing zope.schema first
+                # We get a clone of the field with the context binded
+                field = self.field.bind(self.context)
+
+                # PATCHED:
+                # Only look for a default value if value is equal to missing_value
+                # AND the field is required. Otherwise the widget might ignore
+                # persisted, legitimate no-values for optional fields.
+                #
+                # (Or, as before the patch, if value is NO_VALUE - which
+                # usually means we're in an add form).
+                #
+                # Based on z3c.form = 3.2.11
+                if (field.required and value is field.missing_value) or value is interfaces.NO_VALUE:
+                    default_value = field.default
+                    if default_value is not None and self.showDefault:
+                        value = field.default
+                        lookForDefault = True
+
+            # Step 1.3: If we still have not found a value, then we try to get it
+            #           from an attribute value
+            if ((value is interfaces.NO_VALUE or lookForDefault)
+                and self.showDefault):
+                adapter = zope.component.queryMultiAdapter(
+                    (self.context, self.request, self.form, self.field, self),
+                    interfaces.IValue, name='default')
+                if adapter:
+                    value = adapter.get()
+            # Step 1.4: Convert the value to one that the widget can understand
+            if value not in (interfaces.NO_VALUE, PLACEHOLDER):
+                converter = interfaces.IDataConverter(self)
+                self.value = converter.toWidgetValue(value)
+            # Step 2: Update selected attributes
+            for attrName in self._adapterValueAttributes:
+                # only allow to set values for known attributes
+                if hasattr(self, attrName):
+                    value = zope.component.queryMultiAdapter(
+                        (self.context, self.request, self.form, self.field, self),
+                        interfaces.IValue, name=attrName)
+                    if value is not None:
+                        setattr(self, attrName, value.get())
+
+        from z3c.form import widget
+        locals()['__patch_refs__'] = False
+        original_update = widget.Widget.update
+        self.patch_refs(widget.Widget, 'update', update)
+
+
 class PatchDexterityDefaultAddForm(MonkeyPatch):
     """Patch DefaultAddForm:
 
