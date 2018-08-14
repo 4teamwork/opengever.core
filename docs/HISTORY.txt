@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Sharing views: Show userdetails also in an overlay. [phgross]
+- Fix sharing form for IE 11. [phgross]
 - Lock oder of avaialbe roles in sharing endpoint. [phgross]
 - Fix archival_file and public_trial checks on documents overview. [phgross]
 - Add placeful workflow policy for inbox-area. Let inbox users edit and checkout documents but not the inbox itself. [phgross]

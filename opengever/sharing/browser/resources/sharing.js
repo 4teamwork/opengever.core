@@ -62,7 +62,7 @@ var sharingApp = {
       entry.disabled = false;
     },
 
-    toggle_assignments: function (event, entry) {
+    toggle_assignments: function (entry) {
       if (!entry.assignments){
         var params = { _t: Date.now().toString()};
         var url = this.context_url + '/@role-assignments/' + entry.id;
@@ -96,9 +96,9 @@ var sharingApp = {
 
       this.requester.get(this.endpoint, { params: params }).then(function (response) {
 
-        this.entries = Object.values(this.entries).filter(i => i.disabled == false);
+        this.entries = this.entries.filter(function(i) { return !i.disabled; });
         this.entries = this.entries.concat(
-          response.data['entries'].filter(i => i.disabled != false));
+          response.data['entries'].filter(function(i) { return i.disabled != false; }));
         this.inherit = response.data['inherit'];
 
       }.bind(this));
@@ -107,7 +107,7 @@ var sharingApp = {
 
     save: function(event){
       payload = {
-        entries: Object.values(this.entries),
+        entries: this.entries,
         inherit: this.inherit };
 
       this.requester.post(this.endpoint, payload).then(function (response) {
