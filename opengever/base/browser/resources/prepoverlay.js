@@ -20,6 +20,10 @@ $(function() {
 
     var events = $(this).data('events');
 
+    if ($(this).parents('.overlay-ajax').length) {
+      $(this).parents('.overlay-ajax').overlay().close();
+    };
+
     if (!events || !events.click) {
       $(this).prepOverlay(config);
 

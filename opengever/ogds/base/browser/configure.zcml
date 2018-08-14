@@ -55,6 +55,14 @@
       />
 
   <browser:page
+      for="*"
+      name="user-details-plain"
+      class=".userdetails.UserDetails"
+      permission="zope2.View"
+      template="templates/userdetails_table.pt"
+      />
+
+  <browser:page
       for="opengever.ogds.base.interfaces.ITeam"
       name="view"
       class=".teamdetails.TeamDetails"
