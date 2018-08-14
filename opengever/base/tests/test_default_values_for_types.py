@@ -11,11 +11,18 @@ from hashlib import sha256
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import fake_interaction
 from plone import api
+from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.utils import createContentInContainer
 from plone.dexterity.utils import iterSchemataForType
 from plone.namedfile.file import NamedBlobFile
+from z3c.form.browser.checkbox import CheckBoxWidget
+from z3c.form.browser.checkbox import SingleCheckBoxWidget
+from z3c.form.interfaces import IDataConverter
+from z3c.form.interfaces import IGroupForm
 from zope.schema import getFieldsInOrder
+from zope.schema import List
 import json
 import textwrap
 
@@ -309,6 +316,11 @@ class TestDefaultsBase(IntegrationTestCase):
         defaults.update(self.requireds)
         return defaults
 
+    def get_obj_of_own_type(self):
+        """Return a fixture object of the subclass's portal_type.
+        """
+        raise NotImplementedError
+
     def get_field_names_for_type(self, portal_type):
         names = []
         for schema in iterSchemataForType(self.portal_type):
@@ -328,6 +340,19 @@ class TestDefaultsBase(IntegrationTestCase):
                 names.append(name)
         return names
 
+    def iter_widgets(self, form):
+        """Iterate over all widgets of a (Group)Form.
+        """
+        # XXX: Factor this out into opengever.base.formutils - we also
+        # need to do this kind of thing in production code a lot
+        for widget in form.widgets.values():
+            yield widget
+
+        if IGroupForm.providedBy(form):
+            for group in form.groups:
+                for widget in group.widgets.values():
+                    yield widget
+
     def test_type_defaults_cover_all_schema_fields(self):
         if self.portal_type is not None:
             actual = self.get_type_defaults().keys()
@@ -340,6 +365,76 @@ class TestDefaultsBase(IntegrationTestCase):
             expected = self.get_field_names_for_type(self.portal_type)
             self.assertEqual(set(expected), set(actual))
 
+    def test_widgets_render_missing_values(self):
+        """Test that gets run for each of the portal type specific subclasses,
+        and asserts that a rendered z3c.form widget correctly returns the
+        missing value if that's what's currently persisted on the object.
+        """
+        if self.portal_type is None:
+            # Don't attempt to run this test for the abstract base class
+            return
+
+        self.login(self.manager)
+
+        obj = self.get_obj_of_own_type()
+        form = DefaultEditForm(obj, self.request)
+
+        # Populate the form with fields according to the object's portal type
+        with fake_interaction():
+            # We need a fake IInteraction context because otherwise
+            # z3c.formwidget.query.widget fails with its checkPermission()
+            form.update()
+
+        for widget in self.iter_widgets(form):
+            field = widget.field
+
+            if field.required:
+                # Required fields shouldn't have missing values
+                return
+
+            if field.readonly:
+                return
+
+            # Determine what this field's missing value would be
+            missing_value = field.missing_value
+
+            # Manipulate fixture obj to have missing value for this field
+            field.set(field.interface(obj), missing_value)
+
+            # Update the widget to reflect that changed value on the obj
+            with fake_interaction():
+                widget.update()
+
+            # Use the widget to retrieve the value - but turn it into a
+            # field value using the field's DataConverter, in order to
+            # compare it to missing value.
+            dc = IDataConverter(widget)
+            field_value_from_widget = dc.toFieldValue(widget.value)
+
+            if isinstance(widget, SingleCheckBoxWidget):
+                # Boolean fields handled by SingleCheckBoxWidgets are funny:
+                # Their fields' missing value is None, which ends up
+                # as a widget.value of empty list [], which
+                # IDataConverter.toFieldValue() then turns into False.
+                #
+                # In other words, there isn't really a concept of missing
+                # values for booleans - MV will always end up being
+                # considered the same as False.
+                if field_value_from_widget is False:
+                    field_value_from_widget = None
+
+            if isinstance(field, List) and isinstance(widget, CheckBoxWidget):
+                # zope.schema.List is weird too - it gets rendered using
+                # a CheckBoxWidget.
+                missing_value = []
+
+            self.assertEqual(
+                missing_value, field_value_from_widget,
+                'Unexpectedly got %r instead of missing value %r '
+                'from widget %r (for an %r object) ' % (
+                    field_value_from_widget, missing_value,
+                    widget, obj.portal_type))
+
 
 class TestRepositoryRootDefaults(TestDefaultsBase):
     """Test our repository roots come with expected default values."""
@@ -350,6 +445,9 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
     type_defaults = REPOROOT_DEFAULTS
     form_defaults = REPOROOT_FORM_DEFAULTS
     missing_values = REPOROOT_MISSING_VALUES
+
+    def get_obj_of_own_type(self):
+        return self.repository_root
 
     def test_create_content_in_container(self):
         self.login(self.manager)
@@ -435,6 +533,9 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
     type_defaults = REPOFOLDER_DEFAULTS
     form_defaults = REPOFOLDER_FORM_DEFAULTS
     missing_values = REPOFOLDER_MISSING_VALUES
+
+    def get_obj_of_own_type(self):
+        return self.leaf_repofolder
 
     def test_create_content_in_container(self):
         self.login(self.administrator)
@@ -530,6 +631,9 @@ class TestDossierDefaults(TestDefaultsBase):
     missing_values = DOSSIER_MISSING_VALUES
 
     features = ('dossiertemplate', )
+
+    def get_obj_of_own_type(self):
+        return self.dossier
 
     def test_create_content_in_container(self):
         self.login(self.regular_user)
@@ -687,6 +791,9 @@ class TestDocumentDefaults(TestDefaultsBase):
             contentType='text/plain',
             filename=u'b\xe4rengraben.txt')
         return file_value
+
+    def get_obj_of_own_type(self):
+        return self.document
 
     def test_create_content_in_container(self):
         self.login(self.regular_user)
@@ -862,6 +969,9 @@ class TestMailDefaults(TestDefaultsBase):
             filename=u'msg.eml')
         return message_value
 
+    def get_obj_of_own_type(self):
+        return self.mail
+
     def test_create_content_in_container(self):
         self.login(self.regular_user)
 
@@ -980,6 +1090,9 @@ class TestTaskDefaults(TestDefaultsBase):
     form_defaults = TASK_FORM_DEFAULTS
     missing_values = TASK_MISSING_VALUES
 
+    def get_obj_of_own_type(self):
+        return self.task
+
     def test_create_content_in_container(self):
         self.login(self.regular_user)
 
@@ -1055,6 +1168,9 @@ class TestContactDefaults(TestDefaultsBase):
     type_defaults = CONTACT_DEFAULTS
     form_defaults = CONTACT_FORM_DEFAULTS
     missing_values = CONTACT_MISSING_VALUES
+
+    def get_obj_of_own_type(self):
+        return self.franz_meier
 
     def test_create_content_in_container(self):
         self.login(self.regular_user)
@@ -1149,6 +1265,9 @@ class TestProposalDefaults(TestDefaultsBase):
         self.login(self.meeting_user)
         self.dossier.title = u'Containing Dossier Title'
 
+    def get_obj_of_own_type(self):
+        return self.proposal
+
     def test_create_content_in_container(self):
         self.login(self.meeting_user)
 
@@ -1207,6 +1326,9 @@ class TestPrivateFolderDefaults(TestDefaultsBase):
     missing_values = PRIVATEFOLDER_MISSING_VALUES
 
     features = ('private',)
+
+    def get_obj_of_own_type(self):
+        return self.private_folder
 
     def test_private_folder_defaults(self):
         self.login(self.regular_user)

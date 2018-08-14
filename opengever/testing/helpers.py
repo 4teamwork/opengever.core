@@ -10,6 +10,8 @@ from Products.PloneLanguageTool.LanguageTool import LanguageBinding
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.intid.interfaces import IIntIds
+from zope.security.management import endInteraction
+from zope.security.management import newInteraction
 import pytz
 import transaction
 
@@ -124,3 +126,25 @@ def obj2paths(objs):
     """Returns a list of paths (string) for the given objects.
     """
     return ['/'.join(obj.getPhysicalPath()) for obj in objs]
+
+
+@contextmanager
+def fake_interaction():
+    """Context manager that temporarily sets up a fake IInteraction.
+
+    This may be needed in cases where no real request is being processed
+    (there's no actual publishing going on), but still a call to
+    checkPermission() is necessary.
+
+    That call would otherwise fail with zope.security.interfaces.NoInteraction.
+
+    Initially needed for standalone testing of z3c.forms, inspired by
+    from z3c/formwidget//query/README.txt.
+
+    For more details see zope.security.management and ZPublisher.Publish.
+    """
+    newInteraction()
+    try:
+        yield
+    finally:
+        endInteraction()
