@@ -68,4 +68,4 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.mail, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 28')
+        self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 29')

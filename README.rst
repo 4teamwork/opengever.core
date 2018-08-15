@@ -576,6 +576,7 @@ Objects
           - self.document
           - self.draft_proposal
           - self.draft_word_proposal
+          - self.empty_document
           - self.mail
           - self.mail_msg
           - self.proposal
