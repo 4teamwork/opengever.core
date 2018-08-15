@@ -148,6 +148,10 @@ ul.tabbedview-action-list {
 
 .function-edit, .function-edit-inactive {
   @include inline-cell-icon(pencil-alt);
+
+  &.oc-loading {
+    @include inline-cell-icon-spin(circle-notch);
+  }
 }
 
 .function-edit-metadata, .function-edit-metadata-inactive {
@@ -196,8 +200,4 @@ ul.tabbedview-action-list {
   &:before {
     color: $red;
   }
-}
-
-.oc-loading {
-  @include inline-cell-icon-spin(circle-notch);
 }
