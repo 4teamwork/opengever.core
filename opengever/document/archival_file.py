@@ -60,5 +60,5 @@ class ArchivalFileConverter(object):
         self.set_state(STATE_MANUALLY_PROVIDED)
 
     def get_file_name(self):
-        filename, ext = os.path.splitext(self.document.file.filename)
+        filename, ext = os.path.splitext(self.document.get_filename())
         return u'{}.pdf'.format(filename)

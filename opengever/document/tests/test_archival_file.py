@@ -57,7 +57,7 @@ class TestArchivalFile(FunctionalTestCase):
                           .with_dummy_content()
                           .having(archival_file_state=STATE_MANUALLY_PROVIDED))
 
-        ArchivalFileConverter(self.document).trigger_conversion()
+        ArchivalFileConverter(document).trigger_conversion()
 
         self.assertEquals(STATE_MANUALLY_PROVIDED,
                           IDocumentMetadata(document).archival_file_state)
