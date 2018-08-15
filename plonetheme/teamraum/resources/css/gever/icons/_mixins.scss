@@ -107,6 +107,7 @@ $size-mapping: (
 
 @mixin inline-cell-icon($icon-name) {
   &:before {
+    @extend .fas;
     @extend .fa-#{$icon-name};
     min-width: 15px;
   }
