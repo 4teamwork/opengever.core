@@ -5,6 +5,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
+from opengever.base.interfaces import IGeverUI
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
@@ -62,13 +63,15 @@ class GeverSettingsAdpaterV1(object):
     def get_features(self):
         features = OrderedDict()
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
-        features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)
+        features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
+        features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
+        features['gever_ui_path'] = api.portal.get_registry_record('path', interface=IGeverUI)
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IMeetingSettings)
         features['officeatwork'] = api.portal.get_registry_record('is_feature_enabled', interface=IOfficeatworkSettings)
@@ -82,7 +85,7 @@ class GeverSettingsAdpaterV1(object):
         features['repositoryfolder_documents_tab'] = api.portal.get_registry_record('show_documents_tab', interface=IRepositoryFolderRecords)  # noqa
         features['repositoryfolder_tasks_tab'] = api.portal.get_registry_record('show_tasks_tab', interface=IRepositoryFolderRecords)  # noqa
         features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
-        features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)
+        features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         return features

@@ -350,3 +350,16 @@ class IRecentlyTouchedSettings(Interface):
         description=u'How many entries to keep for a users recently touched '
                     u'items list.',
         default=10)
+
+
+class IGeverUI(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable new GEVER UI',
+        description=u'Whether new GEVER UI is enabled',
+        default=False)
+
+    path = schema.URI(
+        title=u"Base URL of the GEVER UI",
+        description=u"Used as base URL to reach an object on the GEVER UI",
+        default="http://localhost:8081/#/")

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-07-13 15:30+0000\n"
+"POT-Creation-Date: 2018-08-13 06:07+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -135,6 +135,7 @@ msgid "Meeting Dossier"
 msgstr "Dossier de réunion"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingtemplate.xml
+#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.meetingtemplate.xml
 msgid "Meeting Template"
 msgstr ""
 
@@ -152,6 +153,7 @@ msgid "My repository"
 msgstr "Mon référentiel"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
+#: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.paragraphtemplate.xml
 msgid "Paragraph Template"
 msgstr ""
 
@@ -231,6 +233,11 @@ msgstr "Soumettre des documents additionnels"
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"
 msgstr "Proposition soumise"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180809152739_add_gever_ui_action/actions.xml
+msgid "Switch to new UI"
+msgstr "Nouvelle interface graphique"
 
 #: ./opengever/core/profiles/default/types/opengever.task.task.xml
 msgid "Task"

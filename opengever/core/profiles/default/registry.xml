@@ -74,6 +74,9 @@
   <!-- ECH-0147 -->
   <records interface="opengever.ech0147.interfaces.IECH0147Settings" />
 
+  <!-- Gever-UI -->
+  <records interface="opengever.base.interfaces.IGeverUI" />
+
   <!-- LATEX -->
   <records interface="opengever.latex.interfaces.ILaTeXSettings" />
 

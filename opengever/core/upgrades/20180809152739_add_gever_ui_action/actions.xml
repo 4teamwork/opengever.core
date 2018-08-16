@@ -1,0 +1,19 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- OBJECT BUTTONS -->
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <object name="gever_ui" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Switch to new UI</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">python:path("object/get_setting/gever_ui_path") + object.virtual_url_path()</property>
+      <property name="icon_expr" />
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="available_expr">object/get_setting/gever_ui_enabled</property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+</object>
