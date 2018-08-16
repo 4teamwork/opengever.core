@@ -4,7 +4,7 @@
                         teams data/teams"
             i18n:domain="opengever.ogds.base">
 
-  <table class="vertical listing">
+  <table class="vertical listing user_details" >
     <tr>
       <th i18n:translate="label_fullname">Name</th>
       <td tal:content="user/label"></td>

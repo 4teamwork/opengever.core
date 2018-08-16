@@ -3570,8 +3570,9 @@ div.answerType:after { content: ' '; position: absolute; display: block; width: 
 
 /* @end */
 /* @group user and team detail */
-body.template-user-details #content .groups, body.template-user-details #content .teams { list-style-type: none; padding: 0; margin: 0; }
-body.template-user-details #content .group:before, body.template-user-details #content .team:before { font-family: 'opengever'; content: ""; display: inline-block; color: #bababa; text-decoration: underline; font-size: 16px; min-width: 22px; }
+body.template-user-details #content .groups, body.template-user-details #content .teams, .user_details .groups, .user_details .teams { list-style-type: none; padding: 0; margin: 0; }
+body.template-user-details #content .group:before, body.template-user-details #content .team:before, .user_details .group:before, .user_details .team:before { font-family: 'opengever'; content: ""; display: inline-block; color: #bababa; text-decoration: underline; font-size: 16px; min-width: 22px; }
+body.template-user-details #content li, .user_details li { display: list-item; }
 
 body.template-team-details #content .members { list-style-type: none; padding: 0; margin: 0; }
 

@@ -965,7 +965,8 @@ div.answerType:after {
 
 
 /* @group user and team detail */
-body.template-user-details #content{
+body.template-user-details #content,
+.user_details {
   .groups,
   .teams {
     list-style-type: none;
@@ -984,6 +985,11 @@ body.template-user-details #content{
       min-width: 22px;
     }
   }
+
+  li {
+    display: list-item;
+  }
+
 }
 
 body.template-team-details #content{
