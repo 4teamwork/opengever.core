@@ -59,10 +59,14 @@ class TestProposal(IntegrationTestCase):
     features = ('meeting',)
 
     @browsing
-    def test_create_proposal_visible_in_dossier_actions_for_regular_user(self, browser):
+    def test_create_proposal_visible_in_dossier_actions_for_regular_user_when_meeting_enabled(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='tabbedview_view-documents-proxy')
         self.assertEqual(browser.css('.tabbedview-menu-create_proposal').text, ['Create Proposal'])
+
+        self.deactivate_feature('meeting')
+        browser.open(self.dossier, view='tabbedview_view-documents-proxy')
+        self.assertEqual(browser.css('.tabbedview-menu-create_proposal').text, list())
 
     @browsing
     def test_creating_proposal_from_tabbedview_sets_attachments(self, browser):
