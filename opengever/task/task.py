@@ -175,8 +175,6 @@ class ITask(model.Schema):
         )
 
     dexteritytextindexer.searchable('text')
-    model.primary('text')
-
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
