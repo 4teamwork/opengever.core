@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - CSRF logging: Filter list of registered objects so only offending objects are logged in sentry [lgraf]
+- Fix bug where reactivate transition action is not visible for adminsitrators. [phgross]
 - Make sure widgets properly return persisted missing values for optional fields with default values [lgraf]
 - Mark tasks text field no longer as the primary field. [phgross]
 - Fix oc loading icon since fontawesome update. [Kevin Bieri]

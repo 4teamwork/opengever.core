@@ -238,4 +238,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="plone"
+      class=".ploneview.GeverPloneView"
+      permission="zope.Public"
+      allowed_interface="Products.CMFPlone.browser.interfaces.IPlone"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
