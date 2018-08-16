@@ -1,7 +1,8 @@
 <tal:define tal:define="data view/get_userdata;
                         user data/user;
                         groups data/groups;
-                        teams data/teams">
+                        teams data/teams"
+            i18n:domain="opengever.ogds.base">
 
   <table class="vertical listing">
     <tr>
