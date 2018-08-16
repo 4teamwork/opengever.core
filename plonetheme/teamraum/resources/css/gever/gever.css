@@ -4546,7 +4546,7 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .automatic { float: right; }
 #content .sharing-form .automatic:before { font-size: 16px; color: #969696; }
 #content .sharing-form .automatic.highlight:before { color: rgba(32, 92, 144, 0.8); }
-#content .sharing-form .assignments_info_button { float: right; }
+#content .sharing-form .assignments_info_button { float: right; cursor: pointer; }
 #content .sharing-form .assignments_info_button:hover { text-decoration: none; }
 #content .sharing-form .assignments_info_button:before { font-size: 16px; cursor: pointer; color: #969696; }
 #content .sharing-form .assignments_info_button.folded:before { color: #e6e6e6; }
