@@ -113,9 +113,10 @@ $size-mapping: (
 }
 
 @mixin inline-cell-icon-spin($icon-name) {
-  @extend .fa-#{$icon-name};
   &:before {
+    @extend .fas;
     @extend .fa-spin;
+    @extend .fa-#{$icon-name};
     margin-right: 4px;
     min-width: 0 !important;
   }
