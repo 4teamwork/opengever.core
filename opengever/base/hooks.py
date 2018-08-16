@@ -27,6 +27,19 @@ def create_models():
     model.Base.metadata.create_all(model.Session().bind, checkfirst=True)
 
 
+def configure_error_log(site):
+    error_log = getToolByName(site, 'error_log')
+    properties = error_log.getProperties()
+    if 'PreconditionFailed' in properties.get('ignored_exceptions', ()):
+        return
+
+    ignored = tuple(properties['ignored_exceptions'])
+    ignored += ('PreconditionFailed',)
+    properties['ignored_exceptions'] = ignored
+    error_log.setProperties(**properties)
+
+
 def installed(site):
     remove_standard_extedit_action(site)
     create_models()
+    configure_error_log(site)
