@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- Make sure widgets properly return persisted missing values for optional fields with default values [lgraf]
 - Fix oc loading icon since fontawesome update. [Kevin Bieri]
 - Fix inline-cell-icons since fontawesome update. [Kevin Bieri]
 - Fix response description for older rejected tasks. [phgross]
