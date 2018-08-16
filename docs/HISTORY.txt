@@ -7,6 +7,7 @@ Changelog
 
 - Fix oc loading icon since fontawesome update. [Kevin Bieri]
 - Fix inline-cell-icons since fontawesome update. [Kevin Bieri]
+- Fix response description for older rejected tasks. [phgross]
 - Sharing views: Show userdetails also in an overlay. [phgross]
 - Show assignments info button only on rows with automatic roles. [phgross]
 - Fix sharing form for IE 11. [phgross]

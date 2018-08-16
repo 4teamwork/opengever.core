@@ -76,8 +76,14 @@ class Reject(ResponseDescription):
     css_class = 'refuse'
 
     def msg(self):
+        if not self.response.get_change('responsible'):
+            return _('old_transition_msg_reject',
+                     default=u'Rejected by ${user}.',
+                     mapping=self._msg_mapping)
+
         return _('transition_msg_reject',
-                 u'Rejected by ${old_responsible}. Task assigned to responsible ${new_responsible}',
+                 u'Rejected by ${old_responsible}. Task assigned to '
+                 'responsible ${new_responsible}',
                  mapping=self._msg_mapping)
 
     def label(self):

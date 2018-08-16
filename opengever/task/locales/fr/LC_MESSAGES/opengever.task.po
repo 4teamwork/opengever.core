@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-06 15:59+0000\n"
+"POT-Creation-Date: 2018-08-15 08:06+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -668,6 +668,11 @@ msgstr "Mes tâches"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
 msgstr "Nouveau Dossier"
+
+#. Default: "Rejected by ${user}."
+#: ./opengever/task/response_description.py
+msgid "old_transition_msg_reject"
+msgstr "Refusé par ${user}."
 
 #. Default: "Progress:"
 #: ./opengever/task/viewlets/templates/responseview.pt

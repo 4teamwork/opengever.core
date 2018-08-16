@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
@@ -97,6 +98,30 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.assertEqual(
             u'Rejected by M\xfcller Hans (test_user_1_). Task assigned to responsible M\xfcller Hans (test_user_1_)',
             self.get_latest_answer(browser))
+
+    @browsing
+    def test_reject_response_for_older_tasks(self, browser):
+        """The responsible gets changed since the release 2018.4, before
+        rejecting a task was only a status change, so we need to test for
+        another message.
+        """
+
+        browser.login()
+
+        # Reject task
+        # (CSS class is .refuse even though the transition is named 'reject')
+        self.click_task_button(browser, 'refuse')
+
+        # Manually remove responsible change information from the response
+        # to fake an old task situation.
+        response = IResponseContainer(self.task)[-1]
+        response.changes = [
+            change for change in response.changes if change['id'] != 'responsible']
+        transaction.commit()
+
+        browser.reload()
+        self.assertEqual(u'Rejected by M\xfcller Hans (test_user_1_).',
+                         self.get_latest_answer(browser))
 
     @browsing
     def test_resolving_creates_response(self, browser):
