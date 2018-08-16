@@ -90,8 +90,8 @@ class OGProtectTransform(ProtectTransform):
         # If this happened, the _abort_txn_on_confirm_action_view() safeguard
         # above must have failed.
         redirect_url = self.request.form.get('original_url', '')
-        return (self._get_current_view() == '@@confirm-action' and
-                '@@confirm-action' in redirect_url)
+        return (self._get_current_view() == '@@confirm-action'
+                and '@@confirm-action' in redirect_url)
 
     def _check(self):
         should_log_csrf = bool(os.environ.get('CSRF_LOG_ENABLED', True))
