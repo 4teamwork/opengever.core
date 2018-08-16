@@ -8,6 +8,7 @@ from plone.portlets.constants import CONTEXT_ASSIGNMENT_KEY
 from plone.protect.auto import ProtectTransform
 from plone.protect.auto import safeWrite
 from plone.protect.interfaces import IDisableCSRFProtection
+from plone.protect.utils import SAFE_WRITE_KEY
 from pprint import pformat
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -138,7 +139,7 @@ class OGProtectTransform(ProtectTransform):
         - Object's repr, cropped
         """
         summary = []
-        for obj in self._registered_objects():
+        for obj in self._filtered_registered_objects():
             oid = hex(u64(getattr(obj, '_p_oid', '\x00' * 8)))
             klass = repr(getattr(obj, '__class__', None))
             obj_summary = repr(obj)[:100]
@@ -172,7 +173,7 @@ class OGProtectTransform(ProtectTransform):
         logged = False
         try:
             extra = {'referrer': self.request.get('HTTP_REFERER', ''),
-                     '_registered_objects': env['registered_objects_summary']}
+                     'filtered_registered_objects': env['registered_objects_summary']}
         except Exception as e:
             LOG.error('Error while preparing CSRF incident data for Sentry'
                       ' (%r)' % e)
@@ -184,6 +185,7 @@ class OGProtectTransform(ProtectTransform):
             url=env['url'],
             extra=extra,
             fingerprint=['{{ default }}', env['url']],
+            level='warning',
         )
 
         if logged:
@@ -230,6 +232,22 @@ class OGProtectTransform(ProtectTransform):
     def _registered_objects(self):
         self._global_unprotect()
         return super(OGProtectTransform, self)._registered_objects()
+
+    def _filtered_registered_objects(self):
+        # Get list of whitelisted (safe) oids
+        safe_oids = []
+        if SAFE_WRITE_KEY in getattr(self.request, 'environ', {}):
+            safe_oids = self.request.environ[SAFE_WRITE_KEY]
+
+        def is_not_safe(obj):
+            oid = getattr(obj, '_p_oid', None)
+            if oid is not None and oid in safe_oids:
+                return False
+            return True
+
+        # Filter objects to only the ones that aren't safe
+        filtered_objs = filter(is_not_safe, self._registered_objects())
+        return filtered_objs
 
     def _global_unprotect(self):
         # portal_memberdata._members cache will be written sometimes.

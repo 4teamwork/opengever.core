@@ -43,7 +43,7 @@ _marker = object()
 
 def log_msg_to_sentry(message, context=None, request=None, url=None,
                       data=None, extra=None, fingerprint=None,
-                      string_max_length=_marker):
+                      level='error', string_max_length=_marker):
     """A (hopefully) fail-safe function to log a message to Sentry.
 
     This is loosely based on ftw.raven's maybe_report_exception(), except that
@@ -87,6 +87,7 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
                 'extra': prepare_extra_infos(context, request),
                 'modules': prepare_modules_infos(),
                 'tags': get_default_tags(),
+                'level': level,
             }
 
             release = get_release()
