@@ -125,3 +125,20 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                         u'und-vereinbarungen/dossier-1/document-12',
                 u'reference_number': u'Client1 1.1 / 1 / 12',
             })
+
+    @browsing
+    def test_summary_with_filename_on_dossiers_containing_tasks(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.task.text = u'Sample description'
+
+        browser.open(self.dossier.absolute_url() +
+                     '?items.fl=filename,filesize',
+                     headers={'Accept': 'application/json'})
+
+        summary = browser.json['items'][1]
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
+             'vertrage-und-vereinbarungen/dossier-1/task-1',
+             u'filename': None,
+             u'filesize': 0}, summary)
