@@ -2,15 +2,10 @@ var sharingApp = {
   template: '#sharing-form',
   el: '#sharing-view-vue-app',
   data: {
-    userid: null,
     i18n: {},
-    context_url:null,
-    endpoint: null,
     available_roles: [],
     entries: [],
     inherit: null,
-    authtoken: null,
-    requester: null,
     principal_search: null,
     isEditable: false,
   },
@@ -24,7 +19,6 @@ var sharingApp = {
     this.portal_url = this.$el.attributes['data-portalurl'].value;
     this.endpoint = this.context_url + '/@sharing';
     this.i18n = JSON.parse(this.$el.attributes['data-i18n'].value);
-    this.authtoken = this.$el.attributes['data-authtoken'].value;
     this.isEditable = JSON.parse(this.$el.attributes['data-is-editable'].value);
 
     var requester = axios.create();
