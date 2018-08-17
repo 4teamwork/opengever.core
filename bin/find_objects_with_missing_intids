@@ -1,0 +1,31 @@
+#!/usr/bin/env python2.7
+from logging import getLogger
+from plone import api
+from zope.app.intid.interfaces import IIntIds
+
+
+def main(portal):
+    intid_util = api.portal.getUtility(IIntIds)
+    for brain in portal.portal_catalog.unrestrictedSearchResults():
+        object = brain.getObject()
+        if not intid_util.queryId(object):
+            path = '/'.join(object.getPhysicalPath())
+            portal_type = object.portal_type
+            created = str(object.created())
+            logger.error('IntId missing on %s of portal type %s created on %s', path, portal_type, created)
+    exit(0)
+
+
+if __name__ == '__main__':
+    logger = getLogger()
+    if 'app' in locals():
+        try:
+            portal = api.portal.get()
+            main(portal)
+        except api.exc.CannotGetPortalError:
+            logger.error('No site ID provided - launch with -O <portal_id>!')
+            exit(1)
+    logger.error('No Zope App found!')
+    exit(1)
+
+# EOF
