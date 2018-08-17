@@ -1,21 +1,16 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task.adapters import IResponseContainer
-from opengever.task.browser.modify_deadline import ModifyDeadlineFormView
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import login
-from plone.app.testing import TEST_USER_ID
+from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
 import datetime
 
 
-class TestDeadlineModificationForm(FunctionalTestCase):
+class TestDeadlineModificationForm(IntegrationTestCase):
 
     def setUp(self):
         super(TestDeadlineModificationForm, self).setUp()
@@ -29,43 +24,35 @@ class TestDeadlineModificationForm(FunctionalTestCase):
         ModifyDeadlineResponseSyncerReceiver._check_internal_request = self.org_check
 
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
-        url = ModifyDeadlineFormView.url_for(
-            task, transition='task-transition-modify-deadline')
-
-        browser.login().open(url)
+        browser.open(self.task)
+        browser.click_on('task-transition-modify-deadline')
         browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'),
                       'Response': text})
         browser.click_on('Save')
 
     @browsing
     def test_task_deadline_is_updated_when_set_to_a_valid_date(self, browser):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
-
+        self.login(self.dossier_responsible, browser=browser)
         new_deadline = datetime.date(2013, 10, 1)
 
-        url = ModifyDeadlineFormView.url_for(
-            task, transition='task-transition-modify-deadline')
-        browser.login().open(url)
-        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'), })
+        browser.open(self.task)
+        browser.click_on('task-transition-modify-deadline')
+        browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
-        self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(new_deadline, self.task.deadline)
         self.assertEquals(['Deadline successfully changed.'], info_messages())
 
     @browsing
     def test_raise_invalidation_error_when_new_deadline_is_the_current_one(self, browser):
-        current_deadline = datetime.date(2013, 1, 1)
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID, deadline=current_deadline))
+        self.login(self.dossier_responsible, browser=browser)
 
-        url = ModifyDeadlineFormView.url_for(task,
-            transition='task-transition-modify-deadline')
-        browser.login().open(url)
-        browser.fill({'New Deadline': current_deadline.strftime('%d.%m.%Y')})
+        browser.open(self.task)
+        browser.click_on('task-transition-modify-deadline')
+        browser.fill({'New Deadline': self.task.deadline.strftime('%d.%m.%Y')})
         browser.click_on('Save')
 
-        self.assertEquals('{}/@@modify_deadline'.format(task.absolute_url()),
+        self.assertEquals('{}/@@modify_deadline'.format(self.task.absolute_url()),
                           browser.url)
         self.assertEquals(
             ['The given deadline, is the current one.'],
@@ -73,124 +60,107 @@ class TestDeadlineModificationForm(FunctionalTestCase):
 
     @browsing
     def test_deadline_is_updated_also_in_globalindex(self, browser):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID, deadline=datetime.date(2013, 1, 1)))
+        self.login(self.dossier_responsible, browser=browser)
 
-        self._change_deadline(task, datetime.date(2013, 10, 1), '')
+        self._change_deadline(self.task, datetime.date(2013, 10, 1), '')
 
-        self.assertEquals(task.get_sql_object().deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(self.task.get_sql_object().deadline,
+                          datetime.date(2013, 10, 1))
 
     @browsing
     def test_according_response_is_created_when_modify_deadline(self, browser):
-        task = create(Builder('task')
-                      .having(issuer=TEST_USER_ID,
-                              deadline=datetime.date(2013, 1, 1)))
+        self.login(self.dossier_responsible, browser=browser)
 
-        self._change_deadline(task, datetime.date(2013, 10, 1), 'Lorem Ipsum')
-        container = IResponseContainer(task)
-        response = container[-1]
+        old_deadline = self.task.deadline
+
+        self._change_deadline(self.task, datetime.date(2013, 10, 1), 'Lorem Ipsum')
+        response = IResponseContainer(self.task)[-1]
 
         self.assertEquals('Lorem Ipsum', response.text)
-        self.assertEquals(TEST_USER_ID, response.creator)
+        self.assertEquals(self.dossier_responsible.id, response.creator)
         self.assertEquals(
             [{'after': datetime.date(2013, 10, 1),
               'id': 'deadline',
               'name': u'label_deadline',
-              'before': datetime.date(2013, 1, 1)}],
+              'before': old_deadline}],
             response.changes)
 
     @browsing
     def test_successor_is_also_updated_when_modify_predecessors_deadline(self, browser):
-        predecessor = create(Builder('task')
-                             .having(issuer=TEST_USER_ID,
-                                     deadline=datetime.date(2013, 1, 1)))
-        succesor = create(Builder('task')
-                          .having(issuer=TEST_USER_ID,
-                                  deadline=datetime.date(2013, 1, 1)))
+        self.login(self.dossier_responsible, browser=browser)
 
-        ISuccessorTaskController(succesor).set_predecessor(
+        # Make predecessor <-> successor pair
+        predecessor = self.task
+        successor = self.seq_subtask_1
+        ISuccessorTaskController(successor).set_predecessor(
             ISuccessorTaskController(predecessor).get_oguid())
 
         self._change_deadline(
             predecessor, datetime.date(2013, 10, 1), 'Lorem Ipsum')
 
-        self.assertEquals(succesor.deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))
 
 
-class TestDeadlineModifierController(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDeadlineModifierController, self).setUp()
-
-        create(Builder('user')
-               .having(firstname='Hugo', lastname='Boss')
-               .with_userid('hugo.boss'))
-
-        create(Builder('ogds_user')
-               .having(userid='hugo.boss'))
+class TestDeadlineModifierController(IntegrationTestCase):
 
     def test_modify_is_allowed_for_issuer_on_a_open_task(self):
-        task = create(Builder('task').having(issuer='hugo.boss'))
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-open', self.task)
 
-        login(self.portal, 'hugo.boss')
-        self.assertTrue(IDeadlineModifier(task).is_modify_allowed())
+        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
 
     def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
-        task = create(Builder('task')
-                      .having(issuer='hugo.boss', responsible=TEST_USER_ID)
-                      .in_progress())
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-in-progress', self.task)
 
-        login(self.portal, 'hugo.boss')
-        self.assertTrue(IDeadlineModifier(task).is_modify_allowed())
+        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
-        task = create(Builder('task')
-                      .having(issuer='inbox:org-unit-1', responsible=TEST_USER_ID)
-                      .in_progress())
+        self.login(self.secretariat_user)
+        self.set_workflow_state('task-state-in-progress', self.task)
 
-        modifier = IDeadlineModifier(task)
+        self.task.issuer = 'inbox:fa'
+        self.task.sync()
+
+        modifier = IDeadlineModifier(self.task)
         self.assertTrue(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
     def test_modify_is_allowed_for_admin_on_a_open_task_as_agency(self):
-        task = create(Builder('task')
-                      .having(issuer='hugo.boss'))
+        self.login(self.administrator)
 
-        self.grant('Administrator')
-        modifier = IDeadlineModifier(task)
+        self.set_workflow_state('task-state-open', self.task)
+
+        modifier = IDeadlineModifier(self.task)
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
     def test_modify_is_allowed_for_admin_on_a_in_progress_task_as_agency(self):
-        task = create(Builder('task')
-                      .having(issuer='hugo.boss')
-                      .in_progress())
+        self.login(self.administrator)
 
-        self.grant('Administrator')
-        modifier = IDeadlineModifier(task)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        modifier = IDeadlineModifier(self.task)
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
     def test_modify_is_allowed_for_issuing_org_unit_agency_member_as_agency(self):
-        task = create(Builder('task')
-                      .having(issuer=u'hugo.boss')
-                      .in_progress())
+        self.login(self.secretariat_user)
 
-        modifier = IDeadlineModifier(task)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        modifier = IDeadlineModifier(self.task)
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
 
-class TestDeadlineModifier(FunctionalTestCase):
+class TestDeadlineModifier(IntegrationTestCase):
 
     def test_raise_unauthorized_when_mofication_is_not_allowed(self):
-        task = create(Builder('task')
-                      .having(issuer='hugo.boss',
-                              deadline=datetime.date(2013, 1, 1))
-                      .in_state('task-state-resolved'))
+        self.login(self.regular_user)
 
         with self.assertRaises(Unauthorized):
-            IDeadlineModifier(task).modify_deadline(
+            IDeadlineModifier(self.task).modify_deadline(
                 datetime.date(2013, 10, 1),
                 'changed deadline',
                 'task-transition-modify-deadline')
