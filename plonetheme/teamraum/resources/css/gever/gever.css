@@ -3570,8 +3570,9 @@ div.answerType:after { content: ' '; position: absolute; display: block; width: 
 
 /* @end */
 /* @group user and team detail */
-body.template-user-details #content .groups, body.template-user-details #content .teams { list-style-type: none; padding: 0; margin: 0; }
-body.template-user-details #content .group:before, body.template-user-details #content .team:before { font-family: 'opengever'; content: ""; display: inline-block; color: #bababa; text-decoration: underline; font-size: 16px; min-width: 22px; }
+body.template-user-details #content .groups, body.template-user-details #content .teams, .user_details .groups, .user_details .teams { list-style-type: none; padding: 0; margin: 0; }
+body.template-user-details #content .group:before, body.template-user-details #content .team:before, .user_details .group:before, .user_details .team:before { font-family: 'opengever'; content: ""; display: inline-block; color: #bababa; text-decoration: underline; font-size: 16px; min-width: 22px; }
+body.template-user-details #content li, .user_details li { display: list-item; }
 
 body.template-team-details #content .members { list-style-type: none; padding: 0; margin: 0; }
 
@@ -4545,7 +4546,7 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .automatic { float: right; }
 #content .sharing-form .automatic:before { font-size: 16px; color: #969696; }
 #content .sharing-form .automatic.highlight:before { color: rgba(32, 92, 144, 0.8); }
-#content .sharing-form .assignments_info_button { float: right; }
+#content .sharing-form .assignments_info_button { float: right; cursor: pointer; }
 #content .sharing-form .assignments_info_button:hover { text-decoration: none; }
 #content .sharing-form .assignments_info_button:before { font-size: 16px; cursor: pointer; color: #969696; }
 #content .sharing-form .assignments_info_button.folded:before { color: #e6e6e6; }
