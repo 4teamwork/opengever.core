@@ -94,7 +94,7 @@ def get_task_type_title(task_type, language):
 
 
 def add_simple_response(task, text='', field_changes=None, added_object=None,
-                        successor_oguid=None, **kwargs):
+                        successor_oguid=None, supress_events=False, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
@@ -139,7 +139,8 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     container = opengever.task.adapters.IResponseContainer(task)
     container.add(response)
 
-    notify(ObjectModifiedEvent(task))
+    if not supress_events:
+        notify(ObjectModifiedEvent(task))
 
     TaskTransitionActivity(task, task.REQUEST, response).record()
     return response

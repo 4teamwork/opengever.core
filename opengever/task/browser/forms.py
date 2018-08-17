@@ -170,4 +170,4 @@ class TaskEditForm(DefaultEditForm):
                 (ITask['responsible'], data.get('responsible')),
                 (ITask['responsible_client'],
                  data.get('responsible_client')),),
-            transition=REASSIGN_TRANSITION)
+            transition=REASSIGN_TRANSITION, supress_events=True)

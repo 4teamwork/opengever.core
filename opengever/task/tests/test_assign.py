@@ -6,6 +6,10 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
+from opengever.testing.event_recorder import get_recorded_events
+from opengever.testing.event_recorder import register_event_recorder
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 class TestAssignTask(IntegrationTestCase):
@@ -117,6 +121,19 @@ class TestAssignTask(IntegrationTestCase):
             ['Team responsibles are only allowed if the task or forwarding is open.'],
             browser.css('.fieldErrorBox .error').text)
         self.assertEquals(self.regular_user.getId(), self.task.responsible)
+
+    @browsing
+    def test_modify_event_is_fired_but_only_once(self, browser):
+        register_event_recorder(IObjectModifiedEvent)
+
+        self.login(self.regular_user, browser=browser)
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        events = get_recorded_events()
+
+        self.assertEquals(1, len(events))
+        self.assertEqual(self.task, events[0].object)
 
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):

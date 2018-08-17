@@ -3,6 +3,9 @@ from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.model import Subscription
 from opengever.testing import IntegrationTestCase
+from opengever.testing.event_recorder import get_recorded_events
+from opengever.testing.event_recorder import register_event_recorder
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
 class TestTaskEditForm(IntegrationTestCase):
@@ -49,3 +52,19 @@ class TestTaskEditForm(IntegrationTestCase):
             [(u'robert.ziegler', u'task_issuer'),
              (u'jurgen.konig', u'task_responsible')],
             [(sub.watcher.actorid, sub.role) for sub in Subscription.query.all()])
+
+    @browsing
+    def test_modify_event_is_fired_but_only_once(self, browser):
+        register_event_recorder(IObjectModifiedEvent)
+
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-open', self.task)
+        browser.open(self.task, view='edit')
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        browser.find('Save').click()
+
+        events = get_recorded_events()
+        self.assertEquals(1, len(events))
+        self.assertEqual(self.task, events[0].object)

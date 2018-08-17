@@ -128,7 +128,8 @@ class AssignTaskForm(Form):
                 (ITask['responsible'], kwargs.get('responsible')),
                 (ITask['responsible_client'],
                  kwargs.get('responsible_client')),),
-            transition=kwargs.get('transition'))
+            transition=kwargs.get('transition'),
+            supress_events=True)
 
     def sync_remote_task(self, **kwargs):
         sync_task_response(self.context, self.request, 'workflow',
@@ -172,7 +173,8 @@ class RefuseForwardingView(BrowserView):
                 (ITask['responsible'], self.context.responsible),
                 (ITask['responsible_client'],
                  self.context.responsible_client),),
-            transition=u'forwarding-transition-refuse')
+            transition=u'forwarding-transition-refuse',
+            supress_events=True)
 
         notify(ObjectModifiedEvent(self.context))
 

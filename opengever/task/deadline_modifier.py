@@ -56,8 +56,8 @@ class DeadlineModifier(object):
             field_changes=(
                 (ITask['deadline'], new_deadline),
             ),
-            transition=transition
-        )
+            transition=transition,
+            supress_events=True)
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))

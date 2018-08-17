@@ -6,7 +6,10 @@ from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
+from opengever.testing.event_recorder import get_recorded_events
+from opengever.testing.event_recorder import register_event_recorder
 from zExceptions import Unauthorized
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import datetime
 
 
@@ -99,6 +102,19 @@ class TestDeadlineModificationForm(IntegrationTestCase):
             predecessor, datetime.date(2013, 10, 1), 'Lorem Ipsum')
 
         self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))
+
+    @browsing
+    def test_modify_event_is_fired_but_only_once(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        register_event_recorder(IObjectModifiedEvent)
+
+        self._change_deadline(self.task, datetime.date(2013, 10, 1), '')
+
+        events = get_recorded_events()
+
+        self.assertEquals(1, len(events))
+        self.assertEqual(self.task, events[0].object)
 
 
 class TestDeadlineModifierController(IntegrationTestCase):
