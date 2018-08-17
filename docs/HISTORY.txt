@@ -5,6 +5,7 @@ Changelog
 2018.4.0 (unreleased)
 ---------------------
 
+- CSRF logging: Filter list of registered objects so only offending objects are logged in sentry [lgraf]
 - Make sure widgets properly return persisted missing values for optional fields with default values [lgraf]
 - Mark tasks text field no longer as the primary field. [phgross]
 - Fix oc loading icon since fontawesome update. [Kevin Bieri]

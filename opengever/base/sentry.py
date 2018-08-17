@@ -29,7 +29,7 @@ def context_from_request(request):
     if context is None:
         try:
             context = request.get('PARENTS', [])[0]
-        except:
+        except:  # noqa
             pass
     return context
 
@@ -43,7 +43,7 @@ _marker = object()
 
 def log_msg_to_sentry(message, context=None, request=None, url=None,
                       data=None, extra=None, fingerprint=None,
-                      string_max_length=_marker):
+                      level='error', string_max_length=_marker):
     """A (hopefully) fail-safe function to log a message to Sentry.
 
     This is loosely based on ftw.raven's maybe_report_exception(), except that
@@ -87,6 +87,7 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
                 'extra': prepare_extra_infos(context, request),
                 'modules': prepare_modules_infos(),
                 'tags': get_default_tags(),
+                'level': level,
             }
 
             release = get_release()
@@ -96,7 +97,7 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
             if data is not None:
                 data_dict.update(data)
 
-        except:
+        except:  # noqa
             log.error('Error while preparing sentry data.')
             raise
 
@@ -114,17 +115,17 @@ def log_msg_to_sentry(message, context=None, request=None, url=None,
             with custom_string_max_length(client, string_max_length):
                 client.captureMessage(**kwargs)
 
-        except:
+        except:  # noqa
             log.error('Error while reporting to sentry.')
             raise
 
-    except:
+    except:  # noqa
         try:
             get_raven_client().captureException(
                 data={'extra': {
                     'raven_meta_error': 'Error occured while reporting'
                     ' another error.'}})
-        except:
+        except:  # noqa
             log.error(
                 'Failed to report error occured while reporting error.')
             return False
