@@ -64,7 +64,7 @@ class ForwardingRefuseForm(Form):
         add_simple_response(
             self.context,
             text=response_text,
-            transition=u'forwarding-transition-refuse')
+            transition=u'forwarding-transition-refuse', supress_events=True)
 
     def change_workflow_sate(self):
         wf_tool = getToolByName(self.context, 'portal_workflow')

@@ -33,9 +33,9 @@ class DeadlineModifier(object):
         if not include_agency:
             return checker.current_user.is_issuer
         else:
-            return (checker.current_user.is_issuer or
-                    checker.current_user.in_issuing_orgunits_inbox_group or
-                    checker.current_user.is_administrator)
+            return (checker.current_user.is_issuer
+                    or checker.current_user.in_issuing_orgunits_inbox_group
+                    or checker.current_user.is_administrator)
 
     def modify_deadline(self, new_deadline, text, transition):
         """Handles the whole deadline mofication process:
@@ -56,8 +56,8 @@ class DeadlineModifier(object):
             field_changes=(
                 (ITask['deadline'], new_deadline),
             ),
-            transition=transition
-        )
+            transition=transition,
+            supress_events=True)
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
