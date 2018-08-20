@@ -8,6 +8,7 @@ Changelog
 - Set adhoc agendaitem filename to title without prefixing it. [njohner]
 - Disallow dossier from template when adding businesscasedossier is disallowed. [njohner]
 - Change wording for "Return Excerpt" from "zurücksenden" to "ablegen". [njohner]
+- Add modification and creation date column to document listings. [njohner]
 
 
 2018.4.2 (2018-08-30)

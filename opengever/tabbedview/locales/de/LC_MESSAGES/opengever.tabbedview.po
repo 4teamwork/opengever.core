@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-03-22 12:19+0000\n"
+"POT-Creation-Date: 2018-08-20 16:51+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -201,6 +201,11 @@ msgstr "Aktiv"
 msgid "label_checked_out"
 msgstr "In Bearbeitung"
 
+#. Default: "Creation Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_created_date"
+msgstr "Erstelldatum"
+
 #. Default: "Delivery Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_delivery_date"
@@ -245,6 +250,11 @@ msgstr "Ende"
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "label_issuer"
 msgstr "Auftraggeber"
+
+#. Default: "Modification Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_modified_date"
+msgstr "Änderungsdatum"
 
 #. Default: "My notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py

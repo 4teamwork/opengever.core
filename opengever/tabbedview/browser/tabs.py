@@ -145,6 +145,16 @@ class Documents(BaseCatalogListingTab):
          'column_title': _('label_document_date', default="Document Date"),
          'transform': readable_date},
 
+        {'column': 'modified',
+         'column_title': _('label_modified_date', default="Modification Date"),
+         'hidden': True,
+         'transform': readable_date},
+
+        {'column': 'created',
+         'column_title': _('label_created_date', default="Creation Date"),
+         'hidden': True,
+         'transform': readable_date},
+
         {'column': 'receipt_date',
          'column_title': _('label_receipt_date', default="Receipt Date"),
          'transform': readable_date},
