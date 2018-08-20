@@ -30,19 +30,6 @@ def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
 
 
-def remove_subdossier_column(columns):
-    """Removes the subdossier column from list of columns and returns it back.
-    """
-
-    def _filterer(item):
-        if isinstance(item, dict) and \
-           item['column'] == 'containing_subdossier':
-            return False
-        return True
-
-    return filter(_filterer, columns)
-
-
 class PersonalOverview(TabbedView):
     """The personal overview view show all documents and dossier
     where the actual user is the responsible.
@@ -191,8 +178,6 @@ class MyDocuments(Documents):
         'export_documents',
     ]
     major_actions = []
-
-    columns = remove_subdossier_column(Documents.columns)
 
     @property
     def columns(self):
