@@ -560,4 +560,15 @@
       insert-after="++resource++opengever.base/Controller.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/dropdown.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
 </object>

@@ -1,0 +1,17 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      expression=""
+      enabled="True"
+      id="++resource++opengever.base/dropdown.js"
+      inline="False"
+      insert-after="++resource++opengever.base/Controller.js"
+      />
+
+  <javascript id="++theme++plonetheme.teamraum/js/dropdown.js"
+              remove="True"/>
+
+</object>
