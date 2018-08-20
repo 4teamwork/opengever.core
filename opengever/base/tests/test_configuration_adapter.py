@@ -35,6 +35,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('preview', False),
                 ('purge_trash', False),
                 ('repositoryfolder_documents_tab', True),
+                ('repositoryfolder_proposals_tab', True),
                 ('repositoryfolder_tasks_tab', True),
                 ('resolver_name', 'strict'),
                 ('sablon_date_format', u'%d.%m.%Y'),

@@ -84,6 +84,7 @@ class GeverSettingsAdpaterV1(object):
         features['preview'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverBumblebeeSettings)
         features['purge_trash'] = api.portal.get_registry_record('purge_trash_enabled', interface=IDossierResolveProperties)
         features['repositoryfolder_documents_tab'] = api.portal.get_registry_record('show_documents_tab', interface=IRepositoryFolderRecords)  # noqa
+        features['repositoryfolder_proposals_tab'] = api.portal.get_registry_record('show_proposals_tab', interface=IRepositoryFolderRecords)  # noqa
         features['repositoryfolder_tasks_tab'] = api.portal.get_registry_record('show_tasks_tab', interface=IRepositoryFolderRecords)  # noqa
         features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa

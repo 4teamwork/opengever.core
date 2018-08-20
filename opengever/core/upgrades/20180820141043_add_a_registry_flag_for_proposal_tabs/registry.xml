@@ -1,0 +1,5 @@
+<registry>
+  <!-- MEETING -->
+  <record interface="opengever.repository.interfaces.IRepositoryFolderRecords" field="show_proposals_tab">
+  </record>
+</registry>

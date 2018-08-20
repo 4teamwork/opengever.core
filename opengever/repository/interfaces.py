@@ -21,3 +21,7 @@ class IRepositoryFolderRecords(Interface):
 
     show_tasks_tab = schema.Bool(title=u'Show tasks tab on repository folder',
                                  default=True)
+
+    show_proposals_tab = schema.Bool(
+        title=u'Show proposals tab on repository folder',
+        default=True)
