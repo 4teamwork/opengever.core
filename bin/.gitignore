@@ -3,6 +3,8 @@
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
+!enable-lfs
+!find_objects_with_missing_intids
 !git-changed
 !git-changed-files
 !git-changed-py
@@ -17,4 +19,3 @@
 !sass-watcher
 !shellcheck
 !test-cached
-!enable-lfs
