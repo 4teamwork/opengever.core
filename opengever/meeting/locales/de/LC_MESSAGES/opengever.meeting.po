@@ -327,7 +327,7 @@ msgstr "Sitzung wieder öffnen"
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
-msgstr "Protokollauszug zurücksenden"
+msgstr "Protokollauszug ablegen"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -1179,12 +1179,12 @@ msgstr "Löschen"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_return_excerpt"
-msgstr "Protokollauszug zurücksenden"
+msgstr "Protokollauszug ablegen"
 
 #. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
-msgstr "An Antrag zurückgesendet."
+msgstr "In Dossier abgelegt."
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py
@@ -1600,7 +1600,7 @@ msgstr "Wieder eröffnen"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "return_excerpt"
-msgstr "Protokollauszug zurücksenden"
+msgstr "Protokollauszug ablegen"
 
 #. Default: "Revise"
 #: ./opengever/meeting/model/agendaitem.py

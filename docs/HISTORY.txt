@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Disallow dossier from template when adding businesscasedossier is disallowed. [njohner]
+- Change wording for "Return Excerpt" from "zurücksenden" to "ablegen". [njohner]
 
 
 2018.4.2 (2018-08-30)

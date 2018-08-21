@@ -329,7 +329,7 @@ msgstr "Rouvrir la réunion"
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
-msgstr "Renvoyer l'extrait du protocole"
+msgstr "Classer l'extrait de protocole"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -1181,12 +1181,12 @@ msgstr "Supprimer"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_return_excerpt"
-msgstr "Renvoyer l'extrait de protocole"
+msgstr "Classer l'extrait de protocole"
 
 #. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
-msgstr "Renvoyé à la demande."
+msgstr "Classé dans le dossier."
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py
@@ -1602,7 +1602,7 @@ msgstr "Réactiver"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "return_excerpt"
-msgstr "Renvoyer l'extrait de protocole"
+msgstr "Classer l'extrait de protocole"
 
 #. Default: "Revise"
 #: ./opengever/meeting/model/agendaitem.py
