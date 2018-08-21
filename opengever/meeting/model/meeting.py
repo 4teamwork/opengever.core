@@ -473,16 +473,12 @@ class Meeting(Base, SQLFormSupport):
             'opengever.document: Add document', meeting_dossier):
             raise MissingMeetingDossierPermissions
 
-        document_title = _(u'title_ad_hoc_document',
-                           default=u'Ad hoc agenda item ${title}',
-                           mapping={u'title': title})
-
         ad_hoc_document = CreateDocumentCommand(
             context=meeting_dossier,
             filename=ad_hoc_template.file.filename,
             data=ad_hoc_template.file.data,
             content_type=ad_hoc_template.file.contentType,
-            title=translate(document_title, context=getRequest())).execute()
+            title=title).execute()
         agenda_item = AgendaItem(
             title=title, description=description,
             document=ad_hoc_document, is_paragraph=False)

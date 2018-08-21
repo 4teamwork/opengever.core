@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-24 11:50+0000\n"
+"POT-Creation-Date: 2018-08-21 10:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -651,11 +651,6 @@ msgstr ""
 msgid "error_prosal_template_not_docx"
 msgstr ""
 
-#. Default: "Either a proposal template or a proposal document, but not both, is required."
-#: ./opengever/meeting/browser/proposalforms.py
-msgid "error_template_or_document_but_not_both_required_for_creation"
-msgstr ""
-
 #. Default: "Either a proposal template or a proposal document is required."
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "error_template_or_document_required_for_creation"
@@ -855,6 +850,7 @@ msgid "label_create_excerpt"
 msgstr ""
 
 #. Default: "Creator"
+#: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_creator"
 msgstr ""
@@ -1092,6 +1088,7 @@ msgid "label_member"
 msgstr ""
 
 #. Default: "Modified"
+#: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_modified"
 msgstr ""
@@ -1663,11 +1660,6 @@ msgstr ""
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
-msgstr ""
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
 msgstr ""
 
 #. Default: "Delete proposal"

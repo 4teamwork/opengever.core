@@ -56,7 +56,7 @@ class TestAdHocAgendaItem(IntegrationTestCase):
 
         document_link_html = item_data.get('document_link')
         self.assertIn(
-            u'Ad hoc agenda item R\xfccktritt',
+            u'R\xfccktritt',
             document_link_html)
         self.assertIn(
             ad_hoc_document.absolute_url() + '/tooltip',

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-24 11:50+0000\n"
+"POT-Creation-Date: 2018-08-21 10:45+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -652,11 +652,6 @@ msgstr "Nur .docx Dateien sind als Antragsdokumente erlaubt."
 msgid "error_prosal_template_not_docx"
 msgstr "Nur Word-Dateien (.docx) sind erlaubt."
 
-#. Default: "Either a proposal template or a proposal document, but not both, is required."
-#: ./opengever/meeting/browser/proposalforms.py
-msgid "error_template_or_document_but_not_both_required_for_creation"
-msgstr "Bitte wählen sie entweder eine Antragsvorlage oder ein Antragsdokument aus."
-
 #. Default: "Either a proposal template or a proposal document is required."
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "error_template_or_document_required_for_creation"
@@ -856,6 +851,7 @@ msgid "label_create_excerpt"
 msgstr "Protokollauszug generieren"
 
 #. Default: "Creator"
+#: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_creator"
 msgstr "Ersteller"
@@ -1093,6 +1089,7 @@ msgid "label_member"
 msgstr "Mitglied"
 
 #. Default: "Modified"
+#: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_modified"
 msgstr "Zuletzt bearbeitet"
@@ -1665,11 +1662,6 @@ msgstr "${count} Teilnehmende"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Traktandum erfolgreich hinzugefügt"
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
-msgstr "Traktandum ${title}"
 
 #. Default: "Delete proposal"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
