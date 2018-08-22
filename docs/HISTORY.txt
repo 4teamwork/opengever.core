@@ -5,8 +5,9 @@ Changelog
 2018.4.1 (unreleased)
 ---------------------
 
-- Extend meeting zip-export with sort_order and gever_id. [phgross]
+- Fix missing favorite-id on toggle-link if toggling favorite from repository-tree. [elioschmutz]
 - Fix broken favorites state if toggling state in the repository-tree. [elioschmutz]
+- Extend meeting zip-export with sort_order and gever_id. [phgross]
 
 
 2018.4.0 (2018-08-20)

@@ -3,8 +3,11 @@
   function FavoriteController() {
     Controller.call(this);
 
-    this.toggle_favorite_marker = function(target) {
+    this.toggle_favorite_marker = function(target, data, favoriteId) {
       target.toggleClass('is-favorite');
+      if (favoriteId) {
+        target.data('favorite-id', favoriteId);
+      }
     }
 
     this.toggle_favorite = function(target) {
