@@ -1,6 +1,5 @@
 from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
-import requests
 
 
 class TestListingEndpoint(IntegrationTestCase):
@@ -48,3 +47,37 @@ class TestListingEndpoint(IntegrationTestCase):
              u'filesize': self.document.file.size,
              u'filename': u'Vertraegsentwurf.docx'},
             browser.json['items'][-1])
+
+    @browsing
+    def test_batching(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=dossiers'
+        browser.open(
+            self.repository_root, view=view, headers={'Accept': 'application/json'})
+        all_dossiers = browser.json['items']
+
+        # batched no start point
+        view = '@listing?name=dossiers&rows=3'
+        browser.open(
+            self.repository_root, view=view, headers={'Accept': 'application/json'})
+        self.assertEquals(3, len(browser.json['items']))
+        self.assertEquals(all_dossiers[0:3], browser.json['items'])
+
+        # batched with start point
+        view = '@listing?name=dossiers&rows=6&start=4'
+        browser.open(
+            self.repository_root, view=view, headers={'Accept': 'application/json'})
+        self.assertEquals(2, len(browser.json['items']))
+        self.assertEquals(all_dossiers[4:6], browser.json['items'])
+
+    @browsing
+    def test_search_filter(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=documents&search=feedback&columns=title'
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+        self.assertEquals(
+            [self.taskdocument.absolute_url()],
+            [item['@id'] for item in browser.json['items']])
