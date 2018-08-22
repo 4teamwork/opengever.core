@@ -1,5 +1,7 @@
 from opengever.activity.model import NotificationDefault
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
+from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
+from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -85,6 +87,22 @@ DEFAULT_SETTINGS = [
      'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
     {'kind': 'proposal-additional-documents-submitted',
      'badge_notification_roles': [COMMITTEE_RESPONSIBLE_ROLE]},
+
+    {'kind': 'disposition-added',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+     'mail_notification_roles': [DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-appraise',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-archive',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-close',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-appraised-to-closed',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-dispose',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+    {'kind': 'disposition-transition-refuse',
+     'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
 ]
 
 

@@ -22,7 +22,7 @@ msgstr ""
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
 msgid "archivist"
-msgstr "archiviste"
+msgstr "Archiviste"
 
 #. Default: "Cancel"
 #: ./opengever/activity/browser/settings.py
@@ -63,6 +63,36 @@ msgstr "Responsable de commission"
 #: ./opengever/activity/browser/listing.py
 msgid "created"
 msgstr "Créé"
+
+#. Default: "Disposition added"
+#: ./opengever/activity/__init__.py
+msgid "disposition-added"
+msgstr "Offre ajoutée"
+
+#. Default: "Disposition appraised"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-appraise"
+msgstr "Evaluation finalisée"
+
+#. Default: "Disposition archived"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-archive"
+msgstr "Archivage confirmé"
+
+#. Default: "Disposition closed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-close"
+msgstr "Offre clôturée"
+
+#. Default: "Disposition disposed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-dispose"
+msgstr "Proposé pour archivage"
+
+#. Default: "Disposition refused"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-refuse"
+msgstr "Offre refusée"
 
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
@@ -123,6 +153,11 @@ msgstr "Résumé quotidien"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
 msgstr "Détails:"
+
+#. Default: "Dispositions"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dispositions"
+msgstr "Offres"
 
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py

@@ -25,7 +25,8 @@ class TestListSettings(IntegrationTestCase):
                    'task-transition-open-resolved',
                    'task-transition-rejected-open',
                    'task-transition-skipped-open',
-                   'task-transition-planned-skipped']
+                   'task-transition-planned-skipped',
+                   'disposition-transition-appraised-to-closed']
 
         self.assertItemsEqual(
             [item.get('kind') for item in activities],

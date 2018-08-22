@@ -26,6 +26,7 @@ Changelog
 - Fix activity queries for oracle backends. [phgross]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
+- Add Activity settings for Dispositions. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
 - Add feature to generate a task listing pdf when resolving a dossier. [njohner]
 - Set adhoc agendaitem filename to title without prefixing it. [njohner]
