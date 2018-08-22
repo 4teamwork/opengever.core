@@ -2,6 +2,7 @@ from Acquisition import aq_base
 from ftw import bumblebee
 from Missing import Value as MissingValue
 from opengever.base.browser.helper import get_css_class
+from opengever.base.helpers import display_name
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.document import Document
@@ -11,6 +12,7 @@ from plone.app.contentlisting.catalog import CatalogContentListingObject
 from plone.app.contentlisting.realobject import RealContentListingObject
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 
 
 class OpengeverCatalogContentListingObject(CatalogContentListingObject):
@@ -125,6 +127,16 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
         return self._render_simplelink()
 
+    def translated_review_state(self):
+        return translate(
+            self.review_state(), domain='plone', context=self.request)
+
+    def responsible_fullname(self):
+        return display_name(self._brain.responsible)
+
+    def checked_out_fullname(self):
+        return display_name(self._brain.checked_out)
+
     def _render_simplelink(self):
         self.context = self
         return self.simple_link_template(self, self.request)
@@ -147,3 +159,7 @@ class OpengeverRealContentListingObject(RealContentListingObject):
             return getattr(obj, name)
         else:
             raise AttributeError(name)
+
+    def translated_review_state(self):
+        return translate(
+            self.review_state(), domain='plone', context=self.request)

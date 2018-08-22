@@ -1,7 +1,6 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
-from opengever.base.helpers import display_name
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
@@ -13,7 +12,6 @@ from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
-from zope.i18n import translate
 
 
 class Listing(Service):
@@ -141,18 +139,6 @@ def create_list_item(item, fields):
     return data
 
 
-def responsible_name(obj):
-    return display_name(obj.responsible)
-
-
-def checked_out(obj):
-    return display_name(obj.checked_out)
-
-
-def translated_review_state(obj):
-    return translate(obj.review_state(), domain='plone', context=obj.request)
-
-
 def translated_title(obj):
     if ITranslatedTitleSupport.providedBy(obj):
         attr = 'title_{}'.format(get_preferred_language_code())
@@ -186,7 +172,7 @@ DEFAULT_SORT_INDEX = 'modified'
 # Mapping of field name -> (field accessor, sort index)
 FIELDS = {
     '@type': ('PortalType', 'portal_type'),
-    'checked_out': (checked_out, 'checked_out'),
+    'checked_out': ('checked_out_fullname', 'checked_out'),
     'containing_dossier': ('containing_dossier', 'containing_dossier'),
     'containing_subdossier': ('containing_subdossier', 'containing_subdossier'),  # noqa
     'created': ('created', 'created'),
@@ -201,8 +187,8 @@ FIELDS = {
     'receipt_date': ('receipt_date', 'receipt_date'),
     'reference': ('reference', 'reference'),
     'reference_number': ('reference', 'reference'),
-    'responsible': (responsible_name, 'responsible'),
-    'review_state': (translated_review_state, 'review_state'),
+    'responsible': ('responsible_fullname', 'responsible'),
+    'review_state': ('translated_review_state', 'review_state'),
     'sequence_number': ('sequence_number', 'sequence_number'),
     'start': ('start', 'start'),
     'thumbnail': ('get_preview_image_url', DEFAULT_SORT_INDEX),
