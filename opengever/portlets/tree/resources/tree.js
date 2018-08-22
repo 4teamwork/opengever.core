@@ -435,7 +435,7 @@ RepositoryFavorites = function(url, cache_param) {
                 $(this).addClass('bookmarked');
                 self.add($(this).data('uuid'));
               }
-              if ($(this).parent().hasClass('current')) {
+              if (self.on_repository() && $(this).parent().hasClass('current')) {
                   // Toggles the favorites-marker next to the title in the main
                   // content.
                   $('#mark-as-favorite').trigger('toggle-favorite-marker');
@@ -464,6 +464,10 @@ RepositoryFavorites = function(url, cache_param) {
         _data_cache = _data_cache.filter(function(data) { return data !== uuid })
         window.dispatchEvent(changedEvent);
       })
+    },
+
+    on_repository: function() {
+      return $('body.portaltype-opengever-repository-repositoryfolder').length > 0
     },
 
     init: function() {

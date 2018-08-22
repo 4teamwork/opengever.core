@@ -6,6 +6,8 @@ Changelog
 ---------------------
 
 - Extend meeting zip-export with sort_order and gever_id. [phgross]
+- Fix broken favorites state if toggling state in the repository-tree. [elioschmutz]
+
 
 2018.4.0 (2018-08-20)
 ---------------------
