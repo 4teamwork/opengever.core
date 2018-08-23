@@ -1297,6 +1297,10 @@ class OpengeverContentFixture(object):
             )
         for agenda_item in self.decided_meeting.agenda_items:
             agenda_item.close()
+            if agenda_item.has_proposal:
+                excerpt = agenda_item.generate_excerpt(agenda_item.get_title())
+                agenda_item.return_excerpt(excerpt)
+
         self.decided_meeting.close()
 
         closed_meeting_dossier = self.register(

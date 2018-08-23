@@ -930,7 +930,7 @@ class TestProposal(IntegrationTestCase):
         self.assertFalse(browser.reload().find(button_label))
 
         with self.login(self.committee_responsible):
-            agenda_item.decide()
+            self.decide_agendaitem_generate_and_return_excerpt(agenda_item, 'Excerpt')
             self.assertEquals('decided', self.submitted_word_proposal.get_state().title)
 
         self.assertEquals('decided', self.word_proposal.get_state().title)
@@ -944,10 +944,12 @@ class TestProposal(IntegrationTestCase):
         self.assertEquals(
             str(self.word_proposal.get_committee().load_model().committee_id),
             browser.find('Committee').value)
-        self.assertEquals(
-            [rel.to_path for rel in self.word_proposal.relatedItems],
-            [node.value for node
-             in browser.find('Attachments').css('input[type=checkbox]')])
+
+        expected_attachements = [rel.to_path for rel in self.word_proposal.relatedItems]
+        expected_attachements.append(self.word_proposal.get_excerpt().absolute_url_path())
+        self.assertItemsEqual(
+            expected_attachements,
+            [node.value for node in browser.find('Attachments').css('input[type=checkbox]')])
 
         self.assertIn(
             self.word_proposal.get_proposal_document().UID(),
@@ -974,7 +976,7 @@ class TestProposal(IntegrationTestCase):
              ['State', 'Pending'],
              ['Decision number', ''],
              ['Predecessor', u'\xc4nderungen am Personalreglement'],
-             ['Attachments', u'Vertr\xe4gsentwurf'],
+             ['Attachments', u'Excerpt Vertr\xe4gsentwurf'],
              ['Excerpt', '']],
             browser.css('table.listing').first.lists())
 
@@ -994,7 +996,7 @@ class TestProposal(IntegrationTestCase):
              ['Decision number', '2016 / 2'],
              ['Successors', u'\xc4nderungen am Personalreglement zur Nachpr\xfcfung'],
              ['Attachments', u'Vertr\xe4gsentwurf'],
-             ['Excerpt', '']],
+             ['Excerpt', 'Excerpt']],
             browser.css('table.listing').first.lists())
 
     @browsing

@@ -355,13 +355,12 @@ class AgendaItem(Base):
 
         self.meeting.hold()
 
-        if self.has_proposal:
-            self.proposal.decide(self)
-
         self.workflow.execute_transition(None, self, 'pending-decided')
 
     def reopen(self):
-        if self.has_proposal:
+        """If the excerpt has been sent back so that the proposal is
+        decided, we also have to reopen the proposal"""
+        if self.has_proposal and self.is_proposal_decided():
             self.proposal.reopen(self)
         self.workflow.execute_transition(None, self, 'decided-revision')
 
@@ -370,11 +369,18 @@ class AgendaItem(Base):
             return self.get_state() == self.STATE_DECIDED
         return False
 
+    def is_proposal_decided(self):
+        if not self.has_proposal:
+            return False
+        return self.proposal.is_decided()
+
     def revise(self):
+        """If the excerpt has been sent back so that the proposal is
+        decided, we also have to revise the proposal"""
         if not self.is_revise_possible():
             raise WrongAgendaItemState()
 
-        if self.has_proposal:
+        if self.has_proposal and self.is_proposal_decided():
             self.proposal.revise(self)
         self.workflow.execute_transition(None, self, 'revision-decided')
 
@@ -384,6 +390,7 @@ class AgendaItem(Base):
         return False
 
     def return_excerpt(self, document):
+        self.proposal.decide(self)
         self.proposal.return_excerpt(document)
 
     def generate_excerpt(self, title):
