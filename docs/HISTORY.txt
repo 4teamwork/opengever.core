@@ -2,10 +2,10 @@
 Changelog
 =========
 
-2018.4.3 (unreleased)
+2018.5.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Disallow dossier from template when adding businesscasedossier is disallowed. [njohner]
 
 
 2018.4.2 (2018-08-30)
