@@ -147,9 +147,6 @@ class CheckinCheckoutManager(object):
         if not self.is_checkin_allowed():
             raise Unauthorized
 
-        # update document_date to current date
-        self.context.document_date = date.today()
-
         # remember that we checked in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
@@ -307,10 +304,6 @@ class CheckinCheckoutManager(object):
             self.context.file = old_file_copy
         else:
             self.context.file = None
-
-        # update document_date to specific version creation date
-        ts = version.sys_metadata['timestamp']
-        self.context.document_date = datetime.fromtimestamp(ts).date()
 
         if create_version:
             # let's create a version
