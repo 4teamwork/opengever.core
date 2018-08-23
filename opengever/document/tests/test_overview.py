@@ -17,6 +17,26 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         '!officeconnector-checkout',
     )
 
+    @staticmethod
+    def get_metadata_value(browser, row_head):
+        metadata = browser.css('.documentMetadata tr')
+        index = [row.cells[0].text for row in metadata].index(row_head)
+        return metadata[index].cells[1].text
+
+    @browsing
+    def test_overview_displays_creation_date(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='tabbedview_view-overview')
+        self.assertEqual('Aug 31, 2016 03:07 PM',
+                         self.get_metadata_value(browser, "Created"))
+
+    @browsing
+    def test_overview_displays_modification_date(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='tabbedview_view-overview')
+        self.assertEqual('Aug 31, 2016 03:07 PM',
+                         self.get_metadata_value(browser, "Modified"))
+
     @browsing
     def test_overview_displays_related_documents_but_only_documents(self, browser):
         self.login(self.regular_user, browser)
@@ -411,6 +431,8 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Title',
             'Document Date',
             'File',
+            'Created',
+            'Modified',
             'Document Type',
             'Author',
             'creator',

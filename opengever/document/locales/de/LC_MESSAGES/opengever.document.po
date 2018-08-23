@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-10 12:09+0000\n"
+"POT-Creation-Date: 2018-08-23 09:19+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -94,10 +94,6 @@ msgstr "Diese Meldung nicht mehr anzeigen."
 msgid "Export selection"
 msgstr "Auswahl exportieren"
 
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "Logout"
-msgstr "GEVER verlassen"
-
 #: ./opengever/document/checkout/manager.py
 #: ./opengever/document/checkout/revert.py
 msgid "Reverted file to version ${version_id}."
@@ -141,11 +137,6 @@ msgstr "Sie sind nicht berechtigt, das Dokument ${title} zu bearbeiten."
 #: ./opengever/document/checkout/checkout.py
 msgid "You have not selected any documents."
 msgstr "Sie haben keine Dokumente ausgewählt."
-
-#. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "alert_not_checked_in_documents"
-msgstr "Sie haben noch ausgecheckte Dokumente. Wollen Sie OneGov GEVER wirklich verlassen?"
 
 #. Default: "Cancel"
 #: ./opengever/document/checkout/cancel.py
@@ -368,6 +359,11 @@ msgstr "Auschecken und Bearbeiten"
 msgid "label_comment"
 msgstr "Kommentar"
 
+#. Default: "Created"
+#: ./opengever/document/browser/overview.py
+msgid "label_created"
+msgstr "Erstellt"
+
 #. Default: "creator"
 #: ./opengever/document/browser/overview.py
 msgid "label_creator"
@@ -465,6 +461,11 @@ msgstr "Schlagwörter"
 #: ./opengever/document/browser/overview.py
 msgid "label_meeting"
 msgstr "Sitzung"
+
+#. Default: "Modified"
+#: ./opengever/document/browser/overview.py
+msgid "label_modified"
+msgstr "Zuletzt verändert"
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
@@ -592,11 +593,6 @@ msgstr "Keine Datei"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
 msgstr "Dieses Dokumentformat wird vom Office Connector nicht unterstützt und kann deshalb nicht direkt bearbeitet werden."
-
-#. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "overview_not_checked_in_documents"
-msgstr "Folgende Dokumente sind ausgecheckt:"
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt

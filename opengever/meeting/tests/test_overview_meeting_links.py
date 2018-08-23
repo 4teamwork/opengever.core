@@ -31,6 +31,8 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
             'Public trial statement',
             'Submitted with',
             'Proposal',
+            'Created',
+            'Modified',
         ])
 
         self.login(self.secretariat_user, browser)
@@ -77,6 +79,8 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
             'Submitted with',
             'Proposal',
             'Meeting',
+            'Created',
+            'Modified',
         ])
         with self.login(self.committee_responsible, browser):
             self.word_proposal.load_model().schedule(self.meeting.model)
