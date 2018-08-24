@@ -127,6 +127,9 @@ class GlobalTaskListingTab(BaseListingTab):
 
         )
 
+    def get_base_query(self):
+        raise NotImplementedError()
+
 
 @implementer(ITableSource)
 @adapter(IGlobalTaskTableSourceConfig, Interface)
