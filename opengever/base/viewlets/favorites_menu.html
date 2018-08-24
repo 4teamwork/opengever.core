@@ -1,31 +1,31 @@
 <script type="text/x-template" id="favorites-menu-list">
 
-    <div class="favorites-menu">
-        <dl>
-            <dt>
-                <a class="header-dropdown-button" :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
-            </dt>
-            <dd v-show="isOpen">
-                <ul>
-                  <li v-for="entry in entries" :key="entry.position">
-                    <span>
-                      <a :class="entry.icon_class" :href="entry.target_url">
-                        {{entry.title}}
-                      </a>
-                    </span>
-                  </li>
+  <div class="favorites-menu">
+    <dl>
+      <dt>
+        <a class="header-dropdown-button" :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
+      </dt>
+      <dd v-show="isOpen">
+        <ul>
+          <li v-for="entry in entries" :key="entry.position">
+            <span>
+              <a :class="entry.icon_class" :href="entry.target_url">
+                {{entry.title}}
+              </a>
+            </span>
+          </li>
 
-                  <li v-show="entries.length == 0">
-                    <span>{{i18n.label_no_favorites}}</span>
-                  </li>
+          <li v-show="entries.length == 0">
+            <span>{{i18n.label_no_favorites}}</span>
+          </li>
 
-                </ul>
-                <div class="overview">
-                  <a :href="overviewurl">{{i18n.label_overview}}</a>
-                </div>
-            </dd>
-        </dl>
+        </ul>
+        <div class="overview">
+          <a :href="overviewurl">{{i18n.label_overview}}</a>
+        </div>
+      </dd>
+    </dl>
 
-    </div>
+  </div>
 
 </script>
