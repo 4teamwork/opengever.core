@@ -1,3 +1,77 @@
+.dropdown-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  > li {
+    // Override unnecessary inline style from plone
+    display: list-item !important;
+
+    &:last-child > .dropdown-list-item {
+      border-bottom: 0;
+    }
+  }
+
+  + .dropdown-list-footer {
+    border-top: 2px solid $gray-dark;
+    > .dropdown-list-item {
+      padding: 10px 8px !important;
+      justify-content: center;
+      border: 0;
+    }
+  }
+}
+
+.dropdown-list-divider {
+  display: block;
+  border-style: solid;
+  border-bottom-width: 1px;
+  border-top-width: 0;
+  border-color: $gray-dark;
+}
+
+.dropdown-list-header {
+  text-transform: uppercase;
+  display: block;
+  color: $discreet;
+  padding: 10px 8px 6px 8px;
+  font-size: 11px;
+}
+
+.dropdown-list-item-content {
+  white-space: nowrap;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-list-item-icon {
+  min-width: 26px;
+}
+
+.dropdown-list-item-suffix {
+  font-size: 11px;
+  color: $discreet;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.dropdown-list-item {
+  // Override icon padding
+  padding: 6px 8px !important;
+  display: flex !important;
+  justify-content: space-between;
+  border-bottom: 1px solid $gray-dark;
+
+  &:link:hover {
+    // Override icon text-decoration
+    text-decoration: none !important;
+    background-color: $gray-dark;
+  }
+}
+
 #opengever_meeting_meeting, #opengever_meeting_protocol, .template-add-membership {
   .list-group {
     @include list(plain);
