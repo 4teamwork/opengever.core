@@ -226,19 +226,13 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         return SimpleTerm(value, token, title)
 
     def getTermByToken(self, token):
-        """ Should raise LookupError if term could not be found.
+        """Should raise LookupError if term could not be found.
         Check zope.schema.interfaces.IVocabularyTokenized
         """
         orgunit_id, userid = (None, None)
 
         if not token:
             raise LookupError('A token "unit_id:userid" is required.')
-
-        try:
-            orgunit_id, userid = token.split(':', 1)
-        except ValueError:
-            raise LookupError('A token "unit_id:userid" is required.')
-
         try:
             value = token
             return self.getTerm(value)
