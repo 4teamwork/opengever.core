@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.testing import IntegrationTestCase
+from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 
 
 class TestTaskListing(IntegrationTestCase):
@@ -82,3 +83,8 @@ class TestTaskListing(IntegrationTestCase):
             'http://nohost/plone/@@user-details/robert.ziegler',
             link.get('href'))
         self.assertEquals('actor-label actor-user', link.get('class'))
+
+    def test_cannot_group_tasks_by_checkbox_column(self):
+        expected_column = {'groupable': False}
+        checkbox_column = GlobalTaskListingTab.columns[0]
+        self.assertDictContainsSubset(expected_column, checkbox_column)

@@ -75,6 +75,7 @@ class GlobalTaskListingTab(BaseListingTab):
     columns = (
         {'column': '',
          'sortable': False,
+         'groupable': False,
          'transform': task_id_checkbox_helper,
          'width': 30},
 
