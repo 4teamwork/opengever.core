@@ -99,8 +99,6 @@ class TaskAddForm(DefaultAddForm):
         notify(ObjectCreatedEvent(task))
         task_form.add(task)
 
-        activity = TaskAddedActivity(task, self.request, self.context)
-        activity.record()
         return task
 
     def _set_immediate_view(self, created):

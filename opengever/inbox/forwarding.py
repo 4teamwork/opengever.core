@@ -3,7 +3,6 @@ from Acquisition import aq_parent
 from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.inbox import _
-from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
@@ -174,15 +173,7 @@ class ForwardingAddForm(add.DefaultAddForm):
     def createAndAdd(self, data):
         update_reponsible_field_data(data)
 
-        forwarding = super(ForwardingAddForm, self).createAndAdd(data=data)
-
-        ForwardingAddedActivity(
-            forwarding,
-            self.request,
-            self.context,
-            ).record()
-
-        return forwarding
+        return super(ForwardingAddForm, self).createAndAdd(data=data)
 
 
 class ForwardingAddView(add.DefaultAddView):

@@ -7,6 +7,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
 from opengever.testing import FunctionalTestCase
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy import desc
 
 
 class TestAssingForwarding(FunctionalTestCase):
@@ -83,9 +84,9 @@ class TestAssingForwarding(FunctionalTestCase):
         self.assertEquals('inbox:org-unit-2',
                           self.forwarding.get_sql_object().responsible)
 
-        self.assertEquals(1, len(Activity.query.all()))
-        self.assertEquals('forwarding-transition-reassign-refused',
-                          Activity.query.all()[0].kind)
+        self.assertEquals(
+            'forwarding-transition-reassign-refused',
+            Activity.query.order_by(desc(Activity.id)).first().kind)
 
     def assign_forwarding(self, new_client, response, browser=default_browser):
         browser.login().open(self.forwarding)
