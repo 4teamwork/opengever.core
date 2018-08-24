@@ -169,9 +169,11 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertEquals({
             'agenda_items': [{
                 'opengever_id': 2,
+                'sort_order': 1,
                 'title': u'A Gesch\xfcfte',
             }, {
                 'number': '1.',
+                'sort_order': 2,
                 'opengever_id': 3,
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
@@ -187,6 +189,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     'title': u'Vertr\xe4gsentwurf',
                 }],
                 'number': '2.',
+                'sort_order': 3,
                 'opengever_id': 4,
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
@@ -237,13 +240,15 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assert_json_structure_equal({
             'meetings': [
                 {'agenda_items': [
-                    {'title': u'A Gesch\xfcfte'},
+                    {'sort_order': 1,
+                     'title': u'A Gesch\xfcfte'},
                     {'number': '1.',
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                          'file': '1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.docx',
-                         'modified': '2017-12-12T23:00:00+01:00'
+                         'modified': '2017-12-12T23:00:00+01:00',
                      },
+                     'sort_order': 2,
                      'title': u'Ad-hoc Traktand\xfem'},
                     {'attachments': [{
                         'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
@@ -251,6 +256,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                         'modified': '2016-08-31T15:31:46+02:00',
                         'title': u'Vertr\xe4gsentwurf'}],
                      'number': '2.',
+                     'sort_order': 3,
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                          'file': '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
