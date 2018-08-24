@@ -232,7 +232,9 @@ class AgendaItem(Base):
 
     def get_data_for_zip_export(self):
         agenda_item_data = {
+            'opengever_id': self.agenda_item_id,
             'title': safe_unicode(self.get_title()),
+            'sort_order': self.sort_order,
         }
 
         if self.has_document:
