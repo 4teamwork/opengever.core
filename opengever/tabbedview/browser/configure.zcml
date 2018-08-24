@@ -93,6 +93,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="tabbedview_view-proposals"
+      class="opengever.meeting.browser.documents.proposalstab.ProposalListingTab"
+      permission="zope2.View"
+      />
+
   <!-- contactfolder tabs -->
   <browser:page
       for="*"

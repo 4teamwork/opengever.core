@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
+from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import tabbedview
+from plone import api
 
 
 class TestRepositoryFolderTabs(IntegrationTestCase):
@@ -181,3 +183,65 @@ class TestRepositoryFolderTasksTab(IntegrationTestCase):
             expected_column_data,
             tabbedview.row_for(self.task).dict(),
             )
+
+
+class TestRepositoryFolderProposalsTabWithoutMeeting(IntegrationTestCase):
+
+    @browsing
+    def test_not_visible(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+
+class TestRepositoryFolderProposalsTabDisabled(IntegrationTestCase):
+
+    features = (
+        'meeting',
+        )
+
+    @browsing
+    def test_not_visible(self, browser):
+        api.portal.set_registry_record('show_proposals_tab', False, IRepositoryFolderRecords)
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+
+class TestRepositoryFolderProposalsTabWithMeeting(IntegrationTestCase):
+
+    features = (
+        'meeting',
+        )
+
+    @browsing
+    def test_visible(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info', 'Proposals']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+    @browsing
+    def test_visible_actions(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        tabbedview.open('Proposals')
+        self.assertEquals([], tabbedview.minor_actions().text)
+        self.assertEquals([], tabbedview.major_actions().text)
+
+    @browsing
+    def test_columns(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        tabbedview.open('Proposals')
+        # XXX - Should eventually figure out how to amend the columns helper for this
+        expected_rows = [
+            ['Decision number', 'Title', 'Description', 'State', 'Comittee', 'Meeting', 'Date of submission', 'Issuer'],
+            ['', u'Vertr\xe4ge', u'F\xfcr weitere Bearbeitung bewilligen', 'Submitted', 'Submitted', u'Rechnungspr\xfcfungskommission', '', '31.08.2016', 'Ziegler Robert (robert.ziegler)'],  # noqa
+            ['', u'Antrag f\xfcr Kreiselbau', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
+            ['', u'\xc4nderungen am Personalreglement', '', 'Submitted', 'Submitted', u'Rechnungspr\xfcfungskommission', '', '31.08.2016', 'Ziegler Robert (robert.ziegler)'],  # noqa
+            ['', u'\xdcberarbeitung der GAV', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
+            ]
+        self.assertEqual(expected_rows, [row.css('td,span').text for row in browser.css('.listing tr')])

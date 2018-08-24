@@ -1,3 +1,4 @@
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.tabbedview import GeverTabbedView
@@ -104,11 +105,25 @@ class RepositoryFolderTabbedView(GeverTabbedView):
                 }
         return None
 
+    @property
+    def proposals_tab(self):
+        meeting_settings = getUtility(IRegistry).forInterface(IMeetingSettings)
+        meeting_enabled = getattr(meeting_settings, 'is_feature_enabled', False)
+        repository_settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
+        proposals_tab_enabled = getattr(repository_settings, 'show_proposals_tab', False)
+        if meeting_enabled and proposals_tab_enabled:
+            return {
+                'id': 'proposals',
+                'title': _(u'label_proposals', default=u'Proposals'),
+                }
+        return None
+
     def _get_tabs(self):
         return filter(None, [
             self.dossiers_tab,
             self.documents_tab,
             self.tasks_tab,
             self.info_tab,
+            self.proposals_tab,
             self.blocked_local_roles_tab,
         ])

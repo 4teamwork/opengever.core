@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-04 11:35+0000\n"
+"POT-Creation-Date: 2018-09-06 13:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,6 +173,11 @@ msgstr ""
 #. Default: "Overview"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_overview"
+msgstr ""
+
+#. Default: "Proposals"
+#: ./opengever/repository/browser/tabbed.py
+msgid "label_proposals"
 msgstr ""
 
 #. Default: "Reference Prefix"
