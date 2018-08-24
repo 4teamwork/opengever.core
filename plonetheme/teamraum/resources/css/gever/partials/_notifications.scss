@@ -1,3 +1,9 @@
+#notifications-menu-toggler {
+  &:before {
+    @extend .fa-bell;
+  }
+}
+
 .notifications-settings-form {
 
   .actions-column {
