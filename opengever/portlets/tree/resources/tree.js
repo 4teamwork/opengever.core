@@ -428,19 +428,19 @@ RepositoryFavorites = function(url, cache_param) {
             data('uuid', node['uid']).
             click(function(event) {
               event.preventDefault();
-              if($(this).hasClass('bookmarked')) {
-                $(this).removeClass('bookmarked');
-                self.remove($(this).data('uuid'));
+              element = $(this);
+              if(element.hasClass('bookmarked')) {
+                element.removeClass('bookmarked');
+                self.remove(element.data('uuid')).then(function() {
+                  self.toggleMainContentFavoritesMarker(element)
+                });
               } else {
-                $(this).addClass('bookmarked');
-                self.add($(this).data('uuid'));
+                element.addClass('bookmarked');
+                self.add(element.data('uuid')).then(function(data) {
+                  self.toggleMainContentFavoritesMarker(element, data.favorite_id)
+                });
               }
-              if ($(this).parent().hasClass('current')) {
-                  // Toggles the favorites-marker next to the title in the main
-                  // content.
-                  $('#mark-as-favorite').trigger('toggle-favorite-marker');
-              }
-              annotate_link_title($(this));
+              annotate_link_title(element);
             });
         self.favorites().then(function(favorites) {
           if($.inArray(node['uid'], favorites) > -1) {
@@ -453,17 +453,30 @@ RepositoryFavorites = function(url, cache_param) {
     load: load_favorites,
 
     add: function(uuid) {
-      return api.post('', {uuid: uuid}).then(function() {
+      return api.post('', {uuid: uuid}).then(function(response) {
         _data_cache.push(uuid);
         window.dispatchEvent(changedEvent);
+        return response.data
       })
     },
 
     remove: function(uuid) {
-      api.delete(uuid).then(function() {
+      return api.delete(uuid).then(function() {
         _data_cache = _data_cache.filter(function(data) { return data !== uuid })
         window.dispatchEvent(changedEvent);
       })
+    },
+
+    toggleMainContentFavoritesMarker: function(element, favoriteId) {
+      // Toggles the favorites-marker next to the title in the main
+      // content.
+      if (self.on_repository() && element.parent().hasClass('current')) {
+        $('#mark-as-favorite').trigger('toggle-favorite-marker', favoriteId);
+      }
+    },
+
+    on_repository: function() {
+      return $('body.portaltype-opengever-repository-repositoryfolder').length > 0
     },
 
     init: function() {

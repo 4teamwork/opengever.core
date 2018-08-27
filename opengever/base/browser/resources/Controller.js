@@ -284,10 +284,10 @@
       });
     };
 
-    this.trackEvent = function(event, callback, options) {
+    this.trackEvent = function(event, callback, options, payload) {
       var target = $(event.currentTarget);
       var request = $.Deferred();
-      var actionRequest = $.when(callback.call(self, target, event));
+      var actionRequest = $.when(callback.call(self, target, event, payload));
 
       if(options.prevent) { event.preventDefault(); }
 
@@ -316,8 +316,8 @@
         prevent: true
       }, action.options);
 
-      options.context.on(action.method, action.target, function(event) {
-        self.trackEvent(event, action.callback, action.options);
+      options.context.on(action.method, action.target, function(event, payload) {
+        self.trackEvent(event, action.callback, action.options, payload);
       });
     };
 
