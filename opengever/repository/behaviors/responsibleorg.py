@@ -1,8 +1,9 @@
-from opengever.ogds.models import UNIT_ID_LENGTH
+from ftw.keywordwidget.field import ChoicePlus
+from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.repository import _
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
-from zope import schema
 from zope.interface import alsoProvides
 
 
@@ -14,12 +15,10 @@ class IResponsibleOrgUnit(model.Schema):
         fields=['responsible_org_unit'],
         )
 
-    responsible_org_unit = schema.TextLine(
-        title=_(
-            u'responsible_org_unit',
-            default=u'Responsible organisation unit'),
-        description=u'',
-        max_length=UNIT_ID_LENGTH,
+    form.widget('responsible_org_unit', KeywordFieldWidget, new_terms_as_unicode=True)
+    responsible_org_unit = ChoicePlus(
+        title=_(u'responsible_org_unit', default=u'Responsible organisation unit'),
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=False,
         )
 
