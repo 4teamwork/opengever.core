@@ -36,6 +36,17 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
+    def test_available_roles_on_commiteecontainer(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.committee_container, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'MeetingUser', u'CommitteeAdministrator'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
     def test_consider_the_ignore_permissions_flag(self, browser):
         self.login(self.regular_user, browser=browser)
 

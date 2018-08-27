@@ -36,7 +36,12 @@ import re
 
 
 ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
-               'Publisher', 'DossierManager']
+               'Publisher', 'DossierManager',
+               'MeetingUser', 'CommitteeAdministrator',
+               'CommitteeResponsible', 'CommitteeMember', 'WorkspaceAdmin',
+               'WorkspaceOwner', 'WorkspacesCreator',
+               'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
+
 
 ROLE_MAPPING = (
     (IDossier, (
