@@ -2,43 +2,44 @@
 
   <h5 class="hiddenStructure" i18n:translate="heading_notifications">Notifications</h5>
 
-  <dl class="notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
-      tal:attributes="data-read-url view/read_url;
-                      data-list-url view/list_url"
-      tal:define="num_unread view/num_unread">
+  <dl class="dropdown-menu notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
+  tal:attributes="data-read-url view/read_url;
+  data-list-url view/list_url"
+  tal:define="num_unread view/num_unread">
 
-    <dt class="notificationsMenuHeader">
-
-      <a class="header-dropdown-button" id="notifications-menu-toggler" tal:attributes="href string:#"></a>
-
-      <div class="visualClear"></div>
-
-      <span tal:condition="python: num_unread > 0"
-            tal:content="num_unread" class="unread_number"></span>
-
+    <dt class="dropdown-menu-header notificationsMenuHeader">
+      <a class="dropdown-menu-header-button" id="notifications-menu-toggler" tal:attributes="href string:#"></a>
+      <span tal:condition="python: num_unread > 0" tal:content="num_unread" class="dropdown-menu-header-badge danger unread_number"></span>
     </dt>
 
-    <dd id="notificationsContent" class="actionMenuContent notificationsMenuContent">
-      <ul class="notifications">
+    <dd id="notificationsContent" class="dropdown-menu-content notificationsMenuContent">
+      <ul class="dropdown-list notifications">
         <script id="notificationTemplate" type="text/x-handlebars-template">
+          {{#if notifications}}
             {{#each notifications}}
-              <li class="notification-item {{#unless read}}new{{/unless}}">
-                <div class="item-content">
-                  <div class="item-header">
-                    <span class="item-type">{{label}}</span>
-                    <span class="item-creation timeago relativetime" title="{{created}}">{{created}}</span>
+              <li class="notification-item">
+                <span class="dropdown-list-item notification-list-item {{#unless read}}notification-list-item-unread{{/unless}}">
+                  <div class="notification-item-header discreet">
+                    <span>{{label}}</span>
+                    <span class="timeago relativetime" title="{{created}}">{{created}}</span>
                   </div>
-                  <div class="item-footer">
-                    <a class="item-location" href="{{link}}">{{title}}</a>
-                    <div class="item-summary">{{{summary}}}</div>
-                  </div>
-                </div>
+                  <a class="notification-list-item-title" href="{{link}}">{{title}}</a>
+                  <div class="notification-list-item-summary">{{{summary}}}</div>
+                </span>
               </li>
             {{/each}}
+          {{else}}
+            <li>
+              <span class="dropdown-list-item">
+                <span class="dropdown-list-item-content">(Keine neuen Benachrichtigungen)</span>
+              </span>
+            </li>
+          {{/if}}
         </script>
       </ul>
-      <div class="notification-item show_all">
-        <a href="#" class="all_link" tal:attributes="href view/overview_url"
+      <div class="dropdown-list-footer">
+        <a class="dropdown-list-item"
+           tal:attributes="href view/overview_url"
            i18n:translate="label_notifications_overview">
           All Notifications
         </a>

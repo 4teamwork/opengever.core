@@ -136,69 +136,8 @@ table.favorites {
   }
 }
 
-.favorites-menu {
-  padding-right: 2px;
-
-  #favorites-menu-toggler {
-    &:before {
-      @extend .fa-star;
-    }
+#favorites-menu-toggler {
+  &:before {
+    @extend .fa-star;
   }
-
-  > dl {
-    position: relative;
-  }
-
-  dd {
-    position: absolute;
-    width: 350px;
-    background-color: $white;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-
-    > ul {
-
-      max-height: 300px;
-      overflow: auto;
-
-      > li {
-        display: list-item;
-
-        > span {
-          display: block;
-          padding: 6px 8px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-
-          &:hover {
-            background-color: #eaeaea;
-            text-decoration: none;
-          }
-
-          border-bottom: 1px solid #eaeaea;
-
-        }
-
-        &:last-child > span {
-          border-bottom: 0;
-        }
-      }
-
-    }
-
-    .overview {
-      padding: 10px 6px;
-      text-align: center;
-      border-top: 1px solid #eaeaea;
-    }
-
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-
 }

@@ -1,31 +1,32 @@
 <script type="text/x-template" id="favorites-menu-list">
 
-    <div class="favorites-menu">
-        <dl>
-            <dt>
-                <a class="header-dropdown-button" :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
-            </dt>
-            <dd v-show="isOpen">
-                <ul>
-                  <li v-for="entry in entries" :key="entry.position">
-                    <span>
-                      <a :class="entry.icon_class" :href="entry.target_url">
-                        {{entry.title}}
-                      </a>
-                    </span>
-                  </li>
+  <div class="favorites-menu">
+    <dl class="dropdown-menu">
+      <dt class="dropdown-menu-header">
+        <a class="dropdown-menu-header-button" :class="{ isOpen: isOpen }" href="#" id="favorites-menu-toggler" @click.prevent="toggle"></a>
+      </dt>
+      <dd class="dropdown-menu-content" v-show="isOpen">
+        <ul class="dropdown-list">
+          <li v-for="entry in entries" :key="entry.position">
+            <a class="dropdown-list-item" :href="entry.target_url">
+              <span class="dropdown-list-item-icon" :class="entry.icon_class"></span>
+              <span class="dropdown-list-item-content">{{entry.title}}</span>
+            </a>
+          </li>
 
-                  <li v-show="entries.length == 0">
-                    <span>{{i18n.label_no_favorites}}</span>
-                  </li>
+          <li v-if="entries.length == 0">
+            <span class="dropdown-list-item">
+              <span class="dropdown-list-item-content">({{i18n.label_no_favorites}})</span>
+            </span>
+          </li>
 
-                </ul>
-                <div class="overview">
-                  <a :href="overviewurl">{{i18n.label_overview}}</a>
-                </div>
-            </dd>
-        </dl>
+        </ul>
+        <div class="dropdown-list-footer">
+          <a class="dropdown-list-item" :href="overviewurl">{{i18n.label_overview}}</a>
+        </div>
+      </dd>
+    </dl>
 
-    </div>
+  </div>
 
 </script>

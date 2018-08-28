@@ -1,55 +1,57 @@
 <script type="text/x-template" id="recently-touched-menu-list">
 
-    <div class="recently-touched-menu">
+  <div class="recently-touched-menu">
 
-        <dl>
-            <dt>
-                <a class="header-dropdown-button" :class="{ isOpen: isOpen }" href="#" id="recently-touched-menu-toggler" @click.prevent="toggle"></a>
-                <span v-show="numCheckedOut > 0" class="num-checked-out-docs">{{numCheckedOut}}</span>
-            </dt>
-            <dd v-show="isOpen">
+    <dl class="dropdown-menu">
+      <dt class="dropdown-menu-header">
+        <a class="dropdown-menu-header-button" :class="{ isOpen: isOpen }" href="#" id="recently-touched-menu-toggler" @click.prevent="toggle"></a>
+        <span v-show="numCheckedOut > 0" class="dropdown-menu-header-badge">{{numCheckedOut}}</span>
+      </dt>
+      <dd class="dropdown-menu-content" v-show="isOpen">
 
-                <!-- Checked Out -->
-                <span class="menu-group-header discreet">{{i18n.label_checked_out}}</span>
-                <ul class="group-checked-out">
-                  <li v-for="entry in checkedOut">
+        <!-- Checked Out -->
+        <ul class="dropdown-list">
+          <li><span class="dropdown-list-header">{{i18n.label_checked_out}}</span></li>
+          <li v-for="entry in checkedOut">
+            <a class="dropdown-list-item" :href="entry.target_url">
+              <i :class="entry.icon_class" class="dropdown-list-item-icon"></i>
+              <span class="dropdown-list-item-content">{{entry.title}}</span>
+              <span class="dropdown-list-item-suffix timeago relativetime" :title="entry.last_touched">{{entry.last_touched}}</span>
+            </a>
+          </li>
 
-                    <div class="item-content">
-                      <a class="document-link" :class="entry.icon_class" :href="entry.target_url">{{entry.title}}</a>
-                      <span class="item-timestamp timeago relativetime discreet" :title="entry.last_touched">{{entry.last_touched}}</span>
-                    </div>
+          <li v-if="checkedOut.length === 0">
+            <span class="dropdown-list-item">
+              <span class="dropdown-list-item-content">({{i18n.label_no_checked_out_docs}})</span>
+            </span>
+          </li>
 
-                  </li>
+        </ul>
 
-                  <li v-show="checkedOut.length === 0">
-                    <span class="discreet">({{i18n.label_no_checked_out_docs}})</span>
-                  </li>
+        <hr class="dropdown-list-divider" />
 
-                </ul>
+        <!-- Recently Touched -->
+        <ul class="dropdown-list">
+          <li><span class="dropdown-list-header">{{i18n.label_recently_touched}}</span></li>
+          <li v-for="entry in recentlyTouched">
+            <a class="dropdown-list-item" :href="entry.target_url">
+              <i :class="entry.icon_class" class="dropdown-list-item-icon"></i>
+              <span class="dropdown-list-item-content">{{entry.title}}</span>
+              <span class="dropdown-list-item-suffix timeago relativetime" :title="entry.last_touched">{{entry.last_touched}}</span>
+            </a>
+          </li>
 
-                <hr />
+          <li v-if="recentlyTouched.length === 0">
+            <span class="dropdown-list-item">
+              <span class="dropdown-list-item-content">({{i18n.label_no_recently_touched_docs}})</span>
+            </span>
+          </li>
 
-                <!-- Recently Touched -->
-                <span class="menu-group-header discreet">{{i18n.label_recently_touched}}</span>
-                <ul class="group-recently-touched">
-                  <li v-for="entry in recentlyTouched">
+        </ul>
 
-                    <div class="item-content">
-                      <a class="document-link" :class="entry.icon_class" :href="entry.target_url">{{entry.title}}</a>
-                      <span class="item-timestamp timeago relativetime discreet" :title="entry.last_touched">{{entry.last_touched}}</span>
-                    </div>
+      </dd>
+    </dl>
 
-                  </li>
-
-                  <li v-show="recentlyTouched.length === 0">
-                    <span class="discreet">({{i18n.label_no_recently_touched_docs}})</span>
-                  </li>
-
-                </ul>
-
-            </dd>
-        </dl>
-
-    </div>
+  </div>
 
 </script>

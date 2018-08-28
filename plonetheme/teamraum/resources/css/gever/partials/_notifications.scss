@@ -1,3 +1,44 @@
+#notifications-menu-toggler {
+  &:before {
+    @extend .fa-bell;
+  }
+}
+
+.notification-item-header {
+  display: flex !important;
+  justify-content: space-between;
+}
+
+.notification-list-item-title {
+  // Override actionmenu styles from plone
+  padding: 0 !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.notification-list-item {
+  flex-direction: column;
+  line-height: 20px;
+}
+
+.notification-list-item-unread {
+  border-left: 3px solid #205C90;
+}
+
+.notifications {
+  max-height: 450px;
+  overflow-y: scroll;
+}
+
+.notification-list-item-summary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  > a {
+    display: inline !important;
+    padding: 0 !important;
+  }
+}
+
 .notifications-settings-form {
 
   .actions-column {
