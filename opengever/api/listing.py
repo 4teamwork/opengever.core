@@ -30,7 +30,7 @@ class Listing(Service):
             rows = 25
 
         sort_on = self.request.form.get('sort_on', DEFAULT_SORT_INDEX)
-        sort_on = FIELDS.get(sort_on, (None, DEFAULT_SORT_INDEX))[1]
+        sort_on = FIELDS.get(sort_on, (None, DEFAULT_SORT_INDEX))[2]
         sort_order = self.request.form.get('sort_order', 'descending')
         term = self.request.form.get('search', '').strip()
         columns = self.request.form.get('columns', [])
@@ -98,6 +98,8 @@ class Listing(Service):
 
         filters = [u'trashed:false']
         filters.extend(SOLR_FILTERS[name])
+        filters.append(u'path_parent:{}'.format(escape(
+            '/'.join(self.context.getPhysicalPath()))))
 
         sort = sort_on
         if sort:
@@ -106,11 +108,8 @@ class Listing(Service):
             else:
                 sort += ' asc'
 
-        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-              'bumblebee_checksum']
-        fl = fl + [c['column'] for c in self.config.columns if c['column']]
         params = {
-            'fl': fl,
+            'fl': self.solr_field_list(columns),
             'q.op': 'AND',
         }
 
@@ -118,8 +117,17 @@ class Listing(Service):
         resp = solr.search(
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             **params)
-
         return [OGSolrDocument(doc) for doc in resp.docs]
+
+    def solr_field_list(self, columns):
+        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
+              'bumblebee_checksum']
+        for col in columns:
+            if col in FIELDS:
+                field = FIELDS[col][0]
+                if field is not None:
+                    fl.append(field)
+        return fl
 
 
 def create_list_item(item, fields):
@@ -128,7 +136,7 @@ def create_list_item(item, fields):
     for field in fields:
         if field not in FIELDS:
             continue
-        accessor = FIELDS[field][0]
+        accessor = FIELDS[field][1]
         if isinstance(accessor, str):
             value = getattr(obj, accessor, None)
             if callable(value):
@@ -169,41 +177,41 @@ def filename(obj):
 
 DEFAULT_SORT_INDEX = 'modified'
 
-# Mapping of field name -> (field accessor, sort index)
+# Mapping of field name -> (index, accessor, sort index)
 FIELDS = {
-    '@type': ('PortalType', 'portal_type'),
-    'checked_out': ('checked_out_fullname', 'checked_out'),
-    'containing_dossier': ('containing_dossier', 'containing_dossier'),
-    'containing_subdossier': ('containing_subdossier', 'containing_subdossier'),  # noqa
-    'created': ('created', 'created'),
-    'creator': ('Creator', 'Creator'),
-    'description': ('Description', 'Description'),
-    'delivery_date': ('delivery_date', 'delivery_date'),
-    'document_author': ('document_author', 'document_author'),
-    'document_date': ('document_date', 'document_date'),
-    'end': ('end', 'end'),
-    'mimetype': ('getContentType', 'mimetype'),
-    'modified': ('modified', 'modified'),
-    'receipt_date': ('receipt_date', 'receipt_date'),
-    'reference': ('reference', 'reference'),
-    'reference_number': ('reference', 'reference'),
-    'responsible': ('responsible_fullname', 'responsible'),
-    'review_state': ('translated_review_state', 'review_state'),
-    'sequence_number': ('sequence_number', 'sequence_number'),
-    'start': ('start', 'start'),
-    'thumbnail': ('get_preview_image_url', DEFAULT_SORT_INDEX),
-    'title': (translated_title, 'sortable_title'),
-    'type': ('PortalType', 'portal_type'),
-    'filesize': (filesize, 'filesize'),
-    'filename': (filename, 'filename'),
+    '@type': ('portal_type', 'PortalType', 'portal_type'),
+    'checked_out': ('checked_out', 'checked_out_fullname', 'checked_out'),
+    'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
+    'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
+    'created': ('created', 'created', 'created'),
+    'creator': ('Creator', 'Creator', 'Creator'),
+    'description': ('Description', 'Description', 'Description'),
+    'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
+    'document_author': ('document_author', 'document_author', 'document_author'),
+    'document_date': ('document_date', 'document_date', 'document_date'),
+    'end': ('end', 'end', 'end'),
+    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
+    'modified': ('modified', 'modified', 'modified'),
+    'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
+    'reference': ('reference', 'reference', 'reference'),
+    'reference_number': ('reference', 'reference', 'reference'),
+    'responsible': ('responsible', 'responsible_fullname', 'responsible'),
+    'review_state': ('review_state', 'translated_review_state', 'review_state'),
+    'sequence_number': ('sequence_number', 'sequence_number', 'sequence_number'),
+    'start': ('start', 'start', 'start'),
+    'thumbnail': (None, 'get_preview_image_url', DEFAULT_SORT_INDEX),
+    'title': ('Title', translated_title, 'sortable_title'),
+    'type': ('portal_type', 'PortalType', 'portal_type'),
+    'filesize': (None, filesize, 'filesize'),
+    'filename': (None, filename, 'filename'),
 }
 
 SOLR_FILTERS = {
-    'dossiers': [
-        'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
+    u'dossiers': [
+        u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
     ],
-    'documents': [
-        'object_provides:opengever.document.behaviors.IBaseDocument',
+    u'documents': [
+        u'object_provides:opengever.document.behaviors.IBaseDocument',
     ]
 }
 
