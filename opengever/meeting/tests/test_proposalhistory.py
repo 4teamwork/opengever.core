@@ -331,3 +331,23 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
             browser,
             with_submitted=True,
             )
+
+    @browsing
+    def test_comment_on_unsubmitted_proposal_does_not_try_to_sync(self, browser):
+        self.login(self.meeting_user, browser)
+
+        proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(title=u'Vertr\xe4ge',
+                                  committee=self.committee.load_model(),
+                                  issuer=self.dossier_responsible.getId())
+                          .relate_to(self.document))
+
+        # Add comment
+        browser.open(proposal, view='addcomment')
+        browser.fill({'Comment': u'Vorgezogener Kommentar'})
+        browser.click_on('Confirm')
+
+        browser.open(proposal, view='tabbedview_view-overview')
+        self.assertEqual(
+            'Vorgezogener Kommentar', browser.css('.answer .text')[0].text)

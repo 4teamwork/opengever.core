@@ -10,8 +10,6 @@ from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.model import Meeting
-from opengever.meeting.proposal import Proposal
-from opengever.meeting.proposal import SubmittedProposal
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
@@ -68,7 +66,7 @@ class ProposalHistory(object):
         record = clazz(self.context, timestamp=timestamp, **kwargs)
         record.append_to(history)
 
-        if record.needs_syncing:
+        if record.needs_syncing and self.context.is_submitted():
             path = self.context.get_sync_target_path()
             admin_unit_id = self.context.get_sync_admin_unit_id()
 
@@ -122,9 +120,8 @@ class BaseHistoryRecord(object):
     Each record must have a unique `history_type` from which it can be built
     with IHistory.append_record.
 
-    If `needs_syncing` is `True` a records that is created on the
-    `SubmittedProposal` side is automatically added to its corresponding
-    `Proposal`.
+    If `needs_syncing` is `True` a records is created on one side is
+    automatically added to its corresponding `Proposal` or `SubmittedProposal`.
     """
 
     history_type = None
