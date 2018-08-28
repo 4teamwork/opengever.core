@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
+from DateTime import DateTime
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -308,8 +309,8 @@ class DossierContainer(Container):
         return True
 
     def earliest_possible_end_date(self):
-        """The earliest possible end-date must be lather than all document dates and
-        all dossier start and end dates.
+        """The earliest possible end-date must be later than all document last
+        modification dates and all dossier start and end dates.
         """
         dates = []
         catalog = getToolByName(self, 'portal_catalog')
@@ -337,7 +338,7 @@ class DossierContainer(Container):
             })
 
         for document_brain in document_brains:
-            dates.append(document_brain.document_date)
+            dates.append(document_brain.changed)
 
         dates = filter(None, dates)
         dates = map(self._convert_to_date, dates)

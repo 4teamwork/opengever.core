@@ -468,9 +468,8 @@ class TestResolveConditions(FunctionalTestCase):
     @browsing
     def test_dossier_is_resolved_when_dossier_has_an_invalid_end_date(self, browser):
         dossier = create(Builder('dossier').having(end=date(2016, 5, 7)))
-        create(Builder('document')
-               .within(dossier)
-               .having(document_date=date(2016, 6, 1)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(dossier))
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
@@ -487,9 +486,8 @@ class TestResolveConditions(FunctionalTestCase):
         subdossier = create(Builder('dossier')
                             .having(end=date(2016, 5, 7))
                             .within(dossier))
-        create(Builder('document')
-               .within(subdossier)
-               .having(document_date=date(2016, 6, 1)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier))
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
@@ -545,9 +543,8 @@ class TestResolving(FunctionalTestCase):
         subdossier = create(Builder('dossier')
                             .having(start=date(2015, 1, 1))
                             .within(dossier))
-        create(Builder('document')
-               .within(subdossier)
-               .having(document_date=date(2016, 6, 1)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier))
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
