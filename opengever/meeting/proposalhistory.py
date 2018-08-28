@@ -120,9 +120,8 @@ class BaseHistoryRecord(object):
     Each record must have a unique `history_type` from which it can be built
     with IHistory.append_record.
 
-    If `needs_syncing` is `True` a records that is created on the
-    `SubmittedProposal` side is automatically added to its corresponding
-    `Proposal`.
+    If `needs_syncing` is `True` a records is created on one side is
+    automatically added to its corresponding `Proposal` or `SubmittedProposal`.
     """
 
     history_type = None
