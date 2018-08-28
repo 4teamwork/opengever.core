@@ -10,8 +10,6 @@ from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.model import Meeting
-from opengever.meeting.proposal import Proposal
-from opengever.meeting.proposal import SubmittedProposal
 from opengever.ogds.base.actor import Actor
 from persistent.mapping import PersistentMapping
 from plone import api
