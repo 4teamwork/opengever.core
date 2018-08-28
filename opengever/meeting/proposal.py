@@ -329,6 +329,10 @@ class ProposalBase(ModelContainer):
         ProposalCommentedActivitiy(self, self.REQUEST).record()
         return IHistory(self).append_record(u'commented', uuid=uuid, text=text)
 
+    def is_submitted(self):
+        model = self.load_model()
+        return model.is_submitted()
+
 
 class SubmittedProposal(ProposalBase):
     """Proxy for a proposal in queue with a committee."""
@@ -701,7 +705,3 @@ class Proposal(ProposalBase):
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
-
-    def is_submitted(self):
-        model = self.load_model()
-        return model.is_submitted()

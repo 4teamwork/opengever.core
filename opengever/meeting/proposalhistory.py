@@ -68,7 +68,7 @@ class ProposalHistory(object):
         record = clazz(self.context, timestamp=timestamp, **kwargs)
         record.append_to(history)
 
-        if record.needs_syncing:
+        if record.needs_syncing and self.context.is_submitted():
             path = self.context.get_sync_target_path()
             admin_unit_id = self.context.get_sync_admin_unit_id()
 
