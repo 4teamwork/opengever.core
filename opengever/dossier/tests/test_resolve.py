@@ -56,6 +56,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.empty_dossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.empty_dossier))
         self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -69,6 +71,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.subdossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.subdossier))
         statusmessages.assert_no_error_messages()
         self.assertEquals(
             ['The subdossier has been succesfully resolved.'],
@@ -80,6 +84,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.subdossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.subdossier))
         self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
@@ -425,6 +431,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['not all documents and tasks are stored in a subdossier.',
@@ -439,6 +446,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all documents are checked in'],
                           error_messages())
@@ -452,12 +460,13 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all task are closed'],
                           error_messages())
 
     @browsing
-    def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
+    def test_dossier_is_resolved_when_dossier_has_an_invalid_end_date(self, browser):
         dossier = create(Builder('dossier').having(end=date(2016, 5, 7)))
         create(Builder('document')
                .within(dossier)
@@ -467,9 +476,28 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertFalse(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
-        self.assertEquals([],
-                          error_messages())
+        self.assertEquals(['The dossier has been succesfully resolved.'],
+                          info_messages())
+
+    @browsing
+    def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .having(end=date(2016, 5, 7))
+                            .within(dossier))
+        create(Builder('document')
+               .within(subdossier)
+               .having(document_date=date(2016, 6, 1)))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertTrue(dossier.is_open())
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has a invalid end_date'], error_messages())
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
@@ -483,6 +511,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier contains active proposals.'],
                           error_messages())
@@ -498,6 +527,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertFalse(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
