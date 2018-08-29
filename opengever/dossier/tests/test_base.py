@@ -6,12 +6,14 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
+from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.interface import alsoProvides
 import pytz
 
 
@@ -225,6 +227,22 @@ class TestDateCalculations(IntegrationTestCase):
         IChanged(self.document).changed = datetime(2021, 1, 22, tzinfo=pytz.utc)
         self.document.reindexObject(idxs=['changed'])
         self.assertEquals(date(2021, 1, 22),
+                          self.dossier.earliest_possible_end_date())
+
+    def test_earliest_possible_ignores_automatically_generated_documents(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2021, 1, 21)
+        self.dossier.reindexObject(idxs=['end'])
+        IChanged(self.document).changed = datetime(2021, 1, 22, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
+
+        self.assertEquals(date(2021, 1, 22),
+                          self.dossier.earliest_possible_end_date())
+
+        alsoProvides(self.document, IDossierJournalPDFMarker)
+        self.document.reindexObject(idxs=['object_provides'])
+
+        self.assertEquals(date(2021, 1, 21),
                           self.dossier.earliest_possible_end_date())
 
     def test_earliest_possible_is_latest_of_dossiers_end_dates_and_document_modificiation_dates(self):

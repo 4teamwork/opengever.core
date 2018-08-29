@@ -168,10 +168,6 @@ class TestResolveJobs(IntegrationTestCase):
 
     @browsing
     def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
-        """When the document date is not set to the dossiers end date the
-        subdossier will be left in an inconsistent state. this will make
-        resolving the main dossier impossible.
-        """
         self.activate_feature('journal-pdf')
         self.login(self.secretariat_user, browser)
 
@@ -191,6 +187,8 @@ class TestResolveJobs(IntegrationTestCase):
         self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
                          "End date should be set to dossier end date")
 
+        # object provides index needs to be up to date for dossier resolving
+        sub_journal_pdf.reindexObject(idxs=["object_provides"])
         with self.observe_children(self.empty_dossier) as main_children:
             with freeze(datetime(2016, 9, 1)):
                 resolve_dossier(self.empty_dossier, browser)
