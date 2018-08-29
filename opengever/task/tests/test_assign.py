@@ -3,12 +3,12 @@ from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -135,6 +135,21 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
 
+    @browsing
+    def test_revokes_permission_for_former_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):
 
@@ -142,6 +157,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         super(TestAssignTaskWithSuccessors, self).setUp()
         self.login(self.regular_user)
         self.successor = create(Builder('task')
+                                .within(self.dossier)
                                 .having(responsible_client='fa',
                                         responsible=self.regular_user.getId())
                                 .successor_from(self.task))

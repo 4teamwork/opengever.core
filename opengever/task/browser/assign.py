@@ -4,6 +4,7 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -111,6 +112,9 @@ class AssignTaskForm(Form):
 
     def reassign_task(self, **kwargs):
         response = self.add_response(**kwargs)
+        # Revoke local roles for current responsible
+        LocalRolesSetter(self.context).revoke_roles()
+
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
         self.record_activity(response)
