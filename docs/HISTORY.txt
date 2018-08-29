@@ -7,6 +7,7 @@ Changelog
 
 - Pin ftw.table to 1.20.0, to fix a concurrency bug in tables. [njohner]
 - Fix issue when commenting on a not submitted proposal. [phgross]
+- Fix IE bug on the notification settings page. [phgross]
 - Fix sharing view on committecontainer. [phgross]
 - Fix missing favorite-id on toggle-link if toggling favorite from repository-tree. [elioschmutz]
 - Fix broken favorites state if toggling state in the repository-tree. [elioschmutz]

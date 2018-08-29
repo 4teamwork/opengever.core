@@ -57,7 +57,7 @@
         });
       }
 
-      var values = Object.values(activities)
+      var values = Object.keys(activities).map(function(e) { return activities[e]});
 
       var tabs = [
         {tabId: 'tasks',
