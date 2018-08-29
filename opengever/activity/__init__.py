@@ -114,6 +114,8 @@ ACTIVITY_TRANSLATIONS = {
         'proposal-transition-reject', default=u'Proposal rejected'),
     'proposal-transition-schedule': _(
         'proposal-transition-schedule', default=u'Proposal scheduled'),
+    'proposal-transition-pull': _(
+        'proposal-transition-pull', default=u'Proposal pulled'),
     'proposal-transition-decide': _(
         'proposal-transition-decide', default=u'Proposal decided'),
     'proposal-transition-submit': _(
@@ -151,6 +153,7 @@ ACTIVITY_TRANSLATIONS = {
 ACTIVITIES_ICONS = {
     'proposal-transition-reject': 'rejected',
     'proposal-transition-schedule': 'scheduled',
+    'proposal-transition-pull': 'pulled',
     'proposal-transition-decide': 'decided',
     'proposal-transition-submit': 'submitted',
     'proposal-commented': 'commented',

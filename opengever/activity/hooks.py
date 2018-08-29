@@ -71,6 +71,8 @@ DEFAULT_SETTINGS = [
      'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
     {'kind': 'proposal-transition-schedule',
      'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
+    {'kind': 'proposal-transition-pull',
+     'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
     {'kind': 'proposal-transition-decide',
      'badge_notification_roles': [PROPOSAL_ISSUER_ROLE]},
     {'kind': 'proposal-commented',

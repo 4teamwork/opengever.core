@@ -101,6 +101,7 @@
     &.submitted:before { content: $submit; }
     &.rejected:before { content: $reject; }
     &.scheduled:before { content: $schedule; }
+    &.pulled:before { content: $removeSchedule; }
     &.decided:before { content: $decided; }
     &.commented:before { content: $comment; }
     &.documentUpdated:before { content: $updateDocument; }

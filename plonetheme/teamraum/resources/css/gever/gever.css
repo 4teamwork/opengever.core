@@ -4466,6 +4466,7 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 .notifications-settings-form .notification-settings-kind span.submitted:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.rejected:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.scheduled:before { content: ""; }
+.notifications-settings-form .notification-settings-kind span.pulled:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.decided:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.commented:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.documentUpdated:before { content: ""; }
