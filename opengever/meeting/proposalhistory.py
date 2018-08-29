@@ -8,6 +8,7 @@ from opengever.base.request import dispatch_request
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalCommentedActivitiy
 from opengever.meeting.activity.activities import ProposalDecideActivity
+from opengever.meeting.activity.activities import ProposalRemovedFromScheduleActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
 from opengever.meeting.model import Meeting
 from opengever.ogds.base.actor import Actor
@@ -373,6 +374,11 @@ class ProposalRemovedFromSchedule(ProposalScheduled):
                  u'Removed from schedule of meeting ${meeting} by ${user}',
                  mapping={'user': self.get_actor_link(),
                           'meeting': self.meeting_title})
+
+    @classmethod
+    def receive(cls, context, request, data):
+        ProposalRemovedFromScheduleActivity(
+            context, request, data.get('meeting_id')).record()
 
 
 @ProposalHistory.register

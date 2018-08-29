@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-12 14:52+0000\n"
+"POT-Creation-Date: 2018-08-29 15:17+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -177,6 +177,11 @@ msgstr "Antrag kommentiert"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-decide"
 msgstr "Antrag beschlossen"
+
+#. Default: "Proposal pulled"
+#: ./opengever/activity/__init__.py
+msgid "proposal-transition-pull"
+msgstr "Antrag entfernt"
 
 #. Default: "Proposal rejected"
 #: ./opengever/activity/__init__.py

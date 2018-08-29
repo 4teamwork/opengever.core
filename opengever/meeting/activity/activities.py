@@ -93,6 +93,18 @@ class ProposalScheduledActivity(ProposalTransitionActivity):
         return meeting.get_title() if meeting else u''
 
 
+class ProposalRemovedFromScheduleActivity(ProposalScheduledActivity):
+    kind = 'proposal-transition-pull'
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('proposal_history_label_remove_scheduled',
+              u'Removed from schedule of meeting ${meeting} by ${user}',
+              mapping={'meeting': self.get_meeting_title(self.meeting_id),
+                       'user': actor_link()}))
+
+
 class ProposalDecideActivity(ProposalTransitionActivity):
     kind = 'proposal-transition-decide'
 

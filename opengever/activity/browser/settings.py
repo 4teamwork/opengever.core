@@ -62,6 +62,7 @@ ACTIVITY_GROUPS = [
          'proposal-transition-submit',
          'proposal-transition-reject',
          'proposal-transition-schedule',
+         'proposal-transition-pull',
          'proposal-transition-decide',
          'proposal-commented',
          'proposal-attachment-updated',
