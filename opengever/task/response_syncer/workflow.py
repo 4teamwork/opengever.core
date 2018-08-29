@@ -1,5 +1,6 @@
 from opengever.base.security import elevated_privileges
 from opengever.task import _
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
@@ -72,6 +73,10 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
                 _(u"label_responsible", default=u"Responsible"),
                 ITask(self.context).responsible,
                 responsible)
+
+            # Revoke local roles for current responsible
+            # XXX: should be handled as a general transition-after job.
+            LocalRolesSetter(self.context).revoke_roles()
 
             ITask(self.context).responsible_client = responsible_client
             ITask(self.context).responsible = responsible

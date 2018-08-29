@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-15 08:06+0000\n"
+"POT-Creation-Date: 2018-08-29 09:28+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -653,6 +653,16 @@ msgstr "Frist wurde erfolgreich angepasst."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
 msgstr "Diese Statusänderung führt dazu, dass temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung entzogen werden."
+
+#. Default: "Task successfully reassigned."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned"
+msgstr "Aufgabe erfolgreich neu zugewiesen."
+
+#. Default: "Task successfully reassigned. You are no longer permitted to access the task."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned_no_longer_permission"
+msgstr "Aufgabe erfolgreich neu zugewiesen. Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen."
 
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py

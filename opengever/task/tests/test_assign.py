@@ -3,12 +3,15 @@ from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
-from zope.lifecycleevent import ObjectModifiedEvent
+from plone import api
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -53,6 +56,8 @@ class TestAssignTask(IntegrationTestCase):
                           self.task.responsible)
         self.assertEquals(self.secretariat_user.getId(),
                           self.task.get_sql_object().responsible)
+        self.assertEqual(['Task successfully reassigned.'], info_messages())
+        self.assertEqual(self.task, browser.context)
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):
@@ -135,6 +140,43 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
 
+    @browsing
+    def test_revokes_permission_for_former_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
+    @browsing
+    def test_redirects_to_portal_when_current_user_has_no_longer_view_permission(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        api.content.disable_roles_acquisition(obj=self.dossier)
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
+        self.assertEqual(self.portal.absolute_url(), browser.url)
+        self.assertEqual(
+            ['Task successfully reassigned. You are no longer permitted to '
+             'access the task.'],
+            info_messages())
+
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):
 
@@ -142,6 +184,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         super(TestAssignTaskWithSuccessors, self).setUp()
         self.login(self.regular_user)
         self.successor = create(Builder('task')
+                                .within(self.dossier)
                                 .having(responsible_client='fa',
                                         responsible=self.regular_user.getId())
                                 .successor_from(self.task))
@@ -195,3 +238,43 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             response.css('h3').text)
         self.assertEquals(
             self.secretariat_user.getId(), self.successor.responsible)
+
+    @browsing
+    def test_revokes_roles_also_on_predecessor_when_reassigning_successor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.successor)
+        browser.find('task-transition-reassign').click()
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            'fa:{}'.format(self.secretariat_user.getId()))
+        browser.find('Assign').click()
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
+    @browsing
+    def test_revokes_roles_also_on_successor_when_reassigning_predecessor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task)
+        browser.find('task-transition-reassign').click()
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            'fa:{}'.format(self.secretariat_user.getId()))
+        browser.find('Assign').click()
+
+        manager = RoleAssignmentManager(self.successor)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.successor).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-15 08:06+0000\n"
+"POT-Creation-Date: 2018-08-29 09:28+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -655,6 +655,16 @@ msgstr "Le délai a été modifié avec succès."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
 msgstr ""
+
+#. Default: "Task successfully reassigned."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned"
+msgstr "Tâche réassignée avec succès."
+
+#. Default: "Task successfully reassigned. You are no longer permitted to access the task."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned_no_longer_permission"
+msgstr "Tâche réassignée avec succès. Vous n’avez désormais plus accès à cette tâche"
 
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py

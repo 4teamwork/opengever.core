@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-15 08:06+0000\n"
+"POT-Creation-Date: 2018-08-29 09:28+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -650,6 +650,16 @@ msgstr ""
 #. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
+msgstr ""
+
+#. Default: "Task successfully reassigned."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned"
+msgstr ""
+
+#. Default: "Task successfully reassigned. You are no longer permitted to access the task."
+#: ./opengever/task/browser/assign.py
+msgid "msg_successfully_reassigned_no_longer_permission"
 msgstr ""
 
 #. Default: "Commented by ${user}"

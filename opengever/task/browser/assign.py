@@ -4,11 +4,13 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
 from opengever.task.util import update_reponsible_field_data
+from plone import api
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
@@ -107,10 +109,30 @@ class AssignTaskForm(Form):
                     self.context.absolute_url())
 
             self.reassign_task(**data)
+
+            return self.redirect()
+
+    def redirect(self):
+        """Redirects to task if the current user still has View permission,
+        otherwise it redirects to portal.
+        """
+        if api.user.has_permission('View', obj=self.context):
+            msg = _(u'msg_successfully_reassigned',
+                    default=u'Task successfully reassigned.')
+            api.portal.show_message(msg, request=self.request, type='info')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+        msg = _(u'msg_successfully_reassigned_no_longer_permission',
+                default=u'Task successfully reassigned. You are no '
+                'longer permitted to access the task.')
+        api.portal.show_message(msg, request=self.request, type='info')
+        return self.request.RESPONSE.redirect(api.portal.get().absolute_url())
 
     def reassign_task(self, **kwargs):
         response = self.add_response(**kwargs)
+        # Revoke local roles for current responsible
+        LocalRolesSetter(self.context).revoke_roles()
+
         self.update_task(**kwargs)
         notify(ObjectModifiedEvent(self.context))
         self.record_activity(response)
