@@ -3,12 +3,14 @@ from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
+from plone import api
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -53,6 +55,8 @@ class TestAssignTask(IntegrationTestCase):
                           self.task.responsible)
         self.assertEquals(self.secretariat_user.getId(),
                           self.task.get_sql_object().responsible)
+        self.assertEqual(['Task successfully reassigned.'], info_messages())
+        self.assertEqual(self.task, browser.context)
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):
@@ -149,6 +153,28 @@ class TestAssignTask(IntegrationTestCase):
               'reference': Oguid.for_object(self.task).id,
               'principal': 'jurgen.konig'}],
             manager.storage._storage())
+
+    @browsing
+    def test_redirects_to_portal_when_current_user_has_no_longer_view_permission(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        api.content.disable_roles_acquisition(obj=self.dossier)
+        responsible = 'fa:{}'.format(self.secretariat_user.getId())
+        self.assign_task(responsible, u'Thats a job for you.')
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
+        self.assertEqual(self.portal.absolute_url(), browser.url)
+        self.assertEqual(
+            ['Task successfully reassigned. You are no longer permitted to '
+             'access the task.'],
+            info_messages())
 
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):
