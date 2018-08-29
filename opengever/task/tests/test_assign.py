@@ -4,6 +4,7 @@ from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiver
@@ -237,3 +238,43 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             response.css('h3').text)
         self.assertEquals(
             self.secretariat_user.getId(), self.successor.responsible)
+
+    @browsing
+    def test_revokes_roles_also_on_predecessor_when_reassigning_successor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.successor)
+        browser.find('task-transition-reassign').click()
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            'fa:{}'.format(self.secretariat_user.getId()))
+        browser.find('Assign').click()
+
+        manager = RoleAssignmentManager(self.task)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
+
+    @browsing
+    def test_revokes_roles_also_on_successor_when_reassigning_predecessor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task)
+        browser.find('task-transition-reassign').click()
+        browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            'fa:{}'.format(self.secretariat_user.getId()))
+        browser.find('Assign').click()
+
+        manager = RoleAssignmentManager(self.successor)
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.successor).id,
+              'principal': 'jurgen.konig'}],
+            manager.storage._storage())
