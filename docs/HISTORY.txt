@@ -5,7 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Make upgrade step 20180619143343 deferrable: Use of CMFEditions getHistory causes massive amounts of savepoints. [lgraf]
 
 
 2018.4.1 (2018-08-30)
