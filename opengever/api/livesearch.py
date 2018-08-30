@@ -3,6 +3,7 @@ from opengever.base.solr import OGSolrContentListing
 from plone import api
 from plone.registry.interfaces import IRegistry
 from plone.restapi.services.search.get import SearchGet
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 
 
@@ -21,7 +22,8 @@ class GeverLiveSearchGet(SearchGet):
             return []
 
         if settings.use_solr:
-            view = self.context.restrictedTraverse('@@livesearch_reply')
+            view = getMultiAdapter((self.context, self.request),
+                                   name=u'livesearch_reply')
             view.search_term = search_term
             view.limit = limit
             view.path = path
