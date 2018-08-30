@@ -72,6 +72,7 @@ Changelog
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+- Add REST API endpoint for livesearch. [maethu]
 
 
 2018.4.7 (2018-10-05)
