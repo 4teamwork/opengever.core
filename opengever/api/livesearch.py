@@ -13,10 +13,10 @@ class GeverLiveSearchGet(SearchGet):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
 
-        search_term = self.request.get('q', None)
-        limit = int(self.request.get('limit', 10))
-        path = self.request.get('path',
-                                '/'.join(api.portal.get().getPhysicalPath()))
+        search_term = self.request.form.get('q', None)
+        limit = int(self.request.form.get('limit', 10))
+        path = self.request.form.get(
+            'path', '/'.join(api.portal.get().getPhysicalPath()))
 
         if not search_term:
             return []
