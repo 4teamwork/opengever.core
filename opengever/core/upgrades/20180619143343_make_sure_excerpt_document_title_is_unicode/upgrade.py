@@ -36,6 +36,9 @@ class MakeSureExcerptDocumentTitleIsUnicode(SQLUpgradeStep):
     - persisted title in i18n messages of the journal
 
     """
+
+    deferrable = True
+
     def migrate(self):
         has_meeting_feature = api.portal.get_registry_record(
             'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled')
