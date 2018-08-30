@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.4.1 (unreleased)
+2018.4.1 (2018-08-30)
 ---------------------
 
 - Revoke roles for former responsible when reassigning a task. [phgross]
