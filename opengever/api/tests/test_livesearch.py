@@ -38,7 +38,7 @@ class TestLivesearchGet(IntegrationTestCase):
         url = u'{}/@livesearch?q={}&path={}'.format(
             self.portal.absolute_url(),
             self.document.title,
-            '/'.join(self.document.getPhysicalPath()))
+            self.document.absolute_url()[len(self.portal.absolute_url()):])
 
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 

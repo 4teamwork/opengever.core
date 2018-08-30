@@ -15,8 +15,11 @@ class GeverLiveSearchGet(SearchGet):
 
         search_term = self.request.form.get('q', None)
         limit = int(self.request.form.get('limit', 10))
-        path = self.request.form.get(
-            'path', '/'.join(api.portal.get().getPhysicalPath()))
+        portal_path = '/'.join(api.portal.get().getPhysicalPath())
+        path = '{}/{}'.format(
+            portal_path,
+            self.request.form.get('path', '/').lstrip('/'),
+        ).rstrip('/')
 
         if not search_term:
             return []
