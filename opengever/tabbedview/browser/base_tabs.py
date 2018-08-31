@@ -16,6 +16,8 @@ import re
 
 
 class GeverTabMixin(object):
+    """Provide SQL helper functionality to tabbedview tab views."""
+
     implements(ISQLAlchemy)
 
     show_searchform = True
@@ -24,8 +26,7 @@ class GeverTabMixin(object):
     def get_css_classes(self):
         if self.show_searchform:
             return ['searchform-visible']
-        else:
-            return ['searchform-hidden']
+        return ['searchform-hidden']
 
     # XXX : will be moved to registry later...
     extjs_enabled = True
@@ -39,17 +40,15 @@ class GeverTabMixin(object):
             results = self._custom_sort_method(results, sort_on, sort_reverse)
 
         elif sort_on == 'sequence_number':
-            splitter = re.compile('[/\., ]')
+            splitter = re.compile(r'[/\., ]')
 
             def _sortable_data(brain):
-                """ Converts the "reference" into a tuple containing integers,
+                """Converts the "reference" into a tuple containing integers,
                 which are converted well. Sorting "10" and "2" as strings
                 results in wrong order..
                 """
-
                 value = getattr(brain, sort_on, '')
-                if not isinstance(value, str) and not isinstance(
-                    value, unicode):
+                if not isinstance(value, str) and not isinstance(value, unicode):
                     return value
                 parts = []
                 for part in splitter.split(value):
@@ -79,9 +78,7 @@ class GeverTabMixin(object):
 
         # custom sort for sorting on the readable fullname
         # of the users, contacts and inboxes
-        elif sort_on in (
-            'responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
-
+        elif sort_on in ('responsible', 'Creator', 'checked_out', 'issuer', 'contact'):
             if sort_on in ('issuer', 'contact'):
                 sort_dict = SortHelpers().get_user_contact_sort_dict()
             else:
@@ -89,10 +86,8 @@ class GeverTabMixin(object):
 
             def _sorter(a, b):
                 return cmp(
-                    sort_dict.get(
-                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    sort_dict.get(
-                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
                     )
 
             results = list(results)
@@ -103,10 +98,8 @@ class GeverTabMixin(object):
 
             def _state_sorter(a, b):
                 return cmp(
-                    states.get(
-                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    states.get(
-                        getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    states.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    states.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
                     )
 
             results = list(results)
@@ -118,9 +111,8 @@ class GeverTabMixin(object):
             def _type_sorter(a, b):
 
                 return cmp(
-                    types.get(
-                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    types.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    types.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    types.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
                     )
 
             results = list(results)
@@ -131,9 +123,8 @@ class GeverTabMixin(object):
 
             def _public_trial_sorter(a, b):
                 return cmp(
-                    values.get(
-                        getattr(a, sort_on, ''), getattr(a, sort_on, '')),
-                    values.get(getattr(b, sort_on, ''), getattr(b, sort_on, ''))
+                    values.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
+                    values.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
                     )
 
             results = list(results)
@@ -142,12 +133,12 @@ class GeverTabMixin(object):
         return results
 
     def get_filter_text(self):
-        filter = self.request.form.get('searchable_text', u'')
+        _filter = self.request.form.get('searchable_text', u'')
 
-        if isinstance(filter, str):
-            filter = filter.decode('utf-8')
+        if isinstance(_filter, str):
+            _filter = _filter.decode('utf-8')
 
-        return filter.strip().split(' ')
+        return _filter.strip().split(' ')
 
 
 class BaseListingTab(GeverTabMixin, ListingView):
@@ -166,6 +157,9 @@ class BaseListingTab(GeverTabMixin, ListingView):
 
     model = None
 
+    def get_base_query(self):
+        raise NotImplementedError()
+
 
 class FilteredListingTab(BaseListingTab):
     """Base class for filtered listings.
@@ -180,10 +174,12 @@ class FilteredListingTab(BaseListingTab):
     filterlist_name = None
     filterlist = None
 
+    def get_base_query(self):
+        raise NotImplementedError()
+
 
 class BaseCatalogListingTab(GeverTabMixin, CatalogListingView):
-    """Base view for catalog listing tabs.
-    """
+    """Base view for catalog listing tabs."""
 
     selection = ViewPageTemplateFile("selection_with_filters.pt")
     template = ViewPageTemplateFile("generic_with_filters.pt")

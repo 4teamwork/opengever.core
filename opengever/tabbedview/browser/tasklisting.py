@@ -75,6 +75,7 @@ class GlobalTaskListingTab(BaseListingTab):
     columns = (
         {'column': '',
          'sortable': False,
+         'groupable': False,
          'transform': task_id_checkbox_helper,
          'width': 30},
 
@@ -126,6 +127,9 @@ class GlobalTaskListingTab(BaseListingTab):
                            default=u'Sequence number')},
 
         )
+
+    def get_base_query(self):
+        raise NotImplementedError()
 
 
 @implementer(ITableSource)

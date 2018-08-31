@@ -1,3 +1,5 @@
+from AccessControl import getSecurityManager
+from AccessControl import SecurityManagement
 from AccessControl import Unauthorized
 from ftw.tabbedview.browser.tabbed import TabbedView
 from opengever.activity import is_activity_feature_enabled
@@ -23,11 +25,22 @@ from plone.memoize.view import memoize_contextless
 from Products.CMFPlone.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from sqlalchemy.exc import OperationalError
-import AccessControl
 
 
 def authenticated_member(context):
     return context.portal_membership.getAuthenticatedMember().getId()
+
+
+def remove_subdossier_column(columns):
+    """Removes the subdossier column from list of columns and returns it back.
+    """
+    def _filterer(item):
+        if isinstance(item, dict) and \
+           item['column'] == 'containing_subdossier':
+            return False
+        return True
+
+    return filter(_filterer, columns)
 
 
 class PersonalOverview(TabbedView):
@@ -53,8 +66,8 @@ class PersonalOverview(TabbedView):
         """If user is not allowed to view PersonalOverview, redirect him
         to the repository root, otherwise behave like always.
         """
-        user = AccessControl.getSecurityManager().getUser()
-        if user == AccessControl.SecurityManagement.SpecialUsers.nobody:
+        user = getSecurityManager().getUser()
+        if user == SecurityManagement.SpecialUsers.nobody:
             raise Unauthorized
 
         if not self.user_is_allowed_to_view():
@@ -124,8 +137,8 @@ class PersonalOverview(TabbedView):
 
     def is_user_allowed_to_view_additional_tabs(self):
         """The additional tabs Alltasks and AllIssuedTasks are only shown
-        to adminsitrators and users of the current inbox group."""
-
+        to adminsitrators and users of the current inbox group.
+        """
         inbox = get_current_org_unit().inbox()
         current_user = ogds_service().fetch_current_user()
         return current_user in inbox.assigned_users() or self._is_user_admin()
@@ -149,6 +162,8 @@ class PersonalOverview(TabbedView):
 
 
 class MyDossiers(Dossiers):
+    """List the dossiers where the current user is the responsible."""
+
     search_options = {'responsible': authenticated_member,
                       'is_subdossier': False}
 
@@ -165,11 +180,15 @@ class MyDossiers(Dossiers):
 
 
 class MyDocumentsProxy(DocumentsProxy):
+    """The proxy view for documents created by the current user."""
+
     listview = "tabbedview_view-mydocuments"
     galleryview = "tabbedview_view-mydocuments-gallery"
 
 
 class MyDocuments(Documents):
+    """List the documents created by the current user."""
+
     search_options = {'Creator': authenticated_member,
                       'trashed': False}
 
@@ -177,6 +196,7 @@ class MyDocuments(Documents):
         'zip_selected',
         'export_documents',
     ]
+
     major_actions = []
 
     @property
@@ -248,6 +268,7 @@ class IssuedTasks(GlobalTaskListingTab):
 
 
 class MyProposals(ProposalListingTab):
+    """List proposals issued by the current user."""
 
     def get_base_query(self):
         return Proposal.query.by_issuer(api.user.get_current().getId())
@@ -257,6 +278,7 @@ class AllTasks(GlobalTaskListingTab):
     """Lists all tasks assigned to this clients.
     Bases on MyTasks
     """
+
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
