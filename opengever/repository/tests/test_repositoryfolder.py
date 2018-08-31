@@ -161,6 +161,13 @@ class TestDossierTemplateFactoryMenu(IntegrationTestCase):
         self.assertIn(self.factory_label, factoriesmenu.addable_types())
 
     @browsing
+    def test_adding_from_template_not_allowed_when_adding_businesscase_dossier_disallowed(self, browser):
+        self.login(self.administrator, browser)
+        self.leaf_repofolder.allow_add_businesscase_dossier = False
+        browser.open(self.leaf_repofolder)
+        self.assertNotIn(self.factory_label, factoriesmenu.addable_types())
+
+    @browsing
     def test_adding_from_template_not_allowed_on_branch_nodes(self, browser):
         self.login(self.administrator, browser)
         browser.open(self.branch_repofolder)

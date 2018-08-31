@@ -336,4 +336,5 @@ class SelectDossierTemplateView(FormWrapper):
         """
         return is_dossier_template_feature_enabled() and \
             self.context.is_leaf_node() and \
-            api.user.has_permission('opengever.dossier: Add businesscasedossier', obj=self.context)
+            api.user.has_permission('opengever.dossier: Add businesscasedossier', obj=self.context) and \
+            self.context.allow_add_businesscase_dossier
