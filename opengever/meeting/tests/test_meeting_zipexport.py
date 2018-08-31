@@ -177,7 +177,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'opengever_id': 3,
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                    'file': u'1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.docx',
+                    'file': u'1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
                     'modified': u'2017-12-12T23:00:00+01:00',
                 },
                 'title': u'Ad-hoc Traktand\xfem',
@@ -245,7 +245,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     {'number': '1.',
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': '1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.docx',
+                         'file': '1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
                          'modified': '2017-12-12T23:00:00+01:00',
                      },
                      'sort_order': 2,
@@ -281,7 +281,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         file_names = zip_file.namelist()
         for file_name in [
-                '1. Ad-hoc Traktandthm/Ad hoc agenda item Ad-hoc Traktandthm.docx',
+                '1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
                 '2. Anderungen am Personalreglement/Vertragsentwurf.docx',
                 '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
                 'Protocol-9. Sitzung der Rechnungsprufungskommission.docx']:
