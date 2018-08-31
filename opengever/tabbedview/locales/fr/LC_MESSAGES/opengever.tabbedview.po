@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-22 12:19+0000\n"
+"POT-Creation-Date: 2018-08-20 16:51+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tabbedview/fr/>\n"
@@ -195,6 +195,11 @@ msgstr "Actif"
 msgid "label_checked_out"
 msgstr "En traitement"
 
+#. Default: "Creation Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_created_date"
+msgstr "Date de création"
+
 #. Default: "Delivery Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_delivery_date"
@@ -239,6 +244,11 @@ msgstr "Fin"
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "label_issuer"
 msgstr "Mandant"
+
+#. Default: "Modification Date"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_modified_date"
+msgstr "Date de modification"
 
 #. Default: "My notifications"
 #: ./opengever/tabbedview/browser/personal_overview.py

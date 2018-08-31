@@ -101,10 +101,12 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
         expected_column_data = {
             '': '',
             'Checked out by': '',
+            'Creation Date': '31.08.2016',
             'Delivery Date': '03.01.2010',
             'Document Author': 'test_user_1_',
             'Document Date': '03.01.2010',
             'Dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            'Modification Date': '31.08.2016',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
             'Reference Number': 'Client1 1.1 / 1 / 12',

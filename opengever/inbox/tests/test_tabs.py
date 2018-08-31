@@ -17,7 +17,8 @@ class TestInboxTabbedview(IntegrationTestCase):
 
         self.assertEquals(
             ['', 'Sequence Number', 'Title', 'Document Author',
-             'Document Date', 'Receipt Date', 'Delivery Date', 'Public Trial',
+             'Document Date', 'Modification Date', 'Creation Date',
+             'Receipt Date', 'Delivery Date', 'Public Trial',
              'Reference Number'],
             browser.css('.listing th').text)
 
@@ -29,8 +30,8 @@ class TestInboxTabbedview(IntegrationTestCase):
 
         self.assertEquals(
             ['', 'Sequence Number', 'Title', 'Document Author',
-             'Document Date', 'Receipt Date', 'Delivery Date',
-             'Public Trial'],
+             'Document Date', 'Modification Date', 'Creation Date',
+             'Receipt Date', 'Delivery Date', 'Public Trial'],
             browser.css('.listing th').text)
 
     @browsing

@@ -23,6 +23,8 @@ class TestDocumentListing(IntegrationTestCase):
             'Sequence Number': '12',
             'Subdossier': '',
             'Title': u'Vertr\xe4gsentwurf',
+            'Creation Date': '31.08.2016',
+            'Modification Date': '31.08.2016',
             }
 
         listings = browser.css('.listing').first.dicts()
