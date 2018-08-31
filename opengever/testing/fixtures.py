@@ -120,6 +120,7 @@ class OpengeverContentFixture(object):
                 self.create_workspace()
             with self.login(self.dossier_responsible):
                 self.create_shadow_document()
+                self.create_protected_dossier()
 
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
@@ -1164,6 +1165,35 @@ class OpengeverContentFixture(object):
                 start=date(2016, 1, 1),
                 responsible=self.dossier_responsible.getId(),
                 )
+            ))
+
+    @staticuid()
+    def create_protected_dossier(self):
+        protected_dossier = self.register('protected_dossier', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'Luftsch\xfctze')
+            .having(
+                description=u'Lichtbogen-L\xf6schkammern usw.',
+                responsible=self.dossier_responsible.getId(),
+                start=date(2016, 1, 1),
+                )
+            ))
+        protected_dossier.__ac_local_roles_block__ = True
+        protected_dossier.reindexObjectSecurity()
+        protected_dossier.reindexObject(idxs=['blocked_local_roles'])
+
+        protected_document = self.register('protected_document', create(
+            Builder('document')
+            .within(protected_dossier)
+            .titled(u'T\xfcrmli')
+            .having(
+                document_date=datetime(2010, 1, 3),
+                document_author=TEST_USER_ID,
+                )
+            .attach_file_containing(
+                bumblebee_asset('example.docx').bytes(),
+                u'bauplan.docx')
             ))
 
     @staticuid()

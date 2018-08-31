@@ -108,11 +108,7 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
     def test_blocked_role_tab_does_not_render_tree_when_nothing_found(self, browser):  # noqa
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.administrator, browser)
-
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
+        browser.open(self.empty_repofolder, view="tabbedview_view-blocked-local-roles")
         self.assertEquals(
             browser.css('.blocked-local-roles-listing').first.text,
             u'Keine gesch\xfctzte Objekte in diesem Bereich gefunden.',
@@ -167,44 +163,17 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
             )
 
     @browsing
-    def test_blocked_role_tab_tree_rendering_of_dossier(self, browser):
+    def test_blocked_role_tab_tree_rendering(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.administrator, browser)
-
-        self.dossier.__ac_local_roles_block__ = True
-        self.dossier.reindexObject(idxs=['blocked_local_roles'])
-
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
-
-        self.assertEquals(
-            browser.css('.blocked-local-roles-link').text,
-            [
-                u'1. F\xfchrung',
-                u'1.1. Vertr\xe4ge und Vereinbarungen',
-                u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-                ],
-            )
-
-        self.assertEquals(
-            browser.css('.level1 a').text,
-            [
-                u'1.1. Vertr\xe4ge und Vereinbarungen',
-                u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-                ],
-            )
-
-        self.assertEquals(
-            browser.css('.level2 a').text,
-            [
-                u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-                ],
-            )
-
+        browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
+        expected_titles = [u'1. F\xfchrung', u'1.1. Vertr\xe4ge und Vereinbarungen', u'Luftsch\xfctze']
+        self.assertEquals(expected_titles, browser.css('.blocked-local-roles-link').text)
+        expected_titles = [u'1.1. Vertr\xe4ge und Vereinbarungen', u'Luftsch\xfctze']
+        self.assertEquals(expected_titles, browser.css('.level1 a').text)
+        expected_titles = [u'Luftsch\xfctze']
+        self.assertEquals(expected_titles, browser.css('.level2 a').text)
         self.assertFalse(browser.css('.level3 a').text)
-
         nodes = browser.css('.blocked-local-roles-link')
         repo = 'contenttype-opengever-repository-repositoryfolder'
         dossier = 'contenttype-opengever-dossier-businesscasedossier'
@@ -213,125 +182,21 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         self.assertIn(dossier, nodes[2].classes)
 
     @browsing
-    def test_blocked_role_tab_tree_rendering_of_repofolder(self, browser):
-        browser.append_request_header('Accept-Language', 'de-ch')
-        self.login(self.administrator, browser)
-
-        self.leaf_repofolder.__ac_local_roles_block__ = True
-        self.leaf_repofolder.reindexObject(idxs=['blocked_local_roles'])
-
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
-
-        self.assertEquals(
-            browser.css('.blocked-local-roles-link').text,
-            [
-                u'1. F\xfchrung',
-                u'1.1. Vertr\xe4ge und Vereinbarungen',
-                ],
-            )
-
-        self.assertEquals(
-            browser.css('.level1 a').text,
-            [
-                u'1.1. Vertr\xe4ge und Vereinbarungen',
-                ],
-            )
-
-        self.assertFalse(browser.css('.level2 a').text)
-
-        nodes = browser.css('.blocked-local-roles-link')
-        repo = 'contenttype-opengever-repository-repositoryfolder'
-        self.assertIn(repo, nodes[0].classes)
-        self.assertIn(repo, nodes[1].classes)
-
-    @browsing
     def test_blocked_role_tab_can_drill_down_to_dossier(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.administrator, browser)
-
-        self.dossier.__ac_local_roles_block__ = True
-        self.dossier.reindexObject(idxs=['blocked_local_roles'])
-
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
+        browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
         browser.css('.blocked-local-roles-link').first.click()
-        expected_url = ''.join((
-            self.branch_repofolder.absolute_url(),
-            '#blocked-local-roles',
-            ))
-        self.assertEquals(
-            expected_url,
-            browser.url,
-            )
-
-        browser.open(
-            self.branch_repofolder,
-            view="tabbedview_view-blocked-local-roles",
-            )
+        expected_url = ''.join((self.branch_repofolder.absolute_url(), '#blocked-local-roles', ))
+        self.assertEquals(expected_url, browser.url)
+        browser.open(self.branch_repofolder, view="tabbedview_view-blocked-local-roles")
         browser.css('.blocked-local-roles-link').first.click()
-        expected_url = ''.join((
-            self.leaf_repofolder.absolute_url(),
-            '#blocked-local-roles',
-            ))
-        self.assertEquals(
-            expected_url,
-            browser.url,
-            )
-
-        browser.open(
-            self.leaf_repofolder,
-            view="tabbedview_view-blocked-local-roles",
-            )
+        expected_url = ''.join((self.leaf_repofolder.absolute_url(), '#blocked-local-roles', ))
+        self.assertEquals(expected_url, browser.url)
+        browser.open(self.leaf_repofolder, view="tabbedview_view-blocked-local-roles")
         browser.css('.blocked-local-roles-link').first.click()
-        expected_url = ''.join((
-            self.dossier.absolute_url(),
-            '#sharing',
-            ))
-        self.assertEquals(
-            expected_url,
-            browser.url,
-            )
-
-    @browsing
-    def test_blocked_role_tab_can_drill_down_to_repofolder(self, browser):
-        browser.append_request_header('Accept-Language', 'de-ch')
-        self.login(self.administrator, browser)
-
-        self.leaf_repofolder.__ac_local_roles_block__ = True
-        self.leaf_repofolder.reindexObject(idxs=['blocked_local_roles'])
-
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
-        browser.css('.blocked-local-roles-link').first.click()
-        expected_url = ''.join((
-            self.branch_repofolder.absolute_url(),
-            '#blocked-local-roles',
-            ))
-        self.assertEquals(
-            expected_url,
-            browser.url,
-            )
-
-        browser.open(
-            self.branch_repofolder,
-            view="tabbedview_view-blocked-local-roles",
-            )
-        browser.css('.blocked-local-roles-link').first.click()
-        expected_url = ''.join((
-            self.leaf_repofolder.absolute_url(),
-            '#sharing',
-            ))
-        self.assertEquals(
-            expected_url,
-            browser.url,
-            )
+        expected_url = ''.join((self.protected_dossier.absolute_url(), '#sharing', ))
+        self.assertEquals(expected_url, browser.url)
 
     @browsing
     def test_protected_dossiers_are_listed_for_manager(self, browser):
