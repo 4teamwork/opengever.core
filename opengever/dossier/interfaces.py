@@ -211,6 +211,12 @@ class IDossierResolveProperties(Interface):
         'should be added automatically to the dossier when it gets resolved.',
         default=False)
 
+    tasks_pdf_enabled = schema.Bool(
+        title=u'Enable `tasks pdf` option.',
+        description=u'Select if a pdf representation of the tasks in the dossier '
+        'should be added automatically to the dossier when it gets resolved.',
+        default=False)
+
     archival_file_conversion_enabled = schema.Bool(
         title=u'Enable automatic archival file conversion with bumblebee.',
         description=u'Select if GEVER should trigger the archival file '
@@ -222,3 +228,11 @@ class IDossierResolveProperties(Interface):
         vocabulary=u'opengever.dossier.ValidResolverNamesVocabulary',
         default='strict'
     )
+
+
+class IDossierTasksPdfMarker(Interface):
+    """Marker Interface for dossier tasks list document."""
+
+
+class IDossierJournalPdfMarker(Interface):
+    """Marker Interface for dossier journal document."""

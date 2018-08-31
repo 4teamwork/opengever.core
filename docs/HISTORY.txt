@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Add feature to generate a task listing pdf when resolving a dossier. [njohner]
 - Set adhoc agendaitem filename to title without prefixing it. [njohner]
 - Disallow dossier from template when adding businesscasedossier is disallowed. [njohner]
 - Change wording for "Return Excerpt" from "zurücksenden" to "ablegen". [njohner]

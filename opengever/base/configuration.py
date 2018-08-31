@@ -73,6 +73,7 @@ class GeverSettingsAdpaterV1(object):
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
         features['gever_ui_path'] = api.portal.get_registry_record('path', interface=IGeverUI)
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
+        features['tasks_pdf'] = api.portal.get_registry_record('tasks_pdf_enabled', interface=IDossierResolveProperties)
         features['meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IMeetingSettings)
         features['officeatwork'] = api.portal.get_registry_record('is_feature_enabled', interface=IOfficeatworkSettings)
         features['officeconnector_attach'] = api.portal.get_registry_record('attach_to_outlook_enabled', interface=IOfficeConnectorSettings)  # noqa

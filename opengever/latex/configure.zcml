@@ -41,6 +41,11 @@
       />
 
   <adapter
+      factory=".listing.TaskHistoryLaTeXListing"
+      name="task-history"
+      />
+
+  <adapter
       factory=".listing.JournalLaTeXListing"
       name="journal"
       />
@@ -78,6 +83,18 @@
       for="*"
       name="pdf-dossier-journal"
       class=".dossierjournal.DossierJournalPDFView"
+      permission="zope2.View"
+      />
+
+  <adapter
+      factory=".dossiertasks.DossierTasksLaTeXView"
+      provides="ftw.pdfgenerator.interfaces.ILaTeXView"
+      />
+
+  <browser:page
+      for="*"
+      name="pdf-dossier-tasks"
+      class=".dossiertasks.DossierTasksPDFView"
       permission="zope2.View"
       />
 

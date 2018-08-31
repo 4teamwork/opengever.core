@@ -60,8 +60,10 @@ FEATURE_FLAGS = {
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'gever_ui': 'opengever.base.interfaces.IGeverUI.is_feature_enabled',
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
-    'officeconnector-attach': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.attach_to_outlook_enabled',
-    'officeconnector-checkout': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.direct_checkout_and_edit_enabled',  # noqa
+    'officeconnector-attach': 'opengever.officeconnector.interfaces.'
+                              'IOfficeConnectorSettings.attach_to_outlook_enabled',
+    'officeconnector-checkout': 'opengever.officeconnector.interfaces.'
+                                'IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
     'oneoffixx': 'opengever.oneoffixx.interfaces.IOneoffixxSettings.is_feature_enabled',
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
@@ -70,6 +72,7 @@ FEATURE_FLAGS = {
     'solr': 'opengever.base.interfaces.ISearchSettings.use_solr',
     'purge-trash': 'opengever.dossier.interfaces.IDossierResolveProperties.purge_trash_enabled',
     'journal-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.journal_pdf_enabled',
+    'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
     }
 
 FEATURE_PROFILES = {

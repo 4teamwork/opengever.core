@@ -207,6 +207,10 @@ msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossier storniert ist."
 
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr "Mit einer neuen Version des Dossiers ${title} aktualisiert."
+
 #: ./opengever/dossier/archive.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
@@ -908,6 +912,11 @@ msgstr "abgelaufen"
 #: ./opengever/dossier/resolve.py
 msgid "title_dossier_journal"
 msgstr "Dossier Journal ${title}, ${timestamp}"
+
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr "Aufgabenliste des Dossiers ${title}, ${timestamp}"
 
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/browser/forms.py

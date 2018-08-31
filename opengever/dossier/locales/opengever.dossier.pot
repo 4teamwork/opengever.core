@@ -206,6 +206,10 @@ msgstr ""
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr ""
 
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr ""
+
 #: ./opengever/dossier/archive.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
@@ -906,6 +910,11 @@ msgstr ""
 #. Default: "Journal of dossier ${title}, ${timestamp}"
 #: ./opengever/dossier/resolve.py
 msgid "title_dossier_journal"
+msgstr ""
+
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
 msgstr ""
 
 #. Default: "You didn't select any participants."

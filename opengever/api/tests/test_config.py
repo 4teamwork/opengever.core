@@ -59,6 +59,7 @@ class TestConfig(IntegrationTestCase):
                 u'resolver_name': u'strict',
                 u'sablon_date_format': u'%d.%m.%Y',
                 u'solr': False,
+                u'tasks_pdf': False,
                 u'workspace': False,
             })
 

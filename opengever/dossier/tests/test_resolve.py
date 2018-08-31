@@ -197,7 +197,102 @@ class TestResolveJobs(IntegrationTestCase):
                          "Document date should be earliest possible date")
 
     @browsing
-    def test_journal_pdf_is_disabled_by_default(self, browser):
+    def test_journal_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+        self.assertEquals(1, len(children['added']))
+        journal_pdf, = children['added']
+        journal_pdf.reindexObject()
+        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        browser.open(self.empty_dossier, view='transition-reactivate', data={'_authenticator': createToken()})
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+    @browsing
+    def test_adds_tasks_pdf_only_to_main_dossier(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .titled(u'Sub'))
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    resolve_dossier(self.empty_dossier, browser)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_tasks_pdf, = main_children['added']
+        self.assertEquals(u'Task list of dossier An empty dossier, Apr 25, 2016 12:00 AM',
+                          main_tasks_pdf.title)
+        self.assertEquals(u'Task list of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
+                          main_tasks_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          main_tasks_pdf.file.contentType)
+        self.assertFalse(main_tasks_pdf.preserved_as_paper)
+
+        self.assertEquals(0, len(sub_children['added']))
+
+    @browsing
+    def test_sets_tasks_pdf_document_date_to_dossier_end_date(self, browser):
+        """When the document date is not set to the dossiers end date the
+        subdossier will be left in an inconsistent state. this will make
+        resolving the main dossier impossible.
+        """
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
+
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                resolve_dossier(subdossier, browser)
+
+        self.assertEquals(0, len(sub_children['added']))
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                resolve_dossier(self.empty_dossier, browser)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_tasks_pdf, = main_children['added']
+        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
+                         "End should be earliest possible date")
+        self.assertEqual(date(2016, 3, 15), main_tasks_pdf.document_date,
+                         "Document date should be earliest possible date")
+
+    @browsing
+    def test_tasks_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+        self.assertEquals(1, len(children['added']))
+        tasks_pdf, = children['added']
+        tasks_pdf.reindexObject()
+        self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+        browser.open(self.empty_dossier, view='transition-reactivate', data={'_authenticator': createToken()})
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(1, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+    @browsing
+    def test_tasks_and_journal_pdf_are_disabled_by_default(self, browser):
         self.login(self.secretariat_user, browser)
 
         with self.observe_children(self.empty_dossier) as children:

@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from ftw.table import helper
+from opengever.activity import _ as activity_mf
 from opengever.journal import _ as journal_mf
 from opengever.journal.handlers import DOCUMENT_SENT
 from opengever.journal.tab import title_helper
@@ -47,7 +48,7 @@ class ILaTexListing(Interface):
         """"Returns a LaTEx string with the labels of the listing"""
 
     def get_widths():
-        """"Returns a LaTEx string with the labels of the listing,
+        """"Returns a LaTEx string with the widths of the listing,
         which are calculated."""
 
     def get_rows():
@@ -86,20 +87,20 @@ class LaTexListing(object):
         return columns
 
     def get_widths(self):
-        """"Returns a LaTEx string with the labels of the listing,
-        which are calculated."""
+        """"Returns a list of the column widths as strings"""
         return [col.width for col in self.columns.values()]
 
     def get_labels(self):
-        """"Returns a LaTEx string with the labels of the listing"""
+        """"Returns a list of the column labels of the listing"""
         return [col.label for col in self.columns.values()]
 
     def get_rows(self):
-        """"Returns a LaTEx string with all the rows of the listing"""
+        """"Returns a list of the data for each row of the listing"""
         return [self.get_row_for_item(item) for item in self.items]
 
-    def get_listing(self, items=[]):
-        self.items += items
+    def get_listing(self, items=None):
+        if items is not None:
+            self.items += items
 
         if len(self.items) == 0:
             return None
@@ -270,6 +271,32 @@ class TasksLaTeXListing(DossiersLaTeXListing):
                    _('label_deadline', default='Deadline'),
                    '15%',
                    lambda item: helper.readable_date(item, item.deadline))
+        ]
+
+
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
+class TaskHistoryLaTeXListing(LaTexListing):
+
+    def get_columns(self):
+        return [
+            Column('date',
+                   _('label_time', default=u'Time'),
+                   '10%',
+                   lambda item: helper.readable_date_time(item, item.date)),
+
+            Column('creator',
+                   _('label_creator', default='Changed by'),
+                   '20%'),
+
+            Column('transition',
+                   _('label_transition', default='Transition'),
+                   '20%',
+                   lambda item: activity_mf(item.transition)),
+
+            Column('text',
+                   _('label_description', default='Description'),
+                   '50%'),
         ]
 
 

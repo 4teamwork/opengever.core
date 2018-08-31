@@ -205,6 +205,10 @@ msgstr "Le sous-dossier a été clôturé avec succès."
 msgid "This subdossier can't be activated,because the main dossiers is inactive"
 msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier principal a été annulé."
 
+#: ./opengever/dossier/resolve.py
+msgid "Updated with a newer generated version from dossier ${title}."
+msgstr "Actualisé par une nouvelle version du dossier ${title}."
+
 #: ./opengever/dossier/archive.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution du numéro d'inventaire, tous les champs sont obligatoires."
@@ -906,6 +910,11 @@ msgstr "Périmé"
 #: ./opengever/dossier/resolve.py
 msgid "title_dossier_journal"
 msgstr "Journal du dossier ${title}, ${timestamp}"
+
+#. Default: "Task list of dossier ${title}, ${timestamp}"
+#: ./opengever/dossier/resolve.py
+msgid "title_dossier_tasks"
+msgstr "Liste des tâches du dossier ${title}, ${timestamp}"
 
 #. Default: "You didn't select any participants."
 #: ./opengever/dossier/browser/forms.py

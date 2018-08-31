@@ -3,6 +3,7 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.versioner import Versioner
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
@@ -10,6 +11,8 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.dossier.interfaces import IDossierJournalPdfMarker
+from opengever.dossier.interfaces import IDossierTasksPdfMarker
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -17,6 +20,7 @@ from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getSiteManager
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
@@ -180,11 +184,14 @@ class StrictDossierResolver(object):
         - Remove all trashed documents.
         - (Trigger PDF-A conversion).
         - Generate a PDF output of the journal.
+        - For a main dossier, Generate a PDF listing the tasks.
         """
 
         self.trash_shadowed_docs()
         self.purge_trash()
         self.create_journal_pdf()
+        if not self.context.is_subdossier():
+            self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
 
     def trash_shadowed_docs(self):
@@ -192,8 +199,8 @@ class StrictDossierResolver(object):
         """
         portal_catalog = api.portal.get_tool('portal_catalog')
         query = {'path': {'query': self.context.absolute_url_path(), 'depth': -1},
-                'object_provides': [IBaseDocument.__identifier__],
-                'review_state': "document-state-shadow"}
+                 'object_provides': [IBaseDocument.__identifier__],
+                 'review_state': "document-state-shadow"}
         shadowed_docs = portal_catalog.unrestrictedSearchResults(query)
 
         if shadowed_docs:
@@ -244,12 +251,74 @@ class StrictDossierResolver(object):
         if dossier and dossier.end:
             kwargs['document_date'] = dossier.end
 
+        results = api.content.find(object_provides=IDossierJournalPdfMarker,
+                                   depth=1,
+                                   context=self.context)
+
         with elevated_privileges():
-            CreateDocumentCommand(
-                self.context, filename, view.get_data(),
-                title=translate(title, context=self.context.REQUEST),
-                content_type='application/pdf',
-                **kwargs).execute()
+            if len(results) > 0:
+                document = results[0].getObject()
+                document.title = translate(title, context=self.context.REQUEST)
+                comment = _(u'Updated with a newer generated version from dossier ${title}.',
+                            mapping=dict(title=self.context.title))
+                document.update_file(view.get_data(), create_version=True,
+                                     comment=comment)
+                return
+
+            document = CreateDocumentCommand(
+                        self.context, filename, view.get_data(),
+                        title=translate(title, context=self.context.REQUEST),
+                        content_type='application/pdf',
+                        **kwargs).execute()
+            alsoProvides(document, IDossierJournalPdfMarker)
+
+    def create_tasks_listing_pdf(self):
+        """Creates a pdf representation of the dossier tasks, and add it to
+        the dossier as a normal document.
+
+        If the dossiers has an end date use that date as the document date.
+        This prevents the dossier from entering an invalid state with a
+        document date outside the dossiers start-end range.
+        """
+        if not self.get_property('tasks_pdf_enabled'):
+            return
+
+        view = self.context.unrestrictedTraverse('pdf-dossier-tasks')
+
+        today = api.portal.get_localized_time(
+            datetime=datetime.today(), long_format=True)
+        filename = u'Tasks {}.pdf'.format(today)
+        title = _(u'title_dossier_tasks',
+                  default=u'Task list of dossier ${title}, ${timestamp}',
+                  mapping={'title': self.context.title,
+                           'timestamp': today})
+        kwargs = {
+            'preserved_as_paper': False,
+        }
+        dossier = IDossier(self.context)
+        if dossier and dossier.end:
+            kwargs['document_date'] = dossier.end
+
+        results = api.content.find(object_provides=IDossierTasksPdfMarker,
+                                   depth=1,
+                                   context=self.context)
+
+        with elevated_privileges():
+            if len(results) > 0:
+                document = results[0].getObject()
+                document.title = translate(title, context=self.context.REQUEST)
+                comment = _(u'Updated with a newer generated version from dossier ${title}.',
+                            mapping=dict(title=self.context.title))
+                document.update_file(view.get_data(), create_version=True,
+                                     comment=comment)
+                return
+
+            document = CreateDocumentCommand(
+                        self.context, filename, view.get_data(),
+                        title=translate(title, context=self.context.REQUEST),
+                        content_type='application/pdf',
+                        **kwargs).execute()
+            alsoProvides(document, IDossierTasksPdfMarker)
 
     def trigger_pdf_conversion(self):
         if not self.get_property('archival_file_conversion_enabled'):
@@ -352,9 +421,9 @@ class ResolveConditions(object):
 
         errors = []
 
-        if (self.strict and
-                not self.context.is_all_supplied() and
-                not self.context.is_subdossier()):
+        if (self.strict
+                and not self.context.is_all_supplied()
+                and not self.context.is_subdossier()):
             errors.append(NOT_SUPPLIED_OBJECTS)
         if not self.context.is_all_checked_in():
             errors.append(NOT_CHECKED_IN_DOCS)
