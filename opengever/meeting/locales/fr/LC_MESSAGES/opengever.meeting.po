@@ -1466,7 +1466,7 @@ msgstr "Sommaire"
 #. Default: "Paragraph successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "paragraph_added"
-msgstr "Paragraphe ajouté avec succès."
+msgstr "Intertitre ajouté avec succès."
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py
