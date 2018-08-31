@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 11:01+0000\n"
+"POT-Creation-Date: 2018-09-06 07:57+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -362,11 +362,6 @@ msgstr "Le point de l'ordre du jour a été clôturé et la réunion a eu lieu."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_order_updated"
 msgstr "Les points de l'ordre du jour ont été réarrangés."
-
-#. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py
-msgid "agenda_item_proposal_decided"
-msgstr "Le point de l'ordre du jour a été clôturé, l'extrait de protocole a été généré et renvoyé."
 
 #. Default: "Agenda Item successfully reopened."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -1539,6 +1534,7 @@ msgid "proposal_history_label_rejected"
 msgstr "Rejeté par ${user}"
 
 #. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
 msgstr "Enlevé de l'ordre du jour de la réunion ${meeting} par ${user}"
