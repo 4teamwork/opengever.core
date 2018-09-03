@@ -4,7 +4,23 @@ from opengever.trash.trash import ITrashed
 from plone import api
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
+from zope.component.interfaces import IObjectEvent
+from zope.component.interfaces import ObjectEvent
+from zope.event import notify
+from zope.interface import implements
 from zope.intid.interfaces import IIntIds
+
+
+class IObjectWillBeRemovedFromTrashEvent(IObjectEvent):
+    """Interface of an event which gets fired when removing a document from trash.
+    """
+
+
+class ObjectWillBeRemovedFromTrashEvent(ObjectEvent):
+    """The event which gets fired when removing a document from trash.
+    """
+
+    implements(IObjectWillBeRemovedFromTrashEvent)
 
 
 class Remover(object):
@@ -15,6 +31,7 @@ class Remover(object):
         self.verify_is_allowed()
 
         for document in self.documents:
+            notify(ObjectWillBeRemovedFromTrashEvent(document))
             api.content.transition(obj=document,
                                    transition=document.remove_transition)
 
