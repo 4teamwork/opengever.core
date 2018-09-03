@@ -41,6 +41,11 @@ class Column(object):
 
         return value
 
+    def get_width(self):
+        if not self.width.endswith("%"):
+            raise NotImplementedError("Only implemented for width in percentage")
+        return float(self.width.split("%")[0])
+
 
 class ILaTexListing(Interface):
 
@@ -134,6 +139,16 @@ class LaTexListing(object):
 
         return obj.Title()
 
+    @staticmethod
+    def reset_column_widths(columns):
+        """recalculates the column widths so that they span the whole textwidth.
+        """
+        total_width = reduce(lambda total_width, column: total_width + column.get_width(),
+                             columns.values(), 0)
+        for column in columns.values():
+            column.width = str(column.get_width() / total_width * 100) + "%"
+        return columns
+
 
 @implementer(ILaTexListing)
 @adapter(Interface, Interface, Interface)
@@ -193,6 +208,7 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
     def update_column_dict(self, columns):
         del columns['reference']
         del columns['repository_title']
+        self.reset_column_widths(columns)
         return columns
 
 
