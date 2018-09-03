@@ -235,11 +235,18 @@ class LanguagesVocabulary(object):
 
     def __call__(self, context):
         ltool = api.portal.get_tool('portal_languages')
-        languages = [code.split('-')[0]
-                     for code in ltool.getSupportedLanguages()]
+        supported_language_codes = [language[0].split('-')[0] for language in ltool.listSupportedLanguages()]
+        return SimpleVocabulary([
+            SimpleVocabulary.createTerm(*LanguagesVocabulary.parse_language_to_term(language))
+            for language in ltool.listAvailableLanguageInformation()
+            if language.get('code') in supported_language_codes
+            ])
 
-        return SimpleVocabulary(
-            [SimpleTerm(language) for language in languages])
+    @staticmethod
+    def parse_language_to_term(language):
+        code = language.get('code')
+        name = language.get('native')
+        return code, code, name
 
 
 @implementer(IVocabularyFactory)
