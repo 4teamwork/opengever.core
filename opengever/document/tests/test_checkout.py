@@ -79,13 +79,15 @@ class TestCheckinIntegration(IntegrationTestCase):
 class TestCheckin(FunctionalTestCase):
     """Tests for the checkin functionality."""
 
+    document_date = date(2014, 1, 1)
+
     def setUp(self):
         super(TestCheckin, self).setUp()
         self.dossier = create(Builder('dossier'))
 
         self.document = create(Builder('document')
                                .with_dummy_content()
-                               .having(document_date=date(2014, 1, 1))
+                               .having(document_date=self.document_date)
                                .within(self.dossier)
                                .checked_out())
 
@@ -122,20 +124,21 @@ class TestCheckin(FunctionalTestCase):
         self.manager.checkin()
         self.assertFalse(IRefreshableLockable(self.document).locked())
 
-    def test_document_date_is_updated_to_current_date(self):
+    def test_document_date_is_not_updated_when_checked_in(self):
         self.manager.checkin()
-
-        self.assertEquals(date.today(), self.document.document_date)
+        self.assertEquals(self.document_date, self.document.document_date)
 
 
 class TestReverting(FunctionalTestCase):
     """Tests for reverting documents to older revisions."""
 
+    document_date = date(2014, 1, 1)
+
     def setUp(self):
         super(TestReverting, self).setUp()
         self.dossier = create(Builder('dossier'))
         self.document = create(Builder('document')
-                               .having(document_date=date(2014, 1, 1))
+                               .having(document_date=self.document_date)
                                .within(self.dossier)
                                .attach_file_containing(
                                    u"INITIAL VERSION DATA", u"somefile.txt"))
@@ -172,13 +175,11 @@ class TestReverting(FunctionalTestCase):
             self.document.file._blob, version2.object.file._blob)
         self.assertNotEqual(self.document.file, version2.object.file)
 
-    def test_resets_document_date_to_reverted_version(self):
+    def test_revert_does_not_change_document_date(self):
         with freeze(datetime(2015, 01, 28, 12, 00)):
             create_document_version(self.document, 3)
-
-        self.document.document_date = date(2015, 5, 15)
         self.manager.revert_to_version(3)
-        self.assertEquals(date(2015, 01, 28), self.document.document_date)
+        self.assertEquals(self.document_date, self.document.document_date)
 
     def test_revert_disallowed_for_unprivileded_user(self):
         self.grant('Authenticated')
