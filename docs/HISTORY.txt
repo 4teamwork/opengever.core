@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix double escaping of agendaitem title in meeting overview. [njohner]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
