@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-21 10:45+0000\n"
+"POT-Creation-Date: 2018-08-07 11:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1660,6 +1660,16 @@ msgstr ""
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
+msgstr ""
+
+#. Default: "Ad hoc agenda item ${title}"
+#: ./opengever/meeting/model/meeting.py
+msgid "title_ad_hoc_document"
+msgstr ""
+
+#. Default: "Agenda item ${number}"
+#: ./opengever/meeting/model/agendaitem.py
+msgid "title_agenda_item"
 msgstr ""
 
 #. Default: "Delete proposal"

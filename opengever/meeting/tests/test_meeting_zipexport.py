@@ -6,6 +6,7 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.testing import IntegrationTestCase
+from opengever.testing import set_preferred_language
 from opengever.testing.helpers import localized_datetime
 from StringIO import StringIO
 import cgi
@@ -55,27 +56,30 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
     @browsing
     def test_zip_export_agenda_items_attachments(self, browser):
+        browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
+            'Traktandum 1/Vertragsentwurf.docx',
             zip_file.namelist())
 
     @browsing
     def test_export_proposal_word_documents(self, browser):
+        browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            '1. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
+            'Traktandum 1/Anderungen am Personalreglement.docx',
             zip_file.namelist())
 
     @browsing
     def test_excerpt_is_not_exported(self, browser):
+        browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
@@ -85,10 +89,10 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertEquals(
-            ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-             '1. Anderungen am Personalreglement/Vertragsentwurf.docx',
-             '1. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
-             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
+            ['Protokoll-9. Sitzung der Rechnungsprufungskommission.docx',
+             'Traktandum 1/Vertragsentwurf.docx',
+             'Traktandum 1/Anderungen am Personalreglement.docx',
+             'Traktandenliste-9. Sitzung der Rechnungsprufungskommission.docx',
              'meeting.json'],
             zip_file.namelist())
 
@@ -160,6 +164,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             zip_file.namelist())
 
     def test_meeting_data_for_zip_export_json(self):
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
         self.login(self.committee_responsible)
         self.schedule_paragraph(self.meeting, u'A Gesch\xfcfte')
         with freeze(localized_datetime(2017, 12, 13)):
@@ -177,14 +182,14 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'opengever_id': 3,
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                    'file': u'1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
+                    'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
                     'modified': u'2017-12-12T23:00:00+01:00',
                 },
                 'title': u'Ad-hoc Traktand\xfem',
             }, {
                 'attachments': [{
                     'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                    'file': u'2. Anderungen am Personalreglement/Vertragsentwurf.docx',
+                    'file': u'Traktandum 2/Vertragsentwurf.docx',
                     'modified': u'2016-08-31T15:31:46+02:00',
                     'title': u'Vertr\xe4gsentwurf',
                 }],
@@ -193,7 +198,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'opengever_id': 4,
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                    'file': u'2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
+                    'file': u'Traktandum 2/Anderungen am Personalreglement.docx',
                     'modified': u'2016-08-31T15:31:44+02:00',
                 },
                 'title': u'\xc4nderungen am Personalreglement',
@@ -211,6 +216,8 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
     @browsing
     def test_exported_meeting_json_has_correct_file_names(self, browser):
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
         self.schedule_paragraph(self.meeting, u'A Gesch\xfcfte')
         with freeze(localized_datetime(2017, 12, 13)):
@@ -245,32 +252,32 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     {'number': '1.',
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': '1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
-                         'modified': '2017-12-12T23:00:00+01:00',
+                         'file': 'Traktandum 1/Ad-hoc Traktandthm.docx',
+                         'modified': '2017-12-12T23:00:00+01:00'
                      },
                      'sort_order': 2,
                      'title': u'Ad-hoc Traktand\xfem'},
                     {'attachments': [{
                         'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                        'file': '2. Anderungen am Personalreglement/Vertragsentwurf.docx',
+                        'file': 'Traktandum 2/Vertragsentwurf.docx',
                         'modified': '2016-08-31T15:31:46+02:00',
                         'title': u'Vertr\xe4gsentwurf'}],
                      'number': '2.',
                      'sort_order': 3,
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
+                         'file': 'Traktandum 2/Anderungen am Personalreglement.docx',
                          'modified': '2016-08-31T15:31:44+02:00'
                      },
                      'title': u'\xc4nderungen am Personalreglement'}
-                 ],
+                    ],
                  'committee': {'oguid': 'plone:1009273300',
                                'title': u'Rechnungspr\xfcfungskommission'},
                  'end': '2016-09-12T17:00:00+00:00',
                  'location': u'B\xfcren an der Aare',
                  'protocol': {
                      'checksum': 'unpredictable',
-                     'file': 'Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
+                     'file': 'Protokoll-9. Sitzung der Rechnungsprufungskommission.docx',
                      'modified': '2017-12-13T23:00:00+01:00'
                  },
                  'start': '2016-09-12T15:30:00+00:00',
@@ -279,10 +286,13 @@ class TestMeetingZipExportView(IntegrationTestCase):
             'version': '1.0.0'
             }, meeting_json)
 
-        file_names = zip_file.namelist()
-        for file_name in [
-                '1. Ad-hoc Traktandthm/Ad-hoc Traktandthm.docx',
-                '2. Anderungen am Personalreglement/Vertragsentwurf.docx',
-                '2. Anderungen am Personalreglement/Anderungen am Personalreglement.docx',
-                'Protocol-9. Sitzung der Rechnungsprufungskommission.docx']:
-            self.assertIn(file_name, file_names)
+        expected_file_names = [
+            'Protokoll-9. Sitzung der Rechnungsprufungskommission.docx',
+            'Traktandenliste-9. Sitzung der Rechnungsprufungskommission.docx',
+            'Traktandum 1/Ad-hoc Traktandthm.docx',
+            'Traktandum 2/Anderungen am Personalreglement.docx',
+            'Traktandum 2/Vertragsentwurf.docx',
+            'meeting.json',
+            ]
+        file_names = sorted(zip_file.namelist())
+        self.assertEqual(file_names, expected_file_names)

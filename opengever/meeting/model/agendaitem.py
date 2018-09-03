@@ -31,6 +31,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 from tzlocal import get_localzone
 from zope.component import getMultiAdapter
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 import os
 
 
@@ -218,9 +220,11 @@ class AgendaItem(Base):
         self.meeting.reorder_agenda_items()
 
     def get_document_filename_for_zip(self, document):
-        return normalize_path(u'{} {}/{}{}'.format(
-            self.number,
-            safe_unicode(self.get_title()),
+        return normalize_path(u'{}/{}{}'.format(
+            translate(
+                _(u'title_agenda_item', default=u'Agenda item ${number}', mapping={u'number': self.number}),
+                context=getRequest(),
+                ),
             safe_unicode(document.Title()),
             os.path.splitext(document.get_file().filename)[1]))
 

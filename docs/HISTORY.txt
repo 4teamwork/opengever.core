@@ -19,6 +19,7 @@ Changelog
 ---------------------
 
 - Make upgrade step 20180619143343 deferrable: Use of CMFEditions getHistory causes massive amounts of savepoints. [lgraf]
+- Simplify agenda item titles for folder names for meeting zip exports. [Rotonen]
 
 
 2018.4.1 (2018-08-30)
