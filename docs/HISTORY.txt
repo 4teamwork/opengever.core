@@ -15,6 +15,7 @@ Changelog
 - Fix handling of unidirectional by reference tasks in a sequential process. [phgross]
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
+- Bump lxml to 4.1.1. [Rotonen]
 
 
 2018.4.2 (2018-08-30)
