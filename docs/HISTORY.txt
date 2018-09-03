@@ -17,6 +17,7 @@ Changelog
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+- Fix an encoding issue in an upgrade by no using model code. [deiferni]
 
 
 2018.4.2 (2018-08-30)
