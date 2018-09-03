@@ -15,7 +15,6 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
@@ -108,7 +107,17 @@ class UploadValidator(validator.SimpleFieldValidator):
     def validate(self, value):
         """An mail upload as og.document should't be possible,
         it should be added as Mail object (see opengever.mail).
+
+        Only .docx files are accepted into proposal documents.
+
+        Removing a file is not an option for proposal documents.
         """
+        if self.request.form.get('form.widgets.file.action') == 'remove':
+            if self.is_proposal_upload():
+                raise Invalid(_(
+                    u'error_proposal_no_document',
+                    default=(u"It's not possible to have no file in proposal documents.")
+                    ))
         if not value:
             return
 
@@ -116,8 +125,18 @@ class UploadValidator(validator.SimpleFieldValidator):
             return
 
         if self.is_email_upload(value.filename):
-
             self.raise_invalid()
+
+        if self.is_proposal_upload():
+            if not os.path.splitext(value.filename)[1].lower() == '.docx':
+                raise Invalid(_(
+                    u'error_proposal_document_type',
+                    default=(u"It's not possible to have non-.docx documents as proposal documents.")
+                    ))
+
+    def is_proposal_upload(self):
+        """The upload form context can be, for example, a Dossier."""
+        return getattr(self.context, 'is_inside_a_proposal', lambda: False)()
 
     def is_email_upload(self, filename):
         basename, extension = os.path.splitext(filename)
@@ -289,10 +308,6 @@ class Document(Item, BaseDocumentMixin):
     def is_inside_a_task(self):
         parent = aq_parent(aq_inner(self))
         return ITask.providedBy(parent)
-
-    def is_inside_a_proposal(self):
-        parent = aq_parent(aq_inner(self))
-        return IProposal.providedBy(parent)
 
     def is_submitted_document(self):
         parent = aq_parent(aq_inner(self))

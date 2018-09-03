@@ -52,7 +52,7 @@ class BaseDocumentMixin(object):
             return parent
         if ITask.providedBy(parent):
             return parent.get_containing_dossier()
-        if IProposal.providedBy(parent):
+        if self.is_inside_a_proposal():
             return parent.get_containing_dossier()
 
         return None
@@ -70,9 +70,8 @@ class BaseDocumentMixin(object):
 
         This may return a "proposal" or a "submitted proposal".
         """
-        parent = aq_parent(aq_inner(self))
-        if IProposal.providedBy(parent):
-            return parent
+        if self.is_inside_a_proposal():
+            return aq_parent(aq_inner(self))
 
         # Find submitted proposal when self is an excerpt document in the
         # meeting dossier.
@@ -101,6 +100,10 @@ class BaseDocumentMixin(object):
     @property
     def is_mail(self):
         return False
+
+    def is_inside_a_proposal(self):
+        parent = aq_parent(aq_inner(self))
+        return IProposal.providedBy(parent)
 
     def related_items(self):
         raise NotImplementedError

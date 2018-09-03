@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-12 15:47+0000\n"
+"POT-Creation-Date: 2018-08-10 12:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,6 +194,17 @@ msgstr ""
 #. Default: "You have not selected any Items"
 #: ./opengever/document/browser/report.py
 msgid "error_no_items"
+msgstr ""
+
+#. Default: "It's not possible to have non-.docx documents as proposal documents."
+#: ./opengever/document/document.py
+#: ./opengever/document/quick_upload.py
+msgid "error_proposal_document_type"
+msgstr ""
+
+#. Default: "It's not possible to have no file in proposal documents."
+#: ./opengever/document/document.py
+msgid "error_proposal_no_document"
 msgstr ""
 
 #. Default: "Either the title or the file is required."
