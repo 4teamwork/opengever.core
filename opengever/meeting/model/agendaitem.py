@@ -18,6 +18,7 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.trash.trash import ITrashable
+from opengever.trash.trash import ITrashed
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Boolean
@@ -451,7 +452,7 @@ class AgendaItem(Base):
 
         return self.get_state() == self.STATE_DECIDED
 
-    def get_excerpt_documents(self, unrestricted=False):
+    def get_excerpt_documents(self, unrestricted=False, include_trashed=False):
         """Return a list of excerpt documents.
 
         If the agenda items has a proposal return the proposals excerpt
@@ -459,14 +460,16 @@ class AgendaItem(Base):
         dossier.
         """
         if self.has_proposal:
-            return self.submitted_proposal.get_excerpts(unrestricted=unrestricted)
+            return self.submitted_proposal.get_excerpts(unrestricted=unrestricted,
+                                                        include_trashed=include_trashed)
 
         checkPermission = getSecurityManager().checkPermission
         documents = [excerpt.resolve_document() for excerpt in self.excerpts]
         documents = filter(None, documents)
         if not unrestricted:
             documents = filter(lambda obj: checkPermission('View', obj), documents)
-
+        if not include_trashed:
+            documents = filter(lambda obj: not ITrashed.providedBy(obj), documents)
         return documents
 
     def get_source_dossier_excerpt(self):

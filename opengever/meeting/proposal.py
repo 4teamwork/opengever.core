@@ -33,6 +33,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.trash.trash import ITrashed
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
@@ -465,7 +466,7 @@ class SubmittedProposal(ProposalBase):
             dossier.absolute_url(),
             dossier.title)
 
-    def get_excerpts(self, unrestricted=False):
+    def get_excerpts(self, unrestricted=False, include_trashed=False):
         """Return a restricted list of document objects which are excerpts
         of the current proposal.
 
@@ -477,7 +478,8 @@ class SubmittedProposal(ProposalBase):
             obj = relation_value.to_object
             if unrestricted or checkPermission('View', obj):
                 excerpts.append(obj)
-
+        if not include_trashed:
+            excerpts = filter(lambda obj: not ITrashed.providedBy(obj), excerpts)
         return sorted(excerpts, key=lambda excerpt: excerpt.title_or_id())
 
     def append_excerpt(self, excerpt_document):
