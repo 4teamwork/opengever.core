@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.4.3 (unreleased)
+2018.4.3 (2018-09-04)
 ---------------------
 
 - Scale down size for logo wrapper, to have more space for personal menues. [phgross]
