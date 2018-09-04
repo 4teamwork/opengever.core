@@ -14,14 +14,14 @@
         <Arguments>
           <Interface Name="OneGovGEVER">
             <Node Id="ogg.document.title">Sch&#228;ttengarten</Node>
-            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 38</Node>
+            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 37</Node>
             <Node Id="ogg.document.sequence_number">37</Node>
           </Interface>
         </Arguments>
       </Function>
       <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">
         <Value key="ogg.document.title" type="string">Sch&#228;ttengarten</Value>
-        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 38</Value>
+        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 37</Value>
         <Value key="ogg.document.sequence_number" type="string">37</Value>
       </Function>
       <Commands>

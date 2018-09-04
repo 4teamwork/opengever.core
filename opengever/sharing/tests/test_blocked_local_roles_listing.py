@@ -167,11 +167,20 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.administrator, browser)
         browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
-        expected_titles = [u'1. F\xfchrung', u'1.1. Vertr\xe4ge und Vereinbarungen', u'Luftsch\xfctze']
+        expected_titles = [
+            u'1. F\xfchrung',
+            u'1.1. Vertr\xe4ge und Vereinbarungen',
+            u'Luftsch\xfctze',
+            u'Zu allem \xdcbel',
+            ]
         self.assertEquals(expected_titles, browser.css('.blocked-local-roles-link').text)
-        expected_titles = [u'1.1. Vertr\xe4ge und Vereinbarungen', u'Luftsch\xfctze']
+        expected_titles = [
+            u'1.1. Vertr\xe4ge und Vereinbarungen',
+            u'Luftsch\xfctze',
+            u'Zu allem \xdcbel',
+            ]
         self.assertEquals(expected_titles, browser.css('.level1 a').text)
-        expected_titles = [u'Luftsch\xfctze']
+        expected_titles = [u'Luftsch\xfctze', u'Zu allem \xdcbel']
         self.assertEquals(expected_titles, browser.css('.level2 a').text)
         self.assertFalse(browser.css('.level3 a').text)
         nodes = browser.css('.blocked-local-roles-link')

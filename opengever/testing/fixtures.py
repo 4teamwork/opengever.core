@@ -120,7 +120,7 @@ class OpengeverContentFixture(object):
                 self.create_workspace()
             with self.login(self.dossier_responsible):
                 self.create_shadow_document()
-                self.create_protected_dossier()
+                self.create_protected_dossiers()
 
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
@@ -1168,7 +1168,7 @@ class OpengeverContentFixture(object):
             ))
 
     @staticuid()
-    def create_protected_dossier(self):
+    def create_protected_dossiers(self):
         protected_dossier = self.register('protected_dossier', create(
             Builder('dossier')
             .within(self.repofolder00)
@@ -1183,7 +1183,7 @@ class OpengeverContentFixture(object):
         protected_dossier.reindexObjectSecurity()
         protected_dossier.reindexObject(idxs=['blocked_local_roles'])
 
-        protected_document = self.register('protected_document', create(
+        self.register('protected_document', create(
             Builder('document')
             .within(protected_dossier)
             .titled(u'T\xfcrmli')
@@ -1194,6 +1194,48 @@ class OpengeverContentFixture(object):
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
                 u'bauplan.docx')
+            ))
+
+        protected_dossier_with_task = self.register('protected_dossier_with_task', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'Zu allem \xdcbel')
+            .having(
+                description=u'Schl\xe4cht',
+                responsible=self.dossier_responsible.getId(),
+                start=date(2016, 1, 1),
+                )
+            ))
+        protected_dossier_with_task.__ac_local_roles_block__ = True
+        protected_dossier_with_task.reindexObjectSecurity()
+        protected_dossier_with_task.reindexObject(idxs=['blocked_local_roles'])
+
+        protected_document_with_task = self.register('protected_document_with_task', create(
+            Builder('document')
+            .within(protected_dossier_with_task)
+            .titled(u'Das kleinere \xdcbel')
+            .having(
+                document_date=datetime(2010, 1, 3),
+                document_author=TEST_USER_ID,
+                )
+            .attach_file_containing(
+                bumblebee_asset('example.docx').bytes(),
+                u'kunststuck.docx')
+            ))
+
+        self.register('task_in_protected_dossier', create(
+            Builder('task')
+            .within(protected_dossier_with_task)
+            .titled(u'Ein notwendiges \xdcbel')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+                )
+            .in_state('task-state-in-progress')
+            .relate_to(protected_document_with_task)
             ))
 
     @staticuid()
