@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Scale down size for logo wrapper, to have more space for personal menues. [phgross]
 - Fix double escaping of agendaitem title in meeting overview. [njohner]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
