@@ -5,8 +5,6 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
-- Scale down size for logo wrapper, to have more space for personal menues. [phgross]
-- Fix double escaping of agendaitem title in meeting overview. [njohner]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
@@ -15,11 +13,18 @@ Changelog
 - Disallow dossier from template when adding businesscasedossier is disallowed. [njohner]
 - Change wording for "Return Excerpt" from "zurücksenden" to "ablegen". [njohner]
 - Add modification and creation date column to document listings. [njohner]
-- Fix handling of unidirectional by reference tasks in a sequential process. [phgross]
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+
+
+2018.4.3 (2018-09-04)
+---------------------
+
+- Scale down size for logo wrapper, to have more space for personal menues. [phgross]
 - Fix an encoding issue in an upgrade by no using model code. [deiferni]
+- Fix double escaping of agendaitem title in meeting overview. [njohner]
+- Fix handling of unidirectional by reference tasks in a sequential process. [phgross]
 
 
 2018.4.2 (2018-08-30)
