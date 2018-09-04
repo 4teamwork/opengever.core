@@ -32,18 +32,25 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 @provider(IContextSourceBinder)
 def get_templates(context):
-    template_folder = get_template_folder()
+    """We only want to document templates that are directly contained
+    in a templatefolder, and not those contained in dossiertemplate
+    """
+    results = api.content.find(portal_type="opengever.dossier.templatefolder")
+    template_folders = [brain.getObject() for brain in results]
 
-    if template_folder is None:
+    if not template_folders:
         # this may happen when the user does not have permissions to
         # view templates and/or during ++widget++ traversal
         return SimpleVocabulary([])
 
-    templates = api.content.find(
-        context=template_folder,
-        depth=-1,
-        portal_type="opengever.document.document",
-        sort_on='sortable_title', sort_order='ascending')
+    templates = []
+    for template_folder in template_folders:
+        templates.extend(api.content.find(
+                context=template_folder,
+                depth=1,
+                portal_type="opengever.document.document",
+                sort_on='sortable_title', sort_order='ascending'))
+    templates.sort(key=lambda template: template.Title.lower())
 
     intids = getUtility(IIntIds)
     terms = []
