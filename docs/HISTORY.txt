@@ -11,6 +11,7 @@ Changelog
 - Add actions pointing to the meeting and protocol debug views. [njohner]
 - Fix bug with document without file in a dossiertemplate. [njohner]
 - Prevent replacing files on proposal templates with non-.docx files via quickupload. [Rotonen]
+- Add an upgrade step to fix broken-by-broken-protocol-excerpt journal entries on dossiers. [Rotonen]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
