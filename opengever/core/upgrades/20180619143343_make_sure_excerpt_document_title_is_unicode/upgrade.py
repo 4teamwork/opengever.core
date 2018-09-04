@@ -89,9 +89,20 @@ class MakeSureExcerptDocumentTitleIsUnicode(SQLUpgradeStep):
         for submitted_proposal in self.objects(
                 {'portal_type': 'opengever.meeting.submittedproposal'},
                 'Fix submitted proposal excerpts title.'):
-            excerpts = submitted_proposal.get_excerpts(unrestricted=True)
+            excerpts = self.get_submitted_proposal_excerpts(submitted_proposal)
             for excerpt_document in excerpts:
                 self.fix_document_title(excerpt_document)
+
+    def get_submitted_proposal_excerpts(self, submitted_proposal):
+        """Copy of SubmittedProposal.get_excerpts but omitting the sorting
+        as that may trigger errors before THIS upgrade is run.
+        """
+        excerpts = []
+        for relation_value in getattr(submitted_proposal, 'excerpts', ()):
+            obj = relation_value.to_object
+            excerpts.append(obj)
+
+        return excerpts
 
     def migrate_excerpts_in_dossiers(self):
         """Migrate excerpts that were returned to dossier of their proposal."""
