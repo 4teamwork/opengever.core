@@ -5,7 +5,7 @@ Changelog
 2018.4.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix handling of unidirectional by reference tasks in a sequential process. [phgross]
 
 
 2018.4.2 (2018-08-30)

@@ -66,6 +66,21 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
+    def test_starts_next_task_when_open_task_gets_closed(self):
+        self.login(self.regular_user)
+
+        self.seq_subtask_1.task_type = 'information'
+        self.seq_subtask_1.sync()
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(self.seq_subtask_1))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(self.seq_subtask_2))
+
     def test_starts_next_task_when_task_gets_skipped(self):
         self.login(self.dossier_responsible)
 
