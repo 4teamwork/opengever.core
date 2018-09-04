@@ -1,3 +1,4 @@
+from Acquisition import aq_inner
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -8,8 +9,11 @@ from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
+from opengever.meeting.model.excerpt import Excerpt
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from plone import api
+from zc.relation.interfaces import ICatalog
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
@@ -36,6 +40,24 @@ def document_deleted(context, event):
     session = create_session()
     for doc in SubmittedDocument.query.by_document(context).all():
         session.delete(doc)
+
+
+def excerpt_delete(context, event):
+    # if it is an excerpt document from an agendaitem with a proposal,
+    # remove the excerpt from the submitted proposal.
+    for relation in getUtility(ICatalog).findRelations({
+            'to_id': getUtility(IIntIds).getId(aq_inner(context)),
+            'from_attribute': 'excerpts'}):
+        # We expect that there are 0 or 1 relation, because this document
+        # cannot be the excerpt of multiple proposals.
+        submitted_proposal = relation.from_object
+        assert(ISubmittedProposal.providedBy(submitted_proposal))
+        submitted_proposal.remove_excerpt(context)
+        return
+
+    # if it is an excerpt document from an agendaitem without a proposal
+    # remove it from the SQL database.
+    Excerpt.query.by_oguid(Oguid.for_object(context)).delete()
 
 
 def on_document_modified(context, event):

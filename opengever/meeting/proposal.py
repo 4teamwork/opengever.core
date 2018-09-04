@@ -508,6 +508,11 @@ class SubmittedProposal(ProposalBase):
         self.excerpts = excerpts
         addRelations(self, None)
 
+    def remove_excerpt(self, excerpt_document):
+        if excerpt_document not in self.get_excerpts(include_trashed=True):
+            raise ValueError("Excerpt not found in excerpts.")
+        self.excerpts = filter(lambda excerpt: excerpt.to_object != excerpt_document, self.excerpts)
+
     def get_edit_values(self, fieldnames):
         """
         This is used by the 'inject_initial_data' method to prefill the edit
