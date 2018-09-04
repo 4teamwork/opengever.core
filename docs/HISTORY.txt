@@ -5,6 +5,7 @@ Changelog
 2018.4.3 (unreleased)
 ---------------------
 
+- Fix double escaping of agendaitem title in meeting overview. [njohner]
 - Fix handling of unidirectional by reference tasks in a sequential process. [phgross]
 
 
