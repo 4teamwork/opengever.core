@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-24 07:27+0000\n"
+"POT-Creation-Date: 2018-09-04 12:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,10 @@ msgstr ""
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
+msgstr ""
+
+#: ./opengever/trash/browser/trash.py
+msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
 msgstr ""
 
 #: ./opengever/trash/browser/trash.py

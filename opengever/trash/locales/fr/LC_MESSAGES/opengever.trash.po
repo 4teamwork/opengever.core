@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-24 07:27+0000\n"
+"POT-Creation-Date: 2018-09-04 12:38+0000\n"
 "PO-Revision-Date: 2017-12-03 12:24+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-trash/fr/>\n"
@@ -31,6 +31,10 @@ msgstr "Vous n'avez choisi aucun objet."
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "L'objet a été déplacé vers la corbeille"
+
+#: ./opengever/trash/browser/trash.py
+msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
+msgstr "L'objet n'a pas pu être supprimé, il s'agit d'un extrait de protocol renvoyé comme réponse à une proposition"
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."

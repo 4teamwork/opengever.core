@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Add trashing of protocol excerpts. [njohner]
 - Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
 - Do not add a task-reminder activity if task is finished. [elioschmutz]

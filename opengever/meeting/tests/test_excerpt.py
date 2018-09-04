@@ -7,10 +7,29 @@ from opengever.meeting.model import Excerpt
 from opengever.testing import IntegrationTestCase
 from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashable
+from opengever.trash.trash import TrashError
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 from z3c.relationfield.event import _relations
+
+
+class TestTrashReturnedExcerpt(IntegrationTestCase):
+
+    @browsing
+    def test_trash_excerpt_is_forbidden_when_it_has_been_returned_to_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+
+        ITrashable(excerpt1).trash()
+
+        ITrashable(excerpt1).untrash()
+        agenda_item.return_excerpt(excerpt1)
+
+        with self.assertRaises(TrashError):
+            ITrashable(excerpt1).trash()
 
 
 class TestRemoveTrashedExcerpt(IntegrationTestCase):
