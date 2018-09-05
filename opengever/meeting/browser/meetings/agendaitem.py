@@ -271,6 +271,9 @@ class AgendaItemsView(BrowserView):
             if item.is_revise_possible():
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
+            if self.is_debug_allowed():
+                data['debug_excerpt_docxcompose_link'] = meeting.get_url(
+                    view='agenda_items/{}/debug_excerpt_docxcompose'.format(item.agenda_item_id))
             if item.is_paragraph:
                 data['paragraph'] = True
 
@@ -554,8 +557,11 @@ class AgendaItemsView(BrowserView):
                 return doc
         return None
 
+    def is_debug_allowed(self):
+        return api.user.has_permission('cmf.ManagePortal')
+
     def debug_excerpt_docxcompose(self):
-        if not api.user.has_permission('cmf.ManagePortal'):
+        if not self.is_debug_allowed():
             raise Forbidden
 
         if self.agenda_item.is_paragraph:

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 11:01+0000\n"
+"POT-Creation-Date: 2018-09-05 13:21+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -272,6 +272,11 @@ msgstr "Clôturer la réunion"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_create_task"
 msgstr "Créer une tâche"
+
+#. Default: "Debug excerpt docxcompose"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_debug_excerpt_docxcompose"
+msgstr "Télécharger les fichiers docxcompose"
 
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1539,6 +1544,7 @@ msgid "proposal_history_label_rejected"
 msgstr "Rejeté par ${user}"
 
 #. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
 msgstr "Enlevé de l'ordre du jour de la réunion ${meeting} par ${user}"
@@ -1664,11 +1670,6 @@ msgstr "${count} participants"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Texte libre ajouté à l'ordre du jour avec succès."
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
-msgstr "Point ${title} de l'ordre du jour"
 
 #. Default: "Agenda item ${number}"
 #: ./opengever/meeting/model/agendaitem.py
