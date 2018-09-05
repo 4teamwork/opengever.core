@@ -31,6 +31,7 @@
           <a href="#" class="button editing-menu">&#133;</a>
           {{/if}}
           {{/if}}
+
         </div>
 
         {{#if (or ../agendalist_editable reopen_link)}}
@@ -42,6 +43,9 @@
             {{else}}
               <li><a href="{{edit_link}}" class="rename-agenda-item">%(action_rename_agenda_item)s</a></li>
               <li><a href="{{delete_link}}" class="delete-agenda-item">%(action_remove_agenda_item)s</a></li>
+              {{#if debug_excerpt_docxcompose_link}}
+                <li><a href="{{debug_excerpt_docxcompose_link}}" class="debug-excerpt-docxcompose">%(action_debug_excerpt_docxcompose)s</a></li>
+              {{/if}}
             {{/if}}
           {{/if}}
           {{#if reopen_link}}

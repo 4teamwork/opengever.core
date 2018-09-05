@@ -273,6 +273,11 @@ msgstr "Clôturer la réunion"
 msgid "action_create_task"
 msgstr "Créer une tâche"
 
+#. Default: "Debug excerpt docxcompose"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_debug_excerpt_docxcompose"
+msgstr "Télécharger les fichiers docxcompose"
+
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
@@ -1660,11 +1665,6 @@ msgstr "${count} participants"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Texte libre ajouté à l'ordre du jour avec succès."
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
-msgstr "Point ${title} de l'ordre du jour"
 
 #. Default: "Agenda item ${number}"
 #: ./opengever/meeting/model/agendaitem.py

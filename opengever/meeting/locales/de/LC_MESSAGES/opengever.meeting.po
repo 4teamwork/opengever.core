@@ -271,6 +271,11 @@ msgstr "Sitzung abschliessen"
 msgid "action_create_task"
 msgstr "Aufgabe erstellen"
 
+#. Default: "Debug excerpt docxcompose"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_debug_excerpt_docxcompose"
+msgstr "Dateien für docxcompose herunterladen"
+
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
@@ -1658,11 +1663,6 @@ msgstr "${count} Teilnehmende"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Traktandum erfolgreich hinzugefügt"
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
-msgstr "Traktandum ${title}"
 
 #. Default: "Agenda item ${number}"
 #: ./opengever/meeting/model/agendaitem.py
