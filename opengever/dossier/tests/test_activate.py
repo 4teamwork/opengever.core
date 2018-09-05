@@ -13,7 +13,11 @@ class TestDossierActivation(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         self.set_workflow_state(
             'dossier-state-inactive',
-            self.dossier, self.subdossier, self.subdossier2)
+            self.dossier,
+            self.subdossier,
+            self.subdossier2,
+            self.subsubdossier,
+            )
 
         browser.open(self.dossier)
         editbar.menu_option('Actions', 'dossier-transition-activate').click()
@@ -22,6 +26,7 @@ class TestDossierActivation(IntegrationTestCase):
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier2)
+        self.assert_workflow_state('dossier-state-active', self.subsubdossier)
 
     @browsing
     def test_activate_subdossier_is_disallowed_when_main_dossier_is_inactive(
@@ -40,15 +45,23 @@ class TestDossierActivation(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         IDossier(self.dossier).end = date(2013, 2, 21)
         IDossier(self.subdossier).end = date(2013, 2, 21)
+        IDossier(self.subsubdossier).end = date(2013, 2, 21)
         self.set_workflow_state(
             'dossier-state-inactive',
-            self.dossier, self.subdossier, self.subdossier2)
+            self.dossier,
+            self.subdossier,
+            self.subdossier2,
+            self.subsubdossier,
+            )
         self.assertIsNotNone(IDossier(self.dossier).end)
         self.assertIsNotNone(IDossier(self.subdossier).end)
+        self.assertIsNotNone(IDossier(self.subsubdossier).end)
 
         browser.open(self.dossier)
         editbar.menu_option('Actions', 'dossier-transition-activate').click()
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)
+        self.assert_workflow_state('dossier-state-active', self.subsubdossier)
         self.assertIsNone(IDossier(self.dossier).end)
         self.assertIsNone(IDossier(self.subdossier).end)
+        self.assertIsNone(IDossier(self.subsubdossier).end)

@@ -84,9 +84,8 @@ class TestDossierContainer(IntegrationTestCase):
 
     def test_get_subdossiers_is_recursive_by_default(self):
         self.login(self.dossier_responsible)
-        subsubdossier = create(Builder('dossier').within(self.subdossier))
         self.assertSequenceEqual(
-            [self.subdossier, self.subdossier2, subsubdossier],
+            [self.subdossier, self.subdossier2, self.subsubdossier],
             map(self.brain_to_object, self.dossier.get_subdossiers()))
 
         self.assertSequenceEqual(
@@ -99,8 +98,9 @@ class TestDossierContainer(IntegrationTestCase):
             'dossier': 1,
             'subdossier': 2,
             'subdossier2': 3,
-            'expired_dossier': 4,
-            'empty_dossier': 6}
+            'subsubdossier': 4,
+            'expired_dossier': 5,
+            'empty_dossier': 7}
         got = {name: getattr(self, name).get_sequence_number()
                for name in expected.keys()}
         self.assertDictEqual(expected, got)

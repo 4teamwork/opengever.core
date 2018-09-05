@@ -587,6 +587,7 @@ Objects
             - self.seq_subtask_3
           - self.subdossier
             - self.subdocument
+            - self.subsubdossier
           - self.subdossier2
           - self.task
             - self.subtask
