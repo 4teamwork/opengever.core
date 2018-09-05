@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-13 06:07+0000\n"
+"POT-Creation-Date: 2018-09-05 13:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,11 +85,17 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
+#: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Task"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Debug docxcompose"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
@@ -109,12 +115,22 @@ msgid "Dossier template"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Download protocol json"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml
 msgid "Export as Zip"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Export selection"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Fill meeting template"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml

@@ -655,6 +655,42 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="fill_meeting_template" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Fill meeting template</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/fill_meeting_template</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.meeting.sablontemplate.ISablonTemplate')</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="download_protocol_json" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Download protocol json</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/download_protocol_json</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.meeting.interfaces.IMeetingWrapper')</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="debug_docxcompose" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Debug docxcompose</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/debug_docxcompose</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.meeting.interfaces.IMeetingWrapper')</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-13 06:07+0000\n"
+"POT-Creation-Date: 2018-09-05 13:25+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -85,12 +85,18 @@ msgstr "Aussonderungsangebot erstellen"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
+#: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
 msgstr "Antrag erstellen"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Task"
 msgstr "Aufgabe erstellen"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Debug docxcompose"
+msgstr "Dateien für docxcompose herunterladen"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Delete"
@@ -109,6 +115,11 @@ msgid "Dossier template"
 msgstr "Dossiervorlage"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Download protocol json"
+msgstr "JSON Sitzungsdaten herunterladen"
+
+#: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml
 msgid "Export as Zip"
 msgstr "Als Zip-Datei exportieren"
@@ -116,6 +127,11 @@ msgstr "Als Zip-Datei exportieren"
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Fill meeting template"
+msgstr "Beispiels-Sitzungsdaten einfüllen"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Forward"
