@@ -808,7 +808,7 @@ msgstr "Annuler la réunion"
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
-msgstr "La réunion ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés."
+msgstr "La réunion ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et renvoyés comme réponse."
 
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
@@ -1441,7 +1441,7 @@ msgstr "Proposition soumise avec succès."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "La réunion pourra seulement être clôturée quand tous les points de l'ordre du jour seront clôturés."
+msgstr "La réunion pourra seulement être clôturée quand tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et renvoyés comme réponse."
 
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py

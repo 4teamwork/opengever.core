@@ -374,6 +374,17 @@ class AgendaItem(Base):
             return False
         return self.proposal.is_decided()
 
+    def is_completed(self):
+        """An ad-hoc agendaitem is completed when it is decided, whereas an
+        agendaitem with proposal needs to be decided, the excerpt generated
+        and returned to the proposal. A paragraph is always considered completed.
+        """
+        if self.is_paragraph:
+            return True
+        if self.has_proposal:
+            return self.is_decided() and self.is_proposal_decided()
+        return self.is_decided()
+
     def revise(self):
         """If the excerpt has been sent back so that the proposal is
         decided, we also have to revise the proposal"""

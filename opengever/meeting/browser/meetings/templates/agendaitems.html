@@ -1,6 +1,6 @@
 <script id="agendaitemsTemplate" type="text/x-handlebars-template">
   {{#each agendaitems}}
-  <tr class="{{css_class}} word-feature agenda_item" data-uid="{{id}}" id="ai{{id}}">
+  <tr class="{{css_class}} word-feature agenda_item" data-uid="{{id}}" id="ai{{id}}" completed="{{is_completed}}">
     {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
     <td class="title">
 

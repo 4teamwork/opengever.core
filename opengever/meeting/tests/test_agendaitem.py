@@ -152,7 +152,7 @@ class TestEditAgendaItems(IntegrationTestCase):
 
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
@@ -294,7 +294,7 @@ class TestReopenAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
@@ -339,7 +339,7 @@ class TestReviseAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):

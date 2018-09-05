@@ -320,7 +320,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.execute_transition('held-closed')
         self.assertEquals(self.meeting.model.STATE_CLOSED,
                           self.meeting.model.get_state())
