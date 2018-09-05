@@ -827,7 +827,7 @@ readers do not read off random characters that represent icons */
 
 .fa-file-contract:before { content: "\f56c"; }
 
-.fa-file-download:before, #opengever_meeting_meeting.word-feature .agenda_item .agenda-item-actions ul.editing-menu a.debug-excerpt-docxcompose:before { content: "\f56d"; }
+.fa-file-download:before { content: "\f56d"; }
 
 .fa-file-excel:before { content: "\f1c3"; }
 

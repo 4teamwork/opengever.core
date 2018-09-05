@@ -336,7 +336,6 @@ class MeetingView(BrowserView):
                 _('label_decision_number', default=u'Decision number'),
                 _('label_agenda_item_decided', default='Decided'),
                 _('action_edit_document', default='Edit with word'),
-                _('action_debug_excerpt_docxcompose', default='Debug excerpt docxcompose'),
                 _('action_decide', default='Decide'),
                 _('action_generate_excerpt', default='Generate excerpt'),
                 _('action_rename_agenda_item', default='Rename agenda item'),

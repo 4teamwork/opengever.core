@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-05 13:21+0000\n"
+"POT-Creation-Date: 2018-08-07 11:01+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -270,11 +270,6 @@ msgstr "Sitzung abschliessen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_create_task"
 msgstr "Aufgabe erstellen"
-
-#. Default: "Debug excerpt docxcompose"
-#: ./opengever/meeting/browser/meetings/meeting.py
-msgid "action_debug_excerpt_docxcompose"
-msgstr "Dateien für docxcompose herunterladen"
 
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1542,7 +1537,6 @@ msgid "proposal_history_label_rejected"
 msgstr "Zurückgewiesen von ${user}"
 
 #. Default: "Removed from schedule of meeting ${meeting} by ${user}"
-#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
 msgstr "Von der Traktandenliste der Sitzung ${meeting} entfernt durch ${user}"
@@ -1668,6 +1662,11 @@ msgstr "${count} Teilnehmende"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
 msgstr "Traktandum erfolgreich hinzugefügt"
+
+#. Default: "Ad hoc agenda item ${title}"
+#: ./opengever/meeting/model/meeting.py
+msgid "title_ad_hoc_document"
+msgstr "Traktandum ${title}"
 
 #. Default: "Agenda item ${number}"
 #: ./opengever/meeting/model/agendaitem.py

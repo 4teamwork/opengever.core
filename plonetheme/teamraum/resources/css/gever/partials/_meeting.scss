@@ -901,9 +901,6 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             &.reopen-agenda-item:before {
               @extend .fa-undo;
             }
-            &.debug-excerpt-docxcompose:before {
-              @extend .fa-file-download;
-            }
           }
         }
 

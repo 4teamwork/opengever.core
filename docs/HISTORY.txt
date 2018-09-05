@@ -5,7 +5,6 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
-- Add actions pointing to the meeting and protocol debug views. [njohner]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
