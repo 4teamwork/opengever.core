@@ -7,6 +7,8 @@ from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import and_
+from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import true
 
 
 class ActivityQuery(BaseQuery):
@@ -32,8 +34,8 @@ class NotificationQuery(BaseQuery):
         return self.filter_by(activity_id=activity.id).filter(Notification.userid.is_(None))
 
     def unsent_digest_notifications(self):
-        return self.filter(and_(Notification.is_digest.is_(True),
-                                Notification.sent_in_digest.is_(False)))
+        return self.filter(and_(Notification.is_digest == true(),
+                                Notification.sent_in_digest == false()))
 
 
 Notification.query_cls = NotificationQuery
