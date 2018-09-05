@@ -10,8 +10,9 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
     """
 
     def __init__(self, context, template_doc, title, recipient_data=tuple()):
+        data = getattr(template_doc.get_file(), "data", None)
         super(CreateDocumentFromTemplateCommand, self).__init__(
-            context, template_doc.file.filename, template_doc.file.data,
+            context, template_doc.get_filename(), data,
             title=title)
         self.recipient_data = recipient_data
 
