@@ -43,7 +43,7 @@ class LiveSearchReplyView(BrowserView):
         if not isinstance(self.search_term, unicode):
             self.search_term = self.search_term.decode('utf-8')
 
-        self.limit = self.request.form.get('limit', 10)
+        self.limit = int(self.request.form.get('limit', 10))
         self.path = self.request.form.get('path', None)
         results = self.results()
         return self.render_results(results)
