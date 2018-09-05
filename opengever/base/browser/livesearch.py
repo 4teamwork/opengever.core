@@ -5,6 +5,7 @@ from ftw.solr.query import make_query
 from opengever.base.solr import OGSolrContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as pmf
+from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import normalizeString
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -44,7 +45,7 @@ class LiveSearchReplyView(BrowserView):
             self.search_term = self.search_term.decode('utf-8')
 
         self.limit = int(self.request.form.get('limit', 10))
-        self.path = self.request.form.get('path', None)
+        self.path = self.request.form.get('path', getNavigationRoot(self.context))
         results = self.results()
         return self.render_results(results)
 

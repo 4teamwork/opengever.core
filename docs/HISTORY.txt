@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
