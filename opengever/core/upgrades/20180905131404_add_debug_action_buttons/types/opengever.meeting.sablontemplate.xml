@@ -1,0 +1,13 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.meeting.sablontemplate" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- Menu Actions -->
+  <action
+      title="Fill meeting template"
+      action_id="fill_meeting_template"
+      category="object_buttons"
+      url_expr="string:${object_url}/fill_meeting_template"
+      visible="True">
+    <permission value="Manage portal" />
+  </action>
+
+</object>

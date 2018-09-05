@@ -14,12 +14,21 @@ class TestMeetingView(IntegrationTestCase):
 
     @browsing
     def test_displays_correct_edit_bar_actions(self, browser):
+        expected_menu = ['Export as Zip', 'Properties', 'Close meeting', 'Cancel']
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)
 
-        self.assertEquals(
-            ['Export as Zip', 'Properties', 'Close meeting', 'Cancel'],
-            editbar.menu_options('Actions'))
+        self.assertEquals(expected_menu, editbar.menu_options('Actions'))
+
+    @browsing
+    def test_displays_correct_edit_bar_actions_for_manager(self, browser):
+        expected_menu = ['Debug docxcompose', 'Download protocol json',
+                         'Export as Zip', 'Properties', 'Sharing',
+                         'Policy...', 'Close meeting', 'Cancel']
+        self.login(self.manager, browser)
+        browser.open(self.meeting)
+
+        self.assertItemsEqual(expected_menu, editbar.menu_options('Actions'))
 
     @browsing
     def test_meeting_metadata_is_visible(self, browser):

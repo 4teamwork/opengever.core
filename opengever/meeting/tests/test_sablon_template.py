@@ -1,9 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
 class TestSablonTemplateView(FunctionalTestCase):
@@ -41,3 +43,22 @@ class TestSablonTemplateView(FunctionalTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
+
+
+class TestSablonTemplateMenus(IntegrationTestCase):
+
+    features = ('meeting',)
+
+    @browsing
+    def test_action_menu_contents_for_administrator(self, browser):
+        expected_menu = ['Checkout', 'Copy Item', 'Properties']
+        self.login(self.administrator, browser)
+        browser.open(self.sablon_template)
+        self.assertItemsEqual(expected_menu, editbar.menu_options("Actions"))
+
+    @browsing
+    def test_action_menu_contents_for_manager(self, browser):
+        expected_menu = ['Checkout', 'Copy Item', 'Fill meeting template', 'Properties', 'Policy...']
+        self.login(self.manager, browser)
+        browser.open(self.sablon_template)
+        self.assertItemsEqual(expected_menu, editbar.menu_options("Actions"))

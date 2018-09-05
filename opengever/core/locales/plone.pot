@@ -258,6 +258,13 @@ msgstr ""
 msgid "Download Excel"
 msgstr ""
 
+#. Default: "Fill meeting template"
+#: opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Fill meeting template"
+msgstr ""
+
+
+
 msgid "title_can_view"
 msgstr ""
 

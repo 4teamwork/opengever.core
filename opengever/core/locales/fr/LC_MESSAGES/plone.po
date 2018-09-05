@@ -29,6 +29,11 @@ msgstr ""
 msgid "Download Excel"
 msgstr "Exporter en Excel"
 
+#. Default: "Fill meeting template"
+#: opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Fill meeting template"
+msgstr "Insérer un exemple de données de réunion"
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "Inactive"

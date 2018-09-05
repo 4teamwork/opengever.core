@@ -148,4 +148,14 @@
     <permission value="opengever.document: Cancel" />
   </action>
 
+  <!-- Menu Actions -->
+  <action
+      title="Fill meeting template"
+      action_id="fill_meeting_template"
+      category="object_buttons"
+      url_expr="string:${object_url}/fill_meeting_template"
+      visible="True">
+    <permission value="Manage portal" />
+  </action>
+
 </object>
