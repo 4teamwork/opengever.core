@@ -3,6 +3,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import statusmessages
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import IntegrationTestCase
+from StringIO import StringIO
 
 
 class TestProposalTemplate(IntegrationTestCase):
@@ -37,3 +38,24 @@ class TestProposalTemplate(IntegrationTestCase):
         self.assertEquals(
             ['Only word files (.docx) can be added here.'],
             browser.css('#formfield-form-widgets-file .error').text)
+
+    @browsing
+    def test_proposal_template_document_must_be_docx_via_quickupload(self, browser):
+        self.login(self.administrator, browser)
+        filename = 'foo.xlsx'
+        headers = {
+            'X-File-Name': filename,
+            'Content-Type': 'application/octet-stream',
+            'X-Requested-With': 'XMLHttpRequest',
+            }
+        fileish = StringIO('foobar')
+        self.checkout_document(self.proposal_template)
+        expected_error = {u'error': u"It's not possible to have non-.docx documents as proposal documents."}
+        browser.open(
+            self.proposal_template,
+            data={'file': fileish},
+            headers=headers,
+            view='@@quick_upload_file?qqfile={}'.format(filename),
+            )
+        fileish.close()
+        self.assertEqual(browser.json, expected_error)
