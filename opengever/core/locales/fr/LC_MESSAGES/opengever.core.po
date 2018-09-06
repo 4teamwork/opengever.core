@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-13 06:07+0000\n"
+"POT-Creation-Date: 2018-09-06 14:45+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -82,12 +82,18 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
+#: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Task"
 msgstr "Créer une tâche"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Debug docxcompose"
+msgstr "Télécharger les fichiers docxcompose"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Delete"
@@ -104,6 +110,11 @@ msgstr "Document"
 #: ./opengever/core/profiles/default/types/opengever.dossier.dossiertemplate.xml
 msgid "Dossier template"
 msgstr "Modèle de dossier"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20180905131404_add_debug_action_buttons/actions.xml
+msgid "Download protocol json"
+msgstr "Télécharger les données JSON de la réunion"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml

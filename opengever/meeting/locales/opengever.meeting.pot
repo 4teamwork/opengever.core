@@ -270,6 +270,11 @@ msgstr ""
 msgid "action_create_task"
 msgstr ""
 
+#. Default: "Debug excerpt docxcompose"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "action_debug_excerpt_docxcompose"
+msgstr ""
+
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
@@ -1656,11 +1661,6 @@ msgstr ""
 #. Default: "Text successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "text_added"
-msgstr ""
-
-#. Default: "Ad hoc agenda item ${title}"
-#: ./opengever/meeting/model/meeting.py
-msgid "title_ad_hoc_document"
 msgstr ""
 
 #. Default: "Agenda item ${number}"
