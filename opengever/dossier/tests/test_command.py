@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import IntegrationTestCase
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.command import CreateDossierFromTemplateCommand
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 
 
@@ -24,3 +26,13 @@ class TestCreateDocumentFromTemplateCommand(IntegrationTestCase):
         document = command.execute()
         self.assertEqual(expected_title, document.title)
         self.assertIsNone(document.file)
+
+
+class TestCreateDossierFromTemplateCommand(IntegrationTestCase):
+
+    def test_create_dossier_from_template(self):
+        self.login(self.regular_user)
+        command = CreateDossierFromTemplateCommand(self.dossier, self.dossiertemplate)
+        dossier = command.execute()
+        self.assertEqual(self.dossiertemplate.title, dossier.title)
+        self.assertTrue(IDossierMarker.providedBy(dossier))
