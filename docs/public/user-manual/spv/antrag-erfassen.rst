@@ -34,7 +34,8 @@ geöffnet.
 |img-spvupdate-11|
 
 Nach dem Speichern sehen Sie diese Ansicht. Nun wird der eigentliche Antrag
-an den Gemeinderat bearbeitet (das Dokument ist bereits ausgecheckt).
+an den Gemeinderat bearbeitet (das Dokument ist bereits ausgecheckt). Ein Antrag
+kann danach storniert, eingereicht aber auch kommentiert werden.
 
 |img-spvupdate-12|
 

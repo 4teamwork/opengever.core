@@ -18,8 +18,8 @@ alle Dokumente nach Abschluss der Bearbeitung wieder eingechecked werden.
 Für den Fall, dass während der laufenden Sitzung ein unvorhergesehenes Thema
 diskutiert werden muss, besteht die Möglichkeit ein Traktandum hinzuzufügen.
 Die Traktandierung und Protokollierung erfolgt in einer simpel gehaltenen
-Vorlage für ad hoc Geschäfte. Im Moment kann nur eine Vorlage als ad hoc
-Traktandum hinterlegt werden.
+Vorlage für ad hoc Geschäfte. Dabei kann von mehreren unterschiedlichen ad hoc
+Anträgen ausgewählt werden.
 
 Solange die Sitzung noch nicht als abgeschlossen vermerkt wird, kann die
 Tischvorlage gemäss kundenspezifischer Systematik/Struktur in die
