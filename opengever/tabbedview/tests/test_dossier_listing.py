@@ -182,7 +182,6 @@ class TestDossierListing(IntegrationTestCase):
     def test_expired_filters_is_hidden_on_subdossier_listings(self, browser):
         self.login(self.records_manager, browser=browser)
         browser.visit(self.dossier, view='tabbedview_view-subdossiers')
-
         self.assertEquals(['label_tabbedview_filter_all', 'Active'],
                           browser.css('.state_filters a').text)
 
@@ -201,3 +200,20 @@ class TestDossierListing(IntegrationTestCase):
 
         browser.open_html(linked(brain, 'Dummy'))
         self.assertEquals(browser.css('a').first.attrib['data-uid'], uid)
+
+    @browsing
+    def test_subdossier_lists_children_but_not_itself(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.subdossier, view='tabbedview_view-subdossiers')
+        expected_content = [
+            'Reference Number Title Review state Responsible Start End',
+            'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016',
+            ]
+        self.assertEqual(expected_content, browser.css('.listing tr').text)
+
+    @browsing
+    def test_empty_subdossier_does_not_list_itself(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.subsubdossier, view='tabbedview_view-subdossiers')
+        expected_content = ['No contents']
+        self.assertEqual(expected_content, browser.css('p').text)
