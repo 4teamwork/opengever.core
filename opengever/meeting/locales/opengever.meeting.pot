@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 11:01+0000\n"
+"POT-Creation-Date: 2018-09-06 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -358,11 +358,6 @@ msgstr ""
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_order_updated"
-msgstr ""
-
-#. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py
-msgid "agenda_item_proposal_decided"
 msgstr ""
 
 #. Default: "Agenda Item successfully reopened."
@@ -1536,6 +1531,7 @@ msgid "proposal_history_label_rejected"
 msgstr ""
 
 #. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
 msgstr ""

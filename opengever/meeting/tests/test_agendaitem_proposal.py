@@ -24,8 +24,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
                      data={'_authenticator': createToken()})
 
         self.assertEquals('decided', agenda_item.workflow_state)
-        self.assertEquals([{u'message': u'Agenda Item decided and excerpt '
-                                        u'generated.',
+        self.assertEquals([{u'message': u'Agenda Item decided.',
                             u'messageClass': u'info',
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
@@ -223,7 +222,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
              '/opengever-meeting-committeecontainer/committee-1/meeting-1',
              u'messages': [
                  {u'messageTitle': u'Information',
-                  u'message': u'Agenda Item decided and excerpt generated.',
+                  u'message': u'Agenda Item decided.',
                   u'messageClass': u'info'}]},
             browser.json)
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 11:01+0000\n"
+"POT-Creation-Date: 2018-09-06 07:57+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -360,11 +360,6 @@ msgstr "Das Traktandum wurde abgeschlossen und die Sitzung wurde durchgeführt."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_order_updated"
 msgstr "Die Reihenfolge der Traktanden wurde aktualisiert."
-
-#. Default: "Agenda Item decided and excerpt generated."
-#: ./opengever/meeting/browser/meetings/agendaitem.py
-msgid "agenda_item_proposal_decided"
-msgstr "Traktandum wurde abgeschlossen, der Protokollauszug generiert und zurückgespielt."
 
 #. Default: "Agenda Item successfully reopened."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -1464,7 +1459,7 @@ msgstr "Übersicht"
 #. Default: "Paragraph successfully added."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "paragraph_added"
-msgstr "Paragraph erfolgreich hinzugefügt."
+msgstr "Zwischentitel erfolgreich hinzugefügt."
 
 #. Default: "Pending"
 #: ./opengever/meeting/model/agendaitem.py
@@ -1537,6 +1532,7 @@ msgid "proposal_history_label_rejected"
 msgstr "Zurückgewiesen von ${user}"
 
 #. Default: "Removed from schedule of meeting ${meeting} by ${user}"
+#: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
 msgstr "Von der Traktandenliste der Sitzung ${meeting} entfernt durch ${user}"

@@ -380,13 +380,8 @@ class AgendaItemsView(BrowserView):
         self.agenda_item.decide()
 
         response = JSONResponse(self.request)
-        if self.agenda_item.has_proposal:
-            response.info(
-                _(u'agenda_item_proposal_decided',
-                  default=u'Agenda Item decided and excerpt generated.'))
-        else:
-            response.info(_(u'agenda_item_decided',
-                            default=u'Agenda Item decided.'))
+        response.info(_(u'agenda_item_decided',
+                        default=u'Agenda Item decided.'))
 
         if meeting_state != self.meeting.get_state():
             response.redirect(self.context.absolute_url())
