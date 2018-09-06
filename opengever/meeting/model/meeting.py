@@ -398,7 +398,7 @@ class Meeting(Base, SQLFormSupport):
             return not agenda_item.is_paragraph
 
         def is_not_decided(agenda_item):
-            return agenda_item.workflow_state != 'decided'
+            return not agenda_item.is_completed()
 
         return filter(is_not_decided, filter(is_not_paragraph, self.agenda_items))
 

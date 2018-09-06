@@ -224,9 +224,8 @@ class TestMeetingZipExportView(IntegrationTestCase):
             self.schedule_ad_hoc(
                 self.meeting, u'Ad-hoc Traktand\xfem'
             ).decide()
-        self.schedule_proposal(
-            self.meeting, self.submitted_word_proposal
-        ).decide()
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         with freeze(localized_datetime(2017, 12, 14)):
             self.meeting.model.close()
 

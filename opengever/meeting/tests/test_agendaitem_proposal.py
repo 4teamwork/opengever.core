@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.meeting.model.proposal import Proposal
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashed
 from plone import api
@@ -40,6 +41,30 @@ class TestProposalAgendaItem(IntegrationTestCase):
 
         self.assertEqual(2, agenda_item.decision_number)
         self.assertEqual(2, self.meeting.model.meeting_number)
+
+    @browsing
+    def test_proposal_is_decided_only_when_excerpt_is_returned(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEqual(Proposal.STATE_SUBMITTED, self.submitted_proposal.get_state())
+
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
+        self.assertEqual(Proposal.STATE_SCHEDULED, self.submitted_proposal.get_state())
+
+        browser.open(self.agenda_item_url(agenda_item, 'decide'),
+                     data={'_authenticator': createToken()})
+        self.assertEqual(Proposal.STATE_SCHEDULED, self.submitted_proposal.get_state())
+
+        browser.open(self.meeting, view='agenda_items/list')
+        generate_excerpt_link = browser.json['items'][0]['generate_excerpt_link']
+        browser.open(generate_excerpt_link, send_authenticator=True,
+                     data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
+        self.assertEqual(Proposal.STATE_SCHEDULED, self.submitted_proposal.get_state())
+
+        browser.open(self.meeting, view='agenda_items/list')
+        return_excerpt_link = browser.json[u"items"][0]['excerpts'][0]['return_link']
+        browser.open(return_excerpt_link, send_authenticator=True)
+        self.assertEqual(Proposal.STATE_DECIDED, self.submitted_proposal.get_state())
 
     @browsing
     def test_delete_agenda_item_does_not_trash_proposal_document(self, browser):
@@ -202,7 +227,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
                   u'messageClass': u'info'}]},
             browser.json)
 
-        self.assertEquals(proposal_model.STATE_DECIDED, proposal_model.get_state())
+        self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
         self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
 
     @browsing
@@ -295,7 +320,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
                                              self.submitted_word_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.execute_transition('held-closed')
         self.assertEquals(self.meeting.model.STATE_CLOSED,
                           self.meeting.model.get_state())

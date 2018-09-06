@@ -568,6 +568,14 @@ class IntegrationTestCase(TestCase):
         agenda_item = AgendaItem.query.order_by(desc('id')).first()
         return agenda_item
 
+    def decide_agendaitem_generate_and_return_excerpt(self, agendaitem, excerpt_title=None):
+        """Meeting: decide an agendaitem, then generate the excerpt and
+        return it to the dossier. This will set the proposal to decided.
+        """
+        agendaitem.decide()
+        excerpt = agendaitem.generate_excerpt(excerpt_title or agendaitem.get_title())
+        agendaitem.return_excerpt(excerpt)
+
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))
 

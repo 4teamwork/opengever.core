@@ -152,7 +152,7 @@ class TestEditAgendaItems(IntegrationTestCase):
 
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
@@ -257,20 +257,6 @@ class TestDecideAgendaItem(IntegrationTestCase):
                      data={'_authenticator': createToken()})
         self.assertEquals(None, browser.json.get('redirectUrl'))
 
-    @browsing
-    def test_closing_proposal_adds_proposalhistory(self, browser):
-        self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_proposal(
-            self.meeting, self.submitted_word_proposal)
-        agenda_item.close()
-
-        browser.open(self.submitted_word_proposal, view=u'tabbedview_view-overview')
-        entry = browser.css('.answer').first
-
-        self.assertEquals(u'Proposal decided by M\xfcller Fr\xe4nzi (franzi.muller)',
-                          entry.css('h3').first.text)
-        self.assertEquals('answer decided', entry.get('class'))
-
 
 class TestReopenAgendaItem(IntegrationTestCase):
 
@@ -281,7 +267,7 @@ class TestReopenAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
 
         browser.open(self.agenda_item_url(agenda_item, 'reopen'),
                      data={'_authenticator': createToken()})
@@ -308,7 +294,7 @@ class TestReopenAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):
@@ -325,7 +311,7 @@ class TestReviseAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         agenda_item.reopen()
 
         browser.open(self.agenda_item_url(agenda_item, 'revise'),
@@ -353,7 +339,7 @@ class TestReviseAgendaItem(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
-        agenda_item.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.close()
 
         with browser.expect_http_error(code=403):

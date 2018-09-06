@@ -345,8 +345,11 @@ class Proposal(Base):
 
         IHistory(self.resolve_submitted_proposal()).append_record(u'revised')
 
+    def is_decided(self):
+        return self.get_state() == self.STATE_DECIDED
+
     def reopen(self, agenda_item):
-        assert self.get_state() == self.STATE_DECIDED
+        assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
 
     def cancel(self, text=None):

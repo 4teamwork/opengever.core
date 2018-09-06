@@ -72,7 +72,8 @@ class TestMeetingDocxProperties(IntegrationTestCase):
 
     def test_decided_proposal_document(self):
         with self.login(self.committee_responsible):
-            self.schedule_proposal(self.meeting, self.submitted_word_proposal).decide()
+            agendaitem = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+            self.decide_agendaitem_generate_and_return_excerpt(agendaitem)
 
         with self.login(self.dossier_responsible):
             self.assertEquals(
@@ -107,12 +108,11 @@ class TestMeetingDocxProperties(IntegrationTestCase):
                  'ogg.meeting.agenda_item_number': '1.',
                  'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
                  'ogg.meeting.proposal_description': '',
-                 'ogg.meeting.proposal_state': 'Decided'},
+                 'ogg.meeting.proposal_state': 'Scheduled'},
                 get_doc_properties(meeting_dossier_excerpt))
 
             with self.observe_children(self.dossier) as children:
-                self.submitted_word_proposal.load_model().return_excerpt(
-                    meeting_dossier_excerpt)
+                agenda_item.return_excerpt(meeting_dossier_excerpt)
 
             case_dossier_excerpt, = children['added']
 

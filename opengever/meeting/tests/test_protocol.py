@@ -127,7 +127,9 @@ class TestProtocol(IntegrationTestCase):
     @browsing
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal).decide()
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
+
         meeting = self.meeting.model
 
         self.assertIsNone(meeting.protocol_document)

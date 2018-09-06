@@ -253,7 +253,7 @@ class TestMeeting(IntegrationTestCase):
         """The user must decide all agenda items before the meeting can be closed.
         """
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_ad_hoc(self.meeting, "Ad hoc proposal")
         self.assertEquals(u'pending', self.meeting.model.workflow_state)
 
         browser.open(self.meeting)
@@ -268,6 +268,35 @@ class TestMeeting(IntegrationTestCase):
             browser.json)
 
         self.assertEquals(u'pending', self.meeting.model.workflow_state)
+
+    @browsing
+    def test_closing_meeting_with_unreturned_excerpts_is_not_allowed(self, browser):
+        """The user must decide all agenda items before the meeting can be closed.
+        """
+        self.login(self.committee_responsible, browser)
+        agendaitem = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        agendaitem.decide()
+        self.assertEquals(u'held', self.meeting.model.workflow_state)
+
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Close meeting').click()
+        self.assertEquals(
+            {u'messages': [
+                {u'messageTitle': u'Error',
+                 u'message': u'The meeting cannot be closed because it'
+                 u' has undecided agenda items.',
+                 u'messageClass': u'error'}],
+             u'proceed': False},
+            browser.json)
+
+        self.assertEquals(u'held', self.meeting.model.workflow_state)
+
+        excerpt = agendaitem.generate_excerpt("Foo")
+        agendaitem.return_excerpt(excerpt)
+
+        browser.open(self.meeting)
+        editbar.menu_option('Actions', 'Close meeting').click()
+        self.assertEquals(u'closed', self.meeting.model.workflow_state)
 
     def test_is_editable_for_pending_meeting(self):
         with self.login(self.administrator):
@@ -302,7 +331,7 @@ class TestMeeting(IntegrationTestCase):
         item2 = self.schedule_ad_hoc(meeting, u'Ad-Hoc Agenda Item')
 
         self.assertEquals([item1, item2], meeting.get_undecided_agenda_items())
-        item1.decide()
+        self.decide_agendaitem_generate_and_return_excerpt(item1)
         self.assertEquals([item2], meeting.get_undecided_agenda_items())
         item2.decide()
         self.assertEquals([], meeting.get_undecided_agenda_items())

@@ -2,12 +2,12 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
-from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.meeting.interfaces import IHistory
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from plone.protect import createToken
+from plone.uuid.interfaces import IUUID
 
 
 class TestIntegrationProposalHistory(IntegrationTestCase):
@@ -286,11 +286,19 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
+        generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
+        return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         reopening_url = self.meeting.model.get_url(view='agenda_items/2/reopen')
         with self.login(self.committee_responsible, browser):
             browser.open(scheduling_url)
             browser.open(deciding_url, data={'_authenticator': createToken()})
+            browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
+            agenda_item = self.meeting.model.agenda_items[0]
+            excerpt_document = agenda_item.get_excerpt_documents()[0]
+            browser.open(return_excerpt_url.format(IUUID(excerpt_document)), data={'_authenticator': createToken()})
+
             browser.open(reopening_url, data={'_authenticator': createToken()})
+
         self.assert_proposal_history_records(
             u'Proposal reopened by M\xfcller Fr\xe4nzi (franzi.muller)',
             self.proposal,
@@ -303,9 +311,16 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
+        generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
+        return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         with self.login(self.committee_responsible, browser):
             browser.open(scheduling_url)
             browser.open(deciding_url, data={'_authenticator': createToken()})
+            browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
+            agenda_item = self.meeting.model.agenda_items[0]
+            excerpt_document = agenda_item.get_excerpt_documents()[0]
+            browser.open(return_excerpt_url.format(IUUID(excerpt_document)), data={'_authenticator': createToken()})
+
         self.assert_proposal_history_records(
             u'Proposal decided by M\xfcller Fr\xe4nzi (franzi.muller)',
             self.proposal,
@@ -318,13 +333,20 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         scheduling_url = self.meeting.model.get_url(view='unscheduled_proposals/1/schedule')
         deciding_url = self.meeting.model.get_url(view='agenda_items/2/decide')
+        generate_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/generate_excerpt?excerpt_title=bla')
+        return_excerpt_url = self.meeting.model.get_url(view='agenda_items/2/return_excerpt?document={}')
         reopening_url = self.meeting.model.get_url(view='agenda_items/2/reopen')
         revising_url = self.meeting.model.get_url(view='agenda_items/2/revise')
         with self.login(self.committee_responsible, browser):
             browser.open(scheduling_url)
             browser.open(deciding_url, data={'_authenticator': createToken()})
+            browser.open(generate_excerpt_url, data={'_authenticator': createToken()})
+            agenda_item = self.meeting.model.agenda_items[0]
+            excerpt_document = agenda_item.get_excerpt_documents()[0]
+            browser.open(return_excerpt_url.format(IUUID(excerpt_document)), data={'_authenticator': createToken()})
             browser.open(reopening_url, data={'_authenticator': createToken()})
             browser.open(revising_url, data={'_authenticator': createToken()})
+
         self.assert_proposal_history_records(
             u'Proposal revised by M\xfcller Fr\xe4nzi (franzi.muller)',
             self.proposal,

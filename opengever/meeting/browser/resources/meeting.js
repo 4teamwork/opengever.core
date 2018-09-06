@@ -639,7 +639,7 @@
     };
 
     this.updateCloseTransitionActionState = function() {
-      if($('.decide-agenda-item, .revise-agenda-item').length > 0) {
+      if($("[completed='false']").length > 0) {
         $('.close-meeting').addClass('disabled');
         $('.cancel-meeting').hide();
       } else {
