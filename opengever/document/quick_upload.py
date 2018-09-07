@@ -3,6 +3,7 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.meeting.proposaltemplate import IProposalTemplate
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -28,7 +29,7 @@ class QuickUploadFileUpdater(object):
         if not self.is_upload_allowed():
             raise Unauthorized
 
-        if self.is_proposal_upload():
+        if self.is_proposal_upload() or self.is_proposal_template_upload():
             if not os.path.splitext(self.get_file_name(filename))[1].lower() == '.docx':
                 return {
                     'error': translate(_(
@@ -54,6 +55,9 @@ class QuickUploadFileUpdater(object):
     def is_proposal_upload(self):
         """The upload form context can be, for example, a Dossier."""
         return getattr(self.context, 'is_inside_a_proposal', lambda: False)()
+
+    def is_proposal_template_upload(self):
+        return IProposalTemplate.providedBy(self.context)
 
     def get_file_name(self, org_filename):
         filename, ext = os.path.splitext(org_filename)
