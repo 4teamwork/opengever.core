@@ -9,6 +9,7 @@ Changelog
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 - Only set proposal to decided when excerpt has been generated and returned. [njohner]
 - Add actions pointing to the meeting and protocol debug views. [njohner]
+- Fix bug with document without file in a dossiertemplate. [njohner]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
