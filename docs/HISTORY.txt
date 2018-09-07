@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix tree portlet header styling for IE11. [Kevin Bieri]
 - Correct info messages in meetings. [njohner]
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 - Only set proposal to decided when excerpt has been generated and returned. [njohner]
