@@ -11,5 +11,6 @@ Inhalt:
    sablon.rst
    debugging.rst
    wordconfig.rst
+   sitzungsvorlage.rst
 
 .. disqus::
