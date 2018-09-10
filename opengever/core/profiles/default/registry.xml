@@ -122,6 +122,7 @@
       <element>image/tiff</element>
       <element>image/gif</element>
       <element>image/png</element>
+      <element>image/bmp</element>
 
       <!-- MS Visio -->
       <element>application/vnd.visio</element>
