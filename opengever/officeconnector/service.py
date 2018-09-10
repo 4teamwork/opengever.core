@@ -275,8 +275,6 @@ class OfficeConnectorOneOffixxPayload(OfficeConnectorPayload):
 
             if authorized:
                 document = payload['document']
-                checkout_token = create_oc_url(self.request, document, {"action": "checkout"})
-                payload['checkout-url'] = checkout_token
                 payload['filename'] = IAnnotations(document).get("filename")
                 del payload['document']
                 payload['connect-xml'] = '@@oneoffix_connect_xml'

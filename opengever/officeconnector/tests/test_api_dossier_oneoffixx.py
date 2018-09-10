@@ -34,33 +34,18 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
-            u'checkout-url': u'oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-                             u'.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWV'
-                             u'udHMiOlsiY3JlYXRlc2hhZG93ZG9jdW1lbnQwMDAwMDAwMDAwMDEiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHA'
-                             u'iOjQxMjEwMzMxMDB9'
-                             u'.tf1OL0GixVdQv9OBiItrblq3B9Q46jQOwT8kK8CXyDo',
             u'connect-xml': u'@@oneoffix_connect_xml',
             u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-37',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
             }]
-        with freeze(FREEZE_DATE):
-            payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
+
+        payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
+
         for payload, expected_payload in zip(payloads, expected_payloads):
             self.assertTrue(payload.get('csrf-token'))
             self.assertDictContainsSubset(expected_payload, payload)
-
-        expected_token = {
-            u'action': u'checkout',
-            u'documents': [u'createshadowdocument000000000001'],
-            u'exp': 4121033100,
-            u'sub': u'robert.ziegler',
-            u'url': u'http://nohost/plone/oc_checkout',
-            }
-        raw_token = payloads[0].get('checkout-url').split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(expected_token, token)
 
         expected_oneoffixx_xml = [
             '<OneOffixxConnectBatch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
@@ -104,13 +89,24 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             '            <Add key="Filename"></Add>',
             '          </Parameters>',
             '        </Command>',
+            '        <Command Name="InvokeProcess">',
+            '          <Parameters>',
+            '            <Add key="Name">OfficeConnector</Add>',
+            '            <Add key="Arguments">oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
+            '.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWVudHMiOlsiY3JlYXRlc'
+            '2hhZG93ZG9jdW1lbnQwMDAwMDAwMDAwMDEiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHAiOjQxMjEwMzMxMDB9'
+            '.tf1OL0GixVdQv9OBiItrblq3B9Q46jQOwT8kK8CXyDo</Add>',
+            '          </Parameters>',
+            '        </Command>',
             '        <Command Name="ConvertToDocument"/>',
             '      </Commands>',
             '    </OneOffixxConnect>',
             '  </Entries>',
             '</OneOffixxConnectBatch>',
             ]
-        oneoffixx_xml = self.download_oneoffixx_xml(browser, raw_token, payloads[0]).splitlines()
+        with freeze(FREEZE_DATE):
+            oneoffixx_xml = self.download_oneoffixx_xml(browser, raw_token, payloads[0]).splitlines()
+        self.maxDiff = None
         self.assertEqual(expected_oneoffixx_xml, oneoffixx_xml)
 
         # XXX - this test will continue once we have a fileless shadow document

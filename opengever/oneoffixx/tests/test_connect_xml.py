@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from lxml import etree
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_string
 
@@ -22,7 +24,9 @@ class TestConnectXML(IntegrationTestCase):
     @browsing
     def test_connect_xml_content(self, browser):
         self.login(self.dossier_responsible, browser)
-        browser.open(self.shadow_document, view="oneoffix_connect_xml")
+        # Freezing the JWT embedded in the XML file to the OC testing standard
+        with freeze(FREEZE_DATE):
+            browser.open(self.shadow_document, view="oneoffix_connect_xml")
 
         xml = resource_string("opengever.oneoffixx.tests.assets", "oneoffixx_connect_xml.txt")
         self.assertEqual(xml, browser.contents)

@@ -1,5 +1,6 @@
 from lxml import etree
 from opengever.base.interfaces import IReferenceNumber
+from opengever.officeconnector.helpers import create_oc_url
 from plone import api
 from Products.Five import BrowserView
 from zExceptions import NotFound
@@ -21,7 +22,10 @@ class OneoffixxConnectXml(BrowserView):
                          "SaveAs": (("Overwrite", "true"),
                                     ("CreateFolder", "true"),
                                     ("AllowUpdateDocumentPart", "false"),
-                                    ("Filename", ""))
+                                    ("Filename", "")),
+                         "InvokeProcess": (("Name", "OfficeConnector"),
+                                           ("Arguments", create_oc_url(
+                                               self.request, self.context, {"action": "checkout"})))
                          }
 
         self.request.RESPONSE.setHeader("Content-type", "application/xml")
