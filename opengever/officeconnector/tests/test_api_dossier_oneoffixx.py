@@ -31,7 +31,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'checkout-url': u'oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
@@ -60,7 +60,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             }
         raw_token = payloads[0].get('checkout-url').split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_oneoffixx_xml = [
             '<OneOffixxConnectBatch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
@@ -111,7 +111,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             '</OneOffixxConnectBatch>',
             ]
         oneoffixx_xml = self.download_oneoffixx_xml(browser, raw_token, payloads[0]).splitlines()
-        self.assertEqual(oneoffixx_xml, expected_oneoffixx_xml)
+        self.assertEqual(expected_oneoffixx_xml, oneoffixx_xml)
 
         # XXX - this test will continue once we have a fileless shadow document
         # in the fixtures

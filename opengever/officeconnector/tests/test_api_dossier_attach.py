@@ -39,7 +39,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'bcc': u'1014013300@example.org',
@@ -87,7 +87,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'content-type': u'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -134,7 +134,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'content-type': u'application/msword',
@@ -187,7 +187,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [
             {
@@ -251,7 +251,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [
             {
@@ -313,7 +313,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [
             {

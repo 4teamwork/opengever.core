@@ -32,7 +32,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'bcc': u'1014013300@example.org',
@@ -76,7 +76,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         expected_payloads = [{
             u'checkin-with-comment': u'@@checkin_document',
