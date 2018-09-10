@@ -330,6 +330,17 @@ class TestSolrSearch(IntegrationTestCase):
         self.search.results()
         self.assertFalse(self.solr.search.called)
 
+    def test_solr_does_not_modify_request_form(self):
+        self.request.environ['QUERY_STRING'] = 'SearchableText=foo&review_state:list=dossier-state-active&review_state:list=dossier-state-inactive'
+
+        self.request.processInputs()
+        self.search.solr_results()
+
+        self.assertEquals(
+            {'SearchableText': 'foo',
+             'review_state': ['dossier-state-active', 'dossier-state-inactive']},
+            self.request.form)
+
     @browsing
     def test_show_more_is_not_rendered_per_default(self, browser):
         self.login(self.regular_user, browser)
