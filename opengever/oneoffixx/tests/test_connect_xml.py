@@ -28,10 +28,11 @@ class TestConnectXML(IntegrationTestCase):
         with freeze(FREEZE_DATE):
             browser.open(self.shadow_document, view="oneoffix_connect_xml")
 
-        xml = resource_string("opengever.oneoffixx.tests.assets", "oneoffixx_connect_xml.txt")
-        self.assertEqual(xml, browser.contents)
+        expected_oneoffixx_xml = resource_string("opengever.oneoffixx.tests.assets", "oneoffixx_connect_xml.txt")
 
-        self.assertEqual("application/xml", browser.headers["Content-type"])
+        self.maxDiff = None
+        self.assertEqual(expected_oneoffixx_xml.splitlines(), browser.contents.splitlines())
+        self.assertEqual("application/xml", browser.headers.get('Content-type'))
 
     @browsing
     def test_connect_xml_view_allowed_only_on_documents_in_shadow_state(self, browser):
