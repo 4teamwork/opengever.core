@@ -295,4 +295,13 @@
       permission="opengever.webactions.ManageOwnWebActions"
       />
 
+  <plone:service
+      method="POST"
+      name="@workflow"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".transition.GEVERWorkflowTransition"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
 </configure>
