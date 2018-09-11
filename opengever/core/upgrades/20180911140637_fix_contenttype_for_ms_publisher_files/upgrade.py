@@ -8,9 +8,12 @@ from plone import api
 MS_PUBLISHER_EXTENSION = '.pub'
 MS_PUBLISHER_MIMETYPE = 'application/x-mspublisher'
 
+WMF_EXTENSION = '.wmf'
+WMF_MIMETYPE = 'image/x-wmf'
+
 
 class FixContenttypeForMSPublisherFiles(UpgradeStep):
-    """Fix contenttype for MS Publisher files.
+    """Fix contenttype for MS Publisher and WMF files.
     """
 
     def __call__(self):
@@ -20,8 +23,8 @@ class FixContenttypeForMSPublisherFiles(UpgradeStep):
         brains = catalog.unrestrictedSearchResults(
             {'object_provides': IDocumentSchema.__identifier__})
 
-        for brain in ProgressLogger('Fix contettype for MS Publisher files',
-                                    brains):
+        for brain in ProgressLogger(
+                'Fix contettype for MS Publisher and wmf files', brains):
             if brain.getContentType == 'application/octet-stream':
                 obj = brain.getObject()
                 if not obj.file:
@@ -30,4 +33,8 @@ class FixContenttypeForMSPublisherFiles(UpgradeStep):
                 filename, ext = splitext(obj.file.filename)
                 if ext == MS_PUBLISHER_EXTENSION:
                     obj.file.contentType = MS_PUBLISHER_MIMETYPE
+                    obj.reindexObject()
+
+                if ext == WMF_EXTENSION:
+                    obj.file.contentType = WMF_MIMETYPE
                     obj.reindexObject()
