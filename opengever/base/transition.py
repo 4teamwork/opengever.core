@@ -21,6 +21,20 @@ class ITransitionExtender(Interface):
     """
 
 
+class IResponse(Schema):
+
+    text = schema.Text(
+        title=_('label_response', default="Response"),
+        required=False,
+        )
+
+
+class INewDeadline(Schema):
+
+    new_deadline = schema.Date(
+        title=_(u"label_new_deadline", default=u"New Deadline"),
+        required=True)
+
 
 @implementer(ITransitionExtender)
 @adapter(Interface)
@@ -38,6 +52,7 @@ class TransitionExtender(object):
         validate_all = True
         schema_data = {}
         errors = []
+        values = {}
 
         for schemata in self.schemas:
             for name, field in getFields(schemata).items():
@@ -69,6 +84,8 @@ class TransitionExtender(object):
                         errors.append({
                             'message': e.doc(), 'field': name, 'error': e})
 
+            values.update(field_data)
+
         # Validate schemata
         for schemata, field_data in schema_data.items():
             validator = queryMultiAdapter(
@@ -80,4 +97,48 @@ class TransitionExtender(object):
         if errors:
             raise BadRequest(errors)
 
-        return field_data
+        return values
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class AcceptTransitionExtender(TransitionExtender):
+
+    schemas = [IResponse, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'))
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class ModifyDeadlineTransitionExtender(TransitionExtender):
+
+    schemas = [INewDeadline, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        IDeadlineModifier(self.context).modify_deadline(
+            kwargs['new_deadline'], kwargs.get('text'), transition)
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class ResolveTransitionExtender(TransitionExtender):
+
+    schemas = [IResponse, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'))
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class CloseTransitionExtender(TransitionExtender):
+
+    schemas = [IResponse, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'))

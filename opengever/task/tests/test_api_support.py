@@ -1,6 +1,9 @@
+from datetime import date
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
+from opengever.task.adapters import IResponseContainer
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -88,3 +91,114 @@ class TestAPISupport(IntegrationTestCase):
 
         self.assertEqual([u'kathi.barfuss', u'jurgen.konig'],
                          [watcher.actorid for watcher in watchers])
+
+
+class TestAPITransitions(IntegrationTestCase):
+
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    @browsing
+    def test_transition_changes_adds_response(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-open-in-progress'.format(
+            self.seq_subtask_1.absolute_url())
+        data = {'text': 'Wird gemacht!'}
+
+        browser.open(url, method='POST', data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual('task-state-in-progress',
+                         api.content.get_state(self.seq_subtask_1))
+        self.assertEqual('task-state-in-progress',
+                         self.seq_subtask_1.get_sql_object().review_state)
+
+        response = IResponseContainer(self.seq_subtask_1)[-1]
+
+        self.assertEqual(u'Wird gemacht!', response.text)
+        self.assertEqual(u'task-transition-open-in-progress', response.transition)
+        self.assertEqual(self.regular_user.id, response.creator)
+
+    @browsing
+    def test_validates_schema(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        url = '{}/@workflow/task-transition-modify-deadline'.format(
+            self.task.absolute_url())
+
+        # Missing
+        data = {'text': 'Wird nun dringender.'}
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        # Invalid
+        data = {'text': 'Wird nun dringender.', 'new_deadline': 'not-valid'}
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+    @browsing
+    def test_modify_deadline_successful(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        url = '{}/@workflow/task-transition-modify-deadline'.format(
+            self.task.absolute_url())
+
+        data = {'text': 'Wird nun dringender.', 'new_deadline': '2019-11-23'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(date(2019, 11, 23), self.task.deadline)
+
+        response = IResponseContainer(self.task)[-1]
+        self.assertEqual(
+            [{'after': date(2019, 11, 23),
+              'id': 'deadline',
+              'name': u'label_deadline',
+              'before': date(2016, 11, 1)}],
+            response.changes)
+
+    @browsing
+    def test_close_successful(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        url = '{}/@workflow/task-transition-resolved-tested-and-closed'.format(
+            self.subtask.absolute_url())
+
+        data = {'text': 'Tiptop, Danke!'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-tested-and-closed',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Tiptop, Danke!', response.text)
+        self.assertEqual('task-transition-resolved-tested-and-closed',
+                         response.transition)
+
+    @browsing
+    def test_resolve_successful(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        url = '{}/@workflow/task-transition-in-progress-resolved'.format(self.subtask.absolute_url())
+
+        data = {'text': 'Erledigt, siehe Anhang.'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-resolved',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Erledigt, siehe Anhang.', response.text)
+        self.assertEqual('task-transition-in-progress-resolved',
+                         response.transition)

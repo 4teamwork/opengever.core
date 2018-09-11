@@ -381,4 +381,24 @@
       permission="zope.Public"
       />
 
+  <adapter
+      factory=".transition.AcceptTransitionExtender"
+      name="task-transition-open-in-progress"
+      />
+
+  <adapter
+      factory=".transition.ModifyDeadlineTransitionExtender"
+      name="task-transition-modify-deadline"
+      />
+
+  <adapter
+      factory=".transition.ResolveTransitionExtender"
+      name="task-transition-in-progress-resolved"
+      />
+
+  <adapter
+      factory=".transition.CloseTransitionExtender"
+      name="task-transition-resolved-tested-and-closed"
+      />
+
 </configure>
