@@ -1,3 +1,4 @@
+from copy import deepcopy
 from DateTime import DateTime
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
@@ -16,6 +17,7 @@ from Products.CMFPlone.utils import safe_unicode
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
+
 
 FILTER_TYPES = [
     'ftw.mail.mail',
@@ -98,7 +100,9 @@ class OpengeverSearch(Search):
         solr = getUtility(ISolrSearch)
         schema = solr.manager.schema
         filters = []
-        for key, value in self.request.form.items():
+
+        # Avoid mutating nested values in self.request.form
+        for key, value in deepcopy(self.request.form).items():
             if key == 'SearchableText':
                 continue
             if key not in schema.fields:
