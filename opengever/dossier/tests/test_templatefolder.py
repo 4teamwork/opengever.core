@@ -51,6 +51,24 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         self.assertEquals(expected_listing, browser.css('table.listing').first.dicts())
 
     @browsing
+    def test_form_does_not_list_templates_from_dossiertemplates(self, browser):
+        self.login(self.regular_user, browser)
+        create(Builder('document')
+               .titled(u'T\xc3\xb6mpl\xc3\xb6te in dossiertemplate')
+               .with_dummy_content()
+               .within(self.dossiertemplate))
+
+        browser.open(self.dossier, view='document_with_template')
+        expected_listing = [
+            {'': '', 'Creator': 'nicole.kohler', 'Modified': '28.12.2010', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Mit'},
+            {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Normal'},
+            {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Ohne'},
+            {'': '', 'Creator': 'nicole.kohler', 'Modified': '29.02.2020', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Sub'},
+            ]
+
+        self.assertEquals(expected_listing, browser.css('table.listing').first.dicts())
+
+    @browsing
     def test_form_does_not_inlcude_participants_with_disabled_feature(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view='document_with_template')
