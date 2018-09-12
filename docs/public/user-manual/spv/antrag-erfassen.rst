@@ -7,17 +7,37 @@ GEVER. Im vorliegenden Fall soll die Anstellung von Frau Marlies Sutter,
 Abteilungsleiterin Finanzen, für die nächste Sitzung des Gemeinderates
 traktandiert werden.
 
+**Antrag erstellen**
+
 Alle notwendigen Dokumente und Informationen sind im Geschäftsdossier erfasst.
-Unter «Hinzufügen» kann der Antrag an den Gemeinderat Musterhausen erfasst
-werden.
+Zum Erfassen eines Antrags gibt es zwei Möglichkeiten:
+
+-   Unter «Hinzufügen» kann der Antrag an den Gemeinderat Musterhausen erfasst
+    werden. (Dieser Weg wird nachfolgend im Detail beschrieben)
 
 |img-spvupdate-8|
+
+-   Im Dokumenten-Tab eines Dossiers findet sich zuunterst der Button
+    "Antrag erstellen". Diese Variante bietet den Vorteil, dass Dokumente,
+    welche dem Antrag angehängt werden möchten, direkt in der Auflistung
+    angewählt werden können.
+
+|img-spvupdate-41|
+
+**Antrag ausfüllen**
 
 Unter «Antrag hinzufügen» werden der Titel des Traktandums, das betreffende
 Gremium, die passende Antragsvorlage und die dazugehörigen Anhänge bearbeitet
 bzw. ausgewählt.
 
+Anhänge können entweder aus einer bestehenden Vorlage angehängt
+werden:
+
 |img-spvupdate-9|
+
+Oder aus ein oder meheren bestehende Dokumenten bestehen:
+
+|img-spvupdate-42|
 
 |img-spvupdate-10|
 
@@ -55,6 +75,8 @@ eingecheckt werden.
 .. |img-spvupdate-12| image:: ../img/media/img-spvupdate-12.png
 .. |img-spvupdate-13| image:: ../img/media/img-spvupdate-13.png
 .. |img-spvupdate-14| image:: ../img/media/img-spvupdate-14.png
+.. |img-spvupdate-41| image:: ../img/media/img-spvupdate-41.png
+.. |img-spvupdate-42| image:: ../img/media/img-spvupdate-42.png
 
 
 .. disqus::
