@@ -30,7 +30,7 @@ zugewiesen. Dadurch hat der Auftraggeber die Möglichkeit, die Aufgabe wieder zu
 Aufgabe neu zuweisen
 ~~~~~~~~~~~~~~~~~~~~
 
-Eine Aufgabe kann auch einem anderen Sachbearbeiterenden zugewiesen werden.
+Eine Aufgabe kann auch einem anderen Sachbearbeitenden zugewiesen werden.
 Dadurch wird der Auftraggeber der Aufgabe geändert. Wählen Sie dazu
 *Aktionen → Neuzuweisen*. Diese Möglichkeit besteht auch im späteren
 Arbeitsverlauf noch.
