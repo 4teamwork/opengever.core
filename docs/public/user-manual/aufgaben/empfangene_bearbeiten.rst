@@ -30,10 +30,10 @@ zugewiesen. Dadurch hat der Auftraggeber die Möglichkeit, die Aufgabe wieder zu
 Aufgabe neu zuweisen
 ~~~~~~~~~~~~~~~~~~~~
 
-Eine Aufgabe kann auch einem anderen Sachbearbeiter bzw. einer anderen
-Sachbearbeiterin zugewiesen werden. Wählen Sie dazu *Aktionen → Neu
-zuweisen*. Diese Möglichkeit besteht auch im späteren
-Arbeitsverlauf.
+Eine Aufgabe kann auch einem anderen Sachbearbeitenden zugewiesen werden.
+Dadurch wird der Auftraggeber der Aufgabe geändert. Wählen Sie dazu
+*Aktionen → Neuzuweisen*. Diese Möglichkeit besteht auch im späteren
+Arbeitsverlauf noch.
 
 |img-aufgaben-24|
 
@@ -52,8 +52,10 @@ nachträglich unten im Verlauf nachvollzogen werden.
 Aufgabe delegieren
 ~~~~~~~~~~~~~~~~~~
 
-Eine Aufgabe kann einer anderen Person delegiert werden. Akzeptieren Sie dazu
-zuerst die Aufgabe und gehen Sie dann auf *Aktionen → Delegieren*.
+Eine Aufgabe kann einer anderen Person auch delegiert werden. Dadurch wird eine
+Unteraufgabe erstellt. Der Auftraggeber der Hauptaufgabe bleibt dabei jedoch
+bestehen. Akzeptieren Sie dazu zuerst die Aufgabe und gehen Sie dann auf
+*Aktionen → Delegieren*.
 
 |img-aufgaben-30|
 
