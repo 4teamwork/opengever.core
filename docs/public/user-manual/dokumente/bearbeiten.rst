@@ -157,7 +157,7 @@ Open office                          x
 Acrobat Pro, Reader       x          x
 
 
-Adone InDesign            x
+Adobe InDesign            x
 
 
 Adobe Photoshop           x
