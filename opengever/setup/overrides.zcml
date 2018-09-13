@@ -9,4 +9,9 @@
       name="collective.blueprint.jsonmigrator.ac_local_roles"
       />
 
+  <utility
+      component=".sections.reindexobject.GeverReindexObjectSection"
+      name="plone.app.transmogrifier.reindexobject"
+      />
+
 </configure>
