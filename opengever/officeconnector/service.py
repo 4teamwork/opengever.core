@@ -276,6 +276,8 @@ class OfficeConnectorOneOffixxPayload(OfficeConnectorPayload):
             if authorized:
                 document = payload['document']
                 payload['filename'] = IAnnotations(document).get("filename")
+                # Oneoffixx is only used for .docx files in opengever.core
+                payload['content-type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
                 del payload['document']
                 payload['connect-xml'] = '@@oneoffix_connect_xml'
 
