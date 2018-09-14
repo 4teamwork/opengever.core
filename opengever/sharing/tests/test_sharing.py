@@ -204,6 +204,28 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
              u'url': u'http://nohost/plone/@@user-details-plain/kathi.barfuss'},
             [item for item in entries if item['id'] == self.regular_user.id][0])
 
+    @browsing
+    def test_sharing_view_handles_groupids_with_spaces(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        group_id = 'group with spaces'
+        create(Builder('group')
+               .with_groupid(group_id)
+               .having(title='Group with sapces'))
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(
+            TaskRoleAssignment(group_id, ['Reader'], self.task))
+
+        browser.open(self.empty_dossier, view='@sharing',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        entry = [entry for entry in browser.json['entries']
+                 if entry['id'] == u'group with spaces'][0]
+        self.assertEquals(
+            u'http://nohost/plone/@@list_groupmembers?group=group+with+spaces',
+            entry['url'])
+
 
 class TestRoleAssignmentsGet(IntegrationTestCase):
 
