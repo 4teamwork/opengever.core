@@ -1,4 +1,5 @@
 from collective.transmogrifier.transmogrifier import Transmogrifier
+from ftw.solr.interfaces import ISolrConnectionManager
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bundle.ldap import DisabledLDAP
@@ -8,8 +9,10 @@ from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from opengever.setup.sections.reindexobject import SKIP_SOLR_KEY
 from plone import api
 from zope.annotation import IAnnotations
+from zope.component import getUtility
 from zope.interface import alsoProvides
 import argparse
 import logging
@@ -27,6 +30,8 @@ def parse_args(argv):
                         help='Path to the .oggbundle directory')
     parser.add_argument('--no-intermediate-commits', action='store_true',
                         help="Don't to intermediate commits")
+    parser.add_argument('--skip-solr', action='store_false',
+                        help="Do not reindex SOLR")
 
     args = parser.parse_args(argv)
     return args
@@ -61,6 +66,19 @@ def import_oggbundle(app, args):
     ann = IAnnotations(transmogrifier)
     ann[BUNDLE_PATH_KEY] = args.bundle_path
     ann[INTERMEDIATE_COMMITS_KEY] = not args.no_intermediate_commits
+    ann[SKIP_SOLR_KEY] = not args.skip_solr
+
+    solr_enabled = api.portal.get_registry_record(
+        'opengever.base.interfaces.ISearchSettings.use_solr',
+        default=False)
+
+    if solr_enabled and not ann[SKIP_SOLR_KEY]:
+        # Check if solr is running
+        conn = getUtility(ISolrConnectionManager).connection
+        if conn.get('/schema').status == -1:
+            raise Exception(
+                "Solr isn't running, but solr reindexing is enabled. "
+                "Skipping solr reindexing via `--skip-solr`.")
 
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')

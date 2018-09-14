@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add missing mimetype for wmf files. [phgross]
+- Fix solr checked-in indexing problems. [phgross]
 - Fix tree portlet header styling for IE11. [Kevin Bieri]
 - Register bmp as editable by officeconnector. [phgross]
 - Fix batching links on the solr search. [phgross]

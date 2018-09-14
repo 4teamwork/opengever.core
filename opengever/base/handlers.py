@@ -1,3 +1,5 @@
+from collective.indexing.interfaces import IIndexQueueProcessor
+from collective.indexing.queue import getQueue
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
@@ -9,6 +11,7 @@ from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.CMFCatalogAware import CatalogAware
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
+from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -43,6 +46,17 @@ def object_moved_or_added(context, event):
         catalog = api.portal.get_tool('portal_catalog')
         catalog.reindexObject(context, idxs=CatalogAware._cmf_security_indexes,
                               update_metadata=0)
+
+        # Using catalogs reindexObject does not trigger corresponding solr
+        # reindexing, so we do it manually.
+
+        # Register collective.indexing hook, to make sure solr changes
+        # are realy send to solr. See
+        # collective.indexing.queue.IndexQueue.hook.
+        getQueue().hook()
+
+        processor = getUtility(IIndexQueueProcessor, name='ftw.solr')
+        processor.index(context, CatalogAware._cmf_security_indexes)
 
 
 def remove_favorites(context, event):

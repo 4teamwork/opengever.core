@@ -81,7 +81,7 @@ class CreatorMigrator(object):
             modified_idxs.extend(idxs)
             creators_moved.extend(moved)
             if modified_idxs:
-                self.catalog.reindexObject(obj, idxs=modified_idxs)
+                obj.reindexObject(idxs=modified_idxs)
 
         results = {
             'creators': {
