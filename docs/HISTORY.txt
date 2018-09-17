@@ -5,14 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
-- Fix groubmembers overlay for groupids with spaces. [phgross]
-- Add missing mimetype for wmf files. [phgross]
-- Fix solr checked-in indexing problems. [phgross]
-- Fix tree portlet header styling for IE11. [Kevin Bieri]
-- Register bmp as editable by officeconnector. [phgross]
-- Fix batching links on the solr search. [phgross]
 - Correct info messages in meetings. [njohner]
-- Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 - Only set proposal to decided when excerpt has been generated and returned. [njohner]
 - Add actions pointing to the meeting and protocol debug views. [njohner]
 - Fix bug with document without file in a dossiertemplate. [njohner]
@@ -30,6 +23,18 @@ Changelog
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+
+
+2018.4.4 (2018-09-17)
+---------------------
+
+- Fix groubmembers overlay for groupids with spaces. [phgross]
+- Add missing mimetype for wmf files. [phgross]
+- Fix solr checked-in indexing problems. [phgross]
+- Fix tree portlet header styling for IE11. [Kevin Bieri]
+- Fix batching links on the solr search. [phgross]
+- Register bmp as editable by officeconnector. [phgross]
+- Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 
 
 2018.4.3 (2018-09-04)
