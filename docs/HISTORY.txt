@@ -7,6 +7,7 @@ Changelog
 
 - Fix tree portlet header styling for IE11. [Kevin Bieri]
 - Fix batching links on the solr search. [phgross]
+- Register bmp as editable by officeconnector. [phgross]
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 
 

@@ -1,0 +1,15 @@
+<registry>
+
+  <!-- OFFICECONNECTOR -->
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
+  <record
+      interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings"
+      field="officeconnector_editable_types">
+    <value purge="False">
+
+      <element>image/bmp</element>
+
+    </value>
+  </record>
+
+</registry>
