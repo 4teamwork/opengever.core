@@ -5,6 +5,7 @@ Changelog
 2018.4.4 (unreleased)
 ---------------------
 
+- Fix tree portlet header styling for IE11. [Kevin Bieri]
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 
 

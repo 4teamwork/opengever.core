@@ -3213,7 +3213,7 @@ dl.portlet.portletTreePortlet .portletHeader { padding: 0; border: none; border-
 
 dl.portlet.portletTreePortlet .portlet-header-tabs { display: flex; list-style: none; width: 100%; border-bottom: 1px solid #ccc; }
 
-dl.portlet.portletTreePortlet .portlet-header-tabs li { display: table-cell; width: 50%; text-align: center; padding: 0; padding-left: 1px; }
+dl.portlet.portletTreePortlet .portlet-header-tabs li { width: 50%; text-align: center; padding: 0; padding-left: 1px; }
 
 dl.portlet.portletTreePortlet .portlet-header-tabs li:first-child { padding-left: 0; }
 
