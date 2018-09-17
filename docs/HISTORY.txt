@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix tree portlet header styling for IE11. [Kevin Bieri]
+- Fix batching links on the solr search. [phgross]
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 
 
