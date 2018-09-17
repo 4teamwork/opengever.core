@@ -128,6 +128,9 @@ ADDITIONAL_TYPES = [
     # MS Powerpoint Slideshow (Macro Enabled)
     ('application/vnd.ms-powerpoint.slideshow.macroEnabled.12', '.ppsm'),
 
+    # Windows Metafile
+    ('image/x-wmf', '.wmf'),
+
     # Apple Keynote
     ('application/x-iwork-keynote-sffkey', '.key'),
 

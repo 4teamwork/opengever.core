@@ -5,6 +5,7 @@ Changelog
 2018.4.4 (unreleased)
 ---------------------
 
+- Add missing mimetype for wmf files. [phgross]
 - Fix tree portlet header styling for IE11. [Kevin Bieri]
 - Fix batching links on the solr search. [phgross]
 - Register bmp as editable by officeconnector. [phgross]
