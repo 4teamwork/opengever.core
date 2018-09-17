@@ -5,7 +5,7 @@ Changelog
 2018.4.4 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 
 
 2018.4.3 (2018-09-04)

@@ -329,3 +329,20 @@ class TestSolrSearch(IntegrationTestCase):
         self.request.processInputs()
         self.search.results()
         self.assertFalse(self.solr.search.called)
+
+    @browsing
+    def test_show_more_is_not_rendered_per_default(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal, view='@@livesearch_reply?q=test')
+        self.assertIsNone(browser.find('Show all items'))
+
+    @browsing
+    def test_path_for_show_more_is_not_none(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal, view='@@livesearch_reply?q=test&limit=2')
+        all_items_link = browser.find('Show all items')
+        self.assertIsNotNone(all_items_link)
+        self.assertEqual(
+            '<a href="@@search?SearchableText=test&amp;path=/plone" style="font-weight:normal">Show all items</a>',
+            all_items_link.outerHTML,
+            )
