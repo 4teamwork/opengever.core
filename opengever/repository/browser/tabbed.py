@@ -1,3 +1,4 @@
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.tabbedview import GeverTabbedView
@@ -31,7 +32,6 @@ class RepositoryRootTabbedView(GeverTabbedView):
                 'id': 'dispositions',
                 'title': _(u'label_dispositions', default=u'Dispositions'),
                 }
-
         return None
 
     @property
@@ -41,7 +41,6 @@ class RepositoryRootTabbedView(GeverTabbedView):
                 'id': 'journal',
                 'title': _(u'label_journal', default=u'Journal'),
                 }
-
         return None
 
     @property
@@ -51,7 +50,6 @@ class RepositoryRootTabbedView(GeverTabbedView):
                 'id': 'blocked-local-roles',
                 'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
                 }
-
         return None
 
     def _get_tabs(self):
@@ -85,30 +83,40 @@ class RepositoryFolderTabbedView(GeverTabbedView):
                 'id': 'blocked-local-roles',
                 'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
                 }
-
         return None
 
     @property
     def documents_tab(self):
         settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
-        if not getattr(settings, 'show_documents_tab', False):
-            return
-
-        return {
-            'id': 'documents-proxy',
-            'title': _(u'label_documents', default=u'Documents'),
-        }
+        if getattr(settings, 'show_documents_tab', False):
+            return {
+                'id': 'documents-proxy',
+                'title': _(u'label_documents', default=u'Documents'),
+                }
+        return None
 
     @property
     def tasks_tab(self):
         settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
-        if not getattr(settings, 'show_tasks_tab', False):
-            return
+        if getattr(settings, 'show_tasks_tab', False):
+            return {
+                'id': 'tasks',
+                'title': _(u'label_tasks', default=u'Tasks'),
+                }
+        return None
 
-        return {
-            'id': 'tasks',
-            'title': _(u'label_tasks', default=u'Tasks'),
-        }
+    @property
+    def proposals_tab(self):
+        meeting_settings = getUtility(IRegistry).forInterface(IMeetingSettings)
+        meeting_enabled = getattr(meeting_settings, 'is_feature_enabled', False)
+        repository_settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
+        proposals_tab_enabled = getattr(repository_settings, 'show_proposals_tab', False)
+        if meeting_enabled and proposals_tab_enabled:
+            return {
+                'id': 'proposals',
+                'title': _(u'label_proposals', default=u'Proposals'),
+                }
+        return None
 
     def _get_tabs(self):
         return filter(None, [
@@ -116,5 +124,6 @@ class RepositoryFolderTabbedView(GeverTabbedView):
             self.documents_tab,
             self.tasks_tab,
             self.info_tab,
+            self.proposals_tab,
             self.blocked_local_roles_tab,
         ])

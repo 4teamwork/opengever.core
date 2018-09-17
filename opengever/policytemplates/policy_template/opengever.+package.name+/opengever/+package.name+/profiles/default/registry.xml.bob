@@ -79,6 +79,12 @@
   </records>
 
 {{% endif %}}
+{{% if setup.repositoryfolder_proposals_tab %}}
+  <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
+    <value key="show_proposals_tab">True</value>
+  </records>
+
+{{% endif %}}
 {{% if setup.workspace %}}
   <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
     <value key="is_feature_enabled">True</value>

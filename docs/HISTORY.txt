@@ -6,6 +6,8 @@ Changelog
 ---------------------
 
 - Correct info messages in meetings. [njohner]
+- Add proposal tabs to repository folders. [Rotonen]
+- Fix global scoped "show more" links for SOLR livesearch [Rotonen]
 - Only set proposal to decided when excerpt has been generated and returned. [njohner]
 - Add actions pointing to the meeting and protocol debug views. [njohner]
 - Fix bug with document without file in a dossiertemplate. [njohner]

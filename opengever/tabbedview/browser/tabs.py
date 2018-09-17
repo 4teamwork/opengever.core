@@ -90,7 +90,7 @@ class BaseTabProxy(BaseCatalogListingTab):
         `selected_count`: number of items selected / displayed on this page
         """
         if not self.batching_enabled:
-            return
+            return None
 
         if self.table_options is None:
             self.table_options = {}

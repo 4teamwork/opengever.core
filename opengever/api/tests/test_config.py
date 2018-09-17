@@ -55,6 +55,7 @@ class TestConfig(IntegrationTestCase):
                 u'preview_open_pdf_in_new_window': False,
                 u'purge_trash': False,
                 u'repositoryfolder_documents_tab': True,
+                u'repositoryfolder_proposals_tab': True,
                 u'repositoryfolder_tasks_tab': True,
                 u'resolver_name': u'strict',
                 u'sablon_date_format': u'%d.%m.%Y',
