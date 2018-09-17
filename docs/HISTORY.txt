@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.4.4 (unreleased)
+2018.4.4 (2018-09-17)
 ---------------------
 
 - Fix groubmembers overlay for groupids with spaces. [phgross]
