@@ -214,8 +214,9 @@ class OpengeverSharingView(SharingView):
         """Returns the url to the detail view for users or group.
         """
         if item.get('type') == 'group':
-            return '{}/@@list_groupmembers?group={}'.format(
-                api.portal.get().absolute_url(), item['id'])
+            return '{}/@@list_groupmembers?{}'.format(
+                api.portal.get().absolute_url(),
+                urlencode({'group': item['id']}))
         else:
             return '{}/@@user-details-plain/{}'.format(
                 api.portal.get().absolute_url(), item['id'])

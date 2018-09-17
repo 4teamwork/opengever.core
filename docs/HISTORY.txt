@@ -5,6 +5,7 @@ Changelog
 2018.4.4 (unreleased)
 ---------------------
 
+- Fix groubmembers overlay for groupids with spaces. [phgross]
 - Add missing mimetype for wmf files. [phgross]
 - Fix solr checked-in indexing problems. [phgross]
 - Fix tree portlet header styling for IE11. [Kevin Bieri]
