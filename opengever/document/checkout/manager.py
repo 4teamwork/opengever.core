@@ -83,18 +83,10 @@ class CheckinCheckoutManager(object):
         user_id = getSecurityManager().getUser().getId()
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = user_id
 
-        # finally, reindex the object
-        catalog = api.portal.get_tool('portal_catalog')
         # update last modified timestamp for recently modified menu
         self.context.setModificationDate()
-        catalog.reindexObject(
-            self.context,
-            idxs=(
-                'checked_out',
-                'modified',
-                ),
-            update_metadata=True,
-            )
+
+        self.context.reindexObject(idxs=['checked_out', 'modified'])
 
         # fire the event
         notify(ObjectCheckedOutEvent(self.context, ''))
@@ -159,18 +151,10 @@ class CheckinCheckoutManager(object):
         # create new version in CMFEditions
         self.versioner.create_version(comment)
 
-        # finally, reindex the object
-        catalog = api.portal.get_tool('portal_catalog')
         # update last modified timestamp for recently modified menu
         self.context.setModificationDate()
-        catalog.reindexObject(
-            self.context,
-            idxs=(
-                'checked_out',
-                'modified',
-                ),
-            update_metadata=True,
-            )
+
+        self.context.reindexObject(idxs=['checked_out', 'modified'])
 
         # fire the event
         notify(ObjectCheckedInEvent(self.context, comment))
@@ -216,14 +200,7 @@ class CheckinCheckoutManager(object):
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
 
         # finally, reindex the object
-        catalog = api.portal.get_tool('portal_catalog')
-        catalog.reindexObject(
-            self.context,
-            idxs=(
-                'checked_out',
-                ),
-            update_metadata=True,
-            )
+        self.context.reindexObject(idxs=['checked_out'])
 
         # Clear any WebDAV locks left over by ExternalEditor if necessary
         self.clear_locks()
