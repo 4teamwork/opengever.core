@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import plone
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -95,6 +97,26 @@ class TestIntegrationTestCase(IntegrationTestCase):
         """
         self.assertFalse(api.portal.get_registry_record(
             'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled'))
+
+    def test_features_can_be_enabled(self):
+        """Test parse_feature() can enable a setting disabled per default."""
+        self.assertFalse(
+            api.portal.get_registry_record('is_feature_enabled', interface=IGeverBumblebeeSettings),
+            'This test blindly assumes Bumblebee to be off per default.',
+        )
+        self.parse_feature('bumblebee')
+        self.assertTrue(api.portal.get_registry_record('is_feature_enabled', interface=IGeverBumblebeeSettings))
+
+    def test_features_can_be_disabled(self):
+        """Test parse_feature() can disable a setting enabled per default."""
+        self.assertTrue(
+            api.portal.get_registry_record('attach_to_outlook_enabled', interface=IOfficeConnectorSettings),
+            "This test blindly assumes 'Attach to email' to be on per default.",
+        )
+        self.parse_feature('!officeconnector-attach')
+        self.assertFalse(
+            api.portal.get_registry_record('attach_to_outlook_enabled', interface=IOfficeConnectorSettings),
+        )
 
     def test_extjs_can_be_enabled_as_feature(self):
         """In order for actually testing ExtJS behavior, ExtJS can be enabled

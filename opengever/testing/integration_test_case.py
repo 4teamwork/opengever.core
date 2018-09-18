@@ -94,7 +94,7 @@ class IntegrationTestCase(TestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         self.deactivate_extjs()
-        map(self.activate_feature, self.features)
+        map(self.parse_feature, self.features)
         if 'activity' in self.features:
             Mailing(self.portal).set_up()
             insert_notification_defaults(self.portal)
@@ -198,6 +198,13 @@ class IntegrationTestCase(TestCase):
         """
         api.portal.set_registry_record(
             'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled', False)
+
+    def parse_feature(self, feature):
+        """Activate or deactivate a feature flag."""
+        if feature.startswith('!'):
+            self.deactivate_feature(feature.split('!')[-1])
+        else:
+            self.activate_feature(feature)
 
     def activate_feature(self, feature):
         """Activate a feature flag.
