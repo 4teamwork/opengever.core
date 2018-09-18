@@ -1,0 +1,12 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- OBJECT BUTTONS -->
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <object name="delete" meta_type="CMF Action" i18n:domain="plone">
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and here.restrictedTraverse('is_delete_available')()</property>
+    </object>
+
+  </object>
+
+</object>
