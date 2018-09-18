@@ -161,7 +161,6 @@ Changelog
 - Format task template comments in detail view. [tarnap]
 - Open task report: Fix condition to report admin-unit local tasks only. [lgraf]
 - Fix unicode error in versions tab comments. [lgraf]
-- Restrict availability of the delete button. [njohner]
 - Display the checkin comment on bumblebee overlays. [Rotonen]
 - Fix a bug with modern emojis while rendering task responses. [deiferni]
 - Ensure creator sets get to the paster upon pasting content. [Rotonen]
@@ -237,6 +236,12 @@ Changelog
 - Integrate plonetheme.teamraum. [deiferni]
 - Make external reference clickable in dossiers. [njohner]
 - Fix handling of decomposed unicode (aka NFD, NFKD) in Solr. [buchi]
+
+
+2018.3.7 (2018-09-18)
+---------------------
+
+- Restrict availability of the delete button. [njohner]
 
 
 2018.3.6 (2018-08-02)
