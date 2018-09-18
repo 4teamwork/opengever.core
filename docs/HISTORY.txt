@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.3.7 (unreleased)
+2018.3.7 (2018-09-18)
 ---------------------
 
 - Restrict availability of the delete button. [njohner]
