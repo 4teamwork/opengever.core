@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from opengever.repository.deleter import RepositoryDeleter
 from opengever.testing import IntegrationTestCase
@@ -50,18 +51,50 @@ class TestRepositoryDeleter(IntegrationTestCase):
     def test_delete_action_is_only_available_when_preconditions_satisfied(
             self, browser):
         self.login(self.administrator, browser)
-
         browser.open(self.empty_repofolder)
         self.assertIn(
             'Delete',
-            browser.css('#plone-contentmenu-actions .actionMenuContent a').text,
+            editbar.menu_options("Actions"),
             'Expected "Delete" action to be visible on {!r}.'.format(
                 self.empty_repofolder))
 
         browser.open(self.branch_repofolder)
         self.assertNotIn(
             'Delete',
-            browser.css('#plone-contentmenu-actions .actionMenuContent a').text,
+            editbar.menu_options("Actions"),
+            'Expected "Delete" action to be invisible on {!r}.'.format(
+                self.branch_repofolder))
+
+        browser.open(self.leaf_repofolder)
+        self.assertNotIn(
+            'Delete',
+            editbar.menu_options("Actions"),
+            'Expected "Delete" action to be invisible on {!r}.'.format(
+                self.branch_repofolder))
+
+    @browsing
+    def test_delete_action_is_only_available_when_preconditions_satisfied_also_for_managers(
+            self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.empty_repofolder)
+        self.assertIn(
+            'Delete',
+            editbar.menu_options("Actions"),
+            'Expected "Delete" action to be visible on {!r}.'.format(
+                self.empty_repofolder))
+
+        browser.open(self.branch_repofolder)
+        self.assertNotIn(
+            'Delete',
+            editbar.menu_options("Actions"),
+            'Expected "Delete" action to be invisible on {!r}.'.format(
+                self.branch_repofolder))
+
+        browser.open(self.leaf_repofolder)
+        self.assertNotIn(
+            'Delete',
+            editbar.menu_options("Actions"),
             'Expected "Delete" action to be invisible on {!r}.'.format(
                 self.branch_repofolder))
 

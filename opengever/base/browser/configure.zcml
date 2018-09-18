@@ -137,6 +137,13 @@
       />
 
   <browser:page
+      for="*"
+      name="is_delete_available"
+      class=".is_delete_available.IsDeleteAvailable"
+      permission="zope2.View"
+      />
+
+  <browser:page
       name="folder_delete_confirmation"
       for="*"
       permission="zope2.DeleteObjects"

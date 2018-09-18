@@ -440,7 +440,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_confirmation</property>
       <property name="icon_expr" />
-      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and not globals_view.isPortalOrPortalDefaultPage()</property>
+      <property name="available_expr">python:checkPermission("Delete objects", globals_view.getParentObject()) and here.restrictedTraverse('is_delete_available')()</property>
       <property name="permissions">
         <element value="Delete objects" />
       </property>

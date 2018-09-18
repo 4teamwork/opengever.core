@@ -5,7 +5,7 @@ Changelog
 2018.3.7 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Restrict availability of the delete button. [njohner]
 
 
 2018.3.6 (2018-08-02)
