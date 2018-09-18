@@ -1,13 +1,10 @@
+from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
-from ftw.casauth.plugin import CASAuthenticationPlugin
 
 
 class TestConfig(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestConfig, self).setUp()
 
     @browsing
     def test_config_contains_id(self, browser):
@@ -47,8 +44,8 @@ class TestConfig(IntegrationTestCase):
                 u'journal_pdf': False,
                 u'meetings': False,
                 u'officeatwork': False,
-                u'officeconnector_attach': False,
-                u'officeconnector_checkout': False,
+                u'officeconnector_attach': True,
+                u'officeconnector_checkout': True,
                 u'oneoffixx': False,
                 u'preview': False,
                 u'preview_auto_refresh': False,

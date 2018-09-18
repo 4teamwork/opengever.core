@@ -5,6 +5,10 @@ from plone import api
 
 class TestInboxWorkflow(IntegrationTestCase):
 
+    features = (
+        '!officeconnector-checkout',
+    )
+
     @browsing
     def test_only_managers_are_able_to_edit_inboxes(self, browser):
         self.login(self.secretariat_user, browser=browser)
@@ -71,7 +75,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         browser.fill(
             {'form.widgets.dossier.widgets.query': 'Finanzverwaltung'}).submit()
         browser.fill(
-            {'form.widgets.dossier':'/'.join(self.dossier.getPhysicalPath())})
+            {'form.widgets.dossier': '/'.join(self.dossier.getPhysicalPath())})
         browser.click_on('Save')
         # step 3
         browser.click_on('Save')

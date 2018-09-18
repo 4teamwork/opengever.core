@@ -10,7 +10,9 @@ import jwt
 
 
 class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
+
     features = (
+        '!officeconnector-attach',
         'officeconnector-checkout',
     )
 

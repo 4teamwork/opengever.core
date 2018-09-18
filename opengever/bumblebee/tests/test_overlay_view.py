@@ -157,6 +157,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
                 'Edit metadata',
                 'Checkout and edit',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 'Open detail view',
                 ],
@@ -196,6 +197,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
                 'Checkin with comment',
                 'Cancel checkout',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 'Open detail view',
                 ],
@@ -231,6 +233,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
             [
                 'Edit metadata',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 'Open detail view',
                 ],
@@ -250,6 +253,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertEqual(
             [
                 'Download copy',
+                'Attach to email',
                 'Revert document',
                 ],
             browser.css('.file-action-buttons a').text,
@@ -325,6 +329,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
                 'Edit metadata',
                 'Checkout and edit',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 ],
             browser.css('.file-action-buttons a').text,
@@ -362,6 +367,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
                 'Checkin with comment',
                 'Cancel checkout',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 ],
             browser.css('.file-action-buttons a').text,
@@ -395,6 +401,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
             [
                 'Edit metadata',
                 'Download copy',
+                'Attach to email',
                 'Open as PDF',
                 ],
             browser.css('.file-action-buttons a').text,
@@ -413,6 +420,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
         self.assertEqual(
             [
                 'Download copy',
+                'Attach to email',
                 'Revert document',
                 ],
             browser.css('.file-action-buttons a').text,

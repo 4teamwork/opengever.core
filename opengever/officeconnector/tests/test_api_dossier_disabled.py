@@ -4,6 +4,12 @@ from opengever.officeconnector.testing import OCIntegrationTestCase
 
 
 class TestOfficeconnectorDossierAPIDisabled(OCIntegrationTestCase):
+
+    features = (
+        '!officeconnector-attach',
+        '!officeconnector-checkout',
+    )
+
     @browsing
     def test_attach_to_email_open_without_file(self, browser):
         self.login(self.regular_user, browser)

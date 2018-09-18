@@ -8,13 +8,13 @@ class IOfficeConnectorSettings(Interface):
         title=u'OfficeConnector Outlook support',
         description=u'Enable attach to Outlook with the new style '
         u'OfficeConnector URLs',
-        default=False)
+        default=True)
 
     direct_checkout_and_edit_enabled = schema.Bool(
         title=u'OfficeConnector direct checkout suppport',
         description=u'Enable direct checkout and edit with the new style '
         u'OfficeConnector URLs',
-        default=False)
+        default=True)
 
 
 class IOfficeConnectorSettingsView(Interface):

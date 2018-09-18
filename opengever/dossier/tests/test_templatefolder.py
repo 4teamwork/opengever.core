@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
@@ -21,7 +20,6 @@ from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
-from opengever.testing.pages import sharing_tab_data
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.portlets.constants import CONTEXT_CATEGORY
@@ -666,7 +664,7 @@ class TestTemplateFolder(FunctionalTestCase):
                       'Title (French)': u'mod\xe8le'})
         browser.find('Save').click()
 
-        browser.find(u'Français').click()
+        browser.find(u'Fran\xe7ais').click()
         self.assertEquals(u'mod\xe8le', browser.css('h1').first.text)
 
         browser.find('Deutsch').click()
@@ -848,6 +846,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Copy Items',
             'Export selection',
             'Move Items',
+            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -863,6 +862,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Export selection',
             'Delete',
             'Move Items',
+            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
@@ -904,6 +904,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Export as Zip',
             'Copy Items',
             'Export selection',
+            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -918,6 +919,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Checkin without comment',
             'Export selection',
             'Delete',
+            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -936,6 +938,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Export as Zip',
             'Copy Items',
             'Export selection',
+            'Attach selection',
             ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
@@ -949,6 +952,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Checkin with comment',
             'Checkin without comment',
             'Export selection',
+            'Attach selection',
             'Delete',
             ]
 

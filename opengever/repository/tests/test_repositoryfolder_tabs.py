@@ -74,6 +74,7 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
 
         expected_actions = [
             'Copy Items',
+            'Attach selection',
             'Checkout',
             'Cancel',
             'Checkin with comment',

@@ -3,15 +3,13 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.bumblebee.tests.helpers import asset
 from ftw.testbrowser import browsing
-from ftw.testbrowser.exceptions import NoElementFound
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.interfaces import IRedirector
-from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
+from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.officeconnector.helpers import create_oc_url
@@ -226,7 +224,7 @@ class TestReverting(FunctionalTestCase):
         self.assertEqual('Revert', browser.css('span.discreet').first.text)
 
     @browsing
-    def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):  # noqa
+    def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):
         self.manager.checkout()
         transaction.commit()
 
@@ -248,7 +246,7 @@ class TestManagerHelpers(FunctionalTestCase):
         doc = create(Builder('document').checked_out())
         self.assertTrue(self.get_manager(doc).is_checked_out_by_current_user())
 
-    def test_is_not_checked_out_by_current_user_when_document_is_checked_out_by_another_user(self):  # noqa
+    def test_is_not_checked_out_by_current_user_when_document_is_checked_out_by_another_user(self):
         doc = create(Builder('document').checked_out_by('hugo.boss'))
         self.assertFalse(
             self.get_manager(doc).is_checked_out_by_current_user())
@@ -264,7 +262,7 @@ class TestManagerHelpers(FunctionalTestCase):
 
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_upload_is_disallowed_when_document_is_checked_out_by_other_user(self):  # noqa
+    def test_file_upload_is_disallowed_when_document_is_checked_out_by_other_user(self):
         doc = create(Builder('document').checked_out_by('hugo.boss'))
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
@@ -272,7 +270,7 @@ class TestManagerHelpers(FunctionalTestCase):
         doc = create(Builder('document'))
         self.assertFalse(self.get_manager(doc).is_file_upload_allowed())
 
-    def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):  # noqa
+    def test_file_upload_is_allowed_when_document_is_checked_out_and_not_locked(self):
         doc = create(Builder('document').checked_out())
         self.assertTrue(self.get_manager(doc).is_file_upload_allowed())
 
@@ -427,6 +425,10 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
 class TestCheckinViews(IntegrationTestCase):
     """Tests for the checkin views."""
 
+    features = (
+        '!officeconnector-checkout',
+    )
+
     @browsing
     def test_checkin_anyway_shown_for_locked_documents(self, browser):
         self.login(self.regular_user, browser)
@@ -436,9 +438,7 @@ class TestCheckinViews(IntegrationTestCase):
 
         browser.open(self.document)
         browser.css('#checkin_with_comment').first.click()
-        with self.assertRaises(NoElementFound):
-            browser.css('#form-buttons-button_checkin_anyway').first
-
+        self.assertEqual(0, len(browser.css('#form-buttons-button_checkin_anyway')))
         self.assertEqual(browser.css('#form-buttons-button_checkin').first.name, 'form.buttons.button_checkin')
 
         # Lock document
@@ -446,9 +446,7 @@ class TestCheckinViews(IntegrationTestCase):
 
         browser.open(self.document)
         browser.css('#checkin_with_comment').first.click()
-        with self.assertRaises(NoElementFound):
-            browser.css('#form-buttons-button_checkin').first
-
+        self.assertEqual(0, len(browser.css('#form-buttons-button_checkin')))
         self.assertEqual(browser.css('#form-buttons-button_checkin_anyway').first.name, 'form.buttons.button_checkin_anyway')
 
     @browsing
@@ -649,7 +647,7 @@ class TestCheckinViews(IntegrationTestCase):
                 )
 
     @browsing
-    def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):  # noqa
+    def test_multi_checkin_shows_message_when_no_documents_are_selected(self, browser):
         self.login(self.regular_user, browser)
 
         browser.open(
@@ -723,18 +721,15 @@ class TestCheckinViews(IntegrationTestCase):
                 },
             )
 
-        manager = getMultiAdapter(
-                    (self.document, self.portal.REQUEST),
-                    ICheckinCheckoutManager)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
         self.assertEquals('kathi.barfuss', manager.get_checked_out_by())
 
-        manager = getMultiAdapter(
-                (self.subdocument, self.portal.REQUEST),
-                ICheckinCheckoutManager)
+        manager = getMultiAdapter((self.subdocument, self.portal.REQUEST), ICheckinCheckoutManager)
         self.assertEquals(None, manager.get_checked_out_by())
 
         self.assertEquals([u'Could not check in document Vertr\xe4gsentwurf'],
                           error_messages())
+
 
 # TODO: rewrite this test-case to express intent
 class TestCheckinCheckoutManagerAPI(FunctionalTestCase):
