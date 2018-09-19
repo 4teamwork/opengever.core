@@ -14,6 +14,102 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
 
 
+DEFAULT_SORT_INDEX = 'modified'
+
+
+def create_list_item(item, fields):
+    obj = IContentListingObject(item)
+    data = {'@id': obj.getURL()}
+    for field in fields:
+        if field not in FIELDS:
+            continue
+        accessor = FIELDS[field][1]
+        if isinstance(accessor, str):
+            value = getattr(obj, accessor, None)
+            if callable(value):
+                value = value()
+        else:
+            value = accessor(obj)
+        data[field] = json_compatible(value)
+    return data
+
+
+def translated_title(obj):
+    if ITranslatedTitleSupport.providedBy(obj):
+        attr = 'title_{}'.format(get_preferred_language_code())
+        return getattr(obj, attr, obj.Title())
+    else:
+        return obj.Title()
+
+
+def filesize(obj):
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return 0
+    if info.value is None:
+        return 0
+    return info.value.size
+
+
+def filename(obj):
+    try:
+        info = IPrimaryFieldInfo(obj.getObject())
+    except TypeError:
+        return None
+    if info.value is None:
+        return None
+    return info.value.filename
+
+
+# Mapping of field name -> (index, accessor, sort index)
+FIELDS = {
+    '@type': ('portal_type', 'PortalType', 'portal_type'),
+    'checked_out': ('checked_out', 'checked_out_fullname', 'checked_out'),
+    'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
+    'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
+    'created': ('created', 'created', 'created'),
+    'creator': ('Creator', 'Creator', 'Creator'),
+    'description': ('Description', 'Description', 'Description'),
+    'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
+    'document_author': ('document_author', 'document_author', 'document_author'),
+    'document_date': ('document_date', 'document_date', 'document_date'),
+    'end': ('end', 'end', 'end'),
+    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
+    'modified': ('modified', 'modified', 'modified'),
+    'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
+    'reference': ('reference', 'reference', 'reference'),
+    'reference_number': ('reference', 'reference', 'reference'),
+    'responsible': ('responsible', 'responsible_fullname', 'responsible'),
+    'review_state': ('review_state', 'translated_review_state', 'review_state'),
+    'sequence_number': ('sequence_number', 'sequence_number', 'sequence_number'),
+    'start': ('start', 'start', 'start'),
+    'thumbnail': (None, 'get_preview_image_url', DEFAULT_SORT_INDEX),
+    'title': ('Title', translated_title, 'sortable_title'),
+    'type': ('portal_type', 'PortalType', 'portal_type'),
+    'filesize': (None, filesize, 'filesize'),
+    'filename': (None, filename, 'filename'),
+}
+
+SOLR_FILTERS = {
+    u'dossiers': [
+        u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
+    ],
+    u'documents': [
+        u'object_provides:opengever.document.behaviors.IBaseDocument',
+    ]
+}
+
+CATALOG_QUERIES = {
+    'dossiers': {
+        'object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker',  # noqa
+    },
+    'documents': {
+        'object_provides': 'opengever.document.behaviors.IBaseDocument',
+    }
+}
+
+
 class Listing(Service):
     """List of content items"""
 
@@ -128,98 +224,3 @@ class Listing(Service):
                 if field is not None:
                     fl.append(field)
         return fl
-
-
-def create_list_item(item, fields):
-    obj = IContentListingObject(item)
-    data = {'@id': obj.getURL()}
-    for field in fields:
-        if field not in FIELDS:
-            continue
-        accessor = FIELDS[field][1]
-        if isinstance(accessor, str):
-            value = getattr(obj, accessor, None)
-            if callable(value):
-                value = value()
-        else:
-            value = accessor(obj)
-        data[field] = json_compatible(value)
-    return data
-
-
-def translated_title(obj):
-    if ITranslatedTitleSupport.providedBy(obj):
-        attr = 'title_{}'.format(get_preferred_language_code())
-        return getattr(obj, attr, obj.Title())
-    else:
-        return obj.Title()
-
-
-def filesize(obj):
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return 0
-    if info.value is None:
-        return 0
-    return info.value.size
-
-
-def filename(obj):
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return None
-    if info.value is None:
-        return None
-    return info.value.filename
-
-
-DEFAULT_SORT_INDEX = 'modified'
-
-# Mapping of field name -> (index, accessor, sort index)
-FIELDS = {
-    '@type': ('portal_type', 'PortalType', 'portal_type'),
-    'checked_out': ('checked_out', 'checked_out_fullname', 'checked_out'),
-    'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
-    'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
-    'created': ('created', 'created', 'created'),
-    'creator': ('Creator', 'Creator', 'Creator'),
-    'description': ('Description', 'Description', 'Description'),
-    'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
-    'document_author': ('document_author', 'document_author', 'document_author'),
-    'document_date': ('document_date', 'document_date', 'document_date'),
-    'end': ('end', 'end', 'end'),
-    'mimetype': ('getContentType', 'getContentType', 'mimetype'),
-    'modified': ('modified', 'modified', 'modified'),
-    'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
-    'reference': ('reference', 'reference', 'reference'),
-    'reference_number': ('reference', 'reference', 'reference'),
-    'responsible': ('responsible', 'responsible_fullname', 'responsible'),
-    'review_state': ('review_state', 'translated_review_state', 'review_state'),
-    'sequence_number': ('sequence_number', 'sequence_number', 'sequence_number'),
-    'start': ('start', 'start', 'start'),
-    'thumbnail': (None, 'get_preview_image_url', DEFAULT_SORT_INDEX),
-    'title': ('Title', translated_title, 'sortable_title'),
-    'type': ('portal_type', 'PortalType', 'portal_type'),
-    'filesize': (None, filesize, 'filesize'),
-    'filename': (None, filename, 'filename'),
-}
-
-SOLR_FILTERS = {
-    u'dossiers': [
-        u'object_provides:opengever.dossier.behaviors.dossier.IDossierMarker',
-    ],
-    u'documents': [
-        u'object_provides:opengever.document.behaviors.IBaseDocument',
-    ]
-}
-
-CATALOG_QUERIES = {
-    'dossiers': {
-        'object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker',  # noqa
-    },
-    'documents': {
-        'object_provides': 'opengever.document.behaviors.IBaseDocument',
-    }
-}
