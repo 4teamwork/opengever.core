@@ -5,8 +5,11 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
+from opengever.inbox.activities import ForwardingAddedActivity
+from opengever.inbox.forwarding import IForwarding
 from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
+from opengever.task.activities import TaskAddedActivity
 from opengever.task.adapters import IResponseContainer
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
@@ -134,3 +137,25 @@ def revoke_permissions(task, event):
     """
     if event.action in FINAL_TRANSITIONS:
         return LocalRolesSetter(task).revoke_roles()
+
+
+def record_added_activity(task, event):
+    """Record task added activity, which also sets wathcers and
+    create notifications.
+    """
+    # Skip tasks created during successor creation, those are handled manually
+    if getRequest().get('X-CREATING-SUCCESSOR', None):
+        return
+
+    # Skip tasks created during tasktemplatefolder triggering, those are
+    # handled manually
+    if IDuringTaskTemplateFolderTriggering.providedBy(getRequest()):
+        return
+
+    parent = aq_parent(aq_inner(task))
+    if IForwarding.providedBy(task):
+        activity = ForwardingAddedActivity(task, getRequest(), parent)
+    else:
+        activity = TaskAddedActivity(task, getRequest(), parent)
+
+    activity.record()

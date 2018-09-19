@@ -8,6 +8,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.comment_response import CommentResponseHandler
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.testing import FunctionalTestCase
+from sqlalchemy import desc
 from zope.interface.verify import verifyClass
 
 
@@ -31,7 +32,7 @@ class TestCommentResponseHandler(FunctionalTestCase):
 
         ICommentResponseHandler(task).add_response("My response")
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-commented', activity.kind)
 
     def test_add_response_appends_a_new_response_obj_to_the_context_response_container(self):

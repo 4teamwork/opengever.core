@@ -6,6 +6,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from sqlalchemy import desc
 from zope.event import notify
 
 
@@ -23,7 +24,7 @@ class TestNotificationEventHandler(FunctionalTestCase):
                                   {'en': 'Lorem ipsum'})
         notify(event)
 
-        activity = Activity.query.first()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(task, activity.resource.oguid.resolve_object())
         self.assertEquals('task-transition-open-in-progress', activity.kind)
         self.assertEquals('Task accepted by Test user.', activity.summary)

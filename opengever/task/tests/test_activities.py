@@ -14,6 +14,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
+from sqlalchemy import desc
 import email
 
 
@@ -44,7 +45,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity =  Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
@@ -94,7 +95,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -114,7 +115,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.find('Save').click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-commented', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -136,7 +137,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals('hugo.boss', activity.actor_id)
 
@@ -152,7 +153,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Ist erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -171,7 +172,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird \xfcbersprungen.'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-rejected-skipped', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -195,7 +196,7 @@ class TestTaskActivites(FunctionalTestCase):
             'New Deadline': '20.03.2016',
             'Response': u'nicht dring\xe4nd'}).save()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
@@ -224,7 +225,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
@@ -241,7 +242,7 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Title': u'Letter to peter'})
         browser.css('#form-buttons-save').first.click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'transition-add-document', activity.kind)
 
     @browsing
@@ -262,7 +263,7 @@ class TestTaskActivites(FunctionalTestCase):
         # fill medatata step and submit
         browser.find('Save').click()
 
-        activity = Activity.query.one()
+        activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Huber', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)

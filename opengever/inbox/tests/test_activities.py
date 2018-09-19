@@ -79,8 +79,6 @@ class TestForwardingActivites(FunctionalTestCase):
                             .having(responsible=TEST_USER_ID,
                                     issuer='hugo.boss')
                             .within(inbox))
-        self.center.add_task_responsible(forwarding, TEST_USER_ID)
-        self.center.add_task_issuer(forwarding, 'hugo.boss')
 
         successor = accept_forwarding_with_successor(
             self.portal, forwarding.oguid.id,
@@ -97,8 +95,7 @@ class TestForwardingActivites(FunctionalTestCase):
         self.assertItemsEqual(
             [(u'test_user_1_', u'task_responsible'),
              (u'inbox:org-unit-1', u'task_issuer')],
-            [(subscription.watcher.actorid, subscription.role)
-             for subscription in successor_resource.subscriptions])
+            [(subscription.watcher.actorid, subscription.role) for subscription in successor_resource.subscriptions])
 
     @browsing
     def test_accepting_and_assign_forwarding_with_successor_and__updated_responsibles(self, browser):

@@ -22,6 +22,7 @@ from plone.dexterity.utils import createContentInContainer
 from Products.Five.browser import BrowserView
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 import AccessControl
 import transaction
 
@@ -67,6 +68,10 @@ def accept_forwarding_with_successor(
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
 
+    # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
+    # from creating additional responses per added document.
+    context.REQUEST.set('X-CREATING-SUCCESSOR', True)
+
     # transport the remote forwarding to the inbox or actual yearfolder
     transporter = Transporter()
     inbox = get_current_inbox(context)
@@ -80,10 +85,6 @@ def accept_forwarding_with_successor(
 
     # Replace the issuer with the current inbox
     successor_forwarding.issuer = get_current_org_unit().inbox().id()
-
-    # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
-    # from creating additional responses per added document.
-    successor_forwarding.REQUEST.set('X-CREATING-SUCCESSOR', True)
 
     successor_tc = ISuccessorTaskController(successor_forwarding)
 
@@ -240,6 +241,10 @@ def assign_forwarding_to_dossier(
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     predecessor = Task.query.by_oguid(predecessor_oguid)
 
+    # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
+    # from creating additional responses per added document.
+    getRequest().set('X-CREATING-SUCCESSOR', True)
+
     # Transport the original task (predecessor) to this dossier. The new
     # response and task change is not yet done and will be done later. This
     # is necessary for beeing as transaction aware as possible.
@@ -247,10 +252,6 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     successor = transporter.transport_from(
         dossier, predecessor.admin_unit_id, predecessor.physical_path)
     successor_tc = ISuccessorTaskController(successor)
-
-    # Set the "X-CREATING-SUCCESSOR" flag for preventing the event handler
-    # from creating additional responses per added document.
-    successor.REQUEST.set('X-CREATING-SUCCESSOR', True)
 
     # copy documents and map the intids
     doc_transporter = getUtility(ITaskDocumentsTransporter)
