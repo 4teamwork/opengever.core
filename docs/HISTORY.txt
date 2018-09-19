@@ -15,6 +15,8 @@ Changelog
 - Prevent replacing files on proposal templates with non-.docx files via quickupload. [Rotonen]
 - Add an upgrade step to fix broken-by-broken-protocol-excerpt journal entries on dossiers. [Rotonen]
 - Do not list documents within dossiertemplates when creating a document from template. [njohner]
+- Fix task path queries for oracle backends. [phgross]
+- Fix activity queries for oracle backends. [phgross]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
