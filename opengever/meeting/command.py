@@ -421,7 +421,10 @@ class CreateSubmittedProposalCommand(object):
                                     name='field-data')
         jsondata['field-data'] = collector.extract()
 
-        blob = self.proposal.get_proposal_document().file
+        document = self.proposal.get_proposal_document()
+        jsondata['title'] = document.title_or_id()
+
+        blob = document.file
         jsondata['file'] = {
             'filename': blob.filename,
             'contentType': blob.contentType,
@@ -432,10 +435,10 @@ class CreateSubmittedProposalCommand(object):
 
         request_data = {
             REQUEST_KEY: json.dumps(decode_for_json(jsondata)),
-            'history_data': history_data}
-        response = dispatch_json_request(
-            self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
+            'history_data': history_data,
+        }
 
+        response = dispatch_json_request(self.admin_unit_id, '@@create_submitted_proposal', data=request_data)
         self.submitted_proposal_path = response['path']
 
 

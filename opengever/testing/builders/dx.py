@@ -380,6 +380,7 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def after_create(self, obj):
         obj.create_model(self.model_arguments, self.container)
         obj.create_proposal_document(
+            title=obj.title_or_id(),
             filename=u'proposal_document.docx',
             data=self._proposal_file_data,
             content_type='application/vnd.openxmlformats'
