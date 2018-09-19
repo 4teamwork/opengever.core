@@ -117,8 +117,9 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
     def is_bumblebeeable(self):
         if not hasattr(self, '_is_bumblebeeable'):
-            self._is_bumblebeeable = (is_bumblebee_feature_enabled() and
-                                      is_bumblebeeable(self))
+            self._is_bumblebeeable = (
+                is_bumblebee_feature_enabled() and is_bumblebeeable(self))
+
         return self._is_bumblebeeable
 
     def render_link(self):
