@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Support adding tasks via REST API. [phgross]
+- Reindex issuer of all proposals. [phgross]
 - Correct info messages in meetings. [njohner]
 - Add proposal tabs to repository folders. [Rotonen]
 - Fix global scoped "show more" links for SOLR livesearch [Rotonen]
