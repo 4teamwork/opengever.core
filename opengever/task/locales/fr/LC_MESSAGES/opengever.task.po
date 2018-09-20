@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-29 09:28+0000\n"
+"POT-Creation-Date: 2018-09-19 14:54+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -688,6 +688,26 @@ msgstr "Refusé par ${user}."
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "progress"
 msgstr "Progrès"
+
+#. Default: "At the beginning of the week of the deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_beginning_of_week"
+msgstr ""
+
+#. Default: "One day before deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_one_day_before"
+msgstr ""
+
+#. Default: "One week before deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_one_week_before"
+msgstr ""
+
+#. Default: "At the morging of the deadline"
+#: ./opengever/task/reminder/__init__.py
+msgid "reminder_option_title_today"
+msgstr ""
 
 #. Default: "Response"
 #: ./opengever/task/templates/edit_response.pt

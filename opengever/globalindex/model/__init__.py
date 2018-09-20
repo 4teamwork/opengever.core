@@ -4,4 +4,5 @@ from opengever.globalindex.model import query
 tables = [
     'task_principals',
     'tasks',
+    'reminder_settings',
 ]
