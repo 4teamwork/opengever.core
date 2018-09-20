@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-29 15:17+0000\n"
+"POT-Creation-Date: 2018-09-19 14:31+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -150,6 +150,11 @@ msgstr "Toutes les notifications"
 msgid "label_proposals"
 msgstr "Propositions"
 
+#. Default: "Reminders"
+#: ./opengever/activity/browser/settings.py
+msgid "label_reminders"
+msgstr ""
+
 #. Default: "Tasks"
 #: ./opengever/activity/browser/settings.py
 msgid "label_tasks"
@@ -239,6 +244,11 @@ msgstr "tâche ajoutée"
 #: ./opengever/activity/__init__.py
 msgid "task-commented"
 msgstr "tâche commentée"
+
+#. Default: "Task reminder"
+#: ./opengever/activity/__init__.py
+msgid "task-reminder"
+msgstr ""
 
 #. Default: "Task reopened"
 #: ./opengever/activity/__init__.py

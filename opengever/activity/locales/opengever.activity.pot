@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-29 15:17+0000\n"
+"POT-Creation-Date: 2018-09-19 14:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -148,6 +148,11 @@ msgstr ""
 msgid "label_proposals"
 msgstr ""
 
+#. Default: "Reminders"
+#: ./opengever/activity/browser/settings.py
+msgid "label_reminders"
+msgstr ""
+
 #. Default: "Tasks"
 #: ./opengever/activity/browser/settings.py
 msgid "label_tasks"
@@ -236,6 +241,11 @@ msgstr ""
 #. Default: "Task commented"
 #: ./opengever/activity/__init__.py
 msgid "task-commented"
+msgstr ""
+
+#. Default: "Task reminder"
+#: ./opengever/activity/__init__.py
+msgid "task-reminder"
 msgstr ""
 
 #. Default: "Task reopened"

@@ -4471,6 +4471,7 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 .notifications-settings-form .notification-settings-kind span.commented:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.documentUpdated:before { content: ""; }
 .notifications-settings-form .notification-settings-kind span.documentAdded:before { content: ""; }
+.notifications-settings-form .notification-settings-kind span.taskReminder:before { font-family: 'Font Awesome 5 Free'; content: "\f017"; }
 .notifications-settings-form .action { display: inline-block; line-height: normal !important; padding: 8px 12px; border: 1px solid #e6e6e6; margin-bottom: 1em; margin-right: 5px; border-radius: 2px; transition: background-color .2s ease-out; background-color: #fff; color: #000; }
 .notifications-settings-form .action:hover { background-color: #f5f5f5; text-decoration: none; }
 .notifications-settings-form .action:visited { text-decoration: none; color: #000; }
