@@ -1,4 +1,5 @@
 from Acquisition import aq_parent
+from opengever.meeting.interfaces import IParagraphTemplate
 from opengever.private.interfaces import IPrivateContainer
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
@@ -11,17 +12,23 @@ class IsDeleteAvailable(BrowserView):
     as we have our own delete actions for certain portal types.
     """
 
-    authorized_interfaces = (IPrivateContainer,
-                             ITaskTemplate,
-                             ITaskTemplateFolderSchema)
+    authorized_interfaces = (
+        IParagraphTemplate,
+        IPrivateContainer,
+        ITaskTemplate,
+        ITaskTemplateFolderSchema,
+    )
 
-    authorized_parent_interfaces = (IPrivateContainer,
-                                    )
+    authorized_parent_interfaces = (
+        IPrivateContainer,
+    )
 
     def __call__(self):
         parent = aq_parent(self.context)
-        return (any(interface.providedBy(self.context)
-                for interface in self.authorized_interfaces)
-                or any(interface.providedBy(parent)
-                for interface in self.authorized_parent_interfaces)
-                )
+        allowed = (
+            # Whitelisted by interface provided by context
+            any(interface.providedBy(self.context) for interface in self.authorized_interfaces),
+            # Whitelisted by interface provided by the acquired parent
+            any(interface.providedBy(parent) for interface in self.authorized_parent_interfaces),
+        )
+        return any(allowed)
