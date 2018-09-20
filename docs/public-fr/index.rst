@@ -12,3 +12,4 @@ Index:
    documents/index
    chapitre7-contacts
    chapitre8-recherches
+   chapitre9-triage
