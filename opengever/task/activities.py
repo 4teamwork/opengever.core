@@ -1,3 +1,6 @@
+from opengever.activity import ACTIVITY_TRANSLATIONS
+from opengever.activity import base_notification_center
+from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.base import BaseActivity
 from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
@@ -164,3 +167,47 @@ class TaskReassignActivity(TaskTransitionActivity):
 
     def _is_ignored_transition(self):
         return False
+
+
+class TaskReminderActivity(BaseActivity):
+    kind = 'task-reminder'
+
+    def __init__(self, sql_context, request):
+        super(TaskReminderActivity, self).__init__(sql_context, request)
+
+        # A TaskReminderAcitivty requires a SQL-Object as a context because we
+        # have no plone-object on activity-generation due to multi-admin setup.
+        #
+        # Thus we need to change the notification-center instance to the
+        # default instead the PloneNotifiactionCenter
+        self.center = base_notification_center()
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('task_reminder_activity_summary', u'Deadline is on ${deadline}',
+              mapping={'deadline': self._deadline()}))
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(ACTIVITY_TRANSLATIONS[self.kind])
+
+    @property
+    def description(self):
+        return {}
+
+    def _deadline(self):
+        return api.portal.get_localized_time(
+            self.context.deadline, long_format=True)
+
+    def add_activity(self):
+        # Because we use the default NotificationCenter, we need to provide
+        # the oguid instead the object itself.
+        self.center.add_activity(
+            self.context.oguid,
+            self.kind,
+            self.title,
+            self.label,
+            self.summary,
+            SYSTEM_ACTOR_ID,
+            self.description)

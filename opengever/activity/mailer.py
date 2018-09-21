@@ -28,9 +28,9 @@ class Mailer(object):
             data = {}
 
         msg = MIMEMultipart('related')
+        actor = ogds_service().fetch_user(from_userid) if from_userid else None
 
-        if from_userid:
-            actor = ogds_service().fetch_user(from_userid)
+        if actor:
             msg['From'] = make_addr_header(actor.fullname(),
                                            actor.email, 'utf-8')
         else:

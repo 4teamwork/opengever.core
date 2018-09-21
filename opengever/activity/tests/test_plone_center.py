@@ -81,27 +81,6 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
     @browsing
-    def test_shows_message_when_error_happen_during_activity_creation(self, member):
-        # Because there exists no OGDS user for the plone user hugo.boss,
-        # the notification creation fails.
-
-        browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
-        browser.fill({'Title': 'Test Task',
-                      'Task Type': 'comment'})
-
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('inbox:org-unit-1')
-        form.find_widget('Issuer').fill(TEST_USER_ID)
-
-        browser.css('#form-buttons-save').first.click()
-
-        self.assertEquals(
-            ['A problem has occurred during the notification creation. '
-             'Notification could not or only partially produced.'],
-            warning_messages())
-        self.assertEquals(['Item created'], info_messages())
-
-    @browsing
     def test_successfully_add_activity(self, member):
         create(Builder('ogds_user')
                .having(userid='hugo.boss'))

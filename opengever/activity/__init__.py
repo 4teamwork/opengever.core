@@ -1,5 +1,6 @@
 from opengever.activity.badge import BadgeIconDispatcher
 from opengever.activity.center import DisabledNotificationCenter
+from opengever.activity.center import NotificationCenter
 from opengever.activity.center import PloneNotificationCenter
 from opengever.activity.digest import DigestDispatcher
 from opengever.activity.digest import DigestMailer
@@ -17,6 +18,7 @@ import transaction
 
 logger = logging.getLogger('opengever.activity')
 
+SYSTEM_ACTOR_ID = '__system__'
 
 _ = MessageFactory("opengever.activity")
 
@@ -31,10 +33,18 @@ def is_activity_feature_enabled():
 
 
 def notification_center():
+    return _notification_center(PloneNotificationCenter)
+
+
+def base_notification_center():
+    return _notification_center(NotificationCenter)
+
+
+def _notification_center(cls):
     if not is_activity_feature_enabled():
         return DisabledNotificationCenter()
 
-    return PloneNotificationCenter(dispatchers=[
+    return cls(dispatchers=[
         PloneNotificationMailer(), BadgeIconDispatcher(), DigestDispatcher()])
 
 

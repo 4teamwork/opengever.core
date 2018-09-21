@@ -748,6 +748,11 @@ msgstr "Troisième étape"
 msgid "step_4"
 msgstr "Quatrième étape"
 
+#. Default: "Deadline is on ${deadline}"
+#: ./opengever/task/activities.py
+msgid "task_reminder_activity_summary"
+msgstr ""
+
 #. Default: "Accept forwarding"
 #: ./opengever/task/browser/accept/main.py
 msgid "title_accept_forwarding"
