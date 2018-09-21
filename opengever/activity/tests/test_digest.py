@@ -17,12 +17,12 @@ class TestDigestMail(IntegrationTestCase):
         super(TestDigestMail, self).setUp()
         Mailing(self.portal).set_up()
 
-        resource = create(Builder('resource').oguid('fd:123'))
+        self.resource = create(Builder('resource').oguid('fd:123'))
         activity = create(
             Builder('activity')
             .having(title=u'Bitte \xc4nderungen nachvollziehen',
                     created=pytz.UTC.localize(datetime(2017, 10, 15, 18, 24)),
-                    resource=resource))
+                    resource=self.resource))
 
         self.note1 = create(Builder('notification')
                             .having(activity=activity,
@@ -128,3 +128,27 @@ class TestDigestMail(IntegrationTestCase):
 
             self.assertEquals(1, len(messages))
             self.assertEquals('foo@example.com', messages[0].get('To'))
+
+    def test_send_mail_with_site_email_if_activity_actor_lookup_failed(self):
+        self.note1.sent_in_digest = True
+        self.note2.sent_in_digest = True
+
+        activity = create(
+            Builder('activity')
+            .having(title=u'Bitte \xc4nderungen nachvollziehen',
+                    created=pytz.UTC.localize(datetime(2017, 10, 15, 18, 24)),
+                    resource=self.resource,
+                    actor_id="NOT_AN_EXISTING_ACTOR"))
+
+        create(Builder('notification')
+               .having(activity=activity,
+                       is_digest=True,
+                       userid=self.dossier_responsible.getId()))
+
+        DigestMailer().send_digests()
+
+        messages = [message_from_string(mail)
+                    for mail in Mailing(self.portal).get_messages()]
+
+        self.assertEquals(1, len(messages))
+        self.assertIn(self.portal.email_from_address, messages[0].get('From'))
