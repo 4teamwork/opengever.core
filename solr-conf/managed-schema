@@ -271,6 +271,16 @@
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+              splitOnCaseChange="0"
+              splitOnNumerics="0"
+              stemEnglishPossessive="0"
+              generateWordParts="1"
+              generateNumberParts="1"
+              catenateWords="0"
+              catenateNumbers="0"
+              catenateAll="0"
+              preserveOriginal="1"/>
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
