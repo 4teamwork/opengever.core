@@ -31,6 +31,7 @@ Changelog
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+- Split search terms at non-alphanumeric characters. [buchi]
 
 
 2018.4.4 (2018-09-17)
