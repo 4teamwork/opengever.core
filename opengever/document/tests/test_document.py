@@ -308,6 +308,7 @@ class TestDocument(FunctionalTestCase):
         """The checkout_and_get_office_connector_url method should check out
         the document and return an url which will open the office connector.
         """
+        api.portal.set_registry_record('direct_checkout_and_edit_enabled', False, interface=IOfficeConnectorSettings)
         self.grant('Reader', 'Contributor', 'Editor')
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier))
@@ -324,10 +325,6 @@ class TestDocument(FunctionalTestCase):
         checkout_and_get_office_connector_url method should simply return an
         office connector URL which includes the checkout command.
         """
-        api.portal.set_registry_record(
-            'direct_checkout_and_edit_enabled',
-            True,
-            interface=IOfficeConnectorSettings)
         self.grant('Reader', 'Contributor', 'Editor')
         dossier = create(Builder('dossier'))
         document = create(Builder('document').within(dossier)

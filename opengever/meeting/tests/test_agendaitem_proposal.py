@@ -12,7 +12,10 @@ from plone.uuid.interfaces import IUUID
 
 class TestProposalAgendaItem(IntegrationTestCase):
 
-    features = ('meeting',)
+    features = (
+        '!officeconnector-checkout',
+        'meeting',
+    )
 
     @browsing
     def test_decide_proposal_agenda_item(self, browser):
@@ -217,14 +220,11 @@ class TestProposalAgendaItem(IntegrationTestCase):
         browser.open(
             self.agenda_item_url(agenda_item, 'decide'),
             send_authenticator=True)
-        self.assertEquals(
-            {u'redirectUrl': u'http://nohost/plone'
-             '/opengever-meeting-committeecontainer/committee-1/meeting-1',
-             u'messages': [
-                 {u'messageTitle': u'Information',
-                  u'message': u'Agenda Item decided.',
-                  u'messageClass': u'info'}]},
-            browser.json)
+        expected_messages = {
+            u'redirectUrl': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1/meeting-1',
+            u'messages': [{u'messageTitle': u'Information', u'message': u'Agenda Item decided.', u'messageClass': u'info'}],
+        }
+        self.assertEquals(expected_messages, browser.json)
 
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
         self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
@@ -253,14 +253,15 @@ class TestProposalAgendaItem(IntegrationTestCase):
         browser.open(
             self.agenda_item_url(agenda_item, 'decide'),
             send_authenticator=True)
-        self.assertEquals(
-            {u'messages': [
-                {u'messageTitle': u'Error',
-                 u'message': u'Cannot decide agenda item: someone else has'
-                 u' checked out the document.',
-                 u'messageClass': u'error'}],
-             u'proceed': False},
-            browser.json)
+        expected_messages = {
+            u'messages': [{
+                u'messageTitle': u'Error',
+                u'message': u'Cannot decide agenda item: someone else has checked out the document.',
+                u'messageClass': u'error',
+            }],
+            u'proceed': False,
+        }
+        self.assertEquals(expected_messages, browser.json)
 
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
         self.assertEqual(self.administrator.getId(),
@@ -358,13 +359,14 @@ class TestProposalAgendaItem(IntegrationTestCase):
             browser.open(
                 self.agenda_item_url(agenda_item, 'generate_excerpt'),
                 data={'excerpt_title': 'Excerption \xc3\x84nderungen'})
-            self.assertEquals(
-                {u'messages': [
-                    {u'messageTitle': u'Error',
-                     u'message': u'Insufficient privileges to add a document '
-                     u'to the meeting dossier.',
-                     u'messageClass': u'error'}]},
-                browser.json)
+            expected_messages = {
+                u'messages': [{
+                    u'messageTitle': u'Error',
+                    u'message': u'Insufficient privileges to add a document to the meeting dossier.',
+                    u'messageClass': u'error',
+                }],
+            }
+            self.assertEquals(expected_messages, browser.json)
 
     @browsing
     def test_excerpts_listed_in_meeting_item_data(self, browser):

@@ -6,11 +6,18 @@ from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestDocumentTooltip(FunctionalTestCase):
     """Test the lazy loading document tooltip."""
+
+    def setUp(self):
+        super(TestDocumentTooltip, self).setUp()
+        api.portal.set_registry_record('attach_to_outlook_enabled', False, interface=IOfficeConnectorSettings)
+        api.portal.set_registry_record('direct_checkout_and_edit_enabled', False, interface=IOfficeConnectorSettings)
 
     @browsing
     def test_tooltip_contains_linked_breadcrumb(self, browser):

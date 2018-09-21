@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY  # noqa
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
@@ -12,8 +11,14 @@ from zope.component import queryMultiAdapter
 
 
 class TestDocumentOverviewVanilla(IntegrationTestCase):
+
+    features = (
+        '!officeconnector-attach',
+        '!officeconnector-checkout',
+    )
+
     @browsing
-    def test_overview_displays_related_documents_but_only_documents(self, browser):  # noqa
+    def test_overview_displays_related_documents_but_only_documents(self, browser):
         self.login(self.regular_user, browser)
 
         document_chain_link = create(
@@ -271,8 +276,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         """
         self.login(self.regular_user, browser)
         browser.open(self.document, view='tabbedview_view-overview')
-        self.assertFalse(browser.css('.function-edit-inactive'),
-                        'There should not be an inactive edit button')
+        self.assertFalse(browser.css('.function-edit-inactive'), 'There should not be an inactive edit button')
 
         self.document.file.contentType = "application/foo"
         browser.open(self.document, view='tabbedview_view-overview')
@@ -296,7 +300,6 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         self.assertTrue(browser.css('.function-edit-inactive'),
                         'There should be an inactive edit button')
-
 
     @browsing
     def test_checkout_not_possible_if_locked_by_another_user(self, browser):
@@ -377,7 +380,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Public trial edit link should not be visible.')
 
     @browsing
-    def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa
+    def test_modify_public_trial_is_visible_on_closed_dossier_inside_a_task(self, browser):
         self.login(self.regular_user, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
 
@@ -399,7 +402,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.assertEqual(0, len(browser.css('#proposals_box .proposal')))
 
     @browsing
-    def test_archival_file_is_only_available_for_managers_by_default(self, browser):  # noqa
+    def test_archival_file_is_only_available_for_managers_by_default(self, browser):
         self.login(self.regular_user, browser)
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
@@ -441,7 +444,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
     @browsing
-    def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):  # noqa
+    def test_edit_archival_file_link_is_visible_on_closed_dossier(self, browser):
         self.login(self.manager, browser)
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
@@ -452,7 +455,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
     @browsing
-    def test_edit_archival_file_link_is_disabled_on_inbox_documents(self, browser):  # noqa
+    def test_edit_archival_file_link_is_disabled_on_inbox_documents(self, browser):
         self.login(self.secretariat_user, browser)
 
         browser.open(self.inbox_document, view='tabbedview_view-overview')
@@ -462,7 +465,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Archival file edit link should not be visible.')
 
     @browsing
-    def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):  # noqa
+    def test_edit_archival_file_link_is_visible_on_closed_dossier_inside_a_task(self, browser):
         self.login(self.manager, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
         self.set_workflow_state('task-state-tested-and-closed', self.task)
@@ -498,7 +501,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
     @browsing
-    def test_checkin_without_comment_action_button_not_rendered_for_locked_documents(self, browser):  # noqa
+    def test_checkin_without_comment_action_button_not_rendered_for_locked_documents(self, browser):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
@@ -522,7 +525,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
     @browsing
-    def test_checkin_without_comment_portal_action_not_rendered_for_locked_documents(self, browser):  # noqa
+    def test_checkin_without_comment_portal_action_not_rendered_for_locked_documents(self, browser):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tabbedview_view-overview')
@@ -574,7 +577,7 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
             )
 
     @browsing
-    def test_submitted_proposal_link_is_not_shown_for_submitted_documents(self, browser):  # noqa
+    def test_submitted_proposal_link_is_not_shown_for_submitted_documents(self, browser):
         self.login(self.meeting_user, browser)
 
         submitted_document = (

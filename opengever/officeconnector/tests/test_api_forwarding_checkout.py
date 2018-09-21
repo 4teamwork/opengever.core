@@ -3,7 +3,9 @@ from opengever.officeconnector.testing import OCIntegrationTestCase
 
 
 class TestOfficeconnectorForwardingAPIWithCheckout(OCIntegrationTestCase):
+
     features = (
+        '!officeconnector-attach',
         'officeconnector-checkout',
     )
 

@@ -4,6 +4,11 @@ from opengever.testing import IntegrationTestCase
 
 class TestFileActionButtonTemplates(IntegrationTestCase):
 
+    features = (
+        '!officeconnector-attach',
+        '!officeconnector-checkout',
+    )
+
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
@@ -173,9 +178,12 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
 
 
 class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
+
     features = (
+        '!officeconnector-attach',
+        '!officeconnector-checkout',
         'bumblebee',
-        )
+    )
 
     @browsing
     def test_overview_open_without_file(self, browser):
@@ -410,9 +418,11 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
 
 
 class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
+
     features = (
+        '!officeconnector-checkout',
         'officeconnector-attach',
-        )
+    )
 
     @browsing
     def test_overview_open_without_file(self, browser):
@@ -598,11 +608,13 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
         self.assertNotIn('Send as email', actions)
 
 
-class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase):  # noqa
+class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase):
+
     features = (
+        '!officeconnector-checkout',
         'bumblebee',
         'officeconnector-attach',
-        )
+    )
 
     @browsing
     def test_overview_open_without_file(self, browser):
@@ -864,9 +876,11 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
 
 
 class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
+
     features = (
+        '!officeconnector-attach',
         'officeconnector-checkout',
-        )
+    )
 
     @browsing
     def test_overview_open_without_file(self, browser):
@@ -1035,11 +1049,13 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
         self.assertIn('Send as email', actions)
 
 
-class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCase):  # noqa
+class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCase):
+
     features = (
+        '!officeconnector-attach',
         'bumblebee',
         'officeconnector-checkout',
-        )
+    )
 
     @browsing
     def test_overview_open_without_file(self, browser):

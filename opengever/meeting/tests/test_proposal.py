@@ -57,7 +57,10 @@ class TestProposalViewsDisabled(IntegrationTestCase):
 
 class TestProposal(IntegrationTestCase):
 
-    features = ('meeting',)
+    features = (
+        '!officeconnector-checkout',
+        'meeting',
+    )
 
     @browsing
     def test_create_proposal_visible_in_dossier_actions_for_regular_user_when_meeting_enabled(self, browser):
