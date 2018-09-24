@@ -8,6 +8,7 @@ Changelog
 - Add TaskReminderActivity object. [elioschmutz]
 - Add ReminderSetting SQL Model. [elioschmutz]
 - Add task-reminder activity settings. [elioschmutz]
+- Preserve proposal document title for proposal documents of submitted proposals. [Rotonen]
 - Support adding tasks via REST API. [phgross]
 - Reindex issuer of all proposals. [phgross]
 - Correct info messages in meetings. [njohner]

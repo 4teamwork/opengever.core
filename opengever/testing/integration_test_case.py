@@ -16,7 +16,6 @@ from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
-from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -26,6 +25,7 @@ from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
+from opengever.testing.test_case import TestCase
 from operator import methodcaller
 from plone import api
 from plone.app.relationfield.event import update_behavior_relations
@@ -37,7 +37,6 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from sqlalchemy.sql.expression import desc
-from unittest import TestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -129,7 +128,6 @@ class IntegrationTestCase(TestCase):
         def test_something(self):
             pass
         """
-
         @wraps(func)
         def wrapper(self, *args, **kwargs):
             timer = timeit.default_timer
@@ -157,7 +155,6 @@ class IntegrationTestCase(TestCase):
         The method may also be used used as context manager, ensuring that
         after leaving the same user is logged in as before.
         """
-
         if hasattr(user, 'getId'):
             userid = user.getId()
         else:
@@ -455,35 +452,6 @@ class IntegrationTestCase(TestCase):
             expected_roles, current_roles,
             "The user '{}' should have the roles {!r} on context {!r}. "
             "But he has {}".format(userid, expected_roles, context, current_roles))
-
-    def assert_submitted_document_created(self, proposal, document,
-                                       submitted_version=0):
-        portal = api.portal.get()
-        submitted_document_model = SubmittedDocument.query.get_by_source(
-            proposal,
-            document,
-            )
-
-        submitted_document = portal.restrictedTraverse(
-            submitted_document_model.submitted_physical_path.encode('utf-8'),
-            )
-
-        self.assertIsNotNone(submitted_document_model)
-
-        self.assertEqual(
-            Oguid.for_object(submitted_document),
-            submitted_document_model.submitted_oguid,
-            )
-
-        self.assertEqual(
-            submitted_version,
-            submitted_document_model.submitted_version,
-            )
-
-        self.assertEqual(
-            proposal.load_model(),
-            submitted_document_model.proposal,
-            )
 
     def brain_to_object(self, brain):
         """Return the object of a brain.

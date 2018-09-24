@@ -570,6 +570,21 @@ class TestProposal(IntegrationTestCase):
                                             self.mail,
                                             submitted_mail)
 
+    @browsing
+    def test_proposal_document_title_is_not_overridden_on_submit(self, browser):
+        self.login(self.dossier_responsible, browser)
+        changed_title = u'\xc4nderung'
+        self.draft_proposal.get_proposal_document().title = changed_title
+        browser.open(self.draft_proposal, view='tabbedview_view-overview')
+        browser.click_on('Submit')
+        browser.click_on("Confirm")
+        self.login(self.committee_responsible)
+        # submitted proposal created
+        model = self.draft_proposal.load_model()
+        submitted_path = model.submitted_physical_path.encode('utf-8')
+        submitted_proposal = self.portal.restrictedTraverse(submitted_path)
+        self.assertEqual(changed_title, submitted_proposal.get_proposal_document().title)
+
     def test_proposal_paths_remain_in_sync_when_dossier_is_moved(self):
         self.login(self.dossier_responsible)
         model = self.draft_proposal.load_model()

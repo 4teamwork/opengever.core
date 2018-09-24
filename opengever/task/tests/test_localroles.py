@@ -246,3 +246,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEquals([], storage._storage())
+
+    def test_can_delete_related_document_from_task(self):
+        """The localroles update event used to explode when a related item was
+        deleted.
+        """
+        self.login(self.manager)
+        api.content.delete(self.document)
+        self.assertEqual([], self.task.relatedItems)

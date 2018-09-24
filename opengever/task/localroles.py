@@ -166,6 +166,13 @@ def set_roles_after_adding(context, event):
 
 
 def set_roles_after_modifying(context, event):
+    # Handle the modify event having been a removal of a related item
+    setattr(
+        context,
+        'relatedItems',
+        [item for item in getattr(context, 'relatedItems', []) if item.to_object],
+    )
+
     if IContainerModifiedEvent.providedBy(event):
         return
 

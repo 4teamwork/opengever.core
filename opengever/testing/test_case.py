@@ -32,13 +32,23 @@ import json
 import transaction
 import unittest
 
+
 # Squelch pyflakes about unused exports
 widget
 builders
 
 
 class TestCase(unittest.TestCase):
-    pass
+    """Provide a shared base for opengever.core test classes."""
+
+    def assertSubmittedDocumentCreated(self, proposal, document, submitted_version=0):
+        submitted_document_model = SubmittedDocument.query.get_by_source(proposal, document)
+        self.assertIsNotNone(submitted_document_model)
+        portal = api.portal.get()
+        submitted_document = portal.restrictedTraverse(submitted_document_model.submitted_physical_path.encode('utf-8'))
+        self.assertEqual(Oguid.for_object(submitted_document), submitted_document_model.submitted_oguid)
+        self.assertEqual(submitted_version, submitted_document_model.submitted_version)
+        self.assertEqual(proposal.load_model(), submitted_document_model.proposal)
 
 
 class FunctionalTestCase(TestCase):
@@ -187,21 +197,6 @@ class FunctionalTestCase(TestCase):
 
     def assertResponseHeader(self, name, value):
         self.assertEquals(value, self.portal.REQUEST.response.headers.get(name))
-
-    def assertSubmittedDocumentCreated(self, proposal, document,
-                                       submitted_version=0):
-        portal = api.portal.get()
-        submitted_document_model = SubmittedDocument.query.get_by_source(
-            proposal, document)
-        submitted_document = portal.restrictedTraverse(
-            submitted_document_model.submitted_physical_path.encode('utf-8'))
-        self.assertIsNotNone(submitted_document_model)
-        self.assertEqual(Oguid.for_object(submitted_document),
-                         submitted_document_model.submitted_oguid)
-        self.assertEqual(submitted_version,
-                         submitted_document_model.submitted_version)
-        self.assertEqual(proposal.load_model(),
-                         submitted_document_model.proposal)
 
     def assert_json_equal(self, expected, got, msg=None):
         pretty = {'sort_keys': True, 'indent': 4, 'separators': (',', ': ')}

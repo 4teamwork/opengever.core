@@ -278,7 +278,10 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         self.instance_schema = IProposal
         noaq_proposal = super(ProposalAddForm, self).createAndAdd(data)
         proposal = self.context.get(noaq_proposal.getId())
-        proposal_doc = proposal.create_proposal_document(proposal_template.file)
+        proposal_doc = proposal.create_proposal_document(
+            title=proposal.title_or_id(),
+            source_blob=proposal_template.file,
+        )
         if edit_after_creation:
             self.checkout_and_external_edit(proposal_doc)
 

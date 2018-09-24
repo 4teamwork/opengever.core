@@ -293,13 +293,16 @@ class ProposalBase(ModelContainer):
 
         return document
 
-    def create_proposal_document(self, source_blob=None, **kwargs):
+    def create_proposal_document(self, title=None, source_blob=None, **kwargs):
         """Creates a proposal document within this proposal or submitted
         proposal.
         Only one proposal document can be created.
         """
         if self.get_proposal_document():
             raise ValueError('There is already a proposal document.')
+
+        if title:
+            kwargs.setdefault('title', title)
 
         if source_blob:
             kwargs.setdefault('filename', source_blob.filename)
@@ -308,8 +311,6 @@ class ProposalBase(ModelContainer):
 
         kwargs['context'] = self
         kwargs.setdefault('preserved_as_paper', False)
-
-        kwargs.setdefault('title', safe_unicode(self.Title()))
 
         with elevated_privileges():
             obj = CreateDocumentCommand(**kwargs).execute()

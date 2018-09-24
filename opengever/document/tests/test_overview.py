@@ -614,8 +614,4 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
             info_messages(),
             )
 
-        self.assert_submitted_document_created(
-            self.proposal,
-            self.document,
-            submitted_version=1,
-            )
+        self.assertSubmittedDocumentCreated(self.proposal, self.document, submitted_version=1)

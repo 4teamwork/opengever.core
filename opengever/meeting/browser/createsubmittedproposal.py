@@ -41,6 +41,7 @@ class CreateSubmittedProposal(BrowserView):
             submitted_proposal.sync_model(proposal_model=proposal)
 
             submitted_proposal.create_proposal_document(
+                title=data['title'],
                 filename=data['file']['filename'],
                 content_type=data['file']['contentType'].encode('utf-8'),
                 data=base64.decodestring(data['file']['data']))
