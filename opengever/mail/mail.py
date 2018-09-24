@@ -406,10 +406,9 @@ EMAILPATTERN = re.compile(
 def extract_email(header_from):
     header_from = header_from.lower()
     match = re.findall(EMAILPATTERN, header_from)
-    if len(match):
+    if match:
         return match[0][0]
-    else:
-        return header_from
+    return header_from
 
 
 def get_author_by_email(mail):
@@ -433,7 +432,8 @@ def initialize_metadata(mail, event):
         return
 
     mail_metadata = ogmetadata.IDocumentMetadata(mail)
-    date_time = datetime.fromtimestamp(utils.get_date_header(mail.msg, 'Date'))
+    timestamp = utils.get_date_header(mail.msg, 'Date') or 0.0
+    date_time = datetime.fromtimestamp(timestamp)
 
     mail_metadata.document_date = date_time.date()
     mail_metadata.receipt_date = date.today()
