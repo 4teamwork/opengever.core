@@ -202,3 +202,27 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(u'Erledigt, siehe Anhang.', response.text)
         self.assertEqual('task-transition-in-progress-resolved',
                          response.transition)
+
+    @browsing
+    def test_reassign_successful(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-reassign'.format(
+            self.task.absolute_url())
+
+        data = {'text': 'Not working'}
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', data=json.dumps(data), headers=self.api_headers)
+        data = {'text': 'Robert macht das.',
+                'responsible': self.dossier_responsible.id,
+                'responsible_client': u'fa'}
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(self.dossier_responsible.id, self.task.responsible)
+        self.assertEqual('task-state-in-progress', api.content.get_state(self.task))
+
+        response = IResponseContainer(self.task)[-1]
+        self.assertEqual(u'Robert macht das.', response.text)
+        self.assertEqual('task-transition-reassign', response.transition)

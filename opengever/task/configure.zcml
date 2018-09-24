@@ -240,5 +240,10 @@
       name="task-transition-resolved-tested-and-closed"
       />
 
+  <adapter
+      factory=".transition.ReassignTransitionExtender"
+      name="task-transition-reassign"
+      />
+
 
 </configure>
