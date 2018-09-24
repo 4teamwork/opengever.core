@@ -130,6 +130,10 @@ Metadaten zu einem Traktandum (AgendaItem):
 
   Titel des Antrags (String).
 
+- ``description``
+
+  Beschreibung des Antrags (String).
+
 - ``number``
 
   Traktandennummer (startet bei jeder neuen Sitzung wieder bei 1).
