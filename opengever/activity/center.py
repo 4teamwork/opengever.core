@@ -12,13 +12,14 @@ from plone import api
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import true
 from ZODB.POSException import ConflictError
 from zope.globalrequest import getRequest
 from zope.i18nmessageid import MessageFactory
 import logging
 import sys
 import traceback
-
 
 _ = MessageFactory("opengever.activity")
 logger = logging.getLogger('opengever.activity')
@@ -131,7 +132,7 @@ class NotificationCenter(object):
     def get_users_notifications(self, userid, only_unread=False, limit=None):
         query = Notification.query.by_user(userid)
         if only_unread:
-            query = query.filter(Notification.is_read.is_(False))
+            query = query.filter(Notification.is_read == false())
 
         query = query.join(
             Notification.activity).order_by(desc(Activity.created))
@@ -140,8 +141,8 @@ class NotificationCenter(object):
     def count_users_unread_notifications(self, userid, badge_only=False):
         query = Notification.query.by_user(userid)
         if badge_only:
-            query = query.filter(Notification.is_badge.is_(True))
-        return query.filter(Notification.is_read.is_(False)).count()
+            query = query.filter(Notification.is_badge == true())
+        return query.filter(Notification.is_read == false()).count()
 
     def mark_notification_as_read(self, notification_id):
         notification = self.get_notification(notification_id)
@@ -167,7 +168,7 @@ class NotificationCenter(object):
 
         query = query.join(Notification.activity)
         if badge_only:
-            query = query.filter(Notification.is_badge.is_(True))
+            query = query.filter(Notification.is_badge == true())
         query = query.order_by(order(sort_on))
         query = query.offset(offset).limit(limit)
         return query.options(contains_eager(Notification.activity)).all()

@@ -1,13 +1,21 @@
+from opengever.base.model import is_oracle
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.query import BaseQuery
 from plone import api
 from sqlalchemy import and_
+from sqlalchemy import func
 from sqlalchemy import or_
 
 
 class TaskQuery(BaseQuery):
+
+    def _extend_with_physical_path(self, query, field, path):
+        if is_oracle():
+            return query.filter(func.to_char(field) == path)
+
+        return query.filter(field == path)
 
     def users_tasks(self, userid):
         """Returns query which List all tasks where the given user,
@@ -58,8 +66,9 @@ class TaskQuery(BaseQuery):
         """Returns a task on the specified client identified by its physical
         path (which is relative to the site root!) or None.
         """
-        return self.filter_by(
-            admin_unit_id=admin_unit_id, physical_path=path).first()
+        query = self.filter_by(admin_unit_id=admin_unit_id)
+        return self._extend_with_physical_path(
+            query, Task.physical_path, path).first()
 
     def by_ids(self, task_ids):
         """Returns all tasks whos task_ids are listed in `task_ids`.
@@ -76,8 +85,9 @@ class TaskQuery(BaseQuery):
 
     def by_brain(self, brain):
         relative_content_path = '/'.join(brain.getPath().split('/')[2:])
-        return self.by_admin_unit(get_current_admin_unit())\
-                   .filter(Task.physical_path == relative_content_path).one()
+        query = self.by_admin_unit(get_current_admin_unit())
+        return self._extend_with_physical_path(
+            query, Task.physical_path, relative_content_path).one()
 
     def subtasks_by_tasks(self, tasks):
         """Queries all subtask of the given tasks sql object."""

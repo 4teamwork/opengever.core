@@ -5,7 +5,8 @@ Changelog
 2018.4.5 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix task path queries for oracle backends. [phgross]
+- Fix activity queries for oracle backends. [phgross]
 
 
 2018.4.4 (2018-09-17)
