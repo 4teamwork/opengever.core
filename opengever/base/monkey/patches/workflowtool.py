@@ -1,5 +1,5 @@
 from opengever.base.monkey.patching import MonkeyPatch
-from zope.component import getAdapter
+from zope.component import queryAdapter
 
 
 class PatchWorkflowTool(MonkeyPatch):
@@ -8,12 +8,14 @@ class PatchWorkflowTool(MonkeyPatch):
 
         def doActionFor(self, ob, action, wf_id=None, *args, **kw):
             from opengever.base.transition import ITransitionExtender
-            adapter = getAdapter(ob, ITransitionExtender, name=action)
+
+            adapter = queryAdapter(ob, ITransitionExtender, name=action)
+            if not adapter:
+                return original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
+
             values = adapter.deserialize(**kw)
             value = original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
-
             adapter.after_transition_hook(transition=action, **values)
-
             return value
 
         from Products.CMFPlone.WorkflowTool import WorkflowTool
