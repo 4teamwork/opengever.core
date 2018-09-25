@@ -445,12 +445,12 @@ class OpengeverContentFixture(object):
                 .titled(u'Meeting T\xc3\xb6mpl\xc3\xb6te')
                 .within(self.templates)
                 ))
-            create(
+            self.register('paragraph_template', create(
                 Builder('paragraphtemplate')
                 .titled(u'Begr\xfcssung')
                 .having(position=1)
                 .within(self.meeting_template)
-                )
+                ))
             create(
                 Builder('paragraphtemplate')
                 .titled(u'Gesch\xf0fte')

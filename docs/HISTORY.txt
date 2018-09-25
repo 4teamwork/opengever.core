@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add TaskReminderActivity object. [elioschmutz]
+- Make paragraph templates deletable. [Rotonen]
 - Add ReminderSetting SQL Model. [elioschmutz]
 - Add task-reminder activity settings. [elioschmutz]
 - Preserve proposal document title for proposal documents of submitted proposals. [Rotonen]

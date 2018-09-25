@@ -612,6 +612,7 @@ Objects
       - self.subdossiertemplate
     - self.empty_template
     - self.meeting_template
+      - self.paragraph_template
     - self.normal_template
     - self.proposal_template
     - self.recurring_agenda_item_template

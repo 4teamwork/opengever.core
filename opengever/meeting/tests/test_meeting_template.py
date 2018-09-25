@@ -47,6 +47,19 @@ class TestMeetingTemplate(IntegrationTestCase):
         self.assertEquals([u'Meeting T\xc3\xb6mpl\xc3\xb6te'], browser.css('h1').text)
 
     @browsing
+    def test_deleting_paragraphtemplates_works_properly(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(self.paragraph_template)
+        self.assertEqual(3, len(self.meeting_template.objectValues()))
+        expected_actions = ['Delete', 'Sharing']
+        available_actions = browser.css('#plone-contentmenu-actions .actionMenuContent a').text
+        self.assertEqual(expected_actions, available_actions)
+        browser.find('Delete').click()
+        # Confirmation
+        browser.find('Delete').click()
+        self.assertEqual(2, len(self.meeting_template.objectValues()))
+
+    @browsing
     def test_add_meeting_from_template(self, browser):
         self.login(self.committee_responsible, browser)
         committee_model = self.committee.load_model()
