@@ -1,5 +1,5 @@
 ---
 job_template: python
 weight:
-  test-plone-4.3.x-functional.cfg: 3
-  test-plone-4.3.x-integration.cfg: 3
+  test-plone-4.3.x-functional.cfg: 12
+  test-plone-4.3.x-integration.cfg: 12
