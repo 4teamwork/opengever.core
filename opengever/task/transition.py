@@ -51,6 +51,17 @@ class INewResponsibleSchema(Schema):
 
 @implementer(ITransitionExtender)
 @adapter(ITask)
+class DefaultTransitionExtender(TransitionExtender):
+
+    schemas = [IResponse, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'))
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
 class AcceptTransitionExtender(TransitionExtender):
 
     schemas = [IResponse, ]
