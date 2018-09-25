@@ -246,6 +246,11 @@
       />
 
   <adapter
+      factory=".transition.CloseTransitionExtender"
+      name="task-transition-open-tested-and-closed"
+      />
+
+  <adapter
       factory=".transition.ReassignTransitionExtender"
       name="task-transition-reassign"
       />

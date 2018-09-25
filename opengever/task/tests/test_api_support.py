@@ -204,6 +204,27 @@ class TestAPITransitions(IntegrationTestCase):
                          response.transition)
 
     @browsing
+    def test_close_information_successful(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.subtask.task_type = 'information'
+        self.subtask.sync()
+        self.set_workflow_state('task-state-open', self.subtask)
+
+        url = '{}/@workflow/task-transition-open-tested-and-closed'.format(
+            self.subtask.absolute_url())
+        browser.open(url, method='POST', data=json.dumps({'text': 'Done!'}),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-tested-and-closed',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Done!', response.text)
+        self.assertEqual('task-transition-open-tested-and-closed',
+                         response.transition)
+
+    @browsing
     def test_resolve_successful(self, browser):
         self.login(self.regular_user, browser=browser)
 
