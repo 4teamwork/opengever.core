@@ -330,3 +330,22 @@ class TestAPITransitions(IntegrationTestCase):
                            'name': u'label_responsible',
                            'before': self.regular_user.id}],
                          response.changes)
+
+    @browsing
+    def test_reopen_rejected_task_successful(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-rejected', self.subtask)
+
+        url = '{}/@workflow/task-transition-rejected-open'.format(
+            self.subtask.absolute_url())
+        data = {'text': u'Dann erledige ich das selbst.'}
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-open',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Dann erledige ich das selbst.', response.text)
+        self.assertEqual('task-transition-rejected-open', response.transition)

@@ -269,4 +269,9 @@
       name="task-transition-open-rejected"
       />
 
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-rejected-open"
+      />
+
 </configure>
