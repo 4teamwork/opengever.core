@@ -247,3 +247,41 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.task)[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('task-transition-reassign', response.transition)
+
+    @browsing
+    def test_cancel_successful(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-open', self.subtask)
+
+        url = '{}/@workflow/task-transition-open-cancelled'.format(
+            self.subtask.absolute_url())
+        browser.open(url, method='POST',
+                     data=json.dumps({'text': 'Nicht mehr notwendig.'}),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-cancelled',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Nicht mehr notwendig.', response.text)
+        self.assertEqual('task-transition-open-cancelled', response.transition)
+
+    @browsing
+    def test_reopen_successful(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-cancelled', self.subtask)
+
+        url = '{}/@workflow/task-transition-cancelled-open'.format(
+            self.subtask.absolute_url())
+        browser.open(url, method='POST',
+                     data=json.dumps({'text': u'Brauchen wir trotzdem.'}),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-open',
+                         api.content.get_state(self.subtask))
+
+        response = IResponseContainer(self.subtask)[-1]
+        self.assertEqual(u'Brauchen wir trotzdem.', response.text)
+        self.assertEqual('task-transition-cancelled-open', response.transition)

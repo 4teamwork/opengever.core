@@ -250,5 +250,19 @@
       name="task-transition-reassign"
       />
 
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-open-cancelled"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-cancelled-open"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-in-progress-cancelled"
+      />
 
 </configure>
