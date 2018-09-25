@@ -1,3 +1,5 @@
+from opengever.activity import notification_center
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
@@ -137,3 +139,37 @@ class ReassignTransitionExtender(TransitionExtender):
 
     def record_activity(self, response):
         TaskReassignActivity(self.context, self.context.REQUEST, response).record()
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class RejectTransitionExtender(DefaultTransitionExtender):
+    """Default task transition handling expect the responsible is switched
+    to task's issuer.
+    """
+
+    schemas = [IResponse, ]
+
+    def after_transition_hook(self, transition, **kwargs):
+        self.update_watchers()
+
+        response = add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'))
+
+        response.add_change(
+            'responsible',
+            _(u"label_responsible", default=u"Responsible"),
+            ITask(self.context).responsible, ITask(self.context).issuer)
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
+        self.switch_responsible()
+
+    def update_watchers(self):
+        center = notification_center()
+        center.remove_watcher_from_resource(
+            self.context.oguid, self.context.responsible, TASK_RESPONSIBLE_ROLE)
+        center.add_watcher_to_resource(
+            self.context.oguid, self.context.issuer, TASK_RESPONSIBLE_ROLE)
+
+    def switch_responsible(self):
+        self.context.responsible = ITask(self.context).issuer

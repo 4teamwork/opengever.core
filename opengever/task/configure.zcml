@@ -127,12 +127,6 @@
   <subscriber
       for="opengever.task.task.ITask
            Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.set_responsible_to_issuer_on_reject"
-      />
-
-  <subscriber
-      for="opengever.task.task.ITask
-           Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.start_next_task"
       />
 
@@ -268,6 +262,11 @@
   <adapter
       factory=".transition.DefaultTransitionExtender"
       name="task-transition-in-progress-cancelled"
+      />
+
+  <adapter
+      factory=".transition.RejectTransitionExtender"
+      name="task-transition-open-rejected"
       />
 
 </configure>
