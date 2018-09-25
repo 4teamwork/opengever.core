@@ -1142,13 +1142,15 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_emails(self):
-        self.mail_eml = self.register('mail_eml', create(
+        mail_eml = create(
             Builder("mail")
             .with_message(MAIL_DATA)
             .within(self.dossier)
-            ))
+            )
 
-        self.register('mail', self.mail_eml)
+        # XXX - compatibility crutch for not having had to refactor many tests
+        self.register('mail', mail_eml)
+        self.register('mail_eml', mail_eml)
 
         class MockMsg2MimeTransform(object):
 
@@ -1162,7 +1164,7 @@ class OpengeverContentFixture(object):
             transform=MockMsg2MimeTransform(),
             )
 
-        self.mail_msg = self.register('mail_msg', command.execute())
+        self.register('mail_msg', command.execute())
 
     @staticuid()
     def create_meetings(self):
