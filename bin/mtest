@@ -162,7 +162,6 @@ def split(batch):
     minsize_mapping = {
         'opengever.core.testing.opengever.core:integration': 200,
         'opengever.core.testing.opengever.core:functional': 100,
-        'opengever.core.testing.MeetingLayer': 25,
         }
 
     layer = batch.get('layer')
