@@ -43,10 +43,9 @@ class TemplateFolder(Container, TranslatedTitleMixin):
 
         def filter_type(fti):
             factory_type = fti.id
-            if factory_type in [u'opengever.meeting.sablontemplate']:
-                return is_meeting_feature_enabled()
-
-            if factory_type in [u'opengever.meeting.proposaltemplate']:
+            if factory_type in [u'opengever.meeting.sablontemplate',
+                                u'opengever.meeting.proposaltemplate',
+                                u'opengever.meeting.meetingtemplate']:
                 return is_meeting_feature_enabled()
 
             if factory_type in [u'opengever.dossier.dossiertemplate']:

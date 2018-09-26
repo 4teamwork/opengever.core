@@ -649,7 +649,7 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.login().open(templatefolder)
 
         self.assertEquals(
-            ['Document', 'Meeting Template', 'TaskTemplateFolder', 'Template Folder'],
+            ['Document', 'TaskTemplateFolder', 'Template Folder'],
             factoriesmenu.addable_types())
 
     @skip("This test currently fails in a flaky way on CI."
@@ -1037,7 +1037,6 @@ class TestDossierTemplateFeature(IntegrationTestCase):
 
         expected_addable_types = ['Document',
                                   'Dossier template',
-                                  'Meeting Template',
                                   'TaskTemplateFolder',
                                   'Template Folder']
         self.assertEqual(expected_addable_types, factoriesmenu.addable_types())
