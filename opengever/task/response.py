@@ -251,6 +251,18 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
     def is_final_transition(self):
         return self.transition in FINAL_TRANSITIONS
 
+    def is_api_supported_transition(self, transition):
+        return transition in ["task-transition-open-in-progress",
+                              "task-transition-in-progress-resolved",
+                              "task-transition-resolved-tested-and-closed",
+                              "task-transition-in-progress-tested-and-closed"
+                              "task-transition-open-tested-and-closed",
+                              "task-transition-open-rejected",
+                              "task-transition-in-progress-cancelled",
+                              "task-transition-open-cancelled",
+                              "task-transition-cancelled-open",
+                              "task-transition-rejected-open"]
+
     def updateActions(self):
         super(TaskTransitionResponseAddForm, self).updateActions()
         self.actions["save"].addClass("context")
@@ -267,6 +279,12 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             errorMessage += '</ul>'
             self.status = errorMessage
             return None
+
+        elif self.is_api_supported_transition(data.pop('transition')):
+            wftool = api.portal.get_tool('portal_workflow')
+            wftool.doActionFor(self.context, self.transition,
+                               comment=data.get('text'), **data)
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         else:
             new_response = Response(data.get('text'))
