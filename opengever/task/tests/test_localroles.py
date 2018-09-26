@@ -203,21 +203,16 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
         self.set_workflow_state('task-state-resolved', self.task)
-
         storage = RoleAssignmentManager(self.document).storage
-        self.assertEquals(
-            [Oguid.for_object(self.task).id, Oguid.for_object(self.subtask).id],
-            [item.get('reference') for item in storage._storage()])
-
+        expected_oguids = [Oguid.for_object(task).id for task in (self.task, self.subtask, self.info_task, )]
+        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
         # close
         browser.open(self.task, view='tabbedview_view-overview')
         browser.click_on('task-transition-resolved-tested-and-closed')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
-
-        self.assertEquals(
-            [Oguid.for_object(self.subtask).id],
-            [item.get('reference') for item in storage._storage()])
+        expected_oguids = [Oguid.for_object(task).id for task in (self.subtask, self.info_task, )]
+        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
 
     @browsing
     def test_closing_a_task_revokes_responsible_roles_on_distinct_parent(self, browser):

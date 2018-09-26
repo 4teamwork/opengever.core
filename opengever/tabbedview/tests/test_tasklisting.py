@@ -10,32 +10,32 @@ class TestTaskListing(IntegrationTestCase):
     def test_shows_only_pending_tasks_by_default(self, browser):
         self.login(self.regular_user, browser=browser)
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
-
         browser.open(self.dossier, view='tabbedview_view-tasks')
-
         table = browser.css('.listing').first
-        self.assertEquals([u'Vertragsentwurf \xdcberpr\xfcfen',
-                           u'Mitarbeiter Dossier generieren',
-                           u'Personaleintritt'],
-                          [row.get('Title') for row in table.dicts()])
+        expected_tasks = [
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Mitarbeiter Dossier generieren',
+            u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
+        ]
+        self.assertEquals(expected_tasks, [row.get('Title') for row in table.dicts()])
 
     @browsing
     def test_list_every_dossiers_with_the_all_filter(self, browser):
         self.login(self.regular_user, browser=browser)
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
-
-        browser.open(self.dossier, view='tabbedview_view-tasks',
-                     data={'task_state_filter': 'filter_all'})
-
+        browser.open(self.dossier, view='tabbedview_view-tasks', data={'task_state_filter': 'filter_all'})
         table = browser.css('.listing').first
-        self.assertEquals(
-            [u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-             u'Vertragsentwurf \xdcberpr\xfcfen',
-             'Mitarbeiter Dossier generieren',
-             'Arbeitsplatz vorbereiten',
-             'Personaleintritt',
-             'Vorstellungsrunde bei anderen Mitarbeitern'],
-            [row.get('Title') for row in table.dicts()])
+        expected_tasks = [
+            u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+            'Mitarbeiter Dossier generieren',
+            'Arbeitsplatz vorbereiten',
+            'Personaleintritt',
+            'Vorstellungsrunde bei anderen Mitarbeitern',
+            u'Vertragsentw\xfcrfe 2018',
+        ]
+        self.assertEqual(expected_tasks, [row.get('Title') for row in table.dicts()])
 
     @browsing
     def test_escape_dossier_title_to_prevent_xss(self, browser):

@@ -1140,6 +1140,18 @@ class OpengeverContentFixture(object):
                 .relate_to(self.meeting_document)
             ))
 
+        self.register('info_task', create(
+            Builder('task')
+            .titled(u'Vertragsentw\xfcrfe 2018')
+            .within(self.dossier)
+            .having(
+                task_type=u'information',
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+            )
+            .relate_to(self.document)
+        ))
+
     @staticuid()
     def create_expired_dossier(self):
         self.expired_dossier = self.register('expired_dossier', create(

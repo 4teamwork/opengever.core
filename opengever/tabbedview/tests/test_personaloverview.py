@@ -179,12 +179,13 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
-            ]
+        ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertItemsEqual(expected_tasks, found_tasks)
         self.task.get_sql_object().responsible = 'robert.ziegler'
         browser.open(view='tabbedview_view-mytasks')
         expected_tasks = [
@@ -192,13 +193,14 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
 
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertItemsEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_my_tasks_list_also_tasks_assigned_to_my_teams(self, browser):
@@ -283,14 +285,15 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
             u'Ein notwendiges \xdcbel',
-            ]
+        ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertItemsEqual(expected_tasks, found_tasks)
         self.task.get_sql_object().assigned_org_unit = 'additional'
         browser.open(view='tabbedview_view-alltasks')
         expected_tasks = [
@@ -298,14 +301,15 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
             u'Ein notwendiges \xdcbel',
-            ]
+        ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertItemsEqual(expected_tasks, found_tasks)
 
     @browsing
     def test_all_issued_tasks_list_all_task_issued_by_the_current_org_unit(self, browser):
@@ -317,15 +321,24 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
             u'Ein notwendiges \xdcbel',
-            ]
+        ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
-        create(Builder('org_unit').id('stv').having(title=u'Steuerverwaltung', admin_unit_id='plone'))
+        self.assertItemsEqual(expected_tasks, found_tasks)
+        create(
+            Builder('org_unit')
+            .id('stv')
+            .having(
+                title=u'Steuerverwaltung',
+                admin_unit_id='plone',
+                )
+            )
+
         self.task.get_sql_object().issuing_org_unit = 'stv'
         browser.open(view='tabbedview_view-allissuedtasks')
         expected_tasks = [
@@ -333,11 +346,12 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
+            u'Vertragsentw\xfcrfe 2018',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
             u'Ein notwendiges \xdcbel',
-            ]
+        ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
-        self.assertEquals(expected_tasks, found_tasks)
+        self.assertItemsEqual(expected_tasks, found_tasks)

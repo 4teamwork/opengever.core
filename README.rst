@@ -577,6 +577,7 @@ Objects
           - self.draft_proposal
           - self.draft_word_proposal
           - self.empty_document
+          - self.info_task
           - self.mail_eml
           - self.mail_msg
           - self.proposal
