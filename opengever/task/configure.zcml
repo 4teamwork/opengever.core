@@ -279,4 +279,9 @@
       name="task-transition-rejected-open"
       />
 
+  <adapter
+      factory=".transition.DelegateTransitionExtender"
+      name="task-transition-delegate"
+      />
+
 </configure>

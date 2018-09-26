@@ -5,6 +5,9 @@ from opengever.base.transition import TransitionExtender
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
 from opengever.task.activities import TaskReassignActivity
+from opengever.task.browser.delegate.metadata import IUpdateMetadata
+from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
+from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
@@ -173,3 +176,15 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 
     def switch_responsible(self):
         self.context.responsible = ITask(self.context).issuer
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class DelegateTransitionExtender(DefaultTransitionExtender):
+
+    schemas = [IUpdateMetadata, ISelectRecipientsSchema]
+
+    def after_transition_hook(self, transition, **kwargs):
+        create_subtasks(self.context,
+                        kwargs.pop('responsibles'),
+                        kwargs.get('documents', []), kwargs)

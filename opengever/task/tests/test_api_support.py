@@ -368,3 +368,27 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.subtask)[-1]
         self.assertEqual(u'Da stimmt was nicht.', response.text)
         self.assertEqual('task-transition-resolved-in-progress', response.transition)
+
+    @browsing
+    def test_delegate_a_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        url = '{}/@workflow/task-transition-delegate'.format(
+            self.subtask.absolute_url())
+
+        data = {"title": "Neuer Aufgaben Titel",
+                "responsibles": ["fa:{}".format(self.meeting_user.id),
+                                 "fa:{}".format(self.secretariat_user.id)],
+                "issuer": self.dossier_responsible.id,
+                "deadline": "2018-12-03"}
+
+        with self.observe_children(self.subtask) as children:
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        tasks = children['added']
+        self.assertItemsEqual([self.meeting_user.id, self.secretariat_user.id],
+                              [task.responsible for task in tasks])
+        self.assertEqual(["Neuer Aufgaben Titel", "Neuer Aufgaben Titel"],
+                         [task.title for task in tasks])
