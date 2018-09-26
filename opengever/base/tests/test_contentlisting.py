@@ -126,7 +126,7 @@ class TestOpengeverContentListing(IntegrationTestCase):
             )
 
         self.assertFalse(
-            IContentListingObject(obj2brain(self.mail)).is_document,
+            IContentListingObject(obj2brain(self.mail_eml)).is_document,
             )
 
         self.assertFalse(
@@ -243,7 +243,7 @@ class TestBrainContentListingRenderLink(IntegrationTestCase):
 
         self.assertEquals(
             u'PATCHED LINK Die B\xfcrgschaft'.encode('utf-8'),
-            IContentListingObject(obj2brain(self.mail)).render_link(),
+            IContentListingObject(obj2brain(self.mail_eml)).render_link(),
             )
 
     @browsing

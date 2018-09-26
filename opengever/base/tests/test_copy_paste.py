@@ -23,7 +23,7 @@ class TestCopyItems(IntegrationTestCase):
     def test_redirects_back_and_show_statusmessage_if_copy_success(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        data = self.make_path_param(self.document, self.mail)
+        data = self.make_path_param(self.document, self.mail_eml)
         browser.open(self.dossier, data=data, view='copy_items')
 
         self.assertEqual(self.dossier.absolute_url(), browser.url)
@@ -56,16 +56,16 @@ class TestCopyItem(IntegrationTestCase):
     @browsing
     def test_statusmessage_if_copy_mail_success(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.mail, view='copy_item')
+        browser.open(self.mail_eml, view='copy_item')
 
-        self.assertEqual(self.mail.absolute_url(), browser.url)
+        self.assertEqual(self.mail_eml.absolute_url(), browser.url)
         self.assertEqual(['Selected objects successfully copied.'],
                          info_messages())
 
     @browsing
     def test_statusmessage_if_paste_mail_success(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.mail, view='copy_item')
+        browser.open(self.mail_eml, view='copy_item')
 
         browser.open(self.empty_dossier, view='tabbed_view')
         browser.css('#contentActionMenus a#paste').first.click()

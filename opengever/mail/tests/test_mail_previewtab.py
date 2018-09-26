@@ -11,9 +11,9 @@ class TestPreviewTab(IntegrationTestCase):
     @browsing
     def test_mail_preview_tab(self, browser):
         self.login(self.regular_user, browser)
-        self.change_mail_data(self.mail, MAIL_DATA)
+        self.change_mail_data(self.mail_eml, MAIL_DATA)
 
-        browser.open(self.mail, view='tabbedview_view-preview')
+        browser.open(self.mail_eml, view='tabbedview_view-preview')
 
         expect = [['From:', u'Freddy H\xf6lderlin <from@example.org>'],
                   ['Subject:', u'Die B\xfcrgschaft'],
@@ -27,9 +27,9 @@ class TestPreviewTab(IntegrationTestCase):
         self.login(self.regular_user, browser)
         mail_data = resource_string('opengever.mail.tests',
                                     'attachment_with_wrong_mimetype.txt')
-        self.change_mail_data(self.mail, mail_data)
+        self.change_mail_data(self.mail_eml, mail_data)
 
-        browser.open(self.mail, view='tabbedview_view-preview')
+        browser.open(self.mail_eml, view='tabbedview_view-preview')
 
         self.assertEquals([u'B\xfccher.txt'],
                           browser.css('div.mailAttachment a').text)
@@ -37,7 +37,7 @@ class TestPreviewTab(IntegrationTestCase):
     @browsing
     def test_preview_tab_can_be_disabled_by_registry_flag(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.mail, view='tabbed_view')
+        browser.open(self.mail_eml, view='tabbed_view')
 
         self.assertEquals(
             ['Overview', 'Preview', 'Journal', 'Sharing'],
@@ -47,7 +47,7 @@ class TestPreviewTab(IntegrationTestCase):
             name='preview_tab_visible', interface=IMailTabbedviewSettings,
             value=False)
 
-        browser.open(self.mail, view='tabbed_view')
+        browser.open(self.mail_eml, view='tabbed_view')
         self.assertEquals(
             ['Overview', 'Journal', 'Sharing'],
             browser.css('.formTab').text)

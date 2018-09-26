@@ -227,7 +227,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
     def test_actions_with_mail(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.mail, view='bumblebee-overlay-listing')
+        browser.open(self.mail_eml, view='bumblebee-overlay-listing')
 
         self.assertEqual(
             [
@@ -395,7 +395,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
     def test_actions_with_mail(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.mail, view="bumblebee-overlay-document")
+        browser.open(self.mail_eml, view="bumblebee-overlay-document")
 
         self.assertEqual(
             [

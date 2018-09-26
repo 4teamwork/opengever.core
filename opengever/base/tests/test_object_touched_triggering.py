@@ -51,7 +51,7 @@ class TestObjectTouchedTriggering(IntegrationTestCase):
         self.login(self.regular_user)
 
         register_event_recorder(IObjectTouchedEvent)
-        notify(ObjectAddedEvent(self.mail))
+        notify(ObjectAddedEvent(self.mail_eml))
 
         event = get_last_recorded_event()
         self.assertTrue(IObjectTouchedEvent.providedBy(event))
