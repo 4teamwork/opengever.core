@@ -180,7 +180,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         expected_token = {
             u'action': u'attach',
             u'bcc': u'1014013300@example.org',
-            u'documents': [u'createtreatydossiers000000000002', u'createtreatydossiers000000000005'],
+            u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
             u'sub': u'kathi.barfuss',
             u'url': u'http://nohost/plone/oc_attach',
@@ -206,11 +206,11 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-13',
+                                 u'dossier-1/task-1/document-34',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
-                u'uuid': u'createtreatydossiers000000000005',
+                u'uuid': u'createtasks000000000000000000003',
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
@@ -244,7 +244,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
 
         expected_token = {
             u'action': u'attach',
-            u'documents': [u'createtreatydossiers000000000002', u'createtreatydossiers000000000005'],
+            u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
             u'sub': u'kathi.barfuss',
             u'url': u'http://nohost/plone/oc_attach',
@@ -268,11 +268,11 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-13',
+                                 u'dossier-1/task-1/document-34',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
-                u'uuid': u'createtreatydossiers000000000005',
+                u'uuid': u'createtasks000000000000000000003',
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
@@ -306,7 +306,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
 
         expected_token = {
             u'action': u'attach',
-            u'documents': [u'createtreatydossiers000000000002', u'createtreatydossiers000000000005'],
+            u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
             u'sub': u'kathi.barfuss',
             u'url': u'http://nohost/plone/oc_attach',
@@ -330,11 +330,11 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-13',
+                                 u'dossier-1/task-1/document-34',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
-                u'uuid': u'createtreatydossiers000000000005',
+                u'uuid': u'createtasks000000000000000000003',
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
