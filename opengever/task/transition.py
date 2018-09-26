@@ -1,5 +1,6 @@
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
@@ -13,11 +14,16 @@ from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone.supermodel.model import Schema
+from z3c.relationfield.relation import RelationValue
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.component import adapter
+from zope.component import getUtility
 from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import implementer
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
@@ -27,6 +33,28 @@ class IResponse(Schema):
         title=_('label_response', default="Response"),
         required=False,
         )
+
+    relatedItems = RelationList(
+        title=_(u'label_related_items', default=u'Related Items'),
+        default=[],
+        missing_value=[],
+        value_type=RelationChoice(
+            title=u"Related",
+            source=DossierPathSourceBinder(
+                portal_type=("opengever.document.document", "ftw.mail.mail"),
+                navigation_tree_query={
+                    'object_provides': [
+                        'opengever.dossier.behaviors.dossier.IDossierMarker',
+                        'opengever.document.document.IDocumentSchema',
+                        'opengever.task.task.ITask',
+                        'ftw.mail.mail.IMail',
+                        'opengever.meeting.proposal.IProposal',
+                    ],
+                    },
+                ),
+            ),
+        required=False,
+    )
 
 
 class INewDeadline(Schema):
@@ -61,19 +89,39 @@ class DefaultTransitionExtender(TransitionExtender):
     schemas = [IResponse, ]
 
     def after_transition_hook(self, transition, **kwargs):
-        add_simple_response(
+        response = add_simple_response(
             self.context, transition=transition, text=kwargs.get('text'))
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
+
+    def save_related_items(self, response, related_items):
+        if not related_items:
+            return
+
+        intids = getUtility(IIntIds)
+        current_ids = [item.to_id for item in ITask(self.context).relatedItems]
+        for item in related_items:
+            to_id = intids.getId(item)
+            item._v__is_relation = True
+            if to_id not in current_ids:
+                ITask(self.context).relatedItems.append(RelationValue(to_id))
+                response.add_change(
+                    'relatedItems',
+                    _(u'label_related_items', default=u"Related Items"),
+                    '', item.title)
 
 
 @implementer(ITransitionExtender)
 @adapter(ITask)
-class AcceptTransitionExtender(TransitionExtender):
+class AcceptTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
     def after_transition_hook(self, transition, **kwargs):
-        add_simple_response(
+        response = add_simple_response(
             self.context, transition=transition, text=kwargs.get('text'))
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
 
 
 @implementer(ITransitionExtender)
@@ -89,29 +137,33 @@ class ModifyDeadlineTransitionExtender(TransitionExtender):
 
 @implementer(ITransitionExtender)
 @adapter(ITask)
-class ResolveTransitionExtender(TransitionExtender):
+class ResolveTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
     def after_transition_hook(self, transition, **kwargs):
-        add_simple_response(
+        response = add_simple_response(
             self.context, transition=transition, text=kwargs.get('text'))
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
 
 
 @implementer(ITransitionExtender)
 @adapter(ITask)
-class CloseTransitionExtender(TransitionExtender):
+class CloseTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
     def after_transition_hook(self, transition, **kwargs):
-        add_simple_response(
+        response = add_simple_response(
             self.context, transition=transition, text=kwargs.get('text'))
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
 
 
 @implementer(ITransitionExtender)
 @adapter(ITask)
-class ReassignTransitionExtender(TransitionExtender):
+class ReassignTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, INewResponsibleSchema]
 
@@ -126,6 +178,7 @@ class ReassignTransitionExtender(TransitionExtender):
             self.context, transition=transition, text=kwargs.get('text'),
             field_changes=changes, supress_events=True)
 
+        self.save_related_items(response, kwargs.get('relatedItems'))
         self.change_responsible(**kwargs)
         notify(ObjectModifiedEvent(self.context))
         self.record_activity(response)

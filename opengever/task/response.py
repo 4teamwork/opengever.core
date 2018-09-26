@@ -37,10 +37,12 @@ from zExceptions import BadRequest
 from zope import schema
 from zope.cachedescriptors.property import Lazy
 from zope.component import getUtility
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
+from zope.intid.interfaces import IIntIds
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -281,6 +283,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             return None
 
         elif self.is_api_supported_transition(data.pop('transition')):
+            intids = getUtility(IIntIds)
+            data['relatedItems'] = [
+                intids.getId(item) for item in data['relatedItems']]
             wftool = api.portal.get_tool('portal_workflow')
             wftool.doActionFor(self.context, self.transition,
                                comment=data.get('text'), **data)
@@ -299,31 +304,6 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
                 new_response.type = 'clarification'
 
             new_response.transition = self.transition
-
-            # if util.getManagersVocab.getTerm(responseCreator):
-            #   new_response.type =  'reply'
-            # check transition
-            if transition in ('task-transition-open-resolved',
-                              'task-transition-in-progress-resolved'):
-
-                completion_date = datetime.date.today()
-
-            else:
-                completion_date = None
-
-            # check other fields
-            options = [
-                # (task.deadline, data.get('deadline'), 'deadline',
-                #  _('deadline')),
-                (task.date_of_completion, completion_date,
-                 'date_of_completion', _('date_of_completion'))]
-            for task_field, resp_field, option, title in options:
-                if resp_field and task_field != resp_field:
-                    new_response.add_change(option,
-                                            title,
-                                            task_field,
-                                            resp_field)
-                    task.__setattr__(option, resp_field)
 
             # save relatedItems on task
             related_ids = []
