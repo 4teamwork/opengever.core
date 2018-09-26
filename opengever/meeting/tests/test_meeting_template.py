@@ -8,6 +8,10 @@ import json
 
 class TestMeetingTemplate(IntegrationTestCase):
 
+    features = (
+        'meeting',
+    )
+
     @browsing
     def test_adding_meetingtemplate_works_properly(self, browser):
         self.login(self.dossier_responsible, browser=browser)
