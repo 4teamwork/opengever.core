@@ -66,7 +66,7 @@ class TestObjectTouchedLogging(IntegrationTestCase):
 
         with freeze(FROZEN_NOW):
             notify(ObjectTouchedEvent(self.document))
-            notify(ObjectTouchedEvent(self.mail))
+            notify(ObjectTouchedEvent(self.mail_eml))
 
         recently_touched_log = self._get_log(self.regular_user)
 

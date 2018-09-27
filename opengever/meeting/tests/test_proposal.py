@@ -554,7 +554,7 @@ class TestProposal(IntegrationTestCase):
     @browsing
     def test_regression_proposal_submission_with_mails(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.set_related_items(self.draft_proposal, [self.mail])
+        self.set_related_items(self.draft_proposal, [self.mail_eml])
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
         browser.click_on('Submit')
         browser.click_on("Confirm")
@@ -567,7 +567,7 @@ class TestProposal(IntegrationTestCase):
 
         submitted_mail = submitted_proposal.get_documents()[0]
         self.assertSubmittedDocumentCreated(self.draft_proposal,
-                                            self.mail,
+                                            self.mail_eml,
                                             submitted_mail)
 
     @browsing
@@ -729,7 +729,7 @@ class TestProposal(IntegrationTestCase):
     def test_resubmit_rejected_proposal_with_mail_attachments(self, browser):
         with self.login(self.dossier_responsible, browser):
             self.draft_proposal.relatedItems.append(
-                self.as_relation_value(self.mail))
+                self.as_relation_value(self.mail_eml))
 
             browser.visit(self.draft_proposal, view='tabbedview_view-overview')
             browser.click_on('Submit')

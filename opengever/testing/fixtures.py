@@ -47,6 +47,7 @@ class OpengeverContentFixture(object):
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME),
             }
+        self._registered_paths = set()
 
         # Set up a static secret for the Zope acl_users JWT plugin
         # XXX - the __call__ based _lookup_table cannot be used within __init__
@@ -1142,13 +1143,11 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_emails(self):
-        self.mail_eml = self.register('mail_eml', create(
+        self.register('mail_eml', create(
             Builder("mail")
             .with_message(MAIL_DATA)
             .within(self.dossier)
             ))
-
-        self.register('mail', self.mail_eml)
 
         class MockMsg2MimeTransform(object):
 
@@ -1162,7 +1161,7 @@ class OpengeverContentFixture(object):
             transform=MockMsg2MimeTransform(),
             )
 
-        self.mail_msg = self.register('mail_msg', command.execute())
+        self.register('mail_msg', command.execute())
 
     @staticuid()
     def create_meetings(self):
@@ -1444,7 +1443,10 @@ class OpengeverContentFixture(object):
         portal_path = '/'.join(api.portal.get().getPhysicalPath())
         if path.startswith(portal_path):
             path = path[len(portal_path):].lstrip('/')
+        if path in self._registered_paths:
+            raise ValueError('Trying to double register {}!'.format(path))
         self._lookup_table[attrname] = ('object', path)
+        self._registered_paths.add(path)
 
     def register_url(self, attrname, url):
         """Add an object to the lookup table by url.

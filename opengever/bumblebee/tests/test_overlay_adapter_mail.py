@@ -12,7 +12,7 @@ class TestAdapterRegisteredProperly(IntegrationTestCase):
 
     def test_get_overlay_adapter_for_mails(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertIsInstance(adapter, BumblebeeMailOverlay)
 
@@ -26,14 +26,14 @@ class TestHasFile(IntegrationTestCase):
 
     def test_returns_true_if_mail_has_a_file(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertTrue(adapter.has_file())
 
     def test_returns_false_if_mail_has_no_file(self):
         self.login(self.regular_user)
-        IMail(self.mail).message = None
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        IMail(self.mail_eml).message = None
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertFalse(adapter.has_file())
 
@@ -44,16 +44,16 @@ class TestGetFile(IntegrationTestCase):
 
     def test_returns_none_if_document_has_no_file(self):
         self.login(self.regular_user)
-        IMail(self.mail).message = None
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        IMail(self.mail_eml).message = None
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertIsNone(adapter.get_file())
 
     def test_returns_file_if_document_has_file(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
-        self.assertEqual(self.mail.message, adapter.get_file())
+        self.assertEqual(self.mail_eml.message, adapter.get_file())
 
 
 class TestGetOpenAsPdfLink(IntegrationTestCase):
@@ -62,7 +62,7 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
     def test_returns_none_for_unsupported_mail_conversion(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         expected_url = (
             'http://nohost/plone/ordnungssystem/fuhrung'
@@ -74,8 +74,8 @@ class TestGetOpenAsPdfLink(IntegrationTestCase):
 
     def test_handles_non_ascii_characters_in_filename(self):
         self.login(self.regular_user)
-        IMail(self.mail).message.filename = u'GEVER - \xdcbernahme.msg'
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        IMail(self.mail_eml).message.filename = u'GEVER - \xdcbernahme.msg'
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         expected_url = (
             u'http://nohost/plone/ordnungssystem/fuhrung'
@@ -92,7 +92,7 @@ class TestGetCheckoutUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkout_emails(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertIsNone(adapter.get_checkout_url())
 
@@ -103,7 +103,7 @@ class TestGetCheckinWithoutCommentUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkin_emails(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertIsNone(adapter.get_checkin_without_comment_url())
 
@@ -114,6 +114,6 @@ class TestGetCheckinWithCommentUrl(IntegrationTestCase):
 
     def test_returns_none_because_its_not_possible_to_checkin_emails(self):
         self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail, self.request), IBumblebeeOverlay)
+        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertIsNone(adapter.get_checkin_with_comment_url())

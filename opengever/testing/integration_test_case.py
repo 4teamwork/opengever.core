@@ -563,9 +563,8 @@ class IntegrationTestCase(TestCase):
         self.assertTrue(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
 
     def change_mail_data(self, mail, data):
-        old_file = IMail(self.mail).message
-        IMail(self.mail).message = NamedBlobFile(
-            data=data, filename=old_file.filename)
+        old_file = IMail(mail).message
+        IMail(mail).message = NamedBlobFile(data=data, filename=old_file.filename)
 
     def agenda_item_url(self, agenda_item, endpoint):
         return '{}/agenda_items/{}/{}'.format(

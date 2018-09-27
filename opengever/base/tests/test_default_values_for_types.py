@@ -970,7 +970,7 @@ class TestMailDefaults(TestDefaultsBase):
         return message_value
 
     def get_obj_of_own_type(self):
-        return self.mail
+        return self.mail_eml
 
     def test_create_content_in_container(self):
         self.login(self.regular_user)
