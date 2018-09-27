@@ -8,8 +8,8 @@ from ftw.testbrowser.pages.dexterity import erroneous_fields
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import Response
 from opengever.task.interfaces import ITaskSettings
-from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.testing import FunctionalTestCase
 from plone import api

@@ -10,8 +10,8 @@ from opengever.base.utils import ok_response
 from opengever.document.versioner import Versioner
 from opengever.task.adapters import IResponse as IPersistentResponse
 from opengever.task.adapters import IResponseContainer
+from opengever.task.adapters import Response
 from opengever.task.interfaces import ITaskDocumentsTransporter
-from opengever.task.response import Response
 from opengever.task.task import ITask
 from opengever.task.util import get_documents_of_task
 from persistent.dict import PersistentDict

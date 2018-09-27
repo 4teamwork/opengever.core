@@ -4,19 +4,14 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task import util
-from opengever.task.activities import TaskTransitionActivity
 from opengever.task.adapters import IResponseContainer
-from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
 from opengever.task.reminder import get_task_reminder_options_vocabulary
-from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from opengever.task.reminder.reminder import TaskReminder
-from opengever.task.response_syncer import sync_task_response
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.view import memoize
@@ -30,24 +25,18 @@ from z3c.form import field
 from z3c.form import form
 from z3c.form.browser import radio
 from z3c.form.interfaces import HIDDEN_MODE
-from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
 from zope import schema
 from zope.cachedescriptors.property import Lazy
 from zope.component import getUtility
-from zope.component import getUtility
-from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
 from zope.intid.interfaces import IIntIds
-from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema.interfaces import IContextAwareDefaultFactory
-import datetime
 
 
 @provider(IContextAwareDefaultFactory)
@@ -272,96 +261,22 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         super(TaskTransitionResponseAddForm, self).updateActions()
         self.actions["save"].addClass("context")
 
-    @button.buttonAndHandler(_(u'save', default='Save'),
-                             name='save')
+    @button.buttonAndHandler(_(u'save', default='Save'), name='save')
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
-            errorMessage = '<ul>'
-            for error in errors:
-                if errorMessage.find(error.message):
-                    errorMessage += '<li>' + error.message + '</li>'
-            errorMessage += '</ul>'
-            self.status = errorMessage
-            return None
+            return
 
-        elif self.is_api_supported_transition(data.pop('transition')):
-            intids = getUtility(IIntIds)
-            data['relatedItems'] = [
-                intids.getId(item) for item in data['relatedItems']]
-            wftool = api.portal.get_tool('portal_workflow')
-            wftool.doActionFor(self.context, self.transition,
-                               comment=data.get('text'), **data)
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
+        intids = getUtility(IIntIds)
+        data['relatedItems'] = [
+            intids.getId(item) for item in data['relatedItems']]
+        wftool = api.portal.get_tool('portal_workflow')
+        wftool.doActionFor(self.context, self.transition,
+                           comment=data.get('text'), **data)
 
-        else:
-            new_response = Response(data.get('text'))
-            # define responseTyp
-            responseCreator = new_response.creator
-            task = aq_inner(self.context)
-            transition = data['transition']
+        return self.redirect()
 
-            if responseCreator == '(anonymous)':
-                new_response.type = 'additional'
-            if responseCreator == task.Creator():
-                new_response.type = 'clarification'
-
-            new_response.transition = self.transition
-
-            # save relatedItems on task
-            related_ids = []
-            if getattr(task, 'relatedItems'):
-                related_ids = [item.to_id for item in task.relatedItems]
-
-            relatedItems = data.get('relatedItems') or []
-            intids = getUtility(IIntIds)
-            for item in relatedItems:
-                to_id = intids.getId(item)
-                # relation allready exists
-                item._v__is_relation = True
-                if to_id not in related_ids:
-                    if getattr(task, 'relatedItems'):
-                        task.relatedItems.append(RelationValue(to_id))
-                    else:
-                        setattr(task, 'relatedItems', [RelationValue(to_id)])
-
-                new_response.add_change('relatedItems',
-                                        _(u'label_related_items',
-                                          default=u"Related Items"),
-                                        '',
-                                        linked(item, item.Title()))
-
-            container = IResponseContainer(self.context)
-            container.add(new_response)
-
-            # change workflow state of task
-            wftool = getToolByName(self.context, 'portal_workflow')
-            before = wftool.getInfoFor(self.context, 'review_state')
-            if transition != before:
-                before = wftool.getTitleForStateOnType(before, task.Type())
-                wftool.doActionFor(self.context, transition)
-                after = wftool.getInfoFor(self.context, 'review_state')
-                after = wftool.getTitleForStateOnType(after, task.Type())
-                new_response.add_change('review_state', _(u'Issue state'),
-                                        before, after)
-
-            reminder_option = data.get('reminder_option')
-            if reminder_option:
-                TaskReminder().set_reminder(
-                    self.context, TASK_REMINDER_OPTIONS.get(reminder_option))
-
-            notify(ObjectModifiedEvent(self.context))
-
-            self.record_activity(new_response)
-
-            sync_task_response(self.context, self.request, 'workflow',
-                               transition, data.get('text'))
-
-            self.redirect()
-            return new_response
-
-    @button.buttonAndHandler(_(u'cancel', default='Cancel'),
-                             name='cancel', )
+    @button.buttonAndHandler(_(u'cancel', default='Cancel'), name='cancel', )
     def handleCancel(self, action):
         return self.request.RESPONSE.redirect('.')
 
@@ -398,9 +313,6 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
         return get_current_org_unit() in units
-
-    def record_activity(self, response):
-        TaskTransitionActivity(self.context, self.context.REQUEST, response).record()
 
 
 class TaskTransitionResponseAddFormView(layout.FormWrapper):
