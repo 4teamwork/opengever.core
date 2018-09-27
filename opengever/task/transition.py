@@ -93,6 +93,8 @@ class DefaultTransitionExtender(TransitionExtender):
             self.context, transition=transition, text=kwargs.get('text'))
 
         self.save_related_items(response, kwargs.get('relatedItems'))
+        sync_task_response(self.context, getRequest(), 'workflow',
+                           transition, kwargs.get('text'))
 
     def save_related_items(self, response, related_items):
         if not related_items:
@@ -122,6 +124,9 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
             self.context, transition=transition, text=kwargs.get('text'))
 
         self.save_related_items(response, kwargs.get('relatedItems'))
+        sync_task_response(self.context, getRequest(), 'workflow',
+                           transition, kwargs.get('text'))
+
 
 
 @implementer(ITransitionExtender)
@@ -146,6 +151,8 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
             self.context, transition=transition, text=kwargs.get('text'))
 
         self.save_related_items(response, kwargs.get('relatedItems'))
+        sync_task_response(self.context, getRequest(), 'workflow',
+                           transition, kwargs.get('text'))
 
 
 @implementer(ITransitionExtender)
@@ -159,6 +166,8 @@ class CloseTransitionExtender(DefaultTransitionExtender):
             self.context, transition=transition, text=kwargs.get('text'))
 
         self.save_related_items(response, kwargs.get('relatedItems'))
+        sync_task_response(self.context, getRequest(), 'workflow',
+                           transition, kwargs.get('text'))
 
 
 @implementer(ITransitionExtender)
