@@ -220,6 +220,9 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
     def update(self):
         super(TaskTransitionResponseAddForm, self).update()
+        if api.user.is_anonymous():
+            # Traversing request from relation widget
+            return ''
 
         disable_edit_bar()
 
