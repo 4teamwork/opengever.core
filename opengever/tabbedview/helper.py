@@ -203,9 +203,7 @@ def linked_document(item, value):
 
 
 def linked_version_preview(item, value):
-    url = "{}/@@bumblebee-overlay-listing?version_id={}".format(
-        item.url, item.version)
-
+    url = item._bumblebee_url
     showroom_title = translate(
         _('label_showroom_version_title',
             default='Version ${version} of ${timestamp}',
