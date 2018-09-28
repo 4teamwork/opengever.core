@@ -13,7 +13,7 @@ class MergeDocxProtocol(BrowserView):
     def url_for(cls, meeting, overwrite=False):
         dossier = meeting.get_dossier()
 
-        url = '{}/@@merge_docx_protocol?meeting-id={};overwrite={}'.format(
+        url = '{}/@@merge_docx_protocol?meeting-id={}&overwrite={}'.format(
             dossier.absolute_url(), meeting.meeting_id, overwrite)
         return addTokenToUrl(url)
 
