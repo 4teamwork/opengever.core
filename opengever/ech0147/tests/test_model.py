@@ -124,10 +124,8 @@ class TestDossierModel(IntegrationTestCase):
         self.assertItemsEqual(expected_mails + expected_documents, [d.obj for d in dossier.documents])
 
     def test_documents_without_a_file_are_skipped(self):
-        self.document.file = None
         dossier = Dossier(self.dossier, u'files')
-
-        self.assertNotIn(self.document, [d.obj for d in dossier.documents])
+        self.assertNotIn(self.empty_document, [d.obj for d in dossier.documents])
 
     def test_dossier_contains_subdossiers(self):
         dossier = Dossier(self.dossier, u'files')

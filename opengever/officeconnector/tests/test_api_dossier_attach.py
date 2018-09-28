@@ -16,11 +16,8 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_attach_to_email_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_attach_oc_url(browser, self.document)
-
+            oc_url = self.fetch_document_attach_oc_url(browser, self.empty_document)
             self.assertIsNone(oc_url)
 
     @browsing
@@ -346,14 +343,8 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     @browsing
     def test_checkout_checkin_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_checkout_oc_url(
-                browser,
-                self.document,
-                )
-
+            oc_url = self.fetch_document_checkout_oc_url(browser, self.empty_document)
             self.assertIsNone(oc_url)
 
     @browsing

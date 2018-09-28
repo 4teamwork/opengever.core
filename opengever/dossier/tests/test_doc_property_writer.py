@@ -45,11 +45,8 @@ class TestDocPropertyWriter(IntegrationTestCase):
 
     def test_has_file(self):
         self.login(self.dossier_responsible)
-
         self.assertTrue(DocPropertyWriter(self.document).has_file())
-
-        self.document.file = None
-        self.assertFalse(DocPropertyWriter(self.document).has_file())
+        self.assertFalse(DocPropertyWriter(self.empty_document).has_file())
 
     def test_document_with_gever_properties_is_updated_with_all_properties(
             self,
