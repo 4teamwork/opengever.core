@@ -125,6 +125,9 @@ msgstr "Usage"
 msgid "alphabetically"
 msgstr "Alphabétique"
 
+msgid "batch_x_items_matching_your_criteria"
+msgstr "${number} élément(s) trouvé(s)."
+
 msgid "button_download"
 msgstr "Télécharger"
 
