@@ -395,3 +395,6 @@ msgstr ""
 
 msgid "Info success"
 msgstr ""
+
+msgid "batch_x_items_matching_your_criteria"
+msgstr ""
