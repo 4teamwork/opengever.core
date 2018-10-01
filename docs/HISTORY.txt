@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix bumblebee overlay link for not yet created initial version. [phgross]
 - Only allow adding meeting templates, when meeting feature is enabled. [phgross]
 - Add TaskReminderActivity object. [elioschmutz]
 - Make paragraph templates deletable. [Rotonen]
