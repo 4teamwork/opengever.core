@@ -154,6 +154,11 @@ class VersionDataProxy(object):
             label = translate_text(_(u'label_revert', default=u'Revert'))
             return u'<span class="discreet">{}</span>'.format(label)
 
+    @property
+    def _bumblebee_url(self):
+        return "{}/@@bumblebee-overlay-listing?version_id={}".format(
+            self.url, self.version)
+
 
 class LazyHistoryMetadataProxy(object):
     """A proxy for CMFEditions `ShadowHistory` objects as returned by
@@ -298,6 +303,11 @@ class InitialVersionDataProxy(object):
             additional_classes=['standalone', 'function-download-copy'],
             viewname='download', include_token=True)
         return link
+
+    @property
+    def _bumblebee_url(self):
+        return "{}/@@bumblebee-overlay-listing".format(
+            self.url, self.version)
 
 
 class IVersionsSourceConfig(ITableSourceConfig):

@@ -193,6 +193,8 @@ class TestVersionsTabWithBubmelbeeActivated(BaseVersionsTab):
 
 class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
 
+    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+
     def setUp(self):
         super(TestVersionsTabForDocumentWithoutInitialVersion, self).setUp()
 
@@ -209,6 +211,7 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
         self.assertEquals(
             [{'Comment': 'Initial version',
               'Download copy': 'Download copy',
+              'Preview': 'Preview',
               'Revert': '',
               'Version': '0',
               'Date': 'Nov 06, 2016 12:00 AM',
@@ -227,3 +230,11 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
         self.assertEquals(
             u'Document copied from task (task closed)',
             listing.dicts()[0].get('Comment'))
+
+    @browsing
+    def test_uses_working_copy_for_bumblebee_link(self, browser):
+        browser.login().open(self.document, view='tabbedview_view-versions')
+
+        self.assertEquals(
+            'http://nohost/plone/document-1/@@bumblebee-overlay-listing',
+            browser.find_link_by_text('Preview').get('href'))

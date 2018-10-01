@@ -5,6 +5,7 @@ Changelog
 2018.4.6 (unreleased)
 ---------------------
 
+- Fix bumblebee overlay link for not yet created initial version. [phgross]
 - Only allow adding meeting templates, when meeting feature is enabled. [phgross]
 - Ignore Tika exceptions during indexing in Solr. [buchi]
 
