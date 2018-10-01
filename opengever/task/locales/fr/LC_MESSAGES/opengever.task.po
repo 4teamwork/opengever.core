@@ -841,7 +841,7 @@ msgstr "Tâche annulée"
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
-msgstr "Täche fermée"
+msgstr "Tâche fermée"
 
 #. Default: "Created by ${user}"
 #: ./opengever/task/viewlets/response.py

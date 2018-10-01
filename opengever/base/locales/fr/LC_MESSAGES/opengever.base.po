@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-27 09:31+0000\n"
+"POT-Creation-Date: 2018-10-01 07:46+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -304,7 +304,7 @@ msgstr "Aucune valeur"
 #. Default: "Overview"
 #: ./opengever/base/viewlets/favorites_menu.py
 msgid "label_overview"
-msgstr "Apperçu"
+msgstr "Aperçu"
 
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py
