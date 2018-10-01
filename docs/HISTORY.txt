@@ -5,7 +5,7 @@ Changelog
 2018.4.6 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Only allow adding meeting templates, when meeting feature is enabled. [phgross]
 
 
 2018.4.5 (2018-09-24)
