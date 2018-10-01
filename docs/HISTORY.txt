@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Only allow adding meeting templates, when meeting feature is enabled. [phgross]
+- Ignore Tika exceptions during indexing in Solr. [buchi]
 
 
 2018.4.5 (2018-09-24)
