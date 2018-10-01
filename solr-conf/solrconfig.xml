@@ -803,6 +803,7 @@
       <str name="lowernames">false</str>
       <str name="xpath">/xhtml:html/xhtml:body//text()</str>
       <str name="fmap.content">SearchableText</str>
+      <bool name="ignoreTikaException">true</bool>
       <str name="uprefix">ignored_</str>
     </lst>
   </requestHandler>
