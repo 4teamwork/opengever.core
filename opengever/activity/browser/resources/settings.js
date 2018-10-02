@@ -73,7 +73,11 @@
          tabTitle: this.getDataAttribute('tab-title-reminders'),
          activities: this.filterActivitiesByType(values, 'reminder')},
       ];
-
+      if (this.getDataAttribute('show-disposition') == 'True'){
+        tabs.push({tabId: 'dispositions',
+           tabTitle: this.getDataAttribute('tab-title-dispositions'),
+           activities: this.filterActivitiesByType(values, 'disposition')});
+        }
       return this.template({
         tabs: tabs,
         translations: data.translations,

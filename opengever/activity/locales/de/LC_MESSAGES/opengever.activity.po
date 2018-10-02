@@ -62,6 +62,36 @@ msgstr "Gremien-Verantwortlicher"
 msgid "created"
 msgstr "Erstellt"
 
+#. Default: "Disposition added"
+#: ./opengever/activity/__init__.py
+msgid "disposition-added"
+msgstr "Angebot hinzugefügt"
+
+#. Default: "Disposition appraised"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-appraise"
+msgstr "Bewertung finalisiert"
+
+#. Default: "Disposition archived"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-archive"
+msgstr "Archivierung bestätigt"
+
+#. Default: "Disposition closed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-close"
+msgstr "Angebot abgeschlossen"
+
+#. Default: "Disposition disposed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-dispose"
+msgstr "Zur Archivierung angeboten"
+
+#. Default: "Disposition refused"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-refuse"
+msgstr "Angebot abgelehnt"
+
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
@@ -121,6 +151,11 @@ msgstr "Tageszusammenfassung"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
 msgstr "Details:"
+
+#. Default: "Dispositions"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dispositions"
+msgstr "Aussonderung"
 
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py

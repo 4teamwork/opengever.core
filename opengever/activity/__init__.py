@@ -141,6 +141,24 @@ ACTIVITY_TRANSLATIONS = {
     'submitted-proposal-commented': _(
         'submitted-proposal-commented',
         default=u'Submitted proposal commented'),
+    'disposition-added': _(
+        'disposition-added',
+        default=u'Disposition added'),
+    'disposition-transition-appraise': _(
+        'disposition-transition-appraise',
+        default=u'Disposition appraised'),
+    'disposition-transition-archive': _(
+        'disposition-transition-archive',
+        default=u'Disposition archived'),
+    'disposition-transition-dispose': _(
+        'disposition-transition-dispose',
+        default=u'Disposition disposed'),
+    'disposition-transition-refuse': _(
+        'disposition-transition-refuse',
+        default=u'Disposition refused'),
+    'disposition-transition-close': _(
+        'disposition-transition-close',
+        default=u'Disposition closed'),
 }
 
 # TODO: There are too many places where the activites are defined:
@@ -171,5 +189,11 @@ ACTIVITIES_ICONS = {
     'proposal-commented': 'commented',
     'proposal-attachment-updated': 'documentUpdated',
     'proposal-additional-documents-submitted': 'documentAdded',
-    'task-reminder': 'taskReminder'
+    'task-reminder': 'taskReminder',
+    'disposition-added': 'created',
+    'disposition-transition-appraise': 'dispositionAppraised',
+    'disposition-transition-archive': 'dispositionArchived',
+    'disposition-transition-dispose': 'dispositionDisposed',
+    'disposition-transition-refuse': 'dispositionRefused',
+    'disposition-transition-close': 'dispositionClosed',
 }

@@ -5,6 +5,8 @@ from opengever.activity import notification_center
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
+from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
+from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -75,6 +77,17 @@ ACTIVITY_GROUPS = [
      'activities': [
          'task-reminder',
      ]},
+
+    {'id': 'disposition',
+     'roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE],
+     'activities': [
+         'disposition-added',
+         'disposition-transition-appraise',
+         'disposition-transition-archive',
+         'disposition-transition-close',
+         'disposition-transition-dispose',
+         'disposition-transition-refuse',
+     ]},
 ]
 
 
@@ -96,6 +109,10 @@ ALIASES = {
     'task-transition-rejected-skipped': (
         'task-transition-rejected-skipped',
         'task-transition-planned-skipped',
+    ),
+    'disposition-transition-close': (
+        'disposition-transition-close',
+        'disposition-transition-appraised-to-closed',
     )
 }
 
@@ -279,3 +296,9 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_reminders(self):
         return _('label_reminders', default=u'Reminders')
+
+    def tab_title_dispositions(self):
+        return _('label_dispositions', default=u'Dispositions')
+
+    def show_disposition_tab(self):
+        return api.user.has_permission('opengever.disposition: Add disposition')

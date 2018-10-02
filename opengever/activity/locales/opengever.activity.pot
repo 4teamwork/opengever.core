@@ -62,6 +62,36 @@ msgstr ""
 msgid "created"
 msgstr ""
 
+#. Default: "Disposition added"
+#: ./opengever/activity/__init__.py
+msgid "disposition-added"
+msgstr ""
+
+#. Default: "Disposition appraised"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-appraise"
+msgstr ""
+
+#. Default: "Disposition archived"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-archive"
+msgstr ""
+
+#. Default: "Disposition closed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-close"
+msgstr ""
+
+#. Default: "Disposition disposed"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-dispose"
+msgstr ""
+
+#. Default: "Disposition refused"
+#: ./opengever/activity/__init__.py
+msgid "disposition-transition-refuse"
+msgstr ""
+
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
@@ -120,6 +150,11 @@ msgstr ""
 #. Default: "Details:"
 #: ./opengever/activity/templates/notification.pt
 msgid "label_details"
+msgstr ""
+
+#. Default: "Dispositions"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dispositions"
 msgstr ""
 
 #. Default: "Forwardings"

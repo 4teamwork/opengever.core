@@ -107,6 +107,13 @@
     &.documentUpdated:before { content: $updateDocument; }
     &.documentAdded:before { content: $addDocument; }
     &.taskReminder:before { font-family: 'Font Awesome 5 Free'; content: fa-content($fa-var-clock); }
+    &.dispositionAdded:before { content: $created; }
+    &.dispositionAppraised:before { font-family: 'Font Awesome 5 Free';  content: fa-content($appraise); }
+    &.dispositionDisposed:before { font-family: 'Font Awesome 5 Free';  content: fa-content($dispose); }
+    &.dispositionArchived:before { font-family: 'Font Awesome 5 Free';  content: fa-content($archive); }
+    &.dispositionClosed:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-close); }
+    &.dispositionRefused:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-refuse); }
+
   }
 
   .action {
