@@ -28,10 +28,13 @@ class TestClosingForInformationTask(IntegrationTestCase):
             view=u'close-task-wizard-remote_close',
         )
         self.assertEquals('OK', browser.contents)
-        self.assertEquals('task-state-tested-and-closed', api.content.get_state(self.info_task))
+
+        self.assertEquals('task-state-tested-and-closed',
+                          api.content.get_state(self.info_task))
         response = IResponseContainer(self.info_task)[-1]
-        self.assertEquals(u'Danke sch\xf6n'.encode('utf-8'), response.text)
-        self.assertEquals('task-transition-open-tested-and-closed', response.transition)
+        self.assertEquals(u'Danke sch\xf6n', response.text)
+        self.assertEquals('task-transition-open-tested-and-closed',
+                          response.transition)
 
     @browsing
     def test_ignores_conflict_retries(self, browser):

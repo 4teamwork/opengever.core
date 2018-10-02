@@ -1,10 +1,9 @@
 from collective.elephantvocabulary import wrap_vocabulary
-from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
-from opengever.task import _
 from opengever.task.activities import TaskTransitionActivity
 from persistent.list import PersistentList
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.relationfield import RelationValue
@@ -147,29 +146,11 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
 
 
 def change_task_workflow_state(task, transition, **kwargs):
-    """Changes the workflow state of the task by executing a transition
-    and adding a response. The keyword args are passed to
-    add_simple_response, allowing to add additional information on the
-    created response.
+    """Changes the workflow state of the task.
     """
 
-    wftool = getToolByName(task, 'portal_workflow')
-
-    before = wftool.getInfoFor(task, 'review_state')
-    before = wftool.getTitleForStateOnType(before, task.Type())
-
-    response = add_simple_response(task, transition=transition, **kwargs)
-
-    wftool.doActionFor(task, transition)
-    TaskSqlSyncer(task, None).sync()
-
-    after = wftool.getInfoFor(task, 'review_state')
-    after = wftool.getTitleForStateOnType(after, task.Type())
-
-    response.add_change('review_state', _(u'Issue state'),
-                        before, after)
-    response.transition = transition
-    return response
+    wftool = api.portal.get_tool('portal_workflow')
+    wftool.doActionFor(task, transition, **kwargs)
 
 
 def get_documents_of_task(task, include_mails=False):
