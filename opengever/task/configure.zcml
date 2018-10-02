@@ -230,6 +230,11 @@
       />
 
   <adapter
+      factory=".transition.ResolveTransitionExtender"
+      name="task-transition-open-resolved"
+      />
+
+  <adapter
       factory=".transition.DefaultTransitionExtender"
       name="task-transition-resolved-in-progress"
       />
