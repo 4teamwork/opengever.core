@@ -5,6 +5,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.zipexport.utils import normalize_path
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.meeting import _
+from plone.namedfile.file import NamedBlobFile
 from Products.CMFPlone.utils import safe_unicode
 from zope.annotation import IAnnotations
 from zope.component import getUtility
@@ -57,6 +58,23 @@ class MeetingZipExporter(object):
                 zip_job, document, folder, status)
 
         return self.public_id
+
+    def get_document(self, checksum):
+        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        return getUtility(IIntIds).getObject(document_job['intid'])
+
+    def receive_pdf(self, checksum, mimetype, data):
+        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        filename = u'{}.pdf'.format(document_job['title'])
+        blob_file = NamedBlobFile(
+            data=data, contentType=mimetype, filename=filename)
+
+        document_job['status'] = 'finished'
+        document_job['blob'] = blob_file
+
+    def mark_as_skipped(self, checksum):
+        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        document_job['status'] = 'skipped'
 
     def _prepare_zip_job_metadata(self):
         zip_job = OOBTree()

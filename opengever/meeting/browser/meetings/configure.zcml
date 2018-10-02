@@ -113,4 +113,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="receive_meeting_zip_pdf"
+      class=".zipexport_callback.ReceiveZipPdf"
+      permission="zope.Public"
+      />
+
 </configure>
