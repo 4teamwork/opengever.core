@@ -128,26 +128,6 @@
     <permission value="opengever.document: Checkout" />
   </action>
 
-  <action
-      action_id="checkout_edit_document"
-      visible="True"
-      title="Checkout and edit"
-      url_expr="string:${object_url}/@@checkout_documents?mode=external&amp;_authenticator=${object/@@authenticator/token}"
-      condition_expr="python:path('object/@@checkout_control').is_checkout_allowed() and context.file != None"
-      category="object">
-    <permission value="opengever.document: Checkout" />
-  </action>
-
-  <action
-      action_id="cancel_document_checkout"
-      visible="True"
-      title="Cancel Checkout"
-      url_expr="string:${object_url}/@@cancel_document_checkouts?_authenticator=${object/@@authenticator/token}"
-      condition_expr="python:path('object/@@checkout_control').is_cancel_allowed()"
-      category="object">
-    <permission value="opengever.document: Cancel" />
-  </action>
-
   <!-- Menu Actions -->
   <action
       title="Fill meeting template"
