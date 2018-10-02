@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
@@ -9,7 +8,6 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import set_preferred_language
 from opengever.testing.helpers import localized_datetime
 from StringIO import StringIO
-import cgi
 import json
 
 
@@ -104,21 +102,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.assertIn(
             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
             zip_file.namelist())
-
-    @browsing
-    def test_zip_export_link_on_meeting_view(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting)
-        editbar.menu_option('Actions', 'Export as Zip').click()
-
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-
-        self.assertIsNone(zip_file.testzip(),
-                          'Got a invalid zip file.')
-        self.assertEquals(
-            '9. Sitzung der Rechnungsprufungskommission.zip',
-            cgi.parse_header(browser.headers['content-disposition'])[1]['filename'],
-            'Wrong zip filename.')
 
     @browsing
     def test_meeting_can_be_exported_to_zip_when_proposal_related_to_mail(self, browser):

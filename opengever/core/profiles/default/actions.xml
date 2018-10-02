@@ -610,9 +610,9 @@
     <object name="export-meeting-zip" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Export as Zip</property>
       <property name="description" i18n:translate="" />
-      <property name="url_expr">string:${object_url}/export-meeting-zip</property>
+      <property name="url_expr">string:${object_url}/demand_meeting_zip</property>
       <property name="icon_expr" />
-      <property name="available_expr">here/@@export-meeting-zip/visible_in_actions_menu|nothing</property>
+      <property name="available_expr">here/@@demand_meeting_zip/visible_in_actions_menu|nothing</property>
       <property name="permissions">
         <element value="View" />
       </property>

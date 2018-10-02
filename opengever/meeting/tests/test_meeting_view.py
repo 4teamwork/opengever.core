@@ -185,14 +185,10 @@ class TestMeetingView(IntegrationTestCase):
             view.get_closing_infos())
 
     @browsing
-    def test_zip_export_action_is_available_for_committee_member(self, browser):
+    def test_zip_export_is_available_for_committee_member(self, browser):
         self.login(self.meeting_user, browser=browser)
-        browser.open(self.meeting)
+        browser.open(self.meeting, view='export-meeting-zip')
 
-        self.assertIn('Export as Zip',
-                      browser.css('#contentActionMenus a').text)
-
-        browser.click_on('Export as Zip')
         self.assertEquals('application/zip', browser.headers.get('content-type'))
         self.assertEquals(
             'inline; filename="9. Sitzung der Rechnungsprufungskommission.zip"',

@@ -56,6 +56,14 @@ class DemandMeetingZip(BrowserView):
             resource_filename('opengever.meeting.browser.meetings',
                               'templates/demand_zip.html'))
 
+    def visible_in_actions_menu(self):
+        """Returns ``True`` when the zip export action should be displayed
+        in the actions menu.
+
+        The action should only appear when we are on a meeting view..
+        """
+        return IMeetingWrapper.providedBy(self.context)
+
     def get_zip_export_title(self):
         return _(u'title_zip_export',
                  default=u'Zip export: ${title}',
@@ -144,14 +152,6 @@ class MeetingZipExport(BrowserView):
     def __call__(self):
         # Download zip file
         return self.generate_zip()
-
-    def visible_in_actions_menu(self):
-        """Returns ``True`` when the zip export action should be displayed
-        in the actions menu.
-
-        The action should only appear when we are on a meeting view..
-        """
-        return IMeetingWrapper.providedBy(self.context)
 
     def generate_zip(self):
         response = self.request.response
