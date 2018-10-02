@@ -120,4 +120,12 @@
       permission="zope.Public"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="demand_meeting_zip"
+      class=".zipexport.DemandMeetingZip"
+      permission="zope2.View"
+      template="templates/demand_zip.pt"
+      />
+
 </configure>

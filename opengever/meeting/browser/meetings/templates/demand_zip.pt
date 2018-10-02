@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="opengever.meeting"
+      metal:use-macro="context/main_template/macros/master">
+
+  <div id="content-core" metal:fill-slot="main">
+
+    <div id="watermark-header">
+      <h1 class="documentFirstHeading" tal:content="view/get_zip_export_title"></h1>
+    </div>
+
+    <div class="meetingZipDownload">
+
+      <span tal:replace="structure view/vuejs_template">
+      </span>
+      <span id="meeting-zip-export-vue-app"
+           tal:attributes="data-portalurl here/portal_url;
+                           data-i18n view/translations;
+                           data-authtoken context/@@authenticator/token;
+                           data-pollurl view/poll_url;
+                           data-downloadurl view/download_url;
+                           data-meetingurl view/meeting_url;">
+      </span>
+
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.meeting/zip_export_app.js" />
+
+      <hr />
+
+      <div class="zipDownloadOriginalFiles">
+        <div i18n:translate="msg_download_original_files">
+            Download original files rather than PDF files.
+        </div>
+        <div class="discreet" i18n:translate="desc_download_original_files">
+            If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app.
+        </div>
+        <div>
+          <a tal:attributes="href view/zip_export_url;" i18n:translate="label_download_zip_original_files">Download Zip of original files
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</html>
