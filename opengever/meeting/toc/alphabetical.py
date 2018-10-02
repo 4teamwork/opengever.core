@@ -9,6 +9,7 @@ from opengever.meeting.utils import JsonDataProcessor
 from operator import itemgetter
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import false
 import pytz
 
 
@@ -67,7 +68,8 @@ class AlphabeticalToc(object):
         # relevant day for the toc
         query = query.filter(Meeting.start >= datetime_from,
                              Meeting.start < datetime_to,
-                             Meeting.committee == self.period.committee
+                             Meeting.committee == self.period.committee,
+                             AgendaItem.is_paragraph == false()
                              )
         return query
 
