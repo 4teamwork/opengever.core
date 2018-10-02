@@ -6,8 +6,6 @@ Changelog
 ---------------------
 
 - Remove leftover checkout and edit, and cancel actions for sablon and proposal templates. [njohner]
-- Fix bumblebee overlay link for not yet created initial version. [phgross]
-- Only allow adding meeting templates, when meeting feature is enabled. [phgross]
 - Add TaskReminderActivity object. [elioschmutz]
 - Make paragraph templates deletable. [Rotonen]
 - Add ReminderSetting SQL Model. [elioschmutz]
@@ -24,8 +22,6 @@ Changelog
 - Prevent replacing files on proposal templates with non-.docx files via quickupload. [Rotonen]
 - Add an upgrade step to fix broken-by-broken-protocol-excerpt journal entries on dossiers. [Rotonen]
 - Do not list documents within dossiertemplates when creating a document from template. [njohner]
-- Fix task path queries for oracle backends. [phgross]
-- Fix activity queries for oracle backends. [phgross]
 - Correct width of subdossier table in dossier details pdf. [njohner]
 - Do not set document date during check-in or cancel. [njohner]
 - Disallow grouping tasks by the checkbox column in list views. [Rotonen]
@@ -37,9 +33,23 @@ Changelog
 - Disallow replacing the file on proposal documents with a non-.docx file. [Rotonen]
 - Disallow removing the file from proposal documents. [Rotonen]
 - Bump lxml to 4.1.1. [Rotonen]
+
+
+2018.4.6 (2018-10-01)
+---------------------
+
+- Fix bumblebee overlay link for not yet created initial version. [phgross]
+- Only allow adding meeting templates, when meeting feature is enabled. [phgross]
+- Ignore Tika exceptions during indexing in Solr. [buchi]
+
+
+2018.4.5 (2018-09-24)
+---------------------
+
+- Fix task path queries for oracle backends. [phgross]
+- Fix activity queries for oracle backends. [phgross]
 - Split search terms at non-alphanumeric characters. [buchi]
 - Bump Lucene version used in Solr to 7.3.1. [buchi]
-- Ignore Tika exceptions during indexing in Solr. [buchi]
 
 
 2018.4.4 (2018-09-17)
