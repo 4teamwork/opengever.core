@@ -128,7 +128,6 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
                            transition, kwargs.get('text'))
 
 
-
 @implementer(ITransitionExtender)
 @adapter(ITask)
 class ModifyDeadlineTransitionExtender(TransitionExtender):
@@ -180,7 +179,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
         former_responsible = ITask['responsible']
         former_responsible_client = ITask['responsible_client']
 
-        changes =(
+        changes = (
             (former_responsible, kwargs.get('responsible')),
             (former_responsible_client, kwargs.get('responsible_client')))
         response = add_simple_response(
