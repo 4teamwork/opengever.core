@@ -183,6 +183,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         ))
 
         create(Builder('agenda_item').having(
+            meeting=self.meeting2,
+            is_paragraph=True,
+            title=u'I am a paragraph'))
+
+        create(Builder('agenda_item').having(
             meeting=self.meeting_after,
             title=u'I am after period end',
             decision_number=1,
