@@ -37,12 +37,8 @@ class PollMeetingZip(BrowserView):
         if not public_id:
             raise BadRequest('must supply public_id of zip-job.')
 
-        # find committee
-        committee_model = self.model.committee
-        committee = committee_model.oguid.resolve_object()
         public_id = uuid.UUID(public_id)
-
-        exporter = MeetingZipExporter(self.model, committee, public_id=public_id)
+        exporter = MeetingZipExporter(self.model, public_id=public_id)
         status = exporter.get_status()
 
         response = self.request.response
@@ -62,12 +58,8 @@ class DownloadMeetingZip(BrowserView):
         if not public_id:
             raise BadRequest('must supply public_id of zip-job.')
 
-        # find committee
-        committee_model = self.model.committee
-        committee = committee_model.oguid.resolve_object()
         public_id = uuid.UUID(public_id)
-
-        exporter = MeetingZipExporter(self.model, committee, public_id=public_id)
+        exporter = MeetingZipExporter(self.model, public_id=public_id)
 
         response = self.request.response
         with ZipGenerator() as generator:
@@ -97,9 +89,6 @@ class DemandMeetingZip(BrowserView):
         disable_edit_bar()
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        committee_model = self.model.committee
-        committee = committee_model.oguid.resolve_object()
-
         public_id = self.request.get('public_id', None)
         if public_id:
             # XXX validate id
@@ -107,7 +96,7 @@ class DemandMeetingZip(BrowserView):
             return super(DemandMeetingZip, self).__call__()
 
         else:
-            public_id = MeetingZipExporter(self.model, committee).demand_pdfs()
+            public_id = MeetingZipExporter(self.model).demand_pdfs()
             self.public_id = str(public_id)
             url = "{}/@@demand_meeting_zip?public_id={}".format(
                 self.context.absolute_url(), self.public_id)

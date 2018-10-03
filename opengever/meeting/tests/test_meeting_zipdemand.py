@@ -12,7 +12,7 @@ class TestPollMeetingZip(IntegrationTestCase):
     def test_zip_polling_view_reports_converting(self, browser):
         self.login(self.meeting_user, browser)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, None, 'converting')
@@ -28,7 +28,7 @@ class TestPollMeetingZip(IntegrationTestCase):
     def test_zip_polling_view_reports_finished(self, browser):
         self.login(self.meeting_user, browser)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, None, 'finished')
@@ -44,7 +44,7 @@ class TestPollMeetingZip(IntegrationTestCase):
     def test_zip_polling_view_reports_skipped(self, browser):
         self.login(self.meeting_user, browser)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, None, 'skipped')
@@ -65,7 +65,7 @@ class TestDownloadMeetingZip(IntegrationTestCase):
     def test_download_meeting_zip(self, browser):
         self.login(self.meeting_user, browser)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, None, 'converting')

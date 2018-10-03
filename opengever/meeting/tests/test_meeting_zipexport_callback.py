@@ -24,7 +24,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         # don't login in browser as the view is public
         self.login(self.meeting_user)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
             zip_job, self.document, None, 'converting')
@@ -54,7 +54,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         # don't login in browser as the view is public
         self.login(self.meeting_user)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
             zip_job, self.document, None, 'converting')
@@ -80,7 +80,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         # don't login in browser as the view is public
         self.login(self.meeting_user)
 
-        exporter = MeetingZipExporter(self.meeting, self.committee)
+        exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
             zip_job, self.document, None, 'converting')

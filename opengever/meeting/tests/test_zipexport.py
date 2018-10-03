@@ -17,7 +17,7 @@ class TestZipExporter(IntegrationTestCase):
     def test_zipexport_prepares_annotations_of_committee(self):
         self.login(self.meeting_user)
 
-        zipexport.MeetingZipExporter(self.meeting.model, self.committee)
+        zipexport.MeetingZipExporter(self.meeting.model)
 
         annotations = IAnnotations(self.committee)
         self.assertIn(zipexport.ZIP_JOBS_KEY, annotations)
@@ -27,8 +27,7 @@ class TestZipExporter(IntegrationTestCase):
         self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.schedule_ad_hoc(self.meeting, 'ad-hoc agenda item')
 
-        exporter = zipexport.MeetingZipExporter(
-            self.meeting.model, self.committee)
+        exporter = zipexport.MeetingZipExporter(self.meeting.model)
 
         self.assertEqual(3, len(exporter._collect_meeting_documents()))
 
@@ -38,8 +37,7 @@ class TestZipExporter(IntegrationTestCase):
         self.schedule_ad_hoc(self.meeting, 'ad-hoc agenda item')
         reset_queue()
 
-        exporter = zipexport.MeetingZipExporter(
-            self.meeting.model, self.committee)
+        exporter = zipexport.MeetingZipExporter(self.meeting.model)
         public_id = exporter.demand_pdfs()
         queue = get_queue()
         self.assertEqual(3, len(queue.queue))
@@ -78,14 +76,13 @@ class TestZipExporter(IntegrationTestCase):
         annotations = IAnnotations(self.committee)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            exporter = MeetingZipExporter(self.meeting.model, self.committee)
+            exporter = MeetingZipExporter(self.meeting.model)
             old_public_id = exporter.demand_pdfs()
         zip_jobs = annotations[zipexport.ZIP_JOBS_KEY]
         old_zip_job = zip_jobs[old_public_id]
 
         with freeze(datetime(2017, 10, 18, 1, 0, tzinfo=pytz.utc)):
-            new_exporter = MeetingZipExporter(self.meeting.model,
-                                              self.committee)
+            new_exporter = MeetingZipExporter(self.meeting.model)
             new_public_id = new_exporter.demand_pdfs()
         new_zip_job = zip_jobs[new_public_id]
 

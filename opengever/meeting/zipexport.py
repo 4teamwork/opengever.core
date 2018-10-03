@@ -27,9 +27,9 @@ class MeetingZipExporter(object):
     if no pdf can be supplied or pdf conversion was skipped/erroneous.
     """
 
-    def __init__(self, meeting, committee, opaque_id=None, public_id=None):
+    def __init__(self, meeting, opaque_id=None, public_id=None):
         self.meeting = meeting
-        self.committee = committee
+        self.committee = meeting.committee.oguid.resolve_object()
 
         # prepare annotations of committee
         annotations = IAnnotations(self.committee)

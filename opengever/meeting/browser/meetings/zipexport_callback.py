@@ -38,7 +38,7 @@ class ReceiveZipPdf(BaseDemandCallbackView):
     def get_exporter(self):
         if not hasattr(self, '_exporter'):
             self._exporter = MeetingZipExporter(
-                self.model, self.committee, opaque_id=self.get_opaque_id())
+                self.model, opaque_id=self.get_opaque_id())
         return self._exporter
 
     def get_opaque_id(self):
