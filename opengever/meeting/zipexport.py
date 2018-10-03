@@ -33,6 +33,13 @@ def get_document_filename_for_zip(document, agenda_item_number):
         os.path.splitext(document.get_file().filename)[1]))
 
 
+def format_modified(modified):
+    return safe_unicode(
+        get_localzone().localize(
+            modified.asdatetime().replace(tzinfo=None)
+        ).isoformat())
+
+
 class MeetingJSON(object):
     """Represents a JSON file with which grimlock can import the meeting."""
 
@@ -41,7 +48,7 @@ class MeetingJSON(object):
             'opengever_id': meeting.meeting_id,
             'title': safe_unicode(meeting.title),
             'start': safe_unicode(meeting.start.isoformat()),
-            'end': safe_unicode(meeting.end and meeting.end.isoformat() or ''),
+            'end': safe_unicode(meeting.end.isoformat() if meeting.end else ''),
             'location': safe_unicode(meeting.location),
             'committee': {
                 'oguid': safe_unicode(meeting.committee.oguid.id),
@@ -53,15 +60,10 @@ class MeetingJSON(object):
             document = meeting.protocol_document.resolve_document()
             self.data.update({
                 'protocol': {
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
+                    'checksum': IBumblebeeDocument(document).get_checksum(),
                     'file': normalize_path(safe_unicode('{}.docx'.format(
                         document.Title()))),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
+                    'modified': format_modified(document.modified()),
                 }
             })
 
@@ -81,28 +83,18 @@ class MeetingJSON(object):
             agenda_item_data.update({
                 'number': agenda_item.number,
                 'proposal': {
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
+                    'checksum': IBumblebeeDocument(document).get_checksum(),
                     'file': get_document_filename_for_zip(document, agenda_item.number),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
+                    'modified': format_modified(document.modified()),
                 }
             })
 
         if agenda_item.has_submitted_documents():
             agenda_item_data.update({
                 'attachments': [{
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
+                    'checksum': IBumblebeeDocument(document).get_checksum(),
                     'file': get_document_filename_for_zip(document, agenda_item.number),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
+                    'modified': format_modified(document.modified()),
                     'title': safe_unicode(document.Title()),
                 }
                 for document in agenda_item.proposal.resolve_submitted_documents()],
