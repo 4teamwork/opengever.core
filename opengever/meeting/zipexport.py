@@ -1,4 +1,5 @@
 from BTrees.OOBTree import OOBTree
+from datetime import timedelta
 from ftw.bumblebee import get_service_v3
 from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeDocument
@@ -16,6 +17,7 @@ import uuid
 
 
 ZIP_JOBS_KEY = 'opengever.meeting.zipexporter'
+ZIP_EXPIRATION_DAYS = 2
 
 
 class MeetingZipExporter(object):
@@ -48,6 +50,8 @@ class MeetingZipExporter(object):
 
     def demand_pdfs(self):
         """Demand pdfs for all zip documents from bumlebee."""
+
+        self._cleanup_old_jobs()
 
         zip_job = self._prepare_zip_job_metadata()
         documents = self._collect_meeting_documents()
@@ -91,6 +95,25 @@ class MeetingZipExporter(object):
             if document_info['status'] == 'finished':
                 blob = document_info['blob']
                 generator.add_file(blob.filename, blob.open())
+
+    def _cleanup_old_jobs(self):
+        """Remove expired zip jobs.
+
+        The zip jobs are only kept for a relatively short amount of time as
+        they are a temporary thing.
+        """
+        to_remove = set()
+        now = utcnow_tz_aware()
+        expiration_delta = timedelta(days=ZIP_EXPIRATION_DAYS)
+
+        for zip_job in self.zip_jobs.values():
+            delta = now - zip_job['timestamp']
+            if delta > expiration_delta:
+                to_remove.add(zip_job['public_id'])
+                to_remove.add(zip_job['internal_id'])
+
+        for id_ in to_remove:
+            del self.zip_jobs[id_]
 
     def _prepare_zip_job_metadata(self):
         zip_job = OOBTree()

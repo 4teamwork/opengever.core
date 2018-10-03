@@ -1,9 +1,13 @@
+from datetime import datetime
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
+from ftw.testing import freeze
 from opengever.meeting import zipexport
+from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.testing import IntegrationTestCase
 from zope.annotation import IAnnotations
-from ftw.bumblebee.interfaces import IBumblebeeDocument
+import pytz
 
 
 class TestZipExporter(IntegrationTestCase):
@@ -68,3 +72,26 @@ class TestZipExporter(IntegrationTestCase):
              'folder': 'Agenda item 1',
              'title': u'Vertr\xe4ge'},
             doc_job)
+
+    def test_zipexport_removes_expired_jobs(self):
+        self.login(self.meeting_user)
+        annotations = IAnnotations(self.committee)
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            exporter = MeetingZipExporter(self.meeting.model, self.committee)
+            old_public_id = exporter.demand_pdfs()
+        zip_jobs = annotations[zipexport.ZIP_JOBS_KEY]
+        old_zip_job = zip_jobs[old_public_id]
+
+        with freeze(datetime(2017, 10, 18, 1, 0, tzinfo=pytz.utc)):
+            new_exporter = MeetingZipExporter(self.meeting.model,
+                                              self.committee)
+            new_public_id = new_exporter.demand_pdfs()
+        new_zip_job = zip_jobs[new_public_id]
+
+        self.assertEqual(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc),
+                         old_zip_job['timestamp'])
+        self.assertEqual(datetime(2017, 10, 18, 1, 0, tzinfo=pytz.utc),
+                         new_zip_job['timestamp'])
+        self.assertNotIn(old_public_id, zip_jobs)
+        self.assertIn(new_public_id, zip_jobs)
