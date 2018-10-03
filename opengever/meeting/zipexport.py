@@ -86,6 +86,12 @@ class MeetingZipExporter(object):
             status[document_info['status']] += 1
         return status
 
+    def zip_documents(self, generator):
+        for document_info in self.zip_jobs[self.internal_id]['documents'].values():
+            if document_info['status'] == 'finished':
+                blob = document_info['blob']
+                generator.add_file(blob.filename, blob.open())
+
     def _prepare_zip_job_metadata(self):
         zip_job = OOBTree()
         zip_job['internal_id'] = self.internal_id

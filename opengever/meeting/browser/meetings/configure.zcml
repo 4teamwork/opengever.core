@@ -135,4 +135,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="download_meeting_zip"
+      class=".zipexport.DownloadMeetingZip"
+      permission="zope2.View"
+      />
+
 </configure>

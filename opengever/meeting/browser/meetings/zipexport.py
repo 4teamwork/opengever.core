@@ -51,6 +51,41 @@ class PollMeetingZip(BrowserView):
         return json.dumps(status)
 
 
+class DownloadMeetingZip(BrowserView):
+
+    def __init__(self, context, request):
+        super(DownloadMeetingZip, self).__init__(context, request)
+        self.model = self.context.model
+
+    def __call__(self):
+        public_id = self.request.get('public_id')
+        if not public_id:
+            raise BadRequest('must supply public_id of zip-job.')
+
+        # find committee
+        committee_model = self.model.committee
+        committee = committee_model.oguid.resolve_object()
+        public_id = uuid.UUID(public_id)
+
+        exporter = MeetingZipExporter(self.model, committee, public_id=public_id)
+
+        response = self.request.response
+        with ZipGenerator() as generator:
+            exporter.zip_documents(generator)
+            zip_file = generator.generate()
+            filename = '{}.zip'.format(normalize_path(self.model.title))
+            response.setHeader(
+                'Content-Disposition',
+                'inline; filename="{0}"'.format(
+                    safe_unicode(filename).encode('utf-8')))
+            response.setHeader(
+                'Content-type', 'application/zip')
+            response.setHeader(
+                'Content-Length', os.stat(zip_file.name).st_size)
+
+            return filestream_iterator(zip_file.name, 'rb')
+
+
 class DemandMeetingZip(BrowserView):
     """Display a view where the zip can be downloaded eventually."""
 

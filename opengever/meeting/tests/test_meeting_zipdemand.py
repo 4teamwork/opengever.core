@@ -1,6 +1,7 @@
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
 from opengever.meeting.zipexport import MeetingZipExporter
+from opengever.testing import IntegrationTestCase
 
 
 class TestPollMeetingZip(IntegrationTestCase):
@@ -54,3 +55,25 @@ class TestPollMeetingZip(IntegrationTestCase):
         self.assertEqual(
             {u'converting': 0, u'finished': 0, u'skipped': 1},
             browser.json)
+
+
+class TestDownloadMeetingZip(IntegrationTestCase):
+
+    features = ('meeting', 'bumblebee')
+
+    @browsing
+    def test_download_meeting_zip(self, browser):
+        self.login(self.meeting_user, browser)
+
+        exporter = MeetingZipExporter(self.meeting, self.committee)
+        zip_job = exporter._prepare_zip_job_metadata()
+        exporter._append_document_job_metadata(
+            zip_job, self.document, None, 'converting')
+        exporter.receive_pdf(IBumblebeeDocument(self.document).get_checksum(),
+                             'application/pdf',
+                             'i am a apdf.')
+
+        browser.open(
+            self.meeting,
+            view='download_meeting_zip?public_id={}'.format(exporter.public_id))
+        self.assertEquals('application/zip', browser.contenttype)
