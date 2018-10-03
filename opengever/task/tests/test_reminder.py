@@ -151,6 +151,7 @@ class TestTaskReminder(IntegrationTestCase):
         self.subtask.responsible = self.dossier_responsible.getId()
         self.subtask.issuer = self.regular_user.getId()
         self.subtask.deadline = today + timedelta(days=1)
+        self.set_workflow_state('task-state-open', self.subtask)
 
         self.sequential_task.responsible = self.dossier_responsible.getId()
         self.sequential_task.issuer = self.regular_user.getId()
@@ -226,3 +227,38 @@ class TestTaskReminder(IntegrationTestCase):
             task_reminder.get_sql_reminder(
                 self.task,
                 user_id=self.dossier_responsible.getId()).remind_day)
+
+    def test_do_not_create_reminder_activity_if_task_is_finished(self):
+        self.login(self.administrator)
+        today = date.today()
+
+        self.task.responsible = self.dossier_responsible.getId()
+        self.task.issuer = self.regular_user.getId()
+        self.task.deadline = today
+
+        task_reminder = TaskReminder()
+
+        with self.login(self.regular_user):
+            task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
+
+        def create_reminders_for_task_in_state(task, state):
+            self.set_workflow_state(state, task)
+
+            with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
+                task_reminder.create_reminder_notifications()
+
+        create_reminders_for_task_in_state(self.task, 'task-state-tested-and-closed')
+        create_reminders_for_task_in_state(self.task, 'task-state-resolved')
+
+        task_reminder_activities = Activity.query.filter(
+            Activity.kind == TaskReminderActivity.kind)
+
+        self.assertEqual(0, task_reminder_activities.count())
+
+        # Test if it's working at all
+        create_reminders_for_task_in_state(self.task, 'task-state-open')
+
+        task_reminder_activities = Activity.query.filter(
+            Activity.kind == TaskReminderActivity.kind)
+
+        self.assertEqual(1, task_reminder_activities.count())

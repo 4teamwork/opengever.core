@@ -7,6 +7,7 @@ Changelog
 
 - Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
+- Do not add a task-reminder activity if task is finished. [elioschmutz]
 - Add restapi endpoints to add and delete task-reminders. [elioschmutz]
 - Remove leftover checkout and edit, and cancel actions for sablon and proposal templates. [njohner]
 - Do not include paragraphs in comittee table of contents. [njohner]
