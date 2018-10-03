@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-20 08:57+0000\n"
+"POT-Creation-Date: 2018-10-01 09:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -376,6 +376,11 @@ msgstr ""
 #. Default: "Task former responsible"
 #: ./opengever/activity/roles.py
 msgid "task_old_responsible"
+msgstr ""
+
+#. Default: "Watcher"
+#: ./opengever/activity/roles.py
+msgid "task_reminder_watcher_role"
 msgstr ""
 
 #. Default: "Task responsible"

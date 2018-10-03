@@ -5,7 +5,7 @@ from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
-from opengever.activity.roles import WATCHER_ROLE
+from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.model import create_session
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -52,7 +52,7 @@ DEFAULT_SETTINGS = [
     {'kind': 'task-transition-planned-skipped',
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
     {'kind': 'task-reminder',
-     'badge_notification_roles': [WATCHER_ROLE]},
+     'badge_notification_roles': [TASK_REMINDER_WATCHER_ROLE]},
     {'kind': 'forwarding-added',
      'mail_notification_roles': [TASK_RESPONSIBLE_ROLE],
      'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE]},
