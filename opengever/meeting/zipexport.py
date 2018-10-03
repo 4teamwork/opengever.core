@@ -76,6 +76,16 @@ class MeetingZipExporter(object):
         document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
         document_job['status'] = 'skipped'
 
+    def get_status(self):
+        status = {
+            'skipped': 0,
+            'finished': 0,
+            'converting': 0,
+        }
+        for document_info in self.zip_jobs[self.internal_id]['documents'].values():
+            status[document_info['status']] += 1
+        return status
+
     def _prepare_zip_job_metadata(self):
         zip_job = OOBTree()
         zip_job['internal_id'] = self.internal_id

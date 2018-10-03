@@ -15,12 +15,40 @@ from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from StringIO import StringIO
+from zExceptions import BadRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 import pytz
+import uuid
+
+
+class PollMeetingZip(BrowserView):
+    """Poll for meeting zip status, download once all files are available."""
+
+    def __init__(self, context, request):
+        super(PollMeetingZip, self).__init__(context, request)
+        self.model = self.context.model
+
+    def __call__(self):
+        public_id = self.request.get('public_id')
+        if not public_id:
+            raise BadRequest('must supply public_id of zip-job.')
+
+        # find committee
+        committee_model = self.model.committee
+        committee = committee_model.oguid.resolve_object()
+        public_id = uuid.UUID(public_id)
+
+        exporter = MeetingZipExporter(self.model, committee, public_id=public_id)
+        status = exporter.get_status()
+
+        response = self.request.response
+        response.setHeader('Content-Type', 'application/json')
+        response.setHeader('X-Theme-Disabled', 'True')
+        return json.dumps(status)
 
 
 class DemandMeetingZip(BrowserView):

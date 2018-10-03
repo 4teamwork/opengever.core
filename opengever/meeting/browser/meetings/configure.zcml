@@ -128,4 +128,11 @@
       template="templates/demand_zip.pt"
       />
 
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="poll_meeting_zip"
+      class=".zipexport.PollMeetingZip"
+      permission="zope2.View"
+      />
+
 </configure>
