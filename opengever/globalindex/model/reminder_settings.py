@@ -3,6 +3,7 @@ from opengever.base.model import Base
 from opengever.base.model import UTCDateTime
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models import USER_ID_LENGTH
+from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -35,3 +36,7 @@ class ReminderSetting(Base):
             self.actor_id,
             repr(self.task),
             self.remind_day)
+
+    def update_remind_day(self):
+        option = TASK_REMINDER_OPTIONS[self.option_type]
+        self.remind_day = option.calculate_remind_on(self.task.deadline)

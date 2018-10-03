@@ -10,7 +10,7 @@ from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
-from opengever.activity.roles import WATCHER_ROLE
+from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
 from Products.Five import BrowserView
@@ -73,7 +73,7 @@ ACTIVITY_GROUPS = [
      ]},
 
     {'id': 'reminder',
-     'roles': [WATCHER_ROLE],
+     'roles': [TASK_REMINDER_WATCHER_ROLE],
      'activities': [
          'task-reminder',
      ]},

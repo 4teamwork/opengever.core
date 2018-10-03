@@ -5,6 +5,7 @@ from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
+from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.model import Activity
 from opengever.activity.roles import TASK_ISSUER_ROLE
@@ -439,10 +440,13 @@ class TestTaskReminderActivity(IntegrationTestCase):
 
     def test_activity_attributes(self):
         self.login(self.regular_user)
-        TaskReminderActivity(self.task.get_sql_object(), self.request).record()
+        TaskReminderActivity(self.task.get_sql_object(), self.request).record(
+            self.dossier_responsible.getId())
+
         activity = Activity.query.first()
 
         self.assertEquals('task-reminder', activity.kind)
         self.assertEquals('Task reminder', activity.label)
         self.assertEquals(self.task.title, activity.title)
+        self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
         self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)

@@ -7,6 +7,7 @@ Changelog
 
 - Remove leftover checkout and edit, and cancel actions for sablon and proposal templates. [njohner]
 - Do not include paragraphs in comittee table of contents. [njohner]
+- Add TaskReminder to handle reminders in annotations and sql. [elioschmutz]
 - Add TaskReminderActivity object. [elioschmutz]
 - Make paragraph templates deletable. [Rotonen]
 - Add ReminderSetting SQL Model. [elioschmutz]

@@ -93,29 +93,10 @@ class NotificationCenter(object):
         return tuple(resource.watchers)
 
     def add_activity(self, oguid, kind, title, label, summary, actor_id, description):
-        if description is None:
-            description = {}
-
-        resource = self.fetch_resource(oguid)
-        if not resource:
-            resource = self.add_resource(oguid)
-
-        activity = Activity(resource=resource, kind=kind, actor_id=actor_id)
-
-        # language dependent attributes
-        for language, value in label.items():
-            activity.translations[language].label = value
-
-        for language, value in summary.items():
-            activity.translations[language].summary = value
-
-        for language, value in description.items():
-            activity.translations[language].description = value
-
-        for language, value in title.items():
-            activity.translations[language].title = value
-
-        self.session.add(activity)
+        """Creates an activity and the related notifications..
+        """
+        activity = self._add_activity(
+            oguid, kind, title, label, summary, actor_id, description)
 
         errors = self.create_notifications(activity)
         return {'activity': activity, 'errors': errors}
@@ -180,6 +161,35 @@ class NotificationCenter(object):
 
         query = query.join(Notification.activity)
         return query.count()
+
+    def _add_activity(self, oguid, kind, title, label, summary, actor_id, description):
+        """Creates an activity instance and add it to the database.
+        """
+        if description is None:
+            description = {}
+
+        resource = self.fetch_resource(oguid)
+        if not resource:
+            resource = self.add_resource(oguid)
+
+        activity = Activity(resource=resource, kind=kind, actor_id=actor_id)
+
+        # language dependent attributes
+        for language, value in label.items():
+            activity.translations[language].label = value
+
+        for language, value in summary.items():
+            activity.translations[language].summary = value
+
+        for language, value in description.items():
+            activity.translations[language].description = value
+
+        for language, value in title.items():
+            activity.translations[language].title = value
+
+        self.session.add(activity)
+
+        return activity
 
 
 class PloneNotificationCenter(NotificationCenter):
