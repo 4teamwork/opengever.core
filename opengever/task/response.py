@@ -12,6 +12,9 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.permissions import DEFAULT_ISSUE_MIME_TYPE
+from opengever.task.reminder import get_task_reminder_options_vocabulary
+from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import sync_task_response
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
@@ -80,6 +83,15 @@ class ITaskTransitionResponseFormSchema(Interface):
                 ),
             ),
         required=False,
+        )
+
+    reminder_option = schema.Choice(
+        title=_("label_reminder", default="Reminder"),
+        description=_("help_reminder",
+                      default="Set a reminder to get notified based on "
+                              "the duedate"),
+        source=get_task_reminder_options_vocabulary(),
+        required=False
         )
 
 
@@ -318,6 +330,11 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
                 new_response.add_change('review_state', _(u'Issue state'),
                                         before, after)
 
+            reminder_option = data.get('reminder_option')
+            if reminder_option:
+                TaskReminder().set_reminder(
+                    self.context, TASK_REMINDER_OPTIONS.get(reminder_option))
+
             notify(ObjectModifiedEvent(self.context))
 
             self.record_activity(new_response)
@@ -342,6 +359,8 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
         self.widgets['transition'].mode = HIDDEN_MODE
+        if self.transition != 'task-transition-open-in-progress':
+            self.widgets['reminder_option'].mode = HIDDEN_MODE
 
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()
