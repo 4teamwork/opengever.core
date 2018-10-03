@@ -1,11 +1,12 @@
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.interfaces import IDeadlineModifier
+from opengever.task.reminder.reminder import get_task_reminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from zExceptions import Unauthorized
-from zope.event import notify
 from zope.component import adapter
+from zope.event import notify
 from zope.interface import implementer
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -61,6 +62,7 @@ class DeadlineModifier(object):
 
         self.context.deadline = new_deadline
         notify(ObjectModifiedEvent(self.context))
+        get_task_reminder().recalculate_remind_day_for_obj(self.context)
 
     def sync_deadline(self, new_deadline, text, transition):
         sync_task_response(self.context, self.context.REQUEST, 'deadline',
