@@ -22,6 +22,7 @@ Inhalt:
    metadata.rst
    config.rst
    favorite.rst
+   reminder.rst
    recently_touched.rst
    preview.rst
    examples/index.rst

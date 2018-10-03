@@ -203,4 +203,28 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@reminder"
+      for="opengever.task.task.ITask"
+      factory=".reminder.TaskReminderPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@reminder"
+      for="opengever.task.task.ITask"
+      factory=".reminder.TaskReminderPatch"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@reminder"
+      for="opengever.task.task.ITask"
+      factory=".reminder.TaskReminderDelete"
+      permission="zope2.View"
+      />
+
 </configure>
