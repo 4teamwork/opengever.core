@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
+from opengever.meeting.zipexport import MeetingJSON
 from opengever.testing import IntegrationTestCase
 from opengever.testing import set_preferred_language
 from opengever.testing.helpers import localized_datetime
@@ -153,7 +154,8 @@ class TestMeetingZipExportView(IntegrationTestCase):
         with freeze(localized_datetime(2017, 12, 13)):
             self.schedule_ad_hoc(self.meeting, u'Ad-hoc Traktand\xfem')
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
-        data = self.meeting.get_data_for_zip_export()
+
+        data = MeetingJSON(self.meeting.model).data
         self.assertEquals({
             'agenda_items': [{
                 'opengever_id': 2,

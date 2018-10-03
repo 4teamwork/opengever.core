@@ -9,6 +9,8 @@ from opengever.meeting.command import MergeDocxProtocolCommand
 from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.interfaces import IMeetingWrapper
+from opengever.meeting.zipexport import get_document_filename_for_zip
+from opengever.meeting.zipexport import MeetingJSON
 from opengever.meeting.zipexport import MeetingZipExporter
 from pkg_resources import resource_filename
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -268,7 +270,7 @@ class MeetingZipExport(BrowserView):
             if not document:
                 continue
 
-            path = agenda_item.get_document_filename_for_zip(document)
+            path = get_document_filename_for_zip(document, agenda_item.number)
             generator.add_file(path, document.get_file().open())
 
     def add_agenda_items_attachments(self, generator):
@@ -277,7 +279,7 @@ class MeetingZipExport(BrowserView):
                 continue
 
             for document in agenda_item.proposal.resolve_submitted_documents():
-                path = agenda_item.get_document_filename_for_zip(document)
+                path = get_document_filename_for_zip(document, agenda_item.number)
                 generator.add_file(path, document.get_file().open())
 
     def get_agendaitem_list(self):
@@ -305,7 +307,7 @@ class MeetingZipExport(BrowserView):
     def get_meeting_json(self):
         json_data = {
             'version': '1.0.0',
-            'meetings': [self.context.get_data_for_zip_export()],
+            'meetings': [MeetingJSON(self.context.model).data],
         }
         return 'meeting.json', StringIO(json.dumps(json_data,
                                                    sort_keys=True,

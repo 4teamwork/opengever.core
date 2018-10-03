@@ -13,9 +13,6 @@ class MeetingWrapper(SQLWrapperBase):
 
     implements(IMeetingWrapper, ISQLLockable)
 
-    def get_data_for_zip_export(self):
-        return self.model.get_data_for_zip_export()
-
 
 class PeriodWrapper(SQLWrapperBase):
     """SQLWrapper for period objects.

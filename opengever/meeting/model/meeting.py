@@ -1,6 +1,4 @@
 from collections import OrderedDict
-from ftw.bumblebee.interfaces import IBumblebeeDocument
-from ftw.zipexport.utils import normalize_path
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
@@ -23,10 +21,8 @@ from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.ogds.models.user import User
-from operator import methodcaller
 from plone import api
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
-from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -36,7 +32,6 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
-from tzlocal import get_localzone
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -407,37 +402,6 @@ class Meeting(Base, SQLFormSupport):
             return None
 
         return api.portal.get_localized_time(datetime=date, time_only=True)
-
-    def get_data_for_zip_export(self):
-        meeting_data = {
-            'opengever_id': self.meeting_id,
-            'title': safe_unicode(self.title),
-            'start': safe_unicode(self.start.isoformat()),
-            'end': safe_unicode(self.end and self.end.isoformat() or ''),
-            'location': safe_unicode(self.location),
-            'committee': {
-                'oguid': safe_unicode(self.committee.oguid.id),
-                'title': safe_unicode(self.committee.title),
-            },
-            'agenda_items': map(methodcaller('get_data_for_zip_export'),
-                                self.agenda_items),
-        }
-        if self.has_protocol_document():
-            document = self.protocol_document.resolve_document()
-            meeting_data.update({
-                'protocol': {
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
-                    'file': normalize_path(safe_unicode('{}.docx'.format(
-                        document.Title()))),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
-                }
-            })
-        return meeting_data
 
     def schedule_proposal(self, proposal):
         assert proposal.committee == self.committee
