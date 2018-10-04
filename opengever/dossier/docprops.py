@@ -8,6 +8,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.vocabulary import voc_term_title
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
@@ -221,6 +222,9 @@ class DefaultDossierDocPropertyProvider(DocPropertyProvider):
 
     NS = ('ogg', 'dossier')
 
+    def get_external_reference(self):
+        return IDossier(self.context).external_reference
+
     def get_properties(self):
         """Return dossier properties.
 
@@ -237,6 +241,7 @@ class DefaultDossierDocPropertyProvider(DocPropertyProvider):
         self._add_property(properties, 'title', title)
         self._add_property(properties, 'reference_number', reference_number)
         self._add_property(properties, 'sequence_number', sequence_number)
+        self._add_property(properties, 'external_reference', self.get_external_reference())
 
         return properties
 

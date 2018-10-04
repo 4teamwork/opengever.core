@@ -36,6 +36,7 @@ Doc-Properties Dossier:
 - ``ogg.dossier.title`` - Titel des Dossiers, welches das Dokument enthält
 - ``ogg.dossier.reference_number`` - Aktenzeichen des Dossiers, welches das Dokument enthält
 - ``ogg.dossier.sequence_number`` - Laufnummer des Dossiers
+- ``ogg.dossier.external_reference`` - Externe Referenz, welches das Dokument enthält
 
 Doc-Properties Dokument:
 ~~~~~~~~~~~~~~~~~~~~~~~~

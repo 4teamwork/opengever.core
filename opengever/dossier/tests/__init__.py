@@ -57,6 +57,7 @@ EXPECTED_DOSSIER_PROPERTIES = {
     'ogg.dossier.title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
     'ogg.dossier.reference_number': 'Client1 1.1 / 1',
     'ogg.dossier.sequence_number': '1',
+    'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
 }
 
 
