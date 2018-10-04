@@ -115,12 +115,6 @@
   <subscriber
       for="opengever.task.task.ITask
            Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.reassign_team_tasks"
-      />
-
-  <subscriber
-      for="opengever.task.task.ITask
-           Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.cancel_subtasks"
       />
 

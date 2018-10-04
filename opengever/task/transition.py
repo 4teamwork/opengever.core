@@ -15,6 +15,7 @@ from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from plone import api
 from plone.supermodel.model import Schema
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
@@ -129,8 +130,20 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
         response = add_simple_response(
             self.context, transition=transition, text=kwargs.get('text'))
 
+        if self.context.is_team_task:
+            self.reassign_team_task(response)
+
         self.save_related_items(response, kwargs.get('relatedItems'))
         self.sync_change(transition, kwargs.get('text'), disable_sync)
+
+    def reassign_team_task(self, response):
+        old_responsible = ITask(self.context).responsible
+        ITask(self.context).responsible = api.user.get_current().getId()
+        response.add_change(
+            'responsible',
+            _(u"label_responsible", default=u"Responsible"),
+            old_responsible, ITask(self.context).responsible)
+        self.context.sync()
 
 
 @implementer(ITransitionExtender)

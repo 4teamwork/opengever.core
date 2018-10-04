@@ -85,19 +85,6 @@ def set_dates(task, event):
         task.date_of_completion = None
 
 
-def reassign_team_tasks(task, event):
-    if event.action != 'task-transition-open-in-progress':
-        return
-
-    if task.is_team_task:
-        old_responsible = ITask(task).responsible
-        ITask(task).responsible = api.user.get_current().getId()
-        IResponseContainer(task)[-1].add_change(
-            'responsible',
-            _(u"label_responsible", default=u"Responsible"),
-            old_responsible, ITask(task).responsible)
-
-
 def cancel_subtasks(task, event):
     if event.action not in ['task-transition-in-progress-cancelled',
                             'task-transition-open-cancelled']:
