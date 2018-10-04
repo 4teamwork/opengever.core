@@ -11,10 +11,6 @@ from zope.globalrequest import getRequest
 TASK_REMINDER_ANNOTATIONS_KEY = 'opengever.task.task_reminder'
 
 
-def get_task_reminder():
-    return TaskReminder()
-
-
 class TaskReminder(object):
 
     def __init__(self):
