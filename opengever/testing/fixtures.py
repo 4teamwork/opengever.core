@@ -1043,6 +1043,15 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        self.register('subsubdossier', create(
+            Builder('dossier')
+            .within(subdossier)
+            .titled(u'Subsubdossier')
+            .having(
+                keywords=(u'Subsubkeyword', u'Subsubkeyw\xf6rd'),
+                )
+            ))
+
         self.register('empty_document', create(
             Builder('document')
             .within(self.dossier)

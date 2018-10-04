@@ -75,7 +75,7 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
             view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
         )
         self.assertEqual(
-            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7|An empty dossier',
             browser.contents
         )
         self.assert_solr_called(
@@ -91,7 +91,7 @@ class TestRelatedDossierAutocomplete(IntegrationTestCase):
             view='@@edit/++widget++form.widgets.IDossier.relatedDossier/@@autocomplete-search?q=empty'
         )
         self.assertEqual(
-            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6|An empty dossier',
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7|An empty dossier',
             browser.contents
         )
 
@@ -106,7 +106,9 @@ class TestAddableDossierTemplatesAutocomplete(IntegrationTestCase):
         self.login(self.administrator, browser)
         browser.open(
             self.empty_repofolder,
-            view='@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/@@autocomplete-search?q=Bauvorhaben'
+            view=''
+            '@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/'
+            '@@autocomplete-search?q=Bauvorhaben'
         )
         self.assertEqual(
             '/plone/vorlagen/dossiertemplate-1|Bauvorhaben klein',
@@ -123,7 +125,9 @@ class TestAddableDossierTemplatesAutocomplete(IntegrationTestCase):
         self.login(self.administrator, browser)
         browser.open(
             self.empty_repofolder,
-            view='@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/@@autocomplete-search?q=Bauvorhaben'
+            view=''
+            '@@edit/++widget++form.widgets.IRestrictAddableDossierTemplates.addable_dossier_templates/'
+            '@@autocomplete-search?q=Bauvorhaben'
         )
         self.assertEqual(
             '/plone/vorlagen/dossiertemplate-1|Bauvorhaben klein',

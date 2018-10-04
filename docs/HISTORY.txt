@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
 - Remove leftover checkout and edit, and cancel actions for sablon and proposal templates. [njohner]
 - Do not include paragraphs in comittee table of contents. [njohner]

@@ -149,6 +149,8 @@ class TestDossierIndexers(IntegrationTestCase):
                 u'Finanzverwaltung',
                 u'Subkeyword',
                 u'Subkeyw\xf6rd',
+                u'Subsubkeyword',
+                u'Subsubkeyw\xf6rd',
                 u'Vertr\xe4ge',
                 u'secret',
                 u'special',
