@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-01 07:46+0000\n"
+"POT-Creation-Date: 2018-10-04 14:07+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -299,6 +299,11 @@ msgstr "Aucun document modifié récemment"
 #. Default: "None"
 #: ./opengever/base/widgets.py
 msgid "label_none"
+msgstr "Aucune valeur"
+
+#. Default: "Null"
+#: ./opengever/base/helper.py
+msgid "label_null"
 msgstr "Aucune valeur"
 
 #. Default: "Overview"

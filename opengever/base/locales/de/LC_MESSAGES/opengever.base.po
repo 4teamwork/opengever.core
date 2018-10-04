@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-01 07:46+0000\n"
+"POT-Creation-Date: 2018-10-04 14:07+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -301,6 +301,11 @@ msgstr "Keine kürzlich bearbeiteten Dokumente"
 #: ./opengever/base/widgets.py
 msgid "label_none"
 msgstr "Keine Werte"
+
+#. Default: "Null"
+#: ./opengever/base/helper.py
+msgid "label_null"
+msgstr "Kein Wert"
 
 #. Default: "Overview"
 #: ./opengever/base/viewlets/favorites_menu.py
