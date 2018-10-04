@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting.browser.documents.proposalstab import ProposalListingTab
@@ -7,7 +5,6 @@ from opengever.meeting.model import Proposal
 from opengever.meeting.tabs.meetinglisting import MeetingListingTab
 from opengever.meeting.tabs.membershiplisting import MembershipListingTab
 from opengever.tabbedview import SqlTableSource
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
@@ -19,16 +16,7 @@ class Meetings(MeetingListingTab):
 
 
 class Memberships(MembershipListingTab):
-
-    selection = ViewPageTemplateFile("templates/no_selection.pt")
-
-    sort_on = 'member_id'
-
-    enabled_actions = []
-    major_actions = []
-
-    def get_member_link(self, item, value):
-        return item.member.get_link(aq_parent(aq_inner(self.context)))
+    pass
 
 
 class ISubmittedProposalTableSourceConfig(ITableSourceConfig):
