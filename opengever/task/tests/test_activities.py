@@ -433,7 +433,7 @@ class TestSuccesssorHandling(FunctionalTestCase):
 
     def test_when_accepting_task_with_successor_responsible_watcher_gets_moved_from_predecessor_to_successsor(self):
         successor = accept_task_with_successor(
-            self.dossier, self.predecessor.oguid.id, 'Ok.')
+            self.dossier, self.predecessor.oguid.id, u'Ok.')
 
         predecessor_resource = self.center.fetch_resource(self.predecessor)
         successor_resource = self.center.fetch_resource(successor)

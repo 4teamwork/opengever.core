@@ -19,6 +19,7 @@ from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
 from plone.dexterity.utils import createContentInContainer
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -311,7 +312,7 @@ class AcceptTaskWorkflowTransitionView(BrowserView):
         if self.is_already_accepted():
             return ok_response()
 
-        text = self.request.get('text')
+        text = safe_unicode(self.request.get('text'))
         successor_oguid = self.request.get('successor_oguid')
 
         center = notification_center()
