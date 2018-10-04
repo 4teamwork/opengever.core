@@ -1,7 +1,7 @@
 from opengever.base.security import elevated_privileges
 from opengever.task import _
 from opengever.task.localroles import LocalRolesSetter
-from opengever.task.reminder.reminder import get_task_reminder
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
@@ -80,7 +80,7 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
             # XXX: should be handled as a general transition-after job.
             LocalRolesSetter(self.context).revoke_roles()
 
-            get_task_reminder().clear_reminder(task, task.responsible)
+            TaskReminder().clear_reminder(task, task.responsible)
 
             task.responsible_client = responsible_client
             task.responsible = responsible

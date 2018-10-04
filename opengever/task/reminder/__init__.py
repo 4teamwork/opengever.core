@@ -1,6 +1,10 @@
 from datetime import date
 from datetime import timedelta
 from opengever.task import _
+import logging
+
+
+logger = logging.getLogger('opengever.activity.reminder')
 
 
 def day_delta(delta):

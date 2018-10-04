@@ -11,10 +11,6 @@ from zope.globalrequest import getRequest
 TASK_REMINDER_ANNOTATIONS_KEY = 'opengever.task.task_reminder'
 
 
-def get_task_reminder():
-    return TaskReminder()
-
-
 class TaskReminder(object):
 
     def __init__(self):
@@ -67,9 +63,13 @@ class TaskReminder(object):
     def create_reminder_notifications(self):
         """Creates an activity and the related notification for set reminders.
         """
-        for reminder in ReminderSetting.query.filter(
-                ReminderSetting.remind_day == date.today()).all():
+        query = ReminderSetting.query.filter(
+            ReminderSetting.remind_day == date.today())
+
+        for reminder in query.all():
             TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
+
+        return query.count()
 
     def recalculate_remind_day_for_obj(self, obj):
         """If the duedate of a task will change, we have to update the
