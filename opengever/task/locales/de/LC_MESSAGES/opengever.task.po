@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-09-19 14:54+0000\n"
+"POT-Creation-Date: 2018-10-03 15:33+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -323,6 +323,11 @@ msgstr "Kosten in CHF"
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
 
+#. Default: "Set a reminder to get notified based on the duedate"
+#: ./opengever/task/response.py
+msgid "help_reminder"
+msgstr "Sie werden zum ausgewählten Zeitpunkt vor dem Aufgabenende benachrichtigt."
+
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
 msgid "help_responsible"
@@ -536,6 +541,11 @@ msgstr "Vorherige Aufgabe"
 #: ./opengever/task/task.py
 msgid "label_related_items"
 msgstr "Verweise"
+
+#. Default: "Reminder"
+#: ./opengever/task/response.py
+msgid "label_reminder"
+msgstr "Erinnerung"
 
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
