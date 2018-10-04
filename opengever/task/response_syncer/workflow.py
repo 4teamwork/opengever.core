@@ -1,12 +1,9 @@
 from opengever.base.security import elevated_privileges
-from opengever.task import _
-from opengever.task.localroles import LocalRolesSetter
-from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
-from opengever.task.task import ITask
-from Products.CMFCore.utils import getToolByName
+from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -49,41 +46,15 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
     """
 
     def _update(self, transition, text):
-        response = super(WorkflowResponseSyncerReceiver, self)._update(transition, text)
-
         transition = self.request.get('transition')
-        responsible = self.request.get('responsible')
-        responsible_client = self.request.get('responsible_client')
+        data = {'responsible': self.request.get('responsible'),
+                'responsible_client': self.request.get('responsible_client'),
+                'text': safe_unicode(text)}
 
-        wftool = getToolByName(self.context, 'portal_workflow')
-
-        # change workflow state
-        before = wftool.getInfoFor(self.context, 'review_state')
-        before = wftool.getTitleForStateOnType(before, self.context.Type())
-
+        wftool = api.portal.get_tool('portal_workflow')
         with elevated_privileges():
-            wftool.doActionFor(self.context, transition)
 
-        after = wftool.getInfoFor(self.context, 'review_state')
-        after = wftool.getTitleForStateOnType(after, self.context.Type())
-
-        if responsible and responsible is not 'None':
-            # special handling for reassign
-            task = ITask(self.context)
-            response.add_change(
-                'responsible',
-                _(u"label_responsible", default=u"Responsible"),
-                task.responsible,
-                responsible)
-
-            # Revoke local roles for current responsible
-            # XXX: should be handled as a general transition-after job.
-            LocalRolesSetter(self.context).revoke_roles()
-
-            TaskReminder().clear_reminder(task, task.responsible)
-
-            task.responsible_client = responsible_client
-            task.responsible = responsible
+            wftool.doActionFor(
+                self.context, transition, disable_sync=True, **data)
 
         notify(ObjectModifiedEvent(self.context))
-        response.add_change('review_state', _(u'Issue state'), before, after)

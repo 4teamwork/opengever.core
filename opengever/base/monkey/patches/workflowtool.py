@@ -6,7 +6,7 @@ class PatchWorkflowTool(MonkeyPatch):
 
     def __call__(self):
 
-        def doActionFor(self, ob, action, wf_id=None, *args, **kw):
+        def doActionFor(self, ob, action, wf_id=None, disable_sync=False, *args, **kw):
             from opengever.base.transition import ITransitionExtender
 
             adapter = queryAdapter(ob, ITransitionExtender, name=action)
@@ -15,7 +15,8 @@ class PatchWorkflowTool(MonkeyPatch):
 
             values = adapter.deserialize(**kw)
             value = original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
-            adapter.after_transition_hook(transition=action, **values)
+            adapter.after_transition_hook(
+                transition=action, disable_sync=disable_sync, **values)
             return value
 
         from Products.CMFPlone.WorkflowTool import WorkflowTool

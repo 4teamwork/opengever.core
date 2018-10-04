@@ -526,11 +526,9 @@ class TestWorkflowSyncer(FunctionalTestCase):
                            .in_state('task-state-resolved')
                            .successor_from(predecessor))
 
-        sender = WorkflowResponseSyncerSender(predecessor, self.request)
-
-        sender.sync_related_tasks(
-            'task-transition-resolved-in-progress',
-            text=u'Please extend chapter 2.4.')
+        wftool = api.portal.get_tool('portal_workflow')
+        wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
+                           text=u'Please extend chapter 2.4.')
 
         self.assertEquals('task-state-in-progress',
                           api.content.get_state(successor))
@@ -538,25 +536,19 @@ class TestWorkflowSyncer(FunctionalTestCase):
                           successor.get_sql_object().review_state)
 
     def test_adds_corresponding_response(self):
-        predecessor = create(Builder('task'))
+        predecessor = create(Builder('task').in_state('task-state-resolved'))
         successor = create(Builder('task')
-                           .successor_from(predecessor)
-                           .in_state('task-state-in-progress'))
+                           .in_state('task-state-resolved')
+                           .successor_from(predecessor))
 
-        sender = WorkflowResponseSyncerSender(predecessor, self.request)
-
-        sender.sync_related_tasks(
-            'task-transition-in-progress-resolved',
-            text=u'\xe4\xe4hhh I am done!')
+        wftool = api.portal.get_tool('portal_workflow')
+        wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
+                           text=u'\xe4\xe4hhh I am done!')
 
         response = IResponseContainer(successor)[-1]
-        self.assertEquals('task-transition-in-progress-resolved', response.transition)
-        self.assertEquals('\xc3\xa4\xc3\xa4hhh I am done!', response.text)
+        self.assertEquals('task-transition-resolved-in-progress', response.transition)
+        self.assertEquals(u'\xe4\xe4hhh I am done!', response.text)
         self.assertEquals(TEST_USER_ID, response.creator)
-        self.assertEquals([{'before': 'task-state-in-progress',
-                            'after': 'task-state-resolved',
-                            'id': 'review_state',
-                            'name': u'Issue state'}], response.changes)
 
 
 class TestModifyDeadlineSyncer(FunctionalTestCase):
