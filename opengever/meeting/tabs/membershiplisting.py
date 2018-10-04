@@ -1,8 +1,12 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
 from opengever.meeting.model import Membership
-from opengever.tabbedview import BaseListingTab
+from opengever.tabbedview import FilteredListingTab
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview import SqlTableSource
 from zope.component import adapter
 from zope.interface import implementer
@@ -15,11 +19,32 @@ class IMembershipTableSourceConfig(ITableSourceConfig):
     """Marker interface for membership table source configs."""
 
 
-class MembershipListingTab(BaseListingTab):
+class ActiveMembershipFilter(Filter):
+    """Only display active meetings."""
+
+    def update_query(self, query):
+        return query.only_active()
+
+
+class MembershipListingTab(FilteredListingTab):
     implements(IMembershipTableSourceConfig)
+
+    filterlist_name = 'membership_state_filter'
+    filterlist = FilterList(
+        Filter(
+            'filter_membership_all',
+            _('all', default=u'All')),
+        ActiveMembershipFilter(
+            'filter_membership_active',
+            _('active', default=u'Active'),
+            default=True)
+        )
+
+    show_selects = False
 
     model = Membership
     sqlalchemy_sort_indexes = {'member_id': Member.fullname}
+    sort_on = 'member_id'
 
     @property
     def columns(self):
@@ -46,7 +71,7 @@ class MembershipListingTab(BaseListingTab):
             committee=self.context.load_model()).join(Membership.member)
 
     def get_member_link(self, item, value):
-        return item.member.get_link(self.context)
+        return item.member.get_link(aq_parent(aq_inner(self.context)))
 
 
 @implementer(ITableSource)
