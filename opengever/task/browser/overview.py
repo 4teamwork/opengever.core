@@ -105,6 +105,12 @@ class Overview(BrowserView, GeverTabMixin):
                 'is_html': True,
                 },
             {
+                'label': _(u"label_reminder", default=u"Reminder"),
+                'css_class': "taskReminderSelector",
+                'value': self.context.restrictedTraverse('@@task_reminder_selector')(),
+                'is_html': True,
+                },
+            {
                 'label': _(u"label_issuer", default=u"Issuer"),
                 'css_class': "issuer",
                 'value': task.get_issuer_label(),

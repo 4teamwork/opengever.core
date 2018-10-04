@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.task">
+
+  <browser:page
+      for="opengever.task.task.ITask"
+      name="task_reminder_selector"
+      template="templates/task_reminder_selector.pt"
+      class=".selectors.TaskReminderSelector"
+      permission="zope2.View"
+      />
+
+</configure>

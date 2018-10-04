@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-03 15:33+0000\n"
+"POT-Creation-Date: 2018-10-04 15:24+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -227,6 +227,11 @@ msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmis
 #: ./opengever/task/browser/assign.py
 msgid "error_same_responsible"
 msgstr "Pas de changement: mandataire identique séléctionné"
+
+#. Default: "There was an error while updating the reminder"
+#: ./opengever/task/reminder/browser/selectors.py
+msgid "error_while_updating_task_reminder"
+msgstr ""
 
 #. Default: "existing dossier"
 #: ./opengever/task/browser/assign_dossier.py
@@ -545,6 +550,7 @@ msgid "label_related_items"
 msgstr "Renvois"
 
 #. Default: "Reminder"
+#: ./opengever/task/browser/overview.py
 #: ./opengever/task/response.py
 msgid "label_reminder"
 msgstr ""
@@ -688,6 +694,11 @@ msgstr "Mes tâches"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
 msgstr "Nouveau Dossier"
+
+#. Default: "No reminder"
+#: ./opengever/task/reminder/browser/selectors.py
+msgid "no_reminder"
+msgstr ""
 
 #. Default: "Rejected by ${user}."
 #: ./opengever/task/response_description.py

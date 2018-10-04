@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-10-03 15:33+0000\n"
+"POT-Creation-Date: 2018-10-04 15:24+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -225,6 +225,11 @@ msgstr ""
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py
 msgid "error_same_responsible"
+msgstr ""
+
+#. Default: "There was an error while updating the reminder"
+#: ./opengever/task/reminder/browser/selectors.py
+msgid "error_while_updating_task_reminder"
 msgstr ""
 
 #. Default: "existing dossier"
@@ -542,6 +547,7 @@ msgid "label_related_items"
 msgstr ""
 
 #. Default: "Reminder"
+#: ./opengever/task/browser/overview.py
 #: ./opengever/task/response.py
 msgid "label_reminder"
 msgstr ""
@@ -683,6 +689,11 @@ msgstr ""
 #. Default: "new dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
+msgstr ""
+
+#. Default: "No reminder"
+#: ./opengever/task/reminder/browser/selectors.py
+msgid "no_reminder"
 msgstr ""
 
 #. Default: "Rejected by ${user}."

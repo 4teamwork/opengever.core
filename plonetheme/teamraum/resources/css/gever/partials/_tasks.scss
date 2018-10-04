@@ -138,3 +138,13 @@
     margin: 0px 0px 10px 10px;
   }
 }
+
+.taskReminderSelector {
+  dl {
+    width: 100%;
+    cursor: pointer;
+  }
+  .taskReminderSelectorOptionIcon {
+    width: 1.5em;
+  }
+}

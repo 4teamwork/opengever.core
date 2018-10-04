@@ -17,6 +17,7 @@
   <include file="behaviors.zcml" />
   <include package=".upgrades" />
   <include package=".response_syncer" />
+  <include package=".reminder" />
 
   <vdex:vocabulary directory="vdexvocabs" />
 

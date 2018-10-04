@@ -3,6 +3,7 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
@@ -13,6 +14,7 @@ from opengever.task.reminder import TASK_REMINDER_ONE_WEEK_BEFORE
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.testing import IntegrationTestCase
+import json
 import pytz
 
 
@@ -262,3 +264,60 @@ class TestTaskReminder(IntegrationTestCase):
             Activity.kind == TaskReminderActivity.kind)
 
         self.assertEqual(1, task_reminder_activities.count())
+
+
+class TestTaskReminderSelector(IntegrationTestCase):
+
+    features = ('activity', )
+
+    @browsing
+    def test_init_state_keys(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.visit(self.task, view='tabbedview_view-overview')
+        init_state = self._get_init_state(browser)
+
+        self.assertEqual(
+            ['endpoint', 'reminder_options', 'error_msg'],
+            init_state.keys())
+
+    @browsing
+    def test_init_state_endpoint(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.visit(self.task, view='tabbedview_view-overview')
+        init_state = self._get_init_state(browser)
+
+        self.assertEqual(
+            init_state.get('endpoint'),
+            self.task.absolute_url() + '/@reminder')
+
+    @browsing
+    def test_init_state_selected_option(self, browser):
+        self.login(self.regular_user, browser=browser)
+        task_reminder = TaskReminder()
+
+        browser.visit(self.task, view='tabbedview_view-overview')
+        init_state = self._get_init_state(browser)
+        selected_option = filter(lambda x: x.get('selected'),
+                                 init_state.get('reminder_options'))
+
+        self.assertEqual(1, len(selected_option))
+        self.assertEqual(
+            'no-reminder',
+            selected_option[0].get('option_type'))
+
+        task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
+        browser.visit(self.task, view='tabbedview_view-overview')
+        init_state = self._get_init_state(browser)
+        selected_option = filter(lambda x: x.get('selected'),
+                                 init_state.get('reminder_options'))
+
+        self.assertEqual(1, len(selected_option))
+        self.assertEqual(
+            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
+            selected_option[0].get('option_type'))
+
+    def _get_init_state(self, browser):
+        return json.loads(
+            browser.css('#task-reminder-selector').first.get('data-state'))
