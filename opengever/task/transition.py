@@ -10,6 +10,8 @@ from opengever.task.browser.delegate.metadata import IUpdateMetadata
 from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
 from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.interfaces import IDeadlineModifier
+from opengever.task.localroles import LocalRolesSetter
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -177,8 +179,14 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
     schemas = [IResponse, INewResponsibleSchema]
 
     def after_transition_hook(self, transition, disable_sync, **kwargs):
+        # Revoke local roles for current responsible the roles for the
+        # new responsible will be assigned afterwards
+        LocalRolesSetter(self.context).revoke_roles()
+
         former_responsible = ITask['responsible']
         former_responsible_client = ITask['responsible_client']
+
+        TaskReminder().clear_reminder(self.context, self.context.responsible)
 
         changes = (
             (former_responsible, kwargs.get('responsible')),
