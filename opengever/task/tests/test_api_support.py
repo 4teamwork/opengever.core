@@ -392,3 +392,46 @@ class TestAPITransitions(IntegrationTestCase):
                               [task.responsible for task in tasks])
         self.assertEqual(["Neuer Aufgaben Titel", "Neuer Aufgaben Titel"],
                          [task.title for task in tasks])
+
+    @browsing
+    def test_skip_rejected(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.set_workflow_state('task-state-rejected', self.seq_subtask_1)
+
+        url = '{}/@workflow/task-transition-rejected-skipped'.format(
+            self.seq_subtask_1.absolute_url())
+
+        data = {'text': u'Ist nicht notwendig.'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            'task-state-skipped', api.content.get_state(self.seq_subtask_1))
+        self.assertEqual(
+            'task-state-open', api.content.get_state(self.seq_subtask_2))
+
+        response = IResponseContainer(self.seq_subtask_1)[-1]
+        self.assertEqual(u'Ist nicht notwendig.', response.text)
+        self.assertEqual('task-transition-rejected-skipped', response.transition)
+
+    @browsing
+    def test_skip_planed_task(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-planned-skipped'.format(
+            self.seq_subtask_2.absolute_url())
+
+        data = {'text': u'Ist nicht notwendig.'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            'task-state-skipped', api.content.get_state(self.seq_subtask_2))
+        self.assertEqual(
+            'task-state-open', api.content.get_state(self.seq_subtask_3))
+
+        response = IResponseContainer(self.seq_subtask_2)[-1]
+        self.assertEqual(u'Ist nicht notwendig.', response.text)
+        self.assertEqual('task-transition-planned-skipped', response.transition)

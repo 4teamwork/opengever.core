@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
@@ -5,6 +6,7 @@ from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
+from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.browser.delegate.metadata import IUpdateMetadata
 from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
@@ -272,3 +274,22 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
         create_subtasks(self.context,
                         kwargs.pop('responsibles'),
                         kwargs.get('documents', []), kwargs)
+
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask)
+class OpenPlanedTransitionExtender(DefaultTransitionExtender):
+    """Default transition extender but supress default activity and
+    record an TaskAdded activity instead."""
+
+    def after_transition_hook(self, transition, disable_sync, **kwargs):
+        response = add_simple_response(
+            self.context, transition=transition, text=kwargs.get('text'),
+            supress_activity=True)
+
+        TaskAddedActivity(
+            self.context, getRequest(), aq_parent(self.context)).record()
+
+        self.save_related_items(response, kwargs.get('relatedItems'))
+        self.sync_change(transition, kwargs.get('text'), disable_sync)

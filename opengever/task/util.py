@@ -93,7 +93,8 @@ def get_task_type_title(task_type, language):
 
 
 def add_simple_response(task, text='', field_changes=None, added_object=None,
-                        successor_oguid=None, supress_events=False, **kwargs):
+                        successor_oguid=None, supress_events=False,
+                        supress_activity=False, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
@@ -141,7 +142,9 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     if not supress_events:
         notify(ObjectModifiedEvent(task))
 
-    TaskTransitionActivity(task, task.REQUEST, response).record()
+    if not supress_activity:
+        TaskTransitionActivity(task, task.REQUEST, response).record()
+
     return response
 
 

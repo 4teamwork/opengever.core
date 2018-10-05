@@ -283,4 +283,19 @@
       name="task-transition-delegate"
       />
 
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-rejected-skipped"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-planned-skipped"
+      />
+
+  <adapter
+      factory=".transition.OpenPlanedTransitionExtender"
+      name="task-transition-planned-open"
+      />
+
 </configure>
