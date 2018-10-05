@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
+from opengever.base.handlebars import get_handlebars_template
 from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
@@ -9,6 +10,7 @@ from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from pkg_resources import resource_filename
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
@@ -246,3 +248,9 @@ class Overview(BrowserView, GeverTabMixin):
                                              "updating the reminder"),
                                    context=self.request)
         })
+
+    @property
+    def task_reminder_vuejs_template(self):
+        return get_handlebars_template(
+            resource_filename('opengever.task.browser.vue_templates',
+                              'task_reminder_selector.html'))

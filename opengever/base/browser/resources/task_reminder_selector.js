@@ -2,19 +2,7 @@ $(function() {
     var initState = $('#task-reminder-selector').data('state');
     Vue.component('reminder-option', {
         props: ['selected', 'title', 'showSpinner'],
-        template: `
-        <li>
-            <a href="#" @click.prevent="clicked">
-                <span class="taskReminderSelectorOptionIcon">
-                    <span class="fa" :class="{
-                        'fa-check': selected,
-                        'fa-spinner fa-spin': showSpinner }">
-                    </span>
-                </span>
-                <span class="subMenuTitle actionText">{{title}}</span>
-            </a>
-        </li>
-        `,
+        template: '#task-reminder-selector-option-vue-template',
         methods: {
             clicked: function() {
                 this.$emit('clicked');
@@ -24,22 +12,7 @@ $(function() {
 
     var app = new Vue({
         el: '#task-reminder-selector',
-        template: `
-        <dl class="dropdown_button">
-            <dt class="">
-              <span class="taskReminderSelectorCurrent">{{currentTitle}}</span>
-            </dt>
-            <dd>
-                <ul class="taskReminderSelectorOptions">
-                    <reminder-option v-for="option in orderedOptions"
-                                     @clicked="handleSetReminder(option)"
-                                     :selected="option.selected"
-                                     :showSpinner="showSpinnerForOption(option)"
-                                     :title="option.option_title" />
-                </ul>
-            </dd>
-        </dl>
-        `,
+        template: '#task-reminder-selector-vue-template',
         data: {
             reminderOptions: initState.reminder_options,
             endpoint: initState.endpoint,
