@@ -5,7 +5,7 @@ Changelog
 2018.4.7 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Revoke temporary roles also when closing direct-execution tasks. [phgross]
 
 
 2018.4.6 (2018-10-01)

@@ -230,6 +230,21 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.assertEquals([], storage._storage())
 
     @browsing
+    def test_closing_a_direct_execution_task_revokes_roles(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.subtask.task_type = 'direct-execution'
+        self.subtask.sync()
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        # close
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.subtask).storage
+        self.assertEquals([], storage._storage())
+
+    @browsing
     def test_skip_a_task_revokes_roles(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
