@@ -7,6 +7,7 @@ from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
+from opengever.task import FINISHED_TASK_STATES
 from opengever.task.response_description import ResponseDescription
 from plone import api
 from Products.CMFPlone import PloneMessageFactory
@@ -172,6 +173,7 @@ class TaskReassignActivity(TaskTransitionActivity):
 
 class TaskReminderActivity(BaseActivity):
     kind = 'task-reminder'
+    IGNORED_STATES = FINISHED_TASK_STATES + ['task-state-resolved']
 
     def __init__(self, sql_context, request):
         super(TaskReminderActivity, self).__init__(sql_context, request)
@@ -210,6 +212,10 @@ class TaskReminderActivity(BaseActivity):
         to create one notification for the current acitvity-object and the given
         user-id.
         """
+
+        if self.context.review_state in self.IGNORED_STATES:
+            return
+
         activity = self.add_activity()
         Notification(userid=notify_for_user_id, activity=activity)
         map(lambda dispatcher: dispatcher.dispatch_notifications(activity),
