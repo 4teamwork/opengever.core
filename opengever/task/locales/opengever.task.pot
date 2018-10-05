@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-10-04 15:24+0000\n"
+"POT-Creation-Date: 2018-10-05 07:33+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -228,7 +228,7 @@ msgid "error_same_responsible"
 msgstr ""
 
 #. Default: "There was an error while updating the reminder"
-#: ./opengever/task/reminder/browser/selectors.py
+#: ./opengever/task/browser/overview.py
 msgid "error_while_updating_task_reminder"
 msgstr ""
 
@@ -692,7 +692,7 @@ msgid "new_dossier"
 msgstr ""
 
 #. Default: "No reminder"
-#: ./opengever/task/reminder/browser/selectors.py
+#: ./opengever/task/browser/overview.py
 msgid "no_reminder"
 msgstr ""
 

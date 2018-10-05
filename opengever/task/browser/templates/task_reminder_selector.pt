@@ -1,9 +1,9 @@
 <html xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag="python: True">
-    <span id="task-reminder-selector" tal:attributes="data-state view/init_state">
+    <span id="task-reminder-selector" tal:attributes="data-state view/reminder_init_state">
         <!-- For disabled JS -->
         <span class="taskReminderSelectorCurrent" tal:content="view/current_reminder_title"></span>
     </span>
-    <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/task_reminder_selector.js"></script>
+    <script tal:attributes="src string:${context/portal_url}/++resource++opengever.base/task_reminder_selector.js"></script>
 </html>
 
