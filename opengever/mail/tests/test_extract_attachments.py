@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.utils import get_attachments
 from ftw.testbrowser import browsing
@@ -84,6 +85,15 @@ class TestExtractAttachmentView(FunctionalTestCase):
             does not work correctly.')
 
     @browsing
+    def test_deleting_after_extracting_updates_checksum(self, browser):
+        browser.login().open(self.mail, view='extract_attachments')
+        old_checksum = IBumblebeeDocument(self.mail).get_checksum()
+        browser.fill({'attachments:list': ['1'],
+                      'delete_action': ['all']}).submit()
+        new_checksum = IBumblebeeDocument(self.mail).get_checksum()
+        self.assertNotEqual(old_checksum, new_checksum)
+
+    @browsing
     def test_journal_entry_after_deleting_attachments(self, browser):
         browser.login().open(self.mail, view='extract_attachments')
         browser.fill({'attachments:list': ['1'],
@@ -116,6 +126,30 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.css('.formControls input.standalone').first.click()
 
         self.assertEquals(self.mail.absolute_url(), browser.url)
+
+
+class TestExtractAttachmentViewForMailWithOriginalMessage(FunctionalTestCase):
+
+    def setUp(self):
+        super(TestExtractAttachmentViewForMailWithOriginalMessage, self).setUp()
+        self.dossier = create(Builder('dossier'))
+        self.mail = create(Builder('mail')
+                           .within(self.dossier)
+                           .with_message(MESSAGE_TEXT)
+                           .with_dummy_original_message())
+
+    @browsing
+    def test_deleting_after_extracting_does_not_update_checksum(self, browser):
+        """ We use the original message for preview but deleting the attachments
+        after extraction modifies the message and not the original_message, hence
+        the checksum nor the preview will be modified.
+        """
+        browser.login().open(self.mail, view='extract_attachments')
+        old_checksum = IBumblebeeDocument(self.mail).get_checksum()
+        browser.fill({'attachments:list': ['1'],
+                      'delete_action': ['all']}).submit()
+        new_checksum = IBumblebeeDocument(self.mail).get_checksum()
+        self.assertEqual(old_checksum, new_checksum)
 
 
 class TestContentTypeHelper(FunctionalTestCase):

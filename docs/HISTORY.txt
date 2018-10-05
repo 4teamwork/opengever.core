@@ -8,6 +8,7 @@ Changelog
 - Add trashing of protocol excerpts. [njohner]
 - Display title for NullObject in meeting template selection. [njohner]
 - Fix styling of favorite button. [njohner]
+- Update the checksum when deleting attachments from E-mails. [njohner]
 - Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
 - Do not add a task-reminder activity if task is finished. [elioschmutz]
