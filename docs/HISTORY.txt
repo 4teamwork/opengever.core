@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Revoke temporary roles also when closing direct-execution tasks. [phgross]
 - Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
 - Do not add a task-reminder activity if task is finished. [elioschmutz]
