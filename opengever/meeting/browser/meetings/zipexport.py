@@ -4,14 +4,12 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
 from opengever.meeting.interfaces import IMeetingWrapper
-from opengever.meeting.zipexport import MeetingJSONSerializer
-from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.meeting.zipexport import MeetingDocumentZipper
+from opengever.meeting.zipexport import MeetingZipExporter
 from pkg_resources import resource_filename
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
-from StringIO import StringIO
 from zExceptions import BadRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -198,36 +196,20 @@ class MeetingZipExport(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
-        # Download zip file
-        return self.generate_zip()
-
-    def generate_zip(self):
         response = self.request.response
 
         with ZipGenerator() as generator:
-            MeetingDocumentZipper(self.model, generator).traverse()
-            generator.add_file('meeting.json', self.get_meeting_json())
+            zipper = MeetingDocumentZipper(self.model, generator)
+            zip_file = zipper.get_zip_file()
 
-            # Return zip
-            zip_file = generator.generate()
             filename = '{}.zip'.format(normalize_path(self.model.title))
             response.setHeader(
-                "Content-Disposition",
+                'Content-Disposition',
                 'inline; filename="{0}"'.format(
                     safe_unicode(filename).encode('utf-8')))
-            response.setHeader("Content-type", "application/zip")
             response.setHeader(
-                "Content-Length",
-                os.stat(zip_file.name).st_size)
+                'Content-type', 'application/zip')
+            response.setHeader(
+                'Content-Length', os.stat(zip_file.name).st_size)
 
             return filestream_iterator(zip_file.name, 'rb')
-
-    def get_meeting_json(self):
-        serializer = MeetingJSONSerializer(self.model)
-        serializer.traverse()
-
-        json_data = {
-            'version': '1.0.0',
-            'meetings': [serializer.data],
-        }
-        return StringIO(json.dumps(json_data, sort_keys=True, indent=4))

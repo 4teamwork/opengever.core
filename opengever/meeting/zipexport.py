@@ -9,12 +9,16 @@ from opengever.meeting import _
 from opengever.meeting.traverser import MeetingTraverser
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFPlone.utils import safe_unicode
+from StringIO import StringIO
 from tzlocal import get_localzone
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
+from ZPublisher.Iterators import filestream_iterator
+import json
+import os
 import uuid
 
 
@@ -46,6 +50,11 @@ class MeetingDocumentZipper(MeetingTraverser):
         super(MeetingDocumentZipper, self).__init__(meeting)
         self.generator = generator
 
+    def get_zip_file(self):
+        self.traverse()
+        self.generator.add_file('meeting.json', self.get_meeting_json_file())
+        return self.generator.generate()
+
     def traverse_protocol_document(self, document):
         self.generator.add_file(
             document.get_filename(), document.get_file().open()
@@ -68,6 +77,9 @@ class MeetingDocumentZipper(MeetingTraverser):
             document.get_file().open()
         )
 
+    def get_meeting_json_file(self):
+        return StringIO(MeetingJSONSerializer(self.meeting).get_json())
+
 
 class MeetingJSONSerializer(MeetingTraverser):
     """Represents a JSON file with which grimlock can import the meeting."""
@@ -86,6 +98,15 @@ class MeetingJSONSerializer(MeetingTraverser):
             },
             'agenda_items': [],
         }
+
+    def get_json(self):
+        self.traverse()
+
+        json_data = {
+            'version': '1.0.0',
+            'meetings': [self.data],
+        }
+        return json.dumps(json_data, sort_keys=True, indent=4)
 
     def traverse_protocol_document(self, document):
         self.data['protocol'] = {
