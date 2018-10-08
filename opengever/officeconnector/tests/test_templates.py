@@ -12,10 +12,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -58,10 +55,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
     def test_overview_resolved_without_file(self, browser):
         self.login(self.regular_user, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -80,10 +74,7 @@ class TestFileActionButtonTemplates(IntegrationTestCase):
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -188,10 +179,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -254,10 +242,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -353,10 +338,7 @@ class TestFileActionButtonTemplatesWithBumblebee(IntegrationTestCase):
     @browsing
     def test_bumblebee_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='bumblebee-overlay-listing')
-
+        browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -427,10 +409,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -502,10 +481,7 @@ class TestFileActionButtonTemplatesWithOCAttach(IntegrationTestCase):
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -619,10 +595,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -694,10 +667,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -802,10 +772,7 @@ class TestFileActionButtonTemplatesWithOCAttachAndBumblebee(IntegrationTestCase)
     @browsing
     def test_bumblebee_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='bumblebee-overlay-listing')
-
+        browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -885,10 +852,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -951,10 +915,7 @@ class TestFileActionButtonTemplatesWithOCCheckout(IntegrationTestCase):
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -1060,10 +1021,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_overview_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tabbedview_view-overview')
-
+        browser.open(self.empty_document, view='tabbedview_view-overview')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -1126,10 +1084,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_tooltip_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='tooltip')
-
+        browser.open(self.empty_document, view='tooltip')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)
@@ -1225,10 +1180,7 @@ class TestFileActionButtonTemplatesWithOCCheckoutAndBumblebee(IntegrationTestCas
     @browsing
     def test_bumblebee_open_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='bumblebee-overlay-listing')
-
+        browser.open(self.empty_document, view='bumblebee-overlay-listing')
         actions = browser.css('.file-action-buttons a').text
         self.assertNotIn('Attach to email', actions)
         self.assertNotIn('Checkout and edit', actions)

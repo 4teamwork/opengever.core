@@ -167,9 +167,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
     @browsing
     def test_actions_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.empty_document, view='bumblebee-overlay-listing')
 
         self.assertEqual(
             [
@@ -338,9 +336,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
     @browsing
     def test_actions_without_file(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = None
-
-        browser.open(self.document, view="bumblebee-overlay-document")
+        browser.open(self.empty_document, view="bumblebee-overlay-document")
 
         self.assertEqual(
             [

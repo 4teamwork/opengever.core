@@ -15,18 +15,15 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
     @browsing
     def test_create_with_oneoffixx(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.document.file = None
-        self.document.as_shadow_document()
-
+        self.empty_document.as_shadow_document()
         with freeze(datetime(2100, 8, 3, 15, 25)):
-            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.document)
-
+            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.empty_document)
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
         expected_token = {
             u'action': u'oneoffixx',
-            u'documents': [u'createtreatydossiers000000000002'],
+            u'documents': [u'createtreatydossiers000000000033'],
             u'exp': 4121033100,
             u'sub': u'robert.ziegler',
             u'url': u'http://nohost/plone/oc_oneoffixx',
@@ -37,14 +34,14 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
 
         expected_payloads = [{
             u'checkout-url': u'oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-                             u'.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWV'
-                             u'udHMiOlsiY3JlYXRldHJlYXR5ZG9zc2llcnMwMDAwMDAwMDAwMDIiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHA'
-                             u'iOjQxMjEwMzMxMDB9'
-                             u'.9WnbmlXRe9rEOnBdJBVO0y7Di7Zga3mgncFv0grS2H8',
+                             u'.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWVu'
+                             u'dHMiOlsiY3JlYXRldHJlYXR5ZG9zc2llcnMwMDAwMDAwMDAwMzMiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHAiO'
+                             u'jQxMjEwMzMxMDB9'
+                             u'.P14rMZA1TXQsPYVIiOxIZwTSi6gfw-aRV2yYJEF9GSw',
             u'connect-xml': u'@@oneoffix_connect_xml',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-26',
             u'filename': None,
-            u'uuid': u'createtreatydossiers000000000002',
+            u'uuid': u'createtreatydossiers000000000033',
             }]
         with freeze(datetime(2100, 8, 3, 15, 25)):
             payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
@@ -55,7 +52,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
 
         expected_token = {
             u'action': u'checkout',
-            u'documents': [u'createtreatydossiers000000000002'],
+            u'documents': [u'createtreatydossiers000000000033'],
             u'exp': 4121033100,
             u'sub': u'robert.ziegler',
             u'url': u'http://nohost/plone/oc_checkout',
@@ -78,16 +75,16 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             '      <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">',
             '        <Arguments>',
             '          <Interface Name="OneGovGEVER">',
-            '            <Node Id="ogg.document.title">Vertr&#228;gsentwurf</Node>',
-            '            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 12</Node>',
-            '            <Node Id="ogg.document.sequence_number">12</Node>',
+            '            <Node Id="ogg.document.title">L&#228;&#228;r</Node>',
+            '            <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 26</Node>',
+            '            <Node Id="ogg.document.sequence_number">26</Node>',
             '          </Interface>',
             '        </Arguments>',
             '      </Function>',
             '      <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">',
-            '        <Value key="ogg.document.title" type="string">Vertr&#228;gsentwurf</Value>',
-            '        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 12</Value>',
-            '        <Value key="ogg.document.sequence_number" type="string">12</Value>',
+            '        <Value key="ogg.document.title" type="string">L&#228;&#228;r</Value>',
+            '        <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 26</Value>',
+            '        <Value key="ogg.document.sequence_number" type="string">26</Value>',
             '      </Function>',
             '      <Commands>',
             '        <Command Name="DefaultProcess">',
@@ -118,9 +115,6 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
     @browsing
     def test_create_with_oneoffixx_when_not_shadow_document(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.document.file = None
-
         with browser.expect_http_error(404):
-            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.document)
-
+            oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.empty_document)
             self.assertIsNone(oc_url)
