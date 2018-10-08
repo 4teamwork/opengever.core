@@ -1,8 +1,8 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
 from opengever.document.document import Document
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
@@ -161,7 +161,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     def test_checkout_checkin_open_with_file_without_comment(self, browser):
         self.login(self.regular_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
@@ -220,7 +220,7 @@ class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
     def test_checkout_checkin_open_with_file_with_comment(self, browser):
         self.login(self.regular_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)

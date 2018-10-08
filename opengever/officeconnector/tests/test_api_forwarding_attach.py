@@ -1,6 +1,6 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 import jwt
@@ -28,7 +28,7 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
     def test_attach_to_email_open_with_file(self, browser):
         self.login(self.secretariat_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_attach_oc_url(browser, self.inbox_forwarding_document)
 
         self.assertIsNotNone(oc_url)

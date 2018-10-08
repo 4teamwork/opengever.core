@@ -1,6 +1,6 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 import jwt
@@ -24,7 +24,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     def test_attach_to_email_open_with_file(self, browser):
         self.login(self.regular_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
@@ -72,7 +72,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     def test_attach_to_email_inactive_with_file(self, browser):
         self.login(self.regular_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_attach_oc_url(browser, self.inactive_document)
 
         self.assertIsNotNone(oc_url)
@@ -119,7 +119,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
     def test_attach_to_email_resolved_with_file(self, browser):
         self.login(self.regular_user, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_attach_oc_url(browser, self.expired_document)
 
         self.assertIsNotNone(oc_url)
@@ -166,7 +166,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             self.taskdocument,
             ]
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_dossier_multiattach_oc_url(
                 browser,
                 self.dossier,
@@ -231,7 +231,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             self.taskdocument,
             ]
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_dossier_multiattach_oc_url(
                 browser,
                 self.dossier,
@@ -293,7 +293,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             self.taskdocument,
             ]
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_dossier_multiattach_oc_url(
                 browser,
                 self.dossier,

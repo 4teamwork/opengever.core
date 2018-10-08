@@ -1,6 +1,6 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 import jwt
@@ -16,8 +16,9 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
     def test_create_with_oneoffixx(self, browser):
         self.login(self.dossier_responsible, browser)
         self.empty_document.as_shadow_document()
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.empty_document)
+
         self.assertIsNotNone(oc_url)
         self.assertEquals(200, browser.status_code)
 
@@ -43,7 +44,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             u'filename': None,
             u'uuid': u'createtreatydossiers000000000033',
             }]
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
         for payload, expected_payload in zip(payloads, expected_payloads):

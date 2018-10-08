@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from datetime import datetime
 from opengever.journal.handlers import DOCUMENT_ATTACHED
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.journal.handlers import DOCUMENT_CHECKED_OUT
@@ -12,6 +13,9 @@ from xml.etree import ElementTree as ET
 from zope.component import getMultiAdapter
 import json
 
+
+# Sufficiently far in the future to keep yielding valid auth JWT
+FREEZE_DATE = datetime(2100, 8, 3, 15, 25)
 
 JWT_SIGNING_SECRET_PLONE = '/'.join((JWT_SECRET, 'plone', 'acl_users', 'jwt_auth'))
 JWT_SIGNING_SECRET_ZOPE = '/'.join((JWT_SECRET, 'acl_users', 'jwt_auth'))

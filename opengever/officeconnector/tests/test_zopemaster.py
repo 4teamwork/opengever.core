@@ -1,7 +1,7 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_ZOPE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from opengever.testing.assets import path_to_asset
@@ -17,7 +17,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
     def test_attach_to_email_open_with_file(self, browser):
         self.login(self.manager, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_attach_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
@@ -61,7 +61,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
     def test_checkout_checkin_open_with_file_without_comment(self, browser):
         self.login(self.manager, browser)
 
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         self.assertIsNotNone(oc_url)
