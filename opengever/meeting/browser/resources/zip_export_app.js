@@ -54,7 +54,7 @@ function init() {
         // poll for status
         return this.requester.get(url)
           .then(function (response) {
-            if (response.data['converting'] <= 0) {
+            if (response.data['is_finished']) {
               this.isFinished = true;
               if (response.data['skipped'] > 0) {
                 this.isDocumentSkipped = true;

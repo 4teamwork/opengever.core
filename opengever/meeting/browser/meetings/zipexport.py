@@ -1,5 +1,6 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
+from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
@@ -7,8 +8,8 @@ from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.zipexport import MeetingDocumentZipper
 from opengever.meeting.zipexport import MeetingZipExporter
 from pkg_resources import resource_filename
+from plone.namedfile.utils import stream_data
 from plone.protect.interfaces import IDisableCSRFProtection
-from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
 from zope.i18n import translate
@@ -55,21 +56,11 @@ class DownloadMeetingZip(BrowserView):
         public_id = uuid.UUID(public_id)
         exporter = MeetingZipExporter(self.model, public_id=public_id)
 
-        response = self.request.response
-        with ZipGenerator() as generator:
-            exporter.zip_documents(generator)
-            zip_file = generator.generate()
-            filename = '{}.zip'.format(normalize_path(self.model.title))
-            response.setHeader(
-                'Content-Disposition',
-                'inline; filename="{0}"'.format(
-                    safe_unicode(filename).encode('utf-8')))
-            response.setHeader(
-                'Content-type', 'application/zip')
-            response.setHeader(
-                'Content-Length', os.stat(zip_file.name).st_size)
-
-            return filestream_iterator(zip_file.name, 'rb')
+        zip_file = exporter.get_zipfile()
+        filename = u'{}.zip'.format(normalize_path(self.model.title))
+        set_attachment_content_disposition(
+            self.request, filename, file=zip_file)
+        return stream_data(zip_file)
 
 
 class DemandMeetingZip(BrowserView):
@@ -203,10 +194,10 @@ class MeetingZipExport(BrowserView):
             zip_file = zipper.get_zip_file()
 
             filename = '{}.zip'.format(normalize_path(self.model.title))
-            response.setHeader(
-                'Content-Disposition',
-                'inline; filename="{0}"'.format(
-                    safe_unicode(filename).encode('utf-8')))
+            set_attachment_content_disposition(self.request, filename)
+
+            # the following headers must be set manually as
+            # set_attachment_content_disposition expects a Named(Blob)File
             response.setHeader(
                 'Content-type', 'application/zip')
             response.setHeader(

@@ -66,9 +66,7 @@ class TestZipExporter(IntegrationTestCase):
 
         doc_job = document_jobs[doc_checksum]
         self.assertDictContainsSubset(
-            {'status': 'converting',
-             'folder': 'Agenda item 1',
-             'title': u'Vertr\xe4ge'},
+            {'status': 'converting'},
             doc_job)
 
     def test_zipexport_removes_expired_jobs(self):

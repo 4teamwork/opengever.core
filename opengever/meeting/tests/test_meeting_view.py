@@ -191,7 +191,7 @@ class TestMeetingView(IntegrationTestCase):
 
         self.assertEquals('application/zip', browser.headers.get('content-type'))
         self.assertEquals(
-            'inline; filename="9. Sitzung der Rechnungsprufungskommission.zip"',
+            'attachment; filename="9. Sitzung der Rechnungsprufungskommission.zip"',
             browser.headers.get('content-disposition'))
 
     def get_meeting_transition_url(self, transition_name):

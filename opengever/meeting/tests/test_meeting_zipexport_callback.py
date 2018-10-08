@@ -36,7 +36,9 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'converting')
+            zip_job, self.document, 'converting')
+        document_info = exporter._append_document_job_metadata(
+            zip_job, self.taskdocument, 'converting')
 
         fields = {
             'token': download_token_for(self.document),
@@ -49,8 +51,29 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
 
         self.assertEqual('finished', document_info['status'])
         self.assertEqual('the pdf', document_info['blob'].data)
-        self.assertEqual(u'Vertr\xe4gsentwurf.pdf',
-                         document_info['blob'].filename)
+
+    @browsing
+    def test_zip_file_is_created_for_last_sucessful_callback(self, browser):
+        # don't login in browser as the view is public
+        self.login(self.meeting_user)
+
+        exporter = MeetingZipExporter(self.meeting.model)
+        zip_job = exporter._prepare_zip_job_metadata()
+        document_info = exporter._append_document_job_metadata(
+            zip_job, self.document, 'converting')
+
+        fields = {
+            'token': download_token_for(self.document),
+            'status': 'success',
+            'document': IBumblebeeDocument(self.document).get_checksum(),
+            'opaque_id': str(exporter.internal_id),
+            'pdf': ('converted.pdf', 'the pdf', 'application/pdf'),
+        }
+        self.do_callback_request(browser, fields)
+
+        self.assertEqual('zipped', document_info['status'])
+        self.assertNotIn('blob', document_info)
+        self.assertIn('zip_file', zip_job)
 
     @browsing
     def test_skipped_demand_response_callback(self, browser):
@@ -60,7 +83,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'converting')
+            zip_job, self.document, 'converting')
 
         fields = {
             'token': download_token_for(self.document),
@@ -80,7 +103,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         document_info = exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'converting')
+            zip_job, self.document, 'converting')
 
         fields = {
             'token': download_token_for(self.document),

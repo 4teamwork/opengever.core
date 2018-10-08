@@ -15,14 +15,12 @@ class TestPollMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'converting')
+            zip_job, self.document, 'converting')
 
         browser.open(
             self.meeting,
             view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
-        self.assertEqual(
-            {u'converting': 1, u'finished': 0, u'skipped': 0},
-            browser.json)
+        self.assertEqual(1, browser.json['converting'])
 
     @browsing
     def test_zip_polling_view_reports_finished(self, browser):
@@ -31,14 +29,12 @@ class TestPollMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'finished')
+            zip_job, self.document, 'finished')
 
         browser.open(
             self.meeting,
             view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
-        self.assertEqual(
-            {u'converting': 0, u'finished': 1, u'skipped': 0},
-            browser.json)
+        self.assertEqual(1, browser.json['finished'], browser.json)
 
     @browsing
     def test_zip_polling_view_reports_skipped(self, browser):
@@ -47,14 +43,12 @@ class TestPollMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'skipped')
+            zip_job, self.document, 'skipped')
 
         browser.open(
             self.meeting,
             view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
-        self.assertEqual(
-            {u'converting': 0, u'finished': 0, u'skipped': 1},
-            browser.json)
+        self.assertEqual(1, browser.json['skipped'])
 
 
 class TestDownloadMeetingZip(IntegrationTestCase):
@@ -68,7 +62,7 @@ class TestDownloadMeetingZip(IntegrationTestCase):
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
-            zip_job, self.document, None, 'converting')
+            zip_job, self.document, 'converting')
         exporter.receive_pdf(IBumblebeeDocument(self.document).get_checksum(),
                              'application/pdf',
                              'i am a apdf.')

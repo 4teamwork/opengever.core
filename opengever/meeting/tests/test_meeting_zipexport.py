@@ -5,6 +5,7 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
+from opengever.meeting.zipexport import MeetingDocumentZipper
 from opengever.meeting.zipexport import MeetingJSONSerializer
 from opengever.testing import IntegrationTestCase
 from opengever.testing import set_preferred_language
@@ -127,7 +128,9 @@ class TestMeetingZipExportView(IntegrationTestCase):
             self.schedule_ad_hoc(self.meeting, u'Ad-hoc Traktand\xfem')
         self.schedule_proposal(self.meeting, self.submitted_word_proposal)
 
-        serializer = MeetingJSONSerializer(self.meeting.model)
+        serializer = MeetingJSONSerializer(
+            self.meeting.model,
+            MeetingDocumentZipper(self.meeting.model, None))
         serializer.traverse()
 
         self.assertEquals({

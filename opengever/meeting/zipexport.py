@@ -3,6 +3,7 @@ from datetime import timedelta
 from ftw.bumblebee import get_service_v3
 from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.meeting import _
@@ -16,7 +17,6 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
-from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 import uuid
@@ -24,17 +24,6 @@ import uuid
 
 ZIP_JOBS_KEY = 'opengever.meeting.zipexporter'
 ZIP_EXPIRATION_DAYS = 2
-
-
-def get_document_filename_for_zip(document, agenda_item_number):
-    return normalize_path(u'{}/{}'.format(
-        translate(
-            _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
-              mapping={u'number': agenda_item_number}),
-            context=getRequest(),
-            ),
-        safe_unicode(document.get_filename()))
-    )
 
 
 def format_modified(modified):
@@ -49,43 +38,86 @@ class MeetingDocumentZipper(MeetingTraverser):
     def __init__(self, meeting, generator):
         super(MeetingDocumentZipper, self).__init__(meeting)
         self.generator = generator
+        self.json_serializer = MeetingJSONSerializer(self.meeting, self)
 
     def get_zip_file(self):
         self.traverse()
         self.generator.add_file('meeting.json', self.get_meeting_json_file())
         return self.generator.generate()
 
+    def get_filename(self, document):
+        return document.get_filename()
+
+    def get_file(self, document):
+        return document.get_file()
+
+    def get_agenda_item_filename(self, document, agenda_item_number):
+        return normalize_path(u'{}/{}'.format(
+            translate(
+                _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
+                  mapping={u'number': agenda_item_number}),
+                context=getRequest(),
+                ),
+            safe_unicode(self.get_filename(document)))
+        )
+
     def traverse_protocol_document(self, document):
         self.generator.add_file(
-            document.get_filename(), document.get_file().open()
+            self.get_filename(document), self.get_file(document).open()
         )
 
     def traverse_agenda_item_list_document(self, document):
         self.generator.add_file(
-            document.get_filename(), document.get_file().open()
+            self.get_filename(document), self.get_file(document).open()
         )
 
     def traverse_agenda_item_document(self, document, agenda_item):
         self.generator.add_file(
-            get_document_filename_for_zip(document, agenda_item.number),
-            document.get_file().open()
+            self.get_agenda_item_filename(document, agenda_item.number),
+            self.get_file(document).open()
         )
 
     def traverse_agenda_item_attachment(self, document, agenda_item):
         self.generator.add_file(
-            get_document_filename_for_zip(document, agenda_item.number),
-            document.get_file().open()
+            self.get_agenda_item_filename(document, agenda_item.number),
+            self.get_file(document).open()
         )
 
     def get_meeting_json_file(self):
-        return StringIO(MeetingJSONSerializer(self.meeting).get_json())
+        return StringIO(self.json_serializer.get_json())
+
+
+class MeetingPDFDocumentZipper(MeetingDocumentZipper):
+    """Zip a meetings documents, but replace documents with a PDF if available.
+
+    if no PDF is available the original document will be used as a replacement.
+    """
+    def __init__(self, meeting, pdfs, generator):
+        super(MeetingPDFDocumentZipper, self).__init__(meeting, generator)
+        self.pdfs = pdfs
+
+    def get_filename(self, document):
+        checksum = IBumblebeeDocument(document).get_checksum()
+        filename = super(MeetingPDFDocumentZipper, self).get_filename(document)
+        if checksum not in self.pdfs:
+            return filename
+
+        return u'{}.pdf'.format(os.path.splitext(filename)[0])
+
+    def get_file(self, document):
+        checksum = IBumblebeeDocument(document).get_checksum()
+        if checksum not in self.pdfs:
+            return super(MeetingPDFDocumentZipper, self).get_file(document)
+
+        return self.pdfs[checksum]
 
 
 class MeetingJSONSerializer(MeetingTraverser):
     """Represents a JSON file with which grimlock can import the meeting."""
 
-    def __init__(self, meeting):
+    def __init__(self, meeting, zipper):
         super(MeetingJSONSerializer, self).__init__(meeting)
+        self.zipper = zipper
         self.data = {
             'opengever_id': meeting.meeting_id,
             'title': safe_unicode(meeting.title),
@@ -111,7 +143,7 @@ class MeetingJSONSerializer(MeetingTraverser):
     def traverse_protocol_document(self, document):
         self.data['protocol'] = {
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': document.get_filename(),
+            'file': self.zipper.get_filename(document),
             'modified': format_modified(document.modified()),
         }
 
@@ -131,7 +163,7 @@ class MeetingJSONSerializer(MeetingTraverser):
         self.current_agenda_item_data['number'] = agenda_item.number
         self.current_agenda_item_data['proposal'] = {
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': get_document_filename_for_zip(document, agenda_item.number),
+            'file': self.zipper.get_agenda_item_filename(document, agenda_item.number),
             'modified': format_modified(document.modified()),
         }
 
@@ -141,7 +173,7 @@ class MeetingJSONSerializer(MeetingTraverser):
 
         attachment_data.append({
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': get_document_filename_for_zip(document, agenda_item.number),
+            'file': self.zipper.get_agenda_item_filename(document, agenda_item.number),
             'modified': format_modified(document.modified()),
             'title': safe_unicode(document.Title()),
         })
@@ -178,12 +210,11 @@ class ZipExportDocumentCollector(MeetingTraverser):
 
 
 class MeetingZipExporter(object):
-    """Exports a meeting's documents in a zip file.
+    """Exports a meeting's documents as PDF in a zip file.
 
     Requests pdfs from bumblebee, if available. Falls back to original file
     if no pdf can be supplied or pdf conversion was skipped/erroneous.
     """
-
     def __init__(self, meeting, opaque_id=None, public_id=None):
         self.meeting = meeting
         self.committee = meeting.committee.oguid.resolve_object()
@@ -214,12 +245,11 @@ class MeetingZipExporter(object):
         self._cleanup_old_jobs()
 
         self.zip_job = self._prepare_zip_job_metadata()
-        documents = self._collect_meeting_documents()
 
-        for folder, document in documents:
+        for document in self._collect_meeting_documents():
             status = self._queue_demand_job(document)
             self._append_document_job_metadata(
-                self.zip_job, document, folder, status)
+                self.zip_job, document, status)
 
         return self.public_id
 
@@ -228,33 +258,59 @@ class MeetingZipExporter(object):
         return getUtility(IIntIds).getObject(document_job['intid'])
 
     def receive_pdf(self, checksum, mimetype, data):
+        self._update_job_with_pdf(checksum, mimetype, data)
+
+        if self.is_finished_converting():
+            self._generate_zipfile()
+
+    def _update_job_with_pdf(self, checksum, mimetype, data):
         document_job = self.zip_job['documents'][checksum]
-        filename = u'{}.pdf'.format(document_job['title'])
-        blob_file = NamedBlobFile(
-            data=data, contentType=mimetype, filename=filename)
+        # we're using NamedBlobFile here to re-use an IStorage adapter, the
+        # filename is not relevant
+        blob_file = NamedBlobFile(data=data, contentType=mimetype)
 
         document_job['status'] = 'finished'
         document_job['blob'] = blob_file
 
+    def _generate_zipfile(self):
+        pdfs = {}
+        for checksum, document_job in self.zip_job['documents'].items():
+            if document_job['status'] == 'finished':
+                pdfs[checksum] = document_job.pop('blob')
+                document_job['status'] = 'zipped'
+
+        with ZipGenerator() as generator:
+            zipper = MeetingPDFDocumentZipper(
+                self.meeting, pdfs, generator)
+
+            zip_blob_file = NamedBlobFile(data=zipper.get_zip_file(),
+                                          contentType='application/zip')
+            self.zip_job['zip_file'] = zip_blob_file
+
+    def get_zipfile(self):
+        return self.zip_job['zip_file']
+
     def mark_as_skipped(self, checksum):
         document_job = self.zip_job['documents'][checksum]
         document_job['status'] = 'skipped'
+
+    def is_finished_converting(self):
+        return self.get_status()['converting'] == 0
 
     def get_status(self):
         status = {
             'skipped': 0,
             'finished': 0,
             'converting': 0,
+            'zipped': 0,
+            'is_finished': self.is_finished(),
         }
         for document_info in self.zip_job['documents'].values():
             status[document_info['status']] += 1
         return status
 
-    def zip_documents(self, generator):
-        for document_info in self.zip_job['documents'].values():
-            if document_info['status'] == 'finished':
-                blob = document_info['blob']
-                generator.add_file(blob.filename, blob.open())
+    def is_finished(self):
+        return 'zip_file' in self.zip_job
 
     def _cleanup_old_jobs(self):
         """Remove expired zip jobs.
@@ -286,11 +342,9 @@ class MeetingZipExporter(object):
 
         return zip_job
 
-    def _append_document_job_metadata(self, zip_job, document, folder, status):
+    def _append_document_job_metadata(self, zip_job, document, status):
         document_info = OOBTree()
         document_info['intid'] = getUtility(IIntIds).getId(document)
-        document_info['title'] = safe_unicode(document.Title())
-        document_info['folder'] = folder
         document_info['status'] = status
 
         checksum = IBumblebeeDocument(document).get_checksum()
