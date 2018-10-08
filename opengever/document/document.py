@@ -6,7 +6,6 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.base.interfaces import IRedirector
 from opengever.document import _
 from opengever.document.base import BaseDocumentMixin
@@ -18,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.task.task import ITask
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
@@ -299,6 +299,9 @@ class Document(Item, BaseDocumentMixin):
 
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
+
+    def is_oneoffixx_creatable(self):
+        return is_oneoffixx_feature_enabled() and self.is_shadow_document()
 
     def is_checked_out(self):
         return self.checked_out_by() is not None

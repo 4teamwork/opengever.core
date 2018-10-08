@@ -1,5 +1,6 @@
-from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document import _
+from opengever.document.browser.download import DownloadConfirmationHelper
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from plone import api
@@ -90,6 +91,12 @@ class ActionButtonRendererMixin(object):
                     )
 
         return dc_helper.get_html_tag(**kwargs)
+
+    def is_document(self):
+        return IDocumentSchema.providedBy(self.context)
+
+    def is_oneoffixx_creatable(self):
+        return self.is_document() and self.context.is_oneoffixx_creatable()
 
     def is_attach_to_email_available(self):
         if not is_officeconnector_attach_feature_enabled():
