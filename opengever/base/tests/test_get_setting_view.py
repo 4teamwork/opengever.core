@@ -27,3 +27,9 @@ class TestGetSettingView(IntegrationTestCase):
         self.login(self.regular_user)
         with self.assertRaises(KeyError):
             self.portal.unrestrictedTraverse("get_setting/foo")
+
+    def test_no_features_and_settings_share_names(self):
+        self.login(self.regular_user)
+        feature_names = IGeverSettings(self.portal).get_features().keys()
+        setting_names = IGeverSettings(self.portal).get_settings().keys()
+        self.assertFalse(set(feature_names) & set(setting_names))
