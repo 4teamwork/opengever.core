@@ -1,17 +1,59 @@
-# -*- coding: utf-8 -*-
-from plone import api
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.oneoffixx.api_client import OneoffixxAPIClient
+from opengever.oneoffixx.exceptions import OneoffixxBackendException
+from opengever.oneoffixx.exceptions import OneoffixxConfigurationException
+from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.annotation.interfaces import IAnnotations
+import json
+import requests
+import requests_mock
 
 
 class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
+    features = ("officeconnector-checkout", "oneoffixx")
+
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
-        self.activate_feature("officeconnector-checkout")
-        self.activate_feature("oneoffixx")
+        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+
+        access_token = {'access_token': 'all_may_enter'}
+        template_library = [{'datasources': [{'id': 1}]}]
+        template = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
+            'languages': ['2055'],
+            'localizedName': 'Example',
+            'templateGroupId': 1,
+        }
+        template_groups = [{'templates': [template]}]
+
+        session = requests.Session()
+        adapter = requests_mock.Adapter()
+        adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri(
+            'GET',
+            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
+            text=json.dumps(template_groups),
+        )
+        session.mount('mock', adapter)
+
+        credentials = {
+            'client_id': 'foo',
+            'client_secret': 'topsecret',
+            'preshared_key': 'horribletruth',
+        }
+
+        OneoffixxAPIClient(session, credentials)
+
+    def tearDown(self):
+        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
+        super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
 
     @browsing
     def test_document_creation_from_oneoffixx_template_creates_shadow_doc(self, browser):
@@ -53,6 +95,95 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
         annotations = IAnnotations(browser.context)
         self.assertEqual(node.get("value"), annotations['template-id'])
+
+
+class TestCreateDocFromUnconfiguredOneoffixxTemplate(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def tearDown(self):
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
+        super(TestCreateDocFromUnconfiguredOneoffixxTemplate, self).tearDown()
+
+    @browsing
+    def test_oneoffixx_form_errors_on_missing_config(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        browser.exception_bubbling = True
+        # Do note this will not fail if you actually do have the config file!
+        with self.assertRaises(OneoffixxConfigurationException):
+            factoriesmenu.add('document_with_oneoffixx_template')
+
+
+class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def setUp(self):
+        super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).setUp()
+        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+
+        self.session = requests.Session()
+        self.adapter = requests_mock.Adapter()
+        self.session.mount('mock', self.adapter)
+
+        self.credentials = {
+            'client_id': 'foo',
+            'client_secret': 'topsecret',
+            'preshared_key': 'horribletruth',
+        }
+
+    def tearDown(self):
+        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
+
+        # Reset the mock session
+        self.session = requests.Session()
+        self.adapter = requests_mock.Adapter()
+        self.session.mount('mock', self.adapter)
+
+        super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).tearDown()
+
+    def test_access_token_bad_return(self):
+        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', status_code=400)
+        with self.assertRaises(OneoffixxBackendException):
+            OneoffixxAPIClient(self.session, self.credentials)
+
+    def test_access_token_no_token(self):
+        access_token = {}
+        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        with self.assertRaises(OneoffixxBackendException):
+            OneoffixxAPIClient(self.session, self.credentials)
+
+    @browsing
+    def test_template_library_bad_return(self, browser):
+        access_token = {'access_token': 'all_may_enter'}
+        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', status_code=400)
+        OneoffixxAPIClient(self.session, self.credentials)
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        browser.exception_bubbling = True
+        with self.assertRaises(OneoffixxBackendException):
+            factoriesmenu.add('document_with_oneoffixx_template')
+
+    @browsing
+    def test_template_groups_bad_return(self, browser):
+        access_token = {'access_token': 'all_may_enter'}
+        template_library = [{'datasources': [{'id': 1}]}]
+        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups', status_code=400)
+        OneoffixxAPIClient(self.session, self.credentials)
+
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        browser.exception_bubbling = True
+        with self.assertRaises(OneoffixxBackendException):
+            factoriesmenu.add('document_with_oneoffixx_template')
 
 
 class TestOneOffixxTemplateFeature(IntegrationTestCase):

@@ -105,3 +105,12 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(
             browser.json.get(u'cas_url'), 'https://cas.server.local')
+
+    @browsing
+    def test_config_contains_oneoffixx_settings(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config', headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        expected_oneoffixx_settings = {u'baseurl': u'', u'fake_sid': u'', u'double_encode_bug': True}
+        oneoffixx_settings = browser.json.get('oneoffixx_settings')
+        self.assertEqual(expected_oneoffixx_settings, oneoffixx_settings)

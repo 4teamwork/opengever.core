@@ -31,6 +31,7 @@ tests_require = [
     'Products.CMFPlone',
     'PyJWT',
     'pyquery',
+    'requests_mock',
     'requests_toolbelt',
     'unittest2',
     'xlrd',
