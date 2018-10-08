@@ -8,16 +8,60 @@ from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.zipexport import MeetingDocumentZipper
 from opengever.meeting.zipexport import MeetingZipExporter
 from pkg_resources import resource_filename
+from plone import api
 from plone.namedfile.utils import stream_data
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
+from zExceptions import Redirect
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 import uuid
+
+
+def as_uuid(id_from_request):
+    if not id_from_request:
+        return None
+
+    try:
+        return uuid.UUID(id_from_request)
+    except ValueError:
+        pass
+
+    return None
+
+
+def require_public_id_parameter(request):
+    public_id = request.get('public_id')
+    if not public_id:
+        raise BadRequest('must supply valid public_id of zip-job.')
+
+    return public_id
+
+
+def require_exporter(request, meeting, str_public_id):
+    public_id = as_uuid(str_public_id)
+    if not public_id:
+        msg = _(u'msg_invalid_public_id',
+                default=u'The supplied job id ${uuid} is invalid.',
+                mapping={'uuid': str_public_id})
+        api.portal.show_message(
+            message=msg, request=request, type='error')
+        raise Redirect(meeting.get_url())
+
+    if not MeetingZipExporter.exists(meeting, public_id):
+        msg = _(u'msg_no_export_for_public_id',
+                default=u'No zip job could be found for the supplied '
+                         'job id ${uuid}.',
+                mapping={'uuid': str_public_id})
+        api.portal.show_message(
+            message=msg, request=request, type='error')
+        raise Redirect(meeting.get_url())
+
+    return MeetingZipExporter(meeting, public_id=public_id)
 
 
 class PollMeetingZip(BrowserView):
@@ -28,12 +72,9 @@ class PollMeetingZip(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
-        public_id = self.request.get('public_id')
-        if not public_id:
-            raise BadRequest('must supply public_id of zip-job.')
+        public_id = require_public_id_parameter(self.request)
+        exporter = require_exporter(self.request, self.model, public_id)
 
-        public_id = uuid.UUID(public_id)
-        exporter = MeetingZipExporter(self.model, public_id=public_id)
         status = exporter.get_status()
 
         response = self.request.response
@@ -49,12 +90,8 @@ class DownloadMeetingZip(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
-        public_id = self.request.get('public_id')
-        if not public_id:
-            raise BadRequest('must supply public_id of zip-job.')
-
-        public_id = uuid.UUID(public_id)
-        exporter = MeetingZipExporter(self.model, public_id=public_id)
+        public_id = require_public_id_parameter(self.request)
+        exporter = require_exporter(self.request, self.model, public_id)
 
         zip_file = exporter.get_zipfile()
         filename = u'{}.zip'.format(normalize_path(self.model.title))
@@ -76,15 +113,14 @@ class DemandMeetingZip(BrowserView):
 
         public_id = self.request.get('public_id', None)
         if public_id:
-            # XXX validate id
+            require_exporter(self.request, self.model, public_id)
             self.public_id = public_id
             return super(DemandMeetingZip, self).__call__()
 
         else:
             public_id = MeetingZipExporter(self.model).demand_pdfs()
-            self.public_id = str(public_id)
             url = "{}/@@demand_meeting_zip?public_id={}".format(
-                self.context.absolute_url(), self.public_id)
+                self.context.absolute_url(), str(public_id))
             return self.request.RESPONSE.redirect(url)
 
     @property

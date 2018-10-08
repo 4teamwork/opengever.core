@@ -215,6 +215,12 @@ class MeetingZipExporter(object):
     Requests pdfs from bumblebee, if available. Falls back to original file
     if no pdf can be supplied or pdf conversion was skipped/erroneous.
     """
+    @classmethod
+    def exists(cls, meeting, job_id):
+        committee = meeting.committee.oguid.resolve_object()
+        zip_jobs = IAnnotations(committee).get(ZIP_JOBS_KEY, {})
+        return job_id in zip_jobs
+
     def __init__(self, meeting, opaque_id=None, public_id=None):
         self.meeting = meeting
         self.committee = meeting.committee.oguid.resolve_object()
