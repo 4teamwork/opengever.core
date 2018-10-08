@@ -40,6 +40,34 @@ def format_modified(modified):
         ).isoformat())
 
 
+class MeetingDocumentZipper(MeetingTraverser):
+
+    def __init__(self, meeting, generator):
+        super(MeetingDocumentZipper, self).__init__(meeting)
+        self.generator = generator
+
+    def traverse_protocol_document(self, document):
+        self.generator.add_file(
+            document.get_filename(), document.get_file().open()
+        )
+
+    def traverse_agenda_item_list_document(self, document):
+        self.generator.add_file(
+            document.get_filename(), document.get_file().open()
+        )
+
+    def traverse_agenda_item_document(self, document, agenda_item):
+        self.generator.add_file(
+            get_document_filename_for_zip(document, agenda_item.number),
+            document.get_file().open()
+        )
+
+    def traverse_agenda_item_attachment(self, document, agenda_item):
+        self.generator.add_file(
+            get_document_filename_for_zip(document, agenda_item.number),
+            document.get_file().open()
+        )
+
 
 class MeetingJSONSerializer(MeetingTraverser):
     """Represents a JSON file with which grimlock can import the meeting."""

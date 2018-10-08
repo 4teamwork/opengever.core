@@ -3,15 +3,10 @@ from ftw.zipexport.utils import normalize_path
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
 from opengever.meeting import _
-from opengever.meeting.command import AgendaItemListOperations
-from opengever.meeting.command import CreateGeneratedDocumentCommand
-from opengever.meeting.command import MergeDocxProtocolCommand
-from opengever.meeting.command import ProtocolOperations
-from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.interfaces import IMeetingWrapper
-from opengever.meeting.zipexport import get_document_filename_for_zip
 from opengever.meeting.zipexport import MeetingJSONSerializer
 from opengever.meeting.zipexport import MeetingZipExporter
+from opengever.meeting.zipexport import MeetingDocumentZipper
 from pkg_resources import resource_filename
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFPlone.utils import safe_unicode
@@ -23,7 +18,6 @@ from zope.interface import alsoProvides
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
-import pytz
 import uuid
 
 
@@ -211,20 +205,8 @@ class MeetingZipExport(BrowserView):
         response = self.request.response
 
         with ZipGenerator() as generator:
-            # Protocol
-            generator.add_file(*self.get_protocol())
-
-            # Agenda items
-            self.add_agenda_items_attachments(generator)
-            self.add_agenda_item_proposal_documents(generator)
-
-            # Agenda items list
-            try:
-                generator.add_file(*self.get_agendaitem_list())
-            except AgendaItemListMissingTemplate:
-                pass
-
-            generator.add_file(*self.get_meeting_json())
+            MeetingDocumentZipper(self.model, generator).traverse()
+            generator.add_file('meeting.json', self.get_meeting_json())
 
             # Return zip
             zip_file = generator.generate()
@@ -239,70 +221,6 @@ class MeetingZipExport(BrowserView):
                 os.stat(zip_file.name).st_size)
 
             return filestream_iterator(zip_file.name, 'rb')
-
-    def get_protocol(self):
-        if self.model.has_protocol_document():
-            protocol = self.model.protocol_document.resolve_document()
-            protocol_modified = protocol.modified().asdatetime().astimezone(
-                pytz.utc)
-
-            if self.model.modified < protocol_modified:
-                # Return current protocol
-                return (u'{}.docx'.format(safe_unicode(protocol.Title())),
-                        protocol.file.open())
-
-        # Create new protocol
-        operations = ProtocolOperations()
-        command = MergeDocxProtocolCommand(
-            self.context,
-            self.model,
-            operations)
-
-        filename = u'{}.docx'.format(operations.get_title(self.model))
-        return (filename, StringIO(command.generate_file_data()))
-
-    def add_agenda_item_proposal_documents(self, generator):
-        for agenda_item in self.model.agenda_items:
-            if not agenda_item.has_document:
-                continue
-
-            document = agenda_item.resolve_document()
-            if not document:
-                continue
-
-            path = get_document_filename_for_zip(document, agenda_item.number)
-            generator.add_file(path, document.get_file().open())
-
-    def add_agenda_items_attachments(self, generator):
-        for agenda_item in self.model.agenda_items:
-            if not agenda_item.has_submitted_documents():
-                continue
-
-            for document in agenda_item.proposal.resolve_submitted_documents():
-                path = get_document_filename_for_zip(document, agenda_item.number)
-                generator.add_file(path, document.get_file().open())
-
-    def get_agendaitem_list(self):
-        if self.model.has_agendaitem_list_document():
-            agendaitem_list = self.model.agendaitem_list_document.resolve_document()
-            agendaitem_list_modified = agendaitem_list.modified().asdatetime().astimezone(
-                pytz.utc)
-
-            if self.model.modified < agendaitem_list_modified:
-                # Return current protocol
-                return (u'{}.docx'.format(safe_unicode(agendaitem_list.Title())),
-                        agendaitem_list.file.open())
-
-        # Create new protocol
-        operations = AgendaItemListOperations()
-        command = CreateGeneratedDocumentCommand(
-            self.context,
-            self.model,
-            operations,
-            )
-
-        filename = u'{}.docx'.format(operations.get_title(self.model))
-        return (filename, StringIO(command.generate_file_data()))
 
     def get_meeting_json(self):
         serializer = MeetingJSONSerializer(self.model)

@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
 from ftw.zipexport.zipfilestream import ZipFile
+from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.zipexport import MeetingJSONSerializer
 from opengever.testing import IntegrationTestCase
 from opengever.testing import set_preferred_language
@@ -17,15 +18,6 @@ class TestMeetingZipExportView(IntegrationTestCase):
     maxDiff = None
 
     @browsing
-    def test_zip_export_generate_protocol_if_there_is_none(self, browser):
-        self.login(self.committee_responsible, browser)
-        browser.open(self.meeting, view='export-meeting-zip')
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertFalse(self.meeting.model.has_protocol_document())
-        self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-                      zip_file.namelist())
-
-    @browsing
     def test_zip_export_includes_generated_protocol(self, browser):
         self.login(self.committee_responsible, browser)
         self.meeting.model.update_protocol_document()
@@ -33,24 +25,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-                      zip_file.namelist())
-
-    @browsing
-    def test_zip_export_generate_protocol_if_outdated(self, browser):
-        self.login(self.committee_responsible, browser)
-
-        browser.open(self.meeting, view='export-meeting-zip')
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-                      zip_file.namelist())
-
-        browser.open(self.meeting, view='edit-meeting')
-        browser.fill({'Title': 'New Meeting Title'}).save()
-
-        browser.open(self.meeting, view='export-meeting-zip')
-        zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertIn('Agendaitem list-New Meeting Title.docx',
+        self.assertIn('Protocol-9. Sitzung der Rechnungspruefungskommission.docx',
                       zip_file.namelist())
 
     @browsing
@@ -62,7 +37,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            'Traktandum 1/Vertragsentwurf.docx',
+            'Traktandum 1/Vertraegsentwurf.docx',
             zip_file.namelist())
 
     @browsing
@@ -73,7 +48,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            'Traktandum 1/Anderungen am Personalreglement.docx',
+            'Traktandum 1/Aenderungen am Personalreglement.docx',
             zip_file.namelist())
 
     @browsing
@@ -87,21 +62,20 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
-        self.assertEquals(
-            ['Protokoll-9. Sitzung der Rechnungsprufungskommission.docx',
-             'Traktandum 1/Vertragsentwurf.docx',
-             'Traktandum 1/Anderungen am Personalreglement.docx',
-             'Traktandenliste-9. Sitzung der Rechnungsprufungskommission.docx',
+        self.assertItemsEqual(
+            ['Traktandum 1/Vertraegsentwurf.docx',
+             'Traktandum 1/Aenderungen am Personalreglement.docx',
              'meeting.json'],
             zip_file.namelist())
 
     @browsing
     def test_zip_export_agenda_items_list(self, browser):
         self.login(self.committee_responsible, browser)
+        browser.open(GenerateAgendaItemList.url_for(self.meeting.model))
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
+            'Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx',
             zip_file.namelist())
 
     @browsing
@@ -142,9 +116,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
 
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertEquals(
-            ['Protocol-9. Sitzung der Rechnungsprufungskommission.docx',
-             'Agendaitem list-9. Sitzung der Rechnungsprufungskommission.docx',
-             'meeting.json'],
+            ['meeting.json'],
             zip_file.namelist())
 
     def test_meeting_data_for_zip_export_json(self):
