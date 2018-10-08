@@ -1,7 +1,7 @@
-from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
+from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
 from plone.locking.interfaces import ILockable
@@ -21,7 +21,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
     def test_unlock_button_available_only_for_managers(self, browser):
         with freeze():
             self.login(self.regular_user, browser)
-            with freeze(datetime(2100, 8, 3, 15, 25)):
+            with freeze(FREEZE_DATE):
                 oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
             expected_token = {
@@ -33,7 +33,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
                 }
             raw_token = oc_url.split(':')[-1]
             token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-            self.assertEqual(token, expected_token)
+            self.assertEqual(expected_token, token)
 
             self.lock_document(browser, raw_token, self.document)
 
@@ -50,7 +50,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
     @browsing
     def test_force_unlock_clears_lock(self, browser):
         self.login(self.regular_user, browser)
-        with freeze(datetime(2100, 8, 3, 15, 25)):
+        with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_checkout_oc_url(browser, self.document)
 
         expected_token = {
@@ -62,7 +62,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
-        self.assertEqual(token, expected_token)
+        self.assertEqual(expected_token, token)
 
         lockable = ILockable(self.document)
         self.lock_document(browser, raw_token, self.document)
