@@ -153,6 +153,12 @@
       />
 
   <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.trash.remover.IObjectWillBeRemovedFromTrashEvent"
+      handler=".handlers.excerpt_delete"
+      />
+
+  <subscriber
       for="opengever.document.document.IDocumentSchema
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.on_document_modified"

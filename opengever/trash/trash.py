@@ -72,13 +72,10 @@ class Trasher(object):
         if not _checkPermission('opengever.trash: Trash content', folder):
             raise Unauthorized()
 
-        if ITrashed.providedBy(self.context):
-            raise TrashError('Already trashed')
-
-        manager = queryMultiAdapter((self.context, self.context.REQUEST),
-                                    ICheckinCheckoutManager)
-        if manager and manager.get_checked_out_by():
-            raise TrashError('Document checked out')
+        # check that document can be trashed
+        self.verify_is_not_already_trashed()
+        self.verify_is_not_checked_out()
+        self.verify_is_not_returned_excerpt()
 
         alsoProvides(self.context, ITrashed)
 
@@ -105,3 +102,21 @@ class Trasher(object):
 
     def reindex(self):
         self.context.reindexObject(idxs=['trashed', 'object_provides'])
+
+    def verify_is_not_already_trashed(self):
+        if ITrashed.providedBy(self.context):
+            raise TrashError('Already trashed')
+
+    def verify_is_not_checked_out(self):
+        manager = queryMultiAdapter((self.context, self.context.REQUEST),
+                                    ICheckinCheckoutManager)
+        if manager and manager.get_checked_out_by():
+            raise TrashError('Document checked out')
+
+    def verify_is_not_returned_excerpt(self):
+        """ An excerpt that has been returned to the proposal
+        should not be trashed
+        """
+        if (self.context.get_proposal() is not None
+                and self.context.get_proposal().get_excerpt() == self.context):
+            raise TrashError('The document has been returned as excerpt')

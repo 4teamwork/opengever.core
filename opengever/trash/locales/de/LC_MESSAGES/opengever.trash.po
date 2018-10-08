@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: opengever.trash 1.0\n"
-"POT-Creation-Date: 2018-05-24 07:27+0000\n"
+"POT-Creation-Date: 2018-09-04 12:38+0000\n"
 "PO-Revision-Date: 2017-05-03 09:38+0200\n"
 "Last-Translator: Julian Infanger <julian.infangner.@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -30,6 +30,10 @@ msgstr "Sie haben keine Objekte ausgewählt"
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is already trashed"
 msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
+
+#: ./opengever/trash/browser/trash.py
+msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
+msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ein Protokollauszug, welcher als Antwort an einen Antrag zurückgesendet wurde."
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."

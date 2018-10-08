@@ -2,6 +2,7 @@ from datetime import date
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.oguid import Oguid
 from opengever.meeting.model.committee import Committee
+from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.model.generateddocument import GeneratedDocument
 from opengever.meeting.model.meeting import Meeting
 from opengever.meeting.model.membership import Membership
@@ -65,6 +66,17 @@ class ProposalQuery(BaseQuery):
 
 
 Proposal.query_cls = ProposalQuery
+
+
+class ExcerptQuery(BaseQuery):
+
+    def by_oguid(self, oguid):
+        """Return the query for the given oguid
+        """
+        return self.filter(Excerpt.excerpt_oguid == oguid)
+
+
+Excerpt.query_cls = ExcerptQuery
 
 
 class CommitteeQuery(BaseQuery):

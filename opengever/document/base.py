@@ -8,6 +8,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.task.task import ITask
 from plone import api
 from plone.dexterity.content import Item
@@ -81,6 +82,7 @@ class BaseDocumentMixin(object):
             # We expect that there are 0 or 1 relation, because this document
             # cannot be the excerpt of multiple proposals.
             submitted_proposal = relation.from_object
+            assert(ISubmittedProposal.providedBy(submitted_proposal))
             if api.user.has_permission('View', obj=submitted_proposal):
                 return submitted_proposal
 

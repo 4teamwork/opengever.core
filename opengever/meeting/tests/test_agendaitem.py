@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrashable
 from plone.protect import createToken
 import json
 import re
@@ -86,6 +87,44 @@ class TestDisplayAgendaItems(IntegrationTestCase):
         expected_excerpt_order = ['a excerpt', 'b excerpt', 'c excerpt']
         excerpt_order = browser.open_html(excerpt_links).css('a').text
         self.assertEqual(excerpt_order, expected_excerpt_order)
+
+    @browsing
+    def test_trashed_exceprts_are_not_listed_for_agendaitem(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.generate_excerpt('excerpt 2')
+
+        excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
+        self.assertEqual(len(excerpts), 2)
+
+        ITrashable(excerpt1).trash()
+        excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
+        self.assertEqual(len(excerpts), 1)
+
+        excerpt_links = ' '.join([excerpt.get('link') for excerpt in excerpts])
+        excerpt_titles = browser.open_html(excerpt_links).css('a').text
+        self.assertEqual(['excerpt 2'], excerpt_titles)
+
+    @browsing
+    def test_trashed_exceprts_are_not_listed_for_ad_hoc_agendaitem(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'Foo')
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.generate_excerpt('excerpt 2')
+
+        excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
+        self.assertEqual(len(excerpts), 2)
+
+        ITrashable(excerpt1).trash()
+        excerpts = browser.open(self.agenda_item_url(agenda_item, 'list')).json.get('items')[0].get('excerpts')
+        self.assertEqual(len(excerpts), 1)
+
+        excerpt_links = ' '.join([excerpt.get('link') for excerpt in excerpts])
+        excerpt_titles = browser.open_html(excerpt_links).css('a').text
+        self.assertEqual(['excerpt 2'], excerpt_titles)
 
 
 class TestEditAgendaItems(IntegrationTestCase):
