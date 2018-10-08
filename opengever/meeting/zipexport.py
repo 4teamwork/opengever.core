@@ -146,35 +146,38 @@ class MeetingZipExporter(object):
         # prepare or figure out public/internal ids
         if opaque_id and opaque_id in self.zip_jobs:
             self.internal_id = opaque_id
-            self.public_id = self.zip_jobs[self.internal_id]['public_id']
+            self.zip_job = self.zip_jobs[self.internal_id]
+            self.public_id = self.zip_job['public_id']
         elif public_id and public_id in self.zip_jobs:
             self.public_id = public_id
-            self.internal_id = self.zip_jobs[self.public_id]['internal_id']
+            self.zip_job = self.zip_jobs[self.public_id]
+            self.internal_id = self.zip_job['internal_id']
         else:
             self.internal_id = opaque_id or uuid.uuid4()
             self.public_id = public_id or uuid.uuid4()
+            self.zip_job = None
 
     def demand_pdfs(self):
         """Demand pdfs for all zip documents from bumlebee."""
 
         self._cleanup_old_jobs()
 
-        zip_job = self._prepare_zip_job_metadata()
+        self.zip_job = self._prepare_zip_job_metadata()
         documents = self._collect_meeting_documents()
 
         for folder, document in documents:
             status = self._queue_demand_job(document)
             self._append_document_job_metadata(
-                zip_job, document, folder, status)
+                self.zip_job, document, folder, status)
 
         return self.public_id
 
     def get_document(self, checksum):
-        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        document_job = self.zip_job['documents'][checksum]
         return getUtility(IIntIds).getObject(document_job['intid'])
 
     def receive_pdf(self, checksum, mimetype, data):
-        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        document_job = self.zip_job['documents'][checksum]
         filename = u'{}.pdf'.format(document_job['title'])
         blob_file = NamedBlobFile(
             data=data, contentType=mimetype, filename=filename)
@@ -183,7 +186,7 @@ class MeetingZipExporter(object):
         document_job['blob'] = blob_file
 
     def mark_as_skipped(self, checksum):
-        document_job = self.zip_jobs[self.internal_id]['documents'][checksum]
+        document_job = self.zip_job['documents'][checksum]
         document_job['status'] = 'skipped'
 
     def get_status(self):
@@ -192,12 +195,12 @@ class MeetingZipExporter(object):
             'finished': 0,
             'converting': 0,
         }
-        for document_info in self.zip_jobs[self.internal_id]['documents'].values():
+        for document_info in self.zip_job['documents'].values():
             status[document_info['status']] += 1
         return status
 
     def zip_documents(self, generator):
-        for document_info in self.zip_jobs[self.internal_id]['documents'].values():
+        for document_info in self.zip_job['documents'].values():
             if document_info['status'] == 'finished':
                 blob = document_info['blob']
                 generator.add_file(blob.filename, blob.open())
