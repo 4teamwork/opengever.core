@@ -1,13 +1,9 @@
-from opengever.meeting.command import MergeDocxProtocolCommand
-from opengever.meeting.command import ProtocolOperations
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 
 
 class MergeDocxProtocol(BrowserView):
     """Create a protocol merged from several partial protocols."""
-
-    operations = ProtocolOperations()
 
     @classmethod
     def url_for(cls, meeting, overwrite=False):
@@ -19,10 +15,9 @@ class MergeDocxProtocol(BrowserView):
 
     def __call__(self):
         meeting = self.context.get_meeting()
-        command = MergeDocxProtocolCommand(
-            self.context, meeting, self.operations)
-        overwrite = self.request.get("overwrite") == "True"
-        command.execute(overwrite)
+
+        command = meeting.update_protocol_document(
+            overwrite=self.request.get("overwrite") == "True")
         command.show_message()
 
         return self.request.RESPONSE.redirect(meeting.get_url())

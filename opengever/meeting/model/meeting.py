@@ -212,20 +212,16 @@ class Meeting(Base, SQLFormSupport):
         for agenda_item in self.agenda_items:
             agenda_item.generate_decision_number(period)
 
-    def update_protocol_document(self):
+    def update_protocol_document(self, overwrite=False):
         """Update or create meeting's protocol."""
         from opengever.meeting.command import MergeDocxProtocolCommand
         from opengever.meeting.command import ProtocolOperations
 
-        if self.was_protocol_manually_edited():
-            # If a user has made manual changes, we do not update the protocol
-            # to avoid losing the changes
-            return
-
         operations = ProtocolOperations()
         command = MergeDocxProtocolCommand(
             self.get_dossier(), self, operations)
-        command.execute()
+        command.execute(overwrite=overwrite)
+        return command
 
     def hold(self):
         if self.workflow_state == 'held':
