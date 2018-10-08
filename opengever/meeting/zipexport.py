@@ -6,6 +6,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.zipexport.utils import normalize_path
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.meeting import _
+from opengever.meeting.traverser import MeetingTraverser
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFPlone.utils import safe_unicode
 from tzlocal import get_localzone
@@ -14,7 +15,6 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
-import os
 import uuid
 
 
@@ -23,14 +23,14 @@ ZIP_EXPIRATION_DAYS = 2
 
 
 def get_document_filename_for_zip(document, agenda_item_number):
-    return normalize_path(u'{}/{}{}'.format(
+    return normalize_path(u'{}/{}'.format(
         translate(
             _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
               mapping={u'number': agenda_item_number}),
             context=getRequest(),
             ),
-        safe_unicode(document.Title()),
-        os.path.splitext(document.get_file().filename)[1]))
+        safe_unicode(document.get_filename()))
+    )
 
 
 def format_modified(modified):
@@ -40,10 +40,12 @@ def format_modified(modified):
         ).isoformat())
 
 
-class MeetingJSON(object):
+
+class MeetingJSONSerializer(MeetingTraverser):
     """Represents a JSON file with which grimlock can import the meeting."""
 
     def __init__(self, meeting):
+        super(MeetingJSONSerializer, self).__init__(meeting)
         self.data = {
             'opengever_id': meeting.meeting_id,
             'title': safe_unicode(meeting.title),
@@ -54,53 +56,46 @@ class MeetingJSON(object):
                 'oguid': safe_unicode(meeting.committee.oguid.id),
                 'title': safe_unicode(meeting.committee.title),
             },
-            'agenda_items': self.get_agenda_items_data(meeting.agenda_items),
+            'agenda_items': [],
         }
-        if meeting.has_protocol_document():
-            document = meeting.protocol_document.resolve_document()
-            self.data.update({
-                'protocol': {
-                    'checksum': IBumblebeeDocument(document).get_checksum(),
-                    'file': normalize_path(safe_unicode('{}.docx'.format(
-                        document.Title()))),
-                    'modified': format_modified(document.modified()),
-                }
-            })
 
-    def get_agenda_items_data(self, agenda_items):
-        return [self.get_agenda_item_data(agenda_item)
-                for agenda_item in agenda_items]
+    def traverse_protocol_document(self, document):
+        self.data['protocol'] = {
+            'checksum': IBumblebeeDocument(document).get_checksum(),
+            'file': document.get_filename(),
+            'modified': format_modified(document.modified()),
+        }
 
-    def get_agenda_item_data(self, agenda_item):
-        agenda_item_data = {
+    def traverse_agenda_item(self, agenda_item):
+        self.current_agenda_item_data = {
             'opengever_id': agenda_item.agenda_item_id,
             'title': safe_unicode(agenda_item.get_title()),
             'sort_order': agenda_item.sort_order,
         }
 
-        if agenda_item.has_document:
-            document = agenda_item.resolve_document()
-            agenda_item_data.update({
-                'number': agenda_item.number,
-                'proposal': {
-                    'checksum': IBumblebeeDocument(document).get_checksum(),
-                    'file': get_document_filename_for_zip(document, agenda_item.number),
-                    'modified': format_modified(document.modified()),
-                }
-            })
+        super(MeetingJSONSerializer, self).traverse_agenda_item(agenda_item)
 
-        if agenda_item.has_submitted_documents():
-            agenda_item_data.update({
-                'attachments': [{
-                    'checksum': IBumblebeeDocument(document).get_checksum(),
-                    'file': get_document_filename_for_zip(document, agenda_item.number),
-                    'modified': format_modified(document.modified()),
-                    'title': safe_unicode(document.Title()),
-                }
-                for document in agenda_item.proposal.resolve_submitted_documents()],
-            })
+        self.data['agenda_items'].append(self.current_agenda_item_data)
+        self.current_agenda_item_data = None
 
-        return agenda_item_data
+    def traverse_agenda_item_document(self, document, agenda_item):
+        self.current_agenda_item_data['number'] = agenda_item.number
+        self.current_agenda_item_data['proposal'] = {
+            'checksum': IBumblebeeDocument(document).get_checksum(),
+            'file': get_document_filename_for_zip(document, agenda_item.number),
+            'modified': format_modified(document.modified()),
+        }
+
+    def traverse_agenda_item_attachment(self, document, agenda_item):
+        attachment_data = self.current_agenda_item_data.setdefault(
+            'attachments', [])
+
+        attachment_data.append({
+            'checksum': IBumblebeeDocument(document).get_checksum(),
+            'file': get_document_filename_for_zip(document, agenda_item.number),
+            'modified': format_modified(document.modified()),
+            'title': safe_unicode(document.Title()),
+        })
 
 
 class MeetingZipExporter(object):

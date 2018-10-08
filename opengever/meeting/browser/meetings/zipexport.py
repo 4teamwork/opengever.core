@@ -10,7 +10,7 @@ from opengever.meeting.command import ProtocolOperations
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
 from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.zipexport import get_document_filename_for_zip
-from opengever.meeting.zipexport import MeetingJSON
+from opengever.meeting.zipexport import MeetingJSONSerializer
 from opengever.meeting.zipexport import MeetingZipExporter
 from pkg_resources import resource_filename
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -305,10 +305,11 @@ class MeetingZipExport(BrowserView):
         return (filename, StringIO(command.generate_file_data()))
 
     def get_meeting_json(self):
+        serializer = MeetingJSONSerializer(self.model)
+        serializer.traverse()
+
         json_data = {
             'version': '1.0.0',
-            'meetings': [MeetingJSON(self.context.model).data],
+            'meetings': [serializer.data],
         }
-        return 'meeting.json', StringIO(json.dumps(json_data,
-                                                   sort_keys=True,
-                                                   indent=4))
+        return StringIO(json.dumps(json_data, sort_keys=True, indent=4))
