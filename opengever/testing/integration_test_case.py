@@ -553,6 +553,24 @@ class IntegrationTestCase(TestCase):
         excerpt = agendaitem.generate_excerpt(excerpt_title or agendaitem.get_title())
         agendaitem.return_excerpt(excerpt)
 
+    def generate_protocol_document(self, meeting):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        meeting.update_protocol_document()
+
+    def generate_agenda_item_list(self, meeting):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        from opengever.meeting.command import AgendaItemListOperations
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+
+        command = CreateGeneratedDocumentCommand(
+            meeting.get_dossier(), meeting, AgendaItemListOperations(),
+            )
+        command.execute()
+
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))
 
