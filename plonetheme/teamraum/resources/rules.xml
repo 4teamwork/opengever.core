@@ -200,6 +200,13 @@
       <after content="//*[@id='portal-footer-wrapper']/div/script" css:theme="#container" />
       <after content="//*[@id='portal-footer-wrapper']/div/noscript" css:theme="#container" />
 
+      <!-- Move div#favorites-action out of the IBelowContentTitle viewlet and
+           place it after the title so we can style it as display:inline-block -->
+      <after content="//div[@id='content']//h1[@class='documentFirstHeading']">
+        <xsl:copy-of select="//div[@id='content']//div[@id='favorite-action']" />
+      </after>
+      <drop content="//div[@id='content']//div[@id='favorite-action']" />
+
     </rules>
   </rules>
 </rules>
