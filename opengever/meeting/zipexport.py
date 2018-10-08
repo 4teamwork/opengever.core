@@ -126,6 +126,36 @@ class MeetingJSONSerializer(MeetingTraverser):
         })
 
 
+class ZipExportDocumentCollector(MeetingTraverser):
+    """Collect all documents that will be exported in a zip."""
+
+    def __init__(self, meeting):
+        super(ZipExportDocumentCollector, self).__init__(meeting)
+        self._documents = []
+
+    def traverse_protocol_document(self, document):
+        self._collect(document)
+
+    def traverse_agenda_item_list_document(self, document):
+        self._collect(document)
+
+    def traverse_agenda_item_document(self, document, agenda_item):
+        self._collect(document)
+
+    def traverse_agenda_item_attachment(self, document, agenda_item):
+        self._collect(document)
+
+    def get_documents(self):
+        self.traverse()
+        return tuple(self._documents)
+
+    def _collect(self, document):
+        if not IBumblebeeDocument(document).has_file_data():
+            return
+
+        self._documents.append(document)
+
+
 class MeetingZipExporter(object):
     """Exports a meeting's documents in a zip file.
 
@@ -258,35 +288,4 @@ class MeetingZipExporter(object):
             return 'skipped'
 
     def _collect_meeting_documents(self):
-        documents = []
-        if self.meeting.has_protocol_document():
-            protocol = self.meeting.protocol_document.resolve_document()
-            if protocol:
-                documents.append((None, protocol))
-
-        for agenda_item in self.meeting.agenda_items:
-            folder_name = normalize_path(translate(
-                _(u'title_agenda_item',
-                  default=u'Agenda item ${number}',
-                  mapping={u'number': agenda_item.number}),
-                context=getRequest(),
-            ))
-
-            if agenda_item.has_submitted_documents():
-                for document in agenda_item.proposal.resolve_submitted_documents():
-                    documents.append((folder_name, document))
-
-            if agenda_item.has_document:
-                document = agenda_item.resolve_document()
-                if document:
-                    documents.append((folder_name, document))
-
-        if self.meeting.has_agendaitem_list_document():
-            agendaitem_list = self.meeting.agendaitem_list_document.resolve_document()
-            if agendaitem_list:
-                documents.append((None, agendaitem_list))
-
-        # filter documents without file, they might have made their way in as
-        # an attachment or somesuch
-        return [(path, doc) for path, doc in documents
-                if IBumblebeeDocument(doc).has_file_data()]
+        return ZipExportDocumentCollector(self.meeting).get_documents()
