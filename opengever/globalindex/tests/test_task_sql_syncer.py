@@ -29,6 +29,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
                     task_type='direct-execution',
                     responsible_client=get_current_org_unit().id(),
                     responsible=self.user.userid,
+                    is_private=True,
                     deadline=date(2010, 1, 1),
                     text='Lorem ipsum dolor sit amet, consectetur')
             .within(self.subdossier)
@@ -42,6 +43,7 @@ class TestTaskSQLSyncer(FunctionalTestCase):
         self.assertEqual(get_current_admin_unit().id(), task.admin_unit_id)
         self.assertEqual(u'Mach mau!', task.title)
         self.assertEqual(self.user.userid, task.issuer)
+        self.assertTrue(task.is_private)
         self.assertEqual(self.user.userid, task.responsible)
         self.assertEqual(u'dossier > subdossier > Mach mau!',
                          task.breadcrumb_title)
