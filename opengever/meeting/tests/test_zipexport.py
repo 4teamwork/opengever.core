@@ -1,11 +1,11 @@
 from datetime import datetime
-from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testing import freeze
 from opengever.meeting import zipexport
 from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from zope.annotation import IAnnotations
 import pytz
 
@@ -61,10 +61,10 @@ class TestZipExporter(IntegrationTestCase):
         self.assertEqual(3, len(document_jobs))
 
         doc = self.submitted_proposal.get_proposal_document()
-        doc_checksum = IBumblebeeDocument(doc).get_checksum()
-        self.assertIn(doc_checksum, document_jobs)
+        document_id = IUUID(doc)
+        self.assertIn(document_id, document_jobs)
 
-        doc_job = document_jobs[doc_checksum]
+        doc_job = document_jobs[document_id]
         self.assertDictContainsSubset(
             {'status': 'converting'},
             doc_job)

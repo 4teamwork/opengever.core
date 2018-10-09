@@ -9,6 +9,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.meeting import _
 from opengever.meeting.traverser import MeetingTraverser
 from plone.namedfile.file import NamedBlobFile
+from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from StringIO import StringIO
 from tzlocal import get_localzone
@@ -97,19 +98,19 @@ class MeetingPDFDocumentZipper(MeetingDocumentZipper):
         self.pdfs = pdfs
 
     def get_filename(self, document):
-        checksum = IBumblebeeDocument(document).get_checksum()
+        document_id = IUUID(document)
         filename = super(MeetingPDFDocumentZipper, self).get_filename(document)
-        if checksum not in self.pdfs:
+        if document_id not in self.pdfs:
             return filename
 
         return u'{}.pdf'.format(os.path.splitext(filename)[0])
 
     def get_file(self, document):
-        checksum = IBumblebeeDocument(document).get_checksum()
-        if checksum not in self.pdfs:
+        document_id = IUUID(document)
+        if document_id not in self.pdfs:
             return super(MeetingPDFDocumentZipper, self).get_file(document)
 
-        return self.pdfs[checksum]
+        return self.pdfs[document_id]
 
 
 class MeetingJSONSerializer(MeetingTraverser):
@@ -232,25 +233,24 @@ class MeetingZipExporter(object):
         self.zip_jobs = annotations[ZIP_JOBS_KEY]
 
         # prepare or figure out public/internal ids
-        if opaque_id and opaque_id in self.zip_jobs:
-            self.internal_id = opaque_id
+        if opaque_id:
+            self.internal_id = self._opaque_id_to_interal_id(opaque_id)
             self.zip_job = self.zip_jobs[self.internal_id]
             self.public_id = self.zip_job['public_id']
-        elif public_id and public_id in self.zip_jobs:
+        elif public_id:
             self.public_id = public_id
             self.zip_job = self.zip_jobs[self.public_id]
             self.internal_id = self.zip_job['internal_id']
         else:
-            self.internal_id = opaque_id or uuid.uuid4()
-            self.public_id = public_id or uuid.uuid4()
+            self.internal_id = uuid.uuid4()
+            self.public_id = uuid.uuid4()
             self.zip_job = None
 
     def demand_pdfs(self):
         """Demand pdfs for all zip documents from bumlebee."""
 
         self._cleanup_old_jobs()
-
-        self.zip_job = self._prepare_zip_job_metadata()
+        self._prepare_zip_job_metadata()
 
         for document in self._collect_meeting_documents():
             status = self._queue_demand_job(document)
@@ -259,18 +259,20 @@ class MeetingZipExporter(object):
 
         return self.public_id
 
-    def get_document(self, checksum):
-        document_job = self.zip_job['documents'][checksum]
+    def get_document(self, opaque_id):
+        document_id = self._opaque_id_to_document_id(opaque_id)
+        document_job = self.zip_job['documents'][document_id]
         return getUtility(IIntIds).getObject(document_job['intid'])
 
-    def receive_pdf(self, checksum, mimetype, data):
-        self._update_job_with_pdf(checksum, mimetype, data)
+    def receive_pdf(self, opaque_id, mimetype, data):
+        document_id = self._opaque_id_to_document_id(opaque_id)
+        self._update_job_with_pdf(document_id, mimetype, data)
 
         if self.is_finished_converting():
             self._generate_zipfile()
 
-    def _update_job_with_pdf(self, checksum, mimetype, data):
-        document_job = self.zip_job['documents'][checksum]
+    def _update_job_with_pdf(self, document_id, mimetype, data):
+        document_job = self.zip_job['documents'][document_id]
         # we're using NamedBlobFile here to re-use an IStorage adapter, the
         # filename is not relevant
         blob_file = NamedBlobFile(data=data, contentType=mimetype)
@@ -280,9 +282,9 @@ class MeetingZipExporter(object):
 
     def _generate_zipfile(self):
         pdfs = {}
-        for checksum, document_job in self.zip_job['documents'].items():
+        for document_id, document_job in self.zip_job['documents'].items():
             if document_job['status'] == 'finished':
-                pdfs[checksum] = document_job.pop('blob')
+                pdfs[document_id] = document_job.pop('blob')
                 document_job['status'] = 'zipped'
 
         with ZipGenerator() as generator:
@@ -296,8 +298,9 @@ class MeetingZipExporter(object):
     def get_zipfile(self):
         return self.zip_job['zip_file']
 
-    def mark_as_skipped(self, checksum):
-        document_job = self.zip_job['documents'][checksum]
+    def mark_as_skipped(self, opaque_id):
+        document_id = self._opaque_id_to_document_id(opaque_id)
+        document_job = self.zip_job['documents'][document_id]
         document_job['status'] = 'skipped'
 
     def is_finished_converting(self):
@@ -346,6 +349,7 @@ class MeetingZipExporter(object):
         self.zip_jobs[self.internal_id] = zip_job
         self.zip_jobs[self.public_id] = zip_job
 
+        self.zip_job = zip_job
         return zip_job
 
     def _append_document_job_metadata(self, zip_job, document, status):
@@ -353,20 +357,28 @@ class MeetingZipExporter(object):
         document_info['intid'] = getUtility(IIntIds).getId(document)
         document_info['status'] = status
 
-        checksum = IBumblebeeDocument(document).get_checksum()
-        zip_job['documents'][checksum] = document_info
+        document_id = IUUID(document)
+        zip_job['documents'][document_id] = document_info
 
         return document_info
 
     def _queue_demand_job(self, document):
         callback_url = self.meeting.get_url(view='receive_meeting_zip_pdf')
-
         if get_service_v3().queue_demand(
                 document, PROCESSING_QUEUE, callback_url,
-                opaque_id=str(self.internal_id)):
+                opaque_id=self._get_opaque_id(document)):
             return 'converting'
         else:
             return 'skipped'
+
+    def _get_opaque_id(self, document):
+        return '{}:{}'.format(str(self.internal_id), IUUID(document))
+
+    def _opaque_id_to_interal_id(self, opaque_id):
+        return uuid.UUID(opaque_id.split(':')[0])
+
+    def _opaque_id_to_document_id(self, opaque_id):
+        return opaque_id.split(':')[1]
 
     def _collect_meeting_documents(self):
         return ZipExportDocumentCollector(self.meeting).get_documents()

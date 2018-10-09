@@ -1,4 +1,3 @@
-from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
 from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.testing import IntegrationTestCase
@@ -63,7 +62,7 @@ class TestDownloadMeetingZip(IntegrationTestCase):
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, 'converting')
-        exporter.receive_pdf(IBumblebeeDocument(self.document).get_checksum(),
+        exporter.receive_pdf(exporter._get_opaque_id(self.document),
                              'application/pdf',
                              'i am a apdf.')
 

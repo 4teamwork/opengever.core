@@ -1,5 +1,5 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
-from ftw.bumblebee.tests.helpers import download_token_for
+from ftw.bumblebee.tests.helpers import get_download_token
 from ftw.testbrowser import browsing
 from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.testing import IntegrationTestCase
@@ -35,16 +35,16 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
 
         exporter = MeetingZipExporter(self.meeting.model)
         zip_job = exporter._prepare_zip_job_metadata()
+        exporter._append_document_job_metadata(
+            zip_job, self.taskdocument, 'converting')
         document_info = exporter._append_document_job_metadata(
             zip_job, self.document, 'converting')
-        document_info = exporter._append_document_job_metadata(
-            zip_job, self.taskdocument, 'converting')
 
         fields = {
-            'token': download_token_for(self.document),
+            'token': get_download_token(),
             'status': 'success',
             'document': IBumblebeeDocument(self.document).get_checksum(),
-            'opaque_id': str(exporter.internal_id),
+            'opaque_id': exporter._get_opaque_id(self.document),
             'pdf': ('converted.pdf', 'the pdf', 'application/pdf'),
         }
         self.do_callback_request(browser, fields)
@@ -63,10 +63,10 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             zip_job, self.document, 'converting')
 
         fields = {
-            'token': download_token_for(self.document),
+            'token': get_download_token(),
             'status': 'success',
             'document': IBumblebeeDocument(self.document).get_checksum(),
-            'opaque_id': str(exporter.internal_id),
+            'opaque_id': exporter._get_opaque_id(self.document),
             'pdf': ('converted.pdf', 'the pdf', 'application/pdf'),
         }
         self.do_callback_request(browser, fields)
@@ -86,10 +86,10 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             zip_job, self.document, 'converting')
 
         fields = {
-            'token': download_token_for(self.document),
+            'token': get_download_token(),
             'status': 'skipped',
             'document': IBumblebeeDocument(self.document).get_checksum(),
-            'opaque_id': str(exporter.internal_id),
+            'opaque_id': exporter._get_opaque_id(self.document),
         }
         self.do_callback_request(browser, fields)
 
@@ -106,10 +106,10 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             zip_job, self.document, 'converting')
 
         fields = {
-            'token': download_token_for(self.document),
+            'token': get_download_token(),
             'status': 'failed',
             'document': IBumblebeeDocument(self.document).get_checksum(),
-            'opaque_id': str(exporter.internal_id),
+            'opaque_id': exporter._get_opaque_id(self.document),
         }
         self.do_callback_request(browser, fields)
 
