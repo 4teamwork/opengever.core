@@ -498,6 +498,11 @@ msgstr ""
 msgid "label_is_private"
 msgstr ""
 
+#. Default: "Private"
+#: ./opengever/task/viewlets/byline.py
+msgid "label_is_private_byline"
+msgstr ""
+
 #. Default: "Issuer"
 #: ./opengever/task/activities.py
 #: ./opengever/task/browser/delegate/metadata.py
