@@ -69,6 +69,31 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
   margin-left: 16px;
 }
 
+.meetingZipDownload {
+  max-width: 600px;
+  .zipExportDescription, .zipDownloadOriginalFiles {
+    margin-top: 1em;
+  }
+  .downloadButtonBox {
+    margin-bottom: 1em;
+  }
+  .button {
+    &.disabled {
+      background-image: none;
+      background-color: #e6e6e6;
+      pointer-events: none;
+    }
+    &.loading:before {
+      @extend .fas;
+      @extend .fa-spinner;
+      @extend .fa-spin;
+    }
+  }
+  .discreet {
+    margin-bottom: 1em;
+  }
+}
+
 #opengever_meeting_meeting {
 
   p {
