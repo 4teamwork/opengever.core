@@ -114,7 +114,7 @@ class OfficeConnectorPayload(Service):
 
     @staticmethod
     def document_is_valid(document):
-        return document and document.has_file()
+        return document and (document.is_shadow_document() or document.has_file())
 
     def get_base_payloads(self):
         # Require an authenticated user
@@ -224,13 +224,17 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 )
 
             if authorized:
-                payload['content-type'] = document.get_file().contentType
+                if document.is_shadow_document():
+                    # Oneoffixx is only used for .docx files in opengever.core
+                    payload['content-type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                else:
+                    payload['content-type'] = document.get_file().contentType
                 payload['download'] = document.get_download_view_name()
 
                 # for oneoffixx, we checkout the document to fall in the normal
                 # checkout-checkin cycle.
                 if document.is_shadow_document():
-                    payload['filename'] = IAnnotations(document).get("filename")
+                    payload['filename'] = '.'.join((IAnnotations(document).get("filename"), 'docx'))
                 else:
                     payload['filename'] = document.get_filename()
 
