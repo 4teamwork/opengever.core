@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-01 07:46+0000\n"
+"POT-Creation-Date: 2018-10-04 14:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -297,6 +297,11 @@ msgstr ""
 #. Default: "None"
 #: ./opengever/base/widgets.py
 msgid "label_none"
+msgstr ""
+
+#. Default: "Null"
+#: ./opengever/base/helper.py
+msgid "label_null"
 msgstr ""
 
 #. Default: "Overview"

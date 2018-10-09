@@ -5,6 +5,7 @@ from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
 from opengever.base.handlebars import prepare_handlebars_template
+from opengever.base.helper import title_helper
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
@@ -62,7 +63,8 @@ class IMeetingModel(model.Schema):
         columns=(
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),
-             'sort_index': 'sortable_title'},
+             'sort_index': 'sortable_title',
+             'transform': title_helper},
             {'column': 'Creator',
              'column_title': _(u'label_creator', default=u'Creator'),
              'sort_index': 'document_author'},
