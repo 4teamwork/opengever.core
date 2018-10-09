@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-10-09 11:24+0000\n"
+"POT-Creation-Date: 2018-10-09 12:19+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -487,6 +487,11 @@ msgstr "Beginn der Arbeit"
 #: ./opengever/task/task.py
 msgid "label_is_private"
 msgstr "Persönliche Aufgabe"
+
+#. Default: "Private"
+#: ./opengever/task/viewlets/byline.py
+msgid "label_is_private_byline"
+msgstr "Persönlich"
 
 #. Default: "Issuer"
 #: ./opengever/task/activities.py
