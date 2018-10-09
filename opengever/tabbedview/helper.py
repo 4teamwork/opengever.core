@@ -228,6 +228,15 @@ def linked_version_preview(item, value):
     """ % data
 
 
+# XXX Can be deleted once the changed metadata has been filled on all deployments
+# https://github.com/4teamwork/opengever.core/issues/4988
+# Defaults to modified date if changed is not set
+def readable_changed_date(item, date):
+    if not date:
+        date = item.modified
+    return readable_date(item, date)
+
+
 # Also handles datetime strings from Solr
 def readable_date(item, date):
     if isinstance(date, str):

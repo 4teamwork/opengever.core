@@ -20,6 +20,7 @@ from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_containing_subdossier
 from opengever.tabbedview.helper import linked_document
 from opengever.tabbedview.helper import readable_date
+from opengever.tabbedview.helper import readable_changed_date
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
@@ -145,10 +146,10 @@ class Documents(BaseCatalogListingTab):
          'column_title': _('label_document_date', default="Document Date"),
          'transform': readable_date},
 
-        {'column': 'modified',
+        {'column': 'changed',
          'column_title': _('label_modified_date', default="Modification Date"),
          'hidden': True,
-         'transform': readable_date},
+         'transform': readable_changed_date},
 
         {'column': 'created',
          'column_title': _('label_created_date', default="Creation Date"),
