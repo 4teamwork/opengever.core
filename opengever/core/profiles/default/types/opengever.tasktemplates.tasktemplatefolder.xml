@@ -21,6 +21,7 @@
 
   <!-- Enabled behaviors -->
   <property name="behaviors">
+    <element value="opengever.base.behaviors.changed.IChanged" />
     <element value="plone.app.content.interfaces.INameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />

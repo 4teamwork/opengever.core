@@ -16,6 +16,16 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "changed": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Zuletzt ver\u00e4ndert",
+                    "format": "datetime",
+                    "description": "",
+                    "_zope_schema_type": "Datetime"
+                },
                 "classification": {
                     "type": [
                         "null",
@@ -252,6 +262,7 @@
             "field_order": [
                 "title",
                 "file",
+                "changed",
                 "classification",
                 "privacy_layer",
                 "public_trial",

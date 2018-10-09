@@ -1,0 +1,8 @@
+<object name="ftw.mail.mail" meta_type="Dexterity FTI">
+
+  <!-- Enabled behaviors -->
+  <property name="behaviors" purge="False">
+    <element value="opengever.base.behaviors.changed.IChanged" />
+  </property>
+
+</object>

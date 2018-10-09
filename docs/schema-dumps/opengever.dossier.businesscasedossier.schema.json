@@ -4,6 +4,13 @@
     "title": "Gesch\u00e4ftsdossier",
     "additionalProperties": false,
     "properties": {
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        },
         "title": {
             "type": "string",
             "title": "Titel",
@@ -227,6 +234,7 @@
         "responsible"
     ],
     "field_order": [
+        "changed",
         "title",
         "description",
         "keywords",

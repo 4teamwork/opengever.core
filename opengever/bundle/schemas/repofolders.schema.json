@@ -85,6 +85,16 @@
                     "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
                     "_zope_schema_type": "Bool"
                 },
+                "changed": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Zuletzt ver\u00e4ndert",
+                    "format": "datetime",
+                    "description": "",
+                    "_zope_schema_type": "Datetime"
+                },
                 "classification": {
                     "type": [
                         "null",
@@ -346,6 +356,7 @@
                 "former_reference",
                 "addable_dossier_types",
                 "allow_add_businesscase_dossier",
+                "changed",
                 "classification",
                 "privacy_layer",
                 "public_trial",

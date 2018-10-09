@@ -23,6 +23,7 @@
 
   <!-- enabled behaviors -->
   <property name="behaviors">
+    <element value="opengever.base.behaviors.changed.IChanged" />
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />

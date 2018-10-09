@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-04 14:07+0000\n"
+"POT-Creation-Date: 2018-10-12 11:55+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -77,6 +77,11 @@ msgstr "Archivwürdig"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Sampling"
+
+#. Default: "Date last changed"
+#: ./opengever/base/behaviors/changed.py
+msgid "changed_date"
+msgstr "Zuletzt verändert"
 
 #. Default: "classified"
 #: opengever/repository/classification.py

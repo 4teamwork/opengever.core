@@ -306,6 +306,11 @@
       name="bundle_guid"
       />
 
+  <adapter
+      factory=".indexes.changed_indexer"
+      name="changed"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

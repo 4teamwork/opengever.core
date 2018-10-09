@@ -135,6 +135,13 @@
             "title": "Land",
             "description": "",
             "_zope_schema_type": "TextLine"
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
         }
     },
     "required": [
@@ -162,6 +169,7 @@
         "address2",
         "zip_code",
         "city",
-        "country"
+        "country",
+        "changed"
     ]
 }

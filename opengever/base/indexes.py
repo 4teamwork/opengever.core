@@ -1,3 +1,5 @@
+from opengever.base.behaviors.changed import IChanged
+from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
@@ -35,3 +37,11 @@ def bundle_guid_indexer(obj):
     See openever.bundle.console.add_guid_index()
     """
     return IAnnotations(obj).get(BUNDLE_GUID_KEY)
+
+
+@indexer(IDexterityContent)
+def changed_indexer(obj):
+    if IChangedMarker.providedBy(obj):
+        # The indexer transforms this to UTC and then represents it as a integer
+        return IChanged(obj).changed
+    return None
