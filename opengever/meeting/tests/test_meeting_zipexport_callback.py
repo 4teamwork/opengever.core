@@ -11,6 +11,15 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
     features = ('meeting', 'bumblebee')
     maxDiff = None
 
+    def do_callback_request(self, browser, fields):
+        encoder = MultipartEncoder(fields=fields)
+        data = encoder.to_string()
+        headers = {'Content-Type': encoder.content_type}
+
+        browser.open(
+            self.meeting, view='receive_meeting_zip_pdf',
+            method='POST', data=data, headers=headers)
+
     @browsing
     def test_get_method_is_disallowed(self, browser):
         # don't login in browser as the view is public
@@ -36,13 +45,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'opaque_id': str(exporter.internal_id),
             'pdf': ('converted.pdf', 'the pdf', 'application/pdf'),
         }
-        encoder = MultipartEncoder(fields=fields)
-        data = encoder.to_string()
-        headers = {'Content-Type': encoder.content_type}
-
-        browser.open(
-            self.meeting, view='receive_meeting_zip_pdf',
-            method='POST', data=data, headers=headers)
+        self.do_callback_request(browser, fields)
 
         self.assertEqual('finished', document_info['status'])
         self.assertEqual('the pdf', document_info['blob'].data)
@@ -65,13 +68,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'document': IBumblebeeDocument(self.document).get_checksum(),
             'opaque_id': str(exporter.internal_id),
         }
-        encoder = MultipartEncoder(fields=fields)
-        data = encoder.to_string()
-        headers = {'Content-Type': encoder.content_type}
-
-        browser.open(
-            self.meeting, view='receive_meeting_zip_pdf',
-            method='POST', data=data, headers=headers)
+        self.do_callback_request(browser, fields)
 
         self.assertEqual('skipped', document_info['status'])
 
@@ -91,12 +88,6 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'document': IBumblebeeDocument(self.document).get_checksum(),
             'opaque_id': str(exporter.internal_id),
         }
-        encoder = MultipartEncoder(fields=fields)
-        data = encoder.to_string()
-        headers = {'Content-Type': encoder.content_type}
-
-        browser.open(
-            self.meeting, view='receive_meeting_zip_pdf',
-            method='POST', data=data, headers=headers)
+        self.do_callback_request(browser, fields)
 
         self.assertEqual('skipped', document_info['status'])
