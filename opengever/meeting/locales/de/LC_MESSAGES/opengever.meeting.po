@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-06 07:57+0000\n"
+"POT-Creation-Date: 2018-10-09 09:12+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -394,6 +394,7 @@ msgstr "Traktandum erfolgreich aktualisiert."
 #. Default: "All"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 #: ./opengever/meeting/tabs/meetinglisting.py
+#: ./opengever/meeting/tabs/membershiplisting.py
 msgid "all"
 msgstr "Alle"
 
@@ -570,6 +571,16 @@ msgstr "Traktandum abschliessen"
 #: ./opengever/meeting/model/proposal.py
 msgid "decided"
 msgstr "Beschlossen"
+
+#. Default: "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "desc_download_original_files"
+msgstr "Falls sie die Originaldateien anstatt der PDF-Dateien als Zip herunterladen möchten können sie dies hier tun. Auch dieses Zip enthält eine JSON-Datei mit der es in die Sitzungs-App importiert werden kann."
+
+#. Default: "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "desc_pdf_zip_contents"
+msgstr "Das Zip enhält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungs-App importiert werden kann."
 
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
@@ -793,6 +804,26 @@ msgstr "Erlaubte Antragsvorlagen"
 msgid "label_attachments"
 msgstr "Anhänge"
 
+#. Default: "Back to the meeting"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_backlink_to_meeting"
+msgstr "Zurück zur Sitzung"
+
+#. Default: "Generating Zip ..."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_creation_in_progress"
+msgstr "Zip wird generiert ..."
+
+#. Default: "Download Zip"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_download_zip"
+msgstr "Zip herunterladen"
+
+#. Default: "Error Generating Zip"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_button_error"
+msgstr "Zip fehler"
+
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_cancel"
@@ -933,6 +964,11 @@ msgstr "Inhaltsverzeichnis alphabetisch"
 msgid "label_download_repository_toc"
 msgstr "Inhaltsverzeichnis nach Ordnungsposition"
 
+#. Default: "Download Zip of original files"
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "label_download_zip_original_files"
+msgstr "Zip der Originaldateien herunterladen"
+
 #. Default: "Edit"
 #: ./opengever/meeting/browser/templates/member.pt
 #: ./opengever/meeting/browser/templates/periods.pt
@@ -976,6 +1012,11 @@ msgstr "E-Mail"
 msgid "label_end"
 msgstr "Ende"
 
+#. Default: "Error"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_error"
+msgstr "Fehler"
+
 #. Default: "Excerpt"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_excerpt"
@@ -1014,6 +1055,11 @@ msgstr "Filtern"
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "label_firstname"
 msgstr "Vorname"
+
+#. Default: "Information"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_info"
+msgstr "Information"
 
 #. Default: "Insert"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1285,6 +1331,11 @@ msgstr "Nicht traktandierte Anträge"
 msgid "label_upcoming_meetings"
 msgstr "Kommende Sitzungen"
 
+#. Default: "Warning"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "label_warning"
+msgstr "Warnung"
+
 #. Default: "State"
 #: ./opengever/meeting/proposal.py
 msgid "label_workflow_state"
@@ -1376,6 +1427,11 @@ msgstr "Wählen Sie einen aussagekräftigen Titel um die Protokollauszüge besse
 msgid "msg_confirm_return_excerpt_dialog"
 msgstr "Der Protokollauszug wird an den Antragsteller bzw. ins Ursprungsdossier des Antrags zurückgesendet. Es können keine weiteren Protokollauszüge zurückgesendet werden."
 
+#. Default: "Download original files rather than PDF files."
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "msg_download_original_files"
+msgstr "Originaldateien anstatt PDF-Dateien herunterladen."
+
 #. Default: "The agenda item list for meeting ${title} has already been generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py
 msgid "msg_error_agendaitem_list_already_generated"
@@ -1396,6 +1452,11 @@ msgstr "Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bea
 msgid "msg_inactive_committee_selected"
 msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eingereicht werden."
 
+#. Default: "The supplied job id ${uuid} is invalid."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_invalid_public_id"
+msgstr "Die job id ${uuid} ist ungültig."
+
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
@@ -1410,6 +1471,11 @@ msgstr "Die Sitzung ${title} wurde erfolgreich abgeschlossen."
 #: ./opengever/meeting/browser/memberships.py
 msgid "msg_membership_deleted"
 msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
+
+#. Default: "No zip job could be found for the supplied job id ${uuid}."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_no_export_for_public_id"
+msgstr "Für die job id ${uuid} konnte keine Zip-Datei gefunden werden."
 
 #. Default: "There is no toc template configured, toc could not be generated."
 #: ./opengever/meeting/browser/toc.py
@@ -1441,6 +1507,11 @@ msgstr "Antrag erfolgreich eingereicht."
 msgid "msg_require_all_agenda_items_decided_for_closing"
 msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und zurückgesendet wurden."
 
+#. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_some_documents_remain_uncoverted"
+msgstr "Es konnte nicht alle Dokumente in das PDF-Format konviertiert werden, deshalb wurden für die betroffenen Dokumente die Originaldateien in die Zip-Datei eingefügt."
+
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py
 msgid "msg_successfully_deleted"
@@ -1450,6 +1521,26 @@ msgstr "Das Objekt wurde erfolgreich gelöscht."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "msg_unscheduled_proposals"
 msgstr "Es gibt nicht traktandierte Anträge, die diesem Gremium zugewiesen sind."
+
+#. Default: "A Zip file with PDFs for all documents of this meeting is being generated."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_creation_in_progress"
+msgstr "Eine Zip-Datei für alle Dokumente dieser Sitzung wird erstellt."
+
+#. Default: "There was an error while generating the Zip."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_error"
+msgstr "Beim Erstellen der Zip-Datei ist ein Fehler aufgetreten."
+
+#. Default: "The zip file is ready for download."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_ready_for_download"
+msgstr "Die Zip-Datei steht zum herunterladen bereit."
+
+#. Default: "Generating the Zip took too long."
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "msg_zip_timeout"
+msgstr "Das Erstellen der Zip-Datei hat zu lange gedauert."
 
 #. Default: "New unscheduled proposals:"
 #: ./opengever/meeting/browser/templates/committee.pt
@@ -1664,8 +1755,8 @@ msgstr "${count} Teilnehmende"
 msgid "text_added"
 msgstr "Traktandum erfolgreich hinzugefügt"
 
-#. Default: "Agenda item ${number}"
-#: ./opengever/meeting/model/agendaitem.py
+#. Default: "Agenda item ${agenda_item_number}"
+#: ./opengever/meeting/zipexport.py
 msgid "title_agenda_item"
 msgstr "Traktandum ${number}"
 
@@ -1678,6 +1769,11 @@ msgstr "Element streichen"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "title_rename_agenda_item"
 msgstr "Titel und Beschreibung modifizieren"
+
+#. Default: "Zip export: ${title}"
+#: ./opengever/meeting/browser/meetings/zipexport.py
+msgid "title_zip_export"
+msgstr "Zip-Export: ${title}"
 
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py
