@@ -80,6 +80,12 @@ class LocalRolesSetter(object):
 
         RoleAssignmentManager(context).add_or_update_assignment(assignment)
 
+    def _should_add_agency_localroles(self):
+        if self.task.is_private:
+            return False
+
+        return self.is_inboxgroup_agency_active() and self.inbox_group_id
+
     def set_roles_on_task(self):
         """Set local roles on task
         """
@@ -89,7 +95,7 @@ class LocalRolesSetter(object):
             ('Editor', ),
             )
 
-        if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+        if self._should_add_agency_localroles():
             self._add_local_roles(self.task, self.inbox_group_id,
                                   ('Editor', ), is_agency=True)
 
@@ -117,7 +123,7 @@ class LocalRolesSetter(object):
             ('Contributor', ),
             )
 
-        if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+        if self._should_add_agency_localroles():
             self._add_local_roles(context, self.inbox_group_id,
                                   ('Contributor', ), is_agency=True)
 
@@ -134,7 +140,7 @@ class LocalRolesSetter(object):
                 roles,
                 )
 
-            if self.is_inboxgroup_agency_active() and self.inbox_group_id:
+            if self._should_add_agency_localroles():
                 self._add_local_roles(
                     item.to_object, self.inbox_group_id, roles, is_agency=True)
 
