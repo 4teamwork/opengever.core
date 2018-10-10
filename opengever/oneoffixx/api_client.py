@@ -105,11 +105,11 @@ class OneoffixxAPIClient(object):
         except KeyError:
             raise OneoffixxConfigurationException('Oneoffixx configuration file missing data!')
 
-        impersonate_as = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
-
+        fake_sid = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
+        real_sid = getattr(api.user.get_current(), 'objectSid', None)
+        impersonate_as = fake_sid or real_sid
         if not impersonate_as:
-            # TODO - how to actually fetch the SID
-            pass
+            raise OneoffixxConfigurationException('No fake_sid configured and LDAP did not provide one!')
 
         timestamp = str(int(time()))
 

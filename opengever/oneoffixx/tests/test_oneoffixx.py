@@ -19,6 +19,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
         api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
         template_library = [{'datasources': [{'id': 1}]}]
@@ -51,6 +52,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
     def tearDown(self):
         api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
         super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
@@ -101,7 +103,12 @@ class TestCreateDocFromUnconfiguredOneoffixxTemplate(IntegrationTestCase):
 
     features = ("officeconnector-checkout", "oneoffixx")
 
+    def setUp(self):
+        super(TestCreateDocFromUnconfiguredOneoffixxTemplate, self).setUp()
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
+
     def tearDown(self):
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
         super(TestCreateDocFromUnconfiguredOneoffixxTemplate, self).tearDown()
@@ -116,6 +123,24 @@ class TestCreateDocFromUnconfiguredOneoffixxTemplate(IntegrationTestCase):
             factoriesmenu.add('document_with_oneoffixx_template')
 
 
+class TestCreateDocFromUnconfiguredOneoffixxFakeSIDTemplate(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def tearDown(self):
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
+        super(TestCreateDocFromUnconfiguredOneoffixxFakeSIDTemplate, self).tearDown()
+
+    @browsing
+    def test_oneoffixx_form_errors_on_missing_config(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        browser.exception_bubbling = True
+        with self.assertRaises(OneoffixxConfigurationException):
+            factoriesmenu.add('document_with_oneoffixx_template')
+
+
 class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
 
     features = ("officeconnector-checkout", "oneoffixx")
@@ -123,6 +148,7 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
     def setUp(self):
         super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).setUp()
         api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         self.session = requests.Session()
         self.adapter = requests_mock.Adapter()
@@ -136,6 +162,7 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
 
     def tearDown(self):
         api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
 
