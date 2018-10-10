@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-09-19 14:54+0000\n"
+"POT-Creation-Date: 2018-10-09 11:24+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -323,6 +323,11 @@ msgstr ""
 msgid "help_expectedDuration"
 msgstr ""
 
+#. Default: "Deactivates the inbox-group permission."
+#: ./opengever/task/task.py
+msgid "help_is_private"
+msgstr ""
+
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
 msgid "help_responsible"
@@ -476,6 +481,11 @@ msgstr ""
 #. Default: "Start with work"
 #: ./opengever/task/task.py
 msgid "label_expectedStartOfWork"
+msgstr ""
+
+#. Default: "Private task"
+#: ./opengever/task/task.py
+msgid "label_is_private"
 msgstr ""
 
 #. Default: "Issuer"
