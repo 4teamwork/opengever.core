@@ -50,6 +50,7 @@ class TestConfig(IntegrationTestCase):
                 u'preview': False,
                 u'preview_auto_refresh': False,
                 u'preview_open_pdf_in_new_window': False,
+                u'private_tasks': True,
                 u'purge_trash': False,
                 u'repositoryfolder_documents_tab': True,
                 u'repositoryfolder_proposals_tab': True,

@@ -73,6 +73,7 @@ FEATURE_FLAGS = {
     'purge-trash': 'opengever.dossier.interfaces.IDossierResolveProperties.purge_trash_enabled',
     'journal-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.journal_pdf_enabled',
     'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
+    'private-tasks': 'opengever.task.interfaces.ITaskSettings.private_task_feature_enabled',
     }
 
 FEATURE_PROFILES = {
