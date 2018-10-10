@@ -281,6 +281,36 @@
       />
 
   <subscriber
+      for="opengever.base.behaviors.changed.IChangedMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.maybe_update_changed_date"
+      />
+
+  <subscriber
+      for="opengever.base.behaviors.changed.IChangedMarker
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".handlers.update_changed_date"
+      />
+
+  <subscriber
+      for="opengever.base.behaviors.changed.IChangedMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_changed_date"
+      />
+
+  <subscriber
+      for="opengever.base.behaviors.changed.IChangedMarker
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.update_changed_date"
+      />
+
+  <subscriber
+      for="opengever.base.behaviors.changed.IChangedMarker
+           opengever.document.interfaces.IObjectRevertedToVersion"
+      handler=".handlers.update_changed_date"
+      />
+
+  <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            opengever.base.touched.IObjectTouchedEvent"
       handler=".touched.handle_object_touched"
