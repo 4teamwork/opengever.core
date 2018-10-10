@@ -12,13 +12,15 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
     maxDiff = None
 
     def do_callback_request(self, browser, fields):
+        meeting = self.meeting
         encoder = MultipartEncoder(fields=fields)
         data = encoder.to_string()
         headers = {'Content-Type': encoder.content_type}
 
-        browser.open(
-            self.meeting, view='receive_meeting_zip_pdf',
-            method='POST', data=data, headers=headers)
+        with self.logout():
+            browser.open(
+                meeting, view='receive_meeting_zip_pdf',
+                method='POST', data=data, headers=headers)
 
     @browsing
     def test_get_method_is_disallowed(self, browser):
