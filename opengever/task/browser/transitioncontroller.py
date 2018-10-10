@@ -620,11 +620,29 @@ class CurrentUserChecker(object):
 
     @property
     def in_issuing_orgunits_inbox_group(self):
+        """Returns true, if the current user is within the inbox group of
+        the issuing orgunit.
+
+        returns false, if the task is private. This deactivates agency-support
+        for private tasks
+        """
+        if self.task.is_private:
+            return False
+
         inbox = self.task.get_issuing_org_unit().inbox()
         return self.current_user in inbox.assigned_users()
 
     @property
     def in_responsible_orgunits_inbox_group(self):
+        """Returns true, if the current user is within the inbox group of
+        the responsible orgunit.
+
+        returns false, if the task is private. This deactivates agency-support
+        for private tasks
+        """
+        if self.task.is_private:
+            return False
+
         inbox = self.task.get_assigned_org_unit().inbox()
         return self.current_user in inbox.assigned_users()
 
