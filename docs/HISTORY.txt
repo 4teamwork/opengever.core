@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Implement asynchronous meeting zip generation, with PDFs from the new demand endpoint. [deiferni, lgraf]
 - Add new icon for private folder. [njohner]
 - Allow pasting templates into template folders. [Rotonen]
 - Map gever_admins to the administrator_group in example content. [njohner]
