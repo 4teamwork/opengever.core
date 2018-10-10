@@ -1,8 +1,8 @@
 <OneOffixxConnectBatch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schema.oneoffixx.com/OneOffixxConnectBatch/1">
   <Settings>
     <Add key="KeepConnector">true</Add>
-    <Add key="CreateConnectorResultOnError">true</Add>
     <Add key="CreateConnectorResult">true</Add>
+    <Add key="CreateConnectorResultOnError">true</Add>
   </Settings>
   <Entries>
     <OneOffixxConnect>
@@ -30,6 +30,7 @@
             <Add key="start">false</Add>
           </Parameters>
         </Command>
+        <Command Name="ConvertToDocument"/>
         <Command Name="SaveAs">
           <Parameters>
             <Add key="Overwrite">true</Add>
@@ -44,7 +45,6 @@
             <Add key="Arguments">oc:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY3Rpb24iOiJjaGVja291dCIsInVybCI6Imh0dHA6Ly9ub2hvc3QvcGxvbmUvb2NfY2hlY2tvdXQiLCJkb2N1bWVudHMiOlsiY3JlYXRlc2hhZG93ZG9jdW1lbnQwMDAwMDAwMDAwMDEiXSwic3ViIjoicm9iZXJ0LnppZWdsZXIiLCJleHAiOjQxMjEwMzMxMDB9.tf1OL0GixVdQv9OBiItrblq3B9Q46jQOwT8kK8CXyDo</Add>
           </Parameters>
         </Command>
-        <Command Name="ConvertToDocument"/>
       </Commands>
     </OneOffixxConnect>
   </Entries>
