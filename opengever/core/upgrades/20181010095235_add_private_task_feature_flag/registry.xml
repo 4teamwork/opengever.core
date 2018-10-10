@@ -1,0 +1,4 @@
+<registry>
+  <record interface="opengever.task.interfaces.ITaskSettings"
+          field="private_task_feature_enabled" />
+</registry>
