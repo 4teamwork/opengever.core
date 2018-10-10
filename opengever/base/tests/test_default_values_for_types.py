@@ -189,6 +189,7 @@ TASK_REQUIREDS = {
 TASK_DEFAULTS = {
     'deadline': FROZEN_TODAY + timedelta(days=5),
     'relatedItems': [],
+    'is_private': False
 }
 TASK_FORM_DEFAULTS = {
     'issuer': 'kathi.barfuss',

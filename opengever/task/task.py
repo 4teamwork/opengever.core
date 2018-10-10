@@ -45,6 +45,7 @@ from z3c.form import validator
 from z3c.form import widget
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IAddForm
+from z3c.form.interfaces import IEditForm
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -84,6 +85,7 @@ class ITask(model.Schema):
             u'task_type',
             u'responsible_client',
             u'responsible',
+            u'is_private',
             u'deadline',
             u'text',
             u'relatedItems',
@@ -157,6 +159,15 @@ class ITask(model.Schema):
         )
 
     form.widget(deadline=DatePickerFieldWidget)
+
+    is_private = schema.Bool(
+        title=_(u"label_is_private", default=u"Private task"),
+        description=_(u"help_is_private",
+                      default="Deactivates the inbox-group permission."),
+        default=False,
+        )
+
+    form.mode(IEditForm, is_private=HIDDEN_MODE)
 
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
