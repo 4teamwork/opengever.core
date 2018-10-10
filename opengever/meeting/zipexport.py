@@ -6,6 +6,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.security import elevated_privileges
 from opengever.meeting import _
 from opengever.meeting.traverser import MeetingTraverser
 from plone.namedfile.file import NamedBlobFile
@@ -287,7 +288,7 @@ class MeetingZipExporter(object):
                 pdfs[document_id] = document_job.pop('blob')
                 document_job['status'] = 'zipped'
 
-        with ZipGenerator() as generator:
+        with ZipGenerator() as generator, elevated_privileges():
             zipper = MeetingPDFDocumentZipper(
                 self.meeting, pdfs, generator)
 
