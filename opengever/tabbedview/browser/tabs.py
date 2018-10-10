@@ -1,5 +1,7 @@
 from datetime import date
 from ftw.table import helper
+from opengever.base.behaviors.changed import has_metadata_changed_been_filled
+from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee import get_preferred_listing_view
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee import set_preferred_listing_view
@@ -118,7 +120,9 @@ class Documents(BaseCatalogListingTab):
 
     types = ['opengever.document.document', 'ftw.mail.mail']
 
-    columns = (
+    # XXX Can be set back to 'columns' once the changed metadata has been filled on all deployments
+    # https://github.com/4teamwork/opengever.core/issues/4988
+    _columns = (
 
         {'column': '',
          'column_title': '',
@@ -146,6 +150,8 @@ class Documents(BaseCatalogListingTab):
          'column_title': _('label_document_date', default="Document Date"),
          'transform': readable_date},
 
+        # XXX transform should be set to readable_date once the changed metadata has been filled on all deployments
+        # https://github.com/4teamwork/opengever.core/issues/4988
         {'column': 'changed',
          'column_title': _('label_modified_date', default="Modification Date"),
          'hidden': True,
@@ -188,6 +194,16 @@ class Documents(BaseCatalogListingTab):
 
     bumblebee_template = ViewPageTemplateFile(
         'generic_with_bumblebee_viewchooser.pt')
+
+    # XXX Can be deleted once the changed metadata has been filled on all deployments
+    # https://github.com/4teamwork/opengever.core/issues/4988
+    @property
+    def columns(self):
+        if (api.portal.get_registry_record('use_solr', interface=ISearchSettings)
+                and not has_metadata_changed_been_filled()):
+            return tuple([column for column in self._columns
+                          if not column.get("column") == "changed"])
+        return self._columns
 
     def __call__(self, *args, **kwargs):
         if is_bumblebee_feature_enabled():
