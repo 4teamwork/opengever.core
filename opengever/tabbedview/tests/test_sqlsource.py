@@ -47,11 +47,20 @@ class TestCastToString(TestCase):
         self.assertIsInstance(cast_to_string(field).type, String)
 
     def test_does_cast_integer_fields_on_oracle_backends(self):
-        create_session().connection().dialect.name = 'oracle'
+        original_dialect = create_session().connection().dialect.name
+        failed = False
 
-        field = Task.sequence_number
-        self.assertIsInstance(cast_to_string(field), InstrumentedAttribute)
-        self.assertIsInstance(cast_to_string(field).type, Integer)
+        try:
+            create_session().connection().dialect.name = 'oracle'
+            field = Task.sequence_number
+            self.assertIsInstance(cast_to_string(field), InstrumentedAttribute)
+            self.assertIsInstance(cast_to_string(field).type, Integer)
+        except BaseException:
+            failed = True
+        finally:
+            create_session().connection().dialect.name = original_dialect
+
+        self.assertFalse(failed, 'Something went wrong when changing the dialect.')
 
 
 class TestSQLAlchemySortIndexes(FunctionalTestCase):
