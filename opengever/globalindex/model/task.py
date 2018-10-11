@@ -494,6 +494,20 @@ class TaskQuery(BaseQuery):
         """Returns all tasks issued by the given orgunit."""
         return self.filter(Task.issuing_org_unit == org_unit.id())
 
+    def restricted_by_assigned_org_unit(self, org_unit):
+        query = self.by_assigned_org_unit(org_unit)
+
+        member = api.user.get_current()
+        principals = set(member.getGroups() + [member.getId()])
+        query.filter(Task.principals.any(TaskPrincipal.principal.in_(principals))).all()
+
+    def restricetd_by_issuing_org_unit(self, org_unit):
+        query = self.by_issuing_org_unit(org_unit)
+
+        member = api.user.get_current()
+        principals = set(member.getGroups() + [member.getId()])
+        query.filter(Task.principals.any(TaskPrincipal.principal.in_(principals))).all()
+
     def all_issued_tasks(self, admin_unit):
         """List all tasks from the current_admin_unit.
         """
