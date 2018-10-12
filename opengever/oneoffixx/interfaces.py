@@ -14,6 +14,7 @@ class IOneoffixxSettings(Interface):
         title=u'Oneoffixx backend base URL',
         description=u'An URL without a trailing slash to the Oneoffixx backend.',
         default=u'',
+        required=False,
     )
 
     fake_sid = schema.TextLine(
@@ -21,6 +22,7 @@ class IOneoffixxSettings(Interface):
         description=u'A preshared SID for testing. Should be empty for production. '
                     u'Takes precedence over fetching an SID from the LDAP.',
         default=u'',
+        required=False,
     )
 
     double_encode_bug = schema.Bool(

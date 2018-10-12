@@ -1,0 +1,8 @@
+<registry>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="baseurl">
+    <required>False</required>
+  </record>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="fake_sid">
+    <required>False</required>
+  </record>
+</registry>
