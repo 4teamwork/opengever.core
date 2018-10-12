@@ -1,8 +1,10 @@
 from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from opengever.task.reminder.reminder import TaskReminder
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.interface import alsoProvides
 
 
 error_msgs = {
@@ -36,6 +38,9 @@ class TaskReminderPost(Service):
         if not reminder_option:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         task_reminder = TaskReminder()
 
         if task_reminder.get_reminder(self.context):
@@ -68,6 +73,9 @@ class TaskReminderPatch(Service):
         if option_type and not reminder_option:
             raise BadRequest(error_msgs.get('non_existing_option_type'))
 
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         if reminder_option:
             task_reminder = TaskReminder()
 
@@ -93,6 +101,9 @@ class TaskReminderDelete(Service):
         if not task_reminder.get_reminder(self.context):
             self.request.response.setStatus(404)
             return super(TaskReminderDelete, self).reply()
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
 
         task_reminder.clear_reminder(self.context)
         self.request.response.setStatus(204)
