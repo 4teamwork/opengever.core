@@ -3,12 +3,14 @@ from opengever.dossier import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
 from opengever.oneoffixx.utils import whitelisted_template_types
+from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
+from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -70,7 +72,9 @@ class OneOffixxTemplate(object):
         template_type = template['metaTemplateId']
         template_type_info = whitelisted_template_types[template_type]
         self.content_type = template_type_info['content-type']
-        self.filename = u'.'.join((unicode(template.get("localizedName")), template_type_info['extension']))
+        filename = template.get("localizedName")
+        normalizer = getUtility(IFileNameNormalizer, name='gever_filename_normalizer')
+        self.filename = normalizer.normalize(filename, extension=template_type_info['extension'])
         self.languages = template.get("languages")
 
     def __eq__(self, other):
