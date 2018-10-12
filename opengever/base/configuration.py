@@ -58,7 +58,15 @@ class GeverSettingsAdpaterV1(object):
         settings['max_dossier_levels'] = api.portal.get_registry_record('maximum_dossier_depth', interface=IDossierContainerTypes) + 1  # noqa
         settings['max_repositoryfolder_levels'] = api.portal.get_registry_record('maximum_repository_depth', interface=IRepositoryFolderRecords)  # noqa
         settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
+        settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
         return settings
+
+    def get_oneoffixx_settings(self):
+        oneoffixx_settings = OrderedDict()
+        oneoffixx_settings['baseurl'] = api.portal.get_registry_record('baseurl', interface=IOneoffixxSettings)
+        oneoffixx_settings['fake_sid'] = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
+        oneoffixx_settings['double_encode_bug'] = api.portal.get_registry_record('double_encode_bug', interface=IOneoffixxSettings)  # noqa
+        return oneoffixx_settings
 
     def get_features(self):
         features = OrderedDict()

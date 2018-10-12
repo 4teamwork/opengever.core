@@ -12,6 +12,11 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),
+            ('oneoffixx_settings', OrderedDict([
+                ('baseurl', u''),
+                ('fake_sid', u''),
+                ('double_encode_bug', True),
+            ])),
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),
@@ -47,7 +52,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ])
         with self.login(self.regular_user):
             configuration = IGeverSettings(self.portal).get_config()
-        self.assertEqual(configuration, expected_configuration)
+        self.assertEqual(expected_configuration, configuration)
 
     def test_configuration_for_anonymous(self):
         expected_configuration = OrderedDict([

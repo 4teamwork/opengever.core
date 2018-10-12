@@ -1,5 +1,7 @@
+from collections import OrderedDict
 from lxml import etree
 from opengever.base.interfaces import IReferenceNumber
+from opengever.officeconnector.helpers import create_oc_url
 from plone import api
 from Products.Five import BrowserView
 from zExceptions import NotFound
@@ -12,17 +14,26 @@ class OneoffixxConnectXml(BrowserView):
         if not self.is_allowed():
             raise NotFound()
 
-        self.settings = {"KeepConnector": "true",
-                         "CreateConnectorResult": "true",
-                         "CreateConnectorResultOnError": "true"}
+        self.settings = OrderedDict((
+            ("KeepConnector", "true"),
+            ("CreateConnectorResult", "true"),
+            ("CreateConnectorResultOnError", "true"),
+        ))
 
-        self.commands = {"DefaultProcess": (("start", "false"),),
-                         "ConvertToDocument": tuple(),
-                         "SaveAs": (("Overwrite", "true"),
-                                    ("CreateFolder", "true"),
-                                    ("AllowUpdateDocumentPart", "false"),
-                                    ("Filename", ""))
-                         }
+        self.commands = OrderedDict((
+            ("DefaultProcess", (("start", "false"), )),
+            ("ConvertToDocument", tuple()),
+            ("SaveAs", (
+                ("Overwrite", "true"),
+                ("CreateFolder", "true"),
+                ("AllowUpdateDocumentPart", "false"),
+                ("Filename", ""),
+            )),
+            ("InvokeProcess", (
+                ("Name", "OfficeConnector"),
+                ("Arguments", create_oc_url(self.request, self.context, {"action": "checkout"})),
+            )),
+        ))
 
         self.request.RESPONSE.setHeader("Content-type", "application/xml")
         return self.generate_xml()

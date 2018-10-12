@@ -13,6 +13,7 @@ class CreateDocumentFromOneOffixxTemplateCommand(BaseObjectCreatorCommand):
         self.template_id = template.template_id
         self.filename = template.filename
         self.languages = template.languages
+        self.content_type = template.content_type
         super(CreateDocumentFromOneOffixxTemplateCommand, self).__init__(
             context, title)
 
