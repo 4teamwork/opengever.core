@@ -215,11 +215,11 @@ class DemandMeetingZip(BrowserView):
         return self.model.get_url(view='export-meeting-zip')
 
 
-class MeetingZipExport(BrowserView):
+class MeetingZipExportOriginals(BrowserView):
     """Iterate over meeting contents and return results in a .zip archive."""
 
     def __init__(self, context, request):
-        super(MeetingZipExport, self).__init__(context, request)
+        super(MeetingZipExportOriginals, self).__init__(context, request)
         self.model = self.context.model
 
     def __call__(self):
