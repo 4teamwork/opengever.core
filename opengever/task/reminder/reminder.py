@@ -41,6 +41,16 @@ class TaskReminder(object):
         return TASK_REMINDER_OPTIONS.get(
             self._get_user_annotation(obj, user_id))
 
+    def get_reminders(self, obj):
+        """Get the reminder-option object for the given object for a specific
+        user or for the current logged in user.
+
+        Returns None, if no reminder is set.
+        """
+        storage = self._annotation_storage(obj)
+        return {actor: TASK_REMINDER_OPTIONS.get(value)
+                for actor, value in storage.items()}
+
     def get_sql_reminder(self, obj, user_id=None):
         """Get the sql-reminder for the given object for a specific user or
         for the current logged in user.
