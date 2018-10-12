@@ -9,16 +9,15 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
 from opengever.meeting import _
 from opengever.meeting.traverser import MeetingTraverser
+from plone import api
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from StringIO import StringIO
 from tzlocal import get_localzone
 from zope.annotation import IAnnotations
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.intid.interfaces import IIntIds
 import json
 import os
 import uuid
@@ -259,8 +258,11 @@ class MeetingZipExporter(object):
 
     def get_document(self, doc_in_job_id):
         document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
-        document_job = self.zip_job['documents'][document_id]
-        return getUtility(IIntIds).getObject(document_job['intid'])
+        assert document_id in self.zip_job['documents']
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog.unrestrictedSearchResults(UID=document_id)[0]
+        document = brain._unrestrictedGetObject()
+        return document
 
     def receive_pdf(self, doc_in_job_id, mimetype, data):
         document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
@@ -349,7 +351,6 @@ class MeetingZipExporter(object):
 
     def _append_document_job_metadata(self, zip_job, document, status):
         document_info = OOBTree()
-        document_info['intid'] = getUtility(IIntIds).getId(document)
         document_info['status'] = status
 
         document_id = IUUID(document)
