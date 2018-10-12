@@ -75,3 +75,19 @@ class TestTaskByline(TestBylineBase):
 
         seq_number = self.get_byline_value_by_label('Sequence Number:')
         self.assertEquals('c1 1', seq_number.text)
+
+    @browsing
+    def test_is_private_attribute_is_displayed_in_byline_for_private_task(self, browser):
+        self.task.is_private = True
+        transaction.commit()
+
+        browser.login().open(self.task)
+
+        is_private = self.get_byline_value_by_label('Private:')
+        self.assertEquals('Yes', is_private.text)
+
+    @browsing
+    def test_is_private_attribute_is_not_displayed_in_byline_for_default_task(self, browser):
+        browser.login().open(self.task)
+
+        self.assertIsNone(self.get_byline_value_by_label('Private:'))

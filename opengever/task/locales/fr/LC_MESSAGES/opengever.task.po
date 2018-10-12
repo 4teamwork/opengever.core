@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-19 14:54+0000\n"
+"POT-Creation-Date: 2018-10-09 12:19+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -324,6 +324,11 @@ msgstr "Coûts effectifs en CHF"
 msgid "help_expectedDuration"
 msgstr "Durée effective en h"
 
+#. Default: "Deactivates the inbox-group permission."
+#: ./opengever/task/task.py
+msgid "help_is_private"
+msgstr ""
+
 #. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
@@ -479,6 +484,16 @@ msgstr "Durée estimées (h)"
 #: ./opengever/task/task.py
 msgid "label_expectedStartOfWork"
 msgstr "Début du travail"
+
+#. Default: "Private task"
+#: ./opengever/task/task.py
+msgid "label_is_private"
+msgstr ""
+
+#. Default: "Private"
+#: ./opengever/task/viewlets/byline.py
+msgid "label_is_private_byline"
+msgstr ""
 
 #. Default: "Issuer"
 #: ./opengever/task/activities.py
