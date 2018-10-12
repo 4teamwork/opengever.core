@@ -21,25 +21,25 @@ import json
 import os
 
 
-def require_public_id_parameter(request):
-    public_id = request.get('public_id')
-    if not public_id:
-        raise BadRequest('must supply valid public_id of zip-job.')
+def require_job_id_parameter(request):
+    job_id = request.get('job_id')
+    if not job_id:
+        raise BadRequest('must supply valid job_id of zip-job.')
 
-    return public_id
+    return job_id
 
 
-def require_exporter(request, meeting, public_id):
-    if not MeetingZipExporter.exists(meeting, public_id):
-        msg = _(u'msg_no_export_for_public_id',
+def require_exporter(request, meeting, job_id):
+    if not MeetingZipExporter.exists(meeting, job_id):
+        msg = _(u'msg_no_export_for_job_id',
                 default=u'No zip job could be found for the supplied '
-                         'job id ${uuid}.',
-                mapping={'uuid': public_id})
+                        u'job id ${job_id}.',
+                mapping={'job_id': job_id})
         api.portal.show_message(
             message=msg, request=request, type='error')
         raise Redirect(meeting.get_url())
 
-    return MeetingZipExporter(meeting, public_id=public_id)
+    return MeetingZipExporter(meeting, job_id=job_id)
 
 
 class PollMeetingZip(BrowserView):
@@ -50,8 +50,8 @@ class PollMeetingZip(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
-        public_id = require_public_id_parameter(self.request)
-        exporter = require_exporter(self.request, self.model, public_id)
+        job_id = require_job_id_parameter(self.request)
+        exporter = require_exporter(self.request, self.model, job_id)
 
         status = exporter.get_status()
 
@@ -68,8 +68,8 @@ class DownloadMeetingZip(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
-        public_id = require_public_id_parameter(self.request)
-        exporter = require_exporter(self.request, self.model, public_id)
+        job_id = require_job_id_parameter(self.request)
+        exporter = require_exporter(self.request, self.model, job_id)
 
         zip_file = exporter.get_zipfile()
         filename = u'{}.zip'.format(normalize_path(self.model.title))
@@ -89,16 +89,16 @@ class DemandMeetingZip(BrowserView):
         disable_edit_bar()
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        public_id = self.request.get('public_id', None)
-        if public_id:
-            require_exporter(self.request, self.model, public_id)
-            self.public_id = public_id
+        job_id = self.request.get('job_id', None)
+        if job_id:
+            require_exporter(self.request, self.model, job_id)
+            self.job_id = job_id
             return super(DemandMeetingZip, self).__call__()
 
         else:
-            public_id = MeetingZipExporter(self.model).demand_pdfs()
-            url = "{}/@@demand_meeting_zip?public_id={}".format(
-                self.context.absolute_url(), str(public_id))
+            job_id = MeetingZipExporter(self.model).demand_pdfs()
+            url = "{}/@@demand_meeting_zip?job_id={}".format(
+                self.context.absolute_url(), str(job_id))
             return self.request.RESPONSE.redirect(url)
 
     @property
@@ -179,12 +179,12 @@ class DemandMeetingZip(BrowserView):
         })
 
     def poll_url(self):
-        return "{}/@@poll_meeting_zip?public_id={}".format(
-            self.context.absolute_url(), self.public_id)
+        return "{}/@@poll_meeting_zip?job_id={}".format(
+            self.context.absolute_url(), self.job_id)
 
     def download_url(self):
-        return "{}/@@download_meeting_zip?public_id={}".format(
-            self.context.absolute_url(), self.public_id)
+        return "{}/@@download_meeting_zip?job_id={}".format(
+            self.context.absolute_url(), self.job_id)
 
     def meeting_url(self):
         return self.model.get_url()

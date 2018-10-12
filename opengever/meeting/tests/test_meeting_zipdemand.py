@@ -18,7 +18,7 @@ class TestPollMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
+            view='poll_meeting_zip?job_id={}'.format(exporter.job_id))
         self.assertEqual(1, browser.json['converting'])
 
     @browsing
@@ -32,7 +32,7 @@ class TestPollMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
+            view='poll_meeting_zip?job_id={}'.format(exporter.job_id))
         self.assertEqual(1, browser.json['finished'], browser.json)
 
     @browsing
@@ -46,7 +46,7 @@ class TestPollMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?public_id={}'.format(exporter.public_id))
+            view='poll_meeting_zip?job_id={}'.format(exporter.job_id))
         self.assertEqual(1, browser.json['skipped'])
 
 
@@ -68,5 +68,5 @@ class TestDownloadMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='download_meeting_zip?public_id={}'.format(exporter.public_id))
+            view='download_meeting_zip?job_id={}'.format(exporter.job_id))
         self.assertEquals('application/zip', browser.contenttype)

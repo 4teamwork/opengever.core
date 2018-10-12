@@ -223,7 +223,7 @@ class MeetingZipExporter(object):
         zip_jobs = IAnnotations(committee).get(ZIP_JOBS_KEY, {})
         return job_id in zip_jobs
 
-    def __init__(self, meeting, opaque_id=None, public_id=None):
+    def __init__(self, meeting, opaque_id=None, job_id=None):
         self.meeting = meeting
         self.committee = meeting.committee.oguid.resolve_object()
 
@@ -233,18 +233,15 @@ class MeetingZipExporter(object):
             annotations[ZIP_JOBS_KEY] = OOBTree()
         self.zip_jobs = annotations[ZIP_JOBS_KEY]
 
-        # prepare or figure out public/internal ids
+        # Get or create job_id
         if opaque_id:
-            self.internal_id = self._opaque_id_to_interal_id(opaque_id)
-            self.zip_job = self.zip_jobs[self.internal_id]
-            self.public_id = self.zip_job['public_id']
-        elif public_id:
-            self.public_id = public_id
-            self.zip_job = self.zip_jobs[self.public_id]
-            self.internal_id = self.zip_job['internal_id']
+            self.job_id = self._opaque_id_to_job_id(opaque_id)
+            self.zip_job = self.zip_jobs[self.job_id]
+        elif job_id:
+            self.zip_job = self.zip_jobs[job_id]
+            self.job_id = job_id
         else:
-            self.internal_id = str(uuid.uuid4())
-            self.public_id = str(uuid.uuid4())
+            self.job_id = str(uuid.uuid4())
             self.zip_job = None
 
     def demand_pdfs(self):
@@ -258,7 +255,7 @@ class MeetingZipExporter(object):
             self._append_document_job_metadata(
                 self.zip_job, document, status)
 
-        return self.public_id
+        return self.job_id
 
     def get_document(self, opaque_id):
         document_id = self._opaque_id_to_document_id(opaque_id)
@@ -335,20 +332,17 @@ class MeetingZipExporter(object):
         for zip_job in self.zip_jobs.values():
             delta = now - zip_job['timestamp']
             if delta > expiration_delta:
-                to_remove.add(zip_job['public_id'])
-                to_remove.add(zip_job['internal_id'])
+                to_remove.add(zip_job['job_id'])
 
         for id_ in to_remove:
             del self.zip_jobs[id_]
 
     def _prepare_zip_job_metadata(self):
         zip_job = OOBTree()
-        zip_job['internal_id'] = self.internal_id
-        zip_job['public_id'] = self.public_id
+        zip_job['job_id'] = self.job_id
         zip_job['timestamp'] = utcnow_tz_aware()
         zip_job['documents'] = OOBTree()
-        self.zip_jobs[self.internal_id] = zip_job
-        self.zip_jobs[self.public_id] = zip_job
+        self.zip_jobs[self.job_id] = zip_job
 
         self.zip_job = zip_job
         return zip_job
@@ -373,9 +367,9 @@ class MeetingZipExporter(object):
             return 'skipped'
 
     def _get_opaque_id(self, document):
-        return '{}:{}'.format(str(self.internal_id), IUUID(document))
+        return '{}:{}'.format(self.job_id, IUUID(document))
 
-    def _opaque_id_to_interal_id(self, opaque_id):
+    def _opaque_id_to_job_id(self, opaque_id):
         return opaque_id.split(':')[0]
 
     def _opaque_id_to_document_id(self, opaque_id):

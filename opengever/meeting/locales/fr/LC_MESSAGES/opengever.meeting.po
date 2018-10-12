@@ -1469,9 +1469,9 @@ msgstr "La réunion ${title} a été clôturée avec succès."
 msgid "msg_membership_deleted"
 msgstr "L'adhésion a été supprimée avec succès."
 
-#. Default: "No zip job could be found for the supplied job id ${uuid}."
+#. Default: "No zip job could be found for the supplied job id ${job_id}."
 #: ./opengever/meeting/browser/meetings/zipexport.py
-msgid "msg_no_export_for_public_id"
+msgid "msg_no_export_for_job_id"
 msgstr ""
 
 #. Default: "There is no toc template configured, toc could not be generated."

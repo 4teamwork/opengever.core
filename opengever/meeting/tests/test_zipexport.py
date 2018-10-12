@@ -38,23 +38,15 @@ class TestZipExporter(IntegrationTestCase):
         reset_queue()
 
         exporter = zipexport.MeetingZipExporter(self.meeting.model)
-        public_id = exporter.demand_pdfs()
+        job_id = exporter.demand_pdfs()
         queue = get_queue()
         self.assertEqual(3, len(queue.queue))
 
         annotations = IAnnotations(self.committee)
         zip_jobs = annotations[zipexport.ZIP_JOBS_KEY]
-        self.assertIn(public_id, zip_jobs)
+        self.assertIn(job_id, zip_jobs)
 
-        zip_job_metadata = zip_jobs[public_id]
-        internal_id = zip_job_metadata['internal_id']
-        self.assertIn(internal_id, zip_jobs)
-        self.assertEqual(public_id, zip_job_metadata['public_id'])
-        self.assertTrue(public_id != internal_id)
-        self.assertEqual(2, len(zip_jobs.values()),
-            'Expected zip job to be registered under public and internal id')
-        self.assertEqual(zip_jobs[public_id], zip_jobs[internal_id],
-            'Expected same zip job instance to be used')
+        zip_job_metadata = zip_jobs[job_id]
 
         self.assertIn('documents', zip_job_metadata)
         document_jobs = zip_job_metadata['documents']
@@ -75,18 +67,18 @@ class TestZipExporter(IntegrationTestCase):
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             exporter = MeetingZipExporter(self.meeting.model)
-            old_public_id = exporter.demand_pdfs()
+            old_job_id = exporter.demand_pdfs()
         zip_jobs = annotations[zipexport.ZIP_JOBS_KEY]
-        old_zip_job = zip_jobs[old_public_id]
+        old_zip_job = zip_jobs[old_job_id]
 
         with freeze(datetime(2017, 10, 18, 1, 0, tzinfo=pytz.utc)):
             new_exporter = MeetingZipExporter(self.meeting.model)
-            new_public_id = new_exporter.demand_pdfs()
-        new_zip_job = zip_jobs[new_public_id]
+            new_job_id = new_exporter.demand_pdfs()
+        new_zip_job = zip_jobs[new_job_id]
 
         self.assertEqual(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc),
                          old_zip_job['timestamp'])
         self.assertEqual(datetime(2017, 10, 18, 1, 0, tzinfo=pytz.utc),
                          new_zip_job['timestamp'])
-        self.assertNotIn(old_public_id, zip_jobs)
-        self.assertIn(new_public_id, zip_jobs)
+        self.assertNotIn(old_job_id, zip_jobs)
+        self.assertIn(new_job_id, zip_jobs)
