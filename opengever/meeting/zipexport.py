@@ -223,7 +223,7 @@ class MeetingZipExporter(object):
         zip_jobs = IAnnotations(committee).get(ZIP_JOBS_KEY, {})
         return job_id in zip_jobs
 
-    def __init__(self, meeting, opaque_id=None, job_id=None):
+    def __init__(self, meeting, doc_in_job_id=None, job_id=None):
         self.meeting = meeting
         self.committee = meeting.committee.oguid.resolve_object()
 
@@ -234,8 +234,8 @@ class MeetingZipExporter(object):
         self.zip_jobs = annotations[ZIP_JOBS_KEY]
 
         # Get or create job_id
-        if opaque_id:
-            self.job_id = self._opaque_id_to_job_id(opaque_id)
+        if doc_in_job_id:
+            self.job_id = self._doc_in_job_id_to_job_id(doc_in_job_id)
             self.zip_job = self.zip_jobs[self.job_id]
         elif job_id:
             self.zip_job = self.zip_jobs[job_id]
@@ -257,13 +257,13 @@ class MeetingZipExporter(object):
 
         return self.job_id
 
-    def get_document(self, opaque_id):
-        document_id = self._opaque_id_to_document_id(opaque_id)
+    def get_document(self, doc_in_job_id):
+        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
         document_job = self.zip_job['documents'][document_id]
         return getUtility(IIntIds).getObject(document_job['intid'])
 
-    def receive_pdf(self, opaque_id, mimetype, data):
-        document_id = self._opaque_id_to_document_id(opaque_id)
+    def receive_pdf(self, doc_in_job_id, mimetype, data):
+        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
         self._update_job_with_pdf(document_id, mimetype, data)
 
         if self.is_finished_converting():
@@ -296,8 +296,8 @@ class MeetingZipExporter(object):
     def get_zipfile(self):
         return self.zip_job['zip_file']
 
-    def mark_as_skipped(self, opaque_id):
-        document_id = self._opaque_id_to_document_id(opaque_id)
+    def mark_as_skipped(self, doc_in_job_id):
+        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
         document_job = self.zip_job['documents'][document_id]
         document_job['status'] = 'skipped'
 
@@ -359,21 +359,23 @@ class MeetingZipExporter(object):
 
     def _queue_demand_job(self, document):
         callback_url = self.meeting.get_url(view='receive_meeting_zip_pdf')
+        doc_in_job_id = self._get_doc_in_job_id(document)
+
         if get_service_v3().queue_demand(
                 document, PROCESSING_QUEUE, callback_url,
-                opaque_id=self._get_opaque_id(document)):
+                opaque_id=doc_in_job_id):
             return 'converting'
         else:
             return 'skipped'
 
-    def _get_opaque_id(self, document):
+    def _get_doc_in_job_id(self, document):
         return '{}:{}'.format(self.job_id, IUUID(document))
 
-    def _opaque_id_to_job_id(self, opaque_id):
-        return opaque_id.split(':')[0]
+    def _doc_in_job_id_to_job_id(self, doc_in_job_id):
+        return doc_in_job_id.split(':')[0]
 
-    def _opaque_id_to_document_id(self, opaque_id):
-        return opaque_id.split(':')[1]
+    def _doc_in_job_id_to_document_id(self, doc_in_job_id):
+        return doc_in_job_id.split(':')[1]
 
     def _collect_meeting_documents(self):
         return ZipExportDocumentCollector(self.meeting).get_documents()

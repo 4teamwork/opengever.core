@@ -62,7 +62,7 @@ class TestDownloadMeetingZip(IntegrationTestCase):
         zip_job = exporter._prepare_zip_job_metadata()
         exporter._append_document_job_metadata(
             zip_job, self.document, 'converting')
-        exporter.receive_pdf(exporter._get_opaque_id(self.document),
+        exporter.receive_pdf(exporter._get_doc_in_job_id(self.document),
                              'application/pdf',
                              'i am a apdf.')
 

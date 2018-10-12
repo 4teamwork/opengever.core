@@ -28,7 +28,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'token': get_download_token(),
             'status': 'success',
             'document': IBumblebeeDocument(document).get_checksum(),
-            'opaque_id': exporter._get_opaque_id(document),
+            'opaque_id': exporter._get_doc_in_job_id(document),
             'pdf': ('converted.pdf', 'the pdf', 'application/pdf'),
         }
 
@@ -101,7 +101,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'token': get_download_token(),
             'status': 'skipped',
             'document': IBumblebeeDocument(proposal_document).get_checksum(),
-            'opaque_id': exporter._get_opaque_id(proposal_document),
+            'opaque_id': exporter._get_doc_in_job_id(proposal_document),
         }
         self.do_callback_request(browser, fields)
 
@@ -122,7 +122,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             'token': get_download_token(),
             'status': 'failed',
             'document': IBumblebeeDocument(proposal_document).get_checksum(),
-            'opaque_id': exporter._get_opaque_id(proposal_document),
+            'opaque_id': exporter._get_doc_in_job_id(proposal_document),
         }
         self.do_callback_request(browser, fields)
 
