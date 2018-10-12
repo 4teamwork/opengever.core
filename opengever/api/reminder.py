@@ -48,6 +48,7 @@ class TaskReminderPost(Service):
             return super(TaskReminderPost, self).reply()
 
         task_reminder.set_reminder(self.context, reminder_option)
+        self.context.sync()
 
         self.request.response.setStatus(204)
         return super(TaskReminderPost, self).reply()
@@ -84,6 +85,7 @@ class TaskReminderPatch(Service):
                 return super(TaskReminderPatch, self).reply()
 
             task_reminder.set_reminder(self.context, reminder_option)
+            self.context.sync()
 
         self.request.response.setStatus(204)
         return super(TaskReminderPatch, self).reply()
@@ -106,5 +108,7 @@ class TaskReminderDelete(Service):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         task_reminder.clear_reminder(self.context)
+        self.context.sync()
+
         self.request.response.setStatus(204)
         return super(TaskReminderDelete, self).reply()
