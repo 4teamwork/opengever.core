@@ -1451,11 +1451,6 @@ msgstr ""
 msgid "msg_inactive_committee_selected"
 msgstr ""
 
-#. Default: "The supplied job id ${uuid} is invalid."
-#: ./opengever/meeting/browser/meetings/zipexport.py
-msgid "msg_invalid_public_id"
-msgstr ""
-
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"

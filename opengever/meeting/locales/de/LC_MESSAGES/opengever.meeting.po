@@ -1452,11 +1452,6 @@ msgstr "Nach Abschluss eines Traktandums kann die Traktandenliste nicht mehr bea
 msgid "msg_inactive_committee_selected"
 msgstr "Das ausgewählte Gremium wurde deaktiviert, der Antrag konnte nicht eingereicht werden."
 
-#. Default: "The supplied job id ${uuid} is invalid."
-#: ./opengever/meeting/browser/meetings/zipexport.py
-msgid "msg_invalid_public_id"
-msgstr "Die job id ${uuid} ist ungültig."
-
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"

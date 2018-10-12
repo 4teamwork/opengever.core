@@ -19,19 +19,6 @@ from zope.interface import alsoProvides
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
-import uuid
-
-
-def as_uuid(id_from_request):
-    if not id_from_request:
-        return None
-
-    try:
-        return uuid.UUID(id_from_request)
-    except ValueError:
-        pass
-
-    return None
 
 
 def require_public_id_parameter(request):
@@ -42,21 +29,12 @@ def require_public_id_parameter(request):
     return public_id
 
 
-def require_exporter(request, meeting, str_public_id):
-    public_id = as_uuid(str_public_id)
-    if not public_id:
-        msg = _(u'msg_invalid_public_id',
-                default=u'The supplied job id ${uuid} is invalid.',
-                mapping={'uuid': str_public_id})
-        api.portal.show_message(
-            message=msg, request=request, type='error')
-        raise Redirect(meeting.get_url())
-
+def require_exporter(request, meeting, public_id):
     if not MeetingZipExporter.exists(meeting, public_id):
         msg = _(u'msg_no_export_for_public_id',
                 default=u'No zip job could be found for the supplied '
                          'job id ${uuid}.',
-                mapping={'uuid': str_public_id})
+                mapping={'uuid': public_id})
         api.portal.show_message(
             message=msg, request=request, type='error')
         raise Redirect(meeting.get_url())

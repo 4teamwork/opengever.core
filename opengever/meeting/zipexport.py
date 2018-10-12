@@ -243,8 +243,8 @@ class MeetingZipExporter(object):
             self.zip_job = self.zip_jobs[self.public_id]
             self.internal_id = self.zip_job['internal_id']
         else:
-            self.internal_id = uuid.uuid4()
-            self.public_id = uuid.uuid4()
+            self.internal_id = str(uuid.uuid4())
+            self.public_id = str(uuid.uuid4())
             self.zip_job = None
 
     def demand_pdfs(self):
@@ -376,7 +376,7 @@ class MeetingZipExporter(object):
         return '{}:{}'.format(str(self.internal_id), IUUID(document))
 
     def _opaque_id_to_interal_id(self, opaque_id):
-        return uuid.UUID(opaque_id.split(':')[0])
+        return opaque_id.split(':')[0]
 
     def _opaque_id_to_document_id(self, opaque_id):
         return opaque_id.split(':')[1]
