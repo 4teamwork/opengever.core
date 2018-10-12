@@ -235,4 +235,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@notifications"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".notifications.NotificationPatch"
+      permission="zope2.View"
+      />
+
 </configure>

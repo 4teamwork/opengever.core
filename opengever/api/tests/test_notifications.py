@@ -5,6 +5,7 @@ from opengever.activity import notification_center
 from opengever.activity.model import Notification
 from opengever.task.activities import TaskAddedActivity
 from opengever.testing import IntegrationTestCase
+import json
 import pytz
 
 
@@ -135,3 +136,63 @@ class TestNotificationsGet(IntegrationTestCase):
             browser.open(url, method='GET',
                          headers={'Accept': 'application/json'})
 
+
+class TestNotificationsPatch(IntegrationTestCase):
+
+    features = ('activity', )
+
+    @browsing
+    def test_mark_notification_as_read(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+
+        url = '{}/@notifications/{}/{}'.format(self.portal.absolute_url(),
+                                               self.regular_user.getId(), 1)
+
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertFalse(Notification.query.first().is_read)
+
+        data = json.dumps({'read': True})
+        browser.open(url, data=data, method='PATCH',
+                     headers={'Accept': 'application/json'})
+
+        self.assertEqual(204, browser.status_code)
+        self.assertTrue(Notification.query.first().is_read)
+
+    @browsing
+    def test_raises_not_found_when_accessing_not_exisiting_notification(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        url = '{}/@notifications/{}/1'.format(self.portal.absolute_url(),
+                                              self.dossier_responsible.getId())
+
+        self.assertEqual(0,  Notification.query.count())
+
+        with browser.expect_http_error(404):
+            browser.open(url, method='PATCH', data=json.dumps({}),
+                         headers={'Accept': 'application/json'})
+
+    @browsing
+    def test_raises_unauthorized_when_accessing_notification_of_other_user(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+
+        # Different username in path
+        with browser.expect_http_error(401):
+            url = '{}/@notifications/{}/1'.format(
+                self.portal.absolute_url(), self.regular_user.getId())
+            browser.open(url, data=json.dumps({}), method='PATCH',
+                         headers={'Accept': 'application/json'})
+
+        # Own username but foreign notification-id
+        with browser.expect_http_error(401):
+            url = '{}/@notifications/{}/1'.format(
+                self.portal.absolute_url(), self.dossier_responsible.getId())
+            browser.open(url, data=json.dumps({}), method='PATCH',
+                         headers={'Accept': 'application/json'})
