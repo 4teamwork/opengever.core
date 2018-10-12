@@ -2,6 +2,7 @@ from opengever.base.schema import TableChoice
 from opengever.dossier import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
+from opengever.oneoffixx.utils import whitelisted_template_types
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from z3c.form import button
@@ -15,9 +16,13 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 def get_oneoffixx_templates():
     api_client = OneoffixxAPIClient()
-    templates = (OneOffixxTemplate(template)
-                 for template_group in api_client.get_oneoffixx_template_groups()
-                 for template in template_group.get("templates"))
+
+    templates = (
+        OneOffixxTemplate(template)
+        for template_group in api_client.get_oneoffixx_template_groups()
+        for template in template_group.get("templates")
+        if template.get('metaTemplateId') in whitelisted_template_types
+    )
     return templates
 
 
@@ -62,7 +67,10 @@ class OneOffixxTemplate(object):
         self.title = template.get("localizedName")
         self.template_id = template.get("id")
         self.group = template.get('templateGroupId')
-        self.filename = unicode(template.get("localizedName"))
+        template_type = template['metaTemplateId']
+        template_type_info = whitelisted_template_types[template_type]
+        self.content_type = template_type_info['content-type']
+        self.filename = u'.'.join((unicode(template.get("localizedName")), template_type_info['extension']))
         self.languages = template.get("languages")
 
     def __eq__(self, other):
