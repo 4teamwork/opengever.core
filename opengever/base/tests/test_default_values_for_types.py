@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.interfaces import IBumblebeeDocument
@@ -27,7 +28,9 @@ import json
 import textwrap
 
 
-FROZEN_NOW = datetime.now()
+# the frozen zope datetime does not contain the microseconds,
+# so we need to strip them here for later comparisons
+FROZEN_NOW = datetime.now().replace(microsecond=0)
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'
@@ -51,6 +54,7 @@ REPOFOLDER_REQUIREDS = {
 }
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
+    'changed': DateTime(FROZEN_NOW),
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -83,6 +87,7 @@ DOSSIER_REQUIREDS = {
 }
 DOSSIER_DEFAULTS = {
     'archival_value': u'unchecked',
+    'changed': DateTime(FROZEN_NOW),
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -122,6 +127,7 @@ DOCUMENT_REQUIREDS = {
     'title': DEFAULT_TITLE,
 }
 DOCUMENT_DEFAULTS = {
+    'changed': DateTime(FROZEN_NOW),
     'classification': u'unprotected',
     'description': u'',
     'digitally_available': True,
@@ -151,6 +157,7 @@ DOCUMENT_MISSING_VALUES = {
 
 MAIL_REQUIREDS = {}
 MAIL_DEFAULTS = {
+    'changed': DateTime(FROZEN_NOW),
     'classification': u'unprotected',
     'description': u'',
     'digitally_available': True,
@@ -180,6 +187,7 @@ MAIL_MISSING_VALUES = {
 
 
 TASK_REQUIREDS = {
+    'changed': DateTime(FROZEN_NOW),
     'issuer': 'kathi.barfuss',
     'responsible': 'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
@@ -212,6 +220,7 @@ CONTACT_REQUIREDS = {
     'lastname': u'Doe',
 }
 CONTACT_DEFAULTS = {
+    'changed': DateTime(FROZEN_NOW),
     'description': u'',
 }
 CONTACT_FORM_DEFAULTS = {}
@@ -241,6 +250,7 @@ PROPOSAL_REQUIREDS = {
     'issuer': u'herbert.jager',
 }
 PROPOSAL_DEFAULTS = {
+    'changed': DateTime(FROZEN_NOW),
     'description': u'',
     'title': u'Containing Dossier Title',
 }
@@ -506,12 +516,12 @@ class TestRepositoryRootDefaults(TestDefaultsBase):
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
             u'title_fr': u'French Title',
         }
-
-        response = browser.open(
-            self.portal.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.portal.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -602,11 +612,12 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
             u'title_de': REPOFOLDER_REQUIREDS['title_de'],
             u'title_fr': u'French Title',
         }
-        response = browser.open(
-            self.empty_repofolder.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.empty_repofolder.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -695,11 +706,12 @@ class TestDossierDefaults(TestDefaultsBase):
             u'title': DOSSIER_REQUIREDS['title'],
             u'responsible': DOSSIER_FORM_DEFAULTS['responsible'],
         }
-        response = browser.open(
-            self.leaf_repofolder.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.leaf_repofolder.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -885,11 +897,12 @@ class TestDocumentDefaults(TestDefaultsBase):
                 u'filename': u'b\xe4rengraben.txt',
                 u'content-type': u'text/plain'},
         }
-        response = browser.open(
-            self.dossier.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.dossier.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -1057,11 +1070,12 @@ class TestMailDefaults(TestDefaultsBase):
                 u'filename': u'msg.eml',
                 u'content-type': u'message/rfc822'},
         }
-        response = browser.open(
-            self.dossier.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.dossier.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -1232,11 +1246,12 @@ class TestContactDefaults(TestDefaultsBase):
             u'firstname': CONTACT_REQUIREDS['firstname'],
             u'lastname': CONTACT_REQUIREDS['lastname'],
         }
-        response = browser.open(
-            self.contactfolder.absolute_url(),
-            data=json.dumps(payload),
-            method='POST',
-            headers=self.api_headers)
+        with freeze(FROZEN_NOW):
+            response = browser.open(
+                self.contactfolder.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
 
@@ -1272,11 +1287,12 @@ class TestProposalDefaults(TestDefaultsBase):
     def test_create_content_in_container(self):
         self.login(self.meeting_user)
 
-        proposal = createContentInContainer(
-            self.dossier,
-            'opengever.meeting.proposal',
-            issuer=PROPOSAL_REQUIREDS['issuer'],
-        )
+        with freeze(FROZEN_NOW):
+            proposal = createContentInContainer(
+                self.dossier,
+                'opengever.meeting.proposal',
+                issuer=PROPOSAL_REQUIREDS['issuer'],
+            )
 
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_type_defaults()
@@ -1286,11 +1302,12 @@ class TestProposalDefaults(TestDefaultsBase):
     def test_invoke_factory(self):
         self.login(self.meeting_user)
 
-        new_id = self.dossier.invokeFactory(
-            'opengever.meeting.proposal',
-            'proposal-999',
-            issuer=PROPOSAL_REQUIREDS['issuer'],
-        )
+        with freeze(FROZEN_NOW):
+            new_id = self.dossier.invokeFactory(
+                'opengever.meeting.proposal',
+                'proposal-999',
+                issuer=PROPOSAL_REQUIREDS['issuer'],
+            )
         proposal = self.dossier[new_id]
 
         persisted_values = get_persisted_values_for_obj(proposal)
@@ -1302,12 +1319,13 @@ class TestProposalDefaults(TestDefaultsBase):
     def test_z3c_add_form(self, browser):
         self.login(self.meeting_user, browser)
 
-        browser.open(self.dossier)
-        factoriesmenu.add(u'Proposal')
-        browser.forms['form'].fill({
-            'Committee': self.committee.title,
-            'Proposal template': self.proposal_template.title,
-        }).save()
+        with freeze(FROZEN_NOW):
+            browser.open(self.dossier)
+            factoriesmenu.add(u'Proposal')
+            browser.forms['form'].fill({
+                'Committee': self.committee.title,
+                'Proposal template': self.proposal_template.title,
+            }).save()
         proposal = browser.context
 
         persisted_values = get_persisted_values_for_obj(proposal)
@@ -1335,7 +1353,8 @@ class TestPrivateFolderDefaults(TestDefaultsBase):
         self.login(self.regular_user)
 
         # This will trigger member folder creation by MembershipTool
-        create_members_folder(self.private_root)
+        with freeze(FROZEN_NOW):
+            create_members_folder(self.private_root)
 
         private_folder = self.portal.private[api.user.get_current().id]
 
