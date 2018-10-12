@@ -70,36 +70,6 @@ class TestTaskReminder(IntegrationTestCase):
             TASK_REMINDER_ONE_WEEK_BEFORE.option_type,
             task_reminder.get_reminder(self.task).option_type)
 
-    def test_set_reminder_creates_sql_entry_for_current_user(self):
-        self.login(self.regular_user)
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
-
-        reminder = task_reminder.get_sql_reminder(self.task)
-
-        self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
-            reminder.option_type
-            )
-
-        self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.calculate_remind_on(self.task.deadline),
-            reminder.remind_day
-            )
-
-        self.assertIsNone(task_reminder.get_sql_reminder(
-            self.task, user_id=self.dossier_responsible.getId()))
-
-    def test_set_reminder_updates_sql_entry_if_already_exists(self):
-        self.login(self.regular_user)
-        task_reminder = TaskReminder()
-        task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
-        task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_WEEK_BEFORE)
-
-        self.assertEqual(
-            TASK_REMINDER_ONE_WEEK_BEFORE.option_type,
-            task_reminder.get_sql_reminder(self.task).option_type)
-
     def test_clear_reminder_removes_annotation_reminder_for_current_user(self):
         self.login(self.regular_user)
         task_reminder = TaskReminder()
@@ -115,23 +85,6 @@ class TestTaskReminder(IntegrationTestCase):
         self.assertEqual(
             TASK_REMINDER_ONE_DAY_BEFORE.option_type,
             task_reminder.get_reminder(
-                self.task, user_id=self.dossier_responsible.getId()).option_type)
-
-    def test_clear_reminder_removes_sql_reminder_for_current_user(self):
-        self.login(self.regular_user)
-        task_reminder = TaskReminder()
-
-        task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
-        task_reminder.set_reminder(
-            self.task, TASK_REMINDER_ONE_DAY_BEFORE,
-            user_id=self.dossier_responsible.getId())
-
-        task_reminder.clear_reminder(self.task)
-        self.assertIsNone(task_reminder.get_sql_reminder(self.task))
-
-        self.assertEqual(
-            TASK_REMINDER_ONE_DAY_BEFORE.option_type,
-            task_reminder.get_sql_reminder(
                 self.task, user_id=self.dossier_responsible.getId()).option_type)
 
     def test_create_reminder_notifications_does_nothing_if_there_are_no_reminder_settings(self):
@@ -163,10 +116,14 @@ class TestTaskReminder(IntegrationTestCase):
 
         with self.login(self.regular_user):
             task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
+            self.task.sync()
+
             task_reminder.set_reminder(self.sequential_task, TASK_REMINDER_SAME_DAY)
+            self.sequential_task.sync()
 
         with self.login(self.dossier_responsible):
             task_reminder.set_reminder(self.subtask, TASK_REMINDER_ONE_DAY_BEFORE)
+            self.subtask.sync()
 
         with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
             task_reminder.create_reminder_notifications()
@@ -184,52 +141,6 @@ class TestTaskReminder(IntegrationTestCase):
             [self.regular_user.getId(), self.dossier_responsible.getId()],
             [notification.userid for notification in notifications])
 
-    def test_recalculate_remind_day_for_obj_updates_the_remind_day(self):
-        self.login(self.administrator)
-        today = date.today()
-        tomorrow = today + timedelta(days=1)
-        yesterday = today + timedelta(days=-1)
-
-        self.task.deadline = today
-        self.task.sync()
-
-        task_reminder = TaskReminder()
-
-        with self.login(self.regular_user):
-            task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
-
-        with self.login(self.dossier_responsible):
-            task_reminder.set_reminder(self.task, TASK_REMINDER_ONE_DAY_BEFORE)
-
-        self.assertEqual(
-            today,
-            task_reminder.get_sql_reminder(
-                self.task,
-                user_id=self.regular_user.getId()).remind_day)
-
-        self.assertEqual(
-            yesterday,
-            task_reminder.get_sql_reminder(
-                self.task,
-                user_id=self.dossier_responsible.getId()).remind_day)
-
-        self.task.deadline = tomorrow
-        self.task.sync()
-
-        task_reminder.recalculate_remind_day_for_obj(self.task)
-
-        self.assertEqual(
-            tomorrow,
-            task_reminder.get_sql_reminder(
-                self.task,
-                user_id=self.regular_user.getId()).remind_day)
-
-        self.assertEqual(
-            today,
-            task_reminder.get_sql_reminder(
-                self.task,
-                user_id=self.dossier_responsible.getId()).remind_day)
-
     def test_do_not_create_reminder_activity_if_task_is_finished(self):
         self.login(self.administrator)
         today = date.today()
@@ -242,12 +153,14 @@ class TestTaskReminder(IntegrationTestCase):
 
         with self.login(self.regular_user):
             task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
+            self.task.sync()
 
         def create_reminders_for_task_in_state(task, state):
             self.set_workflow_state(state, task)
 
             with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
                 task_reminder.create_reminder_notifications()
+
 
         create_reminders_for_task_in_state(self.task, 'task-state-tested-and-closed')
         create_reminders_for_task_in_state(self.task, 'task-state-resolved')
