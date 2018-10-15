@@ -106,8 +106,17 @@ class OneoffixxAPIClient(object):
             raise OneoffixxConfigurationException('Oneoffixx configuration file missing data!')
 
         fake_sid = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
-        real_sid = getattr(api.user.get_current(), 'objectSid', None)
+        real_sid = api.user.get_current().getProperty('objectSid', None)
+
+        if real_sid and not isinstance(real_sid, str):
+            raise OneoffixxConfigurationException(
+                "SID returned from LDAP as 'objectSid' is not a string, "
+                'probably a missing / misconfigured LDAP property mapping or'
+                'using the wrong version of Products.LDAPUserFolder.'
+            )
+
         impersonate_as = fake_sid or real_sid
+
         if not impersonate_as:
             raise OneoffixxConfigurationException('No fake_sid configured and LDAP did not provide one!')
 
