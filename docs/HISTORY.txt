@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
 - Send notification dispatch exceptions to Raven. [Rotonen]
 - Do not present the paste UI to users without 'Copy or Move' on the target. [Rotonen]
 - Add is_private field for tasks. [elioschmutz]
