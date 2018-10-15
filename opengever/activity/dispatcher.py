@@ -5,14 +5,28 @@ from opengever.activity.model.settings import NotificationSetting
 from opengever.base.model import create_session
 from ZODB.POSException import ConflictError
 import logging
+import pkg_resources
 import sys
 import traceback
+
+
+try:
+    pkg_resources.get_distribution('ftw.raven')
+    from ftw.raven.reporter import maybe_report_exception
+except pkg_resources.DistributionNotFound:
+    HAS_RAVEN = False
+else:
+    HAS_RAVEN = True
 
 
 logger = logging.getLogger('opengever.activity')
 
 
 class NotificationDispatcher(object):
+    """Dispatch notifications.
+
+    Notifications are stored in SQL.
+    """
 
     enabled_key = None
     roles_key = None
@@ -59,11 +73,13 @@ class NotificationDispatcher(object):
             except ConflictError:
                 raise
 
-            except Exception:
+            except BaseException:
+                e_type, e_value, tb = sys.exc_info()
+                if HAS_RAVEN:
+                    maybe_report_exception(self.context, self.request, e_type, e_value, tb)
                 not_dispatched.append(notifications)
-                tcb = ''.join(traceback.format_exception(*sys.exc_info()))
-                logger.error('Exception while dispatch activity '
-                             '(MailDispatcher):\n{}'.format(tcb))
+                formatted_traceback = ''.join(traceback.format_exception(e_type, e_value, tb))
+                logger.error('Exception while dispatch activity (MailDispatcher):\n%s', formatted_traceback)
 
         return not_dispatched
 
