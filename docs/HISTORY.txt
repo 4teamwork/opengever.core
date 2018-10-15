@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Send notification dispatch exceptions to Raven. [Rotonen]
 - Do not present the paste UI to users without 'Copy or Move' on the target. [Rotonen]
 - Add trashing of protocol excerpts. [njohner]
 - Display title for NullObject in meeting template selection. [njohner]
