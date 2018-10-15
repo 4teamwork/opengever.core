@@ -1,6 +1,7 @@
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
@@ -125,20 +126,18 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         today = datetime.date.today()
         tomorrow = today + datetime.timedelta(days=1)
 
-        self._change_deadline(self.task, today)
-
+        self.task.deadline = today
         task_reminder.set_reminder(
             self.task, TASK_REMINDER_SAME_DAY, self.regular_user.id)
+        self.task.sync()
 
-        self.assertEqual(
-            today,
-            task_reminder.get_sql_reminder(self.task, self.regular_user.id).remind_day)
+        sql_setting = ReminderSetting.query.first()
+        self.assertEqual(today, sql_setting.remind_day)
 
         self._change_deadline(self.task, tomorrow)
 
-        self.assertEqual(
-            tomorrow,
-            task_reminder.get_sql_reminder(self.task, self.regular_user.id).remind_day)
+        sql_setting = ReminderSetting.query.first()
+        self.assertEqual(tomorrow, sql_setting.remind_day)
 
 
 class TestDeadlineModifierController(IntegrationTestCase):

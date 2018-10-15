@@ -4413,6 +4413,9 @@ dl.actionMenu.activated .actionMenuContent { border: 1px solid #e6e6e6; margin-t
 #sequence_taskBox .discret { color: #969696; }
 #sequence_taskBox .task { margin: 0px 0px 10px 10px; }
 
+.taskReminderSelector dl { width: 100%; cursor: pointer; }
+.taskReminderSelector .taskReminderSelectorOptionIcon { width: 1.5em; }
+
 #content .select2 .select2-selection--multiple .select2-selection__rendered li.select2-selection__choice { line-height: 2em; }
 #content .select2 .select2-selection--multiple .select2-selection__rendered li.select2-selection__choice .select2-selection__choice__remove { float: right; margin-left: .5em; bottom: -1px; }
 

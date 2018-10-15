@@ -4,12 +4,14 @@ from opengever.base.model import Base
 from opengever.base.model import Session
 from opengever.base.oguid import Oguid
 from opengever.base.utils import escape_html
+from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.task.reminder.reminder import TaskReminder
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Boolean
@@ -218,6 +220,32 @@ class Task(Base):
         predecessor = plone_task.get_tasktemplate_predecessor()
         if predecessor:
             self.tasktemplate_predecessor = predecessor.get_sql_object()
+
+        self.sync_reminders(plone_task)
+
+    def sync_reminders(self, plone_task):
+        reminders = TaskReminder().get_reminders(plone_task)
+
+        for sql_setting in self.reminder_settings:
+
+            # If the setting already exists, we only update the deadline
+            if sql_setting.actor_id in reminders:
+                setting = reminders[sql_setting.actor_id]
+                sql_setting.option_type = setting.option_type
+                sql_setting.remind_day = setting.calculate_remind_on(
+                    plone_task.deadline)
+                reminders.pop(sql_setting.actor_id)
+
+            # delete no longer existing settings
+            else:
+                self.session.delete(sql_setting)
+
+        # Add new reminder settings
+        for actor_id, reminder in reminders.items():
+            setting = ReminderSetting(
+                task=self, actor_id=actor_id, option_type=reminder.option_type,
+                remind_day=reminder.calculate_remind_on(plone_task.deadline))
+            self.session.add(setting)
 
     # XXX move me to task query
     def query_predecessor(self, admin_unit_id, pred_init_id):

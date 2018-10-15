@@ -226,6 +226,7 @@ class TestTaskTextTransformation(IntegrationTestCase):
              'For confirmation / correction',
              'task-state-in-progress',
              'November 1, 2016',
+             'No reminder',
              'Ziegler Robert (robert.ziegler)',
              u'B\xe4rfuss K\xe4thi (kathi.barfuss)', ''],
             table_data)

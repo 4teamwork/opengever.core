@@ -11,6 +11,8 @@ Changelog
 - Fix styling of favorite button. [njohner]
 - Update the checksum when deleting attachments from E-mails. [njohner]
 - return fullname of responsible in dossier GET. [njohner]
+- Revoke temporary roles also when closing direct-execution tasks. [phgross]
+- Add the GUI for task-reminders. [elioschmutz]
 - Exclude searchroots from subdossier listings. [Rotonen, lgraf]
 - Add filters (active and all) to membership listing. [njohner]
 - Do not add a task-reminder activity if task is finished. [elioschmutz]

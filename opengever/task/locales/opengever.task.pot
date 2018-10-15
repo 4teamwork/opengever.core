@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-09-19 14:54+0000\n"
+"POT-Creation-Date: 2018-10-05 07:33+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -227,6 +227,11 @@ msgstr ""
 msgid "error_same_responsible"
 msgstr ""
 
+#. Default: "There was an error while updating the reminder"
+#: ./opengever/task/browser/overview.py
+msgid "error_while_updating_task_reminder"
+msgstr ""
+
 #. Default: "existing dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "existing_dossier"
@@ -321,6 +326,11 @@ msgstr ""
 #. Default: "Duration in h"
 #: ./opengever/task/task.py
 msgid "help_expectedDuration"
+msgstr ""
+
+#. Default: "Set a reminder to get notified based on the duedate"
+#: ./opengever/task/response.py
+msgid "help_reminder"
 msgstr ""
 
 #: ./opengever/task/browser/assign.py
@@ -536,6 +546,12 @@ msgstr ""
 msgid "label_related_items"
 msgstr ""
 
+#. Default: "Reminder"
+#: ./opengever/task/browser/overview.py
+#: ./opengever/task/response.py
+msgid "label_reminder"
+msgstr ""
+
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
 msgid "label_resonsible_client"
@@ -673,6 +689,11 @@ msgstr ""
 #. Default: "new dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
+msgstr ""
+
+#. Default: "No reminder"
+#: ./opengever/task/browser/overview.py
+msgid "no_reminder"
 msgstr ""
 
 #. Default: "Rejected by ${user}."

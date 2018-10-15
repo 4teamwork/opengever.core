@@ -1,21 +1,31 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
+from opengever.base.handlebars import get_handlebars_template
 from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
+from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from pkg_resources import resource_filename
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
+from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.i18n import translate
+import json
 
 
 class Overview(BrowserView, GeverTabMixin):
     """Provide / override tabbedview methods for task overviews."""
+
+    task_reminder_sleector_template = ViewPageTemplateFile(
+        'templates/task_reminder_selector.pt')
 
     def documents(self):
         """Return containing documents and related documents."""
@@ -102,6 +112,12 @@ class Overview(BrowserView, GeverTabMixin):
             {
                 'label': _(u"label_deadline", default=u"Deadline"),
                 'value': task.get_deadline_label(fmt="long"),
+                'is_html': True,
+                },
+            {
+                'label': _(u"label_reminder", default=u"Reminder"),
+                'css_class': "taskReminderSelector",
+                'value': self.task_reminder_sleector_template(self),
                 'is_html': True,
                 },
             {
@@ -192,3 +208,49 @@ class Overview(BrowserView, GeverTabMixin):
 
     def previous_task_link(self):
         return self.render_task(self.context.get_sql_object().get_previous_task())
+
+    def current_reminder_title(self):
+        for option in self.reminder_options():
+            if option.get('selected'):
+                return option.get('option_title')
+
+    def reminder_options(self):
+        options = []
+        reminder_option = TaskReminder().get_reminder(self.context)
+
+        options.append({
+            'option_type': 'no-reminder',
+            'option_title': translate(_('no_reminder', default='No reminder'),
+                                      context=self.request),
+            'sort_order': -1,
+            'selected': reminder_option is None,
+            })
+
+        for option in TASK_REMINDER_OPTIONS.values():
+            selected = option.option_type == reminder_option.option_type if \
+                reminder_option else None
+            options.append({
+                'option_type': option.option_type,
+                'sort_order': option.sort_order,
+                'option_title': translate(
+                    option.option_title, context=self.request),
+                'selected': selected,
+            })
+
+        return options
+
+    def reminder_init_state(self):
+        return json.dumps({
+            'endpoint': self.context.absolute_url() + '/@reminder',
+            'reminder_options': self.reminder_options(),
+            'error_msg': translate(_('error_while_updating_task_reminder',
+                                     default="There was an error while "
+                                             "updating the reminder"),
+                                   context=self.request)
+        })
+
+    @property
+    def task_reminder_vuejs_template(self):
+        return get_handlebars_template(
+            resource_filename('opengever.task.browser.vue_templates',
+                              'task_reminder_selector.html'))

@@ -1,7 +1,7 @@
 from opengever.base.date_time import utcnow_tz_aware
+from sqlalchemy.orm import relationship
 from opengever.base.model import Base
 from opengever.base.model import UTCDateTime
-from opengever.globalindex.model.task import Task
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from sqlalchemy import Column
@@ -9,7 +9,6 @@ from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
-from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
@@ -22,7 +21,7 @@ class ReminderSetting(Base):
                                  primary_key=True)
 
     task_id = Column(Integer, ForeignKey('tasks.id'), nullable=False)
-    task = relationship(Task, backref="reminder_settings")
+    task = relationship("Task", backref="reminder_settings")
 
     actor_id = Column(String(USER_ID_LENGTH), index=True, nullable=False)
 

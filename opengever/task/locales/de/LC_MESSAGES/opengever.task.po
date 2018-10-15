@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-09-19 14:54+0000\n"
+"POT-Creation-Date: 2018-10-05 07:33+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -226,6 +226,11 @@ msgstr "Teams sind nur bei offenen Aufgaben oder Weiterleitungen als Auftragnehm
 msgid "error_same_responsible"
 msgstr "Keine Änderung, da kein anderer Auftragnehmer ausgewählt wurde"
 
+#. Default: "There was an error while updating the reminder"
+#: ./opengever/task/browser/overview.py
+msgid "error_while_updating_task_reminder"
+msgstr "Es ist ein Fehler aufgetreten."
+
 #. Default: "existing dossier"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "existing_dossier"
@@ -322,6 +327,11 @@ msgstr "Kosten in CHF"
 #: ./opengever/task/task.py
 msgid "help_expectedDuration"
 msgstr "Dauer in h"
+
+#. Default: "Set a reminder to get notified based on the duedate"
+#: ./opengever/task/response.py
+msgid "help_reminder"
+msgstr "Wann möchten Sie über das Fristende der Aufgabe benachrichtigt werden."
 
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
@@ -537,6 +547,12 @@ msgstr "Vorherige Aufgabe"
 msgid "label_related_items"
 msgstr "Verweise"
 
+#. Default: "Reminder"
+#: ./opengever/task/browser/overview.py
+#: ./opengever/task/response.py
+msgid "label_reminder"
+msgstr "Erinnerung"
+
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
 msgid "label_resonsible_client"
@@ -676,6 +692,11 @@ msgstr "Meine Aufgaben"
 #: ./opengever/task/browser/assign_dossier.py
 msgid "new_dossier"
 msgstr "neues Dossier"
+
+#. Default: "No reminder"
+#: ./opengever/task/browser/overview.py
+msgid "no_reminder"
+msgstr "Keine Erinnerung"
 
 #. Default: "Rejected by ${user}."
 #: ./opengever/task/response_description.py
