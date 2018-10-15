@@ -247,16 +247,16 @@ class OGMail(Mail, BaseDocumentMixin):
             for attachment in attachments]
         positions = [attachment['position'] for attachment in attachments]
 
-        # Flag the `message` attribute as having changed
-        desc = Attributes(IAttachmentsDeletedEvent, "message")
-        notify(AttachmentsDeleted(self, attachment_names, desc))
-
         # set the new message file
         msg = remove_attachments(self.msg, positions)
         self.message = NamedBlobFile(
             data=msg.as_string(),
             contentType=self.message.contentType,
             filename=self.message.filename)
+
+        # Flag the `message` attribute as having changed
+        desc = Attributes(IAttachmentsDeletedEvent, "message")
+        notify(AttachmentsDeleted(self, attachment_names, desc))
 
     def _get_attachment_data(self, pos):
         """Return a tuple: file-data, content-type and filename extracted from
