@@ -30,7 +30,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         bundle = self.load_bundle()
-        self.assertEqual(14, len(list(bundle)))
+        self.assertEqual(15, len(list(bundle)))
 
     def test_loads_items_in_correct_order(self):
         bundle = self.load_bundle()
@@ -48,6 +48,7 @@ class TestBundleLoader(TestCase):
              ('mail', 'Ein Mail'),
              ('mail', ''),
              ('document', 'Document referenced via UNC-Path'),
+             ('document', 'Nonexistent document referenced via UNC-Path with Umlaut'),
              ('document', 'Dokument in bestehendem Examplecontent Dossier'),
              ('mail', 'Mail in bestehendem Examplecontent Dossier')],
             [(get_portal_type(i), get_title(i)) for i in list(bundle)])
@@ -77,6 +78,7 @@ class TestBundleLoader(TestCase):
             ('document', 'Document referenced via UNC-Path'),
             ('document', 'Dokument in bestehendem Examplecontent Dossier'),
             ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
+            ('document', 'Nonexistent document referenced via UNC-Path with Umlaut'),
             ('mail', ''),
             ('mail', 'Ein Mail'),
             ('mail', 'Mail in bestehendem Examplecontent Dossier'),

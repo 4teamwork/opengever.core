@@ -45,6 +45,12 @@
     "review_state": "document-state-draft",
     "title": "Document referenced via UNC-Path"
   },  {
+    "guid": "173a585aea782074a2758d738772e8d7",
+    "parent_guid": "659645aec58d48a9b9663399ea2ec069",
+    "filepath": "\\\\host\\mount\\subdir\\wörd.docx",
+    "review_state": "document-state-draft",
+    "title": "Nonexistent document referenced via UNC-Path with Umlaut"
+  },  {
     "guid": "d65317ece1cb4dc797de1fc1e21bb4eb",
     "parent_reference": [
       [1, 1],

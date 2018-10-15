@@ -23,6 +23,7 @@ from plone.portlets.interfaces import IPortletManager
 from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import json
 
 
 FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
@@ -50,9 +51,18 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         unc_share_asset_directory = resource_filename(
             'opengever.bundle.tests', 'assets/files_outside_bundle')
-        annotations[BUNDLE_INGESTION_SETTINGS_KEY] = {
-            'unc_mounts': {u'\\\\host\\mount': unc_share_asset_directory},
+
+        ingestion_settings = {
+            'unc_mounts': {
+                u'\\\\host\\mount': unc_share_asset_directory.decode('utf-8')
+            },
         }
+
+        # Shove ingestion settings through JSON deserialization to be as
+        # close as possible to the real thing (unicode strings!).
+        ingestion_settings = json.loads(json.dumps(ingestion_settings))
+        annotations[BUNDLE_INGESTION_SETTINGS_KEY] = ingestion_settings
+
         # We need to add documents to dossiers that have already been created
         # in the 'closed' state, which isn't allowed for anyone except users
         # inheriting from `UnrestrictedUser` -> we need elevated privileges
@@ -574,7 +584,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
         self.assertEqual(3, len(dossiers))
-        self.assertEqual(4, len(documents))
+        self.assertEqual(5, len(documents))
         self.assertEqual(3, len(mails))
 
     def assert_navigation_portlet_assigned(self, root):
