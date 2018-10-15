@@ -215,6 +215,28 @@ class TestCopyPaste(IntegrationTestCase):
             ["Can't paste items, the context does not allow pasting items."],
             error_messages())
 
+    @browsing
+    def test_paste_not_available_without_copy_or_move_on_target(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view="copy_items", data=self.make_path_param(self.document))
+        # A task grants us 'Contributor' on the otherwise inaccessible dossier
+        browser.open(self.protected_dossier_with_task)
+        expected_actions = [
+            u'Add new\u2026 \u25bc',
+            'Document',
+            'document_with_template',
+            'Task',
+            'Add task from template',
+            'Subdossier',
+            'Participant',
+            u'Actions \u25bc',
+            'Cover (PDF)',
+            'Export as Zip',
+            'Print details (PDF)',
+            'Properties',
+            ]
+        self.assertEqual(expected_actions, browser.css('#contentActionMenus a').text)
+
 
 class TestClipboardCaching(IntegrationTestCase):
 

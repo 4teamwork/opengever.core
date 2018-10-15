@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from opengever.base.clipboard import Clipboard
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.private.interfaces import IPrivateContainer
+from plone import api
 from Products.Five import BrowserView
 from ZODB.POSException import ConflictError
 
@@ -34,6 +35,10 @@ class IsPastingAllowedView(BrowserView):
         """Perform the necessary checks to determine whether pasting is
         allowed / possible on the current context.
         """
+        # Check whether the user has Copy or Move on the context
+        if not api.user.has_permission('Copy or Move', obj=self.context):
+            return False
+
         # Check whether pasting is allowed at all for the container type
         if self.context.portal_type in self.disabled_types:
             return False

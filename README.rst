@@ -605,6 +605,11 @@ Objects
           - self.meeting_document
           - self.meeting_task
             - self.meeting_subtask
+        - self.protected_dossier
+          - self.protected_document
+        - self.protected_dossier_with_task
+          - self.protected_document_with_task
+          - self.task_in_protected_dossier
     - self.empty_repofolder
   - self.templates
     - self.ad_hoc_agenda_item_template

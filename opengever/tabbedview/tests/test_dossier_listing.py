@@ -23,7 +23,12 @@ class TestDossierListing(IntegrationTestCase):
     @staticmethod
     def get_contained_folders(folder):
         children = folder.getChildNodes()
-        return [child for child in children if IDossierMarker.providedBy(child)]
+        return [
+            child
+            for child in children
+            if IDossierMarker.providedBy(child)
+            if api.user.has_permission('View', obj=child)
+            ]
 
     @staticmethod
     def get_folder_data(dossier):
