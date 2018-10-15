@@ -3,7 +3,9 @@ from opengever.base.viewlets.byline import BylineBase
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task import _
+from opengever.task import is_private_task_feature_enabled
 from opengever.task.task import ITask
+from Products.CMFPlone import PloneMessageFactory as PMF
 from zope.component import getUtility
 
 
@@ -21,8 +23,11 @@ class TaskByline(BylineBase):
         return u'{} {}'.format(get_current_admin_unit().abbreviation,
                                sequence.get_number(self.context))
 
+    def is_private_label(self):
+        return PMF('Yes') if self.context.is_private else PMF('No')
+
     def get_items(self):
-        return [
+        items = [
             {
                 'class': 'responsible',
                 'label': _('label_by_author', default='by'),
@@ -53,5 +58,14 @@ class TaskByline(BylineBase):
                 'content': self.sequence_number(),
                 'replace': False
             },
-
         ]
+
+        if self.context.is_private:
+            items.append({
+                'class': 'is_private',
+                'label': _('label_is_private_byline', default='Private'),
+                'content': self.is_private_label(),
+                'replace': False
+            })
+
+        return items

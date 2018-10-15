@@ -20,6 +20,7 @@ from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.task.interfaces import ITaskSettings
 from opengever.workspace.interfaces import IWorkspaceSettings
 from pkg_resources import get_distribution
 from plone import api
@@ -98,4 +99,5 @@ class GeverSettingsAdpaterV1(object):
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
+        features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         return features

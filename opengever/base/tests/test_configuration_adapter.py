@@ -46,6 +46,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('sablon_date_format', u'%d.%m.%Y'),
                 ('solr', False),
                 ('workspace', False),
+                ('private_tasks', True),
                 ])),
             ('root_url', 'http://nohost/plone'),
             ('cas_url', None),

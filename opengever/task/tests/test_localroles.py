@@ -104,6 +104,30 @@ class TestLocalRolesSetter(IntegrationTestCase):
             ('Contributor', ),
             dossier.get_local_roles_for_userid('fa_inbox_users'))
 
+    def test_inbox_group_has_no_additional_localroles_on_private_tasks(self):
+        self.login(self.regular_user)
+
+        self.add_additional_org_unit()
+
+        dossier = create(Builder('dossier'))
+        document = create(Builder('document'))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .relate_to(document)
+                      .having(responsible=self.regular_user.id,
+                              is_private=True,
+                              responsible_client='fa'))
+
+        self.assertEquals(
+            (),
+            task.get_local_roles_for_userid('fa_inbox_users'))
+        self.assertEquals(
+            (),
+            document.get_local_roles_for_userid('fa_inbox_users'))
+        self.assertEquals(
+            (),
+            dossier.get_local_roles_for_userid('fa_inbox_users'))
+
     def test_inbox_group_has_no_additional_localroles_in_a_oneclient_setup(self):
         self.login(self.regular_user)
 

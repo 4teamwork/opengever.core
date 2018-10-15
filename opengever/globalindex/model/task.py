@@ -83,6 +83,7 @@ class Task(Base):
 
     responsible = Column(String(USER_ID_LENGTH), index=True)
     issuer = Column(String(USER_ID_LENGTH), index=True)
+    is_private = Column(Boolean(), default=False)
 
     task_type = Column(String(50), index=True)
     is_subtask = Column(Boolean(), default=False)
@@ -190,6 +191,7 @@ class Task(Base):
         self.review_state = plone_task.get_review_state()
         self.icon = plone_task.getIcon()
         self.responsible = plone_task.responsible
+        self.is_private = plone_task.is_private
         self.issuer = plone_task.issuer
         self.deadline = plone_task.deadline
         self.completed = plone_task.date_of_completion

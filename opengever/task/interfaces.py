@@ -50,6 +50,11 @@ class ITaskSettings(Interface):
         required=False,
     )
 
+    private_task_feature_enabled = schema.Bool(
+        title=u'Enable private task feature',
+        description=u'Whether private task features is enabled',
+        default=True)
+
 
 class ISuccessorTaskController(Interface):
     """The successor task controller manages predecessor and successor

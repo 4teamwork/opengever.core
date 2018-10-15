@@ -1,3 +1,5 @@
+from opengever.task.interfaces import ITaskSettings
+from plone import api
 from zope.i18nmessageid import MessageFactory
 
 _ = MessageFactory("opengever.task")
@@ -37,3 +39,8 @@ FINAL_TRANSITIONS = [
     'task-transition-in-progress-tested-and-closed',
     'task-transition-resolved-tested-and-closed',
     'task-transition-planned-skipped']
+
+
+def is_private_task_feature_enabled():
+    return api.portal.get_registry_record(
+        'private_task_feature_enabled', interface=ITaskSettings)

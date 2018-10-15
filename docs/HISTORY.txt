@@ -7,6 +7,7 @@ Changelog
 
 - Send notification dispatch exceptions to Raven. [Rotonen]
 - Do not present the paste UI to users without 'Copy or Move' on the target. [Rotonen]
+- Add is_private field for tasks. [elioschmutz]
 - Add trashing of protocol excerpts. [njohner]
 - Display title for NullObject in meeting template selection. [njohner]
 - Fix styling of favorite button. [njohner]
