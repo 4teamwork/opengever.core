@@ -7,6 +7,7 @@ from opengever.meeting import _
 from opengever.meeting.interfaces import IMeetingWrapper
 from opengever.meeting.zipexport import MeetingDocumentZipper
 from opengever.meeting.zipexport import MeetingZipExporter
+from opengever.meeting.zipexport import ZipJobManager
 from pkg_resources import resource_filename
 from plone import api
 from plone.namedfile.utils import stream_data
@@ -29,8 +30,12 @@ def require_job_id_parameter(request):
     return job_id
 
 
-def require_exporter(request, meeting, job_id):
-    if not MeetingZipExporter.exists(meeting, job_id):
+def require_job(request, meeting, job_id):
+    job_manager = ZipJobManager(meeting)
+
+    try:
+        job = job_manager.get_job(job_id)
+    except KeyError:
         msg = _(u'msg_no_export_for_job_id',
                 default=u'No zip job could be found for the supplied '
                         u'job id ${job_id}.',
@@ -39,11 +44,11 @@ def require_exporter(request, meeting, job_id):
             message=msg, request=request, type='error')
         raise Redirect(meeting.get_url())
 
-    return MeetingZipExporter(meeting, job_id=job_id)
+    return job
 
 
 class PollMeetingZip(BrowserView):
-    """Poll for meeting zip status, download once all files are available."""
+    """Poll for meeting zip progress, download once all files are available."""
 
     def __init__(self, context, request):
         super(PollMeetingZip, self).__init__(context, request)
@@ -51,14 +56,14 @@ class PollMeetingZip(BrowserView):
 
     def __call__(self):
         job_id = require_job_id_parameter(self.request)
-        exporter = require_exporter(self.request, self.model, job_id)
+        job = require_job(self.request, self.model, job_id)
 
-        status = exporter.get_status()
+        progress = job.get_progress()
 
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
-        return json.dumps(status)
+        return json.dumps(progress)
 
 
 class DownloadMeetingZip(BrowserView):
@@ -69,9 +74,9 @@ class DownloadMeetingZip(BrowserView):
 
     def __call__(self):
         job_id = require_job_id_parameter(self.request)
-        exporter = require_exporter(self.request, self.model, job_id)
+        job = require_job(self.request, self.model, job_id)
 
-        zip_file = exporter.get_zipfile()
+        zip_file = job.get_zip_file()
         filename = u'{}.zip'.format(normalize_path(self.model.title))
         set_attachment_content_disposition(
             self.request, filename, file=zip_file)
@@ -91,14 +96,16 @@ class DemandMeetingZip(BrowserView):
 
         job_id = self.request.get('job_id', None)
         if job_id:
-            require_exporter(self.request, self.model, job_id)
+            # Render view in polling mode
+            require_job(self.request, self.model, job_id)
             self.job_id = job_id
             return super(DemandMeetingZip, self).__call__()
 
         else:
-            job_id = MeetingZipExporter(self.model).demand_pdfs()
+            # Create a new job, and then redirect to view in polling mode
+            job = MeetingZipExporter(self.model).demand_pdfs()
             url = "{}/@@demand_meeting_zip?job_id={}".format(
-                self.context.absolute_url(), str(job_id))
+                self.context.absolute_url(), job.job_id)
             return self.request.RESPONSE.redirect(url)
 
     @property

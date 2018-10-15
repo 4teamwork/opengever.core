@@ -15,6 +15,7 @@ from plone.uuid.interfaces import IUUID
 from Products.CMFPlone.utils import safe_unicode
 from StringIO import StringIO
 from tzlocal import get_localzone
+from zExceptions import BadRequest
 from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -210,103 +211,52 @@ class ZipExportDocumentCollector(MeetingTraverser):
         self._documents.append(document)
 
 
-class MeetingZipExporter(object):
-    """Exports a meeting's documents as PDF in a zip file.
-
-    Requests pdfs from bumblebee, if available. Falls back to original file
-    if no pdf can be supplied or pdf conversion was skipped/erroneous.
+class ZipJob(object):
+    """Encapsulates low-level data structures for Zip-generation jobs that
+    use the Bumblebee 'demand' endpoint.
     """
-    @classmethod
-    def exists(cls, meeting, job_id):
-        committee = meeting.committee.oguid.resolve_object()
-        zip_jobs = IAnnotations(committee).get(ZIP_JOBS_KEY, {})
-        return job_id in zip_jobs
 
-    def __init__(self, meeting, doc_in_job_id=None, job_id=None):
-        self.meeting = meeting
-        self.committee = meeting.committee.oguid.resolve_object()
+    def __init__(self, zip_job_data):
+        self._data = zip_job_data
 
-        # prepare annotations of committee
-        annotations = IAnnotations(self.committee)
-        if ZIP_JOBS_KEY not in annotations:
-            annotations[ZIP_JOBS_KEY] = OOBTree()
-        self.zip_jobs = annotations[ZIP_JOBS_KEY]
+    @property
+    def job_id(self):
+        return self._data['job_id']
 
-        # Get or create job_id
-        if doc_in_job_id:
-            self.job_id = self._doc_in_job_id_to_job_id(doc_in_job_id)
-            self.zip_job = self.zip_jobs[self.job_id]
-        elif job_id:
-            self.zip_job = self.zip_jobs[job_id]
-            self.job_id = job_id
-        else:
-            self.job_id = str(uuid.uuid4())
-            self.zip_job = None
+    @property
+    def timestamp(self):
+        return self._data['timestamp']
 
-    def demand_pdfs(self):
-        """Demand pdfs for all zip documents from bumlebee."""
+    def get_doc_status(self, document_id):
+        return self._data['documents'][document_id]
 
-        self._cleanup_old_jobs()
-        self._prepare_zip_job_metadata()
+    def add_doc_status(self, document_id, status_data):
+        doc_status = OOBTree()
+        doc_status.update(status_data)
+        self._data['documents'][document_id] = doc_status
 
-        for document in self._collect_meeting_documents():
-            status = self._queue_demand_job(document)
-            self._append_document_job_metadata(
-                self.zip_job, document, status)
+    def update_doc_status(self, document_id, status_data):
+        doc_status = self.get_doc_status(document_id)
+        doc_status.update(status_data)
 
-        return self.job_id
+    def list_document_ids(self):
+        return list(self._data['documents'].keys())
 
-    def get_document(self, doc_in_job_id):
-        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
-        assert document_id in self.zip_job['documents']
-        catalog = api.portal.get_tool('portal_catalog')
-        brain = catalog.unrestrictedSearchResults(UID=document_id)[0]
-        document = brain._unrestrictedGetObject()
-        return document
+    def is_finished(self):
+        return 'zip_file' in self._data
 
-    def receive_pdf(self, doc_in_job_id, mimetype, data):
-        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
-        self._update_job_with_pdf(document_id, mimetype, data)
+    def get_zip_file(self):
+        return self._data['zip_file']
 
-        if self.is_finished_converting():
-            self._generate_zipfile()
+    def set_zip_file(self, zip_file_blob):
+        self._data['zip_file'] = zip_file_blob
 
-    def _update_job_with_pdf(self, document_id, mimetype, data):
-        document_job = self.zip_job['documents'][document_id]
-        # we're using NamedBlobFile here to re-use an IStorage adapter, the
-        # filename is not relevant
-        blob_file = NamedBlobFile(data=data, contentType=mimetype)
+    def _get_doc_in_job_id(self, document):
+        return '{}:{}'.format(self.job_id, IUUID(document))
 
-        document_job['status'] = 'finished'
-        document_job['blob'] = blob_file
-
-    def _generate_zipfile(self):
-        pdfs = {}
-        for document_id, document_job in self.zip_job['documents'].items():
-            if document_job['status'] == 'finished':
-                pdfs[document_id] = document_job.pop('blob')
-                document_job['status'] = 'zipped'
-
-        with ZipGenerator() as generator, elevated_privileges():
-            zipper = MeetingPDFDocumentZipper(
-                self.meeting, pdfs, generator)
-
-            zip_blob_file = NamedBlobFile(data=zipper.get_zip_file(),
-                                          contentType='application/zip')
-            self.zip_job['zip_file'] = zip_blob_file
-
-    def get_zipfile(self):
-        return self.zip_job['zip_file']
-
-    def mark_as_skipped(self, doc_in_job_id):
-        document_id = self._doc_in_job_id_to_document_id(doc_in_job_id)
-        document_job = self.zip_job['documents'][document_id]
-        document_job['status'] = 'skipped'
-
-    def is_finished_converting(self):
-        return self.get_status()['converting'] == 0
-
-    def get_status(self):
+    def get_progress(self):
+        """Returns a dict describing progress of this job.
+        """
         status = {
             'skipped': 0,
             'finished': 0,
@@ -314,12 +264,47 @@ class MeetingZipExporter(object):
             'zipped': 0,
             'is_finished': self.is_finished(),
         }
-        for document_info in self.zip_job['documents'].values():
+        for document_info in self._data['documents'].values():
             status[document_info['status']] += 1
         return status
 
-    def is_finished(self):
-        return 'zip_file' in self.zip_job
+
+class ZipJobManager(object):
+    """Manages ZIP jobs that use the Bumblebee demand endpoint.
+    """
+
+    def __init__(self, meeting):
+        self.meeting = meeting
+        self.committee = meeting.committee.oguid.resolve_object()
+
+        self._zip_jobs = IAnnotations(self.committee).get(ZIP_JOBS_KEY, {})
+
+    def get_job(self, job_id):
+        return ZipJob(self._zip_jobs[job_id])
+
+    def create_job(self):
+        self._cleanup_old_jobs()
+        self._prepare_committee_annotations()
+
+        job_id = str(uuid.uuid4())
+
+        zip_job_data = OOBTree()
+        zip_job_data['job_id'] = job_id
+        zip_job_data['timestamp'] = utcnow_tz_aware()
+        zip_job_data['documents'] = OOBTree()
+
+        self._zip_jobs[job_id] = zip_job_data
+
+        return ZipJob(zip_job_data)
+
+    def remove_job(self, job_id):
+        del self._zip_jobs[job_id]
+
+    def _prepare_committee_annotations(self):
+        annotations = IAnnotations(self.committee)
+        if ZIP_JOBS_KEY not in annotations:
+            annotations[ZIP_JOBS_KEY] = OOBTree()
+        self._zip_jobs = annotations[ZIP_JOBS_KEY]
 
     def _cleanup_old_jobs(self):
         """Remove expired zip jobs.
@@ -331,36 +316,102 @@ class MeetingZipExporter(object):
         now = utcnow_tz_aware()
         expiration_delta = timedelta(days=ZIP_EXPIRATION_DAYS)
 
-        for zip_job in self.zip_jobs.values():
-            delta = now - zip_job['timestamp']
+        for zip_job_data in self._zip_jobs.values():
+            delta = now - zip_job_data['timestamp']
             if delta > expiration_delta:
-                to_remove.add(zip_job['job_id'])
+                to_remove.add(zip_job_data['job_id'])
 
-        for id_ in to_remove:
-            del self.zip_jobs[id_]
+        for job_id in to_remove:
+            self.remove_job(job_id)
 
-    def _prepare_zip_job_metadata(self):
-        zip_job = OOBTree()
-        zip_job['job_id'] = self.job_id
-        zip_job['timestamp'] = utcnow_tz_aware()
-        zip_job['documents'] = OOBTree()
-        self.zip_jobs[self.job_id] = zip_job
 
-        self.zip_job = zip_job
-        return zip_job
+class MeetingZipExporter(object):
+    """Exports a meeting's documents as PDF in a zip file.
 
-    def _append_document_job_metadata(self, zip_job, document, status):
-        document_info = OOBTree()
-        document_info['status'] = status
+    Requests pdfs from bumblebee, if available. Falls back to original file
+    if no pdf can be supplied or pdf conversion was skipped/erroneous.
+    """
 
-        document_id = IUUID(document)
-        zip_job['documents'][document_id] = document_info
+    def __init__(self, meeting, job_id=None):
+        self.meeting = meeting
+        self.committee = meeting.committee.oguid.resolve_object()
+        self.catalog = api.portal.get_tool('portal_catalog')
 
-        return document_info
+        self.job_manager = ZipJobManager(self.meeting)
+        self.zip_job = None
+
+        if job_id is not None:
+            self.zip_job = self.job_manager.get_job(job_id)
+
+    def demand_pdfs(self):
+        """Demand pdfs for all zip documents from bumlebee."""
+        self.zip_job = self.job_manager.create_job()
+
+        for document in self._collect_meeting_documents():
+            status = self._queue_demand_job(document)
+            self.zip_job.add_doc_status(IUUID(document), {'status': status})
+
+        return self.zip_job
+
+    def resolve_document(self, doc_in_job_id):
+        document_id = self.extract_document_id(doc_in_job_id)
+
+        if document_id not in self.zip_job.list_document_ids():
+            raise BadRequest(
+                'Document with UUID {} not found in job {}'.format(
+                    document_id, self.zip_job.job_id))
+
+        # Need to do an unrestricted query because the 'receive_meeting_zip_pdf'
+        # view which uses this method will be called (by Bumblebee) with an
+        # Anonymous user context.
+        brain = self.catalog.unrestrictedSearchResults(UID=document_id)[0]
+        document = brain._unrestrictedGetObject()
+        return document
+
+    def receive_pdf(self, doc_in_job_id, mimetype, data):
+        document_id = self.extract_document_id(doc_in_job_id)
+        self._update_job_with_pdf(document_id, mimetype, data)
+
+        if self.is_finished_converting():
+            self._generate_zipfile()
+
+    def _update_job_with_pdf(self, document_id, mimetype, data):
+        # we're using NamedBlobFile here to re-use an IStorage adapter, the
+        # filename is not relevant
+        blob_file = NamedBlobFile(data=data, contentType=mimetype)
+        self.zip_job.update_doc_status(document_id, {
+            'status': 'finished',
+            'blob': blob_file,
+        })
+
+    def _generate_zipfile(self):
+        pdfs = {}
+
+        for document_id in self.zip_job.list_document_ids():
+            doc_status = self.zip_job.get_doc_status(document_id)
+            if doc_status['status'] == 'finished':
+                pdfs[document_id] = doc_status.pop('blob')
+                doc_status['status'] = 'zipped'
+
+        with ZipGenerator() as generator, elevated_privileges():
+            zipper = MeetingPDFDocumentZipper(
+                self.meeting, pdfs, generator)
+
+            zip_blob_file = NamedBlobFile(data=zipper.get_zip_file(),
+                                          contentType='application/zip')
+            self.zip_job.set_zip_file(zip_blob_file)
+
+    def mark_as_skipped(self, doc_in_job_id):
+        document_id = self.extract_document_id(doc_in_job_id)
+        self.zip_job.update_doc_status(document_id, {'status': 'skipped'})
+
+    def is_finished_converting(self):
+        progress = self.zip_job.get_progress()
+        return progress['converting'] == 0
 
     def _queue_demand_job(self, document):
         callback_url = self.meeting.get_url(view='receive_meeting_zip_pdf')
-        doc_in_job_id = self._get_doc_in_job_id(document)
+        doc_in_job_id = self.zip_job._get_doc_in_job_id(document)
 
         if get_service_v3().queue_demand(
                 document, PROCESSING_QUEUE, callback_url,
@@ -369,13 +420,12 @@ class MeetingZipExporter(object):
         else:
             return 'skipped'
 
-    def _get_doc_in_job_id(self, document):
-        return '{}:{}'.format(self.job_id, IUUID(document))
-
-    def _doc_in_job_id_to_job_id(self, doc_in_job_id):
+    @staticmethod
+    def extract_job_id(doc_in_job_id):
         return doc_in_job_id.split(':')[0]
 
-    def _doc_in_job_id_to_document_id(self, doc_in_job_id):
+    @staticmethod
+    def extract_document_id(doc_in_job_id):
         return doc_in_job_id.split(':')[1]
 
     def _collect_meeting_documents(self):

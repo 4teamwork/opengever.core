@@ -32,12 +32,12 @@ class ReceiveZipPdf(BaseDemandCallbackView):
 
     def get_document(self):
         if not hasattr(self, '_document'):
-            self._document = self.get_exporter().get_document(
+            self._document = self.get_exporter().resolve_document(
                 doc_in_job_id=self.get_opaque_id())
         return self._document
 
     def get_exporter(self):
         if not hasattr(self, '_exporter'):
-            self._exporter = MeetingZipExporter(
-                self.model, doc_in_job_id=self.get_opaque_id())
+            job_id = MeetingZipExporter.extract_job_id(self.get_opaque_id())
+            self._exporter = MeetingZipExporter(self.model, job_id)
         return self._exporter
