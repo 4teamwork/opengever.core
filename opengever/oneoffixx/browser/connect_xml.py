@@ -2,6 +2,7 @@ from collections import OrderedDict
 from lxml import etree
 from opengever.base.interfaces import IReferenceNumber
 from opengever.officeconnector.helpers import create_oc_url
+from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
 from Products.Five import BrowserView
 from zExceptions import NotFound
@@ -130,6 +131,10 @@ class OneoffixxConnectXml(BrowserView):
         node = etree.SubElement(interface, "Node")
         node.set("Id", "ogg.document.sequence_number")
         node.text = reference_number.get_local_number()
+
+        node = etree.SubElement(interface, "Node")
+        node.set("Id", "ogg.dossier.external_reference")
+        node.text = IDossier(self.context.getParentNode()).external_reference
         return function
 
     def generate_metadata_tag(self):
@@ -152,4 +157,9 @@ class OneoffixxConnectXml(BrowserView):
         node.set("key", "ogg.document.sequence_number")
         node.set("type", "string")
         node.text = reference_number.get_local_number()
+
+        node = etree.SubElement(function, "Value")
+        node.set("key", "ogg.dossier.external_reference")
+        node.set("type", "string")
+        node.text = IDossier(self.context.getParentNode()).external_reference
         return function
