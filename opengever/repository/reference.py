@@ -14,7 +14,7 @@ class RepositoryRootNumber(BasicReferenceNumber):
     ref_type = 'repositoryroot'
 
     def get_number(self):
-        parent_num = self.get_parent_numbers()
+        parent_num = self.get_parent_number()
         if parent_num:
             return str(parent_num) + ' '
         return ''
