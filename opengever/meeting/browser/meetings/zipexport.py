@@ -1,5 +1,6 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
+from logging import getLogger
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
@@ -20,6 +21,8 @@ from zope.interface import alsoProvides
 from ZPublisher.Iterators import filestream_iterator
 import json
 import os
+
+logger = getLogger('opengever.meeting')
 
 
 def require_job_id_parameter(request):
@@ -103,6 +106,7 @@ class DemandMeetingZip(BrowserView):
 
         else:
             # Create a new job, and then redirect to view in polling mode
+            logger.info('Starting PDF Zip export for %s' % self.model.get_url())
             job = MeetingZipExporter(self.model).demand_pdfs()
             url = "{}/@@demand_meeting_zip?job_id={}".format(
                 self.context.absolute_url(), job.job_id)

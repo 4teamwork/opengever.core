@@ -5,6 +5,7 @@ from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
+from logging import getLogger
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
 from opengever.meeting import _
@@ -23,6 +24,8 @@ import json
 import os
 import uuid
 
+
+logger = getLogger('opengever.meeting.zipexport')
 
 ZIP_JOBS_KEY = 'opengever.meeting.zipexporter'
 ZIP_EXPIRATION_DAYS = 2
@@ -109,6 +112,7 @@ class MeetingPDFDocumentZipper(MeetingDocumentZipper):
     def get_file(self, document):
         document_id = IUUID(document)
         if document_id not in self.pdfs:
+            logger.info('Falling back to original format for %r' % document)
             return super(MeetingPDFDocumentZipper, self).get_file(document)
 
         return self.pdfs[document_id]
