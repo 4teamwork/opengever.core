@@ -72,6 +72,22 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.assertFalse(
             checker.current_user.in_responsible_orgunits_inbox_group)
 
+    def test_issuing_orgunit_agency_member_with_private_task(self):
+        self.login(self.secretariat_user)
+        self.task.is_private = True
+        self.task.get_sql_object().sync_with(self.task)
+
+        self.assertFalse(
+            get_checker(self.task).current_user.in_issuing_orgunits_inbox_group)
+
+    def test_responsible_orgunit_agency_member_with_private_task(self):
+        self.login(self.secretariat_user)
+        self.task.is_private = True
+        self.task.get_sql_object().sync_with(self.task)
+
+        self.assertFalse(
+            get_checker(self.task).current_user.in_responsible_orgunits_inbox_group)
+
     def test_all_subtasks_finished(self):
         self.login(self.dossier_responsible)
         for state in ('task-state-rejected',
