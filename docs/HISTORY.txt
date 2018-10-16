@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Map gever_admins to the administrator_group in example content. [njohner]
 - OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
 - Send notification dispatch exceptions to Raven. [Rotonen]
 - Fix sharing-form local_roles inheritance fallback and skip it for administators and managers. [phgross]

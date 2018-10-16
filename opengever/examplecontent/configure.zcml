@@ -19,6 +19,7 @@
                            opengever.examplecontent:municipality_content
                            opengever.examplecontent:init"
       admin_unit_id="fd"
+      administrator_group="gever_admins"
       records_manager_group="record_managers"
       archivist_group="archiv"
       />
@@ -32,6 +33,7 @@
                            opengever.examplecontent:municipality_content
                            opengever.examplecontent:init"
       admin_unit_id="ska"
+      administrator_group="gever_admins"
       records_manager_group="record_managers"
       archivist_group="archiv"
       />
