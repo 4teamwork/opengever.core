@@ -1470,7 +1470,7 @@ msgstr "Die Mitgliedschaft wurde erfolgreich gelöscht"
 #. Default: "No zip job could be found for the supplied job id ${job_id}."
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "msg_no_export_for_job_id"
-msgstr "Für die job id ${job_id} konnte keine Zip-Datei gefunden werden."
+msgstr "Für die Job ID ${job_id} konnte keine Zip-Datei gefunden werden."
 
 #. Default: "There is no toc template configured, toc could not be generated."
 #: ./opengever/meeting/browser/toc.py
@@ -1504,8 +1504,8 @@ msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschl
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
-msgid "msg_some_documents_remain_uncoverted"
-msgstr "Es konnte nicht alle Dokumente in das PDF-Format konviertiert werden, deshalb wurden für die betroffenen Dokumente die Originaldateien in die Zip-Datei eingefügt."
+msgid "msg_some_documents_remain_unconverted"
+msgstr "Es konnte nicht alle Dokumente in das PDF-Format konvertiert werden, deshalb wurden für die betroffenen Dokumente die Originaldateien in die Zip-Datei eingefügt."
 
 #. Default: "The object was deleted successfully."
 #: ./opengever/meeting/browser/views.py

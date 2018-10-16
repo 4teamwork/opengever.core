@@ -142,8 +142,8 @@ class DemandMeetingZip(BrowserView):
             'label_error': translate(
                 _(u'label_error', default=u'Error'),
                 context=self.request),
-            'msg_some_documents_remain_uncoverted': translate(
-                _(u'msg_some_documents_remain_uncoverted',
+            'msg_some_documents_remain_unconverted': translate(
+                _(u'msg_some_documents_remain_unconverted',
                   default=u'Some documents could not be converted to PDF, '
                            'their original files will be included in the '
                            'Zip.'),

@@ -1506,7 +1506,7 @@ msgstr "La réunion pourra seulement être clôturée quand tous les points de l
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
-msgid "msg_some_documents_remain_uncoverted"
+msgid "msg_some_documents_remain_unconverted"
 msgstr ""
 
 #. Default: "The object was deleted successfully."
