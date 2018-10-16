@@ -288,7 +288,8 @@ class OpengeverSharingView(SharingView):
             global_roles = user.getRoles()
             local_roles = [r for r in context_roles if r not in global_roles]
             if local_roles:
-                context.manage_setLocalRoles(user.getId(), local_roles)
+                assignment = SharingRoleAssignment(user.getId(), local_roles)
+                RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
         context.__ac_local_roles_block__ = True if block else None
 
