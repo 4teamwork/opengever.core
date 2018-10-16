@@ -16,7 +16,7 @@ class TestFunctionalHelper(MockTestCase):
         self.replay()
         user = interactive_user_helper(mock_context, 'current_user')
 
-        self.assertTrue('Current user' == user)
+        self.assertEqual('Current user', user)
 
     def test_interactive_user_helper_ogds(self):
         """ Test interactive_user_helper-method
@@ -33,4 +33,4 @@ class TestFunctionalHelper(MockTestCase):
 
         user = interactive_user_helper(mock_context, '')
 
-        self.assertTrue('OGDS User' == user)
+        self.assertEqual('OGDS User', user)

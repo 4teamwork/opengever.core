@@ -32,7 +32,7 @@ class TestAttachmentContentDisposition(MockTestCase):
 
         set_attachment_content_disposition(self.request, '')
 
-        self.assertTrue(len(self.header) == 0)
+        self.assertEqual(len(self.header), 0)
 
     def test_set_ms_filename(self):
         """ In Ms we must remove the quotes.
