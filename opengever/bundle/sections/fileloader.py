@@ -134,6 +134,10 @@ class FileLoaderSection(object):
         # posix_mountpoint is the location where the fileshare has been
         # mounted on the POSIX system (Linux / OS X)
         posix_mountpoint = unc_mount_mapping[mount]
+
+        # Ingestion settings are loaded via JSON, so they are in unicode
+        posix_mountpoint = posix_mountpoint.encode('utf-8')
+
         relative_path = rest.replace('\\', '/').lstrip('/')
         abs_filepath = os.path.join(posix_mountpoint, relative_path)
         return abs_filepath

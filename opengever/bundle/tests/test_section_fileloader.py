@@ -14,6 +14,7 @@ from plone import api
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
+import json
 
 
 class TestFileLoader(FunctionalTestCase):
@@ -106,6 +107,26 @@ class TestFileLoader(FunctionalTestCase):
         self.assertEqual(
             [(u'12345', item['filepath'], 'document-1')],
             self.bundle.errors['files_unresolvable_path'])
+
+    def test_translates_unc_paths(self):
+        section = self.setup_section(previous=[])
+
+        ingestion_settings = {
+            u'unc_mounts': {
+                u'\\\\server\\share': u'/mnt/mountpoint'}
+        }
+        # Shove ingestion settings through JSON deserialization to be as
+        # close as possible to the real thing (unicode strings!).
+        ingestion_settings = json.loads(json.dumps(ingestion_settings))
+        section.bundle.ingestion_settings = ingestion_settings
+
+        filepath = '\\\\server\\share\\folder\\b\xc3\xa4rengraben.txt'
+
+        translated_path = section._translate_unc_path(filepath)
+        self.assertIsInstance(translated_path, str)
+        self.assertEqual(
+            '/mnt/mountpoint/folder/b\xc3\xa4rengraben.txt',
+            translated_path)
 
     def test_handles_eml_mails(self):
         mail = create(Builder('mail'))
