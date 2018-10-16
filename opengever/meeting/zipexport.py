@@ -10,6 +10,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
 from opengever.meeting import _
 from opengever.meeting.traverser import MeetingTraverser
+from persistent.mapping import PersistentMapping
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
@@ -235,7 +236,7 @@ class ZipJob(object):
         return self._data['documents'][document_id]
 
     def add_doc_status(self, document_id, status_data):
-        doc_status = OOBTree()
+        doc_status = PersistentMapping()
         doc_status.update(status_data)
         self._data['documents'][document_id] = doc_status
 
@@ -292,7 +293,7 @@ class ZipJobManager(object):
 
         job_id = str(uuid.uuid4())
 
-        zip_job_data = OOBTree()
+        zip_job_data = PersistentMapping()
         zip_job_data['job_id'] = job_id
         zip_job_data['timestamp'] = utcnow_tz_aware()
         zip_job_data['documents'] = OOBTree()

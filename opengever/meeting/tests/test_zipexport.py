@@ -165,14 +165,14 @@ class TestZipJob(IntegrationTestCase):
         document_id = IUUID(self.meeting_document)
         self.job.add_doc_status(document_id, {'status': 'converting'})
         doc_status = self.job.get_doc_status(document_id)
-        self.assertEqual({'status': 'converting'}, dict(doc_status))
+        self.assertEqual({'status': 'converting'}, doc_status)
 
     def test_update_doc_status(self):
         document_id = IUUID(self.meeting_document)
         self.job.add_doc_status(document_id, {'status': 'converting'})
         self.job.update_doc_status(document_id, {'status': 'finished'})
         doc_status = self.job.get_doc_status(IUUID(self.meeting_document))
-        self.assertEqual({'status': 'finished'}, dict(doc_status))
+        self.assertEqual({'status': 'finished'}, doc_status)
 
     def test_lists_document_ids(self):
         document_id = IUUID(self.meeting_document)
