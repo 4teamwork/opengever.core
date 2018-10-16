@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-10-15 13:26+0000\n"
+"POT-Creation-Date: 2018-10-16 07:48+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -552,6 +552,11 @@ msgstr ""
 #. Default: "Previous task"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_previous_task"
+msgstr ""
+
+#. Default: "New task (private) opened by ${user}"
+#: ./opengever/task/activities.py
+msgid "label_private_task_added"
 msgstr ""
 
 #. Default: "Related Items"

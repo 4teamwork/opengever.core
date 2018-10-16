@@ -35,6 +35,12 @@ class TaskAddedActivity(BaseActivity):
         actor = Actor.lookup(self.context.Creator())
         msg = _('label_task_added', u'New task opened by ${user}',
                 mapping={'user': actor.get_label(with_principal=False)})
+
+        if self.context.is_private:
+            msg = _('label_private_task_added',
+                    default=u'New task (private) opened by ${user}',
+                    mapping={'user': actor.get_label(with_principal=False)})
+
         return self.translate_to_all_languages(msg)
 
     @property

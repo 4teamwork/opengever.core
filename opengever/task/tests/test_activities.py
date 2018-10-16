@@ -67,6 +67,22 @@ class TestTaskActivites(FunctionalTestCase):
             [row.css('td').text for row in rows])
 
     @browsing
+    def test_private_task_added(self, browser):
+        browser.login().open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
+                      'Task Type': 'comment',
+                      'Private task': True,
+                      'Text': 'Lorem ipsum'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+
+        browser.css('#form-buttons-save').first.click()
+
+        activity = Activity.query.one()
+        self.assertEquals(u'New task (private) opened by Test User', activity.summary)
+
+    @browsing
     def test_adding_task_adds_responsible_and_issuer_to_watchers(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',

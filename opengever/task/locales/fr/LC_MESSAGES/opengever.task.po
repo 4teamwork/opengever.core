@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-15 13:26+0000\n"
+"POT-Creation-Date: 2018-10-16 07:48+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -556,6 +556,11 @@ msgstr "Tâche initiale"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_previous_task"
 msgstr "Tâche précédente"
+
+#. Default: "New task (private) opened by ${user}"
+#: ./opengever/task/activities.py
+msgid "label_private_task_added"
+msgstr ""
 
 #. Default: "Related Items"
 #: ./opengever/task/browser/complete.py
