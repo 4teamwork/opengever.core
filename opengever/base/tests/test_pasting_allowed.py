@@ -14,13 +14,21 @@ class TestPastingAllowed(IntegrationTestCase):
         self.assertSequenceEqual([], actions)
 
     @browsing
-    def test_paste_action_not_displayed_for_templates(self, browser):
+    def test_paste_action_displayed_for_templates(self, browser):
         self.login(self.administrator, browser)
         paths = ['/'.join(self.normal_template.getPhysicalPath())]
         browser.open(self.templates, data={'paths:list': paths}, view='copy_items')
         browser.open(self.templates)
         actions = browser.css('#plone-contentmenu-actions li').text
-        self.assertSequenceEqual(['Export as Zip', 'Properties', 'Sharing'], actions)
+        self.assertSequenceEqual(['Export as Zip', 'Paste', 'Properties', 'Sharing'], actions)
+
+    @browsing
+    def test_pasting_template_into_template_folder_is_allowed(self, browser):
+        self.login(self.administrator, browser)
+        paths = ['/'.join(self.normal_template.getPhysicalPath())]
+        browser.open(self.templates, data={'paths:list': paths}, view='copy_items')
+        browser.open(self.templates, view='is_pasting_allowed')
+        self.assertTrue(browser.contents)
 
     @browsing
     def test_paste_action_not_displayed_for_mails(self, browser):
