@@ -11,7 +11,7 @@ class TestListingEndpoint(IntegrationTestCase):
         view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible&sort_on=created'
         browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
-        self.assertEquals(
+        self.assertEqual(
             {u'review_state': u'dossier-state-active',
              u'responsible': u'Ziegler Robert (robert.ziegler)',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
@@ -26,7 +26,7 @@ class TestListingEndpoint(IntegrationTestCase):
         view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&sort_on=created'
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
-        self.assertEquals(
+        self.assertEqual(
             {u'reference': u'Client1 1.1 / 1 / 12',
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
@@ -42,7 +42,7 @@ class TestListingEndpoint(IntegrationTestCase):
         view = '@listing?name=documents&columns=filename&columns=filesize&sort_on=created'
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
-        self.assertEquals(
+        self.assertEqual(
             {u'@id': self.document.absolute_url(),
              u'filesize': self.document.file.size,
              u'filename': u'Vertraegsentwurf.docx'},
@@ -61,15 +61,15 @@ class TestListingEndpoint(IntegrationTestCase):
         view = '@listing?name=dossiers&b_size=3'
         browser.open(
             self.repository_root, view=view, headers={'Accept': 'application/json'})
-        self.assertEquals(3, len(browser.json['items']))
-        self.assertEquals(all_dossiers[0:3], browser.json['items'])
+        self.assertEqual(3, len(browser.json['items']))
+        self.assertEqual(all_dossiers[0:3], browser.json['items'])
 
         # batched with start point
         view = '@listing?name=dossiers&b_size=2&b_start=4'
         browser.open(
             self.repository_root, view=view, headers={'Accept': 'application/json'})
-        self.assertEquals(2, len(browser.json['items']))
-        self.assertEquals(all_dossiers[4:6], browser.json['items'])
+        self.assertEqual(2, len(browser.json['items']))
+        self.assertEqual(all_dossiers[4:6], browser.json['items'])
 
     @browsing
     def test_search_filter(self, browser):
@@ -78,7 +78,7 @@ class TestListingEndpoint(IntegrationTestCase):
         view = '@listing?name=documents&search=feedback&columns=title'
         browser.open(self.repository_root, view=view,
                      headers={'Accept': 'application/json'})
-        self.assertEquals(
+        self.assertEqual(
             [self.taskdocument.absolute_url()],
             [item['@id'] for item in browser.json['items']])
 
