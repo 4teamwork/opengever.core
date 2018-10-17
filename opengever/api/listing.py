@@ -137,8 +137,8 @@ class Listing(Service):
             items = self.solr_results(
                 name, term, columns, start, rows, sort_on, sort_order)
         else:
-            items = self.catalog_results(name, term, rows, sort_on, sort_order)
-
+            items = self.catalog_results(
+                name, term, start, rows, sort_on, sort_order)
         if not items:
             return {}
 
@@ -151,7 +151,7 @@ class Listing(Service):
 
         return res
 
-    def catalog_results(self, name, term, rows, sort_on, sort_order):
+    def catalog_results(self, name, term, start, rows, sort_on, sort_order):
         if name not in CATALOG_QUERIES:
             return []
 
@@ -160,7 +160,7 @@ class Listing(Service):
             'path': '/'.join(self.context.getPhysicalPath()),
             'sort_on': sort_on,
             'sort_order': sort_order,
-            'sort_limit': rows,
+            'sort_limit': start + rows,
         })
 
         # Exclude context from results, which also matches the path query.
