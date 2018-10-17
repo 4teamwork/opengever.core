@@ -14,9 +14,10 @@ class IsPastingAllowedView(BrowserView):
     Used in the available expression of the object_buttons 'paste' action.
     """
 
-    disabled_types = ('opengever.dossier.templatefolder',
-                      'opengever.contact.contactfolder',
-                      'ftw.mail.mail')
+    disabled_types = (
+        'opengever.contact.contactfolder',
+        'ftw.mail.mail',
+    )
 
     @property
     def allowed_content_types(self):

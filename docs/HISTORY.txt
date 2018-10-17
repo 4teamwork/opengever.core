@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Allow pasting templates into template folders. [Rotonen]
 - Map gever_admins to the administrator_group in example content. [njohner]
 - Fix parent reference number fetching for repository roots. [Rotonen]
 - OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
