@@ -60,7 +60,41 @@ class TestNotificationsGet(IntegrationTestCase):
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
               u'title': u'Vertragsentwurf \xdcberpr\xfcfen'}],
-            browser.json)
+            browser.json.get('items'))
+
+    @browsing
+    def test_batch_notifications(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        center = notification_center()
+
+        self.assertEqual(0,  Notification.query.count())
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            for i in range(5):
+                TaskAddedActivity(self.task, self.request, self.task.__parent__).record()
+
+        self.login(self.regular_user, browser=browser)
+
+        batch_size = 2
+        url = '{}/@notifications/{}?b_size={}'.format(
+            self.portal.absolute_url(),
+            self.regular_user.getId(),
+            batch_size)
+
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+
+        self.assertEquals(5, browser.json.get('items_total'))
+        self.assertEquals(2, len(browser.json.get('items')))
+
+        url = browser.json.get('batching').get('last')
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        # 5 notifications with a batchsize of 2 will display only 1 notification
+        # on the last batch
+        self.assertEquals(1, len(browser.json.get('items')))
 
     @browsing
     def test_returns_serialized_notifications_for_the_given_userid_and_notification_id(self, browser):

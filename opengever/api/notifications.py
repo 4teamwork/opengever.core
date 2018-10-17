@@ -1,5 +1,6 @@
 from opengever.activity import notification_center
 from plone import api
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
@@ -34,9 +35,9 @@ class NotificationsGet(Service):
             raise Unauthorized(
                 "It's not allowed to access notifications of other users.")
 
-        return self.serialize(
-            self.get_notification(userid, notification_id) if
-            notification_id else self.get_user_notifications())
+        if notification_id:
+            return self.get_notification(userid, notification_id)
+        return self.get_user_notifications()
 
     def get_notification(self, userid, notification_id):
         notification = self.center.get_notification(notification_id)
@@ -47,10 +48,22 @@ class NotificationsGet(Service):
             raise Unauthorized(
                 "It's not allowed to access notifications of other users.")
 
-        return notification
+        return self.serialize(notification)
 
     def get_user_notifications(self):
-        return self.center.get_current_users_notifications()
+        notifications = self.center.get_current_users_notifications()
+        batch = HypermediaBatch(self.request, notifications)
+
+        result = {
+            '@id': batch.canonical_url,
+            'items_total': batch.items_total,
+            'items': self.serialize(list(batch)),
+        }
+
+        if batch.links:
+            result['batching'] = batch.links
+
+        return result
 
     def serialize(self, notifications):
         url = api.portal.get().absolute_url()
