@@ -8,6 +8,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -123,6 +124,42 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
                               'Content-Type': 'application/json'})
 
         self.assertTrue(self.empty_dossier.__ac_local_roles_block__)
+
+    @browsing
+    def test_stop_inheritance_fallback(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        acl_users = api.portal.get_tool('acl_users')
+
+        roles =['Member', 'Role Manager']
+        acl_users.userFolderEditUser(self.dossier_responsible.id, None, list(roles), [])
+
+        data = json.dumps({"entries": [], "inherit": False})
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',headers={'Accept': 'application/json','Content-Type': 'application/json'})
+
+        self.assertTrue(self.empty_dossier.__ac_local_roles_block__)
+        self.assertEquals(
+            ((self.dossier_responsible.id,
+              ('Contributor', 'Owner', 'Editor', 'Reader')),),
+            self.empty_dossier.get_local_roles())
+
+        self.assertEquals(
+            [{'cause': 3,
+              'roles': ['Contributor', 'Editor', 'Reader', 'Owner'],
+              'reference': None, 'principal': 'robert.ziegler'}],
+            RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+    @browsing
+    def test_stop_inheritance_fallback_is_skipped_for_administrators(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        data = json.dumps({"entries": [], "inherit": False})
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+
+        self.assertTrue(self.empty_dossier.__ac_local_roles_block__)
+        self.assertEquals([], RoleAssignmentManager(self.empty_dossier).storage._storage())
 
     @browsing
     def test_sharing_view_only_returns_users_from_current_admin_unit(self, browser):

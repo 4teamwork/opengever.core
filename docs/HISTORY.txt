@@ -7,6 +7,7 @@ Changelog
 
 - OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
 - Send notification dispatch exceptions to Raven. [Rotonen]
+- Fix sharing-form local_roles inheritance fallback and skip it for administators and managers. [phgross]
 - Do not present the paste UI to users without 'Copy or Move' on the target. [Rotonen]
 - Disallow agency-support for private tasks. [elioschmutz]
 - Update task-added activity summary for private tasks. [elioschmutz]

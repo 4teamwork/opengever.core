@@ -254,6 +254,9 @@ class OpengeverSharingView(SharingView):
         corresponding event. Needed for adding a Journalentry after a
         change of the inheritance
         """
+        user = api.user.get_current()
+        is_administrator = user.has_role('Administrator') or user.has_role('Manager')
+
         # Modifying local roles needs the "Sharing page: Delegate roles"
         # permission as well as "Modify portal content". However, we don't
         # want to give the "Role Manager" Role "Modify portal content",
@@ -280,15 +283,22 @@ class OpengeverSharingView(SharingView):
             context, 'portal_url').getPortalObject().getWrappedOwner()
         newSecurityManager(self.context, owner)
 
-        if block:
+        if block and not is_administrator:
             # If user has inherited local roles and removes inheritance,
             # locally set roles he inherited before
             # to avoid definitive lose of access (refs #11945)
+
+            # For administrators and managers we skip those fallback, because
+            # the access for those users is ensured by the global roles. So we
+            # can avoid local_roles assigned to a specific users, which we say
+            # should not be used usually.
+
             context_roles = user.getRolesInContext(context)
             global_roles = user.getRoles()
             local_roles = [r for r in context_roles if r not in global_roles]
             if local_roles:
-                context.manage_setLocalRoles(user.getId(), local_roles)
+                assignment = SharingRoleAssignment(user.getId(), local_roles)
+                RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
         context.__ac_local_roles_block__ = True if block else None
 
