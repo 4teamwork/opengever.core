@@ -17,12 +17,14 @@ from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
+from .uuidindex import PatchUUIDIndex
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 
 
 PatchBuilderCreate()()
+PatchUUIDIndex()()
 PatchCatalogToFilterTrashedDocs()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchCopyContainerVerifyObjectPaste()()

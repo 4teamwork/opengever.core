@@ -81,3 +81,16 @@ class TestListingEndpoint(IntegrationTestCase):
         self.assertEquals(
             [self.taskdocument.absolute_url()],
             [item['@id'] for item in browser.json['items']])
+
+    @browsing
+    def test_current_context_is_excluded(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=dossiers&columns:list=title&sort_on=created'
+        browser.open(
+            self.dossier, view=view, headers={'Accept': 'application/json'})
+
+        self.assertNotIn(
+            self.dossier.Title().decode('utf8'),
+            [d['title'] for d in browser.json['items']],
+        )

@@ -10,6 +10,7 @@ from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
@@ -170,9 +171,7 @@ class Listing(Service):
         })
 
         # Exclude context from results, which also matches the path query.
-        # Unfortunately UUIDIndex does not support 'not' queries.
-        # getId should be unique enough for our use-case, though.
-        query['getId'] = {'not': self.context.getId()}
+        query['UID'] = {'not': IUUID(self.context)}
 
         if term:
             query['SearchableText'] = term + '*'
