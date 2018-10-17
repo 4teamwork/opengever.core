@@ -58,14 +58,14 @@ class TestListingEndpoint(IntegrationTestCase):
         all_dossiers = browser.json['items']
 
         # batched no start point
-        view = '@listing?name=dossiers&rows=3'
+        view = '@listing?name=dossiers&b_size=3'
         browser.open(
             self.repository_root, view=view, headers={'Accept': 'application/json'})
         self.assertEquals(3, len(browser.json['items']))
         self.assertEquals(all_dossiers[0:3], browser.json['items'])
 
         # batched with start point
-        view = '@listing?name=dossiers&rows=6&start=4'
+        view = '@listing?name=dossiers&b_size=2&b_start=4'
         browser.open(
             self.repository_root, view=view, headers={'Accept': 'application/json'})
         self.assertEquals(2, len(browser.json['items']))

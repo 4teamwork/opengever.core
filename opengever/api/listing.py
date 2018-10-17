@@ -6,10 +6,12 @@ from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.registry.interfaces import IRegistry
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFCore.utils import getToolByName
+from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
 
@@ -116,8 +118,8 @@ class Listing(Service):
     def reply(self):
         name = self.request.form.get('name')
 
-        start = self.request.form.get('start', '0')
-        rows = self.request.form.get('rows', '25')
+        start = self.request.form.get('b_start', '0')
+        rows = self.request.form.get('b_size', '25')
         try:
             start = int(start)
             rows = int(rows)
@@ -139,15 +141,19 @@ class Listing(Service):
         else:
             items = self.catalog_results(
                 name, term, start, rows, sort_on, sort_order)
-        if not items:
-            return {}
 
-        res = {'items': []}
+        batch = HypermediaBatch(self.request, items)
+        res = {}
+        res['@id'] = batch.canonical_url
+        res['items_total'] = batch.items_total
+        res['b_start'] = start
+        res['b_size'] = rows
+        if batch.links:
+            res['batching'] = batch.links
+
+        res['items'] = []
         for item in items[start:start + rows]:
             res['items'].append(create_list_item(item, columns))
-        res['total'] = len(items)
-        res['start'] = start
-        res['rows'] = rows
 
         return res
 
@@ -213,7 +219,11 @@ class Listing(Service):
         resp = solr.search(
             query=query, filters=filters, start=start, rows=rows, sort=sort,
             **params)
-        return [OGSolrDocument(doc) for doc in resp.docs]
+        return LazyMap(
+            OGSolrDocument,
+            start * [None] + resp.docs,
+            actual_result_count=resp.num_found,
+        )
 
     def solr_field_list(self, columns):
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
