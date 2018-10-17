@@ -1,23 +1,37 @@
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
 from plonetheme.teamraum.importexport import CustomStylesUtility
 from plonetheme.teamraum.importexport import DEFAULT_STYLES
-from plonetheme.teamraum.testing import TEAMRAUMTHEME_FUNCTIONAL_TESTING
-from unittest2 import TestCase
+from plonetheme.teamraum.testing import TeamraumThemeTestCase
 import json
 import os
 
 
-IMPORT_STYLES = {"css.header_background": "#000000", "css.show_fullbanner": "", "css.gnav_hover_start": "#FF0000", "css.gnav_grad_end": "#AA0000", "css.show_headerbox": "on", "css.text_color": "#000", "css.gnav_shadowtopcolor": "#AAAAAA", "css.gnav_grad_start": "#FF0000", "css.gnav_active_end": "#AA0000", "css.headerbox_spacetop": "1em", "css.gnav_hover_end": "#00000", "css.gnav_active_start": "#AA0000", "css.footer_background": "#AEAEAE", "css.content_width": "80%", "css.link_color": "#0000FF", "css.font_size": "22px", "css.header_height": "260px", "css.gnav_bordertop": "#FFAAAA", "css.content_background": "#FFFFFF", "css.login_background": "#FFAAAA", "css.headerbox_background": "rgba(255,255,255,0.6)", "css.logo_spaceleft": "true"}
+IMPORT_STYLES = {
+    "css.content_background": "#FFFFFF",
+    "css.content_width": "80%",
+    "css.font_size": "22px",
+    "css.footer_background": "#AEAEAE",
+    "css.gnav_active_end": "#AA0000",
+    "css.gnav_active_start": "#AA0000",
+    "css.gnav_bordertop": "#FFAAAA",
+    "css.gnav_grad_end": "#AA0000",
+    "css.gnav_grad_start": "#FF0000",
+    "css.gnav_hover_end": "#00000",
+    "css.gnav_hover_start": "#FF0000",
+    "css.gnav_shadowtopcolor": "#AAAAAA",
+    "css.header_background": "#000000",
+    "css.header_height": "260px",
+    "css.headerbox_background": "rgba(255,255,255,0.6)",
+    "css.headerbox_spacetop": "1em",
+    "css.link_color": "#0000FF",
+    "css.login_background": "#FFAAAA",
+    "css.logo_spaceleft": "true",
+    "css.show_fullbanner": "",
+    "css.show_headerbox": "on",
+    "css.text_color": "#000",
+}
 
 
-class TestCustomStyles(TestCase):
-
-    layer = TEAMRAUMTHEME_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+class TestCustomStyles(TeamraumThemeTestCase):
 
     @property
     def style_annotations(self):
@@ -27,8 +41,7 @@ class TestCustomStyles(TestCase):
     def test_defaults(self):
         view = self.portal.restrictedTraverse('teamraumtheme-controlpanel')
         view()
-        self.assertEqual(dict(self.style_annotations['customstyles']),
-                              DEFAULT_STYLES)
+        self.assertEqual(dict(self.style_annotations['customstyles']), DEFAULT_STYLES)
 
     def test_update(self):
         self.portal.REQUEST.form.update({'form.submitted': '1',
