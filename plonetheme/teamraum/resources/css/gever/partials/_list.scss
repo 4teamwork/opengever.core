@@ -72,6 +72,17 @@
   }
 }
 
+.dropdown-list-footer .dropdown-list-item {
+  &:link:hover {
+    background-color: white;
+  }
+}
+
+.LSResult .dropdown-list-item{
+  justify-content: normal;
+}
+
+.dropdown-list-item
 #opengever_meeting_meeting, #opengever_meeting_protocol, .template-add-membership {
   .list-group {
     @include list(plain);

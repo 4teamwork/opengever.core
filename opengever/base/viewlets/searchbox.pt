@@ -12,7 +12,7 @@
                         id string:${search_input_id}_form;
                         class python: has_solr and 'has-solr' or 'no-solr'">
 
-    <div class="LSBox">
+    <dd class="LSBox dropdown-menu">
       <label class="hiddenStructure"
              tal:attributes="for search_input_id"
              i18n:translate="text_search">Search Site</label>
@@ -33,7 +33,7 @@
                                                      i18n:attributes="value label_search;"
                                                      />
 
-      <div class="LSResult" id="LSResult" style="display:none;">
+      <dl class="dropdown-menu-content LSResult" id="LSResult" style="display:none;">
         <div class="searchSection">
           <input id="searchbox_currentfolder_only"
                  class="noborder"
@@ -50,17 +50,17 @@
         <div class="LSShadow" id="LSShadow">
 
 		  <!-- GEVER custom: Show advancedsearch link if no results -->
-          <div class="LSRow">
-            <a tal:attributes="href string:${navigation_root_url}/advanced_search"
-               style="font-weight:normal"
+          <ul class="dropdown-list"></ul>
+          <div class="dropdown-list-footer LSRow">
+            <a tal:attributes="href string:${navigation_root_url}/advanced_search" class="dropdown-list-item"
                i18n:domain="plone"
                i18n:translate="label_advanced_search">Advanced Search&#8230;</a>
           </div>
 		  <!-- END GEVER custom -->
 
         </div>
-      </div>
-    </div>
+      </dl>
+    </dd>
 
   </form>
 </div>

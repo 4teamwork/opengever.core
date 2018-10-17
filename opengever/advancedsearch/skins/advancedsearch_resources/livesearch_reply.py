@@ -149,13 +149,14 @@ if not results:
     write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=REQUEST))
     write('''<div class="LSIEFix">''')
     if has_parse_errors:
-        write('''<div id="LSParseErrors"><div class="label_error">%s</div>%s</div>''' %
+        write('''<div id="LSParseErrors" class="dropdown-menu-header"><div class="label_error">%s</div>%s</div>''' %
               (ts.translate(pmf('Error'), context=REQUEST),
                ts.translate(label_has_parse_errors, context=REQUEST)))
     else:
-        write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=REQUEST))
-    write('''<div class="LSRow">''')
-    write('<a href="%s" style="font-weight:normal">%s</a>' %
+        write('''<ul class=dropdown-list><li id="LSNothingFound" class="dropdown-list-item">%s</li></ul>'''
+              % ts.translate(label_no_results_found, context=REQUEST))
+    write('''<div class="dropdown-list-footer LSRow">''')
+    write('<a href="%s" class="dropdown-list-item">%s</a>' %
          (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
           ts.translate(label_advanced_search, context=REQUEST)))
     write('''</div>''')
@@ -165,7 +166,7 @@ else:
     write('''<fieldset class="livesearchContainer">''')
     write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=REQUEST))
     write('''<div class="LSIEFix">''')
-    write('''<ul class="LSTable">''')
+    write('''<ul class="dropdown-list LSTable">''')
     for result in results[:limit]:
 
         itemUrl = result.getURL()
@@ -174,7 +175,6 @@ else:
 
         itemUrl = itemUrl + searchterm_query
 
-        write('''<li class="LSRow">''')
         full_title = safe_unicode(pretty_title_or_id(result))
         if len(full_title) > MAX_TITLE:
             display_title = ''.join((full_title[:MAX_TITLE], '...'))
@@ -188,7 +188,8 @@ else:
         if mime_type_klass:
             css_klass = mime_type_klass
 
-        write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, css_klass, display_title))
+        write('''<a href="%s" title="%s" class="dropdown-list-item LSRow"><span class="%s"/><div>%s</div>'''
+              % (itemUrl, full_title, css_klass, display_title))
         display_description = safe_unicode(result.Description)
         if len(display_description) > MAX_DESCRIPTION:
             display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
@@ -196,25 +197,23 @@ else:
         # need to quote it, to avoid injection of html containing javascript and other evil stuff
         display_description = html_quote(display_description)
         write('''<div class="LSDescr">%s</div>''' % (display_description))
-        write('''</li>''')
+        write('''</a>''')
         full_title, display_title, display_description = None, None, None
+    write('''</ul>''')
 
-    write('''<li class="LSRow">''')
-    write('<a href="%s" style="font-weight:normal">%s</a>' %
+    write('''<div class="dropdown-list-footer LSRow">''')
+    write('<a href="%s" class="dropdown-list-item">%s</a>' %
          (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
           ts.translate(label_advanced_search, context=REQUEST)))
-    write('''</li>''')
 
     if len(results) > limit:
         # add a more... row
-        write('''<li class="LSRow">''')
         searchquery = '@@search?SearchableText=%s&path=%s' % (searchterms, params['path'])
-        write('<a href="%s" style="font-weight:normal">%s</a>' % (
+        write('<a href="%s" class="dropdown-list-item LSRow">%s</a>' % (
                              searchquery,
                              ts.translate(label_show_all, context=REQUEST)))
-        write('''</li>''')
 
-    write('''</ul>''')
+    write('''</div>''')
     write('''</div>''')
     write('''</fieldset>''')
 

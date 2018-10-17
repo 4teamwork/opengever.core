@@ -442,22 +442,11 @@ dl.portlet li.navTreeItem {
 .LSBox {
   position: relative;
 }
+
 #LSResult {
-  font-size: 0.9em;
-  position: absolute;
-  top: 30px;
-  right: 4px;
-  background: #FFF;
-  z-index: 4;
-  border: 1px solid #7b7b7b;
-  moz-border-radius: 4px 0 4px 4px;
-  -webkit-border-radius: 4px 0 4px 4px;
-  border-radius: 4px 0 4px 4px;
-  -moz-box-shadow: 2px 2px 2px 0px #aaa;
-  -webkit-box-shadow: 2px 2px 2px 0px #aaa;
-  box-shadow: 2px 2px 2px 0px #aaa;
-  overflow: hidden;
+  right: 0px;
 }
+
 .searchSection {
   color: #76797c;
   padding: 0.5em 1em;
@@ -476,19 +465,12 @@ fieldset.livesearchContainer {
   display: none;
 }
 
+
 #LSResult .LSDescr {
   font-size: 91.6667%;
   color: #666;
 }
 
-.LSRow,
-#LSNothingFound {
-  display: block;
-  padding: 0.5em 1em;
-  white-space: normal;
-  border-top: 1px solid #eaeaea;
-  width: 20em;
-}
 #LSParseErrors {
   display: block;
   padding: 0.5em 1em;
@@ -507,16 +489,10 @@ fieldset.livesearchContainer {
   float:left;
   padding-right:0.5em;
 }
+
 li.LSHighlight,
 dl.LSTable dd.LSHighlight {
   background: #eaeaea;
-}
-.LSResult a {
-  display: block;
-  color: #000;
-}
-.LSResult a:hover {
-  text-decoration: none;
 }
 /* grouped livesearch */
 dl.LSTable {

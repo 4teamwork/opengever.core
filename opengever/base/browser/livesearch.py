@@ -87,9 +87,12 @@ class LiveSearchReplyView(BrowserView):
             write('''<fieldset class="livesearchContainer">''')
             write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=self.request))
             write('''<div class="LSIEFix">''')
-            write('''<div id="LSNothingFound">%s</div>''' % ts.translate(label_no_results_found, context=self.request))
-            write('''<div class="LSRow">''')
-            write('<a href="%s" style="font-weight:normal">%s</a>' %
+            write('''<ul class=dropdown-list>''')
+            write('''<li id="LSNothingFound" class="dropdown-list-item">%s</li></ul>'''
+                  % ts.translate(label_no_results_found, context=self.request))
+
+            write('''<div class="dropdown-list-footer LSRow">''')
+            write('<a href="%s" class="dropdown-list-item">%s</a>' %
                   (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
                    ts.translate(label_advanced_search, context=self.request)))
             write('''</div>''')
@@ -99,7 +102,7 @@ class LiveSearchReplyView(BrowserView):
             write('''<fieldset class="livesearchContainer">''')
             write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=self.request))
             write('''<div class="LSIEFix">''')
-            write('''<ul class="LSTable">''')
+            write('''<ul class="dropdown-list LSTable">''')
             for result in results:
 
                 itemUrl = result.getURL()
@@ -108,7 +111,6 @@ class LiveSearchReplyView(BrowserView):
 
                 itemUrl = itemUrl + u'?SearchableText=%s' % url_quote_plus(self.search_term)
 
-                write('''<li class="LSRow">''')
                 full_title = safe_unicode(result.Title())
                 if len(full_title) > MAX_TITLE:
                     display_title = ''.join((full_title[:MAX_TITLE], '...'))
@@ -119,7 +121,8 @@ class LiveSearchReplyView(BrowserView):
 
                 css_klass = get_mimetype_icon_klass(result.doc)
 
-                write('''<a href="%s" title="%s" class="%s">%s</a>''' % (itemUrl, full_title, css_klass, display_title))
+                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">
+                         <span class="%s"/><div>%s</div></a>''' % (itemUrl, full_title, css_klass, display_title))
                 display_description = safe_unicode(result.Description()) or u''
                 if len(display_description) > MAX_DESCRIPTION:
                     display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
@@ -127,25 +130,23 @@ class LiveSearchReplyView(BrowserView):
                 # need to quote it, to avoid injection of html containing javascript and other evil stuff
                 display_description = html_quote(display_description)
                 write('''<div class="LSDescr">%s</div>''' % (display_description))
-                write('''</li>''')
+                write('''</a>''')
                 full_title, display_title, display_description = None, None, None
+            write('''</ul>''')
 
-            write('''<li class="LSRow">''')
-            write('<a href="%s" style="font-weight:normal">%s</a>' %
+            write('''<div class="dropdown-list-footer LSRow">''')
+            write('<a href="%s" class="dropdown-list-item">%s</a>' %
                   (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
                    ts.translate(label_advanced_search, context=self.request)))
-            write('''</li>''')
 
             if resp.num_found > self.limit:
                 # add a more... row
-                write('''<li class="LSRow">''')
                 searchquery = u'@@search?SearchableText=%s&path=%s' % (url_quote_plus(self.search_term), self.path)
-                write(u'<a href="%s" style="font-weight:normal">%s</a>' % (
+                write(u'<a href="%s" class="dropdown-list-item LSRow">%s</a>' % (
                                      searchquery,
                                      ts.translate(label_show_all, context=self.request)))
-                write('''</li>''')
 
-            write('''</ul>''')
+            write('''</div>''')
             write('''</div>''')
             write('''</fieldset>''')
         return '\n'.join(output).encode('utf-8')
