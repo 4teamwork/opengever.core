@@ -16,6 +16,7 @@
             <Node Id="ogg.document.title">Sch&#228;ttengarten</Node>
             <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 37</Node>
             <Node Id="ogg.document.sequence_number">37</Node>
+            <Node Id="ogg.dossier.external_reference">qpr-900-9001-&#247;</Node>
           </Interface>
         </Arguments>
       </Function>
@@ -23,6 +24,7 @@
         <Value key="ogg.document.title" type="string">Sch&#228;ttengarten</Value>
         <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 37</Value>
         <Value key="ogg.document.sequence_number" type="string">37</Value>
+        <Value key="ogg.dossier.external_reference" type="string">qpr-900-9001-&#247;</Value>
       </Function>
       <Commands>
         <Command Name="DefaultProcess">
