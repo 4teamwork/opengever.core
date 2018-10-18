@@ -20,5 +20,14 @@ class ReindexCheckedOutAndAllowedRolesAndUsersOnSolr(UpgradeStep):
         solr_maintenance = queryMultiAdapter(
             (portal, portal.REQUEST), name=u'solr-maintenance')
 
+        # solr_maintenance.reindex(
+        #     idxs=['checked_out', 'allowedRolesAndUsers'], doom=False)
+
+        # Changed to only reindex checked_out, because the later upgrade step
+        # 20181018172020_reindex_allowed_roles_and_users_in_solr will
+        # reindex allowedRolesAndUser into Solr again in 2018.5.
+        #
+        # So for deployments where we skip 2018.4 and directly deploy 2018.5
+        # or newer, we don't reindex allowedRolesAndUsers twice.
         solr_maintenance.reindex(
-            idxs=['checked_out', 'allowedRolesAndUsers'], doom=False)
+            idxs=['checked_out'], doom=False)
