@@ -2797,8 +2797,8 @@ body.template-tabbed_view.portaltype-opengever-dossier-businesscasedossier #wate
 body.template-tabbed_view.portaltype-opengever-private-dossier h1.documentFirstHeading:before, body.template-view.portaltype-opengever-private-dossier h1.documentFirstHeading:before { font-family: "opengever"; font-size: 80%; content: ""; padding-right: 0.4em; }
 body.template-tabbed_view.portaltype-opengever-private-dossier #watermark-header:after, body.template-tabbed_view.portaltype-opengever-private-dossier #tabbedview-header:after, body.template-view.portaltype-opengever-private-dossier #watermark-header:after, body.template-view.portaltype-opengever-private-dossier #tabbedview-header:after { font-family: "opengever"; content: ""; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); }
 
-body.template-tabbed_view.portaltype-opengever-private-folder h1.documentFirstHeading:before, body.template-view.portaltype-opengever-private-folder h1.documentFirstHeading:before { font-family: "opengever"; font-size: 80%; content: ""; padding-right: 0.4em; }
-body.template-tabbed_view.portaltype-opengever-private-folder #watermark-header:after, body.template-tabbed_view.portaltype-opengever-private-folder #tabbedview-header:after, body.template-view.portaltype-opengever-private-folder #watermark-header:after, body.template-view.portaltype-opengever-private-folder #tabbedview-header:after { font-family: "opengever"; content: ""; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); }
+body.template-tabbed_view.portaltype-opengever-private-folder h1.documentFirstHeading:before, body.template-view.portaltype-opengever-private-folder h1.documentFirstHeading:before { font-family: "Font Awesome 5 Free"; font-size: 80%; content: "\f2bd"; padding-right: 0.4em; font-weight: 900; }
+body.template-tabbed_view.portaltype-opengever-private-folder #watermark-header:after, body.template-tabbed_view.portaltype-opengever-private-folder #tabbedview-header:after, body.template-view.portaltype-opengever-private-folder #watermark-header:after, body.template-view.portaltype-opengever-private-folder #tabbedview-header:after { font-family: "Font Awesome 5 Free"; content: "\f2bd"; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); font-weight: 900; }
 
 body.template-tabbed_view.portaltype-opengever-private-root h1.documentFirstHeading:before, body.template-view.portaltype-opengever-private-root h1.documentFirstHeading:before { font-family: "opengever"; font-size: 80%; content: ""; padding-right: 0.4em; }
 body.template-tabbed_view.portaltype-opengever-private-root #watermark-header:after, body.template-tabbed_view.portaltype-opengever-private-root #tabbedview-header:after, body.template-view.portaltype-opengever-private-root #watermark-header:after, body.template-view.portaltype-opengever-private-root #tabbedview-header:after { font-family: "opengever"; content: ""; font-size: 110px; line-height: 1em; position: absolute; right: 0; top: 0; opacity: 0.2; color: #aaa; text-shadow: 2px 1px #444444; -webkit-transform: rotate(20deg); transform: rotate(20deg); }
@@ -2865,7 +2865,7 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-private-dossier:before { content: ""; }
 
-#plone-contentmenu-factories dd.actionMenuContent a#opengever-private-folder:before { content: ""; }
+#plone-contentmenu-factories dd.actionMenuContent a#opengever-private-folder:before { content: "\f2bd"; font-family: 'Font Awesome 5 Free'; }
 
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-private-root:before { content: ""; }
 
@@ -2964,7 +2964,7 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 
 .contenttype-opengever-private-dossier:before { content: ""; }
 
-.contenttype-opengever-private-folder:before { content: ""; }
+.contenttype-opengever-private-folder:before { content: "\f2bd"; font-family: 'Font Awesome 5 Free'; font-weight: 900; }
 
 .contenttype-opengever-private-root:before { content: ""; }
 
