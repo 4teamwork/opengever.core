@@ -1,18 +1,13 @@
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
 from plone import api
-from plone.registry.interfaces import IRegistry
 from plone.restapi.services.search.get import SearchGet
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 
 class GeverLiveSearchGet(SearchGet):
 
     def reply(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISearchSettings)
-
         search_term = self.request.form.get('q', None)
         limit = int(self.request.form.get('limit', 10))
         portal_path = '/'.join(api.portal.get().getPhysicalPath())
@@ -24,7 +19,8 @@ class GeverLiveSearchGet(SearchGet):
         if not search_term:
             return []
 
-        if settings.use_solr:
+        if api.portal.get_registry_record(
+                'use_solr', interface=ISearchSettings, default=False):
             view = getMultiAdapter((self.context, self.request),
                                    name=u'livesearch_reply')
             view.search_term = search_term
