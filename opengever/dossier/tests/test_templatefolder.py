@@ -30,6 +30,7 @@ from unittest import skip
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import os
 
 
 class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
@@ -1049,3 +1050,46 @@ class TestDossierTemplateFeature(IntegrationTestCase):
         browser.open(self.templates)
 
         self.assertEqual('Dossier templates', browser.css('.formTab #tab-dossiertemplates').first.text)
+
+
+class TestTemplateFolderShowroomPreviews(IntegrationTestCase):
+
+    features = ('meeting', 'bumblebee',)
+
+    @staticmethod
+    def get_expected_urls_from_documents(document_list):
+        return [os.path.join(document.absolute_url(), "@@bumblebee-overlay-listing")
+                for document in document_list]
+
+    @browsing
+    def test_document_tab_contains_showroom_preview_links(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-documents')
+        expected_documents = [self.docprops_template, self.asset_template,
+                              self.normal_template, self.empty_template]
+
+        expected_urls = self.get_expected_urls_from_documents(expected_documents)
+        actual_urls = [element.get("data-showroom-target") for element in browser.css(".showroom-item")]
+        self.assertEqual(expected_urls, actual_urls)
+
+    @browsing
+    def test_sablontemplates_tab_contains_showroom_preview_links(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-sablontemplates')
+        expected_documents = [self.sablon_template]
+
+        expected_urls = self.get_expected_urls_from_documents(expected_documents)
+        actual_urls = [element.get("data-showroom-target") for element in browser.css(".showroom-item")]
+        self.assertEqual(expected_urls, actual_urls)
+
+    @browsing
+    def test_proposaltemplates_tab_contains_showroom_preview_links(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-proposaltemplates')
+        expected_documents = [self.proposal_template,
+                              self.ad_hoc_agenda_item_template,
+                              self.recurring_agenda_item_template]
+
+        expected_urls = self.get_expected_urls_from_documents(expected_documents)
+        actual_urls = [element.get("data-showroom-target") for element in browser.css(".showroom-item")]
+        self.assertEqual(expected_urls, actual_urls)
