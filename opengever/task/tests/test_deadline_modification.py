@@ -11,6 +11,7 @@ from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncer
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
+from unittest import skip
 from zExceptions import Unauthorized
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 import datetime
@@ -119,6 +120,8 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
 
+    @skip("This test currently fails in a flaky way on CI."
+          "https://github.com/4teamwork/opengever.core/issues/4945")
     @browsing
     def test_recalculate_remind_on_for_set_reminders_if_deadline_changed(self, browser):
         self.login(self.dossier_responsible, browser=browser)

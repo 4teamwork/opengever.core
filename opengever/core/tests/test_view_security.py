@@ -28,6 +28,7 @@ WHITELIST = (
 
     # The bumblebee token is verified in these views:
     'opengever.bumblebee.browser.callback.StoreArchivalFile',
+    'opengever.meeting.browser.meetings.zipexport_callback.ReceiveZipPdf',
 
     # Add-form views are special adapters were the permission is stored
     # differently. These views are verified manually:

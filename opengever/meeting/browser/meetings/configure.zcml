@@ -79,7 +79,7 @@
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
       name="export-meeting-zip"
-      class=".zipexport.MeetingZipExport"
+      class=".zipexport.MeetingZipExportOriginals"
       permission="zope2.View"
       />
 
@@ -110,6 +110,35 @@
       for="opengever.meeting.interfaces.IMeetingWrapper"
       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
       class=".byline.MeetingByline"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="receive_meeting_zip_pdf"
+      class=".zipexport_callback.ReceiveZipPdf"
+      permission="zope.Public"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="demand_meeting_zip"
+      class=".zipexport.DemandMeetingZip"
+      permission="zope2.View"
+      template="templates/demand_zip.pt"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="poll_meeting_zip"
+      class=".zipexport.PollMeetingZip"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="download_meeting_zip"
+      class=".zipexport.DownloadMeetingZip"
       permission="zope2.View"
       />
 

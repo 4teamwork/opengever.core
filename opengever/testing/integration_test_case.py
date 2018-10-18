@@ -31,6 +31,7 @@ from plone import api
 from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
+from plone.app.testing import logout
 from plone.app.testing import SITE_OWNER_NAME
 from plone.namedfile.file import NamedBlobFile
 from plone.portlets.constants import CONTEXT_CATEGORY
@@ -185,6 +186,38 @@ class IntegrationTestCase(TestCase):
                      for (name, value) in browser_auth_headers]
 
         return login_context_manager()
+
+    def logout(self, browser=None):
+        """Logout the currently logged in user.
+
+        Log in security manager and browser:
+        >>> self.logout(browser)
+        Log in only security manager:
+        >>> self.logout()
+
+        The method may also be used used as context manager, ensuring that
+        after leaving the same user is logged in as before.
+        """
+        security_manager = getSecurityManager()
+
+        logout()
+        if browser is not None:
+            browser_auth_headers = filter(
+                lambda item: item[0] == 'Authorization',
+                browser.session_headers)
+            browser.logout()
+
+        @contextmanager
+        def logout_context_manager():
+            try:
+                yield
+            finally:
+                setSecurityManager(security_manager)
+                if browser is not None:
+                    browser.clear_request_header('Authorization')
+                    [browser.append_request_header(name, value)
+                     for (name, value) in browser_auth_headers]
+        return logout_context_manager()
 
     def deactivate_extjs(self):
         """ExtJS is JavaScript and therefore currently untestable with
@@ -552,6 +585,24 @@ class IntegrationTestCase(TestCase):
         agendaitem.decide()
         excerpt = agendaitem.generate_excerpt(excerpt_title or agendaitem.get_title())
         agendaitem.return_excerpt(excerpt)
+
+    def generate_protocol_document(self, meeting):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        meeting.update_protocol_document()
+
+    def generate_agenda_item_list(self, meeting):
+        if isinstance(meeting, MeetingWrapper):
+            meeting = meeting.model
+
+        from opengever.meeting.command import AgendaItemListOperations
+        from opengever.meeting.command import CreateGeneratedDocumentCommand
+
+        command = CreateGeneratedDocumentCommand(
+            meeting.get_dossier(), meeting, AgendaItemListOperations(),
+            )
+        command.execute()
 
     def as_relation_value(self, obj):
         return RelationValue(getUtility(IIntIds).getId(obj))

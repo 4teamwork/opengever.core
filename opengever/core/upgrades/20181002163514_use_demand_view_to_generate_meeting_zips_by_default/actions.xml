@@ -1,0 +1,18 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <object name="export-meeting-zip" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Export as Zip</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/demand_meeting_zip</property>
+      <property name="icon_expr" />
+      <property name="available_expr">here/@@demand_meeting_zip/visible_in_actions_menu|nothing</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+
+</object>

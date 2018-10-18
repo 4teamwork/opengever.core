@@ -154,6 +154,12 @@
       factory=".namedfile.FileUploadStorable"
       />
 
+  <utility
+      name="tempfile._TemporaryFileWrapper"
+      provides="plone.namedfile.interfaces.IStorage"
+      factory=".namedfile.TemporaryFileWrapperStorable"
+      />
+
   <adapter factory=".sequence.DefaultSequenceNumberGenerator" />
 
   <adapter factory=".adapters.ReferenceNumberPrefixAdpater" />

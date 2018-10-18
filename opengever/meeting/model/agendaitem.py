@@ -1,6 +1,4 @@
 from AccessControl import getSecurityManager
-from ftw.bumblebee.interfaces import IBumblebeeDocument
-from ftw.zipexport.utils import normalize_path
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -20,7 +18,6 @@ from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import ITrashed
 from plone import api
-from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -30,11 +27,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import composite
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
-from tzlocal import get_localzone
 from zope.component import getMultiAdapter
-from zope.globalrequest import getRequest
-from zope.i18n import translate
-import os
 
 
 class AgendaItem(Base):
@@ -220,61 +213,11 @@ class AgendaItem(Base):
         session.delete(self)
         self.meeting.reorder_agenda_items()
 
-    def get_document_filename_for_zip(self, document):
-        return normalize_path(u'{}/{}{}'.format(
-            translate(
-                _(u'title_agenda_item', default=u'Agenda item ${number}', mapping={u'number': self.number}),
-                context=getRequest(),
-                ),
-            safe_unicode(document.Title()),
-            os.path.splitext(document.get_file().filename)[1]))
-
     def get_proposal_link(self, include_icon=True):
         if not self.has_proposal:
             return self.get_title_html()
 
         return self.proposal.get_submitted_link(include_icon=include_icon)
-
-    def get_data_for_zip_export(self):
-        agenda_item_data = {
-            'opengever_id': self.agenda_item_id,
-            'title': safe_unicode(self.get_title()),
-            'sort_order': self.sort_order,
-        }
-
-        if self.has_document:
-            document = self.resolve_document()
-            agenda_item_data.update({
-                'number': self.number,
-                'proposal': {
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
-                    'file': self.get_document_filename_for_zip(document),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
-                }
-            })
-
-        if self.has_submitted_documents():
-            agenda_item_data.update({
-                'attachments': [{
-                    'checksum': (IBumblebeeDocument(document)
-                                 .get_checksum()),
-                    'file': self.get_document_filename_for_zip(document),
-                    'modified': safe_unicode(
-                        get_localzone().localize(
-                            document.modified().asdatetime()
-                            .replace(tzinfo=None)
-                        ).isoformat()),
-                    'title': safe_unicode(document.Title()),
-                }
-                for document in self.proposal.resolve_submitted_documents()],
-            })
-
-        return agenda_item_data
 
     def serialize(self):
         return {
@@ -322,6 +265,12 @@ class AgendaItem(Base):
 
     def has_submitted_documents(self):
         return self.has_proposal and self.proposal.has_submitted_documents()
+
+    def resolve_submitted_documents(self):
+        if not self.has_proposal:
+            return []
+
+        return self.proposal.resolve_submitted_documents()
 
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
