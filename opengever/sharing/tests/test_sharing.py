@@ -131,7 +131,7 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
 
         acl_users = api.portal.get_tool('acl_users')
 
-        roles =['Member', 'Role Manager']
+        roles = ['Member', 'Role Manager']
         acl_users.userFolderEditUser(self.dossier_responsible.id, None, list(roles), [])
 
         data = json.dumps({"entries": [], "inherit": False})
@@ -319,3 +319,35 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                   u'title': self.task.title},
               u'principal': u'kathi.barfuss'}],
             browser.json)
+
+    @browsing
+    def test_remove_role_assignments_and_updates_local_roles(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(
+            SharingRoleAssignment(
+                self.regular_user.id, ['Reader', 'Editor', 'Contributor']))
+
+        data = json.dumps({
+            "entries": [
+                {"id": self.regular_user.id,
+                 "roles": {"Contributor": False,
+                           "Editor": False,
+                           "Reader": False,
+                           "Reviewer": False,
+                           "Publisher": False},
+                 "type": "user"},
+            ],
+            "inherit": True})
+
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+
+        self.assertEquals(
+            (('robert.ziegler', ('Owner',)),),
+            self.empty_dossier.get_local_roles())
+        self.assertEquals(
+            [],
+            RoleAssignmentManager(self.empty_dossier).storage._storage())

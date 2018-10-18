@@ -8,6 +8,7 @@ Changelog
 - Bump ftw.solr to 2.3.0 to get patched (optimized) reindexObjectSecurity(). [lgraf]
 - Implement asynchronous meeting zip generation, with PDFs from the new demand endpoint. [deiferni, lgraf]
 - Add new icon for private folder. [njohner]
+- Sharing form: fix removal of all role assignments. [phgross]
 - Allow pasting templates into template folders. [Rotonen]
 - Map gever_admins to the administrator_group in example content. [njohner]
 - Fix parent reference number fetching for repository roots. [Rotonen]
