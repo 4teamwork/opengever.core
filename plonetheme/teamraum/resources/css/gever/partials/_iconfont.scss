@@ -47,7 +47,7 @@ $folder: "\e618";
 $tasktemplate: "\e627";
 $private_root: $repository_root;
 $private_dossier: $dossier;
-$private_folder: $repository_folder;
+$private_folder: $fa-var-user-circle;
 $disposition: $fa-var-archive;
 $favorite: $fa-var-star;
 /* @end*/
@@ -255,8 +255,12 @@ body.template-view.portaltype-opengever-private-dossier {
 
 body.template-tabbed_view.portaltype-opengever-private-folder,
 body.template-view.portaltype-opengever-private-folder {
-  @include heading-icon($private_folder);
-  @include watermark-icon($private_folder);
+  @include heading-icon($char: $private_folder, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
+  @include watermark-icon($char: $private_folder, $iconset: 'Font Awesome 5 Free') {
+    font-weight: 900;
+  };
 }
 
 body.template-tabbed_view.portaltype-opengever-private-root,
@@ -393,7 +397,8 @@ body.meeting-view{
   content: $private_dossier;
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-private-folder:before {
-  content: $private_folder;
+  content: fa-content($private_folder);
+  font-family: 'Font Awesome 5 Free';
 }
 #plone-contentmenu-factories dd.actionMenuContent a#opengever-private-root:before {
   content: $private_root;
@@ -555,7 +560,11 @@ body.meeting-view{
 .contenttype-opengever-meeting-proposaltemplate:before {content: $proposal;}
 .contenttype-opengever-meeting-meetingdossier:before {content: $dossier;}
 .contenttype-opengever-private-dossier:before {content: $private_dossier;}
-.contenttype-opengever-private-folder:before {content: $private_folder;}
+.contenttype-opengever-private-folder:before {
+  content: fa-content($private_folder);
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
 .contenttype-opengever-private-root:before {content: $private_root;}
 .contenttype-opengever-document-document:before {content: $document;}
 .contenttype-opengever-task-task:before { content: $task; }
