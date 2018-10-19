@@ -199,6 +199,29 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.assertEquals([], storage._storage())
 
     @browsing
+    def test_reader_of_parent_can_still_view_closed_task(self, browser):
+        with self.login(self.regular_user):
+            RoleAssignmentManager(self.portal).add_or_update_assignment(
+                SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+            )
+            RoleAssignmentManager(self.dossier).add_or_update_assignment(
+                SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+            )
+
+        self.login(self.reader_user, browser)
+        browser.open(self.task, view='tabbedview_view-overview')
+        expected_actions = ['task-transition-delegate', 'task-transition-reassign']
+        self.assertEqual(expected_actions, browser.css('#action-menu a').text)
+
+        with self.login(self.dossier_responsible, browser=browser):
+            self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+            self.set_workflow_state('task-state-resolved', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        expected_actions = []
+        self.assertEqual(expected_actions, browser.css('#action-menu a').text)
+
+    @browsing
     def test_closing_a_task_revokes_responsible_roles_on_related_documents(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)

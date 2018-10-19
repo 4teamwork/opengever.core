@@ -256,6 +256,30 @@ class OpengeverContentFixture(object):
             u'Peter',
             )
 
+        # This user is intended to be used in situations where you need a user
+        # which has only the 'Reader' role on some context and one has to build
+        # the granting of that themselves
+        firstname = u'L\xfccklicher'
+        lastname = u'L\xe4ser'
+
+        builder = (
+            Builder('user')
+            .named(firstname, lastname)
+            .with_roles(['Member'])
+            )
+
+        builder.update_properties()  # updates builder.userid
+        email = '{}@gever.local'.format(builder.userid)
+        plone_user = create(builder.with_email(email))
+
+        create(
+            Builder('ogds_user')
+            .id(plone_user.getId())
+            .having(firstname=firstname, lastname=lastname, email=email)
+            )
+
+        self._lookup_table['reader_user'] = ('user', plone_user.getId())
+
     def create_teams(self):
         users = [
             ogds_service().find_user(user.getId())
