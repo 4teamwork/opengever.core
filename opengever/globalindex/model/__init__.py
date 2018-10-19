@@ -1,5 +1,4 @@
-from opengever.globalindex.model.task import WORKFLOW_STATE_LENGTH
-from opengever.globalindex.model import query
+WORKFLOW_STATE_LENGTH = 255
 
 tables = [
     'task_principals',

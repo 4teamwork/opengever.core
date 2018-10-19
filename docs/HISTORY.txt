@@ -9,6 +9,7 @@ Changelog
 - Implement asynchronous meeting zip generation, with PDFs from the new demand endpoint. [deiferni, lgraf]
 - Add new icon for private folder. [njohner]
 - Allow pasting templates into template folders. [Rotonen]
+- Fix circular imports after using generate_remind_notifications_zopectl_handler entrypoint. [elioschmutz]
 - Map gever_admins to the administrator_group in example content. [njohner]
 - Fix parent reference number fetching for repository roots. [Rotonen]
 - OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
