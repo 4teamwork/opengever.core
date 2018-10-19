@@ -97,8 +97,12 @@
       <replace css:content="ul.mobileButtons" css:theme="ul.mobileButtons" />
 
       <!-- Copy over the id/class attributes on the body tag. This is important
-           for per-section styling -->
-      <copy attributes="class id dir" content="/html/body" theme="/html/body" />
+           for per-section styling.
+
+           Also copy over the data-base-url attribute. This is required to get
+           this more reliable data attribute (introduced in Plone 4.3.16)
+           for determining the base URL, especially in JS. -->
+      <copy attributes="class id dir data-base-url" content="/html/body" theme="/html/body" />
 
       <!-- Logo (link target) -->
       <replace css:content="#portal-logo" css:theme="#portal-logo" />

@@ -480,6 +480,33 @@ class GEVERIntegrationTesting(FTWIntegrationTesting):
         logout()
 
 
+class ThemeContentFixtureLayer(ContentFixtureLayer):
+    """This is a temporary layer that allows to use the ContentFixture
+    together with plonetheme.teamraum:gever profile (especially for having
+    Diazo transforms applied).
+
+    This is necessary as a separate layer because
+    - Using the theme as a FEATURE_PROFILE doesn't seem to work
+    - Installing the theme profile in OpengeverFixture's
+      installOpengeverProfiles() currently breaks too many existing tests.
+
+    The latter is something we'll eventually want to, but for now this layer
+    provides an option to use the fixture together with the theme without
+    affecting anything else, and should be rebase-friendly.
+    """
+
+    def setUpPloneSite(self, portal):
+        super(ThemeContentFixtureLayer, self).setUpPloneSite(portal)
+        applyProfile(portal, 'plonetheme.teamraum:gever')
+
+
+OPENGEVER_INTEGRATION_TESTING_THEME = GEVERIntegrationTesting(
+    # Warning: do not try to base other layers on ContentFixtureLayer.
+    # See docstring of ContentFixtureLayer.
+    bases=(ThemeContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE),
+    name="opengever.core:integration:theme")
+
+
 OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # Warning: do not try to base other layers on ContentFixtureLayer.
     # See docstring of ContentFixtureLayer.
