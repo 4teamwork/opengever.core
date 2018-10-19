@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from opengever.base.interfaces import IInternalWorkflowTransition
 from opengever.dossier.base import DOSSIER_STATES_OPEN
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
@@ -139,7 +138,7 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-delegate')
     def delegate_guard(self, c, include_agency):
-        return True
+        return api.user.has_permission('Modify portal content', obj=self.context)
 
     @action('task-transition-delegate')
     def delegate_action(self, transition, c):
@@ -419,7 +418,7 @@ class TaskTransitionController(BrowserView):
 
     @guard('task-transition-reassign')
     def reassign_guard(self, c, include_agency):
-        return True
+        return api.user.has_permission('Modify portal content', obj=self.context)
 
     @action('task-transition-reassign')
     def reassign_action(self, transition, c):

@@ -210,7 +210,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         self.login(self.reader_user, browser)
         browser.open(self.task, view='tabbedview_view-overview')
-        expected_actions = ['task-transition-delegate', 'task-transition-reassign']
+        expected_actions = []
         self.assertEqual(expected_actions, browser.css('#action-menu a').text)
 
         with self.login(self.dossier_responsible, browser=browser):

@@ -1,8 +1,9 @@
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
-from plone import api
 from zope.interface import alsoProvides
 import unittest
 
@@ -503,13 +504,40 @@ class TestOpenClosed(BaseTransitionGuardTests):
             self.transition, True, checker))
 
 
-class TestReassign(BaseTransitionGuardTests):
+class TestReassign(IntegrationTestCase):
     transition = 'task-transition-reassign'
 
-    def test_has_no_guard(self):
-        checker = FakeChecker(is_issuer=False, issuing_agency=True)
-        self.assertTrue(self.controller._is_transition_possible(
-            self.transition, True, checker))
+    def test_guarded_by_modify_portal_content(self):
+        self.login(self.regular_user)
+        self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+        RoleAssignmentManager(self.portal).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+
+        self.login(self.reader_user)
+        self.assertNotIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+
+class TestDelegate(IntegrationTestCase):
+    transition = 'task-transition-delegate'
+
+    def test_guarded_by_modify_portal_content(self):
+        self.login(self.regular_user)
+        self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+        RoleAssignmentManager(self.portal).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+        RoleAssignmentManager(self.dossier).add_or_update_assignment(
+            SharingRoleAssignment(self.reader_user.getId(), ['Reader']),
+        )
+
+        self.login(self.reader_user)
+        self.assertNotIn(self.transition, self.get_workflow_transitions_for(self.task))
 
 
 class TestRejectedOpen(BaseTransitionGuardTests):
