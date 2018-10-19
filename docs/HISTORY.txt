@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.4.8 (unreleased)
+2018.4.8 (2018-10-19)
 ---------------------
 
 - Sharing form: do not show search results multiple times. [phgross]
