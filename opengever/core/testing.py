@@ -177,6 +177,7 @@ class OpengeverFixture(PloneSandboxLayer):
     def installOpengeverProfiles(self, portal):
         applyProfile(portal, 'opengever.core:default')
         applyProfile(portal, 'opengever.testing:testing')
+        applyProfile(portal, 'plonetheme.teamraum:gever')
 
     def createMemberFolder(self, portal):
         # Create a Members folder.
