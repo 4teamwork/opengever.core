@@ -23,6 +23,7 @@ Inhalt:
    config.rst
    favorite.rst
    reminder.rst
+   notifications.rst
    recently_touched.rst
    preview.rst
    examples/index.rst
