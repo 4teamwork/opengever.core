@@ -14,6 +14,7 @@ Changelog
 - Fix circular imports after using generate_remind_notifications_zopectl_handler entrypoint. [elioschmutz]
 - Map gever_admins to the administrator_group in example content. [njohner]
 - Fix parent reference number fetching for repository roots. [Rotonen]
+- Style live search to match other dropdown menus. [njohner]
 - OGGBundle: Fix encoding issue with UNC filepaths containing non-ASCII characters. [lgraf]
 - Send notification dispatch exceptions to Raven. [Rotonen]
 - Fix sharing-form local_roles inheritance fallback and skip it for administators and managers. [phgross]

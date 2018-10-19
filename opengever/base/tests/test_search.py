@@ -354,6 +354,6 @@ class TestSolrSearch(IntegrationTestCase):
         all_items_link = browser.find('Show all items')
         self.assertIsNotNone(all_items_link)
         self.assertEqual(
-            '<a href="@@search?SearchableText=test&amp;path=/plone" style="font-weight:normal">Show all items</a>',
+            '<a href="@@search?SearchableText=test&amp;path=/plone" class="dropdown-list-item LSRow">Show all items</a>',
             all_items_link.outerHTML,
             )

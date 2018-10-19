@@ -48,7 +48,7 @@ var livesearch = (function () {
     $request = null,
     $cache = {},
     $querytarget = targetbase + "livesearch_reply",
-    $$result = $form.find('div.LSResult'),
+    $$result = $form.find('dl.LSResult'),
     $shadow = $form.find('div.LSShadow'),
     $path = $form.find('input[name=path]');
 
@@ -87,7 +87,7 @@ var livesearch = (function () {
 
       // Do nothing as long as we have less then two characters -
       // the search results makes no sense, and it's harder on the server.
-	  
+
       // UPDATE for GEVER:
       // Show serach results always (_show() instead of _hide())
       if ($inputnode.value.length < 2) {
@@ -137,7 +137,7 @@ var livesearch = (function () {
     // necessary, because IE doesn't have a way to get the target of
     // an event in a way we need it.
     var $timeout = null,
-    $$result = $form.find('div.LSResult'),
+    $$result = $form.find('dl.LSResult'),
     $shadow = $form.find('div.LSShadow');
 
     function _keyUp() {
