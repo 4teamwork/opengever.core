@@ -98,9 +98,14 @@ var sharingApp = {
 
       this.requester.get(this.endpoint, { params: params }).then(function (response) {
 
-        this.entries = this.entries.filter(function(i) { return !i.disabled; });
+        // Drop former search results, which has not been changed.
+        this.entries = this.entries.filter(function(i) { return i.disabled === false; });
+
+        var current_ids = this.entries.map( function(i) { return i.id})
         this.entries = this.entries.concat(
-          response.data['entries'].filter(function(i) { return i.disabled != false; }));
+          response.data['entries'].filter(function(i) {
+            return i.disabled !== false && current_ids.indexOf(i.id) === -1;
+          }));
         this.inherit = response.data['inherit'];
 
       }.bind(this));

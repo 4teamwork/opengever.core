@@ -4,6 +4,7 @@ from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
 from opengever.base.handlebars import get_handlebars_template
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -320,18 +321,23 @@ class OpengeverSharingView(SharingView):
         """Replaced because we need our own permission manager stuff.
         """
         assignments = []
+        principals_to_clear = []
 
         for s in new_settings:
             principal = s['id']
             selected_roles = frozenset(s['roles'])
             if not selected_roles:
+                principals_to_clear.append(principal)
                 continue
 
             assignments.append(SharingRoleAssignment(principal, selected_roles))
 
+        manager = RoleAssignmentManager(self.context)
         if assignments:
-            manager = RoleAssignmentManager(self.context)
             manager.reset(assignments)
+        else:
+            manager.clear_by_cause_and_principals(
+                ASSIGNMENT_VIA_SHARING, principals_to_clear)
 
     def update_role_settings(self, new_settings, reindex=True):
         """Method Wrapper for the super method, to allow notify a

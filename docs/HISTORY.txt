@@ -5,6 +5,8 @@ Changelog
 2018.4.8 (unreleased)
 ---------------------
 
+- Sharing form: do not show search results multiple times. [phgross]
+- Sharing form: fix removal of all role assignments. [phgross]
 - Fix parent reference number fetching for repository roots. [Rotonen]
 - Fix sharing-form local_roles inheritance fallback and skip it for administators and managers. [phgross]
 
