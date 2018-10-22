@@ -5,8 +5,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
+from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import TASK_REMINDER_BEGINNING_OF_WEEK
 from opengever.task.reminder import TASK_REMINDER_ONE_DAY_BEFORE
@@ -177,6 +179,37 @@ class TestTaskReminder(IntegrationTestCase):
             Activity.kind == TaskReminderActivity.kind)
 
         self.assertEqual(1, task_reminder_activities.count())
+
+    def test_reminder_notifications_respects_user_notification_settings(self):
+        self.login(self.administrator)
+
+        # Validate, that the user wants to get badge-notifications for task
+        # reminders. This is essential for this test.
+        user_settings = NotificationDispatcher().get_setting(
+            'task-reminder', self.regular_user.getId())
+        self.assertIn(TASK_REMINDER_WATCHER_ROLE,
+                      user_settings.badge_notification_roles)
+
+        today = date.today()
+
+        self.task.responsible = self.dossier_responsible.getId()
+        self.task.issuer = self.regular_user.getId()
+        self.task.deadline = today
+
+        task_reminder = TaskReminder()
+
+        with self.login(self.regular_user):
+            task_reminder.set_reminder(self.task, TASK_REMINDER_SAME_DAY)
+            self.task.sync()
+
+        with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
+            task_reminder.create_reminder_notifications()
+
+        notifications = Notification.query.by_user(self.regular_user.getId())
+        self.assertEqual(1, notifications.count())
+
+        notification = notifications.first()
+        self.assertTrue(notification.is_badge)
 
 
 class TestTaskReminderSelector(IntegrationTestCase):

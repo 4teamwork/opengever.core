@@ -4,6 +4,7 @@ from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.base import BaseActivity
 from opengever.activity.model.notification import Notification
 from opengever.activity.roles import TASK_OLD_RESPONSIBLE_ROLE
+from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.base.model import get_locale
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
@@ -223,9 +224,12 @@ class TaskReminderActivity(BaseActivity):
             return
 
         activity = self.add_activity()
-        Notification(userid=notify_for_user_id, activity=activity)
-        map(lambda dispatcher: dispatcher.dispatch_notifications(activity),
-            self.center.dispatchers)
+        notification = Notification(userid=notify_for_user_id, activity=activity)
+
+        for dispatcher in self.center.dispatchers:
+            if TASK_REMINDER_WATCHER_ROLE in dispatcher.get_dispatched_roles_for(
+                    notification.activity.kind, notify_for_user_id):
+                dispatcher.dispatch_notification(notification)
 
     def add_activity(self):
         # Because we use the default NotificationCenter, we need to provide
