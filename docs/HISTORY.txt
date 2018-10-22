@@ -5,6 +5,8 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Make sure our Diazo theme doesn't drop data-base-url attribute. [lgraf]
+- Bump Plone version to 4.3.18. [Rotonen, lgraf]
 - Bump ftw.solr to 2.3.0 to get patched (optimized) reindexObjectSecurity(). [lgraf]
 - Implement asynchronous meeting zip generation, with PDFs from the new demand endpoint. [deiferni, lgraf]
 - Add new icon for private folder. [njohner]
