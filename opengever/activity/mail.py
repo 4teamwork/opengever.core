@@ -1,6 +1,7 @@
 from opengever.activity.browser import resolve_notification_url
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
+from opengever.ogds.base.utils import get_current_admin_unit
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
@@ -43,5 +44,6 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
             'label': notification.activity.translations[language].label,
             'summary': notification.activity.translations[language].summary,
             'description': notification.activity.translations[language].description,
-            'link': resolve_notification_url(notification)
+            'link': resolve_notification_url(notification),
+            'public_url': get_current_admin_unit().public_url,
         }

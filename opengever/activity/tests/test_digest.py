@@ -67,10 +67,10 @@ class TestDigestMail(IntegrationTestCase):
 
         browser.open_html(str(messages[0].get_payload()[0]))
 
-        self.assertEquals('Oct 16, 201= 7', browser.css('table p').text[0])
+        self.assertEquals('Oct 16, 2017', browser.css('table p').text[0])
         self.assertEquals(['Daily Digest for B=C3=A4rfuss K=C3=A4thi'],
                           browser.css('h1').text)
-        self.assertEquals(['Bitte =C3=84nderungen nachvollzie= hen'],
+        self.assertEquals(['Bitte =C3=84nderungen nachvollziehen'],
                           browser.css('h2 a').text)
 
     def test_send_in_digest_flag_is_enabled_after_send(self):

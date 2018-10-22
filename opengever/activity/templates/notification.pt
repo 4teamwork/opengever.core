@@ -1,49 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    i18n:domain="opengever.activity">
+    i18n:domain="opengever.activity"
+    metal:use-macro="context/notification_mail_macros/macros/mail_template">
 
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <metal:title metal:fill-slot="title">
+        <div tal:replace="options/title"></div>
+    </metal:title>
 
-    <title tal:content="structure options/subject"></title>
-    <style>
-      body{
-        font-family: sans-serif;
-        font-size: 85%;
-      }
+    <metal:content metal:fill-slot="content">
+      <p class="notification_label" tal:content="structure options/summary" />
 
-      .notification_label {
-        padding-bottom: 5px;
+      <p><a href="" tal:content="options/title" tal:attributes="href options/link"></a></p>
 
-      }
-      .label {
-        font-weight: bold;
-        text-align: left;
-        padding-right: 1em;
-        }
-
-      .details {
-        padding-top: 15px;
-        }
-    </style>
-
-  </head>
-
-  <body>
-    <p class="notification_label" tal:content="structure options/summary" />
-
-    <p><a href="" tal:content="options/title" tal:attributes="href options/link"></a></p>
-
-    <tal:block tal:condition="options/description">
-      <p class="details" i18n:translate="label_details">Details:</p>
-      <tal:block tal:repeat="paragraph options/description">
-        <p tal:content="structure paragraph" />
+      <tal:block tal:condition="options/description">
+        <p class="details" i18n:translate="label_details">Details:</p>
+        <tal:block tal:repeat="paragraph options/description">
+          <p tal:content="structure paragraph" />
+        </tal:block>
       </tal:block>
-    </tal:block>
-  </body>
 
+    </metal:content>
 </html>
