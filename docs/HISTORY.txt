@@ -17,6 +17,7 @@ Changelog
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Prefill task-reminder select field on task response form. [elioschmutz]
 - Use the same template for default notifiaction email like the daily-digest template. [elioschmutz]
+- Update cached docprops on docprops updates. [Rotonen]
 - Make sure our Diazo theme doesn't drop data-base-url attribute. [lgraf]
 - Bump Plone version to 4.3.18. [Rotonen, lgraf]
 - Fix bug with document showroom for sablon and proposal templates. [njohner]

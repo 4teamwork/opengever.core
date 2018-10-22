@@ -11,6 +11,7 @@ from opengever.journal.tests.utils import get_journal_length
 from opengever.testing import assets
 from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedBlobFile
+import pytz
 
 
 class TestDocPropertyWriterExportDisabled(IntegrationTestCase):
@@ -99,6 +100,87 @@ class TestDocPropertyWriter(IntegrationTestCase):
         entry = get_journal_entry(self.document)
 
         self.assertNotEqual(entry['action']['type'], DOC_PROPERTIES_UPDATED)
+
+    def test_files_with_cached_custom_properties_are_updated(self):
+        self.login(self.regular_user)
+
+        filename = 'with_cached_custom_properties.docx'
+        expected_properties = {
+            'Document.ReferenceNumber': '00 / 11 / 222',
+            'Document.SequenceNumber': '222',
+            'Dossier.ReferenceNumber': '00 / 11',
+            'Dossier.Title': 'Foo Dossier',
+            'User.FullName': 'Foo Bar',
+            'User.ID': 'foo.bar',
+            'ogg.document.delivery_date': datetime(2000, 2, 2, 10, 0, tzinfo=pytz.utc),
+            'ogg.document.document_author': 'Foo Bar',
+            'ogg.document.document_date': datetime(1990, 1, 1, 10, 0, tzinfo=pytz.utc),
+            'ogg.document.document_type': 'Foo Docu',
+            'ogg.document.reception_date': datetime(2010, 3, 3, 10, 0, tzinfo=pytz.utc),
+            'ogg.document.reference_number': '0 / 11 / 222',
+            'ogg.document.sequence_number': '222',
+            'ogg.document.title': 'cached-docprops',
+            'ogg.document.version_number': 333,
+            'ogg.dossier.reference_number': '0 / 11',
+            'ogg.dossier.sequence_number': '11',
+            'ogg.dossier.title': 'Foo Dossier',
+            'ogg.user.title': 'foobar',
+            'ogg.user.userid': 'foobar',
+        }
+        properties = dict(property for property in read_properties(assets.path_to_asset(filename)))
+        self.assertItemsEqual(expected_properties, properties)
+
+        self.with_asset_file(filename)
+
+        DocPropertyWriter(self.document).update_doc_properties(only_existing=False)
+
+        expected_properties = {
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 12',
+            'Document.SequenceNumber': '12',
+            'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
+            'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            'User.FullName': u'B\xe4rfuss K\xe4thi',
+            'User.ID': 'kathi.barfuss',
+            'ogg.document.delivery_date': datetime(2010, 1, 3, 0, 0),
+            'ogg.document.document_author': 'test_user_1_',
+            'ogg.document.document_date': datetime(2010, 1, 3, 0, 0),
+            'ogg.document.document_type': 'Contract',
+            'ogg.document.reception_date': datetime(2010, 1, 3, 0, 0),
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 12',
+            'ogg.document.sequence_number': '12',
+            'ogg.document.title': u'Vertr\xe4gsentwurf',
+            'ogg.document.version_number': 0,
+            'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
+            'ogg.dossier.reference_number': 'Client1 1.1 / 1',
+            'ogg.dossier.sequence_number': '1',
+            'ogg.dossier.title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            'ogg.user.address1': 'Kappelenweg 13',
+            'ogg.user.address2': 'Postfach 1234',
+            'ogg.user.city': 'Vorkappelen',
+            'ogg.user.country': 'Schweiz',
+            'ogg.user.department': 'Staatskanzlei',
+            'ogg.user.department_abbr': 'SK',
+            'ogg.user.description': 'nix',
+            'ogg.user.directorate': 'Staatsarchiv',
+            'ogg.user.directorate_abbr': 'Arch',
+            'ogg.user.email': 'foo@example.com',
+            'ogg.user.email2': 'bar@example.com',
+            'ogg.user.firstname': u'K\xe4thi',
+            'ogg.user.lastname': u'B\xe4rfuss',
+            'ogg.user.phone_fax': '012 34 56 77',
+            'ogg.user.phone_mobile': '012 34 56 76',
+            'ogg.user.phone_office': '012 34 56 78',
+            'ogg.user.salutation': 'Prof. Dr.',
+            'ogg.user.title': u'B\xe4rfuss K\xe4thi',
+            'ogg.user.url': 'http://www.example.com',
+            'ogg.user.userid': 'kathi.barfuss',
+            'ogg.user.zip_code': '1234',
+        }
+
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            properties = dict(property for property in read_properties(tmpfile.path))
+
+        self.assertItemsEqual(expected_properties, properties)
 
     def test_properties_can_be_added_to_file_without_properties(self):
         self.login(self.regular_user)
