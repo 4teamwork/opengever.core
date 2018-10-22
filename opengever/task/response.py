@@ -43,6 +43,14 @@ from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 from zope.lifecycleevent import ObjectModifiedEvent
 import datetime
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
+
+
+@provider(IContextAwareDefaultFactory)
+def get_current_user_reminder(context):
+    reminder = TaskReminder().get_reminder(context)
+    return reminder.option_type if reminder else None
 
 
 class ITaskCommentResponseFormSchema(Interface):
@@ -91,7 +99,8 @@ class ITaskTransitionResponseFormSchema(Interface):
                       default="Set a reminder to get notified based on "
                               "the duedate"),
         source=get_task_reminder_options_vocabulary(),
-        required=False
+        required=False,
+        defaultFactory=get_current_user_reminder
         )
 
 
@@ -359,6 +368,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             self.widgets['relatedItems'].mode = HIDDEN_MODE
 
         self.widgets['transition'].mode = HIDDEN_MODE
+
         if self.transition != 'task-transition-open-in-progress':
             self.widgets['reminder_option'].mode = HIDDEN_MODE
 
