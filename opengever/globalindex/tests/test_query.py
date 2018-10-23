@@ -2,10 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
-from opengever.testing import FunctionalTestCase
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
-from plone import api
+from sqlalchemy.orm.exc import NoResultFound
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 
@@ -129,96 +129,70 @@ class TestTaskQueries(IntegrationTestCase):
         self.assertItemsEqual(
             tasks, Task.query.all_issued_tasks(additional).all())
 
-
-class TestFunctionalTaskQueries(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestFunctionalTaskQueries, self).setUp()
-
-        self.dossier = create(Builder('dossier'))
-
     def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
-        create(Builder('task').within(self.portal))
-        task1 = create(Builder('task').within(self.dossier))
-        subtask = create(Builder('task').within(task1))
+        self.login(self.regular_user)
 
         self.assertItemsEqual(
-            [task1.get_sql_object(), subtask.get_sql_object()],
-            Task.query.by_container(self.dossier, self.admin_unit).all())
+            [self.task.get_sql_object(),
+             self.subtask.get_sql_object(),
+             self.sequential_task.get_sql_object(),
+             self.seq_subtask_1.get_sql_object(),
+             self.seq_subtask_2.get_sql_object(),
+             self.seq_subtask_3.get_sql_object(),
+             self.info_task.get_sql_object()],
+            Task.query.by_container(self.dossier, get_current_admin_unit()).all())
 
     def test_by_container_handles_similar_paths_exactly(self):
-        task1 = create(Builder('task').within(self.dossier))
+        self.login(self.regular_user)
 
-        dossier_11 = create(Builder('dossier').titled(u'Dossier 11'))
-        dossier_11 = api.content.rename(obj=dossier_11, new_id='dossier-11')
-        create(Builder('task').within(dossier_11))
+        # manually set a similar physical path than self.task
+        self.sequential_task.get_sql_object().physical_path = 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-11/task-3'
 
-        self.assertItemsEqual(
-            [task1.get_sql_object()],
-            Task.query.by_container(self.dossier, self.admin_unit).all())
+        tasks = Task.query.by_container(self.dossier, get_current_admin_unit()).all()
+
+        self.assertIn(self.task.get_sql_object(), tasks)
+        self.assertNotIn(self.sequential_task.get_sql_object(), tasks)
 
     def test_by_container_queries_adminunit_dependent(self):
-        create(Builder('task').within(self.dossier))
+        self.login(self.regular_user)
 
-        additional_admin_unit = create(Builder('admin_unit')
-                                       .id(u'additional')
-                                       .having(title='foo')
-                                       .as_current_admin_unit())
-
-        create(Builder('org_unit')
-               .having(admin_unit=additional_admin_unit)
-               .assign_users([self.user])
-               .id(u'additional')
-               .as_current_org_unit())
-
-        task2 = create(Builder('task').within(self.dossier))
-
-        self.assertEquals(
-            [task2.get_sql_object()],
-            Task.query.by_container(self.dossier, additional_admin_unit).all())
+        additional = create(Builder('admin_unit').id("additional"))
+        self.assertItemsEqual(
+            [],
+            Task.query.by_container(self.dossier, additional).all())
 
     def test_by_brain_returns_corresponding_sql_task(self):
-        task1 = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            task1.get_sql_object(),
-            Task.query.by_brain(obj2brain(task1)))
+            self.task.get_sql_object(),
+            Task.query.by_brain(obj2brain(self.task)))
 
     def test_by_brain_queries_adminunit_dependent(self):
-        create(Builder('task'))
-
-        additional_admin_unit = create(
-            Builder('admin_unit')
-            .id(u'additional')
-            .as_current_admin_unit())
-
-        create(Builder('org_unit')
-               .having(admin_unit=additional_admin_unit)
-               .assign_users([self.user])
-               .id(u'additional')
-               .as_current_org_unit())
-
-        task = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            task.get_sql_object(),
-            Task.query.by_brain(obj2brain(task)))
+            self.task.get_sql_object(),
+            Task.query.by_brain(obj2brain(self.task)))
+
+        # manually change admin_unit of task
+        self.task.get_sql_object().admin_unit_id = 'additional'
+
+        with self.assertRaises(NoResultFound):
+            self.assertIsNone(Task.query.by_brain(obj2brain(self.task)))
 
     def test_subtasks_by_task_returns_all_subtask_excluding_the_given_one(self):
-        task1 = create(Builder('task'))
-        task2 = create(Builder('task'))
-
-        subtask1 = create(Builder('task').within(task1))
-        subtask3 = create(Builder('task').within(task1))
-        create(Builder('task').within(task2))
+        self.login(self.regular_user)
 
         self.assertEqual(
-            [subtask1.get_sql_object(), subtask3.get_sql_object()],
-            Task.query.subtasks_by_task(task1.get_sql_object()).all())
+            [self.seq_subtask_1.get_sql_object(),
+             self.seq_subtask_2.get_sql_object(),
+             self.seq_subtask_3.get_sql_object()],
+            Task.query.subtasks_by_task(self.sequential_task.get_sql_object()).all())
 
     def test_subtasks_by_task_returns_empty_list_when_no_subtask_exists(self):
-        task1 = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEqual(
             [],
-            Task.query.subtasks_by_task(task1.get_sql_object()).all())
+            Task.query.subtasks_by_task(self.expired_task.get_sql_object()).all())
