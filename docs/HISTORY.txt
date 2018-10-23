@@ -11,6 +11,7 @@ Changelog
 - Assign correct roles in development content. [deiferni]
 - Place successor proposal button next to workflow buttons. [Kevin Bieri]
 - Remove document tooltip on touch devices. [Kevin Bieri]
+- Respect ISharingConfiguration black- and white_list_prefix for selectable groups in add-team form. [elioschmutz]
 - Restrict selectable orgunits on add-team form to orgunits of the current adminunit only. [elioschmutz]
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Prefill task-reminder select field on task response form. [elioschmutz]
