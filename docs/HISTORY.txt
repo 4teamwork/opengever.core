@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
+- Prefill task-reminder select field on task response form. [elioschmutz]
 - Make sure our Diazo theme doesn't drop data-base-url attribute. [lgraf]
 - Bump Plone version to 4.3.18. [Rotonen, lgraf]
 - Bump ftw.solr to 2.3.0 to get patched (optimized) reindexObjectSecurity(). [lgraf]
