@@ -129,6 +129,22 @@ class TestTaskQueries(IntegrationTestCase):
         self.assertItemsEqual(
             tasks, Task.query.all_issued_tasks(additional).all())
 
+    def test_restrict_checks_principals(self):
+        # Responsible user is able to see
+        self.login(self.regular_user)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+        self.assertIn(sql_task, Task.query.restrict().all())
+
+        # Secretariat user is not able to see the task
+        self.login(self.secretariat_user)
+        self.assertNotIn(sql_task, Task.query.restrict().all())
+
+    def test_restrict_checks_is_skipped_for_admins(self):
+        # Responsible user is able to see
+        self.login(self.administrator)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+        self.assertIn(sql_task, Task.query.restrict().all())
+
     def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
         self.login(self.regular_user)
 
