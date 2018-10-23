@@ -21,6 +21,7 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -654,11 +655,12 @@ class IntegrationTestCase(TestCase):
         return solr
 
     def add_additional_org_unit(self):
-        create(Builder('org_unit').id("additional")
+        org_unit = create(Builder('org_unit').id("additional")
                .having(admin_unit=get_current_admin_unit()))
 
         # Reset org_unit strategy, we need now a MultipleOrgUnitsStrategy
         get_current_org_unit()._chosen_strategy = None
+        return OrgUnit.get('additional')
 
     def assert_solr_called(self, solr, text, **kwargs):
         query = (
