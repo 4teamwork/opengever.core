@@ -2,9 +2,14 @@ from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.contact.interfaces import IContactFolder
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.inbox.container import IInboxContainer
+from opengever.inbox.inbox import IInbox
+from opengever.meeting.committeecontainer import ICommitteeContainer
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
-from opengever.private.root import IPrivateRoot
+from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.ldap_creds import configure_ldap_credentials
 from plone.app.controlpanel.language import ILanguageSelectionSchema
@@ -194,11 +199,31 @@ class GeverDeployment(object):
 
     def configure_development_options(self):
         for obj in self.site.listFolderContents():
-            if IRoleManager.providedBy(obj) and not IPrivateRoot.providedBy(obj):
-                assignment = SharingRoleAssignment(
-                    DEVELOPMENT_USERS_GROUP,
-                    ["Contributor", "Editor", "Reader"])
-                RoleAssignmentManager(obj).add_or_update_assignment(assignment)
+            if not IRoleManager.providedBy(obj):
+                continue
+
+            if self._has_default_role_assignments(obj):
+                self._assign_roles_to_development_users_group(
+                    ["Contributor", "Editor", "Reader"], obj)
+            elif self._has_meeting_role_assignments(obj):
+                self._assign_roles_to_development_users_group(
+                    ["CommitteeAdministrator"], obj)
+
+    def _assign_roles_to_development_users_group(self, roles, obj):
+        assignment = SharingRoleAssignment(DEVELOPMENT_USERS_GROUP, roles)
+        RoleAssignmentManager(obj).add_or_update_assignment(assignment)
+
+    def _has_default_role_assignments(self, obj):
+        return any([
+            IRepositoryRoot.providedBy(obj),
+            IInbox.providedBy(obj),
+            IInboxContainer.providedBy(obj),
+            ITemplateFolder.providedBy(obj),
+            IContactFolder.providedBy(obj),
+        ])
+
+    def _has_meeting_role_assignments(self, obj):
+        return ICommitteeContainer.providedBy(obj)
 
     def drop_sql_tables(self, session):
         """Drops all sql tables, usually for a dev-setup.
