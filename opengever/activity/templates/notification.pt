@@ -5,6 +5,14 @@
     i18n:domain="opengever.activity"
     metal:use-macro="context/notification_mail_macros/macros/mail_template">
 
+    <metal:styles metal:fill-slot="style_slot">
+      <style>
+        .email-content table {
+          width: 100%;
+        }
+      </style>
+    </metal:styles>
+
     <metal:title metal:fill-slot="title">
         <div tal:replace="options/title"></div>
     </metal:title>
@@ -15,7 +23,6 @@
       <p><a href="" tal:content="options/title" tal:attributes="href options/link"></a></p>
 
       <tal:block tal:condition="options/description">
-        <p class="details" i18n:translate="label_details">Details:</p>
         <tal:block tal:repeat="paragraph options/description">
           <p tal:content="structure paragraph" />
         </tal:block>

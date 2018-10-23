@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-01 09:34+0000\n"
+"POT-Creation-Date: 2018-10-23 11:27+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -149,11 +149,6 @@ msgstr "message GEVER"
 msgid "label_daily_digest"
 msgstr "Résumé quotidien"
 
-#. Default: "Details:"
-#: ./opengever/activity/templates/notification.pt
-msgid "label_details"
-msgstr "Détails:"
-
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
@@ -170,8 +165,8 @@ msgid "label_mail"
 msgstr "e-mail"
 
 #. Default: "Notification settings"
+#: ./opengever/activity/browser/templates/notification_mail_macros.pt
 #: ./opengever/activity/browser/templates/settings.pt
-#: ./opengever/activity/templates/digest.pt
 msgid "label_notification_settings"
 msgstr "paramètres de notification"
 

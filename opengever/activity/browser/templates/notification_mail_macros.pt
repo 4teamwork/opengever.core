@@ -159,6 +159,9 @@
       }
 
     </style>
+
+    <metal:styleslot define-slot="style_slot" />
+
     <!-- Progressive Enhancements : END -->
 
     <!-- What it does: Makes background images in 72ppi Outlook render at correct size. -->
@@ -219,7 +222,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td style="padding: 40px; font-family: Arial, sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
+                  <td class="email-content" style="padding: 40px; font-family: Arial, sans-serif; font-size: 15px; line-height: 140%; color: #555555;">
                       <metal:content define-slot="content">
                     </metal:content>
                   </td>
