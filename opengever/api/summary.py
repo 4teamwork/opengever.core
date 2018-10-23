@@ -1,12 +1,7 @@
-from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.base.interfaces import IReferenceNumber
-from opengever.base.utils import get_preferred_language_code
-from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.interfaces import ISerializeToJsonSummary
-from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
-from plone.rfc822.interfaces import IPrimaryFieldInfo
+from opengever.api.listing import create_list_item
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -42,68 +37,4 @@ class GeverJSONSummarySerializer(DefaultJSONSummarySerializer):
         else:
             field_list = ['@type', 'title', 'description', 'review_state']
 
-        obj = IContentListingObject(self.context)
-        summary = json_compatible({
-            '@id': obj.getURL(),
-        })
-
-        for field in field_list:
-            accessor = FIELD_ACCESSORS.get(field)
-            if accessor is None:
-                continue
-            if isinstance(accessor, str):
-                value = getattr(obj, accessor, None)
-                if callable(value):
-                    value = value()
-            else:
-                value = accessor(obj)
-            summary[field] = json_compatible(value)
-
-        if ('title' in summary and
-                ITranslatedTitleSupport.providedBy(self.context)):
-            # Update title to contain translated title in negotiated language
-            attr = 'title_{}'.format(get_preferred_language_code())
-            summary['title'] = getattr(self.context, attr)
-
-        return summary
-
-
-def filesize(obj):
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return 0
-    if info.value is None:
-        return 0
-    return info.value.size
-
-
-def filename(obj):
-    try:
-        info = IPrimaryFieldInfo(obj.getObject())
-    except TypeError:
-        return None
-    if info.value is None:
-        return None
-    return info.value.filename
-
-
-def reference_number(obj):
-    refnum = IReferenceNumber(obj.getObject(), None)
-    if refnum:
-        return refnum.get_number()
-
-
-FIELD_ACCESSORS = {
-    '@type': 'PortalType',
-    'created': 'created',
-    'creator': 'Creator',
-    'description': 'Description',
-    'filename': filename,
-    'filesize': filesize,
-    'mimetype': 'getContentType',
-    'modified': 'modified',
-    'reference_number': reference_number,
-    'review_state': 'review_state',
-    'title': 'Title',
-}
+        return create_list_item(self.context, field_list)
