@@ -777,13 +777,15 @@ class BaseSQLModelSource(BaseQuerySoure):
         return self.terms
 
 
-class AllOrgUnitsSource(BaseSQLModelSource):
+class CurrentAdminUnitOrgUnitsSource(BaseSQLModelSource):
 
     model_class = OrgUnit
 
     @property
     def base_query(self):
-        return OrgUnit.query.filter(OrgUnit.enabled == True)  # noqa
+        admin_unit = get_current_admin_unit()
+        return OrgUnit.query.filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
+                            .filter(OrgUnit.enabled == True)  # noqa
 
     @property
     def search_query(self):
@@ -791,10 +793,10 @@ class AllOrgUnitsSource(BaseSQLModelSource):
 
 
 @implementer(IContextSourceBinder)
-class AllOrgUnitsSourceBinder(object):
+class CurrentAdminUnitOrgUnitsSourceBinder(object):
 
     def __call__(self, context):
-        return AllOrgUnitsSource(context)
+        return CurrentAdminUnitOrgUnitsSource(context)
 
 
 class AllGroupsSource(BaseSQLModelSource):

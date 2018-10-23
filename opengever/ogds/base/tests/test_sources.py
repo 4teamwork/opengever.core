@@ -4,9 +4,10 @@ from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.schema import SolrSchema
 from mock import MagicMock
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllGroupsSource
-from opengever.ogds.base.sources import AllOrgUnitsSource
 from opengever.ogds.base.sources import AllUsersAndGroupsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
@@ -17,6 +18,7 @@ from opengever.ogds.models.group import Group
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_string
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from zope.component import getUtility
 from zope.schema.vocabulary import SimpleTerm
@@ -866,20 +868,31 @@ class TestContactsSource(FunctionalTestCase):
         self.assertEquals([], self.source.search('Hugo'))
 
 
-class TestAllOrgUnitsSource(IntegrationTestCase):
+class TestCurrentAdminUnitOrgUnitsSource(IntegrationTestCase):
 
     def setUp(self):
-        super(TestAllOrgUnitsSource, self).setUp()
-        self.source = AllOrgUnitsSource(self.portal)
+        super(TestCurrentAdminUnitOrgUnitsSource, self).setUp()
+        self.source = CurrentAdminUnitOrgUnitsSource(self.portal)
+
         create(Builder('org_unit')
                .id('afi')
                .having(title=u'Amt f\xfcr Informatik',
                        admin_unit_id='plone',
                        enabled=False))
 
+        self.additional = create(Builder('admin_unit')
+                                 .id('additional'))
+        self.org_unit = create(Builder('org_unit')
+                               .id('ska')
+                               .having(title=u'Staatskanzlei',
+                                       admin_unit=self.additional,
+                                       enabled=True)
+                               .with_default_groups())
+
     def test_all_org_unit_ids_are_valid(self):
         self.assertIn('fa', self.source)
         self.assertIn('afi', self.source)
+        self.assertIn('ska', self.source)
 
     def test_not_existing_org_unit_ids(self):
         self.assertNotIn('not', self.source)
@@ -899,6 +912,17 @@ class TestAllOrgUnitsSource(IntegrationTestCase):
     def test_invalid_token_raises_lookup_error(self):
         with self.assertRaises(LookupError):
             self.source.getTermByToken('invalid-id')
+
+    def test_do_not_find_org_units_of_other_admin_units(self):
+        self.assertEqual(1, len(self.source.search('Finanzamt')))
+        self.assertEqual(0, len(self.source.search('Staatskanzlei')))
+
+        api.portal.set_registry_record('current_unit_id',
+                                       self.additional.id().decode('utf-8'),
+                                       IAdminUnitConfiguration)
+
+        self.assertEqual(0, len(self.source.search('Finanzamt')))
+        self.assertEqual(1, len(self.source.search('Staatskanzlei')))
 
 
 class TestAllGroupsSource(IntegrationTestCase):
