@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Make sure our Diazo theme doesn't drop data-base-url attribute. [lgraf]
 - Bump Plone version to 4.3.18. [Rotonen, lgraf]
 - Bump ftw.solr to 2.3.0 to get patched (optimized) reindexObjectSecurity(). [lgraf]

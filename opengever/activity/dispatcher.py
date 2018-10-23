@@ -41,11 +41,8 @@ class NotificationDispatcher(object):
 
     def dispatch_needed(self, notification):
         userid = notification.userid
-        setting = self.get_setting(notification.activity.kind, userid)
-        if not setting:
-            return False
 
-        dispatched_roles = getattr(setting, self.roles_key)
+        dispatched_roles = self.get_dispatched_roles_for(notification.activity.kind, userid)
         if not dispatched_roles:
             return False
 
@@ -59,6 +56,26 @@ class NotificationDispatcher(object):
                 return True
 
         return False
+
+    def get_dispatched_roles_for(self, activity_kind, userid):
+        """Returns a frozenset containing all activated notification-roles for
+        the given activity_kind for the current dispatcher roles_key (digest,
+        badge, mail).
+
+        I.e. to get notified about added tasks through badge-notification if
+        the user is marked as responsible, the user can select the specific setting
+        within the notification-settings form.
+
+        This function would return this selected role for the specific dispatcher.
+        In our example, it would return:
+
+        frozenset(['task_responsible'])
+
+        for the badge-dispatcher
+        """
+        setting = self.get_setting(activity_kind, userid)
+        fallback = frozenset([])
+        return getattr(setting, self.roles_key, fallback) if setting else fallback
 
     def dispatch_notifications(self, activity):
         not_dispatched = []
