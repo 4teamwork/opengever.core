@@ -320,13 +320,6 @@
       permission="cmf.AddPortalContent"
       />
 
-  <browser:page
-      for="*"
-      class=".macros.View"
-      name="meeting-macros"
-      permission="zope2.View"
-      />
-
   <adapter
       factory=".committeeforms.AddView"
       provides="zope.publisher.interfaces.browser.IBrowserPage"
