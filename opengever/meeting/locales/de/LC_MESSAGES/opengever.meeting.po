@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-09 09:12+0000\n"
+"POT-Creation-Date: 2018-10-24 12:57+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -845,6 +845,7 @@ msgid "label_closed_meetings"
 msgstr "Vergangene Sitzungen"
 
 #. Default: "Comment"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "label_comment"
 msgstr "Kommentar"

@@ -84,9 +84,9 @@
                   <a tal:condition="view/is_comment_allowed" tal:attributes="href view/comment_url"
                      id="comment_proposal" class="proposalCommented"
                      title="Comment"
-                     i18n:attributes="title">
+                     i18n:attributes="title label_comment">
                       <span i18n:translate="label_comment" class="subMenuTitle actionText">
-                        comment
+                        Comment
                       </span>
                   </a>
                 </li>

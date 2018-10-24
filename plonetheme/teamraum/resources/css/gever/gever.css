@@ -2433,7 +2433,7 @@ readers do not read off random characters that represent icons */
 
 .gv-schedule:before { content: ""; }
 
-.gv-proposal:before { content: ""; }
+.gv-proposal:before, .actionButtons .create-successor-proposal-button:before { content: ""; }
 
 .gv-proposaltemplate:before { content: ""; }
 

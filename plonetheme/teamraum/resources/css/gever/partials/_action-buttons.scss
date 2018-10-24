@@ -131,6 +131,10 @@ ul.tabbedview-action-list {
   @extend .gv-comment;
 }
 
+.actionButtons .create-successor-proposal-button {
+  @extend .gv-proposal;
+}
+
 #tabbedview-body {
   .file-action-buttons, .editActions, .updateActions {
     margin-left: 0;
