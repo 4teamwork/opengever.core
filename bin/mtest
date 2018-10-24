@@ -390,18 +390,13 @@ def main(layers=None, modules=None):
     return False
 
 
-def get_concurrency():
-    # Counter system congestion and hyperthreading, FWIW
-    return max(cpu_count() // 2 - 1, 1)
-
-
 # Having the __main__ guard is necessary for multiprocessing.Pool().
 if __name__ == '__main__':
     # Globals
     environ['PYTHONUNBUFFERED'] = '1'
     environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-    CONCURRENCY = int(environ.get('MTEST_PROCESSORS', get_concurrency()))
+    CONCURRENCY = int(cpu_count())
     BUILDOUT_PATH = path.abspath(path.join(__file__, '..', '..'))
     OPENGEVER_PATH = path.join(BUILDOUT_PATH, 'opengever')
     SOURCE_PATH = path.join(BUILDOUT_PATH, 'src')
