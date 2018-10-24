@@ -170,7 +170,8 @@ def split(batch):
         return (batch, )
 
     original_count = batch.get('original_count')
-    chunksize = max(minsize_mapping.get(layer), int(ceil(original_count / float(CONCURRENCY))))
+    chunk_count = min(ceil(original_count / float(minsize_mapping.get(layer))), CONCURRENCY)
+    chunksize = original_count / float(chunk_count)
 
     splinters = []
     for chunk in chunks(batch.get('testclasses').items(), chunksize):
