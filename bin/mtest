@@ -27,7 +27,6 @@ from signal import signal
 from subprocess import CalledProcessError
 from subprocess import check_output
 from subprocess import STDOUT
-from time import sleep
 from time import time
 import re
 import sys
@@ -304,48 +303,6 @@ def run_tests(test_run_params):
     return result
 
 
-def handle_results(results):
-    failed_tests = set()
-    job_count = len(results)
-    runtime = 0
-
-    while results:
-        sleep(1)
-
-        mature_indices = []
-        mature_results = []
-
-        for i, result in enumerate(results):
-            if result.ready():
-                mature_indices.append(i)
-                # The enumeration index can be off for the .pop() otherwise
-                break
-
-        for i in mature_indices:
-            mature_results.append(results.pop(i).get())
-
-        for result in mature_results:
-            returncode = result.get('returncode', 1)
-            runtime += result.get('runtime')
-            if returncode:
-                failed_tests.add(result.get('layer'))
-
-    error_count = len(failed_tests)
-
-    if error_count:
-        logger.error('%d / %d jobs failed.', error_count, job_count)
-
-        for layer in failed_tests:
-            logger.error('Failures in %s', layer)
-
-    logger.info(
-        'Aggregate runtime %s.',
-        humanize_time(runtime)
-        )
-
-    return len(failed_tests) == 0
-
-
 def main(layers=None, modules=None):
     """Discovers and times tests in parallel via multiprocessing.Pool()."""
     # Remove *.py[co] files to avoid race conditions with parallel workers
@@ -367,25 +324,33 @@ def main(layers=None, modules=None):
     # default IPC mechanism
     memory_handler.flush()
 
+    failed_tests = set()
+    job_count = len(test_run_params)
+    runtime = 0
+
     start = time()
 
     pool = Pool(CONCURRENCY)
 
-    results = []
-
-    for params in test_run_params:
-        # Alleviate cPickle load bursting for IPC
-        sleep(0.1)
-        results.append(pool.apply_async(run_tests, (params, )))
-
-    success = handle_results(results)
+    for result in pool.imap_unordered(run_tests, test_run_params):
+        runtime += result.get('runtime')
+        if result.get('returncode', 1):
+            failed_tests.add(result.get('layer'))
 
     pool.close()
     pool.join()
 
+    error_count = len(failed_tests)
+
+    if error_count:
+        logger.error('%d / %d jobs failed.', error_count, job_count)
+        for layer in failed_tests:
+            logger.error('Failures in %s', layer)
+
+    logger.info('Aggregate runtime %s.', humanize_time(runtime))
     logger.info('Wallclock runtime %s.', humanize_time(time() - start))
 
-    if success:
+    if not error_count:
         logger.info('No failed tests.')
         return True
 
