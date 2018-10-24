@@ -435,7 +435,7 @@ class OpengeverContentFixture(object):
             .within(self.templates)
             ))
 
-        with self.features('doc-properties', ):
+        with self.features('doc-properties'):
             self.register('docprops_template', create(
                 Builder('document')
                 .titled(u'T\xc3\xb6mpl\xc3\xb6te Mit')
@@ -444,7 +444,7 @@ class OpengeverContentFixture(object):
                 .within(self.templates)
                 ))
 
-        with self.features('meeting', ):
+        with self.features('meeting'):
             self.meeting_template = self.register('meeting_template', create(
                 Builder('meetingtemplate')
                 .titled(u'Meeting T\xc3\xb6mpl\xc3\xb6te')
@@ -1144,7 +1144,7 @@ class OpengeverContentFixture(object):
 
     @staticuid()
     def create_shadow_document(self):
-        with self.features('oneoffixx', ):
+        with self.features('oneoffixx'):
             shadow_document = self.register('shadow_document', create(
                 Builder('document')
                 .within(self.dossier)

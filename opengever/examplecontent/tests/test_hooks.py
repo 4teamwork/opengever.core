@@ -17,7 +17,6 @@ class TestHooks(IntegrationTestCase):
         applyProfile(api.portal.get(), 'opengever.examplecontent:empty_templates')
         applyProfile(api.portal.get(), 'opengever.examplecontent:repository_minimal')
         applyProfile(api.portal.get(), 'opengever.examplecontent:municipality_content')
-        applyProfile(api.portal.get(), 'opengever.examplecontent:init')
 
         self.assertEqual(7, Proposal.query.count())
         self.assertEqual(4, AgendaItem.query.count())

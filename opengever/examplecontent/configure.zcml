@@ -16,8 +16,7 @@
       additional_profiles="opengever.setup:default_content
                            opengever.examplecontent:empty_templates
                            opengever.examplecontent:repository_minimal
-                           opengever.examplecontent:municipality_content
-                           opengever.examplecontent:init"
+                           opengever.examplecontent:municipality_content"
       admin_unit_id="fd"
       administrator_group="gever_admins"
       records_manager_group="record_managers"
@@ -30,8 +29,7 @@
       additional_profiles="opengever.setup:default_content
                            opengever.examplecontent:empty_templates
                            opengever.examplecontent:repository_minimal
-                           opengever.examplecontent:municipality_content
-                           opengever.examplecontent:init"
+                           opengever.examplecontent:municipality_content"
       admin_unit_id="ska"
       administrator_group="gever_admins"
       records_manager_group="record_managers"
@@ -56,14 +54,6 @@
       name="default-ska"
       title="opengever.examplecontent: default-ska"
       directory="profiles/default-ska"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="init"
-      title="opengever.examplecontent: init"
-      directory="profiles/init"
-      description="initialize example content for developing "
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
