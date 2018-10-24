@@ -167,6 +167,7 @@ def split(batch):
 
     if layer not in minsize_mapping or CONCURRENCY < 2:
         batch['count'] = sum(batch.get('testclasses').values())
+        del batch['testclasses']
         return (batch, )
 
     original_count = batch.get('original_count')
