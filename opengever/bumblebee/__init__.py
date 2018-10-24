@@ -8,7 +8,10 @@ _ = MessageFactory('opengever.bumblebee')
 
 
 BUMBLEBEE_VIEW_COOKIE_NAME = 'bumblebee-view'
-SUPPORTED_CONTENT_TYPES = ['opengever.document.document', 'ftw.mail.mail']
+SUPPORTED_CONTENT_TYPES = ['opengever.document.document',
+                           'ftw.mail.mail',
+                           'opengever.meeting.sablontemplate',
+                           'opengever.meeting.proposaltemplate']
 
 
 def is_bumblebee_feature_enabled():
