@@ -32,5 +32,16 @@
         "phone_mobile": "079 667 52 87",
         "company": "Bauer lagier",
         "function": "Chef"
+    }, {
+        "_path": "/kontakte/evil-contact",
+        "_type": "opengever.contact.contact",
+        "salutation": "<script>alert('evil');</script>",
+        "firstname": "Evil contact <script>alert('evil');</script>",
+        "lastname": "<script>alert('evil');</script>",
+        "email": "<script>alert('evil');</script>",
+        "phone_office": "<script>alert('evil');</script>",
+        "phone_mobile": "<script>alert('evil');</script>",
+        "company": "<script>alert('evil');</script>",
+        "function": "<script>alert('evil');</script>"
     }
 ]

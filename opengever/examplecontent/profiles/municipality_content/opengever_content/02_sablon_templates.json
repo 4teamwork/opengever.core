@@ -34,5 +34,10 @@
         "_type": "opengever.meeting.sablontemplate",
         "title": "Schlussteil Protokollauszug",
         "file:file": "templates/protokollauszug_schlussteil.docx"
+    }, {
+        "_path": "/vorlagen/evil-sablon-template",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Evil sablon template <script>alert('evil');</script>",
+        "file:file": "templates/protokollauszug_schlussteil.docx"
     }
 ]

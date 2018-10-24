@@ -36,6 +36,14 @@
                 "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen",
                 "ad_hoc_template": "resolvePath::/vorlagen/ad-hoc-template",
                 "group_id": "og_demo-ftw_users"
+            },
+            {
+                "_id": "evil-committee-1",
+                "_type": "opengever.meeting.committee",
+                "title": "Evil committee <script>alert('evil');</script>",
+                "repository_folder": "resolvePath::/ordnungssystem/fuehrung/gemeindeversammlung-gemeindeparlament-legislative/versammlungen-sitzungen",
+                "ad_hoc_template": "resolvePath::/vorlagen/evil-proposal-template-1",
+                "group_id": "og_demo-ftw_users"
             }
 
         ]
