@@ -29,7 +29,6 @@ from subprocess import PIPE
 from subprocess import Popen
 from time import sleep
 from time import time
-import locale
 import re
 import sys
 
@@ -133,11 +132,6 @@ def test_discovery(layers=None, modules=None):
     if not modules:
         modules = ()
 
-    output_encoding = sys.stdout.encoding
-
-    if output_encoding is None:
-        output_encoding = locale.getpreferredencoding()
-
     cmdline = ['bin/test', '--list-tests']
     for layer in layers:
         cmdline.append('--layer')
@@ -147,7 +141,7 @@ def test_discovery(layers=None, modules=None):
         cmdline.append(module)
 
     with open(devnull, 'w') as f:
-        output = check_output(cmdline, stderr=f).decode(output_encoding).splitlines()
+        output = check_output(cmdline, stderr=f, universal_newlines=True).splitlines()
 
     return output
 
