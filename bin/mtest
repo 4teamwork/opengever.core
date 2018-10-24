@@ -12,6 +12,7 @@ from math import ceil
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 from os import access
+from os import devnull
 from os import environ
 from os import killpg
 from os import path
@@ -144,7 +145,11 @@ def test_discovery(layers=None, modules=None):
     for module in modules:
         cmdline.append('-m')
         cmdline.append(module)
-    return check_output(cmdline).decode(output_encoding).splitlines()
+
+    with open(devnull, 'w') as f:
+        output = check_output(cmdline, stderr=f).decode(output_encoding).splitlines()
+
+    return output
 
 
 def chunks(chunkable, chunksize):
