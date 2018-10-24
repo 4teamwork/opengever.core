@@ -284,6 +284,20 @@ class TestResponseDescriptions(FunctionalTestCase):
             self.get_latest_answer(browser))
 
     @browsing
+    def test_escape_document_added_description_title(self, browser):
+        create(Builder('document')
+               .titled(u'A title<script>evil</script>')
+               .within(self.task))
+
+        browser.login()
+        self.visit_overview(browser)
+
+        self.assertEqual(
+            u'Document A title added by '
+            u'M\xfcller Hans (test_user_1_)',
+            self.get_latest_answer(browser))
+
+    @browsing
     def test_adding_mail_creates_response(self, browser):
         create(Builder('mail')
                .with_dummy_message()
