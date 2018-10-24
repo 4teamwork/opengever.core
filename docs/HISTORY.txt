@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Assign correct roles in development content. [deiferni]
+- Place successor proposal button next to workflow buttons. [Kevin Bieri]
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Prefill task-reminder select field on task response form. [elioschmutz]
 - Make sure our Diazo theme doesn't drop data-base-url attribute. [lgraf]
