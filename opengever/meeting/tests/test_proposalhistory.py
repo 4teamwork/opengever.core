@@ -168,7 +168,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
 
         # comment proposal
         comment = u'Bevor einreichen noch erg\xe4nzen'
-        browser.click_on("comment")
+        browser.click_on("Comment")
         browser.fill({'Comment': comment}).submit()
         with self.login(self.meeting_user, browser):
             self.assert_proposal_history_records(
@@ -186,7 +186,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, submitted_proposal)
         # comment proposal
         comment = u'Im n\xe4chsten meeting besprechen?'
-        browser.click_on("comment")
+        browser.click_on("Comment")
         browser.fill({'Comment': comment}).submit()
         self.assert_proposal_history_records(
             u'Proposal commented by M\xfcller Fr\xe4nzi (franzi.muller)',
@@ -206,7 +206,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.open_overview(browser, submitted_proposal)
         # comment proposal
         comment = u'Can comment a decided proposal.'
-        browser.click_on("comment")
+        browser.click_on("Comment")
         browser.fill({'Comment': comment}).submit()
         self.assert_proposal_history_records(
             u'Proposal commented by M\xfcller Fr\xe4nzi (franzi.muller)',

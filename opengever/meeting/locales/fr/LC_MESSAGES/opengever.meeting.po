@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-09 09:12+0000\n"
+"POT-Creation-Date: 2018-10-24 12:57+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -847,6 +847,7 @@ msgid "label_closed_meetings"
 msgstr "Réunions passées"
 
 #. Default: "Comment"
+#: ./opengever/meeting/browser/templates/proposaloverview.pt
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "label_comment"
 msgstr "Commentaire"

@@ -64,23 +64,44 @@
               <td><span tal:replace="structure view/render_protocol_excerpt_document_link" /></td>
             </tr>
           </table>
-          <metal:use use-macro="context/@@meeting-macros/workflow_actions_and_comment" />
-
           <div class="actionButtons">
             <ul class="regular_buttons">
-
-              <li tal:condition="view/is_create_successor_proposal_button_visible">
-                <form method="POST"
-                      tal:attributes="action string:${context/aq_parent/absolute_url}/++add++opengever.meeting.proposal">
-                  <input type="hidden" name="predecessor"
-                         tal:attributes="value here/UID" />
-                  <input type="submit"
-                         class="create-successor-proposal-button button"
-                         value="Create successor proposal"
-                         i18n:attributes="value button_create_successor_proposal" />
-                </form>
-              </li>
-
+                <tal:block tal:condition="view/transitions" repeat="transition view/transitions">
+                  <li tal:condition="transition/visible">
+                    <a tal:attributes="href python: view.transition_url(transition);
+                                       title transition/title;
+                                       id transition/name;
+                                       class string: ${transition/name};"
+                       i18n:attributes="title">
+                        <span tal:content="transition/title"
+                              i18n:translate=""
+                              class="subMenuTitle actionText">
+                        </span>
+                    </a>
+                  </li>
+                </tal:block>
+                <li>
+                  <a tal:condition="view/is_comment_allowed" tal:attributes="href view/comment_url"
+                     id="comment_proposal" class="proposalCommented"
+                     title="Comment"
+                     i18n:attributes="title label_comment">
+                      <span i18n:translate="label_comment" class="subMenuTitle actionText">
+                        Comment
+                      </span>
+                  </a>
+                </li>
+                <li tal:condition="view/is_create_successor_proposal_button_visible">
+                  <form method="POST"
+                        tal:attributes="action string:${context/aq_parent/absolute_url}/++add++opengever.meeting.proposal">
+                    <input type="hidden" name="predecessor"
+                           tal:attributes="value here/UID" />
+                    <button type="submit"
+                           class="create-successor-proposal-button button"
+                           i18n:translate="button_create_successor_proposal">
+                           Create successor proposal
+                    </button>
+                  </form>
+                </li>
             </ul>
           </div>
 
