@@ -24,9 +24,9 @@ from os import X_OK
 from signal import SIGINT
 from signal import SIGKILL
 from signal import signal
+from subprocess import CalledProcessError
 from subprocess import check_output
-from subprocess import PIPE
-from subprocess import Popen
+from subprocess import STDOUT
 from time import sleep
 from time import time
 import re
@@ -217,10 +217,7 @@ def find_bytecode_files(directory_path):
 
 
 def run_tests(test_run_params):
-    """Run and time 'bin/test --layer layer -m module [-m module]'.
-
-    Return the module name, layer name and stderr.
-    """
+    """Run and time 'bin/test --layer layer -m module [-m module]'."""
     params = ['bin/test']
     params.append('--xml')
 
@@ -256,15 +253,12 @@ def run_tests(test_run_params):
 
     start = time()
 
-    process = Popen(
-        params,
-        env=env,
-        stderr=PIPE,
-        stdout=PIPE,
-        )
-
-    stdout, stderr = process.communicate()
-    returncode = process.returncode
+    try:
+        output = check_output(params, stderr=STDOUT, env=env, universal_newlines=True)
+        returncode = 0
+    except CalledProcessError as e:
+        output = e.output
+        returncode = e.returncode
 
     runtime = time() - start
 
@@ -272,7 +266,6 @@ def run_tests(test_run_params):
         'layer': layer,
         'returncode': returncode,
         'runtime': runtime,
-        'stderr': stderr,
         }
 
     done_args = (
@@ -299,30 +292,8 @@ def run_tests(test_run_params):
         log_output.error('')
         log_output.error(printable_params)
         log_output.error('')
-
-        if stderr:
-            log_output.error('STDERR')
-            log_output.error('')
-            log_output.error(stderr)
-            log_output.error('')
-
-        if returncode:
-            log_output.error('STDOUT')
-            log_output.error('')
-            log_output.error(stdout)
-            log_output.error('')
-
-    elif stderr:
-        log_output.info('')
-        log_output.info('Command line')
-        log_output.info('')
-        log_output.info(printable_params)
-        log_output.info('')
-
-        log_output.info('STDERR')
-        log_output.info('')
-        log_output.info(stderr)
-        log_output.info('')
+        log_output.error(output)
+        log_output.error('')
 
         # Explicitly flush to trigger IPC over cPickle (and to avoid
         # carryover-fragment-via-pickling)
@@ -333,7 +304,6 @@ def run_tests(test_run_params):
 
 def handle_results(results):
     failed_tests = set()
-    unclean_stderr = set()
     job_count = len(results)
     runtime = 0
 
@@ -354,14 +324,9 @@ def handle_results(results):
 
         for result in mature_results:
             returncode = result.get('returncode', 1)
-            stderr = result.get('stderr')
             runtime += result.get('runtime')
-
             if returncode:
                 failed_tests.add(result.get('layer'))
-
-            if stderr:
-                unclean_stderr.add(result.get('layer'))
 
     error_count = len(failed_tests)
 
@@ -370,14 +335,6 @@ def handle_results(results):
 
         for layer in failed_tests:
             logger.error('Failures in %s', layer)
-
-    stderr_count = len(unclean_stderr)
-
-    if stderr_count:
-        logger.info('%d / %d jobs had an unclean STDERR.', stderr_count, job_count)
-
-        for layer in unclean_stderr:
-            logger.info('Unclean STDERR in %s', layer)
 
     logger.info(
         'Aggregate runtime %s.',
