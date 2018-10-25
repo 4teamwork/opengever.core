@@ -129,8 +129,10 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return self._render_simplelink()
 
     def translated_review_state(self):
-        return translate(
-            self.review_state(), domain='plone', context=self.request)
+        review_state = self.review_state()
+        if review_state:
+            return translate(
+                review_state, domain='plone', context=self.request)
 
     def responsible_fullname(self):
         return display_name(self._brain.responsible)
