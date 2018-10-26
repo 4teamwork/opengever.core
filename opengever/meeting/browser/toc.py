@@ -29,9 +29,8 @@ class DownloadAlphabeticalTOC(BrowserView):
                           'not be generated.'),
                 request=self.request,
                 type='error')
-
-            return self.request.RESPONSE.redirect(
-                "{}/#periods".format(self.context.parent.absolute_url()))
+            response.setHeader('X-ogg-reload-page', "True")
+            return
 
         sablon = Sablon(template)
         try:

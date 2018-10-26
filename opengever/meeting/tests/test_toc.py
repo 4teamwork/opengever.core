@@ -3,6 +3,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import HTTPServerError
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
@@ -222,6 +223,9 @@ class TestAlphabeticalTOC(FunctionalTestCase):
     def test_shows_statusmessage_when_no_template_is_configured(self, browser):
         url = self.period.get_url(self.committee)
         browser.login().open(url, view='alphabetical_toc')
+        # when an error happens here, the view returns an error
+        # and the page is reloaded in Javascript. Here we reload manually
+        browser.open(url)
         self.assertEqual(u'There is no toc template configured, toc could '
                          'not be generated.',
                          error_messages()[0])
@@ -333,6 +337,9 @@ class TestTOCByRepository(TestAlphabeticalTOC):
     def test_shows_statusmessage_when_no_template_is_configured(self, browser):
         url = self.period.get_url(self.committee)
         browser.login().open(url, view='repository_toc')
+        # when an error happens here, the view returns an error
+        # and the page is reloaded in Javascript. Here we reload manually
+        browser.open(url)
         self.assertEqual(u'There is no toc template configured, toc could '
                          'not be generated.',
                          error_messages()[0])
