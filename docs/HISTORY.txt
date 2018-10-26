@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Use plone.protect class of confirm-action view. [elioschmutz]
 - Assign correct roles in development content. [deiferni]
 - Place successor proposal button next to workflow buttons. [Kevin Bieri]
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
