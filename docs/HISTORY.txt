@@ -10,6 +10,7 @@ Changelog
 - Use plone.protect class of confirm-action view. [elioschmutz]
 - Assign correct roles in development content. [deiferni]
 - Place successor proposal button next to workflow buttons. [Kevin Bieri]
+- Remove document tooltip on touch devices. [Kevin Bieri]
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Prefill task-reminder select field on task response form. [elioschmutz]
 - Use the same template for default notifiaction email like the daily-digest template. [elioschmutz]
