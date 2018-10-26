@@ -56,6 +56,7 @@
   <browser:page
       name="confirm-action"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class="plone.protect.views.ConfirmView"
       template="confirm.pt"
       permission="zope2.View"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"

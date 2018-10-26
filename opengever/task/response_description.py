@@ -1,3 +1,4 @@
+from opengever.base.utils import to_safe_html
 from opengever.ogds.base.actor import Actor
 from opengever.task import _
 
@@ -367,7 +368,7 @@ class DocumentAdded(ResponseDescription):
 
     def msg(self):
         docs, subtasks = self.response.get_added_objects()
-        label = u' '.join([doc.title for doc in docs])
+        label = u' '.join([to_safe_html(doc.title) for doc in docs])
 
         return _('transition_add_document',
                  u'Document ${doc} added by ${user}',

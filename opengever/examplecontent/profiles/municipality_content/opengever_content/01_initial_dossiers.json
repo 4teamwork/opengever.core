@@ -177,5 +177,22 @@
     "_type": "opengever.dossier.businesscasedossier",
     "responsible": "philippe.gross",
     "title": "OGGBundle Import"
+  },
+
+  {
+    "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/evil-dossier-1",
+    "_type": "opengever.dossier.businesscasedossier",
+    "responsible": "philippe.gross",
+    "title": "Evil dossier <script>alert('evil');</script>",
+    "description": "<script>alert('evil');</script>",
+    "_children": [
+      {
+        "_id": "evil-document-1",
+        "_type": "opengever.document.document",
+        "title": "Evil document <script>alert('evil');</script>",
+        "file:file": "files/subdossier.docx",
+        "description": "<script>alert('evil');</script>"
+      }
+    ]
   }
 ]

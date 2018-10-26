@@ -38,6 +38,18 @@
             "responsible": "responsible",
             "responsible_client": "interactive_users",
             "task_type": "direct-execution"
+        },
+        {
+            "_id": "evil-tasktemplate-1",
+            "_type": "opengever.tasktemplates.tasktemplate",
+            "title": "Evil tasktemplate <script>alert('evil');</script>",
+            "description": "<script>alert('evil');</script>",
+            "issuer": "responsible",
+            "task_type": "correction",
+            "deadline": 7,
+            "preselected": true,
+            "responsible_client": "afi",
+            "responsible": "philippe.gross"
         }
     ]
 }]

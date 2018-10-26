@@ -206,5 +206,19 @@
     "_type": "opengever.dossier.dossiertemplate",
     "title": "Kleinvorhaben",
     "_children": []
+},
+{
+    "_path": "/vorlagen/evil-dossiertemplate-1",
+    "_type": "opengever.dossier.dossiertemplate",
+    "title": "Evil dossiertemplate <script>alert('evil');</script>",
+    "description": "<script>alert('evil');</script>",
+    "_children": [
+        {
+            "_id": "evil-dossiertemplate-2",
+            "_type": "opengever.dossier.dossiertemplate",
+            "title": "Evil dossiertemplate <script>alert('evil');</script>",
+            "description": "<script>alert('evil');</script>"
+        }
+    ]
 }
 ]

@@ -10,5 +10,11 @@
         "_type": "opengever.meeting.proposaltemplate",
         "title": "Traktandum ohne Antrag",
         "file:file": "templates/ad_hoc.docx"
+    },
+    {
+        "_path": "/vorlagen/evil-proposal-template-1",
+        "_type": "opengever.meeting.proposaltemplate",
+        "title": "Evil proposal template <script>alert('evil');</script>",
+        "file:file": "templates/ad_hoc.docx"
     }
 ]
