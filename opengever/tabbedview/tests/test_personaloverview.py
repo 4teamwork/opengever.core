@@ -250,27 +250,23 @@ class TestGlobalTaskListings(IntegrationTestCase):
         self.login(self.dossier_responsible, browser=browser)
         browser.open(view='tabbedview_view-myissuedtasks')
         expected_tasks = [
-            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEquals(expected_tasks, found_tasks)
         self.task.get_sql_object().issuer = 'kathi.barfuss'
         browser.open(view='tabbedview_view-myissuedtasks')
         expected_tasks = [
-            u'F\xf6rw\xe4rding',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEquals(expected_tasks, found_tasks)
@@ -290,8 +286,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
-        ]
+            ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
         self.task.get_sql_object().assigned_org_unit = 'additional'
@@ -306,8 +301,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
-        ]
+            ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
 
@@ -326,8 +320,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
-        ]
+            ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
         create(
@@ -351,7 +344,6 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
-            u'Ein notwendiges \xdcbel',
         ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
