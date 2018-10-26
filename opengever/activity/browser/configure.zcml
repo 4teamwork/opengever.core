@@ -38,6 +38,14 @@
       allowed_attributes="list save reset"
       />
 
+  <browser:page
+      name="notification_mail_macros"
+      for="*"
+      permission="zope2.View"
+      template="templates/notification_mail_macros.pt"
+      class=".notification_mail_macros.View"
+      />
+
   <adapter factory=".listing.NotificationTableSource" />
 
 </configure>

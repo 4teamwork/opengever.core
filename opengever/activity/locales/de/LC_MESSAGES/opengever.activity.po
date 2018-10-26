@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-01 09:34+0000\n"
+"POT-Creation-Date: 2018-10-23 11:27+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,11 +147,6 @@ msgstr "GEVER Benachrichtigung"
 msgid "label_daily_digest"
 msgstr "Tageszusammenfassung"
 
-#. Default: "Details:"
-#: ./opengever/activity/templates/notification.pt
-msgid "label_details"
-msgstr "Details:"
-
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
@@ -168,8 +163,8 @@ msgid "label_mail"
 msgstr "Mail"
 
 #. Default: "Notification settings"
+#: ./opengever/activity/browser/templates/notification_mail_macros.pt
 #: ./opengever/activity/browser/templates/settings.pt
-#: ./opengever/activity/templates/digest.pt
 msgid "label_notification_settings"
 msgstr "Benachrichtigungs-Einstellungen"
 

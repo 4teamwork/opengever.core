@@ -103,7 +103,7 @@ class TestEmailNotification(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.create_task_via_browser(browser)
         raw_mail = Mailing(self.portal).pop()
-        link = '<p><a href=3D"http://nohost/plone/@@resolve_notification?notification_i=\nd=3D1">Test Task</a></p>'
+        link = '<p><a href=3D"http://nohost/plone/@@resolve_notification?notification=\n_id=3D1">Test Task</a></p>'
         self.assertIn(link, raw_mail.strip())
 
     @browsing
