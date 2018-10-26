@@ -13,6 +13,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.query import extend_query_with_textfilter
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.workspace.utils import get_workspace_user_ids
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -27,6 +28,7 @@ from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
+import re
 
 
 def is_solr_feature_enabled():
@@ -777,13 +779,15 @@ class BaseSQLModelSource(BaseQuerySoure):
         return self.terms
 
 
-class AllOrgUnitsSource(BaseSQLModelSource):
+class CurrentAdminUnitOrgUnitsSource(BaseSQLModelSource):
 
     model_class = OrgUnit
 
     @property
     def base_query(self):
-        return OrgUnit.query.filter(OrgUnit.enabled == True)  # noqa
+        admin_unit = get_current_admin_unit()
+        return OrgUnit.query.filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
+                            .filter(OrgUnit.enabled == True)  # noqa
 
     @property
     def search_query(self):
@@ -791,10 +795,10 @@ class AllOrgUnitsSource(BaseSQLModelSource):
 
 
 @implementer(IContextSourceBinder)
-class AllOrgUnitsSourceBinder(object):
+class CurrentAdminUnitOrgUnitsSourceBinder(object):
 
     def __call__(self, context):
-        return AllOrgUnitsSource(context)
+        return CurrentAdminUnitOrgUnitsSource(context)
 
 
 class AllGroupsSource(BaseSQLModelSource):
@@ -824,6 +828,35 @@ class AllGroupsSourcePrefixed(AllGroupsSource):
         return SimpleTerm(obj.id(),
                           '{}{}'.format(self.GROUP_PREFIX, obj.id()),
                           obj.label())
+
+
+class AllFilteredGroupsSource(AllGroupsSource):
+    """Filters the searched terms by white and black-listed groups
+    """
+
+    def search(self, query_string):
+        terms = super(AllGroupsSource, self).search(query_string)
+        black_list_prefix = api.portal.get_registry_record(
+            'black_list_prefix', ISharingConfiguration)
+        white_list_prefix = api.portal.get_registry_record(
+            'white_list_prefix', ISharingConfiguration)
+
+        def terms_filter(term):
+            if re.search(black_list_prefix, term.value):
+                if re.search(white_list_prefix, term.value):
+                    return True
+                return False
+            return True
+
+        terms = filter(terms_filter, terms)
+        return terms
+
+
+@implementer(IContextSourceBinder)
+class AllFilteredGroupsSourceBinder(object):
+
+    def __call__(self, context):
+        return AllFilteredGroupsSource(context)
 
 
 @implementer(IContextSourceBinder)

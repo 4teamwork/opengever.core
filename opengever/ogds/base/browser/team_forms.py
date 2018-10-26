@@ -4,8 +4,8 @@ from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base import _
-from opengever.ogds.base.sources import AllGroupsSourceBinder
-from opengever.ogds.base.sources import AllOrgUnitsSourceBinder
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSourceBinder
+from opengever.ogds.base.sources import AllFilteredGroupsSourceBinder
 from opengever.ogds.models import UNIT_TITLE_LENGTH
 from opengever.ogds.models.team import Team
 from plone.autoform import directives as form
@@ -30,13 +30,13 @@ class ITeam(model.Schema):
     form.widget('groupid', KeywordFieldWidget, async=True)
     groupid = schema.Choice(
         title=_('label_group', default=u'Group'),
-        source=AllGroupsSourceBinder(),
+        source=AllFilteredGroupsSourceBinder(),
         required=True)
 
     form.widget('org_unit_id', KeywordFieldWidget, async=True)
     org_unit_id = schema.Choice(
         title=_('label_org_unit', default=u'Org Unit'),
-        source=AllOrgUnitsSourceBinder(),
+        source=CurrentAdminUnitOrgUnitsSourceBinder(),
         required=True)
 
 
