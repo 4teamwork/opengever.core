@@ -41,3 +41,7 @@ class WrongAgendaItemState(Exception):
 
 class CannotExecuteTransition(Exception):
     """The workflow transition cannot be executed."""
+
+
+class SablonProcessingFailed(Exception):
+    """Processing of the sablon template failed."""

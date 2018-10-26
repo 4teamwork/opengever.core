@@ -7,6 +7,7 @@ from opengever.meeting import _
 from opengever.meeting.exceptions import CannotExecuteTransition
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.exceptions import WrongAgendaItemState
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.protocol import ExcerptProtocolData
@@ -138,6 +139,11 @@ def return_jsonified_exceptions(func):
                   default=u"No ad-hoc agenda-item template has been "
                           u"configured."),
                 status=501).dump()
+
+        except SablonProcessingFailed:
+            return JSONResponse(getRequest()).error(
+                _('Error while processing Sablon template'),
+                status=500).dump()
 
     return wrapper
 

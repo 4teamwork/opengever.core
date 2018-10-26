@@ -2,6 +2,7 @@ from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from opengever.meeting.browser.sablontemplate import SAMPLE_MEETING_DATA
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
 from os.path import join
 from plone.namedfile.field import NamedBlobFile
@@ -20,10 +21,11 @@ def sablon_template_is_valid(value):
     sablon = Sablon(None)
 
     for template_type, data in VALIDATION_DATA.items():
-        sablon.process(json.dumps(data), namedblobfile=value)
-        if sablon.is_processed_successfully():
+        try:
+            sablon.process(json.dumps(data), namedblobfile=value)
             return True
-
+        except SablonProcessingFailed:
+            continue
     return False
 
 

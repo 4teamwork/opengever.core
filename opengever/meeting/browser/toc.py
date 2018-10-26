@@ -1,5 +1,6 @@
 from opengever.meeting import _
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.meeting.toc.repository import RepositoryBasedTOC
@@ -19,6 +20,7 @@ class DownloadAlphabeticalTOC(BrowserView):
         self.model = context.model
 
     def __call__(self):
+        response = self.request.response
         template = self.model.get_toc_template()
         if not template:
             api.portal.show_message(
@@ -32,12 +34,15 @@ class DownloadAlphabeticalTOC(BrowserView):
                 "{}/#periods".format(self.context.parent.absolute_url()))
 
         sablon = Sablon(template)
-        sablon.process(self.get_json_data())
-
-        assert sablon.is_processed_successfully(), sablon.stderr
+        try:
+            sablon.process(self.get_json_data())
+        except SablonProcessingFailed:
+            message = _(u'Error while processing Sablon template')
+            api.portal.show_message(message, request=self.request, type='error')
+            response.setHeader('X-ogg-reload-page', "True")
+            return
 
         filename = self.get_filename().encode('utf-8')
-        response = self.request.response
         response.setHeader('X-Theme-Disabled', 'True')
         response.setHeader('Content-Type', MIME_DOCX)
         response.setHeader("Content-Disposition",

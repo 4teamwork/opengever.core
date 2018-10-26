@@ -1,3 +1,4 @@
+from opengever.meeting.exceptions import SablonProcessingFailed
 from os import environ
 from os.path import join
 from subprocess32 import PIPE
@@ -38,9 +39,10 @@ class Sablon(object):
                 stdin=PIPE, stdout=PIPE, stderr=PIPE)
             self.stdout, self.stderr = subprocess.communicate(input=json_data)
             self.returncode = subprocess.returncode
-            if self.is_processed_successfully():
-                with open(output_path, 'rb') as outfile:
-                    self.file_data = outfile.read()
+            if not self.is_processed_successfully():
+                raise SablonProcessingFailed(self.stderr)
+            with open(output_path, 'rb') as outfile:
+                self.file_data = outfile.read()
         finally:
             shutil.rmtree(tmpdir_path)
 
