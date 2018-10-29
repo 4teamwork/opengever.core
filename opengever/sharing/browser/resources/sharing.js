@@ -8,6 +8,7 @@ var sharingApp = {
     inherit: null,
     principal_search: null,
     isEditable: false,
+    isSaving: false,
   },
 
   beforeMount: function () {
@@ -111,8 +112,9 @@ var sharingApp = {
       }.bind(this));
     },
 
-
     save: function(event){
+      this.isSaving = true
+
       payload = {
         entries: this.entries,
         inherit: this.inherit };
@@ -121,6 +123,7 @@ var sharingApp = {
         // redirect to context and show statusmessage
         window.location = this.context_url + '/sharing/saved';
       }.bind(this));
+
     },
   },
 };
