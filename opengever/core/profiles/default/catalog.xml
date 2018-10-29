@@ -12,6 +12,9 @@
   <column value="title_de" />
   <column value="title_fr" />
 
+  <!-- CHANGED -->
+  <column value="changed" />
+
   <!-- CONTACT -->
   <column value="contactid" />
   <column value="email" />

@@ -1,5 +1,8 @@
 from opengever.base import model
 from Products.CMFCore.utils import getToolByName
+from opengever.base.config import INDEXES
+from opengever.core.catalog import add_catalog_indexes
+import logging
 
 
 DEFAULT_EXTEDIT_ACTION_IDENTIFIER = 'extedit'
@@ -43,3 +46,4 @@ def installed(site):
     remove_standard_extedit_action(site)
     create_models()
     configure_error_log(site)
+    add_catalog_indexes(INDEXES, logging.getLogger('opengever.base'))

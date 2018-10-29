@@ -1,6 +1,8 @@
 from collective.indexing.interfaces import IIndexQueueProcessor
 from collective.indexing.queue import getQueue
+from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -108,3 +110,27 @@ def update_favorites_title(context, event):
         query.update({'title': context.title})
 
         mark_changed(create_session())
+
+
+"""
+The 'changed' field is updated when an object is created
+(IObjectCreatedEvent) and generally when modified by a user
+(IObjectModifiedEvent except when the object is simply reindexed).
+The field is also updated for workflow status changes and when a document
+is checked-in or reverted to an older version. See opengever/base/configure.zcml
+for registered events handled by the 'maybe_update_changed_date' and
+'update_changed_date' handlers.
+"""
+EVENTS_NOT_UPDATING_CHANGED = (IContainerModifiedEvent, ILocalrolesModifiedEvent)
+
+
+def maybe_update_changed_date(context, event):
+    for interface in EVENTS_NOT_UPDATING_CHANGED:
+        if interface.providedBy(event):
+            return
+    update_changed_date(context, event)
+
+
+def update_changed_date(context, event):
+    IChanged(context).changed = DateTime()
+    context.reindexObject(idxs=["changed"])

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-04 14:07+0000\n"
+"POT-Creation-Date: 2018-10-12 11:55+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -78,6 +78,11 @@ msgstr "Valeur archivistique"
 #: opengever/repository/classification.py
 msgid "archival worthy with sampling"
 msgstr "Echantillon"
+
+#. Default: "Date last changed"
+#: ./opengever/base/behaviors/changed.py
+msgid "changed_date"
+msgstr "Dernière modification"
 
 #. Default: "classified"
 #: opengever/repository/classification.py

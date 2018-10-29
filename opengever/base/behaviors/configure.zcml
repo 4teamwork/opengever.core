@@ -106,4 +106,14 @@
       name="sequence_number"
       />
 
+  <!-- Date object last changed by user -->
+  <plone:behavior
+      title="DateChanged"
+      description="Adds date object was last changed by user."
+      provides=".changed.IChanged"
+      factory=".changed.Changed"
+      marker=".changed.IChangedMarker"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>

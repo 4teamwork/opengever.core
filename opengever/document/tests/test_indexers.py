@@ -1,5 +1,7 @@
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
@@ -52,10 +54,11 @@ class TestDocumentIndexers(FunctionalTestCase):
             index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
 
     def test_date_indexers(self):
-        doc1 = create(Builder('document').having(
-            title=u"Doc One",
-            document_date=datetime.date(2011, 1, 1),
-            receipt_date=datetime.date(2011, 2, 1)))
+        with freeze(datetime.datetime(2016, 1, 1, 0, 0)):
+            doc1 = create(Builder('document').having(
+                title=u"Doc One",
+                document_date=datetime.date(2011, 1, 1),
+                receipt_date=datetime.date(2011, 2, 1)))
 
         # document_date
         self.assertEquals(
@@ -68,6 +71,10 @@ class TestDocumentIndexers(FunctionalTestCase):
         # delivery_date
         self.assertEquals(
             obj2brain(doc1).delivery_date, None)
+
+        # changed
+        self.assertEquals(
+            obj2brain(doc1).changed, DateTime(2016, 1, 1, 0, 0))
 
     def test_checked_out_indexer(self):
         doc1 = createContentInContainer(

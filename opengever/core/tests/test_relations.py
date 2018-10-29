@@ -59,6 +59,7 @@ EXPECTED_INTERFACES = [
     'ftw.tabbedview.interfaces.ITabbedView',
     'ftw.tabbedview.interfaces.ITabbedviewUploadable',
     'opengever.base.behaviors.base.IOpenGeverBaseMarker',
+    'opengever.base.behaviors.changed.IChangedMarker',
     'opengever.base.behaviors.classification.IClassificationMarker',
     'opengever.base.behaviors.lifecycle.ILifeCycleMarker',
     'opengever.base.behaviors.sequence.ISequenceNumberBehavior',

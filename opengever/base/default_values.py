@@ -164,7 +164,7 @@ def get_persisted_value_for_field(context, field):
                 return descriptor.fget(storage_impl)
             raise AttributeError(name)
         return value
-    elif classname(storage_impl) in ('TranslatedTitle', 'OGMailBase'):
+    elif classname(storage_impl) in ('TranslatedTitle', 'OGMailBase', 'Changed'):
         # These factories wrap a context that inherits from DexterityContent,
         # accessed via storage_impl.context.
         # So we need to apply the same strategy as for direct attribute

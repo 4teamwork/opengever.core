@@ -80,6 +80,7 @@ FIELDS = {
     'end': ('end', 'end', 'end'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
     'modified': ('modified', 'modified', 'modified'),
+    'changed': ('changed', 'changed', 'changed'),
     'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
     'reference': ('reference', 'reference', 'reference'),
     'reference_number': ('reference', 'reference', 'reference'),

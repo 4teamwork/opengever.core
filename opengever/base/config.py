@@ -1,0 +1,3 @@
+INDEXES = (
+    ('changed', 'DateIndex'),
+)

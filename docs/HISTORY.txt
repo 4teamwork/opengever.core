@@ -40,6 +40,7 @@ Changelog
 - Add is_private field for tasks. [elioschmutz]
 - Vendor opengever.ogds.models into the opengever.core codebase. [Rotonen]
 - Add GET and PATCH endpoints for notifications. [elioschmutz]
+- Add "changed" field, metadata and index. [njohner]
 - Add trashing of protocol excerpts. [njohner]
 - Display title for NullObject in meeting template selection. [njohner]
 - Fix styling of favorite button. [njohner]
