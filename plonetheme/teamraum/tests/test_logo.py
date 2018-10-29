@@ -1,19 +1,10 @@
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
 from plonetheme.teamraum.importexport import CustomStylesUtility
-from plonetheme.teamraum.testing import TEAMRAUMTHEME_FUNCTIONAL_TESTING
+from plonetheme.teamraum.testing import TeamraumThemeTestCase
 from StringIO import StringIO
-from unittest2 import TestCase
 import base64
 
 
-class TestCustomLogo(TestCase):
-
-    layer = TEAMRAUMTHEME_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+class TestCustomLogo(TeamraumThemeTestCase):
 
     def test_default_logo(self):
         view = self.portal.restrictedTraverse('customlogo')

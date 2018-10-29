@@ -1,47 +1,42 @@
-from ftw.builder.testing import BUILDER_LAYER
-from ftw.builder.testing import functional_session_factory
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.builder.testing import set_builder_session_factory
-from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
+from opengever.core.testing import functional_session_factory
+from opengever.core.testing import OPENGEVER_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
-from plone.app.testing import IntegrationTesting
-from plone.app.testing import login
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import TEST_USER_NAME
-from zope.configuration import xmlconfig
-from opengever.core.testing import clear_transmogrifier_registry
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from unittest2 import TestCase
+import plonetheme.teamraum
 
 
-class TeamraumThemeLayer(PloneSandboxLayer):
+class TeamraumThemeFunctionalLayer(PloneSandboxLayer):
 
-    defaultBases = (COMPONENT_REGISTRY_ISOLATION, BUILDER_LAYER)
+    defaultBases = (OPENGEVER_FIXTURE, )
 
     def setUpZope(self, app, configurationContext):
-        clear_transmogrifier_registry()
-        xmlconfig.string(
-            '<configure xmlns="http://namespaces.zope.org/zope">'
-            '  <include package="z3c.autoinclude" file="meta.zcml" />'
-            '  <includePlugins package="plone" />'
-            '  <includePluginsOverrides package="plone" />'
-            '</configure>',
-            context=configurationContext)
+        self.loadZCML('configure.zcml', package=plonetheme.teamraum)
 
     def setUpPloneSite(self, portal):
-        login(portal, TEST_USER_NAME)
-        # Install into Plone site using portal_setup
         applyProfile(portal, 'plonetheme.teamraum:default')
 
-    def tearDown(self):
-        super(TeamraumThemeLayer, self).tearDown()
-        clear_transmogrifier_registry()
+
+PLONETHEME_TEAMRAUM_FIXTURE = TeamraumThemeFunctionalLayer()
+PLONETHEME_TEAMRAUM_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(PLONETHEME_TEAMRAUM_FIXTURE, set_builder_session_factory(functional_session_factory)),
+    name="plonetheme.teamraum:functional"
+)
 
 
-TEAMRAUMTHEME_FIXTURE = TeamraumThemeLayer()
-TEAMRAUMTHEME_INTEGRATION_TESTING = IntegrationTesting(
-    bases=(TEAMRAUMTHEME_FIXTURE,),
-    name="plonetheme.teamraum:integration")
+class TeamraumThemeTestCase(TestCase):
 
-TEAMRAUMTHEME_FUNCTIONAL_TESTING = FunctionalTesting(
-    bases=(TEAMRAUMTHEME_FIXTURE,
-           set_builder_session_factory(functional_session_factory)),
-    name="plonetheme.teamraum:functional")
+    layer = PLONETHEME_TEAMRAUM_FUNCTIONAL_TESTING
+
+    def setUp(self):
+        super(TeamraumThemeTestCase, self).setUp()
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        create(Builder('admin_unit').as_current_admin_unit())

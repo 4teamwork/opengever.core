@@ -1,21 +1,10 @@
 from ftw.testbrowser import browsing
-from plone.app.testing import setRoles
-from plone.app.testing import TEST_USER_ID
-from plonetheme.teamraum.testing import TEAMRAUMTHEME_FUNCTIONAL_TESTING
+from plonetheme.teamraum.testing import TeamraumThemeTestCase
 from Products.CMFCore.utils import getToolByName
-from unittest2 import TestCase
-
 import transaction
 
 
-class TestSearchBoxViewlet(TestCase):
-
-    layer = TEAMRAUMTHEME_FUNCTIONAL_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        self.request = self.layer['request']
-        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+class TestPersonalBar(TeamraumThemeTestCase):
 
     @browsing
     def test_no_language_link_by_default(self, browser):
