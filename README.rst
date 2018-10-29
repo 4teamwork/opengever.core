@@ -524,6 +524,7 @@ Users
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
 - ``self.member_admin``: ``david.meier``
+- ``self.reader_user``: ``lucklicher.laser``
 - ``self.records_manager``: ``ramon.flucht``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
@@ -577,6 +578,7 @@ Objects
           - self.draft_proposal
           - self.draft_word_proposal
           - self.empty_document
+          - self.info_task
           - self.mail_eml
           - self.mail_msg
           - self.proposal

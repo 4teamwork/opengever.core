@@ -76,22 +76,22 @@ EXPECTED_DOCUMENT_PROPERTIES = {
 }
 
 EXPECTED_TASKDOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 13',
-    'Document.SequenceNumber': '13',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 34',
+    'Document.SequenceNumber': '34',
     'ogg.document.title': u'Feedback zum Vertragsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 13',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 34',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
-    'ogg.document.sequence_number': '13',
+    'ogg.document.sequence_number': '34',
     'ogg.document.version_number': 0
 }
 
 EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
-    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 17',
-    'Document.SequenceNumber': '17',
+    'Document.ReferenceNumber': 'Client1 1.1 / 1 / 16',
+    'Document.SequenceNumber': '16',
     'ogg.document.title': u'Kommentar zum Vertragsentwurf',
-    'ogg.document.reference_number': 'Client1 1.1 / 1 / 17',
+    'ogg.document.reference_number': 'Client1 1.1 / 1 / 16',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
-    'ogg.document.sequence_number': '17',
+    'ogg.document.sequence_number': '16',
     'ogg.document.version_number': 0
 }
 

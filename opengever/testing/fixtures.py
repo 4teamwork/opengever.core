@@ -104,10 +104,13 @@ class OpengeverContentFixture(object):
             with self.login(self.dossier_responsible):
                 self.create_emails()
 
-        with self.freeze_at_hour(16):
             with self.login(self.committee_responsible):
                 with self.features('meeting'):
                     self.create_meetings()
+
+        with self.freeze_at_hour(16):
+            with self.login(self.dossier_responsible):
+                self.create_tasks()
 
         with self.freeze_at_hour(17):
             self.create_private_root()
@@ -252,6 +255,30 @@ class OpengeverContentFixture(object):
             u'Hans',
             u'Peter',
             )
+
+        # This user is intended to be used in situations where you need a user
+        # which has only the 'Reader' role on some context and one has to build
+        # the granting of that themselves
+        firstname = u'L\xfccklicher'
+        lastname = u'L\xe4ser'
+
+        builder = (
+            Builder('user')
+            .named(firstname, lastname)
+            .with_roles(['Member'])
+            )
+
+        builder.update_properties()  # updates builder.userid
+        email = '{}@gever.local'.format(builder.userid)
+        plone_user = create(builder.with_email(email))
+
+        create(
+            Builder('ogds_user')
+            .id(plone_user.getId())
+            .having(firstname=firstname, lastname=lastname, email=email)
+            )
+
+        self._lookup_table['reader_user'] = ('user', plone_user.getId())
 
     def create_teams(self):
         users = [
@@ -840,101 +867,6 @@ class OpengeverContentFixture(object):
                 u'vertragsentwurf.docx')
             ))
 
-        self.task = self.register('task', create(
-            Builder('task')
-            .within(self.dossier)
-            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
-            .having(
-                responsible_client=self.org_unit.id(),
-                responsible=self.regular_user.getId(),
-                issuer=self.dossier_responsible.getId(),
-                task_type='correction',
-                deadline=date(2016, 11, 1),
-                )
-            .in_state('task-state-in-progress')
-            .relate_to(self.document)
-            ))
-
-        self.register('subtask', create(
-            Builder('task')
-            .within(self.task)
-            .titled(
-                u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                )
-            .having(
-                responsible_client=self.org_unit.id(),
-                responsible=self.regular_user.getId(),
-                issuer=self.dossier_responsible.getId(),
-                task_type='correction',
-                deadline=date(2016, 11, 1),
-                )
-            .in_state('task-state-resolved')
-            .relate_to(self.document)
-            ))
-
-        self.register('taskdocument', create(
-            Builder('document')
-            .within(self.task)
-            .titled(u'Feedback zum Vertragsentwurf')
-            .attach_file_containing(
-                'Feedback text',
-                u'vertr\xe4g sentwurf.docx',
-                )
-            ))
-
-        self.sequential_task = self.register('sequential_task', create(
-            Builder('task')
-            .within(self.dossier)
-            .titled(u'Personaleintritt')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.regular_user.getId(),
-                    task_type='direct-execution',
-                    deadline=date(2016, 11, 1))
-            .in_state('task-state-in-progress')
-            .as_sequential_task()
-        ))
-        self.seq_subtask_1 = self.register('seq_subtask_1', create(
-            Builder('task')
-            .within(self.sequential_task)
-            .titled(u'Mitarbeiter Dossier generieren')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.secretariat_user.getId(),
-                    task_type='direct-execution',
-                    deadline=date(2016, 11, 1))
-            .in_state('task-state-open')
-            .as_sequential_task()
-        ))
-        self.seq_subtask_2 = self.register('seq_subtask_2', create(
-            Builder('task')
-            .within(self.sequential_task)
-            .titled(u'Arbeitsplatz vorbereiten')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.secretariat_user.getId(),
-                    task_type='direct-execution',
-                    deadline=date(2016, 11, 1))
-            .in_state('task-state-planned')
-            .as_sequential_task()
-        ))
-        self.seq_subtask_3 = self.register('seq_subtask_3', create(
-            Builder('task')
-            .within(self.sequential_task)
-            .titled(u'Vorstellungsrunde bei anderen Mitarbeitern')
-            .having(responsible_client=self.org_unit.id(),
-                    responsible=self.regular_user.getId(),
-                    issuer=self.dossier_responsible.getId(),
-                    task_type='direct-execution',
-                    deadline=date(2016, 11, 1))
-            .in_state('task-state-planned')
-            .as_sequential_task()
-        ))
-
-        subtasks = [self.seq_subtask_1, self.seq_subtask_2, self.seq_subtask_3]
-        self.sequential_task.set_tasktemplate_order(subtasks)
-        [task.sync() for task in subtasks]
-
         with self.features('meeting'):
             proposal = self.register('proposal', create(
                 Builder('proposal')
@@ -1066,8 +998,187 @@ class OpengeverContentFixture(object):
             ))
 
     @staticuid()
+    def create_tasks(self):
+        self.task = self.register('task', create(
+            Builder('task')
+            .within(self.dossier)
+            .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-in-progress')
+            .relate_to(self.document)
+        ))
+
+        self.register('subtask', create(
+            Builder('task')
+            .within(self.task)
+            .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-resolved')
+            .relate_to(self.document)
+        ))
+
+        self.register('taskdocument', create(
+            Builder('document')
+            .within(self.task)
+            .titled(u'Feedback zum Vertragsentwurf')
+            .attach_file_containing(
+                'Feedback text',
+                u'vertr\xe4g sentwurf.docx',
+            )
+        ))
+
+        sequential_task = self.register('sequential_task', create(
+            Builder('task')
+            .within(self.dossier)
+            .titled(u'Personaleintritt')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.regular_user.getId(),
+                task_type='direct-execution',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-in-progress')
+            .as_sequential_task()
+        ))
+
+        seq_subtask_1 = self.register('seq_subtask_1', create(
+            Builder('task')
+            .within(sequential_task)
+            .titled(u'Mitarbeiter Dossier generieren')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.secretariat_user.getId(),
+                task_type='direct-execution',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-open')
+            .as_sequential_task()
+        ))
+
+        seq_subtask_2 = self.register('seq_subtask_2', create(
+            Builder('task')
+            .within(sequential_task)
+            .titled(u'Arbeitsplatz vorbereiten')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.secretariat_user.getId(),
+                task_type='direct-execution',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-planned')
+            .as_sequential_task()
+        ))
+
+        seq_subtask_3 = self.register('seq_subtask_3', create(
+            Builder('task')
+            .within(sequential_task)
+            .titled(u'Vorstellungsrunde bei anderen Mitarbeitern')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='direct-execution',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-planned')
+            .as_sequential_task()
+        ))
+
+        subtasks = [seq_subtask_1, seq_subtask_2, seq_subtask_3]
+        sequential_task.set_tasktemplate_order(subtasks)
+        for task in subtasks:
+            task.sync()
+
+        self.register('expired_task', create(
+            Builder('task')
+            .within(self.expired_dossier)
+            .titled(u'Vertr\xe4ge abschliessen')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction',
+                deadline=date(2000, 12, 31),
+            )
+            .in_state('task-state-resolved')
+            .relate_to(self.expired_document)
+        ))
+
+        self.register('inactive_task', create(
+            Builder('task')
+            .within(self.inactive_dossier)
+            .titled(u'Status \xdcberpr\xfcfen')
+            .having(
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='direct-execution',
+                deadline=date(2016, 11, 1),
+            )
+            .in_state('task-state-in-progress')
+            .relate_to(self.inactive_document)
+        ))
+
+        with self.features('meeting', ):
+            meeting_task = self.register('meeting_task', create(
+                Builder('task')
+                .within(self.meeting_dossier)
+                .titled(u'Programm \xdcberpr\xfcfen')
+                .having(
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client=self.org_unit.id(),
+                    issuer=self.dossier_responsible.getId(),
+                    task_type='correction',
+                    deadline=date(2016, 11, 1),
+                )
+                .in_state('task-state-in-progress')
+                .relate_to(self.meeting_document)
+            ))
+
+            self.register('meeting_subtask', create(
+                Builder('task')
+                .within(meeting_task)
+                .titled(u'H\xf6rsaal reservieren')
+                .having(
+                    responsible_client=self.org_unit.id(),
+                    responsible=self.dossier_responsible.getId(),
+                    issuer=self.dossier_responsible.getId(),
+                    deadline=date(2016, 11, 1),
+                )
+                .in_state('task-state-resolved')
+                .relate_to(self.meeting_document)
+            ))
+
+        self.register('info_task', create(
+            Builder('task')
+            .titled(u'Vertragsentw\xfcrfe 2018')
+            .within(self.dossier)
+            .having(
+                task_type=u'information',
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+            )
+            .relate_to(self.document)
+        ))
+
+    @staticuid()
     def create_expired_dossier(self):
-        expired_dossier = self.register('expired_dossier', create(
+        self.expired_dossier = self.register('expired_dossier', create(
             Builder('dossier')
             .within(self.repofolder00)
             .titled(u'Abgeschlossene Vertr\xe4ge')
@@ -1081,32 +1192,17 @@ class OpengeverContentFixture(object):
             .in_state('dossier-state-resolved')
             ))
 
-        expired_document = self.register('expired_document', create(
+        self.expired_document = self.register('expired_document', create(
             Builder('document')
-            .within(expired_dossier)
+            .within(self.expired_dossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge vor 2000')
             .attach_archival_file_containing('TEST', name=u'test.pdf')
             .with_dummy_content()
             ))
 
-        self.register('expired_task', create(
-            Builder('task')
-            .within(expired_dossier)
-            .titled(u'Vertr\xe4ge abschliessen')
-            .having(
-                responsible_client=self.org_unit.id(),
-                responsible=self.regular_user.getId(),
-                issuer=self.dossier_responsible.getId(),
-                task_type='correction',
-                deadline=date(2000, 12, 31),
-                )
-            .in_state('task-state-resolved')
-            .relate_to(expired_document)
-            ))
-
     @staticuid()
     def create_inactive_dossier(self):
-        inactive_dossier = self.register('inactive_dossier', create(
+        self.inactive_dossier = self.register('inactive_dossier', create(
             Builder('dossier')
             .within(self.repofolder00)
             .titled(u'Inaktive Vertr\xe4ge')
@@ -1120,26 +1216,11 @@ class OpengeverContentFixture(object):
             .in_state('dossier-state-inactive')
             ))
 
-        inactive_document = self.register('inactive_document', create(
+        self.inactive_document = self.register('inactive_document', create(
             Builder('document')
-            .within(inactive_dossier)
+            .within(self.inactive_dossier)
             .titled(u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016')
             .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')
-            ))
-
-        self.register('inactive_task', create(
-            Builder('task')
-            .within(inactive_dossier)
-            .titled(u'Status \xdcberpr\xfcfen')
-            .having(
-                responsible_client=self.org_unit.id(),
-                responsible=self.regular_user.getId(),
-                issuer=self.dossier_responsible.getId(),
-                task_type='direct-execution',
-                deadline=date(2016, 11, 1),
-                )
-            .in_state('task-state-in-progress')
-            .relate_to(inactive_document)
             ))
 
     @staticuid()
@@ -1322,35 +1403,6 @@ class OpengeverContentFixture(object):
             'meeting',
             self.meeting.physical_path.encode('utf-8'),
             )
-
-        meeting_task = self.register('meeting_task', create(
-            Builder('task')
-            .within(self.meeting_dossier)
-            .titled(u'Programm \xdcberpr\xfcfen')
-            .having(
-                responsible=self.dossier_responsible.getId(),
-                responsible_client=self.org_unit.id(),
-                issuer=self.dossier_responsible.getId(),
-                task_type='correction',
-                deadline=date(2016, 11, 1),
-                )
-            .in_state('task-state-in-progress')
-            .relate_to(self.meeting_document)
-            ))
-
-        self.register('meeting_subtask', create(
-            Builder('task')
-            .within(meeting_task)
-            .titled(u'H\xf6rsaal reservieren')
-            .having(
-                responsible_client=self.org_unit.id(),
-                responsible=self.dossier_responsible.getId(),
-                issuer=self.dossier_responsible.getId(),
-                deadline=date(2016, 11, 1),
-                )
-            .in_state('task-state-resolved')
-            .relate_to(self.meeting_document)
-            ))
 
         decided_meeting_dossier = self.register(
             'decided_meeting_dossier', create(

@@ -44,10 +44,13 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def task_titles(self):
-        return [u'Personaleintritt',
-                u'Mitarbeiter Dossier generieren',
-                u'Vertragsentwurf \xdcberpr\xfcfen',
-                u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen']
+        return [
+            u'Vertragsentw\xfcrfe 2018',
+            u'Personaleintritt',
+            u'Mitarbeiter Dossier generieren',
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
+        ]
 
     @IntegrationTestCase.clock
     @browsing
