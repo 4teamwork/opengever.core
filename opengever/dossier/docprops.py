@@ -1,5 +1,8 @@
 from datetime import datetime
 from datetime import time
+from docx import Document
+from docxcompose.composer import Composer
+from docxcompose.properties import CustomProperties
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
@@ -101,6 +104,11 @@ class DocPropertyWriter(object):
                     changed = True
 
             if changed:
+                # Update cached properties
+                doc = Document(tmpfile.path)
+                CustomProperties(doc).update_all()
+                Composer(doc).save(tmpfile.path)
+
                 with open(tmpfile.path) as processed_tmpfile:
                     file_data = processed_tmpfile.read()
 
