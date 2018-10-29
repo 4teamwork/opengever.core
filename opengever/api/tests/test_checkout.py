@@ -1,4 +1,4 @@
-from ftw.testbrowser import browsing
+from ftw.testbrowser import restapi
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import IntegrationTestCase
@@ -7,83 +7,59 @@ from zope.component import getMultiAdapter
 
 class TestCheckoutAPI(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestCheckoutAPI, self).setUp()
-
-    @browsing
-    def test_checkout_document(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(self.document.absolute_url() + '/@checkout',
-                     method='POST', headers={'Accept': 'application/json'})
-        self.assertEqual(204, browser.status_code)
+    @restapi
+    def test_checkout_document(self, api_client):
+        self.login(self.regular_user, api_client)
+        api_client.open(self.document, endpoint='@checkout', method='POST')
+        self.assertEqual(204, api_client.status_code)
         self.assertTrue(self.document.is_checked_out())
 
-    @browsing
-    def test_checkout_checkedout_document_returns_forbidden(self, browser):
-        self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
+    @restapi
+    def test_checkout_checkedout_document_returns_forbidden(self, api_client):
+        self.login(self.regular_user, api_client)
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        with api_client.expect_http_error(code=403, reason='Forbidden'):
+            api_client.open(self.document, endpoint='@checkout', method='POST')
+        expected_error = {u'error': {u'message': u'Checkout is not allowed.', u'type': u'Forbidden'}}
+        self.assertEqual(expected_error, api_client.contents)
 
-        with browser.expect_http_error(code=403, reason='Forbidden'):
-            browser.open(self.document.absolute_url() + '/@checkout',
-                         method='POST', headers={'Accept': 'application/json'})
-        self.assertIn('Checkout is not allowed', browser.contents)
-
-    @browsing
-    def test_checkin_document(self, browser):
-        self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
-
-        browser.open(self.document.absolute_url() + '/@checkin',
-                     method='POST', headers={'Accept': 'application/json'})
-        self.assertEqual(204, browser.status_code)
+    @restapi
+    def test_checkin_document(self, api_client):
+        self.login(self.regular_user, api_client)
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        api_client.open(self.document, endpoint='@checkin', method='POST')
+        self.assertEqual(204, api_client.status_code)
         self.assertFalse(self.document.is_checked_out())
 
-    @browsing
-    def test_checkin_document_with_comment(self, browser):
-        self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
+    @restapi
+    def test_checkin_document_with_comment(self, api_client):
+        self.login(self.regular_user, api_client)
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        api_client.open(self.document, endpoint='@checkin', data={'comment': 'foo bar'})
+        self.assertEqual(204, api_client.status_code)
+        self.assertFalse(self.document.is_checked_out())
+        self.assertEqual('foo bar', get_journal_entry(self.document)['comments'])
 
-        browser.open(self.document.absolute_url() + '/@checkin',
-                     data='{"comment": "foo bar"}',
-                     method='POST',
-                     headers={'Accept': 'application/json',
-                              'Content-Type': 'application/json'})
-        self.assertEqual(204, browser.status_code)
+    @restapi
+    def test_checkin_checkedin_document_returns_forbidden(self, api_client):
+        self.login(self.regular_user, api_client)
+        with api_client.expect_http_error(code=403, reason='Forbidden'):
+            api_client.open(self.document, endpoint='@checkin', method='POST')
+        expected_error = {u'error': {u'message': u'Checkin is not allowed.', u'type': u'Forbidden'}}
+        self.assertEqual(expected_error, api_client.contents)
+
+    @restapi
+    def test_cancel_checkout(self, api_client):
+        self.login(self.regular_user, api_client)
+        getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
+        api_client.open(self.document, endpoint='@cancelcheckout', method='POST')
+        self.assertEqual(204, api_client.status_code)
         self.assertFalse(self.document.is_checked_out())
 
-        self.assertEqual(
-            'foo bar', get_journal_entry(self.document)['comments'])
-
-    @browsing
-    def test_checkin_checkedin_document_returns_forbidden(self, browser):
-        self.login(self.regular_user, browser)
-        with browser.expect_http_error(code=403, reason='Forbidden'):
-            browser.open(self.document.absolute_url() + '/@checkin',
-                         method='POST', headers={'Accept': 'application/json'})
-        self.assertIn('Checkin is not allowed', browser.contents)
-
-    @browsing
-    def test_cancel_checkout(self, browser):
-        self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
-
-        browser.open(self.document.absolute_url() + '/@cancelcheckout',
-                     method='POST', headers={'Accept': 'application/json'})
-        self.assertEqual(204, browser.status_code)
-        self.assertFalse(self.document.is_checked_out())
-
-    @browsing
-    def test_cancel_checkedin_document_returns_forbidden(self, browser):
-        self.login(self.regular_user, browser)
-        with browser.expect_http_error(code=403, reason='Forbidden'):
-            browser.open(self.document.absolute_url() + '/@cancelcheckout',
-                         method='POST', headers={'Accept': 'application/json'})
-        self.assertIn('Cancel checkout is not allowed', browser.contents)
+    @restapi
+    def test_cancel_checkedin_document_returns_forbidden(self, api_client):
+        self.login(self.regular_user, api_client)
+        with api_client.expect_http_error(code=403, reason='Forbidden'):
+            api_client.open(self.document, endpoint='@cancelcheckout', method='POST')
+        expected_error = {u'error': {u'message': u'Cancel checkout is not allowed.', u'type': u'Forbidden'}}
+        self.assertEqual(expected_error, api_client.contents)
