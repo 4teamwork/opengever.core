@@ -32,6 +32,10 @@ var sharingApp = {
     this.fetchData();
   },
 
+  computed: {
+    messenger: MessageFactory.getInstance,
+  },
+
   methods: {
     fetchData: function () {
       // make sure IE 11 does not cache the fetch request
@@ -119,11 +123,16 @@ var sharingApp = {
         entries: this.entries,
         inherit: this.inherit };
 
-      this.requester.post(this.endpoint, payload).then(function (response) {
-        // redirect to context and show statusmessage
-        window.location = this.context_url + '/sharing/saved';
-      }.bind(this));
-
+      this.requester.post(this.endpoint, payload)
+        .then(function (response) {
+          window.location = this.context_url + '/sharing/saved';
+        }.bind(this))
+        .catch(function(error){
+          this.messenger.shout(
+            [{'messageTitle': this.i18n.message_title_error,
+              'message': this.i18n.label_save_failed, 'messageClass': 'error'}]);
+          this.isSaving = false
+        }.bind(this));
     },
   },
 };

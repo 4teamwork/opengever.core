@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-27 09:31+0000\n"
+"POT-Creation-Date: 2018-10-30 07:44+0000\n"
 "PO-Revision-Date: 2017-12-03 11:34+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-sharing/fr/>\n"
@@ -50,6 +50,11 @@ msgstr "Aucun objet protégé n'a été trouvé dans ce domaine."
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_roles_successfully_changed"
 msgstr ""
+
+#. Default: "Local roles save failed."
+#: ./opengever/sharing/browser/sharing.py
+msgid "message_save_failed"
+msgstr "Les autorisations n'ont pas pu être enregistrées."
 
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py

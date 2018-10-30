@@ -3,6 +3,7 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
+from opengever.base import _ as base_mf
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -109,7 +110,11 @@ class OpengeverSharingView(SharingView):
             'label_automatic_permission': self.translate(
                 _(u'label_automatic_permission', default=u'Automatic permission')),
             'label_local_permission': self.translate(
-                _(u'label_local_permission', default=u'Local permission'))
+                _(u'label_local_permission', default=u'Local permission')),
+            'label_save_failed': self.translate(
+                _(u'message_save_failed', default=u'Local roles save failed.')),
+            'message_title_error': self.translate(
+                base_mf('message_title_error', default=u"Error")),
         })
 
     def saved(self):

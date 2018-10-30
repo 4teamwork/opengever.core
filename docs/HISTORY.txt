@@ -5,7 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
-- Disable buttons during save request in sharing form.[phgross]
+- Disable buttons during save request in sharing form and improve error handling. [phgross]
 - Extend example-content with evil objects containing javascript. [elioschmutz]
 - Escape description of document_added description object. [elioschmutz]
 - Use plone.protect class of confirm-action view. [elioschmutz]
