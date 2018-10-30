@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-27 09:31+0000\n"
+"POT-Creation-Date: 2018-10-30 07:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,11 @@ msgstr "Keine geschützte Objekte in diesem Bereich gefunden."
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_roles_successfully_changed"
 msgstr "Lokale Rolle erfolgreich gespeichert"
+
+#. Default: "Local roles save failed."
+#: ./opengever/sharing/browser/sharing.py
+msgid "message_save_failed"
+msgstr "Lokale Rollen konnten nicht gespeichert werden."
 
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
