@@ -98,5 +98,15 @@
       }
     }
 
+    .loading {
+      pointer-events: none;
+      &:before {
+        @extend .fas;
+        @extend .fa-circle-notch;
+        @extend .fa-spin;
+        margin-right: 5px;
+        font-size: $button-font-size;
+      }
+    }
   }
 }

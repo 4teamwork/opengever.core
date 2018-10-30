@@ -85,8 +85,9 @@
       </div>
 
       <div class="formControls">
-        <a class="button context" @click="save">{{i18n.label_save}}</a>
-        <a class="button" :href="context_url">{{i18n.label_cancel}}</a>
+        <a class="button context" :class="{ loading: isSaving }"
+           :disabled="isSaving" @click="save">{{i18n.label_save}}</a>
+        <a class="button" :disabled="isSaving" :href="context_url">{{i18n.label_cancel}}</a>
       </div>
     </template>
 

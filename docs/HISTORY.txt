@@ -5,7 +5,7 @@ Changelog
 2018.4.9 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Disable buttons during save request in sharing form and improve error handling. [phgross]
 
 
 2018.4.8 (2018-10-19)
