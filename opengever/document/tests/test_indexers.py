@@ -6,6 +6,7 @@ from ftw.testing import MockTestCase
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
+from opengever.document.indexers import filename as filename_indexer
 from opengever.document.indexers import metadata
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.testing import FunctionalTestCase
@@ -64,6 +65,19 @@ class TestDocumentIndexers(FunctionalTestCase):
         document.file = None
         document.reindexObject()
         self.assertEqual(0, index_data_for(document).get('filesize'))
+
+    def test_filename_indexers(self):
+        document = create(
+            Builder("document")
+            .titled(u'D\xf6k\xfcm\xe4nt')
+            .attach_file_containing(u"content", name=u"file.txt")
+        )
+        document.reindexObject()
+        self.assertEqual(u'Doekuemaent.txt', filename_indexer(document)())
+
+        document.file = None
+        document.reindexObject()
+        self.assertEqual(u'', filename_indexer(document)())
 
     def test_date_indexers(self):
         with freeze(datetime.datetime(2016, 1, 1, 0, 0)):

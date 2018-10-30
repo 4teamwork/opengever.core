@@ -203,3 +203,11 @@ def filesize(obj):
     if file_:
         return file_.getSize()
     return 0
+
+
+@indexer(IBaseDocument)
+def filename(obj):
+    filename = obj.get_filename()
+    if filename:
+        return filename
+    return u''

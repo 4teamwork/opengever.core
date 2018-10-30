@@ -276,6 +276,11 @@
       name="filesize"
       />
 
+  <adapter
+      factory=".indexers.filename"
+      name="filename"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
 </configure>
