@@ -1,43 +1,31 @@
-from ftw.testbrowser import browsing
+from ftw.testbrowser import restapi
 from opengever.testing import IntegrationTestCase
 
 
 class TestNavigation(IntegrationTestCase):
 
-    @browsing
-    def test_navigation_contains_respository(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(
-            self.portal.absolute_url() + '/@navigation',
-            headers={'Accept': 'application/json'},
-        )
-        self.assertEqual(browser.status_code, 200)
-        self.assertIn(u'tree', browser.json)
-        self.assertEqual(
-            browser.json['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+    @restapi
+    def test_navigation_contains_respository(self, api_client):
+        self.login(self.regular_user, api_client)
+        api_client.open(endpoint='@navigation')
+        self.assertEqual(api_client.status_code, 200)
+        self.assertIn(u'tree', api_client.contents)
+        self.assertEqual(u'http://nohost/plone/ordnungssystem/@navigation', api_client.contents['@id'])
 
-    @browsing
-    def test_navigation_on_subcontext(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(
-            self.document.absolute_url() + '/@navigation',
-            headers={'Accept': 'application/json'},
-        )
-        self.assertEqual(browser.status_code, 200)
-        self.assertIn(u'tree', browser.json)
-        self.assertEqual(
-            browser.json['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+    @restapi
+    def test_navigation_on_subcontext(self, api_client):
+        self.login(self.regular_user, api_client)
+        api_client.open(self.document, endpoint='@navigation')
+        self.assertEqual(api_client.status_code, 200)
+        self.assertIn(u'tree', api_client.contents)
+        self.assertEqual(u'http://nohost/plone/ordnungssystem/@navigation', api_client.contents['@id'])
 
-    @browsing
-    def test_navigation_id_in_components(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(
-            self.document.absolute_url(),
-            headers={'Accept': 'application/json'},
-        )
-        self.assertEqual(browser.status_code, 200)
+    @restapi
+    def test_navigation_id_in_components(self, api_client):
+        self.login(self.regular_user, api_client)
+        api_client.open(self.document)
+        self.assertEqual(api_client.status_code, 200)
         self.assertEqual(
-            browser.json['@components']['navigation']['@id'],
-            u'http://nohost/plone/ordnungssystem/@navigation')
+            u'http://nohost/plone/ordnungssystem/@navigation',
+            api_client.contents['@components']['navigation']['@id'],
+        )
