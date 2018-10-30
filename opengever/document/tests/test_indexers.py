@@ -61,10 +61,12 @@ class TestDocumentIndexers(FunctionalTestCase):
         )
         document.reindexObject()
         self.assertEqual(7, index_data_for(document).get('filesize'))
+        self.assertEqual(7, obj2brain(document).filesize)
 
         document.file = None
         document.reindexObject()
         self.assertEqual(0, index_data_for(document).get('filesize'))
+        self.assertEqual(0, obj2brain(document).filesize)
 
     def test_filename_indexers(self):
         document = create(
@@ -74,10 +76,12 @@ class TestDocumentIndexers(FunctionalTestCase):
         )
         document.reindexObject()
         self.assertEqual(u'Doekuemaent.txt', filename_indexer(document)())
+        self.assertEqual(u'Doekuemaent.txt', obj2brain(document).filename)
 
         document.file = None
         document.reindexObject()
         self.assertEqual(u'', filename_indexer(document)())
+        self.assertEqual(u'', obj2brain(document).filename)
 
     def test_file_extension_indexers(self):
         document = create(
@@ -87,10 +91,12 @@ class TestDocumentIndexers(FunctionalTestCase):
         )
         document.reindexObject()
         self.assertEqual(u'.txt', index_data_for(document).get('file_extension'))
+        self.assertEqual(u'.txt', obj2brain(document).file_extension)
 
         document.file = None
         document.reindexObject()
         self.assertEqual(u'', index_data_for(document).get('file_extension'))
+        self.assertEqual(u'', obj2brain(document).file_extension)
 
     def test_date_indexers(self):
         with freeze(datetime.datetime(2016, 1, 1, 0, 0)):

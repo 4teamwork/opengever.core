@@ -30,6 +30,9 @@
   <column value="delivery_date" />
   <column value="checked_out" />
   <column value="public_trial" />
+  <column value="filesize" />
+  <column value="filename" />
+  <column value="file_extension" />
 
   <!-- DOSSIER -->
   <column value="containing_subdossier" />
