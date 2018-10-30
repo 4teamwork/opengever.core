@@ -228,5 +228,6 @@ class GeverDeployment(object):
     def drop_sql_tables(self, session):
         """Drops all sql tables, usually for a dev-setup.
         """
-        temp_metadata = MetaData(bind=session.bind, reflect=True)
+        temp_metadata = MetaData(bind=session.bind)
+        temp_metadata.reflect()
         temp_metadata.drop_all()
