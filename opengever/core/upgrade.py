@@ -387,7 +387,8 @@ class SchemaMigration(SQLUpgradeStep):
         super(SchemaMigration, self)._setup_db_connection()
 
         self.dialect_name = self.connection.dialect.name
-        self.metadata = MetaData(self.connection, reflect=True)
+        self.metadata = MetaData(self.connection)
+        self.metadata.reflect()
         self.op = get_operations(self.connection)
 
 
@@ -451,7 +452,9 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
         """Fetches the tracking table from the DB schema metadata if present,
         or creates it if necessary.
         """
-        table = MetaData(self.connection, reflect=True).tables.get(TRACKING_TABLE_NAME)
+        metadata = MetaData(self.connection)
+        metadata.reflect()
+        table = metadata.tables.get(TRACKING_TABLE_NAME)
         if table is not None:
             self._migrate_tracking_table(table)
             return table
