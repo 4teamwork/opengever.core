@@ -7,7 +7,6 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.mail.mail import IMail
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
-from opengever.document.behaviors.related_docs import IRelatedDocuments
 from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
