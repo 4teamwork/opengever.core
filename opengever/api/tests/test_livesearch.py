@@ -1,47 +1,42 @@
-from ftw.testbrowser import browsing
+from ftw.testbrowser import restapi
 from opengever.testing import IntegrationTestCase
 
 
 class TestLivesearchGet(IntegrationTestCase):
 
-    @browsing
-    def test_livesearch(self, browser):
-        self.login(self.regular_user, browser=browser)
+    @restapi
+    def test_livesearch(self, api_client):
+        self.login(self.regular_user, api_client)
+        endpoint = u'@livesearch?q={}'.format(self.document.title)
+        api_client.open(endpoint=endpoint)
 
-        url = u'{}/@livesearch?q={}'.format(self.portal.absolute_url(),
-                                            self.document.title)
-        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+        self.assertEqual(200, api_client.status_code)
+        self.assertGreater(len(api_client.contents), 0)
+        expected_result = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-11',
+            u'@type': u'opengever.task.task',
+            u'title': u'Vertragsentw\xfcrfe 2018',
+        }
+        self.assertEqual(expected_result, api_client.contents[0])
 
-        self.assertEqual(200, browser.status_code)
-        self.assertGreater(len(browser.json), 0)
+    @restapi
+    def test_livesearch_limit(self, api_client):
+        self.login(self.regular_user, api_client)
+        endpoint = u'@livesearch?q={}&limit=1'.format(self.document.title)
+        api_client.open(endpoint=endpoint)
 
-        entry = browser.json[0]
-        self.assertIn('title', entry)
-        self.assertIn('@id', entry)
-        self.assertIn('@type', entry)
+        self.assertEqual(200, api_client.status_code)
+        self.assertEqual(1, len(api_client.contents))
 
-    @browsing
-    def test_livesearch_limit(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        url = u'{}/@livesearch?q={}&limit=1'.format(self.portal.absolute_url(),
-                                                    self.document.title)
-        browser.open(url, method='GET', headers={'Accept': 'application/json'})
-
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(1, len(browser.json))
-
-    @browsing
-    def test_livesearch_by_path(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        url = u'{}/@livesearch?q={}&path={}'.format(
-            self.portal.absolute_url(),
+    @restapi
+    def test_livesearch_by_path(self, api_client):
+        self.login(self.regular_user, api_client)
+        endpoint = u'@livesearch?q={}&path={}'.format(
             self.document.title,
-            self.document.absolute_url()[len(self.portal.absolute_url()):])
+            self.document.absolute_url()[len(self.portal.absolute_url()):],
+        )
+        api_client.open(endpoint=endpoint)
 
-        browser.open(url, method='GET', headers={'Accept': 'application/json'})
-
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(1, len(browser.json))
-        self.assertEquals(self.document.absolute_url(), browser.json[0]['@id'])
+        self.assertEqual(200, api_client.status_code)
+        self.assertEqual(1, len(api_client.contents))
+        self.assertEqual(self.document.absolute_url(), api_client.contents[0]['@id'])
