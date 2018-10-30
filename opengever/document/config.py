@@ -9,4 +9,5 @@ INDEXES = (
     ('sortable_author', 'FieldIndex'),
     ('public_trial', 'FieldIndex'),
     ('filesize', 'FieldIndex'),
+    ('file_extension', 'FieldIndex'),
 )

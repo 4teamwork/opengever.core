@@ -21,6 +21,7 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 import logging
+import os.path
 
 
 logger = logging.getLogger('opengever.document')
@@ -210,4 +211,13 @@ def filename(obj):
     filename = obj.get_filename()
     if filename:
         return filename
+    return u''
+
+
+@indexer(IDocumentSchema)
+def file_extension(obj):
+    filename = obj.get_filename()
+    if filename:
+        # We should not rely on the normalization to have happened
+        return os.path.splitext(filename)[-1].lower()
     return u''

@@ -79,6 +79,19 @@ class TestDocumentIndexers(FunctionalTestCase):
         document.reindexObject()
         self.assertEqual(u'', filename_indexer(document)())
 
+    def test_file_extension_indexers(self):
+        document = create(
+            Builder("document")
+            .titled(u'D\xf6k\xfcm\xe4nt')
+            .attach_file_containing(u"content", name=u"file.txt")
+        )
+        document.reindexObject()
+        self.assertEqual(u'.txt', index_data_for(document).get('file_extension'))
+
+        document.file = None
+        document.reindexObject()
+        self.assertEqual(u'', index_data_for(document).get('file_extension'))
+
     def test_date_indexers(self):
         with freeze(datetime.datetime(2016, 1, 1, 0, 0)):
             doc1 = create(Builder('document').having(

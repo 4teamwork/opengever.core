@@ -281,6 +281,11 @@
       name="filename"
       />
 
+  <adapter
+      factory=".indexers.file_extension"
+      name="file_extension"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
 </configure>
