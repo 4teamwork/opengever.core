@@ -9,6 +9,7 @@ Changelog
 - Extend example-content with evil objects containing javascript. [elioschmutz]
 - Escape description of document_added description object. [elioschmutz]
 - Use plone.protect class of confirm-action view. [elioschmutz]
+- Don't html-escape description for JSON data. [deiferni]
 - Assign correct roles in development content. [deiferni]
 - Place successor proposal button next to workflow buttons. [Kevin Bieri]
 - Remove document tooltip on touch devices. [Kevin Bieri]

@@ -2,8 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.testing import FunctionalTestCase
-from opengever.testing import MEMORY_DB_LAYER
-from unittest import TestCase
 
 
 class TestProposalAgendaItem(FunctionalTestCase):
@@ -36,7 +34,7 @@ class TestProposalAgendaItem(FunctionalTestCase):
         self.proposal, self.submitted_proposal = create(Builder('proposal')
                                .within(self.dossier)
                                .having(title=u'Pr\xf6posal',
-                                       description='Description',
+                                       description=u'F\xfc\xfc',
                                        committee=self.committee.load_model())
                                .with_submitted())
         self.agenda_item = create(
@@ -60,10 +58,21 @@ class TestProposalAgendaItem(FunctionalTestCase):
              'number': '1.',
              'id': 1,
              'title': 'Pr&ouml;posal',
-             'description': 'Description',
+             'description': 'F&uuml;&uuml;',
              'has_proposal': True,
              'link': u'<a href="http://nohost/plone/opengever-meeting-committeecontainer/committee-1/submitted-proposal-1" title="Pr\xf6posal">Pr\xf6posal</a>'},  # noqa
             self.agenda_item.serialize())
+
+    def test_agenda_item_json_data_part(self):
+        self.assertEqual(
+            {'decision_number': None,
+             'description': u'F\xfc\xfc',
+             'dossier_reference_number': u'Client1 1 / 1',
+             'is_paragraph': False,
+             'number': u'1.',
+             'repository_folder_title': u'',
+             'title': u'Pr\xf6posal'},
+            self.agenda_item.get_agenda_item_data())
 
 
 class TestSimpleAgendaItem(FunctionalTestCase):
