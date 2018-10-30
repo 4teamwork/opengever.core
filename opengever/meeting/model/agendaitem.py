@@ -142,9 +142,11 @@ class AgendaItem(Base):
             self.title = title
 
     def get_description(self):
-        description = (self.submitted_proposal.description if self.has_proposal
-                       else self.description)
-        return to_html_xweb_intelligent(description) or None
+        return (self.submitted_proposal.description if self.has_proposal
+                else self.description)
+
+    def get_description_html(self):
+        return to_html_xweb_intelligent(self.get_description()) or None
 
     def set_description(self, description):
         if self.has_proposal:
@@ -224,7 +226,7 @@ class AgendaItem(Base):
             'id': self.agenda_item_id,
             'css_class': self.get_css_class(),
             'title': self.get_title_html(),
-            'description': self.get_description(),
+            'description': self.get_description_html(),
             'number': self.number,
             'has_proposal': self.has_proposal,
             'link': self.get_proposal_link(include_icon=False),

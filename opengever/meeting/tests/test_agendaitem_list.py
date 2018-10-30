@@ -111,7 +111,7 @@ class TestAgendaItemList(IntegrationTestCase):
              u'number': u'1.',
              u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
              u'title': u'Vertr\xe4ge',
-             u'description': u'F&uuml;r weitere Bearbeitung bewilligen'},
+             u'description': u'F\xfcr weitere Bearbeitung bewilligen'},
             {u'decision_number': None,
              u'description': None,
              u'dossier_reference_number': None,
