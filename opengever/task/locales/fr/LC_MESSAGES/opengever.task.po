@@ -110,11 +110,11 @@ msgstr "La tâche a été copiée et acceptée."
 
 #: ./opengever/task/response.py
 msgid "You are not allowed to delete responses."
-msgstr "Vous n'étes pas l'autorisation d'effacer ces réponses"
+msgstr "Vous n'avez pas l'autorisation d'effacer ces réponses"
 
 #: ./opengever/task/response.py
 msgid "You are not allowed to edit responses."
-msgstr "Vous n'étes pas l'autorisation pour éditer ces réponses"
+msgstr "Vous n'avez pas l'autorisation pour éditer ces réponses"
 
 #: ./opengever/task/browser/accept/main.py
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
