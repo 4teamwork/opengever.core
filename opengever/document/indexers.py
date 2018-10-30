@@ -195,3 +195,11 @@ def metadata(obj):
         metadata.append(doc_metadata.foreign_reference.encode('utf8'))
 
     return ' '.join(metadata)
+
+
+@indexer(IBaseDocument)
+def filesize(obj):
+    file_ = obj.get_file()
+    if file_:
+        return file_.getSize()
+    return 0

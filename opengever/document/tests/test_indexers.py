@@ -53,6 +53,18 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEquals(
             index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
 
+    def test_filesize_indexers(self):
+        document = create(
+            Builder("document")
+            .attach_file_containing(u"content", name=u"file.txt")
+        )
+        document.reindexObject()
+        self.assertEqual(7, index_data_for(document).get('filesize'))
+
+        document.file = None
+        document.reindexObject()
+        self.assertEqual(0, index_data_for(document).get('filesize'))
+
     def test_date_indexers(self):
         with freeze(datetime.datetime(2016, 1, 1, 0, 0)):
             doc1 = create(Builder('document').having(

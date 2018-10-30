@@ -8,4 +8,5 @@ INDEXES = (
     ('receipt_date', 'DateIndex'),
     ('sortable_author', 'FieldIndex'),
     ('public_trial', 'FieldIndex'),
+    ('filesize', 'FieldIndex'),
 )
