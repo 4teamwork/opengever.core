@@ -1,0 +1,8 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <javascript
+      id="modernizr.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
+</object>
