@@ -415,6 +415,11 @@
       insert-after="collective.js.jqueryui.custom.min.js"
       />
 
+  <javascript
+      id="modernizr.js"
+      insert-after="collective.js.jqueryui.custom.min.js"
+      />
+
   <!-- Required for the jquery 1.11.2 version. -->
   <javascript
       cacheable="True"

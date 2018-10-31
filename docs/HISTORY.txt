@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix rendering issue in livesearch reply view. [deiferni]
+- Fix JS ordering issue: define modernizr.js position. [phgross]
 - Disable buttons during save request in sharing form and improve error handling. [phgross]
 - Bump docxcompose to 1.0.0a12 to get a bugfix for sections in word. [deiferni]
 - Extend example-content with evil objects containing javascript. [elioschmutz]
