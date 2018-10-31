@@ -181,7 +181,8 @@ else:
         else:
             display_title = full_title
 
-        full_title = full_title.replace('"', '&quot;')
+        full_title = html_quote(full_title)
+        display_title = html_quote(display_title)
 
         css_klass = 'contenttype-%s' % ploneUtils.normalizeString(result.portal_type)
         mime_type_klass = get_mimetype_icon_klass(result)
