@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix normalizing filename for zip export. [deiferni]
+- Fix rendering issue in search view. [deiferni]
 - Fix rendering issue in livesearch reply view. [deiferni]
 - Fix JS ordering issue: define modernizr.js position. [phgross]
 - Disable buttons during save request in sharing form and improve error handling. [phgross]

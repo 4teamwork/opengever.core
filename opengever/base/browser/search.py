@@ -5,12 +5,12 @@ from ftw.solr.query import escape
 from ftw.solr.query import make_query
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
+from opengever.base.utils import escape_html
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from plone import api
 from plone.app.search.browser import EVER
 from plone.app.search.browser import quote_chars
 from plone.app.search.browser import Search
-from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_unicode
@@ -41,12 +41,13 @@ class OpengeverSearch(Search):
         catalog = api.portal.get_tool('portal_catalog')
         self.valid_keys = self.valid_keys + tuple(catalog.indexes())
 
+    @property
+    def use_solr(self):
+        return api.portal.get_registry_record(
+            'use_solr', interface=ISearchSettings)
+
     def results(self, query=None, batch=True, b_size=10, b_start=0):
-
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(ISearchSettings)
-
-        if settings.use_solr:
+        if self.use_solr:
             results = self.solr_results(
                 query=query, batch=batch, b_size=b_size, b_start=b_start)
         else:
@@ -78,6 +79,7 @@ class OpengeverSearch(Search):
             ],
             'hl': 'on',
             'hl.fl': 'SearchableText',
+            'hl.encoder': 'html',
             'hl.snippets': 3,
         }
 
@@ -181,6 +183,25 @@ class OpengeverSearch(Search):
         breadcrumbs = list(view.breadcrumbs())[:-1]
 
         return breadcrumbs
+
+    def escaped_description(self, item):
+        """Return description and guarantee escaping of html special chars.
+
+        OGSolrContentListingObject.CroppedDescription will return markup with
+        highlighting using <em> tags and with html special chars already
+        escaped, whereas CatalogContentListingObject.CroppedDescription won't
+        escape.
+
+        To make sure that tal:structure can be used safely we guarantee
+        escaping in this method in case the search results come from the
+        catalog and not from SOLR.
+        """
+        description = item.CroppedDescription()
+
+        if self.use_solr:  # the description is escaped already by solr
+            return description
+        else:
+            return escape_html(description)
 
     def types_list(self):
         types = super(OpengeverSearch, self).types_list()

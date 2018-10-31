@@ -336,7 +336,7 @@
 
                             </div>
 
-                            <div class="description" tal:content="structure item/CroppedDescription">
+                            <div class="description" tal:content="structure python: view.escaped_description(item)">
                               Cropped description
                             </div>
 
