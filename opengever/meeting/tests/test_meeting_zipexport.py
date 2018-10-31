@@ -181,6 +181,9 @@ class TestMeetingZipExportView(IntegrationTestCase):
         set_preferred_language(self.portal.REQUEST, 'de-ch')
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
+
+        self.meeting.model.title = u'9. Sitzung der Rechnungspr\xfcfungs' \
+                                   u'kommission, ordentlich'
         self.schedule_paragraph(self.meeting, u'A Gesch\xfcfte')
         with freeze(localized_datetime(2017, 12, 13)):
             self.schedule_ad_hoc(
@@ -238,17 +241,17 @@ class TestMeetingZipExportView(IntegrationTestCase):
                  'location': u'B\xfcren an der Aare',
                  'protocol': {
                      'checksum': 'unpredictable',
-                     'file': 'Protokoll-9. Sitzung der Rechnungspruefungskommission.docx',
+                     'file': 'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
                      'modified': '2017-12-13T23:00:00+01:00'
                  },
                  'start': '2016-09-12T15:30:00+00:00',
-                 'title': u'9. Sitzung der Rechnungspr\xfcfungskommission'}
+                 'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich'}
                 ],
             'version': '1.0.0'
             }, meeting_json)
 
         expected_file_names = [
-            'Protokoll-9. Sitzung der Rechnungspruefungskommission.docx',
+            'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
             'Traktandum 1/Ad-hoc Traktandthm.docx',
             'Traktandum 2/Aenderungen am Personalreglement.docx',
             'Traktandum 2/Vertraegsentwurf.docx',

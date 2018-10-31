@@ -52,7 +52,7 @@ class MeetingDocumentZipper(MeetingTraverser):
         return self.generator.generate()
 
     def get_filename(self, document):
-        return document.get_filename()
+        return normalize_path(document.get_filename())
 
     def get_file(self, document):
         return document.get_file()
