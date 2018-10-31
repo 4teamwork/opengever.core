@@ -117,7 +117,8 @@ class LiveSearchReplyView(BrowserView):
                 else:
                     display_title = full_title
 
-                full_title = full_title.replace('"', '&quot;')
+                full_title = html_quote(full_title)
+                display_title = html_quote(display_title)
 
                 css_klass = get_mimetype_icon_klass(result.doc)
 

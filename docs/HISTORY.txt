@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix rendering issue in livesearch reply view. [deiferni]
 - Disable buttons during save request in sharing form and improve error handling. [phgross]
 - Bump docxcompose to 1.0.0a12 to get a bugfix for sections in word. [deiferni]
 - Extend example-content with evil objects containing javascript. [elioschmutz]
