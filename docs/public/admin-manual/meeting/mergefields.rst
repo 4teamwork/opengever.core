@@ -145,8 +145,8 @@ Metadaten zu einem Traktandum (AgendaItem):
 - ``decision_number``
 
   Beschlussnummer (String). Diese Nummer wird von der Sitzungs- und
-  Protokollverwaltung auto-matisch vergeben, wobei die Nummerierung jeweils
-  bei Anfang einer neuen Sitzungsperiode (üb-licherweise ein Kalendarjahr)
+  Protokollverwaltung automatisch vergeben, wobei die Nummerierung jeweils
+  bei Anfang einer neuen Sitzungsperiode (üblicherweise ein Kalendarjahr)
   wieder bei 1 beginnt.
 
 - ``is_paragraph``
