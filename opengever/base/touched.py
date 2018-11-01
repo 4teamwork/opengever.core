@@ -1,6 +1,7 @@
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from opengever.base.interfaces import IRecentlyTouchedSettings
+from opengever.base.protect import unprotected_write
 from opengever.document.behaviors import IBaseDocument
 from operator import itemgetter
 from persistent.list import PersistentList
@@ -56,12 +57,12 @@ class ObjectTouchedHandler(object):
         self.catalog = api.portal.get_tool('portal_catalog')
 
     def ensure_log_initialized(self, user_id):
-        ann = IAnnotations(self.portal)
+        ann = unprotected_write(IAnnotations(self.portal))
         if RECENTLY_TOUCHED_KEY not in ann:
-            ann[RECENTLY_TOUCHED_KEY] = OOBTree()
+            ann[RECENTLY_TOUCHED_KEY] = unprotected_write(OOBTree())
 
         if user_id not in ann[RECENTLY_TOUCHED_KEY]:
-            ann[RECENTLY_TOUCHED_KEY][user_id] = PersistentList()
+            ann[RECENTLY_TOUCHED_KEY][user_id] = unprotected_write(PersistentList())
 
     def log_touched_object(self, context, event):
         # Only log touches for tracked types
@@ -87,7 +88,7 @@ class ObjectTouchedHandler(object):
         self.rotate(current_user_id)
 
     def get_recently_touched_log(self, user_id):
-        return IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id]
+        return unprotected_write(IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id])
 
     def sort(self, recently_touched_log):
         """Sort entire list on write - this way, eventual errors self-correct.
@@ -112,5 +113,5 @@ class ObjectTouchedHandler(object):
         num_checked_out = len(self.catalog(checked_out=user_id))
         limit = get_registry_record('limit', IRecentlyTouchedSettings)
         cutoff = limit + num_checked_out
-        truncated = self.get_recently_touched_log(user_id)[:cutoff]
-        IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id] = truncated
+        truncated = unprotected_write(self.get_recently_touched_log(user_id)[:cutoff])
+        unprotected_write(IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY])[user_id] = truncated
