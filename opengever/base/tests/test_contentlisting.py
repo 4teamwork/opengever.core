@@ -211,6 +211,13 @@ class TestOpengeverContentListing(IntegrationTestCase):
             IContentListingObject(obj2brain(self.document)).get_breadcrumbs(),
             )
 
+    def test_responsible_fullname(self):
+        self.login(self.regular_user)
+        self.assertEqual(
+            IContentListingObject(obj2brain(
+                self.dossier)).responsible_fullname(),
+            u'Ziegler Robert')
+
 
 class TestBrainContentListingRenderLink(IntegrationTestCase):
     """Test we render appropriate content listing links per content type."""
