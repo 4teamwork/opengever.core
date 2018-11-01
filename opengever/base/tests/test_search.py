@@ -291,6 +291,7 @@ class TestSolrSearch(IntegrationTestCase):
                 ],
                 'hl': 'on',
                 'hl.fl': 'SearchableText',
+                'hl.encoder': 'html',
                 'hl.snippets': 3,
             })
 
@@ -312,6 +313,7 @@ class TestSolrSearch(IntegrationTestCase):
                 ],
                 'hl': 'on',
                 'hl.fl': 'SearchableText',
+                'hl.encoder': 'html',
                 'hl.snippets': 3,
             })
 
