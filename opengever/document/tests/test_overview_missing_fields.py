@@ -33,6 +33,8 @@ class TestDocumentOverviewMissingFields(FunctionalTestCase):
             ['Title',
              'Document Date',
              'File',
+             'Created',
+             'Modified',
              'Author',
              'creator',
              'Description',

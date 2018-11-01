@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-10 12:09+0000\n"
+"POT-Creation-Date: 2018-08-23 09:19+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -96,10 +96,6 @@ msgstr "Ne plus afficher ce message."
 msgid "Export selection"
 msgstr "Exporter le choix"
 
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "Logout"
-msgstr "Quitter GEVER"
-
 #: ./opengever/document/checkout/manager.py
 #: ./opengever/document/checkout/revert.py
 msgid "Reverted file to version ${version_id}."
@@ -143,11 +139,6 @@ msgstr "Vous n'avez pas les droits de modifier le document ${title}."
 #: ./opengever/document/checkout/checkout.py
 msgid "You have not selected any documents."
 msgstr "Vous n'avez sélectionné aucun document."
-
-#. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "alert_not_checked_in_documents"
-msgstr "Vous avez encore des documents en checkout! Voulez-vous quand même quitter GEVER?"
 
 #. Default: "Cancel"
 #: ./opengever/document/checkout/cancel.py
@@ -365,6 +356,11 @@ msgstr "Faire le check-out et éditer"
 msgid "label_comment"
 msgstr "commentaire"
 
+#. Default: "Created"
+#: ./opengever/document/browser/overview.py
+msgid "label_created"
+msgstr "Créé"
+
 #. Default: "creator"
 #: ./opengever/document/browser/overview.py
 msgid "label_creator"
@@ -462,6 +458,11 @@ msgstr "Mots-clés"
 #: ./opengever/document/browser/overview.py
 msgid "label_meeting"
 msgstr "Séance"
+
+#. Default: "Modified"
+#: ./opengever/document/browser/overview.py
+msgid "label_modified"
+msgstr "Dernière modification"
 
 #. Default: "no"
 #: ./opengever/document/browser/overview.py
@@ -589,11 +590,6 @@ msgstr "Aucun fichier trouvé"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
 msgstr "Ce format de document n'est pas supporté par Office Connector et ne peut donc pas être directement édité."
-
-#. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "overview_not_checked_in_documents"
-msgstr "Les documents suivants ont été verrouillés:"
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt

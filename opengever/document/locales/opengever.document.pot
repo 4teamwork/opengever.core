@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-10 12:09+0000\n"
+"POT-Creation-Date: 2018-08-23 09:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,10 +96,6 @@ msgstr ""
 msgid "Export selection"
 msgstr ""
 
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "Logout"
-msgstr ""
-
 #: ./opengever/document/checkout/manager.py
 #: ./opengever/document/checkout/revert.py
 msgid "Reverted file to version ${version_id}."
@@ -142,11 +138,6 @@ msgstr ""
 #: ./opengever/document/checkout/checkin.py
 #: ./opengever/document/checkout/checkout.py
 msgid "You have not selected any documents."
-msgstr ""
-
-#. Default: "You have not checked in documents. Do you realy want to logout?"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "alert_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Cancel"
@@ -365,6 +356,11 @@ msgstr ""
 msgid "label_comment"
 msgstr ""
 
+#. Default: "Created"
+#: ./opengever/document/browser/overview.py
+msgid "label_created"
+msgstr ""
+
 #. Default: "creator"
 #: ./opengever/document/browser/overview.py
 msgid "label_creator"
@@ -461,6 +457,11 @@ msgstr ""
 #. Default: "Meeting"
 #: ./opengever/document/browser/overview.py
 msgid "label_meeting"
+msgstr ""
+
+#. Default: "Modified"
+#: ./opengever/document/browser/overview.py
+msgid "label_modified"
 msgstr ""
 
 #. Default: "no"
@@ -588,11 +589,6 @@ msgstr ""
 #. Default: "Office connector unsupported type"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
-msgstr ""
-
-#. Default: "Following documents are checked out:"
-#: ./opengever/document/browser/templates/logout_overlay.pt
-msgid "overview_not_checked_in_documents"
 msgstr ""
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."

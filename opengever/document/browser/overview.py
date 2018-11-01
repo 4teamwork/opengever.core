@@ -4,6 +4,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base import _ as ogbmf
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
+from opengever.base.behaviors.changed import IChanged
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -144,6 +145,10 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
             FieldRow('IDocumentMetadata.document_date'),
             TemplateRow(self.file_template,
                         label=_('label_file', default='File')),
+            CustomRow(self.get_creation_date,
+                      label=_('label_created', default='Created')),
+            CustomRow(self.get_modification_date,
+                      label=_('label_modified', default='Modified')),
             FieldRow('IDocumentMetadata.document_type'),
             FieldRow('IDocumentMetadata.document_author'),
             CustomRow(self.render_creator_link,
@@ -329,3 +334,11 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
             pass
 
         return 'contenttype-opengever-document-document'
+
+    def get_creation_date(self):
+        return self.context.toLocalizedTime(
+            self.context.created(), long_format=True)
+
+    def get_modification_date(self):
+        return self.context.toLocalizedTime(
+            IChanged(self.context).changed, long_format=True)
