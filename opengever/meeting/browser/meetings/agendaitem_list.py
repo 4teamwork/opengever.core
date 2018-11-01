@@ -4,6 +4,7 @@ from opengever.meeting.command import CreateGeneratedDocumentCommand
 from opengever.meeting.command import UpdateGeneratedDocumentCommand
 from opengever.meeting.exceptions import AgendaItemListAlreadyGenerated
 from opengever.meeting.exceptions import AgendaItemListMissingTemplate
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.generateddocument import GeneratedAgendaItemList
 from plone import api
@@ -51,6 +52,10 @@ class GenerateAgendaItemList(BrowserView):
                 )
             api.portal.show_message(msg, self.request, type='error')
 
+        except SablonProcessingFailed:
+            msg = _(u'Error while processing Sablon template')
+            api.portal.show_message(msg, self.request, type='error')
+
         return self.request.RESPONSE.redirect(meeting.get_url())
 
     @classmethod
@@ -88,8 +93,14 @@ class UpdateAgendaItemList(BrowserView):
 
         command = UpdateGeneratedDocumentCommand(
             generated_doc, meeting, self.operations)
-        command.execute()
-        command.show_message()
+
+        try:
+            command.execute()
+            command.show_message()
+
+        except SablonProcessingFailed:
+            msg = _(u'Error while processing Sablon template')
+            api.portal.show_message(msg, self.request, type='error')
 
         return self.request.RESPONSE.redirect(meeting.get_url())
 

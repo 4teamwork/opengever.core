@@ -195,7 +195,6 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
         template = self.document_operations.get_sablon_template(self.meeting)
         sablon = Sablon(template)
         sablon.process(self.document_operations.get_meeting_data(self.meeting).as_json())
-        assert sablon.is_processed_successfully(), sablon.stderr
         return sablon.file_data
 
     def execute(self):
@@ -333,8 +332,7 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         template = self._get_paragraph_template()
         if template is None:
             return
-
-        return Sablon(self._get_paragraph_template()).process(
+        return Sablon(template).process(
             ProtocolData(self.meeting, [agenda_item]).as_json())
 
     @instance.memoize
@@ -352,11 +350,8 @@ class UpdateGeneratedDocumentCommand(object):
 
     def generate_file_data(self):
         template = self.document_operations.get_sablon_template(self.meeting)
-        sablon = Sablon(template)
-        sablon.process(
-            self.document_operations.get_meeting_data(self.meeting).as_json())
-
-        assert sablon.is_processed_successfully(), sablon.stderr
+        data = self.document_operations.get_meeting_data(self.meeting).as_json()
+        sablon = Sablon(template).process(data)
         return sablon.file_data
 
     def execute(self):

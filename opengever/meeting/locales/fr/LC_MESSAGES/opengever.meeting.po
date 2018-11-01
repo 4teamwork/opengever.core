@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-24 12:57+0000\n"
+"POT-Creation-Date: 2018-10-26 07:04+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -127,6 +127,12 @@ msgstr "Supprimer"
 #: ./opengever/meeting/command.py
 msgid "Document ${title} has already been submitted in that version."
 msgstr "Le document ${title} a déjà été soumis dans cette version."
+
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+#: ./opengever/meeting/browser/meetings/agendaitem_list.py
+#: ./opengever/meeting/browser/protocol.py
+msgid "Error while processing Sablon template"
+msgstr "Le Modèle Sablon n'a pas pu être utilisé"
 
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "Existing document"

@@ -1,3 +1,6 @@
+from opengever.meeting import _
+from opengever.meeting.exceptions import SablonProcessingFailed
+from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 
@@ -16,8 +19,12 @@ class MergeDocxProtocol(BrowserView):
     def __call__(self):
         meeting = self.context.get_meeting()
 
-        command = meeting.update_protocol_document(
-            overwrite=self.request.get("overwrite") == "True")
-        command.show_message()
+        try:
+            command = meeting.update_protocol_document(
+                overwrite=self.request.get("overwrite") == "True")
+            command.show_message()
+        except SablonProcessingFailed:
+            msg = _(u'Error while processing Sablon template')
+            api.portal.show_message(msg, self.request, type='error')
 
         return self.request.RESPONSE.redirect(meeting.get_url())

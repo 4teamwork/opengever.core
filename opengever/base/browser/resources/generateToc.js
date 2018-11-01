@@ -11,6 +11,9 @@
     request.responseType = "arraybuffer";
     request.onload = function() {
       loaded.resolve();
+      if (this.getResponseHeader('X-ogg-reload-page')) {
+        window.location.reload();
+      }
       var contentDisposition = this.getResponseHeader('content-disposition');
       var contentType = this.getResponseHeader('content-type');
       var filename = contentDisposition.match(/filename="(.+)"/)[1];

@@ -11,6 +11,7 @@ from opengever.meeting import _
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Period
 from opengever.meeting.model.membership import Membership
@@ -59,15 +60,15 @@ class CloseTransition(Transition):
     def execute(self, obj, model):
         assert self.can_execute(model)
 
-        model.close()
+        success = model.close()
+        if success:
+            msg = _(u'msg_meeting_successfully_closed',
+                    default=u'The meeting ${title} has been successfully closed, '
+                    'the excerpts have been generated and sent back to the '
+                    'initial dossier.',
+                    mapping=dict(title=model.get_title()))
 
-        msg = _(u'msg_meeting_successfully_closed',
-                default=u'The meeting ${title} has been successfully closed, '
-                'the excerpts have been generated and sent back to the '
-                'initial dossier.',
-                mapping=dict(title=model.get_title()))
-
-        api.portal.show_message(msg, api.portal.get().REQUEST)
+            api.portal.show_message(msg, api.portal.get().REQUEST)
 
 
 class CancelTransition(Transition):
@@ -221,6 +222,7 @@ class Meeting(Base, SQLFormSupport):
         command = MergeDocxProtocolCommand(
             self.get_dossier(), self, operations)
         command.execute(overwrite=overwrite)
+
         return command
 
     def hold(self):
@@ -243,8 +245,15 @@ class Meeting(Base, SQLFormSupport):
         assert not self.get_undecided_agenda_items(), \
             'All agenda items must be decided before a meeting is closed.'
 
-        self.update_protocol_document()
+        try:
+            self.update_protocol_document()
+        except SablonProcessingFailed:
+            msg = _(u'Error while processing Sablon template')
+            api.portal.show_message(msg, api.portal.get().REQUEST, type='error')
+            return False
+
         self.workflow_state = 'closed'
+        return True
 
     @property
     def css_class(self):

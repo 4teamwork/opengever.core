@@ -518,6 +518,7 @@
       }
       if (typeof(createExcerptDialog) !== 'undefined') {
         createExcerptDialog.close();
+        $('#confirm_create_excerpt .confirm').removeClass("loading");
       }
       renameAgendaItemDialog.cancel();
     };

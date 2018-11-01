@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-24 12:57+0000\n"
+"POT-Creation-Date: 2018-10-26 07:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,6 +123,12 @@ msgstr ""
 
 #: ./opengever/meeting/command.py
 msgid "Document ${title} has already been submitted in that version."
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/agendaitem.py
+#: ./opengever/meeting/browser/meetings/agendaitem_list.py
+#: ./opengever/meeting/browser/protocol.py
+msgid "Error while processing Sablon template"
 msgstr ""
 
 #: ./opengever/meeting/browser/proposalforms.py

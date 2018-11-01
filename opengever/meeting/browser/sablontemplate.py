@@ -1,5 +1,7 @@
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 import json
 
@@ -69,8 +71,10 @@ class FillMeetingTemplate(BrowserView):
 
     def __call__(self):
         sablon = Sablon(self.context)
-        sablon.process(json.dumps(SAMPLE_MEETING_DATA))
-        assert sablon.is_processed_successfully(), sablon.stderr
+        try:
+            sablon.process(json.dumps(SAMPLE_MEETING_DATA))
+        except SablonProcessingFailed as err:
+            return safe_unicode(err.message)
 
         response = self.request.response
         response.setHeader('X-Theme-Disabled', 'True')
