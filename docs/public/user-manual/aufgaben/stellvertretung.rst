@@ -13,10 +13,9 @@ Stellvertreter-Dropdown vorgenommen werden.
 
 Persönliche Aufgaben
 ~~~~~~~~~~~~~~~~~~~~
-Das Anwählen der Checkbox *Persönliche Aufgabe* ermöglicht, dass eine Aufgabe
-nicht an die Eingangskorb-Gruppe adressiert wird, sondern direkt einer Person.
-Diese Funktion kann vor allem bei Aufgaben mit heiklen Daten sowie
-personenbezogenen Tasks eingesetzt werden.
+Das Anwählen der Checkbox *Persönliche Aufgabe* ermöglicht, dass bei der Aufgabe
+die Stellvertreter-Berechtigungen für die Eingangskorb-Gruppe deaktiviert werden.
+Diese Funktion kann z.B. bei Aufgaben mit personenbezogenen Daten hilfreich sein.
 
 |img-stellvertretung-1|
 
