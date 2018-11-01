@@ -212,10 +212,14 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
                 dm = getUtility(IWizardDataStorage)
                 data = dm.get_data(get_dm_key())
                 data['dossier_oguid'] = Oguid.for_object(dossier)
-                meeting_template = data.pop('meeting_template', None)
+                meeting_template_uid = data.pop('meeting_template', None)
+
                 meeting = Meeting(**data)
-                if meeting_template is not None:
+                if meeting_template_uid is not None:
+                    meeting_template = api.content.get(
+                        UID=meeting_template_uid)
                     meeting_template.apply(meeting)
+
                 meeting.initialize_participants()
                 session = create_session()
                 session.add(meeting)

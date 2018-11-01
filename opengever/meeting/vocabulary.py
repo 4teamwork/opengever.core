@@ -48,7 +48,7 @@ class MeetingTemplateVocabulary(object):
         for brain in meeting_templates:
             template = brain.getObject()
             terms.append(SimpleTerm(
-                value=template,
+                value=IUUID(template),
                 token=template.id,
                 title=safe_unicode(template.title)))
 

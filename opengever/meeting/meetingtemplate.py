@@ -1,4 +1,3 @@
-from opengever.meeting.paragraphtemplate import ParagraphTemplate
 from plone.dexterity.content import Container
 from Products.CMFPlone.utils import safe_unicode
 
