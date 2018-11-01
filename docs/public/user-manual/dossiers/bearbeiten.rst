@@ -78,7 +78,7 @@ Vor dem Abschluss müssen zudem folgende Abschlussregeln beachtet werden:
 
 - Alle Aufgaben müssen geschlossen sein
 - Alle traktandierten Anträge müssen abgeschlossen sein
-- Wenn mind. ein Subdossier erstellt wurde, müssen alle Inhalte des Dossiers in Subdossiers verteilt worden sein. (Diese Regel kann bei Bedarf deaktiviert werden.)
+- Falls das Dossier Subdossiers enthält, so müssen alle Inhalte in Subdossiers abgelegt sein. Diese Regel kann bei Bedarf via Konfigurationsoption deaktiviert werden.
 
 Weiter muss das Abschlussdatum beachtet werden. Dieses muss mind. das letzte
 Bearbeitungs-Datum des zuletzt bearbeiteten Dokumentes haben. Beim
@@ -175,7 +175,6 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 .. |img-dossiers-16| image:: ../img/media/img-dossiers-16.png
 .. |img-dossiers-17| image:: ../img/media/img-dossiers-17.png
 .. |img-dossiers-18| image:: ../img/media/img-dossiers-18.png
-.. |img-dossiers-100| image:: ../img/media/img-dossiers-100.png
 .. |img-dossiers-101| image:: ../img/media/img-dossiers-101.png
 .. |img-dossiers-102| image:: ../img/media/img-dossiers-102.png
 
