@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix an issue when creating meetings from a template. [deiferni]
 - Fix normalizing filename for zip export. [deiferni]
 - Fix rendering issue in livesearch reply view. [deiferni]
 - Fix JS ordering issue: define modernizr.js position. [phgross]
