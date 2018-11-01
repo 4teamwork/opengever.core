@@ -78,6 +78,19 @@ Wählen Sie dazu einfach die Aktion *Abschliessen* um das Dossier abzuschliessen
 
 |img-dossiers-16|
 
+Nach Abschluss des Dossiers wird vom System automatisch ein Journal-PDF erstellt,
+welches alle Aktivitäten sowie alle im Dossier erstellen Anträge und Aufgaben
+aufzeigt.
+
+Vorher:
+
+|img-dossiers-100|
+
+Nachher:
+
+|img-dossiers-101|
+
+
 Ein Dossier wieder eröffnen und wieder ablegen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -151,5 +164,7 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 .. |img-dossiers-16| image:: ../img/media/img-dossiers-16.png
 .. |img-dossiers-17| image:: ../img/media/img-dossiers-17.png
 .. |img-dossiers-18| image:: ../img/media/img-dossiers-18.png
+.. |img-dossiers-100| image:: ../img/media/img-dossiers-100.png
+.. |img-dossiers-101| image:: ../img/media/img-dossiers-101.png
 
 .. disqus::
