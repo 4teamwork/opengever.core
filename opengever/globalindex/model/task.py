@@ -465,6 +465,21 @@ class Task(Base):
 
 class TaskQuery(BaseQuery):
 
+    roles_allowed_to_see_tasks = ('Manager', 'Administrator', 'Reader')
+
+    def restrict(self):
+        member = api.user.get_current()
+
+        # Check for global roles. Global Administrators, Readers and
+        # Managers are always able to access a task, so no need to restrict.
+        global_roles = set(api.user.get_roles(user=member))
+        if not set(self.roles_allowed_to_see_tasks).isdisjoint(global_roles):
+            return self
+
+        principals = member.getGroupIds() + [member.getId()]
+        return self.join(Task._principals).filter(
+            TaskPrincipal.principal.in_(principals)).distinct()
+
     def _extend_with_physical_path(self, query, field, path):
         if is_oracle():
             return query.filter(func.to_char(field) == path)
@@ -475,29 +490,29 @@ class TaskQuery(BaseQuery):
         """Returns query which List all tasks where the given user,
         his userid, is responsible. It queries all admin units.
         """
-        return self.filter(Task.responsible == userid)
+        return self.restrict().filter(Task.responsible == userid)
 
     def by_responsibles(self, responsibles):
-        return self.filter(Task.responsible.in_(responsibles))
+        return self.restrict().filter(Task.responsible.in_(responsibles))
 
     def users_issued_tasks(self, userid):
         """Returns query which list all tasks where the given user
         is the issuer. It queries all admin units.
         """
-        return self.filter(Task.issuer == userid)
+        return self.restrict().filter(Task.issuer == userid)
 
     def by_assigned_org_unit(self, org_unit):
         """Returns all tasks assigned to the given orgunit."""
-        return self.filter(Task.assigned_org_unit == org_unit.id())
+        return self.restrict().filter(Task.assigned_org_unit == org_unit.id())
 
     def by_issuing_org_unit(self, org_unit):
         """Returns all tasks issued by the given orgunit."""
-        return self.filter(Task.issuing_org_unit == org_unit.id())
+        return self.restrict().filter(Task.issuing_org_unit == org_unit.id())
 
     def all_issued_tasks(self, admin_unit):
         """List all tasks from the current_admin_unit.
         """
-        return self.filter(Task.admin_unit_id == admin_unit.id())
+        return self.restrict().filter(Task.admin_unit_id == admin_unit.id())
 
     by_admin_unit = all_issued_tasks
 
@@ -527,14 +542,14 @@ class TaskQuery(BaseQuery):
     def by_ids(self, task_ids):
         """Returns all tasks whos task_ids are listed in `task_ids`.
         """
-        return self.filter(Task.task_id.in_(task_ids)).all()
+        return self.restrict().filter(Task.task_id.in_(task_ids)).all()
 
     def by_container(self, container, admin_unit):
         url_tool = api.portal.get_tool(name='portal_url')
         path = '/'.join(url_tool.getRelativeContentPath(container))
         path = '{}/'.format(path)
 
-        return self.by_admin_unit(admin_unit).filter(
+        return self.restrict().by_admin_unit(admin_unit).filter(
             Task.physical_path.startswith(path))
 
     def by_brain(self, brain):
@@ -545,7 +560,8 @@ class TaskQuery(BaseQuery):
 
     def subtasks_by_tasks(self, tasks):
         """Queries all subtask of the given tasks sql object."""
-        query = self.filter(
+
+        query = self.restrict().filter(
             or_(
                 and_(
                     Task.admin_unit_id == task.admin_unit_id,

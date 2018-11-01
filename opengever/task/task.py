@@ -1,4 +1,5 @@
 from AccessControl.PermissionRole import rolesForPermissionOn
+from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
@@ -37,8 +38,8 @@ from plone.dexterity.content import Container
 from plone.indexer.interfaces import IIndexer
 from plone.supermodel import model
 from Products.CMFCore.permissions import View
-from Products.CMFCore.utils import _mergedLocalRoles
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from z3c.form import validator
@@ -478,13 +479,23 @@ class Task(Container):
         # index the principal which have View permission. This is according to
         # the allowedRolesAndUsers index but it does not car of global roles.
         allowed_roles = rolesForPermissionOn(View, self)
-        principals = []
+        return list(self._get_principals_for_roles(allowed_roles))
 
-        for principal, roles in _mergedLocalRoles(self).items():
-            for role in roles:
-                if role in allowed_roles:
-                    principals.append(safe_unicode(principal))
-                    break
+    def _get_principals_for_roles(self, allowed_roles):
+        principals = set()
+        parent = self
+
+        while parent and not IPloneSiteRoot.providedBy(parent):
+            for principal, roles in parent.get_local_roles():
+                for role in roles:
+                    if role in allowed_roles:
+                        principals.add(safe_unicode(principal))
+
+            # local roles inheritance blocked
+            if getattr(aq_base(parent), '__ac_local_roles_block__', False):
+                break
+
+            parent = aq_parent(aq_inner(parent))
 
         return principals
 

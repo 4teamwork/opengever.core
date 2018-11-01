@@ -1,250 +1,214 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
-from opengever.testing import FunctionalTestCase
-from opengever.testing import MEMORY_DB_LAYER
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
-from plone import api
-from unittest import TestCase
+from sqlalchemy.orm.exc import NoResultFound
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 
 
-class TestTaskQueries(TestCase):
-
-    layer = MEMORY_DB_LAYER
-
-    def setUp(self):
-        super(TestTaskQueries, self).setUp()
-
-        self.session = self.layer.session
-
-        self.admin_unit_a = create(Builder('admin_unit')
-                                   .id('unita'))
-        self.admin_unit_b = create(Builder('admin_unit')
-                                   .id('unitb'))
-
-        self.rr = create(Builder('org_unit').id('rr')
-                         .having(admin_unit=self.admin_unit_a))
-        self.bd = create(Builder('org_unit').id('bd')
-                         .having(admin_unit=self.admin_unit_a))
-        self.afi = create(Builder('org_unit').id('afi')
-                          .having(admin_unit=self.admin_unit_b))
-
-    def task(self, intid, current_admin_unit, sequence_number=1, **kw):
-        arguments = {'issuing_org_unit': 'rr',
-                     'assigned_org_unit': 'bd'}
-        arguments.update(kw)
-
-        task = Task(intid, current_admin_unit, sequence_number=sequence_number,
-                    **arguments)
-        self.session.add(task)
-        return task
+class TestTaskQueries(IntegrationTestCase):
 
     def test_in_pending_state_returns_only_pending_tasks(self):
-        task1 = self.task(1, 'xx', review_state='task-state-open')
-        task2 = self.task(2, 'yy', review_state='task-state-resolved')
-        self.task(3, 'zz', review_state='task-state-cancelled')
+        self.login(self.regular_user)
 
-        self.assertItemsEqual(
-            [task1, task2], Task.query.in_pending_state().all())
+        pending_tasks = Task.query.in_pending_state().all()
+
+        self.assertIn(self.task.get_sql_object(), pending_tasks)
+        self.assertIn(self.subtask.get_sql_object(), pending_tasks)
+        self.assertIn(self.task.get_sql_object(), pending_tasks)
+
+        self.assertNotIn(self.seq_subtask_2.get_sql_object(), pending_tasks)
 
     def test_users_tasks_lists_only_tasks_assigned_to_current_user(self):
-        task1 = self.task(1, 'rr', responsible='hugo.boss')
-        task2 = self.task(2, 'bd', responsible='tommy.hilfiger')
-        task3 = self.task(3, 'sb', responsible='hugo.boss')
+        self.login(self.regular_user)
 
-        self.assertSequenceEqual(
-            [task1, task3],
-            Task.query.users_tasks('hugo.boss').all())
-
-        self.assertSequenceEqual(
-            [task2],
-            Task.query.users_tasks('tommy.hilfiger').all())
+        self.assertItemsEqual(
+            [self.meeting_task.get_sql_object(),
+             self.meeting_subtask.get_sql_object()],
+            Task.query.users_tasks(self.dossier_responsible.id).all())
 
     def test_issued_task_lists_only_task_issued_by_the_current_user(self):
-        task1 = self.task(1, 'rr', issuer='hugo.boss')
-        task2 = self.task(2, 'bd', issuer='tommy.hilfiger')
-        task3 = self.task(3, 'sb', issuer='hugo.boss')
+        self.login(self.regular_user)
 
-        self.assertSequenceEqual(
-            [task1, task3],
-            Task.query.users_issued_tasks('hugo.boss').all())
+        self.assertItemsEqual(
+            [self.sequential_task.get_sql_object()],
+            Task.query.users_issued_tasks(self.regular_user.id).all())
 
-        self.assertSequenceEqual(
-            [task2],
-            Task.query.users_issued_tasks('tommy.hilfiger').all())
+        self.assertItemsEqual(
+            [self.seq_subtask_1.get_sql_object(),
+             self.seq_subtask_2.get_sql_object()],
+            Task.query.users_issued_tasks(self.secretariat_user.id).all())
 
     def test_by_intid_with_existing_pair(self):
-        self.task(1, 'rr')
-        task2 = self.task(2, 'rr')
-        self.task(2, 'bd')
+        self.login(self.regular_user)
 
-        self.assertEquals(task2, Task.query.by_intid(2, 'rr'))
+        intid = getUtility(IIntIds).getId(self.task)
+        self.assertEquals(self.task.get_sql_object(),
+                          Task.query.by_intid(intid, 'plone'))
 
     def test_by_intid_with_NOT_existing_pair_returns_none(self):
-        self.task(1, 'rr')
-
+        self.login(self.regular_user)
         self.assertIsNone(None, Task.query.by_intid(1, 'bd'))
 
     def test_task_by_oguid_returns_correct_task_with_oguid_instance_param(self):
-        task = self.task(1, 'unita')
-        self.task(2, 'unita')
-        self.task(1, 'unitb')
+        self.login(self.regular_user)
 
-        self.assertEqual(task, Task.query.by_oguid(task.oguid))
+        oguid = Oguid.for_object(self.task)
+        self.assertEqual(self.task.get_sql_object(), Task.query.by_oguid(oguid))
 
     def test_task_by_oguid_returns_correct_task_with_string_param(self):
-        task = self.task(1, 'unita')
-        self.task(2, 'unitb')
-        self.task(1, 'unitb')
+        self.login(self.regular_user)
 
-        self.assertEqual(task, Task.query.by_oguid('unita:1'))
+        oguid = Oguid.for_object(self.task)
+        self.assertEqual(self.task.get_sql_object(), Task.query.by_oguid(oguid.id))
 
     def test_task_by_oguid_returns_non_for_unknown_oguids(self):
+        self.login(self.regular_user)
+
         self.assertIsNone(Task.query.by_oguid('theanswer:42'))
 
     def test_py_path(self):
-        task1 = self.task(1, 'unita', physical_path='test/task-1/')
-        self.task(2, 'unitb', physical_path='test/task-1/')
+        self.login(self.regular_user)
 
-        self.assertEquals(task1, Task.query.by_path('test/task-1/', 'unita'))
+        self.assertEquals(self.task.get_sql_object(),
+                          Task.query.by_path(self.task.get_physical_path(), 'plone'))
 
     def test_py_path_returns_none_for_not_existing_task(self):
-        self.task(2, 'unitb', physical_path='test/task-1/')
+        self.login(self.regular_user)
 
-        self.assertEquals(None, Task.query.by_path('test/task-1/', 'unita'))
+        self.assertEquals(None, Task.query.by_path('test/not-existng/', 'plone'))
 
     def test_by_ids_returns_tasks_wich_match_the_given_id(self):
-        task1 = self.task(1, 'unita', task_id=55)
-        self.task(2, 'unita', task_id=56)
-        task3 = self.task(3, 'unita', task_id=58)
+        self.login(self.regular_user)
 
-        self.assertEquals([task1, task3],
-                          Task.query.by_ids([55, 58]))
+        tasks = [self.task, self.subtask, self.meeting_subtask]
+
+        self.assertEquals(
+            [task.get_sql_object() for task in tasks],
+            Task.query.by_ids([task.get_sql_object().id for task in tasks]))
 
     def test_by_assigned_org_unit(self):
-        task1 = self.task(1, 'unita', task_id=55, assigned_org_unit='rr')
-        task2 = self.task(2, 'unita', task_id=56, assigned_org_unit='bd')
-        task3 = self.task(3, 'unita', task_id=58, assigned_org_unit='rr')
+        self.login(self.regular_user)
 
-        self.assertEquals([task1, task3],
-                          Task.query.by_assigned_org_unit(self.rr).all())
-        self.assertEquals([task2],
-                          Task.query.by_assigned_org_unit(self.bd).all())
+        additional = self.add_additional_org_unit()
+
+        self.task.get_sql_object().assigned_org_unit = additional.id()
+        self.meeting_subtask.get_sql_object().assigned_org_unit = additional.id()
+
+        self.assertItemsEqual(
+            [self.task.get_sql_object(), self.meeting_subtask.get_sql_object()],
+            Task.query.by_assigned_org_unit(additional).all())
 
     def test_by_issuing_org_unit(self):
-        task1 = self.task(1, 'unita', task_id=55, issuing_org_unit='rr')
-        task2 = self.task(2, 'unita', task_id=56, issuing_org_unit='bd')
-        task3 = self.task(3, 'unita', task_id=58, issuing_org_unit='rr')
+        self.login(self.regular_user)
 
-        self.assertEquals([task1, task3],
-                          Task.query.by_issuing_org_unit(self.rr).all())
-        self.assertEquals([task2],
-                          Task.query.by_issuing_org_unit(self.bd).all())
+        additional = self.add_additional_org_unit()
+
+        self.task.get_sql_object().issuing_org_unit = additional.id()
+        self.meeting_subtask.get_sql_object().issuing_org_unit = additional.id()
+
+        self.assertEquals(
+            [self.task.get_sql_object(), self.meeting_subtask.get_sql_object()],
+            Task.query.by_issuing_org_unit(additional).all())
 
     def test_all_issued_tasks_lists_all_tasks_created_on_given_admin_unit(self):
-        task1 = self.task(1, 'unita', assigned_org_unit='rr')
-        task2 = self.task(2, 'unitb', assigned_org_unit='afi')
-        task3 = self.task(3, 'unita', assigned_org_unit='bd')
-        task4 = self.task(4, 'unita', assigned_org_unit='afi')
+        self.login(self.regular_user)
+
+        additional = create(Builder('admin_unit').id("additional"))
+
+        tasks = [self.task.get_sql_object(),
+                 self.meeting_subtask.get_sql_object()]
+
+        self.task.get_sql_object().admin_unit_id = additional.id()
+        self.meeting_subtask.get_sql_object().admin_unit_id = additional.id()
 
         self.assertItemsEqual(
-            [task1, task3, task4],
-            Task.query.all_issued_tasks(self.admin_unit_a).all())
+            tasks, Task.query.all_issued_tasks(additional).all())
 
-        self.assertItemsEqual(
-            [task2],
-            Task.query.all_issued_tasks(self.admin_unit_b).all())
+    def test_restrict_checks_principals(self):
+        # Responsible user is able to see
+        self.login(self.regular_user)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+        self.assertIn(sql_task, Task.query.restrict().all())
 
+        # Secretariat user is not able to see the task
+        self.login(self.secretariat_user)
+        self.assertNotIn(sql_task, Task.query.restrict().all())
 
-class TestFunctionalTaskQueries(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestFunctionalTaskQueries, self).setUp()
-
-        self.dossier = create(Builder('dossier'))
+    def test_restrict_checks_is_skipped_for_admins(self):
+        # Responsible user is able to see
+        self.login(self.administrator)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+        self.assertIn(sql_task, Task.query.restrict().all())
 
     def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
-        create(Builder('task').within(self.portal))
-        task1 = create(Builder('task').within(self.dossier))
-        subtask = create(Builder('task').within(task1))
+        self.login(self.regular_user)
 
         self.assertItemsEqual(
-            [task1.get_sql_object(), subtask.get_sql_object()],
-            Task.query.by_container(self.dossier, self.admin_unit).all())
+            [self.task.get_sql_object(),
+             self.subtask.get_sql_object(),
+             self.sequential_task.get_sql_object(),
+             self.seq_subtask_1.get_sql_object(),
+             self.seq_subtask_2.get_sql_object(),
+             self.seq_subtask_3.get_sql_object(),
+             self.info_task.get_sql_object()],
+            Task.query.by_container(self.dossier, get_current_admin_unit()).all())
 
     def test_by_container_handles_similar_paths_exactly(self):
-        task1 = create(Builder('task').within(self.dossier))
+        self.login(self.regular_user)
 
-        dossier_11 = create(Builder('dossier').titled(u'Dossier 11'))
-        dossier_11 = api.content.rename(obj=dossier_11, new_id='dossier-11')
-        create(Builder('task').within(dossier_11))
+        # manually set a similar physical path than self.task
+        self.sequential_task.get_sql_object().physical_path = 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-11/task-3'
 
-        self.assertItemsEqual(
-            [task1.get_sql_object()],
-            Task.query.by_container(self.dossier, self.admin_unit).all())
+        tasks = Task.query.by_container(self.dossier, get_current_admin_unit()).all()
+
+        self.assertIn(self.task.get_sql_object(), tasks)
+        self.assertNotIn(self.sequential_task.get_sql_object(), tasks)
 
     def test_by_container_queries_adminunit_dependent(self):
-        create(Builder('task').within(self.dossier))
+        self.login(self.regular_user)
 
-        additional_admin_unit = create(Builder('admin_unit')
-                                       .id(u'additional')
-                                       .having(title='foo')
-                                       .as_current_admin_unit())
-
-        create(Builder('org_unit')
-               .having(admin_unit=additional_admin_unit)
-               .assign_users([self.user])
-               .id(u'additional')
-               .as_current_org_unit())
-
-        task2 = create(Builder('task').within(self.dossier))
-
-        self.assertEquals(
-            [task2.get_sql_object()],
-            Task.query.by_container(self.dossier, additional_admin_unit).all())
+        additional = create(Builder('admin_unit').id("additional"))
+        self.assertItemsEqual(
+            [],
+            Task.query.by_container(self.dossier, additional).all())
 
     def test_by_brain_returns_corresponding_sql_task(self):
-        task1 = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            task1.get_sql_object(),
-            Task.query.by_brain(obj2brain(task1)))
+            self.task.get_sql_object(),
+            Task.query.by_brain(obj2brain(self.task)))
 
     def test_by_brain_queries_adminunit_dependent(self):
-        create(Builder('task'))
-
-        additional_admin_unit = create(
-            Builder('admin_unit')
-            .id(u'additional')
-            .as_current_admin_unit())
-
-        create(Builder('org_unit')
-               .having(admin_unit=additional_admin_unit)
-               .assign_users([self.user])
-               .id(u'additional')
-               .as_current_org_unit())
-
-        task = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            task.get_sql_object(),
-            Task.query.by_brain(obj2brain(task)))
+            self.task.get_sql_object(),
+            Task.query.by_brain(obj2brain(self.task)))
+
+        # manually change admin_unit of task
+        self.task.get_sql_object().admin_unit_id = 'additional'
+
+        with self.assertRaises(NoResultFound):
+            self.assertIsNone(Task.query.by_brain(obj2brain(self.task)))
 
     def test_subtasks_by_task_returns_all_subtask_excluding_the_given_one(self):
-        task1 = create(Builder('task'))
-        task2 = create(Builder('task'))
-
-        subtask1 = create(Builder('task').within(task1))
-        subtask3 = create(Builder('task').within(task1))
-        create(Builder('task').within(task2))
+        self.login(self.regular_user)
 
         self.assertEqual(
-            [subtask1.get_sql_object(), subtask3.get_sql_object()],
-            Task.query.subtasks_by_task(task1.get_sql_object()).all())
+            [self.seq_subtask_1.get_sql_object(),
+             self.seq_subtask_2.get_sql_object(),
+             self.seq_subtask_3.get_sql_object()],
+            Task.query.subtasks_by_task(self.sequential_task.get_sql_object()).all())
 
     def test_subtasks_by_task_returns_empty_list_when_no_subtask_exists(self):
-        task1 = create(Builder('task'))
+        self.login(self.regular_user)
 
         self.assertEqual(
             [],
-            Task.query.subtasks_by_task(task1.get_sql_object()).all())
+            Task.query.subtasks_by_task(self.expired_task.get_sql_object()).all())
