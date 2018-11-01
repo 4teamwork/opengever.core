@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Bump ftw.solr to 2.3.1 to get reindexObjectSecurity fix. [lgraf]
 - Fix an issue when creating meetings from a template. [deiferni]
 - Fix normalizing filename for zip export. [deiferni]
 - Fix rendering issue in search view. [deiferni]
