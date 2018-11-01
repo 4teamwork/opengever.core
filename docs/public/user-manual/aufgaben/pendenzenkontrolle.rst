@@ -1,3 +1,5 @@
+.. _label-pendenzenkontrolle:
+
 Aufgaben überwachen (Pendenzenkontrolle)
 ----------------------------------------
 

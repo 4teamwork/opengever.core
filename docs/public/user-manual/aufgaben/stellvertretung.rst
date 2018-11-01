@@ -1,3 +1,5 @@
+.. _label-stellvertretung:
+
 Aufgaben stellvertretend bearbeiten
 -----------------------------------
 
