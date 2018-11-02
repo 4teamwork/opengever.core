@@ -45,12 +45,24 @@ Excel-Pendenzenliste zu generieren.
 
 |img-aufgaben-38|
 
+Erinnerung setzen
+~~~~~~~~~~~~~~~~~~
+Innerhalb der Aufgabe gibt es zudem die Möglichkeit, sich eine Erinnerung zu
+setzen. Dies kann auf der Detailansicht (Bild unten) aber auch schon beim
+Akzeptieren der Aufgabe gemacht werden. Dadurch wird - je nach
+Benachrichtigungseinstellungen - eine Notifikation im GEVER oder per Mail
+ausgelöst.
+
+|img-aufgaben-39|
+
 .. |img-aufgaben-33| image:: ../img/media/img-aufgaben-33.png
 .. |img-aufgaben-34| image:: ../img/media/img-aufgaben-34.png
 .. |img-aufgaben-35| image:: ../img/media/img-aufgaben-35.png
 .. |img-aufgaben-36| image:: ../img/media/img-aufgaben-36.png
 .. |img-aufgaben-37| image:: ../img/media/img-aufgaben-37.png
 .. |img-aufgaben-38| image:: ../img/media/img-aufgaben-38.png
+.. |img-aufgaben-39| image:: ../img/media/img-aufgaben-39.png
+
 
 
 
