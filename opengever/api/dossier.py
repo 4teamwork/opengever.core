@@ -14,7 +14,8 @@ class SerializeDossierToJson(SerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeDossierToJson, self).__call__(*args, **kwargs)
 
-        result["responsible"] = self.context.get_responsible_actor().get_label(with_principal=False)
+        result[u"responsible_fullname"] = self.context.get_responsible_actor(
+            ).get_label(with_principal=False)
         result[u'reference_number'] = self.context.get_reference_number()
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(
             self.context)

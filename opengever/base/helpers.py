@@ -14,4 +14,4 @@ def display_name(userid):
         else:
             userid = ''
 
-    return Actor.user(userid).get_label()
+    return Actor.user(userid).get_label(with_principal=False)

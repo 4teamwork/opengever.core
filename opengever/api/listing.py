@@ -68,7 +68,8 @@ def filename(obj):
 # Mapping of field name -> (index, accessor, sort index)
 FIELDS = {
     '@type': ('portal_type', 'PortalType', 'portal_type'),
-    'checked_out': ('checked_out', 'checked_out_fullname', 'checked_out'),
+    'checked_out': ('checked_out', 'checked_out', 'checked_out'),
+    'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
     'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
     'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
     'created': ('created', 'created', 'created'),
@@ -84,11 +85,13 @@ FIELDS = {
     'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
     'reference': ('reference', 'reference', 'reference'),
     'reference_number': ('reference', 'reference', 'reference'),
-    'responsible': ('responsible', 'responsible_fullname', 'responsible'),
+    'responsible': ('responsible', 'responsible', 'responsible'),
+    'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
     'review_state': ('review_state', 'translated_review_state', 'review_state'),
     'sequence_number': ('sequence_number', 'sequence_number', 'sequence_number'),
     'start': ('start', 'start', 'start'),
     'thumbnail': (None, 'get_preview_image_url', DEFAULT_SORT_INDEX),
+    'preview': (None, 'get_preview_pdf_url', DEFAULT_SORT_INDEX),
     'title': ('Title', translated_title, 'sortable_title'),
     'type': ('portal_type', 'PortalType', 'portal_type'),
     'filesize': (None, filesize, 'filesize'),

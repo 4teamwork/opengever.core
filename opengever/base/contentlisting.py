@@ -101,6 +101,14 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return bumblebee.get_service_v3().get_representation_url(
             self.getDataOrigin(), 'thumbnail')
 
+    def get_preview_pdf_url(self):
+        """Return the url to fetch the bumblebee preview pdf."""
+        if not self.is_bumblebeeable():
+            return None
+
+        return bumblebee.get_service_v3().get_representation_url(
+            self.getDataOrigin(), 'pdf')
+
     def get_overlay_title(self):
         """Return the title for the bumblebee overlay."""
 
@@ -129,8 +137,10 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return self._render_simplelink()
 
     def translated_review_state(self):
-        return translate(
-            self.review_state(), domain='plone', context=self.request)
+        review_state = self.review_state()
+        if review_state:
+            return translate(
+                review_state, domain='plone', context=self.request)
 
     def responsible_fullname(self):
         return display_name(self._brain.responsible)

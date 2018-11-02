@@ -8,12 +8,12 @@ class TestListingEndpoint(IntegrationTestCase):
     def test_dossier_listing(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible&sort_on=created'
+        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible_fullname&sort_on=created'
         browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
             {u'review_state': u'dossier-state-active',
-             u'responsible': u'Ziegler Robert (robert.ziegler)',
+             u'responsible_fullname': u'Ziegler Robert',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'reference': u'Client1 1.1 / 1',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
