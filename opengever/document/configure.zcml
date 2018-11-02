@@ -271,6 +271,21 @@
       name="metadata"
       />
 
+  <adapter
+      factory=".indexers.filesize"
+      name="filesize"
+      />
+
+  <adapter
+      factory=".indexers.filename"
+      name="filename"
+      />
+
+  <adapter
+      factory=".indexers.file_extension"
+      name="file_extension"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
 </configure>

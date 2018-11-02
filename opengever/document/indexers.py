@@ -21,6 +21,7 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 import logging
+import os.path
 
 
 logger = logging.getLogger('opengever.document')
@@ -195,3 +196,28 @@ def metadata(obj):
         metadata.append(doc_metadata.foreign_reference.encode('utf8'))
 
     return ' '.join(metadata)
+
+
+@indexer(IBaseDocument)
+def filesize(obj):
+    file_ = obj.get_file()
+    if file_:
+        return file_.getSize()
+    return 0
+
+
+@indexer(IBaseDocument)
+def filename(obj):
+    filename = obj.get_filename()
+    if filename:
+        return filename
+    return u''
+
+
+@indexer(IDocumentSchema)
+def file_extension(obj):
+    filename = obj.get_filename()
+    if filename:
+        # We should not rely on the normalization to have happened
+        return os.path.splitext(filename)[-1].lower()
+    return u''
