@@ -1,7 +1,5 @@
 from datetime import date
-from datetime import datetime
 from datetime import timedelta
-from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.interfaces import IBumblebeeDocument
@@ -9,6 +7,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from hashlib import sha256
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
@@ -28,9 +27,7 @@ import json
 import textwrap
 
 
-# the frozen zope datetime does not contain the microseconds,
-# so we need to strip them here for later comparisons
-FROZEN_NOW = datetime.now().replace(microsecond=0)
+FROZEN_NOW = utcnow_tz_aware()
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'
@@ -54,7 +51,7 @@ REPOFOLDER_REQUIREDS = {
 }
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -87,7 +84,7 @@ DOSSIER_REQUIREDS = {
 }
 DOSSIER_DEFAULTS = {
     'archival_value': u'unchecked',
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -127,7 +124,7 @@ DOCUMENT_REQUIREDS = {
     'title': DEFAULT_TITLE,
 }
 DOCUMENT_DEFAULTS = {
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'classification': u'unprotected',
     'description': u'',
     'digitally_available': True,
@@ -157,7 +154,7 @@ DOCUMENT_MISSING_VALUES = {
 
 MAIL_REQUIREDS = {}
 MAIL_DEFAULTS = {
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'classification': u'unprotected',
     'description': u'',
     'digitally_available': True,
@@ -187,7 +184,7 @@ MAIL_MISSING_VALUES = {
 
 
 TASK_REQUIREDS = {
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'issuer': 'kathi.barfuss',
     'responsible': 'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
@@ -220,7 +217,7 @@ CONTACT_REQUIREDS = {
     'lastname': u'Doe',
 }
 CONTACT_DEFAULTS = {
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'description': u'',
 }
 CONTACT_FORM_DEFAULTS = {}
@@ -250,7 +247,7 @@ PROPOSAL_REQUIREDS = {
     'issuer': u'herbert.jager',
 }
 PROPOSAL_DEFAULTS = {
-    'changed': DateTime(FROZEN_NOW),
+    'changed': FROZEN_NOW,
     'description': u'',
     'title': u'Containing Dossier Title',
 }
