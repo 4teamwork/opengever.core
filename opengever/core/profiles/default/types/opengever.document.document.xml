@@ -150,4 +150,14 @@
     <permission value="opengever.meeting: Add Proposal" />
   </action>
 
+  <action
+      action_id="save_document_as_pdf"
+      visible="True"
+      title="Save document as PDF"
+      url_expr="string:${object_url}/@@save_pdf_under"
+      condition_expr="object/@@save_pdf_under/is_save_pdf_under_available"
+      category="object_buttons">
+    <permission value="View" />
+  </action>
+
 </object>

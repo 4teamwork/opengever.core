@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.document import _
@@ -289,6 +290,9 @@ class SavePDFUnderFormView(layout.FormWrapper):
 
     def render(self):
         return super(SavePDFUnderFormView, self).render()
+
+    def is_save_pdf_under_available(self):
+        return IBumblebeeServiceV3(self.request).is_convertable(self.context)
 
 
 class NotInContentTypes(Invalid):

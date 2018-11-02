@@ -1,0 +1,13 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.document.document" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <action
+      action_id="save_document_as_pdf"
+      visible="True"
+      title="Save document as PDF"
+      url_expr="string:${object_url}/@@save_pdf_under"
+      condition_expr="object/@@save_pdf_under/is_save_pdf_under_available"
+      category="object_buttons">
+    <permission value="View" />
+  </action>
+
+</object>
