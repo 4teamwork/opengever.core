@@ -101,6 +101,13 @@ sowie alle im Dossier erstellen Anträge und Aufgaben.
 
 |img-dossiers-102|
 
+Es kann, sofern diese Option aktiviert ist, auch zusätzlich ein Aufgaben-PDF
+generiert werden.
+
+|img-dossiers-103|
+
+|img-dossiers-104|
+
 
 Ein Dossier wieder eröffnen und wieder ablegen
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -177,5 +184,7 @@ Ein komplettes Dossier kann als ZIP-Datei verpackt und heruntergeladen werden.
 .. |img-dossiers-18| image:: ../img/media/img-dossiers-18.png
 .. |img-dossiers-101| image:: ../img/media/img-dossiers-101.png
 .. |img-dossiers-102| image:: ../img/media/img-dossiers-102.png
+.. |img-dossiers-103| image:: ../img/media/img-dossiers-103.png
+.. |img-dossiers-104| image:: ../img/media/img-dossiers-104.png
 
 .. disqus::
