@@ -1,3 +1,5 @@
+from ftw.bumblebee.interfaces import IBumblebeeDocument
+from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -72,8 +74,24 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 12')
 
     @browsing
+    def test_document_serialization_contains_bumblebee_checksum(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'bumblebee_checksum'), DOCX_CHECKSUM)
+
+    @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'reference_number'), u'Client1 1.1 / 1 / 28')
+
+    @browsing
+    def test_mail_serialization_contains_bumblebee_checksum(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+
+        checksum = IBumblebeeDocument(self.mail_eml).get_checksum()
+        self.assertEqual(browser.json.get(u'bumblebee_checksum'), checksum)
