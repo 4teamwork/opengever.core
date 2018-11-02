@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-30 20:51+0000\n"
+"POT-Creation-Date: 2018-11-08 13:36+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -88,6 +88,10 @@ msgstr "Le rapport n'a pas pu être généré."
 msgid "Current version: ${version}"
 msgstr "Version actuelle: ${version}"
 
+#: ./opengever/document/forms.py
+msgid "Document ${document} was successfully created in ${destination}"
+msgstr "Le document ${document} a été créé dans ${destination}"
+
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "Don't show this message again."
 msgstr "Ne plus afficher ce message."
@@ -143,6 +147,7 @@ msgstr "Vous n'avez sélectionné aucun document."
 #. Default: "Cancel"
 #: ./opengever/document/checkout/cancel.py
 #: ./opengever/document/checkout/checkin.py
+#: ./opengever/document/forms.py
 msgid "button_cancel"
 msgstr "Annuler"
 
@@ -155,6 +160,11 @@ msgstr "Checkin"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin_anyway"
 msgstr "Checkin malgré tout"
+
+#. Default: "Save"
+#: ./opengever/document/forms.py
+msgid "button_submit"
+msgstr "Enregistrer"
 
 #. Default: "Are you sure you want to cancel the checkout?"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
@@ -171,6 +181,11 @@ msgstr "Copie de"
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "description_download_confirmation"
 msgstr "Vous étes en train de télécharger une copie du document ${filename}."
+
+#. Default: "User is not allowed to add a document there."
+#: ./opengever/document/forms.py
+msgid "error_NotInContentTypes"
+msgstr "Vous ne pouvez pas créer de document à cette position."
 
 #. Default: "You don't select a file and document is also not preserved in paper_form, please correct it."
 #: ./opengever/document/behaviors/metadata.py
@@ -235,6 +250,11 @@ msgstr "Remplacer par un nouveau fichier"
 msgid "heading_checkin_comment_form"
 msgstr "Faire le checkin des documents"
 
+#. Default: "Save as PDF"
+#: ./opengever/document/forms.py
+msgid "heading_save_as_pdf"
+msgstr "Enregistrer PDF sous"
+
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_archival_file"
 msgstr "Version en format d'archivage du fichier original"
@@ -252,6 +272,11 @@ msgstr "Modification(s) faite(s) dans le document?"
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_delivery_date"
 msgstr "Date, à laquelle le document a été envoyé par écrit"
+
+#. Default: "Live Search: search for the dossier"
+#: ./opengever/document/forms.py
+msgid "help_destination"
+msgstr "Recherche en direct: Recherchez un dossier cible."
 
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_document_date"
@@ -313,6 +338,26 @@ msgstr "Envoyer par programme de messagerie"
 #: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr "Auteur"
+
+#. Default: "Back to source document"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "label_backlink_to_source_document"
+msgstr "Retour au document d'origine"
+
+#. Default: "Generating"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "label_button_creation_in_progress"
+msgstr "PDF en création..."
+
+#. Default: "Go to destination document"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "label_button_destination_document"
+msgstr "Vers le document généré"
+
+#. Default: "Error"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "label_button_error"
+msgstr "Erreur PDF"
 
 #. Default: "by"
 #: ./opengever/document/viewlets/byline.py
@@ -381,6 +426,11 @@ msgstr "Date de remise"
 msgid "label_description"
 msgstr "Description"
 
+#. Default: "Destination"
+#: ./opengever/document/forms.py
+msgid "label_destination"
+msgstr "Destination (position/dossier)"
+
 #. Default: "Digital Available"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_digitally_available"
@@ -436,6 +486,11 @@ msgstr "Télécharger une copie"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_edit"
 msgstr "Editer à nouveau"
+
+#. Default: "Error"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "label_error"
+msgstr "Erreur"
 
 #. Default: "File"
 #: ./opengever/document/browser/overview.py
@@ -534,6 +589,11 @@ msgstr ""
 msgid "label_revert"
 msgstr "Reculer"
 
+#. Default: "Save PDF"
+#: ./opengever/document/browser/versions_tab.py
+msgid "label_save_pdf"
+msgstr "Enregistrer PDF sous"
+
 #. Default: "Sequence Number"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
@@ -580,6 +640,31 @@ msgstr "${creator} a fait un checkout de ce document."
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne sont pas supportés par le processus de check-in / check-out."
 
+#. Default: "PDF generation error"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "msg_pdf_generation_error"
+msgstr "Erreur lors de la génération du PDF"
+
+#. Default: "PDF generation failed"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "msg_pdf_generation_failed"
+msgstr "Le PDF n'a pas pu être généré"
+
+#. Default: "PDF is being generated"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "msg_pdf_generation_in_progress"
+msgstr "Le PDF est en train d'être généré"
+
+#. Default: "PDF generated successfully"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "msg_pdf_generation_succesfull"
+msgstr "Le PDF a été généré avec succès"
+
+#. Default: "PDF generation timed out"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "msg_pdf_generation_timeout"
+msgstr "La génération du PDF a duré trop longtemps"
+
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt
 #: ./opengever/document/browser/templates/macros.pt
@@ -590,6 +675,21 @@ msgstr "Aucun fichier trouvé"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "oc_unsupported_message"
 msgstr "Ce format de document n'est pas supporté par Office Connector et ne peut donc pas être directement édité."
+
+#. Default: "Save PDF of ${title} under ${destination}"
+#: ./opengever/document/browser/save_pdf_document_under.py
+msgid "title_save_pdf"
+msgstr "Enregistrer le PDF de ${title} sous ${destination}"
+
+#. Default: "This document cannot be converted to PDF."
+#: ./opengever/document/forms.py
+msgid "unconvertable_document"
+msgstr "Ce document ne peux pas être converti en PDF"
+
+#. Default: "Document Version"
+#: ./opengever/document/forms.py
+msgid "version_id"
+msgstr "Version"
 
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt

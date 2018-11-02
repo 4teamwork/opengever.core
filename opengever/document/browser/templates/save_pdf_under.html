@@ -1,0 +1,39 @@
+<script type="text/x-template" id="save-document-pdf">
+
+  <div>
+    <div class="savePDFDescription">
+      <div v-if="isFinished">
+          {{i18n.msg_pdf_generation_succesfull}}
+      </div>
+      <dl v-else-if="isTimeout" class="portalMessage error">
+          <dt>{{i18n.label_error}}</dt>
+          <dd>{{i18n.msg_pdf_generation_timeout}}</dd>
+      </dl>
+      <dl v-else-if="isFailed" class="portalMessage error">
+          <dt>{{i18n.label_error}}</dt>
+          <dd>{{i18n.msg_pdf_generation_failed}}</dd>
+      </dl>
+      <dl v-else-if="isError" class="portalMessage error">
+          <dt>{{i18n.label_error}}</dt>
+          <dd>{{i18n.msg_pdf_generation_error}}</dd>
+      </dl>
+      <div v-else>
+          {{i18n.msg_pdf_generation_in_progress}}
+      </div>
+    </div>
+
+    <div class="savePdfRedirectBox">
+      <a v-if="isFinished" class="button confirm context" :href="destinationdocumenturl">
+        {{i18n.label_button_destination_document}}
+      </a>
+      <span v-else-if="isError" class="button disabled">
+        {{i18n.label_button_error}}
+      </span>
+      <span v-else class="button disabled loading">
+        {{i18n.label_button_creation_in_progress}}
+      </span>
+      <a :href="sourcedocumenturl">{{i18n.label_backlink_to_source_document}}</a>
+    </div>
+  </div>
+
+</script>
