@@ -1,5 +1,6 @@
-from opengever.testing import IntegrationTestCase
+from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
+from opengever.testing import IntegrationTestCase
 
 
 class TestListingEndpoint(IntegrationTestCase):
@@ -23,7 +24,7 @@ class TestListingEndpoint(IntegrationTestCase):
     def test_document_listing(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&sort_on=created'
+        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&columns=bumblebee_checksum&sort_on=created'
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -32,7 +33,8 @@ class TestListingEndpoint(IntegrationTestCase):
              u'document_author': u'test_user_1_',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
              u'modified': u'2016-08-31T14:07:33+00:00',
-             u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
+             u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+             u'bumblebee_checksum': DOCX_CHECKSUM},
             browser.json['items'][-1])
 
     @browsing
