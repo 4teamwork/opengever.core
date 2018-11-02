@@ -49,8 +49,8 @@ Erinnerung setzen
 ~~~~~~~~~~~~~~~~~~
 Innerhalb der Aufgabe gibt es zudem die Möglichkeit, sich eine Erinnerung zu
 setzen. Dies kann auf der Detailansicht (Bild unten) aber auch schon beim
-Akzeptieren der Aufgabe gemacht werden. Dadurch wird - je nach Einstellung
-bei den generellen Benachrichtungen - eine Notifikation im GEVER oder per Mail
+Akzeptieren der Aufgabe gemacht werden. Dadurch wird - je nach
+Benachrichtigungseinstellungen - eine Notifikation im GEVER oder per Mail
 ausgelöst.
 
 |img-aufgaben-39|
