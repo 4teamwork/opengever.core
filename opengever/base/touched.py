@@ -68,9 +68,7 @@ class ObjectTouchedHandler(object):
         if not should_track_touches(context):
             return
 
-        logger.info("Object touched: %r (UID: %s)" % (context, IUUID(context)))
         current_user_id = api.user.get_current().id
-
         self.ensure_log_initialized(current_user_id)
         recently_touched_log = self.get_recently_touched_log(current_user_id)
 
