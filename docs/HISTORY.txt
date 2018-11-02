@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Drop verbose logging for ObjectTouched events. [lgraf]
 - Bump ftw.solr to 2.3.1 to get reindexObjectSecurity fix. [lgraf]
 - Fix an issue when creating meetings from a template. [deiferni]
 - Fix normalizing filename for zip export. [deiferni]
