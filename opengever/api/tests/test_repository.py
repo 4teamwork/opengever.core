@@ -53,5 +53,6 @@ class TestRepositoryAPI(IntegrationTestCase):
             ],
             u"@id": u"http://nohost/plone/ordnungssystem",
             u"@type": u"opengever.repository.repositoryroot",
+            u"relative_path": u"ordnungssystem",
         }
         self.assertEqual(expected_repository_root, browser.json)
