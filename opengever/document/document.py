@@ -12,6 +12,7 @@ from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.interfaces import IDocumentSavedAsPDFMarker
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import ISubmittedProposal
@@ -273,6 +274,11 @@ class Document(Item, BaseDocumentMixin):
         self.reindexObjectSecurity()
         return self
 
+    def leave_shadow_state(self):
+        if self.is_shadow_document():
+            api.content.transition(
+                self, transition='document-transition-initialize')
+
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),
                                   ICheckinCheckoutManager)
@@ -302,7 +308,9 @@ class Document(Item, BaseDocumentMixin):
         return api.content.get_state(self) == self.shadow_state
 
     def is_oneoffixx_creatable(self):
-        return is_oneoffixx_feature_enabled() and self.is_shadow_document()
+        return (is_oneoffixx_feature_enabled()
+                and self.is_shadow_document()
+                and not IDocumentSavedAsPDFMarker.providedBy(self))
 
     def is_checked_out(self):
         return self.checked_out_by() is not None
@@ -365,9 +373,7 @@ class Document(Item, BaseDocumentMixin):
         """
         response = super(Document, self).UNLOCK(REQUEST, RESPONSE)
 
-        if self.is_shadow_document():
-            api.content.transition(
-                self, transition='document-transition-initialize')
+        self.leave_shadow_state()
 
         return response
 
