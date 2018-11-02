@@ -176,7 +176,8 @@ class TestVersionsTabWithBubmelbeeActivated(BaseVersionsTab):
              'Kommentar',
              'Kopie herunterladen',
              u'Zur\xfccksetzen',
-             'Vorschau'],
+             'Vorschau',
+             'PDF speichern unter'],
             column_headers)
 
     @browsing
@@ -213,6 +214,7 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
               'Download copy': 'Download copy',
               'Preview': 'Preview',
               'Revert': '',
+              'Save PDF': 'Save PDF',
               'Version': '0',
               'Date': 'Nov 06, 2016 12:00 AM',
               'Changed by': 'Test User (test_user_1_)'}],
