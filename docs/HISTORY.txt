@@ -8,6 +8,7 @@ Changelog
 - Bump docxcompose to 1.0.0a13 to get a numberig restart bugfix. [deiferni]
 - Fix favourite edit action and display pencil. [deiferni]
 - Make the changed field a python datetime. [njohner]
+- Fix Officeconnector permission checks for task documents tab actions. [Rotonen]
 - Drop verbose logging for ObjectTouched events. [lgraf]
 - Bump ftw.solr to 2.3.1 to get reindexObjectSecurity fix. [lgraf]
 - Fix an issue when creating meetings from a template. [deiferni]

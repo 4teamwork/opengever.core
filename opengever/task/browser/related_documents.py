@@ -1,6 +1,7 @@
 from ftw.table.catalog_source import default_custom_sort
 from ftw.table.interfaces import ICatalogTableSourceConfig
 from ftw.table.interfaces import ITableSource
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled
 from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents
@@ -230,22 +231,30 @@ class RelatedDocuments(Documents):
 
     implements(IRelatedDocumentsCatalogTableSourceConfig)
 
-    enabled_actions = [
-        'send_as_email',
-        'checkout',
-        'checkin',
-        'cancel',
-        'create_task',
-        'trashed',
-        'send_documents',
-        'copy_documents_to_remote_client',
-        'move_items',
-        'copy_items',
-        'zip_selected',
-        'export_documents',
+    sort_on = 'sortable_title'
+
+    @property
+    def enabled_actions(self):
+        actions = [
+            'send_as_email',
+            'checkout',
+            'checkin',
+            'cancel',
+            'create_task',
+            'trashed',
+            'send_documents',
+            'copy_documents_to_remote_client',
+            'move_items',
+            'copy_items',
+            'zip_selected',
+            'export_documents',
         ]
 
-    sort_on = 'sortable_title'
+        if is_officeconnector_attach_feature_enabled():
+            actions.append('attach_documents')
+            actions.remove('send_as_email')
+
+        return actions
 
     def get_base_query(self):
         return {
