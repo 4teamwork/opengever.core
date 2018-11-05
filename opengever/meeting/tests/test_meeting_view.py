@@ -70,7 +70,7 @@ class TestMeetingView(IntegrationTestCase):
             docnode = browser.css('.meeting-document.agenda-item-list-doc').first
             self.assertTrue(docnode.css('div.document-label a'))
             self.assertEquals('Agenda item list', docnode.css('.document-label').first.text)
-            self.assertEquals('Created at Sep 02, 2016 11:15 AM', docnode.css('.document-created').first.text)
+            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
             self.assertTrue(docnode.css('.action.generate'))
             self.assertTrue(docnode.css('.action.download'))
 
@@ -80,7 +80,7 @@ class TestMeetingView(IntegrationTestCase):
             clock.forward(hours=1)
             docnode.css('.action.generate').first.click()
             docnode = browser.css('.meeting-document.agenda-item-list-doc').first
-            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
+            self.assertEquals('Created at Sep 02, 2016 01:15 PM', docnode.css('.document-created').first.text)
 
     @browsing
     def test_protocol_document(self, browser):
@@ -99,7 +99,7 @@ class TestMeetingView(IntegrationTestCase):
             docnode = browser.css('.meeting-document.protocol-doc').first
             self.assertTrue(docnode.css('div.document-label a'))
             self.assertEquals('Pre-protocol', docnode.css('.document-label').first.text)
-            self.assertEquals('Created at Sep 02, 2016 11:15 AM', docnode.css('.document-created').first.text)
+            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
             self.assertTrue(docnode.css('.action.generate'))
             self.assertTrue(docnode.css('.action.download'))
 
@@ -109,7 +109,7 @@ class TestMeetingView(IntegrationTestCase):
             clock.forward(hours=1)
             docnode.css('.action.generate').first.click()
             docnode = browser.css('.meeting-document.protocol-doc').first
-            self.assertEquals('Created at Sep 02, 2016 12:15 PM', docnode.css('.document-created').first.text)
+            self.assertEquals('Created at Sep 02, 2016 01:15 PM', docnode.css('.document-created').first.text)
 
             self.meeting.model.workflow_state = self.meeting.model.STATE_HELD.name
             browser.reload()

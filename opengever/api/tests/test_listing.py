@@ -31,7 +31,7 @@ class TestListingEndpoint(IntegrationTestCase):
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
-             u'modified': u'2016-08-31T13:07:33+00:00',
+             u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
             browser.json['items'][-1])
 

@@ -145,14 +145,14 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                     'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
-                    'modified': u'2017-12-12T23:00:00+01:00',
+                    'modified': u'2017-12-13T00:00:00+01:00',
                 },
                 'title': u'Ad-hoc Traktand\xfem',
             }, {
                 'attachments': [{
                     'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
                     'file': u'Traktandum 2/Vertraegsentwurf.docx',
-                    'modified': u'2016-08-31T15:17:46+02:00',
+                    'modified': u'2016-08-31T16:17:46+02:00',
                     'title': u'Vertr\xe4gsentwurf',
                 }],
                 'number': '2.',
@@ -161,7 +161,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 'proposal': {
                     'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                     'file': u'Traktandum 2/Aenderungen am Personalreglement.docx',
-                    'modified': u'2016-08-31T15:17:44+02:00',
+                    'modified': u'2016-08-31T16:17:44+02:00',
                 },
                 'title': u'\xc4nderungen am Personalreglement',
             }],
@@ -217,21 +217,21 @@ class TestMeetingZipExportView(IntegrationTestCase):
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                          'file': 'Traktandum 1/Ad-hoc Traktandthm.docx',
-                         'modified': '2017-12-12T23:00:00+01:00'
+                         'modified': '2017-12-13T00:00:00+01:00'
                      },
                      'sort_order': 2,
                      'title': u'Ad-hoc Traktand\xfem'},
                     {'attachments': [{
                         'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
                         'file': 'Traktandum 2/Vertraegsentwurf.docx',
-                        'modified': '2016-08-31T15:17:46+02:00',
+                        'modified': '2016-08-31T16:17:46+02:00',
                         'title': u'Vertr\xe4gsentwurf'}],
                      'number': '2.',
                      'sort_order': 3,
                      'proposal': {
                          'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                          'file': 'Traktandum 2/Aenderungen am Personalreglement.docx',
-                         'modified': '2016-08-31T15:17:44+02:00'
+                         'modified': '2016-08-31T16:17:44+02:00'
                      },
                      'title': u'\xc4nderungen am Personalreglement'}
                     ],
@@ -242,7 +242,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                  'protocol': {
                      'checksum': 'unpredictable',
                      'file': 'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-                     'modified': '2017-12-13T23:00:00+01:00'
+                     'modified': '2017-12-14T00:00:00+01:00'
                  },
                  'start': '2016-09-12T15:30:00+00:00',
                  'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich'}

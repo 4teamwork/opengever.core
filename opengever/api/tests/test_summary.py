@@ -100,14 +100,14 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
                 u'und-vereinbarungen/dossier-1/document-12',
-                u'changed': u'2016-08-31T13:07:33+00:00',
-                u'created': u'2016-08-31T13:07:33+00:00',
+                u'changed': u'2016-08-31T14:07:33+00:00',
+                u'created': u'2016-08-31T14:07:33+00:00',
                 u'creator': u'robert.ziegler',
                 u'filename': u'Vertraegsentwurf.docx',
                 u'filesize': 27413,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                 u'wordprocessingml.document',
-                u'modified': u'2016-08-31T13:07:33+00:00'},
+                u'modified': u'2016-08-31T14:07:33+00:00'},
             summary)
 
     @browsing
