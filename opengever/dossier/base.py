@@ -4,6 +4,7 @@ from datetime import date
 from datetime import datetime
 from DateTime import DateTime
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.date_time import as_utc
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
@@ -459,6 +460,11 @@ class DossierContainer(Container):
     def _convert_to_date(self, datetime_obj):
         if isinstance(datetime_obj, datetime):
             return datetime_obj.date()
+
+        # XXX Can be deleted once the changed metadata has been filled on all deployments
+        # https://github.com/4teamwork/opengever.core/issues/4988
+        elif isinstance(datetime_obj, DateTime):
+            return as_utc(datetime_obj.asdatetime()).date()
 
         # It is already a date-object
         return datetime_obj
