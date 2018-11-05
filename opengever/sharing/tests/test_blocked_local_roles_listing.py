@@ -129,60 +129,56 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
                 )
 
     @browsing
-    def test_blocked_role_tab_does_renders_tree_for_manager(self, browser):
+    def test_blocked_role_tab_does_render_tree_for_manager(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
-        self.login(self.administrator, browser)
 
+        self.login(self.manager, browser)
         self.dossier.__ac_local_roles_block__ = True
         self.dossier.reindexObject(idxs=['blocked_local_roles'])
 
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
-        self.assertEquals(
-            browser.css('.blocked-local-roles-listing a').first.text,
-            u'1. F\xfchrung',
-            )
+        browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
+        self.assertEqual(u'1. F\xfchrung - Client1 1', browser.css('.blocked-local-roles-listing a').first.text)
 
     @browsing
-    def test_blocked_role_tab_does_renders_tree_for_administrator(self, browser):  # noqa
+    def test_blocked_role_tab_does_renders_tree_for_administrator(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
-        self.login(self.manager, browser)
 
+        self.login(self.manager)
         self.dossier.__ac_local_roles_block__ = True
         self.dossier.reindexObject(idxs=['blocked_local_roles'])
 
-        browser.open(
-            self.repository_root,
-            view="tabbedview_view-blocked-local-roles",
-            )
-        self.assertEquals(
-            browser.css('.blocked-local-roles-listing a').first.text,
-            u'1. F\xfchrung',
-            )
+        self.login(self.administrator, browser)
+        browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
+        self.assertEqual(u'1. F\xfchrung - Client1 1', browser.css('.blocked-local-roles-listing a').first.text)
 
     @browsing
     def test_blocked_role_tab_tree_rendering(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
+
         self.login(self.administrator, browser)
         browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
         expected_titles = [
-            u'1. F\xfchrung',
-            u'1.1. Vertr\xe4ge und Vereinbarungen',
-            u'Luftsch\xfctze',
-            u'Zu allem \xdcbel',
-            ]
-        self.assertEquals(expected_titles, browser.css('.blocked-local-roles-link').text)
+            u'1. F\xfchrung - Client1 1',
+            u'1.1. Vertr\xe4ge und Vereinbarungen - Client1 1.1',
+            u'Luftsch\xfctze - Client1 1.1 / 9',
+            u'Zu allem \xdcbel - Client1 1.1 / 10',
+        ]
+        self.assertEqual(expected_titles, browser.css('.blocked-local-roles-link').text)
+
         expected_titles = [
-            u'1.1. Vertr\xe4ge und Vereinbarungen',
-            u'Luftsch\xfctze',
-            u'Zu allem \xdcbel',
-            ]
-        self.assertEquals(expected_titles, browser.css('.level1 a').text)
-        expected_titles = [u'Luftsch\xfctze', u'Zu allem \xdcbel']
-        self.assertEquals(expected_titles, browser.css('.level2 a').text)
+            u'1.1. Vertr\xe4ge und Vereinbarungen - Client1 1.1',
+            u'Luftsch\xfctze - Client1 1.1 / 9',
+            u'Zu allem \xdcbel - Client1 1.1 / 10',
+        ]
+        self.assertEqual(expected_titles, browser.css('.level1 a').text)
+
+        expected_titles = [
+            u'Luftsch\xfctze - Client1 1.1 / 9',
+            u'Zu allem \xdcbel - Client1 1.1 / 10',
+        ]
+        self.assertEqual(expected_titles, browser.css('.level2 a').text)
         self.assertFalse(browser.css('.level3 a').text)
+
         nodes = browser.css('.blocked-local-roles-link')
         repo = 'contenttype-opengever-repository-repositoryfolder'
         dossier = 'contenttype-opengever-dossier-businesscasedossier'
