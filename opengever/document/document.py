@@ -269,6 +269,7 @@ class Document(Item, BaseDocumentMixin):
             'actor': ''})
         workflow = wftool.getWorkflowById(workflow_id)
         workflow.updateRoleMappingsFor(self)
+        self.reindexObject(idxs=['review_state'])
         self.reindexObjectSecurity()
         return self
 
