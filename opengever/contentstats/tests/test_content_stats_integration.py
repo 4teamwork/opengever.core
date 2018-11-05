@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.contentstats.interfaces import IStatsKeyFilter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.testbrowser import browsing
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_CONTENTSTATS_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing import FunctionalTestCase
@@ -177,6 +178,8 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
     about the entire content to be found, and we therefore want to closely
     control the fixture that's being in these tests.
     """
+
+    layer = OPENGEVER_FUNCTIONAL_CONTENTSTATS_TESTING
 
     def setUp(self):
         super(TestContentStatsIntegrationWithFixture, self).setUp()
