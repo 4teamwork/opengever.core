@@ -1,12 +1,13 @@
 from collections import OrderedDict
 from lxml import etree
-from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier.interfaces import IDocProperties
 from opengever.officeconnector.helpers import create_oc_url
-from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getMultiAdapter
 
 
 class OneoffixxConnectXml(BrowserView):
@@ -36,6 +37,8 @@ class OneoffixxConnectXml(BrowserView):
             )),
         ))
 
+        self.document_properties = getMultiAdapter((self.context, self.request), IDocProperties).get_properties()
+
         self.request.RESPONSE.setHeader("Content-type", "application/xml")
         return self.generate_xml()
 
@@ -52,7 +55,7 @@ class OneoffixxConnectXml(BrowserView):
 
         entries = etree.SubElement(batch, "Entries")
         entries.append(self.generate_one_offixx_connect_tag())
-        return etree.tostring(batch, pretty_print=True)
+        return etree.tostring(batch, pretty_print=True, xml_declaration=True, encoding="UTF-8")
 
     def generate_settings_tag(self):
         settings_tag = etree.Element("Settings")
@@ -119,22 +122,16 @@ class OneoffixxConnectXml(BrowserView):
         interface = etree.SubElement(arguments, "Interface")
         interface.set("Name", "OneGovGEVER")
 
-        node = etree.SubElement(interface, "Node")
-        node.set("Id", "ogg.document.title")
-        node.text = self.context.Title().decode("utf-8")
+        for key, value in self.document_properties.items():
+            node = etree.SubElement(interface, "Node")
+            node.set("Id", key)
+            if key in ('ogg.document.document_date',):
+                value = api.portal.get_localized_time(value)
+            if isinstance(value, basestring):
+                node.text = safe_unicode(value)
+            else:
+                node.text = unicode(value)
 
-        reference_number = IReferenceNumber(self.context)
-        node = etree.SubElement(interface, "Node")
-        node.set("Id", "ogg.document.reference_number")
-        node.text = reference_number.get_number()
-
-        node = etree.SubElement(interface, "Node")
-        node.set("Id", "ogg.document.sequence_number")
-        node.text = reference_number.get_local_number()
-
-        node = etree.SubElement(interface, "Node")
-        node.set("Id", "ogg.dossier.external_reference")
-        node.text = IDossier(self.context.getParentNode()).external_reference
         return function
 
     def generate_metadata_tag(self):
@@ -142,24 +139,15 @@ class OneoffixxConnectXml(BrowserView):
         function.set("name", "MetaData")
         function.set("id", "c364b495-7176-4ce2-9f7c-e71f302b8096")
 
-        node = etree.SubElement(function, "Value")
-        node.set("key", "ogg.document.title")
-        node.set("type", "string")
-        node.text = self.context.Title().decode("utf-8")
+        for key, value in self.document_properties.items():
+            node = etree.SubElement(function, "Value")
+            node.set("key", key)
+            node.set("type", "string")
+            if key in ('ogg.document.document_date',):
+                value = api.portal.get_localized_time(value)
+            if isinstance(value, basestring):
+                node.text = safe_unicode(value)
+            else:
+                node.text = unicode(value)
 
-        reference_number = IReferenceNumber(self.context)
-        node = etree.SubElement(function, "Value")
-        node.set("key", "ogg.document.reference_number")
-        node.set("type", "string")
-        node.text = reference_number.get_number()
-
-        node = etree.SubElement(function, "Value")
-        node.set("key", "ogg.document.sequence_number")
-        node.set("type", "string")
-        node.text = reference_number.get_local_number()
-
-        node = etree.SubElement(function, "Value")
-        node.set("key", "ogg.dossier.external_reference")
-        node.set("type", "string")
-        node.text = IDossier(self.context.getParentNode()).external_reference
         return function
