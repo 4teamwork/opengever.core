@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Whitelist "recently touched" data structures from CSRF write protection. [lgraf]
 - Bump docxcompose to 1.0.0a13 to get a numberig restart bugfix. [deiferni]
 - Fix favourite edit action and display pencil. [deiferni]
 - Make the changed field a python datetime. [njohner]
