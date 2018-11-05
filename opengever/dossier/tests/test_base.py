@@ -5,13 +5,16 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
-from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.base.behaviors.changed import IChanged
+from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.interface import alsoProvides
+import pytz
 
 
 class TestDossierContainer(IntegrationTestCase):
@@ -219,24 +222,40 @@ class TestDateCalculations(IntegrationTestCase):
         self.assertEquals(date(2029, 9, 18),
                           self.empty_dossier.earliest_possible_end_date())
 
-    def test_earliest_possible_is_latest_document_date(self):
+    def test_earliest_possible_is_last_modified_document_modification_date(self):
         self.login(self.dossier_responsible)
-        IDocumentMetadata(self.document).document_date = date(2021, 1, 22)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2021, 1, 22, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         self.assertEquals(date(2021, 1, 22),
                           self.dossier.earliest_possible_end_date())
 
-    def test_earliest_possible_is_latest_of_dossiers_end_dates_and_document_dates(self):
+    def test_earliest_possible_ignores_automatically_generated_documents(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2021, 1, 21)
+        self.dossier.reindexObject(idxs=['end'])
+        IChanged(self.document).changed = datetime(2021, 1, 22, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
+
+        self.assertEquals(date(2021, 1, 22),
+                          self.dossier.earliest_possible_end_date())
+
+        alsoProvides(self.document, IDossierJournalPDFMarker)
+        self.document.reindexObject(idxs=['object_provides'])
+
+        self.assertEquals(date(2021, 1, 21),
+                          self.dossier.earliest_possible_end_date())
+
+    def test_earliest_possible_is_latest_of_dossiers_end_dates_and_document_modificiation_dates(self):
         self.login(self.dossier_responsible)
 
-        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2020, 1, 1, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         IDossier(self.subdossier).end = date(2020, 2, 2)
         self.subdossier.reindexObject(idxs=['end'])
         self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
 
-        IDocumentMetadata(self.document).document_date = date(2020, 3, 3)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2020, 3, 3, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         self.assertEquals(date(2020, 3, 3), self.dossier.earliest_possible_end_date())
 
     def test_calculation_ignore_inactive_subdossiers_for_calculation(self):
@@ -273,22 +292,22 @@ class TestDateCalculations(IntegrationTestCase):
     def test_dossier_end_can_be_later_than_document_date(self):
         self.login(self.dossier_responsible)
         IDossier(self.dossier).end = date(2020, 2, 2)
-        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2020, 1, 1, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         self.assertTrue(self.dossier.has_valid_enddate())
 
-    def test_dossier_end_can_be_equal_to_document_date(self):
+    def test_dossier_end_can_be_equal_to_document_modification_date(self):
         self.login(self.dossier_responsible)
         IDossier(self.dossier).end = date(2020, 1, 1)
-        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2020, 1, 1, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         self.assertTrue(self.dossier.has_valid_enddate())
 
     def test_dossier_end_cannot_be_earlier_to_document_date(self):
         self.login(self.dossier_responsible)
         IDossier(self.dossier).end = date(2020, 1, 1)
-        IDocumentMetadata(self.document).document_date = date(2020, 2, 2)
-        self.document.reindexObject(idxs=['document_date'])
+        IChanged(self.document).changed = datetime(2020, 2, 2, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
         self.assertFalse(self.dossier.has_valid_enddate())
 
     def test_end_date_is_allways_valid_in_a_empty_dossier(self):
@@ -318,9 +337,9 @@ class TestDateCalculations(IntegrationTestCase):
     def test_earliest_possible_can_handle_datetime_objs(self):
         self.login(self.dossier_responsible)
 
-        IDocumentMetadata(self.document).document_date = datetime(2020, 1, 1, 10, 10)
-        self.document.reindexObject(idxs=['document_date'])
-        IDossier(self.subdossier).end = date(2020, 2, 2)
+        IChanged(self.document).changed = datetime(2020, 1, 1, 10, 10, tzinfo=pytz.utc)
+        self.document.reindexObject(idxs=['changed'])
+        IDossier(self.subdossier).end = datetime(2020, 2, 2, 10, 10)
         self.subdossier.reindexObject(idxs=['end'])
         self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
 

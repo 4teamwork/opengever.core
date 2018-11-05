@@ -4,9 +4,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
+from opengever.base.behaviors.changed import IChanged
 from opengever.core.testing import COMPONENT_UNIT_TESTING
-from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator
 from opengever.dossier.archive import get_filing_actions
@@ -29,6 +30,7 @@ from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import IntegrationTestCase
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
+import pytz
 
 
 class TestArchiver(IntegrationTestCase):
@@ -226,43 +228,44 @@ class TestArchiveFormDefaults(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         # Dossier without sub-objects - earliest possible end date is dossier
         # start date, filing_year should therefore default to this year
-        browser.open(self.dossier, view='transition-archive')
+        browser.open(self.empty_dossier, view='transition-archive')
         form_default = browser.css('#form-widgets-filing_year').first.value
         self.assertEqual('2016', form_default)
 
         # Document with date newer than dossier start. Suggested filing_year
         # default should be that of the document (year of the youngest object)
-        doc = create(Builder('document')
-                     .within(self.dossier)
-                     .having(document_date=date(2050, 1, 1)))
-        browser.open(self.dossier, view='transition-archive')
+        with freeze(datetime(2050, 1, 1)):
+            doc = create(Builder('document')
+                         .within(self.empty_dossier))
+        browser.open(self.empty_dossier, view='transition-archive')
         form_default = browser.css('#form-widgets-filing_year').first.value
         self.assertEqual(doc.document_date.year, int(form_default))
 
     @browsing
-    def test_enddate_may_be_latest_document_date(self, browser):
-        """When a document's date is greater than the dossier end date,
-        use the document's date.
+    def test_enddate_may_be_latest_document_modification_date(self, browser):
+        """When a document's modification date is greater than the dossier
+        end date, use the document's modification date.
         """
         self.login(self.dossier_responsible, browser)
         IDossier(self.dossier).end = date(2021, 1, 1)
         self.dossier.reindexObject(idxs=['end'])
-        IDocumentMetadata(self.subdocument).document_date = date(2021, 1, 2)
-        self.subdocument.reindexObject(idxs=['document_date'])
+
+        IChanged(self.subdocument).changed = datetime(2021, 1, 2, tzinfo=pytz.utc)
+        self.subdocument.reindexObject(idxs=['changed'])
         browser.open(self.dossier, view='transition-archive')
         self.assertEqual(date(2021, 1, 2),
                          self._get_form_date(browser, 'dossier_enddate'))
 
     @browsing
     def test_enddate_may_be_latest_dossier_end_date(self, browser):
-        """When a dossiers end date is greater than the document's date,
-        use the dossier end date.
+        """When a dossiers end date is greater than the document's modification
+        date, use the dossier end date.
         """
         self.login(self.dossier_responsible, browser)
         IDossier(self.dossier).end = date(2021, 2, 2)
         self.dossier.reindexObject(idxs=['end'])
-        IDocumentMetadata(self.subdocument).document_date = date(2021, 2, 1)
-        self.subdocument.reindexObject(idxs=['document_date'])
+        IChanged(self.subdocument).changed = datetime(2021, 1, 2, tzinfo=pytz.utc)
+        self.subdocument.reindexObject(idxs=['changed'])
         browser.open(self.dossier, view='transition-archive')
         self.assertEqual(date(2021, 2, 2),
                          self._get_form_date(browser, 'dossier_enddate'))

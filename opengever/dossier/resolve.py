@@ -3,7 +3,8 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.versioner import Versioner
+from opengever.document.interfaces import IDossierJournalPDFMarker
+from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
@@ -11,8 +12,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
-from opengever.dossier.interfaces import IDossierJournalPdfMarker
-from opengever.dossier.interfaces import IDossierTasksPdfMarker
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -251,7 +250,7 @@ class StrictDossierResolver(object):
         if dossier and dossier.end:
             kwargs['document_date'] = dossier.end
 
-        results = api.content.find(object_provides=IDossierJournalPdfMarker,
+        results = api.content.find(object_provides=IDossierJournalPDFMarker,
                                    depth=1,
                                    context=self.context)
 
@@ -270,7 +269,7 @@ class StrictDossierResolver(object):
                         title=translate(title, context=self.context.REQUEST),
                         content_type='application/pdf',
                         **kwargs).execute()
-            alsoProvides(document, IDossierJournalPdfMarker)
+            alsoProvides(document, IDossierJournalPDFMarker)
 
     def create_tasks_listing_pdf(self):
         """Creates a pdf representation of the dossier tasks, and add it to
@@ -299,7 +298,7 @@ class StrictDossierResolver(object):
         if dossier and dossier.end:
             kwargs['document_date'] = dossier.end
 
-        results = api.content.find(object_provides=IDossierTasksPdfMarker,
+        results = api.content.find(object_provides=IDossierTasksPDFMarker,
                                    depth=1,
                                    context=self.context)
 
@@ -318,7 +317,7 @@ class StrictDossierResolver(object):
                         title=translate(title, context=self.context.REQUEST),
                         content_type='application/pdf',
                         **kwargs).execute()
-            alsoProvides(document, IDossierTasksPdfMarker)
+            alsoProvides(document, IDossierTasksPDFMarker)
 
     def trigger_pdf_conversion(self):
         if not self.get_property('archival_file_conversion_enabled'):

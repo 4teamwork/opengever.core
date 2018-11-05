@@ -230,9 +230,19 @@ class IDossierResolveProperties(Interface):
     )
 
 
+"""
+These two interfaces have been moved and renamed to
+opengever.document.interfaces.IDossierTasksPDFMarker and
+opengever.document.interfaces.IDossierJournalPDFMarker
+Once leftovers have been cleaned up with upgrade step
+opengever/core/upgrades/20181101074702_add_automatically_generated_document_interface
+they can be deleted here (the upgrade step too)
+"""
+
+
 class IDossierTasksPdfMarker(Interface):
-    """Marker Interface for dossier tasks list document."""
+    """Depraceted marker Interface for dossier tasks list document."""
 
 
 class IDossierJournalPdfMarker(Interface):
-    """Marker Interface for dossier journal document."""
+    """Deprecated marker Interface for dossier journal document."""

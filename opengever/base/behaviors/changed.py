@@ -42,6 +42,8 @@ class Changed(object):
         # https://github.com/4teamwork/opengever.core/issues/4988
         if self.context.changed is None:
             return as_utc(self.context.modified().asdatetime())
+        if isinstance(self.context.changed, DateTime):
+            return as_utc(self.context.changed.asdatetime())
         return self.context.changed
 
     def _set_changed(self, value):

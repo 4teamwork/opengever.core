@@ -56,6 +56,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.empty_dossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.empty_dossier))
         self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -69,6 +71,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.subdossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.subdossier))
         statusmessages.assert_no_error_messages()
         self.assertEquals(
             ['The subdossier has been succesfully resolved.'],
@@ -80,6 +84,8 @@ class TestResolvingDossiers(IntegrationTestCase):
 
         resolve_dossier(self.subdossier, browser)
 
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(self.subdossier))
         self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
@@ -162,10 +168,6 @@ class TestResolveJobs(IntegrationTestCase):
 
     @browsing
     def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
-        """When the document date is not set to the dossiers end date the
-        subdossier will be left in an inconsistent state. this will make
-        resolving the main dossier impossible.
-        """
         self.activate_feature('journal-pdf')
         self.login(self.secretariat_user, browser)
 
@@ -185,6 +187,8 @@ class TestResolveJobs(IntegrationTestCase):
         self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
                          "End date should be set to dossier end date")
 
+        # object provides index needs to be up to date for dossier resolving
+        sub_journal_pdf.reindexObject(idxs=["object_provides"])
         with self.observe_children(self.empty_dossier) as main_children:
             with freeze(datetime(2016, 9, 1)):
                 resolve_dossier(self.empty_dossier, browser)
@@ -425,6 +429,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['not all documents and tasks are stored in a subdossier.',
@@ -439,6 +444,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all documents are checked in'],
                           error_messages())
@@ -452,24 +458,42 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all task are closed'],
                           error_messages())
 
     @browsing
-    def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
+    def test_dossier_is_resolved_when_dossier_has_an_invalid_end_date(self, browser):
         dossier = create(Builder('dossier').having(end=date(2016, 5, 7)))
-        create(Builder('document')
-               .within(dossier)
-               .having(document_date=date(2016, 6, 1)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(dossier))
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertFalse(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
-        self.assertEquals([],
-                          error_messages())
+        self.assertEquals(['The dossier has been succesfully resolved.'],
+                          info_messages())
+
+    @browsing
+    def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .having(end=date(2016, 5, 7))
+                            .within(dossier))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertTrue(dossier.is_open())
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has a invalid end_date'], error_messages())
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
@@ -483,6 +507,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertTrue(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier contains active proposals.'],
                           error_messages())
@@ -498,6 +523,7 @@ class TestResolveConditions(FunctionalTestCase):
                              {'_authenticator': createToken()},
                              view='transition-resolve')
 
+        self.assertFalse(dossier.is_open())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -515,9 +541,8 @@ class TestResolving(FunctionalTestCase):
         subdossier = create(Builder('dossier')
                             .having(start=date(2015, 1, 1))
                             .within(dossier))
-        create(Builder('document')
-               .within(subdossier)
-               .having(document_date=date(2016, 6, 1)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier))
 
         browser.login().open(dossier,
                              {'_authenticator': createToken()},
