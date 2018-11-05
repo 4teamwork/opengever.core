@@ -1,8 +1,8 @@
 from collective.indexing.interfaces import IIndexQueueProcessor
 from collective.indexing.queue import getQueue
-from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -132,5 +132,5 @@ def maybe_update_changed_date(context, event):
 
 
 def update_changed_date(context, event):
-    IChanged(context).changed = DateTime()
+    IChanged(context).changed = utcnow_tz_aware()
     context.reindexObject(idxs=["changed"])

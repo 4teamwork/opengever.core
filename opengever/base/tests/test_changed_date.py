@@ -13,33 +13,37 @@ from plone import api
 from zope.component import getMultiAdapter
 import pytz
 
-FREEZING_TIME = datetime(2018, 4, 30, 0, 0)
+
+FREEZING_TIME = datetime(2018, 4, 30, 0, 0, tzinfo=pytz.UTC)
 
 
 class TestChangedBehavior(IntegrationTestCase):
 
-    def test_indexer_returns_zope_datetime(self):
+    def test_indexer_returns_python_datetime(self):
         self.login(self.manager)
         changed_index = changed_indexer(self.document)()
-        self.assertIsInstance(changed_index, DateTime)
+        self.assertIsInstance(changed_index, datetime)
 
-    def test_setter_transforms_python_datetime_to_zope_datetime(self):
+    def test_setter_transforms_zope_datetime_to_python_datetime(self):
         self.login(self.manager)
-        IChanged(self.document).changed = datetime.now(pytz.UTC)
-        self.assertIsInstance(IChanged(self.document).changed, DateTime)
+        IChanged(self.document).changed = DateTime()
+        self.assertIsInstance(IChanged(self.document).changed, datetime)
 
     def test_setter_requires_timezone_aware_datetime(self):
         self.login(self.manager)
         with self.assertRaises(AssertionError):
-            IChanged(self.document).changed = DateTime(2011, 1, 1, 0, 0, 0, None, 0, 0, 0, 0, True)
+            IChanged(self.document).changed = datetime.now()
+
+    def test_setter_normalizes_timezone_to_utc(self):
+        self.login(self.manager)
+        IChanged(self.document).changed = DateTime()
+        self.assertEqual(IChanged(self.document).changed.tzinfo,
+                         pytz.UTC)
 
 
 class TestChangedUpdateBase(IntegrationTestCase):
 
     def assert_changed_value(self, obj, value):
-        # The changed setter casts datetime to DateTime
-        if isinstance(value, datetime):
-            value = DateTime(value)
         self.assertEqual(value, IChanged(obj).changed)
         self.assert_index_and_metadata(value, "changed")
 
@@ -84,7 +88,7 @@ class TestChangedUpdateForDocument(TestChangedUpdateBase):
 
     def test_revert_to_version_updates_changed(self):
         self.login(self.regular_user)
-        CHECKIN_TIME = datetime(2018, 4, 28, 0, 0)
+        CHECKIN_TIME = datetime(2018, 4, 28, 0, 0, tzinfo=pytz.UTC)
         with freeze(CHECKIN_TIME):
             self.checkout_document(self.document)
             self.checkin_document(self.document)

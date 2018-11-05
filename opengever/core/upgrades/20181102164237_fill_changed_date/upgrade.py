@@ -1,6 +1,8 @@
+from DateTime import DateTime
 from ftw.upgrade import UpgradeStep
 from opengever.base.behaviors.changed import METADATA_CHANGED_FILLED_KEY
 from opengever.base.behaviors.changed import IChanged
+from opengever.base.date_time import as_utc
 from zope.annotation import IAnnotations
 from zope.component.hooks import getSite
 
@@ -46,10 +48,13 @@ class FillChangedMetadata(UpgradeStep):
         self.set_changed_flag()
 
     def fill_changed_field(self):
-        """Set the 'changed' field on the object if it hasn't been set already"""
+        """Set the 'changed' field on the object if it hasn't been set already
+        if it has been set already, make sure it is a python datetime"""
         for obj in self.objects(query, 'Initialize IChanged.changed field values'):
             if not obj.changed:
-                IChanged(obj).changed = obj.modified()
+                IChanged(obj).changed = as_utc(obj.modified().asdatetime())
+            elif isinstance(obj.changed, DateTime):
+                IChanged(obj).changed = as_utc(obj.changed.asdatetime())
 
     def reindex_changed_index(self):
         """We first need to clear the index, as it was also set for objects

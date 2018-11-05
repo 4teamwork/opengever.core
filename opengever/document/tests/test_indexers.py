@@ -19,6 +19,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component.hooks import setSite
 import datetime
+import pytz
 
 
 class TestDocumentIndexers(FunctionalTestCase):
@@ -99,7 +100,8 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertEqual(u'', obj2brain(document).file_extension)
 
     def test_date_indexers(self):
-        with freeze(datetime.datetime(2016, 1, 1, 0, 0)):
+        creation_date = datetime.datetime(2016, 1, 1, 0, 0, tzinfo=pytz.UTC)
+        with freeze(creation_date):
             doc1 = create(Builder('document').having(
                 title=u"Doc One",
                 document_date=datetime.date(2011, 1, 1),
@@ -119,7 +121,7 @@ class TestDocumentIndexers(FunctionalTestCase):
 
         # changed
         self.assertEquals(
-            obj2brain(doc1).changed, DateTime(2016, 1, 1, 0, 0))
+            obj2brain(doc1).changed, creation_date)
 
     def test_checked_out_indexer(self):
         doc1 = createContentInContainer(

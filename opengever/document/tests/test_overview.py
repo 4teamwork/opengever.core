@@ -27,14 +27,14 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
     def test_overview_displays_creation_date(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='tabbedview_view-overview')
-        self.assertEqual('Aug 31, 2016 03:07 PM',
+        self.assertEqual('Aug 31, 2016 04:07 PM',
                          self.get_metadata_value(browser, "Created"))
 
     @browsing
     def test_overview_displays_modification_date(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='tabbedview_view-overview')
-        self.assertEqual('Aug 31, 2016 03:07 PM',
+        self.assertEqual('Aug 31, 2016 04:07 PM',
                          self.get_metadata_value(browser, "Modified"))
 
     @browsing
