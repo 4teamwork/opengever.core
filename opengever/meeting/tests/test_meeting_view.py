@@ -128,7 +128,7 @@ class TestMeetingView(IntegrationTestCase):
     def test_meeting_member_cannot_return_excerpt(self, browser):
         with self.login(self.committee_responsible, browser):
             agenda_item = self.schedule_proposal(self.meeting,
-                                                 self.submitted_word_proposal)
+                                                 self.submitted_proposal)
             agenda_item.decide()
             agenda_item.generate_excerpt(title='The Excerpt')
             browser.open(self.meeting, view='agenda_items/list')

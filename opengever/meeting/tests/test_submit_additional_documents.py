@@ -22,7 +22,7 @@ class TestSubmitAdditionalDocumentsIntegration(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.document.file = NamedBlobFile(data='New', filename=u'test.docx')
         api.portal.get_tool('portal_repository').save(self.document)
-        browser.open(self.word_proposal, view='tabbedview_view-overview')
+        browser.open(self.proposal, view='tabbedview_view-overview')
         browser.find('Update document in proposal').click()
         browser.find('Submit Attachments').click()
         expected_messages = [u'A new submitted version of document Vertr\xe4gsentwurf has been created.']

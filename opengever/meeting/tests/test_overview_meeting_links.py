@@ -36,7 +36,7 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
         ])
 
         self.login(self.secretariat_user, browser)
-        browser.open(self.word_proposal.get_proposal_document(),
+        browser.open(self.proposal.get_proposal_document(),
                      view='tabbedview_view-overview')
         fields = dict(zip(
             browser.css('.documentMetadata th').text,
@@ -46,11 +46,8 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
         self.assertEquals(expected_fields,
                           sorted(fields.keys()))
         self.assertEquals(
-            u'<a href="http://nohost/plone/ordnungssystem/fuhrung/'
-            u'vertrage-und-vereinbarungen/dossier-1/proposal-4" '
-            u'title="\xc4nderungen am Personalreglement" '
-            u'class="contenttype-opengever-meeting-proposal">'
-            u'\xc4nderungen am Personalreglement</a>',
+            u'<a href="http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/proposal-1" '
+            u'title="Vertr\xe4ge" class="contenttype-opengever-meeting-proposal">Vertr\xe4ge</a>',
             fields['Proposal']
         )
 
@@ -83,9 +80,9 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
             'Modified',
         ])
         with self.login(self.committee_responsible, browser):
-            self.word_proposal.load_model().schedule(self.meeting.model)
+            self.proposal.load_model().schedule(self.meeting.model)
 
-            browser.open(self.word_proposal.get_proposal_document(),
+            browser.open(self.proposal.get_proposal_document(),
                          view='tabbedview_view-overview')
             fields = dict(zip(
                 browser.css('.documentMetadata th').text,
@@ -103,7 +100,7 @@ class TestDocumentOverviewMeetingLinks(IntegrationTestCase):
             )
 
         with self.login(self.secretariat_user, browser):
-            browser.open(self.word_proposal.get_proposal_document(),
+            browser.open(self.proposal.get_proposal_document(),
                          view='tabbedview_view-overview')
             fields = dict(zip(
                 browser.css('.documentMetadata th').text,

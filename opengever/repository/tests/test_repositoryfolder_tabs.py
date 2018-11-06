@@ -242,7 +242,5 @@ class TestRepositoryFolderProposalsTabWithMeeting(IntegrationTestCase):
             ['Decision number', 'Title', 'Description', 'State', 'Comittee', 'Meeting', 'Date of submission', 'Issuer'],
             ['', u'Vertr\xe4ge', u'F\xfcr weitere Bearbeitung bewilligen', 'Submitted', 'Submitted', u'Rechnungspr\xfcfungskommission', '', '31.08.2016', 'Ziegler Robert (robert.ziegler)'],  # noqa
             ['', u'Antrag f\xfcr Kreiselbau', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
-            ['', u'\xc4nderungen am Personalreglement', '', 'Submitted', 'Submitted', u'Rechnungspr\xfcfungskommission', '', '31.08.2016', 'Ziegler Robert (robert.ziegler)'],  # noqa
-            ['', u'\xdcberarbeitung der GAV', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
-            ]
+        ]
         self.assertEqual(expected_rows, [row.css('td,span').text for row in browser.css('.listing tr')])

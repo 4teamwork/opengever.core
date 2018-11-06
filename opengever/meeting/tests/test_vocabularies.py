@@ -138,9 +138,9 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
             [term.value for term in factory(context=self.dossier)])
 
         self.request.form['form.widgets.predecessor_proposal'] = '/'.join(
-            self.word_proposal.getPhysicalPath()).replace('/plone', '')
+            self.proposal.getPhysicalPath()).replace('/plone', '')
         self.assertItemsEqual(
-            [self.word_proposal.get_proposal_document(),
+            [self.proposal.get_proposal_document(),
              self.proposal_template,
              self.ad_hoc_agenda_item_template,
              self.recurring_agenda_item_template],

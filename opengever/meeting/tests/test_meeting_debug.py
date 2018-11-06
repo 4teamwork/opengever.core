@@ -12,7 +12,7 @@ class TestMeetingDebugViews(IntegrationTestCase):
     def test_smoke_debug_docxcompose(self, browser):
         self.login(self.manager, browser)
 
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.schedule_ad_hoc(self.meeting, "Foo")
         self.schedule_paragraph(self.meeting, "Bar")
 
@@ -27,7 +27,7 @@ class TestMeetingDebugViews(IntegrationTestCase):
         self.login(self.manager, browser)
 
         agenda_1 = self.schedule_proposal(
-            self.meeting, self.submitted_word_proposal)
+            self.meeting, self.submitted_proposal)
         agenda_2 = self.schedule_ad_hoc(self.meeting, "Foo")
         agenda_paragraph = self.schedule_paragraph(self.meeting, "Bar")
 

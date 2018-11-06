@@ -21,7 +21,6 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.base.utils import ogds_service
-from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
 from operator import methodcaller
@@ -923,36 +922,6 @@ class OpengeverContentFixture(object):
                 .load_model()
                 .submitted_physical_path.encode('utf-8'),
                 )
-
-            word_proposal = self.register('word_proposal', create(
-                Builder('proposal')
-                .within(self.dossier)
-                .having(
-                    title=u'\xc4nderungen am Personalreglement',
-                    committee=self.committee.load_model(),
-                    issuer=self.dossier_responsible.getId(),
-                    )
-                .relate_to(self.document)
-                .with_proposal_file(assets.load('vertragsentwurf.docx'))
-                .as_submitted()
-                ))
-
-            self.register_path(
-                'submitted_word_proposal',
-                word_proposal
-                .load_model()
-                .submitted_physical_path.encode('utf-8'),
-                )
-
-            self.register('draft_word_proposal', create(
-                Builder('proposal')
-                .within(self.dossier)
-                .having(
-                    title=u'\xdcberarbeitung der GAV',
-                    committee=self.empty_committee.load_model(),
-                    issuer=self.dossier_responsible.getId(),
-                    )
-                ))
 
         subdossier = self.register('subdossier', create(
             Builder('dossier')

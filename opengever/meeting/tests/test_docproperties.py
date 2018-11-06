@@ -24,79 +24,79 @@ class TestMeetingDocxProperties(IntegrationTestCase):
         self.assertEquals(
             {'ogg.meeting.decision_number': '',
              'ogg.meeting.agenda_item_number': '',
-             'ogg.meeting.proposal_title': '\xc3\x9cberarbeitung der GAV',
+             'ogg.meeting.proposal_title': 'Antrag f\xc3\xbcr Kreiselbau',
              'ogg.meeting.proposal_description': '',
              'ogg.meeting.proposal_state': 'Pending'},
-            get_doc_properties(self.draft_word_proposal.get_proposal_document()))
+            get_doc_properties(self.draft_proposal.get_proposal_document()))
 
     def test_submitted_proposal_document(self):
         with self.login(self.dossier_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Submitted'},
-                get_doc_properties(self.word_proposal.get_proposal_document()))
+                get_doc_properties(self.proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Submitted'},
-                get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
+                get_doc_properties(self.submitted_proposal.get_proposal_document()))
 
     def test_scheduled_proposal_document(self):
         with self.login(self.committee_responsible):
-            self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+            self.schedule_proposal(self.meeting, self.submitted_proposal)
 
         with self.login(self.dossier_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
-                get_doc_properties(self.word_proposal.get_proposal_document()))
+                get_doc_properties(self.proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
-                get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
+                get_doc_properties(self.submitted_proposal.get_proposal_document()))
 
     def test_decided_proposal_document(self):
         with self.login(self.committee_responsible):
-            agendaitem = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+            agendaitem = self.schedule_proposal(self.meeting, self.submitted_proposal)
             self.decide_agendaitem_generate_and_return_excerpt(agendaitem)
 
         with self.login(self.dossier_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},
-                get_doc_properties(self.word_proposal.get_proposal_document()))
+                get_doc_properties(self.proposal.get_proposal_document()))
 
         with self.login(self.committee_responsible):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},
-                get_doc_properties(self.submitted_word_proposal.get_proposal_document()))
+                get_doc_properties(self.submitted_proposal.get_proposal_document()))
 
     def test_excerpt_document(self):
         with self.login(self.committee_responsible):
             agenda_item = self.schedule_proposal(self.meeting,
-                                                 self.submitted_word_proposal)
+                                                 self.submitted_proposal)
             agenda_item.decide()
             with self.observe_children(self.meeting_dossier) as children:
                 agenda_item.generate_excerpt(title='Excerpt')
@@ -106,8 +106,8 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
                 get_doc_properties(meeting_dossier_excerpt))
 
@@ -120,7 +120,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
-                 'ogg.meeting.proposal_title': '\xc3\x84nderungen am Personalreglement',
-                 'ogg.meeting.proposal_description': '',
+                 'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
+                 'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},
                 get_doc_properties(case_dossier_excerpt))

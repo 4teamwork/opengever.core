@@ -88,22 +88,22 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_proposal_document_in_meeting_item_data(self, browser):
         self.login(self.committee_responsible, browser)
         self.schedule_proposal(self.meeting,
-                               self.submitted_word_proposal)
+                               self.submitted_proposal)
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
 
         document_link_html = item_data.get('document_link')
         self.assertIn(
-            u'\xc4nderungen am Personalreglement',
+            u'Vertr\xe4ge',
             document_link_html)
-        document = self.submitted_word_proposal.get_proposal_document()
+        document = self.submitted_proposal.get_proposal_document()
         self.assertIn(document.absolute_url() + '/tooltip', document_link_html)
 
     @browsing
     def test_edit_document_possible_when_item_proposed(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
@@ -118,8 +118,8 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_edit_document_possible_when_i_have_checked_it_out(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-        proposal_document = self.submitted_word_proposal.get_proposal_document()
+                                             self.submitted_proposal)
+        proposal_document = self.submitted_proposal.get_proposal_document()
         self.checkout_document(proposal_document)
 
         browser.open(self.meeting, view='agenda_items/list')
@@ -140,11 +140,11 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_edit_document_not_possible_when_sb_else_checked_it_out(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
 
         with self.login(self.administrator):
             self.checkout_document(
-                self.submitted_word_proposal.get_proposal_document())
+                self.submitted_proposal.get_proposal_document())
 
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
@@ -160,11 +160,11 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_edit_document_possible_when_agenda_item_in_revision(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         agenda_item.reopen()
 
-        proposal_document = self.submitted_word_proposal.get_proposal_document()
+        proposal_document = self.submitted_proposal.get_proposal_document()
         browser.open(self.meeting, view='agenda_items/list')
         item_data = browser.json['items'][0]
         self.assertDictContainsSubset(
@@ -183,8 +183,8 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_edit_document_checks_out_and_provides_OC_url(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
-        document = self.submitted_word_proposal.get_proposal_document()
+                                             self.submitted_proposal)
+        document = self.submitted_proposal.get_proposal_document()
 
         self.assertIsNone(self.get_checkout_manager(document).get_checked_out_by())
         browser.open(
@@ -207,14 +207,14 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_decide_agenda_item_checks_in_documents(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
 
-        document = self.submitted_word_proposal.get_proposal_document()
+        document = self.submitted_proposal.get_proposal_document()
         self.checkout_document(document)
         self.assertEqual(self.committee_responsible.getId(),
                          self.get_checkout_manager(document).get_checked_out_by())
 
-        proposal_model = self.submitted_word_proposal.load_model()
+        proposal_model = self.submitted_proposal.load_model()
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
 
         browser.open(
@@ -238,16 +238,16 @@ class TestProposalAgendaItem(IntegrationTestCase):
 
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
 
         self.login(self.administrator, browser)
-        document = self.submitted_word_proposal.get_proposal_document()
+        document = self.submitted_proposal.get_proposal_document()
         self.checkout_document(document)
         self.assertEqual(self.administrator.getId(),
                          self.get_checkout_manager(document).get_checked_out_by())
 
         self.login(self.committee_responsible, browser)
-        proposal_model = self.submitted_word_proposal.load_model()
+        proposal_model = self.submitted_proposal.load_model()
         self.assertEquals(proposal_model.STATE_SCHEDULED, proposal_model.get_state())
 
         browser.open(
@@ -274,7 +274,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
         """
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         self.assertEquals(self.meeting.model.STATE_HELD,
                           self.meeting.model.get_state())
@@ -285,7 +285,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
         # The generate excerpt link is available on decided agenda items.
         self.assertDictContainsSubset(
             {'generate_excerpt_link': self.agenda_item_url(agenda_item, 'generate_excerpt'),
-             'generate_excerpt_default_title': u'Excerpt \xc4nderungen am Personalreglement'},
+             'generate_excerpt_default_title': u'Excerpt Vertr\xe4ge'},
             item_data)
 
         # Create an excerpt.
@@ -319,7 +319,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_cannot_create_excerpt_when_meeting_closed(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         self.meeting.model.execute_transition('held-closed')
         self.assertEquals(self.meeting.model.STATE_CLOSED,
@@ -332,7 +332,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_cannot_create_excerpt_when_item_not_decided(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         with browser.expect_http_error(code=403):
             browser.open(
                 self.agenda_item_url(agenda_item, 'generate_excerpt'),
@@ -351,7 +351,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
             self.meeting_dossier.__ac_local_roles_block__ = True
 
             agenda_item = self.schedule_proposal(self.meeting,
-                                                 self.submitted_word_proposal)
+                                                 self.submitted_proposal)
             agenda_item.decide()
 
         self.login(self.regular_user, browser)
@@ -372,7 +372,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_excerpts_listed_in_meeting_item_data(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
 
         browser.open(self.meeting, view='agenda_items/list')
@@ -393,18 +393,18 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_decision_number_in_meeting_item_data(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
 
         browser.open(self.meeting, view='agenda_items/list')
         self.assertDictContainsSubset(
-            {'title': u'&Auml;nderungen am Personalreglement',
+            {'title': u'Vertr&auml;ge',
              'decision_number': None},
             browser.json['items'][0])
 
         agenda_item.decide()
         browser.reload()
         self.assertDictContainsSubset(
-            {'title': u'&Auml;nderungen am Personalreglement',
+            {'title': u'Vertr&auml;ge',
              'decision_number': '2016 / 2'},
             browser.json['items'][0])
 
@@ -412,7 +412,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_can_return_excerpts_to_proposer(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         excerpt = agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
 
@@ -443,7 +443,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_agenda_item_create_task_url(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         excerpt_doc = agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
         browser.open(self.meeting, view='agenda_items/list')
@@ -464,7 +464,7 @@ class TestProposalAgendaItem(IntegrationTestCase):
     def test_agendaitem_with_excerpts_has_documents(self, browser):
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         agenda_item.generate_excerpt(title='Excerpt \xc3\x84nderungen')
 

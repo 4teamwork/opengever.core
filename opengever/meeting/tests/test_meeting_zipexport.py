@@ -33,7 +33,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
     def test_zip_export_agenda_items_attachments(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
 
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
@@ -45,11 +45,11 @@ class TestMeetingZipExportView(IntegrationTestCase):
     def test_export_proposal_word_documents(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            'Traktandum 1/Aenderungen am Personalreglement.docx',
+            'Traktandum 1/Vertraege.docx',
             zip_file.namelist())
 
     @browsing
@@ -57,7 +57,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)
         agenda_item = self.schedule_proposal(self.meeting,
-                                             self.submitted_word_proposal)
+                                             self.submitted_proposal)
         agenda_item.decide()
         agenda_item.generate_excerpt(title='Ahoi McEnroe!')
 
@@ -65,7 +65,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertItemsEqual(
             ['Traktandum 1/Vertraegsentwurf.docx',
-             'Traktandum 1/Aenderungen am Personalreglement.docx',
+             'Traktandum 1/Vertraege.docx',
              'meeting.json'],
             zip_file.namelist())
 
@@ -126,55 +126,50 @@ class TestMeetingZipExportView(IntegrationTestCase):
         self.schedule_paragraph(self.meeting, u'A Gesch\xfcfte')
         with freeze(localized_datetime(2017, 12, 13)):
             self.schedule_ad_hoc(self.meeting, u'Ad-hoc Traktand\xfem')
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
 
         serializer = MeetingJSONSerializer(
             self.meeting.model,
             MeetingDocumentZipper(self.meeting.model, None))
         serializer.traverse()
-
-        self.assertEquals({
-            'agenda_items': [{
-                'opengever_id': 2,
-                'sort_order': 1,
-                'title': u'A Gesch\xfcfte',
-            }, {
-                'number': '1.',
-                'sort_order': 2,
-                'opengever_id': 3,
-                'proposal': {
-                    'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                    'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
-                    'modified': u'2017-12-13T00:00:00+01:00',
+        expected_agenda_items = {
+            'agenda_items': [
+                {'opengever_id': 2, 'sort_order': 1, 'title': u'A Gesch\xfcfte'},
+                {
+                    'number': '1.', 'opengever_id': 3, 'proposal': {
+                        'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
+                        'file': 'Traktandum 1/Ad-hoc Traktandthm.docx',
+                        'modified': u'2017-12-13T00:00:00+01:00',
+                    },
+                    'sort_order': 2,
+                    'title': u'Ad-hoc Traktand\xfem'
                 },
-                'title': u'Ad-hoc Traktand\xfem',
-            }, {
-                'attachments': [{
-                    'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                    'file': u'Traktandum 2/Vertraegsentwurf.docx',
-                    'modified': u'2016-08-31T16:17:46+02:00',
-                    'title': u'Vertr\xe4gsentwurf',
-                }],
-                'number': '2.',
-                'sort_order': 3,
-                'opengever_id': 4,
-                'proposal': {
-                    'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                    'file': u'Traktandum 2/Aenderungen am Personalreglement.docx',
-                    'modified': u'2016-08-31T16:17:44+02:00',
+                {
+                    'attachments': [{
+                        'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
+                        'file': 'Traktandum 2/Vertraegsentwurf.docx',
+                        'modified': u'2016-08-31T16:09:37+02:00',
+                        'title': u'Vertr\xe4gsentwurf',
+                    }],
+                    'number': '2.',
+                    'opengever_id': 4,
+                    'proposal': {
+                        'checksum': '114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
+                        'file': 'Traktandum 2/Vertraege.docx',
+                        'modified': u'2016-08-31T16:09:35+02:00',
+                    },
+                    'sort_order': 3,
+                    'title': u'Vertr\xe4ge',
                 },
-                'title': u'\xc4nderungen am Personalreglement',
-            }],
-            'committee': {
-                'oguid': u'plone:1009273300',
-                'title': u'Rechnungspr\xfcfungskommission',
-            },
+            ],
+            'committee': {'oguid': u'plone:1009273300', 'title': u'Rechnungspr\xfcfungskommission'},
             'end': u'2016-09-12T17:00:00+00:00',
             'location': u'B\xfcren an der Aare',
             'opengever_id': 1,
             'start': u'2016-09-12T15:30:00+00:00',
             'title': u'9. Sitzung der Rechnungspr\xfcfungskommission',
-        }, serializer.data)
+        }
+        self.assertEquals(expected_agenda_items, serializer.data)
 
     @browsing
     def test_exported_meeting_json_has_correct_file_names(self, browser):
@@ -189,7 +184,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             self.schedule_ad_hoc(
                 self.meeting, u'Ad-hoc Traktand\xfem'
             ).decide()
-        agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
         with freeze(localized_datetime(2017, 12, 14)):
             self.meeting.model.close()
@@ -208,54 +203,58 @@ class TestMeetingZipExportView(IntegrationTestCase):
         for agenda_item in meeting_json['meetings'][0]['agenda_items']:
             agenda_item.pop('opengever_id')
 
-        self.assert_json_structure_equal({
-            'meetings': [
-                {'agenda_items': [
-                    {'sort_order': 1,
-                     'title': u'A Gesch\xfcfte'},
-                    {'number': '1.',
-                     'proposal': {
-                         'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': 'Traktandum 1/Ad-hoc Traktandthm.docx',
-                         'modified': '2017-12-13T00:00:00+01:00'
-                     },
-                     'sort_order': 2,
-                     'title': u'Ad-hoc Traktand\xfem'},
-                    {'attachments': [{
-                        'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                        'file': 'Traktandum 2/Vertraegsentwurf.docx',
-                        'modified': '2016-08-31T16:17:46+02:00',
-                        'title': u'Vertr\xe4gsentwurf'}],
-                     'number': '2.',
-                     'sort_order': 3,
-                     'proposal': {
-                         'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
-                         'file': 'Traktandum 2/Aenderungen am Personalreglement.docx',
-                         'modified': '2016-08-31T16:17:44+02:00'
-                     },
-                     'title': u'\xc4nderungen am Personalreglement'}
-                    ],
-                 'committee': {'oguid': 'plone:1009273300',
-                               'title': u'Rechnungspr\xfcfungskommission'},
-                 'end': '2016-09-12T17:00:00+00:00',
-                 'location': u'B\xfcren an der Aare',
-                 'protocol': {
-                     'checksum': 'unpredictable',
-                     'file': 'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
-                     'modified': '2017-12-14T00:00:00+01:00'
-                 },
-                 'start': '2016-09-12T15:30:00+00:00',
-                 'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich'}
+        expected_meeting_json = {
+            u'meetings': [{
+                u'agenda_items': [
+                    {u'sort_order': 1, u'title': u'A Gesch\xfcfte'},
+                    {
+                        u'number': u'1.',
+                        u'proposal': {
+                            u'checksum': u'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
+                            u'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
+                            u'modified': u'2017-12-13T00:00:00+01:00',
+                        },
+                        u'sort_order': 2,
+                        u'title': u'Ad-hoc Traktand\xfem',
+                    },
+                    {
+                        u'attachments': [{
+                            u'checksum': u'51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
+                            u'file': u'Traktandum 2/Vertraegsentwurf.docx',
+                            u'modified': u'2016-08-31T16:09:37+02:00',
+                            u'title': u'Vertr\xe4gsentwurf',
+                        }],
+                        u'number': u'2.',
+                        u'proposal': {
+                            u'checksum': u'114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
+                            u'file': u'Traktandum 2/Vertraege.docx',
+                            u'modified': u'2016-08-31T16:09:35+02:00',
+                        },
+                        u'sort_order': 3,
+                        u'title': u'Vertr\xe4ge',
+                    },
                 ],
-            'version': '1.0.0'
-            }, meeting_json)
+                u'committee': {u'oguid': u'plone:1009273300', u'title': u'Rechnungspr\xfcfungskommission'},
+                u'end': u'2016-09-12T17:00:00+00:00',
+                u'location': u'B\xfcren an der Aare',
+                u'protocol': {
+                    u'checksum': 'unpredictable',
+                    u'file': u'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
+                    u'modified': u'2017-12-14T00:00:00+01:00',
+                },
+                u'start': u'2016-09-12T15:30:00+00:00',
+                u'title': u'9. Sitzung der Rechnungspr\xfcfungskommission, ordentlich',
+            }],
+            u'version': u'1.0.0',
+        }
+        self.assert_json_structure_equal(expected_meeting_json, meeting_json)
 
         expected_file_names = [
             'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
             'Traktandum 1/Ad-hoc Traktandthm.docx',
-            'Traktandum 2/Aenderungen am Personalreglement.docx',
+            'Traktandum 2/Vertraege.docx',
             'Traktandum 2/Vertraegsentwurf.docx',
             'meeting.json',
             ]
         file_names = sorted(zip_file.namelist())
-        self.assertEqual(file_names, expected_file_names)
+        self.assertEqual(expected_file_names, file_names)
