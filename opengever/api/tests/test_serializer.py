@@ -28,6 +28,16 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'is_leafnode'), True)
 
+    @browsing
+    def test_repofolder_serialization_contains_relative_path(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.leaf_repofolder, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'relative_path'),
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen')
+
 
 class TestDossierSerializer(IntegrationTestCase):
 
@@ -58,6 +68,15 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertEqual(
             browser.json.get(u'responsible_fullname'), u'Ziegler Robert')
 
+    @browsing
+    def test_dossier_serialization_contains_relative_path(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'relative_path'),
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1')
+
 
 class TestDocumentSerializer(IntegrationTestCase):
 
@@ -81,6 +100,16 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(browser.json.get(u'bumblebee_checksum'), DOCX_CHECKSUM)
 
     @browsing
+    def test_document_serialization_contains_relative_path(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'relative_path'),
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/{}'.format(
+                self.document.getId()))
+
+    @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers={'Accept': 'application/json'})
@@ -95,3 +124,13 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         checksum = IBumblebeeDocument(self.mail_eml).get_checksum()
         self.assertEqual(browser.json.get(u'bumblebee_checksum'), checksum)
+
+    @browsing
+    def test_mail_serialization_contains_relative_path(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail_eml, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'relative_path'),
+            u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/{}'.format(
+                self.mail_eml.getId()))

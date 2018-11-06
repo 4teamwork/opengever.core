@@ -9,7 +9,7 @@ class TestListingEndpoint(IntegrationTestCase):
     def test_dossier_listing(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible_fullname&sort_on=created'
+        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible_fullname&columns=relative_path&sort_on=created'
         browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -17,14 +17,15 @@ class TestListingEndpoint(IntegrationTestCase):
              u'responsible_fullname': u'Ziegler Robert',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'reference': u'Client1 1.1 / 1',
-             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
+             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+             u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
             browser.json['items'][-1])
 
     @browsing
     def test_document_listing(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&columns=bumblebee_checksum&sort_on=created'
+        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&columns=bumblebee_checksum&columns=relative_path&sort_on=created'
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -34,7 +35,8 @@ class TestListingEndpoint(IntegrationTestCase):
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
              u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
-             u'bumblebee_checksum': DOCX_CHECKSUM},
+             u'bumblebee_checksum': DOCX_CHECKSUM,
+             u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12'},
             browser.json['items'][-1])
 
     @browsing

@@ -11,6 +11,7 @@ Changelog
 - Make the changed field a python datetime. [njohner]
 - Fix Officeconnector permission checks for task documents tab actions. [Rotonen]
 - Ensure clamped down enough permissions on shadow documents. [Rotonen]
+- Include relative_path to dexterity item and folder serialization [elioschmutz]
 - Include bumblebee_checksum to dexterity item serialization [elioschmutz]
 - Include bumblebee-checksum into @listing endpoint [elioschmutz]
 - Drop verbose logging for ObjectTouched events. [lgraf]
