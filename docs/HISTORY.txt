@@ -5,6 +5,7 @@ Changelog
 2018.4.9 (unreleased)
 ---------------------
 
+- Fix favourite edit action and display pencil. [deiferni]
 - Disable buttons during save request in sharing form and improve error handling. [phgross]
 
 
