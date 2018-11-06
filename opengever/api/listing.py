@@ -4,6 +4,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
+from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.registry.interfaces import IRegistry
 from plone.restapi.batching import HypermediaBatch
@@ -15,7 +16,6 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
-
 
 DEFAULT_SORT_INDEX = 'modified'
 
@@ -65,6 +65,12 @@ def filename(obj):
     return info.value.filename
 
 
+def relative_path(brain):
+    portal_path_length = len(api.portal.get().getPhysicalPath())
+    content_path = brain.getPath().split('/')
+    return '/'.join(content_path[portal_path_length:])
+
+
 # Mapping of field name -> (index, accessor, sort index)
 FIELDS = {
     '@type': ('portal_type', 'PortalType', 'portal_type'),
@@ -86,6 +92,7 @@ FIELDS = {
     'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
     'reference': ('reference', 'reference', 'reference'),
     'reference_number': ('reference', 'reference', 'reference'),
+    'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
     'responsible': ('responsible', 'responsible', 'responsible'),
     'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
     'review_state': ('review_state', 'translated_review_state', 'review_state'),
