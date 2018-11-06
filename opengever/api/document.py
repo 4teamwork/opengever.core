@@ -3,7 +3,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.serializer.dxcontent import SerializeToJson
+from opengever.api.serializer import GeverSerializeToJson
 from plone.restapi.services.content.update import ContentPatch
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -13,7 +13,7 @@ from zope.interface import Interface
 
 @implementer(ISerializeToJson)
 @adapter(IBaseDocument, Interface)
-class SerializeDocumentToJson(SerializeToJson):
+class SerializeDocumentToJson(GeverSerializeToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeDocumentToJson, self).__call__(*args, **kwargs)

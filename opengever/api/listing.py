@@ -68,6 +68,7 @@ def filename(obj):
 # Mapping of field name -> (index, accessor, sort index)
 FIELDS = {
     '@type': ('portal_type', 'PortalType', 'portal_type'),
+    'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
     'checked_out': ('checked_out', 'checked_out', 'checked_out'),
     'checked_out_fullname': ('checked_out', 'checked_out_fullname', 'checked_out'),
     'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),

@@ -1,7 +1,7 @@
 from ftw.mail.interfaces import IEmailAddress
+from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -9,7 +9,7 @@ from zope.interface import Interface
 
 @implementer(ISerializeToJson)
 @adapter(IDossierMarker, Interface)
-class SerializeDossierToJson(SerializeFolderToJson):
+class SerializeDossierToJson(GeverSerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeDossierToJson, self).__call__(*args, **kwargs)

@@ -1,7 +1,7 @@
+from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -9,7 +9,7 @@ from zope.interface import Interface
 
 @implementer(ISerializeToJson)
 @adapter(IRepositoryFolder, Interface)
-class SerializeRepositoryFolderToJson(SerializeFolderToJson):
+class SerializeRepositoryFolderToJson(GeverSerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeRepositoryFolderToJson, self).__call__(*args, **kwargs)

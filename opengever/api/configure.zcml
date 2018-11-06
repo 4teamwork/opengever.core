@@ -9,6 +9,9 @@
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
 
+  <adapter factory=".serializer.GeverSerializeToJson" />
+  <adapter factory=".serializer.GeverSerializeFolderToJson" />
+
   <adapter factory=".summary.GeverJSONSummarySerializer" />
   <adapter factory=".fields.ChoiceFieldDeserializer" />
 
