@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Display group label in teamdetails instead of group title. [njohner]
 - Add reference numbers to protected items admin view links. [Rotonen]
 - Sort repository excel exports by reference number. [Rotonen]
 - Allow managers to deactivate a dossier. [njohner]
