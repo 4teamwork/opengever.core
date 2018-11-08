@@ -11,6 +11,13 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
+def node_updater(brain, node):
+    node['title'] = brain.Title
+    node['reference'] = brain.reference
+    node['url'] = brain.getURL()
+    node['css_class'] = get_css_class(brain)
+
+
 class BlockedLocalRolesList(BrowserView):
     """Provide an admin overview to list dossiers and repo folders with blocked
     local roles.
@@ -23,11 +30,6 @@ class BlockedLocalRolesList(BrowserView):
 
     def render(self):
         return self.index()
-
-    def node_updater(self, brain, node):
-        node['title'] = brain.Title
-        node['url'] = brain.getURL()
-        node['css_class'] = get_css_class(brain)
 
     def render_tree(self):
         context_path = '/'.join(self.context.getPhysicalPath())
@@ -55,7 +57,7 @@ class BlockedLocalRolesList(BrowserView):
 
             tree = Treeify(
                 dossier_container_brains,
-                context_path, self.node_updater,
+                context_path, node_updater,
                 )
 
             # XXX - Preserving the reference number tree order.
@@ -96,6 +98,7 @@ class BlockedLocalRolesList(BrowserView):
                 ))
 
             title = escape_html(node.get('title'))
+            reference = escape_html(node.get('reference'))
             url = escape_html(node.get('url'))
             css_class = node.get("css_class")
             sub_children = node.get('children')
@@ -110,20 +113,22 @@ class BlockedLocalRolesList(BrowserView):
 
                     output = u''.join((
                         output,
-                        u'<a class="{} blocked-local-roles-link" href="{}">{}</a>'
+                        u'<a class="{} blocked-local-roles-link" href="{}">{} - {}</a>'
                         .format(
                             css_class,
                             target_url,
                             title.decode('UTF-8'),
+                            reference,
                             ),
                         ))
                 else:
                     output = u''.join((
                         output,
-                        u'<span class="{} blocked-local-roles-link">{}</span>'
+                        u'<span class="{} blocked-local-roles-link">{} - {}</span>'
                         .format(
                             css_class,
                             title.decode('UTF-8'),
+                            reference,
                             ),
                         ))
 

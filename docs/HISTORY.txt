@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Add reference numbers to protected items admin view links. [Rotonen]
 - Bump ftw.contentstats to get disk usage logging. [lgraf]
 - Whitelist "recently touched" data structures from CSRF write protection. [lgraf]
 - Bump docxcompose to 1.0.0a13 to get a numberig restart bugfix. [deiferni]
