@@ -129,7 +129,7 @@ class TestMeeting(IntegrationTestCase):
     @browsing
     def test_meeting_with_agenda_items_cannot_be_cancelled(self, browser):
         self.login(self.committee_responsible, browser)
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         browser.open(self.meeting)
         editbar.menu_option('Actions', 'Cancel').click()
 
@@ -274,7 +274,7 @@ class TestMeeting(IntegrationTestCase):
         """The user must decide all agenda items before the meeting can be closed.
         """
         self.login(self.committee_responsible, browser)
-        agendaitem = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        agendaitem = self.schedule_proposal(self.meeting, self.submitted_proposal)
         agendaitem.decide()
         self.assertEquals(u'held', self.meeting.model.workflow_state)
 
@@ -327,7 +327,7 @@ class TestMeeting(IntegrationTestCase):
         self.login(self.committee_responsible)
         meeting = self.meeting.model
         self.schedule_paragraph(meeting, u'A-Gesch\xe4fte')
-        item1 = self.schedule_proposal(meeting, self.submitted_word_proposal)
+        item1 = self.schedule_proposal(meeting, self.submitted_proposal)
         item2 = self.schedule_ad_hoc(meeting, u'Ad-Hoc Agenda Item')
 
         self.assertEquals([item1, item2], meeting.get_undecided_agenda_items())

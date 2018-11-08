@@ -584,7 +584,7 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
 
         proposals = browser.css('#proposals_box .proposal')
-        self.assertEqual(2, len(proposals))
+        self.assertEqual(1, len(proposals))
 
         proposal = proposals.first
 

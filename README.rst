@@ -549,7 +549,6 @@ Objects
       - self.decided_proposal
       - self.meeting
       - self.submitted_proposal
-      - self.submitted_word_proposal
     - self.committee_participant_1
     - self.committee_participant_2
     - self.committee_president
@@ -576,7 +575,6 @@ Objects
         - self.dossier
           - self.document
           - self.draft_proposal
-          - self.draft_word_proposal
           - self.empty_document
           - self.info_task
           - self.mail_eml
@@ -595,7 +593,6 @@ Objects
           - self.task
             - self.subtask
             - self.taskdocument
-          - self.word_proposal
         - self.empty_dossier
         - self.expired_dossier
           - self.expired_document

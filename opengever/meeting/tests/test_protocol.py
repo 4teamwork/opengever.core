@@ -12,7 +12,7 @@ class TestProtocol(IntegrationTestCase):
     def test_word_protocols_can_be_created_and_updated(self, browser):
         self.login(self.committee_responsible, browser)
         self.schedule_paragraph(self.meeting, u'A-Gesch\xe4fte')
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         meeting = self.meeting.model
 
         self.assertIsNone(meeting.protocol_document)
@@ -43,7 +43,7 @@ class TestProtocol(IntegrationTestCase):
     def test_protocol_generate_action_only_available_for_unedited_protocols(self, browser):
         self.login(self.committee_responsible, browser)
         self.schedule_paragraph(self.meeting, u'A-Gesch\xe4fte')
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         meeting = self.meeting.model
 
         self.assertIsNone(meeting.protocol_document)
@@ -99,7 +99,7 @@ class TestProtocol(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         self.committee.protocol_suffix_template = self.committee.protocol_header_template
         self.schedule_paragraph(self.meeting, u'A-Gesch\xe4fte')
-        self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
         meeting = self.meeting.model
 
         self.assertIsNone(meeting.protocol_document)
@@ -127,7 +127,7 @@ class TestProtocol(IntegrationTestCase):
     @browsing
     def test_protocol_is_generated_when_closing_meetings(self, browser):
         self.login(self.committee_responsible, browser)
-        agenda_item = self.schedule_proposal(self.meeting, self.submitted_word_proposal)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
         self.decide_agendaitem_generate_and_return_excerpt(agenda_item)
 
         meeting = self.meeting.model

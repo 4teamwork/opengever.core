@@ -138,7 +138,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.private_document)
 
-        expected_reference_number = 'P Client1 kathi-barfuss / 1 / 35'
+        expected_reference_number = 'P Client1 kathi-barfuss / 1 / 31'
         found_reference_number = browser.css('.referenceNumber .value').text[0]
 
         self.assertEqual(found_reference_number, expected_reference_number)

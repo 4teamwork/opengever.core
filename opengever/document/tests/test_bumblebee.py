@@ -119,7 +119,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
             'deferred': False,
             'url': (
                 '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
-                '/dossier-1/dossier-2/document-24/bumblebee_trigger_storing'
+                '/dossier-1/dossier-2/document-20/bumblebee_trigger_storing'
                 ),
             }
 
@@ -163,7 +163,7 @@ class TestBumblebeeIntegrationWithEnabledFeature(IntegrationTestCase):
             'deferred': False,
             'url': (
                 '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
-                '/dossier-1/dossier-2/document-24/bumblebee_trigger_storing'
+                '/dossier-1/dossier-2/document-20/bumblebee_trigger_storing'
                 ),
             }
 

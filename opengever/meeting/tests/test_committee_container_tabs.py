@@ -128,7 +128,7 @@ class TestCommitteeContainerCommitteeTab(IntegrationTestCase):
 
         self.assertEquals(
             ['New unscheduled proposals: 0',
-             'New unscheduled proposals: 2'],
+             'New unscheduled proposals: 1'],
             browser.css('#committees_view .unscheduled_proposals').text)
 
     @browsing
@@ -139,7 +139,7 @@ class TestCommitteeContainerCommitteeTab(IntegrationTestCase):
 
         link = browser.css('#committees_view .unscheduled_proposals a')[1]
 
-        self.assertEquals('2', link.text)
+        self.assertEquals('1', link.text)
         self.assertEquals(
             'http://nohost/plone/opengever-meeting-committeecontainer/committee-1#submittedproposals',
             link.get('href'))
@@ -154,7 +154,7 @@ class TestCommitteeContainerCommitteeTab(IntegrationTestCase):
 
         self.assertEquals('0', links[0].text)
         self.assertEquals('number', links[0].get('class'))
-        self.assertEquals('2', links[1].text)
+        self.assertEquals('1', links[1].text)
         self.assertEquals('number unscheduled_number', links[1].get('class'))
 
     @browsing

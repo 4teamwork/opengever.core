@@ -149,27 +149,25 @@ class TestSubmittedProposal(IntegrationTestCase):
         its document read-only.
         """
         self.login(self.meeting_user, browser)
-        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
-        self.assertTrue(browser.find(u'\xc4nderungen am Personalreglement'))
+        browser.open(self.submitted_proposal, view='tabbedview_view-overview')
+        self.assertTrue(browser.find(u'Vertr\xe4ge'))
 
-        browser.open(self.submitted_word_proposal.get_proposal_document(),
-                     view='tabbedview_view-overview')
-        self.assertDictContainsSubset(
-            {'Title': u'\xc4nderungen am Personalreglement'},
-            dict(browser.css('.documentMetadata table').first.lists()))
+        browser.open(self.submitted_proposal.get_proposal_document(), view='tabbedview_view-overview')
+        expected_title = {'Title': u'Vertr\xe4ge'}
+        self.assertDictContainsSubset(expected_title, dict(browser.css('.documentMetadata table').first.lists()))
 
     def test_committee_member_permissions_on_proposal_document(self):
         self.login(self.meeting_user)
         self.assert_has_permissions(
             VIEW_PERMISSIONS,
-            self.submitted_word_proposal.get_proposal_document())
+            self.submitted_proposal.get_proposal_document())
 
         self.assert_has_not_permissions(
             (
                 'Modify portal content',
                 'opengever.document: Checkout',
             ),
-            self.submitted_word_proposal.get_proposal_document())
+            self.submitted_proposal.get_proposal_document())
 
     def test_committee_responsible_can_edit_proposal_document(self):
         self.login(self.committee_responsible)
@@ -192,7 +190,7 @@ class TestSubmittedProposal(IntegrationTestCase):
                 'opengever.document: Checkin',
                 'opengever.document: Checkout',
             ),
-            self.submitted_word_proposal.get_proposal_document())
+            self.submitted_proposal.get_proposal_document())
 
     def test_committee_administrator_can_edit_proposal_document(self):
         self.login(self.administrator)
@@ -215,11 +213,11 @@ class TestSubmittedProposal(IntegrationTestCase):
                 'opengever.document: Checkin',
                 'opengever.document: Checkout',
             ),
-            self.submitted_word_proposal.get_proposal_document())
+            self.submitted_proposal.get_proposal_document())
 
     def test_access_to_mail_attached_to_proposal(self):
         with self.login(self.administrator):
-            mail = create(Builder('mail').within(self.submitted_word_proposal))
+            mail = create(Builder('mail').within(self.submitted_proposal))
             self.assert_has_permissions(VIEW_PERMISSIONS, mail,
                                         '(CommitteeAdministrator)')
 
@@ -237,5 +235,5 @@ class TestSubmittedProposal(IntegrationTestCase):
         although it did not work.
         """
         self.login(self.meeting_user, browser)
-        browser.open(self.submitted_word_proposal, view='tabbedview_view-overview')
+        browser.open(self.submitted_proposal, view='tabbedview_view-overview')
         self.assertFalse(browser.find('Reject'))

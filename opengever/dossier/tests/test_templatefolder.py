@@ -213,15 +213,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 40',
-            'Document.SequenceNumber': '40',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 36',
+            'Document.SequenceNumber': '36',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 9, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 40',
-            'ogg.document.sequence_number': '40',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 36',
+            'ogg.document.sequence_number': '36',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
@@ -272,15 +272,15 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
         self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
-            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 40',
-            'Document.SequenceNumber': '40',
+            'Document.ReferenceNumber': 'Client1 1.1 / 1 / 36',
+            'Document.SequenceNumber': '36',
             'Dossier.ReferenceNumber': 'Client1 1.1 / 1',
             'Dossier.Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'User.FullName': u'B\xe4rfuss K\xe4thi',
             'User.ID': 'kathi.barfuss',
             'ogg.document.document_date': datetime(2020, 10, 28, 0, 0),
-            'ogg.document.reference_number': 'Client1 1.1 / 1 / 40',
-            'ogg.document.sequence_number': '40',
+            'ogg.document.reference_number': 'Client1 1.1 / 1 / 36',
+            'ogg.document.sequence_number': '36',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
             'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
