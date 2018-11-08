@@ -1,4 +1,6 @@
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.repository import _
@@ -6,6 +8,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.component import queryAdapter
 
 
 def repository_number_to_outine_level(repository_number):
@@ -125,10 +128,14 @@ def generate_report(request, context):
         {'id': 'get_groupnames_with_manager_role', 'title': label_groupnames_with_manager_role, 'callable': True},
         )
 
-    repository_folders = [context] + [
-        brain.getObject()
-        for brain in api.content.find(context, object_provides=IRepositoryFolder.__identifier__)
-        ]
+    # We sort these by reference number to preserve user experienced ordering
+    active_formatter = api.portal.get_registry_record(name='formatter', interface=IReferenceNumberSettings)
+    formatter = queryAdapter(api.portal.get(), IReferenceNumberFormatter, name=active_formatter)
+    repository_brains = sorted(
+        api.content.find(context, object_provides=IRepositoryFolder.__identifier__),
+        key=formatter.sorter,
+    )
+    repository_folders = [context] + [brain.getObject() for brain in repository_brains]
 
     # XXX - the excel importer expects 4 non-meaningful rows
     return XLSReporter(
