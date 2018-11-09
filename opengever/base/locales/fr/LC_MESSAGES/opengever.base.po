@@ -192,32 +192,32 @@ msgstr "Commentaire concernant la valeur archivistique"
 #. Default: "By committee group"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_committee_group"
-msgstr ""
+msgstr "Par l'appartenance au groupe de la commission"
 
 #. Default: "By protect dossier"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_protect_dossier"
-msgstr ""
+msgstr "Par «Protéger le dossier»"
 
 #. Default: "Via sharing"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_sharing"
-msgstr ""
+msgstr "Par partage manuel"
 
 #. Default: "By task"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_task"
-msgstr ""
+msgstr "Par tâche"
 
 #. Default: "By task agency"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_task_agency"
-msgstr ""
+msgstr "Par tâche (suppléance)"
 
 #. Default: "By workspace invitation"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_workspace_invitation"
-msgstr ""
+msgstr "Par une invitation Teamraum"
 
 #. Default: "Cancel"
 #: ./opengever/base/browser/favorites.py

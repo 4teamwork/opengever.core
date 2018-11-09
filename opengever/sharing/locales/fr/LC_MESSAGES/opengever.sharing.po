@@ -19,27 +19,27 @@ msgstr ""
 #. Default: "By default, permissions from the container of this item are inherited. If you disable this, only the explicitly defined sharing permissions will be valid."
 #: ./opengever/sharing/browser/sharing.py
 msgid "help_inherit_local_roles"
-msgstr ""
+msgstr "Par défaut, les autorisations d'un dossier sont héritées par les éléments contenus dans ce dernier. Si vous désactivez celà, seules les autorisations d'accès explicitement définies seront valables."
 
 #. Default: "Acquired permission"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_acquired_permission"
-msgstr ""
+msgstr "Autorisation héritée"
 
 #. Default: "Automatic permission"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_automatic_permission"
-msgstr ""
+msgstr "Autorisation automatique"
 
 #. Default: "Protected Objects"
 #: ./opengever/sharing/browser/admin_list.py
 msgid "label_blocked_local_roles"
-msgstr "objets protégés"
+msgstr "Objets protégés"
 
 #. Default: "Local permission"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_local_permission"
-msgstr ""
+msgstr "Autorisations locales"
 
 #. Default: "No protected objects were found within this scope."
 #: ./opengever/sharing/browser/admin_list.py
@@ -49,17 +49,17 @@ msgstr "Aucun objet protégé n'a été trouvé dans ce domaine."
 #. Default: "Local roles successfully changed"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_roles_successfully_changed"
-msgstr ""
+msgstr "Role local enregistré avec succès"
 
 #. Default: "Local roles save failed."
 #: ./opengever/sharing/browser/sharing.py
 msgid "message_save_failed"
-msgstr "Les autorisations n'ont pas pu être enregistrées."
+msgstr "Les roles locaux n'ont pas pu être enregistrées."
 
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
-msgstr ""
+msgstr "Recherche d'utilisateur ou de groupe"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_contributor"

@@ -581,12 +581,12 @@ msgstr "Beschlossen"
 #. Default: "If you need the original files instead of the PDFs a Zip file can be downloaded here. That Zip file will also contain a JSON file which allows it to be imported by the meeting app."
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
 msgid "desc_download_original_files"
-msgstr "Falls sie die Originaldateien anstatt der PDF-Dateien als Zip herunterladen möchten können sie dies hier tun. Auch dieses Zip enthält eine JSON-Datei mit der es in die Sitzungs-App importiert werden kann."
+msgstr "Falls sie die Originaldateien anstatt der PDF-Dateien als Zip herunterladen möchten können sie dies hier tun. Auch dieses Zip enthält eine JSON-Datei mit der es in die Sitzungsapp importiert werden kann."
 
 #. Default: "The zip contains a PDF file for each document in this meeting and a JSON file which allows it to be imported by the meeting app."
 #: ./opengever/meeting/browser/meetings/zipexport.py
 msgid "desc_pdf_zip_contents"
-msgstr "Das Zip enhält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungs-App importiert werden kann."
+msgstr "Das Zip enthält eine PDF-Datei für jedes Dokument in dieser Sitzung und eine JSON-Datei mit der das Zip in die Sitzungsapp importiert werden kann."
 
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py

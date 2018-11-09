@@ -191,12 +191,12 @@ msgstr "Vous n'avez sélectionné aucun élément."
 #: ./opengever/document/document.py
 #: ./opengever/document/quick_upload.py
 msgid "error_proposal_document_type"
-msgstr ""
+msgstr "Les documents de proposition doivent toujours être des fichiers Word. Les autres formats ne sont pas autorisés."
 
 #. Default: "It's not possible to have no file in proposal documents."
 #: ./opengever/document/document.py
 msgid "error_proposal_no_document"
-msgstr ""
+msgstr "Un document de proposition sans fichier n'est pas autorisé."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py
@@ -527,7 +527,7 @@ msgstr "Documents liés"
 #. Default: "Oneoffixx retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_oneoffixx"
-msgstr ""
+msgstr "Réessayer avec Oneoffixx"
 
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
