@@ -25,12 +25,12 @@ msgstr "Une nouvelle version soumise du document ${title} a été créée."
 
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "Add Dossier for Meeting"
-msgstr "Ajouter un dossier de réunion"
+msgstr "Ajouter un dossier de séance"
 
 #. Default: "Add Meeting"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "Add Meeting"
-msgstr "Ajouter une réunion"
+msgstr "Ajouter une séance"
 
 #. Default: "Add Member"
 #: ./opengever/meeting/browser/members.py
@@ -74,11 +74,11 @@ msgstr "Une erreur imprévue est apparue"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to cancel this meeting?"
-msgstr "Êtes-vous sûr de vouloir annuler cette réunion?"
+msgstr "Êtes-vous sûr de vouloir annuler cette séance?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to close this meeting?"
-msgstr "Êtes-vous sûr de vouloir clôturer cette réunion?"
+msgstr "Êtes-vous sûr de vouloir clôturer cette séance?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to regenerate the protocol?"
@@ -160,11 +160,11 @@ msgstr "Répertoire d'archivage"
 
 #: ./opengever/meeting/upgrades/profiles/4604/types/opengever.meeting.meetingdossier.xml
 msgid "Meeting Dossier"
-msgstr "Dossier de réunion"
+msgstr "Dossier de séance"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Meeting number"
-msgstr "Numéro de la réunion"
+msgstr "Numéro de la séance"
 
 #: ./opengever/meeting/browser/templates/member.pt
 msgid "Memberships"
@@ -222,7 +222,7 @@ msgstr "Joint à l'ordre du jour avec succès"
 
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "The meeting and its dossier were created successfully"
-msgstr "La réunion et le dossier y associé ont été créés avec succès."
+msgstr "La séance et le dossier y associé ont été créés avec succès."
 
 #: ./opengever/meeting/model/proposal.py
 msgid "The proposal has been rejected successfully"
@@ -250,7 +250,7 @@ msgstr "Le document a été écrasé par une version plus récente de l'extrait 
 
 #: ./opengever/meeting/command.py
 msgid "Updated with a newer generated version from meeting ${title}."
-msgstr "Actualisé par une nouvelle version de la réunion ${title}."
+msgstr "Actualisé par une nouvelle version de la séance ${title}."
 
 #: ./opengever/meeting/browser/templates/overview.pt
 msgid "View all"
@@ -267,12 +267,12 @@ msgstr "Vous ne disposez pas des droits nécessaires pour accéder au dossier."
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_cancel_meeting"
-msgstr "Annuler la réunion"
+msgstr "Annuler la séance"
 
 #. Default: "Close meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_close_meeting"
-msgstr "Clôturer la réunion"
+msgstr "Clôturer la séance"
 
 #. Default: "Create task"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -335,7 +335,7 @@ msgstr "Rouvrir"
 #. Default: "Reopen meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_reopen_meeting"
-msgstr "Rouvrir la réunion"
+msgstr "Rouvrir la séance"
 
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -367,7 +367,7 @@ msgstr "Le point a été enlevé avec succès de l'ordre du jour."
 #. Default: "Agendaitem has been decided and the meeting has been held."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_meeting_held"
-msgstr "Le point de l'ordre du jour a été clôturé et la réunion a eu lieu."
+msgstr "Le point de l'ordre du jour a été clôturé et la séance a eu lieu."
 
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -522,12 +522,12 @@ msgstr "Nom"
 #. Default: "Location"
 #: ./opengever/meeting/tabs/meetinglisting.py
 msgid "column_location"
-msgstr "Lieu de réunion"
+msgstr "Lieu de séance"
 
 #. Default: "Meeting"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 msgid "column_meeting"
-msgstr "Réunion"
+msgstr "Séance"
 
 #. Default: "Member"
 #: ./opengever/meeting/tabs/membershiplisting.py
@@ -659,7 +659,7 @@ msgstr "L'état ne peut pas être changé tant que la proposition contient des d
 #. Default: "Insufficient privileges to add a document to the meeting dossier."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "error_no_permission_to_add_document"
-msgstr "Autorisations insuffisantes pour ajouter un document au dossier de réunion."
+msgstr "Autorisations insuffisantes pour ajouter un document au dossier de séance."
 
 #. Default: "Only .docx files allowed as proposal documents."
 #: ./opengever/meeting/browser/proposalforms.py
@@ -724,7 +724,7 @@ msgstr "Choisissez tous les modèles de proposition autorisés dans ce comité. 
 #. Default: "Create a new task the meeting dossier and attach this excerpt."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_create_task"
-msgstr "Etablir une nouvelle tâche dans le dossier de réunion et y joindre cet extrait de protocole."
+msgstr "Etablir une nouvelle tâche dans le dossier de séance et y joindre cet extrait de protocole."
 
 #. Default: "Template containing the predifined paragraphs"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -744,7 +744,7 @@ msgstr "Cet extrait de protocole a été renvoyé comme réponse à la propositi
 #. Default: "Hold meeting"
 #: ./opengever/meeting/model/meeting.py
 msgid "hold"
-msgstr "Tenir une réunion"
+msgstr "Tenir une séance"
 
 #. Default: "Inactive"
 #: ./opengever/meeting/model/committee.py
@@ -775,7 +775,7 @@ msgstr "Modèle pour l'en-tête d'un point de l'ordre du jour dans le protocole"
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number"
-msgstr "Numéro du point de l'ordre du jour dans cette réunion"
+msgstr "Numéro du point de l'ordre du jour dans cette séance"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
@@ -840,17 +840,17 @@ msgstr "Annuler"
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_cancel_meeting"
-msgstr "Annuler la réunion"
+msgstr "Annuler la séance"
 
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
-msgstr "La réunion ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et renvoyés comme réponse."
+msgstr "La séance ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et renvoyés comme réponse."
 
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_closed_meetings"
-msgstr "Réunions passées"
+msgstr "séances passées"
 
 #. Default: "Comment"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1100,18 +1100,18 @@ msgstr "Nom"
 #. Default: "Linked meeting"
 #: ./opengever/meeting/browser/dossier/overview.py
 msgid "label_linked_meeting"
-msgstr "Réunion"
+msgstr "séance"
 
 #. Default: "Contains automatically generated dossiers and documents for this committee."
 #: ./opengever/meeting/committee.py
 msgid "label_linked_repository_folder"
-msgstr "Tous les documents et dossiers de réunion générés automatiquement seront classés sous cette position."
+msgstr "Tous les documents et dossiers de séance générés automatiquement seront classés sous cette position."
 
 #. Default: "Location"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_location"
-msgstr "Lieu de réunion"
+msgstr "Lieu de séance"
 
 #. Default: "Main Atrributes"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1121,17 +1121,17 @@ msgstr "Propriétés"
 #. Default: "Meeting"
 #: ./opengever/meeting/proposal.py
 msgid "label_meeting"
-msgstr "Réunion"
+msgstr "Séance"
 
 #. Default: "Meeting closed"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_meeting_closed"
-msgstr "Réunion clôturée"
+msgstr "Séance clôturée"
 
 #. Default: "The meeting already has agenda items and can't be cancelled"
 #: ./opengever/meeting/model/meeting.py
 msgid "label_meeting_has_agenda_items"
-msgstr "Cette réunion ne peut pas être annulée tant qu'elle contient des points de l'ordre du jour."
+msgstr "Cette séance ne peut pas être annulée tant qu'elle contient des points de l'ordre du jour."
 
 #. Default: "Meeting Template"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1152,7 +1152,7 @@ msgstr "Dernière modification"
 #. Default: "Next Meeting:"
 #: ./opengever/meeting/browser/templates/committee.pt
 msgid "label_next_meeting"
-msgstr "Prochaine réunion:"
+msgstr "Prochaine séance:"
 
 #. Default: "This member has no memberships."
 #: ./opengever/meeting/browser/templates/member.pt
@@ -1338,7 +1338,7 @@ msgstr "Propositions imprévues"
 #. Default: "Upcoming meetings"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_upcoming_meetings"
-msgstr "Prochaines réunions"
+msgstr "Prochaines séances"
 
 #. Default: "Warning"
 #: ./opengever/meeting/browser/meetings/zipexport.py
@@ -1368,7 +1368,7 @@ msgstr "Lieu"
 #. Default: "Meeting dossier"
 #: ./opengever/meeting/browser/meetings/byline.py
 msgid "meeting_byline_meetin_dossier"
-msgstr "Dossier de réunion"
+msgstr "Dossier de séance"
 
 #. Default: "Presidency"
 #: ./opengever/meeting/browser/meetings/byline.py
@@ -1404,7 +1404,7 @@ msgstr "Rédaction du protocole"
 #. Default: "Meetings"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "meetings"
-msgstr "Réunions"
+msgstr "Séances"
 
 #. Default: "Memberships"
 #: ./opengever/meeting/browser/tabbed.py
@@ -1444,7 +1444,7 @@ msgstr "Télécharger les fichiers originaux au lieu des PDFs."
 #. Default: "The agenda item list for meeting ${title} has already been generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py
 msgid "msg_error_agendaitem_list_already_generated"
-msgstr "L'ordre du jour pour la réunion ${title} a déjà été créé."
+msgstr "L'ordre du jour pour la séance ${title} a déjà été créé."
 
 #. Default: "There is no agendaitem list template configured, agendaitem list could not be generated."
 #: ./opengever/meeting/browser/meetings/agendaitem_list.py
@@ -1464,12 +1464,12 @@ msgstr "Le comité sélectionné a été désactivé; la proposition n'a pas pu 
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_cancelled"
-msgstr "La réunion ${title} a été annulée avec succès"
+msgstr "La séance ${title} a été annulée avec succès"
 
 #. Default: "The meeting ${title} has been successfully closed, the excerpts have been generated and sent back to the initial dossier."
 #: ./opengever/meeting/model/meeting.py
 msgid "msg_meeting_successfully_closed"
-msgstr "La réunion ${title} a été clôturée avec succès."
+msgstr "La séance ${title} a été clôturée avec succès."
 
 #. Default: "The membership was deleted successfully."
 #: ./opengever/meeting/browser/memberships.py
@@ -1489,7 +1489,7 @@ msgstr "Il n'y a pas de modèle configuré pour la table des matières; la table
 #. Default: "Not all meetings are closed."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "msg_pending_meetings"
-msgstr "Il y a des réunions non clôturées."
+msgstr "Il y a des séances non clôturées."
 
 #. Default: "Proposal cancelled successfully."
 #: ./opengever/meeting/model/proposal.py
@@ -1509,7 +1509,7 @@ msgstr "Proposition soumise avec succès."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "La réunion pourra seulement être clôturée quand tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et renvoyés comme réponse."
+msgstr "La séance pourra seulement être clôturée quand tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et renvoyés comme réponse."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
@@ -1635,7 +1635,7 @@ msgstr "Rejeté par ${user}"
 #: ./opengever/meeting/activity/activities.py
 #: ./opengever/meeting/proposalhistory.py
 msgid "proposal_history_label_remove_scheduled"
-msgstr "Enlevé de l'ordre du jour de la réunion ${meeting} par ${user}"
+msgstr "Enlevé de l'ordre du jour de la séance ${meeting} par ${user}"
 
 #. Default: "Proposal reopened by ${user}"
 #: ./opengever/meeting/proposalhistory.py
