@@ -20,6 +20,7 @@ Changelog
 - Task performance improvements: avoid reindexObjectSecurity for not affected documents. [phgross]
 - Display group label in teamdetails instead of group title. [njohner]
 - Prevent shadow documents from being relatable. [Rotonen]
+- Do not open keywordwidget when autofocusing the first form field. [phgross]
 - Add reference numbers to protected items admin view links. [Rotonen]
 - Sort repository excel exports by reference number. [Rotonen]
 - Allow managers to deactivate a dossier. [njohner]
