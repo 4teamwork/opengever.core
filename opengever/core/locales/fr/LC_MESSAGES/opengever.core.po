@@ -78,13 +78,13 @@ msgstr "Couverture (PDF)"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Disposition"
-msgstr ""
+msgstr "Créer une offre d'archivage"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
 #: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
-msgstr ""
+msgstr "Créer une proposition"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Task"
@@ -101,7 +101,7 @@ msgstr "Supprimer"
 
 #: ./opengever/core/profiles/default/types/opengever.disposition.disposition.xml
 msgid "Disposition"
-msgstr ""
+msgstr "Offre"
 
 #: ./opengever/core/profiles/default/types/opengever.document.document.xml
 msgid "Document"
@@ -148,7 +148,7 @@ msgstr "Dossier de réunion"
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingtemplate.xml
 #: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.meetingtemplate.xml
 msgid "Meeting Template"
-msgstr ""
+msgstr "Modèle de séance"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Move Items"
@@ -157,7 +157,7 @@ msgstr "Déplacer d'éléments"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180122154722_add_my_invitation_action/actions.xml
 msgid "My Invitations"
-msgstr ""
+msgstr "Invitations Teamraum"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
@@ -166,7 +166,7 @@ msgstr "Mon référentiel"
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
 #: ./opengever/core/upgrades/20180716085827_meeting_templates/types/opengever.meeting.paragraphtemplate.xml
 msgid "Paragraph Template"
-msgstr ""
+msgstr "Modèle d'intertitre"
 
 #: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
@@ -176,7 +176,7 @@ msgstr "Participation"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180119143619_update_actions_for_workspace/actions.xml
 msgid "Participants"
-msgstr ""
+msgstr "Participants"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Prefix Manager"
@@ -227,7 +227,7 @@ msgstr "Système de classement"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180122090342_add_revive_bumblebee_preview_action/actions.xml
 msgid "Revive preview"
-msgstr ""
+msgstr "Générer l'aperçu à nouveau"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"
@@ -295,16 +295,16 @@ msgstr "Classeur pour l'année"
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180327114419_homogenize_e_ch_0147_import_export_action_titles/actions.xml
 msgid "eCH-0147 Export"
-msgstr ""
+msgstr "Export eCH-0147"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147 Import"
-msgstr ""
+msgstr "Import eCH-0147"
 
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147/eCH-0039 Export"
-msgstr ""
+msgstr "Export eCH-0147/eCH-0039"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "remove"
