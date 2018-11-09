@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
@@ -15,7 +16,6 @@ from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
-from plone.app.testing import SITE_OWNER_NAME
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -65,13 +65,13 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
             task1 = create(Builder('task')
                            .within(dossier)
                            .having(responsible=self.user.userid,
-                                   issuer=SITE_OWNER_NAME,
+                                   responsible_client=self.org_unit.id(),
                                    title="task 1"))
 
             task2 = create(Builder('task')
                            .within(subdossier)
                            .having(responsible=self.user.userid,
-                                   issuer=self.user.userid,
+                                   responsible_client=self.org_unit.id(),
                                    title="task 2"))
 
         expected_deadline = datetime(2016, 4, 17, 0, 0)
@@ -89,19 +89,19 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
             expected = {'label': u'Task list for dossier Anfr\xf6gen 2015 (Client1 / 1)',
                         'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y %H:%M'),
                                             'deadline': expected_deadline.strftime('%d.%m.%Y %H:%M'),
-                                            'description': '',
+                                            'description': None,
                                             'history': None,
-                                            'responsible': u'Test User (test_user_1_)',
-                                            'issuer': u'admin (admin)',
+                                            'responsible': u'test_user_1_',
+                                            'responsible_client': u'org-unit-1',
                                             'sequence_number': 1,
                                             'title': 'task 1',
                                             'type': ''},
                                            {'completion_date': None,
                                             'deadline': expected_deadline.strftime('%d.%m.%Y %H:%M'),
-                                            'description': '',
+                                            'description': None,
                                             'history': None,
-                                            'responsible': u'Test User (test_user_1_)',
-                                            'issuer': u'Test User (test_user_1_)',
+                                            'responsible': u'test_user_1_',
+                                            'responsible_client': u'org-unit-1',
                                             'sequence_number': 2,
                                             'title': 'task 2',
                                             'type': ''}]}
