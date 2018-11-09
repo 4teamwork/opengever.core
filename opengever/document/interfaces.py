@@ -128,3 +128,9 @@ class IDocumentIndexer(Interface):
     def extract_text():
         """Extract plain text from the adapted document.
         """
+
+
+class IDocumentSavedAsPDFMarker(Interface):
+    """Marker Interface for documents that are copies of another document
+    in PDF format. Such documents contain the Source document and version
+    in their annotations."""

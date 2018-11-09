@@ -20,6 +20,7 @@ Changelog
 - Bump ftw.solr to 2.3.1 to get reindexObjectSecurity fix. [lgraf]
 - Fix an issue when creating meetings from a template. [deiferni]
 - Added indices and metadata for filesize, filename and file extension. [Rotonen]
+- Add action to save a document's PDF as a separate document. [njohner]
 - Fix normalizing filename for zip export. [deiferni]
 - Fix rendering issue in search view. [deiferni]
 - Fix rendering issue in livesearch reply view. [deiferni]

@@ -126,6 +126,15 @@
       permission="zope2.View"
       />
 
+  <!-- save pdf under -->
+  <browser:page
+      for="ftw.bumblebee.interfaces.IBumblebeeable"
+      name="save_pdf_under"
+      class=".forms.SavePDFUnderFormView"
+      permission="zope2.View"
+      />
+  <adapter factory=".forms.DestinationValidator" />
+
   <subscriber
       for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectCheckedOutEvent"

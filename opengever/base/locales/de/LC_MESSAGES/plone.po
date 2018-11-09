@@ -101,6 +101,9 @@ msgstr "Übersicht"
 msgid "Participant"
 msgstr "Beteiligung"
 
+msgid "Save document as PDF"
+msgstr "PDF speichern unter"
+
 msgid "Search OneGov Gever"
 msgstr "OneGov GEVER durchsuchen"
 

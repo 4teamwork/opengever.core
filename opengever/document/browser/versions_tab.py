@@ -159,6 +159,20 @@ class VersionDataProxy(object):
         return "{}/@@bumblebee-overlay-listing?version_id={}".format(
             self.url, self.version)
 
+    @property
+    def save_pdf_under_link(self):
+        """Returns a formatted link to save this particular version as
+        PDF.
+        """
+
+        url = '{}/save_pdf_under?version_id={}'
+        url = url.format(self.url, self.version_id)
+        url = addTokenToUrl(url)
+        link = translate_link(
+            url, _(u'label_save_pdf', default=u'Save PDF'),
+            css_class='standalone function-save-pdf')
+        return link
+
 
 class LazyHistoryMetadataProxy(object):
     """A proxy for CMFEditions `ShadowHistory` objects as returned by
@@ -309,6 +323,19 @@ class InitialVersionDataProxy(object):
         return "{}/@@bumblebee-overlay-listing".format(
             self.url, self.version)
 
+    @property
+    def save_pdf_under_link(self):
+        """Returns a formatted link to save this particular version as
+        PDF.
+        """
+        url = '{}/save_pdf_under?version_id={}'
+        url = url.format(self.url, self.version)
+        url = addTokenToUrl(url)
+        link = translate_link(
+            url, _(u'label_save_pdf', default=u'Save PDF'),
+            css_class='standalone function-save-pdf')
+        return link
+
 
 class IVersionsSourceConfig(ITableSourceConfig):
     """
@@ -391,12 +418,18 @@ class VersionsTab(BaseListingTab):
          'column_title': _(u'label_preview', default=u'Preview'),
          'transform': linked_version_preview
          },
+
+        # Dropped if bumblebee is not enabled
+        {'column': 'save_pdf_under_link',
+         'column_title': _(u'label_save_pdf', default=u'Save PDF'),
+         },
     )
 
     @property
     def columns(self):
         if not is_bumblebee_feature_enabled() or not is_bumblebeeable(self.context):
             self._columns = self.remove_column('preview')
+            self._columns = self.remove_column('save_pdf_under_link')
 
         return self._columns
 

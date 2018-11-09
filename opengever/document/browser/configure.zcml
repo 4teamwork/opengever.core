@@ -4,7 +4,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.document">
 
-
   <!-- Document download views -->
   <browser:page
       name="download"
@@ -50,6 +49,22 @@
       class=".tabbed.DocumentTabbedView"
       permission="zope2.View"
       allowed_attributes="listing select_all reorder setgridstate set_default_tab msg_unknownresponse"
+      />
+
+  <!-- Save document as pdf view -->
+  <browser:page
+      for="opengever.document.document.IBaseDocument"
+      name="demand_document_pdf"
+      class=".save_pdf_document_under.SavePDFDocumentUnder"
+      permission="zope2.View"
+      allowed_attributes="get_conversion_status"
+      />
+
+  <browser:page
+      for="opengever.document.document.IBaseDocument"
+      name="get_conversion_status"
+      class=".save_pdf_document_under.DocumentConversionStatusView"
+      permission="zope2.View"
       />
 
   <!-- ZPT / METAL macros -->

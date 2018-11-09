@@ -58,6 +58,13 @@
       />
 
   <browser:page
+      for="ftw.bumblebee.interfaces.IBumblebeeable"
+      name="save_pdf_under_callback"
+      class=".callback.ReceiveDocumentPDF"
+      permission="zope.Public"
+      />
+
+  <browser:page
       for="*"
       name="revive_preview"
       class=".revive_preview.RevivePreview"

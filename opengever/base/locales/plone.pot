@@ -339,6 +339,9 @@ msgstr ""
 msgid "Membership"
 msgstr ""
 
+msgid "Save document as PDF"
+msgstr ""
+
 msgid "Submit additional documents"
 msgstr ""
 

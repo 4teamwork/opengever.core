@@ -27,6 +27,7 @@ WHITELIST = (
     'opengever.base.browser.ploneview.GeverPloneView',
 
     # The bumblebee token is verified in these views:
+    'opengever.bumblebee.browser.callback.ReceiveDocumentPDF',
     'opengever.bumblebee.browser.callback.StoreArchivalFile',
     'opengever.meeting.browser.meetings.zipexport_callback.ReceiveZipPdf',
 
