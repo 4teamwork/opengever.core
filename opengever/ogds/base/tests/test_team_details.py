@@ -1,3 +1,4 @@
+from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
 
@@ -30,6 +31,22 @@ class TestTeamDetails(IntegrationTestCase):
             ['Assigned org unit', 'Finanzamt'], items[0])
         self.assertEquals(
             ['Group', 'Projekt A'], items[1])
+
+    @browsing
+    def test_metadata_table_shows_groupid_if_group_has_no_title(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.raise_http_errors = False
+
+        team = Team.get(1)
+        group = Team.get(1).group
+        group.title = ""
+
+        browser.open(self.contactfolder, view='team-1/view')
+        items = browser.css('.listing').first.lists()
+        self.assertEquals(
+            ['Assigned org unit', team.org_unit.title], items[0])
+        self.assertEquals(
+            ['Group', group.groupid], items[1])
 
     @browsing
     def test_list_and_link_team_members(self, browser):
