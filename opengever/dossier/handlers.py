@@ -41,9 +41,9 @@ def set_former_reference_after_moving(obj, event):
 
     dossier_repr = IDossier(obj)
     former_ref_no = dossier_repr.temporary_former_reference_number
-    IDossier['former_reference_number'].set(dossier_repr, unicode(former_ref_no))
+    IDossier['former_reference_number'].set(dossier_repr, former_ref_no)
     # reset temporary former reference number
-    IDossier['temporary_former_reference_number'].set(dossier_repr, u'')
+    IDossier['temporary_former_reference_number'].set(dossier_repr, '')
 
     # setting the new number
     parent = aq_parent(aq_inner(obj))

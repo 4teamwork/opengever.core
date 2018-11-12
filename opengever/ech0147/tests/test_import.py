@@ -6,8 +6,6 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import obj2brain
 from plone import api
-from plone.dexterity.utils import iterSchemata
-from zope.schema import getFieldsInOrder
 import os.path
 
 
@@ -90,24 +88,6 @@ class TestImport(IntegrationTestCase):
         self.assertEqual(dossier.Title(), 'Neubau Schwimmbad 50m')
 
     @browsing
-    def test_import_dossier_with_full_set_of_metadata_contains_valid_data_after_import(self, browser):
-        self.activate_feature('ech0147-import')
-        self.login(self.regular_user, browser)
-        browser.open(self.leaf_repofolder, view='ech0147_import')
-        with open(get_path('message_full.zip')) as file_:
-            browser.forms['form'].fill({
-                'File': file_,
-            }).submit()
-        dossier = self.leaf_repofolder.objectValues()[-1]
-
-        for schema in iterSchemata(dossier):
-            for name, field in getFieldsInOrder(schema):
-                value = getattr(field.interface(dossier), name, None)
-                # Allow empty values on non-required fields
-                if not field.required and value is not None:
-                    self.assertEqual(field._type, type(value), 'Wrong type for value of field: {}'.format(name))
-
-    @browsing
     def test_import_toplevel_documents_in_dossier(self, browser):
         self.activate_feature('ech0147-import')
         self.login(self.regular_user, browser)
@@ -121,27 +101,6 @@ class TestImport(IntegrationTestCase):
         self.assertEqual(docs[1].Title(), 'Grundrissplan')
 
         self.assertIsNotNone(obj2brain(docs[0]).bumblebee_checksum)
-
-    @browsing
-    def test_import_toplevel_documents_in_dossier_contain_valid_data_after_import(self, browser):
-        self.activate_feature('ech0147-import')
-        self.login(self.regular_user, browser)
-        browser.open(self.dossier, view='ech0147_import')
-        with open(get_path('message_docs_only.zip')) as file_:
-            browser.forms['form'].fill({
-                'File': file_,
-            }).submit()
-
-        for doc in self.dossier.objectValues()[-2:]:
-            for schema in iterSchemata(doc):
-                for name, field in getFieldsInOrder(schema):
-                    # We skip Versionable.changeNote as that's not actually persisted on the object
-                    if name == 'changeNote':
-                        continue
-                    value = getattr(field.interface(doc), name, None)
-                    # Allow empty values on non-required fields
-                    if not field.required and value is not None:
-                        self.assertEqual(field._type, type(value), 'Wrong type for value of field: {}'.format(name))
 
     @browsing
     def test_import_toplevel_documents_in_repofolder_displays_error(self, browser):
