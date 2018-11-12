@@ -9,15 +9,15 @@ from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
-from Products.Five import BrowserView
 from opengever.base.response import JSONResponse
 from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api
+from Products.Five import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 import json
