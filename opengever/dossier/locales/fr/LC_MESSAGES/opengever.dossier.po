@@ -629,7 +629,7 @@ msgstr "Adresse e-mail"
 #. Default: "Meeting Templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_meeting_templates"
-msgstr ""
+msgstr "Modèles de séance"
 
 #. Default: "Modified"
 #: ./opengever/dossier/dossiertemplate/form.py

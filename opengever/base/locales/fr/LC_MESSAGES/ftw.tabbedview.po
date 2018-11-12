@@ -75,7 +75,7 @@ msgid "contacts"
 msgstr "Contacts"
 
 msgid "dispositions"
-msgstr ""
+msgstr "Offres"
 
 msgid "documents"
 msgstr "Documents"
@@ -195,7 +195,7 @@ msgid "reports"
 msgstr "Rapports de travail"
 
 msgid "sablontemplates"
-msgstr ""
+msgstr "Modèles sablon"
 
 msgid "sharing"
 msgstr "Info"

@@ -145,7 +145,7 @@ msgstr "Dossiers"
 #. Default: "Download removal protocol"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_download_removal_protocol"
-msgstr "Télécharger le protocole de supression"
+msgstr "Télécharger le protocole de suppression"
 
 #. Default: "Edit"
 #: ./opengever/disposition/browser/templates/overview.pt

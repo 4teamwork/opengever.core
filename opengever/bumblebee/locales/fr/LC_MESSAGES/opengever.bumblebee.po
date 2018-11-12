@@ -60,12 +60,12 @@ msgstr "Reculer le document"
 #. Default: "Reviving the preview is not available for this context."
 #: ./opengever/bumblebee/browser/revive_preview.py
 msgid "preview_revive_not_available"
-msgstr "L'apperçu ne peut pas être généré à nouveau pour ce contenu"
+msgstr "L'aperçu ne peut pas être généré à nouveau pour ce contenu"
 
 #. Default: "Preview revived and will be available soon"
 #: ./opengever/bumblebee/browser/revive_preview.py
 msgid "preview_revived"
-msgstr "L'apperçu a été généré et sera disponible d'ici quelques secondes"
+msgstr "L'aperçu a été généré et sera disponible d'ici quelques secondes"
 
 #. Default: "You are looking at a versioned file."
 #: ./opengever/bumblebee/browser/templates/bumblebeeoverlay.pt

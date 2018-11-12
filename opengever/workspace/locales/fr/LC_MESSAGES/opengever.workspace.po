@@ -16,139 +16,139 @@ msgstr ""
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Accept"
-msgstr ""
+msgstr "Accepter"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Decline"
-msgstr ""
+msgstr "Décliner"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: ./opengever/workspace/participation/browser/my_invitations.py
 msgid "Deleted Workspace"
-msgstr ""
+msgstr "Temraum supprimé"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invitation"
-msgstr ""
+msgstr "Invitation"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invite"
-msgstr ""
+msgstr "Inviter"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Invited by"
-msgstr ""
+msgstr "Par"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Invited by:"
-msgstr ""
+msgstr "Invité par:"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "My invitations"
-msgstr ""
+msgstr "Invitations Teamraum"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant deleted"
-msgstr ""
+msgstr "Participant supprimé"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant invited"
-msgstr ""
+msgstr "Participant invité"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Role updated"
-msgstr ""
+msgstr "Rôle actualisé"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Rolle"
-msgstr ""
+msgstr "Rôle"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Select a user ..."
-msgstr ""
+msgstr "Rechercher un utilisateur..."
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "User"
-msgstr ""
+msgstr "Utilisateur"
 
 #: ./opengever/workspace/participation/browser/templates/my-invitations.pt
 msgid "Workspace"
-msgstr ""
+msgstr "Teamraum"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "WorkspaceAdmin"
-msgstr ""
+msgstr "Admin"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "WorkspaceGuest"
-msgstr ""
+msgstr "Invité"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "WorkspaceMember"
-msgstr ""
+msgstr "Membre du team"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "WorkspaceOwner"
-msgstr ""
+msgstr "Titulaire"
 
 #. Default: "Documents"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_documents"
-msgstr ""
+msgstr "Documents"
 
 #. Default: "Responsible"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_dossier_responsible"
-msgstr ""
+msgstr "Responsable"
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_journal"
-msgstr ""
+msgstr "Journal"
 
 #. Default: "Overview"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_overview"
-msgstr ""
+msgstr "Aperçu"
 
 #. Default: "Reference Number"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_reference"
-msgstr ""
+msgstr "Numéro de référence"
 
 #. Default: "Tasks"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_tasks"
-msgstr ""
+msgstr "Tâches"
 
 #. Default: "Title"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_title"
-msgstr ""
+msgstr "Titre"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_trash"
-msgstr ""
+msgstr "Corbeille"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
-msgstr ""
+msgstr "Teamraüme"
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
 msgid "title_manage_participation"
-msgstr ""
+msgstr "Participant de  \"${workspace}\""

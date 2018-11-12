@@ -19,10 +19,10 @@ msgstr ""
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "Active"
-msgstr ""
+msgstr "Actif"
 
 msgid "DossierManager"
-msgstr ""
+msgstr "Administrer"
 
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
@@ -37,15 +37,15 @@ msgstr "Insérer un exemple de données de réunion"
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "Inactive"
-msgstr ""
+msgstr "Inactif"
 
 msgid "Publisher"
-msgstr ""
+msgstr "Reactiver"
 
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "deactivate"
-msgstr ""
+msgstr "déactiver"
 
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
@@ -55,231 +55,231 @@ msgstr ""
 #. Default: "committee member"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeMember"
-msgstr ""
+msgstr "Membre de commissions"
 
 #. Default: "committee responsible"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeResponsible"
-msgstr ""
+msgstr "Responsable de commissions"
 
 #. Default: "manager"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--Manager"
-msgstr ""
+msgstr "Manager"
 
 #. Default: "A committe member is part of a committee and can view the committee data, such as meetings and proposals."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeMember"
-msgstr ""
+msgstr "Un membre de commission fait partie d'une commission et peut voir les contenus comme les séances et les propositions de la commission."
 
 #. Default: "The committe responsible is in charge of a committee. This involves creating, planing and hold meetings as well as configuring and deactivating the committee. The committee responsible role is assigned automatically to the group that can be configured per committee."
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE-DESCRIPTION--CommitteeResponsible"
-msgstr ""
+msgstr "Le responsable de commission est responsable d'une commission. Il crée des séances, fixe l'ordre du jour et le protocole, et peut configurer et déactiver la commission. Ce rôle est automatiquement assigné par le système."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--STATUS--active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--STATUS--inactive"
-msgstr ""
+msgstr "Inactif"
 
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--TRANSITION--deactivate--active_inactive"
-msgstr ""
+msgstr "désactiver"
 
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--TRANSITION--reactivate--inactive_active"
-msgstr ""
+msgstr "réactiver"
 
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--CommitteeAdministrator"
-msgstr ""
+msgstr "Administrateur de commissions"
 
 #. Default: "manager"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--Manager"
-msgstr ""
+msgstr "Manager"
 
 #. Default: "meeting user"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE--MeetingUser"
-msgstr ""
+msgstr "Utilisateur de séance"
 
 #. Default: "The committee admin is responsible for creating and managing committees and manging the roles of the committees."
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--CommitteeAdministrator"
-msgstr ""
+msgstr "Un administrateur de commissions est résponsable pour la création et l'administration des commissions, ainsi que pour la configuration du rôle d'utilisateur dans les différentes commissions."
 
 #. Default: "Anyone who works with the meeting module is a meeting user. Meeting users have read access to the meeting area. Additional roles on committe level are required for accessing the committees."
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--ROLE-DESCRIPTION--MeetingUser"
-msgstr ""
+msgstr "Tous ceux qui travaillent avec le module des séances sont des utilisateurs de séance. Ils voient l'onglet «Séances». Pour accéder aux différentes commissions, ils doivent recevoir des rôles supplémentaires pour chaque commission."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_committeecontainer_workflow/specification.txt
 msgid "opengever_committeecontainer_workflow--STATUS--active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--Manager"
-msgstr ""
+msgstr "System Administrator"
 
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceAdmin"
-msgstr ""
+msgstr "Admin"
 
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceGuest"
-msgstr ""
+msgstr "Invité"
 
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceMember"
-msgstr ""
+msgstr "Membre d'équipe"
 
 #. Default: "workspace owner"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--WorkspaceOwner"
-msgstr ""
+msgstr "Titulaire"
 
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceAdmin"
-msgstr ""
+msgstr "Les Admins administrent les membres d'équipe et ont accès en lécture et écriture à tous les contenus."
 
 #. Default: "A workspace guest has read access to the content but cannot change anything."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceGuest"
-msgstr ""
+msgstr "Les invités ont accès en lecture à tous les contenus, mais ne peuvent en modifier aucun."
 
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceMember"
-msgstr ""
+msgstr "Les membres d'équipe ont accès en lécture et écriture à tous les contenus."
 
 #. Default: "The workspace owner is the responsible person for this workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE-DESCRIPTION--WorkspaceOwner"
-msgstr ""
+msgstr "Les titulaires sont responsables du Teamraum."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--STATUS--active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Manager"
-msgstr ""
+msgstr "System Administrator"
 
 #. Default: "workspace admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceAdmin"
-msgstr ""
+msgstr "Admin"
 
 #. Default: "workspace guest"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceGuest"
-msgstr ""
+msgstr "Invité"
 
 #. Default: "workspace member"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceMember"
-msgstr ""
+msgstr "Membre d'équipe"
 
 #. Default: "workspace owner"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--WorkspaceOwner"
-msgstr ""
+msgstr "Titulaire"
 
 #. Default: "Workspace admins can manage the team as well as read and modify all contents."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceAdmin"
-msgstr ""
+msgstr "Les Admins administrent les membres d'équipe et ont accès en lécture et écriture à tous les contenus."
 
 #. Default: "A workspace guest has read access to the content but cannot change anything."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceGuest"
-msgstr ""
+msgstr "Les invités ont accès en lecture à tous les contenus, mais ne peuvent en modifier aucun."
 
 #. Default: "Workspace members can read and modify all contents of the workspace."
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE-DESCRIPTION--WorkspaceMember"
-msgstr ""
+msgstr "Les membres d'équipe ont accès en lécture et écriture à tous les contenus."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--STATUS--active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #. Default: "systems administrator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Manager"
-msgstr ""
+msgstr "System Administrator"
 
 #. Default: "workspaces creator"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--WorkspacesCreator"
-msgstr ""
+msgstr "Créateur de Teamräume"
 
 #. Default: "workspaces user"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--WorkspacesUser"
-msgstr ""
+msgstr "Utilisateur de Teamräume"
 
 #. Default: "Workspaces creators are allowed to create new workspaces."
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE-DESCRIPTION--WorkspacesCreator"
-msgstr ""
+msgstr "Les créateurs de Teamräume peuvent créer de nouveaux Teamräume"
 
 #. Default: "Anyone who uses the workspace module is a workspace user. Workspace users can see the workspace root."
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE-DESCRIPTION--WorkspacesUser"
-msgstr ""
+msgstr "Le rôle d'utilisateur de Teamräume rend l'onglet «Teamräume» visible. Ce rôle est assigné a tous les utilisateurs du module Teamraum."
 
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--STATUS--active"
-msgstr ""
+msgstr "Actif"
 
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
-msgstr ""
+msgstr "réactiver"
 
 msgid "title_can_add"
-msgstr ""
+msgstr "Ajouter"
 
 msgid "title_can_edit"
-msgstr ""
+msgstr "Editer"
 
 msgid "title_can_review"
-msgstr ""
+msgstr "Clôturer"
 
 msgid "title_can_view"
-msgstr ""
+msgstr "Lire"

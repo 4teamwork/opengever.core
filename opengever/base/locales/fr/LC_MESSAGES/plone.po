@@ -30,10 +30,10 @@ msgid "Checkout"
 msgstr "Checkout"
 
 msgid "Close current period"
-msgstr ""
+msgstr "Clôturer la période actuelle"
 
 msgid "Committee Member"
-msgstr ""
+msgstr "Membre"
 
 msgid "Create successor task"
 msgstr "Créer tâche suivante"
@@ -66,7 +66,7 @@ msgid "Dossier state changed to dossier-state-inactive"
 msgstr "Etat du dossier modifié: Annulé"
 
 msgid "Dossier state changed to dossier-state-offered"
-msgstr ""
+msgstr "Etat du dossier modifié: Offert"
 
 msgid "Dossier state changed to dossier-state-resolved"
 msgstr "Etat du dossier modifié: Fermé"
@@ -87,7 +87,7 @@ msgid "Meeting"
 msgstr "Séance"
 
 msgid "Membership"
-msgstr ""
+msgstr "Affiliation"
 
 msgid "Modify deadline"
 msgstr "Changer le délai"
@@ -116,10 +116,10 @@ msgid "Search results for ${term}"
 msgstr "Résultat de la recherche pour"
 
 msgid "Submit additional document"
-msgstr ""
+msgstr "Soumettre document additionnel"
 
 msgid "Submit additional documents"
-msgstr ""
+msgstr "Soumettre documents additionnel"
 
 msgid "Usage"
 msgstr "Usage"
@@ -139,37 +139,37 @@ msgid "date (newest first)"
 msgstr "Changement de date (descendant)"
 
 msgid "disposition-state-appraised"
-msgstr ""
+msgstr "Evalué"
 
 msgid "disposition-state-archived"
-msgstr ""
+msgstr "Archivé"
 
 msgid "disposition-state-closed"
-msgstr ""
+msgstr "Clôturé"
 
 msgid "disposition-state-disposed"
-msgstr ""
+msgstr "Livré"
 
 msgid "disposition-state-in-progress"
-msgstr ""
+msgstr "En cours"
 
 msgid "disposition-transition-appraise"
-msgstr ""
+msgstr "Evaluation finalisée"
 
 msgid "disposition-transition-appraised-to-closed"
-msgstr ""
+msgstr "Offre clôturée"
 
 msgid "disposition-transition-archive"
-msgstr ""
+msgstr "Archivage confirmé"
 
 msgid "disposition-transition-close"
-msgstr ""
+msgstr "Offre clôturée"
 
 msgid "disposition-transition-dispose"
-msgstr ""
+msgstr "Proposé pour archivage"
 
 msgid "disposition-transition-refuse"
-msgstr ""
+msgstr "Offre refusée"
 
 msgid "document-state-draft"
 msgstr "Non défini"
@@ -190,7 +190,7 @@ msgid "document-transition-restore"
 msgstr "Récupérer"
 
 msgid "document_from_officeatwork"
-msgstr ""
+msgstr "Document de officeatwork"
 
 msgid "document_with_oneoffixx_template"
 msgstr "Document à partir d'un modèle OneOffixx"
@@ -208,7 +208,7 @@ msgid "dossier-state-inactive"
 msgstr "Annulé"
 
 msgid "dossier-state-offered"
-msgstr ""
+msgstr "Offert"
 
 msgid "dossier-state-resolved"
 msgstr "Fermé"
@@ -262,7 +262,7 @@ msgid "label_actions_menu"
 msgstr "Actions supplémentaires"
 
 msgid "label_has_parse_errors"
-msgstr ""
+msgstr "Erreur lors du traitement de votre demande de recherche. Veuillez noter que les expressions comme AND, NOT et OR ne sont autorisées que lors d'une recherche avancée."
 
 msgid "label_reset"
 msgstr "Remettre"
@@ -298,7 +298,7 @@ msgid "task-state-open"
 msgstr "Ouvert"
 
 msgid "task-state-planned"
-msgstr ""
+msgstr "Planifié"
 
 msgid "task-state-rejected"
 msgstr "Refusé"
@@ -319,7 +319,7 @@ msgid "task-transition-delegate"
 msgstr "Déléguer"
 
 msgid "task-transition-in-progress-cancelled"
-msgstr ""
+msgstr "Annuler"
 
 msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
@@ -337,7 +337,7 @@ msgid "task-transition-open-in-progress"
 msgstr "Accepter"
 
 msgid "task-transition-open-planned"
-msgstr ""
+msgstr "Planifier"
 
 msgid "task-transition-open-rejected"
 msgstr "Refuser"
@@ -349,7 +349,7 @@ msgid "task-transition-open-tested-and-closed"
 msgstr "Fermer"
 
 msgid "task-transition-planned-open"
-msgstr ""
+msgstr "Ouvrir"
 
 msgid "task-transition-planned-skipped"
 msgstr "Omettre"
@@ -388,4 +388,4 @@ msgid "tasktemplatefolder-transition-inactiv-activ"
 msgstr "Activer"
 
 msgid "transition-add-document"
-msgstr ""
+msgstr "Document ajouté"
