@@ -92,7 +92,7 @@ class TestReceiveDocumentPDF(FunctionalTestCase):
         self.request.set('status', "success")
         self.request.set('pdf', file)
         self.request.set('token', get_download_token())
-        self.request.form['pdf_save_under_token'] = self.save_token
+        self.request.set('opaque_id', self.save_token)
         self.request.method = "POST"
 
     def test_raises_unathorized_when_pdf_save_token_is_wrong(self):

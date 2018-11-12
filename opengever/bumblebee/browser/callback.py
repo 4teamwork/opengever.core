@@ -34,7 +34,7 @@ class ReceiveDocumentPDF(BaseDemandCallbackView):
     def __call__(self):
         if self.request.method != 'POST':
             raise MethodNotAllowed()
-        if not IAnnotations(self.context)[PDF_SAVE_TOKEN_KEY] == self.request.form.get("pdf_save_under_token"):
+        if not IAnnotations(self.context)[PDF_SAVE_TOKEN_KEY] == self.get_opaque_id():
             raise Unauthorized
         return super(ReceiveDocumentPDF, self).__call__()
 
