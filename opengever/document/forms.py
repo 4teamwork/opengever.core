@@ -218,6 +218,11 @@ class SavePDFUnderForm(form.Form):
     def handle_cancel(self, action):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
+    def updateActions(self):
+        super(SavePDFUnderForm, self).updateActions()
+        # make sure button appears colored (green)
+        self.actions['button_submit'].addClass("context")
+
     def get_save_pdf_under_url(self):
         save_pdf_under_url = '{}/demand_document_pdf'.format(self.destination_document.absolute_url())
         return save_pdf_under_url
