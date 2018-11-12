@@ -7,6 +7,7 @@ Changelog
 
 - Fix issue when returning an excerpt to an already decided proposal. [njohner]
 - Display group label in teamdetails instead of group title. [njohner]
+- Prevent shadow documents from being relatable. [Rotonen]
 - Add reference numbers to protected items admin view links. [Rotonen]
 - Sort repository excel exports by reference number. [Rotonen]
 - Allow managers to deactivate a dossier. [njohner]
