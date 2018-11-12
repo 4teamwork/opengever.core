@@ -66,18 +66,22 @@
         {tabId: 'forwardings',
          tabTitle: this.getDataAttribute('tab-title-forwardings'),
          activities: this.filterActivitiesByType(values, 'forwarding')},
-        {tabId: 'proposals',
-         tabTitle: this.getDataAttribute('tab-title-proposals'),
-         activities: this.filterActivitiesByType(values, 'proposal')},
         {tabId: 'reminders',
          tabTitle: this.getDataAttribute('tab-title-reminders'),
          activities: this.filterActivitiesByType(values, 'reminder')},
       ];
-      if (this.getDataAttribute('show-disposition') == 'True'){
+      if (this.getDataAttribute('show-proposals') == 'True') {
+        tabs.push({tabId: 'proposals',
+           tabTitle: this.getDataAttribute('tab-title-proposals'),
+           activities: this.filterActivitiesByType(values, 'proposal')
+        });
+      }
+      if (this.getDataAttribute('show-disposition') == 'True') {
         tabs.push({tabId: 'dispositions',
            tabTitle: this.getDataAttribute('tab-title-dispositions'),
-           activities: this.filterActivitiesByType(values, 'disposition')});
-        }
+           activities: this.filterActivitiesByType(values, 'disposition')
+        });
+      }
       return this.template({
         tabs: tabs,
         translations: data.translations,

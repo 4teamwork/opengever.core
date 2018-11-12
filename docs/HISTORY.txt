@@ -8,6 +8,7 @@ Changelog
 - Fix issue when returning an excerpt to an already decided proposal. [njohner]
 - Fix data in Task PDF when resolving a dossier. [njohner]
 - Make save as pdf button colored green. [deiferni]
+- Only show proposal notification settings when meeting feature is enabled. [deiferni]
 - Display group label in teamdetails instead of group title. [njohner]
 - Add reference numbers to protected items admin view links. [Rotonen]
 - Sort repository excel exports by reference number. [Rotonen]

@@ -14,6 +14,7 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
 from opengever.base.response import JSONResponse
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api
@@ -302,3 +303,6 @@ class NotificationSettingsForm(BrowserView):
 
     def show_disposition_tab(self):
         return api.user.has_permission('opengever.disposition: Add disposition')
+
+    def show_proposals_tab(self):
+        return is_meeting_feature_enabled()
