@@ -32,7 +32,8 @@
                            data-tab-title-proposals view/tab_title_proposals;
                            data-tab-title-reminders view/tab_title_reminders;
                            data-tab-title-dispositions view/tab_title_dispositions;
-                           data-show-disposition view/show_disposition_tab">
+                           data-show-disposition view/show_disposition_tab;
+                           data-show-proposals view/show_proposals_tab;">
 
         <tbody>
           <tal:block tal:replace="structure view/render_form_template"></tal:block>
