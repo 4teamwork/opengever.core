@@ -78,13 +78,13 @@ class DossierTasksLaTeXView(MakoLaTeXView):
                 deadline = deadline.strftime(self.strftimestring)
 
             task_data_list.append({'title': task.title,
-                                   'description': task.text,
+                                   'description': task.text or "",
                                    'sequence_number': task.get_sequence_number(),
                                    'type': task.get_task_type_label(),
                                    'completion_date': completion_date,
                                    'deadline': deadline,
-                                   'responsible': task.responsible,
-                                   'responsible_client': task.responsible_client,
+                                   'responsible': task.get_responsible_actor().get_label(),
+                                   'issuer': task.get_issuer_actor().get_label(),
                                    'history': task_history.get_listing(response_container)})
 
         return {'task_data_list': task_data_list,
