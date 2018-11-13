@@ -2,8 +2,10 @@ from ftw.bumblebee.browser.callback import BaseConvertCallbackView
 from ftw.bumblebee.browser.callback import BaseDemandCallbackView
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import ArchivalFileConverter
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
+from plone import api
 from zExceptions import MethodNotAllowed
 from zExceptions import Unauthorized
 from zope.annotation import IAnnotations
@@ -43,12 +45,19 @@ class ReceiveDocumentPDF(BaseDemandCallbackView):
         return False
 
     def handle_success(self, mimetype, file_upload):
-        # filename will then be reset by the sync_title_and_filename_handler
-        self.get_document().update_file(file_upload, mimetype, filename=u"temp.pdf")
-        # This will notably call the sync_title_and_filename_handler
-        notify(ObjectModifiedEvent(self.context))
-        IAnnotations(self.context)[PDF_SAVE_STATUS_KEY] = 'conversion-successful'
-        IAnnotations(self.context).pop(PDF_SAVE_TOKEN_KEY)
+        # this view is called by bumblebee and hence the current user
+        # is anonymous. This has side effects such as the preview not being
+        # generated for the document. Hence we login as the owner of the document.
+        document_owner_id = IAnnotations(self.context)[PDF_SAVE_OWNER_ID_KEY]
+        user = api.user.get(userid=document_owner_id)
+        with api.env.adopt_user(user=user):
+            # filename will then be reset by the sync_title_and_filename_handler
+            self.get_document().update_file(file_upload, mimetype, filename=u"temp.pdf")
+            # This will notably call the sync_title_and_filename_handler
+            notify(ObjectModifiedEvent(self.context))
+            IAnnotations(self.context)[PDF_SAVE_STATUS_KEY] = 'conversion-successful'
+            IAnnotations(self.context).pop(PDF_SAVE_TOKEN_KEY)
+            IAnnotations(self.context).pop(PDF_SAVE_OWNER_ID_KEY)
 
         with elevated_privileges():
             self.context.leave_shadow_state()

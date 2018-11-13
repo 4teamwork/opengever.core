@@ -6,7 +6,10 @@ from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.versioner import Versioner
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_UUID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import SavePDFDocumentUnder
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
@@ -206,10 +209,12 @@ class TestSavePDFUnderForm(IntegrationTestCase):
 
         annotations = IAnnotations(created_document)
         self.assertEqual(IUUID(self.document),
-                         annotations.get('opengever.document.save_pdf_under_source_uuid'))
+                         annotations.get(PDF_SAVE_SOURCE_UUID_KEY))
         self.assertEqual('conversion-demanded',
-                         annotations.get('opengever.document.save_pdf_under_status'))
-        self.assertIsNotNone(annotations.get('opengever.document.save_pdf_under_token'))
+                         annotations.get(PDF_SAVE_STATUS_KEY))
+        self.assertIsNotNone(annotations.get(PDF_SAVE_TOKEN_KEY))
+        self.assertEqual(self.regular_user.getId(),
+                         annotations.get(PDF_SAVE_OWNER_ID_KEY))
 
     @browsing
     def test_save_pdf_under_form_redirects_to_demand_document_pdf(self, browser):

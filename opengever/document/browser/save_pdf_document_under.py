@@ -6,6 +6,7 @@ from opengever.base.utils import disable_edit_bar
 from opengever.document.versioner import Versioner
 from opengever.document import _
 from pkg_resources import resource_filename
+from plone import api
 from plone.app.uuid.utils import uuidToObject
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -22,6 +23,7 @@ PDF_SAVE_TOKEN_KEY = 'opengever.document.save_pdf_under_token'
 PDF_SAVE_SOURCE_UUID_KEY = 'opengever.document.save_pdf_under_source_uuid'
 PDF_SAVE_SOURCE_VERSION_KEY = 'opengever.document.save_pdf_under_source_version'
 PDF_SAVE_STATUS_KEY = 'opengever.document.save_pdf_under_status'
+PDF_SAVE_OWNER_ID_KEY = 'opengever.document.save_pdf_document_owner_id'
 
 
 class SavePDFDocumentUnder(BrowserView):
@@ -51,6 +53,7 @@ class SavePDFDocumentUnder(BrowserView):
         token = uuid4().hex
         annotations = IAnnotations(self.destination_document)
         annotations[PDF_SAVE_TOKEN_KEY] = token
+        annotations[PDF_SAVE_OWNER_ID_KEY] = api.user.get_current().getId()
 
         if self.version_id is not None:
             document = Versioner(self.source_document).retrieve(self.version_id)

@@ -9,6 +9,7 @@ from opengever.bumblebee.browser.callback import ReceiveDocumentPDF
 from opengever.document.archival_file import STATE_FAILED_TEMPORARILY
 from opengever.document.archival_file import STATE_FAILED_PERMANENTLY
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
 from opengever.testing import FunctionalTestCase
@@ -83,6 +84,7 @@ class TestReceiveDocumentPDF(FunctionalTestCase):
         self.document = create(Builder('document')
                                .titled(u'\xdcberpr\xfcfung XY')).as_shadow_document()
         IAnnotations(self.document)[PDF_SAVE_TOKEN_KEY] = self.save_token
+        IAnnotations(self.document)[PDF_SAVE_OWNER_ID_KEY] = self.user.userid
 
     def prepare_request(self):
         fieldstorage = cgi.FieldStorage()
