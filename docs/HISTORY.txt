@@ -43,6 +43,7 @@ Changelog
 - Respect ISharingConfiguration black- and white_list_prefix for selectable groups in add-team form. [elioschmutz]
 - Restrict selectable orgunits on add-team form to orgunits of the current adminunit only. [elioschmutz]
 - Update ftw.tabbedview to 4.1.2. [Kevin Bieri]
+- Sanitize eCH-0147 imports. [Rotonen]
 - Fix dispatching notifications while recording a TaskReminderActivity. [elioschmutz]
 - Prefill task-reminder select field on task response form. [elioschmutz]
 - Use the same template for default notifiaction email like the daily-digest template. [elioschmutz]
