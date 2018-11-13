@@ -248,12 +248,21 @@ class RoleAssignmentManager(object):
         self.context = context
         self.storage = RoleAssignmentStorage(self.context)
 
-    def add_or_update_assignment(self, assignment):
+    def add_or_update_assignment(self, assignment, reindex=True):
         self.storage.add_or_update(assignment.principal,
                                    assignment.roles,
                                    assignment.cause,
                                    assignment.reference)
-        self._update_local_roles()
+        self._update_local_roles(reindex=reindex)
+
+    def add_or_update_assignments(self, assignments, reindex=True):
+        for assignment in assignments:
+            self.storage.add_or_update(assignment.principal,
+                                       assignment.roles,
+                                       assignment.cause,
+                                       assignment.reference)
+
+        self._update_local_roles(reindex=reindex)
 
     def add_or_update(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
@@ -300,15 +309,16 @@ class RoleAssignmentManager(object):
         self.storage.clear_by_cause_and_principal(cause, principal)
         self._update_local_roles()
 
-    def clear(self, cause, principal, reference):
+    def clear(self, cause, principal, reference, reindex=True):
         item = self.storage.get(principal, cause, Oguid.for_object(reference).id)
         if not item:
             return
 
         self.storage.clear(item)
-        self._update_local_roles()
+        if reindex:
+            self._update_local_roles()
 
-    def _update_local_roles(self):
+    def _update_local_roles(self, reindex=True):
         current_principals = []
         owner_principals = []
 
@@ -329,4 +339,5 @@ class RoleAssignmentManager(object):
             self.context.manage_addLocalRoles(
                 principal, ['Owner'], verified=True)
 
-        self.context.reindexObjectSecurity()
+        if reindex:
+            self.context.reindexObjectSecurity()
