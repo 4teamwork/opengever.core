@@ -29,6 +29,8 @@
 
       <!-- MS Visio -->
       <element>application/vnd.visio</element>
+      <element>application/vnd.ms-visio.drawing</element>
+      <element>application/vnd.ms-visio.drawing.macroEnabled.12</element>
 
       <!-- MS Project -->
       <element>application/vnd.ms-project</element>
