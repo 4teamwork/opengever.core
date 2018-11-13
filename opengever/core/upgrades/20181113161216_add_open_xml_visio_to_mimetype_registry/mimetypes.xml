@@ -1,0 +1,57 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+
+  <mimetype
+      name="Office Open XML Visio Drawing (macro-free)"
+      binary="True"
+      extensions="vsdx"
+      globs="*.vsdx"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.drawing"
+      />
+
+  <mimetype
+      name="Office Open XML Visio Template (macro-free)"
+      binary="True"
+      extensions="vstx"
+      globs="*.vstx"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.template"
+      />
+
+  <mimetype
+      name="Office Open XML Visio Stencil (macro-free)"
+      binary="True"
+      extensions="vssx"
+      globs="*.vssx"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.stencil"
+      />
+
+  <mimetype
+      name="Office Open XML Visio Drawing (macro-enabled)"
+      binary="True"
+      extensions="vsdm"
+      globs="*.vsdm"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.drawing.macroEnabled.12"
+      />
+
+  <mimetype
+      name="Office Open XML Visio Template (macro-enabled)"
+      binary="True"
+      extensions="vstm"
+      globs="*.vstm"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.template.macroEnabled.12"
+      />
+
+  <mimetype
+      name="Office Open XML Visio Stencil (macro-enabled)"
+      binary="True"
+      extensions="vssm"
+      globs="*.vssm"
+      icon_path="icon_dokument_visio.gif"
+      mimetypes="application/vnd.ms-visio.stencil.macroEnabled.12"
+      />
+
+</object>

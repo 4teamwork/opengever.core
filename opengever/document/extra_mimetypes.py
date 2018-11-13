@@ -26,6 +26,24 @@ ADDITIONAL_TYPES = [
     ('application/vnd.visio', '.vtx'),
     ('application/vnd.visio', '.vsl'),
 
+    # Office Open XML Visio Drawing (macro-free)
+    ('application/vnd.ms-visio.drawing', '.vsdx'),
+
+    # Office Open XML Visio Template (macro-free)
+    ('application/vnd.ms-visio.template', '.vstx'),
+
+    # Office Open XML Visio Stencil (macro-free)
+    ('application/vnd.ms-visio.stencil', '.vssx'),
+
+    # Office Open XML Visio Drawing (macro-enabled)
+    ('application/vnd.ms-visio.drawing.macroEnabled.12', '.vsdm'),
+
+    # Office Open XML Visio Template (macro-enabled)
+    ('application/vnd.ms-visio.template.macroEnabled.12', '.vstm'),
+
+    # Office Open XML Visio Stencil (macro-enabled)
+    ('application/vnd.ms-visio.stencil.macroEnabled.12', '.vssm'),
+
     # Adobe InDesign
     ('application/x-indesign', '.ind'),
     ('application/x-indesign', '.indd'),
