@@ -6,8 +6,12 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import TaskAgencyRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.proposal import IProposal
 from opengever.globalindex.handlers.task import sync_task
 from opengever.ogds.base.utils import get_current_org_unit
+from plone import api
+from Products.CMFCore.CMFCatalogAware import CatalogAware
 from zope.container.interfaces import IContainerModifiedEvent
 
 
@@ -68,7 +72,7 @@ class LocalRolesSetter(object):
     def is_inboxgroup_agency_active(self):
         return get_current_org_unit().is_inboxgroup_agency_active
 
-    def _add_local_roles(self, context, principal, roles, is_agency=False):
+    def _add_local_roles(self, context, principal, roles, is_agency=False, reindex=True):
         """Adds local roles to the context.
         `roles` example:
         {'peter': ('Reader', 'Editor')}
@@ -78,7 +82,8 @@ class LocalRolesSetter(object):
         if is_agency:
             assignment = TaskAgencyRoleAssignment(principal, roles, self.task)
 
-        RoleAssignmentManager(context).add_or_update_assignment(assignment)
+        RoleAssignmentManager(context).add_or_update_assignment(
+            assignment, reindex=reindex)
 
     def _should_add_agency_localroles(self):
         if self.task.is_private:
@@ -115,17 +120,29 @@ class LocalRolesSetter(object):
 
     def set_roles_on_distinct_parent(self):
         """Set local roles on next parent having a different content type."""
-        context = self.get_distinct_parent()
+        distinct_parent = self.get_distinct_parent()
 
         self._add_local_roles(
-            context,
+            distinct_parent,
             self.responsible_permission_identfier,
-            ('Contributor', ),
-            )
+            ('Contributor', ), reindex=False)
 
         if self._should_add_agency_localroles():
-            self._add_local_roles(context, self.inbox_group_id,
-                                  ('Contributor', ), is_agency=True)
+            self._add_local_roles(distinct_parent, self.inbox_group_id,
+                                  ('Contributor', ), is_agency=True, reindex=False)
+
+        # We disabled reindexObjectSecurity and reindex the security manually
+        # instead, to avoid reindexing all objects including all documents.
+        # Because there View permission isn't affected by the `Contributor` role
+        # on the dossier.
+        catalog = api.portal.get_tool('portal_catalog')
+        subdossiers = [brain.getObject() for brain in catalog(
+            object_provides=[IDossierMarker.__identifier__,
+                             IProposal.__identifier__],
+            path='/'.join(distinct_parent.getPhysicalPath()))]
+
+        for dossier in subdossiers:
+            dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)."""
@@ -160,11 +177,26 @@ class LocalRolesSetter(object):
                           self.inbox_group_id, self.task)
 
     def revoke_on_distinct_parent(self):
+        distinct_parent = self.get_distinct_parent()
         manager = RoleAssignmentManager(self.get_distinct_parent())
-        manager.clear(ASSIGNMENT_VIA_TASK,
-                      self.responsible_permission_identfier, self.task)
+        manager.clear(
+            ASSIGNMENT_VIA_TASK,
+            self.responsible_permission_identfier, self.task, reindex=False)
         manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                      self.inbox_group_id, self.task)
+                      self.inbox_group_id, self.task, reindex=False)
+
+        # We disabled reindexObjectSecurity and reindex the security manually
+        # instead, to avoid reindexing all objects including all documents.
+        # Because there View permission isn't affected by the `Contributor` role
+        # on the dossier.
+        catalog = api.portal.get_tool('portal_catalog')
+        subdossiers = [brain.getObject() for brain in catalog(
+            object_provides=[IDossierMarker.__identifier__,
+                             IProposal.__identifier__],
+            path='/'.join(distinct_parent.getPhysicalPath()))]
+
+        for dossier in subdossiers:
+            dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
 
 
 def set_roles_after_adding(context, event):
