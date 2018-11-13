@@ -43,12 +43,12 @@ class SavePDFDocumentUnder(BrowserView):
         self.trigger_conversion()
         return self.template()
 
-    def get_callback_url(self, token):
-        return "{}/save_pdf_under_callback?pdf_save_under_token={}".format(
-            self.destination_document.absolute_url(), token)
+    def get_callback_url(self):
+        return "{}/save_pdf_under_callback".format(
+            self.destination_document.absolute_url())
 
     def trigger_conversion(self):
-        token = uuid4().hex
+        token = str(uuid4())
         annotations = IAnnotations(self.destination_document)
         annotations[PDF_SAVE_TOKEN_KEY] = token
 
@@ -58,7 +58,7 @@ class SavePDFDocumentUnder(BrowserView):
             document = self.source_document
 
         if IBumblebeeServiceV3(getRequest()).queue_demand(
-                document, PROCESSING_QUEUE, self.get_callback_url(token)):
+                document, PROCESSING_QUEUE, self.get_callback_url(), opaque_id=token):
             annotations[PDF_SAVE_STATUS_KEY] = "conversion-demanded"
         else:
             raise BadRequest("This document is not convertable.")

@@ -254,8 +254,7 @@ class TestSavePDFDocumentUnder(IntegrationTestCase):
         self.assertEqual(created_document.absolute_url(), view.destination_document_url())
 
         expected_callback_url = "/".join([created_document.absolute_url(), "save_pdf_under_callback"])
-        expected_callback_url += "?pdf_save_under_token=test_token"
-        self.assertEqual(expected_callback_url, view.get_callback_url("test_token"))
+        self.assertEqual(expected_callback_url, view.get_callback_url())
 
     @browsing
     def test_demand_document_pdf_conversion_status_is_traversable(self, browser):
