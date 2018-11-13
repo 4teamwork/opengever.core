@@ -10,6 +10,7 @@ Changelog
 - Make save as pdf button colored green. [deiferni]
 - Only show proposal notification settings when meeting feature is enabled. [deiferni]
 - Use opaque_id instead of get parameter in SavePDFDocumentUnder. [njohner]
+- Task performance improvements: avoid reindexObjectSecurity twice. [phgross]
 - Task performance improvments: avoid reindexObjectSecurity for not affected documents. [phgross]
 - Task performance improvements: avoid reindexObjectSecurity twice. [phgross]
 - Task performance improvements: avoid reindexObjectSecurity for not affected documents. [phgross]

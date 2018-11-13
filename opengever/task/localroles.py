@@ -72,18 +72,17 @@ class LocalRolesSetter(object):
     def is_inboxgroup_agency_active(self):
         return get_current_org_unit().is_inboxgroup_agency_active
 
-    def _add_local_roles(self, context, principal, roles, is_agency=False, reindex=True):
+    def _add_local_roles(self, context, principal, agency_principal, roles, reindex=True):
         """Adds local roles to the context.
         `roles` example:
         {'peter': ('Reader', 'Editor')}
         """
 
-        assignment = TaskRoleAssignment(principal, roles, self.task)
-        if is_agency:
-            assignment = TaskAgencyRoleAssignment(principal, roles, self.task)
+        assignments = [TaskRoleAssignment(principal, roles, self.task), ]
+        if agency_principal:
+            assignments.append(TaskAgencyRoleAssignment(agency_principal, roles, self.task))
 
-        RoleAssignmentManager(context).add_or_update_assignment(
-            assignment, reindex=reindex)
+        RoleAssignmentManager(context).add_or_update_assignments(assignments, reindex=reindex)
 
     def _should_add_agency_localroles(self):
         if self.task.is_private:
@@ -94,15 +93,13 @@ class LocalRolesSetter(object):
     def set_roles_on_task(self):
         """Set local roles on task
         """
-        self._add_local_roles(
-            self.task,
-            self.responsible_permission_identfier,
-            ('Editor', ),
-            )
+        principal = self.responsible_permission_identfier
+        agency_principal = None
 
         if self._should_add_agency_localroles():
-            self._add_local_roles(self.task, self.inbox_group_id,
-                                  ('Editor', ), is_agency=True)
+            agency_principal = self.inbox_group_id
+
+        self._add_local_roles(self.task, principal, agency_principal, ('Editor', ))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -122,14 +119,14 @@ class LocalRolesSetter(object):
         """Set local roles on next parent having a different content type."""
         distinct_parent = self.get_distinct_parent()
 
-        self._add_local_roles(
-            distinct_parent,
-            self.responsible_permission_identfier,
-            ('Contributor', ), reindex=False)
+        principal = self.responsible_permission_identfier
+        agency_principal = None
 
         if self._should_add_agency_localroles():
-            self._add_local_roles(distinct_parent, self.inbox_group_id,
-                                  ('Contributor', ), is_agency=True, reindex=False)
+            agency_principal = self.inbox_group_id
+
+        self._add_local_roles(distinct_parent, principal, agency_principal,
+                              ('Contributor', ), reindex=False)
 
         # We disabled reindexObjectSecurity and reindex the security manually
         # instead, to avoid reindexing all objects including all documents.
@@ -151,15 +148,14 @@ class LocalRolesSetter(object):
             roles.append('Editor')
 
         for item in getattr(aq_base(self.task), 'relatedItems', []):
-            self._add_local_roles(
-                item.to_object,
-                self.responsible_permission_identfier,
-                roles,
-                )
+            principal = self.responsible_permission_identfier
+            agency_principal = None
 
             if self._should_add_agency_localroles():
-                self._add_local_roles(
-                    item.to_object, self.inbox_group_id, roles, is_agency=True)
+                agency_principal = self.inbox_group_id
+
+            self._add_local_roles(
+                item.to_object, principal, agency_principal, roles)
 
     def revoke_roles_on_task(self):
         manager = RoleAssignmentManager(self.task)

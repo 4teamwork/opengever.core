@@ -255,6 +255,15 @@ class RoleAssignmentManager(object):
                                    assignment.reference)
         self._update_local_roles(reindex=reindex)
 
+    def add_or_update_assignments(self, assignments, reindex=True):
+        for assignment in assignments:
+            self.storage.add_or_update(assignment.principal,
+                                       assignment.roles,
+                                       assignment.cause,
+                                       assignment.reference)
+
+        self._update_local_roles(reindex=reindex)
+
     def add_or_update(self, principal, roles, cause, reference=None):
         self.storage.add_or_update(principal, roles, cause, reference)
         self._update_local_roles()
