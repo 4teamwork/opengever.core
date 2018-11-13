@@ -1,9 +1,11 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.event import notify
@@ -311,3 +313,94 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.login(self.manager)
         api.content.delete(self.document)
         self.assertEqual([], self.task.relatedItems)
+
+
+class TestLocalRolesReindexing(IntegrationTestCase):
+
+    def test_reindexes_distinct_parent_and_related_documents(self):
+        self.login(self.dossier_responsible)
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .titled(u'Aufgabe 1')
+                      .having(responsible_client='fa',
+                              responsible=self.secretariat_user.id,
+                              issuer=self.dossier_responsible.getId(),
+                              task_type='correction',
+                              deadline=date(2016, 11, 1))
+                      .in_state('task-state-in-progress')
+                      .relate_to(self.document))
+
+        principal = 'user:{}'.format(self.secretariat_user.id)
+
+        self.assertIn(principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(self.document)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(task)['allowedRolesAndUsers'])
+
+    def test_also_reindexes_containing_subdossier(self):
+        """The dossier are reindex manually
+        """
+        self.login(self.dossier_responsible)
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Aufgabe 1')
+               .having(responsible_client='fa',
+                       responsible=self.secretariat_user.id,
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-in-progress')
+               .relate_to(self.document))
+
+        principal = 'user:{}'.format(self.secretariat_user.id)
+
+        self.assertIn(principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(self.subdossier)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(self.subsubdossier)['allowedRolesAndUsers'])
+
+    @browsing
+    def test_revokes_reindex_task_as_expected(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .titled(u'Aufgabe 1')
+                      .having(responsible_client='fa',
+                              responsible=self.secretariat_user.id,
+                              issuer=self.dossier_responsible.id,
+                              task_type='correction',
+                              deadline=date(2016, 11, 1))
+                      .in_state('task-state-in-progress')
+                      .relate_to(self.document))
+
+        browser.open(task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-reassign')
+
+        # Reassign
+        responsible = 'fa:{}'.format(self.dossier_responsible.id)
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible)
+        browser.click_on('Assign')
+
+        old_principal = 'user:{}'.format(self.secretariat_user.id)
+        new_principal = 'user:{}'.format(self.dossier_responsible.id)
+
+        self.assertIn(new_principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertNotIn(old_principal,
+                         index_data_for(self.dossier)['allowedRolesAndUsers'])
+
+        self.assertIn(new_principal,
+                      index_data_for(self.subdossier)['allowedRolesAndUsers'])
+        self.assertNotIn(old_principal,
+                         index_data_for(self.subdossier)['allowedRolesAndUsers'])
+
+        self.assertIn(new_principal,
+                      index_data_for(self.subsubdossier)['allowedRolesAndUsers'])
+        self.assertNotIn(old_principal,
+                         index_data_for(self.subsubdossier)['allowedRolesAndUsers'])
