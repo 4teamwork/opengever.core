@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.widgets.file import DexterityFileWidget
 from opengever.testing import IntegrationTestCase
+from requests_toolbelt.utils import formdata
 
 
 class TestDocumentIntegration(IntegrationTestCase):
@@ -54,6 +55,36 @@ class TestDocumentIntegration(IntegrationTestCase):
         browser.open(self.dossier, view='++add++opengever.document.document')
         inputs = [form_input.name for form_input in browser.forms.get('form').inputs]
         self.assertNotIn('form.widgets.IVersionable.changeNote', inputs)
+
+    @browsing
+    def test_add_form_does_not_list_shadow_documents_as_relatable(self, browser):
+        """Dossier responsible has created the shadow document.
+
+        This test ensures he does not get it offered as a relatable document on
+        documents.
+        """
+        self.login(self.dossier_responsible, browser)
+        contenttree_url = '/'.join((
+            self.dossier.absolute_url(),
+            '++add++opengever.document.document',
+            '++widget++form.widgets.IRelatedDocuments.relatedItems',
+            '@@contenttree-fetch',
+        ))
+        browser.open(
+            contenttree_url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
+        )
+        expected_documents = [
+            '2015',
+            '2016',
+            '[No Subject]',
+            u'Die B\xfcrgschaft',
+            u'Initialvertrag f\xfcr Bearbeitung',
+            u'L\xe4\xe4r',
+            u'Vertr\xe4gsentwurf',
+        ]
+        self.assertEqual(expected_documents, browser.css('li').text)
 
 
 class TestDocumentFileUploadForm(IntegrationTestCase):

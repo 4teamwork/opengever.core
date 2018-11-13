@@ -23,10 +23,10 @@ class IRelatedDocuments(model.Schema):
             source=RepositoryPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
+                    'review_state': {'not': 'document-state-shadow'},
                     'object_provides':
                         ['opengever.repository.repositoryroot.IRepositoryRoot',
-                         'opengever.repository.repositoryfolder.' +
-                            'IRepositoryFolderSchema',
+                         'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
                          'opengever.dossier.behaviors.dossier.IDossierMarker',
                          'opengever.document.document.IDocumentSchema',
                          'ftw.mail.mail.IMail', ]

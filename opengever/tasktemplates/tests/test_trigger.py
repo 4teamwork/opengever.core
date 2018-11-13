@@ -12,6 +12,7 @@ from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
+from requests_toolbelt.utils import formdata
 
 
 class TestTriggeringTaskTemplate(IntegrationTestCase):
@@ -467,3 +468,36 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
                           task2.get_sql_object().get_previous_task())
         self.assertEquals(task3.get_sql_object(),
                           task2.get_sql_object().get_next_task())
+
+    @browsing
+    def test_add_form_does_not_list_shadow_documents_as_relatable(self, browser):
+        """Dossier responsible has created the shadow document.
+
+        This test ensures he does not get it offered as a relatable document on
+        tasktemplates.
+        """
+        self.login(self.dossier_responsible, browser)
+        contenttree_url = '/'.join((
+            self.dossier.absolute_url(),
+            'add-tasktemplate',
+            '++widget++form.widgets.related_documents',
+            '@@contenttree-fetch',
+        ))
+        browser.open(
+            contenttree_url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
+        )
+        expected_documents = [
+            '2015',
+            '2016',
+            '[No Subject]',
+            u'Die B\xfcrgschaft',
+            u'Initialvertrag f\xfcr Bearbeitung',
+            u'L\xe4\xe4r',
+            'Personaleintritt',
+            u'Vertr\xe4gsentwurf',
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Vertragsentw\xfcrfe 2018',
+        ]
+        self.assertEqual(expected_documents, browser.css('li').text)

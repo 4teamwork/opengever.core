@@ -115,6 +115,7 @@ class IProposal(model.Schema):
             source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
                 navigation_tree_query={
+                    'review_state': {'not': 'document-state-shadow'},
                     'object_provides': [
                         'opengever.dossier.behaviors.dossier.IDossierMarker',
                         'opengever.document.document.IDocumentSchema',
