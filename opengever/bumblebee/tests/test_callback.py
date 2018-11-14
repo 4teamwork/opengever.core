@@ -2,16 +2,16 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.tests.helpers import download_token_for
-from ftw.bumblebee.tests.helpers import get_download_token
+from ftw.bumblebee.tests.helpers import get_demand_callback_access_token
 from ftw.testing import freeze
-from opengever.bumblebee.browser.callback import StoreArchivalFile
 from opengever.bumblebee.browser.callback import ReceiveDocumentPDF
-from opengever.document.archival_file import STATE_FAILED_TEMPORARILY
+from opengever.bumblebee.browser.callback import StoreArchivalFile
 from opengever.document.archival_file import STATE_FAILED_PERMANENTLY
+from opengever.document.archival_file import STATE_FAILED_TEMPORARILY
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
-from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_stream
 from plone.namedfile.file import NamedBlobFile
@@ -93,7 +93,7 @@ class TestReceiveDocumentPDF(FunctionalTestCase):
         file = FileUpload(fieldstorage)
         self.request.set('status', "success")
         self.request.set('pdf', file)
-        self.request.set('token', get_download_token())
+        self.request.set('token', get_demand_callback_access_token())
         self.request.set('opaque_id', self.save_token)
         self.request.method = "POST"
 

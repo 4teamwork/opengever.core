@@ -1,5 +1,5 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
-from ftw.bumblebee.tests.helpers import get_download_token
+from ftw.bumblebee.tests.helpers import get_demand_callback_access_token
 from ftw.testbrowser import browsing
 from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.testing import IntegrationTestCase
@@ -27,7 +27,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
     def success_callback_fields(self, exporter, document):
         doc_in_job_id = exporter.zip_job._get_doc_in_job_id(document)
         return {
-            'token': get_download_token(),
+            'token': get_demand_callback_access_token(),
             'status': 'success',
             'document': IBumblebeeDocument(document).get_checksum(),
             'opaque_id': doc_in_job_id,
@@ -107,7 +107,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
 
         doc_in_job_id = exporter.zip_job._get_doc_in_job_id(proposal_document)
         fields = {
-            'token': get_download_token(),
+            'token': get_demand_callback_access_token(),
             'status': 'skipped',
             'document': IBumblebeeDocument(proposal_document).get_checksum(),
             'opaque_id': doc_in_job_id,
@@ -131,7 +131,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
 
         doc_in_job_id = exporter.zip_job._get_doc_in_job_id(proposal_document)
         fields = {
-            'token': get_download_token(),
+            'token': get_demand_callback_access_token(),
             'status': 'failed',
             'document': IBumblebeeDocument(proposal_document).get_checksum(),
             'opaque_id': doc_in_job_id,
