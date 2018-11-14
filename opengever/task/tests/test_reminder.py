@@ -217,6 +217,18 @@ class TestTaskReminderSelector(IntegrationTestCase):
     features = ('activity', )
 
     @browsing
+    def test_displayed_on_in_progress_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, view='tabbedview_view-overview')
+        self.assertTrue(browser.css('#task-reminder-selector'))
+
+    @browsing
+    def test_not_displayed_on_resolved_task(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.expired_task, view='tabbedview_view-overview')
+        self.assertFalse(browser.css('#task-reminder-selector'))
+
+    @browsing
     def test_init_state_keys(self, browser):
         self.login(self.regular_user, browser=browser)
 

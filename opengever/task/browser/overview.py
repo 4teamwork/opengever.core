@@ -5,6 +5,7 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.globalindex.model.task import Task
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import _
+from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
@@ -213,6 +214,9 @@ class Overview(BrowserView, GeverTabMixin):
         for option in self.reminder_options():
             if option.get('selected'):
                 return option.get('option_title')
+
+    def can_set_reminder(self):
+        return self.context.get_review_state() not in TaskReminderActivity.IGNORED_STATES
 
     def reminder_options(self):
         options = []
