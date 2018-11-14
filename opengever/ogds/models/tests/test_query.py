@@ -1,26 +1,11 @@
-from opengever.ogds.models.testing import DATABASE_LAYER
 from opengever.ogds.models.user import User
 from sqlalchemy.orm.exc import NoResultFound
-import unittest2
+from opengever.ogds.models.tests.base import OGDSTestCase
 
 
-class TestQueryBase(unittest2.TestCase):
-
-    layer = DATABASE_LAYER
-
-    @property
-    def session(self):
-        return self.layer.session
-
-    def setUp(self):
-        super(TestQueryBase, self).setUp()
-        self.john = User('john')
-        self.hugo = User('hugo')
-        self.session.add(self.john)
-        self.session.add(self.hugo)
-
+class TestQueryBase(OGDSTestCase):
     def test_count(self):
-        self.assertEqual(2, User.count())
+        self.assertEqual(6, User.count())
 
     def test_get_by(self):
         self.assertEqual(self.john, User.get_by(userid='john'))
@@ -36,76 +21,31 @@ class TestQueryBase(unittest2.TestCase):
         self.assertIsNone(User.get('asds'))
 
 
-class TestUserQuery(unittest2.TestCase):
-
-    layer = DATABASE_LAYER
-
-    @property
-    def session(self):
-        return self.layer.session
-
-    def setUp(self):
-        super(TestUserQuery, self).setUp()
-        self.jason = User('jj', firstname="Jason", lastname='Brown',
-                          email='jason.brow@example.org')
-        self.hugo = User('hb', firstname="Hugo", lastname='Bred',
-                         email='hugo.bred@example.org')
-        self.james = User('007', firstname="James", lastname='Bond',
-                          email=u'b\xf6nd@example.org')
-
-        self.session.add(self.jason)
-        self.session.add(self.hugo)
-        self.session.add(self.james)
-
+class TestUserQuery(OGDSTestCase):
     def test_by_searchable_text(self):
-        self.assertEqual(
-            [self.hugo],
-            User.query.by_searchable_text(['hu', ]).all())
-
-        self.assertEqual(
-            [self.jason],
-            User.query.by_searchable_text(['bro']).all())
-
-        self.assertEqual(
-            [self.jason, self.hugo],
-            User.query.by_searchable_text(['Br']).all())
+        self.assertEqual([self.hugo], User.query.by_searchable_text(['hu']).all())
+        self.assertEqual([self.peter], User.query.by_searchable_text(['pet']).all())
+        self.assertEqual([self.john, self.jack], User.query.by_searchable_text(['Sm']).all())
 
     def test_by_searchable_text_is_case_insensitive(self):
-        self.assertEqual(
-            [self.james],
-            User.query.by_searchable_text(['james']).all())
+        self.assertEqual([self.peter], User.query.by_searchable_text(['peter']).all())
 
     def test_by_searchable_handles_multiple_text_snippets(self):
-        self.assertEqual(
-            [self.jason, self.hugo],
-            User.query.by_searchable_text(['Br', 'example']).all())
-
-        self.assertEqual(
-            [self.hugo],
-            User.query.by_searchable_text(['Br', 'go']).all())
+        self.assertEqual([self.john, self.jack], User.query.by_searchable_text(['Sm', 'example']).all())
+        self.assertEqual([self.john], User.query.by_searchable_text(['Sm', 'Jo']).all())
 
     def test_handles_no_ascii_characters_correctly(self):
-        self.assertEqual(
-            [self.james],
-            User.query.by_searchable_text([u'b\xf6nd']).all())
+        self.assertEqual([self.peter], User.query.by_searchable_text([u'Zw\xf6i']).all())
 
     def test_handles_asterisk_correctly(self):
-        self.assertEqual(
-            [self.jason, self.hugo],
-            User.query.by_searchable_text([u'br*', 'exam*ple']).all())
-        self.assertEqual(
-            [self.jason, self.hugo],
-            User.query.by_searchable_text([u'br*']).all())
-        self.assertEqual(
-            [self.jason, self.hugo],
-            User.query.by_searchable_text([u'*br']).all())
+        self.assertEqual([self.john, self.jack], User.query.by_searchable_text([u'sm*', 'exam*ple']).all())
+        self.assertEqual([self.john, self.jack], User.query.by_searchable_text([u'sm*']).all())
+        self.assertEqual([self.john, self.jack], User.query.by_searchable_text([u'*ith']).all())
 
     def test_by_searchable_text_ignores_empty_list(self):
-        self.assertEqual(
-            [self.jason, self.hugo, self.james],
-            User.query.by_searchable_text([]).all())
+        expected_users = [self.john, self.hugo, self.peter, self.jack, self.bob, self.admin]
+        self.assertEqual(expected_users, User.query.by_searchable_text([]).all())
 
     def test_by_searchable_text_ignores_none_text(self):
-        self.assertEqual(
-            [self.jason, self.hugo, self.james],
-            User.query.by_searchable_text(None).all())
+        expected_users = [self.john, self.hugo, self.peter, self.jack, self.bob, self.admin]
+        self.assertEqual(expected_users, User.query.by_searchable_text(None).all())
