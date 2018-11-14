@@ -7,6 +7,7 @@ Changelog
 
 - Remove plonetheme.teamraum upgradesteps. [phgross]
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
+- Also show participants with expired membership in meeting participants-tab. [njohner]
 - Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
 - Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
 - Translate z3c.formwidget.query (nothing). [njohner]

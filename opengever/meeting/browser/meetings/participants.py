@@ -85,8 +85,14 @@ class ParticipantsView(BrowserView):
         member_id = self.request.form.get('member_id', None)
         if not member_id:
             return None
-        memberships = Membership.query.for_meeting(self.meeting).filter_by(
+
+        membership = Membership.query.for_meeting(self.meeting).filter_by(
             member_id=member_id).first()
-        if not memberships:
-            return None
-        return memberships.member
+        if membership:
+            return membership.member
+
+        member_id = int(member_id)
+        for member in self.meeting.participants:
+            if member.member_id == member_id:
+                return member
+        return None

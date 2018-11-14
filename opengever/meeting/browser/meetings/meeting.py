@@ -413,25 +413,33 @@ class MeetingView(BrowserView):
 
     def get_participants(self):
         result = []
-        participants = self.model.participants
+        participants = set(self.model.participants)
         presidency = self.model.presidency
         secretary = self.model.secretary
 
-        for membership in Membership.query.for_meeting(self.model):
-            item = {'fullname': membership.member.fullname,
-                    'email': membership.member.email,
-                    'member_id': membership.member.member_id}
+        members = set(membership.member for membership in
+                      Membership.query.for_meeting(self.model))
 
-            if membership.member in participants:
+        for member in participants.union(members):
+            item = {'fullname': member.fullname,
+                    'email': member.email,
+                    'member_id': member.member_id}
+
+            if member in participants:
                 item['presence_cssclass'] = 'presence present'
             else:
                 item['presence_cssclass'] = 'presence not-present'
 
-            if membership.member == presidency:
+            if member not in members:
+                item['presence_cssclass'] += ' non-member'
+            else:
+                item['presence_cssclass'] += ' member'
+
+            if member == presidency:
                 item['role'] = {'name': 'presidency',
                                 'label': _(u'meeting_role_presidency',
                                            default=u'Presidency')}
-            elif membership.member == secretary:
+            elif member == secretary:
                 item['role'] = {'name': 'secretary',
                                 'label': _(u'meeting_role_secretary',
                                            default=u'Secretary')}
