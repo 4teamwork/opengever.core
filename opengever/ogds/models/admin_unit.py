@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import UNIT_TITLE_LENGTH
 from opengever.ogds.models.group import groups_users
@@ -12,7 +12,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import relationship
 
 
-class AdminUnit(BASE):
+class AdminUnit(Base):
 
     __tablename__ = 'admin_units'
 

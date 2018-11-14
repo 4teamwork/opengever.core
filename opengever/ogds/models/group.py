@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import GROUP_TITLE_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
@@ -17,7 +17,7 @@ from sqlalchemy.orm import relationship
 
 # association table
 groups_users = Table(
-    'groups_users', BASE.metadata,
+    'groups_users', Base.metadata,
     Column('groupid', String(GROUP_ID_LENGTH),
            ForeignKey('groups.groupid'), primary_key=True),
     Column('userid', String(USER_ID_LENGTH),
@@ -30,7 +30,7 @@ class GroupQuery(BaseQuery):
     searchable_fields = ['groupid', 'title']
 
 
-class Group(BASE):
+class Group(Base):
     """Group model, corresponds to a LDAP group
     """
 

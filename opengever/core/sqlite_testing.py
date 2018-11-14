@@ -2,7 +2,6 @@ from ftw.dictstorage.sql import DictStorageModel
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.ogds.base.setup import create_sql_tables
-from opengever.ogds.models import BASE
 from plone.testing import Layer
 from sqlalchemy.pool import StaticPool
 from z3c.saconfig import EngineFactory
@@ -93,9 +92,8 @@ def truncate_tables():
     """Truncate existing tables in an sqlite way.
     """
     tables = (
-        BASE.metadata.tables.values() +
-        model.Base.metadata.tables.values() +
-        DictStorageModel.metadata.tables.values()
+        model.Base.metadata.tables.values()
+        + DictStorageModel.metadata.tables.values()
     )
 
     session = create_session()

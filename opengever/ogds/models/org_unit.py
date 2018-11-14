@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import UNIT_TITLE_LENGTH
@@ -37,7 +37,7 @@ class OrgUnitQuery(BaseQuery):
     searchable_fields = ['unit_id', 'title']
 
 
-class OrgUnit(BASE):
+class OrgUnit(Base):
 
     __tablename__ = 'org_units'
 

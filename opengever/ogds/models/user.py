@@ -1,4 +1,4 @@
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models import EMAIL_LENGTH
 from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
@@ -15,7 +15,7 @@ class UserQuery(BaseQuery):
     searchable_fields = ['userid', 'firstname', 'lastname', 'email']
 
 
-class User(BASE):
+class User(Base):
     """User model
     """
 

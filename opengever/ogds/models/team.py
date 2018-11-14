@@ -1,5 +1,5 @@
 from opengever.base.model import SQLFormSupport
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import UNIT_TITLE_LENGTH
@@ -31,7 +31,7 @@ class TeamQuery(BaseQuery):
         return self.filter_by(team_id=team_id).one()
 
 
-class Team(BASE, SQLFormSupport):
+class Team(Base, SQLFormSupport):
     """Team model.
 
     A team can be used as a task responsible when assigning a task to a group.

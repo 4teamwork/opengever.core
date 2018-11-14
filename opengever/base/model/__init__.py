@@ -1,5 +1,4 @@
 from opengever.base.interfaces import ISQLFormSupport
-from opengever.ogds.models import BASE
 from opengever.ogds.models.declarative import query_base
 from plone import api
 from plone.api.exc import CannotGetPortalError
@@ -22,7 +21,13 @@ UID_LENGTH = 36
 
 
 tables = [
+    'admin_units',
     'favorites',
+    'groups_users',
+    'groups',
+    'org_units',
+    'teams',
+    'users',
 ]
 
 
@@ -37,8 +42,6 @@ def get_locale():
 
 
 Session = named_scoped_session('opengever')
-
-BASE.session = Session
 Base = query_base(Session)
 
 make_translatable(options={'locales': SUPPORTED_LOCALES})
