@@ -33,6 +33,9 @@ class MeetingExampleContentCreator(object):
         self.committee_assembly = self.site['sitzungen']['committee-3']
         self.committee_assembly_model = self.committee_assembly.load_model()
 
+        self.commitee_evil = self.site['sitzungen']['evil-committee-1']
+        self.committee_evil_model = self.commitee_evil.load_model()
+
         self.dossier_taxes_1 = self.site.restrictedTraverse(
             'ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-5')
         self.dossier_taxes_2 = self.site.restrictedTraverse(
@@ -86,6 +89,10 @@ class MeetingExampleContentCreator(object):
             date_from=date(2016, 1, 1),
             date_to=date(2016, 12, 31),
             committee=self.committee_assembly_model))
+        create(Builder('period').having(
+            date_from=date(2016, 1, 1),
+            date_to=date(2016, 12, 31),
+            committee=self.committee_evil_model))
 
     def create_members_and_memberships(self):
         peter = create(Builder('member')
