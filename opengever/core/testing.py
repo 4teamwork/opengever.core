@@ -513,7 +513,7 @@ OPENGEVER_INTEGRATION_TESTING_THEME = GEVERIntegrationTesting(
     # Warning: do not try to base other layers on ContentFixtureLayer.
     # See docstring of ContentFixtureLayer.
     bases=(ThemeContentFixtureLayer(), TRAVERSAL_BROWSER_FIXTURE),
-    name="opengever.core:integration:theme")
+    name="opengever.core:theme:integration")
 
 
 OPENGEVER_INTEGRATION_TESTING = GEVERIntegrationTesting(
