@@ -5,6 +5,8 @@ Changelog
 2018.4.10 (unreleased)
 ----------------------
 
+- Task performance improvements: avoid reindexObjectSecurity twice. [phgross]
+- Task performance improvements: avoid reindexObjectSecurity for not affected documents. [phgross]
 - Bump ftw.solr to 2.3.1 to get reindexObjectSecurity fix. [lgraf]
 
 

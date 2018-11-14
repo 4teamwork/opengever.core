@@ -1,9 +1,11 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.event import notify
@@ -261,3 +263,132 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEquals([], storage._storage())
+
+
+class TestLocalRolesReindexing(IntegrationTestCase):
+
+    def test_reindexes_distinct_parent_and_related_documents(self):
+        self.login(self.dossier_responsible)
+
+        principal = 'user:{}'.format(self.secretariat_user.id)
+
+        self.assertNotIn(principal,
+                         index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertNotIn(principal,
+                         index_data_for(self.document)['allowedRolesAndUsers'])
+
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .titled(u'Aufgabe 1')
+                      .having(responsible_client='fa',
+                              responsible=self.secretariat_user.id,
+                              issuer=self.dossier_responsible.getId(),
+                              task_type='correction',
+                              deadline=date(2016, 11, 1))
+                      .in_state('task-state-in-progress')
+                      .relate_to(self.document))
+
+        self.assertIn(principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(self.document)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(task)['allowedRolesAndUsers'])
+
+    def test_also_reindexes_containing_subdossier(self):
+        """The dossier are reindex manually
+        """
+        self.login(self.dossier_responsible)
+
+        principal = 'user:{}'.format(self.secretariat_user.id)
+
+        self.assertNotIn(principal,
+                         index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertNotIn(principal,
+                         index_data_for(self.subdossier)['allowedRolesAndUsers'])
+
+        create(Builder('task')
+               .within(self.dossier)
+               .titled(u'Aufgabe 1')
+               .having(responsible_client='fa',
+                       responsible=self.secretariat_user.id,
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-in-progress')
+               .relate_to(self.document))
+
+        self.assertIn(principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertIn(principal,
+                      index_data_for(self.subdossier)['allowedRolesAndUsers'])
+
+    @browsing
+    def test_revokes_reindex_task_as_expected(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .titled(u'Aufgabe 1')
+                      .having(responsible_client='fa',
+                              responsible=self.secretariat_user.id,
+                              issuer=self.dossier_responsible.id,
+                              task_type='correction',
+                              deadline=date(2016, 11, 1))
+                      .in_state('task-state-in-progress')
+                      .relate_to(self.document))
+
+        browser.open(task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-reassign')
+
+        # Reassign
+        responsible = 'fa:{}'.format(self.dossier_responsible.id)
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(responsible)
+        browser.click_on('Assign')
+
+        old_principal = 'user:{}'.format(self.secretariat_user.id)
+        new_principal = 'user:{}'.format(self.dossier_responsible.id)
+
+        self.assertIn(new_principal,
+                      index_data_for(self.dossier)['allowedRolesAndUsers'])
+        self.assertNotIn(old_principal,
+                         index_data_for(self.dossier)['allowedRolesAndUsers'])
+
+        self.assertIn(new_principal,
+                      index_data_for(self.subdossier)['allowedRolesAndUsers'])
+        self.assertNotIn(old_principal,
+                         index_data_for(self.subdossier)['allowedRolesAndUsers'])
+
+
+class TestDossierReindexShortcut(IntegrationTestCase):
+
+    # Types which are reindexed manually by the local roles setter.
+    types_to_ignore = ['opengever.dossier.businesscasedossier',
+                       'opengever.meeting.proposal']
+
+    def test_reindexObjectSecurity_shortcut_is_safe(self):
+        """Test the fact that none of a dossiers allowed content types assign
+        permissions to the `Contributor` role.
+        """
+        self.login(self.administrator)
+
+        types_tool = api.portal.get_tool('portal_types')
+        dossier_type = types_tool['opengever.dossier.businesscasedossier']
+        allowed_types = dossier_type.allowed_content_types
+        wftool = api.portal.get_tool('portal_workflow')
+
+        for content_type in allowed_types:
+            if content_type in self.types_to_ignore:
+                continue
+
+            wf_id, = wftool.getChainFor(content_type)
+            wf = wftool.getWorkflowById(wf_id)
+            for state_id in wf.states:
+                permission_info = wf.states[state_id].getPermissionInfo('View')
+                self.assertNotIn(
+                    'Contributor', permission_info['roles'],
+                    u'`{}` allows Contributor to View on `{}` state.'.format(wf_id, state_id))
+                self.assertEqual(
+                    0, permission_info['acquired'],
+                    u'{} has acquired View permission on state.'.format(wf_id, state_id))
