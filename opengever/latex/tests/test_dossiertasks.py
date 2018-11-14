@@ -45,7 +45,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                 (dossier, dossier.REQUEST, layout), ILaTeXView)
 
             self.assertEquals(
-                u'Task list for dossier Anfr\xf6gen 2015 (Client1 / 1)',
+                u'Task list for dossier "Anfr\xf6gen 2015 (Client1 / 1)"',
                 dossier_tasks.get_render_arguments().get('label'))
 
     @browsing
@@ -86,7 +86,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                                            ILaTeXView)
             self.assertEquals([task1, task2], dossiertasks.get_tasks())
 
-            expected = {'label': u'Task list for dossier Anfr\xf6gen 2015 (Client1 / 1)',
+            expected = {'label': u'Task list for dossier "Anfr\xf6gen 2015 (Client1 / 1)"',
                         'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y %H:%M'),
                                             'deadline': expected_deadline.strftime('%d.%m.%Y %H:%M'),
                                             'description': '',

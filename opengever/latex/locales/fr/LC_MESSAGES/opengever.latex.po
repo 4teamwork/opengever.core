@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-30 13:38+0000\n"
+"POT-Creation-Date: 2018-11-14 15:33+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-latex/fr/>\n"
@@ -56,10 +56,10 @@ msgstr "Documents"
 msgid "label_dossier_journal"
 msgstr "Journal du dossier ${title} (${reference_number})"
 
-#. Default: "Task list for dossier ${title} (${reference_number})"
+#. Default: "Task list for dossier \"${title} (${reference_number})\""
 #: ./opengever/latex/dossiertasks.py
 msgid "label_dossier_tasks"
-msgstr "Liste des tâches du dossier ${title} (${reference_number})"
+msgstr "Liste des tâches du dossier \"${title} (${reference_number})\""
 
 #. Default: "End"
 #: ./opengever/latex/dossierdetails.py

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-07-30 13:38+0000\n"
+"POT-Creation-Date: 2018-11-14 15:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "label_dossier_journal"
 msgstr ""
 
-#. Default: "Task list for dossier ${title} (${reference_number})"
+#. Default: "Task list for dossier \"${title} (${reference_number})\""
 #: ./opengever/latex/dossiertasks.py
 msgid "label_dossier_tasks"
 msgstr ""

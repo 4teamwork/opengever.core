@@ -58,7 +58,7 @@ class DossierTasksLaTeXView(MakoLaTeXView):
         tasks = self.get_tasks()
         task_data_list = []
         title = translate(_('label_dossier_tasks',
-                            default=u'Task list for dossier ${title} (${reference_number})',
+                            default=u'Task list for dossier "${title} (${reference_number})"',
                           mapping={'title': self.context.title,
                                    'reference_number': self.context.get_reference_number()}),
                           context=self.request)
