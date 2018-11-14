@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Translate status message type in forms. [njohner]
+- Skip check that tasks and documents are in a subdossier when resolving a subdossier. [njohner]
 - Add Open XML Visio mimetypes. [deiferni]
 - Bump ftw.bumblebee to 3.7.0 for new derived secrets for the demand endpoint. [deiferni]
 - Fix issue when returning an excerpt to an already decided proposal. [njohner]
