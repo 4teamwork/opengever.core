@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Translate status message type in forms. [njohner]
 - Add Open XML Visio mimetypes. [deiferni]
 - Fix issue when returning an excerpt to an already decided proposal. [njohner]
 - Fix data in Task PDF when resolving a dossier. [njohner]

@@ -16,7 +16,7 @@
 
               <tal:status condition="python: hasattr(view, 'rendered_error_message') and view.rendered_error_message">
                     <dl class="portalMessage error">
-                        <dt i18n:translate="">
+                        <dt i18n:domain="plone" i18n:translate="">
                             Error
                         </dt>
                         <dd tal:content="structure view/rendered_error_message" />
@@ -27,13 +27,13 @@
                                     groupErrors python: [e for e in [g.widgets.errors for g in getattr(view, 'groups', [])] if e]"
                             condition="status">
                     <dl class="portalMessage error" tal:condition="python: view.widgets.errors or groupErrors">
-                        <dt i18n:translate="">
+                        <dt i18n:domain="plone" i18n:translate="">
                             Error
                         </dt>
                         <dd tal:content="status" />
                     </dl>
                     <dl class="portalMessage info" tal:condition="python: not(view.widgets.errors or groupErrors)">
-                        <dt i18n:translate="">
+                        <dt i18n:domain="plone" i18n:translate="">
                             Info
                         </dt>
                         <dd tal:content="status" />
