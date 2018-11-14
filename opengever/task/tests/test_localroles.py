@@ -200,23 +200,33 @@ class TestLocalRolesRevoking(IntegrationTestCase):
     @browsing
     def test_closing_a_task_revokes_responsible_roles_on_distinct_parent(self, browser):
         self.login(self.dossier_responsible, browser=browser)
-        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
-        self.set_workflow_state('task-state-resolved', self.task)
+        self.set_workflow_state('task-state-resolved', self.meeting_task)
 
-        storage = RoleAssignmentManager(self.dossier).storage
-        self.assertIn(
-            Oguid.for_object(self.task).id,
-            [aa.get('reference') for aa in storage._storage()])
+        storage = RoleAssignmentManager(self.meeting_dossier).storage
+        self.assertEquals(
+            [{'cause': 1,
+              'roles': ['Contributor'],
+              'reference': Oguid.for_object(self.meeting_task),
+              'principal': self.dossier_responsible.id},
+             {'cause': 1,
+              'roles': ['Contributor'],
+              'reference': Oguid.for_object(self.meeting_subtask),
+              'principal': self.dossier_responsible.id}],
+            storage._storage())
 
-        # close
-        browser.open(self.task, view='tabbedview_view-overview')
+        # close subtask
+        browser.open(self.meeting_subtask, view='tabbedview_view-overview')
         browser.click_on('task-transition-resolved-tested-and-closed')
-        browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
 
-        self.assertNotIn(
-            Oguid.for_object(self.task).id,
-            [aa.get('reference') for aa in storage._storage()])
+        browser.open(self.meeting_task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        self.assertEquals([], storage._storage())
+        self.assertEquals(
+            (('franzi.muller', ('Owner',)),),
+            self.meeting_dossier.get_local_roles())
 
     @browsing
     def test_cancelling_a_task_revokes_roles(self, browser):

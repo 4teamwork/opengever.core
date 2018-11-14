@@ -315,8 +315,7 @@ class RoleAssignmentManager(object):
             return
 
         self.storage.clear(item)
-        if reindex:
-            self._update_local_roles()
+        self._update_local_roles(reindex=reindex)
 
     def _update_local_roles(self, reindex=True):
         current_principals = []
