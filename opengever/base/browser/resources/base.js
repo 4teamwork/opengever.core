@@ -3,7 +3,8 @@ $(window).load(function(){
   var firstFormElement = $("form#form input:text:visible, form#form textarea:visible, .keyword-widget").first();
   // Check if element is select2 widget
   if (firstFormElement.data('select2')) {
-    firstFormElement.select2('open');
+    firstFormElement.focus();
+    firstFormElement.select2('focus');
   } else {
     firstFormElement.focus();
   }
