@@ -3,7 +3,7 @@ from opengever.base.model import Base
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import UNIT_TITLE_LENGTH
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey

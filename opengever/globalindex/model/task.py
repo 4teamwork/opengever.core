@@ -12,7 +12,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from opengever.ogds.models.types import UnicodeCoercingText
 from opengever.task.reminder.reminder import TaskReminder
 from plone import api

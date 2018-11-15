@@ -4,7 +4,7 @@ from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import UNIT_TITLE_LENGTH
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.inbox import Inbox
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey

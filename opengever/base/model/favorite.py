@@ -6,11 +6,11 @@ from opengever.base.model import PORTAL_TYPE_LENGTH
 from opengever.base.model import UID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
+from opengever.base.query import BaseQuery
 from opengever.bumblebee import is_bumblebeeable
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.admin_unit import AdminUnit
-from opengever.ogds.models.query import BaseQuery
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
 from sqlalchemy import Boolean

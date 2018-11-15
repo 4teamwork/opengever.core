@@ -10,7 +10,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
-from opengever.ogds.models.query import extend_query_with_textfilter
+from opengever.base.query import extend_query_with_textfilter
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration

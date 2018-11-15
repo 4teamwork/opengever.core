@@ -5,7 +5,7 @@ from opengever.activity.model import NotificationDefault
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from sqlalchemy import and_
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import true

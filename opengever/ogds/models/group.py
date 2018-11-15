@@ -2,7 +2,7 @@ from opengever.base.model import Base
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import GROUP_TITLE_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from opengever.ogds.models.team import Team  # noqa
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean

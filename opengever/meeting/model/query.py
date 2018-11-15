@@ -9,7 +9,7 @@ from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.period import Period
 from opengever.meeting.model.proposal import Proposal
 from opengever.meeting.model.submitteddocument import SubmittedDocument
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 from plone import api
 from sqlalchemy import and_
 from sqlalchemy import desc
