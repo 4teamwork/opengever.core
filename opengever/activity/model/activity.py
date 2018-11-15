@@ -5,7 +5,7 @@ from opengever.base.model import DEFAULT_LOCALE
 from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import UTCDateTime
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

@@ -14,7 +14,7 @@ from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import ITrashed
 from plone import api

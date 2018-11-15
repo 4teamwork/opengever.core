@@ -4,7 +4,7 @@ from opengever.ogds.models import FIRSTNAME_LENGTH
 from opengever.ogds.models import LASTNAME_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.base.query import BaseQuery
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import String

@@ -14,7 +14,7 @@ from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from opengever.ogds.models import GROUP_ID_LENGTH
 from opengever.ogds.models import UNIT_ID_LENGTH
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import and_
 from sqlalchemy import Column
 from sqlalchemy import Integer

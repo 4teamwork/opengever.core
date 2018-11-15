@@ -1,6 +1,6 @@
 from opengever.base.model import Base
 from opengever.contact.models.archive import ArchiveMixin
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer

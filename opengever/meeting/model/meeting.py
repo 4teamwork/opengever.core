@@ -20,7 +20,7 @@ from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from opengever.ogds.models.user import User
 from plone import api
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
