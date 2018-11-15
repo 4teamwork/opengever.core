@@ -69,10 +69,6 @@ Metadaten zur Sitzung:
 
   Sekretär der Sitzung (Participant)
 
-- ``participants.members``
-
-  Liste aller Teilnehmenden (Liste von Participant, siehe unten)
-
 - ``participants.other``
 
   Liste aller weiteren Teilnehmenden/Gäste (Liste von Strings)
@@ -80,13 +76,19 @@ Metadaten zur Sitzung:
 - ``participants.members``
 
   Liste aller Teilnehmenden zur Sitzung (Liste von Participant). Über diese
-  Liste wird typischer-weise iteriert, um die Namen darzustellen (siehe weiter
-  unten).
+  Liste wird typischer-weise iteriert, um die Namen darzustellen (siehe Sitzungsteilnehmer_).
+
+- ``participants.absentees``
+
+  Liste aller Mitglieder die zur Sitzung abwesend sind (Liste von Participant).
+  Über diese Liste wird typischer-weise iteriert, um die Namen darzustellen
+  (siehe Sitzungsteilnehmer_).
 
 - ``agenda_items``
 
   Liste von Traktanden (Liste von AgendaItem)
 
+.. _Sitzungsteilnehmer:
 
 Metadaten zu einem Sitzungsteilnehmer (Participant):
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

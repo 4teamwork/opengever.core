@@ -59,6 +59,10 @@ class TestProtocolJsonData(FunctionalTestCase):
                                   .having(firstname=u'Anna',
                                           lastname=u'B\xe4nni',
                                           email="baenni@example.com"))
+        self.member_otto = create(Builder('member')
+                                  .having(firstname=u'Otto',
+                                          lastname=u'G\xfcnter',
+                                          email="guenter@example.com"))
         self.membership_peter = create(Builder('membership').having(
             member=self.member_peter,
             committee=self.committee,
@@ -77,6 +81,12 @@ class TestProtocolJsonData(FunctionalTestCase):
             date_from=date(2010, 1, 1),
             date_to=date(2012, 1, 1),
             role=None))
+        self.membership_otto = create(Builder('membership').having(
+            member=self.member_otto,
+            committee=self.committee,
+            date_from=date(2010, 1, 1),
+            date_to=date(2012, 1, 1),
+            role='Moderator'))
         self.committee_secretary = create(
             Builder('ogds_user')
             .id('committee.secretary')
@@ -123,22 +133,22 @@ class TestProtocolJsonData(FunctionalTestCase):
         expected_data['meeting']['date'] = '2011 12 13'
         self.assertDictEqual(expected_data, data)
 
-    def test_add_members_handles_participants_are_no_longer_committee_memberships(self):
+    def test_get_attending_members_handles_participants_are_no_longer_committee_memberships(self):
         create_session().delete(self.membership_anna)
 
         self.assertEquals(
-            {'members': [{'firstname': 'Anna',
-                          'lastname': u'B\xe4nni',
-                          'fullname': u'B\xe4nni Anna',
-                          'email': 'baenni@example.com',
-                         'role': None},
-                         {'email': u'mueller@example.com',
-                          'firstname': u'Franz',
-                          'fullname': u'M\xfcller Franz',
-                          'lastname': u'M\xfcller',
-                          'role': None},
-                         ]},
-            ProtocolData(self.meeting).add_members())
+            [{'firstname': 'Anna',
+              'lastname': u'B\xe4nni',
+              'fullname': u'B\xe4nni Anna',
+              'email': 'baenni@example.com',
+             'role': None},
+             {'email': u'mueller@example.com',
+              'firstname': u'Franz',
+              'fullname': u'M\xfcller Franz',
+              'lastname': u'M\xfcller',
+              'role': None},
+             ],
+            ProtocolData(self.meeting).get_attending_members())
 
 
 class TestExcerptJsonData(FunctionalTestCase):
@@ -164,7 +174,7 @@ class TestExcerptJsonData(FunctionalTestCase):
             'agenda_items': [],
             'protocol': {'type': u'Protocol-Excerpt'},
             'document': {'generated': u'04.05.2018'},
-            'participants': {'other': [], 'members': []},
+            'participants': {'other': [], 'members': [], 'absentees': []},
             'committee': {'name': u'Gemeinderat'},
             'mandant': {'name': u'Admin Unit 1'},
             'meeting': {'date': u'13.12.2011',

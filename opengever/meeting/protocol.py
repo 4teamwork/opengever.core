@@ -48,7 +48,15 @@ class ProtocolData(object):
                 context=getRequest())
         }
 
-    def add_members(self):
+    @staticmethod
+    def get_member_data(member, membership=None):
+        return {"firstname": member.firstname,
+                "lastname": member.lastname,
+                "fullname": member.fullname,
+                "email": member.email,
+                "role": membership.role if membership else None}
+
+    def get_attending_members(self):
         members = []
         for participant in self.meeting.participants:
             if self.has_special_role(participant):
@@ -56,18 +64,17 @@ class ProtocolData(object):
 
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, participant)
-            members.append({
-                "firstname": participant.firstname,
-                "lastname": participant.lastname,
-                "fullname": participant.fullname,
-                "email": participant.email,
-                "role": membership.role if membership else None
-            })
-        participants = {
-            'members': members
-        }
+            members.append(self.get_member_data(participant, membership))
+        return members
 
-        return participants
+    def get_absent_members(self):
+        # Now we add the members that are not attending the meeting
+        absentees = []
+        for absentee in self.meeting.absentees:
+            membership = Membership.query.fetch_for_meeting(
+                    self.meeting, absentee)
+            absentees.append(self.get_member_data(absentee, membership))
+        return absentees
 
     def has_special_role(self, participant):
         is_president = participant == self.meeting.presidency
@@ -76,23 +83,21 @@ class ProtocolData(object):
         return is_president or is_secretary
 
     def add_participants(self):
-        participants = self.add_members()
+        participants = {}
+        participants['members'] = self.get_attending_members()
         if self.meeting.other_participants:
             other_participants = self.meeting.other_participants.split('\n')
         else:
             other_participants = []
         participants['other'] = other_participants
 
+        participants['absentees'] = self.get_absent_members()
+
         if self.meeting.presidency:
             membership = Membership.query.fetch_for_meeting(
                 self.meeting, self.meeting.presidency)
-            participants['presidency'] = {
-                "firstname": self.meeting.presidency.firstname,
-                "lastname": self.meeting.presidency.lastname,
-                "fullname": self.meeting.presidency.fullname,
-                "email": self.meeting.presidency.email,
-                "role": membership.role if membership else None
-            }
+            participants['presidency'] = self.get_member_data(
+                self.meeting.presidency, membership)
 
         if self.meeting.secretary:
             participants['secretary'] = {
