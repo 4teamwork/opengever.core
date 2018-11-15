@@ -7,8 +7,8 @@
 
   <table>
     <colgroup>
-      <col tal:repeat="value view/get_widths"
-           tal:attributes="width value" width="1%" />
+      <col tal:repeat="column view/get_columns"
+           tal:attributes="width column/width; align column/alignment" width="1%" align="justify"/>
     </colgroup>
 
     <thead>

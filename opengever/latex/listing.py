@@ -21,10 +21,11 @@ from zope.interface import Interface
 
 class Column(object):
 
-    def __init__(self, id, label, width, getter=None):
+    def __init__(self, id, label, width, getter=None, alignment=None):
         self.id = id
         self.label = label
         self.width = width
+        self.alignment = alignment or "justify"
 
         if getter is None:
             getter = id
@@ -294,21 +295,28 @@ class TasksLaTeXListing(DossiersLaTeXListing):
 @adapter(Interface, Interface, Interface)
 class TaskHistoryLaTeXListing(LaTexListing):
 
+    def get_actor_label(self, item):
+        return Actor.lookup(item.creator).get_label()
+
     def get_columns(self):
         return [
             Column('date',
                    _('label_time', default=u'Time'),
                    '10%',
-                   lambda item: helper.readable_date_time(item, item.date)),
+                   lambda item: helper.readable_date_time(item, item.date),
+                   "left"),
 
             Column('creator',
                    _('label_creator', default='Changed by'),
-                   '20%'),
+                   '20%',
+                   self.get_actor_label,
+                   "left"),
 
             Column('transition',
                    _('label_transition', default='Transition'),
                    '20%',
-                   lambda item: activity_mf(item.transition)),
+                   lambda item: activity_mf(item.transition),
+                   "left"),
 
             Column('text',
                    _('label_description', default='Description'),
