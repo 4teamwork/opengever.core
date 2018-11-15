@@ -184,7 +184,7 @@ def split(batch):
         ))
 
 
-def create_test_run_params(layers=None, modules=None):
+def create_test_run_params(layers=None, modules=None, shuffle=False):
     test_run_params = []
 
     for layer, testclasses in discover_tests(layers, modules).iteritems():
@@ -195,6 +195,7 @@ def create_test_run_params(layers=None, modules=None):
         split_batches = split(batch)
         for i, split_batch in enumerate(split_batches):
             split_batch['batchinfo'] = '{}/{}'.format(i + 1, len(split_batches))
+            split_batch['shuffle'] = shuffle
             test_run_params.append(split_batch)
 
     return tuple(sorted(
@@ -226,6 +227,10 @@ def run_tests(test_run_params):
     batchinfo = test_run_params.get('batchinfo')
     testclasses = test_run_params.get('testclasses', ())
     count = test_run_params.get('count')
+    shuffle = test_run_params.get('shuffle')
+
+    if shuffle:
+        params.append('--shuffle')
 
     if layer:
         params.append('--layer')
@@ -303,7 +308,7 @@ def run_tests(test_run_params):
     return result
 
 
-def main(layers=None, modules=None):
+def main(layers=None, modules=None, shuffle=False):
     """Discovers and times tests in parallel via multiprocessing.Pool()."""
     # Remove *.py[co] files to avoid race conditions with parallel workers
     # stepping on each other's toes when trying to clean up stale bytecode.
@@ -314,10 +319,12 @@ def main(layers=None, modules=None):
     remove_bytecode_files(SOURCE_PATH)
 
     start = time()
-    test_run_params = create_test_run_params(layers, modules)
+    test_run_params = create_test_run_params(layers, modules, shuffle)
     logger.info('Discovered tests in %s', humanize_time(time() - start))
     logger.info('Split the tests into %d jobs', len(test_run_params))
     logger.info('Running the jobs in up to %d processes in parallel', CONCURRENCY)
+    if args.shuffle:
+        logger.info('Shuffling each test batch run order.')
 
     # We need to explicitly flush here in order to avoid multiprocessing
     # related log output duplications due to picking inputs and globals as the
@@ -371,6 +378,12 @@ if __name__ == '__main__':
     # CLI arguments
     parser = ArgumentParser(
         description='Run tests in parallel.',
+        )
+
+    parser.add_argument(
+        '--shuffle',
+        action='store_true',
+        help='Set the testing concurrency level.',
         )
 
     parser.add_argument(
@@ -434,7 +447,7 @@ if __name__ == '__main__':
 
     setup_termination()
 
-    if main(layers=args.layer, modules=args.module):
+    if main(layers=args.layer, modules=args.module, shuffle=args.shuffle):
         exit(0)
 
     exit(1)
