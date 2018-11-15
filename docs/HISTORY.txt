@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Don't display the reminder selector on tasks where it would not work. [Rotonen]
 - Translate status message type in forms. [njohner]
 - Skip check that tasks and documents are in a subdossier when resolving a subdossier. [njohner]
 - Add Open XML Visio mimetypes. [deiferni]
