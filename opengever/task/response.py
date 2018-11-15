@@ -1,3 +1,4 @@
+from AccessControl.users import nobody
 from Acquisition import aq_inner
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import disable_edit_bar
@@ -39,12 +40,12 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import Interface
+from zope.interface import provider
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import modified
 from zope.lifecycleevent import ObjectModifiedEvent
-import datetime
-from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+import datetime
 
 
 @provider(IContextAwareDefaultFactory)
@@ -235,6 +236,10 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
     @property
     def transition(self):
+        # Ignore unauthorized requests (called by the contenttree widget)
+        if api.user.get_current() == nobody:
+            return
+
         if not hasattr(self, '_transition'):
             self._transition = self.request.get('form.widgets.transition',
                                                 self.request.get('transition'))
