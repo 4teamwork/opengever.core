@@ -414,8 +414,9 @@ class Meeting(Base, SQLFormSupport):
         proposal.schedule(self)
         self.reorder_agenda_items()
 
-    def schedule_text(self, title, is_paragraph=False):
+    def schedule_text(self, title, is_paragraph=False, description=None):
         self.agenda_items.append(AgendaItem(title=title,
+                                            description=description,
                                             is_paragraph=is_paragraph))
         self.reorder_agenda_items()
 

@@ -505,7 +505,11 @@
                        for="schedule-paragraph">
                   Add section header:
                 </label>
-                <input id="schedule-paragraph" type="text" />
+                <div i18n:translate="label_title" class="input-label">Title</div>
+                <input id="schedule-paragraph-title" type="text" class="input-field"/>
+                <div i18n:translate="label_description" class="input-label">Description</div>
+                <textarea id="schedule-paragraph-description" type="text" class="input-field"/>
+
                 <button class="schedule-paragraph button submit"
                         tal:attributes="data-url view/url_schedule_paragraph"
                         i18n:translate="label_insert">
