@@ -24,6 +24,16 @@
        
 
 
+   .. py:attribute:: changed
+
+       :Feldname: :field-title:`Zuletzt verändert`
+       :Datentyp: ``Datetime``
+       
+       
+       
+       
+
+
    .. py:attribute:: classification
 
        :Feldname: :field-title:`Klassifikation`

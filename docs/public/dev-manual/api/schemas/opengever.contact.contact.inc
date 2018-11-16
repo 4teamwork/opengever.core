@@ -212,3 +212,13 @@
        
        
        
+
+
+   .. py:attribute:: changed
+
+       :Feldname: :field-title:`Zuletzt verändert`
+       :Datentyp: ``Datetime``
+       
+       
+       
+       
