@@ -1,13 +1,13 @@
-from ftw.testbrowser import browsing
+from ftw.testbrowser import restapi
 from opengever.testing import IntegrationTestCase
 
 
 class TestRepositoryAPI(IntegrationTestCase):
-    @browsing
-    def test_can_get_repository_root(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.repository_root, method="GET", headers={"Accept": "application/json"})
-        self.assertEqual(200, browser.status_code)
+    @restapi
+    def test_can_get_repository_root(self, api_client):
+        self.login(self.regular_user, api_client)
+        api_client.open(self.repository_root)
+        self.assertEqual(200, api_client.status_code)
         expected_repository_root = {
             u"title_de": u"Ordnungssystem",
             u"valid_until": None,
@@ -55,4 +55,4 @@ class TestRepositoryAPI(IntegrationTestCase):
             u"@type": u"opengever.repository.repositoryroot",
             u"relative_path": u"ordnungssystem",
         }
-        self.assertEqual(expected_repository_root, browser.json)
+        self.assertEqual(expected_repository_root, api_client.contents)
