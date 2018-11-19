@@ -112,3 +112,16 @@ class TestForwarding(IntegrationTestCase):
         self.assertEqual(['Responsible'], responsible_row.css('th').text)
         self.assertEqual([u'Projekt \xdcberbaung Dorfmatte (Finanzamt)'],
                          responsible_row.css('td').text)
+
+    @browsing
+    def test_is_private_field_respects_feature_flag(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        data = {'paths': ['/'.join(self.inbox_document.getPhysicalPath())]}
+
+        browser.open(
+            self.inbox, data, view='++add++opengever.inbox.forwarding')
+        self.assertIn('Private task', browser.forms['form'].field_labels)
+
+        self.deactivate_feature('private-tasks')
+        browser.open(self.inbox, data, view='++add++opengever.inbox.forwarding')
+        self.assertNotIn('Private task', browser.forms['form'].field_labels)
