@@ -92,9 +92,7 @@
     showBackdrop(event);
   }
 
-  if (!Modernizr.touch) {
-    $(document).on("mouseover", ".tooltip-trigger", initTooltips);
-  }
+  $(document).on("mouseover", ".tooltip-trigger", initTooltips);
 
 }(window, window.jQuery));
 
