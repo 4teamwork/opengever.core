@@ -7,6 +7,7 @@ from opengever.document.browser.overview import CustomRow
 from opengever.document.browser.overview import FieldRow
 from opengever.document.browser.overview import Overview
 from opengever.document.browser.overview import TemplateRow
+from opengever.document.browser.overview import WebIntelligentFieldRow
 from opengever.mail import _
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -91,7 +92,7 @@ class OverviewTab(MailAttachmentsMixin, Overview):
             FieldRow('IDocumentMetadata.document_author'),
             CustomRow(self.render_creator_link,
                       label=ogdmf('label_creator', default='creator')),
-            FieldRow('IDocumentMetadata.description'),
+            WebIntelligentFieldRow('IDocumentMetadata.description'),
             FieldRow('IDocumentMetadata.foreign_reference'),
             TemplateRow(self.file_template,
                         label=_('label_org_message', default='Message')),
