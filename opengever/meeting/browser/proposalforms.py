@@ -111,6 +111,7 @@ class IAddProposal(IProposal):
             portal_type=("opengever.document.document", ),
             navigation_tree_query={
                 'review_state': {'not': 'document-state-shadow'},
+                'file_extension': '.docx',
                 'object_provides': [
                     'opengever.document.document.IDocumentSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
