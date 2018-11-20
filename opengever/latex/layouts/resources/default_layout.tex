@@ -9,6 +9,12 @@
 <%block name="beneath_packages">
 </%block>
 
+%% TYPESETTING
+%%%% This allows latex to distribute 3em more of white space on a line
+%%%% when it cannot split it in a satisfying way, this is notably
+%%%% usefull as titles often contain long numbers
+\setlength\emergencystretch{3em}
+
 %% TEXT / PARAGRAPHS
 \renewcommand{\familydefault}{ma1}
 \parindent=0pt

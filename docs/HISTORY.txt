@@ -7,6 +7,7 @@ Changelog
 
 - Fix bug in Windows8/10 and IE11/Edge: Select a task-reminder option will now properly stop spinning. [elioschmutz]
 - Show the task-reminder selector spinner directly and not only on long-requests to remove complexity. [elioschmutz]
+- Set \emergencystretch to 3em in latex templates. [njohner]
 - Update schemas in API documentation to include "changed". [njohner]
 - Ignore unauthorized traversal request in the response forms. [phgross]
 - Don't display the reminder selector on tasks where it would not work. [Rotonen]
