@@ -60,10 +60,9 @@ class TaskAddForm(DefaultAddForm):
 
         additional_group.widgets['tasktemplate_position'].mode = HIDDEN_MODE
 
-        common_group = [group for group in self.groups
-                        if group.__name__ == u'common'][0]
-
         if not is_private_task_feature_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
             common_group.widgets['is_private'].mode = HIDDEN_MODE
 
     def createAndAdd(self, data):
