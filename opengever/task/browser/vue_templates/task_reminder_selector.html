@@ -2,10 +2,15 @@
     <li>
         <a href="#" @click.prevent="clicked">
             <span class="taskReminderSelectorOptionIcon">
-                <span class="fa" :class="{
-                    'fa-check': selected,
-                    'fa-spinner fa-spin': showSpinner }">
-                </span>
+              <!-- There is a bug with Windows8/10 and IE11/Edge. Just removing
+              the `fa-spin` class won't stop the spin-animation. Thus, we can't
+              just toggle classes to show the check or spin icon.
+              The only good workaround is to use an own element for the spin-icon
+              and show/hide the whole element.
+              See https://github.com/FortAwesome/Font-Awesome/issues/7572 for
+              more information about this bug. -->
+              <span v-if="showSpinner && !selected" class="fa fa-spinner fa-spin" />
+              <span v-if="selected && !showSpinner" class="fa fa-check" />
             </span>
             <span class="subMenuTitle actionText">{{title}}</span>
         </a>
@@ -21,7 +26,7 @@
                 <reminder-option v-for="option in orderedOptions"
                                  @clicked="handleSetReminder(option)"
                                  :selected="option.selected"
-                                 :showSpinner="showSpinnerForOption(option)"
+                                 :showSpinner="option.showSpinner"
                                  :title="option.option_title" />
             </ul>
         </dd>

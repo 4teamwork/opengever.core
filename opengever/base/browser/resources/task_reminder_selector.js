@@ -13,9 +13,7 @@ $(function() {
             isLoading: false,
             errorMsg: initState.error_msg,
             currentErrorMsg: '',
-            longRequest: false,
             nextSelectedOption: null,
-            spinnerTimeout: 100,
             noReminderIdentifier: 'no-reminder',
           },
           computed: {
@@ -46,6 +44,7 @@ $(function() {
 
               this.isLoading = true;
               this.nextSelectedOption = option;
+              this.nextSelectedOption.showSpinner = true
 
               var request;
               if (option.option_type === this.noReminderIdentifier) {
@@ -55,10 +54,6 @@ $(function() {
               } else {
                 request = this.requester.patch(this.endpoint, option);
               }
-
-              var timer;
-              timer = window.setTimeout(
-                this.handleLongRequest, this.spinnerTimeout);
 
               request.then(function() {
                 this.setReminder(option);
@@ -70,9 +65,9 @@ $(function() {
               }.bind(this));
 
               request.finally(function() {
-                window.clearTimeout(timer);
                 this.isLoading = false;
                 this.longRequest = false;
+                this.nextSelectedOption.showSpinner = false
                 this.nextSelectedOption = null;
               }.bind(this));
             },
@@ -87,12 +82,6 @@ $(function() {
             resetErrorMsg: function() {
               this.currentErrorMsg = '';
             },
-            showSpinnerForOption: function(option) {
-              return this.longRequest && option === this.nextSelectedOption;
-            },
-            handleLongRequest: function() {
-              this.longRequest = true;
-            }
           },
           beforeMount: function () {
             var requester = axios.create();
