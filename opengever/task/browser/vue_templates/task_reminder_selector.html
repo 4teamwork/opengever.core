@@ -21,7 +21,7 @@
                 <reminder-option v-for="option in orderedOptions"
                                  @clicked="handleSetReminder(option)"
                                  :selected="option.selected"
-                                 :showSpinner="showSpinnerForOption(option)"
+                                 :showSpinner="option.showSpinner"
                                  :title="option.option_title" />
             </ul>
         </dd>

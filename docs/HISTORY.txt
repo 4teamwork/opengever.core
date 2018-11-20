@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Show the task-reminder selector spinner directly and not only on long-requests to remove complexity. [elioschmutz]
 - Update schemas in API documentation to include "changed". [njohner]
 - Ignore unauthorized traversal request in the response forms. [phgross]
 - Don't display the reminder selector on tasks where it would not work. [Rotonen]

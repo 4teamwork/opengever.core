@@ -228,6 +228,7 @@ class Overview(BrowserView, GeverTabMixin):
                                       context=self.request),
             'sort_order': -1,
             'selected': reminder_option is None,
+            'showSpinner': False,
             })
 
         for option in TASK_REMINDER_OPTIONS.values():
@@ -239,6 +240,7 @@ class Overview(BrowserView, GeverTabMixin):
                 'option_title': translate(
                     option.option_title, context=self.request),
                 'selected': selected,
+                'showSpinner': False,
             })
 
         return options
