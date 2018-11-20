@@ -68,6 +68,7 @@ FEATURE_FLAGS = {
                               'IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.'
                                 'IOfficeConnectorSettings.direct_checkout_and_edit_enabled',
+    'officeconnector-restapi': 'opengever.officeconnector.interfaces.IOfficeConnectorSettings.restapi_enabled',
     'oneoffixx': 'opengever.oneoffixx.interfaces.IOneoffixxSettings.is_feature_enabled',
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-proposals-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_proposals_tab',

@@ -69,6 +69,7 @@ Changelog
 - Port disposition tests to integration layer. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
 - Fix typo in favorite error message. [njohner]
+- Add feature flagged support to use the RESTAPI for everything in OC. [Rotonen]
 - Only display .docx files as possible proposal documents. [Rotonen]
 - Render mail descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render mail descriptions as intelligent text on the mail overview. [Rotonen]

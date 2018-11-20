@@ -7,6 +7,7 @@ from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import is_officeconnector_restapi_feature_enabled
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from plone import api
 from plone.protect import createToken
@@ -171,15 +172,8 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             document = payload['document']
             parent_dossier = document.get_parent_dossier()
 
-            if (
-                    parent_dossier
-                    and IDossierMarker.providedBy(parent_dossier)
-                ):
-                if parent_dossier.is_open():
-                    payload['bcc'] = (
-                        IEmailAddress(self.request)
-                        .get_email_for_object(parent_dossier)
-                        )
+            if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
+                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_dossier)
 
                 parent_dossier_uuid = api.content.get_uuid(parent_dossier)
 
@@ -217,11 +211,8 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
         # form.
         for payload in payloads:
             # A permission check to verify the user is also able to upload
-            document = payload['document']
-            authorized = api.user.has_permission(
-                'Modify portal content',
-                obj=document,
-                )
+            document = payload.pop('document')
+            authorized = api.user.has_permission('Modify portal content', obj=document)
 
             if authorized:
                 if document.is_shadow_document():
@@ -229,6 +220,7 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                     payload['content-type'] = IAnnotations(document).get("content_type")
                 else:
                     payload['content-type'] = document.get_file().contentType
+
                 payload['download'] = document.get_download_view_name()
 
                 # for oneoffixx, we checkout the document to fall in the normal
@@ -238,12 +230,24 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 else:
                     payload['filename'] = document.get_filename()
 
-                del payload['document']
-                payload['checkin-with-comment'] = '@@checkin_document'
-                payload['checkin-without-comment'] = 'checkin_without_comment'
-                payload['checkout'] = '@@checkout_documents'
-                payload['upload-form'] = 'file_upload'
-                payload['upload-api'] = None
+                if is_officeconnector_restapi_feature_enabled():
+                    reauth_querystring = '&'.join((
+                        '_authenticator={}'.format(payload.pop('csrf-token')),
+                        'mode=external',
+                        'reauth=1',
+                    ))
+                    payload['reauth'] = '?'.join(('@@checkout_documents', reauth_querystring))
+                    payload['status'] = 'status'
+                    payload['lock'] = '@lock'
+                    payload['checkout'] = '@checkout'
+                    payload['upload'] = '@tus-replace'
+                    payload['checkin'] = '@checkin'
+                    payload['unlock'] = '@unlock'
+                else:
+                    payload['checkin-with-comment'] = '@@checkin_document'
+                    payload['checkin-without-comment'] = 'checkin_without_comment'
+                    payload['checkout'] = '@@checkout_documents'
+                    payload['upload-form'] = 'file_upload'
 
             else:
                 # Fail per default
