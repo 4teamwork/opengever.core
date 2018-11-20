@@ -202,6 +202,12 @@
       />
 
   <subscriber
+      for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.unshadow_on_upload"
+      />
+
+  <subscriber
       for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler=".subscribers.set_copyname"

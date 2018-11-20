@@ -16,6 +16,11 @@ DISABLE_DOCPROPERTY_UPDATE_FLAG = 'disable_docproperty_update'
 logger = logging.getLogger('opengever.document.handlers')
 
 
+def unshadow_on_upload(context, event):
+    if context.is_shadow_document() and context.has_file():
+        context.leave_shadow_state()
+
+
 def checked_out(context, event):
     # Don't prevent checkout by failure to update DocProperties
     _update_docproperties(context, raise_on_error=False)

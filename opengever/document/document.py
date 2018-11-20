@@ -1,6 +1,5 @@
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
-from AccessControl.Permissions import webdav_unlock_items
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
@@ -361,21 +360,6 @@ class Document(Item, BaseDocumentMixin):
 
     def get_download_view_name(self):
         return 'download'
-
-    security.declareProtected(webdav_unlock_items, 'UNLOCK')
-
-    def UNLOCK(self, REQUEST, RESPONSE):
-        """Leave shadow state if a shadow-document is unlocked.
-
-        If we are in shadow state when unlocking the document it was created
-        by officeatwork. In that case leave the shadow-state.
-
-        """
-        response = super(Document, self).UNLOCK(REQUEST, RESPONSE)
-
-        self.leave_shadow_state()
-
-        return response
 
     def checkout_and_get_office_connector_url(self):
         """Checkout the document and return an office connector url.
