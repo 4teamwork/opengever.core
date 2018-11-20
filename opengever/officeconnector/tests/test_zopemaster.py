@@ -31,7 +31,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
@@ -75,7 +75,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             u'url': u'http://nohost/plone/oc_checkout',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_ZOPE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
@@ -86,7 +86,6 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
             u'download': u'download',
             u'filename': u'Vertraegsentwurf.docx',
-            u'upload-api': None,
             u'upload-form': u'file_upload',
             u'uuid': u'createtreatydossiers000000000002',
             }]

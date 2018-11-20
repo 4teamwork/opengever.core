@@ -38,7 +38,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
@@ -86,7 +86,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
@@ -133,7 +133,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [{
@@ -186,7 +186,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -250,7 +250,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -312,7 +312,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
