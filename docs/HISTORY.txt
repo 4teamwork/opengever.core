@@ -5,6 +5,7 @@ Changelog
 2018.5.0 (unreleased)
 ---------------------
 
+- Fix bug in Windows8/10 and IE11/Edge: Select a task-reminder option will now properly stop spinning. [elioschmutz]
 - Show the task-reminder selector spinner directly and not only on long-requests to remove complexity. [elioschmutz]
 - Update schemas in API documentation to include "changed". [njohner]
 - Ignore unauthorized traversal request in the response forms. [phgross]
