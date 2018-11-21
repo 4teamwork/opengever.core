@@ -9,6 +9,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.model import Period
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+import os
 
 
 class TestPathBar(IntegrationTestCase):
@@ -131,3 +132,76 @@ class TestPeriod(FunctionalTestCase):
             date_to=date(2010, 12, 31), committee=self.committee_model))
         self.assertEqual('Foo (Jan 01, 2010 - Dec 31, 2010)',
                          period.get_title())
+
+
+class TestPeriodTocJsonButtons(IntegrationTestCase):
+
+    @browsing
+    def test_toc_json_button_only_shown_for_managers(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.committee, view='tabbedview_view-periods')
+        period_rows = browser.css('#period_listing .period')
+        text_by_period = [row.css('> *').text for row in period_rows]
+        self.assertEqual([
+            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
+             'download TOC alphabetical download TOC by repository',
+             'Edit'],
+        ], text_by_period)
+
+        self.login(self.manager, browser)
+        browser.open(self.committee, view='tabbedview_view-periods')
+        period_rows = browser.css('#period_listing .period')
+        text_by_period = [row.css('> *').text for row in period_rows]
+        self.assertEqual([
+            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
+             'download TOC alphabetical download TOC by repository',
+             'Edit',
+             'download TOC json alphabetical download TOC json repository'],
+        ], text_by_period)
+
+    @browsing
+    def test_toc_json_alphabetical_button(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.committee, view='tabbedview_view-periods')
+        button = browser.find('download TOC json alphabetical')
+
+        period = self.committee.load_model().periods[0]
+        expected_url = os.path.join(period.get_url(self.committee),'alphabetical_toc/as_json')
+        self.assertEqual(expected_url, button.get("href"))
+
+        button.click()
+        toc_content = {u'toc': [{u'group_title': u'I',
+                                 u'contents': [{u'decision_number': 1,
+                                                u'dossier_reference_number': u'Client1 1.1 / 1',
+                                                u'has_proposal': True,
+                                                u'meeting_date': u'17.07.2016',
+                                                u'meeting_start_page_number': None,
+                                                u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                 }]}
+        self.assertEqual(toc_content, browser.json)
+
+    @browsing
+    def test_toc_json_repository_button(self, browser):
+        self.login(self.manager, browser)
+        browser.open(self.committee, view='tabbedview_view-periods')
+        button = browser.find('download TOC json repository')
+
+        period = self.committee.load_model().periods[0]
+        expected_url = os.path.join(period.get_url(self.committee),'repository_toc/as_json')
+        self.assertEqual(expected_url, button.get("href"))
+
+        button.click()
+        toc_content = {u'toc': [{u'group_title': u'Vertr\xe4ge und Vereinbarungen',
+                                 u'contents': [{u'decision_number': 1,
+                                                u'dossier_reference_number': u'Client1 1.1 / 1',
+                                                u'has_proposal': True,
+                                                u'meeting_date': u'17.07.2016',
+                                                u'meeting_start_page_number': None,
+                                                u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                 }]}
+
+        self.assertEqual(toc_content, browser.json)

@@ -218,3 +218,6 @@ class PeriodsTab(BrowserView, GeverTabMixin):
 
         return api.user.has_permission(
             'Modify portal content', obj=self.context)
+
+    def is_manager(self):
+        return api.user.has_permission('cmf.ManagePortal')
