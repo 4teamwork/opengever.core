@@ -131,12 +131,6 @@ def reindex_containing_dossier(dossier, event):
                     sync_task(brain.getObject(), event)
 
 
-def reindex_is_subdossier(dossier, event):
-    """Reindex the is_subdossier index after the dossier have been moved.
-    """
-    dossier.reindexObject(idxs=['is_subdossier'])
-
-
 def reindex_blocked_local_roles(dossier, event):
     """Reindex blocked_local_roles upon the acquisition blockedness changing."""
     dossier.reindexObject(idxs=['blocked_local_roles'])

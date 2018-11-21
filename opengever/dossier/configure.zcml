@@ -216,12 +216,6 @@
 
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
-           zope.lifecycleevent.interfaces.IObjectMovedEvent"
-      handler=".handlers.reindex_is_subdossier"
-      />
-
-  <subscriber
-      for="opengever.dossier.behaviors.dossier.IDossierMarker
            opengever.sharing.interfaces.ILocalRolesAcquisitionBlocked"
       handler=".handlers.reindex_blocked_local_roles"
       />

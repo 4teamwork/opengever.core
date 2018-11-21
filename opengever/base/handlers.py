@@ -8,6 +8,10 @@ from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
+from opengever.globalindex.handlers.task import sync_task
+from opengever.task.task import ITask
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFCore.CMFCatalogAware import CatalogAware
@@ -59,6 +63,30 @@ def object_moved_or_added(context, event):
 
         processor = getUtility(IIndexQueueProcessor, name='ftw.solr')
         processor.index(context, CatalogAware._cmf_security_indexes)
+
+    # There are several indices that need updating when a dossier is moved.
+    # first make sure obj was actually moved and not created
+    if not event.oldParent or not event.newParent:
+        return
+
+    # When an object is moved, its containing_dossier needs reindexing.
+    to_reindex = ['containing_dossier']
+    # containing_subdossier is really only used for documents,
+    # while is_subdossier is only meaningful for dossiers.
+    if IDossierMarker.providedBy(context):
+        was_subdossier = IDossierMarker.providedBy(event.oldParent)
+        is_subdossier = IDossierMarker.providedBy(event.newParent)
+        if was_subdossier != is_subdossier:
+            to_reindex.append('is_subdossier')
+
+    if context.portal_type in TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX:
+        to_reindex.append('containing_subdossier')
+
+    context.reindexObject(idxs=to_reindex)
+
+    # synchronize with model if necessary
+    if ITask.providedBy(context):
+        sync_task(context, event)
 
 
 def remove_favorites(context, event):
