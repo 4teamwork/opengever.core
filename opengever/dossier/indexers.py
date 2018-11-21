@@ -125,7 +125,7 @@ def containing_subdossier(obj):
     case an empty string is returned.
     """
     context = aq_inner(obj)
-    # Only compute for types that actually can be contained in a dossier
+    # Only compute for types for which we use the containing subdossier index
     if context.portal_type not in ['opengever.document.document',
                                    'opengever.task.task',
                                    'ftw.mail.mail']:

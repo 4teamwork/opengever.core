@@ -4,11 +4,12 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.dossier.resolve import get_resolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.meeting.handlers import ProposalSqlSyncer
+from opengever.task.task import ITask
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from zope.component import getAdapter
@@ -88,47 +89,51 @@ def save_reference_number_prefix(obj, event):
     obj.reindexObject(idxs=['reference'])
 
 
-def reindex_contained_objects(dossier, event):
+def reindex_containing_subdossier_for_contained_objects(dossier, event):
     """When a subdossier is modified, we update the ``containing_subdossier``
     index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
-    if ILocalrolesModifiedEvent.providedBy(event) or \
-       IContainerModifiedEvent.providedBy(event):
-        return
-
     catalog = api.portal.get_tool('portal_catalog')
-    parent = aq_parent(aq_inner(dossier))
-    is_subdossier = IDossierMarker.providedBy(parent)
-    if is_subdossier:
-        objects = catalog(path='/'.join(dossier.getPhysicalPath()),
-                          portal_type=['opengever.document.document',
-                                       'opengever.task.task',
-                                       'ftw.mail.mail'])
-        for obj in objects:
-            obj.getObject().reindexObject(idxs=['containing_subdossier'])
+    objects = catalog(path='/'.join(dossier.getPhysicalPath()),
+                      portal_type=TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)
+
+    for obj in objects:
+        obj.getObject().reindexObject(idxs=['containing_subdossier'])
 
 
-def reindex_containing_dossier(dossier, event):
-    """Reindex the containging_dossier index for all the contained obects,
-    when the title has changed.
+def reindex_containing_dossier_for_contained_objects(dossier, event):
+    """Reindex the containging_dossier index for all the contained obects.
+    """
+    for brain in dossier.portal_catalog(path='/'.join(dossier.getPhysicalPath())):
+        obj = brain.getObject()
+        obj.reindexObject(idxs=['containing_dossier'])
+
+        if ITask.providedBy(obj):
+            sync_task(brain.getObject(), event)
+
+
+def reindex_contained_objects(dossier, event):
+    """When a dossier is modified, if the title has changed we reindex
+    the corresponding index in all contained object (containing_dossier or
+    containing_subdossier)
     """
     if ILocalrolesModifiedEvent.providedBy(event) or \
        IContainerModifiedEvent.providedBy(event):
         return
 
-    if not IDossierMarker.providedBy(aq_parent(aq_inner(dossier))):
-        attrs = tuple(
-            attr
-            for descr in event.descriptions
-            for attr in descr.attributes
-            )
+    attrs = tuple(
+        attr
+        for descr in event.descriptions
+        for attr in descr.attributes
+        )
+    if 'IOpenGeverBase.title' not in attrs:
+        return
 
-        if 'IOpenGeverBase.title' in attrs:
-            for brain in dossier.portal_catalog(path='/'.join(dossier.getPhysicalPath())):
-                brain.getObject().reindexObject(idxs=['containing_dossier'])
-                if brain.portal_type in ['opengever.task.task', 'opengever.inbox.forwarding']:
-                    sync_task(brain.getObject(), event)
+    if dossier.is_subdossier():
+        reindex_containing_subdossier_for_contained_objects(dossier, event)
+    else:
+        reindex_containing_dossier_for_contained_objects(dossier, event)
 
 
 def reindex_blocked_local_roles(dossier, event):
