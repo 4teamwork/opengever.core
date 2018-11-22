@@ -63,7 +63,7 @@ class NotificationView(BrowserView):
         return json.dumps(data)
 
     def get_link_target(self, notification):
-        oguid =  notification.activity.resource.oguid
+        oguid = notification.activity.resource.oguid
         if oguid.is_on_current_admin_unit:
             return '_self'
 

@@ -232,14 +232,14 @@ class TestListNotifications(FunctionalTestCase):
 
         browser.login().open(self.portal,
                              view="notifications/list",
-                             data={'batch_size': 7, 'page':2})
+                             data={'batch_size': 7, 'page': 2})
         self.assertEquals(
             u'http://nohost/plone/notifications/list?page=3&batch_size=7',
             browser.json.get('next_page'))
 
         browser.login().open(self.portal,
                              view="notifications/list",
-                             data={'batch_size': 7, 'page':3})
+                             data={'batch_size': 7, 'page': 3})
         self.assertEquals(None, browser.json.get('next_page'))
 
     @browsing
