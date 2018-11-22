@@ -3839,10 +3839,9 @@ table#agenda_items tbody .paragraph .proposal_title { font-weight: bold; padding
 #content #period_listing { list-style-type: none; vertical-align: middle; }
 #content #period_listing li.period { padding-left: 10px; padding-right: 10px; }
 #content #period_listing > li { display: table; width: 100%; border-bottom: 1px solid #eee; padding: 15px 0; margin-bottom: 0; }
-#content #period_listing .title { display: table-cell; width: 250px; vertical-align: top; }
-#content #period_listing .download { width: 600px; }
+#content #period_listing .title { display: table-cell; vertical-align: top; }
 #content #period_listing .actions { display: table-cell; vertical-align: middle; }
-#content #period_listing .actions li { display: inline; margin-left: 5px; }
+#content #period_listing .actions li { display: inline; margin-left: 5px; white-space: nowrap; line-height: 3em; }
 #content #period_listing .actions a { padding: 8px; padding-left: 8px; color: #000; border: 1px solid #e6e6e6; margin-bottom: 8px; border-radius: 2px; transition: background-color .2s ease-out; }
 #content #period_listing .actions a:hover { text-decoration: none; background-color: #f5f5f5; }
 #content #period_listing .actions a:before { font-size: 16px; display: inline-block; vertical-align: middle; margin-right: 5px; }

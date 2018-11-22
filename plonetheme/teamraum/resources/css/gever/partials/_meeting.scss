@@ -1200,12 +1200,7 @@ $spacing: 8px;
 
   .title {
     display: table-cell;
-    width: 250px;
     vertical-align: top;
-  }
-
-  .download {
-    width: 600px;
   }
 
   .actions {
@@ -1214,6 +1209,8 @@ $spacing: 8px;
     li {
       display: inline;
       margin-left: 5px;
+      white-space: nowrap;
+      line-height: 3em
     }
     a {
       padding: $spacing;
