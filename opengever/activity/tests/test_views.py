@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity.center import NotificationCenter
+from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
@@ -94,7 +95,7 @@ class TestListNotifications(FunctionalTestCase):
         self.test_user = create(Builder('watcher')
                                 .having(actorid=TEST_USER_ID))
         self.resource_a = create(Builder('resource')
-                                 .oguid('fd:123')
+                                 .oguid('admin-unit-1:123')
                                  .watchers([self.test_user]))
 
         created = pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))
@@ -120,6 +121,7 @@ class TestListNotifications(FunctionalTestCase):
               u'read': False,
               u'created': u'2014-05-07T12:30:00+00:00',
               u'summary': u'Task bla added by Hugo',
+              u'target': u'_self',
               u'link': u'http://example.com/@@resolve_notification?notification_id=1',
               u'label': u'Task added',
               u'id': 1},
@@ -127,9 +129,29 @@ class TestListNotifications(FunctionalTestCase):
               u'read': True,
               u'created': u'2014-05-07T12:30:00+00:00',
               u'summary': u'Task bla added by Hugo',
+              u'target': u'_self',
               u'link': u'http://example.com/@@resolve_notification?notification_id=2',
               u'label': u'Task added',
               u'id': 2}], browser.json.get('notifications'))
+
+    @browsing
+    def test_link_target_depends_on_resource_location(self, browser):
+        create(Builder('notification')
+               .having(activity=self.activity, userid=TEST_USER_ID, is_read=False))
+
+        # on current admin unit
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(
+            u'_self', browser.json.get('notifications')[0]['target'])
+
+        Resource.query.first().admin_unit_id = 'fd'
+        from opengever.base.model import create_session
+        create_session().flush()
+
+        # on forreign admin unit
+        browser.login().open(self.portal, view="notifications/list")
+        self.assertEquals(
+            u'_blank', browser.json.get('notifications')[0]['target'])
 
     @browsing
     def test_is_batched_in_tens_by_default(self, browser):

@@ -62,6 +62,13 @@ class NotificationView(BrowserView):
         response.setHeader('X-Theme-Disabled', 'True')
         return json.dumps(data)
 
+    def get_link_target(self, notification):
+        oguid =  notification.activity.resource.oguid
+        if oguid.is_on_current_admin_unit:
+            return '_self'
+
+        return '_blank'
+
     def dump_notifications(self, notifications):
         data = []
         for notification in notifications:
@@ -72,6 +79,7 @@ class NotificationView(BrowserView):
                 'created': notification.activity.created.astimezone(
                     pytz.UTC).isoformat(),
                 'link': resolve_notification_url(notification),
+                'target': self.get_link_target(notification),
                 'read': notification.is_read,
                 'id': notification.notification_id})
 
