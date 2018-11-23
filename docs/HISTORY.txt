@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.0 (unreleased)
+2018.5.0 (2018-11-23)
 ---------------------
 
 - Open notifications for resources on a foreign admin_unit in a new tab/window. [phgross]
