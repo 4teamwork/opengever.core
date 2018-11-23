@@ -5,7 +5,7 @@ Changelog
 2018.5.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Update the changed date upgrade step. [jone]
 
 
 2018.5.0 (2018-11-23)
