@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.1 (unreleased)
+2018.5.1 (2018-11-23)
 ---------------------
 
 - Update the changed date upgrade step. [jone]
