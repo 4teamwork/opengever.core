@@ -57,19 +57,21 @@ $(function() {
 
               request.then(function() {
                 this.setReminder(option);
+                this.finish_request()
               }.bind(this));
 
               request.catch(function() {
                 this.setReminder(previousOption);
                 this.handleError();
+                this.finish_request()
               }.bind(this));
 
-              request.finally(function() {
-                this.isLoading = false;
-                this.longRequest = false;
-                this.nextSelectedOption.showSpinner = false
-                this.nextSelectedOption = null;
-              }.bind(this));
+            },
+            finish_request: function(){
+              this.isLoading = false;
+              this.longRequest = false;
+              this.nextSelectedOption.showSpinner = false
+              this.nextSelectedOption = null;
             },
             setReminder: function(option) {
               this.reminderOptions.map(function(o) {
