@@ -2,11 +2,12 @@ from ftw.upgrade import UpgradeStep
 from opengever.base.behaviors.changed import METADATA_CHANGED_FILLED_KEY
 from zope.annotation import IAnnotations
 from zope.component.hooks import getSite
-import copy
 
 
-class AddChangedDate(UpgradeStep):
-    """Add changed date field, metadata and index.
+class AddChangedDateV2(UpgradeStep):
+    """Add changed date field, metadata and index (V2).
+
+    This upgrade step was updated and touched.
     """
 
     def __call__(self):
@@ -15,30 +16,30 @@ class AddChangedDate(UpgradeStep):
         self.set_changed_flag()
 
     def add_changed_index(self):
-        """ We fill the index by copying the data from the 'modified' index,
-        as this is much faster than indexing every object. The 'DateIndex'
-        object has a forward ('_index') and backward ('_unindex') index inherited
-        from UnIndex containing data of the form:
-            _index = {datum:[record_id, documentId2]}
-            _unindex = {record_id:datum}
+        """The idea is to fill the new "changed" index with the value of the "modified"
+        index as this is the best value we now from older objects which do not have
+        a separate changed date.
 
-        as 'record_id' are the same for all indexes and come from the catalog ('getRID'),
-        it should be safe to simply copy the data contained in '_index' and '_unindex'.
+        The "changed" index is populated by iterating over the data of the "modified" index
+        and inserting them in the "changed" index.
+        Since we are just inserting already converted values in the form they are stored
+        in the index and are not using a full object for inexing, we need to directly
+        put the values into the DateIndexes "index" and "unindex" BTree.
+        We do that the same way as DateIndex.index_object inserts data.
 
-        the _length attribute stores the number of entries in the index and
-        also needs to be updated.
-        These three attributes contain all the data of the index. The 'clear'
-        method of the index simply resets these three attributes.
+        Warning: This upgrade step has an earlier incarnation which was installed on
+        some installation (dev, test). We want this upgrade to be reran.
         """
-        self.catalog_add_index('changed', 'DateIndex')
+        if not self.catalog_has_index('changed'):
+            self.catalog_add_index('changed', 'DateIndex')
 
         catalog = self.getToolByName('portal_catalog')
         modified = catalog._catalog.indexes["modified"]
         changed = catalog._catalog.indexes["changed"]
 
-        changed._index.update(copy.deepcopy(modified._index))
-        changed._unindex.update(copy.deepcopy(modified._unindex))
-        changed._length.set(modified._length.value)
+        for documentId, value in modified.documentToKeyMap().items():
+            changed.insertForwardIndexEntry(value, documentId)
+            changed._unindex[documentId] = value
 
     def set_changed_flag(self):
         site = getSite()
