@@ -7,6 +7,7 @@ Inhalt:
    :maxdepth: 2
 
    bumblebee
+   solr
    ogip
    feedbackforum-prozess
    ubersetzungen
