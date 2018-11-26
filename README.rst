@@ -222,10 +222,6 @@ Extend the Solr configuration in your `buildout.cfg` and add the Solr directive:
         https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/solr.cfg
     solr-port = 8983
 
-    [solr]
-    url = http://archive.apache.org/dist/lucene/solr/7.3.0/solr-7.3.0.tgz
-    md5sum = dfb6893fc656e14919df48ff654d38f2
-
 
 Buildout
 
