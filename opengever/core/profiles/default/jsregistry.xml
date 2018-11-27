@@ -576,4 +576,14 @@
       insert-after="++resource++opengever.base/Controller.js"
       />
 
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++theme++plonetheme.teamraum/js/bumblebee.js"
+      inline="False"
+      />
+
 </object>

@@ -40,6 +40,7 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="bumblebee"
       title="plonetheme.teamraum: bumblebee"

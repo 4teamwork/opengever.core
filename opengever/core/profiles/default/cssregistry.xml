@@ -20,4 +20,20 @@
       insert-before="++theme++plonetheme.teamraum/css/gever/gever.css"
       />
 
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/bumblebee.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
 </object>
