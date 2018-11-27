@@ -64,7 +64,9 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(4):
             self.create_units()
 
-        with self.freeze_at_hour(5):
+        # Create users. Here we can use a 1minute step between creation of two
+        # objects as every second one is a ogds user with no creation date.
+        with self.freeze_at_hour(5, tick_length=1):
             self.create_users()
 
         with self.freeze_at_hour(6):
@@ -253,6 +255,13 @@ class OpengeverContentFixture(object):
             'workspace_guest',
             u'Hans',
             u'Peter',
+            )
+
+        self.archivist = self.create_user(
+            'archivist',
+            u'J\xfcrgen',
+            u'Fischer',
+            ['Archivist']
             )
 
         # This user is intended to be used in situations where you need a user
@@ -1490,7 +1499,7 @@ class OpengeverContentFixture(object):
             )
 
     @contextmanager
-    def freeze_at_hour(self, hour):
+    def freeze_at_hour(self, hour, tick_length=2):
         """Freeze the time when creating content with builders, so that
         we can rely on consistent creation times.
         Since we can sort consistently when all objects have the exact same
@@ -1507,7 +1516,7 @@ class OpengeverContentFixture(object):
         start = datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)
         end = start + timedelta(hours=1)
         with freeze(start) as clock:
-            with ticking_creator(clock, minutes=2):
+            with ticking_creator(clock, minutes=tick_length):
                 with self.ticking_proposal_history(clock, seconds=1):
                     with time_based_intids():
                         yield
