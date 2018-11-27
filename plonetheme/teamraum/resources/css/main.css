@@ -465,10 +465,21 @@ fieldset.livesearchContainer {
   display: none;
 }
 
+#LSResult .dropdown-list-item-content {
+  width: 410px;
+  flex-flow: row wrap;
+  flex-grow: unset;
+}
 
 #LSResult .LSDescr {
   font-size: 91.6667%;
   color: #666;
+}
+
+#LSResult .LSDescr,
+#LSResult .LSTitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #LSParseErrors {

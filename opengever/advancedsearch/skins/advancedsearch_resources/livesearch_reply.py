@@ -180,19 +180,20 @@ else:
         if mime_type_klass:
             css_klass = mime_type_klass
 
-        write('''<a href="%s" title="%s" class="dropdown-list-item LSRow"><span class="%s"/><div>%s</div>'''
-              % (itemUrl, title, css_klass, title))
-        description = html_quote(safe_unicode(result.Description))
+        write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">''' % (itemUrl, title))
+        write('''<span class="%s"/><span class="dropdown-list-item-content">''' % (css_klass))
+        write('''<div class="LSTitle">%s</div>''' % (title))
 
+        description = html_quote(safe_unicode(result.Description))
         write('''<div class="LSDescr">%s</div>''' % (description))
-        write('''</a>''')
+        write('''</span></a>''')
         title, description = None, None
     write('''</ul>''')
 
     write('''<div class="dropdown-list-footer LSRow">''')
     write('<a href="%s" class="dropdown-list-item">%s</a>' %
-         (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
-          ts.translate(label_advanced_search, context=REQUEST)))
+          (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
+           ts.translate(label_advanced_search, context=REQUEST)))
 
     if len(results) > limit:
         # add a more... row
