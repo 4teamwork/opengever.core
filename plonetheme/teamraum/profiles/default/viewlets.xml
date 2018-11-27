@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<object>
-
-    <hidden manager="plone.portalheader" skinname="*">
-        <viewlet name="plone.logo" remove="True"/>
-        <viewlet name="subsite.logo" />
-    </hidden>
-
-</object>

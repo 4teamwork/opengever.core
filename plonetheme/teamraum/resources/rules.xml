@@ -80,8 +80,14 @@
       <!-- insert exposator <script /> into #portal-top -->
       <after css:content="script#exposator" css:theme-children="#portal-top" />
 
-      <!-- notifications -->
-      <replace css:content-children="#portal-notifications" css:theme-children="#portal-notifications" />
+      <!-- notifications - as the default plone theme has this, we should drop it if it is empty per being disabled -->
+      <rules css:if-content="#portal-notifications">
+        <replace css:content-children="#portal-notifications" css:theme-children="#portal-notifications" />
+      </rules>
+      <rules css:if-not-content="#portal-notifications">
+        <drop css:theme="#portal-notifications" />
+      </rules>
+
       <replace css:content-children=".gever-portal-control" css:theme-children="#gever-portal-controls" />
 
       <!-- header -->

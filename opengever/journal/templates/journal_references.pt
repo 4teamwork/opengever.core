@@ -18,7 +18,7 @@
   <ul class="documents">
     <li tal:repeat="document view/documents">
       <a href="#"
-         tal:attributes="href string: ${context/absolute_url}/@@resolve_oguid?oguid=${document/id}"
+         tal:attributes="href string:${context/absolute_url}/@@resolve_oguid?oguid=${document/id}"
          tal:content="document/title" />
     </li>
   </ul>

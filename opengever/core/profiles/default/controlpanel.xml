@@ -1,4 +1,4 @@
-<object name="portal_controlpanel">
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_controlpanel">
 
   <!-- LDAP SYNCHRONISATION CONTROL PANEL -->
   <configlet
@@ -23,6 +23,21 @@
       condition_expr=""
       icon_expr="string:$portal_url/++resource++plone.app.registry/icon.png"
       visible="True">
+    <permission>Manage portal</permission>
+  </configlet>
+
+  <!-- PLONETHEME TEAMRAUM CONTROL PANEL -->
+  <configlet
+      i18n:domain="plonetheme.teamraum"
+      title="Teamraum theme"
+      action_id="plonetheme.teamraum"
+      appId="plonetheme.teamraum"
+      category="Products"
+      condition_expr=""
+      url_expr="string:${portal_url}/@@teamraumtheme-controlpanel"
+      icon_expr="string:${portal_url}/++resource++teamraumtheme_icon.png"
+      visible="True"
+      i18n:attributes="title">
     <permission>Manage portal</permission>
   </configlet>
 

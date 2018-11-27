@@ -586,4 +586,24 @@
       inline="False"
       />
 
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++theme++plonetheme.teamraum/js/teamraum.js"
+      inline="False"
+      />
+
+  <javascript
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++theme++plonetheme.teamraum/colorpicker/colorpicker.js"
+      inline="False"
+      />
+
 </object>

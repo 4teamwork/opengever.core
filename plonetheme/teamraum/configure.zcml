@@ -19,6 +19,7 @@
   <i18n:registerTranslations directory="locales" />
 
 
+<!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="default"
       title="plonetheme.teamraum"

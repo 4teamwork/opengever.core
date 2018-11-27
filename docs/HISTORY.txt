@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Merge the plonetheme.teamraum default profile into opengever.core. [Rotonen]
 - Merge the plonetheme.teamraum bumblebee profile to opengever.core. [Rotonen]
 - Set the default publisher encoding to UTF-8 to match production in tests. [Rotonen]
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]

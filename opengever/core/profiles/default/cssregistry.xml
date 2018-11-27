@@ -36,4 +36,207 @@
       title=""
       />
 
+  <!-- Set conditions on stylesheets we don't want to pull in -->
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="authoring.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="columns.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="public.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="portlets.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="mobile.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="IEFixes.css"
+      />
+
+  <stylesheet
+      enabled="False"
+      id="member.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="++resource++plone.app.discussion.stylesheets/discussion.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="++resource++classification.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="++resource++egov-contactdirectory-resources/contactdirectory.css"
+      />
+
+  <stylesheet
+      expression="not:request/HTTP_X_THEME_ENABLED | nothing"
+      id="base.css"
+      />
+
+  <!-- Add new stylesheets -->
+  <!-- Note: applyPrefix is not available in Plone < 4.0b3 -->
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/reset.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/columns.css"
+      media="screen"
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/main.css"
+      media="screen"
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/sprites.css"
+      media="screen"
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment="IE"
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/iefixes.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/colorpicker/css/colorpicker.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="customstyles.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/print.css"
+      media="print"
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
+  <stylesheet
+      applyPrefix="True"
+      authenticated="False"
+      cacheable="True"
+      compression="safe"
+      conditionalcomment=""
+      cookable="True"
+      enabled="True"
+      expression="request/HTTP_X_THEME_ENABLED | nothing"
+      id="++theme++plonetheme.teamraum/css/responsive.css"
+      media=""
+      rel="stylesheet"
+      rendering="link"
+      title=""
+      />
+
 </object>
