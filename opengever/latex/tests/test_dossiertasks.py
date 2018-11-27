@@ -45,7 +45,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                 (dossier, dossier.REQUEST, layout), ILaTeXView)
 
             self.assertEquals(
-                u'Task list for dossier "Anfr\xf6gen 2015 (Client1 / 1)"',
+                'Task list for dossier "`Anfr\xc3\xb6gen 2015 (Client1 / 1)"\'',
                 dossier_tasks.get_render_arguments().get('label'))
 
     @browsing
@@ -86,22 +86,22 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                                            ILaTeXView)
             self.assertEquals([task1, task2], dossiertasks.get_tasks())
 
-            expected = {'label': u'Task list for dossier "Anfr\xf6gen 2015 (Client1 / 1)"',
-                        'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y %H:%M'),
-                                            'deadline': expected_deadline.strftime('%d.%m.%Y %H:%M'),
+            expected = {'label': 'Task list for dossier "`Anfr\xc3\xb6gen 2015 (Client1 / 1)"\'',
+                        'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y'),
+                                            'deadline': expected_deadline.strftime('%d.%m.%Y'),
                                             'description': '',
                                             'history': None,
-                                            'responsible': u'Test User (test_user_1_)',
-                                            'issuer': u'admin (admin)',
+                                            'responsible': 'Test User (test\\_user\\_1\\_)',
+                                            'issuer': 'admin (admin)',
                                             'sequence_number': 1,
                                             'title': 'task 1',
                                             'type': ''},
                                            {'completion_date': None,
-                                            'deadline': expected_deadline.strftime('%d.%m.%Y %H:%M'),
+                                            'deadline': expected_deadline.strftime('%d.%m.%Y'),
                                             'description': '',
                                             'history': None,
-                                            'responsible': u'Test User (test_user_1_)',
-                                            'issuer': u'Test User (test_user_1_)',
+                                            'responsible': 'Test User (test\\_user\\_1\\_)',
+                                            'issuer': 'Test User (test\\_user\\_1\\_)',
                                             'sequence_number': 2,
                                             'title': 'task 2',
                                             'type': ''}]}

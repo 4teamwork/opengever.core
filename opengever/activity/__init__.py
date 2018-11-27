@@ -107,6 +107,8 @@ ACTIVITY_TRANSLATIONS = {
         'task-transition-planned-skipped', default=u'Task skipped'),
     'task-reminder': _(
         'task-reminder', default=u'Task reminder'),
+    'transition-add-subtask': _('transition-add-subtask', 'Subtask added'),
+    'transition-add-document': _('transition-add-document', 'Document added'),
     'forwarding-added': _(
         'forwarding-added', default=u'Forwarding added'),
     'forwarding-transition-accept': _(

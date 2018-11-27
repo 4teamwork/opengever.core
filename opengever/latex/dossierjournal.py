@@ -62,13 +62,16 @@ class DossierJorunalLaTeXView(MakoLaTeXView):
         journal_listing = getMultiAdapter((self.context, self.request, self),
                                           ILaTexListing, name='journal')
 
+        title = translate(
+                    _('label_dossier_journal',
+                      default=u'Journal of dossier "${title} (${reference_number})"',
+                      mapping={'title': self.context.title,
+                               'reference_number': self.context.get_reference_number()}),
+                    context=self.request)
+        title = self.convert_plain(title)
+
         return {
-            'label': translate(
-                _('label_dossier_journal',
-                  default=u'Journal of dossier ${title} (${reference_number})',
-                  mapping={'title': self.context.title,
-                           'reference_number': self.context.get_reference_number()}),
-                context=self.request),
+            'label': title,
             'listing': journal_listing.get_listing(self.get_journal_data())}
 
     def get_journal_data(self):

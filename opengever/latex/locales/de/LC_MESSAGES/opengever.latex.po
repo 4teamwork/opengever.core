@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-14 15:33+0000\n"
+"POT-Creation-Date: 2018-11-27 12:37+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,10 +49,10 @@ msgstr "Dokumentdatum"
 msgid "label_documents"
 msgstr "Dokumente"
 
-#. Default: "Journal of dossier ${title} (${reference_number})"
+#. Default: "Journal of dossier \"${title} (${reference_number})\""
 #: ./opengever/latex/dossierjournal.py
 msgid "label_dossier_journal"
-msgstr "Journal zu Dossier ${title} (${reference_number})"
+msgstr "Journal zu Dossier \"${title} (${reference_number})\""
 
 #. Default: "Task list for dossier \"${title} (${reference_number})\""
 #: ./opengever/latex/dossiertasks.py

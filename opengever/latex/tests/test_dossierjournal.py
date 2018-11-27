@@ -43,7 +43,7 @@ class TestJournalListingLaTeXView(FunctionalTestCase):
             (dossier, dossier.REQUEST, layout), ILaTeXView)
 
         self.assertEquals(
-            u'Journal of dossier Anfr\xf6gen 2015 (Client1 / 1)',
+            'Journal of dossier "`Anfr\xc3\xb6gen 2015 (Client1 / 1)"\'',
             dossier_journal.get_render_arguments().get('label'))
 
     @browsing
