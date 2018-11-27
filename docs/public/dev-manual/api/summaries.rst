@@ -21,7 +21,8 @@ folgenden:
 - ``filesize`` (Dateigrösse, falls Dokument)
 - ``mimetype`` (Datetyp, falls Dokument)
 - ``modified`` (Modifikationsdatum)
-- ``review_state`` (Workflow-Status)
+- ``review_state`` (Workflow-Status ID)
+- ``review_state_label`` (Workflow-Status Bezeichnung)
 - ``title`` (Titel)
 
 

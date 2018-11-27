@@ -5,6 +5,7 @@ Changelog
 2018.5.2 (unreleased)
 ---------------------
 
+- Return review_state ID in API summaries and introduce a new review_state_label attribute instead. [phgross]
 - Fix quotation error and missing translations for task and dossier PDFs. [njohner]
 
 
