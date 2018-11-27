@@ -5,7 +5,7 @@ Changelog
 2018.5.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix quotation error and missing translations for task and dossier PDFs. [njohner]
 
 
 2018.5.1 (2018-11-23)

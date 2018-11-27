@@ -68,6 +68,7 @@ class DossierJorunalLaTeXView(MakoLaTeXView):
                       mapping={'title': self.context.title,
                                'reference_number': self.context.get_reference_number()}),
                     context=self.request)
+        title = self.convert_plain(title)
 
         return {
             'label': title,
