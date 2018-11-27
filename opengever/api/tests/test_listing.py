@@ -98,3 +98,17 @@ class TestListingEndpoint(IntegrationTestCase):
             self.dossier.Title().decode('utf8'),
             [d['title'] for d in browser.json['items']],
         )
+
+    @browsing
+    def test_review_state_and_review_state_label(self, browser):
+        self.enable_languages()
+
+        self.login(self.regular_user, browser=browser)
+        view = '@listing?name=dossiers&columns=title&columns=review_state&columns=review_state_label&sort_on=created'
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        item = browser.json['items'][0]
+        self.assertEqual(u'dossier-state-active', item[u'review_state'])
+        self.assertEqual(u'In Bearbeitung', item[u'review_state_label'])
