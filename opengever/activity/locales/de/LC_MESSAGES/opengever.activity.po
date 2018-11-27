@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-23 11:27+0000\n"
+"POT-Creation-Date: 2018-11-27 11:51+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -387,3 +387,13 @@ msgstr "Auftragnehmer"
 #: ./opengever/activity/digest.py
 msgid "title_daily_digest"
 msgstr "Tageszusammenfassung für ${username}"
+
+#. Default: "Document added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-document"
+msgstr "Dokument hinzugefügt"
+
+#. Default: "Subtask added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-subtask"
+msgstr "Unteraufgabe erstellt"

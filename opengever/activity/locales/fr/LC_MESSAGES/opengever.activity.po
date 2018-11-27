@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-23 11:27+0000\n"
+"POT-Creation-Date: 2018-11-27 11:51+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -389,3 +389,13 @@ msgstr "mandataire"
 #: ./opengever/activity/digest.py
 msgid "title_daily_digest"
 msgstr "Résumé quotidien pour ${username}"
+
+#. Default: "Document added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-document"
+msgstr "Document ajouté"
+
+#. Default: "Subtask added"
+#: ./opengever/activity/__init__.py
+msgid "transition-add-subtask"
+msgstr "Sous-tâche ajoutée"
