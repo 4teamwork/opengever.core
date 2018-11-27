@@ -63,6 +63,8 @@ class DossierTasksLaTeXView(MakoLaTeXView):
                                    'reference_number': self.context.get_reference_number()}),
                           context=self.request)
 
+        title = self.convert_plain(title)
+
         for task in tasks:
             task_history = getMultiAdapter((task, self.request, self),
                                            ILaTexListing, name='task-history')
@@ -77,15 +79,16 @@ class DossierTasksLaTeXView(MakoLaTeXView):
             if deadline:
                 deadline = deadline.strftime(self.strftimestring)
 
-            task_data_list.append({'title': task.title,
-                                   'description': task.text or "",
-                                   'sequence_number': task.get_sequence_number(),
-                                   'type': task.get_task_type_label(),
-                                   'completion_date': completion_date,
-                                   'deadline': deadline,
-                                   'responsible': task.get_responsible_actor().get_label(),
-                                   'issuer': task.get_issuer_actor().get_label(),
-                                   'history': task_history.get_listing(response_container)})
+            task_data_list.append(
+              {'title': self.convert_plain(task.title),
+               'description': self.convert_plain(task.text or ""),
+               'sequence_number': task.get_sequence_number(),
+               'type': self.convert_plain(task.get_task_type_label()),
+               'completion_date': completion_date,
+               'deadline': deadline,
+               'responsible': self.convert_plain(task.get_responsible_actor().get_label()),
+               'issuer': self.convert_plain(task.get_issuer_actor().get_label()),
+               'history': task_history.get_listing(response_container)})
 
         return {'task_data_list': task_data_list,
                 'label': title}
