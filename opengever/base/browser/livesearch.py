@@ -113,12 +113,14 @@ class LiveSearchReplyView(BrowserView):
 
                 css_klass = get_mimetype_icon_klass(result.doc)
 
-                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">
-                         <span class="%s"/><div>%s</div></a>''' % (itemUrl, title, css_klass, title))
+                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">''' % (itemUrl, title))
+                write('''<span class="%s"/><span class="dropdown-list-item-content">''' % (css_klass))
+                write('''<div class="LSTitle">%s</div>''' % (title))
+
                 description = html_quote(safe_unicode(result.Description()) or u'')
 
                 write('''<div class="LSDescr">%s</div>''' % (description))
-                write('''</a>''')
+                write('''</span></a>''')
                 title, description = None, None
             write('''</ul>''')
 
