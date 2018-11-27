@@ -50,7 +50,7 @@ class DossierTasksLaTeXView(MakoLaTeXView):
 
     template_directories = ['templates']
     template_name = 'dossiertasks.tex'
-    strftimestring = '%d.%m.%Y %H:%M'
+    strftimestring = '%d.%m.%Y'
 
     def get_render_arguments(self):
         self.layout.show_organisation = True
