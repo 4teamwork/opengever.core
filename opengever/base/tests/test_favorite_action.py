@@ -1,8 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.model import create_session
-from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.viewlets.favorite_action import FavoriteETagValue
 from opengever.document.browser.tabbed import DocumentTabbedView
@@ -24,7 +22,6 @@ class TestFavoriteAction(IntegrationTestCase):
                           viewlet.get('data-oguid'))
         self.assertEquals('http://nohost/plone/@favorites/kathi.barfuss',
                           viewlet.get('data-url'))
-
 
     @browsing
     def test_favorite_action_respects_feature_flag(self, browser):

@@ -11,6 +11,7 @@ from opengever.ogds.models import UNIT_ID_LENGTH
 from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.query import BaseQuery
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -83,6 +84,10 @@ class Favorite(Base):
         admin_unit = AdminUnit.query.get(self.admin_unit_id)
         return u'{}/resolve_oguid/{}'.format(admin_unit.public_url, self.oguid)
 
+    @staticmethod
+    def truncate_title(title):
+        return safe_unicode(title)[:CONTENT_TITLE_LENGTH]
+
 
 class FavoriteQuery(BaseQuery):
 
@@ -110,6 +115,10 @@ class FavoriteQuery(BaseQuery):
         query = query.filter_by(
             portal_type='opengever.repository.repositoryfolder')
         return query.filter_by(admin_unit_id=admin_unit_id)
+
+    def update_title(self, new_title):
+        truncated_title = Favorite.truncate_title(new_title)
+        self.update({'title': truncated_title})
 
 
 Favorite.query_cls = FavoriteQuery

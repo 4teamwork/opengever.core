@@ -1,11 +1,5 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.model import create_session
-from opengever.base.model.favorite import Favorite
-from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
-from plone import api
 
 
 class TestFavoriteMenu(IntegrationTestCase):

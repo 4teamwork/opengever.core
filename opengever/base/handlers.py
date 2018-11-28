@@ -107,7 +107,7 @@ def update_favorites_title(context, event):
         query = Favorite.query.filter(
             and_(Favorite.oguid == Oguid.for_object(context),
                  Favorite.is_title_personalized == False))  # noqa
-        query.update({'title': context.title})
+        query.update_title(context.title)
 
         mark_changed(create_session())
 
