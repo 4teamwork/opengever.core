@@ -27,10 +27,11 @@ class FavoriteManager(object):
         create_session().delete(favorite)
 
     def add(self, userid, obj):
+        truncated_title = Favorite.truncate_title(obj.Title().decode('utf-8'))
         favorite = Favorite(
             userid=userid,
             oguid=Oguid.for_object(obj),
-            title=obj.Title().decode('utf-8'),
+            title=truncated_title,
             portal_type=obj.portal_type,
             icon_class=get_css_class(obj),
             plone_uid=IUUID(obj),
