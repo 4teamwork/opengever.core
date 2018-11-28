@@ -15,8 +15,6 @@ from zope.component import getUtility
 
 
 USE_ICON = True
-MAX_TITLE = 29
-MAX_DESCRIPTION = 93
 
 
 # https://github.com/4teamwork/opengever.core/blob/master/opengever/base/browser/helper.py#L20
@@ -60,10 +58,11 @@ class LiveSearchReplyView(BrowserView):
             filters.append(u'path_parent:%s' % escape(self.path))
         params = {
             'fl': [
-                'UID', 'id', 'Title', 'getIcon', 'portal_type', 'path',
+                'UID', 'id', 'Title', 'getIcon', 'portal_type', 'path', 'Description'
             ],
 
         }
+
         resp = solr.search(
             query=query, filters=filters, rows=self.limit, **params)
         return resp
@@ -111,28 +110,19 @@ class LiveSearchReplyView(BrowserView):
 
                 itemUrl = itemUrl + u'?SearchableText=%s' % url_quote_plus(self.search_term)
 
-                full_title = safe_unicode(result.Title())
-                if len(full_title) > MAX_TITLE:
-                    display_title = ''.join((full_title[:MAX_TITLE], '...'))
-                else:
-                    display_title = full_title
-
-                full_title = html_quote(full_title)
-                display_title = html_quote(display_title)
+                title = html_quote(safe_unicode(result.Title()))
 
                 css_klass = get_mimetype_icon_klass(result.doc)
 
-                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">
-                         <span class="%s"/><div>%s</div></a>''' % (itemUrl, full_title, css_klass, display_title))
-                display_description = safe_unicode(result.Description()) or u''
-                if len(display_description) > MAX_DESCRIPTION:
-                    display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
+                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">''' % (itemUrl, title))
+                write('''<span class="%s"/><span class="dropdown-list-item-content">''' % (css_klass))
+                write('''<div class="LSTitle">%s</div>''' % (title))
 
-                # need to quote it, to avoid injection of html containing javascript and other evil stuff
-                display_description = html_quote(display_description)
-                write('''<div class="LSDescr">%s</div>''' % (display_description))
-                write('''</a>''')
-                full_title, display_title, display_description = None, None, None
+                description = html_quote(safe_unicode(result.Description()) or u'')
+
+                write('''<div class="LSDescr">%s</div>''' % (description))
+                write('''</span></a>''')
+                title, description = None, None
             write('''</ul>''')
 
             write('''<div class="dropdown-list-footer LSRow">''')

@@ -8,6 +8,7 @@ Changelog
 - Return review_state ID in API summaries and introduce a new review_state_label attribute instead. [phgross]
 - Fix quotation error and missing translations for task and dossier PDFs. [njohner]
 - Make ReindexTaskPrincipalsInGlobalindex upgradestep more robust. [phgross]
+- Show one line of each title and description in livesearch result. [njohner]
 
 
 2018.5.1 (2018-11-23)

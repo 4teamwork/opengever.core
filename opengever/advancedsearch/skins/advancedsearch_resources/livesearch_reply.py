@@ -30,8 +30,6 @@ if siteProperties is not None:
 
 # SIMPLE CONFIGURATION
 USE_ICON = True
-MAX_TITLE = 29
-MAX_DESCRIPTION = 93
 
 # generate a result set for the query
 catalog = context.portal_catalog
@@ -175,37 +173,27 @@ else:
 
         itemUrl = itemUrl + searchterm_query
 
-        full_title = safe_unicode(pretty_title_or_id(result))
-        if len(full_title) > MAX_TITLE:
-            display_title = ''.join((full_title[:MAX_TITLE], '...'))
-        else:
-            display_title = full_title
-
-        full_title = html_quote(full_title)
-        display_title = html_quote(display_title)
+        title = html_quote(safe_unicode(pretty_title_or_id(result)))
 
         css_klass = 'contenttype-%s' % ploneUtils.normalizeString(result.portal_type)
         mime_type_klass = get_mimetype_icon_klass(result)
         if mime_type_klass:
             css_klass = mime_type_klass
 
-        write('''<a href="%s" title="%s" class="dropdown-list-item LSRow"><span class="%s"/><div>%s</div>'''
-              % (itemUrl, full_title, css_klass, display_title))
-        display_description = safe_unicode(result.Description)
-        if len(display_description) > MAX_DESCRIPTION:
-            display_description = ''.join((display_description[:MAX_DESCRIPTION], '...'))
+        write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">''' % (itemUrl, title))
+        write('''<span class="%s"/><span class="dropdown-list-item-content">''' % (css_klass))
+        write('''<div class="LSTitle">%s</div>''' % (title))
 
-        # need to quote it, to avoid injection of html containing javascript and other evil stuff
-        display_description = html_quote(display_description)
-        write('''<div class="LSDescr">%s</div>''' % (display_description))
-        write('''</a>''')
-        full_title, display_title, display_description = None, None, None
+        description = html_quote(safe_unicode(result.Description))
+        write('''<div class="LSDescr">%s</div>''' % (description))
+        write('''</span></a>''')
+        title, description = None, None
     write('''</ul>''')
 
     write('''<div class="dropdown-list-footer LSRow">''')
     write('<a href="%s" class="dropdown-list-item">%s</a>' %
-         (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
-          ts.translate(label_advanced_search, context=REQUEST)))
+          (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
+           ts.translate(label_advanced_search, context=REQUEST)))
 
     if len(results) > limit:
         # add a more... row
