@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.2 (unreleased)
+2018.5.2 (2018-11-28)
 ---------------------
 
 - Fix bug in favorites to support objects with long titles. [njohner]
