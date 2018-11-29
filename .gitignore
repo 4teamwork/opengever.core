@@ -17,6 +17,8 @@
 /dist/
 /eggs/
 /format_all_xmls.log
+/include/
+/lib/
 /parts/
 /requirements.txt
 /snakefood/
