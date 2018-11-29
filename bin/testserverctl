@@ -1,0 +1,19 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import xmlrpclib
+
+CTL_PORT = os.environ.get('TESTSERVER_CTL_PORT', '55002')
+
+proxy = xmlrpclib.ServerProxy('http://localhost:{}'.format(CTL_PORT))
+
+if len(sys.argv) < 2:
+    print 'USAGE EXAMPLES:'
+    print 'bin/testserverctl zodb_setup'
+    print 'bin/testserverctl zodb_teardown'
+    sys.exit(1)
+elif len(sys.argv) == 2:
+    getattr(proxy, sys.argv[1])()
+elif len(sys.argv) > 2:
+    raise Exception('unknown command')

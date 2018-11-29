@@ -18,3 +18,4 @@
 !shellcheck
 !test-cached
 !enable-lfs
+!testserverctl
