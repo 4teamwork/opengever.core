@@ -5,7 +5,7 @@ Changelog
 2018.5.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Bump ftw.bumblebee to 3.7.1 to get fix to avoid calculating all indexed on document update. [lgraf]
 
 
 2018.5.2 (2018-11-28)
