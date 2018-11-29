@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import xmlrpclib
+
+CTL_PORT = os.environ.get('TESTSERVER_CTL_PORT', '55002')
+
+parser = argparse.ArgumentParser()
+parser.add_argument('action', choices=['zodb_setup', 'zodb_teardown'])
+args = parser.parse_args()
+
+proxy = xmlrpclib.ServerProxy('http://localhost:{}'.format(CTL_PORT))
+getattr(proxy, args.action)()
