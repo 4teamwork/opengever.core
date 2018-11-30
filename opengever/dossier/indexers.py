@@ -78,9 +78,23 @@ def blocked_local_roles(obj):
     return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))
 
 
+TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',
+                                           'opengever.meeting.proposal',
+                                           'opengever.workspace.folder',
+                                           'opengever.document.document',
+                                           'opengever.task.task',
+                                           'opengever.private.dossier',
+                                           'ftw.mail.mail',
+                                           'opengever.meeting.meetingdossier',
+                                           'opengever.workspace.workspace'))
+
+
 @indexer(IDexterityContent)
 def main_dossier_title(obj):
     """Return the title of the main dossier."""
+    if obj.portal_type not in TYPES_WITH_CONTAINING_DOSSIER_INDEX:
+        return None
+
     dossier = get_main_dossier(obj)
     if not dossier:
         return None
@@ -103,18 +117,21 @@ def main_dossier_title(obj):
     return title
 
 
+TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX = ('opengever.document.document',
+                                          'opengever.task.task',
+                                          'ftw.mail.mail')
+
+
 @indexer(IDexterityContent)
 def containing_subdossier(obj):
     """Returns the title of the subdossier the object is contained in,
     unless it's contained directly in the root of a dossier, in which
     case an empty string is returned.
     """
-    context = aq_inner(obj)
-    # Only compute for types for which we use the containing subdossier index
-    if context.portal_type not in ['opengever.document.document',
-                                   'opengever.task.task',
-                                   'ftw.mail.mail']:
+    if obj.portal_type not in TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX:
         return ''
+
+    context = aq_inner(obj)
 
     parent = context
     parent_dossier = None
