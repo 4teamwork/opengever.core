@@ -145,16 +145,6 @@
       />
 
   <adapter
-      factory=".indexers.isSubdossierIndexer"
-      name="is_subdossier"
-      />
-
-  <adapter
-      factory=".indexers.is_subdossier_dossiertemplate"
-      name="is_subdossier"
-      />
-
-  <adapter
       factory=".indexers.external_reference"
       name="external_reference"
       />

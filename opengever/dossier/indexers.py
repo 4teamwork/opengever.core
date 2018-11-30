@@ -66,21 +66,6 @@ def responsibleIndexer(obj):
 
 
 @indexer(IDossierMarker)
-def isSubdossierIndexer(obj):
-    # TODO: should be replaced with the is_subdossier method
-    # from og.dossier.base.py
-    parent = aq_parent(aq_inner(obj))
-    if IDossierMarker.providedBy(parent):
-        return True
-    return False
-
-
-@indexer(IDossierTemplateMarker)
-def is_subdossier_dossiertemplate(obj):
-    return obj.is_subdossier()
-
-
-@indexer(IDossierMarker)
 def external_reference(obj):
     """Return the external reference of a dossier."""
     context = aq_inner(obj)
