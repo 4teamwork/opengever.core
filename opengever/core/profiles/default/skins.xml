@@ -1,4 +1,4 @@
-<object name="portal_skins">
+<object name="portal_skins" default_skin="Teamraum Theme">
 
   <!-- ADVANCEDSEARCH -->
   <object name="advancedsearch_resources" meta_type="Filesystem Directory View" directory="opengever.advancedsearch:skins/advancedsearch_resources" />
@@ -12,6 +12,15 @@
 
   <skin-path name="*">
     <layer name="opengever.base_scripts" insert-after="custom" />
+  </skin-path>
+
+  <!-- PLONETHEME TEAMRAUM -->
+  <object name="plonetheme_teamraum_gever" meta_type="Filesystem Directory View" directory="plonetheme.teamraum:skins/plonetheme_teamraum_gever" />
+
+  <skin-path
+      name="Teamraum Theme"
+      based-on="Sunburst Theme">
+    <layer name="plonetheme_teamraum_gever" insert-after="custom" />
   </skin-path>
 
 </object>

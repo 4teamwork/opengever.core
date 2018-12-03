@@ -1,3 +1,4 @@
+from hashlib import sha256
 from plonetheme.teamraum.importexport import CustomStylesUtility
 from plonetheme.teamraum.testing import TeamraumThemeTestCase
 from StringIO import StringIO
@@ -8,7 +9,8 @@ class TestCustomLogo(TeamraumThemeTestCase):
 
     def test_default_logo(self):
         view = self.portal.restrictedTraverse('customlogo')
-        self.assertEqual(view.get_logo(headers=False), '')
+        logo_checksum = sha256(view.get_logo(headers=False).read()).hexdigest()
+        self.assertEqual(logo_checksum, '03f68e23319e28ccfbe81dd37706ac25fe7d6d294bf3f8956f36a98f35bfc82a')
 
     def test_import_export_logo(self):
         imgdata = base64.b64encode(

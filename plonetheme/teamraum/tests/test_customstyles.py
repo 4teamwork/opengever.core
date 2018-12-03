@@ -39,9 +39,10 @@ class TestCustomStyles(TeamraumThemeTestCase):
         return customstyles_util.annotations
 
     def test_defaults(self):
-        view = self.portal.restrictedTraverse('teamraumtheme-controlpanel')
-        view()
-        self.assertEqual(dict(self.style_annotations['customstyles']), DEFAULT_STYLES)
+        custom_styles = dict(self.style_annotations['customstyles'])
+        self.assertTrue(custom_styles.get('css.logo'), 'Missing a logo in the default custom style.')
+        del custom_styles['css.logo']
+        self.assertEqual(DEFAULT_STYLES, custom_styles)
 
     def test_update(self):
         self.portal.REQUEST.form.update({'form.submitted': '1',
@@ -68,8 +69,10 @@ class TestCustomStyles(TeamraumThemeTestCase):
     def test_export(self):
         view = self.portal.restrictedTraverse('teamraumtheme-controlpanel')
         self.portal.REQUEST.form.update({'form.export': '1'})
-        data = view()
-        self.assertEqual(data, json.dumps(DEFAULT_STYLES))
+        custom_styles = json.loads(view())
+        self.assertTrue(custom_styles.get('css.logo'), 'Missing a logo in the default custom style.')
+        del custom_styles['css.logo']
+        self.assertEqual(DEFAULT_STYLES, custom_styles)
 
     def test_import(self):
         handler = open(os.path.join(os.path.dirname(__file__),

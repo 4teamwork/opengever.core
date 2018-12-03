@@ -33,6 +33,7 @@
       handler=".hooks.remove_screen_media_types"
       />
 
+  <!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="gever"
       title="plonetheme.teamraum: gever"
