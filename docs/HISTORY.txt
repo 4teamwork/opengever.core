@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bump docxcompose to 1.0.0a14 for better handling of referenced parts. [deiferni]
+- Fix filesize, filename and file extension upgradestep for deployments using solr. [phgross]
 - Fix an issue with meeting template titles. [deiferni]
 
 
