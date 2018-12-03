@@ -6,9 +6,10 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import TaskAgencyRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
+from opengever.document.document import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.meeting.proposal import IProposal
 from opengever.globalindex.handlers.task import sync_task
+from opengever.meeting.proposal import IProposal
 from opengever.ogds.base.utils import get_current_org_unit
 from plone import api
 from Products.CMFCore.CMFCatalogAware import CatalogAware
@@ -150,12 +151,24 @@ class LocalRolesSetter(object):
         for item in getattr(aq_base(self.task), 'relatedItems', []):
             principal = self.responsible_permission_identfier
             agency_principal = None
+            document = item.to_object
 
             if self._should_add_agency_localroles():
                 agency_principal = self.inbox_group_id
 
             self._add_local_roles(
-                item.to_object, principal, agency_principal, roles)
+                document, principal, agency_principal, roles)
+
+            if self._is_inside_a_proposal(document):
+                proposal = document.get_proposal()
+                self._add_local_roles(
+                    proposal, principal, agency_principal, roles)
+
+    def _is_inside_a_proposal(self, maybe_document):
+        if not IBaseDocument.providedBy(maybe_document):
+            return False
+
+        return maybe_document.is_inside_a_proposal()
 
     def revoke_roles_on_task(self):
         manager = RoleAssignmentManager(self.task)
@@ -166,11 +179,21 @@ class LocalRolesSetter(object):
 
     def revoke_on_related_items(self):
         for item in getattr(aq_base(self.task), 'relatedItems', []):
-            manager = RoleAssignmentManager(item.to_object)
+            document = item.to_object
+
+            manager = RoleAssignmentManager(document)
             manager.clear(ASSIGNMENT_VIA_TASK,
                           self.responsible_permission_identfier, self.task)
             manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
                           self.inbox_group_id, self.task)
+
+            if self._is_inside_a_proposal(document):
+                proposal = document.get_proposal()
+                manager = RoleAssignmentManager(proposal)
+                manager.clear(ASSIGNMENT_VIA_TASK,
+                              self.responsible_permission_identfier, self.task)
+                manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
+                              self.inbox_group_id, self.task)
 
     def revoke_on_distinct_parent(self):
         distinct_parent = self.get_distinct_parent()
