@@ -30,6 +30,10 @@ class TableChoiceWidget(PloneWidget):
         return self.input_by_option.keys()
 
     @property
+    def table(self):
+        return self.css('.listing').first
+
+    @property
     def input_by_option(self):
         options = {}
         for input in self.wrapper.css('td:first-child input'):

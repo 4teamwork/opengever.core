@@ -129,6 +129,11 @@ class AddMeetingWizardStep(BaseWizardStepForm, Form):
 
         committee_oguid = Oguid.for_object(self.context)
 
+        if data.get('meeting_template'):
+            # don't store object in wizard, but its uuid.
+            data['meeting_template'] = api.content.get_uuid(
+                data['meeting_template'])
+
         dm = getUtility(IWizardDataStorage)
         dm.update(get_dm_key(committee_oguid), data)
 

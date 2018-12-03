@@ -87,6 +87,12 @@ class TestMeetingTemplate(IntegrationTestCase):
              u'_authenticator'],
             browser.css('form').pop().field_labels)
 
+        self.assertEquals(
+                ['', u'Meeting T\xc3\xb6mpl\xc3\xb6te',
+                 'nicole.kohler', '31.08.2016'],
+                browser.find('Meeting Template').table.lists()[2]
+            )
+
         browser.fill({
             'Title': u'M\xe4\xe4hting',
             'Meeting Template': u'Meeting T\xc3\xb6mpl\xc3\xb6te',
