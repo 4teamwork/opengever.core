@@ -97,6 +97,16 @@ class TestDossierProposalListing(IntegrationTestCase):
         self.assertEqual(expected_proposals, browser.css('.listing').first.dicts())
 
     @browsing
+    def test_listing_only_shows_visible_proposals(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        self.draft_proposal.__ac_local_roles_block__ = True
+        self.draft_proposal.reindexObject()
+
+        browser.open(self.dossier, view='tabbedview_view-proposals')
+        self.assertEqual([SUBMITTED_PROPOSAL], proposal_dicts(browser))
+
+    @browsing
     def test_proposals_are_linked_correctly(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier, view='tabbedview_view-proposals')

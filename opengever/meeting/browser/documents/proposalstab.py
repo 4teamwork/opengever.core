@@ -15,6 +15,7 @@ from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+from plone import api
 
 
 class IProposalTableSourceConfig(ITableSourceConfig):
@@ -26,6 +27,27 @@ class IProposalTableSourceConfig(ITableSourceConfig):
 class ProposalTableSource(SqlTableSource):
 
     searchable_columns = [Proposal.title]
+
+    def search_results(self, query):
+        """Filter proposals from sql query based on their catalog visibility."""
+        results = super(ProposalTableSource, self).search_results(query)
+
+        parent = self.config.context
+        query = {
+            'path': '/'.join(parent.getPhysicalPath()),
+            'portal_type': 'opengever.meeting.proposal'
+        }
+        catalog = api.portal.get_tool('portal_catalog')
+        visible_brains = catalog(query)
+
+        visible_relative_paths = {
+            '/'.join(brain.getPath().split('/')[2:]) for brain in visible_brains
+        }
+
+        return filter(
+            lambda sql_proposal: sql_proposal.physical_path in visible_relative_paths,
+            results
+        )
 
 
 def proposal_link(item, value):
