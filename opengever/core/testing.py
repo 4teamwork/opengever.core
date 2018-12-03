@@ -147,6 +147,10 @@ class OpengeverFixture(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
+        # Match the mandatory-for-Plone default from plone.recipe.zope2instance
+        from Zope2.Startup.datatypes import default_zpublisher_encoding
+        default_zpublisher_encoding('utf-8')
+
         z2.installProduct(app, 'plone.app.versioningbehavior')
         z2.installProduct(app, 'collective.taskqueue.pasplugin')
         z2.installProduct(app, 'Products.CMFPlacefulWorkflow')

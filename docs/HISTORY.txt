@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Set the default publisher encoding to UTF-8 to match production in tests. [Rotonen]
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]
 - Make sure a failure to update DocProperties doesn't prevent checkin/checkout or moving of documents. [lgraf]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
