@@ -6,55 +6,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
-import transaction
-
-
-class SqlObjectBuilder(object):
-    id_argument_name = None
-    mapped_class = None
-
-    def __init__(self, session):
-        self.session = session
-        self.db_session = self._get_db_session(session)
-        self.arguments = {}
-
-    def _get_db_session(self, session):
-        return session.session
-
-    def id(self, identifier):
-        self.arguments[self.id_argument_name] = identifier
-        return self
-
-    def create(self, **kwargs):
-        self.before_create()
-        obj = self.create_object(**kwargs)
-        self.add_object_to_session(obj)
-        obj = self.after_create(obj)
-        self.persist()
-        return obj
-
-    def before_create(self):
-        pass
-
-    def after_create(self, obj):
-        return obj
-
-    def persist(self):
-        if self.session.auto_commit:
-            transaction.commit()
-
-        if getattr(self.session, 'auto_flush', False):
-            self.db_session.flush()
-
-    def add_object_to_session(self, obj):
-        self.db_session.add(obj)
-
-    def having(self, **kwargs):
-        self.arguments.update(kwargs)
-        return self
-
-    def create_object(self):
-        return self.mapped_class(**self.arguments)
+from opengever.testing.builders.sql import SqlObjectBuilder
 
 
 class AdminUnitBuilder(SqlObjectBuilder):
