@@ -25,6 +25,7 @@ def query_property():
 
 def query_base(session=None):
     """Create a base class that queries the provided session."""
+
     class QueryBase(object):
         """Class that contains query functions."""
 

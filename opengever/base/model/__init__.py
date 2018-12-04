@@ -1,5 +1,5 @@
 from opengever.base.interfaces import ISQLFormSupport
-from opengever.ogds.models.declarative import query_base
+from opengever.base.model.declarative import query_base
 from plone import api
 from plone.api.exc import CannotGetPortalError
 from sqlalchemy import types
