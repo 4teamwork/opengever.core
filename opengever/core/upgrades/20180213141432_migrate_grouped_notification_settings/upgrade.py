@@ -1,7 +1,7 @@
 from opengever.activity.model import NotificationDefault
 from opengever.activity.model import NotificationSetting
+from opengever.base.model import create_session
 from opengever.core.upgrade import SchemaMigration
-from opengever.ogds.base.utils import create_session
 import logging
 
 
