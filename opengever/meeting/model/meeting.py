@@ -3,8 +3,11 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import SQLFormSupport
+from opengever.base.model import UNIT_ID_LENGTH
+from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.oguid import Oguid
+from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.globalindex.model import WORKFLOW_STATE_LENGTH
 from opengever.meeting import _
@@ -18,9 +21,6 @@ from opengever.meeting.model.membership import Membership
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from opengever.ogds.models import UNIT_ID_LENGTH
-from opengever.ogds.models import USER_ID_LENGTH
-from opengever.base.types import UnicodeCoercingText
 from opengever.ogds.models.user import User
 from plone import api
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer

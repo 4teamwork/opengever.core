@@ -1,5 +1,5 @@
-from opengever.ogds.models import GROUP_ID_LENGTH
-from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.base.model import GROUP_ID_LENGTH
+from opengever.base.model import UNIT_ID_LENGTH
 from opengever.setup.directives import deployment_directive
 from opengever.setup.directives import ldap_directive
 from zope.configuration.fields import Tokens

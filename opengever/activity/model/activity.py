@@ -3,8 +3,8 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import Base
 from opengever.base.model import DEFAULT_LOCALE
 from opengever.base.model import SUPPORTED_LOCALES
+from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
-from opengever.ogds.models import USER_ID_LENGTH
 from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey

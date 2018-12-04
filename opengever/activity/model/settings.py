@@ -1,5 +1,5 @@
 from opengever.base.model import Base
-from opengever.ogds.models import USER_ID_LENGTH
+from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.models.user import User
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey

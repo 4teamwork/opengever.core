@@ -1,5 +1,5 @@
 from opengever.base.model import Base
-from opengever.ogds.models import USER_ID_LENGTH
+from opengever.base.model import USER_ID_LENGTH
 from plone.restapi.serializer.converters import json_compatible
 from sqlalchemy import Boolean
 from sqlalchemy import Column

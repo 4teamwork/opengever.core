@@ -1,6 +1,6 @@
 from opengever.base.model import Base
+from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.oguid import Oguid
-from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

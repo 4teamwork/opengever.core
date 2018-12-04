@@ -1,5 +1,5 @@
+from opengever.base.model import USER_ID_LENGTH
 from opengever.core.upgrade import SchemaMigration
-from opengever.ogds.models import USER_ID_LENGTH
 from opengever.ogds.models.user import User  # noqa
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
