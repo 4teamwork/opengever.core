@@ -42,7 +42,7 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
-from opengever.ogds.models.tests.builders import AdminUnitBuilder
+from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.tests.builders import OrgUnitBuilder
 from opengever.ogds.models.tests.builders import UserBuilder
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -105,30 +105,51 @@ class SqlObjectBuilder(object):
         return self.mapped_class(**self.arguments)
 
 
-class PloneAdminUnitBuilder(AdminUnitBuilder):
-    """Add plone specific functionality to opengever.ogds.models
-    AdminUnitBuilder.
+class AdminUnitBuilder(SqlObjectBuilder):
 
-    """
+    mapped_class = AdminUnit
+    id_argument_name = 'unit_id'
+
     def __init__(self, session):
-        super(PloneAdminUnitBuilder, self).__init__(session)
+        super(AdminUnitBuilder, self).__init__(session)
         self._as_current_admin_unit = False
+        self.arguments[self.id_argument_name] = u'foo'
+        self.arguments['ip_address'] = '1.2.3.4'
+        self.arguments['site_url'] = 'http://example.com'
+        self.arguments['public_url'] = 'http://example.com/public'
+        self.arguments['abbreviation'] = 'Client1'
+        self.org_unit = None
+        self._as_current_admin_unit = False
+
+    def wrapping_org_unit(self, org_unit):
+        self.org_unit = org_unit
+        self.arguments.update(dict(
+            unit_id=org_unit.id(),
+            title=org_unit.label(),
+        ))
+        return self
 
     def as_current_admin_unit(self):
         self._as_current_admin_unit = True
         return self
 
+    def assign_org_units(self, units):
+        self.arguments['org_units'] = units
+        return self
+
     def after_create(self, obj):
-        obj = super(PloneAdminUnitBuilder, self).after_create(obj)
+        if self.org_unit:
+            self.org_unit.assign_to_admin_unit(obj)
 
         if self._as_current_admin_unit:
             registry = getUtility(IRegistry)
             proxy = registry.forInterface(IAdminUnitConfiguration)
             proxy.current_unit_id = self.arguments.get(self.id_argument_name)
+
         return obj
 
 
-builder_registry.register('admin_unit', PloneAdminUnitBuilder, force=True)
+builder_registry.register('admin_unit', AdminUnitBuilder)
 
 
 class PloneOrgUnitBuilder(OrgUnitBuilder):

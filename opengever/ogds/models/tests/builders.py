@@ -1,52 +1,11 @@
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
-from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.testing.builders.sql import SqlObjectBuilder
-
-
-class AdminUnitBuilder(SqlObjectBuilder):
-
-    mapped_class = AdminUnit
-    id_argument_name = 'unit_id'
-
-    def __init__(self, session):
-        super(AdminUnitBuilder, self).__init__(session)
-        self._as_current_admin_unit = False
-        self.arguments[self.id_argument_name] = u'foo'
-        self.arguments['ip_address'] = '1.2.3.4'
-        self.arguments['site_url'] = 'http://example.com'
-        self.arguments['public_url'] = 'http://example.com/public'
-        self.arguments['abbreviation'] = 'Client1'
-        self.org_unit = None
-
-    def wrapping_org_unit(self, org_unit):
-        self.org_unit = org_unit
-        self.arguments.update(dict(
-            unit_id=org_unit.id(),
-            title=org_unit.label(),
-        ))
-        return self
-
-    def as_current_admin_unit(self):
-        self._as_current_admin_unit = True
-        return self
-
-    def assign_org_units(self, units):
-        self.arguments['org_units'] = units
-        return self
-
-    def after_create(self, obj):
-        if self.org_unit:
-            self.org_unit.assign_to_admin_unit(obj)
-        return obj
-
-
-builder_registry.register('admin_unit', AdminUnitBuilder)
 
 
 class OrgUnitBuilder(SqlObjectBuilder):
