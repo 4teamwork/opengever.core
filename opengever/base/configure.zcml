@@ -68,6 +68,11 @@
       name="clipboard"
       />
 
+  <adapter
+      factory=".language.NegotiateLanguage"
+      for="* opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"
