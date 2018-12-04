@@ -45,6 +45,7 @@ from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.testing.builders.base import TEST_USER_ID
@@ -302,6 +303,15 @@ class OGDSGroupBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('ogds_group', OGDSGroupBuilder)
+
+
+class OGDSTeamBuilder(SqlObjectBuilder):
+
+    mapped_class = Team
+    id_argument_name = 'team_id'
+
+
+builder_registry.register('ogds_team', OGDSTeamBuilder)
 
 
 class TaskBuilder(SqlObjectBuilder):
