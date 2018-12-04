@@ -1,33 +1,19 @@
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TesteCH0160Deployment(FunctionalTestCase):
-
-    def setUp(self):
-        super(TesteCH0160Deployment, self).setUp()
-        self.root = create(Builder('repository_root')
-                           .having(title_de=u'Ordnungssytem 2000'))
-        self.folder = create(Builder('repository').within(self.root))
-        self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
+class TesteCH0160Deployment(IntegrationTestCase):
 
     @browsing
     def test_returns_zip_file_stream(self, browser):
-        dossier_a = create(Builder('dossier')
-                           .as_expired()
-                           .within(self.folder))
-        create(Builder('document').with_dummy_content().within(dossier_a))
-        disposition = create(Builder('disposition')
-                             .having(dossiers=[dossier_a],
-                                     transfer_number=u'10xy')
-                             .within(self.root))
+        self.login(self.records_manager)
+
+        self.disposition.transfer_number = "10xy"
 
         with freeze(datetime(2016, 6, 11)):
-            view = disposition.unrestrictedTraverse('ech0160_export')
+            view = self.disposition.unrestrictedTraverse('ech0160_export')
             view()
 
             self.assertEquals(
