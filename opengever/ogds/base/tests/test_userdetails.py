@@ -73,7 +73,7 @@ class TestUserDetails(IntegrationTestCase):
         browser.open(self.portal, view='@@user-details/kathi.barfuss')
 
         self.assertEqual(
-            ['fa_users', 'Projekt A'], browser.css('.groups li').text)
+            ['fa Users Group', 'Projekt A'], browser.css('.groups li').text)
 
         group_links = [a.get('href') for a in browser.css('.groups li a')]
         self.assertEqual(

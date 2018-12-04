@@ -43,6 +43,7 @@ from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -287,6 +288,20 @@ class OGDSUserBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('ogds_user', OGDSUserBuilder)
+
+
+class OGDSGroupBuilder(SqlObjectBuilder):
+
+    mapped_class = Group
+    id_argument_name = 'groupid'
+
+    def __init__(self, session):
+        super(OGDSGroupBuilder, self).__init__(session)
+        self.arguments['groupid'] = 'testgroup'
+        self.arguments['title'] = 'Test Group'
+
+
+builder_registry.register('ogds_group', OGDSGroupBuilder)
 
 
 class TaskBuilder(SqlObjectBuilder):
