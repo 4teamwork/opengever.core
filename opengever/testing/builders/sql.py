@@ -44,7 +44,7 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.org_unit import OrgUnit
-from opengever.ogds.models.tests.builders import UserBuilder
+from opengever.ogds.models.user import User
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.helpers import localized_datetime
@@ -243,23 +243,37 @@ class OrgUnitBuilder(SqlObjectBuilder):
 builder_registry.register('org_unit', OrgUnitBuilder)
 
 
-class PloneOGDSUserBuilder(UserBuilder):
-    """Add plone specific functionality to opengever.ogds.models
-    UserBuilder.
+class OGDSUserBuilder(SqlObjectBuilder):
 
-    """
+    mapped_class = User
+    id_argument_name = 'userid'
     _as_contact_adapter = False
 
     def __init__(self, session):
-        super(PloneOGDSUserBuilder, self).__init__(session)
+        super(OGDSUserBuilder, self).__init__(session)
+        self.groups = []
+        self.arguments['userid'] = 'test'
+        self.arguments['email'] = 'test@example.org'
         self.arguments[self.id_argument_name] = TEST_USER_ID
 
     def as_contact_adapter(self):
         self._as_contact_adapter = True
         return self
 
+    def in_group(self, group):
+        if group and group not in self.groups:
+            self.groups.append(group)
+        return self
+
+    def assign_to_org_units(self, org_units):
+        for org_unit in org_units:
+            self.groups.append(org_unit.users_group)
+        return self
+
     def create_object(self):
-        obj = super(PloneOGDSUserBuilder, self).create_object()
+        obj = super(OGDSUserBuilder, self).create_object()
+        if self.groups:
+            obj.groups.extend(self.groups)
         if self._as_contact_adapter:
             obj = OgdsUserToContactAdapter(obj)
         return obj
@@ -272,7 +286,7 @@ class PloneOGDSUserBuilder(UserBuilder):
         self.db_session.add(obj)
 
 
-builder_registry.register('ogds_user', PloneOGDSUserBuilder, force=True)
+builder_registry.register('ogds_user', OGDSUserBuilder)
 
 
 class TaskBuilder(SqlObjectBuilder):
