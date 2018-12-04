@@ -5,6 +5,7 @@ Changelog
 2018.5.4 (unreleased)
 ---------------------
 
+- Bump docxcompose to 1.0.0a14 for better handling of referenced parts. [deiferni]
 - Fix an issue with meeting template titles. [deiferni]
 
 
