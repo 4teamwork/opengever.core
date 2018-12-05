@@ -63,8 +63,11 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
             else:
                 sort += ' asc'
 
+        # Todo: modified be removed once the changed metadata is filled on
+        # all deployments.
+        # https://github.com/4teamwork/opengever.core/issues/4988
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-              'bumblebee_checksum']
+              'bumblebee_checksum', 'modified']
         fl = fl + [c['column'] for c in self.config.columns if c['column']]
         params = {
             'fl': fl,
