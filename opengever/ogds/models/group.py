@@ -3,7 +3,7 @@ from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import GROUP_TITLE_LENGTH
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.query import BaseQuery
-from opengever.ogds.models.team import Team  # noqa
+from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -44,7 +44,7 @@ class Group(Base):
 
     users = relation(User, secondary=groups_users,
                      backref=backref('groups', order_by='Group.groupid'))
-    teams = relationship("Team", back_populates="group")
+    teams = relationship(Team, back_populates="group")
 
     def __init__(self, groupid, **kwargs):
         self.groupid = groupid

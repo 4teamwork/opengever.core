@@ -154,6 +154,7 @@ class OgdsUserParticipation(Participation):
         attributes['ogds_userid'] = self.ogds_userid
         return attributes
 
+
 OgdsUserToContactAdapter.participation_class = OgdsUserParticipation
 
 
@@ -205,5 +206,6 @@ class OrgRoleParticipation(Participation):
         attributes = super(OrgRoleParticipation, self)._get_copied_attributes()
         attributes['org_role'] = self.org_role
         return attributes
+
 
 OrgRole.participation_class = OrgRoleParticipation
