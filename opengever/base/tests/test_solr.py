@@ -6,6 +6,7 @@ from opengever.base.solr import OGSolrDocument
 from opengever.tabbedview import BaseCatalogListingTab
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
+from plone import api
 import os
 import pkg_resources
 import unittest
@@ -67,6 +68,91 @@ class TestSolr(IntegrationTestCase):
         listing = OGSolrContentListing(resp)
         self.assertTrue(isinstance(listing[0], OGSolrContentListingObject))
         self.assertTrue(isinstance(listing[0].doc, OGSolrDocument))
+
+    def test_solr_schema_contains_all_new_indexes_and_metadata(self):
+        pkg_path = pkg_resources.get_distribution('opengever.core').location
+        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema'))
+        solr_fields = tree.xpath('.//field/@name')
+
+        catalog = api.portal.get_tool('portal_catalog')
+
+        # indexes
+        CATALOG_ONLY_INDEXES = [
+            'Date',
+            'Type',
+            'assigned_client',
+            'blocked_local_roles',
+            'client_id',
+            'cmf_uid',
+            'commentators',
+            'contactid',
+            'date_of_completion',
+            'effective',
+            'effectiveRange',
+            'expires',
+            'external_reference',
+            'getId',
+            'getObjPositionInParent',
+            'getRawRelatedItems',
+            'in_reply_to',
+            'is_default_page',
+            'is_folderish',
+            'is_subtask',
+            'meta_type',
+            'predecessor',
+            'retention_expiration',
+            'sortable_author',
+            'total_comments',
+        ]
+
+        for index in catalog.indexes():
+            if index not in CATALOG_ONLY_INDEXES:
+                self.assertIn(
+                    index, solr_fields,
+                    '`{}` is missing in the solr schema fields, or is it a '
+                    'catalog only index?'.format(index))
+
+        CATALOG_ONLY_METADATA = [
+            'CreationDate',
+            'Date',
+            'EffectiveDate',
+            'ExpirationDate',
+            'ModificationDate',
+            'Type',
+            'assigned_client',
+            'author_name',
+            'cmf_uid',
+            'commentators',
+            'contactid',
+            'css_icon_class',
+            'date_of_completion',
+            'effective',
+            'email2',
+            'exclude_from_nav',
+            'expires',
+            'getContentType',
+            'getId',
+            'getRemoteUrl',
+            'in_response_to',
+            'is_folderish',
+            'is_subtask',
+            'last_comment_date',
+            'listCreators',
+            'location',
+            'meta_type',
+            'predecessor',
+            'retention_expiration',
+            'title_de',
+            'title_fr',
+            'total_comments'
+        ]
+
+        for metadata in catalog.schema():
+            if metadata not in CATALOG_ONLY_METADATA:
+                self.assertIn(
+                    metadata, solr_fields,
+                    '`{}` is missing in the solr schema fields, or is it a '
+                    'catalog only metadata?'.format(metadata))
 
 
 class TestOGSolrDocument(unittest.TestCase):
