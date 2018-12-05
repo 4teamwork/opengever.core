@@ -126,6 +126,7 @@
 
     <!-- GEVER specific fields -->
     <field name="bumblebee_checksum" type="string" indexed="false" stored="false" />
+    <field name="changed" type="pdate" indexed="true" stored="false" />
     <field name="checked_out" type="string" indexed="true" stored="false" />
     <field name="completed" type="pdate" indexed="true" stored="false" />
     <field name="containing_dossier" type="string" indexed="false" stored="false" />
