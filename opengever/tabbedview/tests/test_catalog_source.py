@@ -85,7 +85,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.assertEqual(
             self.solr.search.call_args[1]['fl'],
             ['UID', 'getIcon', 'portal_type', 'path', 'id',
-             'bumblebee_checksum', 'reference', 'Title']
+             'bumblebee_checksum', 'modified', 'reference', 'Title']
             )
 
     def test_solr_is_used_if_enabled_and_searchable_text(self):
