@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.4 (unreleased)
+2018.5.4 (2018-12-06)
 ---------------------
 
 - Add missing changed index to solr and fix tabbedview helper fallback. [phgross]
