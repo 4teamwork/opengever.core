@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.5 (unreleased)
+2019.1.0 (unreleased)
 ---------------------
 
 - Nothing changed yet.
