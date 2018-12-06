@@ -17,7 +17,7 @@
   <i18n:registerTranslations directory="locales" />
 
   <adapter
-      factory=".hooks.OpenGeverSessionName"
+      factory=".hooks.get_opengever_session"
       provides="ftw.dictstorage.interfaces.IConfig"
       for="ftw.dictstorage.interfaces.ISQLAlchemy"
       />

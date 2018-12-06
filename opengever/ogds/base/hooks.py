@@ -1,5 +1,6 @@
 from ftw.dictstorage.sql import DictStorageModel
 from opengever.base.model import create_session
+from opengever.base.model import Session
 from opengever.ogds.base.setup import create_example_client
 from opengever.ogds.base.setup import create_sql_tables
 from opengever.ogds.models.group import Group
@@ -7,7 +8,6 @@ from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
 from Products.PluggableAuthService.interfaces import plugins
-from z3c.saconfig import named_scoped_session
 from zope.interface import alsoProvides
 import transaction
 
@@ -21,8 +21,8 @@ def example_installed(site):
     _create_example(site)
 
 
-def OpenGeverSessionName(object):
-    return named_scoped_session('opengever')
+def get_opengever_session(object):
+    return Session
 
 
 MODELS = [User, Group, groups_users, OrgUnit, DictStorageModel]

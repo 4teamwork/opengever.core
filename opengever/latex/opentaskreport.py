@@ -3,7 +3,7 @@ from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
-from opengever.globalindex import Session
+from opengever.base.model import Session
 from opengever.globalindex.model.task import Task
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.utils import get_issuer_of_task
