@@ -135,9 +135,12 @@ def to_safe_html(markup):
 
 
 def to_html_xweb_intelligent(text):
-    return api.portal.get_tool(name='portal_transforms').convertTo(
-                    'text/html', text,
-                    mimetype='text/x-web-intelligent').getData()
+    """Transform input text to `text/x-web-intelligent`."""
+    return (
+        api.portal.get_tool(name='portal_transforms')
+        .convertTo('text/html', text, mimetype='text/x-web-intelligent')
+        .getData()
+    )
 
 
 def file_checksum(filename, chunksize=65536, algorithm=u'MD5'):
