@@ -33,9 +33,10 @@ Die folgenden Anpassungen müssen im Kunden Buildout vorgenommen.
     url = http://archive.apache.org/dist/lucene/solr/7.3.1/solr-7.3.1.tgz
     md5sum = 042a6c0d579375be1a8886428f13755f
 
+
 Policy Anpassung
 ----------------
-Obwohl das für die Solr Aktivierung eingesetzte Script, dass Feature-Flag automatisch setzt, soll der Konfigurationswechsel in der Policy (``registry.xml``) festgehalten werden. Ein Upgradestep ist aber nicht notwendig::
+Obwohl das für die Solr Aktivierung eingesetzte Script, dass Feature-Flag automatisch setzt, soll der Konfigurationswechsel in der Policy (z.B. ``opengever.demo/opengever/demo/profiles/default/registry.xml``) festgehalten werden. Ein Upgradestep ist aber nicht notwendig::
 
   <records interface="opengever.base.interfaces.ISearchSettings">
     <value key="use_solr">True</value>
@@ -56,7 +57,17 @@ Nach erfolgreich durchgeführtem Buildout und Neustart des Supervisors, sollte n
 
 Aktivierung
 -----------
-Für die Aktivierung steht im ``opengever.maintenance`` Package das Script ``activate_solr.py`` zur Verfügung.
-Neben der Aktiverung, also dem Setzen des Feature Flags, wird auch der komplette Inhalt im SOLR indexiert und die nicht mehr benötigten Indexes aus dem ``Portal Catalog`` entfernt. Diese zusätzlichen Schritte können mittels separten Optionen (``--keep-indexes`` und ``--no-indexing``) übersprungen werden, standardmässig sollte dies aber nicht nötig sein::
+Die Aktivierung von Solr soll in zwei Schritten erfolgen, zuerst indexieren wir alle Daten mittels dem ``solr-maintenance`` Script::
 
-  bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
+  sudo -u zope bin/instance0 run src/opengever.maintenance/opengever/maintenance/scripts/solr_maintenance.py reindex
+
+
+Anschliessend kann die eigentliche Aktivierung gestartet werden. Hierfür steht im ``opengever.maintenance`` das Script ``activate_solr.py`` zur Verfügung.
+Neben der Aktiverung, also dem Setzen des Feature Flags, wird auch ein Diff berechnet und neu indexiert. Zudem werden die nicht mehr benötigten Indexes aus dem ``Portal Catalog`` entfernt. Diese zusätzlichen Schritte können mittels separten Optionen (``--keep-indexes`` und ``--no-indexing``) übersprungen werden, standardmässig sollte dies aber nicht nötig sein::
+
+  sudo -u zope bin/instance0 run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
+
+
+Abschluss
+---------
+Sofern die Umstellung erfolgreich war und die Suche wie gewünscht funktioniert, muss noch die Dependency auf ``ftw.tika`` im ``setup.py`` der Policy, sowie das ``tika-standalone.cfg`` aus den Buildout extends entfernt werden.
