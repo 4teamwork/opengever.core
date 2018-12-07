@@ -12,6 +12,7 @@ from math import ceil
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 from os import access
+from os import devnull
 from os import environ
 from os import killpg
 from os import path
@@ -23,12 +24,10 @@ from os import X_OK
 from signal import SIGINT
 from signal import SIGKILL
 from signal import signal
+from subprocess import CalledProcessError
 from subprocess import check_output
-from subprocess import PIPE
-from subprocess import Popen
-from time import sleep
+from subprocess import STDOUT
 from time import time
-import locale
 import re
 import sys
 
@@ -132,11 +131,6 @@ def test_discovery(layers=None, modules=None):
     if not modules:
         modules = ()
 
-    output_encoding = sys.stdout.encoding
-
-    if output_encoding is None:
-        output_encoding = locale.getpreferredencoding()
-
     cmdline = ['bin/test', '--list-tests']
     for layer in layers:
         cmdline.append('--layer')
@@ -144,7 +138,11 @@ def test_discovery(layers=None, modules=None):
     for module in modules:
         cmdline.append('-m')
         cmdline.append(module)
-    return check_output(cmdline).decode(output_encoding).splitlines()
+
+    with open(devnull, 'w') as f:
+        output = check_output(cmdline, stderr=f, universal_newlines=True).splitlines()
+
+    return output
 
 
 def chunks(chunkable, chunksize):
@@ -168,10 +166,12 @@ def split(batch):
 
     if layer not in minsize_mapping or CONCURRENCY < 2:
         batch['count'] = sum(batch.get('testclasses').values())
+        del batch['testclasses']
         return (batch, )
 
     original_count = batch.get('original_count')
-    chunksize = max(minsize_mapping.get(layer), int(ceil(original_count / float(CONCURRENCY))))
+    chunk_count = min(ceil(original_count / float(minsize_mapping.get(layer))), CONCURRENCY)
+    chunksize = original_count / float(chunk_count)
 
     splinters = []
     for chunk in chunks(batch.get('testclasses').items(), chunksize):
@@ -184,7 +184,7 @@ def split(batch):
         ))
 
 
-def create_test_run_params(layers=None, modules=None):
+def create_test_run_params(layers=None, modules=None, shuffle=False):
     test_run_params = []
 
     for layer, testclasses in discover_tests(layers, modules).iteritems():
@@ -195,6 +195,7 @@ def create_test_run_params(layers=None, modules=None):
         split_batches = split(batch)
         for i, split_batch in enumerate(split_batches):
             split_batch['batchinfo'] = '{}/{}'.format(i + 1, len(split_batches))
+            split_batch['shuffle'] = shuffle
             test_run_params.append(split_batch)
 
     return tuple(sorted(
@@ -218,10 +219,7 @@ def find_bytecode_files(directory_path):
 
 
 def run_tests(test_run_params):
-    """Run and time 'bin/test --layer layer -m module [-m module]'.
-
-    Return the module name, layer name and stderr.
-    """
+    """Run and time 'bin/test --layer layer -m module [-m module]'."""
     params = ['bin/test']
     params.append('--xml')
 
@@ -229,6 +227,10 @@ def run_tests(test_run_params):
     batchinfo = test_run_params.get('batchinfo')
     testclasses = test_run_params.get('testclasses', ())
     count = test_run_params.get('count')
+    shuffle = test_run_params.get('shuffle')
+
+    if shuffle:
+        params.append('--shuffle')
 
     if layer:
         params.append('--layer')
@@ -257,15 +259,12 @@ def run_tests(test_run_params):
 
     start = time()
 
-    process = Popen(
-        params,
-        env=env,
-        stderr=PIPE,
-        stdout=PIPE,
-        )
-
-    stdout, stderr = process.communicate()
-    returncode = process.returncode
+    try:
+        output = check_output(params, stderr=STDOUT, env=env, universal_newlines=True)
+        returncode = 0
+    except CalledProcessError as e:
+        output = e.output
+        returncode = e.returncode
 
     runtime = time() - start
 
@@ -273,7 +272,6 @@ def run_tests(test_run_params):
         'layer': layer,
         'returncode': returncode,
         'runtime': runtime,
-        'stderr': stderr,
         }
 
     done_args = (
@@ -300,30 +298,8 @@ def run_tests(test_run_params):
         log_output.error('')
         log_output.error(printable_params)
         log_output.error('')
-
-        if stderr:
-            log_output.error('STDERR')
-            log_output.error('')
-            log_output.error(stderr)
-            log_output.error('')
-
-        if returncode:
-            log_output.error('STDOUT')
-            log_output.error('')
-            log_output.error(stdout)
-            log_output.error('')
-
-    elif stderr:
-        log_output.info('')
-        log_output.info('Command line')
-        log_output.info('')
-        log_output.info(printable_params)
-        log_output.info('')
-
-        log_output.info('STDERR')
-        log_output.info('')
-        log_output.info(stderr)
-        log_output.info('')
+        log_output.error(output)
+        log_output.error('')
 
         # Explicitly flush to trigger IPC over cPickle (and to avoid
         # carryover-fragment-via-pickling)
@@ -332,63 +308,7 @@ def run_tests(test_run_params):
     return result
 
 
-def handle_results(results):
-    failed_tests = set()
-    unclean_stderr = set()
-    job_count = len(results)
-    runtime = 0
-
-    while results:
-        sleep(1)
-
-        mature_indices = []
-        mature_results = []
-
-        for i, result in enumerate(results):
-            if result.ready():
-                mature_indices.append(i)
-                # The enumeration index can be off for the .pop() otherwise
-                break
-
-        for i in mature_indices:
-            mature_results.append(results.pop(i).get())
-
-        for result in mature_results:
-            returncode = result.get('returncode', 1)
-            stderr = result.get('stderr')
-            runtime += result.get('runtime')
-
-            if returncode:
-                failed_tests.add(result.get('layer'))
-
-            if stderr:
-                unclean_stderr.add(result.get('layer'))
-
-    error_count = len(failed_tests)
-
-    if error_count:
-        logger.error('%d / %d jobs failed.', error_count, job_count)
-
-        for layer in failed_tests:
-            logger.error('Failures in %s', layer)
-
-    stderr_count = len(unclean_stderr)
-
-    if stderr_count:
-        logger.info('%d / %d jobs had an unclean STDERR.', stderr_count, job_count)
-
-        for layer in unclean_stderr:
-            logger.info('Unclean STDERR in %s', layer)
-
-    logger.info(
-        'Aggregate runtime %s.',
-        humanize_time(runtime)
-        )
-
-    return len(failed_tests) == 0
-
-
-def main(layers=None, modules=None):
+def main(layers=None, modules=None, shuffle=False):
     """Discovers and times tests in parallel via multiprocessing.Pool()."""
     # Remove *.py[co] files to avoid race conditions with parallel workers
     # stepping on each other's toes when trying to clean up stale bytecode.
@@ -399,44 +319,49 @@ def main(layers=None, modules=None):
     remove_bytecode_files(SOURCE_PATH)
 
     start = time()
-    test_run_params = create_test_run_params(layers, modules)
+    test_run_params = create_test_run_params(layers, modules, shuffle)
     logger.info('Discovered tests in %s', humanize_time(time() - start))
     logger.info('Split the tests into %d jobs', len(test_run_params))
     logger.info('Running the jobs in up to %d processes in parallel', CONCURRENCY)
+    if args.shuffle:
+        logger.info('Shuffling each test batch run order.')
 
     # We need to explicitly flush here in order to avoid multiprocessing
     # related log output duplications due to picking inputs and globals as the
     # default IPC mechanism
     memory_handler.flush()
 
+    failed_tests = set()
+    job_count = len(test_run_params)
+    runtime = 0
+
     start = time()
 
     pool = Pool(CONCURRENCY)
 
-    results = []
-
-    for params in test_run_params:
-        # Alleviate cPickle load bursting for IPC
-        sleep(0.1)
-        results.append(pool.apply_async(run_tests, (params, )))
-
-    success = handle_results(results)
+    for result in pool.imap_unordered(run_tests, test_run_params):
+        runtime += result.get('runtime')
+        if result.get('returncode', 1):
+            failed_tests.add(result.get('layer'))
 
     pool.close()
     pool.join()
 
+    error_count = len(failed_tests)
+
+    if error_count:
+        logger.error('%d / %d jobs failed.', error_count, job_count)
+        for layer in failed_tests:
+            logger.error('Failures in %s', layer)
+
+    logger.info('Aggregate runtime %s.', humanize_time(runtime))
     logger.info('Wallclock runtime %s.', humanize_time(time() - start))
 
-    if success:
+    if not error_count:
         logger.info('No failed tests.')
         return True
 
     return False
-
-
-def get_concurrency():
-    # Counter system congestion and hyperthreading, FWIW
-    return max(cpu_count() // 2 - 1, 1)
 
 
 # Having the __main__ guard is necessary for multiprocessing.Pool().
@@ -445,7 +370,7 @@ if __name__ == '__main__':
     environ['PYTHONUNBUFFERED'] = '1'
     environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-    CONCURRENCY = int(environ.get('MTEST_PROCESSORS', get_concurrency()))
+    CONCURRENCY = int(cpu_count())
     BUILDOUT_PATH = path.abspath(path.join(__file__, '..', '..'))
     OPENGEVER_PATH = path.join(BUILDOUT_PATH, 'opengever')
     SOURCE_PATH = path.join(BUILDOUT_PATH, 'src')
@@ -453,6 +378,12 @@ if __name__ == '__main__':
     # CLI arguments
     parser = ArgumentParser(
         description='Run tests in parallel.',
+        )
+
+    parser.add_argument(
+        '--shuffle',
+        action='store_true',
+        help='Set the testing concurrency level.',
         )
 
     parser.add_argument(
@@ -516,7 +447,7 @@ if __name__ == '__main__':
 
     setup_termination()
 
-    if main(layers=args.layer, modules=args.module):
+    if main(layers=args.layer, modules=args.module, shuffle=args.shuffle):
         exit(0)
 
     exit(1)
