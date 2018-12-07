@@ -5,7 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Only display .docx files as possible proposal documents. [Rotonen]
 
 
 2018.5.4 (2018-12-06)
