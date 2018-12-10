@@ -15,6 +15,7 @@ from plone.namedfile.utils import stream_data
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
+from zExceptions import MethodNotAllowed
 from zExceptions import Redirect
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -58,15 +59,20 @@ class PollMeetingZip(BrowserView):
         self.model = self.context.model
 
     def __call__(self):
+        if self.request.method != 'POST':
+            raise MethodNotAllowed()
+
         job_id = require_job_id_parameter(self.request)
         job = require_job(self.request, self.model, job_id)
 
-        progress = job.get_progress()
+        exporter = MeetingZipExporter(self.model, job_id)
+        if exporter.is_finished_converting():
+            exporter.generate_zipfile()
 
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
-        return json.dumps(progress)
+        return json.dumps(job.get_progress())
 
 
 class DownloadMeetingZip(BrowserView):

@@ -62,7 +62,7 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
         self.assertEqual('the pdf', doc_status['blob'].data)
 
     @browsing
-    def test_zip_file_is_created_for_last_sucessful_callback(self, browser):
+    def test_zip_file_is_created_by_polling_view(self, browser):
         # don't login in browser as the view is public
         self.login(self.meeting_user)
 
@@ -80,18 +80,28 @@ class TestReceiveDemandCallbackMeetingZip(IntegrationTestCase):
             self.success_callback_fields(exporter, proposal_attachment))
 
         zip_job = exporter.zip_job
+        document_id = IUUID(proposal_document)
+        doc_status = zip_job.get_doc_status(document_id)
+        attachment_doc_id = IUUID(proposal_attachment)
+        attachment_doc_status = zip_job.get_doc_status(attachment_doc_id)
+
+        self.assertNotIn('zip_file', zip_job._data)
+        self.assertEqual('finished', doc_status['status'])
+        self.assertEqual('finished', attachment_doc_status['status'])
+
+        with self.login(self.meeting_user, browser):
+            browser.open(
+                self.meeting,
+                view='poll_meeting_zip?job_id={}'.format(zip_job.job_id),
+                method='POST')
 
         self.assertIn('zip_file', zip_job._data)
         zip_file = zip_job.get_zip_file()
         self.assertIsInstance(zip_file, NamedBlobFile)
 
-        document_id = IUUID(proposal_document)
-        doc_status = zip_job.get_doc_status(document_id)
         self.assertEqual('zipped', doc_status['status'])
         self.assertNotIn('blob', doc_status)
 
-        attachment_doc_id = IUUID(proposal_attachment)
-        attachment_doc_status = zip_job.get_doc_status(attachment_doc_id)
         self.assertEqual('zipped', attachment_doc_status['status'])
         self.assertNotIn('blob', attachment_doc_status)
 

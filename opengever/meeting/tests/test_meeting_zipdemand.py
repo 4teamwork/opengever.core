@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.meeting.zipexport import MeetingZipExporter
 from opengever.meeting.zipexport import ZipJobManager
 from opengever.testing import IntegrationTestCase
+from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 
 
@@ -19,21 +20,25 @@ class TestPollMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id))
+            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id),
+            method='POST')
         self.assertEqual(1, browser.json['converting'])
 
     @browsing
-    def test_zip_polling_view_reports_finished(self, browser):
+    def test_zip_polling_view_creates_zip_when_all_finished(self, browser):
         self.login(self.meeting_user, browser)
 
         job_manager = ZipJobManager(self.meeting.model)
         zip_job = job_manager.create_job()
-        zip_job.add_doc_status(IUUID(self.document), {'status': 'finished'})
+        zip_job.add_doc_status(
+            IUUID(self.document),
+            {'status': 'finished', 'blob': NamedBlobFile(data='foo')})
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id))
-        self.assertEqual(1, browser.json['finished'], browser.json)
+            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id),
+            method='POST')
+        self.assertEqual(1, browser.json['zipped'], browser.json)
 
     @browsing
     def test_zip_polling_view_reports_skipped(self, browser):
@@ -45,7 +50,8 @@ class TestPollMeetingZip(IntegrationTestCase):
 
         browser.open(
             self.meeting,
-            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id))
+            view='poll_meeting_zip?job_id={}'.format(zip_job.job_id),
+            method='POST')
         self.assertEqual(1, browser.json['skipped'])
 
 
@@ -66,6 +72,7 @@ class TestDownloadMeetingZip(IntegrationTestCase):
         exporter.receive_pdf(doc_in_job_id,
                              'application/pdf',
                              'i am a apdf.')
+        exporter.generate_zipfile()
 
         browser.open(
             self.meeting,
