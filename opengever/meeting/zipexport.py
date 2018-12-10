@@ -273,6 +273,10 @@ class ZipJob(object):
             status[document_info['status']] += 1
         return status
 
+    def is_finished_converting(self):
+        progress = self.get_progress()
+        return progress['converting'] == 0
+
 
 class ZipJobManager(object):
     """Manages ZIP jobs that use the Bumblebee demand endpoint.
@@ -377,9 +381,6 @@ class MeetingZipExporter(object):
         document_id = self.extract_document_id(doc_in_job_id)
         self._update_job_with_pdf(document_id, mimetype, data)
 
-        if self.is_finished_converting():
-            self._generate_zipfile()
-
     def _update_job_with_pdf(self, document_id, mimetype, data):
         # we're using NamedBlobFile here to re-use an IStorage adapter, the
         # filename is not relevant
@@ -389,9 +390,13 @@ class MeetingZipExporter(object):
             'blob': blob_file,
         })
 
-    def _generate_zipfile(self):
-        pdfs = {}
+    def generate_zipfile(self):
+        # we might be called when the zip file has already been generated.
+        # abort in such cases.
+        if self.zip_job.is_finished():
+            return
 
+        pdfs = {}
         for document_id in self.zip_job.list_document_ids():
             doc_status = self.zip_job.get_doc_status(document_id)
             if doc_status['status'] == 'finished':
@@ -411,8 +416,7 @@ class MeetingZipExporter(object):
         self.zip_job.update_doc_status(document_id, {'status': 'skipped'})
 
     def is_finished_converting(self):
-        progress = self.zip_job.get_progress()
-        return progress['converting'] == 0
+        return self.zip_job.is_finished_converting()
 
     def _queue_demand_job(self, document):
         callback_url = self.meeting.get_url(view='receive_meeting_zip_pdf')
