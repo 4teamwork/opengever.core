@@ -52,7 +52,7 @@ function init() {
         }
 
         // poll for status
-        return this.requester.get(url)
+        return this.requester.post(url)
           .then(function (response) {
             if (response.data['is_finished']) {
               this.isFinished = true;
