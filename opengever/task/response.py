@@ -356,8 +356,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             sync_task_response(self.context, self.request, 'workflow',
                                transition, data.get('text'))
 
-            url = self.context.absolute_url()
-            self.request.RESPONSE.redirect(url)
+            self.redirect()
             return new_response
 
     @button.buttonAndHandler(_(u'cancel', default='Cancel'),
@@ -376,6 +375,24 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
 
         if self.transition != 'task-transition-open-in-progress':
             self.widgets['reminder_option'].mode = HIDDEN_MODE
+
+    def redirect(self):
+        """Redirects to task if the current user still has View permission,
+        otherwise it redirects to portal.
+        """
+        if not api.user.has_permission('View', obj=self.context):
+            msg = _(u'msg_transition_successful_no_longer_permission_to_access',
+                    default=u'Review state successfully changed, you are no '
+                    'longer permitted to access the task.')
+            api.portal.show_message(msg, request=self.request, type='info')
+            url = api.portal.get().absolute_url()
+        else:
+            msg = _(u'msg_transition_successful',
+                    default=u'Review state successfully changed.')
+            api.portal.show_message(msg, request=self.request, type='info')
+            url = self.context.absolute_url()
+
+        return self.request.RESPONSE.redirect(url)
 
     def is_user_assigned_to_current_org_unit(self):
         units = ogds_service().assigned_org_units()

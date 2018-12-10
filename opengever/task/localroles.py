@@ -174,12 +174,6 @@ class LocalRolesSetter(object):
 
     def revoke_on_distinct_parent(self):
         distinct_parent = self.get_distinct_parent()
-        manager = RoleAssignmentManager(self.get_distinct_parent())
-        manager.clear(
-            ASSIGNMENT_VIA_TASK,
-            self.responsible_permission_identfier, self.task, reindex=False)
-        manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                      self.inbox_group_id, self.task, reindex=False)
 
         # We disabled reindexObjectSecurity and reindex the security manually
         # instead, to avoid reindexing all objects including all documents.
@@ -190,6 +184,13 @@ class LocalRolesSetter(object):
             object_provides=[IDossierMarker.__identifier__,
                              IProposal.__identifier__],
             path='/'.join(distinct_parent.getPhysicalPath()))]
+
+        manager = RoleAssignmentManager(distinct_parent)
+        manager.clear(
+            ASSIGNMENT_VIA_TASK,
+            self.responsible_permission_identfier, self.task, reindex=False)
+        manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
+                      self.inbox_group_id, self.task, reindex=False)
 
         for dossier in subdossiers:
             dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
