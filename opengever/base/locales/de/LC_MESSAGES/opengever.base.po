@@ -387,7 +387,7 @@ msgstr "Änderungen gespeichert"
 #. Default: "Change could not be saved."
 #: ./opengever/base/browser/favorites.py
 msgid "message_not_saved"
-msgstr "Änderung konnte nicht gespeicher werden."
+msgstr "Änderung konnte nicht gespeichert werden."
 
 #. Default: "Record created"
 #: ./opengever/base/browser/modelforms.py
