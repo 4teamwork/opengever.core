@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-10-16 07:48+0000\n"
+"POT-Creation-Date: 2018-12-10 07:42+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -704,6 +704,16 @@ msgstr "Aufgabe erfolgreich neu zugewiesen. Sie sind nicht länger berechtigt au
 #: ./opengever/task/response_description.py
 msgid "msg_task_commented"
 msgstr "Kommentiert von ${user}"
+
+#. Default: "Review state successfully changed."
+#: ./opengever/task/response.py
+msgid "msg_transition_successful"
+msgstr "Status erfolgreich geändert."
+
+#. Default: "Review state successfully changed, you are no longer permitted to access the task."
+#: ./opengever/task/response.py
+msgid "msg_transition_successful_no_longer_permission_to_access"
+msgstr "Status erfolgreich geändert, Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen."
 
 msgid "mytasks"
 msgstr "Meine Aufgaben"
