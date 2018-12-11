@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import timedelta
 from ftw.table import helper
 from opengever.base.behaviors.changed import has_metadata_changed_been_filled
 from opengever.base.interfaces import ISearchSettings
@@ -305,6 +306,11 @@ class Dossiers(BaseCatalogListingTab):
         query_extension={'review_state': DOSSIER_STATES_CLOSED,
                          'retention_expiration': {'query': date.today(),
                                                   'range': 'max'}})
+    overdue_filter = CatalogQueryFilter(
+        'filter_overdue', _('overdue'),
+        query_extension={'review_state': DOSSIER_STATES_OPEN,
+                         'end': {'query': date.today() - timedelta(days=1),
+                                 'range': 'max'}})
 
     filterlist_name = 'dossier_state_filter'
     filterlist_available = True
@@ -315,6 +321,8 @@ class Dossiers(BaseCatalogListingTab):
 
         if api.user.has_permission('opengever.disposition: Add disposition'):
             filters.append(self.expired_filter)
+
+        filters.append(self.overdue_filter)
 
         return FilterList(*filters)
 

@@ -118,20 +118,21 @@ class TestDossierListing(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
 
-        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'overdue'],
                           browser.css('.state_filters a').text)
 
     @browsing
     def test_expired_filter_only_avaiable_for_record_managers(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
-        self.assertEquals(['label_tabbedview_filter_all', 'Active'],
+        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'overdue'],
                           browser.css('.state_filters a').text)
 
         self.login(self.records_manager, browser=browser)
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
-        self.assertEquals(['label_tabbedview_filter_all', 'Active', 'expired'],
-                          browser.css('.state_filters a').text)
+        self.assertEquals(
+            ['label_tabbedview_filter_all', 'Active', 'expired', 'overdue'],
+            browser.css('.state_filters a').text)
 
     @browsing
     def test_expired_filters_shows_only_dossiers_with_expired_retention_period(self, browser):
@@ -224,3 +225,23 @@ class TestDossierListing(IntegrationTestCase):
         browser.open(self.subsubdossier, view='tabbedview_view-subdossiers')
         expected_content = ['No contents']
         self.assertEqual(expected_content, browser.css('p').text)
+
+    @browsing
+    def test_overdue_filter_shows_open_dossiers_with_expired_end_date(self, browser):
+        self.login(self.records_manager, browser=browser)
+        self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_overdue')
+
+        self.assertEqual([], browser.css('.listing'))
+
+        IDossier(self.dossier).end = date.today() - relativedelta(days=1)
+        self.dossier.reindexObject()
+
+        IDossier(self.empty_dossier).end = date.today()
+        self.empty_dossier.reindexObject()
+
+        self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_overdue')
+        data = browser.css('.listing').first.lists()
+        data.pop(0)  # removes row headings.
+
+        self.assertEqual(1, len(data))
+        self.assertItemsEqual(self.get_folder_data(self.dossier), data[0])
