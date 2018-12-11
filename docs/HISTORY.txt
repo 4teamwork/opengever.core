@@ -15,6 +15,7 @@ Changelog
 - Render mail descriptions as intelligent text on the mail overview. [Rotonen]
 - Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render document descriptions as intelligent text on the document overview. [Rotonen]
+- Remove the now-unnecessary js files from the favorites template. [Rotonen]
 
 
 2018.5.4 (2018-12-06)
