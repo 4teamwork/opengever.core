@@ -37,7 +37,7 @@
       </tr>
       <tr tal:condition="view/overlay/get_description">
         <td class="title" i18n:translate="">Description:</td>
-        <td class="value">
+        <td class="value description">
           <div tal:content="structure view/overlay/get_description" />
         </td>
       </tr>

@@ -10,6 +10,10 @@ Changelog
 - Only display .docx files as possible proposal documents. [Rotonen]
 - Fix task revoking permissions on close/reassign. [phgross]
 - Fix an issue with missing zip after concurrent demand callback requests. [deiferni]
+- Render mail descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
+- Render mail descriptions as intelligent text on the mail overview. [Rotonen]
+- Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
+- Render document descriptions as intelligent text on the document overview. [Rotonen]
 
 
 2018.5.4 (2018-12-06)

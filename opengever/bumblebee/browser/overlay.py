@@ -6,6 +6,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.protect import unprotected_write
+from opengever.base.utils import to_html_xweb_intelligent
 from opengever.bumblebee import _
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
@@ -106,7 +107,7 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
         return self.context.title
 
     def get_description(self):
-        return self.context.description
+        return to_html_xweb_intelligent(self.context.description)
 
     def get_file_size(self):
         """Return the filesize in KB."""

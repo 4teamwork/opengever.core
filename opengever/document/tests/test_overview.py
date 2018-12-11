@@ -572,6 +572,17 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             browser.css('#edit-bar a').text
             )
 
+    @browsing
+    def test_description_is_intelligently_formatted(self, browser):
+        self.login(self.regular_user, browser)
+        self.document.description = u'\n\n Foo\n    Bar\n'
+        browser.open(self.document, view='tabbedview_view-overview')
+        # Somehow what is `&nbsp;` in a browser is `\xa0` in ftw.testbrowser
+        self.assertEqual(
+            u'<br><br>\xa0Foo<br>\xa0\xa0\xa0\xa0Bar<br>',
+            browser.css('#form-widgets-IDocumentMetadata-description')[0].innerHTML,
+        )
+
 
 class TestDocumentOverviewWithMeeting(IntegrationTestCase):
 

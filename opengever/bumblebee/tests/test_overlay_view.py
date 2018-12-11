@@ -422,6 +422,28 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
             browser.css('.file-action-buttons a').text,
             )
 
+    @browsing
+    def test_description_is_intelligently_formatted(self, browser):
+        self.login(self.regular_user, browser)
+        self.document.description = u'\n\n Foo\n    Bar\n'
+        browser.open(self.document, view="bumblebee-overlay-document")
+        # Somehow what is `&nbsp;` in a browser is `\xa0` in ftw.testbrowser
+        self.assertEqual(
+            u'<br><br>\xa0Foo<br>\xa0\xa0\xa0\xa0Bar<br>',
+            browser.css('.value.description div')[0].innerHTML,
+        )
+
+    @browsing
+    def test_description_is_intelligently_formatted_on_mail(self, browser):
+        self.login(self.regular_user, browser)
+        self.mail_eml.description = u'\n\n Foo\n    Bar\n'
+        browser.open(self.mail_eml, view="bumblebee-overlay-document")
+        # Somehow what is `&nbsp;` in a browser is `\xa0` in ftw.testbrowser
+        self.assertEqual(
+            u'<br><br>\xa0Foo<br>\xa0\xa0\xa0\xa0Bar<br>',
+            browser.css('.value.description div')[0].innerHTML,
+        )
+
 
 class TestBumblebeeOverlayViewsWithoutBumblebeeFeature(IntegrationTestCase):
     """Test we can disable Bumblebee."""

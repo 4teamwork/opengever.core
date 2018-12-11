@@ -2,9 +2,10 @@ from AccessControl import getSecurityManager
 from ftw import bumblebee
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.base import _ as ogbmf
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.browser import edit_public_trial
 from opengever.base.browser.helper import get_css_class
-from opengever.base.behaviors.changed import IChanged
+from opengever.base.utils import to_html_xweb_intelligent
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -87,6 +88,18 @@ class FieldRow(BaseRow):
         return yes if bool(value) else no
 
 
+class WebIntelligentFieldRow(FieldRow):
+    """Transform the widget value to x-web-intelligent.
+
+    This should only be used for well known fields.
+    """
+
+    def get_content(self):
+        widget = self.view.w[self.field]
+        content = to_html_xweb_intelligent(widget.value)
+        return '<div id="{}" class="{}">{}</div>'.format(widget.id, widget.klass, content)
+
+
 class CustomRow(BaseRow):
     """A custom metadata row type that uses a callable `renderer` to
     fetch the row's content.
@@ -153,7 +166,7 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
             FieldRow('IDocumentMetadata.document_author'),
             CustomRow(self.render_creator_link,
                       label=_('label_creator', default='creator')),
-            FieldRow('IDocumentMetadata.description'),
+            WebIntelligentFieldRow('IDocumentMetadata.description'),
             TemplateRow(self.keywords_template,
                         label=_(u'label_keywords', default=u'Keywords')),
             FieldRow('IDocumentMetadata.foreign_reference'),
