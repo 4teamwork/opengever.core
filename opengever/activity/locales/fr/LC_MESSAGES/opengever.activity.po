@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 11:51+0000\n"
+"POT-Creation-Date: 2018-12-11 10:29+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -94,6 +94,16 @@ msgstr "Proposé pour archivage"
 msgid "disposition-transition-refuse"
 msgstr "Offre refusée"
 
+#. Default: "Overdue dossier"
+#: ./opengever/activity/__init__.py
+msgid "dossier-overdue"
+msgstr ""
+
+#. Default: "Dossier responsible"
+#: ./opengever/activity/roles.py
+msgid "dossier_responsible_role"
+msgstr ""
+
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
@@ -153,6 +163,11 @@ msgstr "Résumé quotidien"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
 msgstr "Offres"
+
+#. Default: "Dossiers"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dossiers"
+msgstr ""
 
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py

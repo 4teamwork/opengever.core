@@ -12,6 +12,7 @@ WATCHER_ROLE = 'regular_watcher'
 COMMITTEE_RESPONSIBLE_ROLE = 'committee_responsible'
 PROPOSAL_ISSUER_ROLE = 'proposal_issuer'
 TASK_REMINDER_WATCHER_ROLE = 'task_reminder_watcher_role'
+DOSSIER_RESPONSIBLE_ROLE = 'dossier_responsible_role'
 
 _('task_issuer', default=u"Task issuer")
 _('task_responsible', default=u"Task responsible")
@@ -22,3 +23,4 @@ _('regular_watcher', default=u"Watcher")
 _('proposal_issuer', default=u"Proposal issuer")
 _('committee_responsible', default=u"Committee responsible")
 _('task_reminder_watcher_role', default=u"Watcher")
+_('dossier_responsible_role', default=u"Dossier responsible")

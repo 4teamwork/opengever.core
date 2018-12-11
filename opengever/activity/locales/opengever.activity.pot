@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 11:51+0000\n"
+"POT-Creation-Date: 2018-12-11 10:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,6 +92,16 @@ msgstr ""
 msgid "disposition-transition-refuse"
 msgstr ""
 
+#. Default: "Overdue dossier"
+#: ./opengever/activity/__init__.py
+msgid "dossier-overdue"
+msgstr ""
+
+#. Default: "Dossier responsible"
+#: ./opengever/activity/roles.py
+msgid "dossier_responsible_role"
+msgstr ""
+
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
@@ -150,6 +160,11 @@ msgstr ""
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
+msgstr ""
+
+#. Default: "Dossiers"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dossiers"
 msgstr ""
 
 #. Default: "Forwardings"
