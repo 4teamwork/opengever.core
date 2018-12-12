@@ -1,7 +1,12 @@
+from datetime import date
 from opengever.activity.base import BaseActivity
+from opengever.activity.model import Notification
 from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
+from plone import api
+from zope.globalrequest import getRequest
 
 
 class DossierOverdueActivity(BaseActivity):
@@ -50,3 +55,23 @@ class DossierOverdueActivity(BaseActivity):
         self.center.add_watcher_to_resource(
             self.context, IDossier(self.context).responsible,
             DOSSIER_RESPONSIBLE_ROLE)
+
+
+class DossierOverdueActivityGenerator(object):
+
+    def __call__(self):
+        return self.generate_overdue_activities()
+
+    def generate_overdue_activities(context):
+        query = {'review_state': DOSSIER_STATES_OPEN,
+                 'end': {'query': date.today(),
+                         'range': 'max'}}
+
+        catalog = api.portal.get_tool('portal_catalog')
+        num_notifications_before_update = Notification.query.count()
+
+        for brain in catalog.unrestrictedSearchResults(query):
+            obj = brain.getObject()
+            DossierOverdueActivity(obj, getRequest()).record()
+
+        return Notification.query.count() - num_notifications_before_update

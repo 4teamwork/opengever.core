@@ -6,15 +6,20 @@ from zope.globalrequest import setRequest
 import AccessControl
 
 
+def all_plone_sites(app):
+    for item_id, item in sorted(app.items()):
+        if isinstance(item, PloneSite):
+            yield app.unrestrictedTraverse(item_id)
+
+
 def get_first_plone_site(app):
     """Returns the first (of possibly many) Plone Site from a Zope application
     object. If no Plone sites are found an error is raised.
     """
-    for item_id, item in sorted(app.items()):
-        if isinstance(item, PloneSite):
-            return app.unrestrictedTraverse(item_id)
-
-    raise Exception("No Plone site found!")
+    site = next(all_plone_sites(app), None)
+    if not site:
+        raise Exception("No Plone site found!")
+    return site
 
 
 def setup_plone(plone, options=None):

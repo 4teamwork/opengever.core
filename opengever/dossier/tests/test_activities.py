@@ -1,8 +1,11 @@
+from datetime import date
+from datetime import timedelta
 from opengever.activity import notification_center
 from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.dossier.activities import DossierOverdueActivity
+from opengever.dossier.activities import DossierOverdueActivityGenerator
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 
@@ -56,3 +59,29 @@ class TestDossierOverdueActivity(IntegrationTestCase):
         self.assertEqual([self.dossier_manager.getId()],
                          self._get_watcher_ids(self.dossier))
         self.assertEqual(2, Notification.query.count())
+
+
+class TestDossierOverdueActivityGenerator(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_returns_the_number_of_generated_activities(self):
+        self.login(self.dossier_manager)
+
+        self.assertEqual(0, DossierOverdueActivityGenerator()())
+
+        IDossier(self.dossier).end = date.today() - timedelta(days=1)
+        self.dossier.reindexObject()
+
+        self.assertEqual(1, DossierOverdueActivityGenerator()())
+
+    def test_generates_an_activity_for_each_overdue_dossier(self):
+        self.login(self.dossier_manager)
+        IDossier(self.dossier).end = date.today() - timedelta(days=1)
+        self.dossier.reindexObject()
+        DossierOverdueActivityGenerator()()
+
+        self.assertEqual(1, Activity.query.count())
+
+    def test_do_not_fail_if_no_overdue_dossier_is_available(self):
+        self.assertEqual(0, DossierOverdueActivityGenerator()())
