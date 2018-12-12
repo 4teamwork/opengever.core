@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-08-07 14:25+0000\n"
+"POT-Creation-Date: 2019-02-04 10:29+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -543,6 +543,11 @@ msgstr "Dossier-Verwalter"
 msgid "label_dossier_note_placeholder"
 msgstr "Kommentar erfassen"
 
+#. Default: "Overdue dossier"
+#: ./opengever/dossier/activities.py
+msgid "label_dossier_overdue_activity"
+msgstr "Dossier überfällig"
+
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_dossier_templates"
@@ -886,6 +891,11 @@ msgstr "Beteiligungen"
 
 msgid "subdossiers"
 msgstr "Subdossiers"
+
+#. Default: "The dossier is still open after exceeding its end date."
+#: ./opengever/dossier/activities.py
+msgid "summary_dossier_overdue_activity"
+msgstr "Das Dossier hat sein Enddatum überschritten und ist somit überfällig.<br>Bitte überprüfen Sie ob das Dossier abgeschlossen werden kann."
 
 msgid "tasks"
 msgstr "Aufgaben"
