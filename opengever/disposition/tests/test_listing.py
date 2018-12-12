@@ -3,20 +3,15 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 
 
-class TestDispositionListing(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDispositionListing, self).setUp()
-        self.root = create(Builder('repository_root'))
+class TestDispositionListing(IntegrationTestCase):
 
     @browsing
     def test_disposition_tab_is_available_on_repositoryroots(self, browser):
-        self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
-
-        browser.login().open(self.root)
+        self.login(self.records_manager, browser)
+        browser.open(self.repository_root)
 
         self.assertEquals(
             ['Overview', 'Dossiers', 'Dispositions', 'Info'],
@@ -24,7 +19,8 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_disposition_tab_is_not_available_when_user_cant_add_dispositions(self, browser):
-        browser.login().open(self.root)
+        self.login(self.archivist, browser)
+        browser.login().open(self.repository_root)
 
         self.assertEquals(
             ['Overview', 'Dossiers', 'Info'],
@@ -32,81 +28,74 @@ class TestDispositionListing(FunctionalTestCase):
 
     @browsing
     def test_disposition_listing(self, browser):
-        self.grant('Records Manager')
+        self.login(self.records_manager, browser)
 
         with freeze(datetime(2015, 1, 1)):
-            repository = create(Builder('repository').within(self.root))
             self.disposition_a = create(Builder('disposition')
-                                        .titled(u'Angebot FD 23.11.2010')
-                                        .within(repository))
-            self.disposition_b = create(Builder('disposition')
                                         .titled(u'Angebot FD 1.2.2003')
                                         .in_state('disposition-state-appraised')
-                                        .within(repository))
-            self.disposition_c = create(Builder('disposition')
+                                        .within(self.leaf_repofolder))
+            self.disposition_b = create(Builder('disposition')
                                         .titled(u'Angebot FD 1.2.1995')
                                         .in_state('disposition-state-disposed')
-                                        .within(repository))
+                                        .within(self.leaf_repofolder))
 
-        browser.login().open(self.root, view='tabbedview_view-dispositions')
+        browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
-              'Sequence Number': '1',
-              'Title': 'Angebot FD 23.11.2010',
-              'Review state': 'disposition-state-in-progress'},
-             {'': '',
               'Sequence Number': '2',
               'Title': 'Angebot FD 1.2.2003',
               'Review state': 'disposition-state-appraised'},
              {'': '',
               'Sequence Number': '3',
               'Title': 'Angebot FD 1.2.1995',
-              'Review state': 'disposition-state-disposed'}],
+              'Review state': 'disposition-state-disposed'},
+             {'': '',
+              'Review state': 'disposition-state-in-progress',
+              'Sequence Number': '1',
+              'Title': 'Angebot 31.8.2016'}],
             browser.css('.listing').first.dicts())
 
     @browsing
     def test_no_tabbedview_actions_available(self, browser):
-        self.grant('Records Manager')
+        self.login(self.records_manager, browser)
 
-        repository = create(Builder('repository').within(self.root))
-        self.disposition_a = create(Builder('disposition').within(repository))
-
-        browser.login().open(self.root, view='tabbedview_view-dispositions')
+        browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals([''], browser.css('.tabbedview-action-list').text)
 
     @browsing
     def test_statefilter_hides_closed_by_default(self, browser):
-        self.grant('Records Manager')
+        self.login(self.records_manager, browser)
 
         with freeze(datetime(2015, 1, 1)):
-            repository = create(Builder('repository').within(self.root))
-            create(Builder('disposition')
-                   .titled(u'In Progress')
-                   .within(repository))
             create(Builder('disposition')
                    .titled(u'Appraised')
                    .in_state('disposition-state-appraised')
-                   .within(repository))
+                   .within(self.leaf_repofolder))
             create(Builder('disposition')
                    .titled(u'Disposed')
                    .in_state('disposition-state-disposed')
-                   .within(repository))
+                   .within(self.leaf_repofolder))
             create(Builder('disposition')
                    .titled(u'Disposed')
                    .in_state('disposition-state-archived')
-                   .within(repository))
+                   .within(self.leaf_repofolder))
             create(Builder('disposition')
                    .titled(u'Closed')
                    .in_state('disposition-state-closed')
-                   .within(repository))
+                   .within(self.leaf_repofolder))
 
-        browser.login().open(self.root, view='tabbedview_view-dispositions')
+        self.disposition.setTitle("In Progress")
+        self.disposition.reindexObject()
+
+        browser.open(self.leaf_repofolder, view='tabbedview_view-dispositions')
         rows = browser.css('.listing').first.dicts()
+
         self.assertItemsEqual(
             ['In Progress', 'Appraised', 'Disposed', 'Disposed'],
             [row.get('Title') for row in rows])
 
-        browser.open(self.root, view='tabbedview_view-dispositions',
+        browser.open(self.leaf_repofolder, view='tabbedview_view-dispositions',
                      data={'disposition_state_filter': 'filter_all'})
         rows = browser.css('.listing').first.dicts()
         self.assertItemsEqual(
