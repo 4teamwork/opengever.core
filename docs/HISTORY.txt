@@ -10,13 +10,18 @@ Changelog
 - Fixed attaching mails to mail via Office Connector. [Rotonen]
 - Fix typo in favorite error message. [njohner]
 - Only display .docx files as possible proposal documents. [Rotonen]
-- Fix task revoking permissions on close/reassign. [phgross]
-- Fix an issue with missing zip after concurrent demand callback requests. [deiferni]
 - Render mail descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render mail descriptions as intelligent text on the mail overview. [Rotonen]
 - Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render document descriptions as intelligent text on the document overview. [Rotonen]
 - Remove the now-unnecessary js files from the favorites template. [Rotonen]
+
+
+2018.5.5 (2018-12-10)
+---------------------
+
+- Fix task revoking permissions on close/reassign. [phgross]
+- Fix an issue with missing zip after concurrent demand callback requests. [deiferni]
 
 
 2018.5.4 (2018-12-06)
