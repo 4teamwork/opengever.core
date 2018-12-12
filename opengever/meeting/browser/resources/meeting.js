@@ -842,15 +842,23 @@
     };
 
     this.addParagraph = function() {
-      var input = $("#schedule-paragraph");
+      var title = $("#schedule-paragraph-title");
+      var description = $("#schedule-paragraph-description");
       var button = $(".schedule-paragraph");
       button.addClass("loading");
-      return $.post(button.data().url, { title: input.val() }).done(function() {
-        input.val("");
-        self.updateConnected();
-      }).always(function() {
-        button.removeClass("loading");
-      });
+
+      return $.post(button.first().data().url, {
+          title: title.val(),
+          description: description.val(),
+          }).done(function() {
+            if(title.val()){
+              title.val("");
+              description.val("");
+              }
+            self.updateConnected();
+        }).always(function() {
+            button.removeClass("loading");
+        });
     };
 
     this.addText = function() {

@@ -450,11 +450,13 @@ class TestScheduleParagraph(IntegrationTestCase):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting,
                              view='agenda_items/schedule_paragraph',
-                             data={'title': u'Abschnitt A'})
+                             data={'title': u'\xc4bschnitt A',
+                                   'description': u'B\xe4schreibung'})
 
         agenda_items = self.meeting.model.agenda_items
         self.assertEquals(1, len(agenda_items))
-        self.assertEqual(u'Abschnitt A', agenda_items[0].title)
+        self.assertEqual(u'\xc4bschnitt A', agenda_items[0].title)
+        self.assertEqual(u'B\xe4schreibung', agenda_items[0].description)
         self.assertTrue(agenda_items[0].is_paragraph)
 
     @browsing
@@ -465,7 +467,8 @@ class TestScheduleParagraph(IntegrationTestCase):
         with browser.expect_http_error(code=403):
             browser.open(self.meeting,
                                  view='agenda_items/schedule_paragraph',
-                                 data={'title': u'Abschnitt A'})
+                                 data={'title': u'\xc4bschnitt A',
+                                       'description': u'B\xe4schreibung'})
 
     @browsing
     def test_raise_forbidden_when_meeting_is_closed(self, browser):
@@ -475,7 +478,8 @@ class TestScheduleParagraph(IntegrationTestCase):
         with browser.expect_http_error(code=403):
             browser.open(self.meeting,
                                  view='agenda_items/schedule_paragraph',
-                                 data={'title': u'Abschnitt A'})
+                                 data={'title': u'\xc4bschnitt A',
+                                       'description': u'B\xe4schreibung'})
 
 
 class TestScheduleText(IntegrationTestCase):

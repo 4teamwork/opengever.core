@@ -475,12 +475,13 @@ class AgendaItemsView(BrowserView):
         """
         self.require_agendalist_editable()
 
-        title = self.request.get('title')
+        title = safe_unicode(self.request.get('title'))
+        description = safe_unicode(self.request.get('description'))
         if not title:
             return JSONResponse(self.request).error(
                 _('empty_paragraph', default=u"Paragraph must not be empty.")).proceed().dump()
 
-        self.meeting.schedule_text(title, is_paragraph=True)
+        self.meeting.schedule_text(title, is_paragraph=True, description=description)
         return JSONResponse(self.request).info(
             _('paragraph_added', default=u"Paragraph successfully added.")
         ).proceed().dump()
