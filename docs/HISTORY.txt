@@ -13,6 +13,7 @@ Changelog
 - Add buttons for managers to get the toc json for meeting periods. [njohner]
 - Add absent members to the meeting protocolData. [njohner]
 - Add description field to paragraph add form. [njohner]
+- Port disposition tests to integration layer. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
 - Fixed attaching mails to mail via Office Connector. [Rotonen]
 - Fix typo in favorite error message. [njohner]
