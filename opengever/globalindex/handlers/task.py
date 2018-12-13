@@ -1,5 +1,5 @@
+from opengever.base.model import Session
 from opengever.base.sqlsyncer import SqlSyncer
-from opengever.globalindex import Session
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
