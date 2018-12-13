@@ -6,8 +6,11 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -94,6 +97,31 @@ class TestDossierContainer(IntegrationTestCase):
         self.assertSequenceEqual(
             [self.subdossier, self.subdossier2],
             map(self.brain_to_object, self.dossier.get_subdossiers(depth=1)))
+
+    def test_get_subdossiers_unrestricted_search(self):
+        self.login(self.dossier_manager)
+        # Protect self.subsubdossier so it cannot be seen by an 'Editor' of self.subdossier
+        self.assertFalse(getattr(self.subsubdossier, '__ac_local_roles_block__', False))
+        dossier_protector = IProtectDossier(self.subsubdossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.reading = [self.secretariat_user.getId()]
+        dossier_protector.protect()
+        self.assertTrue(getattr(self.subsubdossier, '__ac_local_roles_block__', False))
+        self.assertFalse(
+            api.user.has_permission('View', user=self.regular_user, obj=self.subsubdossier),
+            'This test does not actually test what it says on the tin, if self.regular_user can see self.subsubdossier.',
+        )
+
+        # Grant self.regular_user 'Editor' on self.subdossier so it can be closed by that user
+        RoleAssignmentManager(self.subdossier).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(), ['Reader', 'Contributor', 'Editor']))
+
+        with self.login(self.regular_user):
+            restricted_subdossiers = self.subdossier.get_subdossiers()
+            unrestricted_subdossiers = self.subdossier.get_subdossiers(unrestricted=True)
+
+        self.assertSequenceEqual([], map(self.brain_to_object, restricted_subdossiers))
+        self.assertSequenceEqual([self.subsubdossier], map(self.brain_to_object, unrestricted_subdossiers))
 
     def test_sequence_number(self):
         self.login(self.dossier_responsible)

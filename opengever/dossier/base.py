@@ -191,7 +191,10 @@ class DossierContainer(Container):
         if review_state:
             query['review_state'] = review_state
 
-        subdossiers = self.portal_catalog(query)
+        if unrestricted:
+            subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
+        else:
+            subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
         subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
