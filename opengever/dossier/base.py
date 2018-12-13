@@ -179,22 +179,14 @@ class DossierContainer(Container):
     def has_subdossiers(self):
         return len(self.get_subdossiers()) > 0
 
-    def get_subdossiers(
-            self,
-            sort_on='created',
-            sort_order='ascending',
-            review_state=None,
-            depth=-1,
-        ):
-
+    def get_subdossiers(self, sort_on='created', sort_order='ascending', review_state=None, depth=-1, unrestricted=False):
         dossier_path = '/'.join(self.getPhysicalPath())
-
         query = {
             'path': dict(query=dossier_path, depth=depth),
             'sort_on': sort_on,
             'sort_order': sort_order,
             'object_provides': IDossierMarker.__identifier__,
-            }
+        }
 
         if review_state:
             query['review_state'] = review_state
@@ -202,12 +194,7 @@ class DossierContainer(Container):
         subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
-        subdossiers = [
-            s
-            for s in subdossiers
-            if not s.getPath() == dossier_path
-            ]
-
+        subdossiers = [s for s in subdossiers if not s.getPath() == dossier_path]
         return subdossiers
 
     def is_subdossier(self):
