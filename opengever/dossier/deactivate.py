@@ -1,4 +1,5 @@
 from datetime import date
+from opengever.base.security import elevated_privileges
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
@@ -17,12 +18,11 @@ class DossierDeactivateView(BrowserView):
             return self.redirect()
 
         # recursively deactivate all dossiers
-        for subdossier in self.context.get_subdossiers():
-            state = api.content.get_state(obj=subdossier.getObject())
-            if state != 'dossier-state-inactive':
-                api.content.transition(
-                    obj=subdossier.getObject(),
-                    transition=u'dossier-transition-deactivate')
+        for subdossier in self.context.get_subdossiers(unrestricted=True):
+            with elevated_privileges():
+                state = api.content.get_state(obj=subdossier.getObject())
+                if state != 'dossier-state-inactive':
+                    api.content.transition(obj=subdossier.getObject(), transition=u'dossier-transition-deactivate')
 
         # deactivate main dossier
         self.set_end_date(self.context)

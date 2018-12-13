@@ -6,8 +6,12 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestDossierDeactivation(IntegrationTestCase):
@@ -85,3 +89,28 @@ class TestDossierDeactivation(IntegrationTestCase):
             editbar.menu_option('Actions', 'dossier-transition-deactivate').click()
 
         self.assertEqual(date(2016, 3, 29), IDossier(self.empty_dossier).end)
+
+    @browsing
+    def test_also_deactivates_children_user_cannot_view(self, browser):
+        with self.login(self.dossier_manager):
+            # Protect self.subsubdossier so it cannot be seen by an 'Editor' of self.subdossier
+            self.assertFalse(getattr(self.subsubdossier, '__ac_local_roles_block__', False))
+            dossier_protector = IProtectDossier(self.subsubdossier)
+            dossier_protector.dossier_manager = self.dossier_manager.getId()
+            dossier_protector.reading = [self.secretariat_user.getId()]
+            dossier_protector.protect()
+            self.assertTrue(getattr(self.subsubdossier, '__ac_local_roles_block__', False))
+            self.assertFalse(
+                api.user.has_permission('View', user=self.regular_user, obj=self.subsubdossier),
+                'This test does not actually test what it says on the tin, if self.regular_user can see self.subsubdossier.',
+            )
+
+            # Grant self.regular_user 'Editor' on self.subdossier so it can be closed by that user
+            RoleAssignmentManager(self.subdossier).add_or_update_assignment(
+                SharingRoleAssignment(self.regular_user.getId(), ['Reader', 'Contributor', 'Editor']))
+
+        self.login(self.regular_user, browser)
+        browser.open(self.subdossier, view='transition-deactivate', send_authenticator=True)
+
+        with self.login(self.dossier_manager):
+            self.assertEqual('dossier-state-inactive', api.content.get_state(self.subsubdossier))

@@ -28,6 +28,7 @@ Changelog
 - Translate z3c.formwidget.query (nothing). [njohner]
 - Add buttons for managers to get the toc json for meeting periods. [njohner]
 - Add absent members to the meeting protocolData. [njohner]
+- Also close subdossiers the current user cannot view. [Rotonen]
 - Add description field to paragraph add form. [njohner]
 - Fix bug in disposition ech0160 folder model. [njohner]
 - Port disposition tests to integration layer. [njohner]
