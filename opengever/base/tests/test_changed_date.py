@@ -156,6 +156,17 @@ class TestChangedUpdateForDossier(TestChangedUpdateBase):
         self.assert_changed_value(self.subdossier, FREEZING_TIME)
         self.assert_changed_value(self.dossier, self.dossier_initial_changed)
 
+    def test_changed_is_set_when_copy_paste_an_dossier(self):
+        self.login(self.regular_user)
+
+        with freeze(FREEZING_TIME):
+            new_dossier = api.content.copy(
+                source=self.subdossier, target=self.leaf_repofolder)
+
+        self.assert_changed_value(new_dossier, FREEZING_TIME)
+        for obj in new_dossier.objectValues():
+            self.assert_changed_value(obj, FREEZING_TIME)
+
 
 class TestChangedUpdateForTask(TestChangedUpdateBase):
 

@@ -114,7 +114,7 @@ def update_favorites_title(context, event):
 
 """
 The 'changed' field is updated when an object is created
-(IObjectCreatedEvent) and generally when modified by a user
+(IObjectAddedEvent) and generally when modified by a user
 (IObjectModifiedEvent except when the object is simply reindexed).
 The field is also updated for workflow status changes and when a document
 is checked-in or reverted to an older version. See opengever/base/configure.zcml
