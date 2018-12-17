@@ -5,6 +5,7 @@ Changelog
 2018.5.6 (unreleased)
 ---------------------
 
+- Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
 - Invalidate cached zip export app. [deiferni]
 
 
