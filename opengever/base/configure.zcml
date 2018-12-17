@@ -288,7 +288,7 @@
 
   <subscriber
       for="opengever.base.behaviors.changed.IChangedMarker
-           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.update_changed_date"
       />
 

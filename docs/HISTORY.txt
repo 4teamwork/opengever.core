@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
+- Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
 - Invalidate cached zip export app. [deiferni]
 
 
