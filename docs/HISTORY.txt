@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
 - Add description field to paragraph add form. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
 - Invalidate cached zip export app. [deiferni]
