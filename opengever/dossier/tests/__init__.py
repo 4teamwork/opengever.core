@@ -97,6 +97,7 @@ EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
 
 EXPECTED_MEETING_PROPERTIES = {
     'ogg.meeting.agenda_item_number': '',
+    'ogg.meeting.agenda_item_number_raw': '',
     'ogg.meeting.decision_number': '',
     'ogg.meeting.proposal_state': 'Submitted',
     'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',

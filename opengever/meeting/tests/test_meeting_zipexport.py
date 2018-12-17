@@ -136,7 +136,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             'agenda_items': [
                 {'opengever_id': 2, 'sort_order': 1, 'title': u'A Gesch\xfcfte'},
                 {
-                    'number': '1.', 'opengever_id': 3, 'proposal': {
+                    'number': '1.', 'number_raw': 1, 'opengever_id': 3, 'proposal': {
                         'checksum': 'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                         'file': 'Traktandum 1/Ad-hoc Traktandthm.docx',
                         'modified': u'2017-12-13T00:00:00+01:00',
@@ -152,6 +152,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                         'title': u'Vertr\xe4gsentwurf',
                     }],
                     'number': '2.',
+                    'number_raw': 2,
                     'opengever_id': 4,
                     'proposal': {
                         'checksum': '114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
@@ -209,6 +210,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     {u'sort_order': 1, u'title': u'A Gesch\xfcfte'},
                     {
                         u'number': u'1.',
+                        u'number_raw': 1,
                         u'proposal': {
                             u'checksum': u'e00d6c8fb32c30d3ca3a3f8e5d873565482567561023016d9ca18243ff1cfa14',
                             u'file': u'Traktandum 1/Ad-hoc Traktandthm.docx',
@@ -225,6 +227,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                             u'title': u'Vertr\xe4gsentwurf',
                         }],
                         u'number': u'2.',
+                        u'number_raw': 2,
                         u'proposal': {
                             u'checksum': u'114e7a059dc34c7459dab90904685584e331089d80bb6310183a0de009b66c3b',
                             u'file': u'Traktandum 2/Vertraege.docx',

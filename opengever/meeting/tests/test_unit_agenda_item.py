@@ -48,14 +48,14 @@ class TestProposalAgendaItem(FunctionalTestCase):
             self.agenda_item.get_title())
 
     def test_proposal_title_correctly_contains_number(self):
-        self.assertEqual(
-            u'1. Pr\xf6posal',
-            self.agenda_item.get_title(include_number=True))
+        self.assertEqual(u'1 Pr\xf6posal', self.agenda_item.get_title(include_number=True))
+        self.assertEqual(u'1. Pr\xf6posal', self.agenda_item.get_title(include_number=True, formatted=True))
 
     def test_serialize_proposal_agenda_item(self):
         self.assertEqual(
             {'css_class': 'proposal',
              'number': '1.',
+             'number_raw': 1,
              'id': 1,
              'title': 'Pr&ouml;posal',
              'description': 'F&uuml;&uuml;',
@@ -70,6 +70,7 @@ class TestProposalAgendaItem(FunctionalTestCase):
              'dossier_reference_number': u'Client1 1 / 1',
              'is_paragraph': False,
              'number': u'1.',
+             'number_raw': 1,
              'repository_folder_title': u'',
              'title': u'Pr\xf6posal'},
             self.agenda_item.get_agenda_item_data())
@@ -98,23 +99,23 @@ class TestSimpleAgendaItem(FunctionalTestCase):
         self.assertEqual(u'Simple', self.simple_agenda_item.get_title())
 
     def test_agenda_item_title_correctly_contains_number(self):
-        self.assertEqual(
-            u'1. Simple',
-            self.simple_agenda_item.get_title(include_number=True))
+        self.assertEqual(u'1 Simple', self.simple_agenda_item.get_title(include_number=True))
+        self.assertEqual(u'1. Simple', self.simple_agenda_item.get_title(include_number=True, formatted=True))
 
     def test_number_is_not_included_when_none(self):
-        self.simple_agenda_item.number = None
-        self.assertEqual(
-            u'Simple', self.simple_agenda_item.get_title(include_number=True))
+        self.simple_agenda_item.item_number = None
+        self.assertEqual(u'Simple', self.simple_agenda_item.get_title(include_number=True))
+        self.assertEqual(u'Simple', self.simple_agenda_item.get_title(include_number=True, formatted=True))
 
     def test_number_is_not_included_when_empty(self):
-        self.simple_agenda_item.number = ''
-        self.assertEqual(
-            u'Simple', self.simple_agenda_item.get_title(include_number=True))
+        self.simple_agenda_item.item_number = ''
+        self.assertEqual(u'Simple', self.simple_agenda_item.get_title(include_number=True))
+        self.assertEqual(u'Simple', self.simple_agenda_item.get_title(include_number=True, formatted=True))
 
     def test_serialize(self):
         self.assertEqual({'css_class': '',
                           'number': '1.',
+                          'number_raw': 1,
                           'id': 1,
                           'title': u'Simple',
                           'description': u'item description',

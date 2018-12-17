@@ -18,6 +18,7 @@ class ProposalDocPropertyProvider(object):
         properties = {
             'decision_number': '',
             'agenda_item_number': '',
+            'agenda_item_number_raw': '',
             'proposal_title': proposal.Title(),
             'proposal_description': proposal.Description(),
             'proposal_state': translate(proposal.get_state().title,
@@ -27,7 +28,8 @@ class ProposalDocPropertyProvider(object):
         agenda_item = proposal.load_model().agenda_item
         if agenda_item:
             properties['decision_number'] = agenda_item.get_decision_number()
-            properties['agenda_item_number'] = agenda_item.number
+            properties['agenda_item_number'] = agenda_item.formatted_number
+            properties['agenda_item_number_raw'] = agenda_item.item_number
 
         return properties
 
