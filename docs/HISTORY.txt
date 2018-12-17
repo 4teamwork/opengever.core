@@ -5,7 +5,7 @@ Changelog
 2018.5.6 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Invalidate cached zip export app. [deiferni]
 
 
 2018.5.5 (2018-12-10)
