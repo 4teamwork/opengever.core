@@ -26,6 +26,7 @@ Changelog
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
 - Also show participants with expired membership in meeting participants-tab. [njohner]
 - Change remaining "zurücksenden" to "ablegen". [njohner]
+- Also expand teams, like groups, on keyword widgets. [Rotonen]
 - Translate z3c.formwidget.query (nothing). [njohner]
 - Add buttons for managers to get the toc json for meeting periods. [njohner]
 - Add absent members to the meeting protocolData. [njohner]

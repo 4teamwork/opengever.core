@@ -9,15 +9,23 @@
       }
 
       var isGroup = false;
+      var isTeam = false;
       var principalId = '';
       var principalTitle = '';
       var baseClass = 'keywordWidgetUsersAndGroupsElement';
       var groupMemberEndpoint = '@@list_groupmembers';
+      var teamMemberEndpoint = '@@list_teammembers';
 
       function init(data) {
         var principal = data.id.split('group:');
         if (principal.length > 1) {
           isGroup = true;
+        }
+        else {
+          principal = data.id.split('team:');
+          if (principal.length > 1) {
+            isTeam = true;
+          }
         }
         principalId = principal[principal.length - 1];
         principalTitle = data.text;
@@ -28,6 +36,18 @@
         element.addClass(baseClass);
         element.append($('<span class="fa fa-user"></span>'));
         element.append($('<span />').text(principalTitle));
+        return element;
+      }
+
+      function generateTeamElement() {
+        var element = $('<a />');
+        element.addClass(baseClass);
+        element.attr('href', teamMemberEndpoint + '?team=' + principalId);
+        element.append($('<span class="fa fa-users"></span>'));
+        element.append($('<span />').text(principalTitle));
+        element.prepOverlay({
+          subtype: 'ajax',
+        });
         return element;
       }
 
@@ -48,6 +68,8 @@
 
       if (isGroup) {
         return generateGroupElement();
+      } else if (isTeam) {
+        return generateTeamElement();
       } else {
         return generateUserElement();
       }
