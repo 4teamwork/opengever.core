@@ -84,7 +84,7 @@ msgstr "Wollen sie das Protokoll wirklich neu generieren?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to return this excerpt to the proposer?"
-msgstr "Wollen Sie diesen Protokollauszug wirklich an den Antragsteller zurücksenden?"
+msgstr "Wollen Sie diesen Protokollauszug wirklich im Ursprungsdossier ablegen?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure, you want to decide this agendaitem?"
@@ -687,7 +687,7 @@ msgstr "Protokollauszug erfolgreich generiert."
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
-msgstr "Der Protokollauszug wurde an den Antragsteller zurückgesendet."
+msgstr "Der Protokollauszug wurde im Urspurungsdossier abgelegt."
 
 #. Default: "Excused"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -732,12 +732,12 @@ msgstr "Sitzungsvorlage mit vordefinierten Zwischentiteln"
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_return_excerpt"
-msgstr "Diesen Protokollauszug als definitive Antwort an den Antrag zurücksenden."
+msgstr "Diesen Protokollauszug als definitive Antwort im Ursprungsdossier ablegen."
 
 #. Default: "This excerpt was returned to the dossier"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_returned_excerpt"
-msgstr "Dieser Protokollauszug wurde als Antwort an den Antrag zurückgesendet."
+msgstr "Dieser Protokollauszug wurde als Antwort im Ursprungsdossier abgelegt."
 
 #. Default: "Hold meeting"
 #: ./opengever/meeting/model/meeting.py
@@ -843,7 +843,7 @@ msgstr "Sitzung stornieren"
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
-msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und zurückgesendet wurden."
+msgstr "Die Sitzung kann nicht abgeschlossen werden solange noch nicht alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und abgelegt wurden."
 
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
@@ -1442,7 +1442,7 @@ msgstr "Wählen Sie einen aussagekräftigen Titel um die Protokollauszüge besse
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_confirm_return_excerpt_dialog"
-msgstr "Der Protokollauszug wird an den Antragsteller bzw. ins Ursprungsdossier des Antrags zurückgesendet. Es können keine weiteren Protokollauszüge zurückgesendet werden."
+msgstr "Der Protokollauszug wird im Ursprungsdossier des Antrags abgelegt. Es können keine weiteren Protokollauszüge abgelegt werden."
 
 #. Default: "Download original files rather than PDF files."
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
@@ -1517,7 +1517,7 @@ msgstr "Antrag erfolgreich eingereicht."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und zurückgesendet wurden."
+msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und abgelegt wurden."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py

@@ -34,7 +34,7 @@ msgstr "L'objet a été déplacé vers la corbeille"
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
-msgstr "L'objet n'a pas pu être supprimé, il s'agit d'un extrait de protocol renvoyé comme réponse à une proposition"
+msgstr "L'objet n'a pas pu être supprimé, il s'agit d'un extrait de protocol déposé comme réponse dans le dossier d'origine d'une demande."
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."

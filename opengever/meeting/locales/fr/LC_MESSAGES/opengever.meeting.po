@@ -86,7 +86,7 @@ msgstr "Voulez-vous vraiment génerer une nouvelle version du protocole?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure you want to return this excerpt to the proposer?"
-msgstr "Voulez-vous vraiment renvoyer l'extrait de ce procès-verbal au demandeur?"
+msgstr "Voulez-vous vraiment déposer l'extrait du protocole dans le dossier d'origine?"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure, you want to decide this agendaitem?"
@@ -340,7 +340,7 @@ msgstr "Rouvrir la séance"
 #. Default: "Return to proposal"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_return_excerpt"
-msgstr "Classer l'extrait de protocole"
+msgstr "Déposer l'extrait de protocole"
 
 #. Default: "Active"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -689,7 +689,7 @@ msgstr "Extrait de protocole généré avec succès."
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
-msgstr "L'extrait de protocole a été renvoyé au demandeur."
+msgstr "L'extrait de protocole a été déposé dans le dossier d'origine de la demande."
 
 #. Default: "Excused"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -734,12 +734,12 @@ msgstr "Modèle de séance avec intertitre prédéfinis"
 #. Default: "Return this excerpt the as official answer to the proposal."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_return_excerpt"
-msgstr "Renvoyer cet extrait de protocole comme réponse définitive à la proposition."
+msgstr "Déposer cet extrait de protocole comme réponse définitive dans le dossier d'origine de la demande."
 
 #. Default: "This excerpt was returned to the dossier"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "help_returned_excerpt"
-msgstr "Cet extrait de protocole a été renvoyé comme réponse à la proposition."
+msgstr "Cet extrait de protocole a été déposé comme réponse dans le dossier d'origine de la demande."
 
 #. Default: "Hold meeting"
 #: ./opengever/meeting/model/meeting.py
@@ -845,7 +845,7 @@ msgstr "Annuler la séance"
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
-msgstr "La séance ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et renvoyés comme réponse."
+msgstr "La séance ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
 
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
@@ -1115,7 +1115,7 @@ msgstr "séance"
 #. Default: "Contains automatically generated dossiers and documents for this committee."
 #: ./opengever/meeting/committee.py
 msgid "label_linked_repository_folder"
-msgstr "Tous les documents et dossiers de séance générés automatiquement seront classés sous cette position."
+msgstr "Tous les documents et dossiers de séance générés automatiquement seront déposés sous cette position."
 
 #. Default: "Location"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1241,12 +1241,12 @@ msgstr "Supprimer"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_return_excerpt"
-msgstr "Classer l'extrait de protocole"
+msgstr "Déposer l'extrait de protocole"
 
 #. Default: "Returned"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
-msgstr "Classé dans le dossier."
+msgstr "Déposé dans le dossier."
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py
@@ -1444,7 +1444,7 @@ msgstr "Choisissez un titre pertinent permettant de mieux différencier les extr
 #. Default: "When returning an excerpt to the proposer the selected document will be sent back to the proposals originating dossier. No other excerpts can be returned."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_confirm_return_excerpt_dialog"
-msgstr "L'extrait de protocole est renvoyé au demandeur ou au dossier d'origine de la demande. Aucun extrait de protocole supplémentaire ne peut être renvoyé."
+msgstr "L'extrait de protocole est déposé dans le dossier d'origine de la demande. Aucun extrait de protocole supplémentaire ne peut y être déposé."
 
 #. Default: "Download original files rather than PDF files."
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
@@ -1519,7 +1519,7 @@ msgstr "Proposition soumise avec succès."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "La séance pourra seulement être clôturée quand tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et renvoyés comme réponse."
+msgstr "La séance ne pourra être clôturée que lorsque tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
@@ -1703,7 +1703,7 @@ msgstr "Réactiver"
 #. Default: "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "return_excerpt"
-msgstr "Classer l'extrait de protocole"
+msgstr "Déposer l'extrait de protocole"
 
 #. Default: "Revise"
 #: ./opengever/meeting/model/agendaitem.py
