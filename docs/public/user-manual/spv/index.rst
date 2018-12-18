@@ -23,6 +23,5 @@ können Sie in den untenstehenden Kapiteln nachlesen.
    sitzung-durchfuehren
    sitzung-abschliessen
    sitzungsunterlagen-aufbereiten
-   ausblick
 
 .. disqus::
