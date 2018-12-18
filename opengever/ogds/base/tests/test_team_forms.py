@@ -29,9 +29,9 @@ class TestTeamAddForm(IntegrationTestCase):
         form.find_widget('Org Unit').fill('fa')
         form.find_widget('Group').fill('projekt_a')
         browser.find('Save').click()
-        self.assertEquals(3, len(Team.query.all()))
+        self.assertEquals(4, len(Team.query.all()))
 
-        team = Team.query.get(3)
+        team = Team.query.get(4)
         self.assertEquals('projekt_a', team.groupid)
         self.assertEquals(u'Projekt \xdcberbaung Dorfmatte', team.title)
         self.assertEquals('fa', team.org_unit_id)

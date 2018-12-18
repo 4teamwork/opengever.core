@@ -23,4 +23,4 @@ class TestHooks(IntegrationTestCase):
         self.assertEqual(4, AgendaItem.query.count())
         self.assertEqual(9, Meeting.query.count())
 
-        self.assertEqual(8, Team.query.count())
+        self.assertEqual(10, Team.query.count())

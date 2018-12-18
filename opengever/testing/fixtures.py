@@ -339,6 +339,24 @@ class OpengeverContentFixture(object):
                 )
             )
 
+        group_empty = create(
+            Builder('ogds_group')
+            .having(
+                groupid=u'projekt_laeaer',
+                title=u'Projekt L\xc3\xa4\xc3\xa4r',
+                users=[],
+            )
+        )
+
+        create(
+            Builder('ogds_team')
+            .having(
+                title=u'Sekretariat Abteilung Null',
+                group=group_empty,
+                org_unit=self.org_unit,
+            )
+        )
+
     @staticuid()
     def create_repository_tree(self):
         self.root = self.register('repository_root', create(
