@@ -2,6 +2,7 @@
 *.mo
 *.pyc
 .DS_Store
+_build/
 /.installed.cfg
 /.mr.developer.cfg
 /.python-version
@@ -9,7 +10,6 @@
 /.ruby-version
 /.sass-cache
 /README.html
-/_build/
 /build/
 /buildout.cfg
 /coverage/
