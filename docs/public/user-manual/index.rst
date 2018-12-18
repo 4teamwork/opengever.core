@@ -27,5 +27,6 @@ Release 2018.3
    standardablaeufe
    meine_ablage
    spv/index
+   sitzungs-app/index
 
 * :ref:`genindex`
