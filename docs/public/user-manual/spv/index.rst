@@ -23,6 +23,6 @@ können Sie in den untenstehenden Kapiteln nachlesen.
    sitzung-durchfuehren
    sitzung-abschliessen
    sitzungsunterlagen-aufbereiten
-   ausblick
+   periode-abschliessen
 
 .. disqus::
