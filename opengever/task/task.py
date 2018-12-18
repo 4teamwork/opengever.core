@@ -274,6 +274,14 @@ class IAddTaskSchema(ITask):
         fields=[u'tasktemplate_position'],
     )
 
+    form.widget(
+        'responsible',
+        KeywordFieldWidget,
+        async=True,
+        template_selection='usersAndGroups',
+        template_result='usersAndGroups',
+    )
+
     responsible = schema.List(
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
