@@ -1002,7 +1002,7 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
 class TestAllFilteredGroupsSource(TestAllGroupsSource):
 
     def setUp(self):
-        super(TestAllGroupsSource, self).setUp()
+        super(TestAllFilteredGroupsSource, self).setUp()
         self.source = AllFilteredGroupsSource(self.portal)
 
     def test_search_does_not_find_blacklisted_groups(self):
