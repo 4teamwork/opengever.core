@@ -88,6 +88,24 @@ class TestCommittee(IntegrationTestCase):
             self.sablon_template, self.committee.get_protocol_suffix_template())
 
     @browsing
+    def test_committee_edit_form_fieldsets(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='edit')
+        form = browser.forms["form"]
+
+        self.assertEqual(1, len(form.css("#fieldset-default")))
+        fieldset = form.css("#fieldset-default")
+        self.assertEqual('Default', fieldset.css("legend").first.text)
+
+        self.assertEqual(1, len(form.css("#fieldset-0")))
+        fieldset = form.css("#fieldset-0")
+        self.assertEqual('Protocol templates', fieldset.css("legend").first.text)
+
+        self.assertEqual(1, len(form.css("#fieldset-1")))
+        fieldset = form.css("#fieldset-1")
+        self.assertEqual('Excerpt templates', fieldset.css("legend").first.text)
+
+    @browsing
     def test_can_configure_ad_hoc_template(self, browser):
         self.login(self.committee_responsible, browser)
 
@@ -110,6 +128,7 @@ class TestCommittee(IntegrationTestCase):
         browser.open(self.committee, view='edit')
         browser.fill({'Allowed ad-hoc agenda item templates': u'Freitext Traktandum'})
         browser.fill({'Ad hoc agenda item template': self.proposal_template})
+
         browser.find('Save').click()
         self.assertItemsEqual(['There were some errors.'],
                               statusmessages.error_messages())
@@ -452,30 +471,31 @@ class TestCommitteeWorkflow(IntegrationTestCase):
 
         fields = ['Title',
                   'Committeeresponsible',
-                  'Protocol header template',
-                  'Protocol suffix template',
-                  'Agenda item header template for the protocol',
-                  'Agenda item suffix template for the protocol',
-                  'Excerpt header template',
-                  'Excerpt suffix template',
+                  'Linked repository folder',
                   'Agendaitem list template',
                   'Table of contents template',
-                  'Linked repository folder',
-                  'Paragraph template',
                   'Allowed proposal templates',
+                  'Allowed ad-hoc agenda item templates',
                   'Ad hoc agenda item template',
-                  'Allowed ad-hoc agenda item templates']
+                  'Protocol header template',
+                  'Paragraph template',
+                  'Agenda item header template for the protocol',
+                  'Agenda item suffix template for the protocol',
+                  'Protocol suffix template',
+                  'Excerpt header template',
+                  'Excerpt suffix template']
+
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
             factoriesmenu.add('Committee')
             self.assertEquals(
                 fields,
                 map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > div.field > label')))
+                    browser.css('form#form > fieldset > div.field > label')))
 
         with self.login(self.committee_responsible, browser):
             browser.open(self.committee, view='edit')
             self.assertEquals(
                 fields,
                 map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > div.field > label')))
+                    browser.css('form#form > fieldset > div.field > label')))

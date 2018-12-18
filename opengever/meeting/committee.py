@@ -56,6 +56,36 @@ class ICommittee(model.Schema):
     """Base schema for the committee.
     """
 
+    model.fieldset(
+        u'protocol',
+        label=_(u'fieldset_protocol_templates', u'Protocol templates'),
+        fields=[
+            'protocol_header_template',
+            'paragraph_template',
+            'agenda_item_header_template',
+            'agenda_item_suffix_template',
+            'protocol_suffix_template',
+            ],
+        )
+
+    model.fieldset(
+        u'excerpt',
+        label=_(u'fieldset_excerpt_templates', u'Excerpt templates'),
+        fields=[
+            'excerpt_header_template',
+            'excerpt_suffix_template',
+            ],
+        )
+
+    repository_folder = RelationChoice(
+        title=_(u'Linked repository folder'),
+        description=_(
+            u'label_linked_repository_folder',
+            default=u'Contains automatically generated dossiers and documents '
+                    u'for this committee.'),
+        source=repository_folder_source,
+        required=True)
+
     protocol_header_template = RelationChoice(
         title=_('label_protocol_header_template',
                 default='Protocol header template'),
@@ -112,15 +142,6 @@ class ICommittee(model.Schema):
         required=False,
     )
 
-    repository_folder = RelationChoice(
-        title=_(u'Linked repository folder'),
-        description=_(
-            u'label_linked_repository_folder',
-            default=u'Contains automatically generated dossiers and documents '
-                    u'for this committee.'),
-        source=repository_folder_source,
-        required=True)
-
     paragraph_template = RelationChoice(
         title=_('label_paragraph_template',
                 default=u'Paragraph template'),
@@ -142,13 +163,6 @@ class ICommittee(model.Schema):
         default=None,
         missing_value=None)
 
-    ad_hoc_template = RelationChoice(
-        title=_('label_ad_hoc_template',
-                default=u'Ad hoc agenda item template'),
-        source=proposal_template_source,
-        required=False,
-    )
-
     form.widget('allowed_ad_hoc_agenda_item_templates', CheckBoxFieldWidget)
     allowed_ad_hoc_agenda_item_templates = schema.List(
         title=_(u'label_allowed_ad_hoc_agenda_item_templates',
@@ -162,6 +176,13 @@ class ICommittee(model.Schema):
         required=False,
         default=None,
         missing_value=None)
+
+    ad_hoc_template = RelationChoice(
+        title=_('label_ad_hoc_template',
+                default=u'Ad hoc agenda item template'),
+        source=proposal_template_source,
+        required=False,
+    )
 
     @invariant
     def default_template_is_in_allowed_templates(data):
