@@ -1,6 +1,7 @@
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
 from opengever.meeting.model import Proposal
+from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import applyProfile
@@ -21,3 +22,5 @@ class TestHooks(IntegrationTestCase):
         self.assertEqual(5, Proposal.query.count())
         self.assertEqual(4, AgendaItem.query.count())
         self.assertEqual(9, Meeting.query.count())
+
+        self.assertEqual(8, Team.query.count())
