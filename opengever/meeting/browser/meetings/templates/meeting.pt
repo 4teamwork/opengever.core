@@ -359,41 +359,42 @@
                      i18n:attributes="placeholder" />
 
               <ul class="participant-list">
-                <li tal:repeat="participant participants"
-                    tal:define="cls python:meeting.is_editable() and 'editable' or '';
-                                cls string:participant folded ${cls}"
-                    tal:attributes="data-member-id participant/member_id;
-                                    class cls">
-                  <div tal:attributes="class participant/presence_cssclass" />
-                  <div class="fullname" tal:content="participant/fullname" />
-                  <a class="email" tal:condition="participant/email"
-                     tal:attributes="href string:mailto:${participant/email}"
-                     i18n:attributes="title"
-                     title="send email" />
-                  <div class="role"
-                       tal:content="participant/role/label"
-                       tal:attributes="data-rolename participant/role/name"/>
+                <span tal:repeat="participant participants">
+                  <li tal:define="cls python:meeting.is_editable() and 'editable ' + participant['presence_cssclass'];
+                                  cls string:participant folded ${cls}"
+                      tal:attributes="data-member-id participant/member_id;
+                                      class cls">
+                    <div tal:attributes="class python:participant['presence_cssclass']" />
+                    <div class="fullname" tal:content="participant/fullname" />
+                    <a class="email" tal:condition="participant/email"
+                       tal:attributes="href string:mailto:${participant/email}"
+                       i18n:attributes="title"
+                       title="send email" />
+                    <div class="role"
+                         tal:content="participant/role/label"
+                         tal:attributes="data-rolename participant/role/name"/>
 
-                  <div class="select-role-wrapper" tal:condition="meeting/is_editable">
-                    <select class="role"
-                            tal:attributes="data-url string:${context/absolute_url}/participants/change_role;
-                                            data-member_id participant/member_id">
-                      <option value=""></option>
-                      <option value="presidency" i18n:translate="meeting_role_presidency">Presidency</option>
-                    </select>
-                  </div>
+                    <div class="select-role-wrapper" tal:condition="meeting/is_editable">
+                      <select class="role"
+                              tal:attributes="data-url string:${context/absolute_url}/participants/change_role;
+                                              data-member_id participant/member_id">
+                        <option value=""></option>
+                        <option value="presidency" i18n:translate="meeting_role_presidency">Presidency</option>
+                      </select>
+                    </div>
 
-                  <div class="change_presence" tal:condition="meeting/is_editable">
-                    <input type="checkbox"
-                           tal:attributes="id string:presence-${participant/member_id};
-                                           data-url string:${context/absolute_url}/participants/change_presence;
-                                           data-member_id participant/member_id"
-                           class="excused" />
-                    <label i18n:translate="excused"
-                           tal:attributes="for string:presence-${participant/member_id}">Excused</label>
-                  </div>
+                    <div class="change_presence" tal:condition="meeting/is_editable">
+                      <input type="checkbox"
+                             tal:attributes="id string:presence-${participant/member_id};
+                                             data-url string:${context/absolute_url}/participants/change_presence;
+                                             data-member_id participant/member_id"
+                             class="excused" />
+                      <label i18n:translate="excused"
+                             tal:attributes="for string:presence-${participant/member_id}">Excused</label>
+                    </div>
 
-                </li>
+                  </li>
+                </span>
               </ul>
 
               <div class="other_participants"

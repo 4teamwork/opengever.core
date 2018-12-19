@@ -3720,8 +3720,10 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant { background-color: #e6e6e6; padding: 7px 10px; margin-bottom: 1px; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant:hover { background-color: #f5f5f5; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant.editable:hover { cursor: pointer; }
+#opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant.non-member.not-present { display: none; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .presence { display: inline-block; border-radius: 50%; width: 7px; height: 7px; margin-right: 5px; margin-bottom: 1px; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .presence.present { background-color: #62c462; }
+#opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .presence.present.non-member { background-color: #bd362f; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .presence.not-present { background-color: #969696; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .fullname { display: inline-block; color: #5C646A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; max-width: 130px; }
 #opengever_meeting_meeting.word-feature .sidebar #tab-participants ul.participant-list li.participant .email { color: #5C646A; padding: 0px 5px; font-size: 80%; vertical-align: 1px; border-radius: 2px; }

@@ -524,7 +524,9 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             &.editable:hover {
               cursor: pointer;
             }
-
+            &.non-member.not-present {
+              display: none;
+            }
             .presence {
               display: inline-block;
 	            border-radius: 50%;
@@ -534,6 +536,9 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
               margin-bottom: 1px;
               &.present {
                 background-color: $green-light;
+                &.non-member {
+                  background-color: $red;
+                }
               }
               &.not-present {
                 background-color: $discreet;

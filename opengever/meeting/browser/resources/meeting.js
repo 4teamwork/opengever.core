@@ -194,10 +194,14 @@
           wrapper.prevAll('div.presence').
                 removeClass('not-present').
                 addClass('present');
+          wrapper.parents(".presence").removeClass("not-present");
+          wrapper.parents(".presence").addClass("present");
         } else {
           wrapper.prevAll('div.presence').
                 removeClass('present').
                 addClass('not-present');
+          wrapper.parents(".presence").removeClass("present");
+          wrapper.parents(".presence").addClass('not-present');
         }
         self.showChangeSavedIcon(wrapper);
       });
