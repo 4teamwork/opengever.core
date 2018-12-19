@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.uuid.interfaces import IUUID
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 
@@ -32,3 +33,43 @@ class TestCopyDossiers(IntegrationTestCase):
         prefixed_intids = ref.get_prefix_mapping(subdossier_copy).keys()
         self.assertNotIn(intids.getId(subdossier), prefixed_intids)
         self.assertIn(intids.getId(subdossier_copy), prefixed_intids)
+
+    def test_indexes_are_updated_when_dossier_is_copied(self):
+        self.login(self.dossier_responsible)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdossier)
+        self.assert_index_value(1, 'is_subdossier', self.subdossier)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subsubdossier)
+        self.assert_index_value(1, 'is_subdossier', self.subsubdossier)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdocument)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', self.subdocument)
+
+        dossier_copy = api.content.copy(
+            source=self.subdossier, target=self.leaf_repofolder)
+
+        subdossier_copy = api.content.find(
+            context=dossier_copy, portal_type='opengever.dossier.businesscasedossier',
+            depth=1)[0].getObject()
+
+        subdocument_copy = api.content.find(
+            context=dossier_copy, portal_type='opengever.document.document',
+            depth=1)[0].getObject()
+
+        self.assert_index_and_metadata(dossier_copy.Title(),
+                                       'containing_dossier', dossier_copy)
+        self.assert_index_value(0, 'is_subdossier', dossier_copy)
+
+        self.assert_index_and_metadata(dossier_copy.Title(),
+                                       'containing_dossier', subdossier_copy)
+        self.assert_index_value(1, 'is_subdossier', subdossier_copy)
+
+        self.assert_index_and_metadata(dossier_copy.Title(),
+                                       'containing_dossier', subdocument_copy)
+        self.assert_index_and_metadata('', 'containing_subdossier',
+                                       subdocument_copy)

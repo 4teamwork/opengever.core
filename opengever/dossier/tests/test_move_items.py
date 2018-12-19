@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from requests_toolbelt.utils import formdata
@@ -52,6 +53,261 @@ class TestMoveItems(IntegrationTestCase):
         self.assert_does_not_contain(
             self.dossier, [doc_title, subdossier_title])
         self.assert_contains(self.empty_dossier, [doc_title, subdossier_title])
+
+    def test_indexes_are_updated_when_document_moved_from_dossier_to_dossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.document)
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', self.document)
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.move_items([self.document],
+                            source=self.dossier,
+                            target=self.empty_dossier)
+
+        document, = children.get('added')
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', document)
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', document)
+
+    def test_indexes_are_updated_when_document_moved_from_subdossier_to_subdossier(self):
+        self.login(self.regular_user)
+        empty_subdossier = create(Builder("dossier").titled(u"destination").within(self.empty_dossier))
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdocument)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', self.subdocument)
+
+        with self.observe_children(empty_subdossier) as children:
+            self.move_items([self.subdocument],
+                            source=self.subdossier,
+                            target=empty_subdossier)
+
+        document, = children.get('added')
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', document)
+        self.assert_index_and_metadata(empty_subdossier.Title(),
+                                       'containing_subdossier', document)
+
+    def test_indexes_are_updated_when_document_moved_from_dossier_to_subdossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.meeting_dossier.Title(),
+                                       'containing_dossier', self.meeting_document)
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', self.meeting_document)
+
+        with self.observe_children(self.subdossier) as children:
+            self.move_items([self.meeting_document],
+                            source=self.meeting_dossier,
+                            target=self.subdossier)
+
+        document, = children.get('added')
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', document)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', document)
+
+    def test_indexes_are_updated_when_document_moved_from_subdossier_to_dossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdocument)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', self.subdocument)
+
+        with self.observe_children(self.meeting_dossier) as children:
+            self.move_items([self.subdocument],
+                            source=self.subdossier,
+                            target=self.meeting_dossier)
+
+        document, = children.get('added')
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', document)
+        self.assert_index_and_metadata(self.meeting_dossier.Title(),
+                                       'containing_dossier', document)
+
+    def test_indexes_are_updated_when_task_moved_from_dossier_to_subdossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.meeting_dossier.Title(),
+                                       'containing_dossier', self.meeting_task)
+        self.assert_index_and_metadata('', 'containing_subdossier', self.meeting_task)
+
+        self.assert_index_and_metadata(self.meeting_dossier.Title(),
+                                       'containing_dossier', self.meeting_subtask)
+        self.assert_index_and_metadata('', 'containing_subdossier', self.meeting_subtask)
+
+        with self.observe_children(self.subdossier) as children:
+            self.move_items([self.meeting_task],
+                            source=self.meeting_dossier,
+                            target=self.subdossier)
+
+        task, = children.get('added')
+        subtask = api.content.find(task, depth=1)[0].getObject()
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', task)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', task)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', subtask)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', subtask)
+
+    def test_indexes_are_updated_when_mail_moved_from_dossier_to_subdossier(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.mail_eml)
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', self.mail_eml)
+
+        with self.observe_children(self.subdossier) as children:
+            self.move_items([self.mail_eml],
+                            source=self.dossier,
+                            target=self.subdossier)
+
+        mail, = children.get('added')
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', mail)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', mail)
+
+    def test_indexes_are_updated_when_subdossier_is_moved_into_repofolder(self):
+        self.login(self.regular_user)
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdocument)
+        self.assert_index_and_metadata(self.subdossier.Title(),
+                                       'containing_subdossier', self.subdocument)
+
+        self.assert_index_value(1, 'is_subdossier', self.subdossier)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subdossier)
+
+        self.assert_index_value(1, 'is_subdossier', self.subsubdossier)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subsubdossier)
+
+        with self.observe_children(self.empty_repofolder) as children:
+            self.move_items([self.subdossier],
+                            source=self.dossier,
+                            target=self.empty_repofolder)
+
+        dossier, = children.get('added')
+        subdossier = dossier.get_subdossiers()[0].getObject()
+        document = api.content.find(context=dossier,
+                                    portal_type="opengever.document.document",
+                                    depth=1)[0].getObject()
+
+        self.assert_index_value(0, 'is_subdossier', dossier)
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_dossier', dossier)
+
+        self.assert_index_value(1, 'is_subdossier', subdossier)
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_dossier', subdossier)
+
+        self.assert_index_and_metadata('', 'containing_subdossier', document)
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_dossier', document)
+
+    def test_indexes_are_updated_when_subsubdossier_is_moved_into_repofolder(self):
+        self.login(self.regular_user)
+        subsubdocument = create(Builder("document").titled(u"subsubdocument")
+                                .within(self.subsubdossier))
+
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', subsubdocument)
+        self.assert_index_and_metadata(self.subsubdossier.Title(),
+                                       'containing_subdossier', subsubdocument)
+
+        self.assert_index_value(1, 'is_subdossier', self.subsubdossier)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', self.subsubdossier)
+
+        with self.observe_children(self.empty_repofolder) as children:
+            self.move_items([self.subsubdossier],
+                            source=self.dossier,
+                            target=self.empty_repofolder)
+
+        dossier, = children.get('added')
+        document = api.content.find(context=dossier,
+                                    portal_type="opengever.document.document",
+                                    depth=1)[0].getObject()
+
+        self.assert_index_value(0, 'is_subdossier', dossier)
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_dossier', dossier)
+
+        self.assert_index_and_metadata('', 'containing_subdossier', document)
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_dossier', document)
+
+    def test_indexes_are_updated_when_dossier_is_moved_into_dossier(self):
+        self.login(self.regular_user)
+        document = create(Builder("document").titled(u"document").within(self.empty_dossier))
+
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', document)
+        self.assert_index_and_metadata('', 'containing_subdossier', document)
+
+        self.assert_index_value(0, 'is_subdossier', self.empty_dossier)
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', self.empty_dossier)
+
+        with self.observe_children(self.dossier) as children:
+            self.move_items([self.empty_dossier],
+                            source=self.leaf_repofolder,
+                            target=self.dossier)
+
+        dossier, = children.get('added')
+        document = api.content.find(context=dossier, depth=1)[0].getObject()
+
+        self.assert_index_value(1, 'is_subdossier', dossier)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', dossier)
+
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_subdossier', document)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', document)
+
+    def test_indexes_are_updated_when_dossier_is_moved_into_subsubdossier(self):
+        self.login(self.regular_user)
+        api.portal.set_registry_record(
+            "opengever.dossier.interfaces.IDossierContainerTypes.maximum_dossier_depth", 2)
+        document = create(Builder("document").titled(u"document").within(self.empty_dossier))
+
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', document)
+        self.assert_index_and_metadata('',
+                                       'containing_subdossier', document)
+
+        self.assert_index_value(0, 'is_subdossier', self.empty_dossier)
+        self.assert_index_and_metadata(self.empty_dossier.Title(),
+                                       'containing_dossier', self.empty_dossier)
+
+        with self.observe_children(self.subdossier) as children:
+            self.move_items([self.empty_dossier],
+                            source=self.leaf_repofolder,
+                            target=self.subdossier)
+
+        dossier, = children.get('added')
+        document = api.content.find(context=dossier, depth=1)[0].getObject()
+
+        self.assert_index_value(1, 'is_subdossier', dossier)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', dossier)
+
+        self.assert_index_and_metadata(dossier.Title(),
+                                       'containing_subdossier', document)
+        self.assert_index_and_metadata(self.dossier.Title(),
+                                       'containing_dossier', document)
 
     def test_only_open_items_appear_in_destination_widget(self):
         self.login(self.dossier_manager)
