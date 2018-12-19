@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Remove plonetheme.teamraum upgradesteps. [phgross]
 - Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
 - Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
 - Translate z3c.formwidget.query (nothing). [njohner]

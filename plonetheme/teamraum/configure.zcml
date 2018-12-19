@@ -48,8 +48,6 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <include package=".upgrades" />
-
   <plone:static type="theme" directory="resources" />
 
   <cmf:registerDirectory name="plonetheme_teamraum_gever"/>

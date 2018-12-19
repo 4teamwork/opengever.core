@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_javascripts" meta_type="JavaScripts Registry"
-        autogroup="False">
-
-  <javascript id="++theme++plonetheme.teamraum/js/Editbox.js" remove="True" />
-
-</object>
