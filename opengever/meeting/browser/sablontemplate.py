@@ -62,6 +62,13 @@ SAMPLE_MEETING_DATA = {
                      'lastname': u'M\xfcller',
                      'role': None},
                     ],
+        'absentees': [
+                    {'firstname': 'Otto',
+                     'lastname': u'G\xfcnter',
+                     'fullname': u'G\xfcnter Otto',
+                     'role': 'Moderator',
+                     'email': u'guenter@example.com'},
+                    ],
         'other': [u'Hans M\xfcller', u'Heidi Muster']},
     'protocol': {'type': u'Protocol'}}
 

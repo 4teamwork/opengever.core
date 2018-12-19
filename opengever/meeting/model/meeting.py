@@ -187,6 +187,12 @@ class Meeting(Base, SQLFormSupport):
         self.participants = [membership.member for membership in
                              Membership.query.for_meeting(self)]
 
+    @property
+    def absentees(self):
+        return [membership.member for membership in
+                Membership.query.for_meeting(self)
+                if membership.member not in set(self.participants)]
+
     def __repr__(self):
         return '<Meeting at "{}">'.format(self.start)
 
