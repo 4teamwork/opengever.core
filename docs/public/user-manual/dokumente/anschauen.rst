@@ -69,10 +69,6 @@ Word Dokument                         .doc, .docx     Microsoft Word
 
 Word Vorlage                          .dot, .dotx     Microsoft Word
 
-Word Dokument mit Makros              .docm           Microsoft Word
-
-Word Vorlage mit Makros               .dotm           Micorsoft Word
-
 Word Perfect Dokument                 .wpd            Microsoft Word
 
 Wordpad Dokument                      .wpc            Microsoft Word
@@ -87,10 +83,6 @@ Excel Dokument                        .xls, .xlsx     Microsoft Excel
 
 Excel Vorlage                         .xlt, .xltx     Microsoft Excel
 
-Excel Dokument mit Makros             .xlsm           Microsoft Excel
-
-Excel Vorlage mit Makros              .xltm           Microsoft Excel
-
 PowerPoint Präsentation               .ppt, .pptx     Microsoft PowerPoint
 
 PowerPoint Vorlage                    .pot, .potx     Microsoft PowerPoint
@@ -98,8 +90,6 @@ PowerPoint Vorlage                    .pot, .potx     Microsoft PowerPoint
 PowerPoint Bildschirmpräsentation     .pps, .ppsx     Microsoft PowerPoint
 
 PowerPoint Präsentation mit Makros    .pptm           Microsoft PowerPoint
-
-PowerPoint Vorlage mit Makros         .potm           Microsoft PowerPoint
 
 Visio Zeichnung                       .vsd, .vdx      Microsoft Visio
 

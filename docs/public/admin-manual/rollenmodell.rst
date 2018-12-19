@@ -62,7 +62,7 @@ Innerhalb der Ordnungsstruktur können Rechte zugewiesen werden für
 Diese Rechte werden jeweils AD-Gruppen zugewiesen. Damit werden faktisch
 "Benutzergruppen" gebildet.
 
-Best Practice ist, innerhalb der Organisation ein Gruppe von Personen
+Best Practice ist, innerhalb der Organisation eine Gruppe von Personen
 (Benutzergruppe) zu bilden die jeweils alle obgenannten Rechte exkl.
 "reaktivieren" besitzt. Dabei handelt es sich um generell formuliert
 "Sachbearbeitende".

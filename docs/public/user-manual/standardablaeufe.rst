@@ -85,7 +85,7 @@ Beim Auslösen eines parallelen Standardablaufs wird eine Hauptaufgabe mit
 mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist ersichtlich, dass es
 sich um einen parallelen Standardablauf handelt. Wird ein paralleler
 Standardablauf ausgelöst, so werden alle Aufgaben automatisch in den Status
-"Offen" versetzt und und stehen somit zur gleichzeitigen Bearbeitung bereit.
+"Offen" versetzt und stehen somit zur gleichzeitigen Bearbeitung bereit.
 
 Beim Auslösen eines sequenziellen Standardablaufs wird ebenfalls eine
 Hauptaufgabe mit mehreren Unteraufgaben erstellt. Auf der Hauptaufgabe ist
