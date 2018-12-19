@@ -31,6 +31,22 @@
           </a>
         </li>
       </ul>
+      <ul class="debug actions" tal:condition="view/is_manager">
+        <li>
+          <a class="download_toc_json"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/alphabetical_toc/as_json"
+             i18n:translate="label_download_alphabetical_toc_json">
+            download TOC json alphabetical
+          </a>
+        </li>
+        <li>
+          <a class="download_toc_json"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_toc/as_json"
+             i18n:translate="label_download_repository_toc_json">
+            download TOC json repository
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
 

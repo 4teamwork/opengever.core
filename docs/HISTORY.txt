@@ -8,6 +8,7 @@ Changelog
 - Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
 - Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
 - Translate z3c.formwidget.query (nothing). [njohner]
+- Add buttons for managers to get the toc json for meeting periods. [njohner]
 - Add description field to paragraph add form. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
 - Invalidate cached zip export app. [deiferni]

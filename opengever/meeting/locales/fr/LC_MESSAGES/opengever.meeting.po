@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-26 07:04+0000\n"
+"POT-Creation-Date: 2018-11-22 08:07+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -968,10 +968,20 @@ msgstr "Dossier indisponible"
 msgid "label_download_alphabetical_toc"
 msgstr "Table de matière alphabétique"
 
+#. Default: "download TOC json alphabetical"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_alphabetical_toc_json"
+msgstr "Table de matière alphabétique JSON"
+
 #. Default: "download TOC by repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc"
 msgstr "Table de matière selon l'ordre des points"
+
+#. Default: "download TOC json repository"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_toc_json"
+msgstr "Table de matière selon l'ordre des points JSON"
 
 #. Default: "Download Zip of original files"
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt

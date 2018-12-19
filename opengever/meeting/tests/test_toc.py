@@ -3,7 +3,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from ftw.testbrowser.exceptions import HTTPServerError
+from ftw.testbrowser.exceptions import InsufficientPrivileges
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
@@ -231,8 +231,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                          error_messages()[0])
 
     @browsing
-    def test_toc_json_can_be_downloaded(self, browser):
+    def test_toc_json_can_be_downloaded_only_by_managers(self, browser):
         url = self.period.get_url(self.committee)
+        with self.assertRaises(InsufficientPrivileges):
+            browser.login().open(url, view='alphabetical_toc/as_json')
+
+        self.grant('Manager')
         browser.login().open(url, view='alphabetical_toc/as_json')
         self.assertEqual(self.expected_toc_json, browser.json)
 
@@ -345,8 +349,12 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                          error_messages()[0])
 
     @browsing
-    def test_toc_json_can_be_downloaded(self, browser):
+    def test_toc_json_can_be_downloaded_only_by_managers(self, browser):
         url = self.period.get_url(self.committee)
+        with self.assertRaises(InsufficientPrivileges):
+            browser.login().open(url, view='repository_toc/as_json')
+
+        self.grant('Manager')
         browser.login().open(url, view='repository_toc/as_json')
         self.assertEqual(self.expected_toc_json, browser.json)
 

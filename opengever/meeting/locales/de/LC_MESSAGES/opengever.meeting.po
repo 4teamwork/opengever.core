@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-26 07:04+0000\n"
+"POT-Creation-Date: 2018-11-22 08:07+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -966,10 +966,20 @@ msgstr "Dossier nicht verfügbar"
 msgid "label_download_alphabetical_toc"
 msgstr "Inhaltsverzeichnis alphabetisch"
 
+#. Default: "download TOC json alphabetical"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_alphabetical_toc_json"
+msgstr "Inhaltsverzeichnis alphabetisch JSON"
+
 #. Default: "download TOC by repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc"
 msgstr "Inhaltsverzeichnis nach Ordnungsposition"
+
+#. Default: "download TOC json repository"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_toc_json"
+msgstr "Inhaltsverzeichnis nach Ordnungsposition JSON"
 
 #. Default: "Download Zip of original files"
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt

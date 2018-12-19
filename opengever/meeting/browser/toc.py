@@ -7,6 +7,7 @@ from opengever.meeting.toc.repository import RepositoryBasedTOC
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -69,9 +70,15 @@ class DownloadAlphabeticalTOC(BrowserView):
                         }),
                       context=getRequest()))
 
+    def is_manager(self):
+        """This condition should reflect is_manager in PeriodsTab.
+        """
+        return api.user.has_permission('cmf.ManagePortal')
+
     def as_json(self):
         """Return the table of contents data as JSON."""
-
+        if not self.is_manager():
+            raise Unauthorized()
         response = self.request.response
         response.setHeader('Content-Type', 'application/json')
         response.setHeader('X-Theme-Disabled', 'True')
