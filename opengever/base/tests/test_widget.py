@@ -1,5 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.z3cform.interfaces import IPloneFormLayer
 from z3c.form.browser.text import TextWidget
 from zope.component import getMultiAdapter
@@ -7,7 +7,7 @@ from zope.interface import alsoProvides
 from zope.schema._bootstrapfields import TextLine
 
 
-class TestGeverRenderWidget(FunctionalTestCase):
+class TestGeverRenderWidget(IntegrationTestCase):
     def setUp(self):
         super(TestGeverRenderWidget, self).setUp()
         textfield = TextLine()
@@ -54,11 +54,12 @@ class TestGeverRenderWidget(FunctionalTestCase):
             widget_renderer.get_description())
 
 
-class TestRadioTableWidget(FunctionalTestCase):
+class TestRadioTableWidget(IntegrationTestCase):
 
     @browsing
     def test_renders_default_table_columns(self, browser):
-        browser.login().visit(view='test-z3cform-widget')
+        self.login(self.manager, browser=browser)
+        browser.open(view='test-z3cform-widget')
 
         self.assertEqual(
             # checkbox-column title/text is empty and that's ok.
@@ -68,7 +69,9 @@ class TestRadioTableWidget(FunctionalTestCase):
 
     @browsing
     def test_renders_custom_table_columns(self, browser):
-        browser.login().visit(view='test-z3cform-widget')
+        self.login(self.manager, browser=browser)
+        browser.open(view='test-z3cform-widget')
+
         # checkbox-column title/text is empty and that's ok.
         expected_columns = [
             {'': '', 'Description': ''},
@@ -82,7 +85,7 @@ class TestRadioTableWidget(FunctionalTestCase):
 
     @browsing
     def test_does_not_render_none_choice_when_a_required_field(self, browser):
-        browser.login()
+        self.login(self.manager, browser=browser)
         browser.open(view='test-z3cform-required-widget')
         self.assertNotIn(
             {'': '', 'Description': ''},
@@ -91,13 +94,17 @@ class TestRadioTableWidget(FunctionalTestCase):
 
     @browsing
     def test_fill_table_choice_field(self, browser):
-        browser.login().visit(view='test-z3cform-widget')
+        self.login(self.manager, browser=browser)
+        browser.open(view='test-z3cform-widget')
+
         browser.fill({'form.widgets.default_radio_table_field': '2'}).submit()
         self.assertEqual({u'default_radio_table_field': [2, u'bar']}, browser.json)
 
     @browsing
     def test_renders_table_choice_input_fields(self, browser):
-        browser.login().visit(view='test-z3cform-widget')
+        self.login(self.manager, browser=browser)
+        browser.open(view='test-z3cform-widget')
+
         inputs = browser.css(
             '#formfield-form-widgets-default_radio_table_field input')
         expected_inputs = [
@@ -111,7 +118,9 @@ class TestRadioTableWidget(FunctionalTestCase):
 
     @browsing
     def test_renders_empty_message(self, browser):
-        browser.login().visit(view='test-z3cform-widget')
+        self.login(self.manager, browser=browser)
+        browser.open(view='test-z3cform-widget')
+
         self.assertEqual(
             "No items available",
             browser.css('#formfield-form-widgets-empty_radio_table_field .empty_message').first.text
