@@ -33,7 +33,7 @@ msgstr "Das Objekt ${obj} wurde bereits in den Papierkorb verschoben"
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is an excerpt that has been returned to the proposal."
-msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ein Protokollauszug, welcher als Antwort an einen Antrag zurückgesendet wurde."
+msgstr "Das Objekt ${obj} konnte nicht in den Papierkorb verschoben werden, es ist ein Protokollauszug, welcher als Antwort im Ursprungsdossier abgelegt wurde."
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is checked out."
