@@ -4,7 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from itertools import chain
 from opengever.base.protect import get_buckets_for_btree
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 import transaction
 import unittest
 
@@ -23,22 +23,16 @@ class TestBucketsForBTree(unittest.TestCase):
         self.assertEquals(50, len(list(chain(*keys))))
 
 
-class TestProtect(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestProtect, self).setUp()
-        repo_root = create(Builder('repository_root'))
-        repo_folder = create(Builder('repository').within(repo_root))
-        self.dossier = create(Builder('dossier').within(repo_folder))
-        self.document = create(Builder('document').within(self.dossier))
+class TestProtect(IntegrationTestCase):
 
     @browsing
     def test_initializes_annotations_without_csrf_confirmation(self, browser):
-        browser.login().open(self.document)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document)
+
         self.assertEquals(self.document.absolute_url(), browser.url)
 
         del self.document.__annotations__
-        transaction.commit()
 
-        browser.login().open(self.document)
+        browser.open(self.document)
         self.assertEquals(self.document.absolute_url(), browser.url)
