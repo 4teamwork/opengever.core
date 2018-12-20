@@ -9,14 +9,11 @@ Changelog
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
 - Also show participants with expired membership in meeting participants-tab. [njohner]
 - Change remaining "zurücksenden" to "ablegen". [njohner]
-- Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
-- Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
 - Translate z3c.formwidget.query (nothing). [njohner]
 - Add buttons for managers to get the toc json for meeting periods. [njohner]
 - Add absent members to the meeting protocolData. [njohner]
 - Add description field to paragraph add form. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
-- Invalidate cached zip export app. [deiferni]
 - Fixed attaching mails to mail via Office Connector. [Rotonen]
 - Fix typo in favorite error message. [njohner]
 - Only display .docx files as possible proposal documents. [Rotonen]
@@ -25,6 +22,14 @@ Changelog
 - Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render document descriptions as intelligent text on the document overview. [Rotonen]
 - Remove the now-unnecessary js files from the favorites template. [Rotonen]
+
+
+2018.5.6 (2018-12-17)
+---------------------
+
+- Bump docxcompose to 1.0.0a15 for bugfixes. [deiferni]
+- Set changed date on ObjectAdded instead of ObjectCreatedEvent. [phgross]
+- Invalidate cached zip export app. [deiferni]
 
 
 2018.5.5 (2018-12-10)
