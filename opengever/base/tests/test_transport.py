@@ -1,17 +1,11 @@
-from datetime import date
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
-from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.transport import Transporter
-from opengever.testing import FunctionalTestCase
-from plone.app.testing import TEST_USER_ID
+from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
 
 
-class TestTransporter(FunctionalTestCase):
+class TestTransporter(IntegrationTestCase):
     """We test the transporter using only one client since the setup is much
     easier and the remote request are in fact a separate tool.
     """
@@ -21,42 +15,33 @@ class TestTransporter(FunctionalTestCase):
         self.request = self.portal.REQUEST
 
     def test_transport_from_copies_the_object_inclusive_metadata_and_dublin_core_data(self):
-        dossier = create(Builder("dossier").titled(u"Dossier"))
-        document = create(Builder("document")
-                          .within(dossier)
-                          .titled(u'Testdocument')
-                          .with_dummy_content())
+        self.login(self.regular_user)
 
         transported_doc = Transporter().transport_from(
-            dossier, 'admin-unit-1', '/'.join(document.getPhysicalPath()))
+            self.empty_dossier, 'plone', '/'.join(self.document.getPhysicalPath()))
 
-        self.assertEquals('Testdocument', transported_doc.title)
-        self.assertEquals('Test data', transported_doc.file.data)
+        self.assertEquals(self.document.title, transported_doc.title)
+        self.assertEquals(self.document.file.data, transported_doc.file.data)
 
         self.assertEquals(u'unprotected',
                           IClassification(transported_doc).classification)
         self.assertEquals(u'unchecked',
                           IClassification(transported_doc).public_trial)
 
-        self.assertEquals(document.created(), transported_doc.created())
-        self.assertEquals(TEST_USER_ID, transported_doc.Creator())
+        self.assertEquals(self.document.created(), transported_doc.created())
+        self.assertEquals(self.document.Creator(), transported_doc.Creator())
 
     def test_transport_to_returns_a_dict_with_the_path_to_the_new_object(self):
-        source_dossier = create(Builder("dossier").titled(u"Source"))
-        target_dossier = create(Builder("dossier").titled(u"Target"))
-        document = create(Builder("document")
-                          .within(source_dossier)
-                          .titled(u'Fo\xf6')
-                          .with_dummy_content())
+        self.login(self.regular_user)
 
         data = Transporter().transport_to(
-            document, 'admin-unit-1', '/'.join(target_dossier.getPhysicalPath()))
-        transported_doc = self.portal.unrestrictedTraverse(
-            data.get('path').encode('utf-8'))
+            self.document, 'plone', '/'.join(self.empty_dossier.getPhysicalPath()))
+
+        transported_doc = self.portal.unrestrictedTraverse(data.get('path').encode('utf-8'))
 
         # data
-        self.assertEquals(u'Fo\xf6', transported_doc.title)
-        self.assertEquals('Test data', transported_doc.file.data)
+        self.assertEquals(self.document.title, transported_doc.title)
+        self.assertEquals(self.document.file.data, transported_doc.file.data)
 
         # behavior data
         self.assertEquals(u'unprotected',
@@ -65,52 +50,38 @@ class TestTransporter(FunctionalTestCase):
                           IClassification(transported_doc).public_trial)
 
         # dublin core
-        self.assertEquals(document.created(), transported_doc.created())
-        self.assertEquals(TEST_USER_ID, transported_doc.Creator())
+        self.assertEquals(self.document.created(), transported_doc.created())
+        self.assertEquals(self.document.Creator(), transported_doc.Creator())
 
     def test_transports_tasks_correctly(self):
-        source_dossier = create(Builder("dossier").titled(u"Source"))
-        create(Builder("dossier").titled(u"Target"))
-        task = create(Builder("task")
-                      .within(source_dossier)
-                      .titled(u'Fo\xf6')
-                      .having(deadline=date(2014, 7, 1)))
+        self.login(self.regular_user)
 
         Transporter().transport_from(
-            source_dossier, 'admin-unit-1', '/'.join(task.getPhysicalPath()))
+            self.empty_dossier, 'plone', '/'.join(self.subtask.getPhysicalPath()))
+
+        new_task, = self.empty_dossier.objectValues()
+
+        self.assertEquals(self.task.title, self.task.title)
+        self.assertEquals(self.task.responsible, new_task.responsible)
+        self.assertEquals(self.task.issuer, new_task.issuer)
 
     def test_transport_to_with_elevated_privileges(self):
-        source = create(Builder("dossier").titled(u"Source"))
-        target = create(Builder("dossier").titled(u"Target"))
-        target_path = '/'.join(target.getPhysicalPath())
-        task = create(Builder("task")
-                      .within(source)
-                      .titled(u'Fo\xf6')
-                      .having(deadline=date(2014, 7, 1)))
+        self.login(self.administrator)
+        target_path = '/'.join(self.protected_dossier.getPhysicalPath())
 
-        create(Builder('user').named('Hugo', 'Boss'))
-        RoleAssignmentManager(source).add_or_update_assignment(
-            SharingRoleAssignment(u'hugo.boss',
-                                  ['Contributor', 'Editor', 'Reader']))
-
-        self.login(u'hugo.boss')
-
+        self.login(self.regular_user)
         with self.assertRaises(Unauthorized):
-            Transporter().transport_to(task, 'admin-unit-1', target_path)
+            Transporter().transport_to(self.task, 'plone', target_path)
 
+        self.login(self.regular_user)
         Transporter().transport_to(
-            task, 'admin-unit-1', target_path,
+            self.task, 'plone', target_path,
             view='transporter-privileged-receive-object')
 
     def test_transport_to_does_not_break_deadline_datatype(self):
-        source = create(Builder("dossier").titled(u"Source"))
-        target = create(Builder("dossier").titled(u"Target"))
-        target_path = '/'.join(target.getPhysicalPath())
-        task = create(
-            Builder("task")
-            .within(source)
-            .titled(u'Fo\xf6')
-            .having(deadline=date(2014, 7, 1)),
-            )
-        Transporter().transport_to(task, 'admin-unit-1', target_path, view='transporter-privileged-receive-object')
-        self.assertFalse(isinstance(target.getFirstChild().deadline, datetime))
+        self.login(self.regular_user)
+
+        Transporter().transport_to(self.task, 'plone', '/'.join(self.empty_dossier.getPhysicalPath()))
+
+        new_task, = self.empty_dossier.objectValues()
+        self.assertFalse(isinstance(new_task.deadline, datetime))
