@@ -1,10 +1,7 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.interfaces import ISearchSettings
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.registry.interfaces import IRegistry
@@ -13,19 +10,10 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 
 
-class TestOpengeverSearch(FunctionalTestCase):
+class TestOpengeverSearch(IntegrationTestCase):
 
     def test_types_filters_list_is_limited_to_main_types(self):
-        create(Builder('repository'))
-        create(Builder('repository_root'))
-        create(Builder('dossier'))
-        create(Builder('document'))
-        create(Builder('mail'))
-        create(Builder('task'))
-        create(Builder('inbox'))
-        create(Builder('forwarding'))
-        create(Builder('contactfolder'))
-        create(Builder('contact'))
+        self.login(self.regular_user)
 
         self.assertItemsEqual(
             ['opengever.task.task', 'ftw.mail.mail',
@@ -35,113 +23,93 @@ class TestOpengeverSearch(FunctionalTestCase):
 
     @browsing
     def test_batch_size_is_set_to_25(self, browser):
-        for i in range(0, 30):
-            create(Builder('dossier').titled(u'Test'))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.portal, view='search')
+        browser.open(self.portal, view='@@search')
+
         self.assertEqual(25, len(browser.css('dl.searchResults dt')))
 
     @browsing
     def test_sorting_on_relevance_is_handled_correctly(self, browser):
-        create(Builder('dossier').titled(u'Test A'))
-        create(Builder('dossier').titled(u'Test B'))
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search')
 
-        browser.login().open(self.portal, view='@@search?sort_on=relevance')
-
-        self.assertEqual(['Test A', 'Test B'],
-                         browser.css('.searchItem dt').text)
+        self.assertEqual(25, len(browser.css('dl.searchResults dt')))
 
     @browsing
     def test_no_bubmlebee_preview_rendered_when_feature_not_enabled(self, browser):
-        browser.login().open(self.portal, view='search')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=vertrag')
+
         self.assertEqual(0, len(browser.css('.searchImage')))
 
     @browsing
     def test_prefill_from_advanced_search_omits_searchable_text_keywords(self, browser):
-        browser.login().open(
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
             self.portal,
-            view='advanced_search?SearchableText=foo+NOT+bar+AND+qwe+OR+asd+AND+zxc+OR+dsa+NOT+rsa',
-            )
+            view='advanced_search?SearchableText=foo+NOT+bar+AND+qwe+OR+asd+AND+zxc+OR+dsa+NOT+rsa')
+
         prefill = browser.css('#searchGadget').first.value
         self.assertNotIn('AND', prefill)
         self.assertNotIn('OR', prefill)
         self.assertNotIn('NOT', prefill)
 
 
-class TestBumblebeePreview(FunctionalTestCase):
+class TestBumblebeePreview(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+    features = ('bumblebee', )
 
     @browsing
     def test_thumbnails_are_linked_to_bumblebee_overlay(self, browser):
-        document = create(Builder('document')
-               .titled(u'Foo Document')
-               .with_dummy_content())
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.portal, view='search')
-        browser.fill({'Search Site': 'Foo Document'}).submit()
+        browser.open(self.portal,
+                     view='@@search?portal_type=opengever.document.document&sort_on=created')
 
         self.assertEqual(
-            'showroom-id-{}'.format(IUUID(document)),
+            'showroom-id-{}'.format(IUUID(self.asset_template)),
             browser.css('.bumblebeeSearchPreview').first.get('data-showroom-id'))
 
     @browsing
     def test_all_links_including_documents_are_linked_to_absolute_url(self, browser):
-        dossier = create(Builder('dossier')
-                         .titled(u'Foo Dossier'))
-        document = create(Builder('document')
-               .titled(u'Foo Document')
-               .with_dummy_content()
-               .within(dossier))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().open(self.portal, view='search')
-        browser.fill({'SearchableText': 'Foo*'}).submit()
+        self.dossier.title = 'Foosearch Dossier'
+        self.document.title = 'Foosearch Document'
+        [obj.reindexObject() for obj in [self.dossier, self.document]]
 
+        browser.open(self.portal, view='@@search?SearchableText=Foosearch&sort_on=modified')
         dossierlink, documentlink, hiddenlink = browser.css('.searchItem dt a')
 
-        self.assertEqual('Foo Dossier', dossierlink.text)
-        self.assertEqual(dossier.absolute_url(), dossierlink.get('href'))
+        self.assertEqual('Foosearch Dossier', dossierlink.text)
+        self.assertEqual(self.dossier.absolute_url(), dossierlink.get('href'))
         self.assertEqual('contenttype-opengever-dossier-businesscasedossier',
                          dossierlink.get('class'))
 
-        self.assertEqual('Foo Document', documentlink.text)
-        self.assertEqual(document.absolute_url(), documentlink.get('href'))
-        self.assertEqual('document_link icon-doc',
+        self.assertEqual('Foosearch Document', documentlink.text)
+        self.assertEqual(self.document.absolute_url(), documentlink.get('href'))
+        self.assertEqual('document_link icon-docx',
                          documentlink.get('class'))
 
     @browsing
     def test_batch_size_is_available_in_template(self, browser):
-        dossier = create(Builder('dossier')
-                         .titled(u'Foo Dossier'))
-        create(Builder('document')
-               .titled(u'Foo Document')
-               .with_dummy_content()
-               .within(dossier))
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search')
 
-        browser.login().open(self.portal, view='search')
         batch_size = browser.css('#search-results').first.attrib.get('data-batch-size')
-
         self.assertEqual(
             25, int(batch_size),
             'The batch-size data atribute should be on the tag')
 
     @browsing
     def test_number_of_documents_is_available_in_template(self, browser):
-        dossier = create(Builder('dossier')
-                         .titled(u'Foo Dossier'))
-
-        create(Builder('document')
-               .titled(u'Foo Document')
-               .with_dummy_content()
-               .within(dossier))
-
-        create(Builder('dossier').within(dossier))
-
-        browser.login().open(self.portal, view='search')
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=kommentar')
 
         number_of_documents = browser.css(
             '#search-results .searchResults').first.attrib.get('data-number-of-documents')
-
         self.assertEqual(
             1, int(number_of_documents),
             'The number_of_documents data should be set to the amount of'
@@ -149,36 +117,25 @@ class TestBumblebeePreview(FunctionalTestCase):
 
     @browsing
     def test_set_showroom_vars_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
         catalog = api.portal.get_tool('portal_catalog')
-
-        base = create(Builder('dossier'))
-
         search_view = getMultiAdapter((self.portal, self.request), name="search")
 
-        # Batch 1
-        create(Builder('document').within(base).titled(u'A Foo'))
-        create(Builder('dossier').within(base).titled(u'B Foo'))
+        brains = catalog({'portal_type': 'opengever.document.document',
+                          'sort_on': 'sortable_title',
+                          'SearchableText': "Foo"})
 
-        # Batch 2
-        create(Builder('document').within(base).titled(u'C Foo'))
-        create(Builder('document').within(base).titled(u'D Foo'))
-
-        # Batch 3
-        create(Builder('dossier').within(base).titled(u'E Foo'))
-        create(Builder('document').within(base).titled(u'F Foo'))
-
-        brains = catalog({'sort_on': 'sortable_title', 'SearchableText':"Foo"})
-
-        search_view.calculate_showroom_configuration(IContentListing(brains[:2]))
-        self.assertEqual(1, search_view.number_of_documents)
-        self.assertEqual(0, search_view.offset)
-
-        search_view.calculate_showroom_configuration(IContentListing(brains[2:4]))
+        brains = [obj2brain(obj) for obj in
+                  [self.document, self.dossier, self.subdocument]]
+        search_view.calculate_showroom_configuration(IContentListing(brains))
         self.assertEqual(2, search_view.number_of_documents)
         self.assertEqual(0, search_view.offset)
 
-        search_view.calculate_showroom_configuration(IContentListing(brains[4:]))
-        self.assertEqual(1, search_view.number_of_documents)
+        brains = [obj2brain(obj) for obj in
+                  [self.task, self.subdossier]]
+        search_view.calculate_showroom_configuration(IContentListing(brains))
+        self.assertEqual(0, search_view.number_of_documents)
         self.assertEqual(0, search_view.offset)
 
 
