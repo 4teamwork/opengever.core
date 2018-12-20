@@ -6,7 +6,7 @@ from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
 from opengever.dossier.utils import find_parent_dossier
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.namedfile.file import NamedFile
 from unittest import TestCase
 from urllib import quote
@@ -77,46 +77,45 @@ class TestAttachmentContentDisposition(MockTestCase):
             ['text/plain', 7, 'attachment; filename="Default Name"'])
 
 
-class TestFindParentDossier(FunctionalTestCase):
+class TestFindParentDossier(IntegrationTestCase):
 
     def test_find_parent_dossier(self):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
+        self.login(self.regular_user)
 
-        self.assertEquals(dossier, find_parent_dossier(document))
+        self.assertEquals(self.dossier, find_parent_dossier(self.document))
 
     def test_find_parent_inbox(self):
-        inbox = create(Builder('inbox'))
-        document = create(Builder('document').within(inbox))
+        self.login(self.secretariat_user)
 
-        self.assertEquals(inbox, find_parent_dossier(document))
+        self.assertEquals(self.inbox, find_parent_dossier(self.inbox_document))
 
     def test_find_parent_on_nested_dossiers(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        document = create(Builder('document').within(subdossier))
+        self.login(self.regular_user)
 
-        self.assertEquals(subdossier, find_parent_dossier(document))
+        self.assertEquals(self.subdossier, find_parent_dossier(self.subdocument))
 
     def test_find_first_parent_dossier(self):
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-        document = create(Builder('document').within(task))
+        self.login(self.regular_user)
 
-        self.assertEquals(dossier, find_parent_dossier(document))
+        self.assertEquals(self.dossier, find_parent_dossier(self.taskdocument))
 
     def test_return_itself_if_dossier_is_passed(self):
-        dossier = create(Builder('dossier'))
-        self.assertEquals(dossier, find_parent_dossier(dossier))
+        self.login(self.regular_user)
+
+        self.assertEquals(self.dossier, find_parent_dossier(self.dossier))
 
     def test_raise_valuerror_if_plone_root_is_passed(self):
+        self.login(self.regular_user)
+
         with self.assertRaises(ValueError):
             find_parent_dossier(self.portal)
 
     def test_raise_valuerror_if_plone_root_is_reached(self):
+        self.login(self.regular_user)
+
         document = create(Builder('document'))
         with self.assertRaises(ValueError):
-            find_parent_dossier(document)
+            find_parent_dossier(self.leaf_repofolder)
 
 
 class TestEscapeHTML(TestCase):
