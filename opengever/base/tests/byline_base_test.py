@@ -1,8 +1,8 @@
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browser as default_browser
 
 
-class TestBylineBase(FunctionalTestCase):
+class TestBylineBase(IntegrationTestCase):
 
     def get_byline_value_by_label(self, label, browser=default_browser):
         byline_elements = browser.css(".documentByLine li")
