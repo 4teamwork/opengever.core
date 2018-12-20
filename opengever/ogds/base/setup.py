@@ -1,6 +1,6 @@
 from ftw.dictstorage.sql import DictStorageModel
 from opengever.base.model import create_session
-from opengever.ogds.models import BASE
+from opengever.base.model import Base
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from z3c.saconfig.interfaces import IScopedSession
@@ -14,14 +14,13 @@ def create_sql_tables():
         return
 
     session = create_session()
-    BASE.metadata.create_all(session.bind)
-
+    Base.metadata.create_all(session.bind)
     DictStorageModel.metadata.create_all(session.bind)
 
 
 def create_example_client(session, unit_id, properties):
     if len(session.query(OrgUnit).filter_by(unit_id=unit_id).all()) == 0:
-        #create users_group if not exist
+        # Create users_group if not exist
         temp = session.query(Group).filter(
             Group.groupid == properties.get('group')).all()
         if len(temp) == 0:
@@ -30,7 +29,7 @@ def create_example_client(session, unit_id, properties):
             users_group = temp[0]
         properties.pop('group')
 
-        #create inbox_group if not exist
+        # Create inbox_group if not exist
         temp = session.query(Group).filter(
             Group.groupid == properties.get('inbox_group')).all()
         if len(temp) == 0:

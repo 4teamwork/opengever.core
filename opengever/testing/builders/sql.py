@@ -42,10 +42,11 @@ from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
-from opengever.ogds.models.tests.builders import AdminUnitBuilder
-from opengever.ogds.models.tests.builders import OrgUnitBuilder
-from opengever.ogds.models.tests.builders import SqlObjectBuilder
-from opengever.ogds.models.tests.builders import UserBuilder
+from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.team import Team
+from opengever.ogds.models.user import User
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.helpers import localized_datetime
@@ -55,87 +56,226 @@ from plone.locking.interfaces import ILockable
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
+import transaction
 
 
-class PloneAdminUnitBuilder(AdminUnitBuilder):
-    """Add plone specific functionality to opengever.ogds.models
-    AdminUnitBuilder.
+class SqlObjectBuilder(object):
+    id_argument_name = None
+    mapped_class = None
 
-    """
     def __init__(self, session):
-        super(PloneAdminUnitBuilder, self).__init__(session)
+        self.session = session
+        self.db_session = self._get_db_session(session)
+        self.arguments = {}
+
+    def _get_db_session(self, session):
+        return session.session
+
+    def id(self, identifier):
+        self.arguments[self.id_argument_name] = identifier
+        return self
+
+    def create(self, **kwargs):
+        self.before_create()
+        obj = self.create_object(**kwargs)
+        self.add_object_to_session(obj)
+        obj = self.after_create(obj)
+        self.persist()
+        return obj
+
+    def before_create(self):
+        pass
+
+    def after_create(self, obj):
+        return obj
+
+    def persist(self):
+        if self.session.auto_commit:
+            transaction.commit()
+
+        if getattr(self.session, 'auto_flush', False):
+            self.db_session.flush()
+
+    def add_object_to_session(self, obj):
+        self.db_session.add(obj)
+
+    def having(self, **kwargs):
+        self.arguments.update(kwargs)
+        return self
+
+    def create_object(self):
+        return self.mapped_class(**self.arguments)
+
+
+class AdminUnitBuilder(SqlObjectBuilder):
+
+    mapped_class = AdminUnit
+    id_argument_name = 'unit_id'
+
+    def __init__(self, session):
+        super(AdminUnitBuilder, self).__init__(session)
         self._as_current_admin_unit = False
+        self.arguments[self.id_argument_name] = u'foo'
+        self.arguments['ip_address'] = '1.2.3.4'
+        self.arguments['site_url'] = 'http://example.com'
+        self.arguments['public_url'] = 'http://example.com/public'
+        self.arguments['abbreviation'] = 'Client1'
+        self.org_unit = None
+        self._as_current_admin_unit = False
+
+    def wrapping_org_unit(self, org_unit):
+        self.org_unit = org_unit
+        self.arguments.update(dict(
+            unit_id=org_unit.id(),
+            title=org_unit.label(),
+        ))
+        return self
 
     def as_current_admin_unit(self):
         self._as_current_admin_unit = True
         return self
 
+    def assign_org_units(self, units):
+        self.arguments['org_units'] = units
+        return self
+
     def after_create(self, obj):
-        obj = super(PloneAdminUnitBuilder, self).after_create(obj)
+        if self.org_unit:
+            self.org_unit.assign_to_admin_unit(obj)
 
         if self._as_current_admin_unit:
             registry = getUtility(IRegistry)
             proxy = registry.forInterface(IAdminUnitConfiguration)
             proxy.current_unit_id = self.arguments.get(self.id_argument_name)
+
         return obj
 
 
-builder_registry.register('admin_unit', PloneAdminUnitBuilder, force=True)
+builder_registry.register('admin_unit', AdminUnitBuilder)
 
 
-class PloneOrgUnitBuilder(OrgUnitBuilder):
-    """Add plone specific functionality to opengever.ogds.models
-    OrgUnitBuilder.
+class OrgUnitBuilder(SqlObjectBuilder):
 
-    """
+    mapped_class = OrgUnit
+    id_argument_name = 'unit_id'
+
     def __init__(self, session):
-        super(PloneOrgUnitBuilder, self).__init__(session)
+        super(OrgUnitBuilder, self).__init__(session)
+        self.arguments[self.id_argument_name] = u'rr'
+        self.arguments['users_group_id'] = 'foo'
+        self.arguments['inbox_group_id'] = 'bar'
+        self._with_inbox_group = False
+        self._with_users_group = False
+        self._inbox_users = set()
+        self._group_users = set()
         self._as_current_org_unit = False
+
+    def before_create(self):
+        self._assemble_groups()
 
     def after_create(self, obj):
         if self._as_current_org_unit:
             get_ou_selector().set_current_unit(obj.id())
         return obj
 
+    def with_default_groups(self):
+        self.with_inbox_group()
+        self.with_users_group()
+        return self
+
+    def with_inbox_group(self):
+        self._with_inbox_group = True
+        return self
+
+    def with_users_group(self):
+        self._with_users_group = True
+        return self
+
     def as_current_org_unit(self):
         self._as_current_org_unit = True
         return self
+
+    def assign_users(self, users, to_users=True, to_inbox=True):
+        if to_users:
+            self.with_users_group()
+            self._group_users.update(users)
+
+        if to_inbox:
+            self.with_inbox_group()
+            self._inbox_users.update(users)
+        return self
+
+    def _assemble_groups(self):
+        if self._with_users_group or self._with_inbox_group:
+            unit_id = self.arguments.get(self.id_argument_name)
+
+        if self._with_users_group:
+            users_group_id = "{0}_users".format(unit_id)
+            users_group_title = '{0} Users Group'.format(unit_id)
+            self._create_users_group(users_group_id, users_group_title)
+
+        if self._with_inbox_group:
+            users_inbox_id = "{0}_inbox_users".format(unit_id)
+            users_inbox_title = '{0} Inbox Users Group'.format(unit_id)
+            self._create_inbox_group(users_inbox_id, users_inbox_title)
 
     def _create_users_group(self, users_group_id, users_group_title=None):
         create(Builder('group')
                .having(title=users_group_title)
                .with_groupid(users_group_id)
                .with_members(api.user.get(TEST_USER_ID)))
-        super(PloneOrgUnitBuilder, self)._create_users_group(users_group_id)
+        users_group = create(Builder('ogds_group')
+                             .having(groupid=users_group_id,
+                                     title=users_group_title,
+                                     users=list(self._group_users)))
+        self.arguments['users_group'] = users_group
 
     def _create_inbox_group(self, users_inbox_id, users_inbox_title=None):
         create(Builder('group')
                .having(title=users_inbox_title)
                .with_groupid(users_inbox_id)
                .with_members(api.user.get(TEST_USER_ID)))
-        super(PloneOrgUnitBuilder, self)._create_inbox_group(users_inbox_id)
+        inbox_group = create(Builder('ogds_group')
+                             .having(groupid=users_inbox_id,
+                                     title=users_inbox_title,
+                                     users=list(self._inbox_users)))
+        self.arguments['inbox_group'] = inbox_group
 
 
-builder_registry.register('org_unit', PloneOrgUnitBuilder, force=True)
+builder_registry.register('org_unit', OrgUnitBuilder)
 
 
-class PloneOGDSUserBuilder(UserBuilder):
-    """Add plone specific functionality to opengever.ogds.models
-    UserBuilder.
+class OGDSUserBuilder(SqlObjectBuilder):
 
-    """
+    mapped_class = User
+    id_argument_name = 'userid'
     _as_contact_adapter = False
 
     def __init__(self, session):
-        super(PloneOGDSUserBuilder, self).__init__(session)
+        super(OGDSUserBuilder, self).__init__(session)
+        self.groups = []
+        self.arguments['userid'] = 'test'
+        self.arguments['email'] = 'test@example.org'
         self.arguments[self.id_argument_name] = TEST_USER_ID
 
     def as_contact_adapter(self):
         self._as_contact_adapter = True
         return self
 
+    def in_group(self, group):
+        if group and group not in self.groups:
+            self.groups.append(group)
+        return self
+
+    def assign_to_org_units(self, org_units):
+        for org_unit in org_units:
+            self.groups.append(org_unit.users_group)
+        return self
+
     def create_object(self):
-        obj = super(PloneOGDSUserBuilder, self).create_object()
+        obj = super(OGDSUserBuilder, self).create_object()
+        if self.groups:
+            obj.groups.extend(self.groups)
         if self._as_contact_adapter:
             obj = OgdsUserToContactAdapter(obj)
         return obj
@@ -148,7 +288,30 @@ class PloneOGDSUserBuilder(UserBuilder):
         self.db_session.add(obj)
 
 
-builder_registry.register('ogds_user', PloneOGDSUserBuilder, force=True)
+builder_registry.register('ogds_user', OGDSUserBuilder)
+
+
+class OGDSGroupBuilder(SqlObjectBuilder):
+
+    mapped_class = Group
+    id_argument_name = 'groupid'
+
+    def __init__(self, session):
+        super(OGDSGroupBuilder, self).__init__(session)
+        self.arguments['groupid'] = 'testgroup'
+        self.arguments['title'] = 'Test Group'
+
+
+builder_registry.register('ogds_group', OGDSGroupBuilder)
+
+
+class OGDSTeamBuilder(SqlObjectBuilder):
+
+    mapped_class = Team
+    id_argument_name = 'team_id'
+
+
+builder_registry.register('ogds_team', OGDSTeamBuilder)
 
 
 class TaskBuilder(SqlObjectBuilder):

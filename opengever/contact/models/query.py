@@ -7,21 +7,23 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import OrgRoleParticipation
 from opengever.contact.models import Participation
 from opengever.contact.models import Person
-from opengever.ogds.models.query import BaseQuery
-from opengever.ogds.models.query import extend_query_with_textfilter
+from opengever.base.query import BaseQuery
+from opengever.base.query import extend_query_with_textfilter
 from sqlalchemy import or_
 from sqlalchemy.orm import contains_eager
 
 
 class ContactQuery(BaseQuery):
 
-    def polymorphic_by_searchable_text(self, text_filters=[]):
+    def polymorphic_by_searchable_text(self, text_filters=None):
         """Query all Contacts by searchable text.
 
         If the function of a Persons OrgRole matches, only the matching
         OrgRoles will be returned.
 
         """
+        if text_filters is None:
+            text_filters = []
         # we need to join manually instead of using `options.joinedload` to be
         # able to filter by OrgRole.function below.
         query = self.outerjoin(Person.organizations)
@@ -36,6 +38,7 @@ class ContactQuery(BaseQuery):
     def get_by_former_contact_id(self, former_contact_id):
         return self.filter_by(former_contact_id=former_contact_id).first()
 
+
 Contact.query_cls = ContactQuery
 
 
@@ -45,6 +48,7 @@ class OrganizationQuery(BaseQuery):
 
     def get_by_former_contact_id(self, former_contact_id):
         return self.filter_by(former_contact_id=former_contact_id).first()
+
 
 Organization.query_cls = OrganizationQuery
 
@@ -83,6 +87,7 @@ class ContactParticipationQuery(ParticipationQuery):
     def by_participant(self, contact):
         return self.filter_by(contact=contact)
 
+
 ContactParticipation.query_cls = ContactParticipationQuery
 
 
@@ -91,6 +96,7 @@ class OrgRoleParticipationQuery(ParticipationQuery):
     def by_participant(self, org_role):
         return self.filter_by(org_role=org_role)
 
+
 OrgRoleParticipation.query_cls = OrgRoleParticipationQuery
 
 
@@ -98,6 +104,7 @@ class OgdsUserParticipationQuery(ParticipationQuery):
 
     def by_participant(self, ogds_user):
         return self.filter_by(ogds_userid=ogds_user.id)
+
 
 OgdsUserParticipation.query_cls = OgdsUserParticipationQuery
 
@@ -108,5 +115,6 @@ class PersonQuery(BaseQuery):
 
     def get_by_former_contact_id(self, former_contact_id):
         return self.filter_by(former_contact_id=former_contact_id).first()
+
 
 Person.query_cls = PersonQuery

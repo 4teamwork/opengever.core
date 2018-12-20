@@ -2,7 +2,7 @@ from opengever.base.model import Base
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.contact.docprops import OrgRoleAddressDocPropertyProvider
 from opengever.contact.docprops import OrgRoleDocPropertyProvider
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

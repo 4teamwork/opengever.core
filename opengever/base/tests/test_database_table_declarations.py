@@ -20,7 +20,12 @@ class TestDatabaseTableDeclarations(TestCase):
 
     """
     def test_package_table_definitions_are_correct(self):
-        expected_tables = meeting_tables + activity_tables \
-                          + globalindex_tables + lock_tables + contact_tables \
-                          + base_tables
+        expected_tables = (
+            meeting_tables
+            + activity_tables
+            + globalindex_tables
+            + lock_tables
+            + contact_tables
+            + base_tables
+        )
         self.assertItemsEqual(expected_tables, Base.metadata.tables.keys())

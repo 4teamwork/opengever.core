@@ -2,8 +2,8 @@ from opengever.activity.model.subscription import Subscription
 from opengever.activity.model.watcher import Watcher
 from opengever.base.model import Base
 from opengever.base.model import create_session
+from opengever.base.model import UNIT_ID_LENGTH
 from opengever.base.oguid import Oguid
-from opengever.ogds.models import UNIT_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String

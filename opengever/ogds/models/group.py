@@ -1,9 +1,9 @@
-from opengever.ogds.models import BASE
-from opengever.ogds.models import GROUP_ID_LENGTH
-from opengever.ogds.models import GROUP_TITLE_LENGTH
-from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
-from opengever.ogds.models.team import Team  # noqa
+from opengever.base.model import Base
+from opengever.base.model import GROUP_ID_LENGTH
+from opengever.base.model import GROUP_TITLE_LENGTH
+from opengever.base.model import USER_ID_LENGTH
+from opengever.base.query import BaseQuery
+from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -17,7 +17,7 @@ from sqlalchemy.orm import relationship
 
 # association table
 groups_users = Table(
-    'groups_users', BASE.metadata,
+    'groups_users', Base.metadata,
     Column('groupid', String(GROUP_ID_LENGTH),
            ForeignKey('groups.groupid'), primary_key=True),
     Column('userid', String(USER_ID_LENGTH),
@@ -30,7 +30,7 @@ class GroupQuery(BaseQuery):
     searchable_fields = ['groupid', 'title']
 
 
-class Group(BASE):
+class Group(Base):
     """Group model, corresponds to a LDAP group
     """
 
@@ -44,7 +44,7 @@ class Group(BASE):
 
     users = relation(User, secondary=groups_users,
                      backref=backref('groups', order_by='Group.groupid'))
-    teams = relationship("Team", back_populates="group")
+    teams = relationship(Team, back_populates="group")
 
     def __init__(self, groupid, **kwargs):
         self.groupid = groupid

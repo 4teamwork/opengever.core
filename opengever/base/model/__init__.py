@@ -1,6 +1,5 @@
 from opengever.base.interfaces import ISQLFormSupport
-from opengever.ogds.models import BASE
-from opengever.ogds.models.declarative import query_base
+from opengever.base.model.declarative import query_base
 from plone import api
 from plone.api.exc import CannotGetPortalError
 from sqlalchemy import types
@@ -13,16 +12,28 @@ import sqlalchemy_utils
 DEFAULT_LOCALE = 'de'
 SUPPORTED_LOCALES = ['de', 'fr', 'en']
 
-
 CONTENT_TITLE_LENGTH = 255
-PORTAL_TYPE_LENGTH = 100
-ZIP_CODE_LENGTH = 16
 CSS_CLASS_LENGTH = 100
+EMAIL_LENGTH = 255
+FIRSTNAME_LENGTH = 255
+GROUP_ID_LENGTH = 255
+GROUP_TITLE_LENGTH = 255
+LASTNAME_LENGTH = 255
+PORTAL_TYPE_LENGTH = 100
 UID_LENGTH = 36
-
+UNIT_ID_LENGTH = 30
+UNIT_TITLE_LENGTH = 255
+USER_ID_LENGTH = 255
+ZIP_CODE_LENGTH = 16
 
 tables = [
+    'admin_units',
     'favorites',
+    'groups_users',
+    'groups',
+    'org_units',
+    'teams',
+    'users',
 ]
 
 
@@ -37,8 +48,6 @@ def get_locale():
 
 
 Session = named_scoped_session('opengever')
-
-BASE.session = Session
 Base = query_base(Session)
 
 make_translatable(options={'locales': SUPPORTED_LOCALES})

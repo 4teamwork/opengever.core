@@ -2,11 +2,11 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
+from opengever.base.model import EMAIL_LENGTH
+from opengever.base.model import FIRSTNAME_LENGTH
+from opengever.base.model import LASTNAME_LENGTH
 from opengever.meeting import _
 from opengever.meeting.model import Member
-from opengever.ogds.models import EMAIL_LENGTH
-from opengever.ogds.models import FIRSTNAME_LENGTH
-from opengever.ogds.models import LASTNAME_LENGTH
 from plone.supermodel import model
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile

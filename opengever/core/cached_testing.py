@@ -4,7 +4,6 @@ from glob2 import glob
 from opengever.base import model
 from opengever.base.model import create_session
 from opengever.base.utils import pretty_json
-from opengever.ogds.models import BASE
 from path import Path
 from plone.app.testing import PloneFixture
 from plone.testing import zca
@@ -322,8 +321,7 @@ class DBCacheManager(object):
         """In order to load a sql database from cache we need an empty databse.
         """
         session = create_session()
-        for metadata_model in (BASE.metadata,
-                               model.Base.metadata,
+        for metadata_model in (model.Base.metadata,
                                DictStorageModel.metadata):
             metadata_model.drop_all(session.bind)
 

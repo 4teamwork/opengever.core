@@ -1,6 +1,6 @@
 from opengever.locking.model import Lock
 from opengever.locking.model.locks import lowest_valid
-from opengever.ogds.models.query import BaseQuery
+from opengever.base.query import BaseQuery
 
 
 class LockQuery(BaseQuery):

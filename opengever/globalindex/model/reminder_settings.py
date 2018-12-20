@@ -1,14 +1,14 @@
 from opengever.base.date_time import utcnow_tz_aware
-from sqlalchemy.orm import relationship
 from opengever.base.model import Base
+from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
-from opengever.ogds.models import USER_ID_LENGTH
 from opengever.task.reminder import TASK_REMINDER_OPTIONS
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 

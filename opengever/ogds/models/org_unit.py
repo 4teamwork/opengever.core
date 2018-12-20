@@ -1,10 +1,10 @@
-from opengever.ogds.models import BASE
-from opengever.ogds.models import GROUP_ID_LENGTH
-from opengever.ogds.models import UNIT_ID_LENGTH
-from opengever.ogds.models import UNIT_TITLE_LENGTH
+from opengever.base.model import Base
+from opengever.base.model import GROUP_ID_LENGTH
+from opengever.base.model import UNIT_ID_LENGTH
+from opengever.base.model import UNIT_TITLE_LENGTH
+from opengever.base.query import BaseQuery
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.inbox import Inbox
-from opengever.ogds.models.query import BaseQuery
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -37,7 +37,7 @@ class OrgUnitQuery(BaseQuery):
     searchable_fields = ['unit_id', 'title']
 
 
-class OrgUnit(BASE):
+class OrgUnit(Base):
 
     __tablename__ = 'org_units'
 

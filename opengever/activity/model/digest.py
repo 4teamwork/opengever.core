@@ -1,10 +1,10 @@
 from opengever.base.model import Base
-from sqlalchemy import String
+from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
-from sqlalchemy import Integer
-from sqlalchemy.schema import Sequence
-from opengever.ogds.models import USER_ID_LENGTH
 from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.schema import Sequence
 
 
 class Digest(Base):

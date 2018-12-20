@@ -2,13 +2,13 @@ from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
 from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.base.model import FIRSTNAME_LENGTH
+from opengever.base.model import LASTNAME_LENGTH
 from opengever.contact import _
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models.person import Person
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.models import FIRSTNAME_LENGTH
-from opengever.ogds.models import LASTNAME_LENGTH
 from path import Path
 from plone.supermodel import model
 from Products.Five import BrowserView

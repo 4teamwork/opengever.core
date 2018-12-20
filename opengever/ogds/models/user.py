@@ -1,10 +1,10 @@
-from opengever.ogds.models import BASE
-from opengever.ogds.models import EMAIL_LENGTH
-from opengever.ogds.models import FIRSTNAME_LENGTH
-from opengever.ogds.models import LASTNAME_LENGTH
-from opengever.ogds.models import USER_ID_LENGTH
-from opengever.ogds.models.query import BaseQuery
-from opengever.ogds.models.types import UnicodeCoercingText
+from opengever.base.model import Base
+from opengever.base.model import EMAIL_LENGTH
+from opengever.base.model import FIRSTNAME_LENGTH
+from opengever.base.model import LASTNAME_LENGTH
+from opengever.base.model import USER_ID_LENGTH
+from opengever.base.query import BaseQuery
+from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import String
@@ -15,7 +15,7 @@ class UserQuery(BaseQuery):
     searchable_fields = ['userid', 'firstname', 'lastname', 'email']
 
 
-class User(BASE):
+class User(Base):
     """User model
     """
 

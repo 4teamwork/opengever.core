@@ -5,14 +5,19 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ou_selector import AnonymousOrgUnitSelector
 from opengever.ogds.base.ou_selector import NoAssignedUnitsOrgUnitSelector
 from opengever.ogds.base.ou_selector import OrgUnitSelector
-from opengever.ogds.models.service import OGDSService
+from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.ogds.models.exceptions import RecordNotFound
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.user import User
 from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from sqlalchemy.sql.expression import true
 from UserDict import DictMixin
-from zope.component.hooks import getSite
 from zope.component import getUtility
+from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 
 
@@ -24,13 +29,14 @@ EXPECTED_ENCODINGS = (
 
 
 def ogds_service():
-    return PloneOGDSService(create_session())
+    return OGDSService(create_session())
 
 
-class PloneOGDSService(OGDSService):
-    """Extends ogds-service with plone and opengever.core specific methods.
+class OGDSService(object):
 
-    """
+    def __init__(self, session):
+        self.session = session
+
     def _get_current_user_id(self):
         return api.user.get_current().getId()
 
@@ -38,15 +44,100 @@ class PloneOGDSService(OGDSService):
         userid = self._get_current_user_id()
         return self.fetch_user(userid) if userid else None
 
+    def find_user(self, userid):
+        """Returns a User by its userid. When no User is found, this method raises.
+        a ValueError.
+
+        See #fetch_user for similar behavior.
+        """
+        user = self.fetch_user(userid)
+        if not user:
+            raise RecordNotFound(User, userid)
+        return user
+
+    def fetch_user(self, userid):
+        """Returns a User by it's userid. None is returned when no user is found.
+
+        See #find_user for similar behavior.
+        """
+        return self._query_user().get(userid)
+
+    def filter_users(self, query_string):
+        return self._query_user().by_searchable_text(query_string)
+
+    def all_users(self):
+        return self._query_user().all()
+
+    def inactive_users(self):
+        return self._query_user().filter_by(active=False).all()
+
     def assigned_org_units(self, userid=None, omit_current=False):
         if userid is None:
             userid = self._get_current_user_id()
-        org_units = super(PloneOGDSService, self).assigned_org_units(userid)
+
+        query = self._query_org_units().join(OrgUnit.users_group)
+        query = query.join(Group.users).filter(User.userid == userid)
+        query = query.filter(OrgUnit.enabled == true())
+        org_units = query.all()
+
         if omit_current:
             current_org_unit = get_current_org_unit()
             org_units = [each for each in org_units
                          if each != current_org_unit]
         return org_units
+
+    def assigned_groups(self, userid):
+        query = Group.query.join(Group.users)
+        query = query.filter(User.userid == userid)
+        return query.all()
+
+    def fetch_org_unit(self, unit_id):
+        return self._query_org_units().get(unit_id)
+
+    def all_org_units(self, enabled_only=True):
+        query = self._query_org_units()
+        if enabled_only:
+            query = query.filter_by(enabled=True)
+
+        return query.all()
+
+    def fetch_admin_unit(self, unit_id):
+        return self._query_admin_units(enabled_only=False).get(unit_id)
+
+    def all_admin_units(self, enabled_only=True):
+        query = self._query_admin_units(enabled_only)
+        return query.all()
+
+    def has_multiple_admin_units(self, enabled_only=True):
+        query = self._query_admin_units(enabled_only)
+        return query.count() > 1
+
+    def has_multiple_org_units(self):
+        return self._query_org_units().count() > 1
+
+    def fetch_group(self, groupid):
+        return self._query_group().get(groupid)
+
+    def _query_admin_units(self, enabled_only=True):
+        query = AdminUnit.query
+        if enabled_only:
+            query = query.filter_by(enabled=enabled_only)
+        return query
+
+    def all_groups(self, active_only=True):
+        query = self._query_group()
+        if active_only:
+            query = query.filter_by(active=True)
+        return query.all()
+
+    def _query_org_units(self):
+        return OrgUnit.query.order_by(OrgUnit.title)
+
+    def _query_user(self):
+        return User.query
+
+    def _query_group(self):
+        return Group.query
 
 
 class CookieStorage(DictMixin):

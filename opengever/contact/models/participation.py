@@ -1,14 +1,14 @@
 from opengever.base.model import Base
 from opengever.base.model import create_session
 from opengever.base.model import SQLFormSupport
+from opengever.base.model import UNIT_ID_LENGTH
+from opengever.base.model import USER_ID_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.contact import _
 from opengever.contact.models.org_role import OrgRole
 from opengever.contact.models.participation_role import ParticipationRole
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models import UNIT_ID_LENGTH
-from opengever.ogds.models import USER_ID_LENGTH
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -154,6 +154,7 @@ class OgdsUserParticipation(Participation):
         attributes['ogds_userid'] = self.ogds_userid
         return attributes
 
+
 OgdsUserToContactAdapter.participation_class = OgdsUserParticipation
 
 
@@ -205,5 +206,6 @@ class OrgRoleParticipation(Participation):
         attributes = super(OrgRoleParticipation, self)._get_copied_attributes()
         attributes['org_role'] = self.org_role
         return attributes
+
 
 OrgRole.participation_class = OrgRoleParticipation

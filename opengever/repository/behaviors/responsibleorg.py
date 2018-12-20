@@ -1,4 +1,4 @@
-from opengever.ogds.models import UNIT_ID_LENGTH
+from opengever.base.model import UNIT_ID_LENGTH
 from opengever.repository import _
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model

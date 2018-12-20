@@ -9,8 +9,8 @@ from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.oguid import Oguid
-from opengever.ogds.models.tests.builders import SqlObjectBuilder
 from opengever.testing.builders.base import TEST_USER_ID
+from opengever.testing.builders.sql import SqlObjectBuilder
 
 
 class ResourceBuilder(SqlObjectBuilder):

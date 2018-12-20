@@ -1,5 +1,4 @@
 from opengever.base.model import Base
-from opengever.ogds.models import BASE as ogds_models_base
 from unittest import TestCase
 
 
@@ -17,10 +16,6 @@ class TestDatabaseNoReservedKeywordUsed(TestCase):
     """
     def test_opengever_no_reserved_keyword_used_as_column_name(self):
         self.assert_no_reserved_words_used_as_column_name(Base.metadata)
-
-    def test_ogds_no_reserved_keywords_used_as_column_name(self):
-        self.assert_no_reserved_words_used_as_column_name(
-            ogds_models_base.metadata)
 
     def assert_no_reserved_words_used_as_column_name(self, metadata):
         unlawful_columns = []
