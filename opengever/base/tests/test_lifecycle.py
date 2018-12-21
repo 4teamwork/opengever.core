@@ -5,23 +5,20 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import createContentInContainer
-import transaction
 
 
 def set_retention_period_restricted(value):
     api.portal.set_registry_record(
         'is_restricted', value, interface=IRetentionPeriodRegister)
-    transaction.commit()
 
 
-class TestCustodyPeriodDefault(FunctionalTestCase):
+class TestCustodyPeriodDefault(IntegrationTestCase):
 
     def setUp(self):
         super(TestCustodyPeriodDefault, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['custody_period']
 
     def get_custody_period(self, obj):
@@ -29,7 +26,6 @@ class TestCustodyPeriodDefault(FunctionalTestCase):
 
     def set_custody_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     def get_fti(self, portal_type):
         types_tool = api.portal.get_tool('portal_types')
@@ -37,37 +33,41 @@ class TestCustodyPeriodDefault(FunctionalTestCase):
 
     @browsing
     def test_custody_period_default(self, browser):
-        browser.login().open()
-        factoriesmenu.add(u'Business Case Dossier')
+        self.login(self.administrator, browser=browser)
+        browser.open(self.repository_root)
+        factoriesmenu.add(u'RepositoryFolder')
         browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
 
-        value = self.get_custody_period(dossier)
-        self.assertEqual(30, value)
+        self.assertEqual(
+            30,
+            self.get_custody_period(browser.context))
 
     @browsing
     def test_custody_period_acquired_default(self, browser):
-        browser.login().open(self.repofolder)
-        self.set_custody_period(self.repofolder, 100)
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.leaf_repofolder)
+        self.set_custody_period(self.leaf_repofolder, 100)
+
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        value = self.get_custody_period(dossier)
-        self.assertEqual(100, value)
+        self.assertEqual(
+            100,
+            self.get_custody_period(browser.context))
 
     @browsing
     def test_intermediate_folder_doesnt_break_default_aq(self, browser):
+        self.login(self.regular_user, browser=browser)
+
         # An intermediate folderish object that doesn't have the respective
         # field shouldn't break acquisition of the default
-        self.set_custody_period(self.repofolder, 100)
+        self.set_custody_period(self.leaf_repofolder, 100)
 
         fti = self.get_fti('opengever.repository.repositoryfolder')
         fti.allowed_content_types = fti.allowed_content_types + ('Dummy',)
 
-        dummy = createContentInContainer(self.repofolder, 'Dummy')
-        transaction.commit()
-        browser.login().open(dummy)
+        dummy = createContentInContainer(self.leaf_repofolder, 'Dummy')
+        browser.open(dummy)
 
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
@@ -77,11 +77,10 @@ class TestCustodyPeriodDefault(FunctionalTestCase):
         self.assertEqual(100, value)
 
 
-class TestCustodyPeriodVocabulary(FunctionalTestCase):
+class TestCustodyPeriodVocabulary(IntegrationTestCase):
 
     def setUp(self):
         super(TestCustodyPeriodVocabulary, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['custody_period']
 
     def get_custody_period(self, obj):
@@ -89,18 +88,18 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     def set_custody_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_custody_period_choices_configurable_via_registry(self, browser):
+        self.login(self.regular_user, browser=browser)
+
         # Note: The static fallback default (30) needs to be part of this
         # value range for the default to validate
         api.portal.set_registry_record(
             'custody_periods', interface=IBaseCustodyPeriods,
             value=[u'1', u'2', u'3', u'30', u'99']
         )
-        transaction.commit()
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Custody period (years)')
 
@@ -109,8 +108,10 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_custody_period_default_choices(self, browser):
-        browser.login().open()
-        factoriesmenu.add(u'Business Case Dossier')
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.repository_root)
+        factoriesmenu.add(u'RepositoryFolder')
         form_field = browser.find('Custody period (years)')
         self.assertEqual(
             ['0', '30', '100', '150'],
@@ -118,12 +119,15 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_invalid_acquired_value_falls_back_to_all_choices(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # If vocab is supposed to be restricted, but we find an invalid value
         # via acquisition, the vocab should fall back to offering all choices
         invalid_value = 7
-        self.set_custody_period(self.repofolder, invalid_value)
+        self.set_custody_period(self.branch_repofolder, invalid_value)
+        self.set_custody_period(self.leaf_repofolder, invalid_value)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Custody period (years)')
@@ -133,13 +137,15 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_falsy_acquisition_value_falls_back_to_all_choices(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # If vocab is supposed to be restricted, but we find a  value via
         # acquisition that is falsy, the vocab should offer all choices
         # XXX: This probably should check for None instead of falsyness
         falsy_value = 0
-        self.set_custody_period(self.repofolder, falsy_value)
+        self.set_custody_period(self.leaf_repofolder, falsy_value)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Custody period (years)')
@@ -149,9 +155,11 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
-        self.set_custody_period(self.repofolder, 30)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_custody_period(self.leaf_repofolder, 30)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Custody period (years)')
@@ -159,9 +167,11 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
-        self.set_custody_period(self.repofolder, 100)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_custody_period(self.leaf_repofolder, 100)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Custody period (years)')
@@ -171,9 +181,11 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_acquired_value_is_suggested_as_default(self, browser):
-        self.set_custody_period(self.repofolder, 100)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_custody_period(self.leaf_repofolder, 100)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Custody period (years)')
@@ -184,12 +196,13 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_restriction_works_in_edit_form(self, browser):
-        self.set_custody_period(self.repofolder, 100)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_custody_period(self.leaf_repofolder, 100)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
-        transaction.commit()
 
         browser.click_on('Edit')
         form_field = browser.find('Custody period (years)')
@@ -198,27 +211,26 @@ class TestCustodyPeriodVocabulary(FunctionalTestCase):
             set(form_field.options_values))
 
 
-class TestCustodyPeriodPropagation(FunctionalTestCase):
+class TestCustodyPeriodPropagation(IntegrationTestCase):
 
     def setUp(self):
         super(TestCustodyPeriodPropagation, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['custody_period']
-        self.grant('Administrator')
 
     def get_custody_period(self, obj):
         return self.field.get(self.field.interface(obj))
 
     def set_custody_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_change_propagates_to_children(self, browser):
-        # Start with a short custody period
-        self.set_custody_period(self.repofolder, 30)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        # Start with a short custody period
+        self.set_custody_period(self.leaf_repofolder, 30)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -227,10 +239,9 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
         # Dossier should have inherited custody period from repofolder
         self.assertEqual(30, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         # Increase custody period
         browser.fill({'Custody period (years)': '100'}).save()
-        transaction.commit()
 
         value = self.get_custody_period(dossier)
         # Increased custody period should have propagated to dossier
@@ -238,7 +249,9 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
 
     @browsing
     def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        browser.login().open(self.repofolder)
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({
             'Title': 'My Dossier',
@@ -248,9 +261,8 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
         value = self.get_custody_period(dossier)
         self.assertEqual(150, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         browser.fill({'Custody period (years)': '30'}).save()
-        transaction.commit()
 
         value = self.get_custody_period(dossier)
         self.assertEqual(150, value)
@@ -260,12 +272,14 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
         """Propagation of custody period is depth limited to 2 levels.
         Not sure why this was implemented this way, but here we test for it.
         """
+        self.login(self.administrator, browser=browser)
+
         # Start with a short custody period
-        self.set_custody_period(self.repofolder, 30)
-        repofolder2 = create(Builder('repository').within(self.repofolder))
+        self.set_custody_period(self.branch_repofolder, 30)
+        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
         repofolder3 = create(Builder('repository').within(repofolder2))
 
-        browser.login().open(repofolder3)
+        browser.open(repofolder3)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -274,10 +288,9 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
         # Dossier should have inherited custody period from repofolder2
         self.assertEqual(30, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.branch_repofolder, view='edit')
         # Increase custody period on top level repofolder
         browser.fill({'Custody period (years)': '100'}).save()
-        transaction.commit()
 
         # Increased custody period should have propagated to repofolder2, but
         # not dossier (because of depth limitation)
@@ -285,11 +298,10 @@ class TestCustodyPeriodPropagation(FunctionalTestCase):
         self.assertEqual(30, self.get_custody_period(dossier))
 
 
-class TestRetentionPeriodDefault(FunctionalTestCase):
+class TestRetentionPeriodDefault(IntegrationTestCase):
 
     def setUp(self):
         super(TestRetentionPeriodDefault, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['retention_period']
 
     def get_retention_period(self, obj):
@@ -297,7 +309,6 @@ class TestRetentionPeriodDefault(FunctionalTestCase):
 
     def set_retention_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     def get_fti(self, portal_type):
         types_tool = api.portal.get_tool('portal_types')
@@ -305,9 +316,11 @@ class TestRetentionPeriodDefault(FunctionalTestCase):
 
     @browsing
     def test_retention_period_default(self, browser):
-        browser.login().open()
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.repository_root)
+        factoriesmenu.add(u'RepositoryFolder')
+        browser.fill({'Title': 'My Repofolder'}).save()
         dossier = browser.context
 
         value = self.get_retention_period(dossier)
@@ -315,8 +328,10 @@ class TestRetentionPeriodDefault(FunctionalTestCase):
 
     @browsing
     def test_retention_period_acquired_default(self, browser):
-        browser.login().open(self.repofolder)
-        self.set_retention_period(self.repofolder, 15)
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.leaf_repofolder)
+        self.set_retention_period(self.leaf_repofolder, 15)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -326,16 +341,17 @@ class TestRetentionPeriodDefault(FunctionalTestCase):
 
     @browsing
     def test_intermediate_folder_doesnt_break_default_aq(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # An intermediate folderish object that doesn't have the respective
         # field shouldn't break acquisition of the default
-        self.set_retention_period(self.repofolder, 15)
+        self.set_retention_period(self.leaf_repofolder, 15)
 
         fti = self.get_fti('opengever.repository.repositoryfolder')
         fti.allowed_content_types = fti.allowed_content_types + ('Dummy',)
 
-        dummy = createContentInContainer(self.repofolder, 'Dummy')
-        transaction.commit()
-        browser.login().open(dummy)
+        dummy = createContentInContainer(self.leaf_repofolder, 'Dummy')
+        browser.open(dummy)
 
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
@@ -345,11 +361,10 @@ class TestRetentionPeriodDefault(FunctionalTestCase):
         self.assertEqual(15, value)
 
 
-class TestRetentionPeriodVocabulary(FunctionalTestCase):
+class TestRetentionPeriodVocabulary(IntegrationTestCase):
 
     def setUp(self):
         super(TestRetentionPeriodVocabulary, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['retention_period']
 
     def get_retention_period(self, obj):
@@ -357,18 +372,18 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     def set_retention_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_retention_period_choices_configurable_via_registry(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # Note: The static fallback default (5) needs to be part of this
         # value range for the default to validate
         api.portal.set_registry_record(
             'retention_period', interface=IRetentionPeriodRegister,
             value=[u'1', u'2', u'3', u'4', u'5', u'99']
         )
-        transaction.commit()
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Retention period (years)')
 
@@ -378,7 +393,9 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_retention_period_default_choices_are_unrestricted(self, browser):
-        browser.login().open(self.repofolder)
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Retention period (years)')
         self.assertEqual(
@@ -387,32 +404,34 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_choices_not_limited_by_parent_when_unrestricted(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # When is_restriced is False, choices shall not be limited by
         # an acquired value -  i.e., we always have the full set of choices
         set_retention_period_restricted(False)
         all_choices = ['5', '10', '15', '20', '25']
 
         for value in all_choices:
-            self.set_retention_period(self.repofolder, value)
-            transaction.commit()
-            browser.login().open(self.repofolder)
+            self.set_retention_period(self.leaf_repofolder, value)
+            browser.open(self.leaf_repofolder)
 
             factoriesmenu.add(u'Business Case Dossier')
             form_field = browser.find('Retention period (years)')
-            self.assertEqual(
-                all_choices,
-                form_field.options_values)
+            self.assertEqual(all_choices, form_field.options_values)
 
     @browsing
     def test_invalid_acquired_value_falls_back_to_all_choices(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # If vocab is supposed to be restricted, but we find an invalid value
         # via acquisition, the vocab should fall back to offering all choices
         set_retention_period_restricted(True)
 
         invalid_value = 7
-        self.set_retention_period(self.repofolder, invalid_value)
+        self.set_retention_period(self.branch_repofolder, invalid_value)
+        self.set_retention_period(self.leaf_repofolder, invalid_value)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Retention period (years)')
@@ -425,12 +444,15 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
         # If vocab is supposed to be restricted, but we find a  value via
         # acquisition that is falsy, the vocab should offer all choices
         # XXX: This probably should check for None instead of falsyness
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
 
         falsy_value = 0
-        self.set_retention_period(self.repofolder, falsy_value)
+        self.set_retention_period(self.branch_repofolder, falsy_value)
+        self.set_retention_period(self.leaf_repofolder, falsy_value)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Retention period (years)')
@@ -440,11 +462,13 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
 
-        self.set_retention_period(self.repofolder, 15)
+        self.set_retention_period(self.leaf_repofolder, 15)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Retention period (years)')
@@ -452,11 +476,13 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
 
-        self.set_retention_period(self.repofolder, 15)
+        self.set_retention_period(self.leaf_repofolder, 15)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Retention period (years)')
@@ -466,11 +492,13 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_acquired_value_is_suggested_as_default(self, browser):
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
 
-        self.set_retention_period(self.repofolder, 15)
+        self.set_retention_period(self.leaf_repofolder, 15)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Retention period (years)')
@@ -481,14 +509,15 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
 
     @browsing
     def test_restriction_works_in_edit_form(self, browser):
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
 
-        self.set_retention_period(self.repofolder, 15)
+        self.set_retention_period(self.leaf_repofolder, 15)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
-        transaction.commit()
 
         browser.click_on('Edit')
         form_field = browser.find('Retention period (years)')
@@ -497,28 +526,29 @@ class TestRetentionPeriodVocabulary(FunctionalTestCase):
             set(form_field.options_values))
 
 
-class TestRetentionPeriodPropagation(FunctionalTestCase):
+class TestRetentionPeriodPropagation(IntegrationTestCase):
 
     def setUp(self):
         super(TestRetentionPeriodPropagation, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['retention_period']
-        self.grant('Administrator')
 
     def get_retention_period(self, obj):
         return self.field.get(self.field.interface(obj))
 
     def set_retention_period(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_change_propagates_to_children(self, browser):
-        set_retention_period_restricted(True)
-        # Start with a long retention period
-        self.set_retention_period(self.repofolder, 25)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        set_retention_period_restricted(True)
+
+        # Start with a long retention period
+        self.set_retention_period(self.branch_repofolder, 25)
+        self.set_retention_period(self.leaf_repofolder, 25)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -527,10 +557,9 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
         # Dossier should have inherited retention period from repofolder
         self.assertEqual(25, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         # Reduce retention period
         browser.fill({'Retention period (years)': '15'}).save()
-        transaction.commit()
 
         value = self.get_retention_period(dossier)
         # Reduced retention period should have propagated to dossier
@@ -538,8 +567,13 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
 
     @browsing
     def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
+        self.set_retention_period(self.branch_repofolder, 25)
+        self.set_retention_period(self.leaf_repofolder, 25)
+
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({
             'Title': 'My Dossier',
@@ -549,9 +583,8 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
         value = self.get_retention_period(dossier)
         self.assertEqual(5, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         browser.fill({'Retention period (years)': '15'}).save()
-        transaction.commit()
 
         value = self.get_retention_period(dossier)
         self.assertEqual(5, value)
@@ -561,13 +594,15 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
         """Propagation of retention period is depth limited to 2 levels.
         Not sure why this was implemented this way, but here we test for it.
         """
+        self.login(self.administrator, browser=browser)
+
         set_retention_period_restricted(True)
         # Start with a long retention period
-        self.set_retention_period(self.repofolder, 25)
-        repofolder2 = create(Builder('repository').within(self.repofolder))
+        self.set_retention_period(self.branch_repofolder, 25)
+        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
         repofolder3 = create(Builder('repository').within(repofolder2))
 
-        browser.login().open(repofolder3)
+        browser.open(repofolder3)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -576,10 +611,9 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
         # Dossier should have inherited retention period from repofolder2
         self.assertEqual(25, value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.branch_repofolder, view='edit')
         # Reduce retention period on top level repofolder
         browser.fill({'Retention period (years)': '15'}).save()
-        transaction.commit()
 
         # Reduced retention period should have propagated to repofolder2, but
         # not dossier (because of depth limitation)
@@ -587,11 +621,10 @@ class TestRetentionPeriodPropagation(FunctionalTestCase):
         self.assertEqual(25, self.get_retention_period(dossier))
 
 
-class TestArchivalValueDefault(FunctionalTestCase):
+class TestArchivalValueDefault(IntegrationTestCase):
 
     def setUp(self):
         super(TestArchivalValueDefault, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['archival_value']
 
     def get_archival_value(self, obj):
@@ -599,7 +632,6 @@ class TestArchivalValueDefault(FunctionalTestCase):
 
     def set_archival_value(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     def get_fti(self, portal_type):
         types_tool = api.portal.get_tool('portal_types')
@@ -607,9 +639,11 @@ class TestArchivalValueDefault(FunctionalTestCase):
 
     @browsing
     def test_archival_value_default(self, browser):
-        browser.login().open()
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.repository_root)
+        factoriesmenu.add(u'RepositoryFolder')
+        browser.fill({'Title': 'My Folder'}).save()
         dossier = browser.context
 
         value = self.get_archival_value(dossier)
@@ -617,8 +651,10 @@ class TestArchivalValueDefault(FunctionalTestCase):
 
     @browsing
     def test_archival_value_acquired_default(self, browser):
-        browser.login().open(self.repofolder)
-        self.set_archival_value(self.repofolder, u'archival worthy')
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.leaf_repofolder)
+        self.set_archival_value(self.leaf_repofolder, u'archival worthy')
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -628,16 +664,17 @@ class TestArchivalValueDefault(FunctionalTestCase):
 
     @browsing
     def test_intermediate_folder_doesnt_break_default_aq(self, browser):
+        self.login(self.administrator, browser=browser)
+
         # An intermediate folderish object that doesn't have the respective
         # field shouldn't break acquisition of the default
-        self.set_archival_value(self.repofolder, u'archival worthy')
+        self.set_archival_value(self.leaf_repofolder, u'archival worthy')
 
         fti = self.get_fti('opengever.repository.repositoryfolder')
         fti.allowed_content_types = fti.allowed_content_types + ('Dummy',)
 
-        dummy = createContentInContainer(self.repofolder, 'Dummy')
-        transaction.commit()
-        browser.login().open(dummy)
+        dummy = createContentInContainer(self.leaf_repofolder, 'Dummy')
+        browser.open(dummy)
 
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
@@ -647,11 +684,10 @@ class TestArchivalValueDefault(FunctionalTestCase):
         self.assertEqual(u'archival worthy', value)
 
 
-class TestArchivalValueVocabulary(FunctionalTestCase):
+class TestArchivalValueVocabulary(IntegrationTestCase):
 
     def setUp(self):
         super(TestArchivalValueVocabulary, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['archival_value']
 
     def get_archival_value(self, obj):
@@ -659,19 +695,20 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
 
     def set_archival_value(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_archival_value_default_choices_are_unrestricted(self, browser):
-        browser.login().open(self.repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.repository_root)
+        factoriesmenu.add(u'RepositoryFolder')
         form_field = browser.find('Archival value')
-        self.assertEqual([
-            'unchecked',
-            'prompt',
-            'archival worthy',
-            'not archival worthy',
-            'archival worthy with sampling'],
+        self.assertEqual(
+            ['unchecked',
+             'prompt',
+             'archival worthy',
+             'not archival worthy',
+             'archival worthy with sampling'],
             form_field.options_values)
 
     @browsing
@@ -679,19 +716,22 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
         # If vocab is supposed to be restricted, but we find an invalid value
         # via acquisition, the vocab should fall back to offering all choices
 
-        invalid_value = 7
-        self.set_archival_value(self.repofolder, invalid_value)
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        invalid_value = 7
+        self.set_archival_value(self.branch_repofolder, invalid_value)
+        self.set_archival_value(self.leaf_repofolder, invalid_value)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Archival value')
-        self.assertEqual([
-            'unchecked',
-            'prompt',
-            'archival worthy',
-            'not archival worthy',
-            'archival worthy with sampling'],
+        self.assertEqual(
+            ['unchecked',
+             'prompt',
+             'archival worthy',
+             'not archival worthy',
+             'archival worthy with sampling'],
             form_field.options_values)
 
     @browsing
@@ -699,11 +739,13 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
         # If vocab is supposed to be restricted, but we find a  value via
         # acquisition that is falsy, the vocab should offer all choices
         # XXX: This probably should check for None instead of falsyness
+        self.login(self.administrator, browser=browser)
 
         falsy_value = 0
-        self.set_archival_value(self.repofolder, falsy_value)
+        self.set_archival_value(self.branch_repofolder, falsy_value)
+        self.set_archival_value(self.leaf_repofolder, falsy_value)
 
-        browser.login().open(self.repofolder)
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Archival value')
@@ -717,9 +759,11 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
 
     @browsing
     def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
-        self.set_archival_value(self.repofolder, u'archival worthy')
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_archival_value(self.leaf_repofolder, u'archival worthy')
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Archival value')
@@ -727,9 +771,11 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
 
     @browsing
     def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
-        self.set_archival_value(self.repofolder, u'prompt')
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_archival_value(self.leaf_repofolder, u'prompt')
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Archival value')
@@ -742,9 +788,11 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
 
     @browsing
     def test_acquired_value_is_suggested_as_default(self, browser):
-        self.set_archival_value(self.repofolder, u'prompt')
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_archival_value(self.leaf_repofolder, u'prompt')
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Archival value')
@@ -755,12 +803,13 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
 
     @browsing
     def test_restriction_works_in_edit_form(self, browser):
-        self.set_archival_value(self.repofolder, u'prompt')
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        self.set_archival_value(self.leaf_repofolder, u'prompt')
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
-        transaction.commit()
 
         browser.click_on('Edit')
         form_field = browser.find('Archival value')
@@ -773,27 +822,27 @@ class TestArchivalValueVocabulary(FunctionalTestCase):
             set(form_field.options_values))
 
 
-class TestArchivalValuePropagation(FunctionalTestCase):
+class TestArchivalValuePropagation(IntegrationTestCase):
 
     def setUp(self):
         super(TestArchivalValuePropagation, self).setUp()
-        self.repofolder = create(Builder('repository'))
         self.field = ILifeCycle['archival_value']
-        self.grant('Administrator')
 
     def get_archival_value(self, obj):
         return self.field.get(self.field.interface(obj))
 
     def set_archival_value(self, obj, value):
         self.field.set(self.field.interface(obj), value)
-        transaction.commit()
 
     @browsing
     def test_change_propagates_to_children(self, browser):
-        # Start with a loose archival value
-        self.set_archival_value(self.repofolder, u'unchecked')
+        self.login(self.administrator, browser=browser)
 
-        browser.login().open(self.repofolder)
+        # Start with a loose archival value
+        self.set_archival_value(self.branch_repofolder, u'unchecked')
+        self.set_archival_value(self.leaf_repofolder, u'unchecked')
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -802,10 +851,9 @@ class TestArchivalValuePropagation(FunctionalTestCase):
         # Dossier should have inherited archival value from repofolder
         self.assertEqual(u'unchecked', value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         # Make archival value more strict
         browser.fill({'Archival value': 'prompt'}).save()
-        transaction.commit()
 
         value = self.get_archival_value(dossier)
         # Stricter archival value should have propagated to dossier
@@ -813,7 +861,9 @@ class TestArchivalValuePropagation(FunctionalTestCase):
 
     @browsing
     def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        browser.login().open(self.repofolder)
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({
             'Title': 'My Dossier',
@@ -823,9 +873,8 @@ class TestArchivalValuePropagation(FunctionalTestCase):
         value = self.get_archival_value(dossier)
         self.assertEqual('prompt', value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.leaf_repofolder, view='edit')
         browser.fill({'Archival value': 'unchecked'}).save()
-        transaction.commit()
 
         value = self.get_archival_value(dossier)
         self.assertEqual('prompt', value)
@@ -835,12 +884,14 @@ class TestArchivalValuePropagation(FunctionalTestCase):
         """Propagation of archival value is depth limited to 2 levels.
         Not sure why this was implemented this way, but here we test for it.
         """
+        self.login(self.administrator, browser=browser)
+
         # Start with a loose archival value
-        self.set_archival_value(self.repofolder, u'unchecked')
-        repofolder2 = create(Builder('repository').within(self.repofolder))
+        self.set_archival_value(self.branch_repofolder, u'unchecked')
+        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
         repofolder3 = create(Builder('repository').within(repofolder2))
 
-        browser.login().open(repofolder3)
+        browser.open(repofolder3)
         factoriesmenu.add(u'Business Case Dossier')
         browser.fill({'Title': 'My Dossier'}).save()
         dossier = browser.context
@@ -849,10 +900,9 @@ class TestArchivalValuePropagation(FunctionalTestCase):
         # Dossier should have inherited archival value from repofolder2
         self.assertEqual(u'unchecked', value)
 
-        browser.open(self.repofolder, view='edit')
+        browser.open(self.branch_repofolder, view='edit')
         # Make archival value more strict on top level repofolder
         browser.fill({'Archival value': 'prompt'}).save()
-        transaction.commit()
 
         # Stricter archival value should have propagated to repofolder2, but
         # not dossier (because of depth limitation)
@@ -860,65 +910,53 @@ class TestArchivalValuePropagation(FunctionalTestCase):
         self.assertEqual(u'unchecked', self.get_archival_value(dossier))
 
 
-class TestDateOfSubmission(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDateOfSubmission, self).setUp()
-        self.repofolder = create(Builder('repository'))
+class TestDateOfSubmission(IntegrationTestCase):
 
     @browsing
     def test_is_only_visible_for_managers_on_add_form(self, browser):
-        browser.login().open(
-            self.repofolder,
-            view='++add++opengever.dossier.businesscasedossier')
-
+        self.login(self.administrator, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
         self.assertIsNone(browser.forms['form'].find_field('Date of submission'))
 
-        self.grant('Manager')
-        browser.login().open(
-            self.repofolder,
-            view='++add++opengever.dossier.businesscasedossier')
-
+        self.login(self.manager, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of submission'))
 
     @browsing
     def test_is_only_visible_for_managers_on_edit_form(self, browser):
-        dossier = create(Builder('dossier'))
-        browser.login().open(dossier, view='edit')
+        self.login(self.administrator, browser=browser)
+        browser.open(self.dossier, view='edit')
         self.assertIsNone(browser.forms['form'].find_field('Date of submission'))
+        browser.css('#form-buttons-cancel').first.click()
 
-        self.grant('Manager')
-        browser.login().open(dossier, view='edit')
+        self.login(self.manager, browser=browser)
+        browser.open(self.dossier, view='edit')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of submission'))
 
 
-class TestDateOfCassation(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDateOfCassation, self).setUp()
-        self.repofolder = create(Builder('repository'))
+class TestDateOfCassation(IntegrationTestCase):
 
     @browsing
     def test_is_only_visible_for_managers_on_add_form(self, browser):
-        browser.login().open(
-            self.repofolder,
-            view='++add++opengever.dossier.businesscasedossier')
-
+        self.login(self.administrator, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
         self.assertIsNone(browser.forms['form'].find_field('Date of cassation'))
 
-        self.grant('Manager')
-        browser.login().open(
-            self.repofolder,
-            view='++add++opengever.dossier.businesscasedossier')
-
+        self.login(self.manager, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of cassation'))
 
     @browsing
     def test_is_only_visible_for_managers_on_edit_form(self, browser):
-        dossier = create(Builder('dossier'))
-        browser.login().open(dossier, view='edit')
+        self.login(self.administrator, browser=browser)
+        browser.open(self.dossier, view='edit')
         self.assertIsNone(browser.forms['form'].find_field('Date of cassation'))
+        browser.css('#form-buttons-cancel').first.click()
 
-        self.grant('Manager')
-        browser.login().open(dossier, view='edit')
+        self.login(self.manager, browser=browser)
+        browser.open(self.dossier, view='edit')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of cassation'))
