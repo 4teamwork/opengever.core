@@ -52,16 +52,22 @@ class TestSIPPackage(FunctionalTestCase):
         self.folder = create(Builder('repository').within(self.root))
         self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
 
-    # TODO: should only include all dossiers from the disposition object
     def test_adds_all_dossiers_and_documents(self):
         dossier_a = create(Builder('dossier').within(self.folder).as_expired())
         create(Builder('document').with_dummy_content().within(dossier_a))
         dossier_b = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_c = create(Builder('dossier').within(self.folder).as_expired())
         disposition = create(Builder('disposition')
                              .having(dossiers=[dossier_a, dossier_b])
                              .within(self.folder))
 
         package = SIPPackage(disposition)
+
+        # test that dossier_c is not in package
+        self.assertEquals(2, len(package.dossiers))
+        self.assertItemsEqual([dossier_a, dossier_b],
+                              [dossier.obj for dossier in package.dossiers])
+        self.assertEquals(2, len(package.content_folder.folders))
 
         dossier_a_model, dossier_b_model = package.content_folder.folders
         self.assertEquals(1, len(dossier_a_model.files))
