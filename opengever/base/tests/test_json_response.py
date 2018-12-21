@@ -1,10 +1,10 @@
 from opengever.base import _
 from opengever.base.response import JSONResponse
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 import json
 
 
-class TestUnitJSONResponse(FunctionalTestCase):
+class TestUnitJSONResponse(IntegrationTestCase):
 
     def setUp(self):
         super(TestUnitJSONResponse, self).setUp()

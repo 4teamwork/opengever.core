@@ -2,15 +2,16 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.journal.browser import JournalHistory
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from zope.i18n import translate
 
 
-class TestOGQuickupload(FunctionalTestCase):
+class TestOGQuickupload(IntegrationTestCase):
 
     def setUp(self):
         super(TestOGQuickupload, self).setUp()
-        self.dossier = create(Builder('dossier'))
+
+        self.login(self.regular_user)
         self.adapter = IQuickUploadFileFactory(self.dossier)
 
     def test_get_mimetype(self):
@@ -39,8 +40,8 @@ class TestOGQuickupload(FunctionalTestCase):
         content = create(Builder('quickuploaded_document')
                          .within(self.dossier)
                          .with_asset_data('text.txt'))
-        history = JournalHistory(content, content.REQUEST)
 
+        history = JournalHistory(content, content.REQUEST)
         self.assertEquals(1,
                           len(history.data()),
                           'Expect exactly one journal entry after upload')

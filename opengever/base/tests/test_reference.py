@@ -1,113 +1,92 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberFormatter
-from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
-from opengever.testing import FunctionalTestCase
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
+from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import queryAdapter
 
 
-class TestLocalReferenceNumber(FunctionalTestCase):
+class TestLocalReferenceNumber(IntegrationTestCase):
 
     def test_plone_site_returns_admin_units_abbreviation(self):
-        create(Builder('admin_unit')
-               .having(unit_id=u'fake',
-                       title=u'Fake Unit',
-                       abbreviation="FakeU")
-               .as_current_admin_unit())
+        self.login(self.regular_user)
 
         self.assertEquals(
-            u'FakeU', IReferenceNumber(self.portal).get_local_number())
+            u'Client1', IReferenceNumber(self.portal).get_local_number())
 
     def test_repository_root_returns_empty_string(self):
-        root = create(Builder('repository_root'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            '', IReferenceNumber(root).get_local_number())
+            '', IReferenceNumber(self.repository_root).get_local_number())
 
     def test_repositoryfolder_returns_reference_prefix_of_the_context(self):
-        repository = create(Builder('repository')
-                            .having(reference_number_prefix=u'5'))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            u'5', IReferenceNumber(repository).get_local_number())
+            u'2', IReferenceNumber(self.empty_repofolder).get_local_number())
 
     def test_dossier_returns_reference_prefix_of_the_context(self):
-        dossier = create(Builder('dossier'))
-
-        IReferenceNumberPrefix(self.portal).set_number(dossier, number=u'7')
+        self.login(self.regular_user)
 
         self.assertEquals(
-            u'7', IReferenceNumber(dossier).get_local_number())
+            u'1', IReferenceNumber(self.dossier).get_local_number())
 
 
-class TestReferenceNumberAdapter(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestReferenceNumberAdapter, self).setUp()
-
-        root = create(Builder('repository_root'))
-        repo_2 = create(Builder('repository')
-                        .within(root)
-                        .having(reference_number_prefix=u'2'))
-        repo_2_4 = create(Builder('repository')
-                          .within(repo_2)
-                          .having(reference_number_prefix=u'4'))
-        repo_2_4_7 = create(Builder('repository')
-                            .within(repo_2_4)
-                            .having(reference_number_prefix=u'7'))
-        dossier = create(Builder('dossier').within(repo_2_4_7))
-        IReferenceNumberPrefix(repo_2_4_7).set_number(dossier, number=u'8')
-
-        self.subdossier = create(Builder('dossier').within(dossier))
-        IReferenceNumberPrefix(dossier).set_number(
-            self.subdossier, number=u'2')
+class TestReferenceNumberAdapter(IntegrationTestCase):
 
     def test_returns_full_number_for_the_context(self):
+        self.login(self.regular_user)
+
         self.assertEquals(
             {'site': [u'Client1', ],
              'repositoryroot': [''],
-             'repository': [u'2', u'4', u'7'],
-             'dossier': [u'8', u'2']},
+             'repository': [u'1', u'1'],
+             'dossier': [u'1', u'1']},
             IReferenceNumber(self.subdossier).get_parent_numbers())
 
     def test_use_dotted_as_default_formatter(self):
+        self.login(self.regular_user)
+
         self.assertEquals(
-            'Client1 2.4.7 / 8.2',
+            'Client1 1.1 / 1.1',
             IReferenceNumber(self.subdossier).get_number())
 
     def test_use_grouped_by_three_formatter(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IReferenceNumberSettings)
-        proxy.formatter = 'grouped_by_three'
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='grouped_by_three',
+            interface=IReferenceNumberSettings)
 
         self.assertEquals(
-            'Client1 247-8.2',
+            'Client1 11-1.1',
             IReferenceNumber(self.subdossier).get_number())
 
     def test_use_no_client_id_dotted_formatter(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IReferenceNumberSettings)
-        proxy.formatter = 'no_client_id_dotted'
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_dotted',
+            interface=IReferenceNumberSettings)
 
         self.assertEquals(
-            '2.4.7 / 8.2',
+            '1.1 / 1.1',
             IReferenceNumber(self.subdossier).get_number())
 
     def test_use_no_client_id_grouped_by_three_formatter(self):
-        registry = getUtility(IRegistry)
-        proxy = registry.forInterface(IReferenceNumberSettings)
-        proxy.formatter = 'no_client_id_grouped_by_three'
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='formatter', value='no_client_id_grouped_by_three',
+            interface=IReferenceNumberSettings)
 
         self.assertEquals(
-            '247-8.2',
+            '11-1.1',
             IReferenceNumber(self.subdossier).get_number())
 
 
-class TestDottedFormatterBase(FunctionalTestCase):
+class TestDottedFormatterBase(IntegrationTestCase):
 
     def setUp(self):
         super(TestDottedFormatterBase, self).setUp()
@@ -163,7 +142,7 @@ class TestDottedFormatter(TestDottedFormatterBase):
             self.formatter.list_to_string([[1, 4, 5], [452, 4], [135]]))
 
 
-class TestGroupedbyThreeFormatterBase(FunctionalTestCase):
+class TestGroupedbyThreeFormatterBase(IntegrationTestCase):
 
     def setUp(self):
         super(TestGroupedbyThreeFormatterBase, self).setUp()
@@ -224,7 +203,7 @@ class TestGroupedbyThreeFormatter(TestGroupedbyThreeFormatterBase):
             self.formatter.list_to_string([[1, 4, 5, 7, 2], [452, 4], [135]]))
 
 
-class TestNoClientIDGroupedbyThreeFormatterBase(FunctionalTestCase):
+class TestNoClientIDGroupedbyThreeFormatterBase(IntegrationTestCase):
 
     def setUp(self):
         super(TestNoClientIDGroupedbyThreeFormatterBase, self).setUp()

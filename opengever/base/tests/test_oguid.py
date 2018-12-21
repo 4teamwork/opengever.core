@@ -1,7 +1,5 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.base.oguid import Oguid
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from unittest import TestCase
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -34,33 +32,34 @@ class TestOguid(TestCase):
         self.assertNotEqual(Oguid('bar', 2), Oguid('foo', 2))
 
 
-class TestOguidFunctional(FunctionalTestCase):
+class TestOguidFunctional(IntegrationTestCase):
 
     def test_oguid_for_object(self):
+        self.login(self.regular_user)
+
         intids = getUtility(IIntIds)
 
-        obj = create(Builder('dossier'))
-        int_id = intids.getId(obj)
-        oguid = Oguid.for_object(obj)
-
-        self.assertEqual('admin-unit-1:{}'.format(int_id), oguid)
+        self.assertEqual('plone:{}'.format(intids.getId(self.dossier)),
+                         Oguid.for_object(self.dossier))
 
     def test_oguid_get_url_same_admin_unit(self):
-        obj = create(Builder('dossier'))
-        oguid = Oguid.for_object(obj)
-        self.assertEqual(obj.absolute_url(), oguid.get_url())
+        self.login(self.regular_user)
+
+        oguid = Oguid.for_object(self.dossier)
+        self.assertEqual(self.dossier.absolute_url(), oguid.get_url())
 
     def test_oguid_url_different_admin_unit(self):
+        self.login(self.regular_user)
+
         oguid = Oguid('foo', 1234)
         self.assertEqual(
-            'http://example.com/@@resolve_oguid?oguid=foo:1234',
+            'http://nohost/plone/@@resolve_oguid?oguid=foo:1234',
             oguid.get_url())
 
     def test_oguid_register_registers_intid(self):
-        repo = create(Builder('repository'))
-        dossier = create(Builder('dossier').within(repo))
+        self.login(self.regular_user)
 
-        copied_dossier = dossier._getCopy(repo)
+        copied_dossier = self.dossier._getCopy(self.leaf_repofolder)
         self.assertIsNone(Oguid.for_object(copied_dossier))
 
         oguid = Oguid.for_object(copied_dossier, register=True)

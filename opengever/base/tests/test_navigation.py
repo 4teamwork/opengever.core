@@ -4,76 +4,66 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.testing import add_languages
-from opengever.testing import FunctionalTestCase
-from plone.uuid.interfaces import IUUID
-from unittest import skip
+from opengever.testing import IntegrationTestCase
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
-import transaction
 
 
-class TestNavigation(FunctionalTestCase):
+class TestNavigation(IntegrationTestCase):
 
     def test_caching_url_changes_when_repository_is_changed(self):
-        root = create(Builder('repository_root'))
-        view = root.restrictedTraverse('navigation.json')
+        self.login(self.regular_user)
+        view = self.repository_root.restrictedTraverse('navigation.json')
 
         msg = 'Cache URL did not change after adding a repository folder.'
         with self.assert_changes(view.get_caching_url, msg):
-            folder = create(Builder('repository').within(root))
+            folder = create(Builder('repository').within(self.repository_root))
 
         msg = 'Cache URL did not change after changing a repository folder.'
         with self.assert_changes(view.get_caching_url, msg):
             folder.reindexObject()  # changes the modified date
 
     def test_caching_url_contains_current_language_code(self):
-        root = create(Builder('repository_root'))
-        view = root.restrictedTraverse('navigation.json')
+        self.login(self.regular_user)
+
+        view = self.repository_root.restrictedTraverse('navigation.json')
 
         msg = 'Cache URL did not change after changing language.'
         with self.assert_changes(view.get_caching_url, msg):
-            root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'fr'
+            self.repository_root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'fr'
 
         msg = 'Cache URL did not change after changing language.'
         with self.assert_changes(view.get_caching_url, msg):
-            root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de-ch'
+            self.repository_root.REQUEST.get('LANGUAGE_TOOL').LANGUAGE = 'de-ch'
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_json_is_valid(self, browser):
-        add_languages(['de-ch'])
-        transaction.commit()
+        self.login(self.regular_user, browser=browser)
 
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository')
-                        .having(title_de=u'The Folder',
-                                description='A primary folder')
-                        .within(root))
-        subfolder = create(Builder('repository')
-                           .having(title_de=u'The Sub Folder',
-                                   description='A secondary folder')
-                           .within(folder)
-                           .in_state('repositoryfolder-state-inactive'))
+        self.enable_languages()
 
-        browser.login().open()
+        browser.open()
         browser.click_on('Deutsch')
-        browser.visit(root, view='navigation.json')
-        self.assert_json_equal(
-            [{"text": "1. The Folder",
-              "description": "A primary folder",
-              "uid": IUUID(folder),
-              "url": folder.absolute_url(),
-              "active": True,
-              "nodes": [{"text": "1.1. The Sub Folder",
-                         "description": "A secondary folder",
-                         "nodes": [],
-                         "uid": IUUID(subfolder),
-                         "url": subfolder.absolute_url(),
-                         "active": False,
-                         }],
-              }],
+        browser.visit(self.repository_root, view='navigation.json')
+
+        self.assertEqual(
+            [{u'active': True,
+              u'description': self.branch_repofolder.description,
+              u'nodes': [{u'active': True,
+                          u'description': u'',
+                          u'nodes': [],
+                          u'text': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                          u'uid': u'createrepositorytree000000000003',
+                          u'url': self.leaf_repofolder.absolute_url()}],
+              u'text': u'1. F\xfchrung',
+              u'uid': u'createrepositorytree000000000002',
+              u'url': self.branch_repofolder.absolute_url()},
+             {u'active': True,
+              u'description': u'',
+              u'nodes': [],
+              u'text': u'2. Rechnungspr\xfcfungskommission',
+              u'uid': u'createrepositorytree000000000004',
+              u'url': self.empty_repofolder.absolute_url()}],
             browser.json)
 
     @browsing
@@ -81,12 +71,12 @@ class TestNavigation(FunctionalTestCase):
         # We should never cache the navigation.json when there is no
         # cache key parameter which will change. Otherwise we will no
         # longer be able to flush the cache.
-        root = create(Builder('repository_root'))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().visit(root, view='navigation.json')
+        browser.visit(self.repository_root, view='navigation.json')
         self.assertEquals(None, browser.headers.get('Cache-Control'))
 
-        browser.visit(root, view='navigation.json?cache_key=1')
+        browser.visit(self.repository_root, view='navigation.json?cache_key=1')
         self.assertEquals('private, max-age=31536000',
                           browser.headers.get('Cache-Control'))
 
@@ -99,6 +89,7 @@ class TestNavigation(FunctionalTestCase):
 
         We want to make sure that this does not affect the cachekey.
         """
+        self.login(self.regular_user)
 
         with freeze(datetime(2015, 1, 1, 12, 0)) as clock:
             root = create(Builder('repository_root'))

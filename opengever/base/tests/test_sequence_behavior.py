@@ -1,43 +1,50 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import ISequenceNumber
-from opengever.testing import FunctionalTestCase
-from plone.dexterity.fti import DexterityFTI
+from opengever.base.interfaces import ISequenceNumberGenerator
+from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import getUtility
 
 
-class TestSequenceBehavior(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestSequenceBehavior, self).setUp()
-        self.grant('Manager')
-
-        fti = DexterityFTI('type1', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['type1'], behaviors=["opengever.base.behaviors.sequence.ISequenceNumberBehavior"])
-        self.portal.portal_types._setObject('type1', fti)
-        fti = DexterityFTI('type2', klass="plone.dexterity.content.Container", global_allow=True, allowed_content_types=['type2'])
-        self.portal.portal_types._setObject('type2', fti)
-        self.portal.invokeFactory('type1', 'n1')
-        self.portal.invokeFactory('type1', 'n2')
-        self.portal.invokeFactory('type2', 'f1')
+class TestSequenceBehavior(IntegrationTestCase):
+    """The sequence behavior is tested with the dossier FTI,
+    but is used in other types as well.
+    """
 
     def test_sequence_behavior(self):
-        seq_utility = getUtility(ISequenceNumber)
-        n1 = self.portal.get('n1')
-        self.assertEquals(1, seq_utility.get_number(n1))
+        self.login(self.regular_user)
 
-        n2 = self.portal.get('n2')
-        self.assertEquals(2, seq_utility.get_number(n2))
+        generator = ISequenceNumberGenerator(self.dossier)
+        current_number = generator.get_next(generator.key)
 
-        self.assertEquals(1, seq_utility.get_number(n1))
+        dossier_a = create(Builder('dossier').within(self.leaf_repofolder))
+        dossier_b = create(Builder('dossier').within(self.leaf_repofolder))
 
-        # the sequence number isn't recyclable
-        self.portal.manage_delObjects('n2')
-        self.portal.invokeFactory('type1', 'n3')
-        self.assertEquals(3, seq_utility.get_number(self.portal.get('n3')))
+        sequence_utility = getUtility(ISequenceNumber)
+        self.assertEquals(current_number + 1, sequence_utility.get_number(dossier_a))
+        self.assertEquals(current_number + 2, sequence_utility.get_number(dossier_b))
 
-        # and also the a copy should become a new number
-        cb = self.portal.manage_copyObjects('n1')
-        self.portal.manage_pasteObjects(cb)
-        self.assertEquals(4, seq_utility.get_number(self.portal.get('copy_of_n1')))
+    def test_copy_becomes_a_new_number(self):
+        self.login(self.regular_user)
 
-        # the folder numbering should be start now also by 1
-        f1 = self.portal.get('f1')
-        self.assertEquals(1, seq_utility.get_number(f1))
+        sequence_utility = getUtility(ISequenceNumber)
+        generator = ISequenceNumberGenerator(self.dossier)
+        current_number = generator.get_next(generator.key)
+
+        dossier_copy = api.content.copy(source=self.empty_dossier,
+                                        target=self.leaf_repofolder)
+
+        self.assertEquals(current_number + 1,
+                          sequence_utility.get_number(dossier_copy))
+
+    def test_numbering_is_per_type(self):
+        self.login(self.regular_user)
+
+        dossier_generator = ISequenceNumberGenerator(self.dossier)
+        document_generator = ISequenceNumberGenerator(self.document)
+
+        self.assertNotEqual(dossier_generator.key, document_generator.key)
+        self.assertNotEqual(
+            dossier_generator.get_next(dossier_generator.key),
+            document_generator.get_next(document_generator.key))

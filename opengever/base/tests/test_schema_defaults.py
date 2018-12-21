@@ -1,12 +1,12 @@
 from opengever.base.tests.sample_behavior.sample import ISampleSchema
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFCore.utils import getToolByName
 
 
-class TestSchemaLevelDefaultsForBehaviors(FunctionalTestCase):
+class TestSchemaLevelDefaultsForBehaviors(IntegrationTestCase):
 
     def setUp(self):
         super(TestSchemaLevelDefaultsForBehaviors, self).setUp()
@@ -20,7 +20,12 @@ class TestSchemaLevelDefaultsForBehaviors(FunctionalTestCase):
         typestool._setObject('SampleItem', fti)
         register(fti)
 
+        site_fti = typestool['Plone Site']
+        site_fti.allowed_content_types = site_fti.allowed_content_types + ('SampleItem', )
+
     def test_defaults_on_behavior_schemata_take_effect(self):
+        self.login(self.manager)
+
         obj = createContentInContainer(self.portal, 'SampleItem')
         obj = ISampleSchema(obj)
         self.assertEquals(ISampleSchema['foobar'].default, obj.foobar)

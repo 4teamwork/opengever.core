@@ -1,4 +1,4 @@
 <a  href="#" tal:content="context/Title"
     tal:attributes="href context/getURL;
                     class context/ContentTypeClass;
-                    alt python: context.Title().decode('utf-8')" />
+                    alt python: context.Title() and context.Title().decode('utf-8')" />

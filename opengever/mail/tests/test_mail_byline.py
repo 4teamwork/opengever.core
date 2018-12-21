@@ -8,39 +8,35 @@ from opengever.mail.tests import MAIL_DATA
 
 class TestMailByline(TestBylineBase):
 
-    def setUp(self):
-        super(TestMailByline, self).setUp()
-
-        create(Builder('fixture').with_hugo_boss(email='from@example.org'))
-
-        self.mail = create(Builder('mail')
-                           .with_message(MAIL_DATA)
-                           .having(start=date(2013, 11, 6)))
-
     @browsing
     def test_document_byline_start_date(self, browser):
-        browser.login().open(self.mail)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.mail_eml)
 
         start_date = self.get_byline_value_by_label('from:')
         self.assertEquals('Jan 01, 1999', start_date.text)
 
     @browsing
     def test_document_byline_sequence_number(self, browser):
-        browser.login().open(self.mail)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.mail_eml)
 
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEquals('1', seq_number.text)
+        self.assertEquals('24', seq_number.text)
 
     @browsing
     def test_document_byline_reference_number(self, browser):
-        browser.login().open(self.mail)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.mail_eml)
 
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('Client1 / 1', ref_number.text)
+        self.assertEquals('Client1 1.1 / 1 / 24', ref_number.text)
 
     @browsing
     def test_document_byline_document_author(self, browser):
-        browser.login().open(self.mail)
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.mail_eml)
 
         document_author = self.get_byline_value_by_label('by:')
-        self.assertEquals('Boss Hugo', document_author.text)
+        self.assertEquals(u'Freddy H\xf6lderlin <from@example.org>',
+                          document_author.text)

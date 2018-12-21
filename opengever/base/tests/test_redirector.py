@@ -4,14 +4,14 @@ from opengever.base.interfaces import IRedirector
 from opengever.base.redirector import REDIRECTOR_COOKIE_NAME
 from opengever.base.redirector import RedirectorCookie
 from opengever.base.redirector import RedirectorViewlet
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.caching.interfaces import IETagValue
 from zope.component import getMultiAdapter
 import hashlib
 import json
 
 
-class TestRedirectorCookie(FunctionalTestCase):
+class TestRedirectorCookie(IntegrationTestCase):
 
     def test_adding_string_to_cookie(self):
         self.assertEquals([], RedirectorCookie(self.request).read())
@@ -63,12 +63,10 @@ class TestRedirectorCookie(FunctionalTestCase):
         return self.request.response.cookies.get(REDIRECTOR_COOKIE_NAME, None)
 
 
-class TestRedirector(FunctionalTestCase):
+class TestRedirector(IntegrationTestCase):
 
     def setUp(self):
         super(TestRedirector, self).setUp()
-        self.prepareSession()
-
         self.redirector = IRedirector(self.request)
 
     def test_stores_and_retrieves_redirects(self):
@@ -90,11 +88,7 @@ class TestRedirector(FunctionalTestCase):
         self.assertEquals(1, len(self.redirector.get_redirects(remove=False)))
         self.assertEquals(1, len(self.redirector.get_redirects(remove=False)))
 
-class TestRedirectorViewlet(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestRedirectorViewlet, self).setUp()
-        self.prepareSession()
+class TestRedirectorViewlet(IntegrationTestCase):
 
     def test_viewlet_only_redirects_once(self):
         redirector = IRedirector(self.request)
