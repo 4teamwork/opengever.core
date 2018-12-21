@@ -1,9 +1,9 @@
 from opengever.base.hooks import DEFAULT_EXTEDIT_ACTION_IDENTIFIER
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 
 
-class TestHooks(FunctionalTestCase):
+class TestHooks(IntegrationTestCase):
 
     def test_default_external_edit_action_removed(self):
         actions_tool = api.portal.get_tool('portal_actions')
