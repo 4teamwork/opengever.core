@@ -682,3 +682,8 @@ class IntegrationTestCase(TestCase):
         wftool = api.portal.get_tool('portal_workflow')
         return [transition['id'] for transition in
                 wftool.listActionInfos(object=obj, check_condition=True)]
+
+    def create_inactive_user(self):
+        create(Builder('ogds_user')
+               .having(firstname='Without', lastname='Orgunit',
+                       userid='user.without.orgunit'))
