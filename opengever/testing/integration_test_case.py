@@ -27,6 +27,7 @@ from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
 from opengever.testing.test_case import TestCase
+from opengever.trash.trash import Trasher
 from operator import methodcaller
 from plone import api
 from plone.app.relationfield.event import update_behavior_relations
@@ -687,3 +688,7 @@ class IntegrationTestCase(TestCase):
         create(Builder('ogds_user')
                .having(firstname='Without', lastname='Orgunit',
                        userid='user.without.orgunit'))
+
+    def trash_documents(self, *objects):
+        for obj in objects:
+            Trasher(obj).trash()
