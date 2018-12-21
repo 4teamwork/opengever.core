@@ -14,8 +14,8 @@ class Folder(object):
         toc.increment_folder_counter()
         self.path = os.path.join(base_path, self.name)
 
-        for dossier in dossier.dossiers.values():
-            self.folders.append(Folder(toc, dossier, self.path))
+        for subdossier in dossier.dossiers.values():
+            self.folders.append(Folder(toc, subdossier, self.path))
 
         for doc in dossier.documents.values():
             if doc.obj.archival_file or doc.obj.file:

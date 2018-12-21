@@ -12,6 +12,8 @@ from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from functools import wraps
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
 from opengever.base.role_assignments import InvitationRoleAssignment
@@ -64,7 +66,9 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(4):
             self.create_units()
 
-        with self.freeze_at_hour(5):
+        # Create users. Here we can use a 1minute step between creation of two
+        # objects as every second one is a ogds user with no creation date.
+        with self.freeze_at_hour(5, tick_length=1):
             self.create_users()
 
         with self.freeze_at_hour(6):
@@ -123,6 +127,12 @@ class OpengeverContentFixture(object):
             with self.login(self.dossier_responsible):
                 self.create_shadow_document()
                 self.create_protected_dossiers()
+
+        with self.freeze_at_hour(19):
+            with self.login(self.dossier_responsible):
+                self.create_offered_dossiers()
+            with self.login(self.records_manager):
+                self.create_disposition()
 
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
@@ -253,6 +263,13 @@ class OpengeverContentFixture(object):
             'workspace_guest',
             u'Hans',
             u'Peter',
+            )
+
+        self.archivist = self.create_user(
+            'archivist',
+            u'J\xfcrgen',
+            u'Fischer',
+            ['Archivist']
             )
 
         # This user is intended to be used in situations where you need a user
@@ -1193,6 +1210,46 @@ class OpengeverContentFixture(object):
             ))
 
     @staticuid()
+    def create_offered_dossiers(self):
+        self.offered_dossier_to_archive = self.register('offered_dossier_to_archive', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'Hannah Baufrau')
+            .having(
+                description=u'Anstellung Hannah Baufrau.',
+                keywords=(u'Wichtig'),
+                start=date(2000, 1, 1),
+                end=date(2000, 1, 31),
+                responsible=self.dossier_responsible.getId(),
+                archival_value=ARCHIVAL_VALUE_WORTHY,
+                )
+            .in_state('dossier-state-resolved')
+            ))
+
+        self.offered_dossier_to_destroy = self.register('offered_dossier_to_destroy', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'Hans Baumann')
+            .having(
+                description=u'Bewerbung Hans Baumann.',
+                start=date(2000, 1, 1),
+                end=date(2000, 1, 15),
+                responsible=self.dossier_responsible.getId(),
+                archival_value=ARCHIVAL_VALUE_UNWORTHY,
+                )
+            .in_state('dossier-state-inactive')
+            ))
+
+    @staticuid()
+    def create_disposition(self):
+        self.disposition = self.register('disposition', create(
+            Builder('disposition')
+            .titled(u'Angebot 31.8.2016')
+            .having(dossiers=[self.offered_dossier_to_archive,
+                              self.offered_dossier_to_destroy])
+            .within(self.repofolder00)))
+
+    @staticuid()
     def create_shadow_document(self):
         with self.features('oneoffixx'):
             shadow_document = self.register('shadow_document', create(
@@ -1490,7 +1547,7 @@ class OpengeverContentFixture(object):
             )
 
     @contextmanager
-    def freeze_at_hour(self, hour):
+    def freeze_at_hour(self, hour, tick_length=2):
         """Freeze the time when creating content with builders, so that
         we can rely on consistent creation times.
         Since we can sort consistently when all objects have the exact same
@@ -1507,7 +1564,7 @@ class OpengeverContentFixture(object):
         start = datetime(2016, 8, 31, hour, 1, 33, tzinfo=pytz.UTC)
         end = start + timedelta(hours=1)
         with freeze(start) as clock:
-            with ticking_creator(clock, minutes=2):
+            with ticking_creator(clock, minutes=tick_length):
                 with self.ticking_proposal_history(clock, seconds=1):
                     with time_based_intids():
                         yield

@@ -152,6 +152,7 @@ class TestDossierIndexers(IntegrationTestCase):
                 u'Subsubkeyword',
                 u'Subsubkeyw\xf6rd',
                 u'Vertr\xe4ge',
+                u'Wichtig',
                 u'secret',
                 u'special',
                 ),

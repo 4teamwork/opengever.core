@@ -1,49 +1,17 @@
-from datetime import date
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
+from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.testing import IntegrationTestCase
 from openpyxl import load_workbook
-from plone import api
 from tempfile import NamedTemporaryFile
-from unittest import skip
-import transaction
 
 
-class TestDispositionExcelExport(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDispositionExcelExport, self).setUp()
-        self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.root))
-        self.dossier1 = create(Builder('dossier')
-                               .as_expired()
-                               .within(self.repository)
-                               .having(title=u'Dossier A',
-                                       start=date(2016, 1, 19),
-                                       end=date(2016, 3, 19),
-                                       public_trial='limited-public',
-                                       archival_value='archival worthy'))
-
-        self.dossier2 = create(Builder('dossier')
-                               .as_expired()
-                               .within(self.repository)
-                               .having(title=u'Dossier B',
-                                       start=date(2015, 1, 19),
-                                       end=date(2015, 3, 19),
-                                       public_trial='limited-public',
-                                       archival_value='not archival worthy',
-                                       archival_value_annotation=u'In Absprache mit ARCH.'))
-
-        self.grant('Records Manager')
-        self.disposition = create(Builder('disposition')
-                                  .having(dossiers=[self.dossier1, self.dossier2],
-                                          title="disposition example"))
+class TestDispositionExcelExport(IntegrationTestCase):
 
     @browsing
     def test_label_row(self, browser):
-        browser.login().open(self.disposition, view='download_excel')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='download_excel')
 
         data = browser.contents
         with NamedTemporaryFile(suffix='.xlsx') as tmpfile:
@@ -60,7 +28,12 @@ class TestDispositionExcelExport(FunctionalTestCase):
 
     @browsing
     def test_value_rows(self, browser):
-        browser.login().open(self.disposition, view='download_excel')
+        self.login(self.records_manager, browser)
+
+        ILifeCycle(self.offered_dossier_to_destroy).archival_value_annotation = "In Absprache mit ARCH."
+        self.offered_dossier_to_archive.public_trial = 'limited-public'
+
+        browser.open(self.disposition, view='download_excel')
 
         data = browser.contents
         with NamedTemporaryFile(suffix='.xlsx') as tmpfile:
@@ -71,33 +44,36 @@ class TestDispositionExcelExport(FunctionalTestCase):
             rows = list(workbook.active.rows)
 
             self.assertEquals(
-                [u'Client1 1 / 1', u'Dossier A', datetime(2016, 1, 19, 0, 0),
-                 datetime(2016, 3, 19, 0, 0), u'limited-public',
+                [u'Client1 1.1 / 11', u'Hannah Baufrau', datetime(2000, 1, 1, 0, 0),
+                 datetime(2000, 1, 31, 0, 0), u'limited-public',
                  u'archival worthy', None, u'archival worthy'],
                 [cell.value for cell in rows[1]])
 
             self.assertEquals(
-                [u'Client1 1 / 2', u'Dossier B', datetime(2015, 1, 19, 0, 0),
-                 datetime(2015, 3, 19, 0, 0), u'limited-public',
+                [u'Client1 1.1 / 12', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
+                 datetime(2000, 1, 15, 0, 0), u'unchecked',
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],
                 [cell.value for cell in rows[2]])
 
-    @skip("This test currently fails in a flaky way on CI."
-          "See https://github.com/4teamwork/opengever.core/issues/3995")
     @browsing
     def test_file_name(self, browser):
-        # use the enable_languages method from
-        # IntegrationTestCase when refactoring these tests
-        # as integration tests
-        lang_tool = api.portal.get_tool('portal_languages')
-        lang_tool.use_combined_language_codes = True
-        lang_tool.addSupportedLanguage('de-ch')
-        transaction.commit()
-        browser.login().open()
+        self.enable_languages()
+
+        self.login(self.records_manager, browser)
+
+        browser.open()
         browser.click_on("Deutsch")
         browser.open(self.disposition, view='download_excel')
         fname = eval(browser.headers.get(
             "content-disposition").split(";")[1].split("=")[1])
-        expected = "bewertungsliste_disposition-example.xlsx"
+        expected = "bewertungsliste_angebot-31-8-2016.xlsx"
+        self.assertEquals(expected, fname)
+
+        browser.open()
+        browser.click_on(u'Fran\xe7ais')
+        browser.open(self.disposition, view='download_excel')
+        fname = eval(browser.headers.get(
+            "content-disposition").split(";")[1].split("=")[1])
+        expected = "liste_evaluation_angebot-31-8-2016.xlsx"
         self.assertEquals(expected, fname)

@@ -514,6 +514,7 @@ Users
 .. <fixture:users>
 
 - ``self.administrator``: ``nicole.kohler``
+- ``self.archivist``: ``jurgen.fischer``
 - ``self.committee_responsible``: ``franzi.muller``
 - ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
@@ -568,6 +569,7 @@ Objects
         - self.cancelled_meeting_dossier
         - self.closed_meeting_dossier
         - self.decided_meeting_dossier
+        - self.disposition
         - self.dossier
           - self.document
           - self.draft_proposal
@@ -600,6 +602,8 @@ Objects
           - self.meeting_document
           - self.meeting_task
             - self.meeting_subtask
+        - self.offered_dossier_to_archive
+        - self.offered_dossier_to_destroy
         - self.protected_dossier
           - self.protected_document
         - self.protected_dossier_with_task

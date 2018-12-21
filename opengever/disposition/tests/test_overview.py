@@ -1,71 +1,45 @@
-from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
-from opengever.testing import FunctionalTestCase
+from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.security import elevated_privileges
+from opengever.testing import IntegrationTestCase
+import os
 from plone import api
-import transaction
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
+from z3c.relationfield.relation import RelationValue
 
 
-class TestDispositionOverview(FunctionalTestCase):
-    """Test disposition overviews function as intended."""
-
-    def setUp(self):
-        super(TestDispositionOverview, self).setUp()
-        self.grant('Records Manager')
-        self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository')
-                                 .titled(u'Repository A')
-                                 .having(
-                                     archival_value=ARCHIVAL_VALUE_SAMPLING)
-                                 .within(self.root))
-        self.dossier1 = create(Builder('dossier')
-                               .as_expired()
-                               .within(self.repository)
-                               .having(title=u'Dossier A',
-                                       start=date(2016, 1, 19),
-                                       end=date(2016, 3, 19),
-                                       public_trial='limited-public',
-                                       archival_value='archival worthy'))
-
-        self.dossier2 = create(Builder('dossier')
-                               .as_expired()
-                               .in_state('dossier-state-inactive')
-                               .within(self.repository)
-                               .having(title=u'Dossier B',
-                                       start=date(2015, 1, 19),
-                                       end=date(2015, 3, 19),
-                                       public_trial='public',
-                                       archival_value='not archival worthy',
-                                       archival_value_annotation=u''
-                                       u'In Absprache mit ARCH.'))
-
-        self.disposition = create(Builder('disposition').having(
-            dossiers=[self.dossier1, self.dossier2],
-            transfer_number=u'Ablieferung 2013-44'))
+class TestDispositionOverview(IntegrationTestCase):
 
     @browsing
     def test_list_only_all_disposition_dossiers(self, browser):
-        browser.login().open(self.disposition, view='overview')
-
-        create(Builder('dossier').titled(u'Dossier C'))
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['Client1 1 / 1 Dossier A', 'Client1 1 / 2 Dossier B'],
+            ['Client1 1.1 / 11 Hannah Baufrau',
+             'Client1 1.1 / 12 Hans Baumann'],
             browser.css('.dispositions .title').text)
 
     @browsing
     def test_list_details_for_each_dossiers(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+
+        self.offered_dossier_to_archive.public_trial = 'limited-public'
+        ILifeCycle(self.offered_dossier_to_destroy).archival_value_annotation = "In Absprache mit ARCH."
+
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['Period: Jan 19, 2016 - Mar 19, 2016',
-             'Period: Jan 19, 2015 - Mar 19, 2015'],
+            ['Period: Jan 01, 2000 - Jan 31, 2000',
+             'Period: Jan 01, 2000 - Jan 15, 2000'],
             browser.css('.dispositions .date_period').text)
 
         self.assertEquals(
-            ['Public Trial: limited-public', 'Public Trial: public'],
+            ['Public Trial: limited-public', 'Public Trial: unchecked'],
             browser.css('.dispositions .public_trial').text)
 
         self.assertEquals(
@@ -75,7 +49,8 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_archive_button_is_active_depending_on_the_appraisal(self, browser):  # noqa
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
             'Archive',
@@ -86,8 +61,8 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_appraisal_buttons_are_only_links_in_progress_state(self, browser):
-        self.grant('Archivist')
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.archivist, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
             ['Archive', "Don't archive"],
@@ -95,7 +70,7 @@ class TestDispositionOverview(FunctionalTestCase):
              in browser.css('.appraisal-button-group').first.css('a')])
         browser.find('disposition-transition-appraise').click()
 
-        browser.login().open(self.disposition, view='overview')
+        browser.open(self.disposition, view='overview')
         self.assertEquals(
             [],
             [link.get('title') for link
@@ -111,13 +86,16 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_update_appraisal_displays_buttons_correctly(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
+        # first dossier is archival worthy, the second one is unworthy
         self.assertEquals(
             ['Archive', "Don't archive"],
             [link.get('title') for link
              in browser.css('.appraisal-button-group .active')])
 
+        # change appraisal of second dossier to arhival worthy
         button = browser.css('.appraisal-button-group .archive')[1]
         url = browser.css('#disposition_overview').first.get(
             'data-appraisal_update_url')
@@ -125,6 +103,7 @@ class TestDispositionOverview(FunctionalTestCase):
                 'should_be_archived': button.get('data-archive')}
         browser.open(url, data)
 
+        # Now both are marked as archival worthy
         browser.open(self.disposition, view='overview')
         self.assertEquals(
             ['Archive', 'Archive'],
@@ -133,24 +112,37 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_lists_possible_transitions_in_actionmenu_as_buttons(self, browser):  # noqa
-        self.grant('Archivist', 'Records Manager')
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
+        self.assertEquals([], browser.css('.transitions li').text)
 
+        self.login(self.archivist, browser)
+        browser.open(self.disposition, view='overview')
         self.assertEquals(['disposition-transition-appraise',
                            'disposition-transition-refuse'],
                           browser.css('.transitions li').text)
+
         browser.css('.transitions li a').first.click()
         self.assertEquals('disposition-state-appraised',
                           api.content.get_state(self.disposition))
 
-        browser.login().open(self.disposition, view='overview')
+        browser.open(self.disposition, view='overview')
+        self.assertEquals([], browser.css('.transitions li').text)
+
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
         self.assertEquals(['disposition-transition-dispose'],
                           browser.css('.transitions li').text)
 
     @browsing
-    def test_sip_download_is_only_available_in_disposed_state(self, browser):
-        self.grant('Archivist', 'Records Manager')
-        browser.login().open(self.disposition, view='overview')
+    def test_action_availability(self, browser):
+        """sip_download is only available in disposed state
+        while appraisal list download is always available and
+        removal protocol is only available in closed state"""
+        api.user.grant_roles(user=self.records_manager, roles=['Archivist'])
+        self.login(self.records_manager, browser)
+
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
@@ -164,47 +156,28 @@ class TestDispositionOverview(FunctionalTestCase):
                            'Download disposition package'],
                           browser.css('ul.actions li').text)
         self.assertEquals(
-            'http://nohost/plone/disposition-1/ech0160_export',
+            os.path.join(self.disposition.absolute_url(), 'ech0160_export'),
             browser.find('Download disposition package').get('href'))
-
-    @browsing
-    def test_appraisal_list_download_is_always_available(self, browser):
-        self.grant('Records Manager')
-        browser.login().open(self.disposition, view='overview')
-        self.assertEquals(['Export appraisal list as excel'],
-                          browser.css('ul.actions li').text)
         self.assertEquals(
-            'http://nohost/plone/disposition-1/download_excel',
+            os.path.join(self.disposition.absolute_url(), 'download_excel'),
             browser.find('Export appraisal list as excel').get('href'))
 
-    @browsing
-    def test_removal_protocol_is_available_in_closed_state(self, browser):
-        self.grant('Editor', 'Records Manager')
-
-        browser.login().open(self.disposition, view='overview')
+        browser.find('disposition-transition-archive').click()
         self.assertEquals(['Export appraisal list as excel'],
                           browser.css('ul.actions li').text)
 
-        dossier = create(Builder('dossier').as_expired()
-                         .within(self.repository))
-        disposition_2 = create(Builder('disposition')
-                               .having(dossiers=[dossier])
-                               .in_state('disposition-state-closed'))
-        disposition_2.set_destroyed_dossiers([dossier])
-        transaction.commit()
-
-        browser.login().open(disposition_2, view='overview')
-
+        browser.find('disposition-transition-close').click()
         self.assertEquals(['Export appraisal list as excel',
                            'Download removal protocol'],
                           browser.css('ul.actions li').text)
         self.assertEquals(
-            'http://nohost/plone/disposition-2/removal_protocol',
+            os.path.join(self.disposition.absolute_url(), 'removal_protocol'),
             browser.find('Download removal protocol').get('href'))
 
     @browsing
     def test_states_are_displayed_in_a_wizard_in_the_process_order(self, browser):  # noqa
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
             ['disposition-state-in-progress',
@@ -216,7 +189,8 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_current_state_is_selected(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
             ['disposition-state-in-progress'],
@@ -224,7 +198,10 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_displays_archival_value_for_repositories(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        ILifeCycle(self.leaf_repofolder).archival_value = ARCHIVAL_VALUE_SAMPLING
+
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
             'Archival value: archival worthy with sampling',
@@ -232,7 +209,8 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_displays_active_and_inactive_dossiers_separately(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         resolved_list, inactive_list = browser.css('ul.list-group')
 
@@ -241,7 +219,7 @@ class TestDispositionOverview(FunctionalTestCase):
             ['Resolved Dossiers', 'Archive'],
             resolved_list.css('.label h3').text)
         self.assertEquals(
-            ['Client1 1 / 1 Dossier A'],
+            ['Client1 1.1 / 11 Hannah Baufrau'],
             resolved_list.css('.dispositions h3.title').text)
 
         # inactive
@@ -249,49 +227,14 @@ class TestDispositionOverview(FunctionalTestCase):
             ['Inactive Dossiers', 'Archive'],
             inactive_list.css('.label h3').text)
         self.assertEquals(
-            ['Client1 1 / 2 Dossier B'],
+            ['Client1 1.1 / 12 Hans Baumann'],
             inactive_list.css('.dispositions h3.title').text)
 
     @browsing
-    def test_are_grouped_by_repository_and_sorted(self, browser):
-        repository_10 = create(Builder('repository')
-                               .titled(u'Repository B')
-                               .having(reference_number_prefix=u'10'))
-        dossier_c = create(Builder('dossier')
-                           .as_expired()
-                           .titled(u'Dossier C')
-                           .within(repository_10))
-        repository_7 = create(Builder('repository')
-                              .titled(u'Repository C')
-                              .having(reference_number_prefix=u'7'))
-        dossier_d = create(Builder('dossier')
-                           .as_expired()
-                           .titled(u'Dossier D')
-                           .within(repository_7))
-        dossier_e = create(Builder('dossier')
-                           .as_expired()
-                           .titled(u'Dossier E')
-                           .within(self.repository))
-
-        self.disposition = create(Builder('disposition')
-                                  .having(dossiers=[dossier_c,
-                                                    dossier_d,
-                                                    dossier_e]))
-
-        browser.login().open(self.disposition, view='overview')
-
-        repos = browser.css('.repository-list-item')
-        self.assertEquals(
-            ['1. Repository A', '7. Repository C', '10. Repository B'],
-            repos.css('.repository_title h3').text)
-
-        self.assertEquals(
-            ['Dossier E', 'Dossier D', 'Dossier C'],
-            repos.css('h3.title a').text)
-
-    @browsing
     def test_does_not_show_transfer_number_edit_button_when_readonly(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        self.disposition.transfer_number = 'Ablieferung 2013-44'
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(['Ablieferung 2013-44'],
                           browser.css('div.metadata #transfer-number-value').text)
@@ -300,61 +243,76 @@ class TestDispositionOverview(FunctionalTestCase):
 
     @browsing
     def test_shows_transfer_number_in_text_field_when_editable(self, browser):
-        self.grant('Archivist')
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.archivist, browser)
+        self.disposition.transfer_number = 'Ablieferung 2013-44'
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(['Ablieferung 2013-44'],
                           browser.css('div.metadata #transfer-number-value').text)
         self.assertEquals(['Edit'],
                           browser.css('div.metadata .edit_transfer_number').text)
 
+    @browsing
+    def test_are_grouped_by_repository_and_sorted(self, browser):
+        self.login(self.records_manager, browser)
+        repository_10 = create(Builder('repository')
+                               .titled(u'Repository B')
+                               .having(reference_number_prefix=u'10'))
+        dossier_c = create(Builder('dossier')
+                           .as_expired()
+                           .titled(u'Dossier C')
+                           .within(repository_10))
 
-class TestClosedDispositionOverview(FunctionalTestCase):
-    """Test workflow state does not break disposition overviews."""
+        dossier_d = create(Builder('dossier')
+                           .as_expired()
+                           .titled(u'Dossier D')
+                           .within(self.empty_repofolder))
+
+        # We change the former end state of the offered_dossier_to_destroy,
+        # dossiers that were inactive are displayed separately.
+        api.content.transition(self.offered_dossier_to_destroy, transition="dossier-transition-offered-to-resolved")
+        api.content.transition(self.offered_dossier_to_destroy, transition="dossier-transition-offer")
+        intids = getUtility(IIntIds)
+        self.disposition.dossiers += [RelationValue(intids.getId(dossier_c)), RelationValue(intids.getId(dossier_d))]
+
+        browser.open(self.disposition, view='overview')
+
+        repos = browser.css('.repository-list-item')
+        self.assertEquals(
+            [u'1.1. Vertr\xe4ge und Vereinbarungen',
+             u'2. Rechnungspr\xfcfungskommission',
+             '10. Repository B'],
+            repos.css('.repository_title h3').text)
+
+        self.assertEquals(
+            ['Hannah Baufrau', 'Hans Baumann', 'Dossier D', 'Dossier C'],
+            repos.css('h3.title a').text)
+
+
+class TestClosedDispositionOverview(IntegrationTestCase):
 
     def setUp(self):
         super(TestClosedDispositionOverview, self).setUp()
-
-        self.grant(
-            'Contributor', 'Editor', 'Reader', 'Reviewer', 'Records Manager')
-
-        self.root = create(Builder('repository_root'))
-        self.repository = create(Builder('repository').within(self.root))
-        self.dossier1 = create(Builder('dossier')
-                               .as_expired()
-                               .within(self.repository)
-                               .having(title=u'Dossier A',
-                                       archival_value='archival worthy'))
-
-        self.dossier2 = create(Builder('dossier')
-                               .as_expired()
-                               .within(self.repository)
-                               .having(title=u'Dossier B',
-                                       archival_value='not archival worthy',))
-
-        self.disposition = create(Builder('disposition')
-                                  .in_state('disposition-state-archived')
-                                  .having(dossiers=[
-                                      self.dossier1,
-                                      self.dossier2,
-                                      ]))
-        self.disposition.mark_dossiers_as_archived()
-        api.content.transition(obj=self.disposition,
-                               transition='disposition-transition-close')
-        transaction.commit()
+        with elevated_privileges():
+            api.content.transition(obj=self.disposition, transition='disposition-transition-appraise')
+            api.content.transition(obj=self.disposition, transition='disposition-transition-dispose')
+            api.content.transition(obj=self.disposition, transition='disposition-transition-archive')
+            api.content.transition(obj=self.disposition, transition='disposition-transition-close')
 
     @browsing
     def test_dossier_title_is_not_linked(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['Client1 1 / 1', 'Dossier A', 'Client1 1 / 2', 'Dossier B'],
+            ['Client1 1.1 / 11', 'Hannah Baufrau', 'Client1 1.1 / 12', 'Hans Baumann'],
             browser.css('h3.title span').text)
 
         self.assertEquals([], browser.css('h3.title a'))
 
     @browsing
     def test_additional_metadata_is_not_displayed(self, browser):
-        browser.login().open(self.disposition, view='overview')
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='overview')
 
         self.assertEquals([], browser.css('#disposition_overview div.meta'))

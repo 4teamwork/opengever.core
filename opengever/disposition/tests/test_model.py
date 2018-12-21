@@ -3,103 +3,94 @@ from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import staticuid
+from opengever.base.behaviors.classification import IClassification
 from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import Dossier
 from opengever.disposition.ech0160.model import File
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
-from opengever.testing import FunctionalTestCase
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.testing import IntegrationTestCase
+from plone import api
 import hashlib
 import unittest
 
 
-class TestRepositoryModel(FunctionalTestCase):
+class TestRepositoryModel(IntegrationTestCase):
 
     def test_add_complete_repository_folder_path_for_each_added_dossier(self):
-        root = create(Builder('repository_root'))
-        folder1 = create(Builder('repository').within(root))
-        folder1_1 = create(Builder('repository').within(folder1))
-        dossier1 = create(Builder('dossier').within(folder1_1))
-        folder2 = create(Builder('repository').within(root))
-        dossier2 = create(Builder('dossier').within(folder2))
-        folder3 = create(Builder('repository').within(root))
-        create(Builder('dossier').within(folder3))
+        self.login(self.regular_user)
+        dossier = create(Builder('dossier').within(self.empty_repofolder))
 
         model = Repository()
-        model.add_dossier(Dossier(dossier1))
+        model.add_dossier(Dossier(self.dossier))
 
-        self.assertEquals(root, model.obj)
+        self.assertEquals(self.repository_root, model.obj)
         positions = model.positions.values()
 
-        self.assertEquals([folder1], [pos.obj for pos in positions])
-        self.assertEquals([folder1_1],
+        self.assertEquals([self.branch_repofolder], [pos.obj for pos in positions])
+        self.assertEquals([self.leaf_repofolder],
                           [pos.obj for pos in positions[0].positions.values()])
 
-        model.add_dossier(Dossier(dossier2))
+        model.add_dossier(Dossier(dossier))
         positions = model.positions.values()
 
-        self.assertEquals(set([folder1, folder2]),
+        self.assertEquals(set([self.branch_repofolder, self.empty_repofolder]),
                           set([pos.obj for pos in positions]))
 
     def test_name_is_root_title(self):
-        root = create(Builder('repository_root').titled(u'Ordnungsystem 2001'))
-
+        self.login(self.regular_user)
         model = Repository()
-        model.obj = root
+        model.obj = self.repository_root
 
-        self.assertEquals(u'Ordnungsystem 2001', model.binding().name)
+        self.assertEquals(self.repository_root.Title(), model.binding().name)
 
-    def test_anwendungszeitraum_bis_is_valid_from_date_or_keine_angabe(self):
-        root1 = create(Builder('repository_root')
-                       .having(valid_from=date(2016, 6, 11)))
+    def test_anwendungszeitraum_von_is_valid_from_date_or_keine_angabe(self):
+        self.login(self.regular_user)
         model = Repository()
-        model.obj = root1
-        self.assertEquals(date(2016, 6, 11),
-                          model.binding().anwendungszeitraum.von.datum.date())
+        model.obj = self.repository_root
 
-        root2 = create(Builder('repository_root')
-                       .having(valid_until=date(2016, 6, 11)))
-        model = Repository()
-        model.obj = root2
+        self.repository_root.valid_until = date(2016, 7, 11)
+        self.assertEquals(date(2016, 7, 11),
+                          model.binding().anwendungszeitraum.bis.datum.date())
         self.assertEquals('keine Angabe',
                           model.binding().anwendungszeitraum.von.datum)
 
+        self.repository_root.valid_from = date(2016, 6, 11)
+        self.assertEquals(date(2016, 6, 11),
+                          model.binding().anwendungszeitraum.von.datum.date())
 
-class TestPositionModel(FunctionalTestCase):
 
-    @staticuid('fake')
+class TestPositionModel(IntegrationTestCase):
+
     def test_id_is_uid_prefixed_with_a_underscore(self):
-        folder = create(Builder('repository'))
-        model = Position(folder)
+        self.login(self.regular_user)
 
-        self.assertEquals('_fake0000000000000000000000000001', model.binding().id)
+        model = Position(self.branch_repofolder)
+        self.assertEquals('_createrepositorytree000000000002', model.binding().id)
 
     def test_nummer_is_reference_number(self):
-        folder1 = create(Builder('repository'))
-        folder1_7 = create(Builder('repository')
-                           .having(reference_number_prefix='7')
-                           .within(folder1))
-        model = Position(folder1_7)
+        self.login(self.regular_user)
 
-        self.assertEquals('1.7', model.binding().nummer)
+        model = Position(self.leaf_repofolder)
+        self.assertEquals('1.1', model.binding().nummer)
 
     def test_titel_is_repository_title_without_reference_number(self):
-        folder = create(Builder('repository').titled(u'Qualit\xe4tsumfragen'))
-        model = Position(folder)
+        self.login(self.regular_user)
 
-        self.assertEquals(u'Qualit\xe4tsumfragen', model.binding().titel)
+        model = Position(self.leaf_repofolder)
+        self.assertEquals(u'Vertr\xe4ge und Vereinbarungen', model.binding().titel)
 
     def test_classification_attributes_and_schutzfrist(self):
-        folder = create(Builder('repository')
-                        .having(custody_period=30,
-                                classification='unprotected',
-                                privacy_layer='privacy_layer_yes',
-                                public_trial='private',
-                                public_trial_statement=u'Enth\xe4lt sch\xfctzenswerte Daten.')
-                        .titled(u'Qualit\xe4tsumfragen'))
+        self.login(self.regular_user)
 
-        model = Position(folder)
+        classification = IClassification(self.leaf_repofolder)
+        classification.privacy_layer = 'privacy_layer_yes'
+        classification.public_trial = 'private'
+        classification.public_trial_statement = u'Enth\xe4lt sch\xfctzenswerte Daten.'
+
+        model = Position(self.leaf_repofolder)
         binding = model.binding()
 
         self.assertEquals(u'30', binding.schutzfrist)
@@ -110,57 +101,54 @@ class TestPositionModel(FunctionalTestCase):
                           binding.oeffentlichkeitsstatusBegruendung)
 
     def test_add_repository_folders_descendants_as_ordnunssystempositionen(self):
-        folder = create(Builder('repository'))
-        folder_1 = create(Builder('repository').within(folder))
+        self.login(self.regular_user)
 
-        model = Position(folder)
-        model._add_descendants([folder_1])
+        model = Position(self.branch_repofolder)
+        model._add_descendants([self.leaf_repofolder])
 
-        self.assertEquals(
-            [folder_1],
-            [pos.obj for pos in model.positions.values()])
+        self.assertEquals([self.leaf_repofolder],
+                          [pos.obj for pos in model.positions.values()])
 
     def test_add_dossier_descendants_as_dossiers(self):
-        folder = create(Builder('repository'))
-        dossier = create(Builder('dossier').within(folder))
-        dossier_model = Dossier(dossier)
+        self.login(self.regular_user)
 
-        model = Position(folder)
+        dossier_model = Dossier(self.dossier)
+        model = Position(self.leaf_repofolder)
         model._add_descendants([dossier_model])
 
         self.assertEquals([dossier_model], model.dossiers.values())
 
 
-class TestDossierModel(FunctionalTestCase):
+class TestDossier(IntegrationTestCase):
 
     @staticuid('fake')
     def test_id_is_uid_prefixed_with_a_underscore(self):
-        dossier = create(Builder('dossier'))
-        self.assertEquals('_fake0000000000000000000000000001',
-                          Dossier(dossier).binding().id)
+        self.login(self.regular_user)
 
-    def test_titel_is_title_in_utf8(self):
-        dossier = create(Builder('dossier').titled(u'F\xfchrung'))
-        self.assertEquals(u'F\xfchrung', Dossier(dossier).binding().titel)
+        self.assertEquals(u'_createtreatydossiers000000000001',
+                          Dossier(self.dossier).binding().id)
+
+    def test_titel_is_title_in_unicode(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(self.dossier.Title().decode("utf-8"),
+                          Dossier(self.dossier).binding().titel)
 
     def test_aktenzeichen_is_refernce_number(self):
-        folder1 = create(Builder('repository'))
-        folder1_7 = create(Builder('repository')
-                           .having(reference_number_prefix='7')
-                           .within(folder1))
-        dossier = create(Builder('dossier').within(folder1_7))
+        self.login(self.regular_user)
 
-        self.assertEquals('Client1 1.7 / 1', Dossier(dossier).binding().aktenzeichen)
+        self.assertEquals('Client1 1.1 / 1',
+                          Dossier(self.dossier).binding().aktenzeichen)
 
     def test_classification_attributes_and_schutzfrist(self):
-        dossier = create(Builder('dossier')
-                         .having(custody_period=30,
-                                 classification='unprotected',
-                                 privacy_layer='privacy_layer_yes',
-                                 public_trial='private',
-                                 public_trial_statement=u'Enth\xe4lt sch\xfctzenswerte Daten.'))
+        self.login(self.regular_user)
 
-        binding = Dossier(dossier).binding()
+        classification = IClassification(self.dossier)
+        classification.privacy_layer = 'privacy_layer_yes'
+        classification.public_trial = 'private'
+        classification.public_trial_statement = u'Enth\xe4lt sch\xfctzenswerte Daten.'
+
+        binding = Dossier(self.dossier).binding()
 
         self.assertEquals(u'30', binding.schutzfrist)
         self.assertEquals('unprotected', binding.klassifizierungskategorie)
@@ -170,21 +158,22 @@ class TestDossierModel(FunctionalTestCase):
                           binding.oeffentlichkeitsstatusBegruendung)
 
     def test_entstehungszeitraum_is_oldest_document_date_to_newest_one(self):
-        dossier = create(Builder('dossier'))
+        self.login(self.regular_user)
+
         create(Builder('document')
-               .within(dossier)
+               .within(self.empty_dossier)
                .with_modification_date(DateTime(2016, 1, 15))
                .with_creation_date(DateTime(2014, 3, 4)))
         create(Builder('document')
-               .within(dossier)
+               .within(self.empty_dossier)
                .with_modification_date(DateTime(2016, 3, 1))
                .with_creation_date(DateTime(2015, 1, 1)))
         create(Builder('document')
-               .within(dossier)
+               .within(self.empty_dossier)
                .with_modification_date(DateTime(2016, 12, 27))
                .with_creation_date(DateTime(2016, 1, 1)))
 
-        binding = Dossier(dossier).binding()
+        binding = Dossier(self.empty_dossier).binding()
 
         self.assertEquals(date(2014, 3, 4),
                           binding.entstehungszeitraum.von.datum.date())
@@ -192,58 +181,57 @@ class TestDossierModel(FunctionalTestCase):
                           binding.entstehungszeitraum.bis.datum.date())
 
     def test_entstehungszeitraum_is_kein_angabe_when_dossier_is_empty(self):
-        dossier = create(Builder('dossier'))
+        self.login(self.regular_user)
 
-        binding = Dossier(dossier).binding()
+        binding = Dossier(self.empty_dossier).binding()
         self.assertEquals(u'keine Angabe',
                           binding.entstehungszeitraum.von.datum)
         self.assertEquals(u'keine Angabe',
                           binding.entstehungszeitraum.bis.datum)
 
     def test_eroeffnungsdatum_is_start_date(self):
-        dossier = create(Builder('dossier')
-                         .having(start=date(2016, 11, 6)))
+        self.login(self.regular_user)
 
-        binding = Dossier(dossier).binding()
-        self.assertEquals(date(2016, 11, 6),
+        binding = Dossier(self.dossier).binding()
+        self.assertEquals(IDossier(self.dossier).start,
                           binding.eroeffnungsdatum.datum.date())
 
     def test_abschlussdatum_is_end_date(self):
-        dossier = create(Builder('dossier')
-                         .having(end=date(2016, 11, 6)))
+        self.login(self.regular_user)
 
-        binding = Dossier(dossier).binding()
-        self.assertEquals(date(2016, 11, 6),
+        binding = Dossier(self.inactive_dossier).binding()
+        self.assertEquals(date(2016, 12, 31),
                           binding.abschlussdatum.datum.date())
 
     def test_add_descendants_adds_all_subdossiers(self):
-        dossier = create(Builder('dossier'))
-        subdossier1 = create(Builder('dossier').within(dossier))
-        create(Builder('dossier'))
-        subdossier3 = create(Builder('dossier').within(dossier))
+        self.login(self.regular_user)
 
-        model = Dossier(dossier)
+        model = Dossier(self.dossier)
         model._add_descendants()
 
         self.assertEquals(
-            set([subdossier3, subdossier1]),
+            set([self.subdossier, self.subdossier2]),
             set([mod.obj for mod in model.dossiers.values()]))
 
     def test_add_descendants_adds_all_containing_documents(self):
-        dossier = create(Builder('dossier'))
-        document1 = create(Builder('document').within(dossier))
-        create(Builder('document'))
-        document3 = create(Builder('document').within(dossier))
+        self.login(self.manager)
 
-        model = Dossier(dossier)
+        model = Dossier(self.dossier)
         model._add_descendants()
 
-        self.assertEquals(
-            set([document1, document3]),
-            set([doc.obj for doc in model.documents.values()]))
+        brains = api.content.find(context=self.dossier, depth=1,
+                                  portal_type='opengever.document.document')
+        expected_documents = set([brain.getObject() for brain in brains])
+
+        self.assertEquals(expected_documents,
+                          set([doc.obj for doc in model.documents.values()]))
 
     @unittest.skip('Currently not implemented')
     def test_add_descendants_adds_also_documents_in_tasks(self):
+        """If this were implemented it would show up in the test
+        test_add_descendants_adds_all_containing_documents
+        """
+        self.login(self.regular_user)
         dossier = create(Builder('dossier'))
         task = create(Builder('task').within(dossier))
         document = create(Builder('document').within(task))
@@ -256,99 +244,107 @@ class TestDossierModel(FunctionalTestCase):
             set([doc.obj for doc in model.documents.values()]))
 
 
-class TestDocumentModel(FunctionalTestCase):
+class TestDocumentModel(IntegrationTestCase):
 
-    def test_title_is_document_title_in_utf8(self):
-        document = create(Builder('document')
-                          .titled(u'Qualit\xe4tsumfrage'))
-        self.assertEquals(u'Qualit\xe4tsumfrage',
-                          Document(document).binding().titel)
+    def test_title_is_document_title_in_unicode(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(self.document.Title().decode("utf-8"),
+                          Document(self.document).binding().titel)
 
     def test_autor_is_a_list_containing_document_author(self):
-        document = create(Builder('document')
-                          .having(document_author=u'Peter Fl\xfcckiger'))
-        self.assertEquals([u'Peter Fl\xfcckiger'],
-                          [author for author in Document(document).binding().autor])
+        self.login(self.regular_user)
+
+        self.assertEquals(['test_user_1_'],
+                          [author for author in Document(self.document).binding().autor])
 
     def test_erscheinungsform_is_digital_available_flag(self):
-        doc_with_file = create(Builder('document').with_dummy_content())
+        self.login(self.regular_user)
+
         self.assertEquals(
             u'digital',
-            Document(doc_with_file).binding().erscheinungsform)
+            Document(self.document).binding().erscheinungsform)
 
-        doc_without_file = create(Builder('document'))
         self.assertEquals(
             u'nicht digital',
-            Document(doc_without_file).binding().erscheinungsform)
+            Document(self.empty_document).binding().erscheinungsform)
 
     def test_dokumentyp_is_document_type_title(self):
-        document = create(Builder('document')
-                          .having(document_type='contract'))
+        self.login(self.regular_user)
+
         self.assertEquals(
             u'Contract',
-            Document(document).binding().dokumenttyp)
+            Document(self.document).binding().dokumenttyp)
 
     def test_registrierdatum_is_created_date(self):
-        document = create(Builder('document')
-                          .with_creation_date(DateTime(2016, 11, 6)))
+        self.login(self.regular_user)
 
         self.assertEquals(
-            date(2016, 11, 6),
-            Document(document).binding().registrierdatum.datum.date())
+            self.document.created().asdatetime().date(),
+            Document(self.document).binding().registrierdatum.datum.date())
 
     def test_entstehungszeitraum_is_created_to_modified_date_range(self):
-        document = create(Builder('document')
-                          .with_creation_date(DateTime(2016, 11, 6))
-                          .with_modification_date(DateTime(2017, 12, 6)))
+        self.login(self.regular_user)
 
-        entstehungszeitraum = Document(document).binding().entstehungszeitraum
+        self.document.creation_date = DateTime(2016, 11, 6)
+        self.document.modification_date = DateTime(2017, 12, 6)
+
+        entstehungszeitraum = Document(self.document).binding().entstehungszeitraum
         self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
         self.assertEquals(date(2017, 12, 6), entstehungszeitraum.bis.datum.date())
 
 
-class TestFolderAndFileModel(FunctionalTestCase):
+class TestFolderAndFileModel(IntegrationTestCase):
 
     def test_complete_tree_representation(self):
-        root = create(Builder('repository_root'))
-        folder = create(Builder('repository').within(root))
-        dossier_a = create(Builder('dossier').within(folder))
-        subdossier_a = create(Builder('dossier').within(dossier_a))
-        document_a = create(Builder('document')
-                            .within(subdossier_a)
-                            .with_dummy_content())
-        dossier_b = create(Builder('dossier').within(folder))
-        document_b = create(Builder('document')
-                            .within(dossier_b)
-                            .with_dummy_content())
+        self.login(self.regular_user)
 
         repo = Repository()
         content = ContentRootFolder('SIP_20101212_FD_10xy')
 
-        models = [Dossier(dossier_a), Dossier(dossier_b)]
+        models = [Dossier(self.dossier), Dossier(self.inactive_dossier)]
         for dossier_model in models:
             repo.add_dossier(dossier_model)
             content.add_dossier(dossier_model)
 
         self.assertEquals(2, len(content.folders))
-        dossier_model_a, dossier_model_b = content.folders
+        dossier_model, inactive_dossier_model = content.folders
 
-        # dossier a
-        self.assertEquals(1, len(dossier_model_a.folders))
-        subdossier_model = dossier_model_a.folders[0]
+        # self.dossier
+        # two subdossiers, self.subdossier and self.subdossier2
+        self.assertEquals(2, len(dossier_model.folders))
+        # dossier a contains two files, one for self.document
+        # and one automatically generated for self.decided_proposal
+        self.assertEquals(2, len(dossier_model.files))
+        subdossier_model = dossier_model.folders[0]
+        subdossier2_model = dossier_model.folders[1]
+
+        # self.subdossier
+        # contains self.subsubdossier
+        self.assertEquals(1, len(subdossier_model.folders))
         self.assertEquals(1, len(subdossier_model.files))
-        file_model_a = subdossier_model.files[0]
-        self.assertEquals(u'Testdokumaent.doc', file_model_a.filename)
-        self.assertEquals(document_a.file._blob.committed(), file_model_a.filepath)
+        subdocument_model = subdossier_model.files[0]
+        self.assertEquals(self.subdocument.get_filename(), subdocument_model.filename)
+        self.assertEquals(self.subdocument.file._blob.committed(), subdocument_model.filepath)
 
-        # dossier b
-        self.assertEquals([], dossier_model_b.folders)
-        self.assertEquals(1, len(dossier_model_b.files))
-        file_model_b = dossier_model_b.files[0]
-        self.assertEquals(u'Testdokumaent.doc', file_model_b.filename)
-        self.assertEquals(document_b.file._blob.committed(), file_model_b.filepath)
+        # self.subsubdossier
+        subsubdossier_model = subdossier_model.folders[0]
+        self.assertEquals([], subsubdossier_model.folders)
+        self.assertEquals(0, len(subsubdossier_model.files))
+
+        # self.subdossier2
+        self.assertEquals([], subdossier2_model.folders)
+        self.assertEquals(0, len(subdossier2_model.files))
+
+        # self.inactive_dossier
+        self.assertEquals([], inactive_dossier_model.folders)
+        self.assertEquals(1, len(inactive_dossier_model.files))
+        inactive_document_model = inactive_dossier_model.files[0]
+        self.assertEquals(self.inactive_document.get_filename(), inactive_document_model.filename)
+        self.assertEquals(self.inactive_document.file._blob.committed(), inactive_document_model.filepath)
 
 
-class TestFileModel(FunctionalTestCase):
+class TestFileModel(IntegrationTestCase):
 
     def setUp(self):
         super(TestFileModel, self).setUp()
@@ -356,38 +352,37 @@ class TestFileModel(FunctionalTestCase):
         self.toc.next_file = 3239
 
     def test_uses_documents_archival_file_if_exist(self):
-        document = create(Builder('document')
-                          .attach_archival_file_containing('ARCHIVDATA', u'test.pdf')
-                          .with_dummy_content())
-        model = File(self.toc, Document(document))
+        self.login(self.regular_user)
+
+        model = File(self.toc, Document(self.expired_document))
 
         self.assertEquals(u'test.pdf', model.filename)
-        self.assertEquals(document.archival_file._blob.committed(),
+        self.assertEquals(self.expired_document.archival_file._blob.committed(),
                           model.filepath)
 
     def test_represents_documents_file_if_no_archival_file_exist(self):
-        document = create(Builder('document').with_dummy_content())
-        model = File(self.toc, Document(document))
+        self.login(self.regular_user)
 
-        self.assertEquals(u'Testdokumaent.doc', model.filename)
-        self.assertEquals(document.file._blob.committed(), model.filepath)
+        model = File(self.toc, Document(self.document))
+
+        self.assertEquals(u'Vertraegsentwurf.docx', model.filename)
+        self.assertEquals(self.document.file._blob.committed(), model.filepath)
 
     def test_named_next_file_number_prefixed_with_p(self):
-        document_a = create(Builder('document').with_dummy_content())
-        document_b = create(Builder('document').with_dummy_content())
+        self.login(self.regular_user)
 
-        model = File(self.toc, Document(document_a))
-        self.assertEquals('p003239.doc', model.name)
-        model = File(self.toc, Document(document_b))
-        self.assertEquals('p003240.doc', model.name)
+        model = File(self.toc, Document(self.document))
+        self.assertEquals('p003239.docx', model.name)
+        model = File(self.toc, Document(self.expired_document))
+        self.assertEquals('p003240.pdf', model.name)
 
     def test_pruefsumme_is_a_md5_hash(self):
-        document = create(Builder('document')
-                          .attach_archival_file_containing('Test data'))
-        model = File(self.toc, Document(document))
+        self.login(self.regular_user)
+
+        model = File(self.toc, Document(self.expired_document))
 
         _hash = hashlib.md5()
-        _hash.update('Test data')
+        _hash.update('TEST')
 
         self.assertEquals(_hash.hexdigest(), model.binding().pruefsumme)
         self.assertEquals('MD5', model.binding().pruefalgorithmus)
