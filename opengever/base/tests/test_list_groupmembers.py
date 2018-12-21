@@ -1,44 +1,28 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.testing import FunctionalTestCase
-from opengever.ogds.base.actor import Actor
+from opengever.testing import IntegrationTestCase
 
 
-class TestResolveOGUIDView(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestResolveOGUIDView, self).setUp()
-
-        self.group = create(Builder('ogds_group')
-                            .having(groupid='group', users=[self.user]))
-        self.user2 = create(Builder('ogds_user')
-                            .in_group(self.group)
-                            .having(userid='x.john.doe',
-                                    lastname='Doe',
-                                    firstname='John'))
-
-        self.actor1 = Actor.user(self.user.userid)
-        self.actor2 = Actor.user(self.user2.userid)
+class TestListGroupMembers(IntegrationTestCase):
 
     @browsing
     def test_list_groupmembers_view(self, browser):
-        browser.login().open(view='list_groupmembers',
-                             data={'group': self.group.groupid})
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='list_groupmembers', data={'group': 'projekt_b'})
 
         self.assertSequenceEqual(
-            [self.actor2.get_link(), self.actor1.get_link()],
-            [each.normalized_outerHTML for each in
-             browser.css('.member_listing li a')]
-        )
+            ['http://nohost/plone/@@user-details/herbert.jager',
+             'http://nohost/plone/@@user-details/franzi.muller'],
+            [link.get('href') for link in browser.css('.member_listing li a')])
 
     @browsing
     def test_list_groupmembers_view_with_empty_group(self, browser):
+        self.login(self.regular_user, browser=browser)
+
         group = create(Builder('ogds_group')
                        .having(groupid='empty_group'))
-        browser.login().open(view='list_groupmembers',
-                             data={'group': group.groupid})
-        self.assertEqual(
-            'There are no members in this group.',
-            browser.css('p').text[0],
-        )
+        browser.open(view='list_groupmembers', data={'group': group.groupid})
+        self.assertEqual('There are no members in this group.',
+                         browser.css('p').text[0])
