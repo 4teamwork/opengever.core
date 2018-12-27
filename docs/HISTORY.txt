@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Fix flaky loading of document preview with tooltip. [Kevin Bieri]
 - Remove plonetheme.teamraum upgradesteps. [phgross]
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
 - Also show participants with expired membership in meeting participants-tab. [njohner]

@@ -3,6 +3,7 @@
   "use strict";
 
   var tooltipHideTimer = null;
+  var viewingDocument = false;
 
   var settings = {
     overwrite: false, // Do not reload the tooltip when it's already created
@@ -40,7 +41,7 @@
 
   function isTooltipResponse(data, status, jqXHR) {
     if(jqXHR.getResponseHeader('X-Tooltip-Response') !== "True") {
-      return $.Deferred().reject(jqXHR, "error");
+      return $.Deferred().reject(jqXHR, "X-Tooltip-Response missing on tooltip response.");
     }
     return $.Deferred().resolve(data, status, jqXHR);
   }
@@ -54,7 +55,10 @@
         $(".showroom-reference").on("click", function() { api.hide(); });
       })
       .fail(function() {
-        location.reload();
+        // Avoid cancelling a pending navigation request initiated by the user
+        if (!viewingDocument) {
+          location.reload();
+        }
       });
     return spinner();
   }
@@ -86,6 +90,7 @@
   function closeTooltips(event, api) {
     var target = event.originalEvent.target;
     $(target).on("click", function() {
+      viewingDocument = true;
       api.hide();
       hideBackdrop(event);
     });
