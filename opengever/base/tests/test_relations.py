@@ -23,8 +23,10 @@ class TestRelations(IntegrationTestCase):
             {'to_id': intids.getId(self.dossier)})]
 
         self.assertEqual(2, len(relations))
-        self.assertEqual(intids.getId(self.dossier), relations[-1].to_id)
-        self.assertEqual(intids.getId(browser.context), relations[-1].from_id)
+        self.assertIn(intids.getId(self.dossier),
+                      [rel.to_id for rel in relations])
+        self.assertIn(intids.getId(browser.context),
+                      [rel.from_id for rel in relations])
 
     @browsing
     def test_relation_catalog_gets_upated_when_dossier_is_updated(self, browser):
@@ -41,5 +43,7 @@ class TestRelations(IntegrationTestCase):
             {'to_id': intids.getId(self.dossier)})]
 
         self.assertEqual(2, len(relations))
-        self.assertEqual(intids.getId(self.dossier), relations[-1].to_id)
-        self.assertEqual(intids.getId(self.empty_dossier), relations[-1].from_id)
+        self.assertIn(intids.getId(self.dossier),
+                      [rel.to_id for rel in relations])
+        self.assertIn(intids.getId(self.empty_dossier),
+                      [rel.from_id for rel in relations])
