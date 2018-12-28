@@ -160,17 +160,30 @@ def split(batch):
     minsize_mapping = {
         'opengever.core.testing.opengever.core:integration': 200,
         'opengever.core.testing.opengever.core:functional': 100,
-        }
+    }
+
+    maxsplit_mapping = {
+        'opengever.core.testing.opengever.core:integration': 4,
+        'opengever.core.testing.opengever.core:functional': 2,
+    }
 
     layer = batch.get('layer')
 
-    if layer not in minsize_mapping or CONCURRENCY < 2:
+    unsplittable_layer = (
+        layer not in minsize_mapping
+        or
+        layer not in maxsplit_mapping
+    )
+
+    if unsplittable_layer or CONCURRENCY < 2:
         batch['count'] = sum(batch.get('testclasses').values())
         del batch['testclasses']
         return (batch, )
 
     original_count = batch.get('original_count')
-    chunk_count = min(ceil(original_count / float(minsize_mapping.get(layer))), CONCURRENCY)
+    chunk_count = ceil(original_count / float(minsize_mapping.get(layer)))
+    chunk_count = min(chunk_count, CONCURRENCY)
+    chunk_count = min(chunk_count, maxsplit_mapping.get(layer))
     chunksize = original_count / float(chunk_count)
 
     splinters = []
