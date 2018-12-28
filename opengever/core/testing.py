@@ -6,7 +6,6 @@ from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
 from ftw.contentstats.logger import setup_logger
-from ftw.contentstats.testing import CONTENTSTATS_FIXTURE
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
 from ftw.testing import FTWIntegrationTesting
@@ -247,14 +246,6 @@ OPENGEVER_FUNCTIONAL_ZSERVER_TESTING = FunctionalTesting(
            OPENGEVER_FIXTURE_SQLITE,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:zserver")
-
-# Layer that combines the "fake" eventlog registration from ftw.contentstats'
-# CONTENTSTATS_FIXTURE and a GEVER Functional testing layer
-# XXX: Maybe there's a better way to do this
-OPENGEVER_FUNCTIONAL_CONTENTSTATS_TESTING = FunctionalTesting(
-    bases=(CONTENTSTATS_FIXTURE, OPENGEVER_FIXTURE_SQLITE,
-           set_builder_session_factory(functional_session_factory)),
-    name="opengever.core:functional:contentstats")
 
 
 def activate_filing_number(portal):
