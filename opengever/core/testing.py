@@ -1,9 +1,11 @@
+from App.config import getConfiguration
 from collective.taskqueue.interfaces import ITaskQueue
 from collective.transmogrifier import transmogrifier
 from ftw.builder import session
 from ftw.builder.testing import BUILDER_LAYER
 from ftw.builder.testing import set_builder_session_factory
 from ftw.bumblebee.tests.helpers import BumblebeeTestTaskQueue
+from ftw.contentstats.logger import setup_logger
 from ftw.contentstats.testing import CONTENTSTATS_FIXTURE
 from ftw.testbrowser import TRAVERSAL_BROWSER_FIXTURE
 from ftw.testing import ComponentRegistryLayer
@@ -34,6 +36,7 @@ from plone.browserlayer.utils import unregister_layer
 from plone.dexterity.schema import SCHEMA_CACHE
 from plone.testing import z2
 from Products.CMFCore.utils import getToolByName
+from StringIO import StringIO
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from unittest import TestCase
 from zope.component import getSiteManager
@@ -43,8 +46,11 @@ from zope.sqlalchemy import datamanager
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
 import os
+import shutil
 import sys
+import tempfile
 import transaction
+import ZConfig
 
 
 loghandler = logging.StreamHandler(stream=sys.stdout)
@@ -391,12 +397,37 @@ class ContentFixtureLayer(OpengeverFixture):
     defaultBases = (CACHED_COMPONENT_REGISTRY_ISOLATION, )
 
     def __init__(self):
+        # Keep track of temporary files we create
+        self.tempdir = None
+
         # By super-super-calling the __init__ we remove the SQL bases,
         # since we are implementing SQL setup in this layer directly.
         PloneSandboxLayer.__init__(self)
 
+    def setup_eventlog(self):
+        schema = ZConfig.loadSchemaFile(StringIO("""
+            <schema>
+              <import package='ZConfig.components.logger'/>
+              <section type='eventlog' name='*' attribute='eventlog'/>
+            </schema>
+        """))
+        self.tempdir = tempfile.mkdtemp()
+        f = open(os.path.join(self.tempdir, 'instance0.log'), 'w')
+        f.close()
+        eventlog_conf = ZConfig.loadConfigFile(schema, StringIO("""
+            <eventlog>
+              <logfile>
+                path {}
+                level debug
+              </logfile>
+            </eventlog>
+        """.format(f.name)))[0]
+        assert eventlog_conf.eventlog is not None
+        getConfiguration().eventlog = eventlog_conf.eventlog
+
     def setUpZope(self, app, configurationContext):
         super(ContentFixtureLayer, self).setUpZope(app, configurationContext)
+
         # Setting up the database, which creates a new engine, must happen after
         # opengever's ZCML is loaded in order to have engine creation event
         # handlers already registered, which enable support for rolling back
@@ -418,6 +449,10 @@ class ContentFixtureLayer(OpengeverFixture):
         os.environ['BUMBLEBEE_SECRET'] = 'secret'
         os.environ['BUMBLEBEE_INTERNAL_PLONE_URL'] = 'http://nohost/plone'
         os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee'
+
+        # Set up ftw.contentstats logging for testing
+        self.setup_eventlog()
+        setup_logger()
 
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
@@ -460,7 +495,15 @@ class ContentFixtureLayer(OpengeverFixture):
         # clear bumblebee queue after each test
         self.bumblebee_queue.reset()
 
+    def tearDownZope(self, app):
+        # Clean up ZConf
+        conf = getConfiguration()
+        del conf.eventlog
+
     def tearDown(self):
+        # Clean up all temporary files we created
+        shutil.rmtree(self.tempdir)
+
         sqlite_testing.model.Session.close_all()
         sqlite_testing.truncate_tables()
         super(ContentFixtureLayer, self).tearDown()
