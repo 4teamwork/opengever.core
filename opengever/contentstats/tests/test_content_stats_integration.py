@@ -1,25 +1,16 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.contentstats.interfaces import IStatsKeyFilter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_CONTENTSTATS_TESTING
-from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.mail.tests import MAIL_DATA
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from zope.component import getMultiAdapter
-import transaction
 
 
 class TestContentStatsIntegration(IntegrationTestCase):
 
     def test_portal_types_filter(self):
-        flt = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsKeyFilter, name='portal_types')
+        flt = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsKeyFilter, name='portal_types')
 
         # Obviously the core GEVER types should be kept
         self.assertTrue(flt.keep('opengever.document.document'))
@@ -69,12 +60,10 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.assertTrue(flt.keep('opengever.doesnt.exist.just.yet'))
 
         # The fake portal_type that sums up docs and mails should also be kept
-        self.assertTrue(flt.keep('_opengever.document.behaviors.IBaseDocument'))  # noqa
+        self.assertTrue(flt.keep('_opengever.document.behaviors.IBaseDocument'))
 
     def test_review_states_filter(self):
-        flt = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsKeyFilter, name='review_states')
+        flt = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsKeyFilter, name='review_states')
 
         states_to_keep = [
             'contact-state-active',
@@ -139,14 +128,10 @@ class TestContentStatsIntegration(IntegrationTestCase):
         ]
 
         for state in states_to_keep:
-            self.assertTrue(
-                flt.keep(state),
-                'Expected state %r to be kept by filter (was ignored)' % state)
+            self.assertTrue(flt.keep(state), 'Expected state %r to be kept by filter (was ignored)' % state)
 
         for state in states_to_ignore:
-            self.assertFalse(
-                flt.keep(state),
-                'Expected state %r to be ignored by filter (was kept)' % state)
+            self.assertFalse(flt.keep(state), 'Expected state %r to be ignored by filter (was kept)' % state)
 
         # Collect a list of ALL the currently possible workflow states
         all_possible_workflow_states = set()
@@ -158,95 +143,41 @@ class TestContentStatsIntegration(IntegrationTestCase):
         covered_states = set(states_to_keep + states_to_ignore)
         non_existing_states = covered_states - all_possible_workflow_states
 
-        self.assertEquals(
-            set(), non_existing_states,
-            'Found test for one or more non-existent '
-            'workflow states:\n %r' % non_existing_states)
+        self.assertEqual(
+            set(),
+            non_existing_states,
+            'Found test for one or more non-existent workflow states:\n %r' % non_existing_states,
+        )
 
-        self.assertEquals(
-            all_possible_workflow_states, covered_states,
-            'Missing test assertion for one or more states. Please add '
-            'explicit assertions for the following workflow states:\n'
-            '%r' % (all_possible_workflow_states - covered_states))
-
-
-class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
-    """This is done as a functional test because we don't want to use the
-    standard fixture from the Integration Testing Layer.
-
-    Content stats are special in the way that they'll always dump statistics
-    about the entire content to be found, and we therefore want to closely
-    control the fixture that's being in these tests.
-    """
-
-    layer = OPENGEVER_FUNCTIONAL_CONTENTSTATS_TESTING
-
-    def setUp(self):
-        super(TestContentStatsIntegrationWithFixture, self).setUp()
-        self.dossier = create(Builder('dossier'))
-        self.subdossier = create(Builder('dossier').within(self.dossier))
-
-        self.doc1 = create(Builder('document').within(self.dossier)
-                           .titled(u'Feedback zum Vertragsentwurf')
-                           .attach_file_containing(
-                               'Feedback text',
-                               u'vertr\xe4gsentwurf.docx'))
-
-        self.doc2 = create(Builder('document').within(self.subdossier)
-                           .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
-                           .attach_file_containing(
-                               'Excel dummy content',
-                               u'tab\xe4lle.xlsx'))
-
-        self.inbox = create(
-            Builder('inbox')
-            .titled(u'Eingangsk\xf6rbli')
-            .having(id='eingangskorb'))
-
-        self.doc3 = create(Builder('document').within(self.inbox)
-                           .titled(u'Dokument im Eingangsk\xf6rbli')
-                           .with_asset_file('text.txt'))
-
-        self.mail_eml = create(Builder("mail")
-                               .with_message(MAIL_DATA)
-                               .within(self.dossier))
+        self.assertEqual(
+            all_possible_workflow_states,
+            covered_states,
+            'Missing test assertion for one or more states. Please add explicit assertions for the following workflow '
+            'states:\n%r' % (all_possible_workflow_states - covered_states),
+        )
 
     def test_checked_out_docs_stats_provider(self):
-        stats_provider = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsProvider, name='checked_out_docs')
+        self.login(self.regular_user)
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='checked_out_docs')
+        self.assertEqual({'checked_out': 0, 'checked_in': 35}, stats_provider.get_raw_stats())
 
-        self.assertEqual({'checked_out': 0, 'checked_in': 4},
-                         stats_provider.get_raw_stats())
-
-        # Check out a document
-        getMultiAdapter((self.doc1, self.request),
-                        ICheckinCheckoutManager).checkout()
-
-        self.assertEqual({'checked_out': 1, 'checked_in': 3},
-                         stats_provider.get_raw_stats())
+        self.checkout_document(self.document)
+        self.assertEqual({'checked_out': 1, 'checked_in': 34}, stats_provider.get_raw_stats())
 
     def test_file_mimetypes_provider(self):
-        stats_provider = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsProvider, name='file_mimetypes')
-
-        self.assertEqual({
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 1,  # noqa
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 1,  # noqa
-            'message/rfc822': 1,
-            'text/plain': 1},
-            stats_provider.get_raw_stats())
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='file_mimetypes')
+        expected_stats = {
+            'application/msword': 3,
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 2,
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 17,
+            'message/rfc822': 3,
+            'text/plain': 3,
+        }
+        self.assertEqual(expected_stats, stats_provider.get_raw_stats())
 
     def test_file_mimetypes_provider_doesnt_return_empty_string_mimetype(self):
-        # Document without file
-        create(Builder('document')
-               .titled(u'Document without file'))
-
-        stats_provider = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsProvider, name='file_mimetypes')
-
+        # Relies on self.empty_document being there
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='file_mimetypes')
         # Shouldn't cause a mimetype key of '' (empty string) to be produced
         self.assertNotIn('', stats_provider.get_raw_stats().keys())
 
@@ -255,44 +186,30 @@ class TestContentStatsIntegrationWithFixture(FunctionalTestCase):
         browser.login(SITE_OWNER_NAME)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-file_mimetypes').first
-
-        self.assertEquals([
-            ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '1'],  # noqa
-            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '1'],  # noqa
-            ['', 'message/rfc822', '1'],
-            ['', 'text/plain', '1']],
-            table.lists())
+        expected_stats = [
+            ['', 'application/msword', '3'],
+            ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '2'],
+            ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '17'],
+            ['', 'message/rfc822', '3'],
+            ['', 'text/plain', '3'],
+        ]
+        self.assertEqual(expected_stats, table.lists())
 
     @browsing
     def test_checked_out_docs_stats_provider_in_view(self, browser):
-        browser.login(SITE_OWNER_NAME)
+        self.login(self.manager, browser)
+        browser.open(view='@@content-stats')
+        table = browser.css('#content-stats-checked_out_docs').first
+        self.assertEqual([['', 'checked_in', '35'], ['', 'checked_out', '0']], table.lists())
+
+        self.checkout_document(self.document)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
-
-        self.assertEquals(
-            [['', 'checked_in', '4'], ['', 'checked_out', '0']],
-            table.lists())
-
-        # Check out a document
-        manager = getMultiAdapter(
-            (self.doc1, self.request), ICheckinCheckoutManager)
-        manager.checkout()
-        transaction.commit()
-
-        browser.open(self.portal, view='@@content-stats')
-        table = browser.css('#content-stats-checked_out_docs').first
-
-        self.assertEquals(
-            [['', 'checked_in', '3'], ['', 'checked_out', '1']],
-            table.lists())
+        self.assertEqual([['', 'checked_in', '34'], ['', 'checked_out', '1']], table.lists())
 
     def test_gever_portal_types_contains_base_documents(self):
-        stats_provider = getMultiAdapter(
-            (self.portal, self.portal.REQUEST),
-            IStatsProvider, name='portal_types')
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='portal_types')
         stats = stats_provider.get_raw_stats()
-
         self.assertIn('_opengever.document.behaviors.IBaseDocument', stats)
-        self.assertEquals(
-            stats['opengever.document.document'] + stats['ftw.mail.mail'],
-            stats['_opengever.document.behaviors.IBaseDocument'])
+        documentish_stats = stats['opengever.document.document'] + stats['ftw.mail.mail']
+        self.assertEqual(documentish_stats, stats['_opengever.document.behaviors.IBaseDocument'])
