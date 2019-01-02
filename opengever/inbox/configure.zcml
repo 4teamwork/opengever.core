@@ -71,4 +71,9 @@
       handler=".forwarding.set_dates"
       />
 
+  <adapter
+      factory=".transition.ForwardingCloseTransitionExtender"
+      name="forwarding-transition-close"
+      />
+
 </configure>
