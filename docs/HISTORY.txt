@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix flaky loading of document preview with tooltip. [Kevin Bieri]
+- Remove unused get_conversion_status view. [njohner]
 - Remove plonetheme.teamraum upgradesteps. [phgross]
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
 - Also show participants with expired membership in meeting participants-tab. [njohner]
