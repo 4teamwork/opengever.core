@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Kill the theme integration test layer. [Rotonen]
 - Merge the plonetheme.teamraum gever profile into opengever.core. [Rotonen]
 - Merge the plonetheme.teamraum default profile into opengever.core. [Rotonen]
 - Merge the plonetheme.teamraum bumblebee profile to opengever.core. [Rotonen]
