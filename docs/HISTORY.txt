@@ -7,6 +7,7 @@ Changelog
 
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
+- Fix invalid end dates of resolved subdossiers when resolving main dossier. [njohner]
 - Fix flaky loading of document preview with tooltip. [Kevin Bieri]
 - Remove unused get_conversion_status view. [njohner]
 - Remove plonetheme.teamraum upgradesteps. [phgross]
