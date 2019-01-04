@@ -6,6 +6,7 @@ from plone.testing import Layer
 from sqlalchemy.pool import StaticPool
 from z3c.saconfig import EngineFactory
 from z3c.saconfig import GloballyScopedSession
+from z3c.saconfig import scopedsession
 from z3c.saconfig.interfaces import IEngineFactory
 from z3c.saconfig.interfaces import IScopedSession
 from zope.component import provideUtility
@@ -51,6 +52,9 @@ class StandaloneMemoryDBLayer(Layer):
         model.Session.close_all()
         truncate_tables()
         transaction.abort()
+
+    def tearDown(self):
+        clear_session()
 
 
 def setup_memory_database():
@@ -99,3 +103,22 @@ def truncate_tables():
     session = create_session()
     for table in tables:
         session.execute(table.delete())
+
+
+def clear_session():
+    """Tear down SQL session caches.
+
+    As ``z3c.saconfig`` holds a module level dictionary as a cache of scoped
+    sessions we must pop our known-named session off this cache as
+    otherwise our ``create_session()`` will not do what we expect it to do on
+    other layers.
+
+    Additionally sqlalchemy itself also holds a cache of sessions and engines,
+    so we also need to remove the session from them, which also drops the
+    engine and connection so our ZCML declared events for
+    ``z3c.saconfig.interfaces.IEngineCreatedEvent`` actually fire as intended
+    upon the first ``create_session()`` of the next layer.
+    """
+    scoped_session = scopedsession._named_scoped_sessions.pop('opengever', None)
+    if scoped_session:
+        scoped_session.remove()
