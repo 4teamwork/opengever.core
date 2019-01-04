@@ -72,7 +72,7 @@ class ProposalScheduledActivity(ProposalTransitionActivity):
     kind = 'proposal-transition-schedule'
 
     def __init__(self, context, request, meeting_id):
-        super(ProposalTransitionActivity, self).__init__(context, request)
+        super(ProposalScheduledActivity, self).__init__(context, request)
         self.meeting_id = meeting_id
 
     @property
