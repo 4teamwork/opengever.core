@@ -3,7 +3,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model.subscription import Subscription
-from opengever.meeting.activity.activities import actor_link
+from opengever.meeting.activity.helpers import actor_link
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.app.intid.interfaces import IIntIds

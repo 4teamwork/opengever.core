@@ -1,13 +1,8 @@
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity.base import BaseActivity
 from opengever.meeting import _
+from opengever.meeting.activity.helpers import actor_link
 from opengever.meeting.model import Meeting
-from opengever.ogds.base.actor import Actor
-from plone import api
-
-
-def actor_link():
-    return Actor.lookup(api.user.get_current().id).get_link()
 
 
 class ProposalCommentedActivitiy(BaseActivity):
@@ -77,7 +72,7 @@ class ProposalScheduledActivity(ProposalTransitionActivity):
     kind = 'proposal-transition-schedule'
 
     def __init__(self, context, request, meeting_id):
-        super(ProposalTransitionActivity, self).__init__(context, request)
+        super(ProposalScheduledActivity, self).__init__(context, request)
         self.meeting_id = meeting_id
 
     @property
