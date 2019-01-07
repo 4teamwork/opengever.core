@@ -10,6 +10,7 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from zipfile import BadZipfile
 from zope.component import getMultiAdapter
 
 
@@ -29,6 +30,22 @@ class TestHandlers(FunctionalTestCase):
             .titled("Document with file")
             .having(document_date=datetime(2010, 12, 30, 0, 0))
             .with_asset_file('with_gever_properties.docx'))
+
+    def create_invalid_docx(self):
+        """Produce a file with *.docx extension and mimetype, but contents
+        that aren't a valid DOCX, in order to trip up DocProperties update.
+        """
+        invalid_docx = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled("Invalid DOCX")
+            .attach_file_containing('foo', u'invalid.dat'))
+
+        # Only change file type to .docx after creation, because otherwise
+        # creation already fails because of the attempt to update docprops
+        invalid_docx.file.filename = u'invalid.docx'
+        invalid_docx.file.contentType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  # noqa
+        return invalid_docx
 
     def tearDown(self):
         super(TestHandlers, self).tearDown()
@@ -180,3 +197,41 @@ class TestHandlers(FunctionalTestCase):
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(moved_doc)
+
+    def test_failure_to_update_docprops_doesnt_block_checkout(self):
+        invalid_docx = self.create_invalid_docx()
+        manager = getMultiAdapter(
+            (invalid_docx, self.request),
+            ICheckinCheckoutManager)
+        manager.checkout()
+        self.assertTrue(invalid_docx.is_checked_out())
+
+    def test_failure_to_update_docprops_doesnt_block_checkin(self):
+        invalid_docx = self.create_invalid_docx()
+        manager = getMultiAdapter(
+            (invalid_docx, self.request),
+            ICheckinCheckoutManager)
+        manager.checkout()
+        manager.checkin()
+        self.assertFalse(invalid_docx.is_checked_out())
+
+    def test_failure_to_update_docprops_doesnt_block_moving(self):
+        invalid_docx = self.create_invalid_docx()
+        api.content.move(source=invalid_docx,
+                         target=self.target_dossier)
+        moved_doc = self.target_dossier.getFirstChild()
+        self.assertEqual('Invalid DOCX', moved_doc.title)
+
+    def test_failure_to_update_docprops_does_block_creation_of_new_doc(self):
+        with self.assertRaises(BadZipfile):
+            create(
+                Builder('document')
+                .within(self.dossier)
+                .titled("Invalid DOCX")
+                .attach_file_containing('foo', u'invalid.docx'))
+
+    def test_failure_to_update_docprops_does_block_copying(self):
+        invalid_docx = self.create_invalid_docx()
+        with self.assertRaises(BadZipfile):
+            api.content.copy(source=invalid_docx,
+                             target=self.target_dossier)

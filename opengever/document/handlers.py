@@ -1,16 +1,24 @@
 from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.dossier.docprops import DocPropertyWriter
+from traceback import format_exc
 from zope.lifecycleevent import IObjectRemovedEvent
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+import logging
 
 
 DISABLE_DOCPROPERTY_UPDATE_FLAG = 'disable_docproperty_update'
 
 
+logger = logging.getLogger('opengever.document.handlers')
+
+
 def checked_out(context, event):
-    _update_docproperties(context)
+    # Don't prevent checkout by failure to update DocProperties
+    _update_docproperties(context, raise_on_error=False)
     _update_favorites_icon_class(context)
 
 
@@ -19,7 +27,8 @@ def checked_in(context, event):
 
 
 def before_documend_checked_in(context, event):
-    _update_docproperties(context)
+    # Don't prevent checkin by failure to update DocProperties
+    _update_docproperties(context, raise_on_error=False)
 
 
 def document_moved_or_added(context, event):
@@ -29,11 +38,29 @@ def document_moved_or_added(context, event):
     if context.REQUEST.get(DISABLE_DOCPROPERTY_UPDATE_FLAG):
         return
 
-    _update_docproperties(context)
+    if IObjectAddedEvent.providedBy(event):
+        # Be strict when adding new documents to GEVER, lenient on moving
+        # ones that already made it into the system
+        _update_docproperties(context, raise_on_error=True)
+    else:
+        _update_docproperties(context, raise_on_error=False)
 
 
-def _update_docproperties(document):
-    DocPropertyWriter(document).update()
+def _update_docproperties(document, raise_on_error=False):
+    try:
+        DocPropertyWriter(document).update()
+    except Exception as exc:
+        if not raise_on_error:
+            path = '/'.join(document.getPhysicalPath())
+            logger.warn('Failed to update DocProperties for %r' % path)
+            logger.warn('\n%s' % format_exc(exc))
+            logger.warn('Updating of DocProperties has therefore been skipped')
+            log_msg_to_sentry(
+                'DocProperties update skipped', level='warning',
+                extra={'document_that_failed': repr(document)})
+            return
+
+        raise
 
 
 def set_archival_file_state(context, event):
