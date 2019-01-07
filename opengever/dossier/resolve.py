@@ -366,8 +366,18 @@ class Resolver(object):
 
         if recursive:
             # check the subdossiers end date
-            # set the parent endate when no or a invalid end date is set
-            if not IDossier(dossier).end or not dossier.has_valid_enddate():
+            # If a subdossier is already resolved, but seems to have an invalid
+            # end date, it's because we changed the resolution logic and rules
+            # over time, and that subdossier's end date has retroactively become
+            # invalid. In this case, we correct the end date according to current
+            # rules and proceed with resolving it.
+            if dossier.is_resolved() and not dossier.has_valid_enddate():
+                IDossier(dossier).end = dossier.earliest_possible_end_date()
+            # if no end date is set or the end_date is invalid, set to the parent
+            # end date. Invalid end_date should normally be prevented by
+            # ResolveConditions._recursive_date_validation, but this correction
+            # would happen for example when resolving a dossier in debug mode.
+            elif not IDossier(dossier).end or not dossier.has_valid_enddate():
                 IDossier(dossier).end = end_date
         else:
             # main dossier set the given end_date
@@ -447,7 +457,12 @@ class ResolveConditions(object):
 
         if not main:
             # check end_date
-            if not dossier.has_valid_enddate():
+            # If a dossier is already resolved, but seems to have an invalid
+            # end date, it's because we changed the resolution logic and rules
+            # over time, and that subdossier's end date has retroactively become
+            # invalid. In this case, should allow the resolving the main dossier
+            # anyway, and correct the invalid end date during dossier resolution.
+            if not dossier.is_resolved() and not dossier.has_valid_enddate():
                 self._invalid_dates.append(dossier.title)
 
         # recursively check subdossiers
