@@ -84,3 +84,15 @@ class TestJournalListingLaTeXView(FunctionalTestCase):
                      'time': expected_date}]
 
         self.assertEquals(expected, dossierjournal.get_journal_data())
+
+    @browsing
+    def test_handle_special_white_space_characters(self, browser):
+        repo = create(Builder('repository'))
+        dossier = create(Builder('dossier').titled(u'vertical\x0btab').within(repo))
+        provide_request_layer(dossier.REQUEST, IDossierJournalLayer)
+        layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
+        dossierjournal = getMultiAdapter((dossier, dossier.REQUEST, layout),
+                                         ILaTeXView)
+
+        self.assertEquals('Journal of dossier "`vertical tab (Client1 1 / 1)"\'',
+                          dossierjournal.get_render_arguments()["label"])
