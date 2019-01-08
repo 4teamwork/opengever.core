@@ -12,14 +12,11 @@ Changelog
 - Merge the plonetheme.teamraum bumblebee profile to opengever.core. [Rotonen]
 - Set the default publisher encoding to UTF-8 to match production in tests. [Rotonen]
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]
-- Make sure a failure to update DocProperties doesn't prevent checkin/checkout or moving of documents. [lgraf]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
-- Fix invalid end dates of resolved subdossiers when resolving main dossier. [njohner]
 - Fix flaky loading of document preview with tooltip. [Kevin Bieri]
 - Remove unused get_conversion_status view. [njohner]
-- Remove plonetheme.teamraum upgradesteps. [phgross]
 - Correctly update containing_dossier and containing_subdossier indexes. [njohner]
 - Also show participants with expired membership in meeting participants-tab. [njohner]
 - Change remaining "zurücksenden" to "ablegen". [njohner]
@@ -30,7 +27,6 @@ Changelog
 - Fix bug in disposition ech0160 folder model. [njohner]
 - Port disposition tests to integration layer. [njohner]
 - Add support for simple language codes in request language negotiation [lgraf]
-- Fixed attaching mails to mail via Office Connector. [Rotonen]
 - Fix typo in favorite error message. [njohner]
 - Only display .docx files as possible proposal documents. [Rotonen]
 - Render mail descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
@@ -38,6 +34,15 @@ Changelog
 - Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render document descriptions as intelligent text on the document overview. [Rotonen]
 - Remove the now-unnecessary js files from the favorites template. [Rotonen]
+
+
+2018.5.7 (2019-01-08)
+---------------------
+
+- Make sure a failure to update DocProperties doesn't prevent checkin/checkout or moving of documents. [lgraf]
+- Fix invalid end dates of resolved subdossiers when resolving main dossier. [njohner]
+- Fixed attaching mails to mail via Office Connector. [Rotonen]
+- Remove plonetheme.teamraum upgradesteps. [phgross]
 
 
 2018.5.6 (2018-12-17)
