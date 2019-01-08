@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Make sure a failure to update DocProperties doesn't prevent checkin/checkout or moving of documents. [lgraf]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
