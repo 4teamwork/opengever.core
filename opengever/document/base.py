@@ -174,6 +174,9 @@ class BaseDocumentMixin(object):
             return False
         return mimetypeitem
 
+    def is_shadow_document(self):
+        return False
+
 
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""

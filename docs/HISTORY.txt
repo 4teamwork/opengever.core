@@ -5,7 +5,7 @@ Changelog
 2018.5.7 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fixed attaching mails to mail via Office Connector. [Rotonen]
 
 
 2018.5.6 (2018-12-17)
