@@ -430,6 +430,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertTrue(dossier.is_open())
+        self.assertFalse(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['not all documents and tasks are stored in a subdossier.',
@@ -445,6 +446,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertTrue(dossier.is_open())
+        self.assertFalse(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all documents are checked in'],
                           error_messages())
@@ -459,6 +461,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertTrue(dossier.is_open())
+        self.assertFalse(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['not all task are closed'],
                           error_messages())
@@ -474,6 +477,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertFalse(dossier.is_open())
+        self.assertTrue(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -492,8 +496,29 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertTrue(dossier.is_open())
+        self.assertFalse(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has a invalid end_date'], error_messages())
+
+    @browsing
+    def test_dossier_is_resolved_when_resolved_subdossier_has_an_invalid_end_date(self, browser):
+        dossier = create(Builder('dossier'))
+        subdossier = create(Builder('dossier')
+                            .having(end=date(2016, 5, 7))
+                            .within(dossier)
+                            .in_state('dossier-state-resolved'))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier))
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertFalse(dossier.is_open())
+        self.assertTrue(dossier.is_resolved())
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(['The dossier has been succesfully resolved.'],
+                          info_messages())
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):
@@ -508,6 +533,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertTrue(dossier.is_open())
+        self.assertFalse(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier contains active proposals.'],
                           error_messages())
@@ -524,6 +550,7 @@ class TestResolveConditions(FunctionalTestCase):
                              view='transition-resolve')
 
         self.assertFalse(dossier.is_open())
+        self.assertTrue(dossier.is_resolved())
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -606,6 +633,48 @@ class TestResolving(FunctionalTestCase):
                           api.content.get_state(dossier))
         self.assertEquals('dossier-state-resolved',
                           api.content.get_state(subdossier))
+
+    @browsing
+    def test_corrects_already_resolved_subdossiers_invalid_end_dates(self, browser):
+        """Invalid end date of resolved subdossier is automatically set to
+        the earliest_possible_end_date of that subdossier, whereas end date
+        of open subdossier is set to end_date of main dossier.
+        """
+        with freeze(datetime(2016, 5, 1)):
+            dossier = create(Builder('dossier'))
+            subdossier1 = create(Builder('dossier')
+                                 .within(dossier)
+                                 .having(end=date(2016, 5, 7))
+                                 .in_state('dossier-state-resolved'))
+            subdossier2 = create(Builder('dossier')
+                                 .within(dossier)
+                                 .having(end=date(2016, 7, 1))
+                                 .in_state('dossier-state-resolved'))
+            subdossier3 = create(Builder('dossier')
+                                 .within(dossier)
+                                 .having(end=date(2016, 5, 3)))
+        with freeze(datetime(2016, 6, 1)):
+            create(Builder('document').within(subdossier1))
+
+        self.assertEquals(None, IDossier(dossier).end)
+        self.assertEquals(date(2016, 5, 7), IDossier(subdossier1).end)
+        self.assertEquals(date(2016, 7, 1), IDossier(subdossier2).end)
+        self.assertEquals(date(2016, 5, 3), IDossier(subdossier3).end)
+
+        browser.login().open(dossier,
+                             {'_authenticator': createToken()},
+                             view='transition-resolve')
+
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(dossier))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier1))
+        self.assertEquals('dossier-state-resolved',
+                          api.content.get_state(subdossier2))
+        self.assertEquals(date(2016, 7, 1), IDossier(dossier).end)
+        self.assertEquals(date(2016, 6, 1), IDossier(subdossier1).end)
+        self.assertEquals(date(2016, 7, 1), IDossier(subdossier2).end)
+        self.assertEquals(date(2016, 7, 1), IDossier(subdossier2).end)
 
     @browsing
     def test_inactive_subdossiers_stays_inactive(self, browser):

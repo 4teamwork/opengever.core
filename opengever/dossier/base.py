@@ -48,6 +48,7 @@ DOSSIER_STATES_CLOSED = [
     'dossier-state-resolved',
 ]
 
+DOSSIER_STATE_RESOLVED = 'dossier-state-resolved'
 
 DOSSIER_STATES_OFFERABLE = DOSSIER_STATES_CLOSED + ['dossier-state-offered']
 
@@ -140,6 +141,9 @@ class DossierContainer(Container):
     def is_open(self):
         wf_state = api.content.get_state(obj=self)
         return wf_state in DOSSIER_STATES_OPEN
+
+    def is_resolved(self):
+        return api.content.get_state(obj=self) == DOSSIER_STATE_RESOLVED
 
     def get_main_dossier(self):
         """Return the root dossier for the current dossier.
