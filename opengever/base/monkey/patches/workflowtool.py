@@ -14,10 +14,9 @@ class PatchWorkflowTool(MonkeyPatch):
                 return original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
 
             values = adapter.deserialize(**kw)
-            value = original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
-            adapter.after_transition_hook(
+            original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
+            return adapter.after_transition_hook(
                 transition=action, disable_sync=disable_sync, **values)
-            return value
 
         from Products.CMFPlone.WorkflowTool import WorkflowTool
         locals()['__patch_refs__'] = False

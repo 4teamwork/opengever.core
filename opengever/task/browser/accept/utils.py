@@ -224,13 +224,6 @@ def assign_forwarding_to_dossier(
         '/'.join(forwarding_obj.getPhysicalPath()),
         intids_mapping=intids_mapping)
 
-    # close and store the forwarding in yearfolder
-    change_task_workflow_state(
-        forwarding_obj,
-        'forwarding-transition-assign-to-dossier',
-        text=response_text,
-        successor_oguid=successor_tc_task.get_oguid())
-
     IYearfolderStorer(forwarding_obj).store_in_yearfolder()
 
     # successor

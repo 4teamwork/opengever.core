@@ -76,4 +76,9 @@
       name="forwarding-transition-close"
       />
 
+  <adapter
+      factory=".transition.ForwardingAssignToDossierTransitionExtender"
+      name="forwarding-transition-assign-to-dossier"
+      />
+
 </configure>
