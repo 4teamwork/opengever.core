@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2018.5.7 (unreleased)
+2018.5.7 (2019-01-08)
 ---------------------
 
 - Make sure a failure to update DocProperties doesn't prevent checkin/checkout or moving of documents. [lgraf]
