@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fixed attaching mails to mail via Office Connector. [Rotonen]
+- Remove plonetheme.teamraum upgradesteps. [phgross]
 
 
 2018.5.6 (2018-12-17)
