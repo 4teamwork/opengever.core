@@ -1,5 +1,5 @@
 from opengever.base.schema import TableChoice
-from opengever.dossier import _
+from opengever.oneoffixx import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.command import CreateDocumentFromOneOffixxTemplateCommand
 from opengever.oneoffixx.utils import whitelisted_template_types
