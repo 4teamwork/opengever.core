@@ -1,5 +1,4 @@
 from ftw.testbrowser import browsing
-from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING_THEME
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -13,8 +12,6 @@ class TestBaseURL(IntegrationTestCase):
     for example influences where a browser sends form POSTs to, so we assert
     on that as well.
     """
-
-    layer = OPENGEVER_INTEGRATION_TESTING_THEME
 
     @browsing
     def test_data_base_url_attribute_is_present(self, browser):

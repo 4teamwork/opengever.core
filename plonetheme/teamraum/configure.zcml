@@ -19,6 +19,7 @@
   <i18n:registerTranslations directory="locales" />
 
 
+<!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="default"
       title="plonetheme.teamraum"
@@ -32,6 +33,7 @@
       handler=".hooks.remove_screen_media_types"
       />
 
+  <!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="gever"
       title="plonetheme.teamraum: gever"
@@ -40,6 +42,7 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
   <genericsetup:registerProfile
       name="bumblebee"
       title="plonetheme.teamraum: bumblebee"

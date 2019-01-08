@@ -34,6 +34,11 @@
     <viewlet name="ftw.mail.mail-in" />
   </hidden>
 
+  <hidden manager="plone.portalheader" skinname="*">
+    <viewlet name="plone.logo" remove="True" />
+    <viewlet name="subsite.logo" />
+  </hidden>
+
   <order manager="plone.portalheader" skinname="*">
     <viewlet name="opengever.activity.notification" insert-after="plone.personal_bar" />
   </order>

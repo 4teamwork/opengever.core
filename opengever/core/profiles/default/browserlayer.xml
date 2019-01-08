@@ -6,4 +6,9 @@
 
   <!-- OPENGEVER SHARING -->
   <layer name="opengever.sharing" interface="opengever.sharing.interfaces.IOpengeverSharing" />
+
+
+  <!-- PLONETHEME TEAMRAUM -->
+  <layer name="plonetheme.teamraum" interface="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer" />
+
 </layers>

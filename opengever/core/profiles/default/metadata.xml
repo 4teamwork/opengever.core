@@ -26,5 +26,7 @@
     <dependency>profile-plone.restapi:default</dependency>
     <dependency>profile-Products.CMFPlacefulWorkflow:CMFPlacefulWorkflow</dependency>
     <dependency>profile-ftw.tokenauth:default</dependency>
+    <dependency>profile-plone.app.theming:default</dependency>
+    <dependency>profile-ftw.mobilenavigation:default</dependency>
   </dependencies>
 </metadata>
