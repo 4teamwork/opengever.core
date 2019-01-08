@@ -14,7 +14,6 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
-from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
@@ -181,55 +180,6 @@ def accept_forwarding_with_successor(
         successor_tc_task.set_predecessor(successor_tc.get_oguid())
         return task
     return successor_forwarding
-
-
-def assign_forwarding_to_dossier(
-        context, forwarding_oguid, dossier, response_text):
-
-    forwarding = Task.query.by_oguid(forwarding_oguid)
-
-    forwarding_obj = context.unrestrictedTraverse(
-        forwarding.physical_path.encode('utf-8'))
-
-    # we need all task field values from the forwarding
-    fielddata = {}
-    for fieldname in ITask.names():
-        value = ITask.get(fieldname).get(forwarding_obj)
-        fielddata[fieldname] = value
-
-    # Reset issuer to the current inbox
-    fielddata['issuer'] = get_current_org_unit().inbox().id()
-
-    # Predefine the task_type to avoid tasks with an invalid task_type
-    fielddata['task_type'] = FORWARDING_SUCCESSOR_TYPE
-
-    # lets create a new task - the successor task
-    task = createContentInContainer(
-        dossier, 'opengever.task.task', **fielddata)
-
-    successor_tc_task = ISuccessorTaskController(task)
-
-    # Add issuer and responsible to the watchers of the newly created task
-    center = notification_center()
-    center.add_task_responsible(task, task.responsible)
-    center.add_task_issuer(task, task.issuer)
-
-    # copy documents and map the intids
-    intids_mapping = _copy_documents_from_forwarding(forwarding_obj, task)
-
-    # copy the responses
-    response_transporter = IResponseTransporter(task)
-    response_transporter.get_responses(
-        get_current_admin_unit().id(),
-        '/'.join(forwarding_obj.getPhysicalPath()),
-        intids_mapping=intids_mapping)
-
-    IYearfolderStorer(forwarding_obj).store_in_yearfolder()
-
-    # successor
-    successor_tc_task.set_predecessor(forwarding_oguid)
-
-    return task
 
 
 def accept_task_with_successor(dossier, predecessor_oguid, response_text):
