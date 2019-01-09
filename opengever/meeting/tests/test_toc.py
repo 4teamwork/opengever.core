@@ -23,6 +23,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
     layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
     maxDiff = None
 
+    view_name = 'alphabetical_toc'
+    toc_class = AlphabeticalToc
+    toc_filename = 'Alphabetical Toc 2010 my-committee.docx'
+    download_button_label = 'download TOC alphabetical'
+
     expected_toc_json = {'toc': [{
         'group_title': u'A',
         'contents': [
@@ -217,12 +222,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
     def test_toc_json_is_generated_correctly(self):
         self.assertEqual(
-            self.expected_toc_json, AlphabeticalToc(self.period).get_json())
+            self.expected_toc_json, self.toc_class(self.period).get_json())
 
     @browsing
     def test_shows_statusmessage_when_no_template_is_configured(self, browser):
         url = self.period.get_url(self.committee)
-        browser.login().open(url, view='alphabetical_toc')
+        browser.login().open(url, view=self.view_name)
         # when an error happens here, the view returns an error
         # and the page is reloaded in Javascript. Here we reload manually
         browser.open(url)
@@ -234,10 +239,10 @@ class TestAlphabeticalTOC(FunctionalTestCase):
     def test_toc_json_can_be_downloaded_only_by_managers(self, browser):
         url = self.period.get_url(self.committee)
         with self.assertRaises(InsufficientPrivileges):
-            browser.login().open(url, view='alphabetical_toc/as_json')
+            browser.login().open(url, view='{}/as_json'.format(self.view_name))
 
         self.grant('Manager')
-        browser.login().open(url, view='alphabetical_toc/as_json')
+        browser.login().open(url, view='{}/as_json'.format(self.view_name))
         self.assertEqual(self.expected_toc_json, browser.json)
 
     @browsing
@@ -252,12 +257,12 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
         browser.login().open(self.committee,
                              view='tabbedview_view-periods')
-        browser.find('download TOC alphabetical').click()
+        browser.find(self.download_button_label).click()
 
         self.assertDictContainsSubset(
             {'status': '200 Ok',
              'content-disposition': 'attachment; '
-                'filename="Alphabetical Toc 2010 my-committee.docx"',
+                'filename="{}"'.format(self.toc_filename),
              'x-frame-options': 'SAMEORIGIN',
              'content-type': MIME_DOCX,
              'x-theme-disabled': 'True'},
@@ -267,8 +272,10 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
 class TestTOCByRepository(TestAlphabeticalTOC):
 
-    layer = OPENGEVER_FUNCTIONAL_MEETING_LAYER
-    maxDiff = None
+    view_name = 'repository_toc'
+    toc_class = RepositoryBasedTOC
+    toc_filename = 'Repository Toc 2010 my-committee.docx'
+    download_button_label = 'download TOC by repository'
 
     expected_toc_json = {'toc': [{
         'group_title': None,
@@ -333,51 +340,9 @@ class TestTOCByRepository(TestAlphabeticalTOC):
         }
     ]}
 
-    def test_toc_json_is_generated_correctly(self):
-        self.assertEqual(
-            self.expected_toc_json, RepositoryBasedTOC(self.period).get_json())
 
-    @browsing
-    def test_shows_statusmessage_when_no_template_is_configured(self, browser):
-        url = self.period.get_url(self.committee)
-        browser.login().open(url, view='repository_toc')
-        # when an error happens here, the view returns an error
-        # and the page is reloaded in Javascript. Here we reload manually
-        browser.open(url)
-        self.assertEqual(u'There is no toc template configured, toc could '
-                         'not be generated.',
-                         error_messages()[0])
 
-    @browsing
-    def test_toc_json_can_be_downloaded_only_by_managers(self, browser):
-        url = self.period.get_url(self.committee)
-        with self.assertRaises(InsufficientPrivileges):
-            browser.login().open(url, view='repository_toc/as_json')
 
-        self.grant('Manager')
-        browser.login().open(url, view='repository_toc/as_json')
-        self.assertEqual(self.expected_toc_json, browser.json)
 
-    @browsing
-    def test_toc_can_be_downloaded(self, browser):
-        templates = create(Builder('templatefolder'))
-        sablon_template = create(Builder('sablontemplate')
-                                 .within(templates)
-                                 .with_asset_file('sablon_template.docx'))
-        self.committee.toc_template = RelationValue(
-            getUtility(IIntIds).getId(sablon_template))
-        transaction.commit()
 
-        browser.login().open(self.committee,
-                             view='tabbedview_view-periods')
-        browser.find('download TOC by repository').click()
 
-        self.assertDictContainsSubset(
-            {'status': '200 Ok',
-             'content-disposition': 'attachment; '
-                'filename="Repository Toc 2010 my-committee.docx"',
-             'x-frame-options': 'SAMEORIGIN',
-             'content-type': MIME_DOCX,
-             'x-theme-disabled': 'True'},
-            browser.headers)
-        self.assertIsNotNone(browser.contents)
