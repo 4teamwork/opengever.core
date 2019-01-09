@@ -13,6 +13,7 @@ Changelog
 - Set the default publisher encoding to UTF-8 to match production in tests. [Rotonen]
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
+- Provide solr for local development. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
 - Fix flaky loading of document preview with tooltip. [Kevin Bieri]
