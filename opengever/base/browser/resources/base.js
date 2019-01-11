@@ -1,6 +1,6 @@
 $(window).load(function(){
   // set focus on first form field
-  var firstFormElement = $("form#form input:text:visible, form#form textarea:visible, .keyword-widget").first();
+  var firstFormElement = $('form#form input:text:visible, form#form textarea:visible, .keyword-widget, .choice-field').first();
   // Check if element is select2 widget
   if (firstFormElement.data('select2')) {
     firstFormElement.focus();
