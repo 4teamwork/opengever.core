@@ -14,6 +14,7 @@ Changelog
 - Merge the plonetheme.teamraum bumblebee profile to opengever.core. [Rotonen]
 - Set the default publisher encoding to UTF-8 to match production in tests. [Rotonen]
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]
+- Use the correct message factory in the Oneoffixx form. [Rotonen]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
