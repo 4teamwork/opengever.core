@@ -193,6 +193,7 @@ class TestRepositoryFavoritesPost(IntegrationTestCase):
              u'favorite_id': 1,
              u'icon_class': u'icon-docx',
              u'oguid': u'plone:1014073300',
+             u'portal_type': u'opengever.document.document',
              u'position': None,
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014073300',
              u'title': u'Vertr\xe4gsentwurf',
