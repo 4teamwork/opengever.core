@@ -1,11 +1,8 @@
-from opengever.base.browser.helper import get_css_class
-from opengever.base.utils import escape_html
 from opengever.base.viewlets.byline import BylineBase
 from opengever.meeting import _
 from opengever.tabbedview.helper import linked
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
-from zope.i18n import translate
 
 
 class MeetingByline(BylineBase):
@@ -37,19 +34,11 @@ class MeetingByline(BylineBase):
                    'content': meeting.location}
 
         dossier = meeting.get_dossier()
+        with_tooltip = False
         if api.user.has_permission('View', obj=dossier):
-            dossier_html = linked(dossier, dossier.Title())
-        else:
-            no_access_tooltip = safe_unicode(translate(
-                _(u'You are not allowed to view the meeting dossier.'),
-                context=self.request))
-            dossier_html = (
-                u'<span class="{classes}">'
-                u'<span class="no_access" title="{no_access_tooltip}">'
-                u'{title}</span></span>').format(
-                    classes=safe_unicode(get_css_class(dossier)),
-                    no_access_tooltip=escape_html(no_access_tooltip),
-                    title=escape_html(safe_unicode(dossier.Title())))
+            with_tooltip = True
+
+        dossier_html = linked(dossier, dossier.Title(), with_tooltip=with_tooltip)
 
         yield {'label': _('meeting_byline_meetin_dossier', default='Meeting dossier'),
                'content': dossier_html,
