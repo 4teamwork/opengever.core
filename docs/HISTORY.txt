@@ -36,6 +36,7 @@ Changelog
 - Include portal_type in @favorites endpoint response. [lgraf]
 - Supply date format locale settings for fr-ch. [lgraf]
 - Add meeting error view displayed when user has permission issues. [njohner]
+- Also hide re-risen Unauthorized tracebacks for non-manager users. [Rotonen]
 - Kill the theme functional test layer. [Rotonen]
 - Kill the theme integration test layer. [Rotonen]
 - Merge the plonetheme.teamraum gever profile into opengever.core. [Rotonen]
