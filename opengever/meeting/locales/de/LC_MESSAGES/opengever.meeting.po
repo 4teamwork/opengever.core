@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-22 08:07+0000\n"
+"POT-Creation-Date: 2019-01-11 09:17+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,6 +152,10 @@ msgstr "Ab Vorlage"
 msgid "History"
 msgstr "Verlauf"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
+msgid "Insufficient privileges on meeting dossier"
+msgstr "Unzureichende Berechtigungen auf dem Sitzungsdossier"
+
 #: ./opengever/meeting/committee.py
 msgid "Linked repository folder"
 msgstr "Ablageposition"
@@ -161,6 +165,7 @@ msgid "Meeting Dossier"
 msgstr "Sitzungsdossier"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
 msgid "Meeting number"
 msgstr "Sitzungsnummer"
 
@@ -257,10 +262,6 @@ msgstr "Alle anzeigen"
 #: ./opengever/meeting/browser/meetings/participants.py
 msgid "You are not allowed to change the meeting details."
 msgstr "Sie haben nicht die nötigen Rechte, um Änderungen vorzunehmen."
-
-#: ./opengever/meeting/browser/meetings/byline.py
-msgid "You are not allowed to view the meeting dossier."
-msgstr "Sie haben nicht die nötigen Rechte, um das Sitzungsdossier anzusehen."
 
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1558,6 +1559,16 @@ msgstr "Das Erstellen der Zip-Datei hat zu lange gedauert."
 #: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
 msgstr "Neu eingereichte Anträge"
+
+#. Default: "User does not have permission to edit the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_edit_permissions_on_meeting_dossier"
+msgstr "Sie haben keine Rechte das Sitzungsdossier zu bearbeiten und Inhalte hinzuzufügen:"
+
+#. Default: "User does not have permission to view the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_view_permissions_on_meeting_dossier"
+msgstr "Sie haben keine Rechte das Sitzungsdossier anzusehen:"
 
 #. Default: "Overview"
 #: ./opengever/meeting/browser/tabbed.py

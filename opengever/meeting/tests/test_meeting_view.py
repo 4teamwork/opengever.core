@@ -6,6 +6,7 @@ from ftw.testing import freeze
 from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import byline
+from plone import api
 import pytz
 
 
@@ -247,3 +248,35 @@ class TestMeetingView(IntegrationTestCase):
         self.assertEquals(
             0,
             len(browser.css('#ad-hoc-agenda-item-proposal-templates')))
+
+    @browsing
+    def test_displays_error_view_when_no_view_permissions_on_meeting_dossier(self, browser):
+        self.login(self.meeting_user, browser=browser)
+
+        browser.open(self.meeting)
+        self.assertEqual(0, len(browser.css(".meeting-permission-error-title")))
+        self.assertFalse(0, len(browser.css(".meeting-permission-error-error")))
+
+        api.content.disable_roles_acquisition(self.meeting_dossier)
+
+        browser.open(self.meeting)
+        self.assertEqual(browser.css(".meeting-permission-error-title").first.text,
+                         'Insufficient privileges on meeting dossier')
+        self.assertEqual(browser.css(".meeting-permission-error-message").first.text,
+                         'User does not have permission to view the meeting dossier:')
+
+    @browsing
+    def test_displays_error_view_when_no_edit_permissions_on_meeting_dossier(self, browser):
+        self.login(self.committee_responsible, browser=browser)
+
+        browser.open(self.meeting)
+        self.assertEqual(0, len(browser.css(".meeting-permission-error-title")))
+        self.assertFalse(0, len(browser.css(".meeting-permission-error-error")))
+
+        api.content.disable_roles_acquisition(self.meeting_dossier)
+
+        browser.open(self.meeting)
+        self.assertEqual(browser.css(".meeting-permission-error-title").first.text,
+                         'Insufficient privileges on meeting dossier')
+        self.assertEqual(browser.css(".meeting-permission-error-message").first.text,
+                         'User does not have permission to edit the meeting dossier:')
