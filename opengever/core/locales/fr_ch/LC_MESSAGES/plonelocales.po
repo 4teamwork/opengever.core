@@ -1,0 +1,293 @@
+# Translation of plonelocales.pot to French (Switzerland)
+#
+# This is a supplemental plonelocales definition for the fr-ch locale.
+# We need this to control the date format in GEVER for the French language.
+# The date format should be the same as everywhere in Switzerland
+# (dd.mm.yyyy), not dd/mm/yyyy as in France.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"POT-Creation-Date: 2006-12-15 23:20+0000\n"
+"PO-Revision-Date: 2018-12-04 17:30+0100\n"
+"Last-Translator: Lukas Graf <lukas.graf@4teamwork.ch>\n"
+"Language-Team: 4teamwork <info@4teamwork.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language-Code: fr_ch\n"
+"Language-Name: French (Switzerland)\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plonelocales\n"
+
+#. The variables used here are the same as used in the strftime formating.
+#. Supported are ${A}, ${a}, ${B}, ${b}, ${H}, ${I}, ${m}, ${d}, ${M}, ${p},
+#. ${S}, ${Y}, ${y}, ${Z}, each used as variable in the msgstr.
+#. For example: "${A} ${d}. ${B} ${Y}, ${H}:${M} ${Z}"
+#. In english speaking countries default is:
+#. ${Y}-${m}-${d} ${H}:${M}
+#. ${b} ${d}, ${Y} ${I}:${M} ${p}
+#: ./TranslationServiceTool.py
+msgid "date_format_long"
+msgstr "${d}.${m}.${Y} ${H}:${M}"
+
+#. The variables used here are the same as used in the strftime formating.
+#. Supported are ${A}, ${a}, ${B}, ${b}, ${H}, ${I}, ${m}, ${d}, ${M}, ${p},
+#. ${S}, ${Y}, ${y}, ${Z}, each used as variable in the msgstr.
+#. For example: "${A} ${d}. ${B} ${Y}, ${H}:${M} ${Z}"
+#. In english speaking countries default is:
+#. ${Y}-${m}-${d}
+#. ${b} ${d}, ${Y}
+#: ./TranslationServiceTool.py
+msgid "date_format_short"
+msgstr "${d}.${m}.${Y}"
+
+#. Date format used with the datepicker jqueryui plugin.
+#. Please only use 'dd', 'mm', 'yy', '-', '/', '.' in this string.
+#. Default: "mm/dd/yy"
+msgid "date_format_short_datepicker"
+msgstr "dd.mm.yy"
+
+#. Default: "April"
+#: datetime name of a month, format %B
+msgid "month_apr"
+msgstr "Avril"
+
+#. Default: "Apr"
+#: datetime name of a month, format %b
+msgid "month_apr_abbr"
+msgstr "Avr"
+
+#. Default: "August"
+#: datetime name of a month, format %B
+msgid "month_aug"
+msgstr "Août"
+
+#. Default: "Aug"
+#: datetime name of a month, format %b
+msgid "month_aug_abbr"
+msgstr "Aou"
+
+#. Default: "December"
+#: datetime name of a month, format %B
+msgid "month_dec"
+msgstr "Décembre"
+
+#. Default: "Dec"
+#: datetime name of a month, format %b
+msgid "month_dec_abbr"
+msgstr "Déc"
+
+#. Default: "February"
+#: datetime name of a month, format %B
+msgid "month_feb"
+msgstr "Février"
+
+#. Default: "Feb"
+#: datetime name of a month, format %b
+msgid "month_feb_abbr"
+msgstr "Fév"
+
+#. Default: "January"
+#: datetime name of a month, format %B
+msgid "month_jan"
+msgstr "Janvier"
+
+#. Default: "Jan"
+#: datetime name of a month, format %b
+msgid "month_jan_abbr"
+msgstr "Jan"
+
+#. Default: "July"
+#: datetime name of a month, format %B
+msgid "month_jul"
+msgstr "Juillet"
+
+#. Default: "Jul"
+#: datetime name of a month, format %b
+msgid "month_jul_abbr"
+msgstr "Juil"
+
+#. Default: "June"
+#: datetime name of a month, format %B
+msgid "month_jun"
+msgstr "Juin"
+
+#. Default: "Jun"
+#: datetime name of a month, format %b
+msgid "month_jun_abbr"
+msgstr "Jui"
+
+#. Default: "March"
+#: datetime name of a month, format %B
+msgid "month_mar"
+msgstr "Mars"
+
+#. Default: "Mar"
+#: datetime name of a month, format %b
+msgid "month_mar_abbr"
+msgstr "Mar"
+
+#. Default: "May"
+#: datetime name of a month, format %B
+msgid "month_may"
+msgstr "Mai"
+
+#. Default: "May"
+#: datetime name of a month, format %b
+msgid "month_may_abbr"
+msgstr "Mai"
+
+#. Default: "November"
+#: datetime name of a month, format %B
+msgid "month_nov"
+msgstr "Novembre"
+
+#. Default: "Nov"
+#: datetime name of a month, format %b
+msgid "month_nov_abbr"
+msgstr "Nov"
+
+#. Default: "October"
+#: datetime name of a month, format %B
+msgid "month_oct"
+msgstr "Octobre"
+
+#. Default: "Oct"
+#: datetime name of a month, format %b
+msgid "month_oct_abbr"
+msgstr "Oct"
+
+#. Default: "September"
+#: datetime name of a month, format %B
+msgid "month_sep"
+msgstr "Septembre"
+
+#. Default: "Sep"
+#: datetime name of a month, format %b
+msgid "month_sep_abbr"
+msgstr "Sep"
+
+#. The variables used here are the same as used in the strftime formating.
+#. Supported are ${A}, ${a}, ${B}, ${b}, ${H}, ${I}, ${m}, ${d}, ${M}, ${p},
+#. ${S}, ${Y}, ${y}, ${Z}, each used as variable in the msgstr.
+#. For example: "${A} ${d}. ${B} ${Y}, ${H}:${M} ${Z}"
+#. In english speaking countries default is:
+#. ${I}:${M} ${p}
+#: ./TranslationServiceTool.py
+msgid "time_format"
+msgstr "${H}:${M}"
+
+#. Default: "Friday"
+#: datetime name of a day, format %A
+msgid "weekday_fri"
+msgstr "Vendredi"
+
+#. Default: "Fri"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_fri_abbr"
+msgstr "Ven"
+
+# Shorthand for "Friday"
+#. Default: "Fr"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_fri_short"
+msgstr "Ve"
+
+#. Default: "Monday"
+#: datetime name of a day, format %A
+msgid "weekday_mon"
+msgstr "Lundi"
+
+#. Default: "Mon"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_mon_abbr"
+msgstr "Lun"
+
+# Shorthand for "Monday"
+#. Default: "Mo"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_mon_short"
+msgstr "Lu"
+
+#. Default: "Saturday"
+#: datetime name of a day, format %A
+msgid "weekday_sat"
+msgstr "Samedi"
+
+#. Default: "Sat"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_sat_abbr"
+msgstr "Sam"
+
+# Shorthand for "Saturday"
+#. Default: "Sa"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_sat_short"
+msgstr "Sa"
+
+#. Default: "Sunday"
+#: datetime name of a day, format %A
+msgid "weekday_sun"
+msgstr "Dimanche"
+
+#. Default: "Sun"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_sun_abbr"
+msgstr "Dim"
+
+# Shorthand for "Sunday"
+#. Default: "Su"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_sun_short"
+msgstr "Di"
+
+#. Default: "Thursday"
+#: datetime name of a day, format %A
+msgid "weekday_thu"
+msgstr "Jeudi"
+
+#. Default: "Thu"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_thu_abbr"
+msgstr "Jeu"
+
+# Shorthand for "Thursday"
+#. Default: "Th"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_thu_short"
+msgstr "Je"
+
+#. Default: "Tuesday"
+#: datetime name of a day, format %A
+msgid "weekday_tue"
+msgstr "Mardi"
+
+#. Default: "Tue"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_tue_abbr"
+msgstr "Mar"
+
+# Shorthand for "Tuesday"
+#. Default: "Tu"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_tue_short"
+msgstr "Ma"
+
+#. Default: "Wednesday"
+#: datetime name of a day, format %A
+msgid "weekday_wed"
+msgstr "Mercredi"
+
+#. Default: "Wed"
+#: datetime abbreviation of a day, format %a
+msgid "weekday_wed_abbr"
+msgstr "Mer"
+
+# Shorthand for "Wednesday"
+#. Default: "We"
+#: datetime two letter abbreviation of a day used in the portlet_calendar
+msgid "weekday_wed_short"
+msgstr "Me"
+
