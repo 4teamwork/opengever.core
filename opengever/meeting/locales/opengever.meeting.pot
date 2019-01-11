@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-22 08:07+0000\n"
+"POT-Creation-Date: 2019-01-11 09:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,6 +151,10 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
+msgid "Insufficient privileges on meeting dossier"
+msgstr ""
+
 #: ./opengever/meeting/committee.py
 msgid "Linked repository folder"
 msgstr ""
@@ -160,6 +164,7 @@ msgid "Meeting Dossier"
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
 msgid "Meeting number"
 msgstr ""
 
@@ -255,10 +260,6 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/participants.py
 msgid "You are not allowed to change the meeting details."
-msgstr ""
-
-#: ./opengever/meeting/browser/meetings/byline.py
-msgid "You are not allowed to view the meeting dossier."
 msgstr ""
 
 #. Default: "Cancel meeting"
@@ -1556,6 +1557,16 @@ msgstr ""
 #. Default: "New unscheduled proposals:"
 #: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
+msgstr ""
+
+#. Default: "User does not have permission to edit the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_edit_permissions_on_meeting_dossier"
+msgstr ""
+
+#. Default: "User does not have permission to view the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_view_permissions_on_meeting_dossier"
 msgstr ""
 
 #. Default: "Overview"

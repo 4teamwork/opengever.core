@@ -15,7 +15,6 @@ from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFPlone.utils import safe_unicode
-from Products.CMFPlone.utils import safe_unicode
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.ZCatalog.interfaces import ICatalogBrain
 from zope.component import getUtility
@@ -150,7 +149,7 @@ def linked_containing_maindossier(item, value):
     return link
 
 
-def linked(item, value):
+def linked(item, value, with_tooltip=True):
     """Takes an item (object or brain) and returns a HTML snippet that
     contains a link to the item, it's icon and breadcrumbs in the tooltip.
     """
@@ -171,7 +170,10 @@ def linked(item, value):
     # Make sure all data used in the HTML snippet is properly escaped
     value = escape_html(value)
 
-    link = '<a class="rollover-breadcrumb %s" href="%s" data-uid="%s"><span>%s</span></a>' % (
+    if with_tooltip:
+        css_class = "rollover-breadcrumb " + css_class
+
+    link = '<a class="%s" href="%s" data-uid="%s"><span>%s</span></a>' % (
         css_class, url, uid, value)
 
     wrapper = '<span class="linkWrapper">%s</span>' % link

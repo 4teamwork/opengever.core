@@ -28,10 +28,16 @@ class TestMeetingByline(IntegrationTestCase):
         self.assertEquals(self.meeting_dossier, browser.context)
 
     @browsing
-    def test_dossier_not_linked_when_unauthorized(self, browser):
+    def test_dossier_linked_but_no_breadcrumbs_when_unauthorized(self, browser):
         self.login(self.meeting_user, browser)
+
+        browser.open(self.meeting)
+        item = byline.by_label()['Meeting dossier:']
+        self.assertTrue(item.css('a').first)
+        self.assertTrue(item.css('.rollover-breadcrumb').first)
+
         self.meeting_dossier.__ac_local_roles_block__ = True
         browser.open(self.meeting)
         item = byline.by_label()['Meeting dossier:']
-        self.assertFalse(item.css('a'))
-        self.assertTrue(item.css('span.no_access').first)
+        self.assertTrue(item.css('a').first)
+        self.assertFalse(item.css('.rollover-breadcrumb'))

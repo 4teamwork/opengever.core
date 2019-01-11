@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.meeting">
+
+  <metal:title metal:fill-slot="content-title">
+    <metal:use use-macro="context/@@gever-macros/js_default_error_messages" />
+    <div id="tabbedview-header">
+      <h1 class="memberHeading meeting-view-heading documentFirstHeading">
+        <span tal:content="view/model/get_title" />
+        <span class="meeting-number"
+              tal:define="meeting view/model"
+              tal:condition="meeting/meeting_number"
+              i18n:attributes="title"
+              title="Meeting number">
+          #
+          <tal:YEAR replace="meeting/start/year" />
+          /
+          <tal:MEETING_NUMBER replace="meeting/meeting_number" />
+        </span>
+      </h1>
+    </div>
+  </metal:title>
+
+  <metal:content-core fill-slot="content-core">
+    <h2 class="meeting-permission-error-title" i18n:translate="">Insufficient privileges on meeting dossier</h2>
+    <div class="meeting-permission-error-message" tal:content="view/error_message">
+      Error message
+    </div>
+    <span tal:replace="structure view/meeting_dossier_link"></span>
+  </metal:content-core>
+
+</html>

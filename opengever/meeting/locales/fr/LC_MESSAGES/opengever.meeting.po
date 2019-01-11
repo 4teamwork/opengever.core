@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-22 08:07+0000\n"
+"POT-Creation-Date: 2019-01-11 09:17+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -154,6 +154,10 @@ msgstr "A partir d'un modèle"
 msgid "History"
 msgstr "Historique"
 
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
+msgid "Insufficient privileges on meeting dossier"
+msgstr "Privilèges insuffisants sur le dossier de séance"
+
 #: ./opengever/meeting/committee.py
 msgid "Linked repository folder"
 msgstr "Répertoire d'archivage"
@@ -163,6 +167,7 @@ msgid "Meeting Dossier"
 msgstr "Dossier de séance"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
+#: ./opengever/meeting/browser/meetings/templates/meeting_error.pt
 msgid "Meeting number"
 msgstr "Numéro de la séance"
 
@@ -259,10 +264,6 @@ msgstr "afficher tous"
 #: ./opengever/meeting/browser/meetings/participants.py
 msgid "You are not allowed to change the meeting details."
 msgstr "Vous ne disposez pas des droits nécessaires pour faire des modifications."
-
-#: ./opengever/meeting/browser/meetings/byline.py
-msgid "You are not allowed to view the meeting dossier."
-msgstr "Vous ne disposez pas des droits nécessaires pour accéder au dossier."
 
 #. Default: "Cancel meeting"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1560,6 +1561,16 @@ msgstr "La génération du fichier Zip a duré trop longtemps"
 #: ./opengever/meeting/browser/templates/committee.pt
 msgid "new_unscheduled_proposals"
 msgstr "Nouvelles propositions soumises"
+
+#. Default: "User does not have permission to edit the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_edit_permissions_on_meeting_dossier"
+msgstr "Vous n'avez pas les privilèges suffisants pour modifier le dossier de séance ou y ajouter du contenu:"
+
+#. Default: "User does not have permission to view the meeting dossier:"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "no_view_permissions_on_meeting_dossier"
+msgstr "Vous n'avez pas les privilèges suffisants pour voir le dossier de séance:"
 
 #. Default: "Overview"
 #: ./opengever/meeting/browser/tabbed.py

@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Add meeting error view displayed when user has permission issues. [njohner]
 - Kill the theme functional test layer. [Rotonen]
 - Kill the theme integration test layer. [Rotonen]
 - Merge the plonetheme.teamraum gever profile into opengever.core. [Rotonen]

@@ -18,6 +18,7 @@ from opengever.meeting.browser.protocol import MergeDocxProtocol
 from opengever.meeting.model import Meeting
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.tabbedview.helper import linked
 from operator import itemgetter
 from path import Path
 from plone import api
@@ -251,6 +252,7 @@ class AddMeetingDossierView(WizzardWrappedAddForm):
 class MeetingView(BrowserView):
 
     template = ViewPageTemplateFile('templates/meeting.pt')
+    error_template = ViewPageTemplateFile('templates/meeting_error.pt')
 
     def __init__(self, context, request):
         super(MeetingView, self).__init__(context, request)
@@ -262,6 +264,33 @@ class MeetingView(BrowserView):
         # checks for `ModifyPortalContent`, we have to enable the border
         # manually.
         self.request.set('enable_border', True)
+
+        # Check that user permissions on the meeting dossier match his permissions
+        # on the meeting_dossier, as otherwise several elements in the meeting view
+        # will break.
+        meeting_dossier = self.model.get_dossier()
+        committee = self.model.committee.resolve_committee()
+        if (api.user.has_permission('Modify portal content', obj=committee) and not
+                api.user.has_permission('Modify portal content', obj=meeting_dossier)):
+            self.error_message = translate(
+                _("no_edit_permissions_on_meeting_dossier",
+                  default="User does not have permission to edit the meeting dossier:"),
+                context=self.request)
+            self.meeting_dossier_link = linked(meeting_dossier,
+                                               meeting_dossier.Title())
+            return self.error_template()
+
+        elif (api.user.has_permission('View', obj=committee) and not
+              api.user.has_permission('View', obj=meeting_dossier)):
+            self.error_message = translate(
+                _("no_view_permissions_on_meeting_dossier",
+                  default="User does not have permission to view the meeting dossier:"),
+                context=self.request)
+            self.meeting_dossier_link = linked(meeting_dossier,
+                                               meeting_dossier.Title(),
+                                               with_tooltip=False)
+            return self.error_template()
+
         return self.template()
 
     def get_css_class(self, document):
