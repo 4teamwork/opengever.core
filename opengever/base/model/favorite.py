@@ -55,6 +55,7 @@ class Favorite(Base):
     def serialize(self, portal_url):
         return {
             '@id': self.api_url(portal_url),
+            'portal_type': self.portal_type,
             'favorite_id': self.favorite_id,
             'oguid': self.oguid.id,
             'title': self.title,

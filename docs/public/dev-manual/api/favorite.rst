@@ -35,6 +35,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "icon_class": "icon-dokument_word",
               "oguid": "fd:68398212",
               "title": "Richtlinien Gesetzesentwürfe",
+              "portal_type": "opengever.document.document",
               "position": 1,
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
           }
@@ -45,6 +46,7 @@ Mittels eines GET Request können Favoriten des Benutzers abgefragt werden. Dabe
               "icon_class": "contenttype-opengever-dossier-businesscasedossier",
               "oguid": "fd:68336212",
               "title": "Anfragen 2018",
+              "portal_type": "opengever.dossier.businesscasedossier",
               "position": 2,
               "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68336212"
           }
@@ -81,6 +83,7 @@ Ein Favorit für ein beliebiges Objekt kann mittels POST Request hinzugefügt we
           "icon_class": "icon-dokument_word",
           "oguid": "fd:68398212",
           "title": "Anfrage 2018",
+          "portal_type": "opengever.document.document",
           "position": 1,
           "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
       }
@@ -132,6 +135,7 @@ Es ist aber möglich bei einem PATCH request die Objekt-Repräsentation als Resp
           "icon_class": "icon-dokument_word",
           "oguid": "fd:68398212",
           "title": "Weekly Document",
+          "portal_type": "opengever.document.document",
           "position": 35,
           "target_url": "http://localhost:8080/fd/resolve_oguid/fd:68398212"
       }

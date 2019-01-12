@@ -34,6 +34,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+              u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
               u'position': 23,
               u'oguid': u'plone:1014013300',
@@ -43,6 +44,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
               u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
              {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/2',
+              u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
               u'position': 21,
               u'oguid': u'plone:1014073300',
@@ -69,6 +71,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
              u'position': 23,
              u'oguid': u'plone:1014013300',
@@ -136,6 +139,7 @@ class TestFavoritesPost(IntegrationTestCase):
 
         self.assertEquals(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
              u'oguid': u'plone:1014073300',
              u'position': 0,
@@ -205,6 +209,7 @@ class TestFavoritesPost(IntegrationTestCase):
 
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@favorites/nicole.kohler/1',
+             u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
              u'favorite_id': 1,
              u'icon_class': u'icon-docx',
@@ -448,6 +453,7 @@ class TestFavoritesPatch(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
              u'title': u'\xdcbersicht OGIPs',
              u'target_url': u'http://nohost/plone/resolve_oguid/plone:1014013300',
