@@ -12,6 +12,7 @@ class TestLivesearchReply(IntegrationTestCase):
         self.dossier.reindexObject()
 
         browser.open(view='livesearch_reply?q=evil')
+
         link_node = browser.css('.LSRow').first
         # lxml unescapes attributes for us. we want to test that the title
         # has been escaped correctly and thus use browser.contents only.
@@ -20,3 +21,12 @@ class TestLivesearchReply(IntegrationTestCase):
         # also test title that is displayed
         self.assertIn('&lt;script&gt;alert(\'evil\');&lt;',
                       link_node.innerHTML)
+
+    @browsing
+    def test_livesearch_empty_result(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(view='livesearch_reply?q=blablabla')
+
+        link_node = browser.css('.dropdown-list-item').first
+        self.assertEqual('LSNothingFound', link_node.get("id"))
+        self.assertEqual('No matching results found.', link_node.text)

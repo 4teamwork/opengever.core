@@ -151,7 +151,7 @@ if not results:
               (ts.translate(pmf('Error'), context=REQUEST),
                ts.translate(label_has_parse_errors, context=REQUEST)))
     else:
-        write('''<ul class=dropdown-list><li id="LSNothingFound" class="dropdown-list-item">%s</li></ul>'''
+        write('''<ul class="dropdown-list"><li id="LSNothingFound" class="dropdown-list-item">%s</li></ul>'''
               % ts.translate(label_no_results_found, context=REQUEST))
     write('''<div class="dropdown-list-footer LSRow">''')
     write('<a href="%s" class="dropdown-list-item">%s</a>' %
@@ -191,6 +191,7 @@ else:
     write('''</ul>''')
 
     write('''<div class="dropdown-list-footer LSRow">''')
+
     write('<a href="%s" class="dropdown-list-item">%s</a>' %
           (portal_url + '/advanced_search?SearchableText=%s' % searchurlparameter,
            ts.translate(label_advanced_search, context=REQUEST)))
