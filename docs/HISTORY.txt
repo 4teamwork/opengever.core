@@ -8,6 +8,7 @@ Changelog
 - Remove deprecated docprops from templates and tests. [njohner]
 - Bump ftw.structlog to get new client_ip field and referrer logging fixes. [lgraf]
 - Skip sablon template validation during setup of development system. [njohner]
+- Refactor solr LiveSearchReplyView to use a template. [njohner]
 - Include portal_type in @favorites endpoint response. [lgraf]
 - Supply date format locale settings for fr-ch. [lgraf]
 - Add meeting error view displayed when user has permission issues. [njohner]
