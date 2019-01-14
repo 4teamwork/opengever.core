@@ -30,6 +30,8 @@ from opengever.testing.test_case import TestCase
 from opengever.trash.trash import Trasher
 from operator import methodcaller
 from plone import api
+from plone.api.validation import at_least_one_of
+from plone.api.validation import mutually_exclusive_parameters
 from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import applyProfile
 from plone.app.testing import login
@@ -640,7 +642,9 @@ class IntegrationTestCase(TestCase):
         return {
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
 
-    def mock_solr(self, response_file):
+    @mutually_exclusive_parameters('response_file', 'response_json')
+    @at_least_one_of('response_file', 'response_json')
+    def mock_solr(self, response_file=None, response_json=None):
         conn = MagicMock(name='SolrConnection')
         schema_resp = assets.load('solr_schema.json')
         conn.get = MagicMock(name='get', return_value=SolrResponse(
@@ -650,7 +654,10 @@ class IntegrationTestCase(TestCase):
         manager.schema = SolrSchema(manager)
         solr = getUtility(ISolrSearch)
         solr._manager = manager
-        search_resp = assets.load(response_file)
+        if response_file:
+            search_resp = assets.load(response_file)
+        else:
+            search_resp = json.dumps(response_json)
         solr.search = MagicMock(name='search', return_value=SolrResponse(
             body=search_resp, status=200))
         return solr
