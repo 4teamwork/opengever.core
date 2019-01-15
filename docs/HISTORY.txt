@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Skip sablon template validation during setup of development system. [njohner]
 - Include portal_type in @favorites endpoint response. [lgraf]
 - Supply date format locale settings for fr-ch. [lgraf]
 - Add meeting error view displayed when user has permission issues. [njohner]
