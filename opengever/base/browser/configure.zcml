@@ -11,6 +11,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="list_teammembers"
+      for="*"
+      class=".list_teammembers.ListTeamMembers"
+      permission="zope2.View"
+      />
+
   <adapter factory=".navtree.OpengeverNavtreeStrategy" />
 
   <browser:page

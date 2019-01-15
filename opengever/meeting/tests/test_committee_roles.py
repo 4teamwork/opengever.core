@@ -64,6 +64,7 @@ class TestCommitteeGroupsVocabulary(IntegrationTestCase):
              u'fa_inbox_users',
              u'projekt_a',
              u'projekt_b',
+             u'projekt_laeaer',
              u'committee_rpk_group',
              u'committee_ver_group'],
             [term.value for term in

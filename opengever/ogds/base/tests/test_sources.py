@@ -947,21 +947,14 @@ class TestAllGroupsSource(IntegrationTestCase):
 
     def test_search_finds_only_enabled_org_units(self):
         result = self.source.search('projek')
-
-        self.assertEqual(2, len(result), 'Expect two result. Projey A and Projekt B')
-        self.assertEquals(['projekt_a', 'projekt_b'],
-                          [item.value for item in result])
-        self.assertEquals(['Projekt A', 'Projekt B'],
-                          [item.title for item in result])
+        self.assertEqual(3, len(result), 'Expected three results.')
+        self.assertEquals(['projekt_a', 'projekt_b', 'projekt_laeaer'], [item.value for item in result])
+        self.assertEquals(['Projekt A', 'Projekt B', u'Projekt L\xc3\xa4\xc3\xa4r'], [item.title for item in result])
 
         group = Group.query.get('projekt_b')
         group.active = False
-
         result = self.source.search('projek')
-
-        self.assertEqual(
-            1, len(result),
-            'Expect one result, Projekt A - Projekt B is disabled')
+        self.assertEqual(2, len(result), 'Expected two results.')
 
     def test_invalid_token_raises_lookup_error(self):
         with self.assertRaises(LookupError):
@@ -1002,35 +995,38 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
 class TestAllFilteredGroupsSource(TestAllGroupsSource):
 
     def setUp(self):
-        super(TestAllGroupsSource, self).setUp()
+        super(TestAllFilteredGroupsSource, self).setUp()
         self.source = AllFilteredGroupsSource(self.portal)
 
     def test_search_does_not_find_blacklisted_groups(self):
-        self.assertEqual(
-            [u'fa_users', u'fa_inbox_users', u'projekt_a', u'projekt_b',
-             u'committee_rpk_group', u'committee_ver_group'],
-            [term.value for term in self.source.search('')])
+        expected_groups = [
+            u'fa_users',
+            u'fa_inbox_users',
+            u'projekt_a',
+            u'projekt_b',
+            u'projekt_laeaer',
+            u'committee_rpk_group',
+            u'committee_ver_group',
+        ]
+        self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 
         # Whitelist no group explicitly
-        api.portal.set_registry_record('white_list_prefix',
-                                       u'^$',
-                                       ISharingConfiguration)
+        api.portal.set_registry_record('white_list_prefix', u'^$', ISharingConfiguration)
 
         # Blacklist all groups beginning with `fa_`
-        api.portal.set_registry_record('black_list_prefix',
-                                       u'^fa_',
-                                       ISharingConfiguration)
+        api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
-        self.assertEqual(
-            [u'projekt_a', u'projekt_b', u'committee_rpk_group',
-             u'committee_ver_group'],
-            [term.value for term in self.source.search('')])
+        expected_groups = [
+            u'projekt_a',
+            u'projekt_b',
+            u'projekt_laeaer',
+            u'committee_rpk_group',
+            u'committee_ver_group',
+        ]
+        self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 
         # Blacklist all groups
-        api.portal.set_registry_record('black_list_prefix',
-                                       u'^.',
-                                       ISharingConfiguration)
-
+        api.portal.set_registry_record('black_list_prefix', u'^.', ISharingConfiguration)
         self.assertEqual([], [term.value for term in self.source.search('')])
 
     def test_search_finds_whitelisted_org_groups(self):

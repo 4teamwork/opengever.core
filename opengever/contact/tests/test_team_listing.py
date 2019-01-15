@@ -27,44 +27,31 @@ class TestTeamListing(IntegrationTestCase):
 
     @browsing
     def test_lists_only_active_teams_by_default(self, browser):
-        self.login(self.regular_user, browser=browser)
+        self.login(self.regular_user, browser)
         browser.open(self.contactfolder, view='tabbedview_view-teams')
-
-        self.assertEquals(
-            [u'Projekt \xdcberbaung Dorfmatte', 'Sekretariat Abteilung XY'],
-            [team.get('Title') for team in
-             browser.css('.listing').first.dicts()])
+        expected_teams = [u'Projekt \xdcberbaung Dorfmatte', 'Sekretariat Abteilung Null', 'Sekretariat Abteilung XY']
+        self.assertEqual(expected_teams, [team.get('Title') for team in browser.css('.listing').first.dicts()])
 
         Team.get('1').active = False
         create_session().flush()
 
         browser.open(self.contactfolder, view='tabbedview_view-teams')
-        self.assertEquals(
-            ['Sekretariat Abteilung XY'],
-            [team.get('Title') for team in
-             browser.css('.listing').first.dicts()])
+        expected_teams = ['Sekretariat Abteilung Null', 'Sekretariat Abteilung XY']
+        self.assertEquals(expected_teams, [team.get('Title') for team in browser.css('.listing').first.dicts()])
 
     @browsing
     def test_lists_also_inactive_teams_with_all_filter(self, browser):
         Team.get('1').active = False
         create_session().flush()
 
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder, view='tabbedview_view-teams',
-                     data={'team_state_filter': 'filter_all'})
-
-        self.assertEquals(
-            [u'Projekt \xdcberbaung Dorfmatte', 'Sekretariat Abteilung XY'],
-            [team.get('Title') for team in
-             browser.css('.listing').first.dicts()])
+        self.login(self.regular_user, browser)
+        browser.open(self.contactfolder, view='tabbedview_view-teams', data={'team_state_filter': 'filter_all'})
+        expected_teams = [u'Projekt \xdcberbaung Dorfmatte', 'Sekretariat Abteilung Null', 'Sekretariat Abteilung XY']
+        self.assertEqual(expected_teams, [team.get('Title') for team in browser.css('.listing').first.dicts()])
 
     @browsing
     def test_filtering_on_title(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.contactfolder, view='tabbedview_view-teams',
-                     data={'searchable_text': 'abteilung',})
-
-        self.assertEquals(
-            [u'Sekretariat Abteilung XY'],
-            [team.get('Title') for team in
-             browser.css('.listing').first.dicts()])
+        self.login(self.regular_user, browser)
+        browser.open(self.contactfolder, view='tabbedview_view-teams', data={'searchable_text': 'abteilung'})
+        expected_teams = ['Sekretariat Abteilung Null', 'Sekretariat Abteilung XY']
+        self.assertEqual(expected_teams, [team.get('Title') for team in browser.css('.listing').first.dicts()])
