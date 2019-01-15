@@ -122,7 +122,7 @@ Bestätigungsmeldung:
 
 |img-dokumente-38|
 
-Zugelassene Dokumenttypen
+Unterstützte Anwendungen
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Der External Editor und der Office Connector unterstützen folgende Anwendungen.
@@ -148,13 +148,20 @@ MS Project                x
 
 MS OneNote                x
 
+
 MS Publisher              x
 
 
-Open office                          x
+MS Paint                  x
 
 
-Acrobat Pro, Reader       x          x
+Open / Liber Office                 x
+
+
+Nitro PDF                 x
+
+
+Acrobat Pro, Reader       x         x
 
 
 Adobe InDesign            x
@@ -184,6 +191,7 @@ Apple Keynote                        x
 Apple Pages                          x
 
 ====================== ========= =========
+
 
 Die Bearbeitung von Adobe Grafikdateien (Photoshop, Illustrator,
 InDesign) mit dem External Editor funktioniert zwar, wird aber nicht
