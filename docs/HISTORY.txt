@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Bump ftw.structlog to get new client_ip field and referrer logging fixes. [lgraf]
 - Skip sablon template validation during setup of development system. [njohner]
 - Include portal_type in @favorites endpoint response. [lgraf]
 - Supply date format locale settings for fr-ch. [lgraf]
