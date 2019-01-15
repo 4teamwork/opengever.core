@@ -12,6 +12,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.sablontemplate import sablon_template_is_valid
+from opengever.setup.interfaces import IDuringSetup
 from plone import api
 from zc.relation.interfaces import ICatalog
 from zope.annotation.interfaces import IAnnotations
@@ -20,6 +21,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 from zope.intid.interfaces import IIntIds
+import os
 
 
 def document_deleted(context, event):
@@ -127,6 +129,10 @@ def configure_committee_container_portlets(container, event):
 
 
 def validate_template_file(obj, event):
+    # skip validation during setup of development system. This allows to setup
+    # in development mode without the need of a working sablon installation.
+    if IDuringSetup.providedBy(getRequest()) and os.environ.get('IS_DEVELOPMENT_MODE', False):
+        return
     if obj.file is not None:
         IAnnotations(obj)[
             'opengever.meeting.sablon_template_is_valid'
