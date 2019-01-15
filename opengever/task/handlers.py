@@ -3,6 +3,7 @@ from datetime import date
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
+from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.inbox.activities import ForwardingAddedActivity
@@ -18,6 +19,16 @@ from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggeri
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone import api
 from zope.globalrequest import getRequest
+
+
+def delete_copied_task(copied_task, event):
+    """Prevent tasks from being copied.
+
+    This deletes the task from the copied subtree (a ZEXP) before the subtree
+    gets inserted into the destination location.
+    """
+    with elevated_privileges():
+        api.content.delete(copied_task)
 
 
 def create_subtask_response(context, event):

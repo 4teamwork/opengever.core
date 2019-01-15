@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Prevent tasks from being copied. [lgraf]
 - ResolveOGUIDView: Preserve query string. [lgraf]
 - Bump docxcompose to 1.0.0a16 to fix updating docproperties. [deiferni]
 - Remove deprecated docprops from templates and tests. [njohner]

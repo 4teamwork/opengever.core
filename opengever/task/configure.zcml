@@ -148,6 +148,12 @@
       handler=".handlers.set_initial_state"
       />
 
+  <subscriber
+      for="opengever.task.task.ITask
+           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
+      handler=".handlers.delete_copied_task"
+      />
+
   <adapter
       factory=".indexers.date_of_completion"
       name="date_of_completion"
