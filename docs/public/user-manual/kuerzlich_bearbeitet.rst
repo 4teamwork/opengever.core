@@ -1,3 +1,5 @@
+.. _label-kuerzlich-bearbeitet:
+
 Kürzlich bearbeitete Dokumente
 ==============================
 
