@@ -4,6 +4,29 @@ from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 
 
+class TestDocumentSerializer(IntegrationTestCase):
+
+    @browsing
+    def test_document_serialization_contains_preview_url(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'preview_url')[:124],
+            u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
+            u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
+
+    @browsing
+    def test_document_serialization_contains_thumbnail_url(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'thumbnail_url')[:126],
+            u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
+            u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/thumbnail')
+
+
 class TestDocumentPatch(IntegrationTestCase):
 
     def setUp(self):

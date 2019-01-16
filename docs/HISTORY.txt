@@ -43,6 +43,7 @@ Changelog
 - Render document descriptions as intelligent text on the Bumblebee overlay. [Rotonen]
 - Render document descriptions as intelligent text on the document overview. [Rotonen]
 - Remove the now-unnecessary js files from the favorites template. [Rotonen]
+- Include preview URL and thumbnail URL in document serialization. [buchi]
 
 
 2018.5.7 (2019-01-08)
