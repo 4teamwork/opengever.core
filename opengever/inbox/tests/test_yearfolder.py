@@ -83,4 +83,4 @@ class TestYearFolderStorer(FunctionalTestCase):
 
         with TemporaryDocFile(doc.file) as tmpfile:
             properties = dict(read_properties(tmpfile.path))
-            self.assertItemsEqual(TEST_USER_ID, properties.get('User.ID'))
+            self.assertEqual(TEST_USER_ID, properties.get('ogg.user.userid'))

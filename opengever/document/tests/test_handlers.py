@@ -60,7 +60,7 @@ class TestHandlers(FunctionalTestCase):
 
     def set_document_property_referencenumber(self):
         DocPropertyWriter(self.doc_with_gever_properties).write_properties(
-            False, {'Dossier.ReferenceNumber': 'ClientXY / 42'})
+            False, {'ogg.dossier.reference_number': 'ClientXY / 42'})
 
     def test_document_checkout_updates_doc_properties(self):
         self.set_document_property_referencenumber()
