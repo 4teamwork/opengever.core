@@ -5,10 +5,14 @@ from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.task.task import ITask
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from plone import api
+from z3c.relationfield.relation import RelationValue
+from zope.component import getUtility
 from zope.event import notify
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 
 
@@ -40,6 +44,25 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.assertEquals(
             ('Editor', ),
             self.task.get_local_roles_for_userid(self.regular_user.id))
+
+    def test_relate_to_proposal_document_grants_permissions_on_proposal(self):
+        self.login(self.regular_user)
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+
+        self.assertEquals(
+            ('Editor', 'Reader'),
+            self.proposaldocument.get_local_roles_for_userid(
+                self.regular_user.id))
+        self.assertEquals(
+            ('Editor', 'Reader'),
+            self.proposal.get_local_roles_for_userid(
+                self.regular_user.id),
+            "The proposal should have the same local roles as its document.")
 
     def test_responsible_has_reader_role_on_related_items_when_task_is_added(self):
         self.login(self.regular_user)
@@ -238,6 +261,42 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
         expected_oguids = [Oguid.for_object(task).id for task in (self.subtask, self.info_task, )]
         self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
+
+    @browsing
+    def test_closing_a_task_revokes_roles_on_proposal(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+        notify(ObjectModifiedEvent(self.task))
+
+        document_storage = RoleAssignmentManager(self.proposaldocument).storage
+        self.assertEquals(
+            [{'cause': 1,
+              'roles': ['Reader', 'Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': self.regular_user.id}],
+            document_storage._storage())
+
+        proposal_storage = RoleAssignmentManager(self.proposal).storage
+        self.assertEquals(
+            [{'cause': 1,
+              'roles': ['Reader', 'Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': self.regular_user.id}],
+            proposal_storage._storage())
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+        notify(ObjectModifiedEvent(self.task))
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        self.assertEquals([], proposal_storage._storage())
+        self.assertEquals([], document_storage._storage())
 
     @browsing
     def test_closing_a_task_revokes_responsible_roles_on_distinct_parent(self, browser):

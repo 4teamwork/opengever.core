@@ -68,6 +68,7 @@ Changelog
 
 - Fix task revoking permissions on close/reassign. [phgross]
 - Fix an issue with missing zip after concurrent demand callback requests. [deiferni]
+- Fix an issue with task permissions and proposal visibility. [deiferni]
 
 
 2018.5.4 (2018-12-06)
