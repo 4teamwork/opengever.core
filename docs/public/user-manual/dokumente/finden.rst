@@ -2,9 +2,9 @@ Ausgecheckte Dokumente finden
 =============================
 
 Wenn Sie OneGov GEVER über "GEVER verlassen" beenden, wird Ihnen
-untenstehende Meldung angezeigt, falls Sie noch ausgecheckte
-Dokumente haben. Durch Anwählen des Dokumententitels werden
-Sie direkt zum entsprechenden Dokument geleitet.
+untenstehende Meldung angezeigt, falls Sie noch :ref:`ausgecheckte
+Dokumente <label-kuerzlich-bearbeitet>` haben. Durch Anwählen des
+Dokumententitels werden Sie direkt zum entsprechenden Dokument geleitet.
 
 Mit der erweiterten Suche
 ~~~~~~~~~~~~~~~~~~~~~~~~~
