@@ -1,3 +1,4 @@
+from ftw import bumblebee
 from opengever.base.interfaces import IReferenceNumber
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -20,6 +21,12 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         ref_num = IReferenceNumber(self.context)
         result[u'reference_number'] = ref_num.get_number()
+
+        bumblebee_service = bumblebee.get_service_v3()
+        result[u'thumbnail_url'] = bumblebee_service.get_representation_url(
+            self.context, 'thumbnail')
+        result[u'preview_url'] = bumblebee_service.get_representation_url(
+            self.context, 'preview')
 
         return result
 
