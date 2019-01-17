@@ -1,0 +1,38 @@
+<tal:block tal:condition="not: view/result_items">
+    <fieldset class="livesearchContainer solr">
+        <legend id="livesearchLegend" tal:content="view/legend"></legend>
+        <div class="LSIEFix">
+            <ul class=dropdown-list>
+                <li id="LSNothingFound" class="dropdown-list-item" tal:content="view/nothing_found"></li>
+            </ul>
+            <div class="dropdown-list-footer LSRow">
+                <a tal:attributes="href view/advanced_search_url" class="dropdown-list-item" tal:content="view/advanced_search_label"></a>
+            </div>
+        </div>
+    </fieldset>
+</tal:block>
+
+<tal:block tal:condition="view/result_items">
+    <fieldset class="livesearchContainer solr">
+        <legend id="livesearchLegend" tal:content="view/legend"></legend>
+        <div class="LSIEFix">
+            <ul class="dropdown-list LSTable">
+                <tal:repeat tal:repeat="item view/result_items">
+                    <a tal:attributes="href item/url; title item/title" class="dropdown-list-item LSRow">
+                        <span tal:attributes="class item/css_klass"/>
+                        <span class="dropdown-list-item-content">
+                            <div class="LSTitle" tal:content="item/title"></div>
+                            <div class="LSDescr" tal:content="item/description"></div>
+                        </span>
+                    </a>
+                </tal:repeat>
+            </ul>
+            <div class="dropdown-list-footer LSRow">
+                <a tal:attributes="href view/advanced_search_url" class="dropdown-list-item" tal:content="view/advanced_search_label"></a>
+                <tal:block tal:condition="view/show_more">
+                    <a tal:attributes="href view/show_more/url" class="dropdown-list-item LSRow" tal:content="view/show_more/title"></a>
+                </tal:block>
+            </div>
+        </div>
+    </fieldset>
+</tal:block>

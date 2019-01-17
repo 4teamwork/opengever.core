@@ -1,4 +1,4 @@
-# Copied over from skins/livesearch_reply.py
+# Adapted from skins/livesearch_reply.py
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from ftw.solr.query import make_query
@@ -9,7 +9,7 @@ from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.utils import normalizeString
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
-from Products.PythonScripts.standard import html_quote
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.PythonScripts.standard import url_quote_plus
 from zope.component import getUtility
 
@@ -37,6 +37,8 @@ def get_mimetype_icon_klass(item):
 
 class LiveSearchReplyView(BrowserView):
 
+    template = ViewPageTemplateFile('templates/livesearch.pt')
+
     def __call__(self):
         self.search_term = self.request.form.get('q', None)
         if not isinstance(self.search_term, unicode):
@@ -60,7 +62,6 @@ class LiveSearchReplyView(BrowserView):
             'fl': [
                 'UID', 'id', 'Title', 'getIcon', 'portal_type', 'path', 'Description'
             ],
-
         }
 
         resp = solr.search(
@@ -68,11 +69,6 @@ class LiveSearchReplyView(BrowserView):
         return resp
 
     def render_results(self, resp):
-        output = []
-
-        def write(s):
-            output.append(safe_unicode(s))
-
         ts = getToolByName(self.context, 'translation_service')
         portal_url = getToolByName(self.context, 'portal_url')()
         portalProperties = getToolByName(self.context, 'portal_properties')
@@ -82,65 +78,37 @@ class LiveSearchReplyView(BrowserView):
             useViewAction = siteProperties.getProperty('typesUseViewActionInListings', [])
 
         results = OGSolrContentListing(resp)
-        if not results:
-            write('''<fieldset class="livesearchContainer">''')
-            write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=self.request))
-            write('''<div class="LSIEFix">''')
-            write('''<ul class=dropdown-list>''')
-            write('''<li id="LSNothingFound" class="dropdown-list-item">%s</li></ul>'''
-                  % ts.translate(label_no_results_found, context=self.request))
+        self.result_items = []
+        self.show_more = {}
 
-            write('''<div class="dropdown-list-footer LSRow">''')
-            write('<a href="%s" class="dropdown-list-item">%s</a>' %
-                  (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
-                   ts.translate(label_advanced_search, context=self.request)))
-            write('''</div>''')
-            write('''</div>''')
-            write('''</fieldset>''')
-        else:
-            write('''<fieldset class="livesearchContainer">''')
-            write('''<legend id="livesearchLegend">%s</legend>''' % ts.translate(legend_livesearch, context=self.request))
-            write('''<div class="LSIEFix">''')
-            write('''<ul class="dropdown-list LSTable">''')
-            for result in results:
+        self.legend = ts.translate(legend_livesearch, context=self.request)
+        self.nothing_found = ts.translate(label_no_results_found, context=self.request)
+        self.advanced_search_url = portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term)
+        self.advanced_search_label = ts.translate(label_advanced_search, context=self.request)
 
-                itemUrl = result.getURL()
-                if result.portal_type in useViewAction:
-                    itemUrl += '/view'
+        for result in results:
+            item_url = result.getURL()
+            if result.portal_type in useViewAction:
+                item_url += '/view'
 
-                itemUrl = itemUrl + u'?SearchableText=%s' % url_quote_plus(self.search_term)
+            item_url = item_url + u'?SearchableText=%s' % url_quote_plus(self.search_term)
+            title = safe_unicode(result.Title())
+            css_klass = get_mimetype_icon_klass(result.doc)
+            description = safe_unicode(result.Description()) or u''
 
-                title = html_quote(safe_unicode(result.Title()))
+            self.result_items.append({'url': item_url,
+                                      'title': title,
+                                      'css_klass': css_klass,
+                                      'description': description})
 
-                css_klass = get_mimetype_icon_klass(result.doc)
+        if results.actual_result_count > self.limit:
+            # add a more... row
+            searchquery = u'@@search?SearchableText=%s&path=%s' % (url_quote_plus(self.search_term), self.path)
+            title = ts.translate(label_show_all, context=self.request)
+            self.show_more = {'url': searchquery,
+                              'title': title}
 
-                write('''<a href="%s" title="%s" class="dropdown-list-item LSRow">''' % (itemUrl, title))
-                write('''<span class="%s"/><span class="dropdown-list-item-content">''' % (css_klass))
-                write('''<div class="LSTitle">%s</div>''' % (title))
-
-                description = html_quote(safe_unicode(result.Description()) or u'')
-
-                write('''<div class="LSDescr">%s</div>''' % (description))
-                write('''</span></a>''')
-                title, description = None, None
-            write('''</ul>''')
-
-            write('''<div class="dropdown-list-footer LSRow">''')
-            write('<a href="%s" class="dropdown-list-item">%s</a>' %
-                  (portal_url + '/advanced_search?SearchableText=%s' % url_quote_plus(self.search_term),
-                   ts.translate(label_advanced_search, context=self.request)))
-
-            if resp.num_found > self.limit:
-                # add a more... row
-                searchquery = u'@@search?SearchableText=%s&path=%s' % (url_quote_plus(self.search_term), self.path)
-                write(u'<a href="%s" class="dropdown-list-item LSRow">%s</a>' % (
-                                     searchquery,
-                                     ts.translate(label_show_all, context=self.request)))
-
-            write('''</div>''')
-            write('''</div>''')
-            write('''</fieldset>''')
-        return '\n'.join(output).encode('utf-8')
+        return self.template()
 
 
 legend_livesearch = pmf(
