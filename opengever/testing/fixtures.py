@@ -934,11 +934,12 @@ class OpengeverContentFixture(object):
             .within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
             .having(
-                document_date=datetime(2010, 1, 3),
+                delivery_date=datetime(2010, 1, 3),
+                description=u'Wichtige Vertr\xe4ge',
                 document_author=TEST_USER_ID,
+                document_date=datetime(2010, 1, 3),
                 document_type='contract',
                 receipt_date=datetime(2010, 1, 3),
-                delivery_date=datetime(2010, 1, 3),
                 )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
