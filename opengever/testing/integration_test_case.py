@@ -700,3 +700,6 @@ class IntegrationTestCase(TestCase):
     def trash_documents(self, *objects):
         for obj in objects:
             Trasher(obj).trash()
+
+    def assert_provides(self, obj, interface=None):
+        self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
