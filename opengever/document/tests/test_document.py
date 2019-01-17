@@ -41,30 +41,30 @@ import mimetypes
 import transaction
 
 
-class TestDocumentConfiguration(FunctionalTestCase):
+class TestDocumentConfiguration(IntegrationTestCase):
 
     def test_documents_provide_IDocumentSchema(self):
-        document = create(Builder("document"))
-        self.assertProvides(document, interface=IDocumentSchema)
+        self.login(self.regular_user)
+        self.assert_provides(self.document, interface=IDocumentSchema)
 
     def test_documents_provide_IBaseDocument(self):
-        document = create(Builder("document"))
-        self.assertProvides(document, interface=IBaseDocument)
+        self.login(self.regular_user)
+        self.assert_provides(self.document, interface=IBaseDocument)
 
     def test_fti(self):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
-        self.assertNotEquals(None, fti)
+        self.assertNotEqual(None, fti)
 
     def test_schema(self):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
         schema = fti.lookupSchema()
-        self.assertEquals(IDocumentSchema, schema)
+        self.assertEqual(IDocumentSchema, schema)
 
     def test_factory(self):
         fti = queryUtility(IDexterityFTI, name='opengever.document.document')
         factory = fti.factory
         new_object = createObject(factory)
-        self.assertProvides(new_object, interface=IDocumentSchema)
+        self.assert_provides(new_object, interface=IDocumentSchema)
 
 
 class TestDocument(FunctionalTestCase):
