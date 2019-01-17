@@ -4,6 +4,8 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
+from urllib import urlencode
+from urlparse import parse_qsl
 from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.interface import implementer
@@ -18,6 +20,9 @@ class ResolveOGUIDView(BrowserView):
     GET paramater: /fd/resolve_oguid?oguid=fd:123
     Traversal based paramater: /fd/resolve_oguid/fd:123
     Specific view: /fd/resolve_oguid/fd:123/tooltip
+
+    Any query string parameters (in addition to a possible oguid) will
+    be preserved.
     """
 
     oguid_str = None
@@ -43,6 +48,25 @@ class ResolveOGUIDView(BrowserView):
         return "{}/@@resolve_oguid?oguid={}".format(admin_unit.public_url,
                                                     oguid)
 
+    @classmethod
+    def _extend_with_querystring(cls, url, qs):
+        """Given an URL and a querystring in the form 'key=value&foo=bar',
+        extend the URL with the QS, taking into account that it may already
+        contain one.
+        """
+        if url.endswith('?'):
+            return ''.join((url, qs))
+        return '?'.join((url, qs))
+
+    @classmethod
+    def _strip_oguid(cls, qs):
+        """Given a query string in the form 'key=value&foo=bar', remove any
+        'oguid' parameter from it if present.
+        """
+        # Preserve order as well as multivalued query string params
+        qs_params = qs_params = [(k, v) for k, v in parse_qsl(qs) if k != 'oguid']
+        return urlencode(qs_params)
+
     def _is_on_different_admin_unit(self, admin_unit_id):
         return admin_unit_id != get_current_admin_unit().id()
 
@@ -61,6 +85,12 @@ class ResolveOGUIDView(BrowserView):
             url = obj.absolute_url()
             if self.view_name:
                 url = '/'.join((url, self.view_name))
+
+        # Preserve query string
+        qs = self.request.get('QUERY_STRING')
+        qs = self._strip_oguid(qs)
+        if qs:
+            url = self._extend_with_querystring(url, qs)
 
         return self.request.RESPONSE.redirect(url)
 
