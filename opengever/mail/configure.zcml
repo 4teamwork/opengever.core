@@ -84,4 +84,10 @@
            zope.lifecycleevent.interfaces.IObjectCreatedEvent"
       handler=".mail.initialize_metadata"
       />
+
+  <subscriber
+      for="opengever.mail.mail.IOGMailMarker
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.resolve_mail_author"
+      />
 </configure>
