@@ -1,22 +1,14 @@
-from itertools import groupby
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
-from operator import itemgetter
 
 
 class RepositoryBasedTOC(AlphabeticalToc):
 
-    def sort_items(self, unordered_items):
-        return sorted(unordered_items,
-                      key=itemgetter('repository_folder_title',
-                                     'title',
-                                     'decision_number'))
+    @staticmethod
+    def group_by_key(item):
+        return item['repository_folder_title']
 
-    def group_items(self, sorted_items):
-        results = []
-        for repo_folder_title, contents in groupby(
-                    sorted_items, key=itemgetter('repository_folder_title')):
-            results.append({
-                'group_title': repo_folder_title,
-                'contents': list(contents)
-            })
-        return results
+    @staticmethod
+    def item_sort_key(item):
+        return (item['repository_folder_title'],
+                item['title'],
+                item['decision_number'])

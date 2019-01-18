@@ -4,27 +4,13 @@ from datetime import timedelta
 from itertools import groupby
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
+from opengever.meeting.toc.utils import first_title_char
 from opengever.meeting.utils import format_date
 from opengever.meeting.utils import JsonDataProcessor
-from operator import itemgetter
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.expression import false
 import pytz
-
-
-def first_title_char(value):
-    return value['title'][:1].upper()
-
-
-def group_by_sort_key(item):
-    return (first_title_char(item), item['decision_number'])
-
-
-def item_sort_key(item):
-    return (item['title'].lower(),
-            item['repository_folder_title'],
-            item['decision_number'])
 
 
 class AlphabeticalToc(object):
@@ -32,26 +18,36 @@ class AlphabeticalToc(object):
     def __init__(self, period):
         self.period = period
 
+    @staticmethod
+    def group_by_key(item):
+        return first_title_char(item)
+
+    @staticmethod
+    def item_sort_key(item):
+        return (item['title'].lower(),
+                item['repository_folder_title'],
+                item['decision_number'])
+
     def sort_items(self, unordered_items):
         """We currently sort on the client side since title can be either in
         the agenda_items table or in the proposals table.
         """
-        return sorted(unordered_items, key=group_by_sort_key)
+        return sorted(unordered_items, key=self.item_sort_key)
 
     def group_items(self, sorted_items):
         """Input items must be sorted since groupby depends on input order.
         """
         results = []
         for character, contents in groupby(sorted_items,
-                                           key=first_title_char):
+                                           key=self.group_by_key):
             results.append({
                 'group_title': character,
-                'contents': list(sorted(contents, key=item_sort_key))
+                'contents': list(contents)
             })
         return results
 
     def sort_groups(self, groups):
-        return sorted(groups, key=itemgetter('group_title'))
+        return groups
 
     def build_query(self):
         datetime_from = pytz.UTC.localize(
