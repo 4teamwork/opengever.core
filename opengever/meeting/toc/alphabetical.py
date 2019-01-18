@@ -31,7 +31,7 @@ class AlphabeticalToc(object):
                 item['decision_number'])
 
     @staticmethod
-    def group_key_to_title(group_key):
+    def get_group_title(group_key, contents):
         return group_key.upper()
 
     def sort_items(self, unordered_items):
@@ -46,9 +46,10 @@ class AlphabeticalToc(object):
         results = []
         for group_key, contents in groupby(sorted_items,
                                            key=self.group_by_key):
+            contents = list(contents)
             results.append({
-                'group_title': self.group_key_to_title(group_key),
-                'contents': list(contents)
+                'group_title': self.get_group_title(group_key, contents),
+                'contents': contents
             })
         return results
 

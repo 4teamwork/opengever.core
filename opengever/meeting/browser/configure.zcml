@@ -152,6 +152,22 @@
       />
 
   <browser:page
+      for="opengever.meeting.interfaces.IPeriodWrapper"
+      name="dossier_refnum_toc"
+      class=".toc.DownloadDossierReferenceNumberTOC"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IPeriodWrapper"
+      name="repository_refnum_toc"
+      class=".toc.DownloadRepositoryReferenceNumberTOC"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
+  <browser:page
       name="tabbedview_view-periods"
       for="opengever.meeting.committee.ICommittee"
       class=".periods.PeriodsTab"

@@ -21,7 +21,9 @@ class TestPathBar(IntegrationTestCase):
         self.assertEqual(
             '2016 (Jan 01, 2016 - Dec 31, 2016) '
             'download TOC alphabetical '
-            'download TOC by repository',
+            'download TOC by repository '
+            'download TOC by dossier reference number '
+            'download TOC by repository reference number',
             listing.text
             )
 
@@ -50,13 +52,16 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository',
+             'download TOC alphabetical download TOC by repository '
+             'download TOC by dossier reference number download TOC by repository reference number',
              'Edit'],
             ['2011 (Jan 01, 2011 - Dec 31, 2011)',
-             'download TOC alphabetical download TOC by repository',
+             'download TOC alphabetical download TOC by repository '
+             'download TOC by dossier reference number download TOC by repository reference number',
              'Edit'],
             ['2010 (Jan 01, 2010 - Dec 31, 2010)',
-             'download TOC alphabetical download TOC by repository',
+             'download TOC alphabetical download TOC by repository '
+             'download TOC by dossier reference number download TOC by repository reference number',
              'Edit']
         ], text_by_period)
 
@@ -117,7 +122,8 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository',
+             'download TOC alphabetical download TOC by repository '
+             'download TOC by dossier reference number download TOC by repository reference number',
              'Edit'],
         ], text_by_period)
 
@@ -127,9 +133,11 @@ class TestPeriod(IntegrationTestCase):
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
             ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'download TOC alphabetical download TOC by repository',
+             'download TOC alphabetical download TOC by repository '
+             'download TOC by dossier reference number download TOC by repository reference number',
              'Edit',
-             'download TOC json alphabetical download TOC json repository'],
+             'download TOC json alphabetical download TOC json repository '
+             'download TOC json by dossier reference number download TOC json by repository reference number'],
         ], text_by_period)
 
     @browsing
@@ -140,7 +148,7 @@ class TestPeriod(IntegrationTestCase):
         button = browser.find('download TOC json alphabetical')
 
         period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee),'alphabetical_toc/as_json')
+        expected_url = os.path.join(period.get_url(self.committee), 'alphabetical_toc/as_json')
         self.assertEqual(expected_url, button.get("href"))
 
         button.click()
@@ -162,11 +170,59 @@ class TestPeriod(IntegrationTestCase):
         button = browser.find('download TOC json repository')
 
         period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee),'repository_toc/as_json')
+        expected_url = os.path.join(period.get_url(self.committee), 'repository_toc/as_json')
         self.assertEqual(expected_url, button.get("href"))
 
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Vertr\xe4ge und Vereinbarungen',
+                                 u'contents': [{u'decision_number': 1,
+                                                u'dossier_reference_number': u'Client1 1.1 / 1',
+                                                u'has_proposal': True,
+                                                u'meeting_date': u'17.07.2016',
+                                                u'meeting_start_page_number': None,
+                                                u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                 }]}
+
+        self.assertEqual(toc_content, browser.json)
+
+    @browsing
+    def test_toc_json_dossier_reference_number_button(self, browser):
+        self.login(self.manager, browser)
+        browser.open(self.committee, view='tabbedview_view-periods')
+        button = browser.find('download TOC json by dossier reference number')
+
+        period = self.committee.load_model().periods[0]
+        expected_url = os.path.join(period.get_url(self.committee), 'dossier_refnum_toc/as_json')
+        self.assertEqual(expected_url, button.get("href"))
+
+        button.click()
+        toc_content = {u'toc': [{u'group_title': u'Client1 1.1 / 1',
+                                 u'contents': [{u'decision_number': 1,
+                                                u'dossier_reference_number': u'Client1 1.1 / 1',
+                                                u'has_proposal': True,
+                                                u'meeting_date': u'17.07.2016',
+                                                u'meeting_start_page_number': None,
+                                                u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                 }]}
+
+        self.assertEqual(toc_content, browser.json)
+
+    @browsing
+    def test_toc_json_repository_reference_number_button(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.committee, view='tabbedview_view-periods')
+        button = browser.find('download TOC json by repository reference number')
+
+        period = self.committee.load_model().periods[0]
+        expected_url = os.path.join(period.get_url(self.committee), 'repository_refnum_toc/as_json')
+        self.assertEqual(expected_url, button.get("href"))
+
+        button.click()
+
+        toc_content = {u'toc': [{u'group_title': u'Client1 1.1',
                                  u'contents': [{u'decision_number': 1,
                                                 u'dossier_reference_number': u'Client1 1.1 / 1',
                                                 u'has_proposal': True,

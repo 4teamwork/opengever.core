@@ -21,6 +21,20 @@
             download TOC by repository
           </a>
         </li>
+        <li>
+          <a class="download_toc"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/dossier_refnum_toc"
+             i18n:translate="label_download_dossier_refnum_toc">
+            download TOC by dossier reference number
+          </a>
+        </li>
+        <li>
+          <a class="download_toc"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_refnum_toc"
+             i18n:translate="label_download_repository_refnum_toc">
+            download TOC by repository reference number
+          </a>
+        </li>
       </ul>
       <ul class="actions" tal:condition="view/is_editable_by_current_user">
         <li>
@@ -44,6 +58,20 @@
              tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_toc/as_json"
              i18n:translate="label_download_repository_toc_json">
             download TOC json repository
+          </a>
+        </li>
+        <li>
+          <a class="download_toc_json"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/dossier_refnum_toc/as_json"
+             i18n:translate="label_download_dossier_refnum_toc_json">
+            download TOC json by dossier reference number
+          </a>
+        </li>
+        <li>
+          <a class="download_toc_json"
+             tal:attributes="href string:${context/absolute_url}/${period/wrapper_id}/repository_refnum_toc/as_json"
+             i18n:translate="label_download_repository_refnum_toc_json">
+            download TOC json by repository reference number
           </a>
         </li>
       </ul>

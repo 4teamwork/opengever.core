@@ -17,5 +17,5 @@ class RepositoryBasedTOC(AlphabeticalToc):
                 item['decision_number'])
 
     @staticmethod
-    def group_key_to_title(group_key):
+    def get_group_title(group_key, contents):
         return group_key
