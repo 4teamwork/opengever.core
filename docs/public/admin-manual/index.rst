@@ -25,5 +25,6 @@ Power-User und Administratoren von OneGov GEVER.
    meeting/index.rst
    teams.rst
    ogg-bundle.rst
+   os-export.rst
 
 * :ref:`genindex`
