@@ -13,6 +13,7 @@ from opengever.task.interfaces import IYearfolderStorer
 from opengever.task.task import ITask
 from opengever.task.transition import DefaultTransitionExtender
 from opengever.task.transition import IResponse
+from opengever.task.transition import ReassignTransitionExtender
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import add_simple_response
 from plone.dexterity.utils import createContentInContainer
@@ -115,3 +116,9 @@ class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExt
             intids_mapping=intids_mapping)
 
         return task
+
+
+@implementer(ITransitionExtender)
+@adapter(IForwarding)
+class ForwardingReassignTransitionExtender(ReassignTransitionExtender):
+    """Transition extender for forwarding reassign transition."""

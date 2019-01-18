@@ -81,4 +81,9 @@
       name="forwarding-transition-assign-to-dossier"
       />
 
+  <adapter
+      factory=".transition.ForwardingReassignTransitionExtender"
+      name="forwarding-transition-reassign"
+      />
+
 </configure>

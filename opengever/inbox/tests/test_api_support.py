@@ -84,3 +84,32 @@ class TestAPITransitions(IntegrationTestCase):
         self.assertEqual(FORWARDING_SUCCESSOR_TYPE, task.task_type)
         self.assertEqual('inbox:fa', task.issuer)
         self.assertEqual(u'F\xf6rw\xe4rding', task.title)
+
+    @browsing
+    def test_reassign_forwarding(self, browser):
+        self.login(self.administrator, browser=browser)
+        url = '{}/@workflow/forwarding-transition-reassign'.format(
+            self.inbox_forwarding.absolute_url())
+
+        # missing responsible
+        data = {'text': 'Wird gemacht.'}
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
+
+        # working
+        data = {'text': 'Robert macht das.',
+                'responsible': self.dossier_responsible.id,
+                'responsible_client': u'fa'}
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(self.dossier_responsible.id,
+                         self.inbox_forwarding.responsible)
+        self.assertEqual('forwarding-state-open',
+                         api.content.get_state(self.inbox_forwarding))
+
+        response = IResponseContainer(self.inbox_forwarding)[-1]
+        self.assertEqual(u'Robert macht das.', response.text)
+        self.assertEqual('task-transition-reassign', response.transition)
