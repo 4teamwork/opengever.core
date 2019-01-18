@@ -410,7 +410,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
     download_button_label = 'download TOC by repository'
 
     expected_toc_json = {'toc': [{
-        'group_title': None,
+        'group_title': u'Ad hoc agendaitems',
         'contents': [{
                 'title': u'Nahhh not here either',
                 'dossier_reference_number': None,
