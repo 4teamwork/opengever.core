@@ -10,12 +10,57 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.meeting.toc.repository import RepositoryBasedTOC
+from opengever.meeting.toc.utils import first_title_char
+from opengever.meeting.toc.utils import normalise_string
 from opengever.testing import FunctionalTestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import pytz
 import transaction
+import unittest
+
+
+class TestFirstTitleChar(unittest.TestCase):
+
+    def test_returns_the_first_character_of_title_key(self):
+        item = {"title": u"test title", "other": u"another one"}
+        self.assertEqual(first_title_char(item), u"t")
+
+    def test_supports_plain_string(self):
+        item = {"title": "test title"}
+        self.assertEqual(first_title_char(item), u"t")
+
+    def test_returns_lower_case(self):
+        item = {"title": u'A test'}
+        self.assertEqual(first_title_char(item), u'a')
+
+    def test_umlauts_removed(self):
+        item = {"title": u'\xe4'}
+        self.assertEqual(first_title_char(item), u'a')
+
+
+class TestNormaliseString(unittest.TestCase):
+
+    def test_supports_empty_string(self):
+        string = None
+        self.assertEqual(normalise_string(string), None)
+
+    def test_supports_plain_string(self):
+        string = "test"
+        self.assertEqual(normalise_string(string), u"test")
+
+    def test_returns_lower_case(self):
+        string = u'A tEst'
+        self.assertEqual(normalise_string(string), u'a test')
+
+    def test_removes_umlauts(self):
+        string = u'\xe4'
+        self.assertEqual(normalise_string(string), u'a')
+
+    def test_supports_decomposed_unicode(self):
+        string = u'a\u0308'
+        self.assertEqual(normalise_string(string), u'a')
 
 
 class TestAlphabeticalTOC(FunctionalTestCase):
@@ -32,6 +77,22 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         'group_title': u'A',
         'contents': [
             {
+                'title': u'aa proposal',
+                'dossier_reference_number': '1.1.4 / 1',
+                'repository_folder_title': u'\xc4 Business',
+                'meeting_date': u'01.01.2010',
+                'decision_number': 8,
+                'has_proposal': True,
+                'meeting_start_page_number': 33,
+                }, {
+                'title': u'\xc4a proposal',
+                'dossier_reference_number': '1.1.4 / 2',
+                'repository_folder_title': u'\xc4 Business',
+                'meeting_date': u'01.01.2010',
+                'decision_number': 3,
+                'has_proposal': True,
+                'meeting_start_page_number': 33,
+                }, {
                 'title': u'Anything goes',
                 'dossier_reference_number': '3.1.4 / 77',
                 'repository_folder_title': 'Other Stuff',
@@ -66,31 +127,19 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             {
                 'title': u'proposal 1',
                 'dossier_reference_number': u'1.1.4 / 1',
-                'repository_folder_title': u'Business',
+                'repository_folder_title': u'\xc4 Business',
                 'meeting_date': '01.01.2010',
                 'decision_number': 2,
                 'has_proposal': True,
                 'meeting_start_page_number': 33,
                 }, {
                 'title': u'Proposal 3',
-                'dossier_reference_number': '2.1.4 / 1',
-                'repository_folder_title': 'Stuff',
+                'dossier_reference_number': '10.1.4 / 1',
+                'repository_folder_title': 'A Business',
                 'meeting_date': u'31.12.2010',
                 'decision_number': 4,
                 'has_proposal': True,
                 'meeting_start_page_number': 129,
-            }]
-        }, {
-        'group_title': u'\xdc',
-        'contents': [
-            {
-                'title': u'\xdchhh',
-                'dossier_reference_number': '1.1.4 / 2',
-                'repository_folder_title': 'Business',
-                'meeting_date': u'01.01.2010',
-                'decision_number': 3,
-                'has_proposal': True,
-                'meeting_start_page_number': 33,
             }]
         }]
     }
@@ -131,19 +180,24 @@ class TestAlphabeticalTOC(FunctionalTestCase):
 
         proposal1_1 = create(Builder('submitted_proposal').having(
             title=u'proposal 1',
-            repository_folder_title='Business',
+            repository_folder_title=u'\xc4 Business',
             dossier_reference_number='1.1.4 / 1',
             int_id=1).within(self.committee))
         proposal1_2 = create(Builder('submitted_proposal').having(
-            title=u'\xdchhh',
-            repository_folder_title='Business',
+            title=u'\xc4a proposal',
+            repository_folder_title=u'\xc4 Business',
             dossier_reference_number='1.1.4 / 2',
             int_id=2).within(self.committee))
+        proposal1_3 = create(Builder('submitted_proposal').having(
+            title=u'aa proposal',
+            repository_folder_title=u'\xc4 Business',
+            dossier_reference_number='1.1.4 / 1',
+            int_id=5).within(self.committee))
 
         proposal2_1 = create(Builder('submitted_proposal').having(
             title=u'Proposal 3',
-            repository_folder_title='Stuff',
-            dossier_reference_number='2.1.4 / 1',
+            repository_folder_title='A Business',
+            dossier_reference_number='10.1.4 / 1',
             int_id=3).within(self.committee))
         proposal2_2 = create(Builder('submitted_proposal').having(
             title=u'Anything goes',
@@ -166,6 +220,11 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             meeting=self.meeting1,
             proposal=proposal1_2,
             decision_number=3,
+            ))
+        create(Builder('agenda_item').having(
+            meeting=self.meeting1,
+            proposal=proposal1_3,
+            decision_number=8,
             ))
         create(Builder('agenda_item').having(
             meeting=self.meeting2,
@@ -297,21 +356,40 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                 'meeting_start_page_number': 129,
             }]
         }, {
-            'group_title': u'Business',
+            'group_title': u'A Business',
             'contents': [{
-                'title': u'proposal 1',
-                'dossier_reference_number': u'1.1.4 / 1',
-                'repository_folder_title': u'Business',
-                'meeting_date': '01.01.2010',
-                'decision_number': 2,
+                'title': u'Proposal 3',
+                'dossier_reference_number': '10.1.4 / 1',
+                'repository_folder_title': 'A Business',
+                'meeting_date': u'31.12.2010',
+                'decision_number': 4,
+                'has_proposal': True,
+                'meeting_start_page_number': 129,
+            }]
+        }, {
+            'group_title': u'\xc4 Business',
+            'contents': [{
+                'title': u'aa proposal',
+                'dossier_reference_number': '1.1.4 / 1',
+                'repository_folder_title': u'\xc4 Business',
+                'meeting_date': u'01.01.2010',
+                'decision_number': 8,
                 'has_proposal': True,
                 'meeting_start_page_number': 33,
             }, {
-                'title': u'\xdchhh',
+                'title': u'\xc4a proposal',
                 'dossier_reference_number': '1.1.4 / 2',
-                'repository_folder_title': 'Business',
+                'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
                 'decision_number': 3,
+                'has_proposal': True,
+                'meeting_start_page_number': 33,
+            }, {
+                'title': u'proposal 1',
+                'dossier_reference_number': u'1.1.4 / 1',
+                'repository_folder_title': u'\xc4 Business',
+                'meeting_date': '01.01.2010',
+                'decision_number': 2,
                 'has_proposal': True,
                 'meeting_start_page_number': 33,
             }]
@@ -326,23 +404,5 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                 'has_proposal': True,
                 'meeting_start_page_number': 129,
             }]
-        }, {
-            'group_title': u'Stuff',
-            'contents': [{
-                'title': u'Proposal 3',
-                'dossier_reference_number': '2.1.4 / 1',
-                'repository_folder_title': 'Stuff',
-                'meeting_date': u'31.12.2010',
-                'decision_number': 4,
-                'has_proposal': True,
-                'meeting_start_page_number': 129,
-            }]
-        }
-    ]}
-
-
-
-
-
-
-
+        }]
+    }

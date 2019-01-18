@@ -5,6 +5,7 @@ from itertools import groupby
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Meeting
 from opengever.meeting.toc.utils import first_title_char
+from opengever.meeting.toc.utils import normalise_string
 from opengever.meeting.utils import format_date
 from opengever.meeting.utils import JsonDataProcessor
 from sqlalchemy.orm import contains_eager
@@ -24,9 +25,14 @@ class AlphabeticalToc(object):
 
     @staticmethod
     def item_sort_key(item):
-        return (item['title'].lower(),
-                item['repository_folder_title'],
+        return (normalise_string(item['title']),
+                item['title'],
+                normalise_string(item['repository_folder_title']),
                 item['decision_number'])
+
+    @staticmethod
+    def group_key_to_title(group_key):
+        return group_key.upper()
 
     def sort_items(self, unordered_items):
         """We currently sort on the client side since title can be either in
@@ -38,10 +44,10 @@ class AlphabeticalToc(object):
         """Input items must be sorted since groupby depends on input order.
         """
         results = []
-        for character, contents in groupby(sorted_items,
+        for group_key, contents in groupby(sorted_items,
                                            key=self.group_by_key):
             results.append({
-                'group_title': character,
+                'group_title': self.group_key_to_title(group_key),
                 'contents': list(contents)
             })
         return results
