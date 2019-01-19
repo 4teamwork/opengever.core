@@ -588,6 +588,7 @@ Objects
           - self.subdossier
             - self.subdocument
             - self.subsubdossier
+              - self.subsubdocument
           - self.subdossier2
           - self.task
             - self.subtask

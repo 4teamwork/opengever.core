@@ -82,7 +82,7 @@ class TestProposal(IntegrationTestCase):
         original_template = ('orig_template', '#'.join((self.dossier.absolute_url(), 'documents')), )
         authenticator = ('_authenticator', createToken(), )
         document_12_path = ('paths:list', browser.css('#document-12').first.node.attrib.get('value'), )
-        document_30_path = ('paths:list', browser.css('#document-30').first.node.attrib.get('value'), )
+        document_30_path = ('paths:list', browser.css('#document-31').first.node.attrib.get('value'), )
         method = ('++add++opengever.meeting.proposal:method', '1', )
         browser.open(
             self.dossier.absolute_url(),

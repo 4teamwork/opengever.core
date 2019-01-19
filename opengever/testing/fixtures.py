@@ -1028,14 +1028,24 @@ class OpengeverContentFixture(object):
                 )
             ))
 
-        self.register('subsubdossier', create(
+        subsubdossier = self.register('subsubdossier', create(
             Builder('dossier')
             .within(subdossier)
             .titled(u'Subsubdossier')
             .having(
                 keywords=(u'Subsubkeyword', u'Subsubkeyw\xf6rd'),
-                )
-            ))
+            )
+        ))
+
+        self.register('subsubdocument', create(
+            Builder('document')
+            .within(subsubdossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge von 2014')
+            .attach_file_containing(
+                'Excel dummy content',
+                u'tab\xe4lle neu.xlsx',
+            )
+        ))
 
         self.register('empty_document', create(
             Builder('document')

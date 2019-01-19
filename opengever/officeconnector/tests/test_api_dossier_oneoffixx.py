@@ -41,7 +41,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
         expected_payloads = [{
             u'connect-xml': u'@@oneoffix_connect_xml',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-33',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-34',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
             }]
