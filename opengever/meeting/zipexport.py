@@ -79,13 +79,13 @@ class MeetingDocumentZipper(MeetingTraverser):
 
     def traverse_agenda_item_document(self, document, agenda_item):
         self.generator.add_file(
-            self.get_agenda_item_filename(document, agenda_item.number),
+            self.get_agenda_item_filename(document, agenda_item.formatted_number),
             self.get_file(document).open()
         )
 
     def traverse_agenda_item_attachment(self, document, agenda_item):
         self.generator.add_file(
-            self.get_agenda_item_filename(document, agenda_item.number),
+            self.get_agenda_item_filename(document, agenda_item.formatted_number),
             self.get_file(document).open()
         )
 
@@ -167,10 +167,11 @@ class MeetingJSONSerializer(MeetingTraverser):
         self.current_agenda_item_data = None
 
     def traverse_agenda_item_document(self, document, agenda_item):
-        self.current_agenda_item_data['number'] = agenda_item.number
+        self.current_agenda_item_data['number'] = agenda_item.formatted_number
+        self.current_agenda_item_data['number_raw'] = agenda_item.item_number
         self.current_agenda_item_data['proposal'] = {
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': self.zipper.get_agenda_item_filename(document, agenda_item.number),
+            'file': self.zipper.get_agenda_item_filename(document, agenda_item.formatted_number),
             'modified': format_modified(document.modified()),
         }
 
@@ -180,7 +181,7 @@ class MeetingJSONSerializer(MeetingTraverser):
 
         attachment_data.append({
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': self.zipper.get_agenda_item_filename(document, agenda_item.number),
+            'file': self.zipper.get_agenda_item_filename(document, agenda_item.formatted_number),
             'modified': format_modified(document.modified()),
             'title': safe_unicode(document.Title()),
         })

@@ -373,6 +373,7 @@ class MeetingView(BrowserView):
                 _('label_excerpts', default='Excerpts'),
                 _('label_toggle_attachments', default='Toggle attachments'),
                 _('label_agenda_item_number', default='Agenda item number'),
+                _('label_agenda_item_number_raw', default='Agenda item number (unformatted)'),
                 _('label_decision_number', default=u'Decision number'),
                 _('label_agenda_item_decided', default='Decided'),
                 _('action_edit_document', default='Edit with word'),

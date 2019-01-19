@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-11 09:17+0000\n"
+"POT-Creation-Date: 2018-12-17 15:41+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -777,6 +777,11 @@ msgstr "Modèle pour l'en-tête d'un point de l'ordre du jour dans le protocole"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number"
 msgstr "Numéro du point de l'ordre du jour dans cette séance"
+
+#. Default: "Agenda item number (unformatted)"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_number_raw"
+msgstr ""
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py

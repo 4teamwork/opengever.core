@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-11 09:17+0000\n"
+"POT-Creation-Date: 2018-12-17 15:41+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -775,6 +775,11 @@ msgstr "Kopfvorlage Traktandum in Protokoll"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number"
 msgstr "Nummer des Traktandums in dieser Sitzung"
+
+#. Default: "Agenda item number (unformatted)"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "label_agenda_item_number_raw"
+msgstr "Nummer des Traktandums in dieser Sitzung (unformattiert)"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py

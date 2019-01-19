@@ -71,7 +71,7 @@ class AgendaItem(Base):
 
     title = Column(UnicodeCoercingText)
     description = Column(UnicodeCoercingText)
-    number = Column('item_number', String(16))
+    item_number = Column(Integer)
     is_paragraph = Column(Boolean, nullable=False, default=False)
     sort_order = Column(Integer, nullable=False, default=0)
 
@@ -89,7 +89,8 @@ class AgendaItem(Base):
 
     def get_agenda_item_data(self):
         data = {
-            'number': self.number,
+            'number': self.formatted_number,
+            'number_raw': self.item_number,
             'description': self.get_description(),
             'title': self.get_title(),
             'dossier_reference_number': self.get_dossier_reference_number(),
@@ -123,11 +124,18 @@ class AgendaItem(Base):
             self._submitted_proposal = self.proposal.resolve_submitted_proposal()  # noqa
         return self._submitted_proposal
 
-    def get_title(self, include_number=False):
-        title = (self.submitted_proposal.title
-                 if self.has_proposal else self.title)
-        if include_number and self.number:
-            title = u"{} {}".format(self.number, title)
+    @property
+    def formatted_number(self):
+        return '{}.'.format(self.item_number)
+
+    def get_title(self, include_number=False, formatted=False):
+        title = (self.submitted_proposal.title if self.has_proposal else self.title)
+
+        if include_number and self.item_number:
+            if formatted:
+                title = u"{} {}".format(self.formatted_number, title)
+            else:
+                title = u"{} {}".format(self.item_number, title)
 
         return title
 
@@ -227,7 +235,8 @@ class AgendaItem(Base):
             'css_class': self.get_css_class(),
             'title': self.get_title_html(),
             'description': self.get_description_html(),
-            'number': self.number,
+            'number': self.formatted_number,
+            'number_raw': self.item_number,
             'has_proposal': self.has_proposal,
             'link': self.get_proposal_link(include_icon=False),
         }

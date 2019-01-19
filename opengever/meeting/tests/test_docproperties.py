@@ -24,6 +24,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
         self.assertEquals(
             {'ogg.meeting.decision_number': '',
              'ogg.meeting.agenda_item_number': '',
+             'ogg.meeting.agenda_item_number_raw': '',
              'ogg.meeting.proposal_title': 'Antrag f\xc3\xbcr Kreiselbau',
              'ogg.meeting.proposal_description': '',
              'ogg.meeting.proposal_state': 'Pending'},
@@ -34,6 +35,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
+                 'ogg.meeting.agenda_item_number_raw': '',
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Submitted'},
@@ -43,6 +45,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '',
+                 'ogg.meeting.agenda_item_number_raw': '',
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Submitted'},
@@ -56,6 +59,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
@@ -65,6 +69,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
@@ -79,6 +84,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},
@@ -88,6 +94,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},
@@ -106,6 +113,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Scheduled'},
@@ -120,6 +128,7 @@ class TestMeetingDocxProperties(IntegrationTestCase):
             self.assertEquals(
                 {'ogg.meeting.decision_number': '2016 / 2',
                  'ogg.meeting.agenda_item_number': '1.',
+                 'ogg.meeting.agenda_item_number_raw': 1,
                  'ogg.meeting.proposal_title': 'Vertr\xc3\xa4ge',
                  'ogg.meeting.proposal_description': 'F\xc3\xbcr weitere Bearbeitung bewilligen',
                  'ogg.meeting.proposal_state': 'Decided'},

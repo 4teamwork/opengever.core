@@ -47,8 +47,8 @@ class TestUnitMeeting(TestCase):
         self.meeting.reorder_agenda_items()
         self.assertEqual(1, para.sort_order)
         self.assertEqual(2, item.sort_order)
-        self.assertIsNone(para.number)
-        self.assertEqual('1.', item.number)
+        self.assertIsNone(para.item_number)
+        self.assertEqual(1, item.item_number)
 
     def test_set_agenda_item_order(self):
         item_1 = create(Builder('agenda_item')

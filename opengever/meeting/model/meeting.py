@@ -485,7 +485,7 @@ class Meeting(Base, SQLFormSupport):
             agenda_item.sort_order = sort_order
             sort_order += 1
             if not agenda_item.is_paragraph:
-                agenda_item.number = '{}.'.format(number)
+                agenda_item.item_number = number
                 number += 1
 
     def get_submitted_link(self):

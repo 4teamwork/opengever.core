@@ -88,10 +88,11 @@ class TestAgendaItemList(IntegrationTestCase):
         browser.css('.document-actions .action.download').first.click()
 
         self.assertEqual(200, browser.status_code)
-        self.assertDictContainsSubset(
-            {'content-disposition': 'attachment; filename="Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx"',
-             'content-type': MIME_DOCX},
-            browser.headers)
+        expected_headers = {
+            'content-disposition': 'attachment; filename="Agendaitem list-9. Sitzung der Rechnungspruefungskommission.docx"',
+            'content-type': MIME_DOCX,
+        }
+        self.assertDictContainsSubset(expected_headers, browser.headers)
 
     @browsing
     def test_json_data(self, browser):
@@ -104,11 +105,12 @@ class TestAgendaItemList(IntegrationTestCase):
 
         expected_agenda_items = [
             {u'attachments': [{u'filename': u'Vertraegsentwurf.docx',
-                              u'title': u'Vertr\xe4gsentwurf'}],
+                               u'title': u'Vertr\xe4gsentwurf'}],
              u'decision_number': None,
              u'dossier_reference_number': u'Client1 1.1 / 1',
              u'is_paragraph': False,
-             u'number': u'1.',
+             u'number': '1.',
+             u'number_raw': 1,
              u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
              u'title': u'Vertr\xe4ge',
              u'description': u'F\xfcr weitere Bearbeitung bewilligen'},
@@ -116,7 +118,8 @@ class TestAgendaItemList(IntegrationTestCase):
              u'description': None,
              u'dossier_reference_number': None,
              u'is_paragraph': False,
-             u'number': u'2.',
+             u'number': '2.',
+             u'number_raw': 2,
              u'repository_folder_title': None,
              u'title': u'ad-hoc'}]
 

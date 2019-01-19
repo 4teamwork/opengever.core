@@ -54,6 +54,7 @@ Doc-Properties Sitzung Antrag/Traktandum:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - ``ogg.meeting.decision_number`` - Beschlussnummer des Traktandums
 - ``ogg.meeting.agenda_item_number`` - Nummer des Traktandums in dieser Sitzung
+- ``ogg.meeting.agenda_item_number_raw`` - Nummer des Traktandums in dieser Sitzung (unformattiert)
 - ``ogg.meeting.proposal_title`` - Titel des Antrags
 - ``ogg.meeting.proposal_description`` - Beschreibung des Antrags
 - ``ogg.meeting.proposal_state`` - Status des Antrags
