@@ -86,4 +86,9 @@
       name="forwarding-transition-reassign"
       />
 
+  <adapter
+      factory=".transition.ForwardingReassignTransitionExtender"
+      name="forwarding-transition-reassign-refused"
+      />
+
 </configure>

@@ -112,4 +112,37 @@ class TestAPITransitions(IntegrationTestCase):
 
         response = IResponseContainer(self.inbox_forwarding)[-1]
         self.assertEqual(u'Robert macht das.', response.text)
-        self.assertEqual('task-transition-reassign', response.transition)
+        self.assertEqual('forwarding-transition-reassign', response.transition)
+
+    @browsing
+    def test_reassign_refused_forwarding(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state(
+            'forwarding-state-refused', self.inbox_forwarding)
+
+        url = '{}/@workflow/forwarding-transition-reassign-refused'.format(
+            self.inbox_forwarding.absolute_url())
+
+        # missing responsible
+        data = {'text': 'Wird gemacht.'}
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
+
+        # working
+        data = {'text': 'Robert macht das.',
+                'responsible': self.dossier_responsible.id,
+                'responsible_client': u'fa'}
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(self.dossier_responsible.id,
+                         self.inbox_forwarding.responsible)
+
+        self.assertEqual('forwarding-state-open',
+                         api.content.get_state(self.inbox_forwarding))
+
+        response = IResponseContainer(self.inbox_forwarding)[-1]
+        self.assertEqual(u'Robert macht das.', response.text)
+        self.assertEqual('forwarding-transition-reassign-refused', response.transition)
