@@ -262,4 +262,36 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsPost"
+      permission="cmf.ManagePortal"
+      />
+
+  <plone:service
+      method="GET"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsGet"
+      permission="cmf.ManagePortal"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsPatch"
+      permission="cmf.ManagePortal"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsDelete"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
