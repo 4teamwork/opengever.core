@@ -12,5 +12,5 @@ class ILaTeXSettings(Interface):
 
     location = schema.TextLine(
         title=u'Location',
-        description=u'Possible values for retention period in years.',
+        description=u'Location passed as render argument to latex templates',
         default=u'Bern')
