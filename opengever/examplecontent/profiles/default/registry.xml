@@ -41,4 +41,8 @@
     <value key="group_title_ldap_attribute">description</value>
   </records>
 
+  <records interface="opengever.base.interfaces.ISearchSettings">
+    <value key="use_solr">False</value>
+  </records>
+
 </registry>

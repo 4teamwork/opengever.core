@@ -25,6 +25,7 @@ Changelog
 - Use the correct message factory in the Oneoffixx form. [Rotonen]
 - Add choice fields as possible first form elements for the autofocus seek. [Rotonen]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
+- Provide solr for local development. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
 - Move meeting activity actor_link fetching to meeting activity helpers. [Rotonen]
 - Fix flaky loading of document preview with tooltip. [Kevin Bieri]
