@@ -67,6 +67,21 @@ class MeetingDocumentZipper(MeetingTraverser):
             safe_unicode(self.get_filename(document)))
         )
 
+    def get_agenda_item_attachment_filename(self, document, agenda_item_number, attachment_number):
+        return normalize_path(u'{}/{}/{}_{}'.format(
+            translate(
+                _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
+                  mapping={u'number': agenda_item_number}),
+                context=getRequest(),
+                ),
+            translate(
+                _(u'attachments', default=u'Attachments'),
+                context=getRequest(),
+                ),
+            str(attachment_number),
+            safe_unicode(self.get_filename(document)))
+        )
+
     def traverse_protocol_document(self, document):
         self.generator.add_file(
             self.get_filename(document), self.get_file(document).open()
@@ -83,9 +98,9 @@ class MeetingDocumentZipper(MeetingTraverser):
             self.get_file(document).open()
         )
 
-    def traverse_agenda_item_attachment(self, document, agenda_item):
+    def traverse_agenda_item_attachment(self, document, agenda_item, attachment_number):
         self.generator.add_file(
-            self.get_agenda_item_filename(document, agenda_item.formatted_number),
+            self.get_agenda_item_attachment_filename(document, agenda_item.formatted_number, attachment_number),
             self.get_file(document).open()
         )
 
@@ -175,13 +190,13 @@ class MeetingJSONSerializer(MeetingTraverser):
             'modified': format_modified(document.modified()),
         }
 
-    def traverse_agenda_item_attachment(self, document, agenda_item):
+    def traverse_agenda_item_attachment(self, document, agenda_item, attachment_number):
         attachment_data = self.current_agenda_item_data.setdefault(
             'attachments', [])
 
         attachment_data.append({
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': self.zipper.get_agenda_item_filename(document, agenda_item.formatted_number),
+            'file': self.zipper.get_agenda_item_attachment_filename(document, agenda_item.formatted_number, attachment_number),
             'modified': format_modified(document.modified()),
             'title': safe_unicode(document.Title()),
         })
@@ -203,7 +218,7 @@ class ZipExportDocumentCollector(MeetingTraverser):
     def traverse_agenda_item_document(self, document, agenda_item):
         self._collect(document)
 
-    def traverse_agenda_item_attachment(self, document, agenda_item):
+    def traverse_agenda_item_attachment(self, document, agenda_item, attachment_number):
         self._collect(document)
 
     def get_documents(self):

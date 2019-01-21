@@ -36,14 +36,19 @@ class MeetingTraverser(object):
             self.traverse_agenda_item_document(
                 agenda_item_doc, agenda_item)
 
+        attachment_number = 0
         for attachment in self._get_agenda_item_attachments(agenda_item):
             if attachment:
+                attachment_number += 1
                 self.traverse_agenda_item_attachment(
-                    attachment, agenda_item)
+                    attachment, agenda_item, attachment_number)
 
+        excerpt_number = 0
         for excerpt in self._get_agenda_item_excerpts(agenda_item):
             if excerpt:
-                self.traverse_agenda_item_excerpt(excerpt, agenda_item)
+                excerpt_number += 1
+                self.traverse_agenda_item_excerpt(
+                    excerpt, agenda_item, excerpt_number)
 
     def _get_protocol_document(self):
         if not self.meeting.has_protocol_document():
@@ -75,8 +80,8 @@ class MeetingTraverser(object):
     def traverse_agenda_item_document(self, document, agenda_item):
         pass
 
-    def traverse_agenda_item_attachment(self, document, agenda_item):
+    def traverse_agenda_item_attachment(self, document, agenda_item, attachment_number):
         pass
 
-    def traverse_agenda_item_excerpt(self, document, agenda_item):
+    def traverse_agenda_item_excerpt(self, document, agenda_item, attachment_number):
         pass

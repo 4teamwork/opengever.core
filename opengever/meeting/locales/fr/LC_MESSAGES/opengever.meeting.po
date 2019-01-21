@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-12-17 15:41+0000\n"
+"POT-Creation-Date: 2019-01-24 15:53+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -406,6 +406,11 @@ msgstr "Le point de l'ordre du jour a été mis à jour avec succès."
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "all"
 msgstr "Tous"
+
+#. Default: "Attachments"
+#: ./opengever/meeting/zipexport.py
+msgid "attachments"
+msgstr "Annexes"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/committeeforms.py

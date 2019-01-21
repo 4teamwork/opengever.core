@@ -21,11 +21,11 @@ class MeetingTraverserTestImplementation(MeetingTraverser):
     def traverse_agenda_item_document(self, document, agenda_item):
         self.agenda_item_documents.append(document)
 
-    def traverse_agenda_item_attachment(self, document, agenda_item):
-        self.agenda_item_attachments.append(document)
+    def traverse_agenda_item_attachment(self, document, agenda_item, attachment_number):
+        self.agenda_item_attachments.append((attachment_number, document))
 
-    def traverse_agenda_item_excerpt(self, document, agenda_item):
-        self.agenda_item_excerpts.append(document)
+    def traverse_agenda_item_excerpt(self, document, agenda_item, excerpt_number):
+        self.agenda_item_excerpts.append((excerpt_number, document))
 
 
 class TestMeetingTraverser(IntegrationTestCase):
@@ -61,8 +61,8 @@ class TestMeetingTraverser(IntegrationTestCase):
              ad_hoc_agend_item.resolve_document()],
             traverser.agenda_item_documents)
         self.assertEqual(
-            submitted_proposal.get_documents(),
+            [(i + 1, doc) for i, doc in enumerate(submitted_proposal.get_documents())],
             traverser.agenda_item_attachments)
         self.assertEqual(
-             submitted_proposal.get_excerpts(),
+             [(i + 1, doc) for i, doc in enumerate(submitted_proposal.get_excerpts())],
              traverser.agenda_item_excerpts)

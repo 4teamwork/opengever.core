@@ -38,7 +38,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertIn(
-            'Traktandum 1/Vertraegsentwurf.docx',
+            'Traktandum 1/Anhang/1_Vertraegsentwurf.docx',
             zip_file.namelist())
 
     @browsing
@@ -64,7 +64,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
         browser.open(self.meeting, view='export-meeting-zip')
         zip_file = ZipFile(StringIO(browser.contents), 'r')
         self.assertItemsEqual(
-            ['Traktandum 1/Vertraegsentwurf.docx',
+            ['Traktandum 1/Anhang/1_Vertraegsentwurf.docx',
              'Traktandum 1/Vertraege.docx',
              'meeting.json'],
             zip_file.namelist())
@@ -147,7 +147,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                 {
                     'attachments': [{
                         'checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                        'file': 'Traktandum 2/Vertraegsentwurf.docx',
+                        'file': 'Traktandum 2/Anhang/1_Vertraegsentwurf.docx',
                         'modified': u'2016-08-31T16:09:37+02:00',
                         'title': u'Vertr\xe4gsentwurf',
                     }],
@@ -170,6 +170,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
             'start': u'2016-09-12T15:30:00+00:00',
             'title': u'9. Sitzung der Rechnungspr\xfcfungskommission',
         }
+
         self.assertEquals(expected_agenda_items, serializer.data)
 
     @browsing
@@ -222,7 +223,7 @@ class TestMeetingZipExportView(IntegrationTestCase):
                     {
                         u'attachments': [{
                             u'checksum': u'51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
-                            u'file': u'Traktandum 2/Vertraegsentwurf.docx',
+                            u'file': u'Traktandum 2/Anhang/1_Vertraegsentwurf.docx',
                             u'modified': u'2016-08-31T16:09:37+02:00',
                             u'title': u'Vertr\xe4gsentwurf',
                         }],
@@ -255,9 +256,46 @@ class TestMeetingZipExportView(IntegrationTestCase):
         expected_file_names = [
             'Protokoll-9. Sitzung der Rechnungspruefungskommission- ordentlich.docx',
             'Traktandum 1/Ad-hoc Traktandthm.docx',
+            'Traktandum 2/Anhang/1_Vertraegsentwurf.docx',
             'Traktandum 2/Vertraege.docx',
-            'Traktandum 2/Vertraegsentwurf.docx',
             'meeting.json',
             ]
         file_names = sorted(zip_file.namelist())
         self.assertEqual(expected_file_names, file_names)
+
+    @browsing
+    def test_filename_conflicts_are_avoided_by_prefixing_attachment_number(self, browser):
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        browser.append_request_header('Accept-Language', 'de-ch')
+        self.login(self.committee_responsible, browser)
+
+        documents = [
+            create(Builder('document')
+                   .within(self.dossier)
+                   .titled('The same title')
+                   .with_dummy_content())
+            for i in range(3)]
+        proposal, submitted_proposal = create(Builder('proposal')
+                          .within(self.dossier)
+                          .having(committee=self.committee.load_model())
+                          .with_submitted()
+                          .relate_to(*documents))
+        self.schedule_proposal(self.meeting, submitted_proposal)
+
+        browser.open(self.meeting, view='export-meeting-zip')
+        self.assertEquals('application/zip', browser.contenttype)
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        meeting_json = json.loads(zip_file.read('meeting.json'))
+
+        expected_file_names = [u'Traktandum 1/Anhang/1_The same title.doc',
+                               u'Traktandum 1/Anhang/2_The same title.doc',
+                               u'Traktandum 1/Anhang/3_The same title.doc']
+        json_file_names = [attachment.get("file") for attachment in
+                           meeting_json["meetings"][0]['agenda_items'][0]["attachments"]]
+
+        self.assertItemsEqual(expected_file_names, json_file_names)
+
+        expected_file_names.extend(['meeting.json', 'Traktandum 1/Fooo.docx'])
+
+        file_names = zip_file.namelist()
+        self.assertItemsEqual(expected_file_names, file_names)

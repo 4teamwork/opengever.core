@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-12-17 15:41+0000\n"
+"POT-Creation-Date: 2019-01-24 15:53+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -404,6 +404,11 @@ msgstr "Traktandum erfolgreich aktualisiert."
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "all"
 msgstr "Alle"
+
+#. Default: "Attachments"
+#: ./opengever/meeting/zipexport.py
+msgid "attachments"
+msgstr "Anhang"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/committeeforms.py
