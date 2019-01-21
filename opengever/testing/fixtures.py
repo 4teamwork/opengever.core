@@ -1018,7 +1018,7 @@ class OpengeverContentFixture(object):
             .titled(u'2015')
             ))
 
-        self.register('subdocument', create(
+        subdocument = self.register('subdocument', create(
             Builder('document')
             .within(subdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
@@ -1046,6 +1046,7 @@ class OpengeverContentFixture(object):
                 'Excel dummy content',
                 u'tab\xe4lle neu.xlsx',
             )
+            .relate_to([self.document, subdocument])
         ))
 
         self.register('empty_document', create(
