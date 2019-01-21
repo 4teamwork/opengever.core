@@ -1025,8 +1025,9 @@ class OpengeverContentFixture(object):
             .attach_file_containing(
                 'Excel dummy content',
                 u'tab\xe4lle.xlsx',
-                )
-            ))
+            )
+            .relate_to([self.document])
+        ))
 
         subsubdossier = self.register('subsubdossier', create(
             Builder('dossier')

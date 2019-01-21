@@ -12,8 +12,7 @@ from zope.i18n import translate
 class TestRemoveConditionsChecker(IntegrationTestCase):
 
     def assert_error_messages(self, expected, msgs):
-        self.assertEquals(
-            expected, [translate(msg) for msg in msgs])
+        self.assertEqual(expected, [translate(msg) for msg in msgs])
 
     def test_document_must_not_have_relations(self):
         self.login(self.manager)
@@ -31,13 +30,13 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
     @browsing
     def test_document_must_not_have_backreferences(self, browser):
         self.login(self.manager, browser=browser)
-        self.trash_documents(self.subdocument)
+        self.trash_documents(self.empty_document)
 
         browser.open(self.taskdocument, view='edit')
-        browser.fill({'Related Documents': [self.subdocument]})
+        browser.fill({'Related Documents': [self.empty_document]})
         browser.find('Save').click()
 
-        checker = RemoveConditionsChecker(self.subdocument)
+        checker = RemoveConditionsChecker(self.empty_document)
 
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
@@ -50,18 +49,18 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
         self.login(self.manager, browser=browser)
 
         browser.open(self.taskdocument, view='edit')
-        browser.fill({'Related Documents': [self.subdocument]})
+        browser.fill({'Related Documents': [self.empty_document]})
         browser.find('Save').click()
 
-        self.trash_documents(self.subdocument)
+        self.trash_documents(self.empty_document)
 
-        checker = RemoveConditionsChecker(self.subdocument)
+        checker = RemoveConditionsChecker(self.empty_document)
         self.assertFalse(checker.removal_allowed())
 
         with elevated_privileges():
             api.content.delete(obj=self.taskdocument)
 
-        checker = RemoveConditionsChecker(self.subdocument)
+        checker = RemoveConditionsChecker(self.empty_document)
         self.assertTrue(checker.removal_allowed())
 
     def test_document_must_be_trashed(self):
