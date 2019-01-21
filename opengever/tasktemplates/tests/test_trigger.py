@@ -494,7 +494,6 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             '[No Subject]',
             u'Die B\xfcrgschaft',
             u'Initialvertrag f\xfcr Bearbeitung',
-            u'L\xe4\xe4r',
             'Personaleintritt',
             u'Vertr\xe4gsentwurf',
             u'Vertragsentwurf \xdcberpr\xfcfen',

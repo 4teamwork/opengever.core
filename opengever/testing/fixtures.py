@@ -1049,12 +1049,10 @@ class OpengeverContentFixture(object):
 
         self.register('empty_document', create(
             Builder('document')
-            .within(self.dossier)
+            .within(subdossier)
             .titled(u'L\xe4\xe4r')
-            .having(
-                preserved_as_paper=True,
-                )
-            ))
+            .having(preserved_as_paper=True)
+        ))
 
     @staticuid()
     def create_tasks(self):

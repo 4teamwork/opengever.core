@@ -574,7 +574,6 @@ Objects
         - self.dossier
           - self.document
           - self.draft_proposal
-          - self.empty_document
           - self.info_task
           - self.mail_eml
           - self.mail_msg
@@ -586,6 +585,7 @@ Objects
             - self.seq_subtask_3
           - self.shadow_document
           - self.subdossier
+            - self.empty_document
             - self.subdocument
             - self.subsubdossier
               - self.subsubdocument

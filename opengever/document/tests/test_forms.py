@@ -81,7 +81,6 @@ class TestDocumentIntegration(IntegrationTestCase):
             '[No Subject]',
             u'Die B\xfcrgschaft',
             u'Initialvertrag f\xfcr Bearbeitung',
-            u'L\xe4\xe4r',
             u'Vertr\xe4gsentwurf',
         ]
         self.assertEqual(expected_documents, browser.css('li').text)

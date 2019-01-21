@@ -137,7 +137,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                      '?items.fl=filename,filesize',
                      headers={'Accept': 'application/json'})
 
-        summary = browser.json['items'][10]
+        summary = browser.json['items'][9]
         self.assertEqual(
             {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
              'vertrage-und-vereinbarungen/dossier-1/task-1',

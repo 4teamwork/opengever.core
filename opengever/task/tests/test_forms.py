@@ -97,7 +97,6 @@ class TestTaskEditForm(IntegrationTestCase):
             u'Die B\xfcrgschaft',
             u'Initialvertrag f\xfcr Bearbeitung',
             u'Initialvertrag f\xfcr Bearbeitung',
-            u'L\xe4\xe4r',
             'Personaleintritt',
             u'Vertr\xe4ge',
             u'Vertr\xe4gsentwurf',
