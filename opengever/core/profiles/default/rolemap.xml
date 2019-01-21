@@ -7,6 +7,7 @@
     <role name="CommitteeMember" />
     <role name="CommitteeResponsible" />
     <role name="DossierManager" />
+    <role name="Impersonator" />
     <role name="MeetingUser" />
     <role name="Publisher" />
     <role name="Records Manager" />
@@ -270,6 +271,10 @@
     <!-- TOKENAUTH -->
     <permission name="ftw.tokenauth: Manage own Service Keys" acquire="False">
       <role name="ServiceKeyUser" />
+    </permission>
+
+    <permission name="ftw.tokenauth: Impersonate user" acquire="False">
+      <role name="Impersonator" />
     </permission>
 
     <!-- TRASH -->

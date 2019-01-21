@@ -1,0 +1,10 @@
+<rolemap>
+  <roles>
+    <role name="Impersonator" />
+  </roles>
+  <permissions>
+    <permission name="ftw.tokenauth: Impersonate user" acquire="False">
+      <role name="Impersonator" />
+    </permission>
+  </permissions>
+</rolemap>
