@@ -88,6 +88,13 @@ class NotificationCenter(object):
         if resource and subscriptions:
             map(self.session.delete, subscriptions.all())
 
+            # The association-proxy objects "watchers" of the Resource object
+            # are not update. We have to expire the slq-alchemy object to
+            # let it refetch the relations.
+            # See https://docs.sqlalchemy.org/en/latest/orm/session_state_management.html#refreshing-expiring
+            # for more information about this issue.
+            self.session.expire(resource)
+
     def get_watchers(self, oguid):
         """Returns a read-only tuple of watchers for a given oguid.
         """
