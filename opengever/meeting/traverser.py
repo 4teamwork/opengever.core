@@ -58,9 +58,6 @@ class MeetingTraverser(object):
         return self.meeting.agendaitem_list_document.resolve_document()
 
     def _get_agenda_item_document(self, agenda_item):
-        if not agenda_item.has_document:
-            return None
-
         return agenda_item.resolve_document()
 
     def _get_agenda_item_attachments(self, agenda_item):
