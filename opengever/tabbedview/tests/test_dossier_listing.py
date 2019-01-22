@@ -18,7 +18,8 @@ class TestDossierListing(IntegrationTestCase):
                       'Review state',
                       'Responsible',
                       'Start',
-                      'End']
+                      'End',
+                      'Keywords']
 
     @staticmethod
     def get_contained_folders(folder):
@@ -38,7 +39,8 @@ class TestDossierListing(IntegrationTestCase):
                 api.content.get_state(dossier),
                 dossier.responsible_label,
                 readable_date(dossier, IDossier(dossier).start),
-                readable_date(dossier, IDossier(dossier).end)
+                readable_date(dossier, IDossier(dossier).end),
+                ', '.join(IDossier(dossier).keywords),
                 ]
         return data
 
@@ -73,7 +75,8 @@ class TestDossierListing(IntegrationTestCase):
              'dossier-state-resolved',
              u'Ziegler Robert (robert.ziegler)',
              '01.01.1995',
-             '31.12.2000'],
+             '31.12.2000',
+             u'Vertr\xe4ge'],
             self.get_folder_data(self.expired_dossier)
             )
 
@@ -214,8 +217,9 @@ class TestDossierListing(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.subdossier, view='tabbedview_view-subdossiers')
         expected_content = [
-            'Reference Number Title Review state Responsible Start End',
-            'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016',
+            u'Reference Number Title Review state Responsible Start End Keywords',
+            u'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016 '
+            u'Subsubkeyword, Subsubkeyw\xf6rd',
             ]
         self.assertEqual(expected_content, browser.css('.listing tr').text)
 
