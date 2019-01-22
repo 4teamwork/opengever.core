@@ -1232,7 +1232,7 @@ class OpengeverContentFixture(object):
             .titled(u'Abgeschlossene Vertr\xe4ge')
             .having(
                 description=u'Abgeschlossene Vertr\xe4ge vor 2000.',
-                keywords=(u'Vertr\xe4ge'),
+                keywords=(u'Vertr\xe4ge', ),
                 start=date(1995, 1, 1),
                 end=date(2000, 12, 31),
                 responsible=self.dossier_responsible.getId(),
@@ -1256,7 +1256,7 @@ class OpengeverContentFixture(object):
             .titled(u'Inaktive Vertr\xe4ge')
             .having(
                 description=u'Inaktive Vertr\xe4ge von 2016.',
-                keywords=(u'Vertr\xe4ge'),
+                keywords=(u'Vertr\xe4ge', ),
                 start=date(2016, 1, 1),
                 end=date(2016, 12, 31),
                 responsible=self.dossier_responsible.getId(),
@@ -1279,7 +1279,7 @@ class OpengeverContentFixture(object):
             .titled(u'Hannah Baufrau')
             .having(
                 description=u'Anstellung Hannah Baufrau.',
-                keywords=(u'Wichtig'),
+                keywords=(u'Wichtig', ),
                 start=date(2000, 1, 1),
                 end=date(2000, 1, 31),
                 responsible=self.dossier_responsible.getId(),
