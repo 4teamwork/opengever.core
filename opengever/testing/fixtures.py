@@ -3,6 +3,7 @@ from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from contextlib import nested
 from datetime import date
+from DateTime import DateTime
 from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
@@ -11,6 +12,7 @@ from ftw.builder import ticking_creator
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
+from ftw.tokenauth.pas.storage import CredentialStorage
 from functools import wraps
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
@@ -23,6 +25,7 @@ from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.base.utils import ogds_service
+from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
 from operator import methodcaller
@@ -33,6 +36,7 @@ from plone.app.testing import TEST_USER_ID
 from time import time
 from zope.annotation.interfaces import IAnnotations
 from zope.component.hooks import getSite
+import json
 import logging
 import pytz
 
@@ -70,6 +74,7 @@ class OpengeverContentFixture(object):
         # objects as every second one is a ogds user with no creation date.
         with self.freeze_at_hour(5, tick_length=1):
             self.create_users()
+            self.load_service_keys()
 
         with self.freeze_at_hour(6):
             self.create_teams()
@@ -272,6 +277,17 @@ class OpengeverContentFixture(object):
             ['Archivist']
             )
 
+        self.service_user = self.create_user(
+            'service_user',
+            u'Service',
+            u'User',
+            [
+                'Member',
+                'ServiceKeyUser',
+                'Impersonator',
+                'Administrator',
+            ])
+
         # This user is intended to be used in situations where you need a user
         # which has only the 'Reader' role on some context and one has to build
         # the granting of that themselves
@@ -295,6 +311,13 @@ class OpengeverContentFixture(object):
             )
 
         self._lookup_table['reader_user'] = ('user', plone_user.getId())
+
+    def load_service_keys(self):
+        for filename in ['service_user_generic.public.json']:
+            public_key = json.loads(assets.load(filename))
+            public_key['issued'] = DateTime(public_key['issued']).asdatetime()
+            plugin = getSite().acl_users.token_auth
+            CredentialStorage(plugin).add_service_key(public_key)
 
     def create_teams(self):
         users = [
