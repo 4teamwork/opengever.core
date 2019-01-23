@@ -13,6 +13,12 @@ Damit dies möglich ist, verwenden die Vorlagen Seriendruckfelder, um Daten aus
 der Sitzung direkt in die Wordvorlage zu übertragen und so ein neues
 Worddokument zu erzeugen.
 
+Neue Felder können in Word über den Menüpunkt ``Einfügen`` » ``Feld…`` eingefügt
+werden, wobei im nächsten Dialog in der Kategorie ``Seriendruck``
+mit dem Feld ``MergeField`` gearbeitet wird:
+
+.. image:: ../../_static/img/word_mergefield.png
+
 Die folgenden Seriendruckfelder können standardmässig verwendet werden:
 
 Generelle Metadaten:
