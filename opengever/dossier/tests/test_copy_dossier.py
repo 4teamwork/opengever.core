@@ -3,7 +3,6 @@ from ftw.builder import create
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.testing import IntegrationTestCase
 from plone import api
-from plone.uuid.interfaces import IUUID
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 
@@ -73,3 +72,16 @@ class TestCopyDossiers(IntegrationTestCase):
                                        'containing_dossier', subdocument_copy)
         self.assert_index_and_metadata('', 'containing_subdossier',
                                        subdocument_copy)
+
+    def test_copying_tasks_is_prevented(self):
+        self.login(self.dossier_responsible)
+
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId()))
+
+        copied_dossier = api.content.copy(
+            source=self.empty_dossier, target=self.empty_repofolder)
+        self.assertItemsEqual([], copied_dossier.getFolderContents())
