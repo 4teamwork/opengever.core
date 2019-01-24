@@ -247,7 +247,7 @@ msgstr "Enlever le point de l'ordre du jour"
 
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "Updated with a newer docment version from proposal's dossier."
-msgstr "Le document a été écrasé par une version plus récente du dossier proposé."
+msgstr "Le document a été écrasé par une version plus récente provenant du dossier d'origine de la demande."
 
 #: ./opengever/meeting/browser/excerpt.py
 msgid "Updated with a newer excerpt version."
