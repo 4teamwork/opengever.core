@@ -94,7 +94,7 @@ class CustomStylesUtility(object):
         a blob from it, or resuse the existing one if none has been uploaded.
         """
         logo, blob = None, None
-        data = logo_file.read()
+        data = logo_file.read() if logo_file else None
         if data:
             blob = BlobWrapper('image/png')
             if isinstance(data, basestring):
@@ -145,9 +145,10 @@ class CustomStylesUtility(object):
             if key == LOGO_KEY:
                 logo = self.get_logo(value)
                 styles[LOGO_KEY] = logo
-            elif key == LOGO_RIGHT_KEY and value:
+            elif key == LOGO_RIGHT_KEY:
                 logo_right = self.get_logo_right(value)
-                styles[LOGO_RIGHT_KEY] = logo_right
+                if logo_right:
+                    styles[LOGO_RIGHT_KEY] = logo_right
             elif key == LOGO_TITLE_KEY:
                 if isinstance(value, unicode):
                     value = value.encode('utf8')
