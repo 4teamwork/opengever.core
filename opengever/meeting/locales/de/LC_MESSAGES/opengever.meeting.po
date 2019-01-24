@@ -1523,7 +1523,7 @@ msgstr "Antrag erfolgreich eingereicht."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und abgelegt wurden."
+msgstr "Die Sitzung kann erst abgeschlossen werden, wenn alle Traktanden abgeschlossen sind und bei allen eingereichten Anträgen die Protokollauszüge abgelegt sind."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
