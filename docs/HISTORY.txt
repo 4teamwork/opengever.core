@@ -8,6 +8,7 @@ Changelog
 - Scrub Bobo Call Interface data out of the HTTP response headers. [Rotonen]
 - Scrub the server version out of the HTTP response headers. [Rotonen]
 - Fix bug in excerpt overview when user has no permissions on meeting. [njohner]
+- Fix bug in meeting zip export with documents without files. [njohner]
 - Change wording of info for inactiv close meeting button. [njohner]
 - Avoid truncating committee responsible group token while normalizing. [deiferni]
 - Prevent tasks from being copied. [lgraf]

@@ -42,6 +42,24 @@ class TestMeetingZipExportView(IntegrationTestCase):
             zip_file.namelist())
 
     @browsing
+    def test_zip_export_skips_agenda_items_attachments_without_file(self, browser):
+        browser.append_request_header('Accept-Language', 'de-ch')
+        self.login(self.committee_responsible, browser)
+
+        self.proposal.submit_additional_document(self.empty_document)
+        self.proposal.submit_additional_document(self.subdocument)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
+
+        browser.open(self.meeting, view='export-meeting-zip')
+        zip_file = ZipFile(StringIO(browser.contents), 'r')
+        self.assertItemsEqual(
+            ['Traktandum 1/Vertraege.docx',
+             'Traktandum 1/Anhang/1_Vertraegsentwurf.docx',
+             'Traktandum 1/Anhang/2_Uebersicht der Vertraege von 2016.xlsx',
+             'meeting.json'],
+            zip_file.namelist())
+
+    @browsing
     def test_export_proposal_word_documents(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
         self.login(self.committee_responsible, browser)

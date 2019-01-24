@@ -1,3 +1,6 @@
+from ftw.bumblebee.interfaces import IBumblebeeDocument
+
+
 class MeetingTraverser(object):
     """Traverse the meeting and its documents.
 
@@ -85,3 +88,25 @@ class MeetingTraverser(object):
 
     def traverse_agenda_item_excerpt(self, document, agenda_item, attachment_number):
         pass
+
+
+class MeetingDocumentWithFileTraverser(MeetingTraverser):
+    """Traverse the meeting and its documents, but only if the document
+    has a file.
+
+    There is no need to overwrite _get_agenda_item_document,
+    _get_protocol_document and _get_agenda_item_list_document
+    as these always have a file if they are present.
+    """
+
+    @staticmethod
+    def _document_has_file(document):
+        return IBumblebeeDocument(document).has_file_data()
+
+    def _get_agenda_item_attachments(self, agenda_item):
+        attachments = super(MeetingDocumentWithFileTraverser, self)._get_agenda_item_attachments(agenda_item)
+        return [attachment for attachment in attachments if self._document_has_file(attachment)]
+
+    def _get_agenda_item_excerpts(self, agenda_item):
+        excerpts = super(MeetingDocumentWithFileTraverser, self)._get_agenda_item_excerpts(agenda_item)
+        return [excerpt for excerpt in excerpts if self._document_has_file(excerpt)]
