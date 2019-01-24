@@ -1793,7 +1793,7 @@ msgstr "Texte libre ajouté à l'ordre du jour avec succès."
 #. Default: "Agenda item ${agenda_item_number}"
 #: ./opengever/meeting/zipexport.py
 msgid "title_agenda_item"
-msgstr "Point de l'ordre du jour ${agenda_item_number}"
+msgstr "Point de l'ordre du jour ${number}"
 
 #. Default: "Delete proposal"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
