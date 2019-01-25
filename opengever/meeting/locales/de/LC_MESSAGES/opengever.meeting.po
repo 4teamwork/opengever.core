@@ -245,7 +245,7 @@ msgstr "Traktandum entfernen"
 
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "Updated with a newer docment version from proposal's dossier."
-msgstr "Das Dokument wurde durch eine neuere Version aus dem Antragsdossier überschrieben."
+msgstr "Das Dokument wurde durch eine neuere Version aus dem Ursprungsdossier überschrieben."
 
 #: ./opengever/meeting/browser/excerpt.py
 msgid "Updated with a newer excerpt version."
@@ -1528,7 +1528,7 @@ msgstr "Antrag erfolgreich eingereicht."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "Die Sitzung kann erst abgeschlossen werden wenn alle Traktanden abgeschlossen sind und die Protokollauszüge generiert und abgelegt wurden."
+msgstr "Die Sitzung kann erst abgeschlossen werden, wenn alle Traktanden abgeschlossen sind und bei allen eingereichten Anträgen die Protokollauszüge abgelegt sind."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
