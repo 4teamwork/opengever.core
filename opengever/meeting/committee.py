@@ -188,14 +188,13 @@ class ICommittee(model.Schema):
     def default_template_is_in_allowed_templates(data):
         """ Validate ad-hoc agenda item templates
         """
-
         default_template = data.ad_hoc_template
         allowed_templates = data.allowed_ad_hoc_agenda_item_templates
 
         if default_template is None:
             return
 
-        if not len(allowed_templates):
+        if not allowed_templates:
             return
 
         if IUUID(default_template) not in allowed_templates:
