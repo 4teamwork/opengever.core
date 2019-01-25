@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-12-17 15:41+0000\n"
+"POT-Creation-Date: 2019-01-24 15:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -402,6 +402,11 @@ msgstr ""
 #: ./opengever/meeting/tabs/meetinglisting.py
 #: ./opengever/meeting/tabs/membershiplisting.py
 msgid "all"
+msgstr ""
+
+#. Default: "Attachments"
+#: ./opengever/meeting/zipexport.py
+msgid "attachments"
 msgstr ""
 
 #. Default: "Cancel"
