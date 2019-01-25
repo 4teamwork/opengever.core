@@ -5,6 +5,8 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Scrub Bobo Call Interface data out of the HTTP response headers. [Rotonen]
+- Scrub the server version out of the HTTP response headers. [Rotonen]
 - Change wording of info for inactiv close meeting button. [njohner]
 - Avoid truncating committee responsible group token while normalizing. [deiferni]
 - Prevent tasks from being copied. [lgraf]

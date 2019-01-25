@@ -119,3 +119,9 @@ def disallow_anonymous_views_on_site_root(event):
         return
 
     raise Unauthorized
+
+
+def scrub_server_version(event):
+    """Scrub the server version string response headers."""
+    if getattr(event.request.RESPONSE, '_server_version', None):
+        event.request.RESPONSE._server_version = 'Zope'
