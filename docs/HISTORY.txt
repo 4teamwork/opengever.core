@@ -8,6 +8,7 @@ Changelog
 - Prevent tasks from being copied. [lgraf]
 - ResolveOGUIDView: Preserve query string. [lgraf]
 - Bump docxcompose to 1.0.0a16 to fix updating docproperties. [deiferni]
+- Resolve mail author to fullname when it is a userid. [njohner]
 - Remove deprecated docprops from templates and tests. [njohner]
 - Add Impersonator role and "ftw.tokenauth: Impersonate user" permission. [njohner]
 - Bump ftw.structlog to get new client_ip field and referrer logging fixes. [lgraf]

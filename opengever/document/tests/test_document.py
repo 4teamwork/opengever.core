@@ -15,7 +15,6 @@ from opengever.document.document import UploadValidator
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
-from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -510,16 +509,16 @@ class TestDocumentMimetype(FunctionalTestCase):
         self.assertEqual(str(doc.get_mimetype()[0]), 'application/vnd.ms-excel.sheet.macroEnabled.12')
 
 
-class TestDocumentAuthorResolving(FunctionalTestCase):
+class TestDocumentAuthorResolving(IntegrationTestCase):
 
     def test_adding_document_with_a_userid_as_author_resolves_to_fullname(self):
-        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
         document = create(Builder('document')
-                          .having(document_author='hugo.boss')
+                          .having(document_author='kathi.barfuss')
                           .with_dummy_content())
 
-        self.assertEquals('Boss Hugo', document.document_author)
-        self.assertEquals('Boss Hugo', obj2brain(document).document_author)
+        self.assertEquals(u'B\xe4rfuss K\xe4thi', document.document_author)
+        self.assertEquals('B\xc3\xa4rfuss K\xc3\xa4thi',
+                          obj2brain(document, unrestricted=True).document_author)
 
     def test_adding_document_with_a_real_name_as_author_dont_change_author_name(self):
         document = create(Builder('document')
@@ -530,29 +529,22 @@ class TestDocumentAuthorResolving(FunctionalTestCase):
 
     @browsing
     def test_editing_document_with_a_userid_as_author_resolves_to_fullname(self, browser):
-        create_ogds_user('hugo.boss', firstname='Hugo', lastname='Boss')
-        document = create(Builder('document')
-                          .having(document_author='hanspeter')
-                          .with_dummy_content())
-
-        browser.login().open(document, view='edit')
-        browser.fill({'Author': u'hugo.boss'})
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='edit')
+        browser.fill({'Author': u'kathi.barfuss'})
         browser.click_on('Save')
 
-        self.assertEquals('Boss Hugo', document.document_author)
-        self.assertEquals('Boss Hugo', obj2brain(document).document_author)
+        self.assertEquals(u'B\xe4rfuss K\xe4thi', self.document.document_author)
+        self.assertEquals('B\xc3\xa4rfuss K\xc3\xa4thi', obj2brain(self.document).document_author)
 
     @browsing
     def test_editing_document_with_a_real_name_as_author_dont_change_author_name(self, browser):
-        document = create(Builder('document')
-                          .having(document_author='hugo.boss')
-                          .with_dummy_content())
-
-        browser.login().open(document, view='edit')
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='edit')
         browser.fill({'Author': u'Muster Peter'})
         browser.click_on('Save')
 
-        self.assertEquals('Muster Peter', document.document_author)
+        self.assertEquals('Muster Peter', self.document.document_author)
 
 
 class TestDocumentValidatorsInAddForm(IntegrationTestCase):

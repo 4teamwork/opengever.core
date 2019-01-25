@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
 from ftw.testbrowser import browser
+from ftw.testbrowser import browsing
 from opengever.document.interfaces import IDocumentSettings
 from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
@@ -10,6 +11,8 @@ from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.mail.tests import MAIL_DATA
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from opengever.testing.sql import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from unittest import TestCase
@@ -147,6 +150,28 @@ class TestMailMetadataWithAddView(TestMailMetadataWithBuilder):
 
             mail = browser.context
             return mail
+
+
+class TestMailAuthorResolving(IntegrationTestCase):
+
+    @browsing
+    def test_editing_mail_with_a_userid_as_author_resolves_to_fullname(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail_eml, view='edit')
+        browser.fill({'Author': u'kathi.barfuss'})
+        browser.click_on('Save')
+
+        self.assertEquals(u'B\xe4rfuss K\xe4thi', self.mail_eml.document_author)
+        self.assertEquals(u'B\xe4rfuss K\xe4thi', obj2brain(self.mail_eml).document_author)
+
+    @browsing
+    def test_editing_mail_with_a_real_name_as_author_dont_change_author_name(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.mail_eml, view='edit')
+        browser.fill({'Author': u'Muster Peter'})
+        browser.click_on('Save')
+
+        self.assertEquals('Muster Peter', self.mail_eml.document_author)
 
 
 class TestMailPreservedAsPaperDefault(FunctionalTestCase):
