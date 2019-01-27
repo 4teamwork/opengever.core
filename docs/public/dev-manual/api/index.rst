@@ -26,6 +26,7 @@ Inhalt:
    notifications.rst
    recently_touched.rst
    preview.rst
+   webactions.rst
    examples/index.rst
    docs_changelog.rst
 
