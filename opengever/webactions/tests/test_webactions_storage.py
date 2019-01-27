@@ -14,6 +14,7 @@ from persistent.mapping import PersistentMapping
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
+from zope.schema import ValidationError
 
 
 class TestWebActionsStorageInitialization(IntegrationTestCase):
@@ -73,6 +74,8 @@ class TestWebActionsStorageIDGeneration(IntegrationTestCase):
 
 class TestWebActionsStorageAdding(IntegrationTestCase):
 
+    BASE64_ENCODED_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=='  # noqa
+
     def test_add_webaction(self):
         self.login(self.manager)
 
@@ -109,6 +112,145 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
 
         self.assertEqual(expected, action_from_storage)
         self.assertIsInstance(action_from_storage, PersistentMapping)
+
+    def test_add_webaction_with_missing_fields_raises(self):
+        storage = get_storage()
+        action = {}
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('title', RequiredMissing('title'))).",
+            cm.exception.message)
+
+    def test_icon_required_for_certain_display_locations(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'title-buttons',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "(None, Invalid(\"Display location 'title-buttons' requires an icon.\",))).",
+            cm.exception.message)
+
+    def test_icon_not_allowed_for_certain_display_locations(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'icon_name': 'fa-helicopter',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "(None, Invalid(\"Display location 'actions-menu' doesn't allow an icon.\",))).",
+            cm.exception.message)
+
+    def test_at_most_one_icon_allowed(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'icon_name': 'fa-helicopter',
+            'icon_data': 'data:image/png;base64,%s' % self.BASE64_ENCODED_PNG,
+            'display': 'title-buttons',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "(None, Invalid(\"Icon properties ['icon_name', 'icon_data'] are "
+            "mutually exclusive. At most one icon allowed.\",))).",
+            cm.exception.message)
+
+    def test_rejects_invalid_data_uris_for_icon_data(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'title-buttons',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        # Not an URI at all
+        new_action['icon_data'] = 'foo'
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('icon_data', InvalidURI('foo'))).",
+            cm.exception.message)
+
+        # Not a data URI
+        new_action['icon_data'] = 'http://foo'
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('icon_data', InvalidBase64DataURI('http://foo'))).",
+            cm.exception.message)
+
+        # No base64 encoding declared
+        new_action['icon_data'] = 'data:image/png,%s' % self.BASE64_ENCODED_PNG
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('icon_data', InvalidBase64DataURI('Data URI does not seem to declare base64 encoding.'))).",
+            cm.exception.message)
+
+        # Missing mimetype
+        new_action['icon_data'] = 'data:base64,%s' % self.BASE64_ENCODED_PNG
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('icon_data', InvalidBase64DataURI('Data URI does not seem to declare a mimetype.'))).",
+            cm.exception.message)
+
+        # Not actually base64 encoded
+        new_action['icon_data'] = 'data:image/png;base64,foo'  # noqa
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('icon_data', InvalidBase64DataURI(\"Data URI could not be decoded as base64 (Error('Incorrect padding',)).\"))).",  # noqa
+            cm.exception.message)
 
     def test_cant_add_webaction_with_same_unique_name_twice(self):
         storage = get_storage()
@@ -238,6 +380,75 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         self.assertEqual(
             "An action with the unique_name u'existing-unique-name' already exists",
             cm.exception.message)
+
+    def test_update_webaction_with_invalid_fields_raises(self):
+        storage = get_storage()
+        action = create(Builder('webaction')
+                        .having(
+                            title=u'Open in ExternalApp',
+                            target_url='http://example.org/endpoint',
+        ))
+        action_id = action['action_id']
+        self.assertEqual(action, storage.get(action_id))
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.update(action_id, {'target_url': 'not-an-url'})
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "('target_url', InvalidURI('not-an-url'))).",
+            cm.exception.message)
+
+    def test_invariants_are_validated_on_final_resulting_object(self):
+        """When updating, we need to make sure that invariants are validated
+        on the final object that would result from the change (an invariant
+        might impose a constraint that involves a field that already exists
+        on the object and isn't touched by the update, and one that is being
+        changed by the update).
+        """
+        self.login(self.manager)
+
+        storage = get_storage()
+        # We start with an action in the 'title-buttons' display location,
+        # which requires an icon, and an value for icon_name property.
+        # This is valid so far, no invariants are violated.
+        with freeze(datetime(2019, 12, 31, 17, 45)):
+            action = create(Builder('webaction').titled(u'Open in ExternalApp')
+                            .having(
+                                icon_name='fa-helicopter',
+                                display='title-buttons',
+            ))
+        action_id = action['action_id']
+
+        # But if we now attempt to change the display location to the
+        # 'actions-menu', which doesn't allow for an icon, the invariant will
+        # be violated.
+        with self.assertRaises(ValidationError) as cm:
+            storage.update(action_id, {'display': 'actions-menu'})
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: "
+            "(None, Invalid(\"Display location 'actions-menu' doesn't allow an icon.\",))).",
+            cm.exception.message)
+
+        # If we however change both the properties covered by the invariant in
+        # the same update, the change succeeds:
+        with freeze(datetime(2020, 7, 31, 19, 15)):
+            storage.update(action_id, {'display': 'actions-menu', 'icon_name': None})
+
+        self.assertEqual({
+            'action_id': 0,
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'icon_name': None,
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+            'created': datetime(2019, 12, 31, 17, 45),
+            'modified': datetime(2020, 7, 31, 19, 15),
+            'owner': 'admin',
+        }, storage.get(action_id))
 
     def test_updating_unique_name_correctly_updates_index(self):
         storage = get_storage()

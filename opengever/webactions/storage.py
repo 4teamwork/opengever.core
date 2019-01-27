@@ -4,6 +4,9 @@ from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from opengever.webactions.exceptions import ActionAlreadyExists
 from opengever.webactions.interfaces import IWebActionsStorage
+from opengever.webactions.schema import IPersistedWebActionSchema
+from opengever.webactions.schema import IWebActionSchema
+from opengever.webactions.validation import validate_schema
 from persistent.mapping import PersistentMapping
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -79,7 +82,8 @@ class WebActionsStorage(object):
         return new_id
 
     def add(self, action_data):
-        # TODO: Schema Validation
+        validate_schema(action_data, IWebActionSchema)
+
         self._enforce_unique_name_uniqueness(action_data)
 
         action_id = self.issue_new_action_id()
@@ -114,11 +118,16 @@ class WebActionsStorage(object):
         return self._actions.values()
 
     def update(self, action_id, action_data):
-        # TODO: Schema Validation
         action = self.get(action_id)
 
         self._enforce_unique_name_uniqueness(action_data)
 
+        # Validate schema of the final resulting action on a copy
+        action_copy = action.copy()
+        action_copy.update(action_data)
+        validate_schema(action_copy, IPersistedWebActionSchema)
+
+        # If validation succeeded, update the actual PersistentDict
         self.unindex_action(action)
 
         action.update(action_data)
