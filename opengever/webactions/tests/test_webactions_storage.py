@@ -1,4 +1,5 @@
 from BTrees.IOBTree import IOBTree
+from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from ftw.builder import Builder
@@ -6,6 +7,7 @@ from ftw.builder import create
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.webactions.interfaces import IWebActionsStorage
+from opengever.webactions.storage import ActionAlreadyExists
 from opengever.webactions.storage import get_storage
 from opengever.webactions.storage import WebActionsStorage
 from persistent.mapping import PersistentMapping
@@ -30,6 +32,11 @@ class TestWebActionsStorageInitialization(IntegrationTestCase):
 
         self.assertTrue(storage._actions is storage._storage[WebActionsStorage.STORAGE_ACTIONS_KEY])
         self.assertIsInstance(storage._actions, IOBTree)
+
+        self.assertTrue(storage._indexes is storage._storage[WebActionsStorage.STORAGE_INDEXES_KEY])
+        self.assertIsInstance(storage._indexes, OOBTree)
+
+        self.assertIsInstance(storage._indexes[WebActionsStorage.IDX_UNIQUE_NAME], OIBTree)
 
         self.assertEquals(0, storage._storage['next_id'])
 
@@ -103,6 +110,56 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         self.assertEqual(expected, action_from_storage)
         self.assertIsInstance(action_from_storage, PersistentMapping)
 
+    def test_cant_add_webaction_with_same_unique_name_twice(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+            'unique_name': u'open-in-external-app-title-action',
+        }
+
+        with freeze(datetime(2019, 12, 31, 17, 45)):
+            action_id = storage.add(new_action)
+
+        self.assertEqual(1, len(storage.list()))
+        action_from_storage = storage.get(action_id)
+        self.assertEqual(u'Open in ExternalApp', action_from_storage['title'])
+
+        # Same unique_name, just a different title. Should be rejected.
+        new_action['title'] = u'Launch in ExternalApp'
+        with self.assertRaises(ActionAlreadyExists) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "An action with the unique_name u'open-in-external-app-title-action' already exists",
+            cm.exception.message)
+
+    def test_adding_action_correctly_updates_unique_name_index(self):
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+            'unique_name': u'open-in-external-app-title-action',
+        }
+        action_id = storage.add(new_action)
+
+        unique_name_index = storage._indexes[WebActionsStorage.IDX_UNIQUE_NAME]
+        self.assertIn(
+            u'open-in-external-app-title-action',
+            unique_name_index)
+
+        self.assertEquals(
+            action_id,
+            unique_name_index[u'open-in-external-app-title-action'])
+
 
 class TestWebActionsStorageRetrieval(IntegrationTestCase):
 
@@ -165,6 +222,47 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         with self.assertRaises(KeyError):
             storage.update(77, {'title': u'This action does not exist'})
 
+    def test_updating_unique_name_enforces_uniqueness(self):
+        storage = get_storage()
+
+        existing_action = create(Builder('webaction')
+                                 .having(unique_name=u'existing-unique-name'))
+
+        action_to_update = create(Builder('webaction'))
+
+        with self.assertRaises(ActionAlreadyExists) as cm:
+            storage.update(
+                action_to_update['action_id'],
+                {'unique_name': existing_action['unique_name']})
+
+        self.assertEqual(
+            "An action with the unique_name u'existing-unique-name' already exists",
+            cm.exception.message)
+
+    def test_updating_unique_name_correctly_updates_index(self):
+        storage = get_storage()
+
+        action = create(Builder('webaction')
+                        .having(unique_name=u'open-in-external-app-title-action'))
+
+        unique_name_index = storage._indexes[WebActionsStorage.IDX_UNIQUE_NAME]
+        # Guard assertion to verify first version of action is indexed
+        self.assertEquals(
+            action['action_id'],
+            unique_name_index[u'open-in-external-app-title-action'])
+
+        storage.update(action['action_id'], {'unique_name': u'new-unique-id'})
+
+        # Old index entry should have been removed
+        self.assertNotIn(
+            u'open-in-external-app-title-action',
+            unique_name_index)
+
+        # New index entry should have been added
+        self.assertEquals(
+            action['action_id'],
+            unique_name_index[u'new-unique-id'])
+
 
 class TestWebActionsStorageDeletion(IntegrationTestCase):
 
@@ -179,3 +277,22 @@ class TestWebActionsStorageDeletion(IntegrationTestCase):
         storage = get_storage()
         with self.assertRaises(KeyError):
             storage.delete(77)
+
+    def test_deleting_action_correctly_updates_unique_name_index(self):
+        storage = get_storage()
+
+        action = create(Builder('webaction')
+                        .having(unique_name=u'open-in-external-app-title-action'))
+
+        unique_name_index = storage._indexes[WebActionsStorage.IDX_UNIQUE_NAME]
+        # Guard assertion to verify first version of action is indexed
+        self.assertEquals(
+            action['action_id'],
+            unique_name_index[u'open-in-external-app-title-action'])
+
+        storage.delete(action['action_id'])
+
+        # Index entry should have been removed
+        self.assertNotIn(
+            u'open-in-external-app-title-action',
+            unique_name_index)

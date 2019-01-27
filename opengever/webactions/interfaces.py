@@ -46,3 +46,11 @@ class IWebActionsStorage(Interface):
     def delete(action_id):
         """Delete the action identified by action_id.
         """
+
+    def index_action(action):
+        """Index the given persistent action.
+        """
+
+    def unindex_action(action):
+        """Unindex the given peristent action.
+        """

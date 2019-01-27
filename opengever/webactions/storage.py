@@ -1,6 +1,8 @@
 from BTrees.IOBTree import IOBTree
+from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
+from opengever.webactions.exceptions import ActionAlreadyExists
 from opengever.webactions.interfaces import IWebActionsStorage
 from persistent.mapping import PersistentMapping
 from plone import api
@@ -32,7 +34,10 @@ class WebActionsStorage(object):
     ANNOTATIONS_KEY = 'opengever.webactions.storage'
 
     STORAGE_ACTIONS_KEY = 'actions'
+    STORAGE_INDEXES_KEY = 'indexes'
     STORAGE_NEXT_ID_KEY = 'next_id'
+
+    IDX_UNIQUE_NAME = 'unique_name_to_action_id'
 
     def __init__(self, context, request):
         self.context = context
@@ -40,6 +45,7 @@ class WebActionsStorage(object):
 
         self._storage = None
         self._actions = None
+        self._indexes = None
         self.initialize_storage()
 
     def initialize_storage(self):
@@ -54,6 +60,15 @@ class WebActionsStorage(object):
             self._storage[self.STORAGE_ACTIONS_KEY] = IOBTree()
         self._actions = self._storage[self.STORAGE_ACTIONS_KEY]
 
+        # Indexes needed for fast lookups
+        if self.STORAGE_INDEXES_KEY not in self._storage:
+            self._storage[self.STORAGE_INDEXES_KEY] = OOBTree()
+        self._indexes = self._storage[self.STORAGE_INDEXES_KEY]
+
+        # Index: unique_name -> action_id
+        if self.IDX_UNIQUE_NAME not in self._indexes:
+            self._indexes[self.IDX_UNIQUE_NAME] = OIBTree()
+
         # Counter for the next 'action_id'
         if self.STORAGE_NEXT_ID_KEY not in self._storage:
             self._storage[self.STORAGE_NEXT_ID_KEY] = 0
@@ -65,6 +80,8 @@ class WebActionsStorage(object):
 
     def add(self, action_data):
         # TODO: Schema Validation
+        self._enforce_unique_name_uniqueness(action_data)
+
         action_id = self.issue_new_action_id()
 
         new_action = PersistentMapping(action_data)
@@ -85,6 +102,7 @@ class WebActionsStorage(object):
         new_action['modified'] = now
         new_action['owner'] = userid if userid else 'Anonymous'
 
+        self.index_action(new_action)
         return action_id
 
     def get(self, action_id):
@@ -98,8 +116,39 @@ class WebActionsStorage(object):
     def update(self, action_id, action_data):
         # TODO: Schema Validation
         action = self.get(action_id)
+
+        self._enforce_unique_name_uniqueness(action_data)
+
+        self.unindex_action(action)
+
         action.update(action_data)
         action['modified'] = datetime.now()
 
+        self.index_action(action)
+
     def delete(self, action_id):
+        action = self.get(action_id)
+        self.unindex_action(action)
         del self._actions[action_id]
+
+    def index_action(self, action):
+        action_id = action['action_id']
+
+        # unique_name -> action_id
+        if 'unique_name' in action:
+            unique_name = action['unique_name']
+            self._indexes[self.IDX_UNIQUE_NAME][unique_name] = action_id
+
+    def unindex_action(self, action):
+        # unique_name -> action_id
+        if 'unique_name' in action:
+            unique_name = action['unique_name']
+            del self._indexes[self.IDX_UNIQUE_NAME][unique_name]
+
+    def _enforce_unique_name_uniqueness(self, action_data):
+        if 'unique_name' in action_data:
+            unique_name = action_data['unique_name']
+            if unique_name in self._indexes[self.IDX_UNIQUE_NAME]:
+                raise ActionAlreadyExists(
+                    'An action with the unique_name %r already '
+                    'exists' % action_data['unique_name'])
