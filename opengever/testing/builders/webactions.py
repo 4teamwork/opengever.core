@@ -19,6 +19,7 @@ class WebActionBuilder(object):
             'order': 0,
             'scope': 'global',
         }
+        self.owner = None
 
     def having(self, **kwargs):
         self.arguments.update(kwargs)
@@ -28,11 +29,19 @@ class WebActionBuilder(object):
         self.arguments['title'] = title
         return self
 
+    def owned_by(self, owner):
+        self.owner = owner
+        return self
+
     def create(self, **kwargs):
         action = {}
         action.update(self.arguments)
         storage = getMultiAdapter((getSite(), getRequest()), IWebActionsStorage)
         action_id = storage.add(action)
+
+        if self.owner is not None:
+            storage._actions[action_id]['owner'] = self.owner
+
         return storage.get(action_id)
 
 

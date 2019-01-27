@@ -1,0 +1,14 @@
+<rolemap>
+
+  <roles>
+    <role name="WebActionManager" />
+  </roles>
+
+  <permissions>
+    <permission name="opengever.webactions: Manage own WebActions" acquire="False">
+      <role name="Manager" />
+      <role name="WebActionManager" />
+    </permission>
+  </permissions>
+
+</rolemap>

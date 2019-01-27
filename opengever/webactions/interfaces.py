@@ -35,8 +35,10 @@ class IWebActionsStorage(Interface):
         Raises a KeyError if the action_id doesn't exist.
         """
 
-    def list():
+    def list(owner=None):
         """List all actions in the storage.
+
+        If `owner` is given, only lists actions belonging to that user.
         """
 
     def update(action_id, action_data):
