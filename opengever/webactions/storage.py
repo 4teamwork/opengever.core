@@ -115,9 +115,13 @@ class WebActionsStorage(object):
     def get(self, action_id):
         return self._actions[action_id]
 
-    def list(self):
+    def list(self, owner=None):
         if not self._actions:
             return []
+
+        if owner is not None:
+            return [a for a in self._actions.values() if a['owner'] == owner]
+
         return self._actions.values()
 
     def update(self, action_id, action_data):

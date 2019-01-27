@@ -15,7 +15,7 @@ class TestWebActionsPost(IntegrationTestCase):
 
     @browsing
     def test_can_create_new_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions' % self.portal.absolute_url()
 
@@ -58,12 +58,21 @@ class TestWebActionsPost(IntegrationTestCase):
             'unique_name': 'open-in-external-app-title-action',
             'created': '2019-12-31T17:45:00',
             'modified': '2019-12-31T17:45:00',
-            'owner': 'admin',
+            'owner': 'webaction.manager',
         }, browser.json)
 
     @browsing
+    def test_user_without_required_permission_cant_create_webactions(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '%s/@webactions' % self.portal.absolute_url()
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='POST', data='{}', headers=self.HEADERS)
+
+    @browsing
     def test_creating_webaction_with_incomplete_schema_fails(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions' % self.portal.absolute_url()
 
@@ -81,7 +90,7 @@ class TestWebActionsPost(IntegrationTestCase):
 
     @browsing
     def test_creating_webaction_validates_schema_fields(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions' % self.portal.absolute_url()
 
@@ -124,7 +133,7 @@ class TestWebActionsPost(IntegrationTestCase):
 
     @browsing
     def test_creating_webaction_validates_invariants(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions' % self.portal.absolute_url()
 
@@ -152,7 +161,7 @@ class TestWebActionsGet(IntegrationTestCase):
 
     @browsing
     def test_lists_webactions(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         with freeze(datetime(2019, 12, 31, 17, 45)):
             create(Builder('webaction'))
@@ -174,13 +183,54 @@ class TestWebActionsGet(IntegrationTestCase):
                 'scope': 'global',
                 'created': '2019-12-31T17:45:00',
                 'modified': '2019-12-31T17:45:00',
-                'owner': 'admin',
+                'owner': 'webaction.manager',
             }],
         }, browser.json)
 
     @browsing
-    def test_get_webactions(self, browser):
+    def test_user_without_required_permission_cant_list_webactions(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '%s/@webactions' % self.portal.absolute_url()
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='GET', headers=self.HEADERS)
+
+    @browsing
+    def test_only_lists_own_webactions(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        own_action = create(Builder('webaction'))
+        create(Builder('webaction')
+               .owned_by('someone-else'))
+
+        url = '%s/@webactions' % self.portal.absolute_url()
+
+        browser.open(url, method='GET', headers=self.HEADERS)
+        self.assertEquals(
+            [own_action['action_id']],
+            [a['action_id'] for a in browser.json['items']]
+        )
+
+    @browsing
+    def test_manager_can_list_all_webactions(self, browser):
         self.login(self.manager, browser=browser)
+
+        own_action = create(Builder('webaction'))
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+
+        url = '%s/@webactions' % self.portal.absolute_url()
+
+        browser.open(url, method='GET', headers=self.HEADERS)
+        self.assertEquals(
+            [own_action['action_id'], not_my_action['action_id']],
+            [a['action_id'] for a in browser.json['items']]
+        )
+
+    @browsing
+    def test_get_webactions(self, browser):
+        self.login(self.webaction_manager, browser=browser)
 
         with freeze(datetime(2019, 12, 31, 17, 45)):
             action = create(Builder('webaction'))
@@ -200,12 +250,12 @@ class TestWebActionsGet(IntegrationTestCase):
             'scope': 'global',
             'created': '2019-12-31T17:45:00',
             'modified': '2019-12-31T17:45:00',
-            'owner': 'admin',
+            'owner': 'webaction.manager',
         }, browser.json)
 
     @browsing
     def test_get_webactions_returns_404_for_non_existent_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/77' % self.portal.absolute_url()
 
@@ -213,8 +263,40 @@ class TestWebActionsGet(IntegrationTestCase):
             browser.open(url, method='GET', headers=self.HEADERS)
 
     @browsing
-    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+    def test_user_without_required_permission_cant_get_webactions(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        action = create(Builder('webaction'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='GET', headers=self.HEADERS)
+
+    @browsing
+    def test_user_cant_get_someone_elses_action(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='GET', headers=self.HEADERS)
+
+    @browsing
+    def test_manager_may_get_any_action(self, browser):
         self.login(self.manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        browser.open(url, method='GET', headers=self.HEADERS)
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
+    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/1/1/1/1' % self.portal.absolute_url()
 
@@ -223,7 +305,7 @@ class TestWebActionsGet(IntegrationTestCase):
 
     @browsing
     def test_path_param_for_action_id_must_be_integer(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/not-an-integer' % self.portal.absolute_url()
 
@@ -238,7 +320,7 @@ class TestWebActionsPatch(IntegrationTestCase):
 
     @browsing
     def test_can_update_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         with freeze(datetime(2019, 12, 31, 17, 45)):
             action = create(Builder('webaction')
@@ -267,12 +349,12 @@ class TestWebActionsPatch(IntegrationTestCase):
             'scope': 'global',
             'created': datetime(2019, 12, 31, 17, 45),
             'modified': datetime(2020, 7, 31, 19, 15),
-            'owner': 'admin',
+            'owner': 'webaction.manager',
         }, storage.get(action['action_id']))
 
     @browsing
     def test_update_webactions_returns_404_for_non_existent_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/77' % self.portal.absolute_url()
 
@@ -280,8 +362,40 @@ class TestWebActionsPatch(IntegrationTestCase):
             browser.open(url, method='PATCH', headers=self.HEADERS)
 
     @browsing
-    def test_updating_webaction_validates_schema_fields(self, browser):
+    def test_user_without_required_permission_cant_update_webactions(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        action = create(Builder('webaction'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='PATCH', data='{}', headers=self.HEADERS)
+
+    @browsing
+    def test_user_cant_update_someone_elses_action(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='PATCH', data='{}', headers=self.HEADERS)
+
+    @browsing
+    def test_manager_may_update_any_action(self, browser):
         self.login(self.manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        browser.open(url, method='PATCH', data='{}', headers=self.HEADERS)
+        self.assertEqual(204, browser.status_code)
+
+    @browsing
+    def test_updating_webaction_validates_schema_fields(self, browser):
+        self.login(self.webaction_manager, browser=browser)
 
         action = create(Builder('webaction'))
         url = '%s/@webactions/%s' % (self.portal.absolute_url(), action['action_id'])
@@ -297,7 +411,7 @@ class TestWebActionsPatch(IntegrationTestCase):
 
     @browsing
     def test_updating_webaction_validates_invariants(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         action = create(Builder('webaction')
                         .having(
@@ -319,7 +433,7 @@ class TestWebActionsPatch(IntegrationTestCase):
 
     @browsing
     def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/1/1/1/1' % self.portal.absolute_url()
 
@@ -328,7 +442,7 @@ class TestWebActionsPatch(IntegrationTestCase):
 
     @browsing
     def test_path_param_for_action_id_must_be_integer(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/not-an-integer' % self.portal.absolute_url()
 
@@ -342,7 +456,7 @@ class TestWebActionsDelete(IntegrationTestCase):
 
     @browsing
     def test_delete_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         action = create(Builder('webaction'))
 
@@ -357,7 +471,7 @@ class TestWebActionsDelete(IntegrationTestCase):
 
     @browsing
     def test_delete_webactions_returns_404_for_non_existent_webaction(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/77' % self.portal.absolute_url()
 
@@ -365,8 +479,40 @@ class TestWebActionsDelete(IntegrationTestCase):
             browser.open(url, method='DELETE', headers=self.HEADERS)
 
     @browsing
-    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+    def test_user_without_required_permission_cant_delete_webactions(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        action = create(Builder('webaction'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='DELETE', headers=self.HEADERS)
+
+    @browsing
+    def test_user_cant_delete_someone_elses_action(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        with browser.expect_unauthorized():
+            browser.open(url, method='DELETE', headers=self.HEADERS)
+
+    @browsing
+    def test_manager_may_delete_any_action(self, browser):
         self.login(self.manager, browser=browser)
+
+        not_my_action = create(Builder('webaction')
+                               .owned_by('someone-else'))
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), not_my_action['action_id'])
+
+        browser.open(url, method='DELETE', headers=self.HEADERS)
+        self.assertEqual(204, browser.status_code)
+
+    @browsing
+    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/1/1/1/1' % self.portal.absolute_url()
 
@@ -375,7 +521,7 @@ class TestWebActionsDelete(IntegrationTestCase):
 
     @browsing
     def test_path_param_for_action_id_must_be_integer(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.webaction_manager, browser=browser)
 
         url = '%s/@webactions/not-an-integer' % self.portal.absolute_url()
 

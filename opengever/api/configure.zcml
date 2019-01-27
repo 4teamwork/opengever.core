@@ -8,6 +8,7 @@
   <include package="plone.rest" file="meta.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
+  <include package="opengever.webactions" file="permissions.zcml" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
@@ -267,7 +268,7 @@
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".webactions.WebActionsPost"
-      permission="cmf.ManagePortal"
+      permission="opengever.webactions.ManageOwnWebActions"
       />
 
   <plone:service
@@ -275,7 +276,7 @@
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".webactions.WebActionsGet"
-      permission="cmf.ManagePortal"
+      permission="opengever.webactions.ManageOwnWebActions"
       />
 
   <plone:service
@@ -283,7 +284,7 @@
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".webactions.WebActionsPatch"
-      permission="cmf.ManagePortal"
+      permission="opengever.webactions.ManageOwnWebActions"
       />
 
   <plone:service
@@ -291,7 +292,7 @@
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".webactions.WebActionsDelete"
-      permission="cmf.ManagePortal"
+      permission="opengever.webactions.ManageOwnWebActions"
       />
 
 </configure>

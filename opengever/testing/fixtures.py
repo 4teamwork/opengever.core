@@ -272,6 +272,13 @@ class OpengeverContentFixture(object):
             ['Archivist']
             )
 
+        self.webaction_manager = self.create_user(
+            'webaction_manager',
+            u'WebAction',
+            u'Manager',
+            ['WebActionManager'],
+            )
+
         # This user is intended to be used in situations where you need a user
         # which has only the 'Reader' role on some context and one has to build
         # the granting of that themselves

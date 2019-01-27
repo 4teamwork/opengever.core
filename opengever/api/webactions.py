@@ -2,12 +2,14 @@ from opengever.webactions.schema import IPersistedWebActionSchema
 from opengever.webactions.schema import IWebActionSchema
 from opengever.webactions.storage import get_storage
 from opengever.webactions.validation import get_validation_errors
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import _no_content_marker
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component.hooks import getSite
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
@@ -110,6 +112,19 @@ class WebActionLocator(Service):
                 raise BadRequest('{action_id} path parameter must be an integer')
             return action_id
 
+    def _check_ownership(self, action):
+        """Verify that the currently logged in user owns the given action.
+        """
+        current_user = api.user.get_current()
+
+        if current_user.has_role('Manager'):
+            # Ownership restriction doesn't apply to Manager.
+            # They may view, list, update or delete any action.
+            return
+
+        if action['owner'] != current_user.id:
+            raise Unauthorized()
+
     def locate_action(self):
         action_id = self._parse_action_id()
         if action_id is not None:
@@ -118,6 +133,8 @@ class WebActionLocator(Service):
                 action = storage.get(action_id)
             except KeyError:
                 raise NotFound
+
+            self._check_ownership(action)
             return action
 
 
@@ -164,8 +181,17 @@ class WebActionsGet(WebActionLocator):
 
     def list(self):
         site = getSite()
+        current_user = api.user.get_current()
+
         storage = get_storage()
-        actions = storage.list()
+
+        if current_user.has_role('Manager'):
+            # Manager may always list all actions
+            actions = storage.list()
+        else:
+            # Other users may only see their own
+            actions = storage.list(owner=current_user.id)
+
         result = {
             '@id': '/'.join((site.absolute_url(), '@webactions')),
             'items': [serialize_webaction(a) for a in actions],
