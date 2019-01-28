@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.meeting import _
 from opengever.meeting.committeeroles import CommitteeRoles
@@ -46,7 +47,7 @@ def get_group_vocabulary(context):
     for group in groups:
         terms.append(SimpleTerm(
             group.groupid,
-            token=normalize(group.groupid),
+            token=normalize(group.groupid, max_length=GROUP_ID_LENGTH),
             title=group.title or group.groupid))
     return SimpleVocabulary(terms)
 

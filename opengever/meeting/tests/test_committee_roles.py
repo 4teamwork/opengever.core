@@ -69,3 +69,13 @@ class TestCommitteeGroupsVocabulary(IntegrationTestCase):
              u'committee_ver_group'],
             [term.value for term in
              get_group_vocabulary(self.committee_container)])
+
+    def test_committee_group_vocabulary_does_not_truncate_long_group_ids(self):
+        self.login(self.committee_responsible)
+        long_id = 255 * 'x'
+
+        create(Builder('ogds_group')
+              .having(groupid=long_id, title=u'I have a very long ... ID!'))
+
+        vocabulary = get_group_vocabulary(self.committee_container)
+        self.assertEqual(long_id, vocabulary._terms[-1].token)

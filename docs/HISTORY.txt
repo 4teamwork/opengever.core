@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Change wording of info for inactiv close meeting button. [njohner]
+- Avoid truncating committee responsible group token while normalizing. [deiferni]
 - Prevent tasks from being copied. [lgraf]
 - ResolveOGUIDView: Preserve query string. [lgraf]
 - Bump docxcompose to 1.0.0a16 to fix updating docproperties. [deiferni]
