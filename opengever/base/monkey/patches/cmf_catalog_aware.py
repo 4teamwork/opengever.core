@@ -1,10 +1,13 @@
+from opengever.base import _
 from opengever.base.monkey.patching import MonkeyPatch
 from opengever.base.role_assignments import RoleAssignmentManager
+from plone import api
 from Products.CMFCore.utils import _getAuthenticatedUser
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import noLongerProvides
+from zope.i18n import translate
 
 
 class IDisableCatalogIndexing(Interface):
@@ -104,12 +107,20 @@ class PatchCMFCatalogAwareHandlers(MonkeyPatch):
 
             current_user_id = current_user.getId()
             if current_user_id is not None:
-
                 # Customization
-                RoleAssignmentManager(ob).clear_all()
+                # Instead of deleting all local roles when copying an object
+                # we keep or delete them depending on their assignment cause.
+                # We also set the current user as owner
+                copied = RoleAssignmentManager(ob).update_local_roles_for_copy(current_user_id)
+                if copied:
+                    message = translate(
+                        _('local_roles_copied',
+                          default=u"Some local roles were copied with the objects"),
+                        context=getRequest())
+                    api.portal.show_message(message=message,
+                                            request=getRequest(),
+                                            type='info')
                 # end customization
-
-                ob.manage_setLocalRoles(current_user_id, ['Owner'])
 
         from Products.CMFCore import CMFCatalogAware
         self.patch_refs(CMFCatalogAware,
