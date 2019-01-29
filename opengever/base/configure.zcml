@@ -268,6 +268,11 @@
       />
 
   <subscriber
+      for="ZPublisher.interfaces.IPubEnd"
+      handler=".subscribers.scrub_server_version"
+      />
+
+  <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.IObjectRemovedEvent"
       handler=".handlers.remove_favorites"
