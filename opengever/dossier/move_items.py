@@ -42,7 +42,11 @@ class IMoveItemsSchema(Interface):
                 'review_state': DOSSIER_STATES_OPEN + [
                     'repositoryfolder-state-active',
                     'repositoryroot-state-active']
-                }
+                },
+            review_state=DOSSIER_STATES_OPEN + [
+                'repositoryfolder-state-active',
+                'repositoryroot-state-active',
+            ],
             ),
         required=True,
         )

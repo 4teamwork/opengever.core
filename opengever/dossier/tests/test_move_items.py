@@ -624,3 +624,81 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertEquals(
             ['fuhrung', 'rechnungsprufungskommission', 'drittes-repo'],
             selectables)
+
+    @browsing
+    def test_move_target_autocomplete_widget_does_not_list_repo_roots(self, browser):
+        self.login(self.dossier_responsible, browser)
+        autocomplete_url = u'/'.join((
+            self.dossier.absolute_url(),
+            u'@@move_items',
+            u'++widget++form.widgets.destination_folder',
+            u'@@autocomplete-search',
+        ))
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.repository_root.title_or_id()))))
+        self.assertEqual('', browser.contents)
+
+    @browsing
+    def test_move_target_autocomplete_widget_lists_repofolders(self, browser):
+        self.login(self.dossier_responsible, browser)
+        autocomplete_url = u'/'.join((
+            self.dossier.absolute_url(),
+            u'@@move_items',
+            u'++widget++form.widgets.destination_folder',
+            u'@@autocomplete-search',
+        ))
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.branch_repofolder.title_or_id()))))
+        self.assertEqual('/plone/ordnungssystem/fuhrung|fuhrung', browser.contents)
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.leaf_repofolder.title_or_id()))))
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen|vertrage-und-vereinbarungen',
+            browser.contents,
+        )
+
+    @browsing
+    def test_move_target_autocomplete_widget_does_not_list_inactive_repo_folders(self, browser):
+        self.login(self.dossier_responsible, browser)
+        autocomplete_url = u'/'.join((
+            self.dossier.absolute_url(),
+            u'@@move_items',
+            u'++widget++form.widgets.destination_folder',
+            u'@@autocomplete-search',
+        ))
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.inactive_repofolder.title_or_id()))))
+        self.assertEqual('', browser.contents)
+
+    @browsing
+    def test_move_target_autocomplete_widget_lists_open_dossiers(self, browser):
+        self.login(self.dossier_responsible, browser)
+        autocomplete_url = u'/'.join((
+            self.dossier.absolute_url(),
+            u'@@move_items',
+            u'++widget++form.widgets.destination_folder',
+            u'@@autocomplete-search',
+        ))
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.dossier.title_or_id()))))
+        self.assertEqual(
+            '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'
+            '|Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+            browser.contents,
+        )
+
+    @browsing
+    def test_move_target_autocomplete_widget_does_not_list_closed_dossiers(self, browser):
+        self.login(self.dossier_responsible, browser)
+        autocomplete_url = u'/'.join((
+            self.dossier.absolute_url(),
+            u'@@move_items',
+            u'++widget++form.widgets.destination_folder',
+            u'@@autocomplete-search',
+        ))
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.inactive_dossier.title_or_id()))))
+        self.assertEqual('', browser.contents)
+
+        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.expired_dossier.title_or_id()))))
+        self.assertEqual('', browser.contents)
