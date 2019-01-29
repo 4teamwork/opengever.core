@@ -477,8 +477,8 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.move_items(
             browser, src=self.task,
             task=self.subtask, target=self.empty_dossier)
-        self.subtask = getUtility(IIntIds).getObject(task_intid)
-        self.assertIn(self.subtask, self.empty_dossier.objectValues())
+        subtask = getUtility(IIntIds).getObject(task_intid)
+        self.assertIn(subtask, self.empty_dossier.objectValues())
 
     @browsing
     def test_move_items_within_templatefolder_is_possible(self, browser):
