@@ -610,6 +610,7 @@ Objects
           - self.protected_document_with_task
           - self.task_in_protected_dossier
     - self.empty_repofolder
+    - self.inactive_repofolder
   - self.templates
     - self.ad_hoc_agenda_item_template
     - self.asset_template
