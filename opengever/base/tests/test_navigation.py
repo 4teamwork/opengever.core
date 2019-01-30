@@ -45,26 +45,40 @@ class TestNavigation(IntegrationTestCase):
         browser.open()
         browser.click_on('Deutsch')
         browser.visit(self.repository_root, view='navigation.json')
-
-        self.assertEqual(
-            [{u'active': True,
-              u'description': self.branch_repofolder.description,
-              u'nodes': [{u'active': True,
-                          u'description': u'',
-                          u'nodes': [],
-                          u'text': u'1.1. Vertr\xe4ge und Vereinbarungen',
-                          u'uid': u'createrepositorytree000000000003',
-                          u'url': self.leaf_repofolder.absolute_url()}],
-              u'text': u'1. F\xfchrung',
-              u'uid': u'createrepositorytree000000000002',
-              u'url': self.branch_repofolder.absolute_url()},
-             {u'active': True,
-              u'description': u'',
-              u'nodes': [],
-              u'text': u'2. Rechnungspr\xfcfungskommission',
-              u'uid': u'createrepositorytree000000000004',
-              u'url': self.empty_repofolder.absolute_url()}],
-            browser.json)
+        expected_tree = [
+            {
+                u'active': True,
+                u'description': u'Alles zum Thema F\xfchrung.',
+                u'nodes': [{
+                    u'active': True,
+                    u'description': u'',
+                    u'nodes': [],
+                    u'text': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                    u'uid': u'createrepositorytree000000000003',
+                    u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+                }],
+                u'text': u'1. F\xfchrung',
+                u'uid': u'createrepositorytree000000000002',
+                u'url': u'http://nohost/plone/ordnungssystem/fuhrung',
+            },
+            {
+                u'active': True,
+                u'description': u'',
+                u'nodes': [],
+                u'text': u'2. Rechnungspr\xfcfungskommission',
+                u'uid': u'createrepositorytree000000000004',
+                u'url': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission',
+            },
+            {
+                u'active': False,
+                u'description': u'',
+                u'nodes': [],
+                u'text': u'3. Spinn\xe4nnetzregistrar',
+                u'uid': u'createrepositorytree000000000005',
+                u'url': u'http://nohost/plone/ordnungssystem/spinnannetzregistrar',
+            },
+        ]
+        self.assertEqual(expected_tree, browser.json)
 
     @browsing
     def test_caching_headers_are_only_set_with_cache_key(self, browser):

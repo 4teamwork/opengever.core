@@ -172,18 +172,22 @@ class TestDossier(IntegrationTestCase):
         browser.find_link_by_text(u'Finanzverwaltung').click()
         search_result = browser.css('.searchResults dt a')
 
-        self.assertEquals(2, len(search_result))
-        self.assertEquals(self.dossier.title, search_result.first.text)
-        self.assertIn(self.meeting_dossier.title, search_result.text)
+        self.assertEqual(2, len(search_result))
+        expected_results = ['Sitzungsdossier 9/2017', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung']
+        self.assertItemsEqual(expected_results, search_result.text)
 
         browser.visit(self.dossier, view='@@tabbedview_view-overview')
         browser.find_link_by_text(u'Vertr\xe4ge', within=browser.css("#keywordsBox")).click()
         search_result = browser.css('.searchResults dt a')
 
-        self.assertEquals(4, len(search_result))
-        self.assertIn(self.dossier.title, search_result.text)
-        self.assertIn(self.meeting_dossier.title, search_result.text)
-        self.assertIn(self.expired_dossier.title, search_result.text)
+        self.assertEqual(4, len(search_result))
+        expected_results = [
+            u'Abgeschlossene Vertr\xe4ge',
+            u'Inaktive Vertr\xe4ge',
+            'Sitzungsdossier 9/2017',
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+        ]
+        self.assertItemsEqual(expected_results, search_result.text)
 
 
 class TestMeetingFeatureTypes(IntegrationTestCase):

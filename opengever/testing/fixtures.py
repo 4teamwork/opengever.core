@@ -410,6 +410,16 @@ class OpengeverContentFixture(object):
                 )
             ))
 
+        self.register('inactive_repofolder', create(
+            Builder('repository')
+            .within(self.root)
+            .having(
+                title_de=u'Spinn\xe4nnetzregistrar',
+                title_fr=u"Toile d'araign\xe9e",
+                )
+            .in_state('repositoryfolder-state-inactive')
+            ))
+
     @staticuid()
     def create_contacts(self):
         self.contactfolder = self.register('contactfolder', create(
