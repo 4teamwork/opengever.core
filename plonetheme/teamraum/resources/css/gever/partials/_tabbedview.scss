@@ -3,6 +3,21 @@
     position: relative;
     z-index: 2;
   }
+  #tabbedview-body #selection_container .select2-container,
+  #tabbedview-body #message_no_contents .select2-container {
+    margin-left: 1em;
+    .select2-selection {
+      min-height: inherit;
+    }
+    li {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    li.select2-selection__choice {
+      line-height: 1.4em;
+      margin-top: 5px;
+    }
+  }
 }
 
 #content .formTabs {

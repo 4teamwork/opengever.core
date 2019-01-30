@@ -5,6 +5,7 @@ from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.filters import SubjectFilter
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
@@ -22,6 +23,7 @@ class GeverTabMixin(object):
 
     show_searchform = True
     filterlist_available = False
+    subject_filter_enabled = False
 
     def get_css_classes(self):
         if self.show_searchform:
@@ -139,6 +141,9 @@ class GeverTabMixin(object):
             _filter = _filter.decode('utf-8')
 
         return _filter.strip().split(' ')
+
+    def subject_filter_widget(self):
+        return SubjectFilter(self.request).widget()
 
 
 class BaseListingTab(GeverTabMixin, ListingView):

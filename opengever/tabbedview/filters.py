@@ -1,4 +1,7 @@
 from collections import OrderedDict
+from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.tabbedview import _
+from zope import schema
 
 
 class Filter(object):
@@ -75,3 +78,39 @@ class FilterList(OrderedDict):
             return self[selected_filter_id].update_query(query)
 
         return self.default_filter.update_query(query)
+
+
+class SubjectFilter(object):
+    separator = '++'
+
+    def __init__(self, request):
+        self.request = request
+
+    def widget(self):
+        field = schema.List(
+            value_type=schema.Choice(vocabulary='plone.app.vocabularies.Keywords'),
+            required=False,
+        )
+        widget = KeywordFieldWidget(field, self.request)
+        widget.value = self._subjects
+        widget.promptMessage = _('placeholder_filter_by_subjects',
+                                 default="Filter by subjects...")
+        widget.update()
+
+        return widget.render()
+
+    def update_query(self, query):
+        if not self._subjects:
+            return query
+
+        query['Subject'] = {
+            'query': tuple(self._subjects),
+            'operator': 'and'
+        }
+
+        return query
+
+    @property
+    def _subjects(self):
+        subjects = self.request.form.get('subjects')
+        return subjects.split(self.separator) if subjects else []

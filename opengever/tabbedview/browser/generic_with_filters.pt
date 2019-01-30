@@ -68,6 +68,7 @@
 
         </span>
       </tal:cond>
+      <tal:subjectFilterWidget condition="view/subject_filter_enabled" replace="structure view/subject_filter_widget" />
 
       <p id="message_no_contents"
          i18n:translate="label_no_contents"

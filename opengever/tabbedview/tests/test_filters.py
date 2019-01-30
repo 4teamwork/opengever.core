@@ -1,6 +1,11 @@
+from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.tabbedview.filters import CatalogQueryFilter
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
+from opengever.tabbedview.filters import SubjectFilter
+from opengever.testing import IntegrationTestCase
+from plone import api
 from unittest import TestCase
 
 
@@ -71,3 +76,62 @@ class TestFilterList(TestCase):
         self.assertEquals(
             {'review_state': ['state-open']},
             self.filter_list.update_query({}, selected_filter_id))
+
+
+class TestSubjectFilter(IntegrationTestCase):
+    def test_update_query_does_nothing_if_there_are_no_subjects_defined(self):
+        self.assertEqual({}, SubjectFilter(self.request).update_query({}))
+
+    def test_update_query_uses_subject_values_within_request(self):
+        self.request.form['subjects'] = 'James Bond'
+        query = SubjectFilter(self.request).update_query({})
+        self.assertEqual(('James Bond',), query.get('Subject').get('query'))
+
+    def test_update_query_respects_multiple_values(self):
+        subject_filter = SubjectFilter(self.request)
+        subjects = subject_filter.separator.join(['James Bond', 'Bud Spencer'])
+        self.request.form['subjects'] = subjects
+
+        query = SubjectFilter(self.request).update_query({})
+        self.assertEqual(
+            ('James Bond', 'Bud Spencer'),
+            query.get('Subject').get('query'))
+
+    def test_multiple_subjects_are_queried_with_AND(self):
+        self.login(self.administrator)
+
+        subject_filter = SubjectFilter(self.request)
+        IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
+        self.dossier.reindexObject(idxs=['keywords'])
+
+        IDossier(self.meeting_dossier).keywords = ('Alpha')
+        self.meeting_dossier.reindexObject(idxs=['keywords'])
+
+        subjects = subject_filter.separator.join(['Alpha', 'Gamma'])
+        self.request.form['subjects'] = subjects
+
+        brains = api.portal.get_tool('portal_catalog')(
+            SubjectFilter(self.request).update_query({}))
+
+        self.assertEqual(
+            [self.dossier],
+            [brain.getObject() for brain in brains])
+
+    @browsing
+    def test_widget_returns_the_keywordwidget_html(self, browser):
+        browser.open_html(SubjectFilter(self.request).widget())
+        self.assertEqual(1, len(browser.css('.keyword-widget')))
+
+    @browsing
+    def test_subjects_within_request_are_preselected(self, browser):
+        self.login(self.administrator)
+
+        IDossier(self.dossier).keywords = ('Alpha')
+        self.dossier.reindexObject(idxs=['keywords'])
+
+        self.request.form['subjects'] = 'Alpha'
+
+        browser.open_html(SubjectFilter(self.request).widget())
+        self.assertEqual(
+            ['Alpha'],
+            browser.css('option[selected="selected"]').text)
