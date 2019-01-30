@@ -29,7 +29,7 @@ class MigrateAgendaItemNumbersFromStringsToInt(SchemaMigration):
     def migrate_data(self):
         agendaitems = self.execute(transitory_table.select()).fetchall()
         for agendaitem in agendaitems:
-            if agendaitem:
+            if agendaitem.item_number:
                 stripped_item_number = agendaitem.item_number.strip('.')
                 if stripped_item_number:
                     self.execute(
