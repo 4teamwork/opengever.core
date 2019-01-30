@@ -86,6 +86,7 @@ class BaseDocumentMixin(object):
             assert(ISubmittedProposal.providedBy(submitted_proposal))
             if api.user.has_permission('View', obj=submitted_proposal):
                 return submitted_proposal
+            return None
 
         # Find proposal when self is an excerpt in the case dossier.
         generated_excerpts = GeneratedExcerpt.query.by_document(self).all()

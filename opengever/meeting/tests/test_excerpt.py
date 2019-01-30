@@ -8,6 +8,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.trash.remover import Remover
 from opengever.trash.trash import ITrashable
 from opengever.trash.trash import TrashError
+from operator import attrgetter
 from zope.component import getMultiAdapter
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -145,3 +146,104 @@ class TestSyncExcerpt(IntegrationTestCase):
         notify(ObjectModifiedEvent(self.document_in_proposal))
 
         self.assertEqual(1, self.document_in_dossier.get_current_version_id())
+
+
+class TestExcerptOverview(IntegrationTestCase):
+
+    features = ('meeting',)
+    maxDiff = None
+
+    @browsing
+    def test_excerpt_overview_displays_link_to_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        expected_fields = [
+            'Title',
+            'Document Date',
+            'Document Type',
+            'Author',
+            'creator',
+            'Description',
+            'Foreign Reference',
+            'Keywords',
+            'Checked out',
+            'File',
+            'Digital Available',
+            'Preserved as paper',
+            'Date of receipt',
+            'Date of delivery',
+            'Related Documents',
+            'Classification',
+            'Privacy layer',
+            'Public Trial',
+            'Public trial statement',
+            'Submitted with',
+            'Created',
+            'Modified',
+            'Proposal',
+            'Meeting'
+        ]
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = dict(zip(
+            browser.css('.documentMetadata th').text,
+            map(attrgetter('innerHTML'), browser.css('.documentMetadata td')),
+        ))
+        self.assertItemsEqual(expected_fields, fields.keys())
+
+        self.assertEquals(
+            u'<a href="http://nohost/plone/opengever-meeting-committeecontainer'
+            u'/committee-1/meeting-1/view" title="9. Sitzung der '
+            u'Rechnungspr\xfcfungskommission" class="'
+            u'contenttype-opengever-meeting-meeting">9. Sitzung der '
+            u'Rechnungspr\xfcfungskommission</a>',
+            fields['Meeting'],
+            )
+        self.assertEquals(
+            u'<a href="http://nohost/plone/ordnungssystem/fuhrung/'
+            u'vertrage-und-vereinbarungen/dossier-1/proposal-1" title="Vertr\xe4ge"'
+            u' class="contenttype-opengever-meeting-proposal">Vertr\xe4ge</a>',
+            fields['Proposal'])
+
+    @browsing
+    def test_excerpt_overview_hides_link_to_proposal_when_insufficient_privileges(self, browser):
+        self.login(self.committee_responsible, browser)
+        agenda_item = self.schedule_proposal(self.meeting, self.submitted_proposal)
+        agenda_item.decide()
+        excerpt1 = agenda_item.generate_excerpt('excerpt 1')
+        agenda_item.return_excerpt(excerpt1)
+
+        expected_fields = [
+            'Title',
+            'Document Date',
+            'Document Type',
+            'Author',
+            'creator',
+            'Description',
+            'Foreign Reference',
+            'Keywords',
+            'Checked out',
+            'File',
+            'Digital Available',
+            'Preserved as paper',
+            'Date of receipt',
+            'Date of delivery',
+            'Related Documents',
+            'Classification',
+            'Privacy layer',
+            'Public Trial',
+            'Public trial statement',
+            'Submitted with',
+            'Created',
+            'Modified'
+        ]
+        self.login(self.regular_user, browser)
+        browser.open(excerpt1, view='tabbedview_view-overview')
+        fields = dict(zip(
+            browser.css('.documentMetadata th').text,
+            map(attrgetter('innerHTML'), browser.css('.documentMetadata td')),
+        ))
+        self.assertItemsEqual(expected_fields, fields.keys())
