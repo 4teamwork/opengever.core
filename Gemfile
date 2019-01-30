@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.4.2'
+ruby '2.4.5'
 gem 'sass', '~> 3.4'
 
 install_if -> { RUBY_PLATFORM =~ /darwin|bsd|dragonfly/ } do

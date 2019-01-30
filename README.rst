@@ -165,7 +165,7 @@ and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
     echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
     echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
     source ~/.bash_profile
-    rbenv install 2.3.3
+    rbenv install 2.4.5
     gem install bundler
 
 The installation of the ``Sablon`` gem can then be performed by buildout (by
