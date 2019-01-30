@@ -9,7 +9,7 @@ from logging import getLogger
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
 from opengever.meeting import _
-from opengever.meeting.traverser import MeetingTraverser
+from opengever.meeting.traverser import MeetingDocumentWithFileTraverser
 from persistent.mapping import PersistentMapping
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -39,7 +39,7 @@ def format_modified(modified):
         ).isoformat())
 
 
-class MeetingDocumentZipper(MeetingTraverser):
+class MeetingDocumentZipper(MeetingDocumentWithFileTraverser):
 
     def __init__(self, meeting, generator):
         super(MeetingDocumentZipper, self).__init__(meeting)
@@ -134,7 +134,7 @@ class MeetingPDFDocumentZipper(MeetingDocumentZipper):
         return self.pdfs[document_id]
 
 
-class MeetingJSONSerializer(MeetingTraverser):
+class MeetingJSONSerializer(MeetingDocumentWithFileTraverser):
     """Represents a JSON file with which grimlock can import the meeting."""
 
     def __init__(self, meeting, zipper):
@@ -196,13 +196,14 @@ class MeetingJSONSerializer(MeetingTraverser):
 
         attachment_data.append({
             'checksum': IBumblebeeDocument(document).get_checksum(),
-            'file': self.zipper.get_agenda_item_attachment_filename(document, agenda_item.formatted_number, attachment_number),
+            'file': self.zipper.get_agenda_item_attachment_filename(
+                document, agenda_item.formatted_number, attachment_number),
             'modified': format_modified(document.modified()),
             'title': safe_unicode(document.Title()),
         })
 
 
-class ZipExportDocumentCollector(MeetingTraverser):
+class ZipExportDocumentCollector(MeetingDocumentWithFileTraverser):
     """Collect all documents that will be exported in a zip."""
 
     def __init__(self, meeting):
@@ -226,9 +227,6 @@ class ZipExportDocumentCollector(MeetingTraverser):
         return tuple(self._documents)
 
     def _collect(self, document):
-        if not IBumblebeeDocument(document).has_file_data():
-            return
-
         self._documents.append(document)
 
 
