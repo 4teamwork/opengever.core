@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-12-10 07:42+0000\n"
+"POT-Creation-Date: 2019-01-31 18:37+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -33,12 +33,6 @@ msgstr ""
 
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
-msgstr ""
-
-#: ./opengever/task/response.py
-#: ./opengever/task/response_syncer/workflow.py
-#: ./opengever/task/util.py
-msgid "Issue state"
 msgstr ""
 
 #: ./opengever/task/response.py
@@ -193,10 +187,6 @@ msgstr ""
 msgid "cancel"
 msgstr ""
 
-#: ./opengever/task/response.py
-msgid "date_of_completion"
-msgstr ""
-
 #. Default: "Select one or more responsibles. For each selected responsible a subtask will be created and assigned."
 #: ./opengever/task/browser/delegate/recipients.py
 msgid "delegate_help_responsible"
@@ -340,10 +330,12 @@ msgstr ""
 
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible"
 msgstr ""
 
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible_client"
 msgstr ""
 
@@ -522,6 +514,7 @@ msgstr ""
 
 #. Default: "New Deadline"
 #: ./opengever/task/browser/modify_deadline.py
+#: ./opengever/task/transition.py
 msgid "label_new_deadline"
 msgstr ""
 
@@ -574,6 +567,7 @@ msgstr ""
 
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_resonsible_client"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2019-01-31 18:37+0000\n"
 "PO-Revision-Date: 2016-08-10 04:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-inbox/fr/>\n"
@@ -66,6 +66,11 @@ msgstr "Choix de la personne responsable ou de la boîte de réception du client
 msgid "label_assigned_inbox_tasks"
 msgstr "Tâches reçues"
 
+#. Default: "Dossier"
+#: ./opengever/inbox/transition.py
+msgid "label_dossier"
+msgstr "Dossier"
+
 #. Default: "Forwarding added"
 #: ./opengever/inbox/activities.py
 msgid "label_forwarding_added"
@@ -115,4 +120,3 @@ msgstr "Fermer le transfert"
 #: ./opengever/inbox/yearfolder.py
 msgid "yearfolder_title"
 msgstr "Fermé ${year}"
-

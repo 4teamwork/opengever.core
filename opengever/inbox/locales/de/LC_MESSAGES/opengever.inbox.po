@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2019-01-31 18:37+0000\n"
 "PO-Revision-Date: 2015-03-30 08:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,6 +64,11 @@ msgstr "Wählen Sie die verantwortliche Person bzw. den Eingangskorb des zustän
 msgid "label_assigned_inbox_tasks"
 msgstr "Erhaltene Aufgaben"
 
+#. Default: "Dossier"
+#: ./opengever/inbox/transition.py
+msgid "label_dossier"
+msgstr "Dossier"
+
 #. Default: "Forwarding added"
 #: ./opengever/inbox/activities.py
 msgid "label_forwarding_added"
@@ -113,4 +118,3 @@ msgstr "Weiterleitung abschliessen"
 #: ./opengever/inbox/yearfolder.py
 msgid "yearfolder_title"
 msgstr "Abgeschlossen ${year}"
-
