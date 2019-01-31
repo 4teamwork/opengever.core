@@ -111,16 +111,16 @@ class WebActionsStorage(object):
         return action_id
 
     def get(self, action_id):
-        return self._actions[action_id]
+        return dict(self._actions[action_id])
 
     def list(self, owner=None):
         if owner is not None:
-            return [a for a in self._actions.values() if a['owner'] == owner]
+            return [dict(a) for a in self._actions.values() if a['owner'] == owner]
 
-        return self._actions.values()
+        return [dict(a) for a in self._actions.values()]
 
     def update(self, action_id, action_data):
-        action = self.get(action_id)
+        persisted_action = self._actions[action_id]
 
         # Make sure we only allow updating of the user-controlled fields from
         # the IWebActionSchema, but reject server-controlled ones or other
@@ -130,20 +130,20 @@ class WebActionsStorage(object):
         self._enforce_unique_name_uniqueness(action_data)
 
         # Validate schema of the final resulting action on a copy
-        action_copy = action.copy()
+        action_copy = persisted_action.copy()
         action_copy.update(action_data)
         validate_schema(action_copy, IPersistedWebActionSchema)
 
         # If validation succeeded, update the actual PersistentDict
-        self.unindex_action(action)
+        self.unindex_action(persisted_action)
 
-        action.update(action_data)
-        action['modified'] = datetime.now()
+        persisted_action.update(action_data)
+        persisted_action['modified'] = datetime.now()
 
-        self.index_action(action)
+        self.index_action(persisted_action)
 
     def delete(self, action_id):
-        action = self.get(action_id)
+        action = self._actions[action_id]
         self.unindex_action(action)
         del self._actions[action_id]
 

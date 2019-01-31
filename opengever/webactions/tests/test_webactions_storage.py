@@ -10,7 +10,6 @@ from opengever.webactions.interfaces import IWebActionsStorage
 from opengever.webactions.storage import ActionAlreadyExists
 from opengever.webactions.storage import get_storage
 from opengever.webactions.storage import WebActionsStorage
-from persistent.mapping import PersistentMapping
 from zope.annotation import IAnnotations
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
@@ -111,7 +110,7 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
         })
 
         self.assertEqual(expected, action_from_storage)
-        self.assertIsInstance(action_from_storage, PersistentMapping)
+        self.assertIsInstance(action_from_storage, dict)
 
     def test_add_webaction_with_missing_fields_raises(self):
         storage = get_storage()
@@ -367,7 +366,7 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         with freeze(datetime(2020, 7, 31, 19, 15)):
             storage.update(action_id, {'title': u'My new title'})
 
-        self.assertIsInstance(storage.get(action_id), PersistentMapping)
+        self.assertIsInstance(storage.get(action_id), dict)
         self.assertEqual({
             'action_id': 0,
             'title': u'My new title',
@@ -515,6 +514,7 @@ class TestWebActionsStorageDeletion(IntegrationTestCase):
     def test_delete_webaction(self):
         storage = get_storage()
         action = create(Builder('webaction'))
+        self.assertEqual(1, len(storage._actions))
         storage.delete(action['action_id'])
         self.assertEqual(0, len(storage._actions))
         self.assertEqual({}, dict(storage._actions))
