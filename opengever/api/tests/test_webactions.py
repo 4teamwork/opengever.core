@@ -182,6 +182,32 @@ class TestWebActionsPost(IntegrationTestCase):
             "unique_name u'existing-unique-name' already exists\",))]",
             browser.json['message'])
 
+    @browsing
+    def test_creating_action_rejects_non_user_controlled_fields(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        url = '%s/@webactions' % self.portal.absolute_url()
+
+        action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        # The 'action_id' field is not supposed to be user-controlled
+        action['action_id'] = 42
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(url, method='POST', data=json.dumps(action),
+                         headers=self.HEADERS)
+
+        self.assertEquals(
+            "[(u'action_id', UnknownField(u'action_id'))]",
+            browser.json['message'])
+
 
 class TestWebActionsGet(IntegrationTestCase):
 
@@ -497,6 +523,26 @@ class TestWebActionsPatch(IntegrationTestCase):
         self.assertEquals(
             "[('unique_name', ActionAlreadyExists(\"An action with the "
             "unique_name u'existing-unique-name' already exists\",))]",
+            browser.json['message'])
+
+    @browsing
+    def test_updating_action_rejects_non_user_controlled_fields(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        action = create(Builder('webaction'))
+
+        url = '%s/@webactions/%s' % (self.portal.absolute_url(), action['action_id'])
+
+        # The 'action_id' field is not supposed to be user-controlled
+        action_delta = {'action_id': 42}
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(url, method='PATCH',
+                         data=json.dumps(action_delta),
+                         headers=self.HEADERS)
+
+        self.assertEqual(
+            "[(u'action_id', UnknownField(u'action_id'))]",
             browser.json['message'])
 
 

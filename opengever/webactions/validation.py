@@ -37,6 +37,17 @@ class Base64DataURI(URI):
             raise InvalidBase64DataURI("Data URI could not be decoded as base64 (%r)." % exc)
 
 
+def get_unknown_fields(action_data, schema):
+    """Return an error list of unknown fields that are not part of the schema.
+    """
+    errors = []
+    known_field_names = getFieldNamesInOrder(schema)
+    for key in action_data:
+        if key not in known_field_names:
+            errors.append((key, UnknownField(key)))
+    return errors
+
+
 def get_schema_validation_errors(action_data, schema):
     """Validate a dict against a schema.
 
@@ -65,10 +76,8 @@ def get_schema_validation_errors(action_data, schema):
             except ValidationError as e:
                 errors.append((name, e))
 
-    known_field_names = getFieldNamesInOrder(schema)
-    for key in action_data:
-        if key not in known_field_names:
-            errors.append((key, UnknownField(key)))
+    # Also reject fields that are not part of the schema
+    errors.extend(get_unknown_fields(action_data, schema))
 
     return errors
 
@@ -100,6 +109,19 @@ def validate_schema(action_data, schema):
     """Validate a dict against a schema, raise on error.
     """
     errors = get_validation_errors(action_data, schema)
+    if errors:
+        raise ValidationError(
+            "WebAction doesn't conform to schema (First error: %s)." % str(errors[0]))
+
+
+def validate_no_unknown_fields(action_data, schema):
+    """Validate that data only contains known fields.
+
+    No other validations are performed though. This is needed in situations
+    where only have partial webaction data, like on PATCH / update(), and
+    therefore can't expect invariant validations to succeed.
+    """
+    errors = get_unknown_fields(action_data, schema)
     if errors:
         raise ValidationError(
             "WebAction doesn't conform to schema (First error: %s)." % str(errors[0]))

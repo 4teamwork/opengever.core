@@ -2,6 +2,7 @@ from opengever.webactions.exceptions import ActionAlreadyExists
 from opengever.webactions.schema import IPersistedWebActionSchema
 from opengever.webactions.schema import IWebActionSchema
 from opengever.webactions.storage import get_storage
+from opengever.webactions.validation import get_unknown_fields
 from opengever.webactions.validation import get_validation_errors
 from plone import api
 from plone.restapi.deserializer import json_body
@@ -178,6 +179,11 @@ class WebActionsPatch(WebActionLocator):
 
     def update(self, action):
         action_delta = json_body(self.request)
+
+        # Reject any fields that aren't user-controlled or unknown
+        errors = get_unknown_fields(action_delta, IWebActionSchema)
+        if errors:
+            raise BadRequest(errors)
 
         scrub_json_payload(action_delta)
 

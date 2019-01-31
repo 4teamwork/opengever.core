@@ -302,6 +302,29 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
             action_id,
             unique_name_index[u'open-in-external-app-title-action'])
 
+    def test_add_rejects_non_user_controlled_fields(self):
+        self.login(self.manager)
+
+        storage = get_storage()
+        new_action = {
+            'title': u'Open in ExternalApp',
+            'target_url': 'http://example.org/endpoint',
+            'display': 'actions-menu',
+            'mode': 'self',
+            'order': 0,
+            'scope': 'global',
+        }
+
+        # The 'action_id' field is not supposed to be user-controlled
+        new_action['action_id'] = 42
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.add(new_action)
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
+            cm.exception.message)
+
 
 class TestWebActionsStorageRetrieval(IntegrationTestCase):
 
@@ -473,6 +496,18 @@ class TestWebActionsStorageUpdating(IntegrationTestCase):
         self.assertEquals(
             action['action_id'],
             unique_name_index[u'new-unique-id'])
+
+    def test_update_rejects_non_user_controlled_fields(self):
+        storage = get_storage()
+
+        create(Builder('webaction'))
+
+        with self.assertRaises(ValidationError) as cm:
+            storage.update(0, {'action_id': 42})
+
+        self.assertEqual(
+            "WebAction doesn't conform to schema (First error: ('action_id', UnknownField('action_id'))).",
+            cm.exception.message)
 
 
 class TestWebActionsStorageDeletion(IntegrationTestCase):

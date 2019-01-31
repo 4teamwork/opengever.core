@@ -6,6 +6,7 @@ from opengever.webactions.exceptions import ActionAlreadyExists
 from opengever.webactions.interfaces import IWebActionsStorage
 from opengever.webactions.schema import IPersistedWebActionSchema
 from opengever.webactions.schema import IWebActionSchema
+from opengever.webactions.validation import validate_no_unknown_fields
 from opengever.webactions.validation import validate_schema
 from persistent.mapping import PersistentMapping
 from plone import api
@@ -123,6 +124,11 @@ class WebActionsStorage(object):
 
     def update(self, action_id, action_data):
         action = self.get(action_id)
+
+        # Make sure we only allow updating of the user-controlled fields from
+        # the IWebActionSchema, but reject server-controlled ones or other
+        # surprise data.
+        validate_no_unknown_fields(action_data, IWebActionSchema)
 
         self._enforce_unique_name_uniqueness(action_data)
 
