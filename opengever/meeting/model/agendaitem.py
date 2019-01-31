@@ -126,6 +126,8 @@ class AgendaItem(Base):
 
     @property
     def formatted_number(self):
+        if not self.item_number:
+            return ""
         return '{}.'.format(self.item_number)
 
     def get_title(self, include_number=False, formatted=False):
