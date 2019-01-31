@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Fix bug in paragraph agendaitem item_number display. [njohner]
 - Scrub Bobo Call Interface data out of the HTTP response headers. [Rotonen]
 - Scrub the server version out of the HTTP response headers. [Rotonen]
 - Fix bug in excerpt overview when user has no permissions on meeting. [njohner]
