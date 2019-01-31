@@ -114,9 +114,6 @@ class WebActionsStorage(object):
         return self._actions[action_id]
 
     def list(self, owner=None):
-        if not self._actions:
-            return []
-
         if owner is not None:
             return [a for a in self._actions.values() if a['owner'] == owner]
 
