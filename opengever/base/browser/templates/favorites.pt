@@ -24,7 +24,7 @@
                              data-userid view/get_userid;
                              data-authtoken context/@@authenticator/token"></div>
 
-        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_app.js?_v=1"></script>
+        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_app.js?_v=501b97dec4c77aa4bb750a9b58103ce1"></script>
 
       </metal:core-macro>
     </div>

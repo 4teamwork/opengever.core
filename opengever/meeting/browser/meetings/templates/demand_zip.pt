@@ -24,7 +24,7 @@
                            data-meetingurl view/meeting_url;">
       </span>
 
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.meeting/zip_export_app.js?_v=1" />
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.meeting/zip_export_app.js?_v=c5ab8d15f54c06d30b7af35e5431870a" />
 
       <hr />
 
