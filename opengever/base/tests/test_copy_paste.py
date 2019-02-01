@@ -4,6 +4,16 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import assignments_kept_when_copying
+from opengever.base.role_assignments import ASSIGNMENT_VIA_COMMITTEE_GROUP
+from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
+from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
+from opengever.base.role_assignments import RoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from plone.protect import createToken
 from zope.component import getUtility
@@ -236,6 +246,332 @@ class TestCopyPaste(IntegrationTestCase):
             'Properties',
             ]
         self.assertEqual(expected_actions, browser.css('#contentActionMenus a').text)
+
+
+class TestCopyPastePermissionHandling(IntegrationTestCase):
+
+    @browsing
+    def test_preserves_role_inheritance_block_on_dossier(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.subdossier.__ac_local_roles_block__ = True
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        subsubdossier_copy = subdossier_copy.get_subdossiers()[0].getObject()
+
+        self.assertTrue(getattr(subdossier_copy, '__ac_local_roles_block__', False))
+        self.assertFalse(getattr(subsubdossier_copy, '__ac_local_roles_block__', False))
+
+    @browsing
+    def test_preserves_role_inheritance_block_on_subdossier(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.subsubdossier.__ac_local_roles_block__ = True
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        subsubdossier_copy = subdossier_copy.get_subdossiers()[0].getObject()
+
+        self.assertFalse(getattr(subdossier_copy, '__ac_local_roles_block__', False))
+        self.assertTrue(getattr(subsubdossier_copy, '__ac_local_roles_block__', False))
+
+    @browsing
+    def test_preserves_local_roles_from_sharing(self, browser):
+        assignment_type = ASSIGNMENT_VIA_SHARING
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor']))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(1, len(assignments), "{} should get copied".format(assignment_class))
+        assignment = assignments[0]
+        expected_assignment = {'cause': assignment_type,
+                               'roles': ['Reader', 'Editor', 'Contributor'],
+                               'reference': None,
+                               'principal': self.regular_user.id}
+        self.assertEqual(expected_assignment, assignment)
+
+    @browsing
+    def test_preserves_local_roles_from_protect_dossier(self, browser):
+        assignment_type = ASSIGNMENT_VIA_PROTECT_DOSSIER
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor']))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(1, len(assignments), "{} should get copied".format(assignment_class))
+        assignment = assignments[0]
+        expected_assignment = {'cause': assignment_type,
+                               'roles': ['Reader', 'Editor', 'Contributor'],
+                               'reference': None,
+                               'principal': self.regular_user.id}
+        self.assertEqual(expected_assignment, assignment)
+
+    @browsing
+    def test_preserves_local_roles_from_invitation(self, browser):
+        assignment_type = ASSIGNMENT_VIA_INVITATION
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor'],
+                             self.workspace))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(1, len(assignments), "{} should get copied".format(assignment_class))
+        assignment = assignments[0]
+        expected_assignment = {'cause': assignment_type,
+                               'roles': ['Reader', 'Editor', 'Contributor'],
+                               'reference': Oguid.for_object(self.workspace).id,
+                               'principal': self.regular_user.id}
+        self.assertEqual(expected_assignment, assignment)
+
+    @browsing
+    def test_does_not_preserve_local_roles_from_tasks(self, browser):
+        assignment_type = ASSIGNMENT_VIA_TASK
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor'],
+                             self.task))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(0, len(assignments),
+                         "{} should not get copied".format(assignment_class))
+
+    @browsing
+    def test_does_not_preserve_local_roles_from_task_agency(self, browser):
+        assignment_type = ASSIGNMENT_VIA_TASK_AGENCY
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor'],
+                             self.task))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(0, len(assignments),
+                         "{} should not get copied".format(assignment_class))
+
+    @browsing
+    def test_does_not_preserve_local_roles_from_committee_group(self, browser):
+        assignment_type = ASSIGNMENT_VIA_COMMITTEE_GROUP
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor'],
+                             self.committee))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
+
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
+        manager = RoleAssignmentManager(subdossier_copy)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+
+        self.assertEqual(0, len(assignments),
+                         "{} should not get copied".format(assignment_class))
+
+    def test_all_assignment_types_are_handled(self):
+        assignments_dropped_when_copying = [ASSIGNMENT_VIA_TASK,
+                                            ASSIGNMENT_VIA_TASK_AGENCY,
+                                            ASSIGNMENT_VIA_COMMITTEE_GROUP]
+
+        for assignment in assignments_kept_when_copying:
+            assignment_class = RoleAssignment.registry[assignment]
+            self.assertNotIn(assignment, assignments_dropped_when_copying,
+                             "local roles for {} are not dropped anymore during "
+                             "copy/paste. Please adapt this test if this change "
+                             "is on purpose.".format(assignment_class))
+
+        handled_assignments = assignments_dropped_when_copying + list(assignments_kept_when_copying)
+
+        for key in RoleAssignment.registry:
+            assignment_class = RoleAssignment.registry[assignment]
+            self.assertIn(key, handled_assignments,
+                          "local roles for {} are dropped during copy/paste. If this"
+                          " is on purpose, please adapt this test.".format(assignment_class))
+
+    @browsing
+    def test_status_message_shown_when_local_roles_on_dossier_are_copied(self, browser):
+        assignment_type = ASSIGNMENT_VIA_SHARING
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.empty_repofolder)
+        browser.click_on('Paste')
+
+        self.assertItemsEqual(info_messages(),
+                              ["Objects from clipboard successfully pasted."])
+
+        manager = RoleAssignmentManager(self.subdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor']))
+        manager = RoleAssignmentManager(self.subdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.empty_repofolder)
+        browser.click_on('Paste')
+
+        self.assertItemsEqual(info_messages(),
+                              ["Some local roles were copied with the objects",
+                               "Objects from clipboard successfully pasted."])
+
+    @browsing
+    def test_status_message_shown_when_local_roles_on_subdossier_are_copied(self, browser):
+        assignment_type = ASSIGNMENT_VIA_SHARING
+        assignment_class = RoleAssignment.registry[assignment_type]
+
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.empty_repofolder)
+        browser.click_on('Paste')
+
+        self.assertItemsEqual(info_messages(),
+                              ["Objects from clipboard successfully pasted."])
+
+        manager = RoleAssignmentManager(self.subsubdossier)
+        manager.add_or_update_assignment(
+            assignment_class(self.regular_user.id,
+                             ['Reader', 'Editor', 'Contributor']))
+        manager = RoleAssignmentManager(self.subsubdossier)
+        assignments = manager.get_assignments_by_cause(assignment_type)
+        self.assertEqual(1, len(assignments))
+
+        browser.open(self.dossier,
+                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.empty_repofolder)
+        browser.click_on('Paste')
+
+        self.assertItemsEqual(info_messages(),
+                              ["Some local roles were copied with the objects",
+                               "Objects from clipboard successfully pasted."])
 
 
 class TestClipboardCaching(IntegrationTestCase):

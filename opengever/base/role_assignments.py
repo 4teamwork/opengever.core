@@ -16,6 +16,12 @@ ASSIGNMENT_VIA_PROTECT_DOSSIER = 4
 ASSIGNMENT_VIA_INVITATION = 5
 ASSIGNMENT_VIA_COMMITTEE_GROUP = 6
 
+# When copying a dossier, we keep or drop local roles depending on
+# their assignment cause.
+assignments_kept_when_copying = (ASSIGNMENT_VIA_SHARING,
+                                 ASSIGNMENT_VIA_PROTECT_DOSSIER,
+                                 ASSIGNMENT_VIA_INVITATION)
+
 
 class RoleAssignment(object):
 
@@ -296,7 +302,7 @@ class RoleAssignmentManager(object):
         self._update_local_roles()
 
     def clear_by_cause_and_principals(self, cause, principals):
-        """Remove all assignments of the given cause and for all principals.
+        """Remove all assignments of the given cause and principals.
         """
         for principal in principals:
             self.storage.clear_by_cause_and_principal(cause, principal)
@@ -316,6 +322,38 @@ class RoleAssignmentManager(object):
 
         self.storage.clear(item)
         self._update_local_roles(reindex=reindex)
+
+    def set_new_owner(self, userid, reindex=True):
+        """ Remove all current owners and set Owner for userid.
+        """
+        for principal, roles in self.context.get_local_roles():
+            if 'Owner' not in roles:
+                continue
+            new_roles = (role for role in roles if not role == "Owner")
+            self.context.manage_setLocalRoles(
+                principal, new_roles, verified=True)
+
+        self.context.manage_addLocalRoles(
+                userid, ['Owner'], verified=True)
+
+        if reindex:
+            self.context.reindexObjectSecurity()
+
+    def update_local_roles_after_copying(self, new_owner):
+        """ We only delete certain local roles when copying an object
+        depending on their assignment cause. We also set a new owner
+        on the copied object.
+        """
+        are_all_local_roles_deleted = True
+        for assignment in RoleAssignment.registry.values():
+            if assignment.cause not in assignments_kept_when_copying:
+                self.storage.clear_by_cause(assignment.cause)
+            elif self.get_assignments_by_cause(assignment.cause):
+                are_all_local_roles_deleted = False
+
+        self.set_new_owner(new_owner, reindex=False)
+        self._update_local_roles()
+        return are_all_local_roles_deleted
 
     def _update_local_roles(self, reindex=True):
         current_principals = []

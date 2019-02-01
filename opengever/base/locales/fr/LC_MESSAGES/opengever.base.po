@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-10-12 11:55+0000\n"
+"POT-Creation-Date: 2019-01-28 15:39+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -377,6 +377,11 @@ msgstr "Titre (français)"
 #: opengever/repository/classification.py
 msgid "limited-public"
 msgstr "Accès public restreint"
+
+#. Default: "Some local roles were copied with the objects"
+#: ./opengever/base/monkey/patches/cmf_catalog_aware.py
+msgid "local_roles_copied"
+msgstr "Des autorisations locales ont également été copiées"
 
 #. Default: "Changes saved"
 #: ./opengever/base/browser/modelforms.py
