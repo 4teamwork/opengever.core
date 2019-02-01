@@ -148,7 +148,8 @@ class TestPeriod(IntegrationTestCase):
         button = browser.find('download TOC json alphabetical')
 
         period = self.committee.load_model().periods[0]
-        expected_url = os.path.join(period.get_url(self.committee), 'alphabetical_toc/as_json')
+        expected_url = os.path.join(
+            period.get_url(self.committee), 'alphabetical_toc/as_json')
         self.assertEqual(expected_url, button.get("href"))
 
         button.click()
@@ -159,7 +160,8 @@ class TestPeriod(IntegrationTestCase):
                                                 u'meeting_date': u'17.07.2016',
                                                 u'meeting_start_page_number': None,
                                                 u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
-                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung',
+                                                u'description': None}],
                                  }]}
         self.assertEqual(toc_content, browser.json)
 
@@ -181,7 +183,8 @@ class TestPeriod(IntegrationTestCase):
                                                 u'meeting_date': u'17.07.2016',
                                                 u'meeting_start_page_number': None,
                                                 u'repository_folder_title': u'Vertr\xe4ge und Vereinbarungen',
-                                                u'title': u'Initialvertrag f\xfcr Bearbeitung'}],
+                                                u'title': u'Initialvertrag f\xfcr Bearbeitung',
+                                                u'description': None}],
                                  }]}
 
         self.assertEqual(toc_content, browser.json)
@@ -199,6 +202,7 @@ class TestPeriod(IntegrationTestCase):
         button.click()
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1 / 1',
                                  u'contents': [{u'decision_number': 1,
+                                                u'description': None,
                                                 u'dossier_reference_number': u'Client1 1.1 / 1',
                                                 u'has_proposal': True,
                                                 u'meeting_date': u'17.07.2016',
@@ -224,6 +228,7 @@ class TestPeriod(IntegrationTestCase):
 
         toc_content = {u'toc': [{u'group_title': u'Client1 1.1',
                                  u'contents': [{u'decision_number': 1,
+                                                u'description': None,
                                                 u'dossier_reference_number': u'Client1 1.1 / 1',
                                                 u'has_proposal': True,
                                                 u'meeting_date': u'17.07.2016',

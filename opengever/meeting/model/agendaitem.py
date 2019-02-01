@@ -153,7 +153,7 @@ class AgendaItem(Base):
 
     def get_description(self):
         return (self.submitted_proposal.description if self.has_proposal
-                else self.description)
+                else self.description) or None
 
     def get_description_html(self):
         return to_html_xweb_intelligent(self.get_description()) or None

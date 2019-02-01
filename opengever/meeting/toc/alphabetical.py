@@ -86,6 +86,7 @@ class AlphabeticalToc(object):
             unordered_items.append(processor.process(
                 {
                  'title': agenda_item.get_title(),
+                 'description': agenda_item.get_description(),
                  'dossier_reference_number': agenda_item.get_dossier_reference_number(),
                  'repository_folder_title': agenda_item.get_repository_folder_title(),
                  'decision_number': agenda_item.decision_number,
