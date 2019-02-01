@@ -259,11 +259,14 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         subsubdossier_copy = subdossier_copy.get_subdossiers()[0].getObject()
+
         self.assertTrue(getattr(subdossier_copy, '__ac_local_roles_block__', False))
         self.assertFalse(getattr(subsubdossier_copy, '__ac_local_roles_block__', False))
 
@@ -276,10 +279,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         subsubdossier_copy = subdossier_copy.get_subdossiers()[0].getObject()
 
         self.assertFalse(getattr(subdossier_copy, '__ac_local_roles_block__', False))
@@ -303,10 +308,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 
@@ -336,10 +343,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 
@@ -370,10 +379,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 
@@ -404,10 +415,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 
@@ -433,10 +446,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 
@@ -462,10 +477,12 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         browser.open(self.dossier,
                      data=self.make_path_param(self.subdossier), view="copy_items")
 
-        browser.open(self.empty_repofolder)
-        browser.click_on('Paste')
+        with self.observe_children(self. empty_repofolder) as children:
+            browser.open(self.empty_repofolder)
+            browser.click_on('Paste')
 
-        subdossier_copy = self.empty_repofolder.objectValues()[0]
+        self.assertEqual(1, len(children.get('added')))
+        subdossier_copy = children.get('added').pop()
         manager = RoleAssignmentManager(subdossier_copy)
         assignments = manager.get_assignments_by_cause(assignment_type)
 

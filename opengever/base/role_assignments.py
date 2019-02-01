@@ -339,21 +339,21 @@ class RoleAssignmentManager(object):
         if reindex:
             self.context.reindexObjectSecurity()
 
-    def update_local_roles_for_copy(self, new_owner):
+    def update_local_roles_after_copying(self, new_owner):
         """ We only delete certain local roles when copying an object
         depending on their assignment cause. We also set a new owner
         on the copied object.
         """
-        are_roles_copied = False
+        are_all_local_roles_deleted = True
         for assignment in RoleAssignment.registry.values():
             if assignment.cause not in assignments_kept_when_copying:
                 self.storage.clear_by_cause(assignment.cause)
             elif self.get_assignments_by_cause(assignment.cause):
-                are_roles_copied = True
+                are_all_local_roles_deleted = False
 
         self.set_new_owner(new_owner, reindex=False)
         self._update_local_roles()
-        return are_roles_copied
+        return are_all_local_roles_deleted
 
     def _update_local_roles(self, reindex=True):
         current_principals = []

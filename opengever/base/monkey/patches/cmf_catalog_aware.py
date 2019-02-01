@@ -108,15 +108,12 @@ class PatchCMFCatalogAwareHandlers(MonkeyPatch):
             current_user_id = current_user.getId()
             if current_user_id is not None:
                 # Customization
-                # Instead of deleting all local roles when copying an object
-                # we keep or delete them depending on their assignment cause.
-                # We also set the current user as owner
-                copied = RoleAssignmentManager(ob).update_local_roles_for_copy(current_user_id)
-                if copied:
-                    message = translate(
-                        _('local_roles_copied',
-                          default=u"Some local roles were copied with the objects"),
-                        context=getRequest())
+                are_all_local_roles_deleted = RoleAssignmentManager(ob)\
+                    .update_local_roles_after_copying(current_user_id)
+                if not are_all_local_roles_deleted:
+                    message = _(
+                        'local_roles_copied',
+                         default=u"Some local roles were copied with the objects")
                     api.portal.show_message(message=message,
                                             request=getRequest(),
                                             type='info')
