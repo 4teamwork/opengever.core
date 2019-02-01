@@ -175,6 +175,12 @@ class SavePDFUnderForm(form.Form):
     def update(self):
         version_id = self.request.get("version_id")
 
+        if version_id == "0" and not self.check_has_initial_version():
+            # Initial version is created only when the document gets modified
+            # so it is possible to retrieve version 0 before that happens.
+            # In that case we save the current document as pdf.
+            version_id = None
+
         if not self.check_version_is_convertable(version_id):
             msg = _(u'unconvertable_document',
                     default=u'This document cannot be converted to PDF.')
@@ -184,6 +190,9 @@ class SavePDFUnderForm(form.Form):
 
         super(SavePDFUnderForm, self).update()
         self.widgets["version_id"].value = version_id
+
+    def check_has_initial_version(self):
+        return Versioner(self.context).has_initial_version()
 
     def check_version_is_convertable(self, version_id):
         """ The object action is only available for documents that are convertable,

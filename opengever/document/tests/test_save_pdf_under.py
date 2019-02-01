@@ -118,6 +118,26 @@ class TestSavePDFUnderForm(IntegrationTestCase):
         self.assertEqual(self.document.absolute_url(), browser.url)
 
     @browsing
+    def test_save_pdf_under_form_handles_retrieving_initial_version(self, browser):
+        self.login(self.regular_user, browser)
+        self.document.file.filename = u"test.txt"
+        self.document.file.contentType = "text/plain"
+
+        # when the initial version does not yet exist, retrieving version 0
+        # is handled and returns the pdf for the current state of the document
+        browser.open(self.document, view='save_pdf_under', data={"version_id": "0"})
+        self.assertEqual("/".join([self.document.absolute_url(), 'save_pdf_under']),
+                         browser.url)
+        version_field = browser.forms.get('form').find_field("form.widgets.version_id")
+        self.assertIsNone(version_field.value)
+
+        # Once the initial version has been created, we can retrieve version 0
+        Versioner(self.document).create_version("")
+        browser.open(self.document, view='save_pdf_under', data={"version_id": "0"})
+        version_field = browser.forms.get('form').find_field("form.widgets.version_id")
+        self.assertEqual('0', version_field.value)
+
+    @browsing
     def test_save_pdf_under_form_creates_empty_document(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='save_pdf_under')
