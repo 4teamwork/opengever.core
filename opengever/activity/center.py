@@ -1,3 +1,4 @@
+from opengever.activity.error_handling import NotificationErrorHandler
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
@@ -14,15 +15,6 @@ from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import true
-from ZODB.POSException import ConflictError
-from zope.globalrequest import getRequest
-from zope.i18nmessageid import MessageFactory
-import logging
-import sys
-import traceback
-
-_ = MessageFactory("opengever.activity")
-logger = logging.getLogger('opengever.activity')
 
 
 class NotificationCenter(object):
@@ -249,28 +241,11 @@ class PloneNotificationCenter(NotificationCenter):
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description):
         oguid = self._get_oguid_for(obj)
-        try:
+        with NotificationErrorHandler() as handler:
             result = super(PloneNotificationCenter, self).add_activity(
                 oguid, kind, title, label, summary, actor_id, description)
             if result.get('errors'):
-                self.show_not_notified_message()
-
-        except ConflictError:
-            raise
-
-        except Exception:
-            self.show_not_notified_message()
-            tcb = ''.join(traceback.format_exception(*sys.exc_info()))
-            logger.error('Exception while adding an activity:\n{}'.format(tcb))
-
-        return
-
-    def show_not_notified_message(self):
-        msg = _(u'msg_error_not_notified',
-                default=u'A problem has occurred during the notification '
-                'creation. Notification could not or only partially '
-                'produced.')
-        api.portal.show_message(msg, getRequest(), type='warning')
+                handler.show_not_notified_message()
 
     def get_watchers(self, obj):
         oguid = self._get_oguid_for(obj)
