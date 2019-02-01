@@ -702,6 +702,16 @@ msgstr "L'extrait de protocole a été déposé dans le dossier d'origine de la 
 msgid "excused"
 msgstr "Excusé"
 
+#. Default: "Excerpt templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_excerpt_templates"
+msgstr "Modèles extrait de protocole"
+
+#. Default: "Protocol templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_protocol_templates"
+msgstr "Modèles protocole"
+
 #. Default: "Alphabetical Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_alphabetical_toc"

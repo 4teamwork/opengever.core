@@ -699,6 +699,16 @@ msgstr ""
 msgid "excused"
 msgstr ""
 
+#. Default: "Excerpt templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_excerpt_templates"
+msgstr ""
+
+#. Default: "Protocol templates"
+#: ./opengever/meeting/committee.py
+msgid "fieldset_protocol_templates"
+msgstr ""
+
 #. Default: "Alphabetical Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_alphabetical_toc"

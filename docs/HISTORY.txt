@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix bug in paragraph agendaitem item_number display. [njohner]
+- Group fields in Committee edit forms. [njohner]
 - Scrub Bobo Call Interface data out of the HTTP response headers. [Rotonen]
 - Scrub the server version out of the HTTP response headers. [Rotonen]
 - Fix bug in excerpt overview when user has no permissions on meeting. [njohner]
