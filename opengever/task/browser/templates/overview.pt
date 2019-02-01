@@ -143,5 +143,5 @@
     <div class="visualClear"><!----></div>
   </tal:i18n>
   <div tal:replace="structure view/task_reminder_vuejs_template" />
-  <script tal:attributes="src string:${context/portal_url}/++resource++opengever.base/task_reminder_selector.js"></script>
+  <script tal:attributes="src string:${context/portal_url}/++resource++opengever.base/task_reminder_selector.js?_v=1"></script>
 </html>

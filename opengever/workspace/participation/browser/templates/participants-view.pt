@@ -31,7 +31,7 @@
                              data-i18n view/translations;
                              data-authtoken context/@@authenticator/token"></div>
 
-        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/app.js"></script>
+        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/app.js?_v=1"></script>
 
       </metal:core-macro>
     </div>

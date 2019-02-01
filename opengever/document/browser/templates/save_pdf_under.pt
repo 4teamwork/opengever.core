@@ -24,7 +24,7 @@
                            data-sourcedocumenturl view/source_document_url;">
       </span>
 
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.document/save_pdf_under_app.js" />
+      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.document/save_pdf_under_app.js?_v=1" />
 
     </div>
 
