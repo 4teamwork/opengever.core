@@ -51,11 +51,15 @@ class TestDossierListing(IntegrationTestCase):
         listing_data.sort(key=lambda data: data[1])
         return [data for data, modified in listing_data]
 
-    def open_repo_with_filter(self, browser, dossier, filter_name):
+    def open_repo_with_filter(self, browser, dossier, filter_name, subjects=[]):
+        data = {'dossier_state_filter': filter_name}
+        if subjects:
+            data['subjects'] = subjects
+
         browser.visit(
             dossier,
             view='tabbedview_view-dossiers',
-            data={'dossier_state_filter': filter_name})
+            data=data)
 
     @staticmethod
     def filter_data(data, state='dossier-state-active'):
@@ -249,3 +253,22 @@ class TestDossierListing(IntegrationTestCase):
 
         self.assertEqual(1, len(data))
         self.assertItemsEqual(self.get_folder_data(self.dossier), data[0])
+
+    @browsing
+    def test_subject_filter_is_active(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
+
+        self.assertEqual(
+            1, len(browser.css('.tabbedview_select .keyword-widget')))
+
+    @browsing
+    def test_filter_dossiers_by_subjects(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
+        self.assertLess(1, len(browser.css('.listing tbody tr')))
+
+        self.open_repo_with_filter(
+            browser, self.leaf_repofolder, 'filter_all', ['Wichtig'])
+        self.assertEqual(1, len(browser.css('.listing tbody tr')))

@@ -1,7 +1,12 @@
 from collections import OrderedDict
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.tabbedview import _
+from plone import api
+from Products.CMFDiffTool.utils import safe_utf8
+from Products.CMFPlone.utils import safe_unicode
 from zope import schema
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from binascii import b2a_qp
 
 
 class Filter(object):
@@ -82,17 +87,21 @@ class FilterList(OrderedDict):
 
 class SubjectFilter(object):
     separator = '++'
+    widget_additional_query = {}
 
-    def __init__(self, request):
+    def __init__(self, context, request):
+        self.context = context
         self.request = request
 
     def widget(self):
+        """Returns the html of a keywordwidget.
+        """
         field = schema.List(
-            value_type=schema.Choice(vocabulary='plone.app.vocabularies.Keywords'),
+            value_type=schema.Choice(source=self._keywords_vocabulary()),
             required=False,
         )
         widget = KeywordFieldWidget(field, self.request)
-        widget.value = self._subjects
+        widget.value = self._subject_terms_from_request()
         widget.promptMessage = _('placeholder_filter_by_subjects',
                                  default="Filter by subjects...")
         widget.update()
@@ -100,17 +109,56 @@ class SubjectFilter(object):
         return widget.render()
 
     def update_query(self, query):
-        if not self._subjects:
+        """Used by the FilteredTableSourceMixin to update the table-query
+        with the subject filter.
+
+        This method extends the query with the subject filter.
+        """
+        if not self._subject_terms_from_request():
             return query
 
         query['Subject'] = {
-            'query': tuple(self._subjects),
+            'query': tuple(self._subject_values_from_request()),
             'operator': 'and'
         }
 
         return query
 
-    @property
-    def _subjects(self):
+    def _subject_terms_from_request(self):
         subjects = self.request.form.get('subjects')
-        return subjects.split(self.separator) if subjects else []
+        subjects = subjects.split(self.separator) if subjects else []
+        return [safe_unicode(subject) for subject in subjects]
+
+    def _subject_values_from_request(self):
+        source = self._keywords_vocabulary()
+        subjects = self._subject_terms_from_request()
+        subjects = [source.getTermByToken(subject).value for subject in subjects]
+
+        return [safe_unicode(subject) for subject in subjects]
+
+    def _keywords_vocabulary(self):
+        terms = map(self._make_term, self._context_based_keywords())
+        return SimpleVocabulary(terms)
+
+    def _context_based_keywords(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        query = {'path': {
+            'query': '/'.join(self.context.getPhysicalPath()),
+            'depth': -1}}
+        query.update(self.widget_additional_query)
+
+        return self._unique_subjects(catalog(query))
+
+    def _make_term(self, keyword):
+        return SimpleTerm(
+            value=keyword, token=self._make_token(keyword), title=keyword)
+
+    def _make_token(self, value):
+        return b2a_qp(value)
+
+    def _unique_subjects(self, brains):
+        context_path = '/'.join(self.context.getPhysicalPath())
+        return set([safe_utf8(subject)
+                    for brain in brains
+                    for subject in brain.Subject
+                    if brain.getPath() != context_path])

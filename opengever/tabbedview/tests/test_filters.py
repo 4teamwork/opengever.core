@@ -79,39 +79,50 @@ class TestFilterList(TestCase):
 
 
 class TestSubjectFilter(IntegrationTestCase):
+
     def test_update_query_does_nothing_if_there_are_no_subjects_defined(self):
-        self.assertEqual({}, SubjectFilter(self.request).update_query({}))
+        self.assertEqual({}, SubjectFilter(
+            self.portal, self.request).update_query({}))
 
     def test_update_query_uses_subject_values_within_request(self):
-        self.request.form['subjects'] = 'James Bond'
-        query = SubjectFilter(self.request).update_query({})
-        self.assertEqual(('James Bond',), query.get('Subject').get('query'))
+        self.login(self.administrator)
+        subject_filter = SubjectFilter(self.portal, self.request)
+
+        self.request.form['subjects'] = subject_filter._make_token('Vertr\xc3\xa4ge')
+
+        query = subject_filter.update_query({})
+        self.assertEqual((u'Vertr\xe4ge',), query.get('Subject').get('query'))
 
     def test_update_query_respects_multiple_values(self):
-        subject_filter = SubjectFilter(self.request)
-        subjects = subject_filter.separator.join(['James Bond', 'Bud Spencer'])
+        self.login(self.administrator)
+        subject_filter = SubjectFilter(self.portal, self.request)
+
+        IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
+        self.dossier.reindexObject(idxs=['keywords'])
+
+        subjects = subject_filter.separator.join(['Alpha', 'Beta'])
         self.request.form['subjects'] = subjects
 
-        query = SubjectFilter(self.request).update_query({})
+        query = SubjectFilter(self.portal, self.request).update_query({})
         self.assertEqual(
-            ('James Bond', 'Bud Spencer'),
+            ('Alpha', 'Beta'),
             query.get('Subject').get('query'))
 
     def test_multiple_subjects_are_queried_with_AND(self):
         self.login(self.administrator)
 
-        subject_filter = SubjectFilter(self.request)
+        subject_filter = SubjectFilter(self.portal, self.request)
         IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
         self.dossier.reindexObject(idxs=['keywords'])
 
-        IDossier(self.meeting_dossier).keywords = ('Alpha')
+        IDossier(self.meeting_dossier).keywords = ('Alpha', )
         self.meeting_dossier.reindexObject(idxs=['keywords'])
 
         subjects = subject_filter.separator.join(['Alpha', 'Gamma'])
         self.request.form['subjects'] = subjects
 
         brains = api.portal.get_tool('portal_catalog')(
-            SubjectFilter(self.request).update_query({}))
+            SubjectFilter(self.portal, self.request).update_query({}))
 
         self.assertEqual(
             [self.dossier],
@@ -119,19 +130,29 @@ class TestSubjectFilter(IntegrationTestCase):
 
     @browsing
     def test_widget_returns_the_keywordwidget_html(self, browser):
-        browser.open_html(SubjectFilter(self.request).widget())
+        browser.open_html(SubjectFilter(self.portal, self.request).widget())
         self.assertEqual(1, len(browser.css('.keyword-widget')))
 
     @browsing
     def test_subjects_within_request_are_preselected(self, browser):
         self.login(self.administrator)
 
-        IDossier(self.dossier).keywords = ('Alpha')
+        IDossier(self.dossier).keywords = ('Alpha', )
         self.dossier.reindexObject(idxs=['keywords'])
 
         self.request.form['subjects'] = 'Alpha'
 
-        browser.open_html(SubjectFilter(self.request).widget())
+        browser.open_html(SubjectFilter(self.portal, self.request).widget())
         self.assertEqual(
             ['Alpha'],
             browser.css('option[selected="selected"]').text)
+
+    @browsing
+    def test_restrict_subjects_to_context_children(self, browser):
+        self.login(self.administrator)
+
+        browser.open_html(SubjectFilter(self.dossier, self.request).widget())
+
+        self.assertItemsEqual(
+            [u'Subkeyw\xf6rd', u'Subkeyword', u'Subsubkeyword', u'Subsubkeyw\xf6rd'],
+            browser.css('option').text)

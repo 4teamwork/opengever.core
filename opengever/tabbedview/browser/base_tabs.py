@@ -143,7 +143,18 @@ class GeverTabMixin(object):
         return _filter.strip().split(' ')
 
     def subject_filter_widget(self):
-        return SubjectFilter(self.request).widget()
+        subject_filter = SubjectFilter(self.context, self.request)
+
+        query = {}
+        if self.types:
+            query['portal_type'] = self.types
+
+        if self.object_provides:
+            query['object_provides'] = self.object_provides
+
+        subject_filter.widget_additional_query = query
+
+        return subject_filter.widget()
 
 
 class BaseListingTab(GeverTabMixin, ListingView):
