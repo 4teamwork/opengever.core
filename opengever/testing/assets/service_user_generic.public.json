@@ -1,0 +1,10 @@
+{
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApieWI4lJ60htd6/HRGBP\nKYGRX4jcmgILMMnBlTXn65caA5GFdkKTZddwAwNKSvAr+2Q6vR3q/Gq9FOMCfZNW\n18qJ+dTs1xe2IuL7SgwaZSLtEFGUeSzQS29LyT375j6gfva5LZctum45ANPns/W1\nT++5FIcziLe9NBouXlwfCiBz/cSI9CxkjZW1XfhX0k7Ycl2wCCDtAtZaK/Qk7IO0\nUZEc8AThJDw/NJyEK62n4xxHwzyBDpxN08zl57wKjzsQ9rRbsCdcifkARECHPFm/\n2CtramCF1N2t2E6igA+VaLzAziE87d1uF+xWgkaoZGaaezmNmdXP65sZVTixOaCs\nVwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "user_id": "service.user",
+    "title": "Generic Service Key",
+    "issued": "2019-01-23T14:56:15.298146",
+    "ip_range": null,
+    "client_id": "5936133005c83887af6bfaee4650b04e",
+    "token_uri": "http://localhost:55001/plone/@@oauth2-token",
+    "key_id": "cf146f3dd0492de7c62711380d5dfd21d21bcbcc"
+}

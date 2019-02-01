@@ -37,12 +37,45 @@ def time_based_intids():
                 intid += 1
             return intid
 
+    globals()['TimeBasedIntIds'] = TimeBasedIntIds
     patched_intids = TimeBasedIntIds()
     getSite().getSiteManager().registerUtility(patched_intids, IIntIds)
     try:
         yield
     finally:
         getSite().getSiteManager().registerUtility(original_intids, IIntIds)
+        globals().pop('TimeBasedIntIds')
+
+
+@contextmanager
+def incrementing_intids(starting_number=99000):
+    """In testing environments we often want to have predictable intids,
+    but using a time based version may not work well when time is frozen.
+    This implementation replaces the intids generator with an incrementing one.
+    """
+    original_intids = getUtility(IIntIds)
+    counter = {'number': starting_number}
+
+    class IncrementingIntIds(type(original_intids)):
+
+        def __init__(self):
+            self.__dict__ = original_intids.__dict__
+
+        def _generateId(self):
+            counter['number'] += 1
+            intid = counter['number']
+            while intid in self.refs:
+                intid += 1
+            return intid
+
+    globals()['IncrementingIntIds'] = IncrementingIntIds
+    patched_intids = IncrementingIntIds()
+    getSite().getSiteManager().registerUtility(patched_intids, IIntIds)
+    try:
+        yield
+    finally:
+        getSite().getSiteManager().registerUtility(original_intids, IIntIds)
+        globals().pop('IncrementingIntIds')
 
 
 def localized_datetime(*args, **kwargs):
