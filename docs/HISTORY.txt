@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Notifications: Defer sending mails until end of transaction. [lgraf]
 - Implement WebActions storage and REST API. [lgraf]
 - Add simple cache invalidation mechanism for javascript included in templates. [deiferni]
 - Fix bug in paragraph agendaitem item_number display. [njohner]

@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity.digest import DigestMailer
+from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Digest
 from opengever.testing import IntegrationTestCase
 import pytz
@@ -39,31 +40,36 @@ class TestDigestMail(IntegrationTestCase):
 
     def test_sends_mail_to_all_notified_users(self):
         DigestMailer().send_digests()
+        process_mail_queue()
 
         messages = [message_from_string(mail)
                     for mail in Mailing(self.portal).get_messages()]
         self.assertEquals(2, len(messages))
-        self.assertEquals(['foo@example.com', 'robert.ziegler@gever.local'],
-                          [message.get('To') for message in messages])
+        self.assertItemsEqual(['foo@example.com', 'robert.ziegler@gever.local'],
+                              [message.get('To') for message in messages])
 
     def test_sends_only_not_yet_sended_notifications(self):
         self.note2.sent_in_digest = True
 
         DigestMailer().send_digests()
+        process_mail_queue()
 
         messages = [message_from_string(mail)
                     for mail in Mailing(self.portal).get_messages()]
         self.assertEquals(1, len(messages))
-        self.assertEquals(['foo@example.com'],
-                          [message.get('To') for message in messages])
+        self.assertEquals('foo@example.com',
+                          messages[0].get('To'))
 
     @browsing
     def test_mail_contains_date_activity_summaries(self, browser):
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             DigestMailer().send_digests()
+            process_mail_queue()
 
         messages = [message_from_string(mail)
                     for mail in Mailing(self.portal).get_messages()]
+
+        messages.sort(key=lambda msg: msg.get('To'))
 
         browser.open_html(str(messages[0].get_payload()[0]))
 
@@ -75,6 +81,7 @@ class TestDigestMail(IntegrationTestCase):
 
     def test_send_in_digest_flag_is_enabled_after_send(self):
         DigestMailer().send_digests()
+        process_mail_queue()
 
         self.assertTrue(self.note1.sent_in_digest)
         self.assertTrue(self.note2.sent_in_digest)
@@ -83,11 +90,12 @@ class TestDigestMail(IntegrationTestCase):
         now = datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)
         with freeze(now):
             DigestMailer().send_digests()
+            process_mail_queue()
 
         self.assertEquals(
             [now, now],
             [digest.last_dispatch for digest in Digest.query.all()])
-        self.assertEquals(
+        self.assertItemsEqual(
             [self.regular_user.getId(), self.dossier_responsible.getId()],
             [digest.userid for digest in Digest.query.all()])
 
@@ -102,6 +110,7 @@ class TestDigestMail(IntegrationTestCase):
 
         with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
             DigestMailer().send_digests()
+            process_mail_queue()
 
             messages = [message_from_string(mail)
                         for mail in Mailing(self.portal).get_messages()]
@@ -122,6 +131,7 @@ class TestDigestMail(IntegrationTestCase):
         Mailing(self.portal).reset()
         with freeze(datetime(2017, 10, 16, 11, 30, tzinfo=pytz.utc)):
             DigestMailer().send_digests()
+            process_mail_queue()
 
             messages = [message_from_string(mail)
                         for mail in Mailing(self.portal).get_messages()]
@@ -146,6 +156,7 @@ class TestDigestMail(IntegrationTestCase):
                        userid=self.dossier_responsible.getId()))
 
         DigestMailer().send_digests()
+        process_mail_queue()
 
         messages = [message_from_string(mail)
                     for mail in Mailing(self.portal).get_messages()]
