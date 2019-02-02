@@ -8,6 +8,6 @@
                        data-num-checked-out view/get_num_checked_out;
                        data-userid view/get_userid" />
 
-  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/recently_touched_menu_app.js"></script>
+  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/recently_touched_menu_app.js?_v=0c00a7420a791059bbd0e91785b74b9d"></script>
 
 </div>

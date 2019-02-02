@@ -10,6 +10,6 @@
                        data-i18n view/translations;
                        data-userid view/get_userid" />
 
-  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_menu_app.js"></script>
+  <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/favorites_menu_app.js?_v=bd2593a93b06feed765fd9993e241a79"></script>
 
 </div>

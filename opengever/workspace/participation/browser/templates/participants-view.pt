@@ -7,14 +7,6 @@
       i18n:domain="opengever.workspace">
 
   <body>
-    <metal:js fill-slot="javascript_head_slot">
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/vue.min.js"></script>
-
-      <script tal:attributes="src string:${here/portal_url}/++resource++opengever.base/axios.min.js"></script>
-
-    </metal:js>
-
-
     <metal:title fill-slot="content-title">
        <h1 class="documentFirstHeading" i18n:translate="title_manage_participation">
            Manage participation of <span i18n:name="workspace" tal:replace="here/Title" />
@@ -31,7 +23,7 @@
                              data-i18n view/translations;
                              data-authtoken context/@@authenticator/token"></div>
 
-        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/app.js"></script>
+        <script tal:attributes="src string:${here/portal_url}/++resource++opengever.workspace.participants.resources/app.js?_v=df3da290de17529f737e5ce36d1a4820"></script>
 
       </metal:core-macro>
     </div>
