@@ -25,9 +25,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
-      <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeMember</permission-role>
-      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="Add portal content"
@@ -41,10 +38,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeMember</permission-role>
-      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="List folder contents"
@@ -60,7 +53,7 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="True">
+        acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map
@@ -73,9 +66,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
-      <permission-role>CommitteeAdministrator</permission-role>
-      <permission-role>CommitteeMember</permission-role>
-      <permission-role>CommitteeResponsible</permission-role>
     </permission-map>
     <permission-map
         name="ftw.mail: Add Inbound Mail"
@@ -83,7 +73,7 @@
   </permission-map>
     <permission-map
         name="ftw.mail: Add Mail"
-        acquired="True">
+        acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
