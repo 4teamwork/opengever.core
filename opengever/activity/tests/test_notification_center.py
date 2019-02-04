@@ -6,6 +6,7 @@ from opengever.activity.digest import DigestDispatcher
 from opengever.activity.mail import NotificationDispatcher
 from opengever.activity.model import Notification
 from opengever.activity.model import Resource
+from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -174,6 +175,43 @@ class TestWatcherHandling(ActivityTestCase):
             Oguid('fd', '123'), 'peter', WATCHER_ROLE)
 
         self.assertEquals([hugo], resource.watchers)
+
+    def test_remove_watchers_from_resource_by_role(self):
+        peter = create(Builder('watcher').having(actorid='peter'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+        marie = create(Builder('watcher').having(actorid='marie'))
+        resource = create(Builder('resource').oguid('fd:123'))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=peter, role=WATCHER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=marie, role=WATCHER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=peter, role=TASK_ISSUER_ROLE))
+        create(Builder('subscription')
+               .having(resource=resource, watcher=hugo, role=TASK_ISSUER_ROLE))
+
+        self.center.remove_watchers_from_resource_by_role(
+            Oguid('fd', '123'), WATCHER_ROLE)
+
+        self.assertEqual(
+            set([TASK_ISSUER_ROLE]),
+            set([subscription.role for subscription in Subscription.query.all()]))
+
+        self.assertEquals([peter, hugo], resource.watchers)
+
+    def test_remove_watchers_from_resource_by_role_does_not_affect_other_resources(self):
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+
+        create(Builder('resource').oguid('fd:123').watchers([hugo]))
+        create(Builder('resource').oguid('fd:234').watchers([hugo]))
+
+        self.assertEqual(2, Subscription.query.count())
+        self.assertEqual(
+            ['fd:123', 'fd:234'],
+            [subscription.resource.oguid.id for subscription in Subscription.query.all()])
+
+        self.center.remove_watchers_from_resource_by_role(
+            Oguid('fd', '234'), WATCHER_ROLE)
 
 
 class TestAddActivity(ActivityTestCase):

@@ -28,6 +28,7 @@
                            data-save-url view/save_url;
                            data-reset-url view/reset_url;
                            data-tab-title-task view/tab_title_task;
+                           data-tab-title-dossiers view/tab_title_dossiers;
                            data-tab-title-forwardings view/tab_title_forwardings;
                            data-tab-title-proposals view/tab_title_proposals;
                            data-tab-title-reminders view/tab_title_reminders;

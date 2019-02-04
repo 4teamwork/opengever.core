@@ -113,7 +113,7 @@
     &.dispositionArchived:before { font-family: 'Font Awesome 5 Free';  content: fa-content($archive); }
     &.dispositionClosed:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-close); }
     &.dispositionRefused:before { font-family: 'Font Awesome 5 Free';  content: fa-content($disposition-refuse); }
-
+    &.dossierOverdue:before { content: $time; }
   }
 
   .action {

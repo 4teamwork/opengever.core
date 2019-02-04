@@ -1,4 +1,5 @@
 from opengever.activity import notification_center
+from opengever.activity import SYSTEM_ACTOR_ID
 from plone import api
 from zope.i18n import translate
 
@@ -10,7 +11,12 @@ class BaseActivity(object):
     be performed on an object. It provides every needed attribute/methods to
     record the activity in the notification center.
 
+    By default, an activity is related to an actor. The actor of the activity
+    is the currently logged in user. But there are activities recorded by the
+    system which have no actor. Such an activity is a system_activity.
     """
+    system_activity = False
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
@@ -76,7 +82,7 @@ class BaseActivity(object):
             self.title,
             self.label,
             self.summary,
-            self.actor_id,
+            SYSTEM_ACTOR_ID if self.system_activity else self.actor_id,
             self.description)
 
     def _get_supported_languages(self):

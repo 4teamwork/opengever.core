@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 14:25+0000\n"
+"POT-Creation-Date: 2019-02-04 10:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -542,6 +542,11 @@ msgstr ""
 msgid "label_dossier_note_placeholder"
 msgstr ""
 
+#. Default: "Overdue dossier"
+#: ./opengever/dossier/activities.py
+msgid "label_dossier_overdue_activity"
+msgstr ""
+
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_dossier_templates"
@@ -884,6 +889,11 @@ msgid "sharing"
 msgstr ""
 
 msgid "subdossiers"
+msgstr ""
+
+#. Default: "The dossier is still open after exceeding its end date."
+#: ./opengever/dossier/activities.py
+msgid "summary_dossier_overdue_activity"
 msgstr ""
 
 msgid "tasks"

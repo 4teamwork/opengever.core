@@ -80,6 +80,21 @@ class NotificationCenter(object):
             if subscription:
                 self.session.delete(subscription)
 
+    def remove_watchers_from_resource_by_role(self, oguid, role):
+        resource = self.fetch_resource(oguid)
+        subscriptions = Subscription.query.by_resource_and_role(
+            resource, [role])
+
+        if resource and subscriptions:
+            map(self.session.delete, subscriptions.all())
+
+            # The association-proxy objects "watchers" of the Resource object
+            # are not update. We have to expire the slq-alchemy object to
+            # let it refetch the relations.
+            # See https://docs.sqlalchemy.org/en/latest/orm/session_state_management.html#refreshing-expiring
+            # for more information about this issue.
+            self.session.expire(resource)
+
     def get_watchers(self, oguid):
         """Returns a read-only tuple of watchers for a given oguid.
         """
@@ -215,6 +230,11 @@ class PloneNotificationCenter(NotificationCenter):
         super(PloneNotificationCenter, self).remove_watcher_from_resource(
             oguid, userid, role)
 
+    def remove_watchers_from_resource_by_role(self, obj, role):
+        oguid = self._get_oguid_for(obj)
+        super(PloneNotificationCenter, self).remove_watchers_from_resource_by_role(
+            oguid, role)
+
     def add_task_responsible(self, obj, actorid):
         self.add_watcher_to_resource(obj, actorid, TASK_RESPONSIBLE_ROLE)
 
@@ -292,6 +312,9 @@ class DisabledNotificationCenter(NotificationCenter):
         pass
 
     def remove_watcher_from_resource(self, obj, userid, role):
+        pass
+
+    def remove_watchers_from_resource_by_role(self, obj, role):
         pass
 
     def add_task_responsible(self, obj, actorid):

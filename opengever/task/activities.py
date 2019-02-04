@@ -181,6 +181,7 @@ class TaskReassignActivity(TaskTransitionActivity):
 class TaskReminderActivity(BaseActivity):
     kind = 'task-reminder'
     IGNORED_STATES = FINISHED_TASK_STATES + ['task-state-resolved']
+    system_activity = True
 
     def __init__(self, sql_context, request):
         super(TaskReminderActivity, self).__init__(sql_context, request)
@@ -240,5 +241,5 @@ class TaskReminderActivity(BaseActivity):
             self.title,
             self.label,
             self.summary,
-            SYSTEM_ACTOR_ID,
+            SYSTEM_ACTOR_ID if self.system_activity else self.actor_id,
             self.description)

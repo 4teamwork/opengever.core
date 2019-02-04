@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-07 14:25+0000\n"
+"POT-Creation-Date: 2019-02-04 10:29+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -541,6 +541,11 @@ msgstr "administrateur du dossier"
 msgid "label_dossier_note_placeholder"
 msgstr "Saisir un commentaire"
 
+#. Default: "Overdue dossier"
+#: ./opengever/dossier/activities.py
+msgid "label_dossier_overdue_activity"
+msgstr ""
+
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_dossier_templates"
@@ -884,6 +889,11 @@ msgstr "Participations"
 
 msgid "subdossiers"
 msgstr "Sous-dossiers"
+
+#. Default: "The dossier is still open after exceeding its end date."
+#: ./opengever/dossier/activities.py
+msgid "summary_dossier_overdue_activity"
+msgstr ""
 
 msgid "tasks"
 msgstr "Tâches"

@@ -19,6 +19,7 @@ Changelog
 - Avoid truncating committee responsible group token while normalizing. [deiferni]
 - Provide a testserver for GEVER. [jone]
 - Prevent tasks from being copied. [lgraf]
+- Implement filtering and notifications for overdue dossiers [elioschmutz]
 - ResolveOGUIDView: Preserve query string. [lgraf]
 - Bump docxcompose to 1.0.0a16 to fix updating docproperties. [deiferni]
 - Resolve mail author to fullname when it is a userid. [njohner]

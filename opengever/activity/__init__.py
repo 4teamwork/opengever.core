@@ -161,6 +161,9 @@ ACTIVITY_TRANSLATIONS = {
     'disposition-transition-close': _(
         'disposition-transition-close',
         default=u'Disposition closed'),
+    'dossier-overdue': _(
+        'dossier-overdue',
+        default=u'Overdue dossier'),
 }
 
 # TODO: There are too many places where the activites are defined:
@@ -198,4 +201,5 @@ ACTIVITIES_ICONS = {
     'disposition-transition-dispose': 'dispositionDisposed',
     'disposition-transition-refuse': 'dispositionRefused',
     'disposition-transition-close': 'dispositionClosed',
+    'dossier-overdue': 'dossierOverdue',
 }

@@ -72,3 +72,20 @@ Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte s
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
 der Job "Aufgaben-Erinnerungen erstellen" nur einmal durchgeführt werden! Es ist zu empfehlen die gleiche Konvention wie bei der OGDS Synchronisierung zu verwenden, also jeweils auf dem ersten Mandanten / Deployment des Verbunds durchführen.
+
+
+Benachrichtigung für überfällige Dossiers
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ein überfälliges Dossier ist ein Dossier im Status offen, welches das End-Datum überschritten hat.
+
+Benachrichtigungen für überfällige Dossiers können über den zopectl handler `generate_overdue_notifications` generiert werden. Dabei wird für jedes überfällige Dossier eine Benachrichtigung an die federführende Person versendet.
+
+Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführt werden.
+
+.. code:: bash
+
+    # GEVER Demo: Generate notifications for overdue dossiers
+    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
+
+**Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" berücksichtigt alle Org-Units (Plone-Sites) eines bestimmten Mandanten / Deployments. Dieser Job muss jedoch für jedes Deployment einzeln ausgeführt werden.

@@ -7,6 +7,7 @@ from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
+from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
@@ -88,6 +89,12 @@ ACTIVITY_GROUPS = [
          'disposition-transition-close',
          'disposition-transition-dispose',
          'disposition-transition-refuse',
+     ]},
+
+    {'id': 'dossier',
+     'roles': [DOSSIER_RESPONSIBLE_ROLE],
+     'activities': [
+         'dossier-overdue',
      ]},
 ]
 
@@ -300,6 +307,9 @@ class NotificationSettingsForm(BrowserView):
 
     def tab_title_dispositions(self):
         return _('label_dispositions', default=u'Dispositions')
+
+    def tab_title_dossiers(self):
+        return _('label_dossiers', default=u'Dossiers')
 
     def show_disposition_tab(self):
         return api.user.has_permission('opengever.disposition: Add disposition')

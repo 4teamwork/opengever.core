@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-27 11:51+0000\n"
+"POT-Creation-Date: 2018-12-11 10:29+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,6 +92,16 @@ msgstr "Zur Archivierung angeboten"
 msgid "disposition-transition-refuse"
 msgstr "Angebot abgelehnt"
 
+#. Default: "Overdue dossier"
+#: ./opengever/activity/__init__.py
+msgid "dossier-overdue"
+msgstr "Überfälliges Dossier"
+
+#. Default: "Dossier responsible"
+#: ./opengever/activity/roles.py
+msgid "dossier_responsible_role"
+msgstr "Federführend"
+
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
 msgid "forwarding-added"
@@ -151,6 +161,11 @@ msgstr "Tageszusammenfassung"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
 msgstr "Aussonderung"
+
+#. Default: "Dossiers"
+#: ./opengever/activity/browser/settings.py
+msgid "label_dossiers"
+msgstr "Dossiers"
 
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py

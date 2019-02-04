@@ -2,10 +2,11 @@ from opengever.activity.model import NotificationDefault
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
+from opengever.activity.roles import DOSSIER_RESPONSIBLE_ROLE
 from opengever.activity.roles import PROPOSAL_ISSUER_ROLE
 from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
+from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.model import create_session
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -103,6 +104,9 @@ DEFAULT_SETTINGS = [
      'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
     {'kind': 'disposition-transition-refuse',
      'badge_notification_roles': [DISPOSITION_RECORDS_MANAGER_ROLE, DISPOSITION_ARCHIVIST_ROLE]},
+
+    {'kind': 'dossier-overdue',
+     'badge_notification_roles': [DOSSIER_RESPONSIBLE_ROLE]},
 ]
 
 
