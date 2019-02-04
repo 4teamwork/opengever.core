@@ -13,6 +13,9 @@ DEFAULT_LOCALE = 'de'
 SUPPORTED_LOCALES = ['de', 'fr', 'en']
 
 CONTENT_TITLE_LENGTH = 255
+# Sortable title length is a bit larger than content title due to number
+# padding (we make room for 5 numbers separated by dots and then some margin).
+SORTABLE_TITLE_LENGTH = CONTENT_TITLE_LENGTH + 45
 CSS_CLASS_LENGTH = 100
 EMAIL_LENGTH = 255
 FIRSTNAME_LENGTH = 255

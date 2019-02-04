@@ -3,8 +3,14 @@ from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.model import SORTABLE_TITLE_LENGTH
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
+from plone.i18n.normalizer.base import mapUnicode
+from Products.CMFPlone.CatalogTool import num_sort_regex
+from Products.CMFPlone.CatalogTool import zero_fill
+from Products.CMFPlone.utils import safe_callable
+from Products.CMFPlone.utils import safe_unicode
 from zope.annotation import IAnnotations
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 
@@ -45,3 +51,32 @@ def changed_indexer(obj):
         # The indexer transforms this to UTC and then represents it as a integer
         return IChanged(obj).changed
     return None
+
+
+@indexer(IDexterityContent)
+def sortable_title(obj):
+    """Custom sortable_title indexer for all content types.
+
+    This is a copy from Products.CMFPlone.CatalogTool.sortable_title
+    except that we overwrite MAX_SORTABLE_TITLE with SORTABLE_TITLE_LENGTH.
+    We set set it to a high enough value to basically avoid ever cropping
+    the title, even with number padding. This is to avoid sorting issues
+    in content listings.
+    """
+    title = getattr(obj, 'Title', None)
+    if title is not None:
+        if safe_callable(title):
+            title = title()
+
+        if isinstance(title, basestring):
+            # Ignore case, normalize accents, strip spaces
+            sortabletitle = mapUnicode(safe_unicode(title)).lower().strip()
+            # Replace numbers with zero filled numbers
+            sortabletitle = num_sort_regex.sub(zero_fill, sortabletitle)
+            # Truncate to prevent bloat, take bits from start and end
+            if len(sortabletitle) > SORTABLE_TITLE_LENGTH:
+                start = sortabletitle[:(SORTABLE_TITLE_LENGTH - 13)]
+                end = sortabletitle[-10:]
+                sortabletitle = start + u'...' + end
+            return sortabletitle.encode('utf-8')
+    return ''

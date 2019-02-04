@@ -1,8 +1,8 @@
-from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
 from ftw.testing import MockTestCase
+from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
@@ -23,6 +23,17 @@ import pytz
 
 
 class TestDocumentIndexers(FunctionalTestCase):
+
+    def test_sortable_title_indexer_accomodates_padding_for_five_numbers(self):
+        numeric_part = "1 2 3 4 5"
+        alphabetic_part = u"".join(["a" for i in range(CONTENT_TITLE_LENGTH
+                                                       - len(numeric_part))])
+        title = numeric_part + alphabetic_part
+        document = create(Builder("document").titled(title))
+
+        self.assertEquals(
+            '0001 0002 0003 0004 0005' + alphabetic_part,
+            index_data_for(document).get('sortable_title'))
 
     def test_author_indexers(self):
         """check the author indexers."""

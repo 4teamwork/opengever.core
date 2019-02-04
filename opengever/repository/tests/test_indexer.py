@@ -1,32 +1,34 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.testing import IntegrationTestCase
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
-from opengever.repository.indexers import sortable_title
+from opengever.base.indexes import sortable_title
 from zope.event import notify
 
 
 class TestRepositoryFolderIndexers(IntegrationTestCase):
 
-    def test_sortable_title_index_ignores_refernce_number_length(self):
+    def test_sortable_title_index_accomodates_five_numbers_without_cropping(self):
         self.login(self.secretariat_user)
 
+        title = u"".join(["a" for i in range(CONTENT_TITLE_LENGTH)])
         # create a 5 fold nested folder
         repofolder = reduce(
             lambda repofolder, level: create(
                 Builder('repository')
                 .within(repofolder)
                 .having(
-                    title_de=u'Vertr\xe4ge {}'.format(level),
-                    title_fr=u'Contrats {}'.format(level),
+                    title_de=title,
+                    title_fr=title,
                 )),
-            range(5),
+            range(3),
             self.leaf_repofolder,
         )
 
         self.assertEquals(
-            '0001.0001.0001.0001.0001.0001.0001. vertrage 0004',
+            '0001.0001.0001.0001.0001. ' + title,
             sortable_title(repofolder)())
 
     def test_blocked_local_roles(self):
