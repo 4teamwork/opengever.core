@@ -13,6 +13,7 @@
     <role name="Records Manager" />
     <role name="Role Manager" />
     <role name="ServiceKeyUser" />
+    <role name="WebActionManager" />
     <role name="WorkspaceAdmin" />
     <role name="WorkspaceGuest" />
     <role name="WorkspaceMember" />
@@ -286,6 +287,12 @@
     <permission name="opengever.trash: Untrash content" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+    </permission>
+
+    <!-- WEBACTIONS -->
+    <permission name="opengever.webactions: Manage own WebActions" acquire="False">
+      <role name="Manager" />
+      <role name="WebActionManager" />
     </permission>
 
     <!-- WORKSPACE -->

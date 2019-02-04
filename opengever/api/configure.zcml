@@ -8,6 +8,7 @@
   <include package="plone.rest" file="meta.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
+  <include package="opengever.webactions" file="permissions.zcml" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
@@ -260,6 +261,38 @@
       factory=".livesearch.GeverLiveSearchGet"
       name="@livesearch"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsPost"
+      permission="opengever.webactions.ManageOwnWebActions"
+      />
+
+  <plone:service
+      method="GET"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsGet"
+      permission="opengever.webactions.ManageOwnWebActions"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsPatch"
+      permission="opengever.webactions.ManageOwnWebActions"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@webactions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".webactions.WebActionsDelete"
+      permission="opengever.webactions.ManageOwnWebActions"
       />
 
 </configure>

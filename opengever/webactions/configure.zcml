@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.webactions">
+
+  <include file="permissions.zcml" />
+
+  <adapter factory=".storage.WebActionsStorage" />
+
+</configure>

@@ -176,6 +176,13 @@
                    "
       />
 
+  <!-- Manage own WebActions is only managed globally in rolemap.xml. -->
+  <lawgiver:ignore
+      permissions="
+                   opengever.webactions: Manage own WebActions,
+                   "
+      />
+
   <!--  "ftw.usermigration: Migrate users" is never managed via workflows -->
   <lawgiver:ignore
       permissions="
