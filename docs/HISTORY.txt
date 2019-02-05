@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Solr TabbedView filters: Also include non-wildcarded terms in query. [lgraf]
 - Better label the Oneoffixx template selection dropdown default value. [Rotonen]
 - Notifications: Defer sending mails until end of transaction. [lgraf]
 - Make the Oneoffixx timeout configurable via the registry. [Rotonen]
