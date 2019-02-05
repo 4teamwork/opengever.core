@@ -1,10 +1,43 @@
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from opengever.activity.error_handling import NotificationErrorHandler
 from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.base.utils import ogds_service
 from plone import api
+from threading import local
+import transaction
+
+
+class NotificationMailQueue(local):
+    """Thread-local mail queue that keeps track of mails to be sent at
+    the end using a beforeCommitHook.
+    """
+
+    def __init__(self):
+        self._queue = []
+
+    def put(self, msg):
+        self._queue.append(msg)
+
+    def get(self):
+        return self._queue.pop()
+
+    def empty(self):
+        return not len(self._queue)
+
+
+mail_queue = NotificationMailQueue()
+
+
+def process_mail_queue():
+    mailhost = api.portal.get_tool('MailHost')
+
+    with NotificationErrorHandler():
+        while not mail_queue.empty():
+            mail = mail_queue.get()
+            mailhost.send(mail)
 
 
 class Mailer(object):
@@ -13,15 +46,36 @@ class Mailer(object):
     """
 
     def __init__(self):
-        self.mailhost = api.portal.get_tool('MailHost')
-
         # This is required by ViewPageTemplateFile for
         # the html mail-template
         self.context = api.portal.get()
         self.request = self.context.REQUEST
 
+        # Register beforeCommitHook that processes the mail queue at the
+        # end of the transaction.
+        txn = transaction.get()
+        if process_mail_queue not in txn.getBeforeCommitHooks():
+            txn.addBeforeCommitHook(process_mail_queue)
+
     def send_mail(self, msg):
-        self.mailhost.send(msg)
+        """Queue a mail for delivery at the end of the transaction.
+
+        We don't immediately call mailhost.send() here, but instead place
+        mails to be sent in a queue that gets processed at the end of the
+        transaction.
+
+        We need to do this because mailhost.send() registers an IDataManager
+        without savepoint support (zope.sendmail.delivery.MailDataManager)
+        on the transaction, in order to facilitate transactional mail support.
+
+        This results in a 'Savepoints unsupported' TypeError if at any point
+        after that data manager has joined the transaction any code tries to
+        create a savepoint (creating initial versions does this for example).
+
+        We therefore defer the dispatching of notification mails until the
+        very end of the transaction to work around this issue.
+        """
+        mail_queue.put(msg)
 
     def prepare_mail(self, subject=u'', to_userid=None, from_userid=None, data=None):
         if data is None:
