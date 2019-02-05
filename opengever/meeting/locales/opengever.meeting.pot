@@ -347,6 +347,11 @@ msgstr ""
 msgid "active"
 msgstr ""
 
+#. Default: "Ad hoc agendaitems"
+#: ./opengever/meeting/toc/dossier_refnum.py
+msgid "ad_hoc_toc_group_title"
+msgstr ""
+
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_cannot_decide_document_checked_out"
@@ -714,6 +719,16 @@ msgstr ""
 msgid "filename_alphabetical_toc"
 msgstr ""
 
+#. Default: "Dossier Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_dossier_reference_number_toc"
+msgstr ""
+
+#. Default: "Repository Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_repository_reference_number_toc"
+msgstr ""
+
 #. Default: "Repository Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_toc"
@@ -989,6 +1004,26 @@ msgstr ""
 #. Default: "download TOC json alphabetical"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
+msgstr ""
+
+#. Default: "download TOC by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc"
+msgstr ""
+
+#. Default: "download TOC json by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc_json"
+msgstr ""
+
+#. Default: "download TOC by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc"
+msgstr ""
+
+#. Default: "download TOC json by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc_json"
 msgstr ""
 
 #. Default: "download TOC by repository"

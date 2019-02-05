@@ -3,6 +3,8 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
+from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
+from opengever.meeting.toc.repository_refnum import RepositoryReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -98,6 +100,46 @@ class DownloadRepositoryTOC(DownloadAlphabeticalTOC):
         return u"{}.docx".format(
             translate(_(u'filename_repository_toc',
                         default=u'Repository Toc ${period} ${committee}',
+                        mapping={
+                          'period': period_title,
+                          'committee': committee_title,
+                        }),
+                      context=getRequest()))
+
+
+class DownloadDossierReferenceNumberTOC(DownloadAlphabeticalTOC):
+
+    def get_data(self):
+        return DossierReferenceNumberBasedTOC(self.model).get_json()
+
+    def get_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        period_title = normalizer.normalize(self.model.title)
+        committee_title = normalizer.normalize(self.model.committee.title)
+
+        return u"{}.docx".format(
+            translate(_(u'filename_dossier_reference_number_toc',
+                        default=u'Dossier Reference Number Toc ${period} ${committee}',
+                        mapping={
+                          'period': period_title,
+                          'committee': committee_title,
+                        }),
+                      context=getRequest()))
+
+
+class DownloadRepositoryReferenceNumberTOC(DownloadAlphabeticalTOC):
+
+    def get_data(self):
+        return RepositoryReferenceNumberBasedTOC(self.model).get_json()
+
+    def get_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        period_title = normalizer.normalize(self.model.title)
+        committee_title = normalizer.normalize(self.model.committee.title)
+
+        return u"{}.docx".format(
+            translate(_(u'filename_repository_reference_number_toc',
+                        default=u'Repository Reference Number Toc ${period} ${committee}',
                         mapping={
                           'period': period_title,
                           'committee': committee_title,

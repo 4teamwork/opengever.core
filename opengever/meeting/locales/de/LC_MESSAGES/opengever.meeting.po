@@ -348,6 +348,11 @@ msgstr "Protokollauszug ablegen"
 msgid "active"
 msgstr "Aktiv"
 
+#. Default: "Ad hoc agendaitems"
+#: ./opengever/meeting/toc/dossier_refnum.py
+msgid "ad_hoc_toc_group_title"
+msgstr "Traktanden ohne Antrag"
+
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_cannot_decide_document_checked_out"
@@ -715,6 +720,16 @@ msgstr "Vorlagen Protokoll"
 msgid "filename_alphabetical_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} alphabetisch"
 
+#. Default: "Dossier Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_dossier_reference_number_toc"
+msgstr "Inhaltsverzeichnis ${period} ${committee} nach Aktenzeichen"
+
+#. Default: "Repository Reference Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_repository_reference_number_toc"
+msgstr "Inhaltsverzeichnis ${period} ${committee} nach Positionsnummer"
+
 #. Default: "Repository Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_toc"
@@ -991,6 +1006,26 @@ msgstr "Inhaltsverzeichnis alphabetisch"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
 msgstr "Inhaltsverzeichnis alphabetisch JSON"
+
+#. Default: "download TOC by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc"
+msgstr "Inhaltsverzeichnis nach Aktenzeichen"
+
+#. Default: "download TOC json by dossier reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_dossier_refnum_toc_json"
+msgstr "Inhaltsverzeichnis nach Aktenzeichen JSON"
+
+#. Default: "download TOC by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc"
+msgstr "Inhaltsverzeichnis nach Positionsnummer"
+
+#. Default: "download TOC json by repository reference number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_repository_refnum_toc_json"
+msgstr "Inhaltsverzeichnis nach Positionsnummer JSON"
 
 #. Default: "download TOC by repository"
 #: ./opengever/meeting/browser/templates/periods.pt

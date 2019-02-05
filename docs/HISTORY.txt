@@ -42,6 +42,7 @@ Changelog
 - Bump ftw.testbrowser to 1.30.0 to respect content encodings in tests. [Rotonen]
 - Use the correct message factory in the Oneoffixx form. [Rotonen]
 - Add choice fields as possible first form elements for the autofocus seek. [Rotonen]
+- Add two new TOC types for periods. [njohner]
 - Bump ftw.pdfgenerator to version 1.6.3. [njohner]
 - Provide solr for local development. [njohner]
 - Fix an improper super call in meeting activities. [Rotonen]
