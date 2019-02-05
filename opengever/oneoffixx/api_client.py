@@ -17,21 +17,29 @@ def oneoffixx_access_token_cachekey(*args):
 
 
 def oneoffixx_templatelibrary_id_cachekey(*args):
-    """Cache the template library, per user, for 30 minutes.
+    """Cache the template library, per user.
 
     The left-behind-by-instability cache keys this produces will get reaped by
     the global cache LRU cleanups.
+
+    The timeout is configurable in the registry and used a part of the cache
+    key so changing the timeout immediately invalidates all caches.
     """
-    return '-'.join(('oneoffixx_templatelibrary_id', api.user.get_current().id, str(time() // (60 * 30)), ))
+    timeout = api.portal.get_registry_record('cache_timeout', interface=IOneoffixxSettings)
+    return '-'.join(('oneoffixx_templatelibrary_id', api.user.get_current().id, str(timeout), str(time() // timeout), ))
 
 
 def oneoffixx_template_groups_cachekey(*args):
-    """Cache the template groups, per user, for 5 minutes.
+    """Cache the template groups, per user.
 
     The left-behind-by-instability cache keys this produces will get reaped by
     the global cache LRU cleanups.
+
+    The timeout is configurable in the registry and used a part of the cache
+    key so changing the timeout immediately invalidates all caches.
     """
-    return '-'.join(('oneoffixx_template_groups', api.user.get_current().id, str(time() // (60 * 5)), ))
+    timeout = api.portal.get_registry_record('cache_timeout', interface=IOneoffixxSettings)
+    return '-'.join(('oneoffixx_template_groups', api.user.get_current().id, str(timeout), str(time() // timeout), ))
 
 
 class OneoffixxAPIClientSingleton(type):

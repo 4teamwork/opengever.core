@@ -31,3 +31,9 @@ class IOneoffixxSettings(Interface):
                     u'This setting provides a disablable future proofing toggle for that behaviour.',
         default=True,
     )
+
+    cache_timeout = schema.Int(
+        title=u'Oneoffixx backend caching timeout in seconds.',
+        description=u'Quite many of the backend responses are very slow, so we cache them per user. Defaults to 30 days.',
+        default=30 * 24 * 60 * 60,
+    )
