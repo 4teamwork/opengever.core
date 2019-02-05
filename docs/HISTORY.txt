@@ -7,6 +7,7 @@ Changelog
 
 - Notifications: Defer sending mails until end of transaction. [lgraf]
 - Implement WebActions storage and REST API. [lgraf]
+- Fix changing task to or from private via edit form. [deiferni]
 - Fix creating private tasks by mistake. [deiferni]
 - Add simple cache invalidation mechanism for javascript included in templates. [deiferni]
 - Fix handling of initial version when saving a document as PDF. [njohner]

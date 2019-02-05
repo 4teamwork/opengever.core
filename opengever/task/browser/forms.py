@@ -155,6 +155,9 @@ class TaskEditForm(DefaultEditForm):
         """
         update_reponsible_field_data(data)
 
+        # make sure is_private is never changed.
+        data.pop('is_private', None)
+
         if self.is_reassigned(data):
             response = self.add_reassign_response(data)
             changes = super(TaskEditForm, self).applyChanges(data)

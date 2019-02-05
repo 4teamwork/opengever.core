@@ -29,6 +29,17 @@ class TestPrivateTaskIntegration(IntegrationTestCase):
             'hidden',
             browser.css('#formfield-form-widgets-is_private input').first.type)
 
+    @browsing
+    def test_task_private_field_cant_be_changed_in_edit_form(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.assertFalse(self.seq_subtask_1.is_private)
+
+        browser.open(self.seq_subtask_1, view='edit')
+        browser.fill({'form.widgets.is_private:list': 'selected'})
+        browser.click_on('Save')
+
+        self.assertFalse(self.seq_subtask_1.is_private)
+
 
 class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
 
