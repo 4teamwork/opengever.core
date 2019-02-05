@@ -1,5 +1,4 @@
 from opengever.task import is_private_task_feature_enabled
-from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
