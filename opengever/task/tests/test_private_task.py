@@ -57,3 +57,20 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
         self.assertEqual(
             'hidden',
             browser.css('#formfield-form-widgets-is_private input').first.type)
+
+    @browsing
+    def test_cant_create_private_tasks_when_feature_is_inactive(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, view='++add++opengever.task.task')
+            browser.fill({'Title': u'I should not be private despite input.',
+                          'Task Type': 'comment',
+                          'form.widgets.is_private:list': 'selected'})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(
+                'fa:{}'.format(self.secretariat_user.getId()))
+            browser.css('#form-buttons-save').first.click()
+
+        task = children['added'].pop()
+        self.assertFalse(task.is_private)

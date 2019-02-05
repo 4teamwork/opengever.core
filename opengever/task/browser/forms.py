@@ -66,6 +66,12 @@ class TaskAddForm(DefaultAddForm):
 
     def createAndAdd(self, data):
         created = []
+
+        # make sure we don't create private tasks when the feature is
+        # not enabled. the field is hidden, but users could still submit.
+        if not is_private_task_feature_enabled():
+            data['is_private'] = False
+
         if isinstance(data['responsible'], basestring):
             data['responsible'] = [data['responsible']]
 
