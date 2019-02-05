@@ -104,6 +104,8 @@
       icon_path="icon_dokument_excel.gif"
       mimetypes="application/vnd.ms-excel
                  application/msexcel
+                 application/excel
+                 application/vnd.msexcel
                  application/x-msexcel"
       />
 
@@ -408,9 +410,6 @@
       mimetypes="text/comma-separated-values
                  text/csv
                  application/csv
-                 application/excel
-                 application/vnd.ms-excel
-                 application/vnd.msexcel
                  text/anytext"
       />
 

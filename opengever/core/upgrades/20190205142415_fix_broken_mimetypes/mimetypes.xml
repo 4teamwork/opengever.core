@@ -1,0 +1,29 @@
+<object name="mimetypes_registry" meta_type="MimeTypes Registry">
+
+  <!-- MS Excel -->
+  <mimetype
+      name="Microsoft Excel Spreadsheet"
+      binary="True"
+      extensions="xls xlt xla xlb xlc xld xll xlm xlw"
+      globs="*.xls *.xlt *.xla *.xlb *.xlc *.xld *.xll *.xlm *.xlw"
+      icon_path="icon_dokument_excel.gif"
+      mimetypes="application/vnd.ms-excel
+                 application/msexcel
+                 application/excel
+                 application/vnd.msexcel
+                 application/x-msexcel"
+      />
+
+  <mimetype
+      name="Comma-separated values"
+      binary="False"
+      extensions="csv"
+      globs="*.csv"
+      icon_path="icon_dokument_excel.gif"
+      mimetypes="text/comma-separated-values
+                 text/csv
+                 application/csv
+                 text/anytext"
+      />
+
+</object>

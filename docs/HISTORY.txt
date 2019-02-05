@@ -13,6 +13,7 @@ Changelog
 - Make the Oneoffixx timeout configurable via the registry. [Rotonen]
 - Update change-date properly if meeting documents have been updated. [elioschmutz]
 - Update unmatching label for modification dates for meeting documents. [elioschmutz]
+- Fix broken .xls mimetypes-registry entry. [elioschmutz]
 - Implement WebActions storage and REST API. [lgraf]
 - Fix changing task to or from private via edit form. [deiferni]
 - Fix creating private tasks by mistake. [deiferni]
