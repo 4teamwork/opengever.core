@@ -97,7 +97,15 @@
     showBackdrop(event);
   }
 
-  $(document).on("mouseover", ".tooltip-trigger", initTooltips);
+  var hasTouched = false;
+
+  $(document).on("touchstart", ".tooltip-trigger", function() {
+    hasTouched = true;
+  });
+  $(document).on("mouseover", ".tooltip-trigger", function(e) {
+    if (hasTouched) { return; }
+    initTooltips(e);
+  });
 
 }(window, window.jQuery));
 
