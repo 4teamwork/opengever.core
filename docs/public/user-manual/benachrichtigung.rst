@@ -31,10 +31,10 @@ Individualisierte Einstellungen können mit der Aktion *Auf Standard zurücksetz
 
 |img-benachrichtigungs-einstellungen-4|
 
-Benachrichtigungen für Weiterleitungen und Anträge
---------------------------------------------------
-Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Weiterleitungen*
-sowie *Anträge* die Benachrichtigungen für diese Aktivitäten eingestellt werden.
+Benachrichtigungen für Weiterleitungen, Erinnerungen und Anträge
+-----------------------------------------------------------------
+Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Weiterleitungen*,
+*Erinnerungen* sowie *Anträge* die Benachrichtigungen für diese Aktivitäten eingestellt werden.
 
 |img-benachrichtigungs-einstellungen-5|
 
