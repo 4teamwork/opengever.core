@@ -6,8 +6,6 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
-from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
@@ -364,10 +362,6 @@ class TestDateCalculations(IntegrationTestCase):
             api.user.has_permission('View', user=self.regular_user, obj=self.subsubdossier),
             'This test does not actually test what it says on the tin, if self.regular_user can see self.subsubdossier.',
         )
-
-        # Grant self.regular_user 'Editor' on self.subdossier so it can be closed by that user
-        RoleAssignmentManager(self.subdossier).add_or_update_assignment(
-            SharingRoleAssignment(self.regular_user.getId(), ['Reader', 'Contributor', 'Editor']))
 
         with self.login(self.regular_user):
             restricted_subdossiers = self.subdossier.get_subdossiers()

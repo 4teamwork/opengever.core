@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-02-08 12:46+0000\n"
+"POT-Creation-Date: 2019-02-06 20:56+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -136,6 +136,14 @@ msgid "Templates"
 msgstr "Vorlagen"
 
 #: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} can't be deactivated by the user."
+msgstr "Der Benutzer darf das Dossier ${dossier} nicht stornieren."
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} contains a subdossier which can't be deactivated by the user."
+msgstr "Das Dossier ${dossier} enthält ein Subdossier welches der Benutzer nicht stornieren darf."
+
+#: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr "Das Dossier kann nicht storniert werden, es enthält aktive Anträge."
 
@@ -148,7 +156,7 @@ msgid "The Dossier can't be deactivated, not all containeddocuments are checked 
 msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokumente eingecheckt sind."
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
 msgstr "Das Dossier konnte nicht storniert werden, da das Subdossier ${dossier} bereits abgeschlossen ist. Das Subdossier muss vorgängig wieder eröffnet werden."
 
 #: ./opengever/dossier/activate.py
