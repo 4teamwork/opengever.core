@@ -14,6 +14,7 @@ from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.i18n import translate
 
 
 def get_oneoffixx_templates():
@@ -123,6 +124,11 @@ class SelectOneOffixxTemplateDocumentWizardStep(Form):
     label = _(u'create_document_with_template', default=u'Create document from template')
     ignoreContext = True
     fields = Fields(ICreateDocumentFromOneOffixxTemplate)
+
+    def updateWidgets(self, prefix=None):
+        super(SelectOneOffixxTemplateDocumentWizardStep, self).updateWidgets(prefix=prefix)
+        self.widgets['template_group'].noValueMessage = translate(
+            _(u'label_all_template_groups', default=u'All templates'), context=self.request)
 
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)
