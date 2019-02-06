@@ -10,12 +10,12 @@ from Products.CMFCore.utils import getToolByName
 from sqlalchemy import desc
 
 
-class TestAssingForwarding(FunctionalTestCase):
+class TestAssignForwarding(FunctionalTestCase):
 
     layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 
     def setUp(self):
-        super(TestAssingForwarding, self).setUp()
+        super(TestAssignForwarding, self).setUp()
 
         create(Builder('org_unit')
                .with_default_groups()
