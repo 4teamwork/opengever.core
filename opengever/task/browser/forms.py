@@ -1,5 +1,4 @@
 from opengever.task import is_private_task_feature_enabled
-from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
@@ -67,6 +66,12 @@ class TaskAddForm(DefaultAddForm):
 
     def createAndAdd(self, data):
         created = []
+
+        # make sure we don't create private tasks when the feature is
+        # not enabled. the field is hidden, but users could still submit.
+        if not is_private_task_feature_enabled():
+            data['is_private'] = False
+
         if isinstance(data['responsible'], basestring):
             data['responsible'] = [data['responsible']]
 
@@ -149,6 +154,9 @@ class TaskEditForm(DefaultEditForm):
         Also update the responsible_cliend and responsible user
         """
         update_reponsible_field_data(data)
+
+        # make sure is_private is never changed.
+        data.pop('is_private', None)
 
         if self.is_reassigned(data):
             response = self.add_reassign_response(data)
