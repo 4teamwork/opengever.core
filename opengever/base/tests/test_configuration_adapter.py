@@ -16,6 +16,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('baseurl', u''),
                 ('fake_sid', u''),
                 ('double_encode_bug', True),
+                ('cache_timeout', 2592000),
             ])),
             ('features', OrderedDict([
                 ('activity', False),
