@@ -151,6 +151,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         'contents': [
             {
                 'title': u'aa proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -159,6 +160,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                 'meeting_start_page_number': 33,
                 }, {
                 'title': u'\xc4a proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 2',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -167,6 +169,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                 'meeting_start_page_number': 33,
                 }, {
                 'title': u'Anything goes',
+                'description': u'Really, Anything.',
                 'dossier_reference_number': '3.1.4 / 77',
                 'repository_folder_title': 'Other Stuff',
                 'meeting_date': u'31.12.2010',
@@ -179,6 +182,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         'contents': [
             {
                 'title': u'Nahhh not here either',
+                'description': u'But a description!',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -187,6 +191,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                 'meeting_start_page_number': 129,
             }, {
                 'title': u'No Proposal here',
+                'description': None,
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -199,6 +204,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         'contents': [
             {
                 'title': u'proposal 1',
+                'description': None,
                 'dossier_reference_number': u'1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': '01.01.2010',
@@ -207,6 +213,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
                 'meeting_start_page_number': 33,
                 }, {
                 'title': u'Proposal 3',
+                'description': None,
                 'dossier_reference_number': '10.1.4 / 1',
                 'repository_folder_title': 'A Business',
                 'meeting_date': u'31.12.2010',
@@ -274,6 +281,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             int_id=3).within(self.committee))
         proposal2_2 = create(Builder('submitted_proposal').having(
             title=u'Anything goes',
+            description=u'Really, Anything.',
             repository_folder_title='Other Stuff',
             dossier_reference_number='3.1.4 / 77',
             int_id=4).within(self.committee))
@@ -317,6 +325,7 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         create(Builder('agenda_item').having(
             meeting=self.meeting2,
             title=u'Nahhh not here either',
+            description=u'But a description!',
             decision_number=7,
         ))
 
@@ -353,8 +362,9 @@ class TestAlphabeticalTOC(FunctionalTestCase):
         ))
 
     def test_toc_json_is_generated_correctly(self):
-        self.assertEqual(
-            self.expected_toc_json, self.toc_class(self.period).get_json())
+        self.assertDictEqual(
+            self.expected_toc_json, self.toc_class(self.period).get_json(),
+            "Toc mismatch in {}".format(self.toc_class.__name__))
 
     @browsing
     def test_shows_statusmessage_when_no_template_is_configured(self, browser):
@@ -413,6 +423,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
         'group_title': u'Ad hoc agendaitems',
         'contents': [{
                 'title': u'Nahhh not here either',
+                'description': u'But a description!',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -421,6 +432,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                 'meeting_start_page_number': 129,
             }, {
                 'title': u'No Proposal here',
+                'description': None,
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -432,6 +444,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
             'group_title': u'A Business',
             'contents': [{
                 'title': u'Proposal 3',
+                'description': None,
                 'dossier_reference_number': '10.1.4 / 1',
                 'repository_folder_title': 'A Business',
                 'meeting_date': u'31.12.2010',
@@ -443,6 +456,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
             'group_title': u'\xc4 Business',
             'contents': [{
                 'title': u'aa proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -451,6 +465,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                 'meeting_start_page_number': 33,
             }, {
                 'title': u'\xc4a proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 2',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -459,6 +474,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
                 'meeting_start_page_number': 33,
             }, {
                 'title': u'proposal 1',
+                'description': None,
                 'dossier_reference_number': u'1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': '01.01.2010',
@@ -470,6 +486,7 @@ class TestTOCByRepository(TestAlphabeticalTOC):
             'group_title': u'Other Stuff',
             'contents': [{
                 'title': u'Anything goes',
+                'description': u'Really, Anything.',
                 'dossier_reference_number': '3.1.4 / 77',
                 'repository_folder_title': 'Other Stuff',
                 'meeting_date': u'31.12.2010',
@@ -492,6 +509,7 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
         'group_title': u'Ad hoc agendaitems',
         'contents': [{
                 'title': u'Nahhh not here either',
+                'description': u'But a description!',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -500,6 +518,7 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
                 'meeting_start_page_number': 129,
             }, {
                 'title': u'No Proposal here',
+                'description': None,
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -511,6 +530,7 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'1.1.4 / 1',
             'contents': [{
                 'title': u'aa proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -519,18 +539,19 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
                 'meeting_start_page_number': 33,
             }, {
                 'title': u'proposal 1',
+                'description': None,
                 'dossier_reference_number': u'1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': '01.01.2010',
                 'decision_number': 2,
                 'has_proposal': True,
                 'meeting_start_page_number': 33,
-
-            }]
+             }]
         }, {
             'group_title': u'1.1.4 / 2',
             'contents': [{
                 'title': u'\xc4a proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 2',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -542,6 +563,7 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'3.1.4 / 77',
             'contents': [{
                 'title': u'Anything goes',
+                'description': u'Really, Anything.',
                 'dossier_reference_number': '3.1.4 / 77',
                 'repository_folder_title': 'Other Stuff',
                 'meeting_date': u'31.12.2010',
@@ -553,6 +575,7 @@ class TestTOCByDossierReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'10.1.4 / 1',
             'contents': [{
                 'title': u'Proposal 3',
+                'description': None,
                 'dossier_reference_number': '10.1.4 / 1',
                 'repository_folder_title': 'A Business',
                 'meeting_date': u'31.12.2010',
@@ -575,6 +598,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
         'group_title': u'Ad hoc agendaitems',
         'contents': [{
                 'title': u'Nahhh not here either',
+                'description': u'But a description!',
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -583,6 +607,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
                 'meeting_start_page_number': 129,
             }, {
                 'title': u'No Proposal here',
+                'description': None,
                 'dossier_reference_number': None,
                 'repository_folder_title': None,
                 'meeting_date': u'31.12.2010',
@@ -594,6 +619,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'1.1.4',
             'contents': [{
                 'title': u'aa proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -602,6 +628,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
                 'meeting_start_page_number': 33,
             }, {
                 'title': u'\xc4a proposal',
+                'description': None,
                 'dossier_reference_number': '1.1.4 / 2',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': u'01.01.2010',
@@ -610,6 +637,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
                 'meeting_start_page_number': 33,
             }, {
                 'title': u'proposal 1',
+                'description': None,
                 'dossier_reference_number': u'1.1.4 / 1',
                 'repository_folder_title': u'\xc4 Business',
                 'meeting_date': '01.01.2010',
@@ -621,6 +649,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'3.1.4',
             'contents': [{
                 'title': u'Anything goes',
+                'description': u'Really, Anything.',
                 'dossier_reference_number': '3.1.4 / 77',
                 'repository_folder_title': 'Other Stuff',
                 'meeting_date': u'31.12.2010',
@@ -632,6 +661,7 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
             'group_title': u'10.1.4',
             'contents': [{
                 'title': u'Proposal 3',
+                'description': None,
                 'dossier_reference_number': '10.1.4 / 1',
                 'repository_folder_title': 'A Business',
                 'meeting_date': u'31.12.2010',
