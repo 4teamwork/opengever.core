@@ -185,6 +185,7 @@ class DossierContainer(Container):
             sort_order='ascending',
             review_state=None,
             depth=-1,
+            unrestricted=False,
         ):
 
         dossier_path = '/'.join(self.getPhysicalPath())
@@ -199,7 +200,10 @@ class DossierContainer(Container):
         if review_state:
             query['review_state'] = review_state
 
-        subdossiers = self.portal_catalog(query)
+        if unrestricted:
+            subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
+        else:
+            subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
         subdossiers = [
