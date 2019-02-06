@@ -32,7 +32,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
                 u'url': u'http://nohost/plone/oc_checkout',
                 }
             raw_token = oc_url.split(':')[-1]
-            token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+            token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
             self.assertEqual(expected_token, token)
 
             self.lock_document(browser, raw_token, self.document)
@@ -61,7 +61,7 @@ class TestDocumentForceUnlock(OCIntegrationTestCase):
             u'url': u'http://nohost/plone/oc_checkout',
             }
         raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE)
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(expected_token, token)
 
         lockable = ILockable(self.document)

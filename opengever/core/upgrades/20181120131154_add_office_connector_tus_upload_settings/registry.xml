@@ -1,0 +1,3 @@
+<registry>
+  <record interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" field="restapi_enabled" />
+</registry>
