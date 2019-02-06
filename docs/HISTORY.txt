@@ -7,6 +7,7 @@ Changelog
 
 - Fix logo upload in the theme control-panel. [phgross]
 - Solr TabbedView filters: Also include non-wildcarded terms in query. [lgraf]
+- Prevent deactivating dossiers with undeactivatable subdossiers. [Rotonen]
 - Add an unrestricted search option to get_subdossiers(). [Rotonen]
 - Better label the Oneoffixx template selection dropdown default value. [Rotonen]
 - Notifications: Defer sending mails until end of transaction. [lgraf]

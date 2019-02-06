@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-04 10:29+0000\n"
+"POT-Creation-Date: 2019-02-06 20:56+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -134,6 +134,14 @@ msgid "Templates"
 msgstr "Modèles"
 
 #: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} can't be deactivated by the user."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} contains a subdossier which can't be deactivated by the user."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr "Le dossier ne peut pas être annulé, il contient des requêtes actives."
 
@@ -146,7 +154,7 @@ msgid "The Dossier can't be deactivated, not all containeddocuments are checked 
 msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui ne sont pas en statut \"checkin\"."
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
 msgstr "Impossible d'annuler le dossier, parce que le sous-dossier ${dossier} a déjà été clôturé. Le sous-dossier doit d'abord être rouvert."
 
 #: ./opengever/dossier/activate.py

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-04 10:29+0000\n"
+"POT-Creation-Date: 2019-02-06 20:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,6 +135,14 @@ msgid "Templates"
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} can't be deactivated by the user."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier ${dossier} contains a subdossier which can't be deactivated by the user."
+msgstr ""
+
+#: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr ""
 
@@ -147,7 +155,7 @@ msgid "The Dossier can't be deactivated, not all containeddocuments are checked 
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved"
+msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
 msgstr ""
 
 #: ./opengever/dossier/activate.py
