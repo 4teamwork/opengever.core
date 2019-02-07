@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import index_data_for
 from plone import api
 
 
@@ -126,3 +128,95 @@ class TestInboxWorkflow(IntegrationTestCase):
         self.assertEquals(
             'opengever_mail_workflow',
             wftool.getWorkflowsFor(moved)[0].id)
+
+    def test_local_roles_assigned_properly_when_creating_forwarding(self):
+        self.login(self.secretariat_user)
+
+        self.forwarding = create(
+            Builder('forwarding')
+            .within(self.inbox)
+            .titled(u'Test forwarding')
+            .having(responsible_client='fa',
+                    responsible=self.secretariat_user.getId(),
+                    issuer=self.secretariat_user.getId())
+            .relate_to(self.inbox_document))
+
+        # Editor role is granted to forwarding responsible
+        assignment_manager = RoleAssignmentManager(self.forwarding)
+        assignments = assignment_manager.storage._storage()
+        self.assertEqual(1, len(assignments))
+        assignment = assignments[0]
+        self.assertEqual(1, assignment["cause"])
+        self.assertEqual(["Editor"], assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), assignment["principal"])
+
+        # No role assignments on contained objects as they already
+        # inherit from the forwarding
+        inbox_document, = self.forwarding.listFolderContents()
+        assignment_manager = RoleAssignmentManager(inbox_document)
+        assignments = assignment_manager.storage._storage()
+        self.assertEqual(0, len(assignments))
+
+    @browsing
+    def test_assign_updates_role_assignment_on_forwarding(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        assignment_manager = RoleAssignmentManager(self.inbox_forwarding)
+        assignments = assignment_manager.storage._storage()
+        self.assertEqual(1, len(assignments))
+        assignment = assignments[0]
+        self.assertEqual(1, assignment["cause"])
+        self.assertEqual(["Editor"], assignment["roles"])
+        self.assertEqual(self.regular_user.getId(), assignment["principal"])
+
+        browser.open(self.inbox_forwarding)
+        browser.click_on('forwarding-transition-reassign')
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.getId()))
+        browser.click_on('Assign')
+
+        assignment_manager = RoleAssignmentManager(self.inbox_forwarding)
+        assignments = assignment_manager.storage._storage()
+        self.assertEqual(1, len(assignments))
+        assignment = assignments[0]
+        self.assertEqual(1, assignment["cause"])
+        self.assertEqual(["Editor"], assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), assignment["principal"])
+
+    @browsing
+    def test_forwarding_grants_view_permissions(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        mail = create(Builder('mail').within(self.inbox_forwarding))
+
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(mail)['allowedRolesAndUsers'])
+        self.assertNotIn("user:{}".format(self.meeting_user),
+                         index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
+        self.assertNotIn("user:{}".format(self.meeting_user),
+                         index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
+        self.assertNotIn("user:{}".format(self.meeting_user),
+                         index_data_for(mail)['allowedRolesAndUsers'])
+
+        browser.open(self.inbox_forwarding)
+        browser.click_on('forwarding-transition-reassign')
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.meeting_user.getId()))
+        browser.click_on('Assign')
+
+        self.assertNotIn("user:{}".format(self.regular_user),
+                         index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
+        self.assertNotIn("user:{}".format(self.regular_user),
+                         index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
+        self.assertNotIn("user:{}".format(self.regular_user),
+                         index_data_for(mail)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.meeting_user),
+                      index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.meeting_user),
+                      index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.meeting_user),
+                      index_data_for(mail)['allowedRolesAndUsers'])
