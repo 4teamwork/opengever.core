@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.inbox import _
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
@@ -230,11 +231,14 @@ def move_documents_into_forwarding(context, event):
     "relatedItems" (see custom AddForm above) - which is not yet the right
     place. After saving the forwarding, we need to move the documents into
     the forwarding (which did not exist before).
+    We also need to clear the role assignments which are added onto related
+    items upon task creation (opengever.task.localroles.set_roles_after_adding).
     """
     relations = context.relatedItems
 
     for relation in relations:
         obj = relation.to_object
+        RoleAssignmentManager(obj).clear_by_reference(context)
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
 
