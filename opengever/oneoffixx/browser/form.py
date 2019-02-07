@@ -21,7 +21,7 @@ def get_oneoffixx_templates():
     api_client = OneoffixxAPIClient()
 
     templates = (
-        OneOffixxTemplate(template)
+        OneOffixxTemplate(template, template_group.get('localizedName', ''))
         for template_group in api_client.get_oneoffixx_template_groups()
         for template in template_group.get("templates")
         if template.get('metaTemplateId') in whitelisted_template_types
@@ -66,10 +66,11 @@ def list_template_groups(context):
 
 class OneOffixxTemplate(object):
 
-    def __init__(self, template):
+    def __init__(self, template, groupname):
         self.title = template.get("localizedName")
         self.template_id = template.get("id")
         self.group = template.get('templateGroupId')
+        self.groupname = groupname
         template_type = template['metaTemplateId']
         template_type_info = whitelisted_template_types[template_type]
         self.content_type = template_type_info['content-type']
