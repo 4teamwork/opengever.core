@@ -1,4 +1,6 @@
+from ftw.tabbedview.browser.listing import ListingView
 from ftw.table.helper import path_checkbox
+from opengever.document.base import mimetype_lookup
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.tabbedview import BaseCatalogListingTab
@@ -6,6 +8,11 @@ from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.helper import linked
+from opengever.tabbedview.interfaces import IOneoffixxTableSourceConfig
+from plone import api
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from zope.component import getUtility
+from zope.interface import implements
 
 
 REMOVED_COLUMNS = ['receipt_date', 'delivery_date', 'containing_subdossier']
@@ -197,3 +204,51 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
 
     enabled_actions = ['folder_delete_confirmation']
     major_actions = []
+
+
+def oneoffixx_css(item, value):
+    # Adapted from opengever/document/base.py
+    mtr = api.portal.get_tool('mimetypes_registry')
+    mimetypeitem = mimetype_lookup(mtr, item.get('content_type'))
+    icon = mimetypeitem[0].icon_path
+
+    # Adapted from opengever/base/browser/helper.py
+    # Strip '.gif' from end of icon name and remove leading 'icon_'
+    filetype = icon[:icon.rfind('.')].replace('icon_', '')
+    css_class = 'icon-{}'.format(getUtility(IIDNormalizer).normalize(filetype))
+
+    return u'<span class="{}">{}</span>'.format(css_class, value)
+
+
+class TemplateFolderOneoffixxTemplates(ListingView):
+    implements(IOneoffixxTableSourceConfig)
+
+    enabled_actions = []
+    major_actions = []
+    minor_actions = []
+
+    show_selects = False
+
+    sort_on = 'title'
+    sort_reverse = False
+
+    lazy = False
+
+    columns = (
+        {
+            'column': 'title',
+            'column_title': _(u'label_title', default=u'Title'),
+            'width': 300,
+            'transform': oneoffixx_css,
+        },
+        {
+            'column': 'groupname',
+            'column_title': _(u'label_template_group', default=u'Template group'),
+        },
+    )
+
+    def get_base_query(self):
+        return {}
+
+    def custom_sort(self, results, sort_on, sort_reverse):
+        return sorted(results, key=lambda row: row.get(sort_on), reverse=sort_reverse)

@@ -23,14 +23,32 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
         access_token = {'access_token': 'all_may_enter'}
         template_library = [{'datasources': [{'id': 1}]}]
-        template = {
+        template_word = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
             'languages': ['2055'],
-            'localizedName': 'Example',
+            'localizedName': '3 Example Word file',
             'templateGroupId': 1,
         }
-        template_groups = [{'templates': [template]}]
+        template_excel = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc8',
+            'metaTemplateId': 'e31ca353-2ab1-4408-921b-a70ae2f57ad1',
+            'languages': ['2055'],
+            'localizedName': '2 Example Excel file',
+            'templateGroupId': 2,
+        }
+        template_powerpoint = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc9',
+            'metaTemplateId': 'a2c9b700-86cd-4481-a17f-533fe9c504a2',
+            'languages': ['2055'],
+            'localizedName': '1 Example Powerpoint presentation',
+            'templateGroupId': 3,
+        }
+        template_groups = [
+            {'id': 1, 'localizedName': 'Word templates', 'templates': [template_word]},
+            {'id': 2, 'localizedName': 'Excel templates', 'templates': [template_excel]},
+            {'id': 3, 'localizedName': 'Powerpoint template folder', 'templates': [template_powerpoint]},
+        ]
 
         session = requests.Session()
         adapter = requests_mock.Adapter()
@@ -98,6 +116,100 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
         annotations = IAnnotations(browser.context)
         self.assertEqual(node.get("value"), annotations['template-id'])
+
+    @browsing
+    def test_show_oneoffixx_templates_tab(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates)
+        expected_template_tabs = ['OneOffixx', 'Documents', 'Tasktemplate Folders']
+        self.assertEqual(expected_template_tabs, browser.css('.formTab').text)
+
+    @browsing
+    def test_oneoffixx_templates_tab(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates')
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['1 Example Powerpoint presentation', 'Powerpoint template folder'],
+            ['2 Example Excel file', 'Excel templates'],
+            ['3 Example Word file', 'Word templates'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+        expected_css_classes = [
+            ['1 Example Powerpoint presentation', ['icon-pptx']],
+            ['2 Example Excel file', ['icon-xlsx']],
+            ['3 Example Word file', ['icon-docx']],
+        ]
+        self.assertEqual(expected_css_classes, [[node.text, node.classes] for node in browser.css('td span')])
+
+    @browsing
+    def test_oneoffixx_templates_tab_sorting(self, browser):
+        self.login(self.regular_user, browser)
+        sort_query = {
+            'sort': 'title',
+            'dir': 'DESC',
+            'ext': 'json',
+            'tableType': 'extjs',
+            'mode': 'json',
+        }
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates', data=sort_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['3 Example Word file', 'Word templates'],
+            ['2 Example Excel file', 'Excel templates'],
+            ['1 Example Powerpoint presentation', 'Powerpoint template folder'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+        sort_query = {
+            'sort': 'groupname',
+            'dir': 'ASC',
+            'ext': 'json',
+            'tableType': 'extjs',
+            'mode': 'json',
+        }
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates', data=sort_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['2 Example Excel file', 'Excel templates'],
+            ['1 Example Powerpoint presentation', 'Powerpoint template folder'],
+            ['3 Example Word file', 'Word templates'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+
+    @browsing
+    def test_oneoffixx_templates_tab_search(self, browser):
+        self.login(self.regular_user, browser)
+        post_query = {
+            'ext': 'json',
+            'tableType': 'extjs',
+            'mode': 'json',
+        }
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates?searchable_text=folder', data=post_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['1 Example Powerpoint presentation', 'Powerpoint template folder'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates?searchable_text=word', data=post_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['3 Example Word file', 'Word templates'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates?searchable_text=templates', data=post_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['2 Example Excel file', 'Excel templates'],
+            ['3 Example Word file', 'Word templates'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+        browser.open(self.templates, view='tabbedview_view-oneoffixxtemplates?searchable_text=presentation', data=post_query)
+        expected_templates_table = [
+            ['Title', 'Template group'],
+            ['1 Example Powerpoint presentation', 'Powerpoint template folder'],
+        ]
+        self.assertEqual(expected_templates_table, browser.css('table').first.lists())
+
 
 class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
 

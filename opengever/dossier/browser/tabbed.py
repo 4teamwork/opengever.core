@@ -2,6 +2,7 @@ from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.tabbedview import GeverTabbedView
 from plone import api
 
@@ -151,6 +152,16 @@ class TemplateFolderTabbedView(GeverTabbedView):
         return None
 
     @property
+    def oneoffixxtemplate_tab(self):
+        if is_oneoffixx_feature_enabled():
+            return {
+                'id': 'oneoffixxtemplates',
+                'title': _(u'label_oneoffixx_templates', default=u'OneOffixx'),
+            }
+
+        return None
+
+    @property
     def meeting_templates_tab(self):
         if is_meeting_feature_enabled():
             return {
@@ -160,13 +171,16 @@ class TemplateFolderTabbedView(GeverTabbedView):
         return None
 
     def _get_tabs(self):
+        if is_oneoffixx_feature_enabled():
+            self.template_tab['title'] = _(u'label_local_templates', default=u'Documents')
         return filter(None, [
+            self.oneoffixxtemplate_tab,
             self.template_tab,
             self.dossiertemplate_tab,
             self.sablon_tab,
             self.proposal_templates_tab,
             self.meeting_templates_tab,
-            self.tasktemplate_folders_tab
+            self.tasktemplate_folders_tab,
         ])
 
 

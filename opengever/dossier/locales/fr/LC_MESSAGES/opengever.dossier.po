@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-04 10:29+0000\n"
+"POT-Creation-Date: 2019-02-08 12:46+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -626,6 +626,11 @@ msgstr "label"
 msgid "label_linked_dossiers"
 msgstr "Dossiers liés"
 
+#. Default: "Documents"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_local_templates"
+msgstr ""
+
 #. Default: "Mail-Address"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_mail_address"
@@ -661,6 +666,11 @@ msgstr "Le document «${name}» est dans une tâche et ne peut pas être déplac
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "label_number_of_containers"
 msgstr "Nombre de conteneurs"
+
+#. Default: "OneOffixx"
+#: ./opengever/dossier/browser/tabbed.py
+msgid "label_oneoffixx_templates"
+msgstr "OneOffixx"
 
 #. Default: "Overview"
 #: ./opengever/dossier/browser/tabbed.py
@@ -803,6 +813,11 @@ msgstr "Déroulements standard"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Modèle"
+
+#. Default: "Template group"
+#: ./opengever/dossier/templatefolder/tabs.py
+msgid "label_template_group"
+msgstr ""
 
 #. Default: "Title"
 #: ./opengever/dossier/browser/report.py

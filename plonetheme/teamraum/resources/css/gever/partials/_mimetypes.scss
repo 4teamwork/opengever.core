@@ -20,9 +20,18 @@ $mimetype-icon-padding: 2px;
 }
 
 // Special for span elements without any children
+// Spans have the text inside the element instead of next to it
 span[class*="icon-"] {
   vertical-align: middle;
   height: $mimetype-icon-size;
+  width: auto;
+  padding-left: $mimetype-icon-size + $mimetype-icon-padding;
+
+  > span {
+    display: inline-block;
+    line-height: $mimetype-icon-size;
+    vertical-align: middle;
+  }
 }
 
 // Link have the text inside the element instead of next to

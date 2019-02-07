@@ -17,6 +17,7 @@
 
   <adapter factory=".catalog_source.GeverCatalogTableSource" />
   <adapter factory=".sqlsource.SqlTableSource" />
+  <adapter factory=".oneoffixxsource.OneoffixxTableSource" />
 
   <!-- Classification Behavior -->
   <plone:behavior
