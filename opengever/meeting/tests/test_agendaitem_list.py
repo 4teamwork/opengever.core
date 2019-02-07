@@ -5,6 +5,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
+from ooxml_docprops import read_properties
+from opengever.dossier.docprops import TemporaryDocFile
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import IntegrationTestCase
 import pytz
@@ -12,7 +14,7 @@ import pytz
 
 class TestAgendaItemList(IntegrationTestCase):
 
-    features = ('meeting',)
+    features = ('meeting', 'doc-properties')
 
     def test_default_template_is_configured_on_committee_container(self):
         self.login(self.committee_responsible)
@@ -78,6 +80,36 @@ class TestAgendaItemList(IntegrationTestCase):
             u'Rechnungspr\xfcfungskommission has been updated successfully.')
         self.assertIsNotNone(meeting.agendaitem_list_document)
         self.assertEqual(1, meeting.agendaitem_list_document.generated_version)
+
+    @browsing
+    def test_updating_agendaitem_list_updates_docproperties(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+
+        meeting = self.meeting.model
+
+        browser.css('.document-actions .action.generate').first.click()
+        self.assertIsNotNone(meeting.agendaitem_list_document)
+
+        document = meeting.agendaitem_list_document.oguid.resolve_object()
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = {key: value for (key, value)
+                          in read_properties(tmpfile.path)}
+            self.assertEqual(
+                'Sitzungsdossier 9/2017', properties['ogg.dossier.title'])
+
+        # change dossier title
+        self.meeting_dossier.title = u'New dossier title'
+
+        # update agendaitem list
+        browser.css('.document-actions .action.generate').first.click()
+
+        document = meeting.agendaitem_list_document.oguid.resolve_object()
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = {key: value for (key, value)
+                          in read_properties(tmpfile.path)}
+            self.assertEqual(
+                u'New dossier title', properties['ogg.dossier.title'])
 
     @browsing
     def test_agendaitem_list_can_be_downloaded(self, browser):
