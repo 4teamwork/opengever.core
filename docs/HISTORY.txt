@@ -6,6 +6,8 @@ Changelog
 ---------------------
 
 - Skip creation of the tasks pdf on resolve for dossiers without tasks. [phgross]
+- Give View permission to Editors on mails. [njohner]
+- Clear role assignments on contained object after forwarding creation. [njohner]
 - Testserver: add support for custom fixtures. [jone]
 - Reindex and store additionally supported bumblebee documents. [elioschmutz]
 - Fix scrubbing the server version out of the HTTP response headers. [Rotonen]
