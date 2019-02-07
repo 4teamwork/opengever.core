@@ -7,6 +7,7 @@ Changelog
 
 - Testserver: add support for custom fixtures. [jone]
 - Reindex and store additionally supported bumblebee documents. [elioschmutz]
+- Fix scrubbing the server version out of the HTTP response headers. [Rotonen]
 - Make sure docproperties gets updated when updating an agendaitem list or a protocol. [phgross]
 - Fix logo upload in the theme control-panel. [phgross]
 - Solr TabbedView filters: Also include non-wildcarded terms in query. [lgraf]
