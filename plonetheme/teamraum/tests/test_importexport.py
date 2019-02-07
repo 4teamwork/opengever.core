@@ -4,6 +4,7 @@ from io import StringIO
 from opengever.testing import IntegrationTestCase
 from plonetheme.teamraum.importexport import CustomStylesUtility
 from plonetheme.teamraum.importexport import LOGO_RIGHT_KEY
+from plonetheme.teamraum.importexport import LOGO_KEY
 import json
 
 
@@ -79,7 +80,7 @@ class TestCustomStylesImportExport(IntegrationTestCase):
         self.login(self.manager, browser)
 
         data = self.get_dict()
-        data[LOGO_RIGHT_KEY] = None
+        data.pop(LOGO_RIGHT_KEY)
 
         browser.open(self.portal, view='@@teamraumtheme-controlpanel')
         browser.fill({'import_styles': self.file_from_dict(data)})
@@ -102,7 +103,7 @@ class TestCustomStylesImportExport(IntegrationTestCase):
         self.login(self.manager, browser)
 
         data = self.get_dict()
-        data[LOGO_RIGHT_KEY] = ''
+        data.pop(LOGO_RIGHT_KEY)
 
         browser.open(self.portal, view='@@teamraumtheme-controlpanel')
         browser.fill({'import_styles': self.file_from_dict(data)})
@@ -111,11 +112,24 @@ class TestCustomStylesImportExport(IntegrationTestCase):
         statusmessages.assert_no_error_messages()
 
         custom_styles = CustomStylesUtility(self.portal)
-        self.assertEquals(
-            '',
+        self.assertIsNone(
             custom_styles.annotations['customstyles'].get(LOGO_RIGHT_KEY))
 
         browser.find('export styles').click()
         self.assertEquals(
             data,
             json.loads(browser.contents))
+
+    @browsing
+    def test_safe_logo_without_a_right_logo(self, browser):
+        self.login(self.manager, browser)
+
+        browser.open(self.portal, view='@@teamraumtheme-controlpanel')
+        browser.fill({'Logo': ('Raw file data', 'logo.png', 'image/png')})
+        browser.click_on('save')
+
+        self.assertEqual(['Changes saved'], statusmessages.info_messages())
+
+        custom_styles = CustomStylesUtility(self.portal)
+        logo = custom_styles.annotations['customstyles'].get(LOGO_KEY)
+        self.assertEqual('Raw file data', logo.data)
