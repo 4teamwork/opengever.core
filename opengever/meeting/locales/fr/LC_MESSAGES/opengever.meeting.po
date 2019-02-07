@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-24 15:53+0000\n"
+"POT-Creation-Date: 2019-02-07 09:13+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -611,11 +611,6 @@ msgstr "Ce groupe peut modifier et consulter le comité."
 msgid "document_checkout_not_allowed"
 msgstr "Vous n'êtes pas autorisé(e) à extraire le document."
 
-#. Default: "Created at ${date}"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt
-msgid "document_created_at"
-msgstr "Etabli le ${date} heure"
-
 #. Default: "Agenda item list"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -631,6 +626,11 @@ msgstr "Pré-protocole"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "document_label_protocol"
 msgstr "Protocole"
+
+#. Default: "Modified at ${date}"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "document_last_modified"
+msgstr ""
 
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
