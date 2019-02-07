@@ -1,12 +1,17 @@
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
+from opengever.base.date_time import as_utc
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Proposal
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrashable
 from plone.protect import createToken
+from zope.component import getMultiAdapter
 import json
+import pytz
 import re
 
 
@@ -147,6 +152,35 @@ class TestEditAgendaItems(IntegrationTestCase):
                             u'messageTitle': u'Information'}],
                           browser.json.get('messages'))
         self.assertEquals(True, browser.json.get('proceed'))
+
+    @browsing
+    def test_updating_agenda_item_will_update_modification_dates(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+
+        creation_date = datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)
+        update_date = datetime(2018, 10, 16, 0, 0, tzinfo=pytz.utc)
+
+        def generate_agendaitem_list(meeting):
+            meeting_view = getMultiAdapter(
+                (self.meeting, self.request), name='view')
+            browser.open(meeting_view.url_generate_agendaitem_list())
+
+        # Generate first protocol
+        with freeze(creation_date):
+            generate_agendaitem_list(self.meeting)
+
+        document = model.agendaitem_list_document.resolve_document()
+
+        self.assertEqual(creation_date, as_utc(document.modified().asdatetime()))
+        self.assertEqual(creation_date, document.changed)
+
+        # Update the protocol
+        with freeze(update_date):
+            generate_agendaitem_list(self.meeting)
+
+        self.assertEqual(update_date, as_utc(document.modified().asdatetime()))
+        self.assertEqual(update_date, document.changed)
 
     @browsing
     def test_when_title_is_missing_returns_json_error(self, browser):

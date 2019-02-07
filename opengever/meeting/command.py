@@ -29,8 +29,10 @@ from opengever.ogds.base.utils import decode_for_json
 from plone import api
 from plone.memoize import instance
 from zope.component import getMultiAdapter
+from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.lifecycleevent import ObjectModifiedEvent
 import base64
 import json
 
@@ -271,8 +273,9 @@ class MergeDocxProtocolCommand(CreateGeneratedDocumentCommand):
         Versioner(document).create_version(comment)
         new_version = document.get_current_version_id()
         self.meeting.protocol_document.generated_version = new_version
-        document.setModificationDate(DateTime())
-        document.reindexObject(idxs=['modified'])
+
+        notify(ObjectModifiedEvent(document))
+
         self.protocol_updated = True
         return document
 
@@ -370,8 +373,8 @@ class UpdateGeneratedDocumentCommand(object):
         Versioner(document).create_version(comment)
         new_version = document.get_current_version_id()
         self.generated_document.generated_version = new_version
-        document.setModificationDate(DateTime())
-        document.reindexObject(idxs=['modified'])
+
+        notify(ObjectModifiedEvent(document))
 
         return document
 
