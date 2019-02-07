@@ -358,6 +358,10 @@ class UpdateGeneratedDocumentCommand(object):
         document = Oguid.resolve_object(self.generated_document.oguid)
         document.update_file(self.generate_file_data())
 
+        # Avoid circular imports:
+        from opengever.document.handlers import _update_docproperties
+        _update_docproperties(document)
+
         comment = translate(
             _(u'Updated with a newer generated version from meeting ${title}.',
               mapping=dict(title=self.meeting.get_title())),
