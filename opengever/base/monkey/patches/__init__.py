@@ -9,6 +9,7 @@ from .default_values import PatchInvokeFactory
 from .default_values import PatchTransmogrifyDXSchemaUpdater
 from .default_values import PatchZ3CFormChangedField
 from .default_values import PatchZ3CFormWidgetUpdate
+from .exception_formatter import PatchExceptionFormatter
 from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
@@ -48,3 +49,4 @@ PatchCMFCatalogAware()()
 PatchOFSRoleManager()()
 PatchCMFCatalogAwareHandlers()()
 ScrubBoboExceptions()()
+PatchExceptionFormatter()()
