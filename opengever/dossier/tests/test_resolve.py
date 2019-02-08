@@ -90,6 +90,17 @@ class TestResolvingDossiers(IntegrationTestCase):
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
 
+    @browsing
+    def test_cant_resolve_already_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_dossier(self.subdossier, browser)
+        resolve_dossier(self.subdossier, browser)
+
+        self.assertEquals(self.subdossier.absolute_url(), browser.url)
+        self.assertEquals(['Dossier has already been resolved.'],
+                          info_messages())
+
 
 class TestResolveJobs(IntegrationTestCase):
 

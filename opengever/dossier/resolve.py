@@ -6,6 +6,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -59,9 +60,13 @@ class ValidResolverNamesVocabularyFactory(object):
 class DossierResolveView(BrowserView):
 
     def __call__(self):
+        if self.is_already_resolved():
+            return self.show_already_resolved_msg()
+
         self.execute_recursive_resolve()
 
     def execute_recursive_resolve(self):
+
         resolver = get_resolver(self.context)
 
         # check preconditions
@@ -87,8 +92,18 @@ class DossierResolveView(BrowserView):
     def context_url(self):
         return self.context.absolute_url()
 
+    def is_already_resolved(self):
+        wfstate = api.content.get_state(obj=self.context)
+        return wfstate == DOSSIER_STATE_RESOLVED
+
     def redirect(self, url):
         return self.request.RESPONSE.redirect(url)
+
+    def show_already_resolved_msg(self):
+        api.portal.show_message(
+            message=_('Dossier has already been resolved.'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
 
     def show_errors(self, errors):
         for msg in errors:
