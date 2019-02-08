@@ -12,6 +12,8 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
 from zope.globalrequest import setRequest
+import imp
+import os
 import pytz
 import transaction
 
@@ -29,10 +31,9 @@ class TestserverLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
-        from opengever.testing.fixtures import OpengeverContentFixture
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
-        OpengeverContentFixture()()
+        self.get_fixture_class()()
         print 'Finished installing fixture.'
         setRequest(None)
 
@@ -40,6 +41,33 @@ class TestserverLayer(OpengeverFixture):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de')
         lang_tool.supported_langs = ['de-ch']
+
+    def get_fixture_class(self):
+        """The fixture of the testserver should be replaceable from the outside.
+        The idea is that the 'FIXTURE' environment variable can be set to a path
+        to a python file which is located in another project.
+        Therefore we import the file manually in the context of GEVER so that
+        subclassing the fixture works.
+        """
+        custom_fixture_path = os.environ.get('FIXTURE', None)
+
+        if not custom_fixture_path:
+            from opengever.testing.fixtures import OpengeverContentFixture
+            return OpengeverContentFixture
+
+        fixture_dir = os.path.dirname(custom_fixture_path)
+        package_name = 'customfixture'
+        module_name = os.path.splitext(os.path.basename(custom_fixture_path))[0]
+        module_path = '{}.{}'.format(package_name, module_name)
+
+        # It is important to first load the package of the custom fixture, so that
+        # local imports will work within this package.
+        imp.load_module(package_name, *imp.find_module('.', [fixture_dir]))
+        module = imp.load_module(module_path, *imp.find_module(module_name, [fixture_dir]))
+        class_name = os.environ.get('FIXTURE_CLASS', 'Fixture')
+        klass = getattr(module, class_name, None)
+        assert klass, 'Could not find class {!r} in module {!r}'.format(class_name, module)
+        return klass
 
 
 class TestServerFunctionalTesting(FunctionalTesting):
