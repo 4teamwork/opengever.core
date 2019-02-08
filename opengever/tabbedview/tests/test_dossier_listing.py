@@ -255,8 +255,15 @@ class TestDossierListing(IntegrationTestCase):
         self.assertItemsEqual(self.get_folder_data(self.dossier), data[0])
 
     @browsing
-    def test_subject_filter_is_active(self, browser):
+    def test_subject_filter_is_only_enabled_with_solr(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
+
+        self.assertEqual(
+            0, len(browser.css('.tabbedview_select .keyword-widget')))
+
+        self.activate_feature('solr')
+
         browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
 
         self.assertEqual(

@@ -247,7 +247,7 @@ class Dossiers(BaseCatalogListingTab):
     """List all dossiers recursively."""
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
-    subject_filter_enabled = True
+    subject_filter_available = True
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
