@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -66,6 +68,8 @@ class TestInboxWorkflow(IntegrationTestCase):
     def test_switch_to_regular_workflow_when_assign_to_dossier_via_forwarding(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
+        mail = create(Builder('mail').within(self.inbox_forwarding))
+
         # step 1
         browser.open(self.inbox_forwarding, view='tabbedview_view-overview')
         browser.click_on('forwarding-transition-assign-to-dossier')
@@ -80,7 +84,45 @@ class TestInboxWorkflow(IntegrationTestCase):
         # step 3
         browser.click_on('Save')
 
-        document, = browser.context.objectValues()
+        document, mail = browser.context.objectValues()
         wftool = api.portal.get_tool('portal_workflow')
         self.assertEquals('opengever_document_workflow',
                           wftool.getWorkflowsFor(document)[0].id)
+        self.assertEquals('opengever_mail_workflow',
+                          wftool.getWorkflowsFor(mail)[0].id)
+
+    def test_inbox_mail_uses_placeful_workflow(self):
+        self.login(self.secretariat_user)
+
+        mail = create(Builder('mail').within(self.inbox))
+
+        wftool = api.portal.get_tool('portal_workflow')
+        self.assertEquals(
+            'opengever_inbox_mail_workflow',
+            wftool.getWorkflowsFor(mail)[0].id)
+
+    @browsing
+    def test_editors_are_able_to_edit_a_mail(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        mail = create(Builder('mail').within(self.inbox))
+
+        browser.open(mail, view='edit')
+        browser.fill({'Title': 'Mail Update'})
+        browser.click_on('Save')
+
+        self.assertEquals(200, browser.status_code)
+        self.assertEqual("Mail Update", mail.Title())
+
+    def test_switch_to_regular_workflow_when_moving_a_mail_to_repository(self):
+        self.login(self.secretariat_user)
+
+        mail = create(Builder('mail').within(self.inbox))
+
+        moved = api.content.move(
+            source=mail, target=self.dossier)
+
+        wftool = api.portal.get_tool('portal_workflow')
+        self.assertEquals(
+            'opengever_mail_workflow',
+            wftool.getWorkflowsFor(moved)[0].id)

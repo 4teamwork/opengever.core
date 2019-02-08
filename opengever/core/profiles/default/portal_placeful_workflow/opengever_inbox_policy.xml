@@ -6,5 +6,9 @@
       <bound-workflow workflow_id="opengever_inbox_document_workflow" />
     </type>
 
+    <type type_id="ftw.mail.mail">
+      <bound-workflow workflow_id="opengever_inbox_mail_workflow" />
+    </type>
+
   </bindings>
 </object>
