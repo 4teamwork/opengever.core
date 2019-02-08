@@ -67,39 +67,54 @@ class DossierResolveView(BrowserView):
         # check preconditions
         errors = resolver.is_resolve_possible()
         if errors:
-            for msg in errors:
-                api.portal.show_message(
-                    message=msg, request=self.request, type='error')
-
-            return self.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            self.show_errors(errors)
+            return self.redirect(self.context_url)
 
         # validate enddates
         invalid_dates = resolver.are_enddates_valid()
         if invalid_dates:
-            for title in invalid_dates:
-                msg = _("The dossier ${dossier} has a invalid end_date",
-                        mapping=dict(dossier=title,))
-                api.portal.show_message(
-                    message=msg, request=self.request, type='error')
-
-            return self.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            self.show_invalid_end_dates(titles=invalid_dates)
+            return self.redirect(self.context_url)
 
         if resolver.is_archive_form_needed():
-            self.request.RESPONSE.redirect('transition-archive')
+            self.redirect('transition-archive')
         else:
             resolver.resolve()
             if self.context.is_subdossier():
-                api.portal.show_message(
-                    message=_('The subdossier has been succesfully resolved.'),
-                    request=self.request, type='info')
+                self.show_subdossier_resolved_msg()
             else:
-                api.portal.show_message(
-                    message=_('The dossier has been succesfully resolved.'),
-                    request=self.request, type='info')
+                self.show_dossier_resolved_msg()
 
-            self.request.RESPONSE.redirect(self.context.absolute_url())
+            self.redirect(self.context_url)
+
+    @property
+    def context_url(self):
+        return self.context.absolute_url()
+
+    def redirect(self, url):
+        return self.request.RESPONSE.redirect(url)
+
+    def show_errors(self, errors):
+        for msg in errors:
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+
+    def show_invalid_end_dates(self, titles):
+        for title in titles:
+            msg = _("The dossier ${dossier} has a invalid end_date",
+                    mapping=dict(dossier=title,))
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+
+    def show_subdossier_resolved_msg(self):
+        api.portal.show_message(
+            message=_('The subdossier has been succesfully resolved.'),
+            request=self.request, type='info')
+
+    def show_dossier_resolved_msg(self):
+        api.portal.show_message(
+            message=_('The dossier has been succesfully resolved.'),
+            request=self.request, type='info')
 
 
 class DossierReactivateView(BrowserView):
