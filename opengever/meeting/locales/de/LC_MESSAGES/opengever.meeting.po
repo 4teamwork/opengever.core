@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-24 15:53+0000\n"
+"POT-Creation-Date: 2019-02-07 09:13+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -609,11 +609,6 @@ msgstr "Diese Gruppe kann die Kommission bearbeiten und einsehen."
 msgid "document_checkout_not_allowed"
 msgstr "Sie dürfen das Dokument nicht auschecken."
 
-#. Default: "Created at ${date}"
-#: ./opengever/meeting/browser/meetings/templates/meeting.pt
-msgid "document_created_at"
-msgstr "Erstellt am ${date} Uhr"
-
 #. Default: "Agenda item list"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -629,6 +624,11 @@ msgstr "Vorprotokoll"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "document_label_protocol"
 msgstr "Protokoll"
+
+#. Default: "Modified at ${date}"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "document_last_modified"
+msgstr "Zuletzt verändert: ${date}"
 
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt

@@ -1,7 +1,11 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
+from ftw.testing import freeze
+from opengever.base.date_time import as_utc
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
+import pytz
 
 
 class TestProtocol(IntegrationTestCase):
@@ -38,6 +42,29 @@ class TestProtocol(IntegrationTestCase):
             u'Rechnungspr\xfcfungskommission has been updated successfully.')
         self.assertIsNotNone(meeting.protocol_document)
         self.assertEqual(1, meeting.protocol_document.generated_version)
+
+    def test_updating_word_protocol_will_update_modification_dates(self):
+        self.login(self.committee_responsible)
+        model = self.meeting.model
+
+        creation_date = datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)
+        update_date = datetime(2018, 10, 16, 0, 0, tzinfo=pytz.utc)
+
+        # Generate first protocol
+        with freeze(creation_date):
+            model.update_protocol_document()
+
+        document = model.protocol_document.resolve_document()
+
+        self.assertEqual(creation_date, as_utc(document.modified().asdatetime()))
+        self.assertEqual(creation_date, document.changed)
+
+        # Update the protocol
+        with freeze(update_date):
+            model.update_protocol_document()
+
+        self.assertEqual(update_date, as_utc(document.modified().asdatetime()))
+        self.assertEqual(update_date, document.changed)
 
     @browsing
     def test_protocol_generate_action_only_available_for_unedited_protocols(self, browser):

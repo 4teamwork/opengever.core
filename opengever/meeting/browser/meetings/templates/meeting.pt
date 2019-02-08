@@ -255,7 +255,7 @@
                          i18n:translate="document_label_agenda_item_list">
                       Agenda item list
                     </div>
-                    <div class="document-created"
+                    <div class="document-modified"
                          i18n:translate="document_not_yet_generated">
                       Not yet generated.
                     </div>
@@ -265,9 +265,9 @@
                     <div class="document-label">
                       <a tal:replace="structure view/get_agendaitem_list_document_link" />
                     </div>
-                    <div class="document-created"
-                         i18n:translate="document_created_at">
-                      Created at
+                    <div class="document-modified"
+                         i18n:translate="document_last_modified">
+                      Modified at
                       <tal:date
                           replace="python:toLocalizedTime(agendaitem_list_document.getObject().ModificationDate(), long_format=1)"
                           i18n:name="date" />
@@ -309,7 +309,7 @@
                   <tal:NOT_GENERATED tal:condition="not:protocol_document">
                     <div class="document-label"
                          tal:content="view/get_protocol_document_label" />
-                    <div class="document-created"
+                    <div class="document-modified"
                          i18n:translate="document_not_yet_generated">
                       Not yet generated.
                     </div>
@@ -319,9 +319,9 @@
                     <div class="document-label">
                       <a tal:replace="structure view/get_protocol_document_link" />
                     </div>
-                    <div class="document-created"
-                         i18n:translate="document_created_at">
-                      Created at
+                    <div class="document-modified"
+                         i18n:translate="document_last_modified">
+                      Modified at
                       <tal:date
                           replace="python:toLocalizedTime(protocol_document.getObject().ModificationDate(), long_format=1)"
                           i18n:name="date" />
