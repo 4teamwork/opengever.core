@@ -1056,6 +1056,13 @@ class OpengeverContentFixture(object):
             .having(preserved_as_paper=True)
         ))
 
+        self.register('removed_document', create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'W\xe4g')
+            .removed()
+        ))
+
     @staticuid()
     def create_tasks(self):
         self.task = self.register('task', create(

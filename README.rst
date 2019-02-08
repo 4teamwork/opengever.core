@@ -579,6 +579,7 @@ Objects
           - self.mail_msg
           - self.proposal
             - self.proposaldocument
+          - self.removed_document
           - self.sequential_task
             - self.seq_subtask_1
             - self.seq_subtask_2
