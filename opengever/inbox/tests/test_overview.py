@@ -87,6 +87,23 @@ class TestInboxOverviewDocumentBox(TestBaseInboxOverview):
              'Document 6', 'Document 5', 'Document 4', 'Document 3',
              'Document 2', 'Document 1'])
 
+    @browsing
+    def test_document_box_items_display_bumblebee_tootlip(self, browser):
+        document = create(Builder('document')
+                          .titled('inbox document')
+                          .within(self.inbox))
+
+        browser.login().open(self.inbox, view='tabbedview_view-overview')
+
+        document_nodes = browser.css('#documentsBox li:not(.moreLink) div')
+        self.assertEqual(1, len(document_nodes))
+
+        document_node = document_nodes[0]
+        self.assertEqual("linkWrapper tooltip-trigger",
+                         document_node.get("class"))
+        self.assertEqual("/".join((document.absolute_url(), "tooltip")),
+                         document_node.get("data-tooltip-url"))
+
 
 class TestInboxOverviewAssignedInboxTasks(TestBaseInboxOverview):
 
