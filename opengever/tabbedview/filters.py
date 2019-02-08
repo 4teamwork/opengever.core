@@ -1,12 +1,15 @@
+from binascii import b2a_qp
 from collections import OrderedDict
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
+from opengever.ogds.base.sources import is_solr_feature_enabled
 from opengever.tabbedview import _
-from plone import api
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.CMFPlone.utils import safe_unicode
 from zope import schema
+from zope.component import getUtility
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from binascii import b2a_qp
 
 
 class Filter(object):
@@ -86,16 +89,45 @@ class FilterList(OrderedDict):
 
 
 class SubjectFilter(object):
-    separator = '++'
-    widget_additional_query = {}
+    """A tabbedview filter providing a keywordwidget for subject-filtering.
 
-    def __init__(self, context, request):
+    This filter only works if solr is enabled.
+    """
+    separator = '++'
+
+    def __init__(self, context, request, additional_solr_subject_filters=None):
         self.context = context
         self.request = request
+        self.additional_solr_subject_filters = \
+            additional_solr_subject_filters or []
 
-    def widget(self):
+    @property
+    def enabled(self):
+        return is_solr_feature_enabled()
+
+    def render_widget(self):
         """Returns the html of a keywordwidget.
+        Returns an empty string if the solr is not enabled.
         """
+        return self._widget().render() if self.enabled else ''
+
+    def update_query(self, query):
+        """Used by the FilteredTableSourceMixin to update the table-query
+        with the subject filter.
+
+        This method extends the query with the subject filter.
+        """
+        if not self.enabled or not self._subject_terms_from_request():
+            return query
+
+        query['Subject'] = {
+            'query': tuple(self._subject_values_from_request()),
+            'operator': 'and'
+        }
+
+        return query
+
+    def _widget(self):
         field = schema.List(
             value_type=schema.Choice(source=self._keywords_vocabulary()),
             required=False,
@@ -106,23 +138,7 @@ class SubjectFilter(object):
                                  default="Filter by subjects...")
         widget.update()
 
-        return widget.render()
-
-    def update_query(self, query):
-        """Used by the FilteredTableSourceMixin to update the table-query
-        with the subject filter.
-
-        This method extends the query with the subject filter.
-        """
-        if not self._subject_terms_from_request():
-            return query
-
-        query['Subject'] = {
-            'query': tuple(self._subject_values_from_request()),
-            'operator': 'and'
-        }
-
-        return query
+        return widget
 
     def _subject_terms_from_request(self):
         subjects = self.request.form.get('subjects')
@@ -132,33 +148,42 @@ class SubjectFilter(object):
     def _subject_values_from_request(self):
         source = self._keywords_vocabulary()
         subjects = self._subject_terms_from_request()
-        subjects = [source.getTermByToken(subject).value for subject in subjects]
-
-        return [safe_unicode(subject) for subject in subjects]
+        return [source.getTermByToken(subject).value for subject in subjects]
 
     def _keywords_vocabulary(self):
         terms = map(self._make_term, self._context_based_keywords())
         return SimpleVocabulary(terms)
 
     def _context_based_keywords(self):
-        catalog = api.portal.get_tool('portal_catalog')
-        query = {'path': {
-            'query': '/'.join(self.context.getPhysicalPath()),
-            'depth': -1}}
-        query.update(self.widget_additional_query)
+        solr = getUtility(ISolrSearch)
+        response = solr.search(
+            query="*:*", filters=self._solr_filters(), **self._solr_params())
 
-        return self._unique_subjects(catalog(query))
+        return self._extract_facets_from_solr_response(response)
+
+    def _solr_filters(self):
+        filters = []
+        filters.append(
+            'path:{}\\/*'.format(escape('/'.join(self.context.getPhysicalPath()))))
+        filters.extend(self.additional_solr_subject_filters)
+        return filters
+
+    def _solr_params(self):
+        return {
+            'facet': True,  # activate facetting
+            'facet.field': 'Subject',  # add factes for this field
+            'facet.limit': -1,  # do not limit the number of facet-terms
+            'rows': 0,  # do not return documents found by the query
+            'facet.mincount': 1  # exclude facet-terms with no document
+            }
+
+    def _extract_facets_from_solr_response(self, response):
+        facets = response.body.get('facet_counts').get('facet_fields').get('Subject')
+        return facets[::2]
 
     def _make_term(self, keyword):
         return SimpleTerm(
             value=keyword, token=self._make_token(keyword), title=keyword)
 
     def _make_token(self, value):
-        return b2a_qp(value)
-
-    def _unique_subjects(self, brains):
-        context_path = '/'.join(self.context.getPhysicalPath())
-        return set([safe_utf8(subject)
-                    for brain in brains
-                    for subject in brain.Subject
-                    if brain.getPath() != context_path])
+        return b2a_qp(safe_utf8(value))

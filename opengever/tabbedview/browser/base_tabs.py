@@ -144,23 +144,16 @@ class GeverTabMixin(object):
         return _filter.strip().split(' ')
 
     def subject_filter_widget(self):
-        subject_filter = SubjectFilter(self.context, self.request)
+        if not self.subject_filter_available:
+            return ''
 
-        query = {}
-        if self.types:
-            query['portal_type'] = self.types
+        filters = []
 
-        if self.object_provides:
-            query['object_provides'] = self.object_provides
+        if hasattr(self, 'object_provides') and self.object_provides:
+            filters.append('object_provides:{}'.format(self.object_provides))
 
-        subject_filter.widget_additional_query = query
-
-        return subject_filter.widget()
-
-    @property
-    def subject_filter_enabled(self):
-        return self.subject_filter_available and \
-            is_solr_feature_enabled()
+        subject_filter = SubjectFilter(self.context, self.request, filters)
+        return subject_filter.render_widget()
 
 
 class BaseListingTab(GeverTabMixin, ListingView):

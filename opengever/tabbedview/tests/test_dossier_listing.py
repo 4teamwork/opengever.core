@@ -8,6 +8,7 @@ from opengever.tabbedview.helper import linked
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.utils import safe_unicode
 
 
 class TestDossierListing(IntegrationTestCase):
@@ -64,6 +65,13 @@ class TestDossierListing(IntegrationTestCase):
     @staticmethod
     def filter_data(data, state='dossier-state-active'):
         return filter(lambda folder_data: folder_data[3] == state, data)
+
+    def solr_response(self, *facets):
+        solr_facets = []
+        for facet in facets:
+            solr_facets.extend([safe_unicode(facet), 1])
+
+        return {u'facet_counts': {u'facet_fields': {u'Subject': solr_facets}}}
 
     @browsing
     def test_get_folder_data(self, browser):
@@ -255,23 +263,11 @@ class TestDossierListing(IntegrationTestCase):
         self.assertItemsEqual(self.get_folder_data(self.dossier), data[0])
 
     @browsing
-    def test_subject_filter_is_only_enabled_with_solr(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
-
-        self.assertEqual(
-            0, len(browser.css('.tabbedview_select .keyword-widget')))
-
-        self.activate_feature('solr')
-
-        browser.visit(self.leaf_repofolder, view='tabbedview_view-dossiers')
-
-        self.assertEqual(
-            1, len(browser.css('.tabbedview_select .keyword-widget')))
-
-    @browsing
     def test_filter_dossiers_by_subjects(self, browser):
+        self.activate_feature('solr')
         self.login(self.regular_user, browser=browser)
+
+        self.mock_solr(response_json=self.solr_response('Wichtig'))
 
         self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
         self.assertLess(1, len(browser.css('.listing tbody tr')))
