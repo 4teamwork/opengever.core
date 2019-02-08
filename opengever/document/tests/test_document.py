@@ -257,58 +257,45 @@ class TestDocument(IntegrationTestCase):
         self.assertIsNone(checkout_manager.get_checked_out_by())
 
 
-class TestDocumentDefaultValues(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDocumentDefaultValues, self).setUp()
-        self.dossier = create(Builder('dossier'))
+class TestDocumentDefaultValues(IntegrationTestCase):
 
     @browsing
     def test_default_document_date_is_today(self, browser):
+        self.login(self.regular_user, browser)
+
         now = datetime.now()
         today = now.date()
-
-        browser.login().open(self.dossier)
+        browser.open(self.dossier)
 
         with freeze(now):
             factoriesmenu.add('Document')
             browser.fill({'Title': u'My Document'}).save()
-        document = self.dossier['document-1']
 
+        document = self.dossier['document-38']
         self.assertEqual(today, document.document_date)
 
     @browsing
     def test_preserved_as_paper_default_false(self, browser):
-        browser.login()
-
-        # registry default of False
-        api.portal.set_registry_record(
-            'preserved_as_paper_default', False,
-            interface=IDocumentSettings)
-        transaction.commit()
-
+        api.portal.set_registry_record('preserved_as_paper_default', False, interface=IDocumentSettings)
+        self.login(self.regular_user, browser)
         browser.open(self.dossier)
+
         factoriesmenu.add('Document')
-        browser.fill(
-            {'Title': u'My Document',
-             'File': ('DATA', 'file.txt', 'text/plain')}).save()
-        document = self.dossier['document-1']
+        browser.fill({'Title': u'My Document', 'File': ('DATA', 'file.txt', 'text/plain')}).save()
+
+        document = self.dossier['document-38']
         self.assertFalse(document.preserved_as_paper)
 
     @browsing
     def test_preserved_as_paper_default_true(self, browser):
-        browser.login()
-
-        # registry default of True
-        api.portal.set_registry_record(
-            'preserved_as_paper_default', True,
-            interface=IDocumentSettings)
-        transaction.commit()
-
+        api.portal.set_registry_record('preserved_as_paper_default', True, interface=IDocumentSettings)
+        self.login(self.regular_user, browser)
         browser.open(self.dossier)
+
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document'}).save()
-        document = self.dossier['document-1']
+
+        document = self.dossier['document-38']
         self.assertTrue(document.preserved_as_paper)
 
 
