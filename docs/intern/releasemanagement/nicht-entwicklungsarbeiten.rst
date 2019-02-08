@@ -3,33 +3,24 @@
 Nicht Entwicklungsarbeiten
 ==========================
 
+Nachstehend werden alle Arbeiten beschrieben, welche bei einem OneGov GEVER
+Release aus Nicht-Entwicklungs-Sicht anfallen.
+
 1. Initialer Input
 ~~~~~~~~~~~~~~~~~~
-Information in to-do im `Basecamp „OneGov GEVER Team“ <https://basecamp.com/2768704/projects/13482340>`_  durch Entwickler.
+Information über neuen Release  erfolgt im `Basecamp „OneGov GEVER Team“ <https://basecamp.com/2768704/projects/13482340>`_  durch die Entwicklung.
+Im To-Do werden auf Basis des `Changelogs / History <https://github.com/4teamwork/opengever.core/blob/master/docs/HISTORY.txt>`_ die wichtigsten Änderungen durch die Entiwcklung beschrieben und in einem bilateralen Meeting erläutert.
+Weiter wird pro Release ein `Release-Dossier <https://gever.4teamwork.ch/ordnungssystem/3/2/2/1#dossiers>`_ durch die Entwicklung erstellt, in welchem alle relevanten Dokumente/Informationen abgelegt werden.
 
-2. Ablage
-~~~~~~~~~~
-Pro Jahr wird ein `Release-Dossier <https://gever.4teamwork.ch/ordnungssystem/3/2/2/1#dossiers>`_ durch PL erstellt. Alle relevanten Dokumente sollen mit Referenz auf Release-Nr. dort abgelegt werden.
-
-3. Testing
-~~~~~~~~~~~
-- Testing gemäss `Test-Drehbuch-Vorlage <https://gever.4teamwork.ch/vorlagen/opengever-dossier-templatefolder/document-18914#overview>`_  aus OneGov GEVER.
-- Bei Abschluss des Testings Info an Entwickler via `Basecamp <https://basecamp.com/2768704/projects/13482340>`_.
-- Bei gröberen Bugs, welche während dem Testen auftreten, wird ein GitHub-Ticket direkt im `opengever.core-Repository <https://github.com/4teamwork/opengever.core>`_ durch PL erfasst.
-
-4. Dokumentation
+2. Dokumentation
 ~~~~~~~~~~~~~~~~
-Die neuen resp. angepassten Funktionalitäten sollen auf docs.onegovgever.ch angepasst werden. `Informationen zu Handling der Dokumentation <https://intern.onegovgever.ch/meta/#arbeiten-an-der-dokumentation>`_
+Die neuen resp. angepassten Funktionalitäten werden auf docs.onegovgever.ch angepasst. `Informationen zu Handling der Dokumentation <https://intern.onegovgever.ch/meta/#arbeiten-an-der-dokumentation>`_
 
-5. Kommunikation
+3. Kommunikation
 ~~~~~~~~~~~~~~~~
-- Finalisierung der Release Notes auf Basis der Stichworte des Entwicklers.
-- Erfassung Release Notes auf `onegovgever.ch/aktuelles <https://onegovgever.ch/aktuelles>`_. Dabei soll unter Kategorisierung das Stichwort „Releaseinfo“ ergänzt werden.
-- Erstellung einer Light-Variante der Release Notes auf dem `4tw-Blog <https://www.4teamwork.ch/blog/onegov-gever-relase-2017.3>`_.
-- Erstellung eines Kurz-Beitrags im `Feedbackforum <https://feedback.onegovgever.ch/c/release>`_ in der Kategorie "Releases", auf Basis der Release-Notes. Danach kann der Beitrag des alten Releases in den Status "geschlossen" gesetzt werden.
+- Erfassung Release Notes in der `Dokumentation <https://docs.onegovgever.ch/release-notes/>`_.
+- Erstellung eines Kurz-Beitrags im `Feedbackforum <https://feedback.onegovgever.ch/c/release>`_ in der Kategorie "Releases", auf Basis der Release-Notes. Danach kann der Beitrag über den vorherigen Release in den Status "geschlossen" gesetzt werden.
 - Absetzen eines `Twitter-Posts <https://twitter.com/4teamwork>`_.
-- Mailings: Pro Release werden drei unterschiedliche Mails an drei
-  unterschiedliche Zielgruppen über Mailchimp (Login siehe LastPass) verschickt.
-  Zuvor muss das Template jeweils aktualisiert und die aktuellen Adressen
-  (siehe dazu die Tags) aus Insightly exportiert werden. Es handelt sich um
-  folgende drei Zielgruppen: `SaaS-Kunden (Insightly-Tag: ReleaseInfoGEVERSaaS) <https://us4.admin.mailchimp.com/templates/edit?id=185489>`_ , `On-Site-Kunden (Insightly-Tag: ReleaseInfoGEVEROnSite) <https://us4.admin.mailchimp.com/templates/edit?id=185489>`_ und `Onboarding-Kunden und 4tw-Mitarbeiter (Insightly-Tag: GEVER Onboarding, Mitarbeitende 4teamwork) <https://us4.admin.mailchimp.com/templates/edit?id=185493>`_ .
+- Mailings: Pro Release werden zwei unterschiedliche Mails an drei unterschiedliche Zielgruppen über Mailchimp (Login siehe LastPass) verschickt.
+  Zuvor muss das Template jeweils aktualisiert und die aktuellen Adressen mithilfe der Tags aus dem Insightly exportiert werden. Es handelt sich um
+  folgende drei Zielgruppen, wobei bei OnSite und 4tw-Mitarbeitende das gleiche Mail-Template benutzt wird: `SaaS-Kunden (Insightly-Tag: ReleaseInfoGEVERSaaS) <https://us4.admin.mailchimp.com/templates/edit?id=185489>`_ , `On-Site-Kunden (Insightly-Tag: ReleaseInfoGEVEROnSite) <https://us4.admin.mailchimp.com/templates/edit?id=185457>`_ und `4tw-Mitarbeiter (Insightly-Tag: Mitarbeitende 4teamwork) <https://us4.admin.mailchimp.com/templates/edit?id=185457>`_ .
