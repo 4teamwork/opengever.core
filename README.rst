@@ -1032,6 +1032,39 @@ The ports used by the testserver can easily be changed through environment varia
 - ``TESTSERVER_CTL_PORT`` - the port of the XMLRPC control server (default: ``55002`).
 
 
+Custom fixtures
+~~~~~~~~~~~~~~~
+
+A custom fixture can be loaded in the testserver.
+This is helpful when other projects are testing GEVER integration and need specific content.
+The custom fixture can be defined with an environment variable:
+
+.. code::
+
+   FIXTURE=~/projects/myproject/gever/fixture.py ./bin/testserver
+
+The fixture will be loaded into the testserver process with the dottedname
+``customfixture.fixture``; the package name is always ``customfixture``.
+It is possible to import local files of this folder with ``import .otherfile``.
+
+Example fixture:
+
+.. code::
+
+   from opengever.testing.fixtures import OpengeverContentFixture
+
+   class Fixture(OpengeverContentFixture):
+
+       def __init__(self):
+           super(Fixture, self).__init__()
+           with self.freeze_at_hour(20):
+               self.create_my_custom_content()
+
+The fixture class name defaults to ``Fixture`` and can be changed with the environment
+variable ``FIXTURE_CLASS``.
+
+
+
 Testing on the CI
 ~~~~~~~~~~~~~~~~~
 

@@ -52,9 +52,13 @@ class OpengeverContentFixture(object):
         self._logger = logger = logging.getLogger('opengever.testing')
         self._lookup_table = {
             'manager': ('user', SITE_OWNER_NAME),
-            }
+        }
         self._registered_paths = set()
+        self.configure_jwt_plugin()
+        self.create_fixture_content()
+        logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
+    def configure_jwt_plugin(self):
         # Set up a static secret for the Zope acl_users JWT plugin
         # XXX - the __call__ based _lookup_table cannot be used within __init__
         with self.login(api.user.get(SITE_OWNER_NAME)):
@@ -67,6 +71,7 @@ class OpengeverContentFixture(object):
         jwt_plugin.use_keyring = False
         jwt_plugin._secret = JWT_SECRET
 
+    def create_fixture_content(self):
         with self.freeze_at_hour(4):
             self.create_units()
 
@@ -138,8 +143,6 @@ class OpengeverContentFixture(object):
                 self.create_offered_dossiers()
             with self.login(self.records_manager):
                 self.create_disposition()
-
-        logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
     def __call__(self):
         return self._lookup_table
