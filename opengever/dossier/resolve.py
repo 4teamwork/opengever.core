@@ -59,6 +59,9 @@ class ValidResolverNamesVocabularyFactory(object):
 class DossierResolveView(BrowserView):
 
     def __call__(self):
+        self.execute_recursive_resolve()
+
+    def execute_recursive_resolve(self):
         resolver = get_resolver(self.context)
 
         # check preconditions
