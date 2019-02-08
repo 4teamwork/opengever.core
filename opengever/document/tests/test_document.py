@@ -21,7 +21,6 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import OPENGEVER_FUNCTIONAL_TESTING
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.dexterity.fti import DexterityFTI
 from plone.dexterity.fti import register
 from plone.dexterity.interfaces import IDexterityFTI
@@ -67,271 +66,193 @@ class TestDocumentConfiguration(IntegrationTestCase):
         self.assert_provides(new_object, interface=IDocumentSchema)
 
 
-class TestDocument(FunctionalTestCase):
+class TestDocument(IntegrationTestCase):
 
     def test_upload_file(self):
-        document = create(Builder("document"))
+        self.login(self.regular_user)
         field = IDocumentSchema['file']
-        file = NamedBlobFile('bla bla', filename=u'test.txt')
-        field.set(document, file)
-        self.assertTrue(field.get(document).data == 'bla bla')
+        file_ = NamedBlobFile('bla bla', filename=u'test.txt')
+        field.set(self.document, file_)
+        self.assertTrue(field.get(self.document).data == 'bla bla')
 
     def test_is_not_a_mail(self):
-        document = create(Builder('document'))
-        self.assertFalse(document.is_mail)
+        self.login(self.regular_user)
+        self.assertFalse(self.document.is_mail)
 
     def test_filename_getter_returns_filename_if_file_is_available(self):
-        document = create(Builder('document')
-                          .titled('Foo')
-                          .attach_file_containing('foo', name=u'foo.txt'))
-        self.assertEqual(u'Foo.txt', document.get_filename())
+        self.login(self.regular_user)
+        self.assertEqual(u'Vertraegsentwurf.docx', self.document.get_filename())
 
     def test_filename_getter_return_none_if_no_file_is_available(self):
-        document = create(Builder('document'))
-        self.assertIsNone(document.get_filename())
+        self.login(self.regular_user)
+        self.assertIsNone(self.empty_document.get_filename())
 
     def test_document_with_file_is_digitally_available(self):
-        document_with_file = create(Builder("document").with_dummy_content())
-        self.assertTrue(document_with_file.digitally_available)
+        self.login(self.regular_user)
+        self.assertTrue(self.document.digitally_available)
 
     def test_document_without_file_is_not_digitally_available(self):
-        document_without_file = create(Builder("document"))
-        self.assertFalse(document_without_file.digitally_available)
+        self.login(self.regular_user)
+        self.assertFalse(self.empty_document.digitally_available)
 
     @browsing
     def test_documents_tabbedview(self, browser):
-        doc = create(Builder('document').with_dummy_content())
-        browser.login().open(doc, view='@@tabbed_view')
-
-        self.assertEquals(
-            ['overview', 'versions', 'journal', 'sharing'],
-            browser.css('.formTabs .formTab').text)
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='@@tabbed_view')
+        self.assertEqual(['overview', 'versions', 'journal', 'sharing'], browser.css('.formTabs .formTab').text)
 
     @browsing
     def test_documents_properties_view(self, browser):
-        self.grant('Manager')
-        doc = create(Builder('document').with_dummy_content())
-        browser.login().open(doc, view='@@view')
-
-        self.assertEquals(
-            u'Testdokum\xe4nt',
-            browser.css('.documentFirstHeading').first.text)
-
-        self.assertEquals(
-            ['Common', 'Classification', 'Archive file'],
-            browser.css('.dossier-detail-listing-title').text)
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='@@view')
+        self.assertEqual(u'Vertr\xe4gsentwurf', browser.css('.documentFirstHeading').first.text)
+        self.assertEqual(['Common', 'Classification'], browser.css('.dossier-detail-listing-title').text)
 
     def test_copying_a_document_prefixes_title_with_copy_of(self):
-        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
-        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
-        document = create(Builder('document')
-                          .within(dossier_a)
-                          .titled(u'Testdocument'))
-
-        copy = api.content.copy(source=document, target=dossier_b)
-        self.assertEquals(u'copy of Testdocument', copy.title)
+        self.login(self.regular_user)
+        copy = api.content.copy(source=self.document, target=self.subdossier)
+        self.assertEqual(u'copy of Vertr\xe4gsentwurf', copy.title)
 
     def test_copying_a_mail_prefixes_title_with_copy_of(self):
-        self.grant('Reader', 'Contributor', 'Editor')
-        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
-        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
-        mail = create(Builder('mail')
-                      .within(dossier_a)
-                      .titled('Testmail'))
-
-        copy = api.content.copy(source=mail, target=dossier_b)
-        self.assertEquals(u'copy of Testmail', copy.title)
+        self.login(self.regular_user)
+        copy = api.content.copy(source=self.mail_eml, target=self.subdossier)
+        self.assertEqual(u'copy of Die B\xfcrgschaft', copy.title)
 
     def test_copying_a_mail_does_not_create_versions(self):
-        self.grant('Reader', 'Contributor', 'Editor')
-        dossier_a = create(Builder('dossier').titled(u'Dossier A'))
-        dossier_b = create(Builder('dossier').titled(u'Dossier B'))
-        mail = create(Builder('mail')
-                      .within(dossier_a)
-                      .titled('Testmail'))
-
-        copy = api.content.copy(source=mail, target=dossier_b)
+        self.login(self.regular_user)
+        copy = api.content.copy(source=self.mail_eml, target=self.subdossier)
         new_history = self.portal.portal_repository.getHistory(copy)
-        self.assertEquals(len(new_history), 0)
+        self.assertEqual(len(new_history), 0)
 
     def test_copying_a_document_does_not_copy_its_versions(self):
-        orig_doc = create(Builder("document").having(preserved_as_paper=False))
+        self.login(self.regular_user)
 
-        cb = self.portal.manage_copyObjects(orig_doc.id)
-        self.portal.manage_pasteObjects(cb)
+        # Check the original actually has a history
+        old_history = self.portal.portal_repository.getHistory(self.document)
+        self.assertEqual(len(old_history), 0)
+        self.checkout_document(self.document)
+        self.checkin_document(self.document)
+        old_history = self.portal.portal_repository.getHistory(self.document)
+        self.assertEqual(len(old_history), 1)
 
-        new_doc = self.portal['copy_of_document-1']
-
+        cb = self.dossier.manage_copyObjects(self.document.id)
+        self.dossier.manage_pasteObjects(cb)
+        new_doc = self.dossier['copy_of_document-12']
         new_history = self.portal.portal_repository.getHistory(new_doc)
-        self.assertEquals(len(new_history), 0)
+        self.assertEqual(len(new_history), 0)
 
     def test_accessors(self):
-        document = create(Builder("document")
-                          .titled(u'Test title')
-                          .having(description=u'Lorem ipsum'))
-
-        self.assertEquals(document.Title(), 'Test title')
-        self.assertEquals(document.Description(), 'Lorem ipsum')
+        self.login(self.regular_user)
+        self.assertEqual(self.document.Title(), 'Vertr\xc3\xa4gsentwurf')
+        self.assertEqual(self.document.Description(), 'Wichtige Vertr\xc3\xa4ge')
 
     def test_checked_out_by_returns_userid(self):
-        document_a = create(Builder('document')
-                            .checked_out())
-        document_b = create(Builder('document'))
-
-        self.assertEquals(TEST_USER_ID, document_a.checked_out_by())
-        self.assertEquals(None, document_b.checked_out_by())
+        self.login(self.regular_user)
+        self.assertEqual(None, self.document.checked_out_by())
+        self.checkout_document(self.document)
+        self.assertEqual(self.regular_user.id, self.document.checked_out_by())
 
     def test_is_checked_in(self):
-        document_a = create(Builder('document')
-                            .checked_out())
-        document_b = create(Builder('document'))
-
-        self.assertTrue(document_a.is_checked_out())
-        self.assertFalse(document_b.is_checked_out())
+        self.login(self.regular_user)
+        self.assertFalse(self.document.is_checked_out())
+        self.checkout_document(self.document)
+        self.assertTrue(self.document.is_checked_out())
 
     def test_related_items(self):
-        document_a = create(Builder('document'))
-        document_b = create(Builder('document')
-                            .relate_to([document_a]))
-        document_c = create(Builder('document')
-                            .relate_to([document_a, document_b]))
-
-        self.assertEquals([], document_a.related_items())
-        self.assertEquals([document_a], document_b.related_items())
-        self.assertEquals([document_a, document_b], document_c.related_items())
+        self.login(self.regular_user)
+        self.assertEqual([], self.document.related_items())
+        self.assertEqual([self.document], self.subdocument.related_items())
+        self.assertEqual([self.document, self.subdocument], self.subsubdocument.related_items())
 
     def test_is_removed(self):
-        document_a = create(Builder('document'))
-        document_b = create(Builder('document').removed())
-
-        self.assertFalse(document_a.is_removed)
-        self.assertTrue(document_b.is_removed)
+        self.login(self.regular_user)
+        self.assertFalse(self.document.is_removed)
+        with self.login(self.manager):
+            self.assertTrue(self.removed_document.is_removed)
 
     def test_document_inside_a_dossier_is_movable(self):
-        dossier = create(Builder('dossier'))
-        doc = create(Builder('document').within(dossier))
-
-        self.assertTrue(doc.is_movable())
+        self.login(self.regular_user)
+        self.assertTrue(self.document.is_movable())
 
     def test_document_inside_a_task_is_not_movable(self):
-        task = create(Builder('task'))
-        doc = create(Builder('document').within(task))
-
-        self.assertFalse(doc.is_movable())
+        self.login(self.regular_user)
+        self.assertFalse(self.taskdocument.is_movable())
 
     def test_document_inside_a_submitted_proposal_is_not_movable(self):
-        repo, repo_folder = create(Builder('repository_tree'))
-        dossier = create(Builder('dossier').within(repo_folder))
-        document = create(Builder('document').within(dossier))
-        committee = create(Builder('committee').with_default_period())
-        self.grant('CommitteeResponsible', on=committee)
-        proposal, submitted_proposal = create(
-            Builder('proposal').within(dossier)
-                               .having(title='Mach doch',
-                                       committee=committee.load_model())
-                               .relate_to(document)
-                               .with_submitted())
-
-        submitted_document = submitted_proposal.get_documents()[0]
+        self.login(self.meeting_user)
+        submitted_document = self.submitted_proposal.get_documents()[0]
         self.assertFalse(submitted_document.is_movable())
 
     def test_current_document_version_is_increased(self):
-        document = create(Builder("document").with_dummy_content())
-        self.assertEqual(None, document.get_current_version_id())
-        self.assertEqual(0, document.get_current_version_id(missing_as_zero=True))
+        self.login(self.regular_user)
+        self.assertEqual(None, self.document.get_current_version_id())
+        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
 
-        document.file = NamedBlobFile(data='New', filename=u'test.txt')
-        self.assertEqual(0, document.get_current_version_id())
+        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        self.assertEqual(0, self.document.get_current_version_id())
 
         repository = api.portal.get_tool('portal_repository')
-        repository.save(document)
-
-        self.assertEqual(1, document.get_current_version_id())
+        repository.save(self.document)
+        self.assertEqual(1, self.document.get_current_version_id())
 
     def test_get_parent_dossier_returns_direct_parent_for_dossiers(self):
-        dossier = create(Builder('dossier'))
-        subdossier = create(Builder('dossier').within(dossier))
-        document = create(Builder('document').within(dossier))
-        document_sub = create(Builder('document').within(subdossier))
-
-        self.assertEqual(dossier, document.get_parent_dossier())
-        self.assertEqual(subdossier, document_sub.get_parent_dossier())
+        self.login(self.regular_user)
+        self.assertEqual(self.dossier, self.document.get_parent_dossier())
+        self.assertEqual(self.subdossier, self.subdocument.get_parent_dossier())
+        self.assertEqual(self.subsubdossier, self.subsubdocument.get_parent_dossier())
 
     def test_get_parent_dossier_returns_tasks_dossier(self):
-        dossier = create(Builder('dossier'))
-        task = create(Builder('task').within(dossier))
-        subtask = create(Builder('task').within(task))
-        document = create(Builder('document').within(subtask))
-
-        self.assertEqual(dossier, document.get_parent_dossier())
+        self.login(self.regular_user)
+        self.assertEqual(self.dossier, self.taskdocument.get_parent_dossier())
 
     def test_get_parent_inbox_returns_inbox_for_document_in_inbox(self):
-        inbox = create(Builder('inbox'))
-        document = create(Builder('document').within(inbox))
-
-        self.assertEqual(inbox, document.get_parent_inbox())
+        self.login(self.secretariat_user)
+        self.assertEqual(self.inbox, self.inbox_document.get_parent_inbox())
 
     def test_get_parent_inbox_returns_none_for_document_in_dossier(self):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
-
-        self.assertIsNone(document.get_parent_inbox())
+        self.login(self.regular_user)
+        self.assertIsNone(self.document.get_parent_inbox())
 
     @browsing
     def test_regular_user_can_add_new_keywords_in_document(self, browser):
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
-
-        self.grant('Reader', 'Contributor', 'Editor')
-
-        browser.login().visit(document, view='@@edit')
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='@@edit')
 
         keywords = browser.find_field_by_text(u'Keywords')
         new = browser.css('#' + keywords.attrib['id'] + '_new').first
         new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
-        browser.visit(document, view='edit')
+        browser.open(self.document, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
-        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
-                              tuple(keywords.value))
+        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'), tuple(keywords.value))
 
-    def test_is_office_connector_editable_mimetype_check_is_case_insensitive(self):
-        self.grant('Reader', 'Contributor', 'Editor')
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier).with_dummy_content())
-        document.file.contentType = document.file.contentType.upper()
-        self.assertTrue(document.is_office_connector_editable())
+    def test_office_connector_editable_mimetype_check_is_case_insensitive(self):
+        self.login(self.regular_user)
+        self.document.file.contentType = self.document.file.contentType.upper()
+        self.assertTrue(self.document.is_office_connector_editable())
 
     def test_checkout_and_get_office_connector_url(self):
         """The checkout_and_get_office_connector_url method should check out
         the document and return an url which will open the office connector.
         """
         api.portal.set_registry_record('direct_checkout_and_edit_enabled', False, interface=IOfficeConnectorSettings)
-        self.grant('Reader', 'Contributor', 'Editor')
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier))
-        checkout_manager = getMultiAdapter((document, self.request),
-                                           ICheckinCheckoutManager)
+        self.login(self.regular_user)
+        checkout_manager = getMultiAdapter((self.document, self.request), ICheckinCheckoutManager)
         self.assertIsNone(checkout_manager.get_checked_out_by())
-        self.assertEquals(
-            'http://nohost/plone/dossier-1/document-1/external_edit',
-            document.checkout_and_get_office_connector_url())
-        self.assertEquals(TEST_USER_ID, checkout_manager.get_checked_out_by())
+        url = self.document.checkout_and_get_office_connector_url()
+        self.assertEqual('/'.join((self.document.absolute_url(), 'external_edit')), url)
+        self.assertEqual(self.regular_user.id, checkout_manager.get_checked_out_by())
 
     def test_checkout_and_get_office_connector_url_with_checkout_feature(self):
         """When the office connector checkout feature is enabled, the
         checkout_and_get_office_connector_url method should simply return an
         office connector URL which includes the checkout command.
         """
-        self.grant('Reader', 'Contributor', 'Editor')
-        dossier = create(Builder('dossier'))
-        document = create(Builder('document').within(dossier)
-                          .with_dummy_content())
-        checkout_manager = getMultiAdapter((document, self.request),
-                                           ICheckinCheckoutManager)
+        self.login(self.regular_user)
+        checkout_manager = getMultiAdapter((self.document, self.request), ICheckinCheckoutManager)
         self.assertIsNone(checkout_manager.get_checked_out_by())
-        url = document.checkout_and_get_office_connector_url()
+        url = self.document.checkout_and_get_office_connector_url()
         self.assertTrue(url.startswith('oc:'), url)
         self.assertIsNone(checkout_manager.get_checked_out_by())
 
