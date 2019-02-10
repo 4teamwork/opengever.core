@@ -226,6 +226,15 @@ class TestResolveJobs(IntegrationTestCase):
         subdossier = create(Builder('dossier')
                             .within(self.empty_dossier)
                             .titled(u'Sub'))
+        create(Builder('task')
+               .within(subdossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
 
         with self.observe_children(self.empty_dossier) as main_children:
             with self.observe_children(subdossier) as sub_children:
@@ -245,6 +254,16 @@ class TestResolveJobs(IntegrationTestCase):
         self.assertEquals(0, len(sub_children['added']))
 
     @browsing
+    def test_tasks_pdf_is_skipped_for_dossiers_without_tasks(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            resolve_dossier(self.empty_dossier, browser)
+
+        self.assertEqual(0, len(children['added']))
+
+    @browsing
     def test_sets_tasks_pdf_document_date_to_dossier_end_date(self, browser):
         """When the document date is not set to the dossiers end date the
         subdossier will be left in an inconsistent state. this will make
@@ -259,6 +278,15 @@ class TestResolveJobs(IntegrationTestCase):
                                 start=date(2016, 1, 1),
                                 end=date(2016, 3, 15))
                             .titled(u'Sub'))
+        create(Builder('task')
+               .within(subdossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
 
         with self.observe_children(subdossier) as sub_children:
             with freeze(datetime(2016, 4, 25)):
@@ -281,6 +309,16 @@ class TestResolveJobs(IntegrationTestCase):
     def test_tasks_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
         self.activate_feature('tasks-pdf')
         self.login(self.secretariat_user, browser)
+
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
 
         with self.observe_children(self.empty_dossier) as children:
             resolve_dossier(self.empty_dossier, browser)
