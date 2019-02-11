@@ -10,6 +10,8 @@ $favorites-icon-size: 1em;
   display: inline-block;
   vertical-align: 2px;
   margin-left: 4px;
+  z-index: 99;
+  position: inherit;
 
   #mark-as-favorite {
     color: $gever-green;
