@@ -12,6 +12,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -189,9 +190,14 @@ class StrictDossierResolver(object):
         self.trash_shadowed_docs()
         self.purge_trash()
         self.create_journal_pdf()
-        if not self.context.is_subdossier():
+        if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
+
+    def contains_tasks(self):
+        tasks = api.content.find(
+            context=self.context, depth=-1, object_provides=ITask)
+        return len(tasks) > 0
 
     def trash_shadowed_docs(self):
         """Trash all documents that are in shadow state (recursive).
