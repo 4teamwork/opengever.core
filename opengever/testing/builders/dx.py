@@ -1,6 +1,8 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from ftw.builder import Builder
 from ftw.builder import builder_registry
+from ftw.builder import create
 from ftw.builder.dexterity import DexterityBuilder
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.oguid import Oguid
@@ -327,9 +329,19 @@ class RepositoryRootBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 
     def __init__(self, session):
         super(RepositoryRootBuilder, self).__init__(session)
+        self._with_tree_portlet = False
         self.arguments = {
             'title_de': u'Ordnungssystem',
         }
+
+    def with_tree_portlet(self):
+        self._with_tree_portlet = True
+        return self
+
+    def after_create(self, obj):
+        super(RepositoryRootBuilder, self).after_create(obj)
+        if self._with_tree_portlet:
+            create(Builder('tree portlet').for_root(obj))
 
 
 builder_registry.register('repository_root', RepositoryRootBuilder)

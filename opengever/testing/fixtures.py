@@ -394,6 +394,7 @@ class OpengeverContentFixture(object):
     def create_repository_tree(self):
         self.root = self.register('repository_root', create(
             Builder('repository_root')
+            .with_tree_portlet()
             .having(
                 title_de=u'Ordnungssystem',
                 title_fr=u'Syst\xe8me de classement',

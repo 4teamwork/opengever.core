@@ -3,6 +3,7 @@ from opengever.testing import IntegrationTestCase
 
 
 class TestRepositoryAPI(IntegrationTestCase):
+
     @browsing
     def test_can_get_repository_root(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -47,7 +48,7 @@ class TestRepositoryAPI(IntegrationTestCase):
             ],
             u'items_total': 3,
             u'layout': u'tabbed_view',
-            u'modified': u'2016-08-31T07:09:33+00:00',
+            u'modified': u'2016-08-31T07:11:33+00:00',
             u'parent': {
                 u'@id': u'http://nohost/plone',
                 u'@type': u'Plone Site',
@@ -62,4 +63,4 @@ class TestRepositoryAPI(IntegrationTestCase):
             u'valid_until': None,
             u'version': None,
         }
-        self.assertEqual(expected_repository_root, browser.json)
+        self.assert_json_structure_equal(expected_repository_root, browser.json)

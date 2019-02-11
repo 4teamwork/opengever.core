@@ -11,26 +11,6 @@ class TestTreePortlet(IntegrationTestCase):
 
     features = ('favorites', )
 
-    def setUp(self):
-        super(TestTreePortlet, self).setUp()
-        with self.login(self.administrator):
-            self.add_treeportlet(self.repository_root, self.repository_root)
-
-    def add_treeportlet(self, context, repository_root):
-        manager = getUtility(IPortletManager,
-                             name=u'plone.leftcolumn',
-                             context=self.portal)
-        assignments = getMultiAdapter((context, manager),
-                                      IPortletAssignmentMapping,
-                                      context=self.portal)
-
-        portlet = treeportlet.Assignment(
-            root_path='/'.join(repository_root.getPhysicalPath()))
-
-        name = 'treeportlet_1'
-        portlet.__name__ = portlet
-        assignments[name] = portlet
-
     @browsing
     def test_context_url_data_object_is_absolute_url_of_current_context(self, browser):
         self.login(self.regular_user, browser)
