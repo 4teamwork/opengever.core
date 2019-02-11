@@ -78,9 +78,8 @@ reports and task listing PDFs.
 For CentOS, the ``tetex-latex`` package contains the ``pdflatex`` binary. For
 local development on OS X we recommend the `MacTeX distribution <http://www.tug.org/mactex/>`_.
 
-Additionally, some LaTeX fonts are required. You need at least the Arial font
-for LaTeX. Our `internal SVN repo <https://svn.4teamwork.ch/repos/Vorlagen/trunk/latex-fonts/>`_
-contains a copy of fonts and installation instructions.
+There is a 4teamwork internal `devdocs LaTeX section <https://devdocs.4teamwork.ch/latex/>`_
+on how to install ``pdflatex`` with our own fonts.
 
 HAProxy
 ^^^^^^^
