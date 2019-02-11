@@ -6,6 +6,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.tabbedview import GeverTabMixin
 from opengever.task import OPEN_TASK_STATES
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListing
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
 
@@ -76,13 +77,5 @@ class InboxOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                  'sort_order': 'reverse'}
 
         documents = catalog(query)[:10]
-        document_list = [{
-            'Title': document.Title,
-            'getURL': document.getURL,
-            'alt': document.document_date and
-            document.document_date.strftime('%d.%m.%Y') or '',
-            'css_class': get_css_class(document),
-            'portal_type': document.portal_type,
-        } for document in documents]
-
+        document_list = IContentListing(documents)
         return document_list

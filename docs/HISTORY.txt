@@ -13,6 +13,7 @@ Changelog
 - Fix scrubbing the server version out of the HTTP response headers. [Rotonen]
 - Make sure docproperties gets updated when updating an agendaitem list or a protocol. [phgross]
 - Fix order issue when deleting a favorite.  [phgross]
+- Add document tooltip to inbox document listing. [njohner]
 - Fix logo upload in the theme control-panel. [phgross]
 - Solr TabbedView filters: Also include non-wildcarded terms in query. [lgraf]
 - Better label the Oneoffixx template selection dropdown default value. [Rotonen]
