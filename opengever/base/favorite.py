@@ -18,7 +18,8 @@ class FavoriteManager(object):
 
         # update positions
         favorites_to_reduce = Favorite.query.by_userid(userid).filter(
-            Favorite.position > favorite.position).with_for_update()
+            Favorite.position > favorite.position).with_for_update().order_by(
+                Favorite.position)
 
         for new_pos, fav_to_reduce in enumerate(
                 favorites_to_reduce, start=favorite.position):

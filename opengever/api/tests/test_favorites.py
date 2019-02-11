@@ -291,26 +291,31 @@ class TestFavoritesDelete(IntegrationTestCase):
     def test_updates_positions_when_deleting_favorite(self, browser):
         self.login(self.administrator, browser=browser)
 
-        fav1 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=0)
-                      .for_object(self.dossier))
-        fav2 = create(Builder('favorite')
-                      .for_user(self.administrator)
-                      .having(position=1)
-                      .for_object(self.document))
-        fav3 = create(Builder('favorite')
+        fav_on_2 = create(Builder('favorite')
                       .for_user(self.administrator)
                       .having(position=2)
+                      .for_object(self.dossier))
+        fav_on_0 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=0)
+                      .for_object(self.document))
+        fav_on_1 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=1)
                       .for_object(self.leaf_repofolder))
+        fav_on_3 = create(Builder('favorite')
+                      .for_user(self.administrator)
+                      .having(position=3)
+                      .for_object(self.meeting_dossier))
 
         url = '{}/@favorites/{}/{}'.format(
             self.portal.absolute_url(), self.administrator.getId(),
-            fav1.favorite_id)
+            fav_on_0.favorite_id)
         browser.open(url, method='DELETE', headers={'Accept': 'application/json'})
 
-        self.assertEqual(0, fav2.position)
-        self.assertEqual(1, fav3.position)
+        self.assertEqual(0, fav_on_1.position)
+        self.assertEqual(1, fav_on_2.position)
+        self.assertEqual(2, fav_on_3.position)
 
     @browsing
     def test_raises_unauthorized_when_removing_a_favorite_of_a_other_user(self, browser):
