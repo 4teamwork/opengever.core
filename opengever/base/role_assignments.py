@@ -200,6 +200,10 @@ class RoleAssignmentStorage(object):
         for item in self.get_by_cause(cause):
             self._storage().remove(item)
 
+    def clear_by_reference(self, reference):
+        for item in self.get_by_reference(reference):
+            self._storage().remove(item)
+
     def clear_all(self):
         ann = IAnnotations(self.context)
         ann[self.key] = PersistentList()
@@ -218,6 +222,9 @@ class RoleAssignmentStorage(object):
         for item in self._storage():
             if item['cause'] == cause and item['principal'] == principal:
                 return item
+
+    def get_by_reference(self, reference):
+        return [item for item in self._storage() if item['reference'] == reference]
 
     def add_or_update(self, principal, roles, cause, reference):
         """Add or update a role assignment
@@ -313,6 +320,12 @@ class RoleAssignmentManager(object):
         """Remove all assignments of the given cause by the given principal.
         """
         self.storage.clear_by_cause_and_principal(cause, principal)
+        self._update_local_roles()
+
+    def clear_by_reference(self, reference):
+        """Remove all assignments from the given reference.
+        """
+        self.storage.clear_by_reference(Oguid.for_object(reference).id)
         self._update_local_roles()
 
     def clear(self, cause, principal, reference, reindex=True):
