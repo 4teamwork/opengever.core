@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Make sure favorite button is in front of the watermark header. [njohner]
+- Fix mail for task added activity with multiline comment. [njohner]
 - Skip creation of the tasks pdf on resolve for dossiers without tasks. [phgross]
 - Give View permission to Editors on mails. [njohner]
 - Clear role assignments on contained object after forwarding creation. [njohner]
