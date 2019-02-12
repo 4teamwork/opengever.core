@@ -452,7 +452,7 @@ follow these steps:
    pull request.
 
 
-Versions in producion
+Versions in production
 ~~~~~~~~~~~~~~~~~~~~~
 
 For production deployments, the ``versions.cfg`` of a tag can be included
