@@ -31,6 +31,12 @@ class TestserverLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
+        os.environ['BUMBLEBEE_DEACTIVATE'] = 'True'
+        os.environ['BUMBLEBEE_APP_ID'] = 'local'
+        os.environ['BUMBLEBEE_SECRET'] = 'secret'
+        os.environ['BUMBLEBEE_INTERNAL_PLONE_URL'] = 'http://nohost/plone'
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee'
+
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
         self.get_fixture_class()()

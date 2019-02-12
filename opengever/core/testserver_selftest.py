@@ -6,6 +6,7 @@ from threading import Thread
 from time import sleep
 import json
 import os
+import re
 import signal
 import socket
 import subprocess
@@ -25,9 +26,11 @@ class TestserverSelftest(object):
         # and therefore should not subclass TestserverSelftest.
         # Lets do a hack so that we have assert methods anyway.
         case = unittest.TestCase('__init__')
+        case.maxDiff = None
         self.assertIn = case.assertIn
         self.assertNotIn = case.assertNotIn
         self.assertDictContainsSubset = case.assertDictContainsSubset
+        self.assertMultiLineEqual = case.assertMultiLineEqual
 
     def __call__(self):
         os.environ['ZSERVER_PORT'] = os.environ.get('ZSERVER_PORT', '60601')
@@ -74,6 +77,17 @@ class TestserverSelftest(object):
                  u'UID': u'testserversession000000000000001',
                  u'email': u'99001@example.org'},
                 browser.json)
+
+            document_url = (
+                self.plone_url
+                + 'ordnungssystem/fuehrung/vertraege-und-vereinbarungen/dossier-1/document-12')
+            browser.open(document_url)
+
+            expected_preview_url = '''
+http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview?access_token=L1I-UGCXCjMaevatBSv-ZLZwypkO9yWkj5cCATieaDI%3D
+'''.strip()
+            got_preview_url = browser.json['preview_url'].split('&bid')[0]
+            self.assertMultiLineEqual(expected_preview_url, got_preview_url)
 
             self.testserverctl('zodb_teardown')
             self.testserverctl('zodb_setup')

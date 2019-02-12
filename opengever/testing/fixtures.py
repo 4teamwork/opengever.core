@@ -9,6 +9,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
+from ftw.bumblebee.interfaces import IBumblebeeUserSaltStore
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
@@ -1745,6 +1746,9 @@ class OpengeverContentFixture(object):
             .in_group(group)
             .having(**kwargs)
             )
+
+        user_salt_storage = IBumblebeeUserSaltStore(api.portal.get())._get_storage()
+        user_salt_storage[plone_user.getId()] = '{}-user-salt'.format(plone_user.getId())
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
