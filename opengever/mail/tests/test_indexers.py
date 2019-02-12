@@ -1,4 +1,5 @@
 from collective.dexteritytextindexer.interfaces import IDynamicTextIndexExtender  # noqa
+from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.mail.indexer import checked_out
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -6,6 +7,20 @@ from zope.component import getAdapter
 
 
 class TestMailIndexers(IntegrationTestCase):
+
+    def test_sortable_title_indexer_accomodates_padding_for_five_numbers(self):
+        self.login(self.regular_user)
+        numeric_part = "1 2 3 4 5"
+        alphabetic_part = u"".join(["a" for i in range(CONTENT_TITLE_LENGTH
+                                                       - len(numeric_part))])
+        title = numeric_part + alphabetic_part
+
+        self.mail_eml.setTitle(title)
+        self.mail_eml.reindexObject(["sortable_title"])
+
+        self.assertEquals(
+            '0001 0002 0003 0004 0005' + alphabetic_part,
+            index_data_for(self.mail_eml).get('sortable_title'))
 
     def test_keywords_field_is_indexed_in_Subject_index(self):
         self.login(self.regular_user)

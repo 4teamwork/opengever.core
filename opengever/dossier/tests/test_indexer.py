@@ -1,4 +1,5 @@
 from opengever.base.behaviors.base import IOpenGeverBase
+from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.sharing.events import LocalRolesAcquisitionActivated
@@ -14,6 +15,21 @@ from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class TestDossierIndexers(IntegrationTestCase):
+
+    def test_sortable_title_indexer_accomodates_padding_for_five_numbers(self):
+        self.login(self.regular_user)
+        numeric_part = "1 2 3 4 5"
+        alphabetic_part = u"".join(["a" for i in range(CONTENT_TITLE_LENGTH
+                                                       - len(numeric_part))])
+        title = numeric_part + alphabetic_part
+
+        self.dossier.setTitle(title)
+        self.dossier.reindexObject(["sortable_title"])
+
+        self.assertEquals(
+            '0001 0002 0003 0004 0005' + alphabetic_part,
+            index_data_for(self.dossier).get('sortable_title'))
+
     def test_containing_dossier(self):
         self.login(self.regular_user)
 

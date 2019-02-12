@@ -69,7 +69,7 @@ class TestIntegrationTestCase(IntegrationTestCase):
         self.maxDiff = None
         self.assertDictContainsSubset(
             {'Type': u'Business Case Dossier',
-             'sortable_title': 'vertrage mit der kantonalen...verwaltung'},
+             'sortable_title': 'vertrage mit der kantonalen finanzverwaltung'},
             self.get_catalog_indexdata(self.dossier))
 
     def test_get_catalog_metadata(self):

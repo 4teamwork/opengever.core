@@ -351,6 +351,11 @@
       name="changed"
       />
 
+  <adapter
+      factory=".indexes.sortable_title"
+      name="sortable_title"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
