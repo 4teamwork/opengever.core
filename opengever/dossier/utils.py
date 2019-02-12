@@ -11,7 +11,7 @@ ELLIPSIS = unicodedata.lookup('HORIZONTAL ELLIPSIS')
 
 
 def get_containing_dossier(obj):
-    while not IPloneSiteRoot.providedBy(obj):
+    while obj and not IPloneSiteRoot.providedBy(obj):
         if IDossierMarker.providedBy(obj) or IInbox.providedBy(obj):
             return obj
         obj = aq_parent(aq_inner(obj))
@@ -39,7 +39,7 @@ def get_main_dossier(obj):
     If the given object is not storred inside a dossier it returns None."""
 
     dossier = None
-    while not IPloneSiteRoot.providedBy(obj):
+    while obj and not IPloneSiteRoot.providedBy(obj):
         if IDossierMarker.providedBy(obj) or IInbox.providedBy(obj):
             dossier = obj
 
