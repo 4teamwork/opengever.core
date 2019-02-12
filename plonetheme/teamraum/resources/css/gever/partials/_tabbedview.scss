@@ -18,6 +18,21 @@
       margin-top: 5px;
     }
   }
+
+  #tabbedview-body #message_no_contents .select2-selection--multiple {
+    // Fixes an issue where the calculated width of the input-filed is broken.
+    // This happens, if the search field is hidden by default and gets visible
+    // thorugh JS. This is the case if there where no results found within a
+    // table-listing
+    //
+    // See https://github.com/select2/select2/issues/3462 for more information
+    .select2-search--inline:first-child {
+      width: 100%;
+      .select2-search__field {
+        width: 100% !important;
+      }
+    }
+  }
 }
 
 #content .formTabs {
