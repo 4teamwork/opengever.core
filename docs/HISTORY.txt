@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Avoid infinite loops when looking for parent dossiers. [lgraf]
 - Make sure favorite button is in front of the watermark header. [njohner]
 - Fix mail for task added activity with multiline comment. [njohner]
 - Skip creation of the tasks pdf on resolve for dossiers without tasks. [phgross]
