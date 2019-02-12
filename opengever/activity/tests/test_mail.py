@@ -39,9 +39,11 @@ class TestEmailNotification(IntegrationTestCase):
         # The secretariat user is a part of the inbox group
         create(Builder('watcher').having(actorid=self.secretariat_user.id))
 
-    def create_task_via_browser(self, browser, inbox=False):
+    def create_task_via_browser(self, browser, inbox=False, description=None):
         browser.open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task', 'Task Type': 'comment'})
+        if description is not None:
+            browser.fill({"Text": description})
         # XXX - we cannot yet fixturize SQL objects so we have to hardcode here
         org_unit_id = u'fa'
         form = browser.find_form_by_field('Responsible')
@@ -85,6 +87,21 @@ class TestEmailNotification(IntegrationTestCase):
         self.assertIn('<p></p>', raw_mail)
         self.assertIn('<p>line</p>', raw_mail)
         self.assertIn('<p>comment</p>', raw_mail)
+
+    @browsing
+    def test_notification_add_task_summary_is_split_into_lines(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.create_task_via_browser(browser, description='Multi\nline\ncomment')
+        process_mail_queue()
+
+        mails = Mailing(self.portal).get_messages()
+        self.assertEqual(len(mails), 1)
+        raw_mail = mails[0]
+        mail = raw_mail.decode("quopri")
+
+        self.assertIn('<td>Multi<br />', mail)
+        self.assertIn('line<br />', mail)
+        self.assertIn('comment</td>', mail)
 
     @browsing
     def test_notification_mailer_handle_empty_activity_description(self, browser):

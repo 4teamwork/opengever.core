@@ -56,9 +56,12 @@ class TaskAddedActivity(BaseActivity):
     def render_description_markup(self, data, language):
         msg = u'<table><tbody>'
         for label, value in data:
-            msg = u'{}<tr><td class="label">{}</td><td>{}</td></tr>'.format(
-                msg, self.translate(label, language), value)
-
+            msg = u'{}<tr><td class="label">{}</td><td>'.format(
+                msg, self.translate(label, language))
+            # Break lines correctly in the table rows
+            if value:
+                msg += u"<br />".join(value.splitlines())
+            msg += u"</td></tr>"
         return u'{}</tbody></table>'.format(msg)
 
     def collect_description_data(self, language):
