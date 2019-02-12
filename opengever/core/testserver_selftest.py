@@ -4,6 +4,7 @@ from plone.app.testing.interfaces import SITE_OWNER_NAME
 from plone.app.testing.interfaces import SITE_OWNER_PASSWORD
 from threading import Thread
 from time import sleep
+from urlparse import urlparse
 import json
 import os
 import signal
@@ -30,12 +31,13 @@ class TestserverSelftest(object):
         self.assertDictContainsSubset = case.assertDictContainsSubset
 
     def __call__(self):
-        os.environ['ZSERVER_PORT'] = os.environ.get('ZSERVER_PORT', '60601')
-        self.plone_url = 'http://localhost:{}/plone/'.format(os.environ['ZSERVER_PORT'])
-        os.environ['TESTSERVER_CTL_PORT'] = os.environ.get('PORT1', '60602')
+        os.environ['ZSERVER_PORT'] = '0'
+        os.environ['TESTSERVER_CTL_PORT'] = '0'
+        os.environ['PYTHONUNBUFFERED'] = 'true'
 
-        self.controller_proxy = xmlrpclib.ServerProxy('http://localhost:{}'.format(
-            os.environ['TESTSERVER_CTL_PORT']))
+        self.plone_url = None
+        self.xmlrpc_url = None
+
         print ansi_green('> STARTING TESTSERVER')
         self.start_testserver()
         try:
@@ -93,8 +95,23 @@ class TestserverSelftest(object):
         """
         args = ['bin/testserver']
         print ansi_blue('>', *args)
-        self.testserver_process = subprocess.Popen(args)
-        self.testserver_thread = Thread(target=self.testserver_process.communicate)
+        self.testserver_process = subprocess.Popen(args, stdout=subprocess.PIPE)
+
+        def run_and_observe_process():
+            while True:
+                rc = self.testserver_process.poll()
+                if rc is not None:
+                    return rc
+
+                line = self.testserver_process.stdout.readline()
+                sys.stdout.write(line)
+                if not self.plone_url and line.startswith('ZSERVER: '):
+                    self.plone_url = '{}/plone/'.format(line[len('ZSERVER: '):].strip())
+                if not self.xmlrpc_url and line.startswith('XMLRPC: '):
+                    self.xmlrpc_url = line[len('XMLRPC: '):].strip()
+                    os.environ['TESTSERVER_CTL_PORT'] = str(urlparse(self.xmlrpc_url).port)
+
+        self.testserver_thread = Thread(target=run_and_observe_process)
         self.testserver_thread.start()
 
     def wait_for_testserver(self):
@@ -103,6 +120,20 @@ class TestserverSelftest(object):
         timeout_seconds = 60 * 5
         interval = 0.1
         steps = timeout_seconds / interval
+
+        # Wait for urls to be appear. The urls are set from the thread watching
+        # the bin/testserver subprocess.
+        for num in range(int(steps)):
+            if self.xmlrpc_url and self.plone_url:
+                break
+            if num > 300 and num % 300 == 0:
+                print ansi_gray('... waiting for testserver to be ready ')
+            sleep(interval)
+
+        # A soon as the URLs appear we can setup the XMLRPC proxy.
+        self.controller_proxy = xmlrpclib.ServerProxy(self.xmlrpc_url)
+
+        # Now wait until the server is actually ready.
         for num in range(int(steps)):
             if self.is_controller_server_ready():
                 return
