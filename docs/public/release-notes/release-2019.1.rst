@@ -19,15 +19,10 @@ Nach überfälligen Dossiers kann ab diesem Release mittels Filter gesucht werde
 
 |img-release-notes-2019.1-1|
 
-Weiter kann in den Benachrichtigungs-Einstellung eine Erinnerung gesetzt werden,
-damit der Benutzende benachrichtigt wird, wenn ein Dossier überfällig ist.
+Weiter kann in den Benachrichtigungs-Einstellungen eine Erinnerung gesetzt werden,
+damit der Benutzende benachrichtigt wird, wenn ein Dossier überfällig wird.
 
 |img-benachrichtigungs-einstellungen-5|
-
-API-Erweiterung
----------------
-Mittels der API können ab diesem Release Servicebenutzende Inhalte im Namen
-bestehender Benutzer erstellen.
 
 Diverse Verbesserungen:
 -----------------------
@@ -36,7 +31,7 @@ Diverse Verbesserungen:
 
 -	Berechtigungen werden beim Kopieren von Inhalten übernommen
 
--	Aufgaben werden nicht mitkopiert
+-	Aufgaben werden beim Koiper-Vorgang nicht mitkopiert
 
 -	Performanceverbesserung beim OfficeConnector
 
@@ -46,6 +41,8 @@ Diverse Verbesserungen:
 
 -	Ausbau der OneOffixx Schnittstelle
 
+- API-Erweiterung: Mittels der API können ab diesem Release Servicebenutzende Inhalte im Namen bestehender Benutzer erstellen
+
 Sitzungs- und Protokollverwaltung (SPV):
 ----------------------------------------
 
@@ -53,13 +50,13 @@ Sitzungs- und Protokollverwaltung (SPV):
 
 - Gremium: Die hinterlegten Vorlagen werden übersichtlicher dargestellt
 
-- Unterschiedliche Gruppierungs-Möglichkeit vom Inhaltsverzeichnis: 1.) Gruppierung nach Positionsnummer der Ursprungs-Ordnungsposition 2.) Gruppierung nach Aktenzeichen des Ursprungs-Dossiers
+- Neue Inhaltsverzeichnis mit unterschiedlichen Gruppierungs-Möglichkeiten: 1.) Gruppierung nach Positionsnummer der Ursprungs-Ordnungsposition 2.) Gruppierung nach Aktenzeichen des Ursprungs-Dossiers
 
 - Abwesende Mitglieder können im Protokoll eingefügt werden
 
 - Traktandennummer kann ohne Punkt in Protokoll/Traktandenlisten eingefügt werden
 
-- Es werden nur noch docx-Dateien als Antragsdokumente vorgeschlagen
+- Beim Erstellen eines Antrages ab bestehendem Dokument werden nur noch docx-Dateien als Antragsdokumente vorgeschlagen
 
 Bugfixes
 --------
