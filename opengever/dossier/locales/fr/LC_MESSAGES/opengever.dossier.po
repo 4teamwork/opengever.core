@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-06 20:56+0000\n"
+"POT-Creation-Date: 2019-02-13 16:45+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -633,11 +633,6 @@ msgstr "label"
 #: ./opengever/dossier/browser/overview.py
 msgid "label_linked_dossiers"
 msgstr "Dossiers liés"
-
-#. Default: "Documents"
-#: ./opengever/dossier/browser/tabbed.py
-msgid "label_local_templates"
-msgstr ""
 
 #. Default: "Mail-Address"
 #: ./opengever/dossier/templatefolder/form.py
