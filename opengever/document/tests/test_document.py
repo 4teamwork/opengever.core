@@ -15,6 +15,7 @@ from opengever.document.document import UploadValidator
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.officeconnector.mimetypes import EDITABLE_TYPES
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -227,10 +228,50 @@ class TestDocument(IntegrationTestCase):
         keywords = browser.find_field_by_text(u'Keywords')
         self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'), tuple(keywords.value))
 
+    def test_fixtured_document_is_office_connector_editable_per_default(self):
+        self.login(self.regular_user)
+        self.assertTrue(self.document.is_office_connector_editable())
+
     def test_office_connector_editable_mimetype_check_is_case_insensitive(self):
         self.login(self.regular_user)
         self.document.file.contentType = self.document.file.contentType.upper()
         self.assertTrue(self.document.is_office_connector_editable())
+
+    def test_can_add_additional_mimetypes_to_office_connector_editable_mimetypes(self):
+        api.portal.set_registry_record(
+            'officeconnector_editable_types_extra',
+            [u'foo/bar'],
+            interface=IOfficeConnectorSettings,
+        )
+        self.login(self.regular_user)
+        self.document.file.contentType = u'foo/bar'
+        self.assertTrue(self.document.is_office_connector_editable())
+
+    def test_can_blacklist_mimetypes_from_office_connector_editable_mimetypes(self):
+        api.portal.set_registry_record(
+            'officeconnector_editable_types_blacklist',
+            [u'application/vnd.openxmlformats-officedocument.wordprocessingml.document', u'foo/bar'],
+            interface=IOfficeConnectorSettings,
+        )
+        self.login(self.regular_user)
+        self.assertFalse(self.document.is_office_connector_editable())
+        self.document.file.contentType = u'foo/bar'
+        self.assertFalse(self.document.is_office_connector_editable())
+
+    def test_office_connector_editable_mimetype_blacklist_is_stronger_than_whitelist(self):
+        api.portal.set_registry_record(
+            'officeconnector_editable_types_extra',
+            [u'foo/bar'],
+            interface=IOfficeConnectorSettings,
+        )
+        api.portal.set_registry_record(
+            'officeconnector_editable_types_blacklist',
+            [u'foo/bar'],
+            interface=IOfficeConnectorSettings,
+        )
+        self.login(self.regular_user)
+        self.document.file.contentType = 'foo/bar'
+        self.assertFalse(self.document.is_office_connector_editable())
 
     def test_checkout_and_get_office_connector_url(self):
         """The checkout_and_get_office_connector_url method should check out

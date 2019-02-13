@@ -8,6 +8,7 @@ Changelog
 - Add date string localization for sablon data. [njohner]
 - Fixed the REST API scan-in end point for organization units with non-ASCII in their titles. [Rotonen]
 - Set default language for task reminders. [njohner]
+- Add a three-tier mechanism for mapping MIME types to Office Connector. [Rotonen]
 - Suppress deletion events when filtering objects from copied subtrees. [lgraf]
 - Avoid infinite loops when looking for parent dossiers. [lgraf]
 - Make sure favorite button is in front of the watermark header. [njohner]

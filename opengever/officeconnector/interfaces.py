@@ -21,6 +21,18 @@ class IOfficeConnectorSettings(Interface):
         description=u'Enable sending restapi payloads Office Connector.',
         default=False)
 
+    officeconnector_editable_types_extra = schema.List(
+        title=u'Office Connector supported additional MIME types',
+        description=u'A list of Office Connector supported additional MIME types.'
+        u'These are additive to the default list.',
+        default=[])
+
+    officeconnector_editable_types_blacklist = schema.List(
+        title=u'Office Connector supported MIME types blacklist',
+        description=u'A list of Office Connector blacklisted MIME types.'
+        u'These are subtractive from the default list.',
+        default=[])
+
 
 class IOfficeConnectorSettingsView(Interface):
 

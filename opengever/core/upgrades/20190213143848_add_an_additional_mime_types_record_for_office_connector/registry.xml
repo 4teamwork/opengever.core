@@ -1,0 +1,8 @@
+<registry>
+  <record interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" field="officeconnector_editable_types_extra">
+    <field type="plone.registry.field.List">
+      <value_type type="plone.registry.field.TextLine" />
+    </field>
+    <value />
+  </record>
+</registry>
