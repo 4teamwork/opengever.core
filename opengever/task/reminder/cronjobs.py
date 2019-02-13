@@ -2,6 +2,7 @@ from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from opengever.task.reminder import logger
 from opengever.task.reminder.reminder import TaskReminder
+from plone import api
 import logging
 import transaction
 
@@ -11,7 +12,14 @@ def generate_remind_notifications_zopectl_handler(app, args):
     stream_handler.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
 
-    setup_plone(get_first_plone_site(app))
+    plone = setup_plone(get_first_plone_site(app))
+
+    # Set up the language based on site wide preferred language. We do this
+    # so all the i18n and l10n machinery down the line uses the right language.
+    lang_tool = api.portal.get_tool('portal_languages')
+    lang = lang_tool.getPreferredLanguage()
+    plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
+    plone.REQUEST.setupLocale()
 
     logger.info('Start generate remind notifications...')
     created = TaskReminder().create_reminder_notifications()
