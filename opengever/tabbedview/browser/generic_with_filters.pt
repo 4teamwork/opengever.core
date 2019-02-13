@@ -68,7 +68,7 @@
 
         </span>
       </tal:cond>
-      <tal:subjectFilterWidget replace="structure view/subject_filter_widget" />
+      <tal:subjectFilterWidget replace="structure view/render_subject_filter_widget" />
       <p id="message_no_contents"
          i18n:translate="label_no_contents"
          i18n:domain="ftw.tabbedview">

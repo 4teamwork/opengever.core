@@ -143,17 +143,31 @@ class GeverTabMixin(object):
 
         return _filter.strip().split(' ')
 
-    def subject_filter_widget(self):
+    def render_subject_filter_widget(self):
         if not self.subject_filter_available:
             return ''
 
-        filters = []
+        return self._subject_filter().render_widget()
 
+    def _subject_filter(self):
+        if not self.subject_filter_available:
+            return ''
+
+        subject_filter = SubjectFilter(self.context, self.request,
+                                       self._additional_solr_subject_filters())
+
+        return subject_filter
+
+    def _additional_solr_subject_filters(self):
+        filters = []
         if hasattr(self, 'object_provides') and self.object_provides:
             filters.append('object_provides:{}'.format(self.object_provides))
 
-        subject_filter = SubjectFilter(self.context, self.request, filters)
-        return subject_filter.render_widget()
+        if hasattr(self, 'search_options'):
+            for option, value in self.search_options.items():
+                filters.append('{}:{}'.format(option, str(value)))
+
+        return filters
 
 
 class BaseListingTab(GeverTabMixin, ListingView):
