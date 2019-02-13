@@ -9,6 +9,7 @@ from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
@@ -18,6 +19,7 @@ from opengever.meeting.toc.utils import normalise_string
 from opengever.meeting.toc.utils import repo_refnum
 from opengever.meeting.toc.utils import to_human_sortable_key
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
@@ -671,3 +673,47 @@ class TestTOCByRepositoryReferenceNumber(TestAlphabeticalTOC):
             }]
         }]
     }
+
+
+class TestMeetingTocDataLocalisation(IntegrationTestCase):
+
+    @browsing
+    def test_date_localisation_in_toc_json_with_en_local(self, browser):
+        self.login(self.manager, browser)
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+        period = self.committee.load_model().periods[0]
+        url = period.get_url(self.committee)
+
+        lang_tool.setDefaultLanguage('en')
+        browser.open(url, view='alphabetical_toc/as_json')
+        self.assertEqual(u'Sun 17 Jul',
+                         browser.json["toc"][0]["contents"][0]["meeting_date"])
+
+    @browsing
+    def test_date_localisation_in_toc_json_with_fr_local(self, browser):
+        self.login(self.manager, browser)
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+        period = self.committee.load_model().periods[0]
+        url = period.get_url(self.committee)
+
+        lang_tool.setDefaultLanguage('fr')
+        browser.open(url, view='alphabetical_toc/as_json')
+        self.assertEqual(u'Dim 17 Juil',
+                         browser.json["toc"][0]["contents"][0]["meeting_date"])
+
+    @browsing
+    def test_date_localisation_in_toc_json_with_de_local(self, browser):
+        self.login(self.manager, browser)
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%a %d %b", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+        period = self.committee.load_model().periods[0]
+        url = period.get_url(self.committee)
+        lang_tool.setDefaultLanguage('de')
+        browser.open(url, view='alphabetical_toc/as_json')
+        self.assertEqual(u'Son 17 Jul',
+                         browser.json["toc"][0]["contents"][0]["meeting_date"])

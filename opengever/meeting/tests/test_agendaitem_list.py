@@ -8,7 +8,9 @@ from ftw.testing import freeze
 from ooxml_docprops import read_properties
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.meeting.command import MIME_DOCX
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.testing import IntegrationTestCase
+from plone import api
 import pytz
 
 
@@ -191,3 +193,113 @@ class TestAgendaItemList(IntegrationTestCase):
         self.assertDictContainsSubset(expected_metadata, browser.json)
         self.assertDictContainsSubset(expected_participants, browser.json['participants'])
         self.assertEqual(expected_agenda_items, browser.json['agenda_items'])
+
+    @browsing
+    def test_json_data_with_en_locale(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc')
+
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%A %d %B %Y", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+
+        lang_tool.setDefaultLanguage('en')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
+        expected_metadata = {
+            u'document': {u'generated':  u'Friday 10 November 2017'},
+            u'meeting': {u'date': u'Monday 12 September 2016',
+                         u'end_time': u'07:00 PM',
+                         u'start_time': u'05:30 PM',
+                         u'location': u'B\xfcren an der Aare',
+                         u'number': None}}
+        self.assertDictContainsSubset(expected_metadata, browser.json)
+
+    @browsing
+    def test_json_data_with_fr_locale(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc')
+
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%A %d %B %Y", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+
+        lang_tool.setDefaultLanguage('fr')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
+        expected_metadata = {
+            u'document': {u'generated':  u'Vendredi 10 Novembre 2017'},
+            u'meeting': {u'date': u'Lundi 12 Septembre 2016',
+                         u'end_time': u'19:00',
+                         u'start_time': u'17:30',
+                         u'location': u'B\xfcren an der Aare',
+                         u'number': None}}
+        self.assertDictContainsSubset(expected_metadata, browser.json)
+
+    @browsing
+    def test_json_data_with_de_locale(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc')
+
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%A %d %B %Y", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+
+        lang_tool.setDefaultLanguage('de')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
+        expected_metadata = {
+            u'document': {u'generated':  u'Freitag 10 November 2017'},
+            u'meeting': {u'date': u'Montag 12 September 2016',
+                         u'end_time': u'19:00',
+                         u'start_time': u'17:30',
+                         u'location': u'B\xfcren an der Aare',
+                         u'number': None}}
+        self.assertDictContainsSubset(expected_metadata, browser.json)
+
+    @browsing
+    def test_json_data_with_de_ch_locale(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc')
+
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%A %d %B %Y", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+
+        lang_tool.setDefaultLanguage('de-ch')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
+        expected_metadata = {
+            u'document': {u'generated':  u'Freitag 10 November 2017'},
+            u'meeting': {u'date': u'Montag 12 September 2016',
+                         u'end_time': u'19:00',
+                         u'start_time': u'17:30',
+                         u'location': u'B\xfcren an der Aare',
+                         u'number': None}}
+        self.assertDictContainsSubset(expected_metadata, browser.json)
+
+    @browsing
+    def test_json_data_with_fr_ch_locale(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.schedule_proposal(self.meeting, self.proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc')
+
+        api.portal.set_registry_record(
+            "sablon_date_format_string", u"%A %d %B %Y", interface=IMeetingSettings)
+        lang_tool = api.portal.get_tool('portal_languages')
+
+        lang_tool.setDefaultLanguage('fr-ch')
+        with freeze(datetime(2017, 11, 10, 13, 0, tzinfo=pytz.utc)):
+            browser.open(self.meeting, view='agenda_item_list/as_json')
+        expected_metadata = {
+            u'document': {u'generated':  u'Vendredi 10 Novembre 2017'},
+            u'meeting': {u'date': u'Lundi 12 Septembre 2016',
+                         u'end_time': u'19:00',
+                         u'start_time': u'17:30',
+                         u'location': u'B\xfcren an der Aare',
+                         u'number': None}}
+        self.assertDictContainsSubset(expected_metadata, browser.json)

@@ -1,5 +1,7 @@
+from opengever.base.date_time import ulocalized_time
 from opengever.meeting.interfaces import IMeetingSettings
 from plone import api
+from zope.globalrequest import getRequest
 
 
 class JsonDataProcessor(object):
@@ -27,7 +29,9 @@ class JsonDataProcessor(object):
         return data
 
 
-def format_date(date):
+def format_date(date, request=None):
+    if request is None:
+        request = getRequest()
     date_string_format = api.portal.get_registry_record(
         "sablon_date_format_string", interface=IMeetingSettings)
-    return date.strftime(date_string_format)
+    return ulocalized_time(date, date_string_format, request)
