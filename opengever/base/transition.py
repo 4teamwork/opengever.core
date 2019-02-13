@@ -1,3 +1,4 @@
+from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.interfaces import IFieldDeserializer
 from z3c.form.interfaces import IManagerValidator
 from zExceptions import BadRequest
@@ -6,6 +7,7 @@ from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFields
 from zope.schema.interfaces import ValidationError
 
@@ -16,13 +18,14 @@ class ITransitionExtender(Interface):
 
 
 @implementer(ITransitionExtender)
-@adapter(Interface)
+@adapter(IDexterityContent, IBrowserRequest)
 class TransitionExtender(object):
 
     schemas = []
 
-    def __init__(self, context):
+    def __init__(self, context, request):
         self.context = context
+        self.request = request
 
     def after_transition_hook(self, **kwargs):
         pass

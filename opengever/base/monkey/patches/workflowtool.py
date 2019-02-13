@@ -1,5 +1,6 @@
 from opengever.base.monkey.patching import MonkeyPatch
-from zope.component import queryAdapter
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 
 
 class PatchWorkflowTool(MonkeyPatch):
@@ -9,7 +10,7 @@ class PatchWorkflowTool(MonkeyPatch):
         def doActionFor(self, ob, action, wf_id=None, disable_sync=False, *args, **kw):
             from opengever.base.transition import ITransitionExtender
 
-            adapter = queryAdapter(ob, ITransitionExtender, name=action)
+            adapter = queryMultiAdapter((ob, getRequest()), ITransitionExtender, name=action)
             if not adapter:
                 return original_doActionFor(self, ob, action, wf_id=wf_id, *args, **kw)
 

@@ -30,6 +30,7 @@ from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class IResponse(Schema):
@@ -88,7 +89,7 @@ class INewResponsibleSchema(Schema):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class DefaultTransitionExtender(TransitionExtender):
 
     schemas = [IResponse, ]
@@ -123,7 +124,7 @@ class DefaultTransitionExtender(TransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class AcceptTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
@@ -149,7 +150,7 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class ModifyDeadlineTransitionExtender(TransitionExtender):
 
     schemas = [INewDeadline, ]
@@ -160,7 +161,7 @@ class ModifyDeadlineTransitionExtender(TransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class ResolveTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
@@ -174,7 +175,7 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class CloseTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
@@ -188,7 +189,7 @@ class CloseTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class ReassignTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, INewResponsibleSchema]
@@ -231,7 +232,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class RejectTransitionExtender(DefaultTransitionExtender):
     """Default task transition handling expect the responsible is switched
     to task's issuer.
@@ -265,7 +266,7 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class DelegateTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IUpdateMetadata, ISelectRecipientsSchema]
@@ -278,7 +279,7 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(ITask)
+@adapter(ITask, IBrowserRequest)
 class OpenPlanedTransitionExtender(DefaultTransitionExtender):
     """Default transition extender but supress default activity and
     record an TaskAdded activity instead."""

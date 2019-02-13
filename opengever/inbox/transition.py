@@ -21,6 +21,7 @@ from plone.supermodel.model import Schema
 from z3c.relationfield.schema import RelationChoice
 from zope.component import adapter
 from zope.interface import implementer
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class IChooseDossierSchema(Schema):
@@ -42,13 +43,13 @@ class IChooseDossierSchema(Schema):
 
 
 @implementer(ITransitionExtender)
-@adapter(IForwarding)
+@adapter(IForwarding, IBrowserRequest)
 class ForwardingDefaultTransitionExtender(DefaultTransitionExtender):
     """Default transiition extender for all forwarding transitions."""
 
 
 @implementer(ITransitionExtender)
-@adapter(IForwarding)
+@adapter(IForwarding, IBrowserRequest)
 class ForwardingCloseTransitionExtender(ForwardingDefaultTransitionExtender):
     """Transition Extender for forwardings close transition, stores forwarding
     to yearfolder after state change.
@@ -62,7 +63,7 @@ class ForwardingCloseTransitionExtender(ForwardingDefaultTransitionExtender):
 
 
 @implementer(ITransitionExtender)
-@adapter(IForwarding)
+@adapter(IForwarding, IBrowserRequest)
 class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExtender):
     """Transition extender for forwarding closing
     """
@@ -119,6 +120,6 @@ class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExt
 
 
 @implementer(ITransitionExtender)
-@adapter(IForwarding)
+@adapter(IForwarding, IBrowserRequest)
 class ForwardingReassignTransitionExtender(ReassignTransitionExtender):
     """Transition extender for forwarding reassign transition."""
