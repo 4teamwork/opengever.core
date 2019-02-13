@@ -1,7 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.testing import IntegrationTestCase
+from opengever.testing.event_recorder import get_recorded_events
+from opengever.testing.event_recorder import register_event_recorder
 from plone import api
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -82,6 +85,13 @@ class TestCopyDossiers(IntegrationTestCase):
                        responsible=self.regular_user.getId(),
                        issuer=self.dossier_responsible.getId()))
 
+        register_event_recorder(IObjectWillBeRemovedEvent)
+
         copied_dossier = api.content.copy(
             source=self.empty_dossier, target=self.empty_repofolder)
         self.assertItemsEqual([], copied_dossier.getFolderContents())
+
+        self.assertFalse(
+            any(IObjectWillBeRemovedEvent.providedBy(event) for
+                event in get_recorded_events())
+        )

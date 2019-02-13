@@ -26,9 +26,17 @@ def delete_copied_task(copied_task, event):
 
     This deletes the task from the copied subtree (a ZEXP) before the subtree
     gets inserted into the destination location.
+
+    Suppress deletion events in order to avoid attempts to uncatalog
+    an object that
+    1) hasn't even been cataloged yet
+    2) doesn't have a proper AQ chain because it's parts of a subtree
+       that only exists as a temporary ZEXP that hasn't been attached to
+       a container yet
     """
     with elevated_privileges():
-        api.content.delete(copied_task)
+        container = aq_parent(copied_task)
+        container._delObject(copied_task.id, suppress_events=True)
 
 
 def create_subtask_response(context, event):

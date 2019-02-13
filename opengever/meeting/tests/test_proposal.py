@@ -9,6 +9,7 @@ from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
+from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.oguid import Oguid
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.meeting.command import MIME_DOCX
@@ -20,6 +21,8 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing.event_recorder import get_recorded_events
+from opengever.testing.event_recorder import register_event_recorder
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
@@ -780,9 +783,16 @@ class TestProposal(IntegrationTestCase):
                .titled(u'My Proposal')
                .having(committee=self.committee.load_model()))
 
+        register_event_recorder(IObjectWillBeRemovedEvent)
+
         copied_dossier = api.content.copy(
             source=self.empty_dossier, target=self.empty_repofolder)
         self.assertItemsEqual([], copied_dossier.getFolderContents())
+
+        self.assertFalse(
+            any(IObjectWillBeRemovedEvent.providedBy(event) for
+                event in get_recorded_events())
+        )
 
     @browsing
     def test_prevent_trashing_proposal_document(self, browser):

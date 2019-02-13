@@ -1,4 +1,5 @@
 from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.browser.paste import ICopyPasteRequestLayer
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
@@ -13,7 +14,6 @@ from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from opengever.setup.interfaces import IDuringSetup
-from plone import api
 from zc.relation.interfaces import ICatalog
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
@@ -87,14 +87,22 @@ def _sync_excerpt(document):
     UpdateExcerptInDossierCommand(proposal).execute()
 
 
-def delete_copied_proposal(obj, event):
+def delete_copied_proposal(copied_proposal, event):
     """Prevent that proposals are copied.
 
-    Turns out the easiest way to accomplish this is to delete the proposal
-    after it has been copied.
+    This deletes the proposal from the copied subtree (a ZEXP) before the
+    subtree gets inserted into the destination location.
+
+    Suppress deletion events in order to avoid attempts to uncatalog
+    an object that
+    1) hasn't even been cataloged yet
+    2) doesn't have a proper AQ chain because it's parts of a subtree
+       that only exists as a temporary ZEXP that hasn't been attached to
+       a container yet
     """
     with elevated_privileges():
-        api.content.delete(obj)
+        container = aq_parent(copied_proposal)
+        container._delObject(copied_proposal.id, suppress_events=True)
 
 
 class ProposalSqlSyncer(SqlSyncer):
