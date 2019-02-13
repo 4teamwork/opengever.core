@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-06 20:56+0000\n"
+"POT-Creation-Date: 2019-02-13 16:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -633,11 +633,6 @@ msgstr ""
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py
 msgid "label_linked_dossiers"
-msgstr ""
-
-#. Default: "Documents"
-#: ./opengever/dossier/browser/tabbed.py
-msgid "label_local_templates"
 msgstr ""
 
 #. Default: "Mail-Address"

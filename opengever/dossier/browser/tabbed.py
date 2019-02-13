@@ -171,8 +171,6 @@ class TemplateFolderTabbedView(GeverTabbedView):
         return None
 
     def _get_tabs(self):
-        if is_oneoffixx_feature_enabled():
-            self.template_tab['title'] = _(u'label_local_templates', default=u'Documents')
         return filter(None, [
             self.oneoffixxtemplate_tab,
             self.template_tab,
