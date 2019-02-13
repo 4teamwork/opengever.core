@@ -248,7 +248,7 @@ msgstr "Mandant"
 #. Default: "Keywords"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_keywords"
-msgstr ""
+msgstr "Mots-clés"
 
 #. Default: "Modification Date"
 #: ./opengever/tabbedview/browser/tabs.py
@@ -366,7 +366,7 @@ msgstr "Unité d'organisation"
 
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "overdue"
-msgstr ""
+msgstr "En souffrance"
 
 msgid "overview"
 msgstr "Sommaire"
@@ -385,7 +385,7 @@ msgstr "Numéro de téléphone"
 #. Default: "Filter by subjects..."
 #: ./opengever/tabbedview/filters.py
 msgid "placeholder_filter_by_subjects"
-msgstr ""
+msgstr "Filtrer par mots-clés..."
 
 msgid "preview"
 msgstr "Aperçu"

@@ -32,7 +32,7 @@ msgstr "Créer un document à partir d'un modèle"
 #. Default: "All templates"
 #: ./opengever/oneoffixx/browser/form.py
 msgid "label_all_template_groups"
-msgstr ""
+msgstr "Tous les modèles"
 
 #. Default: "Template"
 #: ./opengever/oneoffixx/browser/form.py

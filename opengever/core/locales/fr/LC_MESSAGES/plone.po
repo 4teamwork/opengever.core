@@ -50,7 +50,7 @@ msgstr "déactiver"
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "opengever_committee_workflow--ROLE--CommitteeAdministrator"
-msgstr ""
+msgstr "Administrateur/trice de commission"
 
 #. Default: "committee member"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
