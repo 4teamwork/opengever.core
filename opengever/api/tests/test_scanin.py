@@ -104,7 +104,7 @@ class TestScanIn(IntegrationTestCase):
         self.login(self.regular_user, browser)
         inbox = self.create_org_unit_inbox()
 
-        body, headers = self.prepare_request(org_unit='Finanzamt')
+        body, headers = self.prepare_request(org_unit=u'Finanz\xe4mt')
         browser.open(self.portal.absolute_url() + '/@scan-in',
                      method='POST',
                      headers=headers,

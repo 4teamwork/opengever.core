@@ -102,10 +102,10 @@ class TestAssignTask(IntegrationTestCase):
                                    admin_unit_id='fa')
                            .with_default_groups())
 
-        self.hans = create(Builder('ogds_user')
-                           .id('james.bond')
-                           .having(firstname=u'James', lastname=u'Bond')
-                           .assign_to_org_units([org_unit2]))
+        create(Builder('ogds_user')
+               .id('james.bond')
+               .having(firstname=u'James', lastname=u'Bond')
+               .assign_to_org_units([org_unit2]))
 
         data = {'form.widgets.transition': 'task-transition-reassign'}
         browser.open(self.task, data, view='assign-task')
@@ -113,15 +113,15 @@ class TestAssignTask(IntegrationTestCase):
         browser.open(self.task,
                      data={'q': 'james', 'page': 1},
                      view='@@assign-task/++widget++form.widgets.responsible/search')
-        self.assertEquals([], browser.json.get('results'))
+        self.assertEqual([], browser.json.get('results'))
 
         browser.open(self.task,
                      data={'q': 'robert', 'page': 1},
                      view='@@assign-task/++widget++form.widgets.responsible/search')
-        self.assertEquals(
+        self.assertEqual(
             [{u'_resultId': u'fa:robert.ziegler',
               u'id': u'fa:robert.ziegler',
-              u'text': u'Finanzamt: Ziegler Robert (robert.ziegler)'}],
+              u'text': u'Finanz\xe4mt: Ziegler Robert (robert.ziegler)'}],
             browser.json.get('results'))
 
     @browsing

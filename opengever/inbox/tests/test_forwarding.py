@@ -110,7 +110,7 @@ class TestForwarding(IntegrationTestCase):
         browser.open(self.inbox_forwarding, view='tabbedview_view-overview')
         responsible_row = browser.css('.listing').first.rows[8]
         self.assertEqual(['Responsible'], responsible_row.css('th').text)
-        self.assertEqual([u'Projekt \xdcberbaung Dorfmatte (Finanzamt)'],
+        self.assertEqual([u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)'],
                          responsible_row.css('td').text)
 
     @browsing

@@ -31,14 +31,14 @@ class TestTaskOverview(IntegrationTestCase):
                           browser.css('.issuer a').first.text)
 
     @browsing
-    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):  # noqa
+    def test_issuer_is_prefixed_by_current_org_unit_on_a_multiclient_setup(self, browser):
         self.login(self.regular_user, browser=browser)
         create(Builder('org_unit').id('client2')
                .having(admin_unit=get_current_admin_unit()))
         browser.open(self.task, view='tabbedview_view-overview')
 
-        self.assertEquals(
-            'Finanzamt / Ziegler Robert (robert.ziegler)',
+        self.assertEqual(
+            u'Finanz\xe4mt / Ziegler Robert (robert.ziegler)',
             browser.css('.issuer').first.text)
 
     @browsing

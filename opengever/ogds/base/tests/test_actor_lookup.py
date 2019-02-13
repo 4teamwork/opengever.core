@@ -13,12 +13,12 @@ class TestActorLookup(IntegrationTestCase):
     def test_inbox_actor_lookup(self):
         actor = Actor.lookup('inbox:fa')
 
-        self.assertEqual(u'Inbox: Finanzamt', actor.get_label())
+        self.assertEqual(u'Inbox: Finanz\xe4mt', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
-        self.assertEqual('Inbox: Finanzamt', actor.get_link())
+        self.assertEqual(u'Inbox: Finanz\xe4mt', actor.get_link())
         self.assertEqual(u'fa_inbox_users', actor.permission_identifier)
         self.assertEqual(
-            u'<span class="actor-label actor-inbox">Inbox: Finanzamt</span>',
+            u'<span class="actor-label actor-inbox">Inbox: Finanz\xe4mt</span>',
             actor.get_link(with_icon=True))
 
     def test_contact_actor_lookup(self):
@@ -39,7 +39,7 @@ class TestActorLookup(IntegrationTestCase):
         self.login(self.regular_user)
         actor = Actor.lookup('team:1')
 
-        self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanzamt)',
+        self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                          actor.get_label())
         self.assertEqual('http://nohost/plone/kontakte/team-1/view',
                          actor.get_profile_url())
@@ -47,12 +47,12 @@ class TestActorLookup(IntegrationTestCase):
         self.assertEqual(
             u'<a href="http://nohost/plone/kontakte/team-1/view" '
             u'class="actor-label actor-team">Projekt \xdcberbaung Dorfmatte '
-            u'(Finanzamt)</a>',
+            u'(Finanz\xe4mt)</a>',
             actor.get_link(with_icon=True))
 
         self.assertEqual(
             u'<a href="http://nohost/plone/kontakte/team-1/view">'
-            u'Projekt \xdcberbaung Dorfmatte (Finanzamt)</a>',
+            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
             actor.get_link())
 
     def test_user_actor_ogds_user(self):
@@ -83,7 +83,9 @@ class TestActorLookup(IntegrationTestCase):
         actor = Actor.lookup('contact:meier-franz')
 
         self.assertEquals(
-            u'<a href="http://nohost/plone/kontakte/meier-franz">Meier Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (meier.f@example.com)</a>',
+            u'<a href="http://nohost/plone/kontakte/meier-franz">'
+            u'Meier Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (meier.f@example.com)'
+            u'</a>',
             actor.get_link())
 
 
