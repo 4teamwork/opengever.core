@@ -994,6 +994,13 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
     features = ('bumblebee', )
 
     @browsing
+    def test_visible_tabs(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbed_view')
+        expected_tabs = ['Documents', 'Tasktemplate Folders']
+        self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
+
+    @browsing
     def test_template_overview_tab(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.normal_template, view='tabbedview_view-overview')
@@ -1028,10 +1035,29 @@ class TestTemplateDocumentTabs(IntegrationTestCase):
             [img.attrib.get('alt') for img in browser.css('img')])
 
 
+class TestTemplateDocumentTabsWithOneoffixx(IntegrationTestCase):
+
+    features = ('oneoffixx', )
+
+    @browsing
+    def test_visible_tabs(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbed_view')
+        expected_tabs = ['OneOffixx', 'Documents', 'Tasktemplate Folders']
+        self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
+
+
 class TestDossierTemplateFeature(IntegrationTestCase):
     features = (
         'dossiertemplate',
         )
+
+    @browsing
+    def test_visible_tabs(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.templates, view='tabbed_view')
+        expected_tabs = ['Documents', 'Dossier templates', 'Tasktemplate Folders']
+        self.assertEqual(expected_tabs, browser.css('.tabbedview-tabs span').text)
 
     @browsing
     def test_dossier_template_is_addable_if_dossier_template_feature_is_enabled(self, browser):

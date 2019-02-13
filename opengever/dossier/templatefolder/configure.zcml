@@ -25,6 +25,13 @@
       />
 
   <browser:page
+      for="*"
+      name="tabbedview_view-oneoffixxtemplates"
+      class=".tabs.TemplateFolderOneoffixxTemplates"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="opengever.dossier.templatefolder.interfaces.ITemplateFolder"
       name="tabbedview_view-documents"
       class=".tabs.TemplateFolderDocuments"

@@ -16,6 +16,10 @@ class IGeverCatalogTableSourceConfig(IGeverTableSourceConfig, ICatalogTableSourc
     pass
 
 
+class IOneoffixxTableSourceConfig(ITableSourceConfig):
+    pass
+
+
 class ITabbedViewProxy(Interface):
     """A tabbedview-view providing this interfaces is a master-tab
     which defines which sub-view should be rendered (bumblebee).
