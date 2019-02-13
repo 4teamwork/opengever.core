@@ -5,6 +5,7 @@ Changelog
 2019.1.0 (unreleased)
 ---------------------
 
+- Set default language for task reminders. [njohner]
 - Suppress deletion events when filtering objects from copied subtrees. [lgraf]
 - Avoid infinite loops when looking for parent dossiers. [lgraf]
 - Make sure favorite button is in front of the watermark header. [njohner]
