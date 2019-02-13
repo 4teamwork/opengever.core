@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Add date string localization for sablon data. [njohner]
+- Fixed the REST API scan-in end point for organization units with non-ASCII in their titles. [Rotonen]
 - Set default language for task reminders. [njohner]
 - Suppress deletion events when filtering objects from copied subtrees. [lgraf]
 - Avoid infinite loops when looking for parent dossiers. [lgraf]
