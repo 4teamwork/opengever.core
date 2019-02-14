@@ -132,13 +132,13 @@ class TestTeamTasks(IntegrationTestCase):
                      'id': 'review_state',
                      'name': u'Issue state'}]
 
-        self.assertEquals(
+        self.assertEqual(
             expected, [dict(change) for change in response.changes])
 
         browser.open(self.task, view='tabbedview_view-overview')
-        self.assertEquals(
+        self.assertEqual(
             u'Accepted by B\xe4rfuss K\xe4thi (kathi.barfuss), responsible '
-            u'changed from Projekt \xdcberbaung Dorfmatte (Finanzamt) to '
+            u'changed from Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt) to '
             u'B\xe4rfuss K\xe4thi (kathi.barfuss).',
             browser.css('.answer h3').text[0])
 

@@ -27,9 +27,9 @@ class TestTeamDetails(IntegrationTestCase):
         browser.open(self.contactfolder, view='team-1/view')
 
         items = browser.css('.listing').first.lists()
-        self.assertEquals(
-            ['Assigned org unit', 'Finanzamt'], items[0])
-        self.assertEquals(
+        self.assertEqual(
+            ['Assigned org unit', u'Finanz\xe4mt'], items[0])
+        self.assertEqual(
             ['Group', 'Projekt A'], items[1])
 
     @browsing

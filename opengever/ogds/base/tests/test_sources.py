@@ -903,9 +903,9 @@ class TestCurrentAdminUnitOrgUnitsSource(IntegrationTestCase):
         result = self.source.search('Finanz')
 
         self.assertEqual(1, len(result), 'Expect one result. only Finanzamt')
-        self.assertEquals('fa', result[0].token)
-        self.assertEquals('fa', result[0].value)
-        self.assertEquals(u'Finanzamt', result[0].title)
+        self.assertEqual('fa', result[0].token)
+        self.assertEqual('fa', result[0].value)
+        self.assertEqual(u'Finanz\xe4mt', result[0].title)
 
         result = self.source.search('Informatik')
         self.assertEqual(0, len(result),
@@ -916,7 +916,7 @@ class TestCurrentAdminUnitOrgUnitsSource(IntegrationTestCase):
             self.source.getTermByToken('invalid-id')
 
     def test_do_not_find_org_units_of_other_admin_units(self):
-        self.assertEqual(1, len(self.source.search('Finanzamt')))
+        self.assertEqual(1, len(self.source.search(u'Finanz\xe4mt')))
         self.assertEqual(0, len(self.source.search('Staatskanzlei')))
 
         api.portal.set_registry_record('current_unit_id',

@@ -166,7 +166,7 @@ class OpengeverContentFixture(object):
             Builder('org_unit')
             .id('fa')
             .having(
-                title=u'Finanzamt',
+                title=u'Finanz\xe4mt',
                 admin_unit=self.admin_unit,
                 )
             .with_default_groups()

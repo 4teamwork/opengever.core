@@ -10,20 +10,37 @@ class TestTeamListing(IntegrationTestCase):
     def test_team_listing(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.contactfolder, view='tabbedview_view-teams')
+        expected_listing = [
+            {
+                'Active': 'Yes',
+                'Group': 'Projekt A',
+                'Org Unit': u'Finanz\xe4mt',
+                'Title': u'Projekt \xdcberbaung Dorfmatte',
+            },
+            {
+                'Active': 'Yes',
+                'Group': u'Projekt L\xc3\xa4\xc3\xa4r',
+                'Org Unit': u'Finanz\xe4mt',
+                'Title': 'Sekretariat Abteilung Null',
+            },
+            {
+                'Active': 'Yes',
+                'Group': 'Projekt B',
+                'Org Unit': u'Finanz\xe4mt',
+                'Title': 'Sekretariat Abteilung XY',
+            },
+        ]
+        self.assertEqual(expected_listing, browser.css('.listing').first.dicts())
 
-        row = browser.css('.listing').first.dicts()[0]
-        self.assertEquals(
-            {'Active': 'Yes',
-             'Org Unit': 'Finanzamt',
-             'Group': 'Projekt A',
-             'Title': u'Projekt \xdcberbaung Dorfmatte'},
-            row)
-
-        link = browser.css('.listing tr')[1].css('a').first
-        self.assertEquals(
-            u'Projekt \xdcberbaung Dorfmatte', link.text)
-        self.assertEquals('http://nohost/plone/kontakte/team-1/view',
-                          link.get('href'))
+        expected_links = [
+            (u'Projekt \xdcberbaung Dorfmatte', 'http://nohost/plone/kontakte/team-1/view'),
+            ('Sekretariat Abteilung Null', 'http://nohost/plone/kontakte/team-3/view'),
+            ('Sekretariat Abteilung XY', 'http://nohost/plone/kontakte/team-2/view'),
+        ]
+        self.assertEqual(
+            expected_links,
+            [(row.text, row.get('href')) for row in browser.css('.listing a')],
+        )
 
     @browsing
     def test_lists_only_active_teams_by_default(self, browser):

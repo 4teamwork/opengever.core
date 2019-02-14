@@ -91,6 +91,8 @@ class ScanIn(Service):
     def find_inbox(self):
         portal = api.portal.get()
         org_unit = self.request.form.get('org_unit')
+        if org_unit:
+            org_unit = org_unit.decode('UTF-8')
 
         with elevated_privileges():
             # Find inbox for the given org_unit
