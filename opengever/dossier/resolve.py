@@ -13,6 +13,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.dossier.resolve_lock import ResolveLock
 from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -26,6 +27,7 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+import transaction
 
 
 NOT_SUPPLIED_OBJECTS = _(
@@ -60,13 +62,45 @@ class ValidResolverNamesVocabularyFactory(object):
 class DossierResolveView(BrowserView):
 
     def __call__(self):
+        # Ensure already resolved dossier can't be resolved again
         if self.is_already_resolved():
             return self.show_already_resolved_msg()
 
-        self.execute_recursive_resolve()
+        resolve_lock = ResolveLock(self.context)
+
+        # Check whether a resolve is already in progress
+        if resolve_lock.is_locked():
+            resolve_lock.log('Concurrent attempt at resolving %s rejected' % self.context)
+            return self.show_being_resolved_msg()
+
+        # No resolve in progress, proceed with resolving this dossier
+        # by acquring a lock, resolving, and then releasing the lock
+        try:
+            resolve_lock.acquire(commit=True)
+            result = self.execute_recursive_resolve()
+            resolve_lock.log('Successfully resolved %s' % self.context)
+            return result
+
+        except Exception:
+            transaction.abort()
+            raise
+
+        finally:
+            # We end up here in two cases:
+            #
+            # 1) Resolve was successful (no exception)
+            # 2) An exception happened during resolve, and the txn has been
+            #    aborted just above (but the exception has not been
+            #    propagated yet).
+            #
+            # In either case, we remove the lock and commit the removal.
+            #
+            # In the case of a previous abort, the removal will be committed
+            # as as separate transaction, in the success case the removal will
+            # be part of the successful dossier resolution transaction.
+            resolve_lock.release(commit=True)
 
     def execute_recursive_resolve(self):
-
         resolver = get_resolver(self.context)
 
         # check preconditions
@@ -83,6 +117,7 @@ class DossierResolveView(BrowserView):
             return self.redirect('transition-archive')
 
         resolver.resolve()
+
         if self.context.is_subdossier():
             return self.show_subdossier_resolved_msg()
 
@@ -102,6 +137,12 @@ class DossierResolveView(BrowserView):
     def show_already_resolved_msg(self):
         api.portal.show_message(
             message=_('Dossier has already been resolved.'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
+
+    def show_being_resolved_msg(self):
+        api.portal.show_message(
+            message=_('Dossier is already being resolved'),
             request=self.request, type='info')
         return self.redirect(self.context_url)
 
