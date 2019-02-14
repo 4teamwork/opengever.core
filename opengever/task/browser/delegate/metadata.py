@@ -79,7 +79,8 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
             data['responsibles'] = self.request.get('responsibles')
             data['documents'] = self.request.get('documents', None) or []
             wftool = api.portal.get_tool('portal_workflow')
-            wftool.doActionFor(self.context, 'task-transition-delegate', **data)
+            wftool.doActionFor(self.context, 'task-transition-delegate',
+                               transition_params=data)
 
             msg = _(u'${subtask_num} subtasks were create.',
                     mapping={u'subtask_num': len(data['responsibles'])})

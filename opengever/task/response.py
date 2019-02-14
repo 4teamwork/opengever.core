@@ -272,7 +272,7 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
             intids.getId(item) for item in data['relatedItems']]
         wftool = api.portal.get_tool('portal_workflow')
         wftool.doActionFor(self.context, self.transition,
-                           comment=data.get('text'), **data)
+                           comment=data.get('text'), transition_params=data)
 
         return self.redirect()
 

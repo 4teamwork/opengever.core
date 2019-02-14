@@ -528,7 +528,7 @@ class TestWorkflowSyncer(FunctionalTestCase):
 
         wftool = api.portal.get_tool('portal_workflow')
         wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
-                           text=u'Please extend chapter 2.4.')
+                           transition_params={'text': u'Please extend chapter 2.4.'})
 
         self.assertEquals('task-state-in-progress',
                           api.content.get_state(successor))
@@ -543,7 +543,7 @@ class TestWorkflowSyncer(FunctionalTestCase):
 
         wftool = api.portal.get_tool('portal_workflow')
         wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
-                           text=u'\xe4\xe4hhh I am done!')
+                           transition_params={'text': u'\xe4\xe4hhh I am done!'})
 
         response = IResponseContainer(successor)[-1]
         self.assertEquals('task-transition-resolved-in-progress', response.transition)

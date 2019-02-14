@@ -27,10 +27,10 @@ class TransitionExtender(object):
         self.context = context
         self.request = request
 
-    def after_transition_hook(self, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         pass
 
-    def deserialize(self, **data):
+    def deserialize(self, transition_params):
         validate_all = True
         schema_data = {}
         errors = []
@@ -40,7 +40,7 @@ class TransitionExtender(object):
             for name, field in getFields(schemata).items():
                 field_data = schema_data.setdefault(schemata, {})
 
-                if name in data:
+                if name in transition_params:
                     # Deserialize to field value
                     deserializer = queryMultiAdapter(
                         (field, self.context, getRequest()),
@@ -49,7 +49,7 @@ class TransitionExtender(object):
                         continue
 
                     try:
-                        value = deserializer(data[name])
+                        value = deserializer(transition_params[name])
                     except ValueError as e:
                         errors.append({
                             'message': e.message, 'field': name, 'error': e})

@@ -94,12 +94,12 @@ class DefaultTransitionExtender(TransitionExtender):
 
     schemas = [IResponse, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
-        response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        response = add_simple_response(self.context, transition=transition,
+                                       text=transition_params.get('text'))
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.sync_change(transition, kwargs.get('text'), disable_sync)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.sync_change(transition, transition_params.get('text'), disable_sync)
 
     def save_related_items(self, response, related_items):
         if not related_items:
@@ -129,15 +129,15 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+            self.context, transition=transition, text=transition_params.get('text'))
 
         if self.context.is_team_task:
             self.reassign_team_task(response)
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.sync_change(transition, kwargs.get('text'), disable_sync)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.sync_change(transition, transition_params.get('text'), disable_sync)
 
     def reassign_team_task(self, response):
         old_responsible = ITask(self.context).responsible
@@ -155,9 +155,10 @@ class ModifyDeadlineTransitionExtender(TransitionExtender):
 
     schemas = [INewDeadline, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         IDeadlineModifier(self.context).modify_deadline(
-            kwargs['new_deadline'], kwargs.get('text'), transition)
+            transition_params['new_deadline'], transition_params.get('text'),
+            transition)
 
 
 @implementer(ITransitionExtender)
@@ -166,12 +167,13 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+            self.context, transition=transition,
+            text=transition_params.get('text'))
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.sync_change(transition, kwargs.get('text'), disable_sync)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.sync_change(transition, transition_params.get('text'), disable_sync)
 
 
 @implementer(ITransitionExtender)
@@ -180,12 +182,12 @@ class CloseTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
-        response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        response = add_simple_response(self.context, transition=transition,
+                                       text=transition_params.get('text'))
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.sync_change(transition, kwargs.get('text'), disable_sync)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.sync_change(transition, transition_params.get('text'), disable_sync)
 
 
 @implementer(ITransitionExtender)
@@ -194,7 +196,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, INewResponsibleSchema]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         # Revoke local roles for current responsible the roles for the
         # new responsible will be assigned afterwards
         LocalRolesSetter(self.context).revoke_roles()
@@ -205,27 +207,27 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
         TaskReminder().clear_reminder(self.context, self.context.responsible)
 
         changes = (
-            (former_responsible, kwargs.get('responsible')),
-            (former_responsible_client, kwargs.get('responsible_client')))
+            (former_responsible, transition_params.get('responsible')),
+            (former_responsible_client, transition_params.get('responsible_client')))
         response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'),
+            self.context, transition=transition, text=transition_params.get('text'),
             field_changes=changes, supress_events=True)
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.change_responsible(**kwargs)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.change_responsible(transition_params)
         notify(ObjectModifiedEvent(self.context))
         self.record_activity(response)
 
         if not disable_sync:
-            sync_task_response(self.context, getRequest(), 'workflow',
-                               transition,
-                               kwargs.get('text'),
-                               responsible=kwargs.get('responsible'),
-                               responsible_client=kwargs.get('responsible_client'))
+            sync_task_response(
+                self.context, getRequest(), 'workflow',
+                transition, transition_params.get('text'),
+                responsible=transition_params.get('responsible'),
+                responsible_client=transition_params.get('responsible_client'))
 
-    def change_responsible(self, **kwargs):
-        self.context.responsible_client = kwargs.get('responsible_client')
-        self.context.responsible = kwargs.get('responsible')
+    def change_responsible(self, transition_params):
+        self.context.responsible_client = transition_params.get('responsible_client')
+        self.context.responsible = transition_params.get('responsible')
 
     def record_activity(self, response):
         TaskReassignActivity(self.context, self.context.REQUEST, response).record()
@@ -240,18 +242,18 @@ class RejectTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, ]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         self.update_watchers()
 
         response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+            self.context, transition=transition, text=transition_params.get('text'))
 
         response.add_change(
             'responsible',
             _(u"label_responsible", default=u"Responsible"),
             ITask(self.context).responsible, ITask(self.context).issuer)
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
+        self.save_related_items(response, transition_params.get('relatedItems'))
         self.switch_responsible()
 
     def update_watchers(self):
@@ -271,11 +273,11 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IUpdateMetadata, ISelectRecipientsSchema]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         create_subtasks(self.context,
-                        kwargs.pop('responsibles'),
-                        kwargs.get('documents', []), kwargs)
-
+                        transition_params.pop('responsibles'),
+                        transition_params.get('documents', []),
+                        transition_params)
 
 
 @implementer(ITransitionExtender)
@@ -284,13 +286,13 @@ class OpenPlanedTransitionExtender(DefaultTransitionExtender):
     """Default transition extender but supress default activity and
     record an TaskAdded activity instead."""
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
-        response = add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'),
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        response = add_simple_response(self.context, transition=transition,
+                                       text=transition_params.get('text'),
             supress_activity=True)
 
         TaskAddedActivity(
             self.context, getRequest(), aq_parent(self.context)).record()
 
-        self.save_related_items(response, kwargs.get('relatedItems'))
-        self.sync_change(transition, kwargs.get('text'), disable_sync)
+        self.save_related_items(response, transition_params.get('relatedItems'))
+        self.sync_change(transition, transition_params.get('text'), disable_sync)

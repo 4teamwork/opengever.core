@@ -18,7 +18,8 @@ class GEVERWorkflowTransition(WorkflowTransition):
                                                  IDeserializeFromJson)
                 deserializer(data=publication_dates)
 
-            self.wftool.doActionFor(obj, self.transition, comment=comment, **data)
+            self.wftool.doActionFor(obj, self.transition,
+                                    comment=comment, transition_params=data)
             if include_children and IFolderish.providedBy(obj):
                 self.recurse_transition(
                     obj.objectValues(), comment, publication_dates,

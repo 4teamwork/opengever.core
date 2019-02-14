@@ -128,7 +128,7 @@ class AssignTaskForm(Form):
     def reassign_task(self, **kwargs):
         wftool = api.portal.get_tool('portal_workflow')
         wftool.doActionFor(self.context, kwargs.pop('transition'),
-                           comment=kwargs.get('text'), **kwargs)
+                           comment=kwargs.get('text'), transition_params=kwargs)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

@@ -486,7 +486,8 @@ class TestChangedUpdateForForwarding(TestChangedUpdateBase):
             api.content.transition(
                 obj=self.inbox_forwarding,
                 transition="forwarding-transition-reassign",
-                responsible=self.regular_user.id, responsible_client='fa')
+                transition_params={'responsible': self.regular_user.id,
+                                   'responsible_client':'fa'})
 
         self.assert_changed_value(self.inbox_forwarding, FREEZING_TIME)
 

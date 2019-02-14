@@ -37,7 +37,8 @@ class ForwardingCloseForm(Form):
         data, errors = self.extractData()
         if not errors:
             wftool = api.portal.get_tool('portal_workflow')
-            wftool.doActionFor(self.context, 'forwarding-transition-close', **data)
+            wftool.doActionFor(self.context, 'forwarding-transition-close',
+                               transition_params=data)
 
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 

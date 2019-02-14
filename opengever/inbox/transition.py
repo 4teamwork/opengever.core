@@ -55,9 +55,9 @@ class ForwardingCloseTransitionExtender(ForwardingDefaultTransitionExtender):
     to yearfolder after state change.
     """
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
+    def after_transition_hook(self, transition, disable_sync, transition_params):
         add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'))
+            self.context, transition=transition, text=transition_params.get('text'))
 
         IYearfolderStorer(self.context).store_in_yearfolder()
 
@@ -70,11 +70,11 @@ class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExt
 
     schemas = [IResponse, IChooseDossierSchema]
 
-    def after_transition_hook(self, transition, disable_sync, **kwargs):
-        successor_task = self.create_successor_task(kwargs['dossier'])
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        successor_task = self.create_successor_task(transition_params['dossier'])
 
         add_simple_response(
-            self.context, transition=transition, text=kwargs.get('text'),
+            self.context, transition=transition, text=transition_params.get('text'),
             successor_oguid=Oguid.for_object(successor_task).id)
 
         # set predecessor on successor task

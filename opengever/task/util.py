@@ -153,7 +153,7 @@ def change_task_workflow_state(task, transition, **kwargs):
     """
 
     wftool = api.portal.get_tool('portal_workflow')
-    wftool.doActionFor(task, transition, **kwargs)
+    wftool.doActionFor(task, transition, transition_params=kwargs)
 
 
 def get_documents_of_task(task, include_mails=False):

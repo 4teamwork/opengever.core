@@ -111,7 +111,8 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
                     task = wftool.doActionFor(
                         Oguid.parse(oguid).resolve_object(),
                         'forwarding-transition-assign-to-dossier',
-                        comment=transition_data['text'], **transition_data)
+                        comment=transition_data['text'],
+                        transition_params=transition_data)
 
                     IStatusMessage(self.request).addStatusMessage(
                         _(u'The forwarding is now assigned to the dossier'),

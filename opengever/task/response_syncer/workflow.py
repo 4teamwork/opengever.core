@@ -55,6 +55,6 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
         with elevated_privileges():
 
             wftool.doActionFor(
-                self.context, transition, disable_sync=True, **data)
+                self.context, transition, disable_sync=True, transition_params=data)
 
         notify(ObjectModifiedEvent(self.context))
