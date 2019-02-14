@@ -698,7 +698,7 @@ msgstr "Protokollauszug erfolgreich generiert."
 #. Default: "Excerpt was returned to proposer."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "excerpt_returned"
-msgstr "Der Protokollauszug wurde im Urspurungsdossier abgelegt."
+msgstr "Der Protokollauszug wurde im Ursprungsdossier abgelegt."
 
 #. Default: "Excused"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
