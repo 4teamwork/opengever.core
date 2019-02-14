@@ -12,7 +12,7 @@ from opengever.tabbedview.browser.tabbed import GeverTabbedView  # noqa
 from opengever.tabbedview.browser.tabbed import ModelProxyTabbedView  # noqa
 from opengever.tabbedview.catalog_source import GeverCatalogTableSource  # noqa
 from opengever.tabbedview.sqlsource import SqlTableSource  # noqa
-import logging
+import logging  # noqa
 
 
 LOG = logging.getLogger('opengever.tabbedview')
