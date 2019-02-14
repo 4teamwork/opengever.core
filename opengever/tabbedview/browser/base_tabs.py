@@ -3,8 +3,10 @@ from opengever.base.behaviors.classification import translated_public_trial_term
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
+from opengever.ogds.base.sources import is_solr_feature_enabled
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.listing import ListingView
+from opengever.tabbedview.filters import SubjectFilter
 from opengever.tabbedview.utils import get_translated_transitions
 from opengever.tabbedview.utils import get_translated_types
 from plone.registry.interfaces import IRegistry
@@ -22,6 +24,7 @@ class GeverTabMixin(object):
 
     show_searchform = True
     filterlist_available = False
+    subject_filter_available = False
 
     def get_css_classes(self):
         if self.show_searchform:
@@ -139,6 +142,32 @@ class GeverTabMixin(object):
             _filter = _filter.decode('utf-8')
 
         return _filter.strip().split(' ')
+
+    def render_subject_filter_widget(self):
+        if not self.subject_filter_available:
+            return ''
+
+        return self._subject_filter().render_widget()
+
+    def _subject_filter(self):
+        if not self.subject_filter_available:
+            return ''
+
+        subject_filter = SubjectFilter(self.context, self.request,
+                                       self._additional_solr_subject_filters())
+
+        return subject_filter
+
+    def _additional_solr_subject_filters(self):
+        filters = []
+        if hasattr(self, 'object_provides') and self.object_provides:
+            filters.append('object_provides:{}'.format(self.object_provides))
+
+        if hasattr(self, 'search_options'):
+            for option, value in self.search_options.items():
+                filters.append('{}:{}'.format(option, str(value)))
+
+        return filters
 
 
 class BaseListingTab(GeverTabMixin, ListingView):

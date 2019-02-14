@@ -22,8 +22,9 @@ from opengever.tabbedview.helper import external_edit_link
 from opengever.tabbedview.helper import linked
 from opengever.tabbedview.helper import linked_containing_subdossier
 from opengever.tabbedview.helper import linked_document
-from opengever.tabbedview.helper import readable_date
+from opengever.tabbedview.helper import linked_subjects
 from opengever.tabbedview.helper import readable_changed_date
+from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import readable_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import workflow_state
@@ -246,6 +247,7 @@ class Dossiers(BaseCatalogListingTab):
     """List all dossiers recursively."""
 
     template = ViewPageTemplateFile("generic_with_filters.pt")
+    subject_filter_available = True
 
     object_provides = 'opengever.dossier.behaviors.dossier.IDossierMarker'
 
@@ -282,6 +284,10 @@ class Dossiers(BaseCatalogListingTab):
         {'column': 'end',
          'column_title': _(u'label_end', default=u'End'),
          'transform': readable_date},
+
+        {'column': 'Subject',
+         'column_title': _(u'label_keywords', default=u'Keywords'),
+         'transform': linked_subjects},
         )
 
     search_options = {'is_subdossier': False}

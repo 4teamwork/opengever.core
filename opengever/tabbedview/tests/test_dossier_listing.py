@@ -8,6 +8,7 @@ from opengever.tabbedview.helper import linked
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.utils import safe_unicode
 
 
 class TestDossierListing(IntegrationTestCase):
@@ -18,7 +19,8 @@ class TestDossierListing(IntegrationTestCase):
                       'Review state',
                       'Responsible',
                       'Start',
-                      'End']
+                      'End',
+                      'Keywords']
 
     @staticmethod
     def get_contained_folders(folder):
@@ -38,7 +40,8 @@ class TestDossierListing(IntegrationTestCase):
                 api.content.get_state(dossier),
                 dossier.responsible_label,
                 readable_date(dossier, IDossier(dossier).start),
-                readable_date(dossier, IDossier(dossier).end)
+                readable_date(dossier, IDossier(dossier).end),
+                ', '.join(IDossier(dossier).keywords),
                 ]
         return data
 
@@ -49,15 +52,26 @@ class TestDossierListing(IntegrationTestCase):
         listing_data.sort(key=lambda data: data[1])
         return [data for data, modified in listing_data]
 
-    def open_repo_with_filter(self, browser, dossier, filter_name):
+    def open_repo_with_filter(self, browser, dossier, filter_name, subjects=[]):
+        data = {'dossier_state_filter': filter_name}
+        if subjects:
+            data['subjects'] = subjects
+
         browser.visit(
             dossier,
             view='tabbedview_view-dossiers',
-            data={'dossier_state_filter': filter_name})
+            data=data)
 
     @staticmethod
     def filter_data(data, state='dossier-state-active'):
         return filter(lambda folder_data: folder_data[3] == state, data)
+
+    def solr_response(self, *facets):
+        solr_facets = []
+        for facet in facets:
+            solr_facets.extend([safe_unicode(facet), 1])
+
+        return {u'facet_counts': {u'facet_fields': {u'Subject': solr_facets}}}
 
     @browsing
     def test_get_folder_data(self, browser):
@@ -73,7 +87,8 @@ class TestDossierListing(IntegrationTestCase):
              'dossier-state-resolved',
              u'Ziegler Robert (robert.ziegler)',
              '01.01.1995',
-             '31.12.2000'],
+             '31.12.2000',
+             u'Vertr\xe4ge'],
             self.get_folder_data(self.expired_dossier)
             )
 
@@ -214,8 +229,9 @@ class TestDossierListing(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.subdossier, view='tabbedview_view-subdossiers')
         expected_content = [
-            'Reference Number Title Review state Responsible Start End',
-            'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016',
+            u'Reference Number Title Review state Responsible Start End Keywords',
+            u'Client1 1.1 / 1.1.1 Subsubdossier dossier-state-active 31.08.2016 '
+            u'Subsubkeyword, Subsubkeyw\xf6rd',
             ]
         self.assertEqual(expected_content, browser.css('.listing tr').text)
 
@@ -245,3 +261,17 @@ class TestDossierListing(IntegrationTestCase):
 
         self.assertEqual(1, len(data))
         self.assertItemsEqual(self.get_folder_data(self.dossier), data[0])
+
+    @browsing
+    def test_filter_dossiers_by_subjects(self, browser):
+        self.activate_feature('solr')
+        self.login(self.regular_user, browser=browser)
+
+        self.mock_solr(response_json=self.solr_response('Wichtig'))
+
+        self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
+        self.assertLess(1, len(browser.css('.listing tbody tr')))
+
+        self.open_repo_with_filter(
+            browser, self.leaf_repofolder, 'filter_all', ['Wichtig'])
+        self.assertEqual(1, len(browser.css('.listing tbody tr')))

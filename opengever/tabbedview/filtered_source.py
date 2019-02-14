@@ -1,3 +1,6 @@
+from opengever.tabbedview.filters import SubjectFilter
+
+
 class FilteredTableSourceMixin(object):
 
     def build_query(self):
@@ -15,5 +18,6 @@ class FilteredTableSourceMixin(object):
         """When the filterlist is active, we update the query with
         the current filter."""
 
+        SubjectFilter(self.config.context, self.request).update_query(query)
         selected_filter_id = self.request.get(self.config.filterlist_name)
         return self.config.filterlist.update_query(query, selected_filter_id)

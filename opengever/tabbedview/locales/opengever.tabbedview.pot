@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-12-11 09:14+0000\n"
+"POT-Creation-Date: 2019-01-31 09:17+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -244,6 +244,11 @@ msgstr ""
 msgid "label_issuer"
 msgstr ""
 
+#. Default: "Keywords"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_keywords"
+msgstr ""
+
 #. Default: "Modification Date"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_modified_date"
@@ -374,6 +379,11 @@ msgid "personal_overview_title"
 msgstr ""
 
 msgid "phone_office"
+msgstr ""
+
+#. Default: "Filter by subjects..."
+#: ./opengever/tabbedview/filters.py
+msgid "placeholder_filter_by_subjects"
 msgstr ""
 
 msgid "preview"

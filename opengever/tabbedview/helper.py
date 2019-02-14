@@ -10,13 +10,16 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import ogds_service
 from opengever.tabbedview import _
+from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from plone.memoize import ram
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.interfaces._tools import IMemberData
+from Products.CMFDiffTool.utils import safe_utf8
 from Products.CMFPlone.utils import safe_unicode
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
 from Products.ZCatalog.interfaces import ICatalogBrain
+from urllib import quote_plus
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
@@ -147,6 +150,27 @@ def linked_containing_maindossier(item, value):
     link = u'<a href="{}" title="{}" class="maindossierLink">{}</a>'.format(
         redirect_url, title, title)
     return link
+
+
+def linked_subjects(item, subjects):
+    if not subjects:
+        return ''
+
+    subjects = sorted(subjects)
+    links = []
+
+    for subject in subjects:
+
+        subject = escape_html(safe_utf8(subject))
+        quoted_subject = quote_plus(subject)
+
+        url = u'{}/@@search?Subject={}'.format(
+            api.portal.get().absolute_url(), quoted_subject)
+
+        links.append(u'<a href="{}" class="subjectLinks">{}</a>'.format(
+            url, safe_unicode(subject)))
+
+    return u', '.join(links)
 
 
 def linked(item, value, with_tooltip=True):

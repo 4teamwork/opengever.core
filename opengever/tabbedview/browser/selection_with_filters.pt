@@ -28,5 +28,5 @@
 
       </span>
     </tal:condition>
-
+    <tal:subjectFilterWidget replace="structure view/render_subject_filter_widget" />
 </div>
