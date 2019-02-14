@@ -46,7 +46,7 @@ Nach dem Speichern ist eine Aufgabe im Status *Offen*.
 Wird ein Standardablauf mit sequentiellen Ablauftyp ausgelöst, kommen noch die
 Status *Geplant* und *Übersprungen* dazu. Wird ein solcher Standardablauf
 ausgelöst, werden die Aufgaben nacheinander ausgelöst. Das bedeutet, dass sich
-die nächste Aufagbe erst aktiviert, wenn jene davor abgeschlossen wurde. Die
+die nächste Aufgabe erst aktiviert, wenn jene davor abgeschlossen wurde. Die
 erste Aufgabe wird dadurch automatisch in den Status *Offen* gesetzt. Alle
 weiteren, nachfolgenden Aufgabe erhalten den Status *Geplant* bis diese dann an
 der Reihe sind. Solche Aufgaben können auch *Übersprungen* werden und erhalten
