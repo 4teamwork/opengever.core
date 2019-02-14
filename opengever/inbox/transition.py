@@ -45,7 +45,7 @@ class IChooseDossierSchema(Schema):
 @implementer(ITransitionExtender)
 @adapter(IForwarding, IBrowserRequest)
 class ForwardingDefaultTransitionExtender(DefaultTransitionExtender):
-    """Default transiition extender for all forwarding transitions."""
+    """Default transition extender for all forwarding transitions."""
 
 
 @implementer(ITransitionExtender)

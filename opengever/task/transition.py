@@ -282,7 +282,7 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
 
 @implementer(ITransitionExtender)
 @adapter(ITask, IBrowserRequest)
-class OpenPlanedTransitionExtender(DefaultTransitionExtender):
+class OpenPlannedTransitionExtender(DefaultTransitionExtender):
     """Default transition extender but supress default activity and
     record an TaskAdded activity instead."""
 

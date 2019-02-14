@@ -54,6 +54,9 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
         wftool = api.portal.get_tool('portal_workflow')
         with elevated_privileges():
 
+            # Because this is already teh syncing of the foreign side, we need
+            # to disable syncing of the transition, otherwise it would end in
+            # a snycing-loop
             wftool.doActionFor(
                 self.context, transition, disable_sync=True, transition_params=data)
 

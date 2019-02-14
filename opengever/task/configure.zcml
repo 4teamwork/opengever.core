@@ -294,7 +294,7 @@
       />
 
   <adapter
-      factory=".transition.OpenPlanedTransitionExtender"
+      factory=".transition.OpenPlannedTransitionExtender"
       name="task-transition-planned-open"
       />
 
