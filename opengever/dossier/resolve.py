@@ -78,6 +78,13 @@ class DossierResolveView(BrowserView):
         try:
             resolve_lock.acquire(commit=True)
             result = self.execute_recursive_resolve()
+
+            # We need to commit here so that a possible ConflictError already
+            # manifests here, in our try..finally that will remove the lock.
+            # Otherwise the ConflictError would happen when *trying* to remove
+            # the lock (and commit), which would fail and leave us with a left
+            # over lock which would cause the retried request to be rejected.
+            transaction.commit()
             resolve_lock.log('Successfully resolved %s' % self.context)
             return result
 
@@ -86,18 +93,21 @@ class DossierResolveView(BrowserView):
             raise
 
         finally:
-            # We end up here in two cases:
+            # We end up here in three cases:
             #
             # 1) Resolve was successful (no exception)
-            # 2) An exception happened during resolve, and the txn has been
+            #
+            # 2) A ConflictError happened during the commit() above. We then
+            #    remove the lock here, and are ready for the request to be
+            #    retried, once the ConflictError continues to be propagated.
+            #
+            # 3) An exception happened during resolve, and the txn has been
             #    aborted just above (but the exception has not been
             #    propagated yet).
             #
-            # In either case, we remove the lock and commit the removal.
-            #
-            # In the case of a previous abort, the removal will be committed
-            # as as separate transaction, in the success case the removal will
-            # be part of the successful dossier resolution transaction.
+            # In either case, we remove the lock and commit the removal. If
+            # there was an exception, propagation will continue after leaving
+            # this 'finally' block.
             resolve_lock.release(commit=True)
 
     def execute_recursive_resolve(self):
