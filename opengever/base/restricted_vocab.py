@@ -1,4 +1,5 @@
 from opengever.base.acquisition import acquire_field_value
+from Products.CMFCore.interfaces import ISiteRoot
 from opengever.base.acquisition import NO_VALUE_FOUND
 from opengever.base.interfaces import IDuringContentCreation
 from plone.app.dexterity.behaviors.metadata import MetadataBase
@@ -98,6 +99,11 @@ class RestrictedVocabularyFactory(object):
         request = context.REQUEST
         if IDuringContentCreation.providedBy(request):
             # object does not yet exist, context is container (add)
+            container = context
+        elif ISiteRoot.providedBy(context):
+            # The context is the siteroot when using the /@types endpoint
+            # from the plone rest-api.
+            # See https://github.com/4teamwork/opengever.core/issues/5283
             container = context
         else:
             # object already exists, container is parent of context (edit)

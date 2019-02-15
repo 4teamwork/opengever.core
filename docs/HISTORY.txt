@@ -37,6 +37,7 @@ Changelog
 - Fix changing task to or from private via edit form. [deiferni]
 - Fix creating private tasks by mistake. [deiferni]
 - Add keywords-filter for dossier listings. [elioschmutz]
+- Fix restapi /@types endpiont for all portal-types. [elioschmutz]
 - Add simple cache invalidation mechanism for javascript included in templates. [deiferni]
 - Fix handling of initial version when saving a document as PDF. [njohner]
 - Include agenda item description in TOC json. [deiferni]

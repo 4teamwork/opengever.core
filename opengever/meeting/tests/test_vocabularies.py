@@ -73,7 +73,7 @@ class TestProposalTemplatesVocabulary(IntegrationTestCase):
             [self.proposal_template.Title(),
              self.ad_hoc_agenda_item_template.Title(),
              self.recurring_agenda_item_template.Title()],
-            [term.title for term in factory(context=None)])
+            [term.title.encode('utf-8') for term in factory(context=None)])
 
         self.assertItemsEqual(
             [IUUID(self.proposal_template),

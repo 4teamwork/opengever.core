@@ -21,6 +21,11 @@ def reference_number_prefix_default(context):
     default factory is called during content creation), unless the factory
     is called from an edit or display action (which shouldn't happen).
     """
+    if not context:
+        # We don't have any context if using the /@types endpoint from the
+        # plone rest-api.
+        # See https://github.com/4teamwork/opengever.core/issues/5283
+        return u''
     return PrefixAdapter(context).get_next_number()
 
 

@@ -257,7 +257,7 @@ class ProposalTemplatesVocabulary(object):
         for brain in api.content.find(object_provides=IProposalTemplate):
             terms.append(SimpleTerm(value=brain.UID,
                                     token=brain.UID,
-                                    title=brain.Title))
+                                    title=safe_unicode(brain.Title)))
 
         terms.sort(key=attrgetter('title'))
         return SimpleVocabulary(terms)
