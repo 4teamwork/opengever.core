@@ -1,10 +1,13 @@
 from Acquisition import aq_parent
 from datetime import datetime
 from datetime import timedelta
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.mapping import PersistentMapping
 from plone import api
 from zope.annotation import IAnnotations
+from zope.globalrequest import getRequest
+import itertools
 import logging
 import transaction
 
@@ -48,6 +51,20 @@ class ResolveLock(object):
         Will overwrite a possibly existing expired lock.
         """
         self.log("Acquiring resolve lock for %s..." % self.context)
+
+        if self.txn_is_dirty():
+            # Acquiring and committing the lock should always be the first
+            # thing that's being done when resolving the dossier, otherwise
+            # we would be committing unrelated, unexpected changes.
+            #
+            # Detect if that happens, but still proceed and log to sentry.
+            msg = 'Dirty transaction when comitting resolve lock'
+            self.log(msg)
+            self.log('Registered objects: %r' % self._registered_objects())
+            log_msg_to_sentry(msg, level='warning', extra={
+                'registered_objects': repr(self._registered_objects())}
+            )
+
         ann = IAnnotations(self.context)
         lockinfo = PersistentMapping({
             'timestamp': datetime.now(),
@@ -130,3 +147,20 @@ class ResolveLock(object):
         """
         conn = self.context._p_jar
         logger.info('[%r] %s' % (conn, msg))
+
+    def _registered_objects(self):
+        """Returns a list of objects changed in this transaction.
+
+        Lifted from plone.protect.auto.
+        """
+        app = getRequest().PARENTS[-1]
+        return list(itertools.chain.from_iterable([
+            conn._registered_objects
+            # skip the 'temporary' connection since it stores session objects
+            # which get written all the time
+            for name, conn in app._p_jar.connections.items()
+            if name != 'temporary'
+        ]))
+
+    def txn_is_dirty(self):
+        return bool(self._registered_objects())
