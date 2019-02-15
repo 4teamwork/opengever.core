@@ -61,7 +61,7 @@ class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
     """
 
     def validate(self, value):
-        if ActorLookup(value).is_team() and not self.context.is_open():
+        if value and ActorLookup(value).is_team() and not self.context.is_open():
             raise Invalid(
                 _(u'error_no_team_responsible_in_progress_state',
                   default=u'Team responsibles are only allowed if the task or '
