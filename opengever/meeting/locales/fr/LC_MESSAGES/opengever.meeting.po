@@ -630,7 +630,7 @@ msgstr "Protocole"
 #. Default: "Modified at ${date}"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "document_last_modified"
-msgstr ""
+msgstr "Dernière modification: ${date}"
 
 #. Default: "Not yet generated."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -811,7 +811,7 @@ msgstr "Numéro du point de l'ordre du jour dans cette séance"
 #. Default: "Agenda item number (unformatted)"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number_raw"
-msgstr ""
+msgstr "Numéro du point de l'ordre du jour dans cette séance (non-formatté)"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py

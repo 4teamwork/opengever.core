@@ -97,12 +97,12 @@ msgstr "Offre refusée"
 #. Default: "Overdue dossier"
 #: ./opengever/activity/__init__.py
 msgid "dossier-overdue"
-msgstr ""
+msgstr "Dossier en souffrance"
 
 #. Default: "Dossier responsible"
 #: ./opengever/activity/roles.py
 msgid "dossier_responsible_role"
-msgstr ""
+msgstr "Responsable"
 
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
@@ -167,7 +167,7 @@ msgstr "Offres"
 #. Default: "Dossiers"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dossiers"
-msgstr ""
+msgstr "Dossiers"
 
 #. Default: "Forwardings"
 #: ./opengever/activity/browser/settings.py

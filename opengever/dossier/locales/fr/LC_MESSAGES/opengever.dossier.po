@@ -564,7 +564,7 @@ msgstr "Saisir un commentaire"
 #. Default: "Overdue dossier"
 #: ./opengever/dossier/activities.py
 msgid "label_dossier_overdue_activity"
-msgstr ""
+msgstr "Dossier en souffrance"
 
 #. Default: "Dossier templates"
 #: ./opengever/dossier/browser/tabbed.py
@@ -832,7 +832,7 @@ msgstr "Modèle"
 #. Default: "Template group"
 #: ./opengever/dossier/templatefolder/tabs.py
 msgid "label_template_group"
-msgstr ""
+msgstr "Groupe de modèles"
 
 #. Default: "Title"
 #: ./opengever/dossier/browser/report.py
@@ -923,7 +923,7 @@ msgstr "Sous-dossiers"
 #. Default: "The dossier is still open after exceeding its end date."
 #: ./opengever/dossier/activities.py
 msgid "summary_dossier_overdue_activity"
-msgstr ""
+msgstr "La date de fin est dépassée et le dossier est donc en souffrance.<br>Veuillez vérifier si le dossier peut être clôturé."
 
 msgid "tasks"
 msgstr "Tâches"

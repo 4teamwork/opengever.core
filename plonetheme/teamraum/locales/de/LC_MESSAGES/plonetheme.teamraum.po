@@ -163,7 +163,7 @@ msgstr "Logo"
 #. Default: "Logo right"
 #: ./plonetheme/teamraum/browser/controlpanel.pt
 msgid "label_logo_right"
-msgstr ""
+msgstr "Logo rechts"
 
 #. Default: "Logo space left"
 #: ./plonetheme/teamraum/browser/controlpanel.pt

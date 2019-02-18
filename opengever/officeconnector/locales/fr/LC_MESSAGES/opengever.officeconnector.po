@@ -20,6 +20,5 @@ msgstr ""
 #. Default: "Unfortunately it's not currently possible to attach this many documents. Please try again with fewer documents selected."
 #: ./opengever/officeconnector/service.py
 msgid "error_oc_url_too_long"
-msgstr ""
-"Le nombre des documents choisis est trop important pour être envoyé en une "
+msgstr "Le nombre de documents choisis est trop important pour être envoyé en une "
 "seule fois comme pièces jointes. Veuillez réessayer avec moins de documents."
