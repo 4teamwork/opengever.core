@@ -6,12 +6,14 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
+from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
+from opengever.dossier.resolve_lock import ResolveLock
 from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -25,6 +27,7 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+import transaction
 
 
 NOT_SUPPLIED_OBJECTS = _(
@@ -59,44 +62,125 @@ class ValidResolverNamesVocabularyFactory(object):
 class DossierResolveView(BrowserView):
 
     def __call__(self):
+        # Ensure already resolved dossier can't be resolved again
+        if self.is_already_resolved():
+            return self.show_already_resolved_msg()
+
+        resolve_lock = ResolveLock(self.context)
+
+        # Check whether a resolve is already in progress
+        if resolve_lock.is_locked():
+            resolve_lock.log('Concurrent attempt at resolving %s rejected' % self.context)
+            return self.show_being_resolved_msg()
+
+        # No resolve in progress, proceed with resolving this dossier
+        # by acquring a lock, resolving, and then releasing the lock
+        try:
+            resolve_lock.acquire(commit=True)
+            result = self.execute_recursive_resolve()
+
+            # We need to commit here so that a possible ConflictError already
+            # manifests here, in our try..finally that will remove the lock.
+            # Otherwise the ConflictError would happen when *trying* to remove
+            # the lock (and commit), which would fail and leave us with a left
+            # over lock which would cause the retried request to be rejected.
+            transaction.commit()
+            resolve_lock.log('Successfully resolved %s' % self.context)
+            return result
+
+        except Exception:
+            transaction.abort()
+            raise
+
+        finally:
+            # We end up here in three cases:
+            #
+            # 1) Resolve was successful (no exception)
+            #
+            # 2) A ConflictError happened during the commit() above. We then
+            #    remove the lock here, and are ready for the request to be
+            #    retried, once the ConflictError continues to be propagated.
+            #
+            # 3) An exception happened during resolve, and the txn has been
+            #    aborted just above (but the exception has not been
+            #    propagated yet).
+            #
+            # In either case, we remove the lock and commit the removal. If
+            # there was an exception, propagation will continue after leaving
+            # this 'finally' block.
+            resolve_lock.release(commit=True)
+
+    def execute_recursive_resolve(self):
         resolver = get_resolver(self.context)
 
         # check preconditions
         errors = resolver.is_resolve_possible()
         if errors:
-            for msg in errors:
-                api.portal.show_message(
-                    message=msg, request=self.request, type='error')
-
-            return self.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            return self.show_errors(errors)
 
         # validate enddates
         invalid_dates = resolver.are_enddates_valid()
         if invalid_dates:
-            for title in invalid_dates:
-                msg = _("The dossier ${dossier} has a invalid end_date",
-                        mapping=dict(dossier=title,))
-                api.portal.show_message(
-                    message=msg, request=self.request, type='error')
-
-            return self.request.RESPONSE.redirect(
-                self.context.absolute_url())
+            return self.show_invalid_end_dates(titles=invalid_dates)
 
         if resolver.is_archive_form_needed():
-            self.request.RESPONSE.redirect('transition-archive')
-        else:
-            resolver.resolve()
-            if self.context.is_subdossier():
-                api.portal.show_message(
-                    message=_('The subdossier has been succesfully resolved.'),
-                    request=self.request, type='info')
-            else:
-                api.portal.show_message(
-                    message=_('The dossier has been succesfully resolved.'),
-                    request=self.request, type='info')
+            return self.redirect('transition-archive')
 
-            self.request.RESPONSE.redirect(self.context.absolute_url())
+        resolver.resolve()
+
+        if self.context.is_subdossier():
+            return self.show_subdossier_resolved_msg()
+
+        return self.show_dossier_resolved_msg()
+
+    @property
+    def context_url(self):
+        return self.context.absolute_url()
+
+    def is_already_resolved(self):
+        wfstate = api.content.get_state(obj=self.context)
+        return wfstate == DOSSIER_STATE_RESOLVED
+
+    def redirect(self, url):
+        return self.request.RESPONSE.redirect(url)
+
+    def show_already_resolved_msg(self):
+        api.portal.show_message(
+            message=_('Dossier has already been resolved.'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
+
+    def show_being_resolved_msg(self):
+        api.portal.show_message(
+            message=_('Dossier is already being resolved'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
+
+    def show_errors(self, errors):
+        for msg in errors:
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+        return self.redirect(self.context_url)
+
+    def show_invalid_end_dates(self, titles):
+        for title in titles:
+            msg = _("The dossier ${dossier} has a invalid end_date",
+                    mapping=dict(dossier=title,))
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+        return self.redirect(self.context_url)
+
+    def show_subdossier_resolved_msg(self):
+        api.portal.show_message(
+            message=_('The subdossier has been succesfully resolved.'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
+
+    def show_dossier_resolved_msg(self):
+        api.portal.show_message(
+            message=_('The dossier has been succesfully resolved.'),
+            request=self.request, type='info')
+        return self.redirect(self.context_url)
 
 
 class DossierReactivateView(BrowserView):

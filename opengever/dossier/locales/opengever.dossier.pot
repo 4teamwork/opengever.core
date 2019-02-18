@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-13 16:45+0000\n"
+"POT-Creation-Date: 2019-02-14 16:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
+
+#: ./opengever/dossier/viewlets/byline.py
+msgid " (currently being resolved)"
+msgstr ""
 
 #: ./opengever/dossier/move_items.py
 msgid "${copied_items} Elements were moved successfully"
@@ -47,6 +51,14 @@ msgstr ""
 
 #: ./opengever/dossier/browser/overview.py
 msgid "Description"
+msgstr ""
+
+#: ./opengever/dossier/resolve.py
+msgid "Dossier has already been resolved."
+msgstr ""
+
+#: ./opengever/dossier/resolve.py
+msgid "Dossier is already being resolved"
 msgstr ""
 
 #: ./opengever/dossier/browser/templates/overview.pt

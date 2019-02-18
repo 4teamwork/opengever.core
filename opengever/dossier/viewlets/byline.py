@@ -3,8 +3,11 @@ from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve_lock import ResolveLock
 from opengever.ogds.base.actor import Actor
 from plone import api
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 class BusinessCaseByline(BylineBase):
@@ -21,6 +24,9 @@ class BusinessCaseByline(BylineBase):
     def end(self):
         dossier = IDossier(self.context)
         return self.to_localized_time(dossier.end)
+
+    def is_resolve_locked(self):
+        return ResolveLock(self.context).is_locked(recursive=False)
 
     def mailto_link(self):
         """Displays email-address if the IMailInAddressMarker behavior
@@ -41,6 +47,16 @@ class BusinessCaseByline(BylineBase):
             'text/html', self.external_reference(),
             mimetype='text/x-web-intelligent').getData()
         return '<span>%s</span>' % ref_tag
+
+    def workflow_state(self):
+        """If the dossier is currently being resolved, extend translated
+        workflow state with a message saying so.
+        """
+        wfstate = super(BusinessCaseByline, self).workflow_state()
+        if self.is_resolve_locked():
+            wfstate = translate(wfstate, context=getRequest())
+            wfstate += translate(_(u' (currently being resolved)'), context=getRequest())
+        return wfstate
 
     def get_items(self):
         items = [

@@ -12,9 +12,11 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
+from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.dossier.resolve_lock import ResolveLock
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -88,6 +90,17 @@ class TestResolvingDossiers(IntegrationTestCase):
                           api.content.get_state(self.subdossier))
         self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
+                          info_messages())
+
+    @browsing
+    def test_cant_resolve_already_resolved_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_dossier(self.subdossier, browser)
+        resolve_dossier(self.subdossier, browser)
+
+        self.assertEquals(self.subdossier.absolute_url(), browser.url)
+        self.assertEquals(['Dossier has already been resolved.'],
                           info_messages())
 
 
@@ -743,3 +756,65 @@ class TestResolving(FunctionalTestCase):
                           api.content.get_state(dossier))
         self.assertEquals('dossier-state-resolved',
                           api.content.get_state(subdossier))
+
+
+class TestResolveLocking(TestBylineBase):
+
+    @browsing
+    def test_resolve_locked_dossier_is_recognized_as_such(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_lock = ResolveLock(self.empty_dossier)
+        resolve_lock.acquire(commit=False)
+
+        self.assertTrue(resolve_lock.is_locked())
+
+        browser.open(self.empty_dossier)
+
+        wfstate = self.get_byline_value_by_label('State:').text
+        self.assertEqual('dossier-state-active (currently being resolved)', wfstate)
+
+    @browsing
+    def test_expired_resolve_lock_is_recognized(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        with freeze(datetime(2018, 4, 30)) as freezer:
+            resolve_lock = ResolveLock(self.empty_dossier)
+            resolve_lock.acquire(commit=False)
+
+            self.assertTrue(resolve_lock.is_locked())
+
+            freezer.forward(hours=25)
+            self.assertFalse(resolve_lock.is_locked())
+
+    @browsing
+    def test_resolve_lock_works_recursively_for_whole_subtree(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        main_dossier = self.subdossier.aq_parent
+
+        # Issue lock on the main dossier
+        resolve_lock = ResolveLock(main_dossier)
+        resolve_lock.acquire(commit=False)
+
+        # Subdossier should also be considered locked
+        self.assertTrue(ResolveLock(self.subdossier).is_locked())
+
+        # Except if we explicitly check with recursive=False
+        # (used for low-cost display in byline on every view)
+        self.assertFalse(ResolveLock(self.subdossier).is_locked(recursive=False))
+
+    @browsing
+    def test_locked_dossier_cant_be_resolved(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        resolve_lock = ResolveLock(self.empty_dossier)
+        resolve_lock.acquire(commit=False)
+
+        resolve_dossier(self.empty_dossier, browser)
+
+        self.assertEquals(
+            ['Dossier is already being resolved'], info_messages())
+
+        self.assertEquals('dossier-state-active',
+                          api.content.get_state(self.empty_dossier))
