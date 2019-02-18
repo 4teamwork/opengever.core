@@ -41,7 +41,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
         expected_payloads = [{
             u'connect-xml': u'@@oneoffix_connect_xml',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-33',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-35',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
             }]
@@ -88,7 +88,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             u'checkin-without-comment': u'checkin_without_comment',
             u'checkout': u'@@checkout_documents',
             u'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-33',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-35',
             u'download': u'download',
             u'filename': None,
             u'upload-form': u'file_upload',
@@ -156,7 +156,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixxWithRESTAPI(TestOfficeconnectorD
         expected_payloads = [{
             u'connect-xml': u'@@oneoffix_connect_xml',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-33',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-35',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
             }]
@@ -203,7 +203,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixxWithRESTAPI(TestOfficeconnectorD
             u'checkin': u'@checkin',
             u'checkout': u'@checkout',
             u'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-33',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-35',
             u'download': u'download',
             u'filename': None,
             u'lock': u'@lock',

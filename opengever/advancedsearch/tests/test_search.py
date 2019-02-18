@@ -79,18 +79,17 @@ class TestSearchWithContent(IntegrationTestCase):
     @browsing
     def test_search_documents(self, browser):
         self.login(self.regular_user, browser=browser)
-
         browser.open(self.portal, view='advanced_search')
         browser.fill({
             'Text': u'Vertr\xe4gsentwurf',
-            'Type': ['opengever.document.behaviors.IBaseDocument']})
+            'Type': ['opengever.document.behaviors.IBaseDocument'],
+        })
         browser.css('#form-buttons-button_search').first.click()
-
-        self.assertEquals(['3'], browser.css('#search-results-number').text)
-        self.assertEquals(
-            [self.document.title, self.taskdocument.title,
-             self.proposaldocument.title],
-            browser.css('.searchResults .searchItem dt').text)
+        self.assertEqual(['3'], browser.css('#search-results-number').text)
+        self.assertItemsEqual(
+            [self.document.title, self.taskdocument.title, self.proposaldocument.title],
+            browser.css('.searchResults .searchItem dt').text,
+        )
 
     @browsing
     def test_search_tasks(self, browser):

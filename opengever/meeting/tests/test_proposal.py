@@ -82,12 +82,12 @@ class TestProposal(IntegrationTestCase):
         original_template = ('orig_template', '#'.join((self.dossier.absolute_url(), 'documents')), )
         authenticator = ('_authenticator', createToken(), )
         document_12_path = ('paths:list', browser.css('#document-12').first.node.attrib.get('value'), )
-        document_30_path = ('paths:list', browser.css('#document-30').first.node.attrib.get('value'), )
+        document_32_path = ('paths:list', browser.css('#document-32').first.node.attrib.get('value'), )
         method = ('++add++opengever.meeting.proposal:method', '1', )
         browser.open(
             self.dossier.absolute_url(),
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            data=formdata.urlencode((original_template, authenticator, document_12_path, document_30_path, method, )),
+            data=formdata.urlencode((original_template, authenticator, document_12_path, document_32_path, method, )),
             )
         self.assertEqual(
             [u'Vertr\xe4gsentwurf', 'Feedback zum Vertragsentwurf'],
@@ -1115,7 +1115,6 @@ class TestProposal(IntegrationTestCase):
             u'Die B\xfcrgschaft',
             u'Initialvertrag f\xfcr Bearbeitung',
             u'Initialvertrag f\xfcr Bearbeitung',
-            u'L\xe4\xe4r',
             'Personaleintritt',
             u'Vertr\xe4ge',
             u'Vertr\xe4gsentwurf',

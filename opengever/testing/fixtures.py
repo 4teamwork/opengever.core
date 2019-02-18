@@ -934,11 +934,12 @@ class OpengeverContentFixture(object):
             .within(self.dossier)
             .titled(u'Vertr\xe4gsentwurf')
             .having(
-                document_date=datetime(2010, 1, 3),
+                delivery_date=datetime(2010, 1, 3),
+                description=u'Wichtige Vertr\xe4ge',
                 document_author=TEST_USER_ID,
+                document_date=datetime(2010, 1, 3),
                 document_type='contract',
                 receipt_date=datetime(2010, 1, 3),
-                delivery_date=datetime(2010, 1, 3),
                 )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
@@ -1017,33 +1018,50 @@ class OpengeverContentFixture(object):
             .titled(u'2015')
             ))
 
-        self.register('subdocument', create(
+        subdocument = self.register('subdocument', create(
             Builder('document')
             .within(subdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
             .attach_file_containing(
                 'Excel dummy content',
                 u'tab\xe4lle.xlsx',
-                )
-            ))
+            )
+            .relate_to([self.document])
+        ))
 
-        self.register('subsubdossier', create(
+        subsubdossier = self.register('subsubdossier', create(
             Builder('dossier')
             .within(subdossier)
             .titled(u'Subsubdossier')
             .having(
                 keywords=(u'Subsubkeyword', u'Subsubkeyw\xf6rd'),
-                )
-            ))
+            )
+        ))
+
+        self.register('subsubdocument', create(
+            Builder('document')
+            .within(subsubdossier)
+            .titled(u'\xdcbersicht der Vertr\xe4ge von 2014')
+            .attach_file_containing(
+                'Excel dummy content',
+                u'tab\xe4lle neu.xlsx',
+            )
+            .relate_to([self.document, subdocument])
+        ))
 
         self.register('empty_document', create(
             Builder('document')
-            .within(self.dossier)
+            .within(subdossier)
             .titled(u'L\xe4\xe4r')
-            .having(
-                preserved_as_paper=True,
-                )
-            ))
+            .having(preserved_as_paper=True)
+        ))
+
+        self.register('removed_document', create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'W\xe4g')
+            .removed()
+        ))
 
     @staticuid()
     def create_tasks(self):

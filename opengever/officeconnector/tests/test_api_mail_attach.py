@@ -18,7 +18,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             oc_url = self.fetch_document_attach_oc_url(browser, self.mail_eml)
 
         self.assertIsNotNone(oc_url)
-        self.assertEquals(200, browser.status_code)
+        self.assertEqual(200, browser.status_code)
 
         expected_token = {
             u"action": u"attach",
@@ -36,18 +36,18 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"content-type": u"message/rfc822",
             u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
             u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                             u"document-24",
+                             u"document-26",
             u"download": u"download",
             u"filename": u"Die Buergschaft.eml",
             u"title": u"Die B\xfcrgschaft",
             u"uuid": u"createemails00000000000000000001",
         }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEquals(200, browser.status_code)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(expected_payloads, payloads)
 
         file_contents = self.download_document(browser, raw_token, payloads[0])
-        self.assertEquals(file_contents, self.mail_eml.get_file().data)
+        self.assertEqual(file_contents, self.mail_eml.get_file().data)
 
     @browsing
     def test_attach_to_email_msg(self, browser):
@@ -57,7 +57,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             oc_url = self.fetch_document_attach_oc_url(browser, self.mail_msg)
 
         self.assertIsNotNone(oc_url)
-        self.assertEquals(200, browser.status_code)
+        self.assertEqual(200, browser.status_code)
 
         expected_token = {
             u"action": u"attach",
@@ -75,18 +75,18 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"content-type": u"application/vnd.ms-outlook",
             u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
             u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                             u"document-25",
+                             u"document-27",
             u"download": u"@@download/original_message",
             u"filename": u"testm\xe4il.msg",
             u"title": u"[No Subject]",
             u"uuid": u"createemails00000000000000000002",
         }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEquals(200, browser.status_code)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(expected_payloads, payloads)
 
         file_contents = self.download_document(browser, raw_token, payloads[0])
-        self.assertEquals(file_contents, self.mail_msg.get_file().data)
+        self.assertEqual(file_contents, self.mail_msg.get_file().data)
 
     @browsing
     def test_attach_many_to_email_open(self, browser):
@@ -95,7 +95,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
         dossier_email = self.fetch_dossier_bcc(browser, self.dossier)
 
         self.assertTrue(dossier_email)
-        self.assertEquals(200, browser.status_code)
+        self.assertEqual(200, browser.status_code)
 
         documents = [self.mail_eml, self.mail_msg]
 
@@ -103,7 +103,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             oc_url = self.fetch_dossier_multiattach_oc_url(browser, self.dossier, documents, dossier_email)
 
         self.assertIsNotNone(oc_url)
-        self.assertEquals(200, browser.status_code)
+        self.assertEqual(200, browser.status_code)
 
         expected_token = {
             u"action": u"attach",
@@ -123,7 +123,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"content-type": u"message/rfc822",
                 u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
                 u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                                 u"document-24",
+                                 u"document-26",
                 u"download": u"download",
                 u"filename": u"Die Buergschaft.eml",
                 u"title": u"Die B\xfcrgschaft",
@@ -134,7 +134,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"content-type": u"application/vnd.ms-outlook",
                 u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
                 u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                                 u"document-25",
+                                 u"document-27",
                 u"download": u"@@download/original_message",
                 u"filename": u"testm\xe4il.msg",
                 u"title": u"[No Subject]",
@@ -143,7 +143,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
         ]
 
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
     @browsing
     def test_checkout_checkin(self, browser):

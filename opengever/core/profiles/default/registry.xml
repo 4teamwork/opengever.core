@@ -97,97 +97,20 @@
   <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings" />
   <record
       interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings"
-      field="officeconnector_editable_types">
+      field="officeconnector_editable_types_extra">
     <field type="plone.registry.field.List">
       <value_type type="plone.registry.field.TextLine" />
     </field>
-    <value>
-      <!-- TextEdit -->
-      <element>text/plain</element>
-      <element>application/rtf</element>
-      <element>text/csv</element>
-      <element>text/css</element>
-      <element>text/xml</element>
-      <element>text/tab-separated-values</element>
-      <element>text/richtext</element>
-      <element>text/html</element>
-
-      <!-- Acrobat Pro, Reader, Preview -->
-      <element>application/pdf</element>
-      <element>application/postscript</element>
-
-      <!-- Preview -->
-      <element>image/jpeg</element>
-      <element>image/jpg</element>
-      <element>image/tiff</element>
-      <element>image/gif</element>
-      <element>image/png</element>
-      <element>image/bmp</element>
-
-      <!-- MS Visio -->
-      <element>application/vnd.visio</element>
-
-      <!-- MS Project -->
-      <element>application/vnd.ms-project</element>
-
-      <!-- MS Project (generic) -->
-      <element>application/x-project</element>
-
-      <!-- Adobe InDesign -->
-      <element>application/x-indesign</element>
-
-      <!-- Adobe Photoshop -->
-      <element>image/vnd.adobe.photoshop</element>
-
-      <!-- Adobe Illustrator -->
-      <element>application/illustrator</element>
-
-      <!-- MS OneNote -->
-      <element>application/onenote</element>
-
-      <!-- MS Excel -->
-      <element>application/vnd.ms-excel</element>
-      <element>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</element>
-      <element>application/vnd.openxmlformats-officedocument.spreadsheetml.template</element>
-      <element>application/vnd.ms-excel.sheet.macroEnabled.12</element>
-      <element>application/vnd.ms-excel.sheet.binary.macroEnabled.12</element>
-      <element>application/vnd.ms-excel.template.macroEnabled.12</element>
-      <element>application/vnd.ms-excel.addin.macroEnabled.12</element>
-
-      <!-- MS Powerpoint -->
-      <element>application/vnd.ms-powerpoint</element>
-      <element>application/vnd.ms-powerpoint.addin.macroEnabled.12</element>
-      <element>application/vnd.ms-powerpoint.presentation.macroEnabled.12</element>
-      <element>application/vnd.ms-powerpoint.slideshow.macroEnabled.12</element>
-      <element>application/vnd.openxmlformats-officedocument.presentationml.presentation</element>
-      <element>application/vnd.openxmlformats-officedocument.presentationml.template</element>
-      <element>application/vnd.openxmlformats-officedocument.presentationml.slideshow</element>
-
-      <!-- MS Publisher -->
-      <element>application/x-mspublisher</element>
-
-      <!-- MS Word -->
-      <element>application/msword</element>
-      <element>application/vnd.ms-word.document.macroEnabled.12</element>
-      <element>application/vnd.ms-word.template.macroEnabled.12</element>
-      <element>application/vnd.openxmlformats-officedocument.wordprocessingml.document</element>
-      <element>application/vnd.openxmlformats-officedocument.wordprocessingml.template</element>
-
-      <!-- Apple Numbers -->
-      <element>application/x-iwork-numbers-sffnumbers</element>
-
-      <!-- Apple Keynote -->
-      <element>application/x-iwork-keynote-sffkey</element>
-
-      <!-- Apple Pages -->
-      <element>application/x-iwork-pages-sffpages</element>
-
-      <!-- Mindjet Mind Manager -->
-      <element>application/vnd.mindjet.mindmanager</element>
-
-    </value>
+    <value />
   </record>
-
+  <record
+      interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings"
+      field="officeconnector_editable_types_blacklist">
+    <field type="plone.registry.field.List">
+      <value_type type="plone.registry.field.TextLine" />
+    </field>
+    <value />
+  </record>
 
   <!-- OGDS -->
   <records interface="opengever.ogds.base.interfaces.IAdminUnitConfiguration" />

@@ -92,7 +92,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6/document-23',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6/document-25',
             u'download': u'download',
             u'filename': u'Uebersicht der Inaktiven Vertraege von 2016.xlsx',
             u'title': u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016',
@@ -139,7 +139,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'application/msword',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5/document-22',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5/document-24',
             u'download': u'download',
             u'filename': u'Uebersicht der Vertraege vor 2000.doc',
             u'title': u'\xdcbersicht der Vertr\xe4ge vor 2000',
@@ -206,7 +206,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-30',
+                                 u'dossier-1/task-1/document-32',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -268,7 +268,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-30',
+                                 u'dossier-1/task-1/document-32',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -330,7 +330,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-30',
+                                 u'dossier-1/task-1/document-32',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',

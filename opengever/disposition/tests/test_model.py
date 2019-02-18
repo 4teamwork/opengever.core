@@ -330,7 +330,7 @@ class TestFolderAndFileModel(IntegrationTestCase):
         # self.subsubdossier
         subsubdossier_model = subdossier_model.folders[0]
         self.assertEquals([], subsubdossier_model.folders)
-        self.assertEquals(0, len(subsubdossier_model.files))
+        self.assertEquals(1, len(subsubdossier_model.files))
 
         # self.subdossier2
         self.assertEquals([], subdossier2_model.folders)

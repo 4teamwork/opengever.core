@@ -574,20 +574,22 @@ Objects
         - self.dossier
           - self.document
           - self.draft_proposal
-          - self.empty_document
           - self.info_task
           - self.mail_eml
           - self.mail_msg
           - self.proposal
             - self.proposaldocument
+          - self.removed_document
           - self.sequential_task
             - self.seq_subtask_1
             - self.seq_subtask_2
             - self.seq_subtask_3
           - self.shadow_document
           - self.subdossier
+            - self.empty_document
             - self.subdocument
             - self.subsubdossier
+              - self.subsubdocument
           - self.subdossier2
           - self.task
             - self.subtask

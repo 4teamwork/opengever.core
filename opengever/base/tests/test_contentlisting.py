@@ -108,15 +108,9 @@ class TestOpengeverContentListing(IntegrationTestCase):
                 ).CroppedDescription(),
             )
 
-    def test_cropped_description_returns_empty_string_for_objs_without_description(self):  # noqa
+    def test_cropped_description_returns_empty_string_for_objs_without_description(self):
         self.login(self.regular_user)
-
-        self.assertEquals(
-            '',
-            IContentListingObject(
-                obj2brain(self.document),
-                ).CroppedDescription(),
-            )
+        self.assertEqual('', IContentListingObject(obj2brain(self.empty_document)).CroppedDescription())
 
     def test_is_document(self):
         self.login(self.regular_user)

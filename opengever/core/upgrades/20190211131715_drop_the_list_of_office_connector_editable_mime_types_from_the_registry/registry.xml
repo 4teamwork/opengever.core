@@ -1,0 +1,3 @@
+<registry>
+  <record name="opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types" remove="True" />
+</registry>
