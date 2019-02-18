@@ -48,6 +48,16 @@ class TestAssignTask(IntegrationTestCase):
         self.assertIsNone(browser.find('Transition'))
 
     @browsing
+    def test_responsible_is_mandatory(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, view='assign-task')
+        browser.click_on('Assign')
+
+        self.assertEqual([], info_messages())
+        errors = browser.css("#formfield-form-widgets-transition .error")
+        self.assertEqual(['Required input is missing.'], errors.text)
+
+    @browsing
     def test_updates_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 

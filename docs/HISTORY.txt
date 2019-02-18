@@ -8,6 +8,7 @@ Changelog
 - Lock dossier subtree during resolve transition. [lgraf]
 - Prevent dossiers from being resolved twice. [lgraf]
 - Fix subject-filter for personal overview. [elioschmutz]
+- Handle empty responsible field when assigning task. [njohner]
 - Add date string localization for sablon data. [njohner]
 - Fixed the REST API scan-in end point for organization units with non-ASCII in their titles. [Rotonen]
 - Set default language for task reminders. [njohner]
