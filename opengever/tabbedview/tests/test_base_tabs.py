@@ -78,6 +78,11 @@ class TestGeverTabMixin(IntegrationTestCase):
         listing_view = self.leaf_repofolder.restrictedTraverse(
             'tabbedview_view-dossiers')
 
-        self.assertIn(
-            'is_subdossier:False',
-            listing_view._subject_filter()._solr_filters())
+        listing_view.search_options = {
+            'option_1': 'foo',
+            'option_2': lambda x: 'bar'
+        }
+        filters = listing_view._subject_filter()._solr_filters()
+
+        self.assertIn('option_1:foo', filters)
+        self.assertIn('option_2:bar', filters)

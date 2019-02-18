@@ -163,8 +163,11 @@ class GeverTabMixin(object):
         if hasattr(self, 'object_provides') and self.object_provides:
             filters.append('object_provides:{}'.format(self.object_provides))
 
-        if hasattr(self, 'search_options'):
-            for option, value in self.search_options.items():
+        # `search_options` can contain functions as values. Using
+        # `_search_options` instead of `search_options` ensures that callables
+        # are called properly and we have the real value of the option.
+        if hasattr(self, '_search_options'):
+            for option, value in self._search_options.items():
                 filters.append('{}:{}'.format(option, str(value)))
 
         return filters
