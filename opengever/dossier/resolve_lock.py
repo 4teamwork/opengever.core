@@ -120,13 +120,6 @@ class ResolveLock(object):
         If a lock exists (somewhere) but is older than RESOLVE_LOCK_LIFETIME,
         it is considered expired and treated as if it wouldn't exist.
         """
-        if not recursive:
-            lockinfo = self.get_lockinfo(self.context)
-            if lockinfo is not None and not self.is_expired(lockinfo):
-                self.log("%s is resolve locked" % self.context)
-                return True
-            return False
-
         item = self.context
 
         while IDossierMarker.providedBy(item):
@@ -135,6 +128,10 @@ class ResolveLock(object):
             if lockinfo is not None and not self.is_expired(lockinfo):
                 self.log("%s is resolve locked via lock on %r" % (self.context, item))
                 return True
+
+            if not recursive:
+                return False
+
             item = aq_parent(item)
 
         return False
