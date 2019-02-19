@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-07 09:13+0000\n"
+"POT-Creation-Date: 2019-02-28 07:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -349,6 +349,8 @@ msgstr ""
 
 #. Default: "Ad hoc agendaitems"
 #: ./opengever/meeting/toc/dossier_refnum.py
+#: ./opengever/meeting/toc/repository.py
+#: ./opengever/meeting/toc/repository_refnum.py
 msgid "ad_hoc_toc_group_title"
 msgstr ""
 
@@ -435,6 +437,11 @@ msgstr ""
 #: ./opengever/meeting/browser/committeeforms.py
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
+msgstr ""
+
+#. Default: "Create protocol approval proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "button_create_protocol_approval_proposal"
 msgstr ""
 
 #. Default: "Create successor proposal"
@@ -1262,6 +1269,11 @@ msgstr ""
 #. Default: "Proposal template"
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_proposal_template"
+msgstr ""
+
+#. Default: "Approve protocol"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_protocol_approval"
 msgstr ""
 
 #. Default: "Protocol header template"

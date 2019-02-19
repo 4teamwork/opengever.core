@@ -320,6 +320,11 @@ class MeetingView(BrowserView):
         return document.render_link(title=self.get_protocol_document_label(),
                                     show_icon=False)
 
+    def get_protocol_document_uid(self):
+        protocol_document = self.get_protocol_document()
+        if protocol_document:
+            return protocol_document.uuid()
+
     def get_agendaitem_list_document(self):
         if self.model.agendaitem_list_document:
             return IContentListingObject(
@@ -362,6 +367,13 @@ class MeetingView(BrowserView):
             return GenerateAgendaItemList.url_for(self.model)
         else:
             return UpdateAgendaItemList.url_for(self.model)
+
+    def url_create_protocol_approval_proposal(self):
+        if self.has_protocol_document and not self.model.is_editable():
+            url = "{}/++add++opengever.meeting.proposal".format(
+                self.model.get_dossier().absolute_url())
+            return url
+        return None
 
     def render_handlebars_agendaitems_template(self):
         return prepare_handlebars_template(

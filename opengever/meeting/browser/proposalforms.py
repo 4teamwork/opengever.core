@@ -32,6 +32,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.i18n import translate
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 from zope.schema import Choice
@@ -196,6 +197,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         paths = self.request.get('paths', [])
         if paths:
             self.request.set('form.widgets.relatedItems', paths)
+        self.prefill_meeting_protocol_defaults()
         self.prefillPredecessorDefaults()
         self.prefill_issuer()
         return super(ProposalAddForm, self).update()
@@ -221,6 +223,26 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         ltool = api.portal.get_tool('portal_languages')
         if len(ltool.getSupportedLanguages()) <= 1:
             self.widgets['language'].mode = HIDDEN_MODE
+
+    def prefill_meeting_protocol_defaults(self):
+        if 'protocol' not in self.request.form:
+            # Either we are not creating a proposal from a meeting protocol,
+            # but a regular proposal, or form is already submitted.
+            # In both cases we don't want prefill defaults.
+            return
+        protocol_document = uuidToObject(self.request.form['protocol'])
+        meeting = protocol_document.get_parent_dossier().get_meeting()
+        related_items_paths = ['/'.join(protocol_document.getPhysicalPath())]
+
+        title = translate(_(u'label_protocol_approval', default=u'Approve protocol'),
+                          context=self.request)
+        defaults = {
+            'title': u"{} {}".format(title, safe_unicode(meeting.title)),
+            'committee': [unicode(meeting.committee_id)],
+            'relatedItems': related_items_paths}
+
+        for name, value in defaults.items():
+            self.request.form['form.widgets.' + name] = value
 
     def prefillPredecessorDefaults(self):
         """When we create a successor proposal, the defaults change to
