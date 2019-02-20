@@ -28,7 +28,7 @@ damit der Benutzende benachrichtigt wird, wenn ein Dossier überfällig wird.
 Dokument als PDF speichern
 --------------------------
 Ab diesem Release können bestehende Dokumente als PDF im gewünschten
-Ziel-Dossier/Position abgelegt werden.
+Ziel-Dossier abgelegt werden.
 
 |img-pdf-speichern-unter-1|
 

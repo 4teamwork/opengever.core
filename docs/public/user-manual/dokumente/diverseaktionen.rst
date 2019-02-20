@@ -208,13 +208,12 @@ werden.
 
 |img-pdf-speichern-unter-1|
 
-Darauf erscheint die Maske vom Bild unten. In dieser Maske kann ausgewählt
-werden, in welcher Ordnungsposition resp. Dossier das PDF abgespeichert werden
-soll.
+In der darauf erscheinenden Maske kann ausgewählt werden, in welcher
+Ordnungsposition resp. Dossier das PDF abgespeichert werden soll.
 
 |img-pdf-speichern-unter-2|
 
-Nachdem die Aktion mit *Speichern* abgeschlossen wird, wird das PDF
+Nachdem die Aktion mit *Speichern* abgeschlossen wurde, wird das PDF
 generiert. Ist dieser Vorgang vom System abgeschlossen, erscheint ein grüner
 Button, welcher direkt zum neuen PDF führt.
 
