@@ -17,7 +17,7 @@ Auch Aufgaben können via REST API bedient werden. Die Erstellung einer Aufgabe 
         "responsible": "john.doe",
         "issuer": "john.doe",
         "responsible_client": "afi",
-        "task_type": "direct-execution",
+        "task_type": "direct-execution"
       }
 
 
@@ -31,7 +31,7 @@ Auch Aufgaben können via REST API bedient werden. Die Erstellung einer Aufgabe 
       {
         "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5",
         "@type": "opengever.task.task",
-        "...": "...",
+        "...": "..."
       }
 
 
@@ -47,7 +47,7 @@ Ein GET Request auf den @workflow endpoint listet mögiche Transitions auf:
 
    .. sourcecode:: http
 
-      POST /(path)/@workflow/task-transition-open-in-progress HTTP/1.1
+      GET /(path)/@workflow HTTP/1.1
       Accept: application/json
 
 
@@ -117,7 +117,7 @@ Akzeptieren
 ~~~~~~~~~~~
 
 Transition IDs:
- - `task-transition-open-in-progress`
+ - ``task-transition-open-in-progress``
 
 Zusätzliche Metadaten:
 
@@ -130,7 +130,7 @@ Frist verlängern
 ~~~~~~~~~~~~~~~~
 
 Transition IDs:
- - `task-transition-modify-deadline`
+ - ``task-transition-modify-deadline``
 
 Zusätzliche Metadaten:
 
@@ -163,7 +163,7 @@ Neu zuweisen
 ~~~~~~~~~~~~
 
 Transition IDs:
- - `task-transition-reassign`
+ - ``task-transition-reassign``
 
 Zusätzliche Metadaten:
 
@@ -187,8 +187,8 @@ Erledigen
 ~~~~~~~~~
 
 Transition IDs:
- - `task-transition-in-progress-resolved`
- - `task-transition-open-resolved`
+ - ``task-transition-in-progress-resolved``
+ - ``task-transition-open-resolved``
 
 Zusätzliche Metadaten:
 
@@ -285,7 +285,7 @@ Zusätzliche Metadaten:
        :Datentyp: ``Text``
 
 
-Des weiteren stehen auch die Statuswechseln für sequentielle Aufgaben zur Verfügung:
+Des weiteren stehen auch die Statuswechsel für sequentielle Aufgaben zur Verfügung:
 
 
 Überspringen
