@@ -453,7 +453,7 @@ follow these steps:
 
 
 Versions in production
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 For production deployments, the ``versions.cfg`` of a tag can be included
 with a raw github url in buildout like this:
