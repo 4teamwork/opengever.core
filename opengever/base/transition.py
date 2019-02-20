@@ -1,7 +1,6 @@
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.interfaces import IFieldDeserializer
 from z3c.form.interfaces import IManagerValidator
-from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
@@ -44,8 +43,21 @@ class TransitionExtender(object):
     def after_transition_hook(self, transition, disable_sync, transition_params):
         pass
 
+    def validate_schema(self, transition_params):
+        """Validates the schema and collect the erros.
+        """
+        values, errors = self._deserialize_values(transition_params,
+                                                 collect_errors=True)
+        return errors
+
     def deserialize(self, transition_params):
-        validate_all = True
+        values, errors = self._deserialize_values(transition_params)
+        return values
+
+    def _deserialize_values(self, transition_params, collect_errors=False):
+        """Deserialize and validates the defined schema returns a values and
+        a list of errors.
+        """
         schema_data = {}
         errors = []
         values = {}
@@ -57,30 +69,33 @@ class TransitionExtender(object):
                 if name in transition_params:
                     # Deserialize to field value
                     deserializer = queryMultiAdapter(
-                        (field, self.context, getRequest()),
-                        IFieldDeserializer)
+                        (field, self.context, getRequest()), IFieldDeserializer)
                     if deserializer is None:
                         continue
 
                     try:
                         value = deserializer(transition_params[name])
                     except ValueError as e:
-                        errors.append({
-                            'message': e.message, 'field': name, 'error': e})
+                        if not collect_errors:
+                            raise
+                        errors.append({'message': e.message, 'field': name, 'error': e})
+
                     except ValidationError as e:
-                        errors.append({
-                            'message': e.doc(), 'field': name, 'error': e})
+                        if not collect_errors:
+                            raise
+                        errors.append({'message': e.doc(), 'field': name, 'error': e})
                     else:
                         field_data[name] = value
 
-                elif validate_all:
+                else:
                     field_data[name] = field.missing_value
 
                     try:
                         field.validate(field_data.get(name))
                     except ValidationError as e:
-                        errors.append({
-                            'message': e.doc(), 'field': name, 'error': e})
+                        if not collect_errors:
+                            raise
+                        errors.append({'message': e.doc(), 'field': name, 'error': e})
 
             values.update(field_data)
 
@@ -90,9 +105,9 @@ class TransitionExtender(object):
                 (self.context, getRequest(), None, schemata, None),
                 IManagerValidator)
             for error in validator.validate(field_data):
+                if not collect_errors:
+                    raise ValueError(error.message)
+
                 errors.append({'error': error, 'message': error.message})
 
-        if errors:
-            raise BadRequest(errors)
-
-        return values
+        return values, errors
