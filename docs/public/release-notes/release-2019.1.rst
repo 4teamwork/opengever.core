@@ -1,9 +1,9 @@
 OneGov GEVER Release 2019.1
 ===========================
 
-Durch den Release 2019.1 erhielt vor allem das Element «Dossier» neue
-Funktionalitäten: einen Schlagwortfilter für Dossierauflistungen und einen
-Filter sowie Benachrichtigungsmöglichkeit für überfällige Dossiers. Weiter
+Durch den Release 2019.1 hat vor allem das Element «Dossier» neue
+Funktionalitäten erhalten: einen Schlagwortfilter für Dossierauflistungen und einen
+Filter sowie Benachrichtigungsmöglichkeiten für überfällige Dossiers. Weiter
 wurde eine Vielzahl von Korrekturen eingespielt sowie generelle Verbesserungen
 vorgenommen.
 
@@ -24,6 +24,15 @@ damit der Benutzende benachrichtigt wird, wenn ein Dossier überfällig wird.
 
 |img-benachrichtigungs-einstellungen-5|
 
+
+Dokument als PDF speichern
+--------------------------
+Ab diesem Release können bestehende Dokumente als PDF im gewünschten
+Ziel-Dossier/Position abgelegt werden.
+
+|img-pdf-speichern-unter-1|
+
+
 Diverse Verbesserungen:
 -----------------------
 
@@ -31,9 +40,9 @@ Diverse Verbesserungen:
 
 -	Berechtigungen werden beim Kopieren von Inhalten übernommen
 
--	Aufgaben werden beim Koiper-Vorgang nicht mitkopiert
+-	Aufgaben werden beim Kopieren von Inhalten nicht übernommen
 
--	Performanceverbesserung beim OfficeConnector
+-	Performanceverbesserung beim Office Connector
 
 -	Verbesserte Darstellung der Beschreibung in der Dokumentvorschau
 
@@ -46,11 +55,11 @@ Diverse Verbesserungen:
 Sitzungs- und Protokollverwaltung (SPV):
 ----------------------------------------
 
-- Die Beschreibung für Traktanden stehen im Inhaltsverzeichnis neu zur Verfügung
+- Die Beschreibung für Traktanden steht im Inhaltsverzeichnis neu zur Verfügung
 
 - Gremium: Die hinterlegten Vorlagen werden übersichtlicher dargestellt
 
-- Neue Inhaltsverzeichnis mit unterschiedlichen Gruppierungs-Möglichkeiten: 1.) Gruppierung nach Positionsnummer der Ursprungs-Ordnungsposition 2.) Gruppierung nach Aktenzeichen des Ursprungs-Dossiers
+- Neue Inhaltsverzeichnisse mit unterschiedlichen Gruppierungs-Möglichkeiten: 1.) Gruppierung nach Positionsnummer der Ursprungs-Ordnungsposition 2.) Gruppierung nach Aktenzeichen des Ursprungs-Dossiers
 
 - Abwesende Mitglieder können im Protokoll eingefügt werden
 
@@ -103,5 +112,6 @@ Bugfixes
 
 .. |img-release-notes-2019.1-1| image:: ../_static/img/img-release-notes-2019.1-1.png
 .. |img-benachrichtigungs-einstellungen-5| image:: ../user-manual/img/media/img-benachrichtigungs-einstellungen-5.png
+.. |img-pdf-speichern-unter-1| image:: ../user-manual/img/media/img-pdf-speichern-unter-1.png
 
 .. disqus::

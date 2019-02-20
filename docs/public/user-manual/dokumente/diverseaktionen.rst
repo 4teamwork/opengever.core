@@ -14,6 +14,8 @@ werden können:
 
 - ZIP-Export/Import
 
+- Ein bestehendes Dokument als PDF speichern
+
 Ein bestehendes Dokument einsehen (Lesemodus)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -198,6 +200,28 @@ Verfügung.
    den Windows-Explorer verpackt werden (rechte Maustaste > Senden an >
    ZIP-komprimierter Ordner)
 
+Dokument als PDF speichern
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ein bestehendes Dokument kann als PDF gespeichert werden. Dazu kann auf der
+Dokumentseite unter *Aktionen* die Auswahl *PDF speichern unter* angewählt
+werden.
+
+|img-pdf-speichern-unter-1|
+
+Darauf erscheint die Maske vom Bild unten. In dieser Maske kann ausgewählt
+werden, in welcher Ordnungsposition resp. Dossier das PDF abgespeichert werden
+soll.
+
+|img-pdf-speichern-unter-2|
+
+Nachdem die Aktion mit *Speichern* abgeschlossen wird, wird das PDF
+generiert. Ist dieser Vorgang vom System abgeschlossen, erscheint ein grüner
+Button, welcher direkt zum neuen PDF führt.
+
+|img-pdf-speichern-unter-3|
+
+|img-pdf-speichern-unter-4|
+
 .. |img-dokumente-18| image:: ../img/media/img-dokumente-18.png
 .. |img-dokumente-19| image:: ../img/media/img-dokumente-19.png
 .. |img-dokumente-20| image:: ../img/media/img-dokumente-20.png
@@ -208,5 +232,9 @@ Verfügung.
 .. |img-dokumente-25| image:: ../img/media/img-dokumente-25.png
 .. |img-dokumente-26| image:: ../img/media/img-dokumente-26.png
 .. |img-dokumente-34| image:: ../img/media/img-dokumente-34.png
+.. |img-pdf-speichern-unter-1| image:: ../img/media/img-pdf-speichern-unter-1.png
+.. |img-pdf-speichern-unter-2| image:: ../img/media/img-pdf-speichern-unter-2.png
+.. |img-pdf-speichern-unter-3| image:: ../img/media/img-pdf-speichern-unter-3.png
+.. |img-pdf-speichern-unter-4| image:: ../img/media/img-pdf-speichern-unter-4.png
 
 .. disqus::
