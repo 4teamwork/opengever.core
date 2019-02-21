@@ -7,14 +7,19 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
+from opengever.document.behaviors import IBaseDocument
 from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.protect import createToken
 from plone.protect.interfaces import IDisableCSRFProtection
 from zope.component import adapter
+from zope.event import notify
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import Invalid
+from zope.lifecycleevent import ObjectModifiedEvent
+import json
 import mimetypes
 import os
 import transaction
@@ -60,8 +65,21 @@ class OGQuickUploadFile(QuickUploadFile):
         if token:
             self.request.form['_authenticator'] = token
 
-        result = super(OGQuickUploadFile, self).quick_upload_file()
-        self.request.response.setHeader('Content-Type', 'application/json')
+        try:
+            result = super(OGQuickUploadFile, self).quick_upload_file()
+            self.request.response.setHeader('Content-Type', 'application/json')
+
+            parsed_result = json.loads(result)
+            if parsed_result.get('success'):
+                # We're updating a document-ish in-place
+                if IBaseDocument.providedBy(self.context):
+                    notify(ObjectModifiedEvent(self.context))
+
+        except Invalid as exc:
+            # The error response aborts the transaction for us
+            msg = translate(exc.message, context=self.context.REQUEST)
+            return self._error_response(msg)
+
         return result
 
 
@@ -88,11 +106,15 @@ class OGQuickUploadCapableFileFactory(object):
         try:
             obj = command.execute()
         except ForbiddenByQuota as exc:
-            # this is an error, we must not commit
+            # This is an error, we abort the transaction
             transaction.abort()
-            return {'error': translate(exc.message,
-                                       context=self.context.REQUEST),
-                    'success': None}
+            msg = translate(exc.message, context=self.context.REQUEST)
+            return {'error': msg, 'success': None}
+        except Invalid as exc:
+            # This is an error, we abort the transaction
+            transaction.abort()
+            msg = translate(exc.message, context=self.context.REQUEST)
+            return {'error': msg, 'success': None}
 
         result = {'success': obj}
         return result
