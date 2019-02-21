@@ -8,6 +8,5 @@ Inhalt:
 
    list.rst
    insert.rst
-   autoupdate.rst
 
 .. disqus::
