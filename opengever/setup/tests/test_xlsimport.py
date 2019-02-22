@@ -97,3 +97,8 @@ class TextXLSImport(TestCase):
     def test_responsible_org_unit_is_imported(self):
         self.assertEquals('EinAmt',
                           self.source[1]['responsible_org_unit'])
+
+    def test_block_inheritance_mapping(self):
+        self.assertEquals(self.source[0]['block_inheritance'], True)
+        self.assertEquals(self.source[1]['block_inheritance'], False)
+        self.assertEquals(self.source[2]['block_inheritance'], True)

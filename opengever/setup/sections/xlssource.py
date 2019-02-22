@@ -34,11 +34,14 @@ ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
                           u'Auswahl archivw\xfcrdig': u'archival worthy with sampling',
                           }
 
+BLOCK_INHERITANCE_MAPPING = {u'ja': True,
+                             u'nein': False}
 
 MAPPED_FIELDS = {'archival_value': ARCHIVAL_VALUE_MAPPING,
                  'classification': CLASSIFICATION_MAPPING,
                  'privacy_layer': PRIVACY_LAYER_MAPPING,
                  'public_trial': PUBLIC_TRIAL_MAPPING,
+                 'block_inheritance': BLOCK_INHERITANCE_MAPPING
                  }
 
 
@@ -120,6 +123,7 @@ class XlsSource(object):
                        'retention_period',
                        'custody_period',
                        'archival_value',
+                       'block_inheritance',
                        ) and cell in (None, '', u''):
                 continue
 
