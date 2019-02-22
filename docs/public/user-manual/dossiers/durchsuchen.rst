@@ -18,7 +18,7 @@ durchsucht werden.
 |img-dossier-durchsuchen-0|
 
 
-Dursuchen mittels Schlagworten
+Durchsuchen mittels Schlagworten
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ein Dossier kann auch mittels Schlagworte durchsucht werden. Dazu kann im unten
 rot markierten Bereich das gewünschte Schlagwort eingegeben werden.
