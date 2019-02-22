@@ -32,19 +32,33 @@ gelöscht und somit auf den GEVER Standard zurück gesetzt werden.
 
 |img-benachrichtigungs-einstellungen-4|
 
-Benachrichtigungen für Dossiers, Weiterleitungen, Erinnerungen und Anträge
+Benachrichtigungen für Weiterleitungen, Erinnerungen und Anträge
 --------------------------------------------------------------------------
-Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Dossiers*,
-*Weiterleitungen*, *Erinnerungen* sowie *Anträge* die Benachrichtigungen für
-diese Aktivitäten eingestellt werden.
+Analog den Benachrichtigungen für Aufgaben, kann in den Tabs *Weiterleitungen*,
+*Erinnerungen* sowie *Anträge* die Benachrichtigungen für diese Aktivitäten
+eingestellt werden.
 
 |img-benachrichtigungs-einstellungen-5|
+
+Benachrichtigung für Dossiers
+-----------------------------
+Um eine Benachrichtigung für überfälliges Dossiers zu erstellen, müssen
+zwei Schritte beachtet werden:
+
+1. Enddatum beim Dossier setzen
+
+|img-benachrichtigungs-einstellungen-6|
+
+2. Benachrichtigung in Tab *Dossiers* setzen
+
+|img-benachrichtigungs-einstellungen-7|
 
 .. |img-benachrichtigungs-einstellungen-1| image:: img/media/img-benachrichtigungs-einstellungen-1.png
 .. |img-benachrichtigungs-einstellungen-2| image:: img/media/img-benachrichtigungs-einstellungen-2.png
 .. |img-benachrichtigungs-einstellungen-3| image:: img/media/img-benachrichtigungs-einstellungen-3.png
 .. |img-benachrichtigungs-einstellungen-4| image:: img/media/img-benachrichtigungs-einstellungen-4.png
 .. |img-benachrichtigungs-einstellungen-5| image:: img/media/img-benachrichtigungs-einstellungen-5.png
-
+.. |img-benachrichtigungs-einstellungen-6| image:: img/media/img-benachrichtigungs-einstellungen-6.png
+.. |img-benachrichtigungs-einstellungen-7| image:: img/media/img-benachrichtigungs-einstellungen-7.png
 
 .. disqus::
