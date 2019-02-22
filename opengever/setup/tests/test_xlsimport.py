@@ -77,6 +77,8 @@ class TextXLSImport(TestCase):
     def test_archival_value_mapping(self):
         self.assertEquals('unchecked', self.source[0]['archival_value'])
         self.assertEquals('prompt', self.source[1]['archival_value'])
+
+    def test_mapping_handles_values_that_are_already_valid_terms(self):
         self.assertEquals('archival worthy', self.source[2]['archival_value'])
 
     def test_classification_mapping(self):
