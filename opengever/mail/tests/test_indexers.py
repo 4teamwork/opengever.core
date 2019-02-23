@@ -56,7 +56,7 @@ class TestMailIndexers(IntegrationTestCase):
     def test_reference_number(self):
         self.login(self.regular_user)
         extender = getAdapter(self.mail_eml, IDynamicTextIndexExtender, u'IDocumentSchema')
-        self.assertEqual('Client1 1.1 / 1 / 29 29', extender())
+        self.assertEqual('Client1 1.1 / 1 / 30 30', extender())
 
     def test_file_extension_uses_extension_of_original_message_if_exists(self):
         self.login(self.regular_user)

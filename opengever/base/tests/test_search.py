@@ -111,7 +111,7 @@ class TestBumblebeePreview(IntegrationTestCase):
         number_of_documents = browser.css(
             '#search-results .searchResults').first.attrib.get('data-number-of-documents')
         self.assertEqual(
-            1, int(number_of_documents),
+            2, int(number_of_documents),
             'The number_of_documents data should be set to the amount of'
             'of found bumblebeeable objects.')
 

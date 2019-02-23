@@ -27,6 +27,6 @@ class TestDocumentsTab(IntegrationTestCase):
 
         expected_url = (
             'http://nohost/plone/ordnungssystem/fuhrung'
-            '/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22'
+            '/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-23'
         )
         self.assertEqual(expected_url, items.first.get('href'))

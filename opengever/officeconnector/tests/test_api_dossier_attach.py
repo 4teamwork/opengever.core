@@ -92,7 +92,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6/document-27',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6/document-28',
             u'download': u'download',
             u'filename': u'Uebersicht der Inaktiven Vertraege von 2016.xlsx',
             u'title': u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016',
@@ -100,7 +100,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
         file_contents = self.download_document(browser, raw_token, payloads[0])
         self.assertEquals(file_contents, self.inactive_document.file.data)
@@ -139,7 +139,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'application/msword',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5/document-26',
+            u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5/document-27',
             u'download': u'download',
             u'filename': u'Uebersicht der Vertraege vor 2000.doc',
             u'title': u'\xdcbersicht der Vertr\xe4ge vor 2000',
@@ -147,7 +147,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
         file_contents = self.download_document(browser, raw_token, payloads[0])
         self.assertEquals(file_contents, self.expired_document.file.data)
@@ -206,7 +206,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-35',
+                                 u'dossier-1/task-1/document-36',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -214,7 +214,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
     @browsing
     def test_attach_many_to_email_inactive(self, browser):
@@ -268,7 +268,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-35',
+                                 u'dossier-1/task-1/document-36',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -276,7 +276,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
     @browsing
     def test_attach_many_to_email_resolved(self, browser):
@@ -330,7 +330,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-35',
+                                 u'dossier-1/task-1/document-36',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -338,7 +338,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertEqual(expected_payloads, payloads)
 
     @browsing
     def test_checkout_checkin_open_without_file(self, browser):

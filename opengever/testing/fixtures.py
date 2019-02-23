@@ -1030,13 +1030,23 @@ class OpengeverContentFixture(object):
                     )
                 ))
 
-            self.register('draft_proposal', create(
+            draftproposal = self.register('draft_proposal', create(
                 Builder('proposal')
                 .within(self.dossier)
                 .having(
                     title=u'Antrag f\xfcr Kreiselbau',
                     committee=self.empty_committee.load_model(),
                     issuer=self.dossier_responsible.getId(),
+                    )
+                ))
+
+            self.register('draftproposaldocument', create(
+                Builder('document')
+                .within(draftproposal)
+                .titled(u'Antrag f\xfcr Kreiselbau - Kommentar')
+                .attach_file_containing(
+                    'Komentar text',
+                    u'vertr\xe4g sentwurf.docx',
                     )
                 ))
 

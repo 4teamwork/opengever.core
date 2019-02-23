@@ -575,6 +575,7 @@ Objects
         - self.dossier
           - self.document
           - self.draft_proposal
+            - self.draftproposaldocument
           - self.inbox_task
           - self.info_task
           - self.mail_eml

@@ -45,8 +45,8 @@ class TestDocumentReporter(IntegrationTestCase):
             [cell.value for cell in list(workbook.active.rows)[1]])
 
         self.assertSequenceEqual(
-            [u'Client1 1.1 / 1 / 29',
-             29L,
+            [u'Client1 1.1 / 1 / 30',
+             30L,
              u'Die B\xfcrgschaft',
              u'Freddy H\xf6lderlin <from@example.org>',
              u'Jan 01, 1999',
@@ -71,7 +71,8 @@ class TestDocumentReporter(IntegrationTestCase):
                  {u'width': 110, u'sortable': True, u'id': u'document_date'},
                  {u'width': 110, u'hidden': True, u'sortable': True, u'id': u'changed'},
                  {u'width': 110, u'hidden': True, u'sortable': True, u'id': u'created'},
-                 {u'width': 110, u'sortable': True, u'id': u'receipt_date'}, {u'width': 110, u'sortable': True, u'id': u'delivery_date'},
+                 {u'width': 110, u'sortable': True, u'id': u'receipt_date'},
+                 {u'width': 110, u'sortable': True, u'id': u'delivery_date'},
                  {u'width': 110, u'sortable': True, u'id': u'checked_out'},
                  {u'width': 110, u'sortable': True, u'hidden': True, u'id': u'public_trial'},
                  {u'width': 110, u'sortable': True, u'id': u'reference'},

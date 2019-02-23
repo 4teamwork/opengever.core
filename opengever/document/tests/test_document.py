@@ -308,11 +308,11 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         today = now.date()
         browser.open(self.dossier)
 
-        with freeze(now):
+        with freeze(now), self.observe_children(self.dossier) as children:
             factoriesmenu.add('Document')
             browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-41']
+        document = children.get('added').pop()
         self.assertEqual(today, document.document_date)
 
     @browsing
@@ -321,10 +321,11 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
 
-        factoriesmenu.add('Document')
-        browser.fill({'Title': u'My Document', 'File': ('DATA', 'file.txt', 'text/plain')}).save()
+        with self.observe_children(self.dossier) as children:
+            factoriesmenu.add('Document')
+            browser.fill({'Title': u'My Document', 'File': ('DATA', 'file.txt', 'text/plain')}).save()
 
-        document = self.dossier['document-41']
+        document = children.get('added').pop()
         self.assertFalse(document.preserved_as_paper)
 
     @browsing
@@ -333,10 +334,11 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
 
-        factoriesmenu.add('Document')
-        browser.fill({'Title': u'My Document'}).save()
+        with self.observe_children(self.dossier) as children:
+            factoriesmenu.add('Document')
+            browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-41']
+        document = children.get('added').pop()
         self.assertTrue(document.preserved_as_paper)
 
 
