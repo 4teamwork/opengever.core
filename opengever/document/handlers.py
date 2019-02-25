@@ -5,11 +5,13 @@ from opengever.base.sentry import log_msg_to_sentry
 from opengever.document import _
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.dossier.docprops import DocPropertyWriter
+from opengever.meeting.proposaltemplate import IProposalTemplate
 from traceback import format_exc
 from zope.interface import Invalid
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 import logging
+import os.path
 
 
 DISABLE_DOCPROPERTY_UPDATE_FLAG = 'disable_docproperty_update'
@@ -121,3 +123,19 @@ def reject_empty_files(doc, event):
                 default=u'Empty files are not allowed.',
             ))
 
+
+def reject_non_docx_files_on_proposals(doc, event):
+    """Prevent proposals from being created/modified with an unsuitable file.
+
+    Catches modifications via form or quickupload.
+    """
+    file_ = getattr(doc, 'file', None)
+    if file_:
+        inside_a_proposal = getattr(doc, 'is_inside_a_proposal', lambda: False)()
+        is_a_propsal_template = IProposalTemplate.providedBy(doc)
+        if inside_a_proposal or is_a_propsal_template:
+            if not os.path.splitext(file_.filename)[1].lower() == '.docx':
+                raise Invalid(_(
+                    u'error_proposal_document_type',
+                    default=(u"It's not possible to have non-.docx documents as proposal documents.")
+                ))

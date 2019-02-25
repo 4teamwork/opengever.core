@@ -194,7 +194,8 @@ class TestCommittee(IntegrationTestCase):
         with self.login(self.administrator):
             create(Builder('proposaltemplate')
                    .titled(u'Baubewilligung')
-                   .within(self.templates))
+                   .within(self.templates)
+                   .with_asset_file('vertragsentwurf.docx'))
 
         self.login(self.committee_responsible, browser)
         self.assertFalse(self.committee.allowed_proposal_templates)
@@ -390,7 +391,8 @@ class TestCommitteeWorkflow(IntegrationTestCase):
         with self.login(self.administrator):
             create(Builder('proposaltemplate')
                    .titled(u'Baubewilligung')
-                   .within(self.templates))
+                   .within(self.templates)
+                   .with_asset_file('vertragsentwurf.docx'))
 
         self.login(self.committee_responsible, browser)
         self.assertFalse(self.committee.allowed_proposal_templates)

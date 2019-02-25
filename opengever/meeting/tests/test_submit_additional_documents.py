@@ -144,7 +144,7 @@ class TestSubmitAdditionalDocumentsIntegration(IntegrationTestCase):
     @browsing
     def test_update_existing_document_version_by_clicking_on_update_link(self, browser):
         self.login(self.meeting_user, browser)
-        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        self.document.file = NamedBlobFile(data='New', filename=u'test.docx')
         api.portal.get_tool('portal_repository').save(self.document)
         browser.open(self.proposal, view='tabbedview_view-overview')
         browser.find('Update document in proposal').click()

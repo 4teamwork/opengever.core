@@ -30,6 +30,17 @@ class TestDocumentQuickupload(IntegrationTestCase):
                .with_data('NEW DATA'))
         self.assertEquals('NEW DATA', self.document.file.data)
 
+    def test_can_update_proposal_document(self):
+        self.login(self.regular_user)
+        original_filename = self.draftproposaldocument.file.filename
+        self.checkout_document(self.draftproposaldocument)
+        create(Builder('quickuploaded_document')
+               .within(self.draftproposaldocument)
+               .with_data('NEW DATA', filename='new.docx'))
+        self.assertEqual('NEW DATA', self.draftproposaldocument.file.data)
+        self.assertEqual(
+            original_filename, self.draftproposaldocument.file.filename)
+
     def test_empty_file_is_rejected(self):
         self.login(self.regular_user)
         self.checkout_document(self.document)
@@ -46,3 +57,12 @@ class TestDocumentQuickupload(IntegrationTestCase):
                .within(self.document)
                .with_data('NEW DATA', filename='test.pdf'))
         self.assertEquals('Vertraegsentwurf.pdf', self.document.file.filename)
+
+    def test_non_docx_file_is_rejected_on_proposal_document(self):
+        self.login(self.regular_user)
+        original_data = self.draftproposaldocument.file.data
+        self.checkout_document(self.draftproposaldocument)
+        create(Builder('quickuploaded_document')
+               .within(self.draftproposaldocument)
+               .with_data('NEW DATA', filename='test.pdf'))
+        self.assertEqual(original_data, self.draftproposaldocument.file.data)

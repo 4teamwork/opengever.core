@@ -844,7 +844,10 @@ class TestProposal(IntegrationTestCase):
 
     def test_submit_new_document_version_updates_submitted_document(self):
         self.login(self.administrator)
-        ori_document = self.subdocument
+        ori_document = create(Builder('document')
+                              .within(self.dossier)
+                              .titled(u'Pr\xf6p\xf6s\xe4l.')
+                              .with_asset_file('vertragsentwurf.docx'))
         with self.observe_children(self.submitted_proposal) as children:
             with self.login(self.dossier_responsible):
                 self.proposal.submit_additional_document(ori_document)

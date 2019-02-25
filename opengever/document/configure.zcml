@@ -227,6 +227,18 @@
 
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".handlers.reject_non_docx_files_on_proposals"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reject_non_docx_files_on_proposals"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler=".subscribers.set_copyname"
       />

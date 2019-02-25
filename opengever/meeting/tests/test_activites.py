@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.activity.model import Activity
@@ -230,7 +232,10 @@ class TestMeetingActivities(IntegrationTestCase):
         committee_group_id = self.committee.load_model().group_id
         rtool = api.portal.get_tool('portal_repository')
 
-        document = self.subdocument
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .titled(u'Pr\xf6p\xf6s\xe4l.')
+                          .with_asset_file('vertragsentwurf.docx'))
 
         proposal = self.create_proposal_with_issuer(
             self.dossier_responsible, self.committee, browser)

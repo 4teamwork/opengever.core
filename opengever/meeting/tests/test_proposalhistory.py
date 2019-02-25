@@ -236,7 +236,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
     @browsing
     def test_updating_existing_document_creates_history_entry(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file = NamedBlobFile('New', filename=u'test.txt')
+        self.document.file = NamedBlobFile('New', filename=u'test.docx')
         repository = api.portal.get_tool('portal_repository')
         repository.save(self.document)
         browser.open(self.proposal)

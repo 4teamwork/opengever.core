@@ -193,7 +193,9 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
         Versioner(document_a).create_initial_version()
 
         create(Builder('document').within(dossier_a).relate_to(document_a))
-        create(Builder('proposaltemplate').relate_to(document_a))
+        create(Builder('proposaltemplate')
+               .relate_to(document_a)
+               .with_asset_file(u'vertragsentwurf.docx'))
 
         create(Builder('task').within(dossier_a).relate_to([document_a]))
         create(Builder('forwarding').within(dossier_a).relate_to([document_a]))

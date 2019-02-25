@@ -90,7 +90,8 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
         baubewilligungen = create(
             Builder('proposaltemplate')
             .titled(u'Baubewilligung')
-            .within(self.templates))
+            .within(self.templates)
+            .with_asset_file('vertragsentwurf.docx'))
 
         factory = getUtility(
             IVocabularyFactory,
@@ -107,7 +108,8 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
         baubewilligungen = create(
             Builder('proposaltemplate')
             .titled(u'Baubewilligung')
-            .within(self.templates))
+            .within(self.templates)
+            .with_asset_file('vertragsentwurf.docx'))
 
         factory = getUtility(
             IVocabularyFactory,
@@ -145,4 +147,3 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
              self.ad_hoc_agenda_item_template,
              self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
-
