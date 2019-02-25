@@ -82,6 +82,11 @@
   justify-content: normal;
 }
 
+.LSRow .dropdown-list-item-content {
+  line-height: 22px;
+  display: inline-block;
+}
+
 .dropdown-list-item
 #opengever_meeting_meeting, #opengever_meeting_protocol, .template-add-membership {
   .list-group {
