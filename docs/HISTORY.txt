@@ -5,11 +5,11 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
-- Add *.vsdx to the base list of OC-editable types.
-  [lgraf]
+- Add *.vsdx to the base list of OC-editable types. [lgraf]
 - Fix handling of valid terms in repository tree xlsx file. [njohner]
 - Handle translations for block_inheritance in repository xlsx file. [njohner]
 - Set default language for dossier overdue activity. [njohner]
+- Fix display issue for livesearch rsults. [deiferni]
 
 
 2019.1.0 (2019-02-19)

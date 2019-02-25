@@ -2626,6 +2626,8 @@ readers do not read off random characters that represent icons */
 
 .LSResult .dropdown-list-item { justify-content: normal; }
 
+.LSRow .dropdown-list-item-content { line-height: 22px; display: inline-block; }
+
 .dropdown-list-item #opengever_meeting_meeting .list-group, #opengever_meeting_protocol .list-group, .template-add-membership .list-group { list-style: none; padding-left: 0; margin: 0; border-radius: 2px; }
 .dropdown-list-item #opengever_meeting_meeting .list-group .list-group-item, #opengever_meeting_protocol .list-group .list-group-item, .template-add-membership .list-group .list-group-item { display: table; width: 100%; padding: 16px 18px; border: 1px solid #e6e6e6; border-bottom: none; box-sizing: border-box; }
 .dropdown-list-item #opengever_meeting_meeting .list-group .list-group-item, #opengever_meeting_protocol .list-group .list-group-item, .template-add-membership .list-group .list-group-item { *zoom: 1; }
