@@ -77,6 +77,8 @@ class TextXLSImport(TestCase):
     def test_archival_value_mapping(self):
         self.assertEquals('unchecked', self.source[0]['archival_value'])
         self.assertEquals('prompt', self.source[1]['archival_value'])
+
+    def test_mapping_handles_values_that_are_already_valid_terms(self):
         self.assertEquals('archival worthy', self.source[2]['archival_value'])
 
     def test_classification_mapping(self):
@@ -97,3 +99,8 @@ class TextXLSImport(TestCase):
     def test_responsible_org_unit_is_imported(self):
         self.assertEquals('EinAmt',
                           self.source[1]['responsible_org_unit'])
+
+    def test_block_inheritance_mapping(self):
+        self.assertEquals(self.source[0]['block_inheritance'], True)
+        self.assertEquals(self.source[1]['block_inheritance'], False)
+        self.assertEquals(self.source[2]['block_inheritance'], True)

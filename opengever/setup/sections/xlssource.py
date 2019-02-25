@@ -34,11 +34,14 @@ ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
                           u'Auswahl archivw\xfcrdig': u'archival worthy with sampling',
                           }
 
+BLOCK_INHERITANCE_MAPPING = {u'ja': True,
+                             u'nein': False}
 
 MAPPED_FIELDS = {'archival_value': ARCHIVAL_VALUE_MAPPING,
                  'classification': CLASSIFICATION_MAPPING,
                  'privacy_layer': PRIVACY_LAYER_MAPPING,
                  'public_trial': PUBLIC_TRIAL_MAPPING,
+                 'block_inheritance': BLOCK_INHERITANCE_MAPPING
                  }
 
 
@@ -120,6 +123,7 @@ class XlsSource(object):
                        'retention_period',
                        'custody_period',
                        'archival_value',
+                       'block_inheritance',
                        ) and cell in (None, '', u''):
                 continue
 
@@ -136,11 +140,9 @@ class XlsSource(object):
             if key in MAPPED_FIELDS.keys():
                 mapping = MAPPED_FIELDS[key]
 
-                # Data is already a valid term
-                if cell in mapping.values():
-                    continue
-
-                cell = mapping[cell]
+                # Data not already a valid term
+                if cell not in mapping.values():
+                    cell = mapping[cell]
 
             data[key] = cell
 
@@ -156,7 +158,6 @@ def xlrd_xls2array(path):
     """
     book = xlrd.open_workbook(path)
     sheets = []
-    formatter = lambda(t, v): format_excelval(book, t, v, False)
 
     for sheet_name in book.sheet_names():
         raw_sheet = book.sheet_by_name(sheet_name)
@@ -164,7 +165,8 @@ def xlrd_xls2array(path):
         for row in range(raw_sheet.nrows):
             (types, values) = (raw_sheet.row_types(row),
                                raw_sheet.row_values(row))
-            data.append(map(formatter, zip(types, values)))
+            data.append(map(lambda (t, v): format_excelval(book, t, v, False),
+                        zip(types, values)))
         sheets.append({'sheet_name': sheet_name, 'sheet_data': data})
     return sheets
 
@@ -184,11 +186,14 @@ def tupledate_to_isodate(tupledate):
     http://www.lexicon.net/sjmachin/xlrd.html
     """
     (y, m, d, hh, mm, ss) = tupledate
-    nonzero = lambda n: n != 0
+
+    def nonzero(n):
+        return n != 0
+
     date = "%04d-%02d-%02d" % (y, m, d) if filter(nonzero,
                                                   (y, m, d)) else ''
     time = "T%02d:%02d:%02d" % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) or not date else ''
-    return date+time
+    return date + time
 
 
 def format_excelval(book, type, value, wanttupledate):
