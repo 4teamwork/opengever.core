@@ -9,6 +9,7 @@ Changelog
   [lgraf]
 - Fix handling of valid terms in repository tree xlsx file. [njohner]
 - Handle translations for block_inheritance in repository xlsx file. [njohner]
+- Set default language for dossier overdue activity. [njohner]
 
 
 2019.1.0 (2019-02-19)

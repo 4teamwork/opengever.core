@@ -1,6 +1,7 @@
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.dossier.activities import DossierOverdueActivityGenerator
+from plone import api
 import logging
 import transaction
 
@@ -16,7 +17,17 @@ def generate_overdue_notifications_zopectl_handler(app, args):
     logger.setLevel(logging.INFO)
 
     for plone_site in all_plone_sites(app):
-        setup_plone(plone_site)
+        plone = setup_plone(plone_site)
+
+        # XXX This should not be necessary, but it seems that language negotiation
+        # fails somewhere down the line.
+        # Set up the language based on site wide preferred language. We do this
+        # so all the i18n and l10n machinery down the line uses the right language.
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang = lang_tool.getPreferredLanguage()
+        plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
+        plone.REQUEST.setupLocale()
+
         created = DossierOverdueActivityGenerator()()
         logger.info('Successfully created {} notifications'.format(created))
 
