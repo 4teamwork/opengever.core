@@ -56,6 +56,8 @@ def send_digest_zopectl_handler(app, args):
 
     plone = setup_plone(get_first_plone_site(app))
 
+    # XXX This should not be necessary, but it seems that language negotiation
+    # fails somewhere down the line.
     # Set up the language based on site wide preferred language. We do this
     # so all the i18n and l10n machinery down the line uses the right language.
     lang_tool = api.portal.get_tool('portal_languages')
