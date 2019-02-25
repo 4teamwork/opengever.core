@@ -39,6 +39,7 @@ EDITABLE_TYPES = [
     'application/x-mspublisher',
     # MS Visio
     'application/vnd.visio',
+    'application/vnd.ms-visio.drawing',
     # MS Word
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
