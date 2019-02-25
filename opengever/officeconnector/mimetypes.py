@@ -1,3 +1,6 @@
+from plone import api
+
+
 EDITABLE_TYPES = [
     # Adobe Illustrator
     'application/illustrator',
@@ -36,6 +39,7 @@ EDITABLE_TYPES = [
     'application/x-mspublisher',
     # MS Visio
     'application/vnd.visio',
+    'application/vnd.ms-visio.drawing',
     # MS Word
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -53,3 +57,25 @@ EDITABLE_TYPES = [
     'text/tab-separated-values',
     'text/xml',
 ]
+
+
+def get_editable_types():
+    """Return the full list of OC-editable mimetypes (lowercased).
+
+    This function compiles the final list based on the standard set from
+    EDITABLE_TYPES, plus/minus some customer-specific blacklisted / whitelisted
+    types defined in registry settings.
+    """
+    editable_mimetypes = set(type.lower() for type in EDITABLE_TYPES)
+
+    # Append extra MIME types from the registry
+    extra_mimetypes = set(type.lower() for type in api.portal.get_registry_record(
+        'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types_extra'))
+    editable_mimetypes.update(extra_mimetypes)
+
+    # Remove blacklisted-in-registry MIME types
+    blacklisted_mimetypes = set(type.lower() for type in api.portal.get_registry_record(
+        'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types_blacklist'))
+    editable_mimetypes.difference_update(blacklisted_mimetypes)
+
+    return editable_mimetypes

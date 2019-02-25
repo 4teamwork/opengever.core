@@ -17,7 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
-from opengever.officeconnector.mimetypes import EDITABLE_TYPES
+from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.task.task import ITask
 from plone import api
@@ -288,18 +288,7 @@ class Document(Item, BaseDocumentMixin):
         if self.file is None:
             return False
 
-        editable_mimetypes = set(type.lower() for type in EDITABLE_TYPES)
-
-        # Append extra MIME types from the registry
-        extra_mimetypes = set(type.lower() for type in api.portal.get_registry_record(
-            'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types_extra'))
-        editable_mimetypes.update(extra_mimetypes)
-
-        # Remove blacklisted-in-registry MIME types
-        blacklisted_mimetypes = set(type.lower() for type in api.portal.get_registry_record(
-            'opengever.officeconnector.interfaces.IOfficeConnectorSettings.officeconnector_editable_types_blacklist'))
-        editable_mimetypes.difference_update(blacklisted_mimetypes)
-
+        editable_mimetypes = get_editable_types()
         return self.content_type().lower() in editable_mimetypes
 
     def is_checkout_and_edit_available(self):
