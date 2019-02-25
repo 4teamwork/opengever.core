@@ -30,6 +30,15 @@ class TestDocumentQuickupload(IntegrationTestCase):
                .with_data('NEW DATA'))
         self.assertEquals('NEW DATA', self.document.file.data)
 
+    def test_empty_file_is_rejected(self):
+        self.login(self.regular_user)
+        self.checkout_document(self.document)
+        original_data = self.document.file.data
+        create(Builder('quickuploaded_document')
+               .within(self.document)
+               .with_data(''))
+        self.assertEqual(original_data, self.document.file.data)
+
     def test_uses_existing_filename_but_new_extension(self):
         self.login(self.regular_user)
         self.checkout_document(self.document)

@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from collective.quickupload.interfaces import IQuickUploadFileFactory
+from opengever.document.behaviors import IBaseDocument
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -7,10 +8,14 @@ from opengever.meeting.proposaltemplate import IProposalTemplate
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
+from zope.interface import Invalid
+from zope.lifecycleevent import ObjectModifiedEvent
 import os
+import transaction
 
 
 @implementer(IQuickUploadFileFactory)
@@ -41,9 +46,19 @@ class QuickUploadFileUpdater(object):
                     'success': None,
                     }
 
-        self.context.update_file(data,
-                                 content_type=content_type,
-                                 filename=self.get_file_name(filename))
+        try:
+            self.context.update_file(
+                data,
+                content_type=content_type,
+                filename=self.get_file_name(filename),
+            )
+            if IBaseDocument.providedBy(self.context):
+                notify(ObjectModifiedEvent(self.context))
+        except Invalid as exc:
+            # This is an error, we abort the transaction
+            transaction.abort()
+            msg = translate(exc.message, context=self.context.REQUEST)
+            return {'error': msg, 'success': None}
 
         return {'success': self.context}
 

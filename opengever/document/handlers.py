@@ -2,9 +2,11 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import log_msg_to_sentry
+from opengever.document import _
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.dossier.docprops import DocPropertyWriter
 from traceback import format_exc
+from zope.interface import Invalid
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 import logging
@@ -104,3 +106,18 @@ def _update_favorites_icon_class(context):
 
     for favorite in favorites_query.all():
         favorite.icon_class = get_css_class(context, for_user=favorite.userid)
+
+
+def reject_empty_files(doc, event):
+    """Prevent documents from being created/modified with an empty file.
+
+    Catches modifications via form, quickupload or mail extraction.
+    """
+    file_ = getattr(doc, 'file', None)
+    if file_:
+        if not file_.size:
+            raise Invalid(_(
+                u'error_empty_file',
+                default=u'Empty files are not allowed.',
+            ))
+

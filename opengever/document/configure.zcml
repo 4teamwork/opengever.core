@@ -215,6 +215,18 @@
 
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectCreatedEvent"
+      handler=".handlers.reject_empty_files"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.reject_empty_files"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler=".subscribers.set_copyname"
       />
