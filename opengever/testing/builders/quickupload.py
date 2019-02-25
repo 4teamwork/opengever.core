@@ -2,6 +2,7 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.builder import builder_registry
 from ftw.builder.builder import PloneObjectBuilder
 from opengever.testing import assets
+from zope.component import getAdapter
 import mimetypes
 import os
 
@@ -14,7 +15,7 @@ class QuickuploadMailBuilder(PloneObjectBuilder):
         self.filename = 'mail.eml'
 
     def create_object(self, **kwargs):
-        factory = IQuickUploadFileFactory(self.container)
+        factory = getAdapter(self.container, IQuickUploadFileFactory)
         assert factory, 'invalid container'
 
         result = factory(filename=self.filename,
@@ -47,7 +48,7 @@ class QuickuploadDocumentBuilder(PloneObjectBuilder):
         self.content_type = 'text/plain'
 
     def create_object(self, **kwargs):
-        factory = IQuickUploadFileFactory(self.container)
+        factory = getAdapter(self.container, IQuickUploadFileFactory)
         assert factory, 'invalid container'
 
         result = factory(filename=self.filename,
@@ -56,6 +57,7 @@ class QuickuploadDocumentBuilder(PloneObjectBuilder):
                          content_type=self.content_type,
                          data=self.data,
                          portal_type='opengever.document.document')
+
         return result['success']
 
     def with_data(self, data, filename=None, content_type=None):
