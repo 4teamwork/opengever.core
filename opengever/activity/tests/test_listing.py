@@ -7,6 +7,7 @@ from opengever.activity.model.notification import Notification
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.oguid import Oguid
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -120,3 +121,16 @@ class TestMyNotifications(IntegrationTestCase):
 
         browser.open(self.portal, view='tabbedview_view-mynotifications')
         self.assertEquals(3, len(browser.css('.listing').first.rows))
+
+    @browsing
+    def test_hide_system_actor_id(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.activity_2.actor_id = SYSTEM_ACTOR_ID
+
+        browser.open(self.portal, view='tabbedview_view-mynotifications')
+        self.assertEquals(
+            [u'Ziegler Robert (robert.ziegler)',
+             u'',
+             u'Ziegler Robert (robert.ziegler)'],
+            [row.get('Actor') for row in browser.css('.listing').first.dicts()])

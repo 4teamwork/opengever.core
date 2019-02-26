@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Hide system-actor in the my-notification listing. [phgross]
 - Add *.vsdx to the base list of OC-editable types. [lgraf]
 - Fix handling of valid terms in repository tree xlsx file. [njohner]
 - Handle translations for block_inheritance in repository xlsx file. [njohner]

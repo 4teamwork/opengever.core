@@ -1,5 +1,5 @@
 from opengever.activity import notification_center
-from opengever.activity import SYSTEM_ACTOR_ID
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from plone import api
 from zope.i18n import translate
 
