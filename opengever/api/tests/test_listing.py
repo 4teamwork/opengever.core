@@ -8,8 +8,16 @@ class TestListingEndpoint(IntegrationTestCase):
     @browsing
     def test_dossier_listing(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible_fullname&columns=relative_path&sort_on=created'
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=reference',
+            'columns=title',
+            'columns=review_state',
+            'columns=responsible_fullname',
+            'columns=relative_path',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
         browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -24,8 +32,18 @@ class TestListingEndpoint(IntegrationTestCase):
     @browsing
     def test_document_listing(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&columns=bumblebee_checksum&columns=relative_path&sort_on=created'
+        query_string = '&'.join((
+            'name=documents',
+            'columns=reference',
+            'columns=title',
+            'columns=modified',
+            'columns=document_author',
+            'columns=containing_dossier',
+            'columns=bumblebee_checksum',
+            'columns=relative_path',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
