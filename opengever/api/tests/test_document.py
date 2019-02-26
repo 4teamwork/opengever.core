@@ -17,6 +17,16 @@ class TestDocumentSerializer(IntegrationTestCase):
             u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
 
     @browsing
+    def test_document_serialization_contains_pdf_url(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json.get(u'pdf_url')[:120],
+            u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
+            u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf')
+
+    @browsing
     def test_document_serialization_contains_thumbnail_url(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, headers={'Accept': 'application/json'})
