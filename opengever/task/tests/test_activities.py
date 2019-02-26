@@ -5,13 +5,13 @@ from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
-from opengever.activity import SYSTEM_ACTOR_ID
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.model import Activity
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import FunctionalTestCase

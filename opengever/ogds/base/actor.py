@@ -37,6 +37,9 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
+SYSTEM_ACTOR_ID = '__system__'
+
+
 class Actor(object):
 
     css_class = 'actor-user'
@@ -136,6 +139,32 @@ class NullActor(object):
 
     def get_link(self, with_icon=False):
         return self.identifier or u''
+
+    def representatives(self):
+        return []
+
+
+class SystemActor(object):
+    """Used for system notifications, using the internal SYSTEM_ACTOR_ID.
+    """
+
+    def __init__(self, identifier):
+        if identifier != SYSTEM_ACTOR_ID:
+            raise ValueError('System actor use only for the SYSTEM_ACTOR_ID')
+
+        self.identifier = identifier
+
+    def corresponds_to(self, user):
+        return False
+
+    def get_profile_url(self):
+        return None
+
+    def get_label(self, with_principal=True):
+        return u''
+
+    def get_link(self, with_icon=False):
+        return u''
 
     def representatives(self):
         return []
@@ -307,6 +336,9 @@ class ActorLookup(object):
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
+    def is_system_actor(self):
+        return self.identifier == SYSTEM_ACTOR_ID
+
     def create_contact_actor(self, contact=None):
         if not contact:
 
@@ -350,9 +382,15 @@ class ActorLookup(object):
     def create_null_actor(self):
         return NullActor(self.identifier)
 
+    def create_system_actor(self):
+        return SystemActor(self.identifier)
+
     def lookup(self):
         if not self.identifier:
             return self.create_null_actor()
+
+        elif self.is_system_actor():
+            return self.create_system_actor()
 
         elif self.is_inbox():
             return self.create_inbox_actor()

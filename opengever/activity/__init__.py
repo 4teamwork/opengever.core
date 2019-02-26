@@ -8,6 +8,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.activity.mail import PloneNotificationMailer
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -18,7 +19,6 @@ import transaction
 
 logger = logging.getLogger('opengever.activity')
 
-SYSTEM_ACTOR_ID = '__system__'
 
 _ = MessageFactory("opengever.activity")
 
