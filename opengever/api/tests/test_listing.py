@@ -5,6 +5,8 @@ from opengever.testing import IntegrationTestCase
 
 class TestListingEndpoint(IntegrationTestCase):
 
+    features = ('bumblebee',)
+
     @browsing
     def test_dossier_listing(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -56,6 +58,23 @@ class TestListingEndpoint(IntegrationTestCase):
              u'bumblebee_checksum': DOCX_CHECKSUM,
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12'},
             browser.json['items'][-1])
+
+    @browsing
+    def test_document_listing_preview_url(self, browser):
+        self.login(self.regular_user, browser)
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=preview_url',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
+            '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview',
+            browser.json['items'][-1]['preview_url'][:124],
+        )
 
     @browsing
     def test_file_information(self, browser):
