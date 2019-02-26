@@ -101,6 +101,14 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return bumblebee.get_service_v3().get_representation_url(
             self.getDataOrigin(), 'thumbnail')
 
+    def get_preview_frame_url(self):
+        """Return the url to fetch the bumblebee preview HTML frame."""
+        if not self.is_bumblebeeable():
+            return None
+
+        return bumblebee.get_service_v3().get_representation_url(
+            self.getDataOrigin(), 'preview')
+
     def get_preview_pdf_url(self):
         """Return the url to fetch the bumblebee preview pdf."""
         if not self.is_bumblebeeable():
