@@ -77,6 +77,22 @@ class TestListingEndpoint(IntegrationTestCase):
         )
 
     @browsing
+    def test_document_listing_pdf_url(self, browser):
+        self.login(self.regular_user, browser)
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=pdf_url',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        self.assertEqual(
+            'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
+            '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf',
+            browser.json['items'][-1]['pdf_url'][:120],
+        )
+
+    @browsing
     def test_file_information(self, browser):
         self.login(self.regular_user, browser=browser)
 

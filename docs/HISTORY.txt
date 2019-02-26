@@ -5,7 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 
 
 2019.1.1 (2019-02-26)

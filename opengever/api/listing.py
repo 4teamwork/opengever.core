@@ -102,6 +102,7 @@ FIELDS = {
     'start': ('start', 'start', 'start'),
     'thumbnail_url': (None, 'get_preview_image_url', DEFAULT_SORT_INDEX),
     'preview_url': (None, 'get_preview_frame_url', DEFAULT_SORT_INDEX),
+    'pdf_url': (None, 'get_preview_pdf_url', DEFAULT_SORT_INDEX),
     'title': ('Title', translated_title, 'sortable_title'),
     'type': ('portal_type', 'PortalType', 'portal_type'),
     'filesize': (None, filesize, 'filesize'),
