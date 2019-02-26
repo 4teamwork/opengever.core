@@ -6,7 +6,7 @@ Changelog
 ---------------------
 
 - Hide system-actor in the my-notification listing. [phgross]
-- Add *.vsdx to the base list of OC-editable types. [lgraf]
+- Add `*.vsdx` to the base list of OC-editable types. [lgraf]
 - Fix handling of valid terms in repository tree xlsx file. [njohner]
 - Handle translations for block_inheritance in repository xlsx file. [njohner]
 - Set default language for dossier overdue activity. [njohner]

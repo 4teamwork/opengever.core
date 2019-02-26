@@ -1029,8 +1029,8 @@ Changing ports
 
 The ports used by the testserver can easily be changed through environment variables:
 
-- ``ZSERVER_PORT`` - the port of the GEVER http server (default: ``55001`)
-- ``TESTSERVER_CTL_PORT`` - the port of the XMLRPC control server (default: ``55002`).
+- ``ZSERVER_PORT`` - the port of the GEVER http server (default: ``55001``)
+- ``TESTSERVER_CTL_PORT`` - the port of the XMLRPC control server (default: ``55002``).
 
 
 Custom fixtures
