@@ -5,11 +5,21 @@ from opengever.testing import IntegrationTestCase
 
 class TestListingEndpoint(IntegrationTestCase):
 
+    features = ('bumblebee',)
+
     @browsing
     def test_dossier_listing(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        view = '@listing?name=dossiers&columns=reference&columns=title&columns=review_state&columns=responsible_fullname&columns=relative_path&sort_on=created'
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=reference',
+            'columns=title',
+            'columns=review_state',
+            'columns=responsible_fullname',
+            'columns=relative_path',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
         browser.open(self.repository_root, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -24,8 +34,18 @@ class TestListingEndpoint(IntegrationTestCase):
     @browsing
     def test_document_listing(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        view = '@listing?name=documents&columns=reference&columns=title&columns=modified&columns=document_author&columns=containing_dossier&columns=bumblebee_checksum&columns=relative_path&sort_on=created'
+        query_string = '&'.join((
+            'name=documents',
+            'columns=reference',
+            'columns=title',
+            'columns=modified',
+            'columns=document_author',
+            'columns=containing_dossier',
+            'columns=bumblebee_checksum',
+            'columns=relative_path',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -38,6 +58,39 @@ class TestListingEndpoint(IntegrationTestCase):
              u'bumblebee_checksum': DOCX_CHECKSUM,
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12'},
             browser.json['items'][-1])
+
+    @browsing
+    def test_document_listing_preview_url(self, browser):
+        self.login(self.regular_user, browser)
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=preview_url',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
+            '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview',
+            browser.json['items'][-1]['preview_url'][:124],
+        )
+
+    @browsing
+    def test_document_listing_pdf_url(self, browser):
+        self.login(self.regular_user, browser)
+        query_string = '&'.join((
+            'name=documents',
+            'columns:list=pdf_url',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
+        self.assertEqual(
+            'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local'
+            '/51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/pdf',
+            browser.json['items'][-1]['pdf_url'][:120],
+        )
 
     @browsing
     def test_file_information(self, browser):
