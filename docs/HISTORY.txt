@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 
 
