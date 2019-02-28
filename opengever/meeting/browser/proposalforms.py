@@ -198,7 +198,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         if paths:
             self.request.set('form.widgets.relatedItems', paths)
         self.prefill_meeting_protocol_defaults()
-        self.prefillPredecessorDefaults()
+        self.prefill_predecessor_defaults()
         self.prefill_issuer()
         return super(ProposalAddForm, self).update()
 
@@ -244,7 +244,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         for name, value in defaults.items():
             self.request.form['form.widgets.' + name] = value
 
-    def prefillPredecessorDefaults(self):
+    def prefill_predecessor_defaults(self):
         """When we create a successor proposal, the defaults change to
         be based on the predecessor.
         Since the relation widgets do not support changing values we must
