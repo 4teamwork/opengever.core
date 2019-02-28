@@ -7,6 +7,7 @@ Changelog
 
 - Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
+- Make sure all workflow IDs are unique. [njohner]
 
 
 2019.1.1 (2019-02-26)
