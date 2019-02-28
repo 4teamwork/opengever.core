@@ -120,3 +120,14 @@ class TestConfig(IntegrationTestCase):
         }
         oneoffixx_settings = browser.json.get('oneoffixx_settings')
         self.assertEqual(expected_oneoffixx_settings, oneoffixx_settings)
+
+    @browsing
+    def test_config_contains_sharing_configuration_white_and_black_lists(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+
+        browser.json.get(u'sharing_configuration')
+        self.assertEqual(browser.json.get(u'sharing_configuration'),
+                         {u'white_list_prefix': '^.+', u'black_list_prefix': '^$'})

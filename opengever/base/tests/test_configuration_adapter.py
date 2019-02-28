@@ -5,6 +5,7 @@ from pkg_resources import get_distribution
 
 
 class TestConfigurationAdapter(IntegrationTestCase):
+
     def test_configuration(self):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
@@ -18,6 +19,10 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('double_encode_bug', True),
                 ('cache_timeout', 2592000),
             ])),
+            ('sharing_configuration', OrderedDict([
+                ('white_list_prefix', u'^.+'),
+                ('black_list_prefix', u'^$'),
+                ])),
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),

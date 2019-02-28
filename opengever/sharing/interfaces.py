@@ -29,13 +29,13 @@ class ISharingConfiguration(Interface):
 
     white_list_prefix = schema.TextLine(
         title=u'white list prefix',
-        description=u'The prrefix pattern, for groups wich should displayed'
-        'in the sharing view, equal the black list prefix would also match.',
+        description=u'The prefix pattern for groups which should be displayed'
+        'in the sharing view, even if the black list prefix also matches.',
         default=u"^.+")
 
     black_list_prefix = schema.TextLine(
         title=u'black list prefix',
-        description=u"The prrefix pattern, for groups wich shouldn't be "
+        description=u"The prefix pattern for groups which shouldn't be "
         "displayed in the sharing view. For example another client group.",
         default=u"^$")
 
