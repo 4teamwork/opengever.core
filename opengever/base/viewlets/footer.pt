@@ -1,9 +1,9 @@
 <div id="ftw-footer" class="row">
     <div id="footer-column-1" class="column cell position-0 width-4">
         <h2>OneGov GEVER</h2>
-        <p><a href="https://onegovgever.ch">Über OneGov GEVER</a></p>
+        <p><a href="https://www.4teamwork.ch/loesungen/onegov-gever/">Über OneGov GEVER</a></p>
         <p><a href="https://github.com/4teamwork/opengever.core">Quellcode</a></p>
-        <p><a href="https://onegovgever.ch/aktuell">Release-Informationen</a></p>
+        <p><a href="https://docs.onegovgever.ch/release-notes/">Release-Informationen</a></p>
         <p>Version: <span tal:content="view/get_gever_version" /></p>
     </div>
 
