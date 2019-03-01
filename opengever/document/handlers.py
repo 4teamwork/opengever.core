@@ -6,6 +6,7 @@ from opengever.document import _
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.meeting.proposaltemplate import IProposalTemplate
+from openpyxl import load_workbook
 from traceback import format_exc
 from zope.interface import Invalid
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -138,4 +139,31 @@ def reject_non_docx_files_on_proposals(doc, event):
                 raise Invalid(_(
                     u'error_proposal_document_type',
                     default=(u"It's not possible to have non-.docx documents as proposal documents.")
+                ))
+
+
+def reject_shared_excel_files(doc, event):
+    """Prevent documents from being created/modified with a shared Excel file.
+
+    Catches modifications via form, quickupload or mail extraction.
+    """
+    file_ = getattr(doc, 'file', None)
+    if file_:
+        extension = os.path.splitext(file_.filename)[1].lower()
+        if extension == '.xlsx':
+            with file_._blob.open() as f:
+                try:
+                    wb = load_workbook(f)
+                except BadZipfile:
+                    raise Invalid(_(
+                        u'error_bad_excel',
+                        default=u'The file is not an XLSX file or is '
+                                u'otherwise broken.',
+                    ))
+
+            custom_views = getattr(wb, 'custom_views', ())
+            if any(getattr(v, 'personalView', False) for v in custom_views):
+                raise Invalid(_(
+                    u'error_shared_excel',
+                    default=u'Shared Excel files are not allowed.',
                 ))

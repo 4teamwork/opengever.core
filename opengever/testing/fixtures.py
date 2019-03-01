@@ -1088,7 +1088,7 @@ class OpengeverContentFixture(object):
             .within(subdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2016')
             .attach_file_containing(
-                'Excel dummy content',
+                assets.load('empty.xlsx'),
                 u'tab\xe4lle.xlsx',
             )
             .relate_to([self.document])
@@ -1109,7 +1109,7 @@ class OpengeverContentFixture(object):
             .within(subsubdossier)
             .titled(u'\xdcbersicht der Vertr\xe4ge von 2014')
             .attach_file_containing(
-                'Excel dummy content',
+                assets.load('empty.xlsx'),
                 u'tab\xe4lle neu.xlsx',
             )
             .relate_to([self.document, subdocument])
@@ -1387,8 +1387,11 @@ class OpengeverContentFixture(object):
             Builder('document')
             .within(self.inactive_dossier)
             .titled(u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016')
-            .attach_file_containing('Excel dummy content', u'tab\xe4lle.xlsx')
-            ))
+            .attach_file_containing(
+                assets.load('empty.xlsx'),
+                u'tab\xe4lle.xlsx',
+            )
+        ))
 
     @staticuid()
     def create_offered_dossiers(self):
