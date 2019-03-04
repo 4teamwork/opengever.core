@@ -39,7 +39,7 @@ Die Inhaltsstatistiken werden einmal pro Tag mittels dem
 
 .. code:: bash
 
-    # GEVER Demo: Dump content stats
+    # Dump content stats
     0 22 * * * /home/zope/server/01-gever.example.org/bin/dump-content-stats -s <plone_site_id> >/dev/null 2>&1
 
 
@@ -66,7 +66,7 @@ Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte s
 
 .. code:: bash
 
-    # GEVER Demo: Generate remind notifications
+    # Generate remind notifications
     0 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
 
 
@@ -85,7 +85,7 @@ Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführ
 
 .. code:: bash
 
-    # GEVER Demo: Generate notifications for overdue dossiers
+    # Generate notifications for overdue dossiers
     30 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
 
 **Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" berücksichtigt alle Org-Units (Plone-Sites) eines bestimmten Mandanten / Deployments. Dieser Job muss jedoch für jedes Deployment einzeln ausgeführt werden.
