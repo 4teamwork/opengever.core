@@ -1,7 +1,6 @@
 from opengever.inbox import _
 from opengever.task import _ as task_mf
-from opengever.task.interfaces import IYearfolderStorer
-from opengever.task.util import change_task_workflow_state
+from plone import api
 from plone.supermodel import model
 from plone.z3cform import layout
 from z3c.form import button
@@ -37,16 +36,11 @@ class ForwardingCloseForm(Form):
 
         data, errors = self.extractData()
         if not errors:
+            wftool = api.portal.get_tool('portal_workflow')
+            wftool.doActionFor(self.context, 'forwarding-transition-close',
+                               transition_params=data)
 
-            # close and store the forwarding in yearfolder
-            change_task_workflow_state(
-                self.context,
-                'forwarding-transition-close',
-                text=data.get('text'))
-
-            IYearfolderStorer(self.context).store_in_yearfolder()
-
-            return self.request.RESPONSE.redirect('.')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     @button.buttonAndHandler(task_mf(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

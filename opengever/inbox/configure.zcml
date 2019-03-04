@@ -71,4 +71,24 @@
       handler=".forwarding.set_dates"
       />
 
+  <adapter
+      factory=".transition.ForwardingCloseTransitionExtender"
+      name="forwarding-transition-close"
+      />
+
+  <adapter
+      factory=".transition.ForwardingAssignToDossierTransitionExtender"
+      name="forwarding-transition-assign-to-dossier"
+      />
+
+  <adapter
+      factory=".transition.ForwardingReassignTransitionExtender"
+      name="forwarding-transition-reassign"
+      />
+
+  <adapter
+      factory=".transition.ForwardingReassignTransitionExtender"
+      name="forwarding-transition-reassign-refused"
+      />
+
 </configure>

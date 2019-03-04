@@ -5,6 +5,7 @@ dossier where the task is then filed.
 
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.form import WizzardWrappedAddForm
+from opengever.base.oguid import Oguid
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.validators import BaseRepositoryfolderValidator
 from opengever.globalindex.model.task import Task
@@ -13,9 +14,10 @@ from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
+from plone import api
 from plone.dexterity.i18n import MessageFactory as dexterityMF
 from plone.supermodel.model import Schema
+from plone.uuid.interfaces import IUUID
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -272,9 +274,15 @@ class DossierAddFormView(WizzardWrappedAddForm):
                 # forwarding
                 if dm.get(dmkey, 'is_forwarding'):
                     if dm.get(dmkey, 'is_only_assign'):
-                        task = assign_forwarding_to_dossier(
-                            self.context, oguid, dossier, dm.get(
-                                dmkey, 'text'))
+                        transition_data = {
+                            'text': dm.get(dmkey, 'text'),
+                            'dossier': IUUID(dossier)}
+                        wftool = api.portal.get_tool('portal_workflow')
+                        task = wftool.doActionFor(
+                            Oguid.parse(oguid).resolve_object(),
+                            'forwarding-transition-assign-to-dossier',
+                            comment=transition_data['text'],
+                            transition_params=transition_data)
 
                         IStatusMessage(self.request).addStatusMessage(
                             _(u'The forwarding is now assigned to the new '

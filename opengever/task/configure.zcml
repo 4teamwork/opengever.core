@@ -115,19 +115,7 @@
   <subscriber
       for="opengever.task.task.ITask
            Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.reassign_team_tasks"
-      />
-
-  <subscriber
-      for="opengever.task.task.ITask
-           Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.cancel_subtasks"
-      />
-
-  <subscriber
-      for="opengever.task.task.ITask
-           Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.set_responsible_to_issuer_on_reject"
       />
 
   <subscriber
@@ -217,6 +205,97 @@
   <adapter
       factory=".task.default_responsible_client"
       name="default"
+      />
+
+  <!-- transitions -->
+  <adapter
+      factory=".transition.AcceptTransitionExtender"
+      name="task-transition-open-in-progress"
+      />
+
+  <adapter
+      factory=".transition.ModifyDeadlineTransitionExtender"
+      name="task-transition-modify-deadline"
+      />
+
+  <adapter
+      factory=".transition.ResolveTransitionExtender"
+      name="task-transition-in-progress-resolved"
+      />
+
+  <adapter
+      factory=".transition.ResolveTransitionExtender"
+      name="task-transition-open-resolved"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-resolved-in-progress"
+      />
+
+  <adapter
+      factory=".transition.CloseTransitionExtender"
+      name="task-transition-resolved-tested-and-closed"
+      />
+
+  <adapter
+      factory=".transition.CloseTransitionExtender"
+      name="task-transition-in-progress-tested-and-closed"
+      />
+
+  <adapter
+      factory=".transition.CloseTransitionExtender"
+      name="task-transition-open-tested-and-closed"
+      />
+
+  <adapter
+      factory=".transition.ReassignTransitionExtender"
+      name="task-transition-reassign"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-open-cancelled"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-cancelled-open"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-in-progress-cancelled"
+      />
+
+  <adapter
+      factory=".transition.RejectTransitionExtender"
+      name="task-transition-open-rejected"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-rejected-open"
+      />
+
+  <adapter
+      factory=".transition.DelegateTransitionExtender"
+      name="task-transition-delegate"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-rejected-skipped"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-planned-skipped"
+      />
+
+  <adapter
+      factory=".transition.OpenPlannedTransitionExtender"
+      name="task-transition-planned-open"
       />
 
 </configure>

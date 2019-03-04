@@ -5,9 +5,11 @@ from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
-from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from plone.app.testing import TEST_USER_ID
+import json
 
 
 class TestForwardingActivites(FunctionalTestCase):
@@ -51,26 +53,6 @@ class TestForwardingActivites(FunctionalTestCase):
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New forwarding added by Test User',
                           activity.summary)
-
-    @browsing
-    def test_assign_forwarding_to_dossier_add_responsible_and_issuer_to_successors_watcherlist(self, browser):
-        dossier = create(Builder('dossier').titled(u'Dossier A'))
-        inbox = create(Builder('inbox').titled(u'Inbox'))
-        forwarding = create(Builder('forwarding')
-                            .within(inbox)
-                            .having(issuer='inbox:org-unit-2',
-                                    responsible='hugo.boss')
-                            .titled(u'Anfrage XY'))
-
-        task = assign_forwarding_to_dossier(self.portal, forwarding.oguid.id,
-                                            dossier, "Ok!")
-
-        resource = notification_center().fetch_resource(task)
-        self.assertItemsEqual(
-            [(u'hugo.boss', u'task_responsible'),
-             (u'inbox:org-unit-1', u'task_issuer')],
-            [(subscription.watcher.actorid, subscription.role)
-             for subscription in resource.subscriptions])
 
     @browsing
     def test_accepting_forwarding_with_successor_updated_responsibles(self, browser):
@@ -202,3 +184,34 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         self.assertItemsEqual(
             ['peter.mueller', u'hugo.boss'],
             [watcher.actorid for watcher in resource.watchers])
+
+
+class TestForwardingActivitesIntegration(IntegrationTestCase):
+
+    features = ('activity', )
+
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    @browsing
+    def test_assign_to_dossier_open_successor_task(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        url = '{}/@workflow/forwarding-transition-assign-to-dossier'.format(
+            self.inbox_forwarding.absolute_url())
+
+        dossier_uid = obj2brain(self.empty_dossier).UID
+        data = {'dossier': dossier_uid}
+        browser.open(url, method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        task = self.empty_dossier.objectValues()[-1]
+
+        resource = notification_center().fetch_resource(task)
+        self.assertItemsEqual(
+            [(self.regular_user.id, u'task_responsible'),
+             (u'inbox:fa', u'task_issuer')],
+            [(subscription.watcher.actorid, subscription.role)
+             for subscription in resource.subscriptions])

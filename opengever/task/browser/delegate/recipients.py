@@ -35,6 +35,7 @@ class ISelectRecipientsSchema(Schema):
         title=_(u'delegate_label_documents', default=u'Attach documents'),
         description=_(u'Select the related documents you wish to attach '
                       u'to the new subtasks.'),
+        missing_value=[],
         required=False,
         value_type=schema.Choice(
             source=vocabulary.attachable_documents_vocabulary))

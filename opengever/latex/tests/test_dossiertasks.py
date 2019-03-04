@@ -90,7 +90,6 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                         'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y'),
                                             'deadline': expected_deadline.strftime('%d.%m.%Y'),
                                             'description': '',
-                                            'history': None,
                                             'responsible': 'Test User (test\\_user\\_1\\_)',
                                             'issuer': 'admin (admin)',
                                             'sequence_number': 1,
@@ -99,14 +98,19 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                                            {'completion_date': None,
                                             'deadline': expected_deadline.strftime('%d.%m.%Y'),
                                             'description': '',
-                                            'history': None,
                                             'responsible': 'Test User (test\\_user\\_1\\_)',
                                             'issuer': 'Test User (test\\_user\\_1\\_)',
                                             'sequence_number': 2,
                                             'title': 'task 2',
                                             'type': ''}]}
 
-            self.assertEquals(expected, dossiertasks.get_render_arguments())
+            values = dossiertasks.get_render_arguments()
+            # remove history attribute from the dicts, history is tested in
+            # a separate test
+            [item.pop('history') for item in values['task_data_list']]
+
+            self.assertEquals(expected['label'], values['label'])
+            self.assertEquals(expected['task_data_list'], values['task_data_list'])
 
     @browsing
     def test_dossier_tasks_history(self, browser):

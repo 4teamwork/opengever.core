@@ -1,14 +1,15 @@
+from datetime import date
 from datetime import datetime
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.testing import IntegrationTestCase
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.indexes import changed_indexer
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.component import getMultiAdapter
 import pytz
@@ -183,8 +184,10 @@ class TestChangedUpdateForTask(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
-            api.content.transition(obj=self.task, transition='task-transition-delegate')
-        self.assert_changed_value(self.task, FREEZING_TIME)
+            api.content.transition(
+                obj=self.subtask,
+                transition='task-transition-resolved-tested-and-closed')
+            self.assert_changed_value(self.subtask, FREEZING_TIME)
 
 
 class TestChangedUpdateForProposal(TestChangedUpdateBase):
@@ -480,7 +483,12 @@ class TestChangedUpdateForForwarding(TestChangedUpdateBase):
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
         with freeze(FREEZING_TIME):
-            api.content.transition(obj=self.inbox_forwarding, transition="forwarding-transition-assign-to-dossier")
+            api.content.transition(
+                obj=self.inbox_forwarding,
+                transition="forwarding-transition-reassign",
+                transition_params={'responsible': self.regular_user.id,
+                                   'responsible_client':'fa'})
+
         self.assert_changed_value(self.inbox_forwarding, FREEZING_TIME)
 
 

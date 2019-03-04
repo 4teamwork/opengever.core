@@ -21,6 +21,7 @@ from plone import api
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -280,7 +281,8 @@ class CloseTaskView(BrowserView):
     transition = 'task-transition-open-tested-and-closed'
 
     def __call__(self):
-        text = self.request.get('text')
+        text = safe_unicode(self.request.get('text'))
+
         if self.is_already_done():
             return ok_response(self.request)
 

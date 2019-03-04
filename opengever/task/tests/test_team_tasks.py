@@ -126,11 +126,7 @@ class TestTeamTasks(IntegrationTestCase):
         expected = [{'before': u'team:1',
                      'after': 'kathi.barfuss',
                      'id': 'responsible',
-                     'name': u'label_responsible'},
-                    {'before': 'task-state-open',
-                     'after': 'task-state-in-progress',
-                     'id': 'review_state',
-                     'name': u'Issue state'}]
+                     'name': u'label_responsible'}]
 
         self.assertEqual(
             expected, [dict(change) for change in response.changes])
@@ -150,17 +146,17 @@ class TestTeamTasks(IntegrationTestCase):
         self.set_workflow_state('task-state-open', self.task)
 
         successor = accept_task_with_successor(
-            self.dossier, self.task.oguid.id, 'Ok.')
+            self.dossier, self.task.oguid.id, u'Ok.')
 
         self.assertEquals(self.regular_user.getId(), successor.responsible)
         self.assertEquals(
             self.regular_user.getId(), successor.get_sql_object().responsible)
         self.assertEquals(
             [{'after': 'kathi.barfuss', 'id': 'responsible',
-              'name': u'label_responsible', 'before': u'team:1'},
-             {'after': 'task-state-in-progress', 'id': 'review_state',
-              'name': u'Issue state', 'before': 'task-state-open'}],
+              'name': u'label_responsible', 'before': u'team:1'}],
             IResponseContainer(self.task)[-1].changes)
+        self.assertEquals('task-transition-open-in-progress',
+                          IResponseContainer(self.task)[-1].transition)
 
     @browsing
     def test_multi_admin_unit_team_task_edit_in_issuer_dossier(self, browser):

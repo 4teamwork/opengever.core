@@ -1,8 +1,5 @@
 from Acquisition import aq_inner, aq_parent
 from datetime import date
-from opengever.activity import notification_center
-from opengever.activity.roles import TASK_ISSUER_ROLE
-from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
@@ -86,32 +83,6 @@ def set_dates(task, event):
         task.date_of_completion = date.today()
     if event.action == 'task-transition-resolved-in-progress':
         task.date_of_completion = None
-
-
-def reassign_team_tasks(task, event):
-    if event.action != 'task-transition-open-in-progress':
-        return
-
-    if task.is_team_task:
-        old_responsible = ITask(task).responsible
-        ITask(task).responsible = api.user.get_current().getId()
-        IResponseContainer(task)[-1].add_change(
-            'responsible',
-            _(u"label_responsible", default=u"Responsible"),
-            old_responsible, ITask(task).responsible)
-
-
-def set_responsible_to_issuer_on_reject(task, event):
-    if event.action == 'task-transition-open-rejected':
-        notification_center().remove_watcher_from_resource(task.oguid, task.responsible, TASK_RESPONSIBLE_ROLE)
-        notification_center().add_watcher_to_resource(task.oguid, task.issuer, TASK_ISSUER_ROLE)
-        notification_center().add_watcher_to_resource(task.oguid, task.issuer, TASK_RESPONSIBLE_ROLE)
-        old_responsible = ITask(task).responsible
-        task.responsible = task.issuer
-        IResponseContainer(task)[-1].add_change(
-            'responsible',
-            _(u"label_responsible", default=u"Responsible"),
-            old_responsible, ITask(task).responsible)
 
 
 def cancel_subtasks(task, event):

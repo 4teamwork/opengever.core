@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.activity.model import Resource
 from opengever.activity.model.activity import Activity
 from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -169,7 +170,9 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
-        activity = Activity.query.all()[-1]
+        activities = Resource.query.get_by_oguid(
+            Oguid.for_object(subtask2)).activities
+        activity = activities[-1]
         self.assertEquals('task-added', activity.kind)
         self.assertEquals('Task opened', activity.label)
         self.assertEquals(u'New task opened by B\xe4rfuss K\xe4thi',

@@ -23,6 +23,7 @@ from .tz_for_log import PatchZ2LogTimezone
 from .uuidindex import PatchUUIDIndex
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
+from .workflowtool import PatchWorkflowTool
 
 
 PatchBuilderCreate()()
@@ -50,3 +51,4 @@ PatchOFSRoleManager()()
 PatchCMFCatalogAwareHandlers()()
 ScrubBoboExceptions()()
 PatchExceptionFormatter()()
+PatchWorkflowTool()()

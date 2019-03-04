@@ -3,20 +3,21 @@ views for the method when a user wants to work within an existing dossier and
 the task needs to be copied to this dossier (successor task).
 """
 
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
-from Products.statusmessages.interfaces import IStatusMessage
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
+from opengever.base.oguid import Oguid
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
+from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.task.browser.accept.utils import \
-    accept_forwarding_with_successor
-from opengever.task.browser.accept.utils import assign_forwarding_to_dossier
+from plone import api
 from plone.supermodel.model import Schema
+from plone.uuid.interfaces import IUUID
 from plone.z3cform.layout import FormWrapper
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
@@ -102,8 +103,17 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
             # forwarding
             if dm.get(key, 'is_forwarding'):
                 if dm.get(key, 'is_only_assign'):
-                    task = assign_forwarding_to_dossier(
-                        self.context, oguid, data['dossier'], text)
+                    transition_data = {
+                        'text': text,
+                        'dossier': IUUID(data['dossier'])}
+
+                    wftool = api.portal.get_tool('portal_workflow')
+                    task = wftool.doActionFor(
+                        Oguid.parse(oguid).resolve_object(),
+                        'forwarding-transition-assign-to-dossier',
+                        comment=transition_data['text'],
+                        transition_params=transition_data)
+
                     IStatusMessage(self.request).addStatusMessage(
                         _(u'The forwarding is now assigned to the dossier'),
                         'info')

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-12-10 07:42+0000\n"
+"POT-Creation-Date: 2019-01-31 18:37+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -33,12 +33,6 @@ msgstr "Löschen"
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
 msgstr "Bearbeiten"
-
-#: ./opengever/task/response.py
-#: ./opengever/task/response_syncer/workflow.py
-#: ./opengever/task/util.py
-msgid "Issue state"
-msgstr "Status"
 
 #: ./opengever/task/response.py
 msgid "No response selected for removal."
@@ -192,10 +186,6 @@ msgstr "Speichern"
 msgid "cancel"
 msgstr "Abbrechen"
 
-#: ./opengever/task/response.py
-msgid "date_of_completion"
-msgstr "Erledigungsdatum"
-
 #. Default: "Select one or more responsibles. For each selected responsible a subtask will be created and assigned."
 #: ./opengever/task/browser/delegate/recipients.py
 msgid "delegate_help_responsible"
@@ -340,10 +330,12 @@ msgstr "Wann möchten Sie über das Fristende der Aufgabe benachrichtigt werden.
 
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible"
 msgstr "Wählen Sie die verantwortlichen Personen aus."
 
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer."
 
@@ -522,6 +514,7 @@ msgstr "Eigenschaften"
 
 #. Default: "New Deadline"
 #: ./opengever/task/browser/modify_deadline.py
+#: ./opengever/task/transition.py
 msgid "label_new_deadline"
 msgstr "Neue Frist"
 
@@ -575,6 +568,7 @@ msgstr "Erinnerung"
 
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_resonsible_client"
 msgstr "Mandant des Auftragnehmers"
 

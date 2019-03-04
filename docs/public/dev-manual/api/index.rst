@@ -27,6 +27,7 @@ Inhalt:
    recently_touched.rst
    preview.rst
    webactions.rst
+   tasks.rst
    examples/index.rst
    docs_changelog.rst
 

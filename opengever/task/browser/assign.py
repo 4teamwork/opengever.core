@@ -3,10 +3,6 @@ from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
-from opengever.task.activities import TaskReassignActivity
-from opengever.task.localroles import LocalRolesSetter
-from opengever.task.reminder.reminder import TaskReminder
-from opengever.task.response_syncer import sync_task_response
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.task.util import getTransitionVocab
@@ -130,41 +126,9 @@ class AssignTaskForm(Form):
         return self.request.RESPONSE.redirect(api.portal.get().absolute_url())
 
     def reassign_task(self, **kwargs):
-        response = self.add_response(**kwargs)
-        # Revoke local roles for current responsible
-        LocalRolesSetter(self.context).revoke_roles()
-
-        TaskReminder().clear_reminder(self.context, self.context.responsible)
-
-        self.update_task(**kwargs)
-        notify(ObjectModifiedEvent(self.context))
-        self.record_activity(response)
-        self.sync_remote_task(**kwargs)
-
-    def update_task(self, **kwargs):
-        self.context.responsible_client = kwargs.get('responsible_client')
-        self.context.responsible = kwargs.get('responsible')
-
-    def add_response(self, **kwargs):
-        return add_simple_response(
-            self.context,
-            text=kwargs.get('text'),
-            field_changes=(
-                (ITask['responsible'], kwargs.get('responsible')),
-                (ITask['responsible_client'],
-                 kwargs.get('responsible_client')),),
-            transition=kwargs.get('transition'),
-            supress_events=True)
-
-    def sync_remote_task(self, **kwargs):
-        sync_task_response(self.context, self.request, 'workflow',
-                           kwargs.get('transition'),
-                           kwargs.get('text'),
-                           responsible=kwargs.get('responsible'),
-                           responsible_client=kwargs.get('responsible_client'))
-
-    def record_activity(self, response):
-        TaskReassignActivity(self.context, self.context.REQUEST, response).record()
+        wftool = api.portal.get_tool('portal_workflow')
+        wftool.doActionFor(self.context, kwargs.pop('transition'),
+                           comment=kwargs.get('text'), transition_params=kwargs)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))
     def handle_cancel(self, action):

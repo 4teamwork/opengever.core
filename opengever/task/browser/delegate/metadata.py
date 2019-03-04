@@ -3,7 +3,6 @@ from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
-from opengever.task.browser.delegate.utils import create_subtasks
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
@@ -76,13 +75,15 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
     def handle_save(self, action):
         data, errors = self.extractData()
         if not errors:
-            responsibles = self.request.get('responsibles')
-            documents = self.request.get('documents', None) or []
-            subtasks = create_subtasks(self.context, responsibles,
-                                       documents, data)
+
+            data['responsibles'] = self.request.get('responsibles')
+            data['documents'] = self.request.get('documents', None) or []
+            wftool = api.portal.get_tool('portal_workflow')
+            wftool.doActionFor(self.context, 'task-transition-delegate',
+                               transition_params=data)
 
             msg = _(u'${subtask_num} subtasks were create.',
-                    mapping={u'subtask_num': len(subtasks)})
+                    mapping={u'subtask_num': len(data['responsibles'])})
             IStatusMessage(self.request).addStatusMessage(msg, 'info')
 
             url = self.context.absolute_url()

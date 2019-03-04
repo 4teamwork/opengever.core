@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-12-10 07:42+0000\n"
+"POT-Creation-Date: 2019-01-31 18:37+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -35,12 +35,6 @@ msgstr "Supprimer"
 #: ./opengever/task/viewlets/templates/responseview.pt
 msgid "Edit"
 msgstr "Modifier"
-
-#: ./opengever/task/response.py
-#: ./opengever/task/response_syncer/workflow.py
-#: ./opengever/task/util.py
-msgid "Issue state"
-msgstr "Etat"
 
 #: ./opengever/task/response.py
 msgid "No response selected for removal."
@@ -194,10 +188,6 @@ msgstr "Enregistrer"
 msgid "cancel"
 msgstr "Annuler"
 
-#: ./opengever/task/response.py
-msgid "date_of_completion"
-msgstr "Date d'accomplissement"
-
 #. Default: "Select one or more responsibles. For each selected responsible a subtask will be created and assigned."
 #: ./opengever/task/browser/delegate/recipients.py
 msgid "delegate_help_responsible"
@@ -342,10 +332,12 @@ msgstr "Quand voulez-vous un rappel du délai de cette tâche."
 #. Default: "Select the responsible user from the client chosen above, or the corresponding inbox."
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible"
 msgstr "Sélectionnez les personnes responsables."
 
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "help_responsible_client"
 msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire."
 
@@ -524,6 +516,7 @@ msgstr "Attributs"
 
 #. Default: "New Deadline"
 #: ./opengever/task/browser/modify_deadline.py
+#: ./opengever/task/transition.py
 msgid "label_new_deadline"
 msgstr "Nouveau délai"
 
@@ -577,6 +570,7 @@ msgstr "Rappel"
 
 #. Default: "Responsible Client"
 #: ./opengever/task/task.py
+#: ./opengever/task/transition.py
 msgid "label_resonsible_client"
 msgstr "Client responsable"
 
