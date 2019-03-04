@@ -62,7 +62,7 @@ Aufgaben-Erinnerungen erstellen
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Aufgaben-Erinnerungen können via zopectl handler `generate_remind_notifications` generiert werden.
-Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte somit so früh wie möglich an einem neuen Tag ausgeführt werden und in jedem fall **vor** dem "Daily Digest"-Job.
+Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte somit so früh wie möglich an einem neuen Tag ausgeführt werden und in jedem Fall **vor** dem "Daily Digest"-Job.
 
 .. code:: bash
 
@@ -88,4 +88,4 @@ Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführ
     # Generate notifications for overdue dossiers
     30 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
 
-**Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" berücksichtigt alle Org-Units (Plone-Sites) eines bestimmten Mandanten / Deployments. Dieser Job muss jedoch für jedes Deployment einzeln ausgeführt werden.
+**Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" muss **für jeden Mandanten** eines Clusters einzeln ausgeführt und eingerichtet werden.
