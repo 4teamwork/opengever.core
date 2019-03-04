@@ -51,7 +51,7 @@ Die Daily Digest mails können via zopectl handler `send_digest` generiert und v
 .. code:: bash
 
     # GEVER Demo: Send daily digest
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 send_digest >/dev/null 2>&1
+    0 5 * * * /home/zope/server/01-gever.example.org/bin/instance0 send_digest >/dev/null 2>&1
 
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
@@ -67,7 +67,7 @@ Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte s
 .. code:: bash
 
     # GEVER Demo: Generate remind notifications
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
+    0 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
 
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
@@ -86,6 +86,6 @@ Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführ
 .. code:: bash
 
     # GEVER Demo: Generate notifications for overdue dossiers
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
+    30 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
 
 **Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" berücksichtigt alle Org-Units (Plone-Sites) eines bestimmten Mandanten / Deployments. Dieser Job muss jedoch für jedes Deployment einzeln ausgeführt werden.
