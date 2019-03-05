@@ -7,4 +7,6 @@
 
   <adapter factory=".storage.WebActionsStorage" />
 
+  <adapter factory=".provider.WebActionsProvider" />
+
 </configure>

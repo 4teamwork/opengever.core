@@ -56,3 +56,16 @@ class IWebActionsStorage(Interface):
     def unindex_action(action):
         """Unindex the given peristent action.
         """
+
+
+class IWebActionsProvider(Interface):
+    """Multiadapter of context and request used to get all available
+    webactions for a given user on a given context.
+    """
+
+    def get_webactions(self, display=None):
+        """Returns a dictionary of all available webactions per display location
+        ('display' location as key and list of webactions for that location as
+        values). If display is passed, only webactions for that display type are
+        returned.
+        """
