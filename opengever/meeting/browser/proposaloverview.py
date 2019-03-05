@@ -10,6 +10,8 @@ from opengever.meeting.proposal_transition_comment import ProposalTransitionComm
 from opengever.tabbedview import GeverTabMixin
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
+from zope.component import getMultiAdapter
+from opengever.webactions.interfaces import IWebActionsRenderer
 
 
 class OverviewBase(object):
@@ -85,6 +87,11 @@ class OverviewBase(object):
         if excerpt:
             return DocumentLinkWidget(excerpt).render()
         return u''
+
+    def get_webaction_items(self):
+        renderer = getMultiAdapter((self.context, self.request),
+                                   IWebActionsRenderer, name='action-buttons')
+        return renderer()
 
 
 class ProposalOverview(OverviewBase, view.DefaultView, GeverTabMixin):
