@@ -1,5 +1,6 @@
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.response_description import ResponseDescription
+from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.app.layout.viewlets.common import ViewletBase
 from zope.component import getMultiAdapter
@@ -11,6 +12,7 @@ class ActionMenuViewlet(ViewletBase):
 
     regular_items = None
     agency_items = None
+    webactions_items = None
 
     def available(self):
         return True
@@ -38,6 +40,11 @@ class ActionMenuViewlet(ViewletBase):
             self.get_menu_items()
 
         return self.agency_items
+
+    def get_webaction_items(self):
+        renderer = getMultiAdapter((self.context, self.request),
+                                   IWebActionsRenderer, name='action-buttons')
+        return renderer()
 
     def _append_workflow_menu_items(self, regular_items, agency_items):
         wftool = api.portal.get_tool(name='portal_workflow')
