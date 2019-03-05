@@ -80,3 +80,14 @@ class IWebActionsRenderer(Interface):
         """Returns the webactions as a list of markup used for the rendering at a given
         location.
         """
+
+
+class IWebActionsMenuItemsPreparer(Interface):
+    """Named Multiadapter of context and request used to add the webactions to
+    menus. The name of the multiadapter corresponds to the display location.
+    """
+
+    def __call__(self):
+        """Returns the webactions as a list of items (dictionaries) used used
+        to add the webactions to a given menu.
+        """

@@ -15,4 +15,9 @@
       name="title-buttons"
       />
 
+  <adapter
+      factory=".menu_items_preparer.WebActionsActionsMenuItemsPreparer"
+      name="actions-menu"
+      />
+
 </configure>

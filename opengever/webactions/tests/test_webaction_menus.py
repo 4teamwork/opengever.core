@@ -1,8 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.menu import OGCombinedActionsWorkflowMenu
 from opengever.testing import IntegrationTestCase
 from opengever.webactions.storage import get_storage
+from opengever.webactions.tests.test_webactions_provider import TestWebActionBase
 
 
 class TestWebActionsTitleButtons(IntegrationTestCase):
@@ -93,3 +95,104 @@ class TestWebActionsTitleButtons(IntegrationTestCase):
         self.assertEqual(len(webactions), 1)
         self.assertEqual([u"\xc4ction 1"],
                          map(lambda action: action.get("title"), webactions))
+
+
+class TestWebactionsActionsMenu(TestWebActionBase):
+
+    def setUp(self):
+        super(TestWebactionsActionsMenu, self).setUp()
+        create(Builder('webaction')
+               .titled(u'\xc4ction 1')
+               .having(order=5,
+                       enabled=True,
+                       display='actions-menu'))
+
+        create(Builder('webaction')
+               .titled(u'Action 2')
+               .having(order=1,
+                       enabled=True,
+                       display='actions-menu',
+                       target_url="http://example.org/endpoint2"))
+
+    @browsing
+    def test_webactions_are_shown_on_dexterity_object(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier)
+
+        action_menu = browser.css('#contentActionMenus a')
+        webaction_items = action_menu.css('.actionicon-object_webaction')
+        self.assertEqual(['Action 2', u'\xc4ction 1'], webaction_items.text)
+
+    @browsing
+    def test_webactions_are_disabled_on_wrapper_objects(self, browser):
+        self.activate_feature('meeting')
+        self.login(self.meeting_user, browser=browser)
+        browser.open(self.meeting)
+
+        action_menu = browser.css('#contentActionMenus a')
+        webaction_items = action_menu.css('.actionicon-object_webaction')
+        self.assertEqual([], webaction_items.text)
+
+    def test_only_webactions_with_display_actions_menu_are_shown(self):
+        self.login(self.regular_user)
+        menu = OGCombinedActionsWorkflowMenu(self.dossier)
+
+        menu_items = menu.getMenuItems(self.dossier, self.dossier.REQUEST)
+        webaction_items = filter(
+            lambda item: item.get("extra").get("class") == 'actionicon-object_webaction',
+            menu_items)
+
+        self.assertEqual(['Action 2', u'\xc4ction 1'],
+                         [action["title"] for action in webaction_items])
+
+        storage = get_storage()
+        storage.update(1, {"display": "action-buttons"})
+        self.clear_request_cache()
+
+        menu_items = menu.getMenuItems(self.dossier, self.dossier.REQUEST)
+        webaction_items = filter(
+            lambda item: item.get("extra").get("class") == 'actionicon-object_webaction',
+            menu_items)
+
+        self.assertEqual([u'\xc4ction 1'],
+                         [action["title"] for action in webaction_items])
+
+    @browsing
+    def test_webactions_are_html_escaped(self, browser):
+        storage = get_storage()
+        storage.update(1, {"title": u"<bold>Action 2 with html</bold>"})
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier)
+
+        action_menu = browser.css('#contentActionMenus a')
+        webaction_items = action_menu.css('.actionicon-object_webaction')
+
+        self.assertIn(u'\xc4ction 1', webaction_items[1].innerHTML)
+        self.assertIn("&lt;bold&gt;Action 2 with html&lt;/bold&gt;",
+                      webaction_items[0].innerHTML)
+
+    def test_only_webactions_satisfying_type_are_shown(self):
+        self.login(self.regular_user)
+
+        storage = get_storage()
+        storage.update(0, {"types": ["opengever.document.document"]})
+        storage.update(1, {"types": ["opengever.dossier.businesscasedossier"]})
+        menu = OGCombinedActionsWorkflowMenu(self.dossier)
+
+        menu_items = menu.getMenuItems(self.dossier, self.dossier.REQUEST)
+        webaction_items = filter(
+            lambda item: item.get("extra").get("class") == 'actionicon-object_webaction',
+            menu_items)
+
+        self.assertEqual(['Action 2'],
+                         [action["title"] for action in webaction_items])
+
+        self.clear_request_cache()
+        menu_items = menu.getMenuItems(self.document, self.document.REQUEST)
+        webaction_items = filter(
+            lambda item: item.get("extra").get("class") == 'actionicon-object_webaction',
+            menu_items)
+
+        self.assertEqual([u'\xc4ction 1'],
+                         [action["title"] for action in webaction_items])
