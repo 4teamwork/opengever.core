@@ -583,6 +583,48 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             browser.css('#form-widgets-IDocumentMetadata-description')[0].innerHTML,
         )
 
+    @browsing
+    def test_webactions_are_shown_in_overview(self, browser):
+        self.login(self.regular_user, browser)
+
+        create(Builder('webaction')
+               .titled(u'\xc4ction 1')
+               .having(order=5,
+                       display='action-buttons',
+                       icon_name="fa-helicopter"))
+
+        create(Builder('webaction')
+               .titled(u'Action 2')
+               .having(order=1,
+                       display='action-buttons',
+                       target_url="http://example.org/endpoint2"))
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        webactions = browser.css('.file-action-buttons a.webaction_button')
+        self.assertEqual(['Action 2', u'\xc4ction 1'], webactions.text)
+
+        self.assertEqual(
+            map(lambda item: item.get("href"), webactions),
+            ['http://example.org/endpoint2', 'http://example.org/endpoint'])
+
+        self.assertEqual(
+            map(lambda item: item.get("class"), webactions),
+            ['webaction_button', 'webaction_button fa fa-helicopter'])
+
+    @browsing
+    def test_webactions_are_html_escaped(self, browser):
+        self.login(self.regular_user, browser)
+
+        create(Builder('webaction')
+               .titled(u'<bold>Action with HTML</bold>')
+               .having(display='action-buttons'))
+
+        browser.open(self.document, view='tabbedview_view-overview')
+
+        webactions = browser.css('.file-action-buttons a.webaction_button')
+        self.assertIn('&lt;bold&gt;Action with HTML&lt;/bold&gt;', webactions[0].innerHTML)
+
 
 class TestDocumentOverviewWithMeeting(IntegrationTestCase):
 

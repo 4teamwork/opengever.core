@@ -36,3 +36,18 @@ class TestWebActionRendererTitleButtons(IntegrationTestCase):
         rendered_data = renderer()
 
         self.assertEqual(self.expected_data, rendered_data)
+
+
+class TestWebActionRendererActionButtons(TestWebActionRendererTitleButtons):
+
+    display = 'action-buttons'
+    icon = 'fa-helicopter'
+
+    expected_data = [
+            '<a title="Action 1" href="http://example.org/endpoint" '
+            'class="webaction_button fa fa-helicopter">'
+            '<span class="subMenuTitle actionText">Action 1</span></a>',
+
+            '<a title="Action 2" href="http://example.org/endpoint" '
+            'class="webaction_button fa fa-helicopter">'
+            '<span class="subMenuTitle actionText">Action 2</span></a>']

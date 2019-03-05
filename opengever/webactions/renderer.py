@@ -86,3 +86,10 @@ class WebActionsTitleButtonsRenderer(BaseWebActionsRenderer):
                                   image=image.format(**action),
                                   label=self.label.format(**action),
                                   **action)
+
+
+class WebActionsActionButtonsRenderer(WebActionsTitleButtonsRenderer):
+
+    display = 'action-buttons'
+
+    label = u'<span class="subMenuTitle actionText">{title}</span>'

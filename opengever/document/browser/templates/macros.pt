@@ -184,7 +184,9 @@
               Oneoffixx retry
           </a>
         </tal:oneoffixx>
-
+        <tal:block repeat="subMenuItem view/get_webaction_items">
+            <a tal:replace="structure subMenuItem" />
+        </tal:block>
     </div>
 
     <tal:nofile tal:condition="not:context/has_file">

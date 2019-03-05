@@ -20,4 +20,9 @@
       name="actions-menu"
       />
 
+  <adapter
+      factory=".renderer.WebActionsActionButtonsRenderer"
+      name="action-buttons"
+      />
+
 </configure>

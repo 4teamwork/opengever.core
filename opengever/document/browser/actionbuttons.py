@@ -3,9 +3,11 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
+from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.protect import createToken
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
 
@@ -201,3 +203,8 @@ class ActionButtonRendererMixin(object):
 
     def get_url(self):
         return self.context.absolute_url()
+
+    def get_webaction_items(self):
+        renderer = getMultiAdapter((self.context, self.request),
+                                   IWebActionsRenderer, name='action-buttons')
+        return renderer()
