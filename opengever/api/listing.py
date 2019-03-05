@@ -1,3 +1,6 @@
+from DateTime import DateTime
+from DateTime.interfaces import DateTimeError
+from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
@@ -16,6 +19,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
+from ZPublisher.HTTPRequest import record
 
 DEFAULT_SORT_INDEX = 'modified'
 
@@ -88,6 +92,7 @@ FIELDS = {
     'end': ('end', 'end', 'end'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
     'modified': ('modified', 'modified', 'modified'),
+    'keywords': ('Subject', 'Subject', 'Subject'),
     'changed': ('changed', 'changed', 'changed'),
     'receipt_date': ('receipt_date', 'receipt_date', 'receipt_date'),
     'reference': ('reference', 'reference', 'reference'),
@@ -108,6 +113,17 @@ FIELDS = {
     'filesize': (None, filesize, 'filesize'),
     'filename': (None, filename, 'filename'),
 }
+
+DATE_INDEXES = set([
+    'changed',
+    'created',
+    'delivery_date',
+    'document_date',
+    'end',
+    'modified',
+    'receipt_date',
+    'start',
+])
 
 SOLR_FILTERS = {
     u'dossiers': [
@@ -148,15 +164,18 @@ class Listing(Service):
         sort_order = self.request.form.get('sort_order', 'descending')
         term = self.request.form.get('search', '').strip()
         columns = self.request.form.get('columns', [])
+        filters = self.request.form.get('filters', {})
+        if not isinstance(filters, record):
+            filters = {}
 
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         if settings.use_solr:
             items = self.solr_results(
-                name, term, columns, start, rows, sort_on, sort_order)
+                name, term, columns, start, rows, sort_on, sort_order, filters)
         else:
             items = self.catalog_results(
-                name, term, start, rows, sort_on, sort_order)
+                name, term, start, rows, sort_on, sort_order, filters)
 
         batch = HypermediaBatch(self.request, items)
         res = {}
@@ -173,7 +192,8 @@ class Listing(Service):
 
         return res
 
-    def catalog_results(self, name, term, start, rows, sort_on, sort_order):
+    def catalog_results(self, name, term, start, rows, sort_on, sort_order,
+                        filters):
         if name not in CATALOG_QUERIES:
             return []
 
@@ -191,14 +211,44 @@ class Listing(Service):
         if term:
             query['SearchableText'] = term + '*'
 
+        for key, value in filters.items():
+            if key not in FIELDS:
+                continue
+            key = FIELDS[key][0]
+            if key is None:
+                continue
+            if key in DATE_INDEXES:
+                value = self.catalog_daterange_query(value)
+            query[key] = value
+
         catalog = getToolByName(self.context, 'portal_catalog')
         try:
             return catalog(**query)
         except ParseError:
             return []
 
+    def parse_dates(self, value):
+        if isinstance(value, list):
+            value = value[0]
+        if not isinstance(value, str):
+            return None, None
+
+        dates = value.split('TO')
+        if len(dates) == 2:
+            try:
+                date_from = DateTime(dates[0]).earliestTime()
+                date_to = DateTime(dates[1]).latestTime()
+            except DateTimeError:
+                return None, None
+        return date_from, date_to
+
+    def catalog_daterange_query(self, value):
+        date_from, date_to = self.parse_dates(value)
+        if date_from is not None and date_to is not None:
+            return {'query': [date_from, date_to], 'range': 'minmax'}
+
     def solr_results(self, name, term, columns, start, rows, sort_on,
-                     sort_order):
+                     sort_order, filters):
 
         if name not in SOLR_FILTERS:
             return []
@@ -212,10 +262,25 @@ class Listing(Service):
                 pattern.format(term=escape(t)) for t in term.split()]
             query = u' AND '.join(term_queries)
 
-        filters = [u'trashed:false']
-        filters.extend(SOLR_FILTERS[name])
-        filters.append(u'path_parent:{}'.format(escape(
+        filter_queries = []
+        if 'trashed' not in filters:
+            filter_queries.append(u'trashed:false')
+        filter_queries.extend(SOLR_FILTERS[name])
+        filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
+
+        for key, value in filters.items():
+            if key not in FIELDS:
+                continue
+            key = FIELDS[key][0]
+            if key is None:
+                continue
+            if key in DATE_INDEXES:
+                value = self.solr_daterange_filter(value)
+            elif isinstance(value, list):
+                value = u' OR '.join(value)
+            if value is not None:
+                filter_queries.append(u'{}:{}'.format(key, value))
 
         sort = sort_on
         if sort:
@@ -231,8 +296,8 @@ class Listing(Service):
 
         solr = getUtility(ISolrSearch)
         resp = solr.search(
-            query=query, filters=filters, start=start, rows=rows, sort=sort,
-            **params)
+            query=query, filters=filter_queries, start=start, rows=rows,
+            sort=sort, **params)
         return LazyMap(
             OGSolrDocument,
             start * [None] + resp.docs,
@@ -248,3 +313,9 @@ class Listing(Service):
                 if field is not None:
                     fl.append(field)
         return fl
+
+    def solr_daterange_filter(self, value):
+        date_from, date_to = self.parse_dates(value)
+        if date_from is not None and date_to is not None:
+            return u'[{} TO {}]'.format(
+                to_iso8601(date_from), to_iso8601(date_to))

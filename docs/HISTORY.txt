@@ -17,6 +17,7 @@ Changelog
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 - Make sure all workflow IDs are unique. [njohner]
 - Add button to create protocol approval proposal from meeting. [njohner]
+- Add support for filters in listing endpoint. [buchi]
 
 
 2019.1.2 (2019-03-07)
