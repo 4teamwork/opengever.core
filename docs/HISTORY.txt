@@ -26,6 +26,7 @@ Changelog
 2019.1.2 (2019-03-07)
 ---------------------
 
+- Add webaction title-buttons. [njohner]
 - Add WebActionsProvider. [njohner]
 - Add mapping between public and gever permissions. [njohner]
 - Disable CSRF protect on webaction api post requests. [njohner]

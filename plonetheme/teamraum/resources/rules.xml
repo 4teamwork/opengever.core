@@ -217,6 +217,13 @@
       </after>
       <drop content="//div[@id='content']//div[@id='favorite-action']" />
 
+      <!-- Move div #webactions_title-buttons out of the IBelowContentTitle viewlet and
+           place it after the title so we can style it as display:inline-block -->
+      <after content="//div[@id='content']//h1[@class='documentFirstHeading']">
+        <xsl:copy-of select="//div[@id='content']//div[@id='webactions_title-buttons']" />
+      </after>
+      <drop content="//div[@id='content']//div[@id='webactions_title-buttons']" />
+
     </rules>
   </rules>
 </rules>

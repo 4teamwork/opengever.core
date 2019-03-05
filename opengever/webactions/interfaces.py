@@ -69,3 +69,14 @@ class IWebActionsProvider(Interface):
         values). If display is passed, only webactions for that display type are
         returned.
         """
+
+
+class IWebActionsRenderer(Interface):
+    """Named Multiadapter of context and request used to render the webactions.
+    The name of the multiadapter corresponds to the display location.
+    """
+
+    def __call__(self):
+        """Returns the webactions as a list of markup used for the rendering at a given
+        location.
+        """

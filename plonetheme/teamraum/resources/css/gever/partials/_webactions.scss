@@ -1,0 +1,23 @@
+#webactions-title-buttons {
+  display: inline-stretch;
+  vertical-align: middle;
+  margin-left: 6px;
+  position: inherit;
+  z-index: 99;
+  float: right;
+  font-size: 16px;
+
+  * {
+    vertical-align: inherit;
+  }
+
+  & img {
+    height: 16px;
+  }
+
+  div {
+    display: inline-block;
+    margin-left: 2px;
+  }
+
+}

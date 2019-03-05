@@ -1,0 +1,7 @@
+<div id="webactions-title-buttons"
+     i18n:domain="opengever.base">
+  <div tal:repeat="webaction view/get_webactions">
+    <span tal:replace="structure webaction" />
+  </div>
+</div>
+<hr class="horizontal-spacer" />

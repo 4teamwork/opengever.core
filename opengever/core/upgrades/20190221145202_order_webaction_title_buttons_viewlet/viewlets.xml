@@ -1,0 +1,7 @@
+<object>
+
+  <order manager="plone.belowcontenttitle" skinname="*">
+    <viewlet name="opengever.webactions-title-buttons" insert-before="ftw.tabbedview.searchbox" />
+  </order>
+
+</object>
