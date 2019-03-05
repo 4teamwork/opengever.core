@@ -20,6 +20,9 @@ from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import DocumentsProxy
 from opengever.tabbedview.browser.tabs import Dossiers
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.tabbedview.filters import Filter
+from opengever.tabbedview.filters import FilterList
+from opengever.tabbedview.filters import PendingMinusResolvedTasksFilter
 from plone import api
 from plone.memoize.view import memoize_contextless
 from Products.CMFPlone.utils import getToolByName
@@ -227,6 +230,12 @@ class MyTasks(GlobalTaskListingTab):
     This listing is based on opengever.globalindex (sqlalchemy) and respects
     the basic features of tabbedview such as searching and batching.
     """
+
+    filterlist = FilterList(
+        Filter('filter_all', _('label_tabbedview_filter_all')),
+        PendingMinusResolvedTasksFilter(
+            'filter_pending', _('label_pending', 'Pending'), default=True),
+    )
 
     enabled_actions = [
         'pdf_taskslisting',

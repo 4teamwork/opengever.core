@@ -3,13 +3,15 @@ from collections import OrderedDict
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.globalindex.model.task import Task
 from opengever.ogds.base.sources import is_solr_feature_enabled
 from opengever.tabbedview import _
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.CMFPlone.utils import safe_unicode
 from zope import schema
 from zope.component import getUtility
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class Filter(object):
@@ -60,6 +62,15 @@ class PendingTasksFilter(Filter):
     """
     def update_query(self, query):
         return query.in_pending_state()
+
+
+class PendingMinusResolvedTasksFilter(Filter):
+    """Filter pending tasks to not have
+    """
+    def update_query(self, query):
+        states = list(
+            set(Task.PENDING_STATES) - set(('task-state-resolved',)))
+        return query.in_state(states)
 
 
 class FilterList(OrderedDict):

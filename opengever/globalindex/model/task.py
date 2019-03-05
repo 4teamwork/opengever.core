@@ -577,8 +577,11 @@ class TaskQuery(BaseQuery):
         """Queries all subtask of the given task sql object."""
         return self.subtasks_by_tasks([task])
 
+    def in_state(self, states):
+        return self.filter(Task.review_state.in_(states))
+
     def in_pending_state(self):
-        return self.filter(Task.review_state.in_(Task.PENDING_STATES))
+        return self.in_state(Task.PENDING_STATES)
 
 
 Task.query_cls = TaskQuery
