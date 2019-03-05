@@ -13,6 +13,24 @@ from zope.interface import implementer
 from zope.interface import Interface
 
 
+def convert_catalog_query_to_solr_query(query):
+    """Convert a catalog SearchableText query to a solr query.
+
+    Defaults to a match-all wildcard query.
+    """
+    searchable_text = query.get('SearchableText')
+    if searchable_text:
+        term = query['SearchableText'].rstrip('*').decode('utf8')
+        pattern = (
+            u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
+            u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
+        )
+        term_queries = [pattern.format(term=escape(t)) for t in term.split()]
+        return u' AND '.join(term_queries)
+
+    return u'*:*'
+
+
 @implementer(ITableSource)
 @adapter(IGeverCatalogTableSourceConfig, Interface)
 class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
@@ -22,23 +40,15 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
     def search_results(self, query):
         """Executes the query and returns a tuple of `results`.
         """
-        if 'SearchableText' in query:
-            registry = getUtility(IRegistry)
-            settings = registry.forInterface(ISearchSettings)
-            if settings.use_solr:
-                return self.solr_results(query)
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(ISearchSettings)
+        if settings.use_solr:
+            return self.solr_results(query)
 
         return super(GeverCatalogTableSource, self).search_results(query)
 
     def solr_results(self, query):
-        term = query['SearchableText'].rstrip('*').decode('utf8')
-        pattern = (
-            u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
-            u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
-        )
-
-        term_queries = [pattern.format(term=escape(t)) for t in term.split()]
-        solr_query = u' AND '.join(term_queries)
+        solr_query = convert_catalog_query_to_solr_query(query)
 
         filters = [u'trashed:false']
         for key, value in query.items():

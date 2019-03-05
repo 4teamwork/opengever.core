@@ -104,9 +104,9 @@ class TestSolrSearch(IntegrationTestCase):
         self.source.search_results({'SearchableText': 'foo'})
         self.assertFalse(self.solr.search.called)
 
-    def test_solr_is_not_used_if_no_searchable_text(self):
+    def test_solr_is_used_if_enabled_and_no_searchable_text(self):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         settings.use_solr = True
         self.source.search_results({})
-        self.assertFalse(self.solr.search.called)
+        self.assertTrue(self.solr.search.called)
