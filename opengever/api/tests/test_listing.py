@@ -217,6 +217,23 @@ class TestListingEndpoint(IntegrationTestCase):
         self.assertEqual(1, len(start_dates))
         self.assertEqual('2016-01-01', start_dates[0])
 
+    @browsing
+    def test_workspaces_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=workspaces',
+            'columns=title',
+            'columns=responsible_fullname',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace_root, view=view, headers={'Accept': 'application/json'})
+
+        self.assertDictEqual(
+            {u'responsible_fullname': u'Fr\xf6hlich G\xfcnther',
+             u'@id': u'http://nohost/plone/workspaces/workspace-1',
+             u'title': u'A Workspace'},
+            browser.json['items'][-1])
+
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
 

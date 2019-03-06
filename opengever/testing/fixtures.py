@@ -1873,6 +1873,7 @@ class OpengeverContentFixture(object):
             Builder('workspace')
             .titled(u'A Workspace')
             .within(self.workspace_root)
+            .having(responsible=self.workspace_owner.getId())
             ))
 
         RoleAssignmentManager(self.workspace).reset([

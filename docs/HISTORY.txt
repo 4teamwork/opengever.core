@@ -13,6 +13,7 @@ Changelog
 - Make attachments for `direct-execution` tasks editable by the responsible. [phgross]
 - Make reject to skip transition only available for tasks part of a sequence. [phgross]
 - Adapt footer to new 4teamwork website. [njohner]
+- Extend @listing endpoint with `workspaces`-listing. [elioschmutz]
 - Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 - Make sure all workflow IDs are unique. [njohner]
