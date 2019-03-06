@@ -14,11 +14,14 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from sqlalchemy import desc
+from zope.interface import alsoProvides
 import email
+import transaction
 
 
 class TestTaskActivites(FunctionalTestCase):
@@ -185,6 +188,9 @@ class TestTaskActivites(FunctionalTestCase):
                       .titled(u'Abkl\xe4rung Fall Meier')
                       .having(responsible=TEST_USER_ID)
                       .in_state('task-state-rejected'))
+
+        alsoProvides(task, IFromSequentialTasktemplate)
+        transaction.commit()
 
         browser.login().open(task)
         browser.css('#workflow-transition-task-transition-rejected-skipped').first.click()

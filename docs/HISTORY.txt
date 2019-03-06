@@ -8,6 +8,7 @@ Changelog
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Make attachments for `direct-execution` tasks editable by the responsible. [phgross]
+- Make reject to skip transition only available for tasks part of a sequence. [phgross]
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
 - Complete French translations of repository in examplecontent. [andresoberhaensli]
 - Adapt footer to new 4teamwork website. [njohner]
