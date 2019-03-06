@@ -22,7 +22,7 @@ Release 2018.3
    dokumente/index
    kontakte
    suchen
-   posteingang
+   eingangskorb
    aufgaben/index
    standardablaeufe
    meine_ablage
