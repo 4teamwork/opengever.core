@@ -2,10 +2,16 @@
 Sitzung durchführen
 -------------------
 Unter dem Reiter «Teilnehmende» sind die dem Gremium zugewiesenen Mitglieder
-aufgeführt. An der Sitzung können die abwesenden Mitglieder entsprechend
-vermerkt werden. Ebenfalls kann die Rolle Vorsitz hinterlegt werden.
+aufgeführt.
 
 |img-spvupdate-24|
+
+Teilnehmer, welche Mitglieder des Gremiums sind, jedoch keine aktive
+Mitgliedschaft mehr haben, werden mit einem roten Punkt ausgewiesen.
+Weiter können die abwesenden Mitglieder entsprechend vermerkt werden. Ebenfalls
+kann die Rolle *Vorsitz* hinterlegt werden.
+
+|img-spvupdate-43|
 
 Der Beschlusstext sowie allfällige Diskussionen werden im Antragsdokument
 protokolliert. Mit «in Word bearbeiten» wird das Dokument ausgechecked und somit
@@ -39,6 +45,6 @@ Nr. 3).
 .. |img-spvupdate-25| image:: ../img/media/img-spvupdate-25.png
 .. |img-spvupdate-26| image:: ../img/media/img-spvupdate-26.png
 .. |img-spvupdate-33| image:: ../img/media/img-spvupdate-33.png
-
+.. |img-spvupdate-43| image:: ../img/media/img-spvupdate-43.png
 
 .. disqus::
