@@ -4,6 +4,8 @@ Allgemein
 Allgemeine Informationen zum Deployment und Betrieb von GEVER-Installationen,
 die sowohl für SaaS wie auch On-Premise Installationen gelten.
 
+.. _CronJobs:
+
 Cron-Jobs
 ---------
 
