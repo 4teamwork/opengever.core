@@ -7,6 +7,7 @@ Changelog
 
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
 - Complete French translations of repository in examplecontent. [andresoberhaensli]
+- Adapt footer to new 4teamwork website. [njohner]
 - Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 - Make sure all workflow IDs are unique. [njohner]
