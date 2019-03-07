@@ -447,6 +447,7 @@ class DossierContainer(Container):
 
     def reset_end_date(self):
         IDossier(self).end = None
+        self.reindexObject(idxs=['end'])
 
     def get_former_state(self):
         """Returns the end state of the active dossier lifecycle,

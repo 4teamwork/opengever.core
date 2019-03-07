@@ -8,6 +8,7 @@ from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
@@ -756,6 +757,21 @@ class TestResolving(FunctionalTestCase):
                           api.content.get_state(dossier))
         self.assertEquals('dossier-state-resolved',
                           api.content.get_state(subdossier))
+
+
+class TestResolvingReindexing(IntegrationTestCase):
+
+    @browsing
+    def test_end_date_is_reindexed(self, browser):
+        self.login(self.secretariat_user, browser)
+        enddate = datetime(2016, 8, 31)
+        enddate_index_value = self.dateindex_value_from_datetime(enddate)
+
+        browser.open(self.subsubdossier)
+        editbar.menu_option('Actions', 'dossier-transition-resolve').click()
+        self.assertEqual(enddate.date(), IDossier(self.subsubdossier).end)
+        self.assert_index_value(enddate_index_value, 'end', self.subsubdossier)
+        self.assert_metadata_value(enddate.date(), 'end', self.subsubdossier)
 
 
 class TestResolveLocking(TestBylineBase):

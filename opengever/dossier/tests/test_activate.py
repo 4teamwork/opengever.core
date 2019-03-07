@@ -46,6 +46,7 @@ class TestDossierActivation(IntegrationTestCase):
         IDossier(self.dossier).end = date(2013, 2, 21)
         IDossier(self.subdossier).end = date(2013, 2, 21)
         IDossier(self.subsubdossier).end = date(2013, 2, 21)
+
         self.set_workflow_state(
             'dossier-state-inactive',
             self.dossier,
@@ -65,3 +66,27 @@ class TestDossierActivation(IntegrationTestCase):
         self.assertIsNone(IDossier(self.dossier).end)
         self.assertIsNone(IDossier(self.subdossier).end)
         self.assertIsNone(IDossier(self.subsubdossier).end)
+
+    @browsing
+    def test_end_date_is_reindexed(self, browser):
+        enddate = date(2013, 2, 21)
+        enddate_index_value = self.dateindex_value_from_datetime(enddate)
+
+        self.login(self.secretariat_user, browser)
+        IDossier(self.subsubdossier).end = enddate
+        self.subsubdossier.reindexObject(idxs=['end'])
+
+        self.set_workflow_state(
+            'dossier-state-inactive',
+            self.subsubdossier,
+            )
+
+        self.assertEqual(enddate, IDossier(self.subsubdossier).end)
+        self.assert_index_value(enddate_index_value, 'end', self.subsubdossier)
+        self.assert_metadata_value(enddate, 'end', self.subsubdossier)
+
+        browser.open(self.subsubdossier)
+        editbar.menu_option('Actions', 'dossier-transition-activate').click()
+
+        self.assert_index_value('', 'end', self.subsubdossier)
+        self.assert_metadata_value(None, 'end', self.subsubdossier)
