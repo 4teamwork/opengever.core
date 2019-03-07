@@ -266,11 +266,56 @@ class TestDossierListing(IntegrationTestCase):
     def test_filter_dossiers_by_subjects(self, browser):
         self.activate_feature('solr')
         self.login(self.regular_user, browser=browser)
-
-        self.mock_solr(response_json=self.solr_response('Wichtig'))
+        docs = [
+            {  # self.offered_dossier_to_archive
+                u'Subject': [u'Wichtig'],
+                u'Title': u'Hannah Baufrau',
+                u'UID': u'createoffereddossiers00000000001',
+                u'getIcon': u'',
+                u'id': u'dossier-16',
+                u'modified': u'2016-08-31T21:01:33+02:00',
+                u'path': u'/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-16',
+                u'portal_type': u'opengever.dossier.businesscasedossier',
+                u'reference': u'Client1 1.1 / 11',
+                u'responsible': u'robert.ziegler',
+                u'review_state': u'dossier-state-offered',
+                u'start': u'2019-03-07T00:00:00Z',
+            },
+            {  # self.dossier
+                u'Title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+                u'UID': u'createtreatydossiers000000000001',
+                u'getIcon': u'',
+                u'id': u'dossier-1',
+                u'modified': u'2016-08-31T20:05:33+02:00',
+                u'path': u'/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'portal_type': u'opengever.dossier.businesscasedossier',
+                u'reference': u'Client1 1.1 / 1',
+                u'responsible': u'robert.ziegler',
+                u'review_state': u'dossier-state-active',
+                u'start': u'2019-03-07T00:00:00Z',
+            },
+        ]
+        self.mock_solr(response_json=self.solr_response('Wichtig'), docs_json=docs)
 
         self.open_repo_with_filter(browser, self.leaf_repofolder, 'filter_all')
         self.assertLess(1, len(browser.css('.listing tbody tr')))
+
+        # XXX - what do we actually manage to *test* here?
+        docs = [{  # self.offered_dossier_to_archive
+            u'Subject': [u'Wichtig'],
+            u'Title': u'Hannah Baufrau',
+            u'UID': u'createoffereddossiers00000000001',
+            u'getIcon': u'',
+            u'id': u'dossier-16',
+            u'modified': u'2016-08-31T21:01:33+02:00',
+            u'path': u'/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-16',
+            u'portal_type': u'opengever.dossier.businesscasedossier',
+            u'reference': u'Client1 1.1 / 11',
+            u'responsible': u'robert.ziegler',
+            u'review_state': u'dossier-state-offered',
+            u'start': u'2019-03-07T00:00:00Z',
+        }]
+        self.mock_solr(response_json=self.solr_response('Wichtig'), docs_json=docs)
 
         self.open_repo_with_filter(
             browser, self.leaf_repofolder, 'filter_all', ['Wichtig'])

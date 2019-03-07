@@ -649,8 +649,9 @@ class IntegrationTestCase(TestCase):
             'paths:list': ['/'.join(obj.getPhysicalPath()) for obj in objects]}
 
     @mutually_exclusive_parameters('response_file', 'response_json')
+    @mutually_exclusive_parameters('docs_file', 'docs_json')
     @at_least_one_of('response_file', 'response_json')
-    def mock_solr(self, response_file=None, response_json=None):
+    def mock_solr(self, response_file=None, response_json=None, docs_file=None, docs_json=None):
         conn = MagicMock(name='SolrConnection')
         schema_resp = assets.load('solr_schema.json')
         conn.get = MagicMock(name='get', return_value=SolrResponse(
@@ -666,6 +667,14 @@ class IntegrationTestCase(TestCase):
             search_resp = json.dumps(response_json)
         solr.search = MagicMock(name='search', return_value=SolrResponse(
             body=search_resp, status=200))
+
+        if docs_file or docs_json:
+            if docs_file:
+                docs = json.loads(assets.load(docs_file))
+            elif docs_json:
+                docs = docs_json
+            solr.search().docs = docs
+
         return solr
 
     def add_additional_org_unit(self):
