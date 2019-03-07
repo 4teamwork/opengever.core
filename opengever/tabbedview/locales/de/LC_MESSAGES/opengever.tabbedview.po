@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-01-31 09:17+0000\n"
+"POT-Creation-Date: 2019-03-07 18:16+0000\n"
 "PO-Revision-Date: 2012-11-22 14:19+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -230,6 +230,11 @@ msgstr "Autor"
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_document_date"
 msgstr "Dokumentdatum"
+
+#. Default: "File extension"
+#: ./opengever/tabbedview/browser/tabs.py
+msgid "label_document_file_extension"
+msgstr "Dateiendung"
 
 #. Default: "Reference Number"
 #: ./opengever/tabbedview/browser/tabs.py

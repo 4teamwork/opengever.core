@@ -109,6 +109,7 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
             'Document Author': 'test_user_1_',
             'Document Date': '03.01.2010',
             'Dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            'File extension': '.docx',
             'Modification Date': '31.08.2016',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
