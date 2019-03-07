@@ -337,6 +337,11 @@ class IntegrationTestCase(TestCase):
         rid = catalog.getrid('/'.join(obj.getPhysicalPath()))
         return catalog.getIndexDataForRID(rid)
 
+    @staticmethod
+    def dateindex_value_from_datetime(datetime_obj):
+        yr, mo, dy, hr, mn = datetime_obj.timetuple()[:5]
+        return ((((yr * 12 + mo) * 31 + dy) * 24 + hr) * 60 + mn)
+
     def assert_index_value(self, expected_value, index_name, *objects):
         """Asserts that an index exists and has a specific value for a
         given object.

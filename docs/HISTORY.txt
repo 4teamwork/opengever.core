@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Readd Office template files into Office Connector editable MIME types. [Rotonen]
+- Make sure end date is reindexed when resolving/reactivating a dossier. [njohner]
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
 - Complete French translations of repository in examplecontent. [andresoberhaensli]
 - Adapt footer to new 4teamwork website. [njohner]
