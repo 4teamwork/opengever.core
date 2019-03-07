@@ -54,6 +54,10 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         for key, value in query.items():
             if key == 'SearchableText':
                 continue
+            if key == 'Subject':
+                operator = value['operator'].upper()
+                termlist = operator.join(escape(term) for term in value['query'])
+                filters.append(u'Subject:({})'.format(termlist))
             elif key == 'sort_on' or key == 'sort_order':
                 continue
             elif key == 'path':
