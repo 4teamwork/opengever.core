@@ -39,7 +39,7 @@ Die Inhaltsstatistiken werden einmal pro Tag mittels dem
 
 .. code:: bash
 
-    # GEVER Demo: Dump content stats
+    # Dump content stats
     0 22 * * * /home/zope/server/01-gever.example.org/bin/dump-content-stats -s <plone_site_id> >/dev/null 2>&1
 
 
@@ -51,7 +51,7 @@ Die Daily Digest mails können via zopectl handler `send_digest` generiert und v
 .. code:: bash
 
     # GEVER Demo: Send daily digest
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 send_digest >/dev/null 2>&1
+    0 5 * * * /home/zope/server/01-gever.example.org/bin/instance0 send_digest >/dev/null 2>&1
 
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
@@ -62,12 +62,12 @@ Aufgaben-Erinnerungen erstellen
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Aufgaben-Erinnerungen können via zopectl handler `generate_remind_notifications` generiert werden.
-Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte somit so früh wie möglich an einem neuen Tag ausgeführt werden und in jedem fall **vor** dem "Daily Digest"-Job.
+Es werden nur Erinnerungen für den aktuellen Tag erstellt. Der Cronjob sollte somit so früh wie möglich an einem neuen Tag ausgeführt werden und in jedem Fall **vor** dem "Daily Digest"-Job.
 
 .. code:: bash
 
-    # GEVER Demo: Generate remind notifications
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
+    # Generate remind notifications
+    0 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_remind_notifications >/dev/null 2>&1
 
 
 **Hinweise:** Pro Verbund (Gruppe von Mandanten mit gemeinsamem OGDS) darf
@@ -85,7 +85,7 @@ Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführ
 
 .. code:: bash
 
-    # GEVER Demo: Generate notifications for overdue dossiers
-    0 8 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
+    # Generate notifications for overdue dossiers
+    30 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
 
-**Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" berücksichtigt alle Org-Units (Plone-Sites) eines bestimmten Mandanten / Deployments. Dieser Job muss jedoch für jedes Deployment einzeln ausgeführt werden.
+**Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" muss **für jeden Mandanten** eines Clusters einzeln ausgeführt und eingerichtet werden.
