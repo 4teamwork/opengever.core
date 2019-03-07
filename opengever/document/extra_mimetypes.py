@@ -141,7 +141,7 @@ ADDITIONAL_TYPES = [
     ('application/vnd.ms-powerpoint.presentation.macroEnabled.12', '.pptm'),
 
     # MS Powerpoint Template (Macro Enabled)
-    ('application/vnd.ms-powerpoint.presentation.macroEnabled.12', '.potm'),
+    ('application/vnd.ms-powerpoint.template.macroEnabled.12', '.potm'),
 
     # MS Powerpoint Slideshow (Macro Enabled)
     ('application/vnd.ms-powerpoint.slideshow.macroEnabled.12', '.ppsm'),

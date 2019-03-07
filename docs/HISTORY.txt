@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Readd Office template files into Office Connector editable MIME types. [Rotonen]
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
 - Complete French translations of repository in examplecontent. [andresoberhaensli]
 - Adapt footer to new 4teamwork website. [njohner]
