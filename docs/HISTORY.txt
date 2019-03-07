@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
+- Complete French translations of repository in examplecontent. [andresoberhaensli]
 
 
 2019.1.1 (2019-02-26)
