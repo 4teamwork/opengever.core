@@ -24,11 +24,13 @@ EDITABLE_TYPES = [
     # Mindjet Mind Manager
     'application/vnd.mindjet.mindmanager',
     # MS Excel
+    'application/vnd.ms-excel.sheet.macroEnabled.12',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     # MS OneNote
     'application/onenote',
     # MS Powerpoint
+    'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
     'application/vnd.ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
@@ -42,6 +44,7 @@ EDITABLE_TYPES = [
     'application/vnd.ms-visio.drawing',
     # MS Word
     'application/msword',
+    'application/vnd.ms-word.document.macroEnabled.12',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     # PDF editors - Adobe Acrobat or Nitro PDF
     'application/pdf',
