@@ -5,6 +5,8 @@ class ReindexDossierEndDate(UpgradeStep):
     """Reindex dossier end date when there is a mismatch between index and metadata
     """
 
+    deferrable = True
+
     def __call__(self):
         query = {'object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker'}
         catalog = self.portal.portal_catalog

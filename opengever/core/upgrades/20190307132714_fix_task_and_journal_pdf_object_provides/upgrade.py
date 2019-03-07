@@ -11,6 +11,8 @@ class FixTaskAndJournalPDFObjectProvides(UpgradeStep):
     """Fix task and journal pdf object provides.
     """
 
+    deferrable = True
+
     def __call__(self):
         catalog = self.portal.portal_catalog
         object_provides = catalog._catalog.getIndex("object_provides")
