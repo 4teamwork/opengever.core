@@ -24,28 +24,43 @@ EDITABLE_TYPES = [
     # Mindjet Mind Manager
     'application/vnd.mindjet.mindmanager',
     # MS Excel
+    'application/vnd.ms-excel.addin.macroEnabled.12',
+    'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
     'application/vnd.ms-excel.sheet.macroEnabled.12',
+    'application/vnd.ms-excel.template.macroEnabled.12',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
     # MS OneNote
     'application/onenote',
     # MS Powerpoint
+    'application/vnd.ms-powerpoint.addin.macroEnabled.12',
     'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+    'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+    'application/vnd.ms-powerpoint.template.macroEnabled.12',
     'application/vnd.ms-powerpoint',
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+    'application/vnd.openxmlformats-officedocument.presentationml.template',
     # MS Project
     'application/vnd.ms-project',
     'application/x-project',
     # MS Publisher
     'application/x-mspublisher',
     # MS Visio
-    'application/vnd.visio',
+    'application/vnd.ms-visio.drawing.macroEnabled.12',
     'application/vnd.ms-visio.drawing',
+    'application/vnd.ms-visio.stencil.macroEnabled.12',
+    'application/vnd.ms-visio.stencil',
+    'application/vnd.ms-visio.template.macroEnabled.12',
+    'application/vnd.ms-visio.template',
+    'application/vnd.visio',
     # MS Word
     'application/msword',
     'application/vnd.ms-word.document.macroEnabled.12',
+    'application/vnd.ms-word.template.macroEnabled.12',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
     # PDF editors - Adobe Acrobat or Nitro PDF
     'application/pdf',
     'application/postscript',
