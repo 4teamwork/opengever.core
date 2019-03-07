@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2019.1.2 (unreleased)
+2019.1.2 (2019-03-07)
 ---------------------
 
 - Make sure task and journal PDFs object_provides index is up to date after resolving a dossier. [njohner]
