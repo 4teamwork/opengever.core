@@ -8,6 +8,7 @@ Changelog
 - Make sure task and journal PDFs object_provides index is up to date after resolving a dossier. [njohner]
 - Readd Office template files into Office Connector editable MIME types. [Rotonen]
 - Make sure end date is reindexed when resolving/reactivating a dossier. [njohner]
+- Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]
 - Complete French translations of repository in examplecontent. [andresoberhaensli]
 - Adapt footer to new 4teamwork website. [njohner]

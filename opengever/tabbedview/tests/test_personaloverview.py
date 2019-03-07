@@ -175,12 +175,10 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-mytasks')
         expected_tasks = [
             u'F\xf6rw\xe4rding',
-            u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
             u'Vertragsentw\xfcrfe 2018',
-            u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
         ]
@@ -190,11 +188,9 @@ class TestGlobalTaskListings(IntegrationTestCase):
         browser.open(view='tabbedview_view-mytasks')
         expected_tasks = [
             u'F\xf6rw\xe4rding',
-            u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
             u'Mitarbeiter Dossier generieren',
             u'Personaleintritt',
             u'Vertragsentw\xfcrfe 2018',
-            u'Vertr\xe4ge abschliessen',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
             ]
