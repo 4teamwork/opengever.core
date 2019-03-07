@@ -360,6 +360,7 @@ class StrictDossierResolver(object):
                         content_type='application/pdf',
                         **kwargs).execute()
             alsoProvides(document, IDossierJournalPDFMarker)
+            document.reindexObject(idxs=['object_provides'])
 
     def create_tasks_listing_pdf(self):
         """Creates a pdf representation of the dossier tasks, and add it to
@@ -408,6 +409,7 @@ class StrictDossierResolver(object):
                         content_type='application/pdf',
                         **kwargs).execute()
             alsoProvides(document, IDossierTasksPDFMarker)
+            document.reindexObject(idxs=['object_provides'])
 
     def trigger_pdf_conversion(self):
         if not self.get_property('archival_file_conversion_enabled'):
