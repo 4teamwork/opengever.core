@@ -64,23 +64,37 @@ class TestLocalRolesSetter(IntegrationTestCase):
                 self.regular_user.id),
             "The proposal should have the same local roles as its document.")
 
-    def test_responsible_has_reader_role_on_related_items_when_task_is_added(self):
+    def test_responsible_has_reader_and_editor_role_on_related_items_of_direct_execution_task(self):
         self.login(self.regular_user)
 
         # inactive_task is unidirectional by value
-        self.assertEquals(
-            ('Reader', ),
-            self.inactive_document.get_local_roles_for_userid(self.regular_user.id))
+        manager = RoleAssignmentManager(self.inactive_document)
+        assignment = manager.storage.get_by_reference(
+            Oguid.for_object(self.inactive_task).id)[0]
 
-    def test_responsible_has_reader_role_on_related_items_when_responsible_is_changed(self):
+        self.assertEquals(['Reader', 'Editor'], assignment.get('roles'))
+
+    def test_responsible_has_reader_role_on_related_items_of_information_task(self):
         self.login(self.regular_user)
+
+        # info_task is unidirectional by value
+        manager = RoleAssignmentManager(self.document)
+        assignment = manager.storage.get_by_reference(Oguid.for_object(self.info_task).id)[0]
+        self.assertEquals(['Reader'], assignment.get('roles'))
+
+    def test_reassigning_task_grants_local_roles_to_new_responsible(self):
+        self.login(self.regular_user)
+
+        roles = self.inactive_document.get_local_roles_for_userid(
+            self.secretariat_user.id)
+        self.assertEquals(tuple(), roles)
 
         self.inactive_task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.inactive_task))
 
         roles = self.inactive_document.get_local_roles_for_userid(
             self.secretariat_user.id)
-        self.assertEquals(('Reader', ), roles)
+        self.assertEquals(('Editor', 'Reader'), roles)
 
     def test_responsible_of_a_bidirectional_by_ref_task_has_reader_and_editor_role_on_related_items(self):
         self.login(self.regular_user)

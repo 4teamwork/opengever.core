@@ -145,7 +145,8 @@ class LocalRolesSetter(object):
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)."""
         roles = ['Reader']
-        if self.task.task_type_category == 'bidirectional_by_reference':
+        if self.task.task_type_category in [
+                'bidirectional_by_reference', 'unidirectional_by_value']:
             roles.append('Editor')
 
         for item in getattr(aq_base(self.task), 'relatedItems', []):
