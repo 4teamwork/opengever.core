@@ -472,6 +472,7 @@ class Resolver(object):
         else:
             # main dossier set the given end_date
             IDossier(dossier).end = end_date
+        dossier.reindexObject(idxs=['end'])
 
         for subdossier in dossier.get_subdossiers():
             self._recursive_resolve(
@@ -503,6 +504,7 @@ class Reactivator(object):
 
     def reset_end_date(self, dossier):
         IDossier(dossier).end = None
+        dossier.reindexObject(idxs=['end'])
 
 
 class ResolveConditions(object):
