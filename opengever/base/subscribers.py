@@ -43,6 +43,7 @@ ALLOWED_ENDPOINTS = set([
     'upgrades-api',
     'oauth2-token',
     'my-invitations',
+    'wopi',
 ])
 
 
