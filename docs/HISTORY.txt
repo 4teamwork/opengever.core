@@ -5,16 +5,20 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
-- Make sure task and journal PDFs object_provides index is up to date after resolving a dossier. [njohner]
-- Readd Office template files into Office Connector editable MIME types. [Rotonen]
-- Make sure end date is reindexed when resolving/reactivating a dossier. [njohner]
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
-- Readd Office macro files into Office Connector editable MIME types. [Rotonen]
-- Complete French translations of repository in examplecontent. [andresoberhaensli]
 - Adapt footer to new 4teamwork website. [njohner]
 - Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]
 - Make sure all workflow IDs are unique. [njohner]
+
+2019.1.2 (2019-03-07)
+---------------------
+
+- Make sure task and journal PDFs object_provides index is up to date after resolving a dossier. [njohner]
+- Readd Office template files into Office Connector editable MIME types. [Rotonen]
+- Make sure end date is reindexed when resolving/reactivating a dossier. [njohner]
+- Readd Office macro files into Office Connector editable MIME types. [Rotonen]
+- Complete French translations of repository in examplecontent. [andresoberhaensli]
 
 
 2019.1.1 (2019-02-26)
