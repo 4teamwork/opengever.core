@@ -38,7 +38,10 @@ def actions_by_extension(net_zone='external-https', url=URL):
     wopi_discovery = etree_to_dict(tree)['wopi-discovery']
 
     actions = {}
-    for zone in wopi_discovery['net-zone']:
+    net_zones = wopi_discovery['net-zone']
+    if not isinstance(net_zones, list):
+        net_zones = [net_zones]
+    for zone in net_zones:
         if zone['@name'] == net_zone:
             for app in zone['app']:
                 app_name = app['@name']
