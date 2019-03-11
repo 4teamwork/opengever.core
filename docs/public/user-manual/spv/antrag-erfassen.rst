@@ -27,10 +27,10 @@ Zum Erfassen eines Antrags gibt es zwei Möglichkeiten:
 **Antrag ausfüllen**
 
 Unter «Antrag hinzufügen» werden der Titel des Traktandums, das betreffende
-Gremium, die passende Antragsvorlage und die dazugehörigen Anhänge bearbeitet
+Gremium, die passende Antragsvorlage und die dazugehörigen Beilagen bearbeitet
 bzw. ausgewählt.
 
-Anhänge können entweder aus einer bestehenden Vorlage angehängt
+Beilagen können entweder aus einer bestehenden Vorlage angehängt
 werden:
 
 |img-spvupdate-9|

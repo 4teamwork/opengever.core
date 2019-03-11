@@ -107,7 +107,7 @@ msgstr "Retour à la version ${version_id} du document."
 
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
-msgstr "Soumettre des documents additionnels"
+msgstr "Soumettre des pièces jointes additionnelles"
 
 #: ./opengever/document/browser/overview.py
 msgid "Submitted version: ${version}"

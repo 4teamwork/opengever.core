@@ -116,10 +116,10 @@ msgid "Search results for ${term}"
 msgstr "Suchresultate für ${term}"
 
 msgid "Submit additional document"
-msgstr "Zusätzlichen Anhang einreichen"
+msgstr "Zusätzliche Beilage einreichen"
 
 msgid "Submit additional documents"
-msgstr "Zusätzliche Anhänge einreichen"
+msgstr "Zusätzliche Beilagen einreichen"
 
 msgid "Usage"
 msgstr "Nutzung"

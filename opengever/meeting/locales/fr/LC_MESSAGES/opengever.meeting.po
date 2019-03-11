@@ -417,7 +417,7 @@ msgstr "Tous"
 #. Default: "Attachments"
 #: ./opengever/meeting/zipexport.py
 msgid "attachments"
-msgstr "Annexes"
+msgstr "Pièces jointes"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/committeeforms.py
@@ -1353,7 +1353,7 @@ msgstr "Début"
 #: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "label_submit_additional_documents"
-msgstr "Soumettre les documents additionnels"
+msgstr "Soumettre les pièces jointes additionnelles"
 
 #. Default: "Submit Updated Documents"
 #: ./opengever/meeting/browser/documents/submit.py

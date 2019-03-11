@@ -239,7 +239,7 @@ msgstr "Envoyer par E-Mail"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Submit additional documents"
-msgstr "Soumettre des documents additionnels"
+msgstr "Soumettre des pièces jointes additionnelles"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"

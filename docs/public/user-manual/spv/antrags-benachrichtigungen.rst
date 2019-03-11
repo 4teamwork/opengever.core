@@ -22,8 +22,8 @@ Verantwortlichen eines Gremiums ausgelöst:
 
 -   Neuer Antrag eingereicht
 -   Eingereichter Antrag kommentiert
--   Neue Anhänge eingereicht
--   Bestehende Anhänge aktualisiert
+-   Neue Beilagen eingereicht
+-   Bestehende Beilagen aktualisiert
 
 Diese oben erwähnten Aktionen werden auch in den Benachrichtigungs-Einstellungen
 sichtbar und können von den Benutzern einzeln konfiguriert werden. Mehr

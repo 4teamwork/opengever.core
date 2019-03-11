@@ -27,7 +27,7 @@ Neu kann beim Hinzufügen einer Vorlage in einem Suchfeld nach der gewünschten 
 Sitzungs- und Protokollverwaltung
 ---------------------------------
 
-- Anhänge in Traktanden werden nun alphabetisch sortiert dargestellt
+- Beilagen in Traktanden werden nun alphabetisch sortiert dargestellt
 
 - Freitext-Traktanden sind nun auch im Zip-Export enthalten
 

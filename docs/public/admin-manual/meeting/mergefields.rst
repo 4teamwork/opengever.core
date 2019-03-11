@@ -163,11 +163,11 @@ Metadaten zu einem Traktandum (AgendaItem):
 
 - ``attachments``
 
-  Liste von Anhängen des Antrags (Liste von Attachment).
+  Liste von Beilagen des Antrags (Liste von Attachments).
 
 
-Metadaten zu einem Anhang eines Antrags (Attachment):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Metadaten zu einer Beilage eines Antrags (Attachment):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - ``title``
 

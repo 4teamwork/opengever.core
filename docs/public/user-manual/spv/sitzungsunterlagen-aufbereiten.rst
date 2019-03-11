@@ -2,7 +2,7 @@
 Sitzungsunterlagen aufbereiten
 ------------------------------
 Sie haben jederzeit die Möglichkeit die Inhalte aus der SPV in eine ZIP-Datei
-zu exportieren (einzelne Geschäfte inkl. Anhänge). Die Dokumente werden
+zu exportieren (einzelne Geschäfte inkl. Beilagen). Die Dokumente werden
 automatisch in PDFs konvertiert. Diese können Sie den Behördenmitgliedern via
 Email, Teamraum oder einer anderen Collaborationplattform zur Verfügung stellen.
 

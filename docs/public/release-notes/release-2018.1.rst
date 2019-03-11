@@ -87,7 +87,7 @@ Sitzungs- und Protokollverwaltung
 
 - Mitgliedschaften werden neu nach Nachnamen sortiert
 
-- Anhänge für Antrage werden neu alphabetisch sortiert
+- Beilagen für Anträge werden neu alphabetisch sortiert
 
 - Bei den `Sablon-Vorlagen <https://docs.onegovgever.ch/admin-manual/meeting/mergefields/>`_ kann neu Vor- und Nachname separat ausgewiesen werden.
   Natürlich bleibt die Möglichkeit beide zusammen zu nehmen (fullname) noch bestehen.

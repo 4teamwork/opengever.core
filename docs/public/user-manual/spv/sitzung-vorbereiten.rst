@@ -23,7 +23,7 @@ Ansicht einer vorbereiteten Sitzung:
 |img-spvupdate-22|
 |img-spvupdate-23|
 
-1. Die Ansicht der Anhänge pro Antrag lässt sich ein- und ausklappen.
+1. Die Ansicht der Beilagen pro Antrag lässt sich ein- und ausklappen.
 2. Über «Bearbeiten» können weitere Teilnehmende (Gäste) hinzugefügt werden.
 3. In diesem Feld kann die Protokollführende Person ausgewählt werden.
 4. Der Beginn der Seitennummerierung kann hier festgelegt werden.
