@@ -15,7 +15,7 @@ def create_access_token(userid, scope, timestamp=None, secret=None):
         timestamp = int(time())
 
     digest = hmac.new(
-        secret, userid + scope + pack("!I", timestamp),
+        secret, str(userid) + scope + pack("!I", timestamp),
         hashlib.sha256).digest()
     token = "%s%08x%s" % (digest, timestamp, userid)
     return token
