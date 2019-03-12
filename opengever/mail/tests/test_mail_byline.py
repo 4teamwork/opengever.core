@@ -17,14 +17,14 @@ class TestMailByline(TestBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.mail_eml)
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEqual('26', seq_number.text)
+        self.assertEqual('28', seq_number.text)
 
     @browsing
     def test_document_byline_reference_number(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.mail_eml)
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEqual('Client1 1.1 / 1 / 26', ref_number.text)
+        self.assertEqual('Client1 1.1 / 1 / 28', ref_number.text)
 
     @browsing
     def test_document_byline_document_author(self, browser):

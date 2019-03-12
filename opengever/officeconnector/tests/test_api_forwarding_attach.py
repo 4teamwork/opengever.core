@@ -48,7 +48,7 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
         expected_payloads = [{
             u'content-type': u'text/plain',
             u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
-            u'document-url': u'http://nohost/plone/eingangskorb/forwarding-1/document-11',
+            u'document-url': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
             u'download': u'download',
             u'filename': u'Dokument im Eingangskoerbliweiterleitung.txt',
             u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung',

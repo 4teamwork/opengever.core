@@ -138,7 +138,7 @@ class TestDocument(IntegrationTestCase):
 
         cb = self.dossier.manage_copyObjects(self.document.id)
         self.dossier.manage_pasteObjects(cb)
-        new_doc = self.dossier['copy_of_document-12']
+        new_doc = self.dossier['copy_of_document-14']
         new_history = self.portal.portal_repository.getHistory(new_doc)
         self.assertEqual(len(new_history), 0)
 
@@ -312,7 +312,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
             factoriesmenu.add('Document')
             browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-38']
+        document = self.dossier['document-40']
         self.assertEqual(today, document.document_date)
 
     @browsing
@@ -324,7 +324,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document', 'File': ('DATA', 'file.txt', 'text/plain')}).save()
 
-        document = self.dossier['document-38']
+        document = self.dossier['document-40']
         self.assertFalse(document.preserved_as_paper)
 
     @browsing
@@ -336,7 +336,7 @@ class TestDocumentDefaultValues(IntegrationTestCase):
         factoriesmenu.add('Document')
         browser.fill({'Title': u'My Document'}).save()
 
-        document = self.dossier['document-38']
+        document = self.dossier['document-40']
         self.assertTrue(document.preserved_as_paper)
 
 

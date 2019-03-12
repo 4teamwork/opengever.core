@@ -113,8 +113,8 @@ class TestRepositoryFolderDocumentsTab(IntegrationTestCase):
             'Modification Date': '31.08.2016',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
-            'Reference Number': 'Client1 1.1 / 1 / 12',
-            'Sequence Number': '12',
+            'Reference Number': 'Client1 1.1 / 1 / 14',
+            'Sequence Number': '14',
             'Subdossier': '',
             'Title': u'Vertr\xe4gsentwurf',
             }

@@ -636,11 +636,27 @@ class OpengeverContentFixture(object):
             .within(self.templates)
             ))
 
+        # The title of this one should be alphabetically after
+        # subdossiertemplatedocument for testing sorting!
+        self.register('dossiertemplatedocument', create(
+            Builder('document')
+            .within(self.dossiertemplate)
+            .titled(u'Werkst\xe4tte')
+            .having(preserved_as_paper=True)
+        ))
+
         self.subdossiertemplate = self.register('subdossiertemplate', create(
             Builder('dossiertemplate')
             .titled(u'Anfragen')
             .within(self.dossiertemplate)
             ))
+
+        self.register('subdossiertemplatedocument', create(
+            Builder('document')
+            .within(self.subdossiertemplate)
+            .titled(u'Baumsch\xfctze')
+            .having(preserved_as_paper=True)
+        ))
 
     @staticuid()
     def create_subtemplates(self):

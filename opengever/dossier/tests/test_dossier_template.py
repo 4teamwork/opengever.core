@@ -405,17 +405,6 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
     @browsing
     def test_add_recursive_documents_and_subdossiers(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        create(Builder('document')
-               .titled('Document 1')
-               .within(self.subdossiertemplate)
-               .with_dummy_content())
-
-        create(Builder("dossiertemplate")
-               .within(self.subdossiertemplate)
-               .titled(u'Anfragen 2017'))
-
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
         factoriesmenu.add('Dossier with template')
@@ -428,14 +417,14 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         self.assertEqual('Bauvorhaben klein', dossier.title)
         self.assertEqual(
-            [u'Anfragen'],
+            [u'Werkst\xe4tte', u'Anfragen'],
             [obj.title for obj in dossier.listFolderContents()],
             "The content of the root-dossier is not correct."
             )
 
-        subdossier = dossier.listFolderContents()[0]
+        subdossier = dossier.listFolderContents()[1]
         self.assertEqual(
-            ['Document 1', u'Anfragen 2017'],
+            [u'Baumsch\xfctze'],
             [obj.title for obj in subdossier.listFolderContents()],
             "The content of the subdossiertemplate is not correct"
         )
@@ -458,7 +447,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         browser.click_on('Save')
 
-        subdossier = browser.context.listFolderContents()[0]
+        subdossier = browser.context.listFolderContents()[1]
 
         self.assertEqual(self.dossier_responsible.getId(), IDossier(subdossier).responsible)
 
@@ -583,41 +572,50 @@ class TestDossierTemplateOverview(IntegrationTestCase):
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_sortable_title(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
 
+        # Test for what we'll bump out of view
+        expected_titles = [u'Baumsch\xfctze', u'Werkst\xe4tte']
+        discovered_titles = browser.css('#documentsBox li:not(.moreLink) a.document_link').text
+        self.assertEqual(2, len(discovered_titles))
+        self.assertSequenceEqual(expected_titles, discovered_titles)
+
+        # Bump the preexisting ones out of view
         for i in range(1, 11):
             create(Builder('document')
                    .within(self.dossiertemplate)
-                   .titled(u'C Document %s' % i))
-
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled(u'A Document'))
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled(u'B Document'))
+                   .titled(u'A Document %s' % i))
 
         browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
-
-        self.assertSequenceEqual(
-            ['A Document', 'B Document', 'C Document 1', 'C Document 2', 'C Document 3',
-             'C Document 4', 'C Document 5', 'C Document 6', 'C Document 7',
-             'C Document 8'],
-            browser.css('#documentsBox li:not(.moreLink) a.document_link').text)
+        expected_titles = [
+            'A Document 1',
+            'A Document 2',
+            'A Document 3',
+            'A Document 4',
+            'A Document 5',
+            'A Document 6',
+            'A Document 7',
+            'A Document 8',
+            'A Document 9',
+            'A Document 10',
+        ]
+        discovered_titles = browser.css('#documentsBox li:not(.moreLink) a.document_link').text
+        self.assertEqual(10, len(discovered_titles))
+        self.assertSequenceEqual(expected_titles, discovered_titles)
 
     @browsing
     def test_documents_in_overview_are_linked(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        document = create(Builder('document')
-                          .within(self.dossiertemplate)
-                          .titled(u'Document 1'))
-
         browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
 
         items = browser.css('#documentsBox li:not(.moreLink) a.document_link')
 
-        self.assertEqual(1, len(items))
-        self.assertEqual(document.absolute_url(), items.first.get('href'))
+        self.assertEqual(2, len(items))
+        self.assertEqual(
+            self.subdossiertemplatedocument.absolute_url(),
+            items.first.get('href'),
+        )
 
 
 class TestDossierTemplateSubdossiers(IntegrationTestCase):
@@ -634,16 +632,12 @@ class TestDossierTemplateSubdossiers(IntegrationTestCase):
 
         create(Builder('dossiertemplate')
                .within(self.dossiertemplate)
-               .titled(u'C Subdossier'))
-
-        create(Builder('dossiertemplate')
-               .within(self.dossiertemplate)
                .titled(u'B Subdossier'))
 
         browser.open(self.dossiertemplate, view=SUBDOSSIERS_TAB)
 
         self.assertEqual(
-            ['AA Subdossier', 'Anfragen', 'B Subdossier', 'C Subdossier'],
+            ['AA Subdossier', 'Anfragen', 'B Subdossier'],
             browser.css('table.listing a.contenttype-opengever-dossier-dossiertemplate').text)
 
     @browsing
@@ -661,27 +655,13 @@ class TestDossierTemplateDocuments(IntegrationTestCase):
 
     features = ('dossiertemplate', 'bumblebee')
 
-    def setUp(self):
-        super(TestDossierTemplateDocuments, self).setUp()
-        self.login(self.regular_user)
-
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled('Document 1'))
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled('Document 3'))
-        create(Builder('document')
-               .within(self.subdossiertemplate)
-               .titled('Document 2'))
-
     @browsing
     def test_show_documents_in_list_view_sorted_alphabetically(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossiertemplate, view=DOCUMENTS_LIST_TAB)
 
         self.assertEqual(
-            ['Document 1', 'Document 2', 'Document 3'],
+            [u'Baumsch\xfctze', u'Werkst\xe4tte'],
             browser.css('table.listing a.icon-document_empty').text)
 
     @browsing
@@ -690,6 +670,6 @@ class TestDossierTemplateDocuments(IntegrationTestCase):
         browser.open(self.dossiertemplate, view=DOCUMENTS_GALLERY_TAB)
 
         self.assertEqual(
-            ['Document 1', 'Document 2', 'Document 3'],
+            [u'Baumsch\xfctze', u'Werkst\xe4tte'],
             [preview.attrib.get('alt') for preview in browser.css(
                 '.preview-listing .file-preview')])
