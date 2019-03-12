@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-07 09:13+0000\n"
+"POT-Creation-Date: 2019-02-28 07:21+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -352,6 +352,8 @@ msgstr "Actif"
 
 #. Default: "Ad hoc agendaitems"
 #: ./opengever/meeting/toc/dossier_refnum.py
+#: ./opengever/meeting/toc/repository.py
+#: ./opengever/meeting/toc/repository_refnum.py
 msgid "ad_hoc_toc_group_title"
 msgstr "Points de l'ordre du jour sans demande"
 
@@ -439,6 +441,11 @@ msgstr "Confirmer"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Continuer"
+
+#. Default: "Create protocol approval proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "button_create_protocol_approval_proposal"
+msgstr "Créer proposition d'approbation"
 
 #. Default: "Create successor proposal"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1266,6 +1273,11 @@ msgstr "Document de proposition"
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_proposal_template"
 msgstr "Modèle de proposition"
+
+#. Default: "Approve protocol"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_protocol_approval"
+msgstr "Approbation du procès-verbal"
 
 #. Default: "Protocol header template"
 #: ./opengever/meeting/committee.py

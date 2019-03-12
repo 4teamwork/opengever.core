@@ -328,6 +328,19 @@
                     </div>
                   </tal:GENERATED>
 
+                  <div>
+                    <form method="POST" id="create_protocol_approval_proposal"
+                          tal:condition="python: meeting.is_closed() and protocol_document"
+                          tal:attributes="action view/url_create_protocol_approval_proposal">
+                      <input type="hidden" name="protocol"
+                             tal:attributes="value view/get_protocol_document_uid" />
+                      <input type="submit"
+                             class="create_protocol_approval_proposal-button"
+                             value="Create protocol approval proposal"
+                             i18n:attributes="value button_create_protocol_approval_proposal" />
+                    </form>
+                  </div>
+
                 </div>
 
                 <div class="meeting-workflow" tal:condition="meeting/is_editable">

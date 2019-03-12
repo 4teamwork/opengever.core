@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-07 09:13+0000\n"
+"POT-Creation-Date: 2019-02-28 07:21+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -350,6 +350,8 @@ msgstr "Aktiv"
 
 #. Default: "Ad hoc agendaitems"
 #: ./opengever/meeting/toc/dossier_refnum.py
+#: ./opengever/meeting/toc/repository.py
+#: ./opengever/meeting/toc/repository_refnum.py
 msgid "ad_hoc_toc_group_title"
 msgstr "Traktanden ohne Antrag"
 
@@ -437,6 +439,11 @@ msgstr "Bestätigen"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "button_continue"
 msgstr "Weiter"
+
+#. Default: "Create protocol approval proposal"
+#: ./opengever/meeting/browser/meetings/templates/meeting.pt
+msgid "button_create_protocol_approval_proposal"
+msgstr "Protokollgenehmigung erstellen"
 
 #. Default: "Create successor proposal"
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
@@ -1264,6 +1271,11 @@ msgstr "Antragsdokument"
 #: ./opengever/meeting/browser/proposalforms.py
 msgid "label_proposal_template"
 msgstr "Antragsvorlage"
+
+#. Default: "Approve protocol"
+#: ./opengever/meeting/browser/proposalforms.py
+msgid "label_protocol_approval"
+msgstr "Protokollgenehmigung"
 
 #. Default: "Protocol header template"
 #: ./opengever/meeting/committee.py

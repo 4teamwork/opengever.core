@@ -481,6 +481,28 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
             }
           }
         }
+
+        #create_protocol_approval_proposal {
+          display: block;
+          &:before {
+            @extend .fas;
+            font-family: 'opengever';
+            content: $proposal;
+            padding-right: 4px;
+            color: $black;
+          }
+          .create_protocol_approval_proposal-button {
+            background: none;
+            box-shadow: none;
+            border: none;
+            padding-left: 0px;
+            color: #205C90;
+            font-family: Arial, FreeSans, sans-serif;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
       }
 
       #tab-participants {

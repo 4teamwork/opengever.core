@@ -7,6 +7,7 @@ from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import byline
 from plone import api
+from plone.uuid.interfaces import IUUID
 import pytz
 
 
@@ -248,6 +249,27 @@ class TestMeetingView(IntegrationTestCase):
         self.assertEquals(
             0,
             len(browser.css('#ad-hoc-agenda-item-proposal-templates')))
+
+    @browsing
+    def test_generate_protocol_approval_proposal_available_when_meeting_closed(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting)
+
+        self.assertIsNone(browser.find("Create protocol approval proposal"))
+
+        self.meeting.model.close()
+        browser.open(self.meeting)
+
+        button = browser.find("Create protocol approval proposal")
+        self.assertIsNotNone(button)
+
+        form = button.form
+        expected_url = "{}/++add++opengever.meeting.proposal".format(
+            self.meeting_dossier.absolute_url())
+        self.assertEqual(expected_url, form.action)
+
+        protocol_document = self.meeting.model.protocol_document.resolve_document()
+        self.assertEquals(IUUID(protocol_document), form.values["protocol"])
 
     @browsing
     def test_displays_error_view_when_no_view_permissions_on_meeting_dossier(self, browser):

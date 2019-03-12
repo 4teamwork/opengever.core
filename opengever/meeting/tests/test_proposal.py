@@ -1028,6 +1028,49 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(expected_listing, browser.css('table.listing').first.lists())
 
     @browsing
+    def test_create_protocol_approval_proposal(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.meeting.model.close()
+        browser.open(self.meeting)
+
+        button_label = "Create protocol approval proposal"
+        browser.click_on(button_label)
+
+        self.assertEquals(u'Approve protocol ' + self.meeting.get_title(),
+                          browser.find('Title').value)
+
+        self.assertEquals(str(self.meeting.model.committee_id),
+                          browser.find('Committee').value)
+
+        protocol_document = self.meeting.model.protocol_document.resolve_document()
+        expected_attachements = [protocol_document.absolute_url_path()]
+        self.assertItemsEqual(
+            expected_attachements,
+            [node.value for node in browser.find('Attachments').css('input[type=checkbox]')])
+
+        browser.fill({
+            'Proposal template': self.proposal_template.Title(),
+        }).save()
+
+        statusmessages.assert_no_error_messages()
+
+        proposal = browser.context
+        browser.open(proposal, view='tabbedview_view-overview')
+        expected_listing = [
+            ['Title', u'Approve protocol 9. Sitzung der Rechnungspr\xfcfungskommission'],
+            ['Description', ''],
+            ['Committee', u'Rechnungspr\xfcfungskommission'],
+            ['Meeting', ''],
+            ['Issuer', u'M\xfcller Fr\xe4nzi (franzi.muller)'],
+            ['Proposal document', u'Approve protocol 9. Sitzung der Rechnungspr\xfcfungskommission'],
+            ['State', 'Pending'],
+            ['Decision number', ''],
+            ['Attachments', u'Protocol-9. Sitzung der Rechnungspr\xfcfungskommission'],
+            ['Excerpt', ''],
+        ]
+        self.assertEqual(expected_listing, browser.css('table.listing').first.lists())
+
+    @browsing
     def test_proposal_title_is_displayed_xss_safe(self, browser):
         self.login(self.dossier_responsible, browser)
         self.proposal.title = u'<p>qux</p>'
