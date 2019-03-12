@@ -1,10 +1,14 @@
+from datetime import date
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.dossier.tests.test_resolve import resolve_dossier
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.annotation import IAnnotations
@@ -92,6 +96,35 @@ class TestRecentlyModifiedGet(IntegrationTestCase):
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'target_url': self.document.absolute_url(),
                 'title': u'Vertr\xe4gsentwurf'}],
+             'recently_touched': []},
+            browser.json)
+
+    @browsing
+    def test_journal_and_task_pdfs_are_not_listed(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.secretariat_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
+
+        with freeze(datetime(2018, 4, 30)):
+            resolve_dossier(self.empty_dossier, browser)
+
+        url = '%s/@recently-touched/%s' % (
+            self.portal.absolute_url(), self.secretariat_user.getId())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(
+            {'checked_out': [],
              'recently_touched': []},
             browser.json)
 
