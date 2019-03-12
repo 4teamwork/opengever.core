@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from Acquisition import aq_parent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi.token import validate_access_token
 from plone import api
@@ -19,6 +20,9 @@ from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound
 from base64 import urlsafe_b64decode
 import json
+import logging
+
+logger = logging.getLogger('opengever.wopi')
 
 
 @implementer(IPublishTraverse)
@@ -46,17 +50,18 @@ class WOPIView(BrowserView):
         return self
 
     def __call__(self):
-        print self.request.ACTUAL_URL + '?' + self.request.get('QUERY_STRING')
-        lock = self.request.getHeader('X-WOPI-Lock', '-')
-        old_lock = self.request.getHeader('X-WOPI-OldLock', '-')
-        print "Method: {}, X-WOPI-Override: {}, X-WOPI-Lock: {}, X-WOPI-OldLock: {}".format(
-            self.method, self.override, lock, old_lock)
-        print ""
+        url = self.request.ACTUAL_URL + '?' + self.request.get('QUERY_STRING')
+        lock = self.request.getHeader('X-WOPI-Lock', 'None')
+        old_lock = self.request.getHeader('X-WOPI-OldLock', 'None')
+        logger.info(
+            'WOPI-Request: url=%s, method=%s,  X-WOPI-Override=%s, '
+            'X-WOPI-Lock=%s, X-WOPI-OldLock=%s',
+            url, self.method, self.override, lock, old_lock)
 
         if self.object_id is None:
             raise zNotFound()
 
-        token = self.request.form.get('access_token')
+        token = self.request.form.get('access_token', '')
         try:
             token = urlsafe_b64decode(token)
         except:
@@ -103,6 +108,11 @@ class WOPIView(BrowserView):
     def check_file_info(self):
         obj = self.obj()
         member = self.portal_state.member()
+        dossier = aq_parent(obj)
+        modified_dt = obj.modified().asdatetime()
+        modified_iso9601 = (
+            modified_dt.replace(tzinfo=None) - modified_dt.utcoffset()
+            ).isoformat() + 'Z'
         data = {
             'BaseFileName': obj.file.filename,
             'OwnerId': obj.Creator(),
@@ -117,6 +127,12 @@ class WOPIView(BrowserView):
             'UserCanNotWriteRelative': True,
             'UserCanWrite': True,
             'CloseUrl': obj.absolute_url(),
+            'BreadcrumbBrandName': 'OneGov GEVER',
+            'BreadcrumbBrandUrl': self.portal_state.portal_url(),
+            'BreadcrumbDocName': obj.Title(),
+            'BreadcrumbFolderName': dossier.Title(),
+            'BreadcrumbFolderUrl': dossier.absolute_url(),
+            'LastModifiedTime': modified_iso9601,
         }
         return self.render_json(data)
 
@@ -135,8 +151,11 @@ class WOPIView(BrowserView):
             if lock_info:
                 current_token = lock_info[0]['token']
                 token = self.request.getHeader('X-WOPI-Lock')
+                if current_token != token:
+                    logger.warn(
+                        'Lock token mismatch: current token: %s, '
+                        'provided token: %s', current_token, token)
                 # Office Online sends the wrong token?!!
-                # if current_token != token:
                 #     self.request.response.setStatus(409)
                 #     self.request.response.setHeader('X-WOPI-Lock', token)
                 #     return
@@ -150,7 +169,7 @@ class WOPIView(BrowserView):
                 self.request.response.setStatus(200, lock=1)
             else:
                 self.request.response.setStatus(409)
-                self.request.response.setHeader('X-WOPI-Lock', token)
+                self.request.response.setHeader('X-WOPI-Lock', '')
                 return
         else:
             self.request.response.setStatus(501)
