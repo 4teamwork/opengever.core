@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Update plone.rest api to 3.7.2. [mathias.leimgruber]
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Adapt footer to new 4teamwork website. [njohner]
