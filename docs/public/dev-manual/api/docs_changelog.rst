@@ -5,6 +5,11 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+2019-03-13
+----------
+
+- Kapitel "Auflistungen" hinzugefügt
+
 2018-08-09
 ----------
 
