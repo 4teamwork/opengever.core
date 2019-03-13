@@ -1,6 +1,10 @@
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
+from ftw.solr.connection import SolrResponse
+from ftw.solr.interfaces import ISolrSearch
 from ftw.testbrowser import browsing
+from mock import Mock
 from opengever.testing import IntegrationTestCase
+from zope.component import getUtility
 
 
 class TestListingEndpoint(IntegrationTestCase):
@@ -165,3 +169,115 @@ class TestListingEndpoint(IntegrationTestCase):
         item = browser.json['items'][0]
         self.assertEqual(u'dossier-state-active', item[u'review_state'])
         self.assertEqual(u'In Bearbeitung', item[u'review_state_label'])
+
+    @browsing
+    def test_filter_by_review_state(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=review_state'
+                '&filters.review_state:record=dossier-state-active')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        items = browser.json['items']
+        review_states = list(set(map(lambda x: x['review_state'], items)))
+        self.assertEqual(1, len(review_states))
+        self.assertEqual('dossier-state-active', review_states[0])
+
+    @browsing
+    def test_filter_by_multiple_review_states(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=review_state'
+                '&filters.review_state:record:list=dossier-state-active'
+                '&filters.review_state:record:list=dossier-state-inactive')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        items = browser.json['items']
+        review_states = list(set(map(lambda x: x['review_state'], items)))
+        self.assertEqual(2, len(review_states))
+        self.assertIn('dossier-state-active', review_states)
+        self.assertIn('dossier-state-inactive', review_states)
+
+    @browsing
+    def test_filter_by_start_date(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=start'
+                '&filters.start:record=2016-01-01TO2016-01-01')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        items = browser.json['items']
+        start_dates = list(set(map(lambda x: x['start'], items)))
+        self.assertEqual(1, len(start_dates))
+        self.assertEqual('2016-01-01', start_dates[0])
+
+
+class TestListingEndpointWithSolr(IntegrationTestCase):
+
+    features = ('bumblebee', 'solr')
+
+    def setUp(self):
+        super(TestListingEndpointWithSolr, self).setUp()
+
+        # Mock Solr connection
+        self.conn = Mock(name='SolrConnection')
+        self.conn.search.return_value = SolrResponse()
+        self.solr = getUtility(ISolrSearch)
+        self._manager = self.solr._manager
+        self.solr._manager = Mock(name='SolrConnectionManager')
+        self.solr.manager.connection = self.conn
+
+    def tearDown(self):
+        self.solr._manager = self._manager
+
+    @browsing
+    def test_filter_by_review_state(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=review_state'
+                '&filters.review_state:record=dossier-state-active')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn('review_state:dossier-state-active', filters)
+
+    @browsing
+    def test_filter_by_multiple_review_states(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=review_state'
+                '&filters.review_state:record:list=dossier-state-active'
+                '&filters.review_state:record:list=dossier-state-inactive')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(
+            'review_state:dossier-state-active OR dossier-state-inactive',
+            filters,
+        )
+
+    @browsing
+    def test_filter_by_start_date(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=start'
+                '&filters.start:record=2016-01-01TO2016-01-01')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(
+            'start:[2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z]',
+            filters,
+        )
