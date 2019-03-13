@@ -2,7 +2,7 @@ Situngsunterlagen zusammenstellen
 ----------------------------------
 
 Die Sitzung wird in der Sitzungs- und Protokollverwaltung vorbereitet. Wenn alle
-Unterlagen (Anträge, Anhänge, Traktandenliste, Vorprotokoll) erstellt sind,
+Unterlagen (Anträge, Beilagen, Traktandenliste, Vorprotokoll) erstellt sind,
 können die Sitzungsunterlagen als ZIP-Datei exportiert und lokal
 zwischengespeichert werden. Die Unterlagen sind nun bereit um
 auf der Sitzungs-App zur Verfügung gestellt zu werden.

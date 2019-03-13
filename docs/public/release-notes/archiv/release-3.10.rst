@@ -66,7 +66,7 @@ Zudem wurden folgende weiteren kleineren Anpassungen für diesen Release umgeset
 - Verbesserung beim Schreiben von DocProperties, diese können neu DocProperties
   eines falschen Typs überschreiben.
 
-- Die Dateinamen der Anhänge eines Antrags stehen neu beim Erstellen der Protokolle zur Verfügung.
+- Die Dateinamen der Beilagen eines Antrags stehen neu beim Erstellen der Protokolle zur Verfügung.
 
 - Die Dokumentauflistung eines Dossiers oder Subdossiers kann neu als Excel-Report exportiert werden.
 

@@ -105,7 +105,7 @@ msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
 
 #: ./opengever/document/upgrades/profiles/4200/actions.xml
 msgid "Submit additional documents"
-msgstr "Zusätzliche Anhänge einreichen"
+msgstr "Zusätzliche Beilagen einreichen"
 
 #: ./opengever/document/browser/overview.py
 msgid "Submitted version: ${version}"

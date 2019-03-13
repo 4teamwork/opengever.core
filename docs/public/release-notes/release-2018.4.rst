@@ -98,7 +98,7 @@ Sitzungs- und Protokollverwaltung
 - Anträge und Traktanden haben neu das Feld „Beschreibung“.
 
 - Neu befindet sich ein Button „Antrag erstellen“ beim Dokumenten-Tab eines
-  Dossiers. Damit können Anträge direkt mit mehreren Dokumenten als Anhang erstellt werden.
+  Dossiers. Damit können Anträge direkt mit mehreren Dokumenten als Beilage erstellt werden.
 
 - Es können neu mehrere unterschiedliche Antragsvorlagen für Ad-Hoc Anträge konfiguriert werden.
 

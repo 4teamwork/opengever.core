@@ -101,7 +101,7 @@ Sitzungs- und Protokollverwaltung
 
 Alle Unterlagen zu einer Sitzung können neu als Zip-Datei heruntergeladen werden.
 Die Zip-Datei beinhaltet neben der Traktandenliste das Vorprotokoll sowie
-sämtliche Anhänge zu den Traktanden. Dies erleichtert die Sitzungsvorbereitung,
+sämtliche Beilagen zu den Traktanden. Dies erleichtert die Sitzungsvorbereitung,
 da alle Sitzungsunterlagen als Zip-Datei an die Teilnehmenden verteilt werden können.
 
 Office Connector

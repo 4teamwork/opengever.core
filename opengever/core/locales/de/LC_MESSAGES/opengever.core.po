@@ -244,7 +244,7 @@ msgstr "Als E-Mail versenden"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Submit additional documents"
-msgstr "Zusätzliche Anhänge einreichen"
+msgstr "Zusätzliche Beilagen einreichen"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"

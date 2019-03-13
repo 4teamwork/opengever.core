@@ -415,7 +415,7 @@ msgstr "Alle"
 #. Default: "Attachments"
 #: ./opengever/meeting/zipexport.py
 msgid "attachments"
-msgstr "Anhang"
+msgstr "Beilage"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/browser/committeeforms.py
@@ -454,7 +454,7 @@ msgstr "Folgeantrag erstellen"
 #: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "button_submit_attachments"
-msgstr "Anhänge einreichen"
+msgstr "Beilagen einreichen"
 
 #. Default: "Cancel"
 #: ./opengever/meeting/model/meeting.py
@@ -851,7 +851,7 @@ msgstr "Erlaubte Antragsvorlagen"
 #: ./opengever/meeting/browser/submitdocuments.py
 #: ./opengever/meeting/browser/templates/proposaloverview.pt
 msgid "label_attachments"
-msgstr "Anhänge"
+msgstr "Beilagen"
 
 #. Default: "Back to the meeting"
 #: ./opengever/meeting/browser/meetings/zipexport.py
@@ -1351,7 +1351,7 @@ msgstr "Start"
 #: ./opengever/meeting/browser/documents/submit.py
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "label_submit_additional_documents"
-msgstr "Zusätzliche Dokumente einreichen"
+msgstr "Zusätzliche Beilagen einreichen"
 
 #. Default: "Submit Updated Documents"
 #: ./opengever/meeting/browser/documents/submit.py
@@ -1389,7 +1389,7 @@ msgstr "Vorlage Inhaltsverzeichnis"
 #. Default: "Toggle attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_toggle_attachments"
-msgstr "Anhänge anzeigen / ausblenden"
+msgstr "Beilagen anzeigen / ausblenden"
 
 #. Default: "Transition"
 #: ./opengever/meeting/proposal_transition_comment.py
