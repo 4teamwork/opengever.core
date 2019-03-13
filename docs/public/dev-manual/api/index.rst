@@ -13,6 +13,7 @@ Inhalt:
    serialization.rst
    batching.rst
    summaries.rst
+   listings.rst
    navigation.rst
    searching.rst
    trash.rst
