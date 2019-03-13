@@ -11,6 +11,7 @@ Changelog
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Make attachments for `direct-execution` tasks editable by the responsible. [phgross]
 - Make reject to skip transition only available for tasks part of a sequence. [phgross]
+- Allow reassigning tasks to other org- and adminunits. [phgross]
 - Adapt footer to new 4teamwork website. [njohner]
 - Move personal bar customization into opengever.base. [njohner]
 - Unify Bumblebee URLs on REST API for document vs. document on a listing. [Rotonen]

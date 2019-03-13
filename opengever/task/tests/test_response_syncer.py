@@ -354,7 +354,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
     def test_updates_responsible_if_new_value_is_given(self):
         create(Builder('ogds_user').id('hugo.boss'))
         task = create(Builder('task')
-                      .in_state('task-state-in-progress')
+                      .in_state('task-state-open')
                       .having(responsible_client='org-unit-1'))
 
         self.prepare_request(task, text=u'I am done!',

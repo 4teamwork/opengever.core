@@ -103,36 +103,43 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEquals('Please make that for me.', response.text)
 
     @browsing
-    def test_assign_task_only_to_users_of_the_current_orgunit(self, browser):
+    def test_assign_open_task_to_a_foreign_org_unit_is_possible(self, browser):
         self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-open', self.task)
 
-        org_unit2 = create(Builder('org_unit')
-                           .id('afi')
-                           .having(title=u'Finanzdirektion',
-                                   admin_unit_id='fa')
-                           .with_default_groups())
+        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
 
         create(Builder('ogds_user')
                .id('james.bond')
                .having(firstname=u'James', lastname=u'Bond')
-               .assign_to_org_units([org_unit2]))
+               .assign_to_org_units([org_unit]))
 
-        data = {'form.widgets.transition': 'task-transition-reassign'}
-        browser.open(self.task, data, view='assign-task')
+        responsible = u'rk:james.bond'
+        self.assign_task(responsible, u'Please make that for me.')
 
-        browser.open(self.task,
-                     data={'q': 'james', 'page': 1},
-                     view='@@assign-task/++widget++form.widgets.responsible/search')
-        self.assertEqual([], browser.json.get('results'))
+        self.assertEquals('james.bond', self.task.responsible)
+        self.assertEquals('rk', self.task.responsible_client)
 
-        browser.open(self.task,
-                     data={'q': 'robert', 'page': 1},
-                     view='@@assign-task/++widget++form.widgets.responsible/search')
-        self.assertEqual(
-            [{u'_resultId': u'fa:robert.ziegler',
-              u'id': u'fa:robert.ziegler',
-              u'text': u'Finanz\xe4mt: Ziegler Robert (robert.ziegler)'}],
-            browser.json.get('results'))
+    @browsing
+    def test_switching_admin_unit_in_progress_state_is_not_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
+
+        create(Builder('ogds_user')
+               .id('james.bond')
+               .having(firstname=u'James', lastname=u'Bond')
+               .assign_to_org_units([org_unit]))
+
+        responsible = u'rk:james.bond'
+        self.assign_task(responsible, u'Please make that for me.')
+
+        self.assertEquals(
+            [u'Admin unit changes are not allowed if the task or forwarding is'
+             u' already accepted.'],
+            browser.css('.fieldErrorBox .error').text)
+
+        self.assertEquals(self.regular_user.id, self.task.responsible)
 
     @browsing
     def test_reassign_task_to_a_team_is_possible(self, browser):

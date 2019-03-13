@@ -2,6 +2,7 @@ from ftw.keywordwidget.widget import KeywordWidget
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -40,8 +41,8 @@ class IAssignSchema(Schema):
         title=_(u"label_responsible", default=u"Responsible"),
         description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(
-            only_current_inbox=True,
-            only_current_orgunit=True,
+            only_current_inbox=False,
+            only_current_orgunit=False,
             include_teams=True),
         required=True,
         )
@@ -52,20 +53,33 @@ class IAssignSchema(Schema):
         )
 
 
-class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
-    """Teams are only allowed if the task/forwarding is in open state.
+class InProgressStateLimitiationsValidator(validator.SimpleFieldValidator):
+    """Tasks not in the open state are limited:
+
+    - Teams are only allowed if the task/forwarding is in open state.
+    - Admin unit changes are only allowed in open state.
     """
 
     def validate(self, value):
-        if value and ActorLookup(value).is_team() and not self.context.is_open():
-            raise Invalid(
-                _(u'error_no_team_responsible_in_progress_state',
-                  default=u'Team responsibles are only allowed if the task or '
-                  u'forwarding is open.'))
+        if value and not self.context.is_open():
+            if ActorLookup(value).is_team():
+                raise Invalid(
+                    _(u'error_no_team_responsible_in_progress_state',
+                      default=u'Team responsibles are only allowed if the task or '
+                      u'forwarding is open.'))
+
+            responsible_client, responsible = value.split(':')
+            new_admin_unit = ogds_service().fetch_org_unit(
+                responsible_client).admin_unit
+            if self.context.get_responsible_admin_unit().id() != new_admin_unit.id():
+                raise Invalid(
+                    _(u'error_no_admin_unit_change_in_progress_state',
+                      default=u'Admin unit changes are not allowed if the task or '
+                      u'forwarding is already accepted.'))
 
 
 validator.WidgetValidatorDiscriminators(
-    NoTeamsInProgressStateValidator,
+    InProgressStateLimitiationsValidator,
     field=IAssignSchema['responsible'],
 )
 

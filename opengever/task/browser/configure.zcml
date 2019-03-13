@@ -7,7 +7,7 @@
   <include package=".delegate" />
 
   <adapter factory=".complete.NoCheckedoutDocsValidator" />
-  <adapter factory=".assign.NoTeamsInProgressStateValidator" />
+  <adapter factory=".assign.InProgressStateLimitiationsValidator" />
 
   <browser:page
       name="task_transition_controller"
