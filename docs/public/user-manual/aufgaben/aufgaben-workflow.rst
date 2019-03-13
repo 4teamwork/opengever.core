@@ -66,7 +66,7 @@ Auftragstyp               Auftragnehmende
 ======================== =================
 Zur Kenntnisnahme         zu lesen
 
-Zur direkten Erledigung   zu lesen
+Zur direkten Erledigung   zu überarbeiten
 
 Zum Bericht/Antrag        zu überarbeiten
 
