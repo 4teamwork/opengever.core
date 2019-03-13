@@ -92,14 +92,14 @@ class TestTaskTransitionActionsForRejected(BaseTransitionActionIntegrationTest):
     def setUp(self):
         super(TestTaskTransitionActionsForRejected, self).setUp()
         with self.login(self.regular_user):
-            self.set_workflow_state('task-state-rejected', self.task)
+            self.set_workflow_state('task-state-rejected', self.seq_subtask_1)
 
     @browsing
     def test_skip_task(self, browser):
-        self.login(self.dossier_responsible, browser)
-        self.do_transition(browser, self.task, 'task-transition-rejected-skipped')
+        self.login(self.secretariat_user, browser)
+        self.do_transition(browser, self.seq_subtask_1, 'task-transition-rejected-skipped')
         expected_transition_action = 'addresponse?form.widgets.transition=task-transition-rejected-skipped'
-        self.assert_action(browser, '/'.join((self.task.absolute_url(), expected_transition_action, )))
+        self.assert_action(browser, '/'.join((self.seq_subtask_1.absolute_url(), expected_transition_action, )))
 
 
 class TestTaskTransitionActionsForSkipped(BaseTransitionActionIntegrationTest):

@@ -443,7 +443,11 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-rejected-skipped')
     def rejected_to_skipped_guard(self, c, include_agency):
         """Checks if:
-        - The current user is the issuer of the task"""
+        - The current user is the issuer of the task
+        - The task is part of a task process
+        """
+        if not self.context.is_from_sequential_tasktemplate:
+            return False
 
         if include_agency:
             return c.current_user.is_issuer or c.current_user.is_administrator
@@ -458,6 +462,9 @@ class TaskTransitionController(BrowserView):
     def planned_to_skipped_guard(self, c, include_agency):
         """Checks if:
         - The current user is the issuer of the task"""
+
+        # The check that the task is part of a task sequence is unnecessary,
+        # because only tasks from a sequene can be in the planned state.
 
         if include_agency:
             return c.current_user.is_issuer or c.current_user.is_administrator

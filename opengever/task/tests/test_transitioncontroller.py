@@ -260,6 +260,35 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
             self.transition, True, checker))
 
 
+class TestSkipRejectedGuard(IntegrationTestCase):
+    transition = 'task-transition-rejected-skipped'
+
+    def test_available_when_user_is_issuer_or_admin(self):
+        self.login(self.regular_user)
+        self.set_workflow_state('task-state-rejected', self.seq_subtask_1)
+
+        # not issuer
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.seq_subtask_1))
+
+        # issuer
+        self.login(self.secretariat_user)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.seq_subtask_1))
+
+        # administrator
+        self.login(self.administrator)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.seq_subtask_1))
+
+    def test_not_available_when_task_is_not_part_of_a_task_sequence(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-rejected', self.task)
+
+        self.assertNotIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+
 class TestInProgressClosed(BaseTransitionGuardTests):
 
     transition = 'task-transition-in-progress-tested-and-closed'
