@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -428,6 +430,103 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
             [obj.title for obj in subdossier.listFolderContents()],
             "The content of the subdossiertemplate is not correct"
         )
+        expected_role_assignments = []
+        role_assignments = RoleAssignmentManager(subdossier).storage._storage()
+        self.assertEqual(expected_role_assignments, role_assignments)
+
+    @browsing
+    def test_unseen_by_user_subdossier_is_not_copied_from_template(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Block local roles inheritance on self.subdossiertemplate
+        self.subdossiertemplate.__ac_local_roles_block__ = True
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        with self.login(self.manager):
+            self.assertEqual(
+                [u'Werkst\xe4tte'],
+                [obj.title for obj in dossier.listFolderContents()],
+                "The content of the root-dossier includes self.subdossiertemplate!"
+            )
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles_block_false(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Explicitly allow local roles inheritance on self.subdossiertemplate
+        self.subdossiertemplate.__ac_local_roles_block__ = False
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        self.assertEqual(
+            [u'Werkst\xe4tte', u'Anfragen'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the subdossiertemplate is not correct!"
+        )
+
+        subdossier = dossier.listFolderContents()[1]
+        self.assertFalse(subdossier.__ac_local_roles_block__)
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles_block_not_set(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        subdossier = browser.context.listFolderContents()[1]
+        self.assertFalse(hasattr(subdossier, '__ac_local_roles_block__'))
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles(self, browser):
+        self.login(self.regular_user, browser)
+
+        RoleAssignmentManager(self.subdossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        subdossier = dossier.listFolderContents()[1]
+        self.assertEqual(
+            [u'Werkst\xe4tte', u'Anfragen'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the subdossiertemplate is not correct!"
+        )
+        expected_role_assignments = [{
+            'cause': 3,
+            'reference': None,
+            'roles': ['Reader', 'Contributor', 'Editor'],
+            'principal': 'kathi.barfuss',
+        }]
+        role_assignments = RoleAssignmentManager(subdossier).storage._storage()
+        self.assertEqual(expected_role_assignments, role_assignments)
 
     @browsing
     def test_subdossier_has_same_responsible_as_dossier(self, browser):
