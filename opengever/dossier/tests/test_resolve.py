@@ -15,6 +15,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
+from opengever.document.interfaces import IDossierJournalPDFMarker
+from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.resolve_lock import ResolveLock
@@ -168,6 +170,7 @@ class TestResolveJobs(IntegrationTestCase):
                           main_journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           main_journal_pdf.file.contentType)
+        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
         self.assertFalse(main_journal_pdf.preserved_as_paper)
 
         self.assertEquals(1, len(sub_children['added']))
@@ -178,6 +181,7 @@ class TestResolveJobs(IntegrationTestCase):
                           sub_journal_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           sub_journal_pdf.file.contentType)
+        self.assertTrue(IDossierJournalPDFMarker.providedBy(sub_journal_pdf))
         self.assertFalse(sub_journal_pdf.preserved_as_paper)
 
     @browsing
@@ -260,6 +264,7 @@ class TestResolveJobs(IntegrationTestCase):
                           main_tasks_pdf.file.filename)
         self.assertEquals(u'application/pdf',
                           main_tasks_pdf.file.contentType)
+        self.assertTrue(IDossierTasksPDFMarker.providedBy(main_tasks_pdf))
         self.assertFalse(main_tasks_pdf.preserved_as_paper)
 
         self.assertEquals(0, len(sub_children['added']))

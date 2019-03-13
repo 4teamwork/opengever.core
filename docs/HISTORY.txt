@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
+- Do not list auto-generated documents as recently touched. [njohner]
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Make attachments for `direct-execution` tasks editable by the responsible. [phgross]
 - Readd Office macro files into Office Connector editable MIME types. [Rotonen]

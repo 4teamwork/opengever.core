@@ -8,6 +8,7 @@ from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
+
 def _default_from_schema(context, schema, fieldname):
     """Helper to look up default value of a field
 
@@ -98,8 +99,11 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
     default values for fields that haven't had a value passed in to the
     constructor.
 
-    Additionaly, have the request provide IDuringContentCreation while content
+    Additionaly:
+    - Have the request provide IDuringContentCreation while content
     creation is in progress.
+    - Accept an *interfaces* argument to add interfaces onto the created object
+    before the ObjectAddedEvent is fired.
     """
 
     def __call__(self):
@@ -134,11 +138,14 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
             notify(ObjectCreatedEvent(content))
             return content
 
-        def createContentInContainer(container, portal_type, checkConstraints=True, **kw):
+        def createContentInContainer(container, portal_type, checkConstraints=True,
+                                     interfaces=None, **kw):
             alsoProvides(container.REQUEST, IDuringContentCreation)
             # Also pass container to createContent so it is available for
             # determining default values
             content = createContentWithDefaults(portal_type, container, **kw)
+            if interfaces is not None:
+                alsoProvides(content, *interfaces)
             result = addContentToContainer(
                 container, content, checkConstraints=checkConstraints)
             noLongerProvides(container.REQUEST, IDuringContentCreation)

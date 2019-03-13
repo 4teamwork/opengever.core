@@ -22,7 +22,6 @@ from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getSiteManager
 from zope.i18n import translate
-from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
@@ -358,8 +357,8 @@ class StrictDossierResolver(object):
                         self.context, filename, view.get_data(),
                         title=translate(title, context=self.context.REQUEST),
                         content_type='application/pdf',
+                        interfaces=[IDossierJournalPDFMarker],
                         **kwargs).execute()
-            alsoProvides(document, IDossierJournalPDFMarker)
             document.reindexObject(idxs=['object_provides'])
 
     def create_tasks_listing_pdf(self):
@@ -407,8 +406,8 @@ class StrictDossierResolver(object):
                         self.context, filename, view.get_data(),
                         title=translate(title, context=self.context.REQUEST),
                         content_type='application/pdf',
+                        interfaces=[IDossierTasksPDFMarker],
                         **kwargs).execute()
-            alsoProvides(document, IDossierTasksPDFMarker)
             document.reindexObject(idxs=['object_provides'])
 
     def trigger_pdf_conversion(self):
