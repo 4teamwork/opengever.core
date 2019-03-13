@@ -7,6 +7,7 @@ from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
+from opengever.task.helper import task_type_helper
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.registry.interfaces import IRegistry
@@ -49,6 +50,10 @@ def translated_title(obj):
         return obj.Title()
 
 
+def translated_task_type(obj):
+    return task_type_helper(obj, obj.task_type)
+
+
 def filesize(obj):
     try:
         info = IPrimaryFieldInfo(obj.getObject())
@@ -84,6 +89,7 @@ FIELDS = {
     'containing_dossier': ('containing_dossier', 'containing_dossier', 'containing_dossier'),
     'containing_subdossier': ('containing_subdossier', 'containing_subdossier', 'containing_subdossier'),  # noqa
     'created': ('created', 'created', 'created'),
+    'completed': ('completed', 'completed', 'completed'),
     'creator': ('Creator', 'Creator', 'Creator'),
     'description': ('Description', 'Description', 'Description'),
     'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
@@ -100,6 +106,7 @@ FIELDS = {
     'relative_path': (None, relative_path, DEFAULT_SORT_INDEX),
     'responsible': ('responsible', 'responsible', 'responsible'),
     'responsible_fullname': ('responsible', 'responsible_fullname', 'responsible'),
+    'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
     'review_state': ('review_state', 'review_state', 'review_state'),
     'review_state_label': ('review_state', 'translated_review_state',
                            'review_state'),
@@ -112,6 +119,8 @@ FIELDS = {
     'type': ('portal_type', 'PortalType', 'portal_type'),
     'filesize': (None, filesize, 'filesize'),
     'filename': (None, filename, 'filename'),
+    'task_type': ('task_type', translated_task_type, 'task_type'),
+    'deadline': ('deadline', 'deadline', 'deadline'),
 }
 
 DATE_INDEXES = set([
@@ -134,6 +143,9 @@ SOLR_FILTERS = {
     ],
     u'workspaces': [
         u'object_provides:opengever.workspace.interfaces.IWorkspace',
+    ],
+    u'tasks': [
+        u'object_provides:opengever.task.task.ITask',
     ]
 }
 
@@ -146,6 +158,9 @@ CATALOG_QUERIES = {
     },
     'workspaces': {
         'object_provides': 'opengever.workspace.interfaces.IWorkspace',
+    },
+    'tasks': {
+        'object_provides': 'opengever.task.task.ITask',
     }
 
 }

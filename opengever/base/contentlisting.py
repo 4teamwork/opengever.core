@@ -153,6 +153,9 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     def responsible_fullname(self):
         return display_name(self._brain.responsible)
 
+    def issuer_fullname(self):
+        return display_name(self._brain.issuer)
+
     def checked_out_fullname(self):
         return display_name(self._brain.checked_out)
 

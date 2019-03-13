@@ -234,6 +234,42 @@ class TestListingEndpoint(IntegrationTestCase):
              u'title': u'A Workspace'},
             browser.json['items'][-1])
 
+    @browsing
+    def test_tasks_listing(self, browser):
+        self.enable_languages()
+
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=tasks',
+            'columns=review_state_label',
+            'columns=title',
+            'columns=task_type',
+            'columns=deadline',
+            'columns=completed',
+            'columns=responsible_fullname',
+            'columns=issuer_fullname',
+            'columns=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json',
+                              'Accept-Language': 'de-ch'})
+
+        item = filter(lambda item: item.get('@id') == self.task.absolute_url(),
+                      browser.json['items'])[0]
+
+        self.assertItemsEqual(
+            {u'issuer_fullname': u'Ziegler Robert',
+             u'task_type': u'Zur Pr\xfcfung / Korrektur',
+             u'responsible_fullname': u'B\xe4rfuss K\xe4thi',
+             u'completed': None,
+             u'created': u'2016-08-31T16:01:33+00:00',
+             u'deadline': u'2016-11-01',
+             u'review_state_label': u'In Arbeit',
+             u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
+             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1'},
+            item)
+
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
 
