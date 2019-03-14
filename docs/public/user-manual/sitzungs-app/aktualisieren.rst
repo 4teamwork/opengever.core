@@ -1,5 +1,5 @@
 Sitzungsunterlagen aktualisieren
---------------------------------
+---------------------------------
 
 Es kann vorkommen, dass eine Sitzung bzw. die Unterlagen dazu aktualisiert
 werden müssen (Beispiele dazu: ein dringendes Traktandum wurde nachgeliefert

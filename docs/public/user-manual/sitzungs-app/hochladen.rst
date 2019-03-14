@@ -1,5 +1,5 @@
 Sitzungsunterlagen hochladen
-----------------------------
+-----------------------------
 
 Wählen Sie das betreffende Gremium (1.) aus und laden Sie die heruntergeladenen
 Sitzungsunterlagen über den grünen Knopf (2.) in die App hoch (3.).

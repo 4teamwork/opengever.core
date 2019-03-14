@@ -1,5 +1,5 @@
 Sitzungsunterlagen zusammenstellen
-----------------------------------
+-----------------------------------
 
 Die Sitzung wird in der Sitzungs- und Protokollverwaltung vorbereitet. Wenn alle
 Unterlagen (Anträge, Beilagen, Traktandenliste, Vorprotokoll) erstellt sind,

@@ -1,5 +1,5 @@
 Sitzungsunterlagen benachrichtigen
-----------------------------------
+-----------------------------------
 
 In der Sitzungsansicht sind nun alle Traktanden gemäss der Traktandenliste
 dargestellt. Nun können Sie die Mitglieder des Gremiums über die neuen
