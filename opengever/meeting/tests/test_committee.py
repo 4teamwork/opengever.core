@@ -39,15 +39,6 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_toc_template())
 
-    def test_get_toc_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.committee_container.toc_template = self.as_relation_value(
-            self.sablon_template)
-
-        self.assertIsNone(self.committee.toc_template)
-        self.assertEqual(
-            self.sablon_template, self.committee.get_toc_template())
-
     def test_get_protocol_header_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
         self.activate_feature('meeting')
@@ -57,32 +48,11 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_protocol_header_template())
 
-    def test_get_protocol_header_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.activate_feature('meeting')
-        self.assertIsNone(self.committee.protocol_header_template)
-        self.assertIsNotNone(self.committee_container.protocol_header_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_protocol_header_template())
-
     def test_get_protocol_suffix_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
         self.activate_feature('meeting')
         self.committee.protocol_suffix_template = self.as_relation_value(
             self.sablon_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_protocol_suffix_template())
-
-    def test_get_protocol_suffix_template_falls_back_to_container_if_available(self):
-        self.login(self.administrator)
-        self.activate_feature('meeting')
-        self.committee_container.protocol_suffix_template = self.as_relation_value(
-            self.sablon_template)
-
-        self.assertIsNone(self.committee.protocol_suffix_template)
-        self.assertIsNotNone(self.committee_container.protocol_suffix_template)
 
         self.assertEqual(
             self.sablon_template, self.committee.get_protocol_suffix_template())
@@ -167,13 +137,6 @@ class TestCommittee(IntegrationTestCase):
         self.committee_container.paragraph_template = None
         self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
 
-    def test_get_paragraph_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.committee.paragraph_template = None
-        self.committee_container.paragraph_template = self.as_relation_value(
-            self.sablon_template)
-        self.assertEqual(self.sablon_template, self.committee.get_paragraph_template())
-
     def test_get_agenda_item_header_template_falls_back_to_container(self):
         self.login(self.administrator)
         self.committee_container.agenda_item_header_template = self.as_relation_value(
@@ -210,14 +173,6 @@ class TestCommittee(IntegrationTestCase):
         self.assertEqual(
             self.sablon_template, self.committee.get_agenda_item_suffix_template())
 
-    def test_get_excerpt_header_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.assertIsNone(self.committee.excerpt_header_template)
-        self.assertIsNotNone(self.committee_container.excerpt_header_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_excerpt_header_template())
-
     def test_get_excerpt_header_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
         self.committee.excerpt_header_template = self.as_relation_value(
@@ -225,14 +180,6 @@ class TestCommittee(IntegrationTestCase):
 
         self.assertEqual(
             self.sablon_template, self.committee.get_excerpt_header_template())
-
-    def test_get_excerpt_suffix_template_falls_back_to_container(self):
-        self.login(self.administrator)
-        self.assertIsNone(self.committee.excerpt_suffix_template)
-        self.assertIsNotNone(self.committee_container.excerpt_suffix_template)
-
-        self.assertEqual(
-            self.sablon_template, self.committee.get_excerpt_suffix_template())
 
     def test_get_excerpt_suffix_template_returns_committee_template_if_available(self):
         self.login(self.administrator)
