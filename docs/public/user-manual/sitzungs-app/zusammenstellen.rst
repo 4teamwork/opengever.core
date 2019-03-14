@@ -1,4 +1,4 @@
-Situngsunterlagen zusammenstellen
+Sitzungsunterlagen zusammenstellen
 ----------------------------------
 
 Die Sitzung wird in der Sitzungs- und Protokollverwaltung vorbereitet. Wenn alle

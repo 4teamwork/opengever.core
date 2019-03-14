@@ -1,4 +1,4 @@
-Situngsunterlagen hochladen
+Sitzungsunterlagen hochladen
 ----------------------------
 
 Wählen Sie das betreffende Gremium (1.) aus und laden Sie die heruntergeladenen

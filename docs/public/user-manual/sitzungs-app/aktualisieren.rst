@@ -1,4 +1,4 @@
-Situngsunterlagen aktualisieren
+Sitzungsunterlagen aktualisieren
 --------------------------------
 
 Es kann vorkommen, dass eine Sitzung bzw. die Unterlagen dazu aktualisiert
@@ -8,7 +8,7 @@ Knopf können die aktualisierten Unterlagen (neues ZIP-File aus der Sitzungs-
 und Protokollverwaltung) erneut hochgeladen werden. Auf Stufe Sitzung und
 Traktandum erfasste Notizen bleiben bestehen bzw. sind immer noch ersichtlich.
 Via Benachrichtigung kann ein automatischer Hinweis an die Sitzungsteilnehmenden
-versendet werden. 
+versendet werden.
 
 
 .. disqus::

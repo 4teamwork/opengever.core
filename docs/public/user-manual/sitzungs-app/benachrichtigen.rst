@@ -1,4 +1,4 @@
-Situngsunterlagen benachrichtigen
+Sitzungsunterlagen benachrichtigen
 ----------------------------------
 
 In der Sitzungsansicht sind nun alle Traktanden gemäss der Traktandenliste
