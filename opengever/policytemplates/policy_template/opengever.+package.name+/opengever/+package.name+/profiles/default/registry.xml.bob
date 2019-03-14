@@ -120,11 +120,9 @@
   </records>
 
 {{% endif %}}
-{{% if setup.enable_bumblebee_feature %}}
   <record interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
     <value>True</value>
   </record>
 
-{{% endif %}}
 </registry>

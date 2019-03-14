@@ -4,9 +4,7 @@ extends =
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ogds-postgres.cfg
     https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/tika-standalone.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/zeoclients/2.cfg
-{{% if setup.enable_bumblebee_feature %}}
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
-{{% endif %}}
     versions.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/production-v2.cfg
 
@@ -19,11 +17,9 @@ instance-eggs += opengever.{{{package.name}}}
 raven_tags = {"cluster": "{{{base.domain}}}"}
 develop = .
 
-{{% if setup.enable_bumblebee_feature %}}
 [instance0]
 environment-vars +=
     BUMBLEBEE_APP_ID gever_{{{package.name}}}
     BUMBLEBEE_INTERNAL_PLONE_URL https://{{{base.domain}}}/
     BUMBLEBEE_PUBLIC_URL https://{{{base.domain}}}/
     BUMBLEBEE_SECRET XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-{{% endif %}}
