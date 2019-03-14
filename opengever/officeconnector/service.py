@@ -72,6 +72,22 @@ class OfficeConnectorAttachURL(OfficeConnectorURL):
         raise NotFound
 
 
+class OfficeConnectorAttachAsPDFURL(OfficeConnectorURL):
+    """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
+
+    Instruct where to fetch an OfficeConnector 'attach' action payload for this
+    document, but end up fetching the PDF representation instead.
+    """
+
+    def render(self):
+        if is_officeconnector_attach_feature_enabled():
+            payload = {'action': 'attach', 'as_pdf': True}
+            return self.create_officeconnector_url_json(payload)
+
+        # Fail per default
+        raise NotFound
+
+
 class OfficeConnectorCheckoutURL(OfficeConnectorURL):
     """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
 
