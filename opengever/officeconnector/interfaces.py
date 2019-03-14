@@ -33,6 +33,11 @@ class IOfficeConnectorSettings(Interface):
         u'These are subtractive from the default list.',
         default=[])
 
+    attach_as_pdf_enabled = schema.Bool(
+        title=u'OfficeConnector "attach as PDF" support',
+        description=u'Enable attaching documents to emails as PDF.',
+        default=False)
+
 
 class IOfficeConnectorSettingsView(Interface):
 
@@ -43,4 +48,7 @@ class IOfficeConnectorSettingsView(Interface):
         pass
 
     def is_restapi_enabled():
+        pass
+
+    def is_attach_as_pdf_enabled():
         pass

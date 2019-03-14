@@ -32,6 +32,13 @@ def is_officeconnector_restapi_feature_enabled():
         )
 
 
+def is_officeconnector_attach_as_pdf_feature_enabled():
+    return api.portal.get_registry_record(
+        'attach_as_pdf_enabled',
+        interface=IOfficeConnectorSettings,
+    )
+
+
 def parse_bcc(request):
     body = request.get('BODY', None)
     if body and 'bcc' in body:
