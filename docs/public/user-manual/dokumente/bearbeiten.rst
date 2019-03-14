@@ -88,6 +88,12 @@ den weiteren Bearbeitungsmöglichkeiten angezeigt.
    rückgängig gemacht und die Datei auf den zuletzt eingecheckten Zustand
    (= Version vor dem Auschecken) zurückgesetzt. Die Aktion muss doppelt bestätigt werden.
 
+
+   .. note::
+     - Dokumente werden nach jedem Speichervorgang hochgeladen.
+     - Wenn das Hochladen aufgrund eines Verbindungsfehlers fehlschlägt, wird automatisch versucht das Dokument hochzuladen, sobald wieder eine Verbindung möglich ist.
+
+
 Mit Mailprogramm versenden
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
