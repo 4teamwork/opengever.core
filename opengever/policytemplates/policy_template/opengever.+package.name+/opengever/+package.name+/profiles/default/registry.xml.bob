@@ -49,18 +49,6 @@
   </records>
 
 {{% endif %}}
-{{% if setup.officeconnector_attach %}}
-  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
-    <value key="attach_to_outlook_enabled">True</value>
-  </records>
-
-{{% endif %}}
-{{% if setup.officeconnector_checkout %}}
-  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
-    <value key="direct_checkout_and_edit_enabled">True</value>
-  </records>
-
-{{% endif %}}
 {{% if setup.maximum_repository_depth %}}
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="maximum_repository_depth">{{{setup.maximum_repository_depth}}}</value>
