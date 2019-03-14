@@ -670,13 +670,6 @@ class OpengeverContentFixture(object):
         self.committee_container = self.register('committee_container', create(
             Builder('committee_container')
             .titled(u'Sitzungen')
-            .having(
-                agendaitem_list_template=self.sablon_template,
-                protocol_header_template=self.sablon_template,
-                excerpt_header_template=self.sablon_template,
-                excerpt_suffix_template=self.sablon_template,
-                paragraph_template=self.sablon_template,
-                )
             ))
 
         self.set_roles(
@@ -698,7 +691,14 @@ class OpengeverContentFixture(object):
             responsibles=[
                 self.administrator,
                 self.committee_responsible,
-                ]
+                ],
+            templates={
+                'agendaitem_list_template': self.sablon_template,
+                'protocol_header_template': self.sablon_template,
+                'excerpt_header_template': self.sablon_template,
+                'excerpt_suffix_template': self.sablon_template,
+                'paragraph_template': self.sablon_template,
+            }
             ))
 
         self.register_raw(
@@ -767,6 +767,13 @@ class OpengeverContentFixture(object):
                     self.administrator,
                     self.committee_responsible,
                     ],
+                templates={
+                    'agendaitem_list_template': self.sablon_template,
+                    'protocol_header_template': self.sablon_template,
+                    'excerpt_header_template': self.sablon_template,
+                    'excerpt_suffix_template': self.sablon_template,
+                    'paragraph_template': self.sablon_template,
+                }
                 ),
             )
 
@@ -1808,7 +1815,10 @@ class OpengeverContentFixture(object):
             group_id,
             group_title,
             responsibles,
+            templates=None,
         ):
+        if templates is None:
+            templates = {}
         # XXX I would have expected the commitee builder to do all of that.
         ogds_members = map(
             ogds_service().find_user,
@@ -1839,6 +1849,7 @@ class OpengeverContentFixture(object):
                 ad_hoc_template=self.proposal_template,
                 repository_folder=repository_folder,
                 group_id=group_id,
+                **templates
                 )
             )
 

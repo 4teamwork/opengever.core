@@ -8,6 +8,7 @@ Changelog
 - Fix upgrade step that reindexes object_provides for PDFs so it performs better. [lgraf]
 - Update plone.rest api to 3.7.2. [mathias.leimgruber]
 - Respect tabbedview settings when generating an task or dossier excel export. [phgross]
+- Exclusively handle templates on Committee and not on CommitteeContainer anymore. [njohner]
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
 - Do not list auto-generated documents as recently touched. [njohner]
 - Standardize french and german translation of "attachments" in meetings. [njohner]
