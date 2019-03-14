@@ -13,7 +13,6 @@ from opengever.meeting.proposal import IProposal
 from opengever.ogds.base.utils import get_current_org_unit
 from plone import api
 from Products.CMFCore.CMFCatalogAware import CatalogAware
-from zope.container.interfaces import IContainerModifiedEvent
 
 
 class LocalRolesSetter(object):
@@ -218,21 +217,3 @@ class LocalRolesSetter(object):
 
         for dossier in subdossiers:
             dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
-
-
-def set_roles_after_adding(context, event):
-    LocalRolesSetter(context).set_roles(event)
-
-
-def set_roles_after_modifying(context, event):
-    # Handle the modify event having been a removal of a related item
-    setattr(
-        context,
-        'relatedItems',
-        [item for item in getattr(context, 'relatedItems', []) if item.to_object],
-    )
-
-    if IContainerModifiedEvent.providedBy(event):
-        return
-
-    LocalRolesSetter(context).set_roles(event)
