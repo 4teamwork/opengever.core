@@ -1,11 +1,8 @@
 [buildout]
 extends =
-    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/standard-deployment-v2.cfg
-    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ogds-postgres.cfg
+    https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/saas-deployment.cfg
     https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/zeoclients/2.cfg
-    https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/bumblebee.cfg
     versions.cfg
-    https://raw.githubusercontent.com/4teamwork/ftw-buildouts/master/production-v2.cfg
 
 
 deployment-number = {{{base.deployment_number}}}
