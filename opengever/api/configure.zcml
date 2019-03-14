@@ -312,4 +312,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@journal"
+      for="ftw.journal.interfaces.IJournalizable"
+      factory=".journal.JournalPost"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

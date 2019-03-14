@@ -30,6 +30,7 @@ Inhalt:
    preview.rst
    webactions.rst
    tasks.rst
+   journal.rst
    examples/index.rst
    docs_changelog.rst
 
