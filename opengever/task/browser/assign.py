@@ -53,6 +53,31 @@ class IAssignSchema(Schema):
         )
 
 
+def validate_no_teams(context, responsible):
+    if responsible and not context.is_open():
+        if ActorLookup(responsible).is_team():
+            raise Invalid(
+                _(u'error_no_team_responsible_in_progress_state',
+                  default=u'Team responsibles are only allowed if the task or '
+                  u'forwarding is open.'))
+
+
+def validate_no_admin_unit_change(context, responsible_client):
+    if responsible_client and not context.is_open():
+        org_unit = ogds_service().fetch_org_unit(responsible_client)
+
+        # Skip team or inbox responsibles
+        if not org_unit:
+            return
+
+        new_admin_unit = org_unit.admin_unit
+        if context.get_responsible_admin_unit().id() != new_admin_unit.id():
+            raise Invalid(
+                _(u'error_no_admin_unit_change_in_progress_state',
+                  default=u'Admin unit changes are not allowed if the task or '
+                  u'forwarding is already accepted.'))
+
+
 class InProgressStateLimitiationsValidator(validator.SimpleFieldValidator):
     """Tasks not in the open state are limited:
 
@@ -62,20 +87,12 @@ class InProgressStateLimitiationsValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         if value and not self.context.is_open():
-            if ActorLookup(value).is_team():
-                raise Invalid(
-                    _(u'error_no_team_responsible_in_progress_state',
-                      default=u'Team responsibles are only allowed if the task or '
-                      u'forwarding is open.'))
+            data = {}
+            data['responsible'] = value
+            update_reponsible_field_data(data)
 
-            responsible_client, responsible = value.split(':')
-            new_admin_unit = ogds_service().fetch_org_unit(
-                responsible_client).admin_unit
-            if self.context.get_responsible_admin_unit().id() != new_admin_unit.id():
-                raise Invalid(
-                    _(u'error_no_admin_unit_change_in_progress_state',
-                      default=u'Admin unit changes are not allowed if the task or '
-                      u'forwarding is already accepted.'))
+            validate_no_teams(self.context, data['responsible'])
+            validate_no_admin_unit_change(self.context, data['responsible_client'])
 
 
 validator.WidgetValidatorDiscriminators(

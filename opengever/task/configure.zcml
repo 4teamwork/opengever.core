@@ -23,6 +23,8 @@
   <i18n:registerTranslations directory="locales" />
 
   <adapter factory=".task.NoCheckedoutDocsValidator" />
+  <adapter factory=".transition.NoTeamsInProgressStateValidator" />
+  <adapter factory=".transition.NoAdminUnitChangeInProgressStateValidator" />
 
   <browser:page
       name="task_response_delete"

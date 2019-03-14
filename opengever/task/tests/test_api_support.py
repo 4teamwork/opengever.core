@@ -1,4 +1,6 @@
 from datetime import date
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.task.adapters import IResponseContainer
@@ -268,6 +270,40 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.task)[-1]
         self.assertEqual(u'Robert macht das.', response.text)
         self.assertEqual('task-transition-reassign', response.transition)
+
+    @browsing
+    def test_reassign_to_team_validation(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-reassign'.format(
+            self.task.absolute_url())
+        data = {'text': 'Robert macht das.',
+                'responsible': 'team:1',
+                'responsible_client': u'fa'}
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
+
+    @browsing
+    def test_reassign_admin_unit_change_validation(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
+        create(Builder('ogds_user')
+               .id('james.bond')
+               .having(firstname=u'James', lastname=u'Bond')
+               .assign_to_org_units([org_unit]))
+
+        url = '{}/@workflow/task-transition-reassign'.format(
+            self.task.absolute_url())
+        data = {'text': 'Robert macht das.',
+                'responsible': 'james.bond',
+                'responsible_client': u'rk'}
+
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST',
+                         data=json.dumps(data), headers=self.api_headers)
 
     @browsing
     def test_cancel_successful(self, browser):

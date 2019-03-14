@@ -8,6 +8,8 @@ from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskReassignActivity
+from opengever.task.browser.assign import validate_no_admin_unit_change
+from opengever.task.browser.assign import validate_no_teams
 from opengever.task.browser.delegate.metadata import IUpdateMetadata
 from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
 from opengever.task.browser.delegate.utils import create_subtasks
@@ -19,6 +21,7 @@ from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone import api
 from plone.supermodel.model import Schema
+from z3c.form import validator
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -86,6 +89,37 @@ class INewResponsibleSchema(Schema):
         description=_(u'help_responsible_client', default=u''),
         vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
+
+
+class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
+    """Tasks not in the open state are limited:
+    - Teams are only allowed if the task/forwarding is in open state.
+    """
+
+    def validate(self, value):
+        if value and not self.context.is_open():
+            validate_no_teams(self.context, value)
+
+
+validator.WidgetValidatorDiscriminators(
+    NoTeamsInProgressStateValidator,
+    field=INewResponsibleSchema['responsible'],
+)
+
+
+class NoAdminUnitChangeInProgressStateValidator(validator.SimpleFieldValidator):
+    """Admin unit changes are only allowed in open state.
+    """
+
+    def validate(self, value):
+        if value and not self.context.is_open():
+            validate_no_admin_unit_change(self.context, value)
+
+
+validator.WidgetValidatorDiscriminators(
+    NoAdminUnitChangeInProgressStateValidator,
+    field=INewResponsibleSchema['responsible_client'],
+)
 
 
 @implementer(ITransitionExtender)
