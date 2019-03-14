@@ -1,5 +1,3 @@
-from ftw.dictstorage.interfaces import IDictStorage
-from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
@@ -7,20 +5,19 @@ from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import value
 from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
+from opengever.base.browser.reporting_view import BaseReporterView
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.component import queryMultiAdapter
-import json
 
 
-class DossierReporter(BrowserView):
+class DossierReporter(BaseReporterView):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
     and their important attributes.
     """
 
-    def get_dossier_attributes(self):
-        attributes = [
+    @property
+    def _attributes(self):
+        return [
             {'id': 'Title',
              'sort_index': 'sortable_title',
              'title': _('label_title', default=u'Title'),
@@ -42,49 +39,7 @@ class DossierReporter(BrowserView):
                         default=u'Reference Number')},
         ]
 
-        return self.filter_and_order_by_tabbedview_settings(attributes)
-
-    def filter_and_order_by_tabbedview_settings(self, attributes):
-        attributes_dict = {
-            item.get('sort_index', item.get('id')): item for (item) in attributes}
-        active_attributes = []
-        active_columns = self.get_active_columns()
-        if not active_columns:
-            return attributes
-
-        for col in active_columns:
-            attribute = attributes_dict.get(col.get('id'))
-            if attribute:
-                active_attributes.append(attribute)
-
-        return active_attributes
-
-    def get_grid_state(self, view_name):
-        """Load tabbedview gridstate of the logged in users for the given view.
-        """
-        tabbedview = self.context.restrictedTraverse(
-            "@@tabbedview_view-{}".format(view_name), default=None)
-        if not tabbedview:
-            return None
-
-        generator = queryMultiAdapter((self.context, tabbedview, self.request),
-                                      IGridStateStorageKeyGenerator)
-        key = generator.get_key()
-        storage = IDictStorage(tabbedview)
-        return json.loads(storage.get(key, '{}'))
-
-    def get_active_columns(self):
-        """Loads corresponding tabbedview grid-state and returns an orderd
-        list of the current visible columns.
-        """
-        view_name = self.request.form.get('view_name', None)
-        grid_state = self.get_grid_state(view_name)
-        if grid_state:
-            return [col for col in
-                    grid_state.get('columns') if not col.get('hidden')]
-
     def get_selected_dossiers(self):
-
         # get the given dossiers
         catalog = getToolByName(self.context, 'portal_catalog')
         dossiers = []
@@ -109,7 +64,7 @@ class DossierReporter(BrowserView):
 
         # generate the xls data with the XLSReporter
         reporter = XLSReporter(
-            self.request, self.get_dossier_attributes(), dossiers)
+            self.request, self.attributes(), dossiers)
 
         data = reporter()
         if not data:
