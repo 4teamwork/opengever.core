@@ -35,13 +35,6 @@
   </records>
 
 {{% endif %}}
-
-{{% if setup.officeatwork %}}
-  <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
-    <value key="is_feature_enabled">True</value>
-  </records>
-
-{{% endif %}}
 {{% if setup.maximum_repository_depth %}}
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
     <value key="maximum_repository_depth">{{{setup.maximum_repository_depth}}}</value>
