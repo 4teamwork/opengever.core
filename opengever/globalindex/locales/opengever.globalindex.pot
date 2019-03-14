@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-10-02 12:51+0000\n"
+"POT-Creation-Date: 2019-03-14 14:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.globalindex\n"
-
-#: ./opengever/globalindex/browser/report.py
-msgid "Could not generate the report."
-msgstr ""
 
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
@@ -83,4 +79,3 @@ msgstr ""
 #: ./opengever/globalindex/browser/report.py
 msgid "review_state"
 msgstr ""
-

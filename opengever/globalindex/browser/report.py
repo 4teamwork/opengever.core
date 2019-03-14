@@ -1,5 +1,4 @@
 from datetime import datetime
-from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
@@ -35,8 +34,10 @@ class TaskReporter(BaseReporterView):
     task and their important attributes from the globalindex.
     """
 
+    filename = 'task_report.xlsx'
+
     @property
-    def _attributes(self):
+    def _columns(self):
         return [
             {'id': 'title', 'title': _('label_task_title')},
             {'id': 'review_state', 'title': _('review_state'),
@@ -76,7 +77,7 @@ class TaskReporter(BaseReporterView):
 
         reporter = XLSReporter(
             self.context.REQUEST,
-            self.attributes(),
+            self.columns(),
             tasks,
             sheet_title=translate(
                 _('label_tasks', default=u'Tasks'), context=self.request),
@@ -85,18 +86,4 @@ class TaskReporter(BaseReporterView):
                 get_current_admin_unit().id())
             )
 
-        data = reporter()
-        if not data:
-            msg = _(u'Could not generate the report.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        response = self.request.RESPONSE
-
-        response.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        set_attachment_content_disposition(self.request, "task_report.xlsx")
-
-        return data
+        return self.return_excel(reporter)

@@ -1,4 +1,3 @@
-from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
@@ -15,8 +14,10 @@ class DossierReporter(BaseReporterView):
     and their important attributes.
     """
 
+    filename = 'dossier_report.xlsx'
+
     @property
-    def _attributes(self):
+    def _columns(self):
         return [
             {'id': 'Title',
              'sort_index': 'sortable_title',
@@ -62,22 +63,5 @@ class DossierReporter(BaseReporterView):
 
         dossiers = self.get_selected_dossiers()
 
-        # generate the xls data with the XLSReporter
-        reporter = XLSReporter(
-            self.request, self.attributes(), dossiers)
-
-        data = reporter()
-        if not data:
-            msg = _(u'Could not generate the report.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        response = self.request.RESPONSE
-
-        response.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        set_attachment_content_disposition(self.request, "dossier_report.xlsx")
-
-        return data
+        reporter = XLSReporter(self.request, self.columns(), dossiers)
+        return self.return_excel(reporter)
