@@ -88,6 +88,7 @@ class ITask(model.Schema):
             u'responsible_client',
             u'responsible',
             u'is_private',
+            u'revoke_permissions',
             u'deadline',
             u'text',
             u'relatedItems',
@@ -170,6 +171,14 @@ class ITask(model.Schema):
         )
 
     form.mode(IEditForm, is_private=HIDDEN_MODE)
+
+    revoke_permissions = schema.Bool(
+        title=_(u"label_revoke_permissions",
+                default=u"Revoke permissions."),
+        description=_(u"help_revoke_permissions",
+                      default="Revoke permissions when closing or reassigning task."),
+        default=True,
+        )
 
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
