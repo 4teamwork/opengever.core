@@ -510,7 +510,10 @@ class CommitteeBuilder(DexterityBuilder):
                           'agenda_item_suffix_template',
                           'excerpt_header_template',
                           'excerpt_suffix_template',
-                          'allowed_proposal_templates'):
+                          'agendaitem_list_template',
+                          'toc_template',
+                          'allowed_proposal_templates',
+                          'allowed_ad_hoc_agenda_item_templates'):
             self.arguments.pop(fieldname, None)
 
         obj.create_model(self.arguments, self.container)
