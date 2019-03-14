@@ -21,7 +21,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
     def test_responsible_has_local_editor_role_on_task_when_is_added(self):
         self.login(self.regular_user)
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', ),
             self.task.get_local_roles_for_userid(self.regular_user.id))
 
@@ -31,7 +31,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.task))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', ),
             self.task.get_local_roles_for_userid(self.secretariat_user.id))
 
@@ -41,7 +41,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.task))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', ),
             self.task.get_local_roles_for_userid(self.regular_user.id))
 
@@ -54,11 +54,11 @@ class TestLocalRolesSetter(IntegrationTestCase):
 
         notify(ObjectModifiedEvent(self.task))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', 'Reader'),
             self.proposaldocument.get_local_roles_for_userid(
                 self.regular_user.id))
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', 'Reader'),
             self.proposal.get_local_roles_for_userid(
                 self.regular_user.id),
@@ -72,7 +72,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
         assignment = manager.storage.get_by_reference(
             Oguid.for_object(self.inactive_task).id)[0]
 
-        self.assertEquals(['Reader', 'Editor'], assignment.get('roles'))
+        self.assertEqual(['Reader', 'Editor'], assignment.get('roles'))
 
     def test_responsible_has_reader_role_on_related_items_of_information_task(self):
         self.login(self.regular_user)
@@ -80,33 +80,33 @@ class TestLocalRolesSetter(IntegrationTestCase):
         # info_task is unidirectional by value
         manager = RoleAssignmentManager(self.document)
         assignment = manager.storage.get_by_reference(Oguid.for_object(self.info_task).id)[0]
-        self.assertEquals(['Reader'], assignment.get('roles'))
+        self.assertEqual(['Reader'], assignment.get('roles'))
 
     def test_reassigning_task_grants_local_roles_to_new_responsible(self):
         self.login(self.regular_user)
 
         roles = self.inactive_document.get_local_roles_for_userid(
             self.secretariat_user.id)
-        self.assertEquals(tuple(), roles)
+        self.assertEqual(tuple(), roles)
 
         self.inactive_task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.inactive_task))
 
         roles = self.inactive_document.get_local_roles_for_userid(
             self.secretariat_user.id)
-        self.assertEquals(('Editor', 'Reader'), roles)
+        self.assertEqual(('Editor', 'Reader'), roles)
 
     def test_responsible_of_a_bidirectional_by_ref_task_has_reader_and_editor_role_on_related_items(self):
         self.login(self.regular_user)
 
         # task is bidirectional by value
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', 'Reader', ),
             self.document.get_local_roles_for_userid(self.regular_user.id))
 
     def test_responsible_has_contributor_role_on_distinct_parent_when_task_is_added(self):
         self.login(self.regular_user)
-        self.assertEquals(
+        self.assertEqual(
             ('Contributor', ),
             self.dossier.get_local_roles_for_userid(self.regular_user.id))
 
@@ -116,7 +116,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.inactive_task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.inactive_task))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Contributor', ),
             self.inactive_dossier.get_local_roles_for_userid(self.secretariat_user.id))
 
@@ -133,13 +133,13 @@ class TestLocalRolesSetter(IntegrationTestCase):
                       .having(responsible=self.regular_user.id,
                               responsible_client='fa'))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', ),
             task.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             ('Reader', ),
             document.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             ('Contributor', ),
             dossier.get_local_roles_for_userid('fa_inbox_users'))
 
@@ -157,26 +157,26 @@ class TestLocalRolesSetter(IntegrationTestCase):
                               is_private=True,
                               responsible_client='fa'))
 
-        self.assertEquals(
+        self.assertEqual(
             (),
             task.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             (),
             document.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             (),
             dossier.get_local_roles_for_userid('fa_inbox_users'))
 
     def test_inbox_group_has_no_additional_localroles_in_a_oneclient_setup(self):
         self.login(self.regular_user)
 
-        self.assertEquals(
+        self.assertEqual(
             (),
             self.task.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             (),
             self.document.get_local_roles_for_userid('fa_inbox_users'))
-        self.assertEquals(
+        self.assertEqual(
             (),
             self.dossier.get_local_roles_for_userid('fa_inbox_users'))
 
@@ -187,15 +187,15 @@ class TestLocalRolesSetter(IntegrationTestCase):
                       .within(self.dossier)
                       .having(responsible='inbox:fa'))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Editor', ),
             task.get_local_roles_for_userid('fa_inbox_users'))
 
-        self.assertEquals(
+        self.assertEqual(
             ('Contributor', ),
             self.dossier.get_local_roles_for_userid('fa_inbox_users'))
 
-        self.assertEquals(
+        self.assertEqual(
             (), task.get_local_roles_for_userid('inbox:client1'))
 
     @browsing
@@ -223,7 +223,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.set_workflow_state('task-state-resolved', self.task)
 
         storage = RoleAssignmentManager(self.task).storage
-        self.assertEquals(
+        self.assertEqual(
             [{'cause': 1,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
@@ -235,7 +235,94 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
 
-        self.assertEquals([], storage._storage())
+        self.assertEqual([], storage._storage())
+
+    @browsing
+    def test_closing_does_not_revoke_roles_on_task_if_revoke_permission_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+        self.task.revoke_permissions = False
+
+        storage = RoleAssignmentManager(self.task).storage
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': 'kathi.barfuss'}], storage._storage())
+
+        # close
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': 'kathi.barfuss'}], storage._storage())
+
+    @browsing
+    def test_reassigning_task_revokes_responsible_roles_on_task(self, browser):
+        self.login(self.regular_user, browser)
+
+        roles = self.task.get_local_roles_for_userid(
+            self.regular_user.id)
+        self.assertEqual(('Editor',), roles)
+
+        roles = self.task.get_local_roles_for_userid(
+            self.secretariat_user.id)
+        self.assertEqual(tuple(), roles)
+
+        # assign
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-reassign')
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        browser.fill({'Response': 'For you'})
+        browser.click_on('Assign')
+
+        # old responsible's permissions were revoked
+        roles = self.task.get_local_roles_for_userid(
+            self.regular_user.id)
+        self.assertEqual(tuple(), roles)
+
+        # new responsible was granted permissions
+        roles = self.task.get_local_roles_for_userid(
+            self.secretariat_user.id)
+        self.assertEqual(('Editor', ), roles)
+
+    @browsing
+    def test_reassigning_task_does_not_revoke_roles_if_revoke_permission_is_false(self, browser):
+        self.login(self.regular_user, browser)
+        self.task.revoke_permissions = False
+
+        roles = self.task.get_local_roles_for_userid(
+            self.regular_user.id)
+        self.assertEqual(('Editor',), roles)
+
+        roles = self.task.get_local_roles_for_userid(
+            self.secretariat_user.id)
+        self.assertEqual(tuple(), roles)
+
+        # assign
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-reassign')
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        browser.fill({'Response': 'For you'})
+        browser.click_on('Assign')
+
+        # old responsible's permissions were not revoked
+        roles = self.task.get_local_roles_for_userid(
+            self.regular_user.id)
+        self.assertEqual(('Editor',), roles)
+
+        # new responsible was granted permissions
+        roles = self.task.get_local_roles_for_userid(
+            self.secretariat_user.id)
+        self.assertEqual(('Editor', ), roles)
 
     @browsing
     def test_reader_of_parent_can_still_view_closed_task(self, browser):
@@ -290,6 +377,26 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         )
 
     @browsing
+    def test_closing_does_not_revoke_roles_on_related_documents_if_revoke_permission_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+        self.task.revoke_permissions = False
+
+        storage = RoleAssignmentManager(self.document).storage
+        expected_oguids = [Oguid.for_object(task).id for task in (self.task,
+                           self.subtask, self.info_task, self.private_task)]
+        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
+
+        # close
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
+
+    @browsing
     def test_closing_a_task_revokes_roles_on_proposal(self, browser):
         self.login(self.dossier_responsible, browser=browser)
 
@@ -298,21 +405,16 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         ITask(self.task).relatedItems.append(relation)
         notify(ObjectModifiedEvent(self.task))
 
+        expected_assignments = [{'cause': 1,
+                                 'roles': ['Reader', 'Editor'],
+                                 'reference': Oguid.for_object(self.task),
+                                 'principal': self.regular_user.id}]
+
         document_storage = RoleAssignmentManager(self.proposaldocument).storage
-        self.assertEquals(
-            [{'cause': 1,
-              'roles': ['Reader', 'Editor'],
-              'reference': Oguid.for_object(self.task),
-              'principal': self.regular_user.id}],
-            document_storage._storage())
+        self.assertEqual(expected_assignments, document_storage._storage())
 
         proposal_storage = RoleAssignmentManager(self.proposal).storage
-        self.assertEquals(
-            [{'cause': 1,
-              'roles': ['Reader', 'Editor'],
-              'reference': Oguid.for_object(self.task),
-              'principal': self.regular_user.id}],
-            proposal_storage._storage())
+        self.assertEqual(expected_assignments, proposal_storage._storage())
 
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
         self.set_workflow_state('task-state-resolved', self.task)
@@ -322,8 +424,40 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('task-transition-resolved-tested-and-closed')
         browser.click_on('Save')
 
-        self.assertEquals([], proposal_storage._storage())
-        self.assertEquals([], document_storage._storage())
+        self.assertEqual([], proposal_storage._storage())
+        self.assertEqual([], document_storage._storage())
+
+    @browsing
+    def test_closing_does_not_revoke_roles_on_proposal_if_revoke_permission_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.task.revoke_permissions = False
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+        notify(ObjectModifiedEvent(self.task))
+
+        expected_assignments = [{'cause': 1,
+                                 'roles': ['Reader', 'Editor'],
+                                 'reference': Oguid.for_object(self.task),
+                                 'principal': self.regular_user.id}]
+
+        document_storage = RoleAssignmentManager(self.proposaldocument).storage
+        self.assertEqual(expected_assignments, document_storage._storage())
+
+        proposal_storage = RoleAssignmentManager(self.proposal).storage
+        self.assertEqual(expected_assignments, proposal_storage._storage())
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+        notify(ObjectModifiedEvent(self.task))
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        self.assertEqual(expected_assignments, proposal_storage._storage())
+        self.assertEqual(expected_assignments, document_storage._storage())
 
     @browsing
     def test_closing_a_task_revokes_responsible_roles_on_distinct_parent(self, browser):
@@ -331,7 +465,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.set_workflow_state('task-state-resolved', self.meeting_task)
 
         storage = RoleAssignmentManager(self.meeting_dossier).storage
-        self.assertEquals(
+        self.assertEqual(
             [{'cause': 1,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_task),
@@ -351,9 +485,51 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('task-transition-resolved-tested-and-closed')
         browser.click_on('Save')
 
-        self.assertEquals([], storage._storage())
-        self.assertEquals(
+        self.assertEqual([], storage._storage())
+        self.assertEqual(
             (('franzi.muller', ('Owner',)),),
+            self.meeting_dossier.get_local_roles())
+
+    @browsing
+    def test_closing_does_not_revoke_roles_on_distinct_parent_if_revoke_permission_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-resolved', self.meeting_task)
+        self.meeting_task.revoke_permissions = False
+
+        self.assertEqual(
+            (('franzi.muller', ('Owner',)), ('robert.ziegler', ('Contributor',))),
+            self.meeting_dossier.get_local_roles())
+
+        storage = RoleAssignmentManager(self.meeting_dossier).storage
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Contributor'],
+              'reference': Oguid.for_object(self.meeting_task),
+              'principal': self.dossier_responsible.id},
+             {'cause': 1,
+              'roles': ['Contributor'],
+              'reference': Oguid.for_object(self.meeting_subtask),
+              'principal': self.dossier_responsible.id}],
+            storage._storage())
+
+        # close subtask
+        browser.open(self.meeting_subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        browser.open(self.meeting_task, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Contributor'],
+              'reference': Oguid.for_object(self.meeting_task),
+              'principal': self.dossier_responsible.id}],
+            storage._storage())
+        self.assertEqual(
+            (('franzi.muller', ('Owner',)),
+             ('robert.ziegler', ('Contributor',))),
             self.meeting_dossier.get_local_roles())
 
     @browsing
@@ -367,7 +543,27 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
-        self.assertEquals([], storage._storage())
+        self.assertEqual([], storage._storage())
+
+    @browsing
+    def test_cancelling_a_task_does_not_revoke_roles_if_revoke_permission_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-open', self.subtask)
+        self.subtask.revoke_permissions = False
+
+        # cancel
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-open-cancelled')
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.subtask).storage
+
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': self.regular_user.id}],
+            storage._storage())
 
     @browsing
     def test_closing_a_direct_execution_task_revokes_roles(self, browser):
@@ -382,14 +578,35 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         storage = RoleAssignmentManager(self.subtask).storage
-        self.assertEquals([], storage._storage())
+        self.assertEqual([], storage._storage())
+
+    @browsing
+    def test_closing_direct_execution_task_does_not_revoke_roles_if_revoke_permission_is_false(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.subtask.revoke_permissions = False
+        self.subtask.task_type = 'direct-execution'
+        self.subtask.sync()
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+
+        # close
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-in-progress-tested-and-closed')
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.subtask).storage
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': self.regular_user.id}],
+            storage._storage())
 
     @browsing
     def test_skip_a_task_revokes_roles(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
         storage = RoleAssignmentManager(self.seq_subtask_2).storage
-        self.assertEquals(
+        self.assertEqual(
             [{'cause': 1,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
@@ -400,7 +617,30 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('task-transition-planned-skipped')
         browser.click_on('Save')
 
-        self.assertEquals([], storage._storage())
+        self.assertEqual([], storage._storage())
+
+    @browsing
+    def test_skip_task_does_not_revoke_roles_if_revoke_permission_is_false(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.seq_subtask_2.revoke_permissions = False
+
+        storage = RoleAssignmentManager(self.seq_subtask_2).storage
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.seq_subtask_2),
+              'principal': 'kathi.barfuss'}], storage._storage())
+
+        # skip
+        browser.open(self.seq_subtask_2, view='tabbedview_view-overview')
+        browser.click_on('task-transition-planned-skipped')
+        browser.click_on('Save')
+
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.seq_subtask_2),
+              'principal': 'kathi.barfuss'}], storage._storage())
 
     def test_can_delete_related_document_from_task(self):
         """The localroles update event used to explode when a related item was

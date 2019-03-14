@@ -216,10 +216,17 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
         disable_edit_bar()
 
         if self.is_final_transition:
-            self.status = _(
-                u'msg_revoking_permissions',
-                default=u'This transtion revokes temporary permissions for '
-                'the responsible user and agency group.')
+            if self.context.revoke_permissions:
+                self.status = _(
+                    u'msg_revoking_permissions',
+                    default=u'This transtion revokes temporary permissions for '
+                    'the responsible user and agency group.')
+
+            else:
+                self.status = _(
+                    u'msg_not_revoking_permissions',
+                    default=u'Temporary permissions will not be revoked by this '
+                    'transtion as revoke permissions is unchecked for this task')
 
     @property
     def label(self):

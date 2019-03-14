@@ -121,9 +121,10 @@ def set_initial_state(task, event):
 
 
 def revoke_permissions(task, event):
-    """Revoke temporary local roles on task and its related objects.
+    """Revoke temporary local roles on task and its related objects,
+    except if revoke_permissions is set to False
     """
-    if event.action in FINAL_TRANSITIONS:
+    if event.action in FINAL_TRANSITIONS and task.revoke_permissions:
         return LocalRolesSetter(task).revoke_roles()
 
 
