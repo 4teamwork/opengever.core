@@ -1,12 +1,5 @@
 <registry>
 
-{{% if not setup.enable_activity_feature %}}
-  <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
-    <field type="plone.registry.field.Bool" />
-    <value>False</value>
-  </record>
-
-{{% endif %}}
 {{% if setup.enable_meeting_feature %}}
   <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
     <field type="plone.registry.field.Bool" />
