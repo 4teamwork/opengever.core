@@ -577,6 +577,7 @@ Objects
           - self.info_task
           - self.mail_eml
           - self.mail_msg
+          - self.private_task
           - self.proposal
             - self.proposaldocument
           - self.removed_document
