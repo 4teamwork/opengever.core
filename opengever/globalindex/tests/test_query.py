@@ -162,7 +162,10 @@ class TestTaskQueries(IntegrationTestCase):
         self.login(self.regular_user)
 
         # manually set a similar physical path than self.task
-        self.sequential_task.get_sql_object().physical_path = 'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-11/task-3'
+        self.sequential_task.get_sql_object().physical_path = (
+            'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-11'
+            '/task-3'
+        )  # Do not add commas within this grouping - this is a string!
 
         tasks = Task.query.by_container(self.dossier, get_current_admin_unit()).all()
 
