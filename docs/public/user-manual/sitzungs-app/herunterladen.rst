@@ -1,5 +1,5 @@
-Situngsunterlagen herunterladen
--------------------------------
+Sitzungsunterlagen herunterladen
+--------------------------------
 
 Sofern erwünscht, können Sitzungsunterlagen lokal heruntergeladen werden.
 
