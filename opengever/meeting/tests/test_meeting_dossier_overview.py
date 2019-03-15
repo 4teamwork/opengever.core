@@ -30,6 +30,10 @@ class TestMeetingDossierOverview(test_overview.TestOverview):
         return [u'Programm \xdcberpr\xfcfen',
                 u'H\xf6rsaal reservieren']
 
+    @property
+    def task_titles_minus_pending(self):
+        return [u'Programm \xdcberpr\xfcfen']
+
     @browsing
     def test_meeting_is_linked_on_overview(self, browser):
         self.login(self.meeting_user, browser)

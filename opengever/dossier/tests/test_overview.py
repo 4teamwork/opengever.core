@@ -35,7 +35,8 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def tested_subtask(self):
-        return self.subtask
+        # XXX - not expected, but a quick way around the visibility limit
+        return self.private_task
 
     @property
     def participants(self):
@@ -45,9 +46,20 @@ class TestOverview(IntegrationTestCase):
     @property
     def task_titles(self):
         return [
+            u'Diskr\xe4te Dinge',
             u'Vertragsentw\xfcrfe 2018',
             u'Personaleintritt',
             u'Mitarbeiter Dossier generieren',
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+        ]
+
+    @property
+    def task_titles_minus_pending(self):
+        # As we have more than 5 tasks, they shift in like this
+        return [
+            u'Vertragsentw\xfcrfe 2018',
+            'Personaleintritt',
+            'Mitarbeiter Dossier generieren',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
         ]
@@ -117,11 +129,11 @@ class TestOverview(IntegrationTestCase):
         self.set_workflow_state(
             'task-state-tested-and-closed', self.tested_subtask)
 
-        browser.open(self.tested_dossier,
-                     view='tabbedview_view-overview')
+        browser.open(self.tested_dossier, view='tabbedview_view-overview')
         self.assertSequenceEqual(
-            self.task_titles[:-1],
-            browser.css('#newest_tasksBox li:not(.moreLink) a').text)
+            self.task_titles_minus_pending,
+            browser.css('#newest_tasksBox li:not(.moreLink) a').text,
+        )
 
     @browsing
     def test_participant_labels_are_displayed(self, browser):

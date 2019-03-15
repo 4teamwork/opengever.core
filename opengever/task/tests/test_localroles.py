@@ -266,15 +266,28 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.set_workflow_state('task-state-tested-and-closed', self.subtask)
         self.set_workflow_state('task-state-resolved', self.task)
         storage = RoleAssignmentManager(self.document).storage
-        expected_oguids = [Oguid.for_object(task).id for task in (self.task, self.subtask, self.info_task, )]
-        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
+        expected_oguids = [
+            Oguid.for_object(task).id
+            for task in (
+                self.task, self.subtask, self.info_task, self.private_task)
+        ]
+        self.assertEqual(
+            expected_oguids,
+            [item.get('reference') for item in storage._storage()],
+        )
         # close
         browser.open(self.task, view='tabbedview_view-overview')
         browser.click_on('task-transition-resolved-tested-and-closed')
         browser.fill({'Response': 'Done!'})
         browser.click_on('Save')
-        expected_oguids = [Oguid.for_object(task).id for task in (self.subtask, self.info_task, )]
-        self.assertEqual(expected_oguids, [item.get('reference') for item in storage._storage()])
+        expected_oguids = [
+            Oguid.for_object(task).id
+            for task in (self.subtask, self.info_task, self.private_task)
+        ]
+        self.assertEqual(
+            expected_oguids,
+            [item.get('reference') for item in storage._storage()],
+        )
 
     @browsing
     def test_closing_a_task_revokes_roles_on_proposal(self, browser):

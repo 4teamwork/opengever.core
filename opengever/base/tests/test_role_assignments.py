@@ -246,6 +246,16 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                     u'title': u'Vertragsentw\xfcrfe 2018',
                 },
                 u'principal': u'kathi.barfuss',
+            },
+            {
+                u'cause': {u'id': 1, u'title': u'By task'},
+                u'roles': [u'Contributor'],
+                u'reference': {
+                    u'url': u'http://nohost/plone/ordnungssystem/fuhrung'
+                            u'/vertrage-und-vereinbarungen/dossier-1/task-12',
+                    u'title': u'Diskr\xe4te Dinge',
+                },
+                u'principal': u'kathi.barfuss',
             }
         ]
         self.assertEquals(expected_assignments, browser.json)
