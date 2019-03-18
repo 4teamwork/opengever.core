@@ -6,8 +6,7 @@ from opengever.testing import IntegrationTestCase
 
 class TestPrivateTaskIntegration(IntegrationTestCase):
 
-    @browsing
-    def test_feature_is_activated_by_default(self, browser):
+    def test_feature_is_activated_by_default(self):
         self.assertTrue(is_private_task_feature_enabled())
 
     @browsing
@@ -45,8 +44,7 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
 
     features = ('!private-tasks', )
 
-    @browsing
-    def test_feature_is_deactivated(self, browser):
+    def test_feature_is_deactivated(self):
         self.assertFalse(is_private_task_feature_enabled())
 
     @browsing
