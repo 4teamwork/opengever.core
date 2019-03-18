@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.model import Resource
-from opengever.activity.model.activity import Activity
 from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase

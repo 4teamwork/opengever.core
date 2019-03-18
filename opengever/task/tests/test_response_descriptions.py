@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.task.adapters import IResponseContainer
-from opengever.task.adapters import IResponseContainer
 from opengever.task.adapters import Response
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import TEST_USER_ID
