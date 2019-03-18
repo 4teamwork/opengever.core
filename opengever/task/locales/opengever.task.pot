@@ -349,6 +349,11 @@ msgstr ""
 msgid "help_responsible_client"
 msgstr ""
 
+#. Default: "Revoke permissions when closing or reassigning task."
+#: ./opengever/task/task.py
+msgid "help_revoke_permissions"
+msgstr ""
+
 #: ./opengever/task/task.py
 msgid "help_task_type"
 msgstr ""
@@ -600,6 +605,11 @@ msgstr ""
 msgid "label_return_to_issue"
 msgstr ""
 
+#. Default: "Revoke permissions."
+#: ./opengever/task/task.py
+msgid "label_revoke_permissions"
+msgstr ""
+
 #. Default: "Sequence"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_sequence"
@@ -687,9 +697,19 @@ msgstr ""
 msgid "msg_deadline_change_successfull"
 msgstr ""
 
+#. Default: "Temporary permissions will not be revoked by this transtion as revoke permissions is unchecked for this task"
+#: ./opengever/task/response.py
+msgid "msg_not_revoking_permissions"
+msgstr ""
+
 #. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
+msgstr ""
+
+#. Default: "Permissions have been succesfully revoked"
+#: ./opengever/task/browser/revoke_permissions.py
+msgid "msg_revoking_successful"
 msgstr ""
 
 #. Default: "Task successfully reassigned."

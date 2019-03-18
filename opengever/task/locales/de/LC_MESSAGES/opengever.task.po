@@ -349,6 +349,11 @@ msgstr "Wählen Sie die verantwortlichen Personen aus."
 msgid "help_responsible_client"
 msgstr "Wählen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer."
 
+#. Default: "Revoke permissions when closing or reassigning task."
+#: ./opengever/task/task.py
+msgid "help_revoke_permissions"
+msgstr "Berechtigungen für den Auftragnehmer und dessen Stellvertretung nach Abschluss oder Neuzuweisung der Aufgabe entziehen."
+
 #: ./opengever/task/task.py
 msgid "help_task_type"
 msgstr "Wählen Sie den Auftragstyp"
@@ -601,6 +606,11 @@ msgstr "Auftragnehmer"
 msgid "label_return_to_issue"
 msgstr "Zurück zur Aufgabe"
 
+#. Default: "Revoke permissions."
+#: ./opengever/task/task.py
+msgid "label_revoke_permissions"
+msgstr "Berechtigungen nach Abschluss entziehen"
+
 #. Default: "Sequence"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_sequence"
@@ -689,10 +699,20 @@ msgstr "Status"
 msgid "msg_deadline_change_successfull"
 msgstr "Frist wurde erfolgreich angepasst."
 
+#. Default: "Temporary permissions will not be revoked by this transtion as revoke permissions is unchecked for this task"
+#: ./opengever/task/response.py
+msgid "msg_not_revoking_permissions"
+msgstr "Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung bleiben bestehen, der Entzug der Berechtigungen ist für diese Aufgabe deaktiviert."
+
 #. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
 msgstr "Diese Statusänderung führt dazu, dass temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung entzogen werden."
+
+#. Default: "Permissions have been succesfully revoked"
+#: ./opengever/task/browser/revoke_permissions.py
+msgid "msg_revoking_successful"
+msgstr "Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung wurden entzogen."
 
 #. Default: "Task successfully reassigned."
 #: ./opengever/task/browser/assign.py

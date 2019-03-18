@@ -934,3 +934,40 @@ class TestRevokePermissionsAuthorization(IntegrationTestCase):
         api.user.grant_roles(user=self.dossier_responsible, roles=['Manager'])
         browser.open(addTokenToUrl(url))
 
+
+class TestRevokePermissionsAction(IntegrationTestCase):
+
+    features = ('optional-task-permissions-revoking', )
+
+    @browsing
+    def test_revoke_action_points_to_revoke_permissions_view(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+
+        browser.open(self.subtask)
+        revoke_action = editbar.menu_option('Actions', "Revoke permissions")
+        action_url = urlparse(revoke_action.get("href"))
+
+        self.assertEqual("/".join([self.subtask.absolute_url_path(),
+                                   '@@revoke_permissions']),
+                         action_url.path)
+
+    @browsing
+    def test_revoke_action_revokes_permissions_on_task(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.subtask.revoke_permissions = False
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.subtask).storage
+        self.assertEqual(
+            [{'cause': 1,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': self.regular_user.id}],
+            storage._storage())
+
+        browser.open(self.subtask)
+        browser.click_on("Revoke permissions")
+        self.assertEqual([], storage._storage())

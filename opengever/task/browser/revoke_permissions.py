@@ -5,6 +5,7 @@ from opengever.task.task import ITask
 from plone import api
 from Products.Five.browser import BrowserView
 from zExceptions import Unauthorized
+from opengever.task import _
 
 
 class RevokePermissions(BrowserView):
@@ -13,6 +14,11 @@ class RevokePermissions(BrowserView):
         if not self.is_available():
             raise Unauthorized()
         LocalRolesSetter(self.context).revoke_roles()
+
+        msg = _(u'msg_revoking_successful',
+                default=u'Permissions have been succesfully revoked')
+        api.portal.show_message(msg, request=self.request, type='info')
+
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def is_available(self):
