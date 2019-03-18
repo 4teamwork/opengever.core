@@ -23,6 +23,7 @@
   <i18n:registerTranslations directory="locales" />
 
   <adapter factory=".task.NoCheckedoutDocsValidator" />
+  <adapter factory=".task.PrivateTaskValidator" />
 
   <browser:page
       name="task_response_delete"

@@ -28,6 +28,7 @@ from opengever.task import TASK_STATE_PLANNED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.validators import NoCheckedoutDocsValidator
+from opengever.task.validators import PrivateTaskValidator
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from persistent.dict import PersistentDict
@@ -45,7 +46,6 @@ from z3c.form import validator
 from z3c.form import widget
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IAddForm
-from z3c.form.interfaces import IEditForm
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -53,7 +53,6 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
 from zope.schema.vocabulary import getVocabularyRegistry
@@ -167,8 +166,6 @@ class ITask(model.Schema):
         default=False,
         )
 
-    form.mode(IEditForm, is_private=HIDDEN_MODE)
-
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
@@ -257,6 +254,10 @@ validator.WidgetValidatorDiscriminators(
     field=ITask['relatedItems'],
     )
 
+validator.WidgetValidatorDiscriminators(
+    PrivateTaskValidator,
+    field=ITask['is_private'],
+)
 
 default_responsible_client = widget.ComputedWidgetAttribute(
     lambda adapter: get_current_org_unit().id(),
