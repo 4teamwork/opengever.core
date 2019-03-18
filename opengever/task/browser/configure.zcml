@@ -52,6 +52,14 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="revoke_permissions"
+      class=".revoke_permissions.RevokePermissions"
+      permission="zope2.View"
+      allowed_attributes="is_available"
+      />
+
   <!-- related documents tab -->
   <adapter factory=".related_documents.RelatedDocumentsCatalogTableSource" />
 
