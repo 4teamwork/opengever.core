@@ -1,91 +1,23 @@
 from datetime import datetime
-from datetime import date
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.core.testing import activate_filing_number
-from opengever.core.testing import inactivate_filing_number
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from openpyxl import load_workbook
-from plone.app.testing import TEST_USER_ID
 from tempfile import NamedTemporaryFile
+import json
 
 
-class TestDossierReporterWithFilingNumberSupport(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierReporterWithFilingNumberSupport, self).setUp()
-        activate_filing_number(self.portal)
-
-        self.dossier = create(Builder('dossier')
-                              .titled(u'Export1 Dossier')
-                              .having(start=date(2012, 1, 1),
-                                      end=date(2012, 12, 1),
-                                      responsible=TEST_USER_ID,
-                                      filing_no='Client1-Leitung-2012-1')
-                              .in_state('active'))
-
-    def tearDown(self):
-        super(TestDossierReporterWithFilingNumberSupport, self).tearDown()
-        inactivate_filing_number(self.portal)
-
-    @browsing
-    def test_report_appends_filing_fields(self, browser):
-        browser.login().open(view='dossier_report',
-                             data={'paths:list': [
-                                   '/'.join(self.dossier.getPhysicalPath()),
-                                   ]})
-
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
-        self.assertSequenceEqual(
-            [u'Export1 Dossier',
-             datetime(2012, 1, 1),
-             datetime(2012, 12, 1),
-             u'Test User (test_user_1_)',
-             u'Leitung',
-             2012.0,
-             1.0,
-             u'Client1-Leitung-2012-1',
-             u'active',
-             u'Client1 / 1'],
-            [cell.value for cell in list(workbook.active.rows)[1]])
-
-
-class TestDossierReporter(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDossierReporter, self).setUp()
-
-        self.dossier1 = create(Builder('dossier')
-                               .titled(u'Export1 Dossier')
-                               .having(start=date(2012, 1, 1),
-                                       end=date(2012, 12, 1),
-                                       responsible=TEST_USER_ID)
-                               .in_state('active'))
-
-        self.dossier2 = create(Builder('dossier')
-                               .titled(u'Foo Dossier')
-                               .having(start=date(2012, 1, 1),
-                                       end=date(2012, 12, 1),
-                                       responsible=TEST_USER_ID)
-                               .in_state('active'))
+class TestDossierReporter(IntegrationTestCase):
 
     @browsing
     def test_dossier_report(self, browser):
-        pass
-        browser.login().open(view='dossier_report',
-                             data={'paths:list': [
-                                   '/'.join(self.dossier1.getPhysicalPath()),
-                                   '/'.join(self.dossier2.getPhysicalPath())
-                                   ]})
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='dossier_report',
+                     data=self.make_path_param(self.dossier, self.inactive_dossier))
 
         data = browser.contents
         with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
@@ -96,21 +28,94 @@ class TestDossierReporter(FunctionalTestCase):
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
-            [u'Export1 Dossier',
-             datetime(2012, 1, 1),
-             datetime(2012, 12, 1),
-             u'Test User (test_user_1_)',
-             u'active',
-             u'Client1 / 1'],
+            [self.dossier.title,
+             datetime(2016, 1, 1),
+             None,
+             u'Ziegler Robert (robert.ziegler)',
+             u'dossier-state-active',
+             u'Client1 1.1 / 1'],
             [cell.value for cell in rows[1]])
+
         self.assertSequenceEqual(
-            [u'Foo Dossier',
-             datetime(2012, 1, 1),
-             datetime(2012, 12, 1),
-             u'Test User (test_user_1_)',
-             u'active',
-             u'Client1 / 2'],
+            [self.inactive_dossier.title,
+             datetime(2016, 1, 1, 0, 0),
+             datetime(2016, 12, 31, 0, 0),
+             u'Ziegler Robert (robert.ziegler)',
+             u'dossier-state-inactive',
+             u'Client1 1.1 / 3'],
             [cell.value for cell in rows[2]])
+
+    @browsing
+    def test_respects_column_tabbedview_settings_if_exists(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        data = {'view_name': 'mydossiers',
+                'gridstate': json.dumps({
+                    "columns":[
+                        {"id":"path_checkbox","width":30},
+                        {"id":"sortable_title","width":300,"sortable":True},
+                        {"id":"review_state","width":110,"sortable":True},
+                        {"id":"reference","width":110,"sortable":True},
+                        {"id":"end","width":110,"sortable":True},
+                        {"id":"responsible","width":110,"sortable":True},
+                        {"id":"start","width":110,"hidden":True,"sortable":True},
+                        {"id":"Subject","width":110,"sortable":True},
+                        {"id":"dummy","width":1,"hidden":True}],
+                    "sort":{"field":"modified","direction":"ASC"}})}
+        browser.open(view='@@tabbed_view/setgridstate', data=data)
+
+
+        data = self.make_path_param(self.dossier, self.inactive_dossier)
+        data['view_name'] = 'mydossiers'
+        browser.open(view='dossier_report', data=data)
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        rows = list(workbook.active.rows)
+        self.assertSequenceEqual(
+            [u'Title', u'Review state', u'Reference Number', u'Closing Date',
+             u'Responsible'],
+            [cell.value for cell in rows[0]])
+
+    @browsing
+    def test_report_appends_filing_fields(self, browser):
+        self.activate_feature('filing_number')
+        self.login(self.regular_user, browser=browser)
+
+        IFilingNumber(self.dossier).filing_no = u'Client1-Leitung-2012-1'
+        self.dossier.reindexObject()
+
+        browser.open(view='dossier_report',
+                     data=self.make_path_param(self.dossier))
+
+        data = browser.contents
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        labels = [cell.value for cell in list(workbook.active.rows)[0]]
+        self.assertIn(u'filing_no_filing', labels)
+        self.assertIn(u'filing_no_year', labels)
+        self.assertIn(u'filing_no_number', labels)
+        self.assertIn(u'Filing number', labels)
+
+        self.assertSequenceEqual(
+            [self.dossier.title,
+             datetime(2016, 1, 1),
+             None,
+             u'Ziegler Robert (robert.ziegler)',
+             u'Leitung',
+             2012,
+             1,
+             u'Client1-Leitung-2012-1',
+             u'dossier-state-active',
+             u'Client1 1.1 / 1'],
+            [cell.value for cell in list(workbook.active.rows)[1]])
 
     def test_filing_no_year(self):
         self.assertEquals(

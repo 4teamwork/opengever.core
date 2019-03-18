@@ -22,6 +22,7 @@
             action="folder_object"
             tal:attributes="action context/absolute_url">
         <input type="hidden" name="orig_template" tal:attributes="value string:${context/absolute_url}/#${view/view_name}" />
+        <input type="hidden" name="view_name" tal:attributes="value string:${view/view_name}" />
         <span tal:replace="structure context/@@authenticator/authenticator"/>
 
         <tal:extjs condition="view/extjs_enabled">

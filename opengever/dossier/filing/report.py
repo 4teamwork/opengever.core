@@ -38,8 +38,8 @@ def filing_no_number(filing_number):
 class DossierFilingNumberReporter(DossierReporter):
     """DossierReporter addition, which add filing columns to the xls-export.
     """
-
-    def get_dossier_attributes(self):
+    @property
+    def _columns(self):
         filing_columns = [
             {'id': 'filing_no',
              'title': _('filing_no_filing'),
@@ -58,8 +58,7 @@ class DossierFilingNumberReporter(DossierReporter):
         ]
         filing_columns.reverse()
 
-        columns = super(
-            DossierFilingNumberReporter, self).get_dossier_attributes()
+        columns = super(DossierFilingNumberReporter, self)._columns
 
         index = [col.get('id') for col in columns].index('review_state')
         for column in filing_columns:

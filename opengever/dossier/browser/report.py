@@ -1,23 +1,26 @@
-from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.reporter import value
 from opengever.dossier import _
 from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
+from opengever.base.browser.reporting_view import BaseReporterView
 from Products.statusmessages.interfaces import IStatusMessage
 
 
-class DossierReporter(BrowserView):
+class DossierReporter(BaseReporterView):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
     and their important attributes.
     """
 
-    def get_dossier_attributes(self):
+    filename = 'dossier_report.xlsx'
+
+    @property
+    def _columns(self):
         return [
             {'id': 'Title',
+             'sort_index': 'sortable_title',
              'title': _('label_title', default=u'Title'),
              'transform': value},
             {'id': 'start',
@@ -38,7 +41,6 @@ class DossierReporter(BrowserView):
         ]
 
     def get_selected_dossiers(self):
-
         # get the given dossiers
         catalog = getToolByName(self.context, 'portal_catalog')
         dossiers = []
@@ -61,22 +63,5 @@ class DossierReporter(BrowserView):
 
         dossiers = self.get_selected_dossiers()
 
-        # generate the xls data with the XLSReporter
-        reporter = XLSReporter(
-            self.request, self.get_dossier_attributes(), dossiers)
-
-        data = reporter()
-        if not data:
-            msg = _(u'Could not generate the report.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        response = self.request.RESPONSE
-
-        response.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        set_attachment_content_disposition(self.request, "dossier_report.xlsx")
-
-        return data
+        reporter = XLSReporter(self.request, self.columns(), dossiers)
+        return self.return_excel(reporter)
