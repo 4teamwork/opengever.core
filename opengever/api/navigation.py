@@ -13,16 +13,6 @@ from zope.interface import implementer
 from zope.interface import Interface
 
 
-def brain_to_node(brain):
-    return {
-        'text': brain.Title,
-        'description': brain.Description,
-        'url': brain.getURL(),
-        'uid': brain.UID,
-        'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE
-    }
-
-
 @implementer(IExpandableElement)
 @adapter(Interface, IOpengeverBaseLayer)
 class Navigation(object):
@@ -60,10 +50,23 @@ class Navigation(object):
             path='/'.join(root.getPhysicalPath()),
             sort_on='sortable_title',
         )
-        nodes = map(brain_to_node, items)
+
+        nodes = map(self.brain_to_node, items)
         result['navigation']['tree'] = make_tree_by_url(nodes)
 
         return result
+
+    def brain_to_node(self, brain):
+        return {
+            '@type': brain.portal_type,
+            'text': brain.Title,
+            'description': brain.Description,
+            'url': brain.getURL(),
+            'uid': brain.UID,
+            'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE,
+            'current': self.context.absolute_url() == brain.getURL(),
+            'current_tree': self.context.absolute_url().startswith(brain.getURL()),
+        }
 
 
 class NavigationGet(Service):

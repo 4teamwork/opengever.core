@@ -24,15 +24,24 @@ GEVER-Mandanten abgefragt werden.
           "@id": "http://localhost:8080/fd/ordnungssystem/@navigation",
           "tree": [
               {
+                  "@type": "opengever.repository.repositoryfolder",
                   "active": true,
+                  "current": false,
+                  "current_tree": false,
                   "description": "",
                   "nodes": [
                       {
+                          "@type": "opengever.repository.repositoryfolder",
                           "active": true,
+                          "current": false,
+                          "current_tree": false,
                           "description": "",
                           "nodes": [
                               {
+                                  "@type": "opengever.repository.repositoryfolder",
                                   "active": true,
+                                  "current": false,
+                                  "current_tree": false,
                                   "description": "",
                                   "nodes": [],
                                   "text": "9.5.0. Allgemeines",
@@ -40,7 +49,10 @@ GEVER-Mandanten abgefragt werden.
                                   "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict/allgemeines"
                               },
                               {
+                                  "@type": "opengever.repository.repositoryfolder",
                                   "active": true,
+                                  "current": false,
+                                  "current_tree": false,
                                   "description": "",
                                   "nodes": [],
                                   "text": "9.5.1. Informatik",
@@ -48,7 +60,10 @@ GEVER-Mandanten abgefragt werden.
                                   "url": "http://localhost:8080/fd/ordnungssystem/ressourcen-und-support/ict/informatik"
                               },
                               {
+                                  "@type": "opengever.repository.repositoryfolder",
                                   "active": true,
+                                  "current": false,
+                                  "current_tree": false,
                                   "description": "",
                                   "nodes": [],
                                   "text": "9.5.2. Telefonie",
