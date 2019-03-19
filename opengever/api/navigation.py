@@ -8,7 +8,9 @@ from plone import api
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zExceptions import BadRequest
 from zope.component import adapter
+from zope.dottedname.resolve import resolve
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -22,16 +24,20 @@ class Navigation(object):
         self.request = request
 
     def __call__(self, expand=False):
+        root_interface = self.get_root_interface()
+        content_interfaces = self.get_content_interfaces()
+
         context = self.context
-        while (not IRepositoryRoot.providedBy(context)
+
+        while (not root_interface.providedBy(context)
                and not IPloneSiteRoot.providedBy(context)):
             context = aq_parent(context)
 
-        if IRepositoryRoot.providedBy(context):
+        if root_interface.providedBy(context):
             root = context
         else:
             roots = api.content.find(
-                object_provides=IRepositoryRoot.__identifier__)
+                object_provides=root_interface.__identifier__)
             if roots:
                 root = roots[0].getObject()
             else:
@@ -46,7 +52,7 @@ class Navigation(object):
             return result
 
         items = api.content.find(
-            object_provides=IRepositoryFolder.__identifier__,
+            object_provides=content_interfaces,
             path='/'.join(root.getPhysicalPath()),
             sort_on='sortable_title',
         )
@@ -55,6 +61,39 @@ class Navigation(object):
         result['navigation']['tree'] = make_tree_by_url(nodes)
 
         return result
+
+    def _lookup_iface_by_identifier(self, identifier):
+        return resolve(identifier) if identifier else None
+
+    def get_root_interface(self):
+        """Lookups the root_interface provided within the request parameter.
+
+        This interface is used as the navigation root identifier.
+        """
+        interface = self.request.form.get('root_interface')
+        try:
+            return self._lookup_iface_by_identifier(
+                interface) or IRepositoryRoot
+        except ImportError:
+            raise BadRequest("The provided `root_interface` could not be "
+                             "looked up: {}".format(interface))
+
+    def get_content_interfaces(self):
+        """Lookups the content_interfaces provided within the request parameter.
+
+        The interfaces provided in `content_interfaces` are used as navigation
+        items.
+        """
+        interface = self.request.form.get('content_interfaces')
+        try:
+            content_interfaces = self._lookup_iface_by_identifier(
+                interface) or IRepositoryFolder
+        except ImportError:
+            raise BadRequest("The provided `content_interfaces` could not be "
+                             "looked up: {}".format(interface))
+
+        return content_interfaces if isinstance(content_interfaces, list) \
+            else [content_interfaces]
 
     def brain_to_node(self, brain):
         return {
