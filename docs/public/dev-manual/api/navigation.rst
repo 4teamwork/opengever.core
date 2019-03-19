@@ -131,3 +131,45 @@ Ein Navigationsbaum eines Arbeitsraumes kann wie folgt abgefragt werden:
           ]
       }
 
+Über den Parameter `include_root` kann das Root-Objekt im Navigationsbaum hinzugefügt werden.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /@navigation?include_root=true&root_provides=opengever.workspace.interfaces.IWorkspace&content_provides=opengever.workspace.interfaces.IWorkspaceFolder HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@navigation",
+          "tree": [
+              {
+                  "active": true,
+                  "current": false,
+                  "current_tree": false,
+                  "description": "",
+                  "nodes": [
+                      {
+                          "active": true,
+                          "current": false,
+                          "current_tree": false,
+                          "description": "",
+                          "nodes": [],
+                          "text": "",
+                          "uid": "8dee9268d10f4b2db742fb52ebefdd03",
+                          "url": "http://localhost:8080/fd/workspaces/workspace-1/folder-1"
+                      }
+                  ],
+                  "text": "",
+                  "uid": "f93938316a524fa5ac59f3b98506b47c",
+                  "url": "http://localhost:8080/fd/workspaces/workspace-1"
+              }
+          ]
+      }

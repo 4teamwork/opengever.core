@@ -27,6 +27,9 @@ class Navigation(object):
         root_interface = self.get_root_interface()
         content_interfaces = self.get_content_interfaces()
 
+        if self.request.form.get('include_root'):
+            content_interfaces.append(root_interface)
+
         context = self.context
 
         while (not root_interface.providedBy(context)

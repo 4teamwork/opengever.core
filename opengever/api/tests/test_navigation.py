@@ -145,3 +145,24 @@ class TestNavigation(IntegrationTestCase):
             {"message": "The provided `content_interfaces` could not be looked up: not.existing.Interface",
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_allow_including_root_object(self, browser):
+        self.login(self.workspace_member, browser)
+        params = [
+            ('root_interface', 'opengever.workspace.interfaces.IWorkspace'),
+            ('content_interfaces', 'opengever.workspace.interfaces.IWorkspaceFolder'),
+            ('include_root', True)
+        ]
+
+        browser.open(
+            self.workspace.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        items = flatten_tree(browser.json.get('tree'))
+
+        self.assertEqual(
+            [self.workspace.UID(), self.workspace_folder.UID()],
+            [item.get('uid') for item in items])
