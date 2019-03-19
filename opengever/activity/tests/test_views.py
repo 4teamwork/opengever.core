@@ -6,85 +6,104 @@ from ftw.testing import freeze
 from opengever.activity.center import NotificationCenter
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 import json
 import pytz
 
 
-class TestMarkAsRead(FunctionalTestCase):
+FREEZE_TIME = pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))
 
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+
+class TestMarkAsRead(IntegrationTestCase):
 
     def setUp(self):
         super(TestMarkAsRead, self).setUp()
+        with self.login(self.regular_user):
+            self.center = NotificationCenter()
+            self.watcher = create(
+                Builder('watcher')
+                .having(actorid=self.regular_user.id)
+            )
+            oguid = Oguid.for_object(self.task)
+            self.resource = create(
+                Builder('resource')
+                .oguid(oguid.id)
+                .watchers([self.watcher])
+            )
 
-        self.center = NotificationCenter()
-        self.test_user = create(Builder('watcher')
-                                .having(actorid=TEST_USER_ID))
-        self.resource_a = create(Builder('resource')
-                                 .oguid('fd:123')
-                                 .watchers([self.test_user]))
+            with freeze(FREEZE_TIME):
+                self.activity_1 = create(
+                    Builder('activity')
+                    .having(resource=self.resource)
+                )
+                create(
+                    Builder('notification')
+                    .id(1)
+                    .having(
+                        activity=self.activity_1,
+                        userid=self.regular_user.id,
+                    )
+                )
 
-        with freeze(pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))):
-            self.activity_1 = self.center.add_activity(
-                Oguid('fd', '123'),
-                'task-added',
-                {'en': 'Kennzahlen 2014 erfassen'},
-                {'en': 'Task added'},
-                {'en': 'Task bla added by Hugo'},
-                'hugo.boss',
-                {'en': None}).get('activity')
+                self.activity_2 = create(
+                    Builder('activity')
+                    .having(resource=self.resource)
+                )
+                create(
+                    Builder('notification')
+                    .id(2)
+                    .having(
+                        activity=self.activity_2,
+                        userid=self.regular_user.id,
+                    )
+                )
 
-            self.activity_2 = self.center.add_activity(
-                Oguid('fd', '123'),
-                'task-transition-open-in-progress',
-                {'en': 'Kennzahlen 2014 erfassen'},
-                {'en': 'Task accepted'},
-                {'en': 'Task bla accepted'},
-                'hugo.boss',
-                {'en': None}).get('activity')
-
-            self.notifications = self.center.get_users_notifications(TEST_USER_ID)
+            self.notifications = self.center.get_users_notifications(
+                self.regular_user.id)
 
     @browsing
     def test_mark_single_notification_as_read(self, browser):
+        self.login(self.regular_user, browser)
         notification_id = self.notifications[0].notification_id
-        browser.login().open(self.portal, view='notifications/read',
-                             data={'notification_ids': json.dumps([notification_id])})
+        ids = {'notification_ids': json.dumps([notification_id])}
+        browser.open(view='notifications/read', data=ids)
 
-        notifications = self.center.get_users_notifications(TEST_USER_ID)
+        notifications = self.center.get_users_notifications(
+            self.regular_user.id)
         self.assertTrue(notifications[0].is_read)
         self.assertFalse(notifications[1].is_read)
 
     @browsing
     def test_mark_multiple_notifications_as_read(self, browser):
-        ids = [self.notifications[0].notification_id,
-               self.notifications[1].notification_id]
+        self.login(self.regular_user, browser)
+        ids = {'notification_ids': json.dumps([
+            self.notifications[0].notification_id,
+            self.notifications[1].notification_id,
+        ])}
+        browser.open(view='notifications/read', data=ids)
 
-        browser.login().open(self.portal, view='notifications/read',
-                             data={'notification_ids': json.dumps(ids)})
-
-        notifications = self.center.get_users_notifications(TEST_USER_ID)
+        notifications = self.center.get_users_notifications(
+            self.regular_user.id)
         self.assertTrue(notifications[0].is_read)
         self.assertTrue(notifications[1].is_read)
 
     @browsing
     def test_mark_already_read_or_invalid_notification_as_read_is_ignored(self, browser):
+        self.login(self.regular_user, browser)
         invalid = 123
         notification_id = self.notifications[0].notification_id
-
         self.notifications[0].is_read = True
-
-        browser.login().open(
-            self.portal, view='notifications/read',
-            data={'notification_ids': json.dumps([invalid, notification_id])})
+        ids = {'notification_ids': json.dumps([invalid, notification_id])}
+        browser.open(view='notifications/read', data=ids)
+        self.assertEqual(200, browser.status_code)
 
     @browsing
     def test_read_raise_exception_when_parameter_is_missing(self, browser):
+        self.login(self.regular_user, browser)
         with browser.expect_http_error():
-            browser.login().open(self.portal, view='notifications/read')
+            browser.open(self.portal, view='notifications/read')
 
 
 class TestListNotifications(FunctionalTestCase):
@@ -115,7 +134,7 @@ class TestListNotifications(FunctionalTestCase):
         create(Builder('notification')
                .having(activity=self.activity, userid=TEST_USER_ID, is_read=True))
 
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(
             [{u'title': u'Kennzahlen 2014 erfassen',
               u'read': False,
@@ -140,7 +159,7 @@ class TestListNotifications(FunctionalTestCase):
                .having(activity=self.activity, userid=TEST_USER_ID, is_read=False))
 
         # on current admin unit
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(
             u'_self', browser.json.get('notifications')[0]['target'])
 
@@ -149,7 +168,7 @@ class TestListNotifications(FunctionalTestCase):
         create_session().flush()
 
         # on forreign admin unit
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(
             u'_blank', browser.json.get('notifications')[0]['target'])
 
@@ -161,7 +180,7 @@ class TestListNotifications(FunctionalTestCase):
                            userid=TEST_USER_ID,
                            is_read=False))
 
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(10, len(browser.json.get('notifications')))
 
     @browsing
@@ -172,7 +191,7 @@ class TestListNotifications(FunctionalTestCase):
                            userid=TEST_USER_ID,
                            is_read=False))
 
-        browser.login().open(self.portal, view="notifications/list",
+        browser.open(self.portal, view="notifications/list",
                              data={'batch_size': 12})
         self.assertEquals(12, len(browser.json.get('notifications')))
 
@@ -185,21 +204,21 @@ class TestListNotifications(FunctionalTestCase):
                            is_read=False))
 
         # first page
-        browser.login().open(self.portal, view="notifications/list",
+        browser.open(self.portal, view="notifications/list",
                              data={'batch_size': 7})
         self.assertEquals(
             [1, 2, 3, 4, 5, 6, 7],
             [item['id'] for item in browser.json.get('notifications')])
 
         # second page
-        browser.login().open(self.portal, view="notifications/list",
+        browser.open(self.portal, view="notifications/list",
                              data={'batch_size': 7, 'page': 2})
         self.assertEquals(
             [8, 9, 10, 11, 12, 13, 14],
             [item['id'] for item in browser.json.get('notifications')])
 
         # third page
-        browser.login().open(self.portal, view="notifications/list",
+        browser.open(self.portal, view="notifications/list",
                              data={'batch_size': 7, 'page': 3})
         self.assertEquals(
             [15, 16, 17],
@@ -213,7 +232,7 @@ class TestListNotifications(FunctionalTestCase):
                            userid=TEST_USER_ID,
                            is_read=False))
 
-        browser.login().open(self.portal, view="notifications/list",
+        browser.open(self.portal, view="notifications/list",
                              data={'batch_size': 7})
 
         next_page = browser.json.get('next_page')
@@ -230,14 +249,14 @@ class TestListNotifications(FunctionalTestCase):
                            userid=TEST_USER_ID,
                            is_read=False))
 
-        browser.login().open(self.portal,
+        browser.open(self.portal,
                              view="notifications/list",
                              data={'batch_size': 7, 'page': 2})
         self.assertEquals(
             u'http://nohost/plone/notifications/list?page=3&batch_size=7',
             browser.json.get('next_page'))
 
-        browser.login().open(self.portal,
+        browser.open(self.portal,
                              view="notifications/list",
                              data={'batch_size': 7, 'page': 3})
         self.assertEquals(None, browser.json.get('next_page'))
@@ -261,7 +280,7 @@ class TestListNotifications(FunctionalTestCase):
                .having(activity=newes,
                        userid=TEST_USER_ID, is_read=False))
 
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(u'Kennzahlen 2015 erfassen',
                           browser.json.get('notifications')[0].get('title'))
 
@@ -285,7 +304,7 @@ class TestListNotifications(FunctionalTestCase):
                .having(activity=task_added,
                        userid=TEST_USER_ID, is_read=False, is_badge=True))
 
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(1, len(browser.json.get('notifications')))
         self.assertEquals(u'Kennzahlen 2015 erfassen',
                           browser.json.get('notifications')[0].get('title'))
@@ -296,7 +315,7 @@ class TestListNotifications(FunctionalTestCase):
                .having(activity=self.activity,
                        userid=TEST_USER_ID, is_read=False))
 
-        browser.login().open(self.portal, view="notifications/list")
+        browser.open(self.portal, view="notifications/list")
         self.assertEquals(
             'http://example.com/@@resolve_notification?notification_id=1',
             browser.json.get('notifications')[0].get('link'))
