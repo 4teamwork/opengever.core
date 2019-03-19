@@ -468,6 +468,9 @@ class TaskQuery(BaseQuery):
     roles_allowed_to_see_tasks = ('Manager', 'Administrator', 'Reader')
 
     def restrict(self):
+        # XXX: Temp workaround for oracle
+        return self
+        # XXX
         member = api.user.get_current()
 
         # Check for global roles. Global Administrators, Readers and
