@@ -20,6 +20,7 @@ from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
 from opengever.workspace.interfaces import IWorkspaceSettings
 from pkg_resources import get_distribution
@@ -60,7 +61,14 @@ class GeverSettingsAdpaterV1(object):
         settings['max_repositoryfolder_levels'] = api.portal.get_registry_record('maximum_repository_depth', interface=IRepositoryFolderRecords)  # noqa
         settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
         settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
+        settings['sharing_configuration'] = self.get_sharing_configuration()
         return settings
+
+    def get_sharing_configuration(self):
+        sharing_configuration = OrderedDict()
+        sharing_configuration['white_list_prefix'] = api.portal.get_registry_record('white_list_prefix', interface=ISharingConfiguration)  # noqa
+        sharing_configuration['black_list_prefix'] = api.portal.get_registry_record('black_list_prefix', interface=ISharingConfiguration)  # noqa
+        return sharing_configuration
 
     def get_oneoffixx_settings(self):
         oneoffixx_settings = OrderedDict()

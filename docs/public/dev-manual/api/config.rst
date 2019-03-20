@@ -54,7 +54,11 @@ GEVER-Mandanten abgefragt werden.
           "max_repositoryfolder_levels": 3,
           "recently_touched_limit": 10,
           "root_url": "http://localhost:8080/fd",
-          "version": "2018.4.0.dev0"
+          "sharing_configuration": {
+              "black_list_prefix": "^$",
+              "white_list_prefix": "^.+"
+          }
+          "version": "2018.4.0.dev0",
       }
 
 
@@ -120,3 +124,11 @@ features
 
     workspace
         Arbeitsräume
+
+sharing_configuration
+
+    white_list_prefix
+        regex Muster für Gruppen die in der Freigabe angezeigt werden sollen
+
+    black_list_prefix
+        regex Muster für Gruppen die in der Freigabe nicht angezeigt werden sollen
