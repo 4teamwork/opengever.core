@@ -48,6 +48,12 @@
     <div class="info-viewlets">
       <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
       <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
+      <div tal:define="message view/overlay/trash_warning" tal:condition="message">
+        <dl class="portalMessage warning">
+          <dt i18n:domain="plone" i18n:translate="">Warning</dt>
+          <dd tal:content="message | nothing" />
+        </dl>
+      </div>
       <div tal:condition="not: view/overlay/is_latest_version">
         <dl class="portalMessage warning">
           <dt i18n:domain="plone" i18n:translate="">Warning</dt>

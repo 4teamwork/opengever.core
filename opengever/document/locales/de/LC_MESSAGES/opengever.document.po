@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-11-08 13:36+0000\n"
+"POT-Creation-Date: 2019-03-26 18:31+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -698,6 +698,11 @@ msgstr "Version"
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "warning_download_confirmation"
 msgstr "Bitte beachten Sie, dass in diesem Fall Änderungen an diesem Dokument NICHT in GEVER gespeichert werden."
+
+#. Default: "This document is trashed."
+#: ./opengever/document/browser/tabbed.py
+msgid "warning_trashed"
+msgstr "Dieses Dokument befindet sich im Papierkorb."
 
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"

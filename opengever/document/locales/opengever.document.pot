@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-08 13:36+0000\n"
+"POT-Creation-Date: 2019-03-26 18:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -694,6 +694,11 @@ msgstr ""
 #. Default: "Please note that in this case changes on the document wouldn't be saved in to GEVER."
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "warning_download_confirmation"
+msgstr ""
+
+#. Default: "This document is trashed."
+#: ./opengever/document/browser/tabbed.py
+msgid "warning_trashed"
 msgstr ""
 
 #: ./opengever/document/upgrades/profiles/4000/actions.xml

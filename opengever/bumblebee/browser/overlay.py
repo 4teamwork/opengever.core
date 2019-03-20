@@ -12,6 +12,7 @@ from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
+from opengever.document import _ as document_mf
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
@@ -19,8 +20,10 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.info import GeverLockInfoViewlet
+from opengever.mail import _ as mail_mf
 from opengever.mail.mail import IOGMailMarker
 from opengever.ogds.base.actor import Actor
+from opengever.trash.trash import ITrashed
 from plone import api
 from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
@@ -51,6 +54,11 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+
+    def trash_warning(self):
+        if ITrashed.providedBy(self.context):
+            return document_mf(
+                u'warning_trashed', default=u'This document is trashed.',)
 
     def get_checkin_comment(self):
         version_id = self.version_id
@@ -200,6 +208,11 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for base mails.
     """
 
+    def trash_warning(self):
+        if ITrashed.providedBy(self.context):
+            return mail_mf(
+                u'warning_trashed', default=u'This mail is trashed.',)
+
     def is_latest_version(self):
         """Mails are not versionable."""
         return True
@@ -235,6 +248,11 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
 @adapter(IDocumentSchema, IVersionedContextMarker)
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     """Bumblebee overlay for versioned documents"""
+
+    def trash_warning(self):
+        if self.trashed:
+            return document_mf(
+                u'warning_trashed', default=u'This document is trashed.',)
 
     def is_latest_version(self):
         return self.version_id == self.context.get_current_version_id()
@@ -274,6 +292,7 @@ class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
 
         overlay_context = self.context
         version_id = self._get_version_id(overlay_context)
+        trashed = ITrashed.providedBy(overlay_context)
 
         if version_id is not None:
             overlay_context = self._retrieve_version(overlay_context, version_id)
@@ -281,6 +300,7 @@ class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
 
         self.overlay = getMultiAdapter((overlay_context, self.request), IBumblebeeOverlay)
         self.overlay.version_id = version_id
+        self.overlay.trashed = trashed
 
         # we only render an html fragment, no reason to waste time on diazo
         self.request.response.setHeader('X-Theme-Disabled', 'True')
