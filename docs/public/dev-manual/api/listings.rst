@@ -45,6 +45,7 @@ Aktuell werden folgende Auflistungen unterstützt:
 
 - ``dossiers``: Dossiers
 - ``documents``: Dokumente
+- ``workspaces``: Arbeitsräume
 
 
 Für jede Auflistung können verschiedene Felder (Parameter ``columns``) abgefragt

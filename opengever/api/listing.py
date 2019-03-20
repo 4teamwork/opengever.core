@@ -131,6 +131,9 @@ SOLR_FILTERS = {
     ],
     u'documents': [
         u'object_provides:opengever.document.behaviors.IBaseDocument',
+    ],
+    u'workspaces': [
+        u'object_provides:opengever.workspace.interfaces.IWorkspace',
     ]
 }
 
@@ -140,7 +143,11 @@ CATALOG_QUERIES = {
     },
     'documents': {
         'object_provides': 'opengever.document.behaviors.IBaseDocument',
+    },
+    'workspaces': {
+        'object_provides': 'opengever.workspace.interfaces.IWorkspace',
     }
+
 }
 
 
