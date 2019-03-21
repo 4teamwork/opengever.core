@@ -59,7 +59,10 @@ Doc-Properties Sitzung Antrag/Traktandum:
 - ``ogg.meeting.proposal_description`` - Beschreibung des Antrags
 - ``ogg.meeting.proposal_state`` - Status des Antrags
 
-Neu kann beim Erstellen eines Dokumentes ab Vorlage ein Empfänger angegeben werden. Dies setzt jedoch voraus, dass das neue SQL-basierte Kontaktmodul verwendet wird. Von diesem Empfänger werden die folgenden Doc-Properties geschrieben:
+
+.. note::
+    Bei folgenden DocProperties muss eine spezifische Konfiguration vorgenommen
+    werden, damit diese eingesetzt werden können.
 
 Doc-Properties alle Empfänger:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
