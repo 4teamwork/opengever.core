@@ -23,8 +23,6 @@
     this.listItems = function(data) {
       self.nextUrl = data.next_page;
       var items = options.template({ notifications: data.notifications });
-      var unreadNotifications = $.grep(data.notifications, function(notification) { return !notification.read; });
-      self.markAsUnread($.map(unreadNotifications, function(notification) { return notification.id; }));
       self.appendItems(items);
     };
 
@@ -35,11 +33,6 @@
       if(this.nextUrl) {
         this.list(this.nextUrl);
       }
-    };
-
-    this.markAsUnread = function(notifications) {
-      var unreadRequest = $.post(options.update, { "notification_ids": JSON.stringify(notifications) });
-      unreadRequest.done(function() { self.updateCount(notifications.length); });
     };
 
     this.updateCount = function(count) {
