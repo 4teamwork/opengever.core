@@ -4601,4 +4601,7 @@ table.favorites .ui-sortable-helper { display: table !important; }
 a.webaction_button > span { font-family: Arial, FreeSans, sans-serif; font-weight: 400; }
 a.webaction_button img { height: 18px; vertical-align: middle; margin-right: 4px; }
 
+/* @group webactions-menu in personaltool bar */
+#portal-personaltools.actionMenu dd ul li.category-webactions.separator a { border-bottom: 1px solid #e6e6e6; }
+
 /*# sourceMappingURL=gever.css.map */

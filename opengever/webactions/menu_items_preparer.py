@@ -62,3 +62,22 @@ class WebActionsActionsMenuItemsPreparer(BaseWebActionsMenuItemsPreparer):
         if len(actions) > 0:
             actions[0]['extra']['separator'] = 'actionSeparator'
         return actions
+
+
+class WebActionsUserMenuItemsPreparer(BaseWebActionsMenuItemsPreparer):
+
+    display = "user-menu"
+
+    def prepare_webaction(self, action):
+        return {
+                'title': action["title"],
+                'category': 'webactions',
+                'url': action["target_url"],
+                'separator': None,
+                'id': "webaction-" + str(action["action_id"])
+               }
+
+    def _post_formatting(self, actions):
+        if len(actions) > 0:
+            actions[-1]['separator'] = 'actionSeparator'
+        return actions

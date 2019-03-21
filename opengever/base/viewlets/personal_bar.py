@@ -1,7 +1,9 @@
+from opengever.webactions.interfaces import IWebActionsMenuItemsPreparer
 from plone.app.i18n.locales.browser.selector import LanguageSelector
 from plone.app.layout.viewlets import common
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.component import getMultiAdapter
 
 
 class PersonalBarViewlet(common.PersonalBarViewlet):
@@ -11,6 +13,7 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
 
     def update(self):
         super(PersonalBarViewlet, self).update()
+        self._update_user_actions_with_webactions()
         self._update_user_actions_with_languages(self.user_actions)
 
     def _update_user_actions_with_languages(self, actions):
@@ -38,6 +41,12 @@ class PersonalBarViewlet(common.PersonalBarViewlet):
                                'id': 'lang-{0}'.format(lang['code']),
                                'separator': index == 0
                                })
+
+    def _update_user_actions_with_webactions(self):
+        renderer = getMultiAdapter((self.context, self.request),
+                                   IWebActionsMenuItemsPreparer, name='user-menu')
+        for action in reversed(renderer()):
+            self.user_actions.insert(0, action)
 
     def portrait_url(self):
         mtool = getToolByName(self.context, 'portal_membership')

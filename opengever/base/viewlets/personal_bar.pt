@@ -60,6 +60,18 @@
                 </li>
             </tal:language>
 
+            <tal:webactions condition="python:action['category'] == 'webactions'">
+                <li tal:define="separator python:action.get('separator') and ' separator' or ''"
+                    tal:attributes="id string:personaltools-${action/id};
+                                    class string:category-${action/category}${separator}">
+                    <a href=""
+                       tal:attributes="href action/url"
+                       tal:content="structure action/title">
+                        action title
+                    </a>
+                </li>
+            </tal:webactions>
+
         </tal:actions>
     </ul>
   </dd>
