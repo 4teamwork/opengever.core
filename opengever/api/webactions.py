@@ -5,6 +5,7 @@ from opengever.webactions.storage import get_storage
 from opengever.webactions.validation import get_unknown_fields
 from opengever.webactions.validation import get_validation_errors
 from plone import api
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import _no_content_marker
@@ -13,6 +14,7 @@ from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component.hooks import getSite
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 from zope.schema import Choice
@@ -107,6 +109,10 @@ class WebActionsPost(Service):
     """
 
     def reply(self):
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         action_data = json_body(self.request)
         scrub_json_payload(action_data)
 

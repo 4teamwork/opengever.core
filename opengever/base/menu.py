@@ -1,10 +1,12 @@
 from ftw.contentmenu.interfaces import IContentmenuPostFactoryMenu
 from ftw.contentmenu.menu import CombinedActionsWorkflowMenu
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.webactions.interfaces import IWebActionsMenuItemsPreparer
 from plone.app.contentmenu.interfaces import IDisplaySubMenuItem
 from plone.app.contentmenu.menu import DisplaySubMenuItem
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
@@ -106,6 +108,7 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
         result = filter(lambda item: (item.get('extra', {})
                                       .get('id', None) != 'advanced'), result)
         result = result + self.getSQLWorkflowMenuItems(context)
+        result = result + self.getWebActionsMenuItems(context, request)
         return result
 
     def getSQLWorkflowMenuItems(self, context):
@@ -144,6 +147,13 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
             })
 
         return result
+
+    def getWebActionsMenuItems(self, context, request):
+        """Return webactions action-menu items
+        """
+        renderer = getMultiAdapter((context, request), IWebActionsMenuItemsPreparer,
+                                   name='actions-menu')
+        return renderer()
 
 
 class OGDisplaySubMenuItem(DisplaySubMenuItem):

@@ -4591,4 +4591,14 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content div.wizard .wizardSteps > .selected > a { font-weight: normal; }
 #content div.wizard .wizardSteps > .visited > a::after { content: "\f00c"; }
 
+#webactions-title-buttons { display: inline-stretch; vertical-align: middle; margin-left: 6px; position: inherit; z-index: 99; float: right; font-size: 16px; }
+#webactions-title-buttons * { vertical-align: inherit; }
+#webactions-title-buttons img { height: 16px; }
+#webactions-title-buttons div { display: inline-block; margin-left: 2px; }
+
+#content div .actionButtons .webactions_buttons a.webaction_button::before { font-family: 'Font Awesome 5 Free'; }
+
+a.webaction_button > span { font-family: Arial, FreeSans, sans-serif; font-weight: 400; }
+a.webaction_button img { height: 18px; vertical-align: middle; margin-right: 4px; }
+
 /*# sourceMappingURL=gever.css.map */

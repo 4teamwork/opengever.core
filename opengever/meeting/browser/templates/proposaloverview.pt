@@ -103,6 +103,13 @@
                   </form>
                 </li>
             </ul>
+            <ul class="webactions_buttons">
+                <tal:block repeat="subMenuItem view/get_webaction_items">
+                  <li>
+                    <a tal:replace="structure subMenuItem" />
+                  </li>
+                </tal:block>
+            </ul>
           </div>
 
       </div>

@@ -44,7 +44,7 @@ Erstellen (POST)
       POST /@webactions HTTP/1.1
       Accept: application/json
       Content-Type: application/json
-      
+
       {
         "title": "Open in ExternalApp",
         "target_url": "http://example.org/endpoint",
@@ -318,7 +318,8 @@ Folgend ist eine Auflistung aller von Webaktionen unterstützten Felder und dere
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+
 | ``target_url``  | String, obligatorisch         | Ziel-URL auf den Endpoint der Drittanwendung                                |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+
-| ``enabled``     | Boolean, optional             | Kann verwendet werden, um registrierte WebActions temporär zu deaktivieren. |
+| ``enabled``     | Boolean, optional             | Kann verwendet werden, um registrierte WebActions temporär zu deaktivieren, |
+|                 |                               | i.e. wenn kein Wert gesetzt ist, wird die Webaktion als aktiviert behandelt.|
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+
 | ``icon_name``   | String, bedingt obligatorisch | Font-Awesome CSS-Klasse (z.B. ``fa-folder``)                                |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------+

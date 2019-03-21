@@ -4,7 +4,25 @@
     i18n_domain="opengever.webactions">
 
   <include file="permissions.zcml" />
+  <include package=".viewlets" />
 
   <adapter factory=".storage.WebActionsStorage" />
+
+  <adapter factory=".provider.WebActionsProvider" />
+
+  <adapter
+      factory=".renderer.WebActionsTitleButtonsRenderer"
+      name="title-buttons"
+      />
+
+  <adapter
+      factory=".menu_items_preparer.WebActionsActionsMenuItemsPreparer"
+      name="actions-menu"
+      />
+
+  <adapter
+      factory=".renderer.WebActionsActionButtonsRenderer"
+      name="action-buttons"
+      />
 
 </configure>
