@@ -21,6 +21,11 @@
       />
 
   <adapter
+      factory=".menu_items_preparer.WebActionsUserMenuItemsPreparer"
+      name="user-menu"
+      />
+
+  <adapter
       factory=".renderer.WebActionsActionButtonsRenderer"
       name="action-buttons"
       />

@@ -46,4 +46,10 @@ a.webaction_button {
   }
 }
 
+/* @group webactions-menu in personaltool bar */
 
+#portal-personaltools.actionMenu dd ul li.category-webactions {
+  &.separator a {
+    border-bottom: 1px solid $gray-dark;
+  }
+}
