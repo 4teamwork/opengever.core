@@ -14,6 +14,7 @@ Changelog
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
 - Make attachments for `direct-execution` tasks editable by the responsible. [phgross]
 - Make reject to skip transition only available for tasks part of a sequence. [phgross]
+- Allow reassigning tasks to other org- and adminunits. [phgross]
 - Adapt footer to new 4teamwork website. [njohner]
 - Extend @listing endpoint with `workspaces`-listing. [elioschmutz]
 - Add sharing white and black list prefix to config endpoint/view. [njohner]

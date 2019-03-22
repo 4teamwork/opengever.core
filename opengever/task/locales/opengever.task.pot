@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-01-31 18:37+0000\n"
+"POT-Creation-Date: 2019-03-07 11:08+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -205,6 +205,11 @@ msgstr ""
 #. Default: "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
 #: ./opengever/task/validators.py
 msgid "error_checked_out_document"
+msgstr ""
+
+#. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
+#: ./opengever/task/browser/assign.py
+msgid "error_no_admin_unit_change_in_progress_state"
 msgstr ""
 
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."

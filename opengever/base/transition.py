@@ -1,15 +1,18 @@
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.interfaces import IFieldDeserializer
 from z3c.form.interfaces import IManagerValidator
+from z3c.form.interfaces import IValidator
 from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import Attribute
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.interface import Invalid
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFields
 from zope.schema.interfaces import ValidationError
+
 
 class ITransitionExtender(Interface):
     """Interface for adapters, to extend a specific worklow transition,
@@ -75,7 +78,12 @@ class TransitionExtender(object):
 
                     try:
                         value = deserializer(transition_params[name])
-                    except ValueError as e:
+                        validator = queryMultiAdapter(
+                            (self.context, self.request, None, field, None), IValidator)
+                        if validator:
+                            validator.validate(value)
+
+                    except (ValueError, Invalid) as e:
                         if not collect_errors:
                             raise
                         errors.append({'message': e.message, 'field': name, 'error': e})

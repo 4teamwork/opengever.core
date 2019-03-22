@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-01-31 18:37+0000\n"
+"POT-Creation-Date: 2019-03-07 11:08+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -207,6 +207,11 @@ msgstr "Responsable"
 #: ./opengever/task/validators.py
 msgid "error_checked_out_document"
 msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un checkin pour pouvoir les déposer."
+
+#. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
+#: ./opengever/task/browser/assign.py
+msgid "error_no_admin_unit_change_in_progress_state"
+msgstr ""
 
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
 #: ./opengever/task/browser/assign.py
