@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Fix upgrade step that reindexes object_provides for PDFs so it performs better. [lgraf]
 - Update plone.rest api to 3.7.2. [mathias.leimgruber]
 - Respect tabbedview settings when generating an task or dossier excel export. [phgross]
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
