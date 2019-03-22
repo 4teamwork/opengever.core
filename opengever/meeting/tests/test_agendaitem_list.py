@@ -43,7 +43,7 @@ class TestAgendaItemList(IntegrationTestCase):
     @browsing
     def test_agendaitem_list_shows_statusmessage_when_no_template_is_configured(self, browser):
         self.login(self.administrator, browser)
-        self.committee_container.agendaitem_list_template = None
+        self.committee.agendaitem_list_template = None
 
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting)

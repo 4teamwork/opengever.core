@@ -11,7 +11,7 @@ from zope.component import getUtility
 
 
 # Update this list when removing or adding a interface, for example a behavior.
-# Becuase the zc.relation catalog persists provided interfaces, the catalog has
+# Because the zc.relation catalog persists provided interfaces, the catalog has
 # to be cleaned up when removing an interface from this list.
 # See oc.core.upgrades.CleanupICreatorInterfacesFromRelationCatalog for a howto
 # example
@@ -77,7 +77,6 @@ EXPECTED_INTERFACES = [
     'opengever.inbox.forwarding.IForwarding',
     'opengever.mail.behaviors.ISendableDocsContainer',
     'opengever.meeting.committee.ICommittee',
-    'opengever.meeting.committeecontainer.ICommitteeContainer',
     'opengever.meeting.interfaces.IMeetingDossier',
     'opengever.meeting.proposal.IProposal',
     'opengever.meeting.proposaltemplate.IProposalTemplate',
@@ -93,7 +92,6 @@ EXPECTED_INTERFACES = [
     'opengever.task.task.ITask',
     'opengever.trash.trash.ITrashableMarker',
     'persistent.interfaces.IPersistent',
-    'plone.app.content.interfaces.INameFromTitle',
     'plone.app.lockingbehavior.behaviors.ILocking',
     'plone.app.relationfield.interfaces.IDexterityHasRelations',
     'plone.app.versioningbehavior.behaviors.IVersioningSupport',
@@ -145,7 +143,6 @@ EXPECTED_TYPES_WITH_RELATIONS = [
     'opengever.meeting.proposal',
     'opengever.meeting.submittedproposal',
     'opengever.meeting.committee',
-    'opengever.meeting.committeecontainer',
     'opengever.meeting.sablontemplate',
     'opengever.meeting.meetingdossier',
     'opengever.meeting.proposaltemplate',

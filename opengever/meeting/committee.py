@@ -90,7 +90,7 @@ class ICommittee(model.Schema):
         title=_('label_protocol_header_template',
                 default='Protocol header template'),
         source=sablon_template_source,
-        required=False,
+        required=True,
     )
 
     protocol_suffix_template = RelationChoice(
@@ -335,50 +335,42 @@ class Committee(ModelContainer):
     def get_protocol_header_template(self):
         if self.protocol_header_template:
             return self.protocol_header_template.to_object
-
-        return self.get_committee_container().get_protocol_header_template()
+        return None
 
     def get_protocol_suffix_template(self):
         if self.protocol_suffix_template:
             return self.protocol_suffix_template.to_object
-
-        return self.get_committee_container().get_protocol_suffix_template()
+        return None
 
     def get_agenda_item_header_template(self):
         if self.agenda_item_header_template:
             return self.agenda_item_header_template.to_object
-
-        return self.get_committee_container().get_agenda_item_header_template()
+        return None
 
     def get_agenda_item_suffix_template(self):
         if self.agenda_item_suffix_template:
             return self.agenda_item_suffix_template.to_object
-
-        return self.get_committee_container().get_agenda_item_suffix_template()
+        return None
 
     def get_excerpt_header_template(self):
         if self.excerpt_header_template:
             return self.excerpt_header_template.to_object
-
-        return self.get_committee_container().get_excerpt_header_template()
+        return None
 
     def get_excerpt_suffix_template(self):
         if self.excerpt_suffix_template:
             return self.excerpt_suffix_template.to_object
-
-        return self.get_committee_container().get_excerpt_suffix_template()
+        return None
 
     def get_agendaitem_list_template(self):
         if self.agendaitem_list_template:
             return self.agendaitem_list_template.to_object
-
-        return self.get_committee_container().get_agendaitem_list_template()
+        return None
 
     def get_toc_template(self):
         if self.toc_template:
             return self.toc_template.to_object
-
-        return self.get_committee_container().get_toc_template()
+        return None
 
     def get_ad_hoc_template(self):
         if self.ad_hoc_template:
@@ -388,8 +380,7 @@ class Committee(ModelContainer):
     def get_paragraph_template(self):
         if self.paragraph_template:
             return self.paragraph_template.to_object
-
-        return self.get_committee_container().get_paragraph_template()
+        return None
 
     def get_repository_folder(self):
         return self.repository_folder.to_object
