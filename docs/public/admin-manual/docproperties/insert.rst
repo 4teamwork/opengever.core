@@ -79,9 +79,9 @@ Wenn ein Datum DocProperty eingefügt wird z.B. ogg.document.document_date kann 
 |docprops-9|
 
 .. note::
-    Bei einer Dokument-Erstellen ab Vorlage wird technisch gesehen nur ein
-    Dokument kopiert, daher muss das Format .docx und nicht .dotx verwendet
-    werden.
+    Bei der Funktion *Dokument aus Vorlage erstellen* wird technisch gesehen nur
+    ein Dokument kopiert, daher muss das Format .docx und nicht .dotx für die
+    Vorlage verwendet werden.
 
 
 .. |docprops-3| image:: ../_static/img/kurzref_adm_docprops_3.png
