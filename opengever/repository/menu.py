@@ -1,11 +1,11 @@
-from opengever.base.menu import FilteredPostFactoryMenu
+from opengever.base.menu import FilteredPostFactoryMenuWithWebactions
 from opengever.repository.interfaces import IRepositoryFolder
 from zope.component import adapter
 from zope.interface import Interface
 
 
 @adapter(IRepositoryFolder, Interface)
-class RepositoryFolderPostFactoryMenu(FilteredPostFactoryMenu):
+class RepositoryFolderPostFactoryMenu(FilteredPostFactoryMenuWithWebactions):
 
     def is_filtered(self, factory):
         factory_id = factory.get('id')

@@ -1,11 +1,11 @@
-from opengever.base.menu import FilteredPostFactoryMenu
+from opengever.base.menu import FilteredPostFactoryMenuWithWebactions
 from opengever.inbox.inbox import IInbox
 from zope.component import adapter
 from zope.interface import Interface
 
 
 @adapter(IInbox, Interface)
-class InboxPostFactoryMenu(FilteredPostFactoryMenu):
+class InboxPostFactoryMenu(FilteredPostFactoryMenuWithWebactions):
     """Remove the mail, forwarding and yearfolder action from the factory menu.
     And use the standard ordering.
     """

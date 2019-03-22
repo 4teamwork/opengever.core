@@ -27,3 +27,29 @@ class TestWebActionRendererActionsMenu(TestWebActionRendererTitleButtons):
          'selected': False,
          'submenu': None,
          'title': u'Action 2'}]
+
+
+class TestWebActionRendererAddMenu(TestWebActionRendererActionsMenu):
+
+    display = 'add-menu'
+    icon = 'fa-helicopter'
+
+    expected_data = [
+        {'action': 'http://example.org/endpoint',
+         'description': '',
+         'extra': {'class': 'webaction fa-helicopter',
+                   'id': 'webaction-0',
+                   'separator': 'actionSeparator'},
+         'icon': None,
+         'selected': False,
+         'submenu': None,
+         'title': u'Action 1'},
+        {'action': 'http://example.org/endpoint',
+         'description': '',
+         'extra': {'class': 'webaction fa-helicopter',
+                   'id': 'webaction-1',
+                   'separator': None},
+         'icon': None,
+         'selected': False,
+         'submenu': None,
+         'title': u'Action 2'}]

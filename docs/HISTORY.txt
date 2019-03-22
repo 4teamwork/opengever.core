@@ -29,6 +29,7 @@ Changelog
 - Include `include_root` parameter to `@navigation` endpoint to include the root object to the tree. [elioschmutz]
 - Include `root_interface` and `content_interfaces` parameter to `@navigation` endpoint to customize the navigation items [elioschmutz]
 - Include `@type`, `current` and `current_tree` property to `@navigation`-items. [elioschmutz]
+- Add webaction in the add-menu of folderish content types. [njohner]
 - Update plone.rest api to 3.7.2. [mathias.leimgruber]
 - Respect tabbedview settings when generating an task or dossier excel export. [phgross]
 - Exclusively handle templates on Committee and not on CommitteeContainer anymore. [njohner]

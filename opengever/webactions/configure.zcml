@@ -26,6 +26,11 @@
       />
 
   <adapter
+      factory=".menu_items_preparer.WebActionsAddMenuItemsPreparer"
+      name="add-menu"
+      />
+
+  <adapter
       factory=".renderer.WebActionsActionButtonsRenderer"
       name="action-buttons"
       />

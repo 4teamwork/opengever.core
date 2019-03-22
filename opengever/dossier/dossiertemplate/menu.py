@@ -1,4 +1,4 @@
-from opengever.base.menu import FilteredPostFactoryMenu
+from opengever.base.menu import FilteredPostFactoryMenuWithWebactions
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from zope.component import adapter
@@ -6,7 +6,7 @@ from zope.interface import Interface
 
 
 @adapter(IDossierTemplateSchema, Interface)
-class DossierTemplatePostFactoryMenu(FilteredPostFactoryMenu):
+class DossierTemplatePostFactoryMenu(FilteredPostFactoryMenuWithWebactions):
 
     subdossier_types = [u'opengever.dossier.dossiertemplate']
 
