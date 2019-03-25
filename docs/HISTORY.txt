@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Move translation overrides for ftw.mail from og.mail to og.base. [lgraf]
 - Fix upgrade step that reindexes object_provides for PDFs so it performs better. [lgraf]
 - Add webactions in user menu. [njohner]
 - Add webaction action-buttons for documents, tasks and proposals. [njohner]
