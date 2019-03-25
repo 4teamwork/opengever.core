@@ -795,6 +795,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Checked out by',
             'Public Trial',
             'Reference Number',
+            'File extension',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
@@ -815,6 +816,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Checked out by',
             'Public Trial',
             'Reference Number',
+            'File extension',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
@@ -835,6 +837,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Checked out by',
             'Public Trial',
             'Reference Number',
+            'File extension',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])

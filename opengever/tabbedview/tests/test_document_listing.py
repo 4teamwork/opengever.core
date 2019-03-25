@@ -17,6 +17,7 @@ class TestDocumentListing(IntegrationTestCase):
             'Delivery Date': '03.01.2010',
             'Document Author': 'test_user_1_',
             'Document Date': '03.01.2010',
+            'File extension': '.docx',
             'Public Trial': 'unchecked',
             'Receipt Date': '03.01.2010',
             'Reference Number': 'Client1 1.1 / 1 / 12',
@@ -28,5 +29,4 @@ class TestDocumentListing(IntegrationTestCase):
             }
 
         listings = browser.css('.listing').first.dicts()
-
         self.assertIn(expected_metadata, listings)

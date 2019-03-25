@@ -187,6 +187,10 @@ class Documents(BaseCatalogListingTab):
         {'column': 'reference',
          'column_title': _(u'label_document_reference',
                            default=u'Reference Number')},
+
+        {'column': 'file_extension',
+         'column_title': _(u'label_document_file_extension',
+                           default=u'File extension')},
         )
 
     major_actions = [
