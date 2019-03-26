@@ -55,6 +55,12 @@ class ITaskSettings(Interface):
         description=u'Whether private task features is enabled',
         default=True)
 
+    optional_task_permissions_revoking_enabled = schema.Bool(
+        title=u'Enable optional task permission revoking',
+        description=u'Whether the option not to revoke permissions associated '
+        'with a task when closing it is available',
+        default=False)
+
 
 class ISuccessorTaskController(Interface):
     """The successor task controller manages predecessor and successor

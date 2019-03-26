@@ -1,4 +1,5 @@
 from opengever.task import is_private_task_feature_enabled
+from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
@@ -64,6 +65,11 @@ class TaskAddForm(DefaultAddForm):
                 group for group in self.groups if group.__name__ == u'common')
             common_group.widgets['is_private'].mode = HIDDEN_MODE
 
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE
+
     def createAndAdd(self, data):
         created = []
 
@@ -71,6 +77,11 @@ class TaskAddForm(DefaultAddForm):
         # not enabled. the field is hidden, but users could still submit.
         if not is_private_task_feature_enabled():
             data['is_private'] = False
+
+        # make sure user doesn't set revoke_permissions when the feature
+        # is disabled and the field hidden.
+        if not is_optional_task_permissions_revoking_enabled():
+            data['revoke_permissions'] = True
 
         if isinstance(data['responsible'], basestring):
             data['responsible'] = [data['responsible']]

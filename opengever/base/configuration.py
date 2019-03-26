@@ -109,4 +109,5 @@ class GeverSettingsAdpaterV1(object):
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
+        features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         return features

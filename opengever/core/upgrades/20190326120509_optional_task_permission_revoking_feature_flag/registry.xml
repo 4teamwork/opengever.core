@@ -1,0 +1,4 @@
+<registry>
+  <record interface="opengever.task.interfaces.ITaskSettings"
+          field="optional_task_permissions_revoking_enabled" />
+</registry>
