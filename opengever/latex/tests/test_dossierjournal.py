@@ -217,3 +217,19 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
             ' kantonalen Finanzverwaltung (Client1 1.1 / 1)"\'',
             dossier_journal.get_render_arguments().get('label'),
         )
+
+    def test_handle_complex_urls(self):
+        self.login(self.regular_user)
+        self.dossier.title = (
+            u'https://example.com/some.php?get1=1234'
+            '&weird_get_%5Bbracketed%5D=5678&somemore=blah'
+        )  # Do not add commas above, this is a string!
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
+        dossier_journal = getMultiAdapter(
+            (self.dossier, self.request, layout), ILaTeXView)
+        self.assertEqual(
+            'Journal of dossier "`https://example.com""/some.php?get1=1234'
+            '""\\&weird\\_get\\_\\%5Bbracketed\\%5D=5678'
+            '""\\&somemore=blah (Client1 1.1 / 1)"\'',
+            dossier_journal.get_render_arguments().get('label'),
+        )
