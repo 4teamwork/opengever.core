@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-08 13:36+0000\n"
+"POT-Creation-Date: 2019-03-26 18:31+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -695,6 +695,11 @@ msgstr "Version"
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "warning_download_confirmation"
 msgstr "Attention! En ouvrant le document de cette manière, toutes les modifications apportées ne seront PAS sauvegardées en GEVER."
+
+#. Default: "This document is trashed."
+#: ./opengever/document/browser/tabbed.py
+msgid "warning_trashed"
+msgstr ""
 
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"

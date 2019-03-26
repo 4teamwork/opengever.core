@@ -14,6 +14,7 @@ Changelog
 - Add WebActionsProvider. [njohner]
 - Add mapping between public and gever permissions. [njohner]
 - Disable CSRF protect on webaction api post requests. [njohner]
+- Warn the user on overviews and overlays of trashed mails or documents. [Rotonen]
 - Update plone.rest api to 3.7.2. [mathias.leimgruber]
 - Respect tabbedview settings when generating an task or dossier excel export. [phgross]
 - Exclusively handle templates on Committee and not on CommitteeContainer anymore. [njohner]
