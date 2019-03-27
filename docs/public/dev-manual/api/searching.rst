@@ -104,3 +104,48 @@ darzustellen, kann ``metadata_fields=_all`` verwendet werden.
     einen separaten Mechanismus.
 
 .. disqus::
+
+
+Solr Suche
+----------
+Um direkt eine Suchabfrage an den Solr Service abzusetzen, steht der ``@solrsearch`` Endpoint zur Verfügung. Für die Abfrage kann SOLR API Syntax und dessen Parameter verwendet werden. Der Endpoint liefert ein Liste von Treffern zurück mit den im Parameter ``fl`` definierten Felder. Die folgende Parameter sind zurzeit vom Endpoint unterstützt:
+
+
+Query
+~~~~~
+``q``: Query in Solr syntax.
+
+Beipsiel für eine Suchabfrage nach dem Titel Kurzinfo:
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?query=Title:Kurz* HTTP/1.1
+
+
+Filters
+~~~~~~~
+``fq``: Filtern nach einem bestimmten Wert eines Feldes.
+
+Beispiel für ein Suchabfrage gefiltert nach portal_type nur für Dokumente und Dossiers
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?fq=portal_type:(opengever.document.document%20OR%20opengever.dossier.businesscasedossier) HTTP/1.1
+
+
+Fields
+~~~~~~
+``fl``: Liste der Felder, die zurückgegeben werden sollen. Standardmässig werden die Felder ``UID``, ``Title``, ``Description``, ``path`` zurückgegeben.
+
+Beispiel für ein Suchabfrage, mit id, Title und Laufnummer als Resultat
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?query=Title:Kurz*&fl=id,Title,sequence_number HTTP/1.1
+
+
+Weitere optionale Parameter:
+
+- ``start``: Das erste zurückzugebende Element
+- ``rows``: Die maximale Anzahl der zurückzugebenden Elemente
+- ``sort``: Sortierung nach einem indexierten Feld
