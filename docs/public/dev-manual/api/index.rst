@@ -16,6 +16,7 @@ Inhalt:
    listings.rst
    navigation.rst
    searching.rst
+   documents.rst
    trash.rst
    workflow.rst
    scanin.rst
