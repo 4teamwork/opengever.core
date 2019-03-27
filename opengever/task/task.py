@@ -24,6 +24,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TASK_STATES
+from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
@@ -53,9 +54,10 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implements
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.schema.vocabulary import getVocabularyRegistry
 
 
@@ -250,6 +252,17 @@ class ITask(model.Schema):
     predecessor = schema.TextLine(
         title=_(u'label_predecessor', default=u'Predecessor'),
         required=False)
+
+    @invariant
+    def private_task_is_not_changed_when_disabled(data):
+        if not is_private_task_feature_enabled() and data.is_private:
+
+            # Because the z3c.form.validator.Data object has implemented a
+            # getattr fallback, which fetches the value from the context, we
+            # need to check if the is_private value was part of the input-data.
+            if 'is_private' in data._Data_data___:
+                raise Invalid(_(u'error_private_task_feature_is_disabled',
+                                default=u'The private task feature is disabled'))
 
 
 validator.WidgetValidatorDiscriminators(
