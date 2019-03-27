@@ -41,16 +41,6 @@ class TestLocalRolesSetter(IntegrationTestCase):
             ('Editor', ),
             self.task.get_local_roles_for_userid(self.secretariat_user.id))
 
-    def test_dont_remove_editor_role_when_responsible_is_changed(self):
-        self.login(self.regular_user)
-
-        self.task.responsible = self.secretariat_user.id
-        notify(ObjectModifiedEvent(self.task))
-
-        self.assertEqual(
-            ('Editor', ),
-            self.task.get_local_roles_for_userid(self.regular_user.id))
-
     def test_relate_to_proposal_document_grants_permissions_on_proposal(self):
         self.login(self.regular_user)
 
