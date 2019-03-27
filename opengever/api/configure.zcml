@@ -264,6 +264,14 @@
       />
 
   <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".solrsearch.SolrSearchGet"
+      name="@solrsearch"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
