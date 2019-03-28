@@ -141,8 +141,8 @@ class IWebActionSchema(Interface):
 
     @invariant
     def icon_present_for_display_types_that_need_it(self):
-        display = self['display']
-        has_icon = any(self.get(key) not in ('', None) for key in (ICON_PROPERTIES))
+        display = self.display
+        has_icon = any(getattr(self, key, None) not in ('', None) for key in (ICON_PROPERTIES))
 
         icon_required = ('title-buttons', 'add-menu')
         icon_forbidden = ('actions-menu', 'user-menu')
@@ -158,7 +158,7 @@ class IWebActionSchema(Interface):
 
     @invariant
     def no_more_than_one_icon(self):
-        icons = filter(None, (self.get(key) for key in (ICON_PROPERTIES)))
+        icons = filter(None, (getattr(self, key, None) for key in (ICON_PROPERTIES)))
         if len(icons) > 1:
             raise Invalid(
                 'Icon properties %r are mutually exclusive. '
