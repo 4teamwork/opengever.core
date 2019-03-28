@@ -8,6 +8,7 @@ Changelog
 - Bump ftw.mail to 2.6.0 to get error logging on inbound mail failures. [lgraf]
 - Handle complex URLs as titles on journal PDF exports. [Rotonen]
 - Move translation overrides for ftw.mail from og.mail to og.base. [lgraf]
+- Add solrsearch REST API endpoint. [phgross]
 - Fix upgrade step that reindexes object_provides for PDFs so it performs better. [lgraf]
 - Add webactions in user menu. [njohner]
 - Add webaction action-buttons for documents, tasks and proposals. [njohner]
