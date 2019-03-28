@@ -287,7 +287,7 @@ class Listing(Service):
             elif isinstance(value, list):
                 value = u' OR '.join(value)
             if value is not None:
-                filter_queries.append(u'{}:{}'.format(key, value))
+                filter_queries.append(u'{}:({})'.format(key, value))
 
         sort = sort_on
         if sort:
