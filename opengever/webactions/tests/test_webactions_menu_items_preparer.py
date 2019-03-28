@@ -29,6 +29,23 @@ class TestWebActionRendererActionsMenu(TestWebActionRendererTitleButtons):
          'title': u'Action 2'}]
 
 
+class TestWebActionRendererUserMenu(TestWebActionRendererActionsMenu):
+
+    display = 'user-menu'
+
+    expected_data = [
+        {'title': u'Action 1',
+         'category': 'webactions',
+         'url': 'http://example.org/endpoint',
+         'separator': None,
+         'id': 'webaction-0'},
+        {'title': u'Action 2',
+         'category': 'webactions',
+         'url': 'http://example.org/endpoint',
+         'separator': 'actionSeparator',
+         'id': 'webaction-1'}]
+
+
 class TestWebActionRendererAddMenu(TestWebActionRendererActionsMenu):
 
     display = 'add-menu'
