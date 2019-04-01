@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-webactions-add"
+      class=".forms.AddWebactionForm"
+      permission="opengever.webactions.ManageOwnWebActions"
+      />
+
+</configure>

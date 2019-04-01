@@ -6,9 +6,13 @@
   <include file="permissions.zcml" />
   <include package=".viewlets" />
 
+  <include package=".browser" />
+
   <adapter factory=".storage.WebActionsStorage" />
 
   <adapter factory=".provider.WebActionsProvider" />
+
+  <i18n:registerTranslations directory="locales" />
 
   <adapter
       factory=".renderer.WebActionsTitleButtonsRenderer"
