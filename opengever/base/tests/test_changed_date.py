@@ -96,9 +96,9 @@ class TestChangedUpdateForDocument(TestChangedUpdateBase):
 
         self.assert_changed_value(self.document, CHECKIN_TIME)
         with freeze(FREEZING_TIME):
-            self.manager = getMultiAdapter((self.document, self.portal.REQUEST),
-                                           ICheckinCheckoutManager)
-            self.manager.revert_to_version(0)
+            manager = getMultiAdapter(
+                (self.document, self.portal.REQUEST), ICheckinCheckoutManager)
+            manager.revert_to_version(0)
         self.assert_changed_value(self.document, FREEZING_TIME)
 
     @browsing
