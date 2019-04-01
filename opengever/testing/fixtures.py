@@ -1249,6 +1249,23 @@ class OpengeverContentFixture(object):
             .relate_to(self.document)
         ))
 
+        self.register('private_task', create(
+            Builder('task')
+            .titled(u'Diskr\xe4te Dinge')
+            .within(self.dossier)
+            .having(
+                deadline=date(2020, 1, 1),
+                is_private=True,
+                issuer=self.dossier_responsible.getId(),
+                responsible_client=self.org_unit.id(),
+                responsible=self.regular_user.getId(),
+                task_type=u'direct-execution',
+                text=u'L\xf6rem ipsum dolor sit amet, consectetur'
+            )
+            .relate_to(self.document)
+            .in_state('task-state-in-progress')
+        ))
+
     @staticuid()
     def create_expired_dossier(self):
         self.expired_dossier = self.register('expired_dossier', create(

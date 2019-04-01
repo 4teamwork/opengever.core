@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-07 11:08+0000\n"
+"POT-Creation-Date: 2019-03-28 06:54+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -215,6 +215,11 @@ msgstr "Mandanten-Wechsel sind bei bereits akzeptierten Aufgaben nicht erlaubt."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_team_responsible_in_progress_state"
 msgstr "Teams sind nur bei offenen Aufgaben oder Weiterleitungen als Auftragnehmer erlaubt."
+
+#. Default: "The private task feature is disabled"
+#: ./opengever/task/task.py
+msgid "error_private_task_feature_is_disabled"
+msgstr "Die Funktionalität private Aufgaben ist deaktiviert."
 
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py

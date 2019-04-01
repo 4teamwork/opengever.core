@@ -10,6 +10,7 @@ Auch Aufgaben können via REST API bedient werden. Die Erstellung einer Aufgabe 
 
       POST /(container) HTTP/1.1
       Accept: application/json
+      Content-Type: application/json
 
       {
         "@type": "opengever.task.task",

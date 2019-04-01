@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-07 11:08+0000\n"
+"POT-Creation-Date: 2019-03-28 06:54+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -217,6 +217,11 @@ msgstr ""
 #: ./opengever/task/browser/assign.py
 msgid "error_no_team_responsible_in_progress_state"
 msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmissions ou des tâches ouvertes."
+
+#. Default: "The private task feature is disabled"
+#: ./opengever/task/task.py
+msgid "error_private_task_feature_is_disabled"
+msgstr ""
 
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py

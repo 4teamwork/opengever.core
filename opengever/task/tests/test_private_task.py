@@ -1,13 +1,14 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.task import is_private_task_feature_enabled
 from opengever.testing import IntegrationTestCase
+import json
 
 
 class TestPrivateTaskIntegration(IntegrationTestCase):
 
-    @browsing
-    def test_feature_is_activated_by_default(self, browser):
+    def test_feature_is_activated_by_default(self):
         self.assertTrue(is_private_task_feature_enabled())
 
     @browsing
@@ -45,8 +46,7 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
 
     features = ('!private-tasks', )
 
-    @browsing
-    def test_feature_is_deactivated(self, browser):
+    def test_feature_is_deactivated(self):
         self.assertFalse(is_private_task_feature_enabled())
 
     @browsing
@@ -83,5 +83,28 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
                 'fa:{}'.format(self.secretariat_user.getId()))
             browser.css('#form-buttons-save').first.click()
 
-        task = children['added'].pop()
-        self.assertFalse(task.is_private)
+        self.assertEqual(['There were some errors.'], error_messages())
+        self.assertEqual(['The private task feature is disabled'],
+                         browser.css('form .error').text)
+        self.assertEqual(0, len(children['added']))
+
+    @browsing
+    def test_cant_create_private_tasks_over_api_when_feature_is_inactive(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        data = json.dumps({
+            "@type": "opengever.task.task",
+            "title": "I should not be private despite input",
+            "task_type": "comment",
+            "issuer": self.dossier_responsible.getId(),
+            "responsible": self.secretariat_user.getId(),
+            "responsible_client": 'fa',
+            "is_private": True,
+        })
+
+        with browser.expect_http_error(400):
+            browser.open(self.dossier, headers=headers, data=data)

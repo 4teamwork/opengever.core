@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-07 11:08+0000\n"
+"POT-Creation-Date: 2019-03-28 06:54+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -215,6 +215,11 @@ msgstr ""
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_team_responsible_in_progress_state"
+msgstr ""
+
+#. Default: "The private task feature is disabled"
+#: ./opengever/task/task.py
+msgid "error_private_task_feature_is_disabled"
 msgstr ""
 
 #. Default: "No changes: same responsible selected"

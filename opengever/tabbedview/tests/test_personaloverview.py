@@ -181,6 +181,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Vertragsentw\xfcrfe 2018',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
+            u'Diskr\xe4te Dinge',
         ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -193,6 +194,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Vertragsentw\xfcrfe 2018',
             u'Status \xdcberpr\xfcfen',
             u'Ein notwendiges \xdcbel',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
 
@@ -252,6 +254,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEquals(expected_tasks, found_tasks)
@@ -263,6 +266,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertEquals(expected_tasks, found_tasks)
@@ -282,6 +286,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -297,6 +302,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -316,6 +322,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -340,6 +347,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'Status \xdcberpr\xfcfen',
             u'Programm \xdcberpr\xfcfen',
             u'H\xf6rsaal reservieren',
+            u'Diskr\xe4te Dinge',
         ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)

@@ -95,6 +95,7 @@ class TestTaskEditForm(IntegrationTestCase):
             '[No Subject]',
             u'Antrag f\xfcr Kreiselbau',
             u'Die B\xfcrgschaft',
+            u'Diskr\xe4te Dinge',
             u'Initialvertrag f\xfcr Bearbeitung',
             u'Initialvertrag f\xfcr Bearbeitung',
             'Personaleintritt',
