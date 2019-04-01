@@ -58,7 +58,8 @@ class IWebActionSchema(Interface):
     enabled = Bool(
         title=u'Enabled',
         description=u'Whether this webaction is enabled or not',
-        required=False)
+        required=False,
+        missing_value=True)
 
     icon_name = ASCIILine(
         title=u'Icon Name',
@@ -116,7 +117,8 @@ class IWebActionSchema(Interface):
         # Maybe factor out some of the definitions from
         # opengever.base.schemadump.config into vocabularies?
         value_type=Choice(values=GEVER_TYPES),
-        required=False)
+        required=False,
+        missing_value=list())
 
     groups = List(
         title=u'Groups',
@@ -132,7 +134,8 @@ class IWebActionSchema(Interface):
                     u'action is only shown when the user has at least one '
                     u'of those permissions on the respective context.',
         value_type=Choice(values=ACTION_PERMISSIONS),
-        required=False)
+        required=False,
+        missing_value=list())
 
     comment = TextLine(
         title=u'Comment',
