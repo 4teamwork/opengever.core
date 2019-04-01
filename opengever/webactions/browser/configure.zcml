@@ -9,4 +9,11 @@
       permission="opengever.webactions.ManageOwnWebActions"
       />
 
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-webactions-edit"
+      class=".forms.EditWebactionForm"
+      permission="opengever.webactions.ManageOwnWebActions"
+      />
+
 </configure>
