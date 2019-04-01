@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-18 16:29+0000\n"
+"POT-Creation-Date: 2019-04-01 14:32+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -144,6 +144,10 @@ msgstr "Eingangskorb"
 #: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
 msgid "Inbox Container"
 msgstr "Eingangskorb Ordner"
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Manage Webactions"
+msgstr "Webaktionen verwalten"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml
 msgid "Meeting Dossier"
