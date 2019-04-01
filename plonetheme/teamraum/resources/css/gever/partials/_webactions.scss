@@ -53,3 +53,18 @@ a.webaction_button {
     border-bottom: 1px solid $gray-dark;
   }
 }
+
+/* @group webactions management view*/
+
+#webactions-list li.webaction {
+
+  list-style-type: none;
+
+  & img {
+    height: 18px;
+  }
+
+  & hr {
+    margin-top: 10px;
+  }
+}

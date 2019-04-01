@@ -4,6 +4,14 @@
 
   <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="manage-webactions"
+      class=".manage_webactions.ManageWebactionsView"
+      permission="opengever.webactions.ManageOwnWebActions"
+      template="templates/manage_webactions.pt"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       name="manage-webactions-add"
       class=".forms.AddWebactionForm"
       permission="opengever.webactions.ManageOwnWebActions"
