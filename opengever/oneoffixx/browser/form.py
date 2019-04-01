@@ -1,3 +1,4 @@
+from copy import deepcopy
 from opengever.base.schema import TableChoice
 from opengever.oneoffixx import _
 from opengever.oneoffixx.api_client import OneoffixxAPIClient
@@ -11,22 +12,47 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
 from zope.component import getUtility
+from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.i18n import translate
+
+
+def get_oneoffixx_favorites():
+    """Return the user chosen favorites as a template group, if any."""
+    api_client = OneoffixxAPIClient()
+    favorites = api_client.get_oneoffixx_favorites()
+    if favorites.get('templates'):
+        return favorites
+    return None
+
+
+def get_oneoffixx_template_groups():
+    """Return the template groups.
+
+    Potentially amended with user chosen favorites.
+    """
+    api_client = OneoffixxAPIClient()
+    # We need to work on a copy to not pollute the cached one
+    template_groups = deepcopy(api_client.get_oneoffixx_template_groups())
+    favorites = get_oneoffixx_favorites()
+    if favorites:
+        template_groups.insert(0, favorites)
+    return template_groups
 
 
 def get_oneoffixx_templates():
-    api_client = OneoffixxAPIClient()
+    """Return all oneoffixx templates.
 
-    templates = (
+    We do not want duplicates from favorites here.
+    """
+    api_client = OneoffixxAPIClient()
+    return (
         OneOffixxTemplate(template, template_group.get('localizedName', ''))
         for template_group in api_client.get_oneoffixx_template_groups()
         for template in template_group.get("templates")
         if template.get('metaTemplateId') in whitelisted_template_types
     )
-    return templates
 
 
 @provider(IContextSourceBinder)
@@ -38,24 +64,32 @@ def list_templates(context):
 
     for template in templates:
         terms.append(SimpleVocabulary.createTerm(
-            template,
-            str(template.template_id),
-            template.title,
-            ))
+            template, template.template_id, template.title))
 
-    # filter templates when template_group has been selected
-    if template_group is not None and template_group[0] != '--NOVALUE--':
-        terms = [term for term in terms if term.value.group == template_group[0]]
+    # We filter templates when template_group has been selected
+    if template_group is not None:
+        favorites = get_oneoffixx_favorites()
+        # Favorites are a special case
+        if favorites and template_group[0] == favorites.get('id'):
+            terms = [
+                SimpleVocabulary.createTerm(
+                    OneOffixxTemplate(
+                        template, favorites.get('localizedName', '')),
+                    template.get('id'),
+                    template.get('localizedName'),
+                )
+                for template in favorites.get('templates')
+            ]
+        elif template_group[0] != '--NOVALUE--':
+            terms = [term for term in terms if term.value.group == template_group[0]]
 
     return MutableObjectVocabulary(terms)
 
 
 @provider(IContextSourceBinder)
 def list_template_groups(context):
-    """Return the list of available template groups
-    """
-    api_client = OneoffixxAPIClient()
-    template_groups = api_client.get_oneoffixx_template_groups()
+    """Return the list of available template groups."""
+    template_groups = get_oneoffixx_template_groups()
     terms = []
     for group in template_groups:
         terms.append(SimpleVocabulary.createTerm(group.get("id"),

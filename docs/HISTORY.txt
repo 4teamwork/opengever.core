@@ -9,6 +9,7 @@ Changelog
 - Show archival file state on documents overview for managers. [njohner]
 - Fix tests failing due to timezone leading to date shift. [njohner]
 - Fix creation of scaneingang dossier in the scan-in endpoint. [phgross]
+- Display user chosen Favorites as a Oneoffixx template group. [Rotonen]
 - Prevent tasks from being created as private or switched to private when feature is not enabled. [Rotonen, phgross]
 - Bump ftw.mail to 2.6.0 to get error logging on inbound mail failures. [lgraf]
 - Handle complex URLs as titles on journal PDF exports. [Rotonen]
