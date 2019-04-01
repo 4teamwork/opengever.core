@@ -7,8 +7,12 @@ from opengever.base.solr import OGSolrDocument
 from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 from opengever.tabbedview.interfaces import IGeverCatalogTableSourceConfig
 from plone.registry.interfaces import IRegistry
+from plone.uuid.interfaces import IUUID
+from Products.CMFCore.interfaces import IContentish
 from zope.component import adapter
 from zope.component import getUtility
+from zope.component import queryAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -29,6 +33,51 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
                 return self.solr_results(query)
 
         return super(GeverCatalogTableSource, self).search_results(query)
+
+    def _context_from_request(self):
+        """Attempt to find the context from the request.
+
+        This is needed for excluding the search root below, and should
+        be considered 'good enough' for here, but not used anywhere else.
+        """
+        request = getRequest()
+        for item in request.get('PARENTS', []):
+            if IContentish.providedBy(item):
+                return item
+
+        return None
+
+    def exclude_searchroot_from_query(self, query):
+        """Override ftw.table CatalogTableSource's implementation.
+
+        That implementation has serious performance issues for containers
+        with many immediate children.
+
+        In GEVER, we have a newer Products.ZCatalog version and monkey patch
+        support for the 'not' operator onto the UIDIndex's query options, so
+        we can use a more efficient approach here.
+        """
+        if not getattr(self.config, 'exclude_searchroot', True):
+            return query
+
+        path_query = query.get('path')
+        if path_query is None:
+            return query
+
+        if isinstance(path_query, dict):
+            if path_query.get('depth') in (0, 1):
+                # If any of these depths are specified, do nothing:
+                # 0: single object - searchroot exclusion doesn't make sense
+                # 1: immediate children - already does what it's supposed to
+                #    do (excludes searchroot), nothing to do for us
+                return query
+
+        if 'UID' not in query:
+            context = self._context_from_request()
+            uuid = queryAdapter(context, IUUID)
+            if uuid:
+                query['UID'] = {'not': uuid}
+        return query
 
     def solr_results(self, query):
         term = query['SearchableText'].rstrip('*').decode('utf8')

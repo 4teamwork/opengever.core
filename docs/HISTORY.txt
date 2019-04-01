@@ -5,7 +5,7 @@ Changelog
 2018.5.8 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
 
 
 2018.5.7 (2019-01-08)
