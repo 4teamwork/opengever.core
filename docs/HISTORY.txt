@@ -6,6 +6,7 @@ Changelog
 ---------------------
 
 - Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
+- Make sure task and journal PDFs object_provides index is up to date after resolving a dossier. [njohner]
 
 
 2018.5.7 (2019-01-08)
