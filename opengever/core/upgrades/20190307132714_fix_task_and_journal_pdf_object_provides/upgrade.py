@@ -24,7 +24,7 @@ class FixTaskAndJournalPDFObjectProvides(UpgradeStep):
         possible_titles = [title_fr, title_de, title_en]
 
         for title in possible_titles:
-            query = {'portal_type': 'opengever.document.document', 'title': title}
+            query = {'portal_type': 'opengever.document.document', 'Title': title}
             for brain in self.catalog_unrestricted_search(query):
                 # If the interface is already in the index, we can skip
                 if journal_interface_name in object_provides.getEntryForObject(brain.getRID(), ""):
@@ -41,7 +41,7 @@ class FixTaskAndJournalPDFObjectProvides(UpgradeStep):
         possible_titles = [title_fr, title_de, title_en]
 
         for title in possible_titles:
-            query = {'portal_type': 'opengever.document.document', 'title': title}
+            query = {'portal_type': 'opengever.document.document', 'Title': title}
             for brain in self.catalog_unrestricted_search(query):
                 # If the interface is already in the index, we can skip
                 if task_interface_name in object_provides.getEntryForObject(brain.getRID(), ""):
