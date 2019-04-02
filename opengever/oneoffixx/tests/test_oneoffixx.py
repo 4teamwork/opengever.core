@@ -98,6 +98,16 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
 
     @browsing
+    def test_oneoffixx_defaults_to_listing_all(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual([], browser.css('option[selected=selected]').text)
+        self.assertIsNone(browser.css('select').first.value)
+        # XXX - this always renders the --NOVALUE-- as the actually chosen
+        # default is actually loaded over AJAX - confusing and bad UX
+
+    @browsing
     def test_document_creation_from_oneoffixx_template_creates_shadow_doc(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
@@ -543,10 +553,32 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         self.assertEqual(expected_categories, browser.css('select option').text)
 
     @browsing
-    def test_oneoffixx_favorites_not_duplicated_on_select_all(self, browser):
+    def test_oneoffixx_defaults_to_listing_favorites(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
         factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(
+            ['Favorites'], browser.css('option[selected=selected]').text)
+        self.assertEqual(
+            'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
+            browser.css('select').first.value,
+        )
+        # XXX - this always renders the --NOVALUE-- as the actually chosen
+        # default is actually loaded over AJAX - confusing and bad UX
+
+    @browsing
+    def test_oneoffixx_favorites_not_duplicated_on_select_all(self, browser):
+        self.login(self.regular_user, browser)
+        view = (
+            'document_with_oneoffixx_template'
+            '/++widget++form.widgets.template'
+            '/ajax_render'
+            '?form.widgets.template_group:list=--NOVALUE--'
+            '&form.widgets.template_group-empty-marker=1'
+            '&form.widgets.template-empty-marker=1'
+            '&form.widgets.title'
+        )  # Do not add commas above, this is a string!
+        browser.open(self.dossier, view=view, send_authenticator=True)
         expected_options = [
             '3 Example Word file',
             '2 Example Excel file',

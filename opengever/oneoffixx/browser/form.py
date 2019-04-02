@@ -55,6 +55,14 @@ def get_oneoffixx_templates():
     )
 
 
+def default_template_group():
+    """Return all templates, or the user favorites, if defined by user."""
+    favorites = get_oneoffixx_favorites()
+    if favorites:
+        return favorites.get('id')
+    return None
+
+
 @provider(IContextSourceBinder)
 def list_templates(context):
     """Return a list available templates."""
@@ -130,10 +138,13 @@ class MutableObjectVocabulary(SimpleVocabulary):
 
 class ICreateDocumentFromOneOffixxTemplate(model.Schema):
 
+    # XXX - this always renders the --NOVALUE-- as the actually chosen
+    # default is actually loaded over AJAX - confusing and bad UX
     template_group = schema.Choice(
         title=_(u'label_template_group', default=u'Template group'),
         source=list_template_groups,
         required=False,
+        defaultFactory=default_template_group,
     )
 
     template = TableChoice(
