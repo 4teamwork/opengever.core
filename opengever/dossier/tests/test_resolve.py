@@ -12,6 +12,7 @@ from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from ftw.testing import freeze
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_BUMBLEBEE_LAYER
@@ -232,6 +233,25 @@ class TestResolveJobs(IntegrationTestCase):
             resolve_dossier(self.empty_dossier, browser)
         self.assertEquals(0, len(children['added']))
         self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+    @browsing
+    def test_reactivating_subdossier_is_not_possible(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
+
+        resolve_dossier(self.empty_dossier, browser)
+
+        browser.open(subdossier, view='transition-reactivate', data={'_authenticator': createToken()})
+        self.assertEqual(
+            ["It isn't possible to reactivate a sub dossier."],
+            warning_messages())
+        self.assertEquals('dossier-state-resolved', api.content.get_state(subdossier))
 
     @browsing
     def test_adds_tasks_pdf_only_to_main_dossier(self, browser):
