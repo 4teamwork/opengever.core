@@ -151,7 +151,7 @@ class ICreateDocumentFromOneOffixxTemplate(model.Schema):
         title=_(u"label_template", default=u"Template"),
         source=list_templates,
         required=True,
-        show_filter=False,
+        show_filter=True,
         vocabulary_depends_on=['form.widgets.template_group'],
         columns=(
             {'column': 'title',

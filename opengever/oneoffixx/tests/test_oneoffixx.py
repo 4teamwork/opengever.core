@@ -98,6 +98,16 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
 
     @browsing
+    def test_oneoffixx_wizard_shows_filter(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(
+            'Filter',
+            browser.css('input.tableradioSearchbox').first.get('placeholder'),
+        )
+
+    @browsing
     def test_oneoffixx_defaults_to_listing_all(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier)
