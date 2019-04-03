@@ -111,6 +111,25 @@ class TestNavigation(IntegrationTestCase):
             [item.get('uid') for item in items])
 
     @browsing
+    def test_lookup_propper_root_if_root_interface_is_within_content_interfaces(self, browser):
+        self.login(self.workspace_member, browser)
+        params = [
+            ('root_interface', 'opengever.dossier.businesscase.IBusinessCaseDossier'),
+            ('content_interfaces', 'opengever.dossier.businesscase.IBusinessCaseDossier')
+        ]
+
+        browser.open(
+            self.subdossier.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        self.assertEqual(
+            self.dossier.UID(),
+            browser.json.get('tree')[0].get('uid'),
+            "The root-object needs to be the last IBusinessCaseDossier")
+
+    @browsing
     def test_raises_bad_request_when_not_existing_root_interface_provided(self, browser):
         self.login(self.workspace_member, browser)
         params = [

@@ -32,9 +32,22 @@ class Navigation(object):
 
         context = self.context
 
-        while (not root_interface.providedBy(context)
-               and not IPloneSiteRoot.providedBy(context)):
-            context = aq_parent(context)
+        if root_interface not in content_interfaces:
+            while (not root_interface.providedBy(context)
+                   and not IPloneSiteRoot.providedBy(context)):
+                context = aq_parent(context)
+        else:
+            # This happens i.e. on lookup a dossier tree from a subdossier.
+            #
+            # The current context is the subdossier which is also
+            # providing the root_interface. We have to get sure, that we return
+            # the most upper object providing the given root_interface if
+            # the root_interface is within `content_interfaces`
+            current = context
+            while (not IPloneSiteRoot.providedBy(current)):
+                if root_interface.providedBy(current):
+                    context = current
+                current = aq_parent(current)
 
         if root_interface.providedBy(context):
             root = context
