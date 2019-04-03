@@ -46,6 +46,7 @@ Aktuell werden folgende Auflistungen unterstützt:
 - ``dossiers``: Dossiers
 - ``documents``: Dokumente
 - ``workspaces``: Arbeitsräume
+- ``tasks``: Aufgaben
 
 
 Für jede Auflistung können verschiedene Felder (Parameter ``columns``) abgefragt
@@ -57,6 +58,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``checked_out_fullname``: Anzeigename des Benutzers, der das Dokument ausgechecked hat
 - ``containing_dossier``: Titel des Hauptdossier in dem das Element enthalten ist
 - ``containing_subdossier``: Titel des Subdossiers in dem das Dokument enthalten ist
+- ``completed``: Zeigt an ob eine Aufgabe erledigt ist.
 - ``created``: Erstelldatum
 - ``creator``: Ersteller
 - ``description``: Beschreibung
@@ -72,7 +74,8 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``reference_number``: Aktenzeichen
 - ``relative_path``: Pfad
 - ``responsible``: Federführung (Benutzername)
-- ``responsible_fullname``: Federführung (Anzeigename)
+- ``responsible_fullname``: Federführung oder Auftragnehmer (Anzeigename)
+- ``issuer_fullname``: Auftraggeber (Anzeigename)
 - ``review_state``: Status
 - ``review_state_label``: Status (Anzeigewert)
 - ``sequence_number``: Laufnummer
@@ -82,6 +85,8 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``title``: Titel
 - ``filesize``: Dateigrösse
 - ``filename``: Dateiname
+- ``task_type``: Aufgaben-Typ
+- ``deadline``: Aufgabenfrist
 
 Je nach Auflistungstyp und Inhalt sind bestimmte Felder nicht verfügbar. In diesem
 Fall wird der Wert ``none`` zurückgegeben. So haben Dossiers bspw. keinen Dateinamen.
