@@ -163,8 +163,8 @@ def split(batch):
     }
 
     maxsplit_mapping = {
-        'opengever.core.testing.opengever.core:integration': 4,
-        'opengever.core.testing.opengever.core:functional': 2,
+        'opengever.core.testing.opengever.core:integration': 6,
+        'opengever.core.testing.opengever.core:functional': 6,
     }
 
     layer = batch.get('layer')
