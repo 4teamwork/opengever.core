@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -7,7 +8,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from hashlib import sha256
-from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.date_time import as_utc
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
@@ -25,9 +26,11 @@ from zope.schema import getFieldsInOrder
 from zope.schema import List
 import json
 import textwrap
+import pytz
 
 
-FROZEN_NOW = utcnow_tz_aware()
+FROZEN_NOW = as_utc(datetime(
+    2019, 4, 1, 12, 30, 0, 0, pytz.timezone('Europe/Zurich')))
 FROZEN_TODAY = FROZEN_NOW.date()
 
 DEFAULT_TITLE = u'My title'

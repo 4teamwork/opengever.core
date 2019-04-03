@@ -15,7 +15,7 @@ from zope.interface import alsoProvides
 from zope.event import notify
 
 
-FROZEN_NOW = datetime.now()
+FROZEN_NOW = datetime(2019, 4, 1, 12, 30)
 
 
 class TestObjectTouchedLogging(IntegrationTestCase):
