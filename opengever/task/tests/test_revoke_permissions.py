@@ -229,3 +229,15 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.activate_feature('optional-task-permissions-revoking')
         browser.open(self.dossier, view='++add++opengever.task.task')
         self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
+
+    @browsing
+    def test_revoke_permissions_only_shown_when_feature_is_enabled_in_edit_form(self, browser):
+        self.login(self.administrator, browser)
+        self.set_workflow_state('task-state-open', self.task)
+        browser.open(self.task, view='edit')
+
+        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions."))
+
+        self.activate_feature('optional-task-permissions-revoking')
+        browser.open(self.task, view='edit')
+        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))

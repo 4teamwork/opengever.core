@@ -194,3 +194,11 @@ class TaskEditForm(DefaultEditForm):
                 (ITask['responsible_client'],
                  data.get('responsible_client')),),
             transition=REASSIGN_TRANSITION, supress_events=True)
+
+    def update(self):
+        super(TaskEditForm, self).update()
+
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE
