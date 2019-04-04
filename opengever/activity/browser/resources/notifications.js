@@ -78,6 +78,14 @@
         notifications.list(endpoints.listUrl);
       }
     });
+    $(".read-all-notifications").on("click", function(event) {
+      event.preventDefault();
+      var postReadAll = $.post(endpoints.readUrl, { "timestamp": Math.round(new Date().getTime()/1000) });
+      $.when(postReadAll.success()).then(function(){
+        var counter = $(".unread_number");
+        counter.remove();
+      });
+    });
   };
 
   $(function(){

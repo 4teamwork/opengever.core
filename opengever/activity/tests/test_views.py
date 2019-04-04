@@ -7,11 +7,17 @@ from opengever.activity.center import NotificationCenter
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
-import json
+from time import time
 import pytz
 
 
-FREEZE_TIME = pytz.UTC.localize(datetime(2014, 5, 7, 12, 30))
+FREEZE_TIME = datetime(2014, 5, 7, 12, 30, 0, tzinfo=pytz.UTC)
+
+
+FREEZE_TIME_BEFORE = datetime(2014, 5, 7, 13, 30, 0, tzinfo=pytz.UTC)
+FREEZE_TIME_FIRST = datetime(2014, 5, 7, 14, 30, 0, tzinfo=pytz.UTC)
+FREEZE_TIME_BETWEEN = datetime(2014, 5, 7, 15, 30, 0, tzinfo=pytz.UTC)
+FREEZE_TIME_SECOND = datetime(2014, 5, 7, 16, 30, 0, tzinfo=pytz.UTC)
 
 
 class TestMarkAsRead(IntegrationTestCase):
@@ -31,10 +37,11 @@ class TestMarkAsRead(IntegrationTestCase):
                 .watchers([self.watcher])
             )
 
-            with freeze(FREEZE_TIME):
+            # XXX - something is wonky with the builder for activities
+            with freeze(FREEZE_TIME_FIRST):
                 self.activity_1 = create(
                     Builder('activity')
-                    .having(resource=self.resource)
+                    .having(resource=self.resource, created=FREEZE_TIME_FIRST)
                 )
                 create(
                     Builder('notification')
@@ -45,9 +52,11 @@ class TestMarkAsRead(IntegrationTestCase):
                     )
                 )
 
+            # XXX - something is wonky with the builder for activities
+            with freeze(FREEZE_TIME_SECOND):
                 self.activity_2 = create(
                     Builder('activity')
-                    .having(resource=self.resource)
+                    .having(resource=self.resource, created=FREEZE_TIME_SECOND)
                 )
                 create(
                     Builder('notification')
@@ -62,25 +71,10 @@ class TestMarkAsRead(IntegrationTestCase):
                 self.regular_user.id)
 
     @browsing
-    def test_mark_single_notification_as_read(self, browser):
+    def test_mark_all_notifications_as_read(self, browser):
         self.login(self.regular_user, browser)
-        notification_id = self.notifications[0].notification_id
-        ids = {'notification_ids': json.dumps([notification_id])}
-        browser.open(view='notifications/read', data=ids)
-
-        notifications = self.center.get_users_notifications(
-            self.regular_user.id)
-        self.assertTrue(notifications[0].is_read)
-        self.assertFalse(notifications[1].is_read)
-
-    @browsing
-    def test_mark_multiple_notifications_as_read(self, browser):
-        self.login(self.regular_user, browser)
-        ids = {'notification_ids': json.dumps([
-            self.notifications[0].notification_id,
-            self.notifications[1].notification_id,
-        ])}
-        browser.open(view='notifications/read', data=ids)
+        # Now is always after both FREEZE_TIME_FIRST and FREEZE_TIME_SECOND
+        browser.open(view='notifications/read', data={'timestamp': int(time())})
 
         notifications = self.center.get_users_notifications(
             self.regular_user.id)
@@ -88,14 +82,30 @@ class TestMarkAsRead(IntegrationTestCase):
         self.assertTrue(notifications[1].is_read)
 
     @browsing
-    def test_mark_already_read_or_invalid_notification_as_read_is_ignored(self, browser):
+    def test_mark_some_notifications_as_read(self, browser):
         self.login(self.regular_user, browser)
-        invalid = 123
-        notification_id = self.notifications[0].notification_id
-        self.notifications[0].is_read = True
-        ids = {'notification_ids': json.dumps([invalid, notification_id])}
-        browser.open(view='notifications/read', data=ids)
-        self.assertEqual(200, browser.status_code)
+        # This is testing a race condition of more notifications after render
+        with freeze(FREEZE_TIME_BETWEEN):
+            browser.open(
+                view='notifications/read', data={'timestamp': int(time())})
+
+        notifications = self.center.get_users_notifications(
+            self.regular_user.id)
+        self.assertFalse(notifications[0].is_read)
+        self.assertTrue(notifications[1].is_read)
+
+    @browsing
+    def test_mark_no_notifications_as_read(self, browser):
+        self.login(self.regular_user, browser)
+        # This is testing a race condition of more notifications after render
+        with freeze(FREEZE_TIME_BEFORE):
+            browser.open(
+                view='notifications/read', data={'timestamp': int(time())})
+
+        notifications = self.center.get_users_notifications(
+            self.regular_user.id)
+        self.assertFalse(notifications[0].is_read)
+        self.assertFalse(notifications[1].is_read)
 
     @browsing
     def test_read_raise_exception_when_parameter_is_missing(self, browser):
