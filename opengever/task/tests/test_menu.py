@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
-from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task.interfaces import ITaskSettings
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -97,15 +96,3 @@ class TestActionMenu(IntegrationTestCase):
         api.user.grant_roles(user=self.dossier_responsible, roles=['Manager'])
         browser.open(self.subtask)
         self.assertIn('Revoke permissions', editbar.menu_options('Actions'))
-
-    @browsing
-    def test_revoke_action_displays_success_message(self, browser):
-        self.login(self.manager, browser)
-        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
-
-        browser.open(self.subtask)
-        self.assertEqual([], info_messages())
-
-        browser.click_on("Revoke permissions")
-        self.assertIn('Permissions have been succesfully revoked',
-                      info_messages())

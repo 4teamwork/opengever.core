@@ -12,17 +12,6 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 class TestTaskAddForm(IntegrationTestCase):
 
     @browsing
-    def test_revoke_permissions_only_shown_when_feature_is_enabled(self, browser):
-        self.login(self.regular_user, browser)
-        browser.open(self.dossier, view='++add++opengever.task.task')
-
-        self.assertIsNone(browser.forms.get('form').find_field("Revoke permissions."))
-
-        self.activate_feature('optional-task-permissions-revoking')
-        browser.open(self.dossier, view='++add++opengever.task.task')
-        self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
-
-    @browsing
     def test_add_form_does_not_list_shadow_documents_as_relatable(self, browser):
         """Dossier responsible has created the shadow document.
 
