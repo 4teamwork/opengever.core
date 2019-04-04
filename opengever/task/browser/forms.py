@@ -78,11 +78,6 @@ class TaskAddForm(DefaultAddForm):
         if not is_private_task_feature_enabled():
             data['is_private'] = False
 
-        # make sure user doesn't set revoke_permissions when the feature
-        # is disabled and the field hidden.
-        if not is_optional_task_permissions_revoking_enabled():
-            data['revoke_permissions'] = True
-
         if isinstance(data['responsible'], basestring):
             data['responsible'] = [data['responsible']]
 

@@ -301,3 +301,99 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
 
         with browser.expect_http_error(400):
             browser.open(self.dossier, headers=headers, data=data)
+
+
+class TestRevokePermissionsDefault(IntegrationTestCase):
+
+    def test_feature_is_deactivated(self):
+        self.assertFalse(is_optional_task_permissions_revoking_enabled())
+
+    @browsing
+    def test_revoke_permissions_default_when_creating_task_with_feature_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, view='++add++opengever.task.task')
+            browser.fill({'Title': u'Test default revoke permissions',
+                          'Task Type': 'comment'})
+
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(
+                'fa:{}'.format(self.secretariat_user.getId()))
+
+            browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual([], error_messages())
+        self.assertEqual(1, len(children['added']))
+        task = children['added'].pop()
+        self.assertTrue(task.revoke_permissions)
+
+    @browsing
+    def test_revoke_permissions_default_when_creating_task_over_api_with_feature_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        data = json.dumps({
+            "@type": "opengever.task.task",
+            "title": "Test default revoke permissions",
+            "task_type": "comment",
+            "issuer": self.dossier_responsible.getId(),
+            "responsible": self.secretariat_user.getId(),
+            "responsible_client": 'fa',
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, headers=headers, data=data)
+
+        self.assertEqual(1, len(children['added']))
+        task = children['added'].pop()
+        self.assertTrue(task.revoke_permissions)
+
+    @browsing
+    def test_revoke_permissions_default_when_creating_task_with_feature_enabled(self, browser):
+        self.activate_feature('optional-task-permissions-revoking')
+        self.login(self.dossier_responsible, browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, view='++add++opengever.task.task')
+            browser.fill({'Title': u'Test default revoke permissions',
+                          'Task Type': 'comment'})
+
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(
+                'fa:{}'.format(self.secretariat_user.getId()))
+
+            browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual([], error_messages())
+        self.assertEqual(1, len(children['added']))
+        task = children['added'].pop()
+        self.assertTrue(task.revoke_permissions)
+
+    @browsing
+    def test_revoke_permissions_default_when_creating_task_over_api_with_feature_enabled(self, browser):
+        self.activate_feature('optional-task-permissions-revoking')
+        self.login(self.dossier_responsible, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        data = json.dumps({
+            "@type": "opengever.task.task",
+            "title": "Test default revoke permissions",
+            "task_type": "comment",
+            "issuer": self.dossier_responsible.getId(),
+            "responsible": self.secretariat_user.getId(),
+            "responsible_client": 'fa',
+        })
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, headers=headers, data=data)
+
+        self.assertEqual(1, len(children['added']))
+        task = children['added'].pop()
+        self.assertTrue(task.revoke_permissions)
