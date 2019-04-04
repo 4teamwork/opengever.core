@@ -211,6 +211,24 @@ class TestRevokePermissionsAction(IntegrationTestCase):
                       info_messages())
         self.assertEqual(self.subtask, browser.context)
 
+    @browsing
+    def test_redirect_when_losing_permissions_on_task_during_revoke_action(self, browser):
+        # when revoke action leads to the current user losing access to the
+        # task, it displays a message and redirects to the site root.
+        self.login(self.administrator)
+        self.set_workflow_state('task-state-tested-and-closed', self.task_in_protected_dossier)
+        self.task_in_protected_dossier.issuer = self.regular_user.id
+        self.task_in_protected_dossier.revoke_permissions = False
+        self.task_in_protected_dossier.sync()
+
+        self.login(self.regular_user, browser)
+        browser.open(self.task_in_protected_dossier)
+        browser.click_on("Revoke permissions")
+        self.assertIn('Permissions have been succesfully revoked, '
+                      'you are no longer permitted to access the task.',
+                      info_messages())
+        self.assertEquals(api.portal.get(), browser.context)
+
 
 class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
 

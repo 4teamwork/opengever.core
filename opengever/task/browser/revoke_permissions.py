@@ -15,11 +15,7 @@ class RevokePermissions(BrowserView):
             raise Unauthorized()
         LocalRolesSetter(self.context).revoke_roles()
 
-        msg = _(u'msg_revoking_successful',
-                default=u'Permissions have been succesfully revoked')
-        api.portal.show_message(msg, request=self.request, type='info')
-
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+        return self.redirect()
 
     def is_available(self):
         """The action should only be available on closed tasks for
@@ -35,3 +31,21 @@ class RevokePermissions(BrowserView):
             return True
         issuer = self.context.get_issuer_actor()
         return issuer.identifier == api.user.get_current().id
+
+    def redirect(self):
+        """Redirects to task if the current user still has View permission,
+        otherwise it redirects to portal.
+        """
+        if not api.user.has_permission('View', obj=self.context):
+            msg = _(u'msg_revoking_successful_no_longer_permission_to_access',
+                    default=u'Permissions have been succesfully revoked, '
+                    'you are no longer permitted to access the task.')
+            api.portal.show_message(msg, request=self.request, type='info')
+            url = api.portal.get().absolute_url()
+        else:
+            msg = _(u'msg_revoking_successful',
+                    default=u'Permissions have been succesfully revoked')
+            api.portal.show_message(msg, request=self.request, type='info')
+            url = self.context.absolute_url()
+
+        return self.request.RESPONSE.redirect(url)
