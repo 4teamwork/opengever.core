@@ -297,15 +297,6 @@ def run_tests(test_run_params):
         )
 
     if returncode:
-        logger.error(*done_args)
-    else:
-        logger.info(*done_args)
-
-    # Explicitly flush to trigger IPC over cPickle (and to avoid
-    # carryover-fragment-via-pickling)
-    memory_handler.flush()
-
-    if returncode:
         log_output.error('')
         log_output.error('Command line')
         log_output.error('')
@@ -313,10 +304,13 @@ def run_tests(test_run_params):
         log_output.error('')
         log_output.error(output)
         log_output.error('')
+        logger.error(*done_args)
+    else:
+        logger.info(*done_args)
 
-        # Explicitly flush to trigger IPC over cPickle (and to avoid
-        # carryover-fragment-via-pickling)
-        stdout_handler.flush()
+    # Explicitly flush to trigger IPC over cPickle (and to avoid
+    # carryover-fragment-via-pickling)
+    memory_handler.flush()
 
     return result
 
