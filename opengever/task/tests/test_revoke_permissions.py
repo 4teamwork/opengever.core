@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -17,6 +18,7 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
+import json
 
 
 class TestRevokePermissions(IntegrationTestCase):
@@ -232,8 +234,6 @@ class TestRevokePermissionsAction(IntegrationTestCase):
 
 class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
 
-    features = ('!optional-task-permissions-revoking', )
-
     def test_feature_is_deactivated(self):
         self.assertFalse(is_optional_task_permissions_revoking_enabled())
 
@@ -259,3 +259,45 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.activate_feature('optional-task-permissions-revoking')
         browser.open(self.task, view='edit')
         self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
+
+    @browsing
+    def test_cant_create_task_with_revoke_permissions_false_when_feature_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, view='++add++opengever.task.task')
+            browser.fill({'Title': u'Cannot change revoke permissions',
+                          'Task Type': 'comment',
+                          'form.widgets.revoke_permissions:list': 'False'})
+
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill(
+                'fa:{}'.format(self.secretariat_user.getId()))
+
+            browser.css('#form-buttons-save').first.click()
+
+        self.assertEqual(['There were some errors.'], error_messages())
+        self.assertEqual(['The revoke permissions feature is disabled'],
+                         browser.css('form .error').text)
+        self.assertEqual(0, len(children['added']))
+
+    @browsing
+    def test_cant_create_task_over_api_with_revoke_permissions_false_when_feature_disabled(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        data = json.dumps({
+            "@type": "opengever.task.task",
+            "title": "Cannot change revoke permissions",
+            "task_type": "comment",
+            "issuer": self.dossier_responsible.getId(),
+            "responsible": self.secretariat_user.getId(),
+            "responsible_client": 'fa',
+            "revoke_permissions": False,
+        })
+
+        with browser.expect_http_error(400):
+            browser.open(self.dossier, headers=headers, data=data)

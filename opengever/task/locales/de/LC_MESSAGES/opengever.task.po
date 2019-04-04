@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-28 06:54+0000\n"
+"POT-Creation-Date: 2019-04-04 12:13+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -220,6 +220,11 @@ msgstr "Teams sind nur bei offenen Aufgaben oder Weiterleitungen als Auftragnehm
 #: ./opengever/task/task.py
 msgid "error_private_task_feature_is_disabled"
 msgstr "Die Funktionalität private Aufgaben ist deaktiviert."
+
+#. Default: "The revoke permissions feature is disabled"
+#: ./opengever/task/task.py
+msgid "error_revoke_permissions_feature_is_disabled"
+msgstr "Die Funktionalität Berechtigungen nach Abschluss optional zu entziehen ist deaktiviert."
 
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py
@@ -713,6 +718,11 @@ msgstr "Diese Statusänderung führt dazu, dass temporäre Berechtigungen für d
 #: ./opengever/task/browser/revoke_permissions.py
 msgid "msg_revoking_successful"
 msgstr "Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung wurden entzogen."
+
+#. Default: "Permissions have been succesfully revoked, you are no longer permitted to access the task."
+#: ./opengever/task/browser/revoke_permissions.py
+msgid "msg_revoking_successful_no_longer_permission_to_access"
+msgstr "Die temporäre Berechtigungen für den Auftragnehmer und dessen Stellvertretung wurden entzogen. Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen."
 
 #. Default: "Task successfully reassigned."
 #: ./opengever/task/browser/assign.py
