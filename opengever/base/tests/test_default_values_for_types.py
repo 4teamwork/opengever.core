@@ -26,9 +26,12 @@ from zope.schema import List
 import json
 import textwrap
 
-
+# changed is timezone aware, so we need a timezone aware FROZEN_NOW, but dates
+# in GEVER are timezone naive, so to avoid this test failing when timezone
+# offset leads to a date shift, we define a timezone naive FROZEN_TODAY.
 FROZEN_NOW = utcnow_tz_aware()
-FROZEN_TODAY = FROZEN_NOW.date()
+with freeze(FROZEN_NOW):
+    FROZEN_TODAY = date.today()
 
 DEFAULT_TITLE = u'My title'
 DEFAULT_CLIENT = u'fa'
