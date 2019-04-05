@@ -15,7 +15,6 @@ from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
-from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
@@ -221,14 +220,15 @@ class Listing(Service):
 
         query = CATALOG_QUERIES[name].copy()
         query.update({
-            'path': '/'.join(self.context.getPhysicalPath()),
+            'path': {
+                'query': '/'.join(self.context.getPhysicalPath()),
+                'depth': -1,
+                'exclude_root': 1,
+            },
             'sort_on': sort_on,
             'sort_order': sort_order,
             'sort_limit': start + rows,
         })
-
-        # Exclude context from results, which also matches the path query.
-        query['UID'] = {'not': IUUID(self.context)}
 
         if term:
             query['SearchableText'] = term + '*'
