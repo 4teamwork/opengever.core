@@ -1,10 +1,10 @@
 from ftw.lawgiver.tests.base import WorkflowTest
-from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
+from opengever.core.testing import OPENGEVER_LAWGIVER_LAYER
 
 
 class GeverWorkflowTest(WorkflowTest):
 
-    layer = OPENGEVER_INTEGRATION_TESTING
+    layer = OPENGEVER_LAWGIVER_LAYER
     workflow_name = None
 
     def _is_base_test(self):
