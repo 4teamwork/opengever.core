@@ -268,6 +268,19 @@ def inactivate_filing_number(portal):
     SCHEMA_CACHE.invalidate('opengever.dossier.businesscasedossier')
 
 
+class LawGiverLayer(PloneSandboxLayer):
+    """Isolate lawgiver tests onto their own layer.
+
+    We do this as they cause writes to filesystem hierarchies and bust the path
+    modification time based caching strategy of the integration testing
+    fixtures."""
+
+    defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
+
+
+OPENGEVER_LAWGIVER_LAYER = LawGiverLayer()
+
+
 class FilingLayer(PloneSandboxLayer):
 
     defaultBases = (OPENGEVER_FUNCTIONAL_TESTING,)
