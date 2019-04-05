@@ -53,6 +53,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('solr', False),
                 ('workspace', False),
                 ('private_tasks', True),
+                ('optional_task_permissions_revoking', False),
                 ])),
             ('root_url', 'http://nohost/plone'),
             ('cas_url', None),

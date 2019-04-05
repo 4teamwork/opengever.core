@@ -9,6 +9,45 @@ from requests_toolbelt.utils import formdata
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
+class TestTaskAddForm(IntegrationTestCase):
+
+    @browsing
+    def test_add_form_does_not_list_shadow_documents_as_relatable(self, browser):
+        """Dossier responsible has created the shadow document.
+
+        This test ensures he does not get it offered as a relatable document on
+        tasks.
+        """
+        self.login(self.dossier_responsible, browser)
+        contenttree_url = '/'.join((
+            self.dossier.absolute_url(),
+            '++add++opengever.task.task',
+            '++widget++form.widgets.relatedItems',
+            '@@contenttree-fetch',
+        ))
+        browser.open(
+            contenttree_url,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
+        )
+        expected_documents = [
+            '2015',
+            '2016',
+            '[No Subject]',
+            u'Antrag f\xfcr Kreiselbau',
+            u'Die B\xfcrgschaft',
+            u'Diskr\xe4te Dinge',
+            u'Initialvertrag f\xfcr Bearbeitung',
+            u'Initialvertrag f\xfcr Bearbeitung',
+            'Personaleintritt',
+            u'Vertr\xe4ge',
+            u'Vertr\xe4gsentwurf',
+            u'Vertragsentwurf \xdcberpr\xfcfen',
+            u'Vertragsentw\xfcrfe 2018',
+        ]
+        self.assertEqual(expected_documents, browser.css('li').text)
+
+
 class TestTaskEditForm(IntegrationTestCase):
 
     @browsing
@@ -69,39 +108,3 @@ class TestTaskEditForm(IntegrationTestCase):
         events = get_recorded_events()
         self.assertEquals(1, len(events))
         self.assertEqual(self.task, events[0].object)
-
-    @browsing
-    def test_add_form_does_not_list_shadow_documents_as_relatable(self, browser):
-        """Dossier responsible has created the shadow document.
-
-        This test ensures he does not get it offered as a relatable document on
-        tasks.
-        """
-        self.login(self.dossier_responsible, browser)
-        contenttree_url = '/'.join((
-            self.dossier.absolute_url(),
-            '++add++opengever.task.task',
-            '++widget++form.widgets.relatedItems',
-            '@@contenttree-fetch',
-        ))
-        browser.open(
-            contenttree_url,
-            headers={'Content-Type': 'application/x-www-form-urlencoded'},
-            data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
-        )
-        expected_documents = [
-            '2015',
-            '2016',
-            '[No Subject]',
-            u'Antrag f\xfcr Kreiselbau',
-            u'Die B\xfcrgschaft',
-            u'Diskr\xe4te Dinge',
-            u'Initialvertrag f\xfcr Bearbeitung',
-            u'Initialvertrag f\xfcr Bearbeitung',
-            'Personaleintritt',
-            u'Vertr\xe4ge',
-            u'Vertr\xe4gsentwurf',
-            u'Vertragsentwurf \xdcberpr\xfcfen',
-            u'Vertragsentw\xfcrfe 2018',
-        ]
-        self.assertEqual(expected_documents, browser.css('li').text)

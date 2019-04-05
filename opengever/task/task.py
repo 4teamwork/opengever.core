@@ -24,6 +24,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.task import _
 from opengever.task import FINAL_TASK_STATES
+from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import util
@@ -88,6 +89,7 @@ class ITask(model.Schema):
             u'responsible_client',
             u'responsible',
             u'is_private',
+            u'revoke_permissions',
             u'deadline',
             u'text',
             u'relatedItems',
@@ -170,6 +172,15 @@ class ITask(model.Schema):
         )
 
     form.mode(IEditForm, is_private=HIDDEN_MODE)
+
+    revoke_permissions = schema.Bool(
+        title=_(u"label_revoke_permissions",
+                default=u"Revoke permissions."),
+        description=_(u"help_revoke_permissions",
+                      default="Revoke permissions when closing or reassigning task."),
+        default=True,
+        required=False,
+        )
 
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
@@ -263,6 +274,16 @@ class ITask(model.Schema):
             if 'is_private' in data._Data_data___:
                 raise Invalid(_(u'error_private_task_feature_is_disabled',
                                 default=u'The private task feature is disabled'))
+
+    @invariant
+    def revoke_permissions_is_not_changed_when_disabled(data):
+        if not is_optional_task_permissions_revoking_enabled():
+            # Because the z3c.form.validator.Data object has implemented a
+            # getattr fallback, which fetches the value from the context, we
+            # need to check if the revoke_permissions value was part of the input-data.
+            if 'revoke_permissions' in data._Data_data___ and not data.revoke_permissions:
+                raise Invalid(_(u'error_revoke_permissions_feature_is_disabled',
+                                default=u'The revoke permissions feature is disabled'))
 
 
 validator.WidgetValidatorDiscriminators(

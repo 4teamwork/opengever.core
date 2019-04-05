@@ -1,4 +1,5 @@
 from opengever.task import is_private_task_feature_enabled
+from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
@@ -63,6 +64,11 @@ class TaskAddForm(DefaultAddForm):
             common_group = next(
                 group for group in self.groups if group.__name__ == u'common')
             common_group.widgets['is_private'].mode = HIDDEN_MODE
+
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE
 
     def createAndAdd(self, data):
         created = []
@@ -183,3 +189,11 @@ class TaskEditForm(DefaultEditForm):
                 (ITask['responsible_client'],
                  data.get('responsible_client')),),
             transition=REASSIGN_TRANSITION, supress_events=True)
+
+    def update(self):
+        super(TaskEditForm, self).update()
+
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE

@@ -172,13 +172,13 @@
   <subscriber
       for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".localroles.set_roles_after_adding"
+      handler=".handlers.set_roles_after_adding"
       />
 
   <subscriber
       for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".localroles.set_roles_after_modifying"
+      handler=".handlers.set_roles_after_modifying"
       />
 
   <subscriber

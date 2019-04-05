@@ -44,3 +44,8 @@ FINAL_TRANSITIONS = [
 def is_private_task_feature_enabled():
     return api.portal.get_registry_record(
         'private_task_feature_enabled', interface=ITaskSettings)
+
+
+def is_optional_task_permissions_revoking_enabled():
+    return api.portal.get_registry_record(
+        'optional_task_permissions_revoking_enabled', interface=ITaskSettings)

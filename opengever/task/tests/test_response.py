@@ -48,6 +48,18 @@ class TestTaskResponseForm(IntegrationTestCase):
         self.assertEquals([], info_messages())
 
     @browsing
+    def test_shows_no_revoke_warn_message_if_revoke_permissions_is_false(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.subtask.revoke_permissions = False
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('task-transition-resolved-tested-and-closed')
+
+        self.assertEquals(['Temporary permissions will not be revoked by this '
+                           'transtion as revoke permissions is unchecked for '
+                           'this task'],
+                          info_messages())
+
+    @browsing
     def test_redirects_to_task_if_user_has_access_rights(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         browser.open(self.subtask, view='tabbedview_view-overview')

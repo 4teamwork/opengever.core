@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2018-09-06 14:45+0000\n"
+"POT-Creation-Date: 2019-03-18 16:29+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -118,6 +118,7 @@ msgstr "Télécharger les données JSON de la réunion"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml
+#: ./opengever/core/upgrades/20181002163514_use_demand_view_to_generate_meeting_zips_by_default/actions.xml
 msgid "Export as Zip"
 msgstr "Exporter comme fichier ZIP"
 
@@ -228,6 +229,11 @@ msgstr "Système de classement"
 #: ./opengever/core/upgrades/20180122090342_add_revive_bumblebee_preview_action/actions.xml
 msgid "Revive preview"
 msgstr "Générer l'aperçu à nouveau"
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20190318115405_add_revoke_permissions_action/actions.xml
+msgid "Revoke permissions"
+msgstr "Révoquer les autorisations"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
 msgid "Sablon Template"

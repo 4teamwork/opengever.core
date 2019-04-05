@@ -1,14 +1,10 @@
-from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.browser.transitioncontroller import Checker
 from opengever.task.browser.transitioncontroller import get_checker
 from opengever.task.browser.transitioncontroller import TaskChecker
-from opengever.task.interfaces import ISuccessorTaskController
 from opengever.testing import IntegrationTestCase
-from plone.app.testing import TEST_USER_ID
-from unittest import skip
 
 
 class TestTaskControllerChecker(IntegrationTestCase):

@@ -231,9 +231,12 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
     schemas = [IResponse, INewResponsibleSchema]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        # Revoke local roles for current responsible the roles for the
-        # new responsible will be assigned afterwards
-        LocalRolesSetter(self.context).revoke_roles()
+        # Revoke local roles for current responsible, except if
+        # revoke_permissions is set to False.
+        # the roles for the new responsible will be assigned afterwards
+        # in set_roles_after_modifying on the ObjectModifiedEvent.
+        if self.context.revoke_permissions:
+            LocalRolesSetter(self.context).revoke_roles()
 
         former_responsible = ITask['responsible']
         former_responsible_client = ITask['responsible_client']

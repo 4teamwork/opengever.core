@@ -5,16 +5,14 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.inbox.forwarding import IForwarding
-from opengever.task import _
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task.activities import TaskAddedActivity
-from opengever.task.adapters import IResponseContainer
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
-from plone import api
+from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 
 
@@ -123,10 +121,29 @@ def set_initial_state(task, event):
 
 
 def revoke_permissions(task, event):
-    """Revoke temporary local roles on task and its related objects.
+    """Revoke temporary local roles on task and its related objects,
+    except if revoke_permissions is set to False
     """
-    if event.action in FINAL_TRANSITIONS:
+    if event.action in FINAL_TRANSITIONS and task.revoke_permissions:
         return LocalRolesSetter(task).revoke_roles()
+
+
+def set_roles_after_adding(context, event):
+    LocalRolesSetter(context).set_roles(event)
+
+
+def set_roles_after_modifying(context, event):
+    # Handle the modify event having been a removal of a related item
+    setattr(
+        context,
+        'relatedItems',
+        [item for item in getattr(context, 'relatedItems', []) if item.to_object],
+    )
+
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
+    LocalRolesSetter(context).set_roles(event)
 
 
 def record_added_activity(task, event):

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-09-06 14:45+0000\n"
+"POT-Creation-Date: 2019-03-18 16:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,6 +121,7 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20170920132556_add_zipexport_action_for_meetings/actions.xml
+#: ./opengever/core/upgrades/20181002163514_use_demand_view_to_generate_meeting_zips_by_default/actions.xml
 msgid "Export as Zip"
 msgstr ""
 
@@ -230,6 +231,11 @@ msgstr ""
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180122090342_add_revive_bumblebee_preview_action/actions.xml
 msgid "Revive preview"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20190318115405_add_revoke_permissions_action/actions.xml
+msgid "Revoke permissions"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml

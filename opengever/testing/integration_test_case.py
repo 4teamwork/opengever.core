@@ -81,6 +81,7 @@ FEATURE_FLAGS = {
     'journal-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.journal_pdf_enabled',
     'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
     'private-tasks': 'opengever.task.interfaces.ITaskSettings.private_task_feature_enabled',
+    'optional-task-permissions-revoking': 'opengever.task.interfaces.ITaskSettings.optional_task_permissions_revoking_enabled',  # noqa
     }
 
 FEATURE_PROFILES = {

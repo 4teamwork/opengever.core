@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-28 06:54+0000\n"
+"POT-Creation-Date: 2019-04-04 12:13+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -223,6 +223,11 @@ msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmis
 msgid "error_private_task_feature_is_disabled"
 msgstr ""
 
+#. Default: "The revoke permissions feature is disabled"
+#: ./opengever/task/task.py
+msgid "error_revoke_permissions_feature_is_disabled"
+msgstr "La fonctionalité Révoquer les autorisations de manière facultative après la fermeture est désactivée"
+
 #. Default: "No changes: same responsible selected"
 #: ./opengever/task/browser/assign.py
 msgid "error_same_responsible"
@@ -350,6 +355,11 @@ msgstr "Sélectionnez les personnes responsables."
 #: ./opengever/task/transition.py
 msgid "help_responsible_client"
 msgstr "Sélectionner d'abord le client du mandataire et ensuite le mandataire."
+
+#. Default: "Revoke permissions when closing or reassigning task."
+#: ./opengever/task/task.py
+msgid "help_revoke_permissions"
+msgstr "Révoquer les autorisations pour le mandataire et ses suppléants lors de la fermeture ou de la réattribution de la tâche."
 
 #: ./opengever/task/task.py
 msgid "help_task_type"
@@ -603,6 +613,11 @@ msgstr "Mandataire"
 msgid "label_return_to_issue"
 msgstr "Retour à la tâche"
 
+#. Default: "Revoke permissions."
+#: ./opengever/task/task.py
+msgid "label_revoke_permissions"
+msgstr "Révoquer les autorisations après la fermeture"
+
 #. Default: "Sequence"
 #: ./opengever/task/browser/templates/overview.pt
 msgid "label_sequence"
@@ -691,10 +706,25 @@ msgstr "Etat"
 msgid "msg_deadline_change_successfull"
 msgstr "Le délai a été modifié avec succès."
 
+#. Default: "Temporary permissions will not be revoked by this transtion as revoke permissions is unchecked for this task"
+#: ./opengever/task/response.py
+msgid "msg_not_revoking_permissions"
+msgstr "Les autorisations temporaires pour le mandataire et ses suppléants resteront en vigueur, la révocation des autorisations étant désactivée pour cette tâche."
+
 #. Default: "This transtion revokes temporary permissions for the responsible user and agency group."
 #: ./opengever/task/response.py
 msgid "msg_revoking_permissions"
 msgstr "Cette transition révoque les autorisations temporaires pour le mandataire et ses suppléants."
+
+#. Default: "Permissions have been succesfully revoked"
+#: ./opengever/task/browser/revoke_permissions.py
+msgid "msg_revoking_successful"
+msgstr "Les autorisations temporaires pour le mandataire et ses suppléants ont été révoquées."
+
+#. Default: "Permissions have been succesfully revoked, you are no longer permitted to access the task."
+#: ./opengever/task/browser/revoke_permissions.py
+msgid "msg_revoking_successful_no_longer_permission_to_access"
+msgstr "Les autorisations temporaires pour le mandataire et ses suppléants ont été révoquées. Vous n'avez plus les droits d'accès à la tâche."
 
 #. Default: "Task successfully reassigned."
 #: ./opengever/task/browser/assign.py

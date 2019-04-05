@@ -1,8 +1,6 @@
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity.dispatcher import NotificationDispatcher
@@ -162,7 +160,6 @@ class TestTaskReminder(IntegrationTestCase):
 
             with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
                 task_reminder.create_reminder_notifications()
-
 
         create_reminders_for_task_in_state(self.task, 'task-state-tested-and-closed')
         create_reminders_for_task_in_state(self.task, 'task-state-resolved')
