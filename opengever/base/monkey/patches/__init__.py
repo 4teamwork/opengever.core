@@ -21,14 +21,12 @@ from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
 from .tz_for_log import PatchZ2LogTimezone
-from .uuidindex import PatchUUIDIndex
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
 from .workflowtool import PatchWorkflowTool
 
 
 PatchBuilderCreate()()
-PatchUUIDIndex()()
 PatchExtendedPathIndex()()
 PatchCatalogToFilterTrashedDocs()()
 PatchCMFEditonsHistoryHandlerTool()()
