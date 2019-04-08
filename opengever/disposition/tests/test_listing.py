@@ -144,9 +144,9 @@ class TestDestroyedDossierListing(BaseLatexListingTest):
                                      self.disposition.get_dossier_representations())
 
         self.assert_row_values(
-            ['Client1 1.1 / 11', 'Hannah Baufrau', 'Yes'], rows[0])
+            ['Client1 1.1 / 12', 'Hannah Baufrau', 'Yes'], rows[0])
         self.assert_row_values(
-            ['Client1 1.1 / 12', 'Hans Baumann', 'No'], rows[1])
+            ['Client1 1.1 / 13', 'Hans Baumann', 'No'], rows[1])
 
 
 class TestDispositionHistoryListing(BaseLatexListingTest):
