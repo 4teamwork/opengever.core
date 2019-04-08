@@ -36,7 +36,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"content-type": u"message/rfc822",
             u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
             u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                             u"document-26",
+                             u"document-27",
             u"download": u"download",
             u"filename": u"Die Buergschaft.eml",
             u"title": u"Die B\xfcrgschaft",
@@ -75,7 +75,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"content-type": u"application/vnd.ms-outlook",
             u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
             u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                             u"document-27",
+                             u"document-28",
             u"download": u"@@download/original_message",
             u"filename": u"testm\xe4il.msg",
             u"title": u"[No Subject]",
@@ -123,7 +123,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"content-type": u"message/rfc822",
                 u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
                 u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                                 u"document-26",
+                                 u"document-27",
                 u"download": u"download",
                 u"filename": u"Die Buergschaft.eml",
                 u"title": u"Die B\xfcrgschaft",
@@ -134,7 +134,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"content-type": u"application/vnd.ms-outlook",
                 u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
                 u"document-url": u"http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
-                                 u"document-27",
+                                 u"document-28",
                 u"download": u"@@download/original_message",
                 u"filename": u"testm\xe4il.msg",
                 u"title": u"[No Subject]",

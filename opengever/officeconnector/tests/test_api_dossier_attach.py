@@ -206,7 +206,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-32',
+                                 u'dossier-1/task-1/document-33',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -268,7 +268,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-32',
+                                 u'dossier-1/task-1/document-33',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
@@ -330,7 +330,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 u'csrf-token': u'86ecf9b4135514f8c94c61ce336a4b98b4aaed8a',
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
-                                 u'dossier-1/task-1/document-32',
+                                 u'dossier-1/task-1/document-33',
                 u'download': u'download',
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',

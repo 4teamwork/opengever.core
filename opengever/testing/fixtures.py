@@ -112,6 +112,7 @@ class OpengeverContentFixture(object):
                 self.create_expired_dossier()
                 self.create_inactive_dossier()
                 self.create_empty_dossier()
+                self.create_resolvable_dossier()
 
         with self.freeze_at_hour(15):
             with self.login(self.dossier_responsible):
@@ -1366,6 +1367,40 @@ class OpengeverContentFixture(object):
             shadow_document_annotations['template-id'] = '2574d08d-95ea-4639-beab-3103fe4c3bc7'
             shadow_document_annotations['languages'] = [2055]
             shadow_document_annotations['content_type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  # noqa
+
+    @staticuid()
+    def create_resolvable_dossier(self):
+        self.resolvable_dossier = self.register('resolvable_dossier', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'A resolvable main dossier')
+            .having(
+                start=date(2016, 1, 1),
+                responsible=self.dossier_responsible.getId(),
+            )
+        ))
+
+        self.resolvable_subdossier = self.register('resolvable_subdossier', create(
+            Builder('dossier')
+            .within(self.resolvable_dossier)
+            .titled(u'Resolvable Subdossier')
+            .having(
+                start=date(2016, 1, 1),
+                responsible=self.dossier_responsible.getId(),
+            )
+        ))
+
+        self.resolvable_document = self.register('resolvable_document', create(
+            Builder('document')
+            .within(self.resolvable_subdossier)
+            .titled(u'Umbau B\xe4rengraben')
+            .having(
+                document_date=datetime(2010, 1, 3),
+            )
+            .attach_file_containing(
+                bumblebee_asset('example.docx').bytes(),
+                u'vertragsentwurf.docx')
+        ))
 
     @staticuid()
     def create_empty_dossier(self):

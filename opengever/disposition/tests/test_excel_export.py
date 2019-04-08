@@ -44,13 +44,13 @@ class TestDispositionExcelExport(IntegrationTestCase):
             rows = list(workbook.active.rows)
 
             self.assertEquals(
-                [u'Client1 1.1 / 11', u'Hannah Baufrau', datetime(2000, 1, 1, 0, 0),
+                [u'Client1 1.1 / 12', u'Hannah Baufrau', datetime(2000, 1, 1, 0, 0),
                  datetime(2000, 1, 31, 0, 0), u'limited-public',
                  u'archival worthy', None, u'archival worthy'],
                 [cell.value for cell in rows[1]])
 
             self.assertEquals(
-                [u'Client1 1.1 / 12', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
+                [u'Client1 1.1 / 13', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
                  datetime(2000, 1, 15, 0, 0), u'unchecked',
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],
