@@ -422,7 +422,9 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         self.assertEqual(0, len(browser.css('#proposals_box .proposal')))
 
     @browsing
-    def test_archival_file_is_only_available_for_managers_by_default(self, browser):
+    def test_archival_file_rows_only_visible_for_managers_by_default(self, browser):
+        # Both the archival file and archival file state rows are only shown
+        # for managers (users with the 'Modify archival file' permission)
         self.login(self.regular_user, browser)
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
@@ -450,6 +452,13 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             'Public Trial',
             'Public trial statement',
             ]
+
+        self.assertEquals(document_attributes, browser.css('.listing th').text)
+
+        self.login(self.manager, browser)
+        browser.open(self.expired_document, view='tabbedview_view-overview')
+
+        document_attributes.extend(["Archival File", "Archival file state"])
 
         self.assertEquals(document_attributes, browser.css('.listing th').text)
 
@@ -505,7 +514,8 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
 
         browser.open(self.expired_document, view='tabbedview_view-overview')
 
-        archival_file_row = browser.css('.listing tr')[-1]
+        archival_file_row_index = browser.css('.listing tr th').text.index("Archival File")
+        archival_file_row = browser.css('.listing tr')[archival_file_row_index]
 
         self.assertEquals(
             'Archival File',

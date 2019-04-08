@@ -8,6 +8,7 @@ from opengever.base.browser.helper import get_css_class
 from opengever.base.utils import to_html_xweb_intelligent
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document import _
+from opengever.document.archival_file import ARCHIVAL_FILE_STATE_MAPPING
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
 from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
@@ -185,16 +186,25 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
                                     default='Public Trial')),
             FieldRow('IClassification.public_trial_statement')
         ]
+
         if self.is_archivale_file_visible():
             row = TemplateRow(
                 self.archival_file_template,
                 label=_(u'label_archival_file', default='Archival File'))
+            rows.append(row)
+            row = CustomRow(self.render_archival_file_state,
+                            label=_('label_archival_file_state',
+                                    default='Archival file state'))
             rows.append(row)
 
         if is_meeting_feature_enabled():
             rows.append(TemplateRow(self.submitted_with_template,
                                     label=_('Submitted with')))
         return rows
+
+    def render_archival_file_state(self):
+        state = IDocumentMetadata(self.context).archival_file_state
+        return ARCHIVAL_FILE_STATE_MAPPING.get(state)
 
     def get_metadata_rows(self):
         for row in self.get_metadata_config():
