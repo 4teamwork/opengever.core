@@ -148,4 +148,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="archival_file_management"
+      class=".archival_file_management_view.ArchivalFileManagementView"
+      permission="cmf.ManagePortal"
+      template="templates/archival_file_management_view.pt"
+      />
+
 </configure>
