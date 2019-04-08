@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-26 18:31+0000\n"
+"POT-Creation-Date: 2019-04-08 11:37+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -325,6 +325,7 @@ msgstr "Fichier archivé"
 
 #. Default: "Archival file state"
 #: ./opengever/document/behaviors/metadata.py
+#: ./opengever/document/browser/overview.py
 msgid "label_archival_file_state"
 msgstr "Etat du ficher d'archivage"
 
