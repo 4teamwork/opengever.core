@@ -45,7 +45,7 @@ class TestPrivateDossier(IntegrationTestCase):
     def test_use_same_id_schema_as_regular_dossiers(self):
         self.login(self.regular_user)
         self.assertEquals(
-            ['dossier-12', 'dossier-13'],
+            ['dossier-14', 'dossier-15'],
             [dos.getId() for dos in self.private_folder.listFolderContents()])
 
     def test_uses_the_same_sequence_counter_as_regular_dossiers(self):
@@ -53,7 +53,7 @@ class TestPrivateDossier(IntegrationTestCase):
 
         sequence_number = getUtility(ISequenceNumber)
         self.assertEquals(
-            [12, 13],
+            [14, 15],
             [sequence_number.get_number(dos) for dos
              in self.private_folder.listFolderContents()])
 
