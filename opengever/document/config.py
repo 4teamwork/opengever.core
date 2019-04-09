@@ -5,6 +5,7 @@ INDEXES = (
          'lexicon_id': 'plone_lexicon'}),
     ('checked_out', 'FieldIndex'),
     ('document_date', 'DateIndex'),
+    ('document_type', 'FieldIndex'),
     ('receipt_date', 'DateIndex'),
     ('sortable_author', 'FieldIndex'),
     ('public_trial', 'FieldIndex'),

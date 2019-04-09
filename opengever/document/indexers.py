@@ -167,6 +167,11 @@ def sortable_author(obj):
 
 
 @indexer(IDocumentMetadata)
+def document_type(obj):
+    return IDocumentMetadata(obj).document_type
+
+
+@indexer(IDocumentMetadata)
 def DocumentSubjectIndexer(obj):
     return IDocumentMetadata(obj).keywords
 

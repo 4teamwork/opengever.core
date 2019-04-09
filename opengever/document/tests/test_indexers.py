@@ -4,6 +4,7 @@ from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
 from opengever.document.indexers import filename as filename_indexer
@@ -65,6 +66,14 @@ class TestDocumentIndexers(FunctionalTestCase):
             obj2brain(doc1).document_author, 'H\xc3\xbcgo B\xc3\xb6ss')
         self.assertEquals(
             index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
+
+    def test_document_type_indexer(self):
+        document = create(Builder("document"))
+        self.assertEqual(index_data_for(document)['document_type'], None)
+
+        IDocumentMetadata(document).document_type = "question"
+        document.reindexObject()
+        self.assertEqual(index_data_for(document)['document_type'], "question")
 
     def test_filesize_indexers(self):
         document = create(
