@@ -8,7 +8,7 @@ from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
-from opengever.dossier.tests.test_resolve import resolve_dossier
+from opengever.dossier.tests.test_resolve import ResolveTestHelper
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.annotation import IAnnotations
@@ -16,7 +16,7 @@ from zope.component import queryMultiAdapter
 from zope.event import notify
 
 
-class TestRecentlyModifiedGet(IntegrationTestCase):
+class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
 
     def _clear_recently_touched_log(self, user_id):
         del IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id][:]
@@ -116,7 +116,7 @@ class TestRecentlyModifiedGet(IntegrationTestCase):
                .in_state('task-state-tested-and-closed'))
 
         with freeze(datetime(2018, 4, 30)):
-            resolve_dossier(self.empty_dossier, browser)
+            self.resolve(self.empty_dossier, browser)
 
         url = '%s/@recently-touched/%s' % (
             self.portal.absolute_url(), self.secretariat_user.getId())
