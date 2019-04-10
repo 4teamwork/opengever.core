@@ -45,11 +45,27 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
             'templateGroupId': 3,
         }
         template_groups = [
-            {'id': 1, 'localizedName': 'Word templates', 'templates': [template_word]},
-            {'id': 2, 'localizedName': 'Excel templates', 'templates': [template_excel]},
-            {'id': 3, 'localizedName': 'Powerpoint template folder', 'templates': [template_powerpoint]},
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
+                'localizedName': 'Word templates',
+                'templates': [template_word],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
+                'localizedName': 'Excel templates',
+                'templates': [template_excel],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
+                'localizedName': 'Powerpoint template folder',
+                'templates': [template_powerpoint],
+            },
         ]
-
+        favorites = {
+            'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
+            'localizedName': 'Favorites',
+            'templates': [],
+        }
         session = requests.Session()
         adapter = requests_mock.Adapter()
         adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
@@ -58,6 +74,11 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
             'GET',
             'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
             text=json.dumps(template_groups),
+        )
+        adapter.register_uri(
+            'GET',
+            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            text=json.dumps(favorites),
         )
         session.mount('mock', adapter)
 
@@ -75,6 +96,26 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
         super(TestCreateDocFromOneoffixxTemplate, self).tearDown()
+
+    @browsing
+    def test_oneoffixx_wizard_shows_filter(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(
+            'Filter',
+            browser.css('input.tableradioSearchbox').first.get('placeholder'),
+        )
+
+    @browsing
+    def test_oneoffixx_defaults_to_listing_all(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual([], browser.css('option[selected=selected]').text)
+        self.assertIsNone(browser.css('select').first.value)
+        # XXX - this always renders the --NOVALUE-- as the actually chosen
+        # default is actually loaded over AJAX - confusing and bad UX
 
     @browsing
     def test_document_creation_from_oneoffixx_template_creates_shadow_doc(self, browser):
@@ -237,7 +278,7 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
             'templateGroupId': 1,
         }
         template_groups = [{'templates': [valid_template, invalid_template]}]
-
+        favorites = {'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd', 'localizedName': 'Favorites', 'templates': []}
         session = requests.Session()
         adapter = requests_mock.Adapter()
         adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
@@ -246,6 +287,11 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
             'GET',
             'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
             text=json.dumps(template_groups),
+        )
+        adapter.register_uri(
+            'GET',
+            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            text=json.dumps(favorites),
         )
         session.mount('mock', adapter)
 
@@ -415,3 +461,159 @@ class TestOneOffixxTemplateFeature(IntegrationTestCase):
              'Subdossier',
              'Participant'],
             factoriesmenu.addable_types())
+
+
+class TestOneoffixxTemplateFavorites(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def setUp(self):
+        super(TestOneoffixxTemplateFavorites, self).setUp()
+        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
+
+        access_token = {'access_token': 'all_may_enter'}
+        template_library = [{'datasources': [{'id': 1}]}]
+        template_word = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
+            'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
+            'languages': ['2055'],
+            'localizedName': '3 Example Word file',
+            'templateGroupId': 1,
+        }
+        template_excel = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc8',
+            'metaTemplateId': 'e31ca353-2ab1-4408-921b-a70ae2f57ad1',
+            'languages': ['2055'],
+            'localizedName': '2 Example Excel file',
+            'templateGroupId': 2,
+        }
+        template_powerpoint = {
+            'id': '2574d08d-95ea-4639-beab-3103fe4c3bc9',
+            'metaTemplateId': 'a2c9b700-86cd-4481-a17f-533fe9c504a2',
+            'languages': ['2055'],
+            'localizedName': '1 Example Powerpoint presentation',
+            'templateGroupId': 3,
+        }
+        template_groups = [
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
+                'localizedName': 'Word templates',
+                'templates': [template_word],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
+                'localizedName': 'Excel templates',
+                'templates': [template_excel],
+            },
+            {
+                'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532c0',
+                'localizedName': 'Powerpoint template folder',
+                'templates': [template_powerpoint],
+            },
+        ]
+        favorites = {
+            'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
+            'localizedName': 'Favorites',
+            'templates': [template_powerpoint],
+        }
+        session = requests.Session()
+        adapter = requests_mock.Adapter()
+        adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri(
+            'GET',
+            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
+            text=json.dumps(template_groups),
+        )
+        adapter.register_uri(
+            'GET',
+            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            text=json.dumps(favorites),
+        )
+        session.mount('mock', adapter)
+
+        credentials = {
+            'client_id': 'foo',
+            'client_secret': 'topsecret',
+            'preshared_key': 'horribletruth',
+        }
+
+        OneoffixxAPIClient(session, credentials)
+
+    def tearDown(self):
+        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
+        super(TestOneoffixxTemplateFavorites, self).tearDown()
+
+    @browsing
+    def test_oneoffixx_favorites_listed_as_a_category(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        expected_categories = [
+            'All templates',
+            'Favorites',
+            'Word templates',
+            'Excel templates',
+            'Powerpoint template folder',
+        ]
+        self.assertEqual(expected_categories, browser.css('select option').text)
+
+    @browsing
+    def test_oneoffixx_defaults_to_listing_favorites(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('document_with_oneoffixx_template')
+        self.assertEqual(
+            ['Favorites'], browser.css('option[selected=selected]').text)
+        self.assertEqual(
+            'c2ddc01a-befd-4e0d-b15f-f67025f532bd',
+            browser.css('select').first.value,
+        )
+        # XXX - this always renders the --NOVALUE-- as the actually chosen
+        # default is actually loaded over AJAX - confusing and bad UX
+
+    @browsing
+    def test_oneoffixx_favorites_not_duplicated_on_select_all(self, browser):
+        self.login(self.regular_user, browser)
+        view = (
+            'document_with_oneoffixx_template'
+            '/++widget++form.widgets.template'
+            '/ajax_render'
+            '?form.widgets.template_group:list=--NOVALUE--'
+            '&form.widgets.template_group-empty-marker=1'
+            '&form.widgets.template-empty-marker=1'
+            '&form.widgets.title'
+        )  # Do not add commas above, this is a string!
+        browser.open(self.dossier, view=view, send_authenticator=True)
+        expected_options = [
+            '3 Example Word file',
+            '2 Example Excel file',
+            '1 Example Powerpoint presentation',
+        ]
+        self.assertEqual(
+            expected_options,
+            [e.get('title') for e in browser.css('input[type=radio]')],
+        )
+
+    @browsing
+    def test_oneoffixx_favorites_lists_only_favorites(self, browser):
+        self.login(self.regular_user, browser)
+        view = (
+            'document_with_oneoffixx_template'
+            '/++widget++form.widgets.template'
+            '/ajax_render'
+            '?form.widgets.template_group:list=c2ddc01a-befd-4e0d-b15f-f67025f532bd'
+            '&form.widgets.template_group-empty-marker=1'
+            '&form.widgets.template-empty-marker=1'
+            '&form.widgets.title'
+        )  # Do not add commas above, this is a string!
+        browser.open(self.dossier, view=view, send_authenticator=True)
+        expected_options = ['1 Example Powerpoint presentation']
+        self.assertEqual(
+            expected_options,
+            [e.get('title') for e in browser.css('input[type=radio]')],
+        )

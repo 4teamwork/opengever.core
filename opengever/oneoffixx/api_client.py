@@ -42,6 +42,19 @@ def oneoffixx_template_groups_cachekey(*args):
     return '-'.join(('oneoffixx_template_groups', api.user.get_current().id, str(timeout), str(time() // timeout), ))
 
 
+def oneoffixx_favorites_cachekey(*args):
+    """Cache the favorite templates, per user.
+
+    The left-behind-by-instability cache keys this produces will get reaped by
+    the global cache LRU cleanups.
+
+    The timeout is configurable in the registry and used as a part of the cache
+    key so changing the timeout immediately invalidates all caches.
+    """
+    timeout = api.portal.get_registry_record('cache_timeout', interface=IOneoffixxSettings)
+    return '-'.join(('oneoffixx_favorites', api.user.get_current().id, str(timeout), str(time() // timeout), ))
+
+
 class OneoffixxAPIClientSingleton(type):
     """Ensure we have a shared configurable singleton of the client."""
 
@@ -213,3 +226,24 @@ class OneoffixxAPIClient(object):
             else:
                 raise OneoffixxBackendException('Unable to fetch the template groups from Oneoffixx.', response.text, error)
         return template_groups
+
+    @ram.cache(oneoffixx_favorites_cachekey)
+    def get_oneoffixx_favorites(self):
+        templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
+        url = '/'.join((
+            self.get_oneoffixx_baseurl(),
+            'webapi/api/v1/{}/TemplateLibrary/TemplateFavorites'.format(templatelibrary_id),
+        ))
+        try:
+            response = self.session.get(url)
+            response.raise_for_status()
+            favorites = response.json()
+        except requests.HTTPError as error:
+            if response.status_code == 401:
+                self.refresh_access_token(invalidate=True)
+                response = self.session.get(url)
+                response.raise_for_status()
+                favorites = response.json()
+            else:
+                raise OneoffixxBackendException('Unable to fetch the favorites from Oneoffixx.', response.text, error)
+        return favorites
