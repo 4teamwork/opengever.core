@@ -136,9 +136,13 @@ class TestHandlers(FunctionalTestCase):
         self.assert_doc_properties_updated_journal_entry_generated(
             self.doc_with_gever_properties, entry=-2)
 
-    def test_copying_documents_updates_doc_properties(self):
-        api.content.copy(source=self.doc_with_gever_properties,
-                         target=self.target_dossier)
+    @browsing
+    def test_copying_documents_updates_doc_properties(self, browser):
+        browser.login()
+        browser.open(self.doc_with_gever_properties, view='copy_item')
+        browser.open(self.target_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
         copied_doc = self.target_dossier.getFirstChild()
 
         expected_doc_properties = [
