@@ -1,8 +1,11 @@
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
+from opengever.document.behaviors import IBaseDocument
+from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from plone import api
 from Products.Five import BrowserView
 from zope.container.interfaces import INameChooser
+from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import Interface
 
@@ -75,6 +78,10 @@ class PasteClipboardView(BrowserView):
         INameChooser adapter.
         """
         for obj in objs:
+            # We do not want to update the docproperties when copying the objects
+            # but only when renaming the documents
+            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
+
             # Using the plone.api does not work because we need the fix from
             # https://github.com/plone/plone.api/commit/79bec69932ca87a4a5cd675db8b0bd9437dddcdf
             # the following code should be replaced with plone.api after the
@@ -90,6 +97,12 @@ class PasteClipboardView(BrowserView):
         return self._recursive_rename(copy)
 
     def _recursive_rename(self, obj):
+        # We update the docproperties only when renaming a document
+        # not when renaming the containing dossiers
+        if IBaseDocument.providedBy(obj):
+            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
+        else:
+            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
         renamed = api.content.rename(obj, new_id=self.get_new_id(obj))
         for child in renamed.getFolderContents():
             self._recursive_rename(child.getObject())

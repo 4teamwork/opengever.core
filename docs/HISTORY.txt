@@ -5,6 +5,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Fix solr error during copy/paste of word document. [njohner]
 - Add archival file management view on dossier level. [njohner]
 - Show archival file state on documents overview for managers. [njohner]
 - Fix tests failing due to timezone leading to date shift. [njohner]

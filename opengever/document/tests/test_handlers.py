@@ -12,6 +12,7 @@ from plone import api
 from plone.app.testing import TEST_USER_ID
 from zipfile import BadZipfile
 from zope.component import getMultiAdapter
+from ftw.testbrowser import browsing
 
 
 class TestHandlers(FunctionalTestCase):
@@ -166,6 +167,46 @@ class TestHandlers(FunctionalTestCase):
             properties = read_properties(tmpfile.path)
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
+
+    @browsing
+    def test_copying_dossier_updates_doc_properties_of_contained_document(self, browser):
+        browser.login()
+        browser.open(self.dossier, view='copy_item')
+        browser.open(self.target_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        copied_dossier = self.target_dossier.getFirstChild()
+        copied_doc = copied_dossier.getFirstChild()
+
+        expected_doc_properties = [
+            ('Document.ReferenceNumber', 'Client1 / 2.1 / 2'),
+            ('Document.SequenceNumber', '2'),
+            ('Dossier.ReferenceNumber', 'Client1 / 2.1'),
+            ('Dossier.Title', 'Dossier'),
+            ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
+            ('ogg.document.reference_number', 'Client1 / 2.1 / 2'),
+            ('ogg.document.sequence_number', '2'),
+            ('ogg.document.title', 'copy of Document with file'),
+            ('ogg.document.version_number', 0),
+            ('ogg.dossier.reference_number', 'Client1 / 2.1'),
+            ('ogg.dossier.sequence_number', '3'),
+            ('ogg.dossier.title', 'Dossier'),
+            ('ogg.user.email', 'test@example.org'),
+            ('ogg.user.firstname', 'User'),
+            ('ogg.user.lastname', 'Test'),
+            ('ogg.user.title', 'Test User'),
+            ('ogg.user.userid', TEST_USER_ID),
+            ('User.FullName', 'Test User'),
+            ('User.ID', TEST_USER_ID),
+        ]
+
+        with TemporaryDocFile(copied_doc.file) as tmpfile:
+            properties = read_properties(tmpfile.path)
+            self.assertItemsEqual(expected_doc_properties, properties)
+        self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
+
+        # XXX we should also test that the document gets properly reindexed in
+        # solr as a regression test for https://github.com/4teamwork/opengever.core/pull/5553
 
     def test_moving_documents_updates_doc_properties(self):
         api.content.move(source=self.doc_with_gever_properties,
