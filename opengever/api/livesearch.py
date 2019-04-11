@@ -39,6 +39,7 @@ class GeverLiveSearchGet(SearchGet):
             return [
                 {
                     'title': entry.Title(),
+                    'filename': entry.filename,
                     '@id': entry.getURL(),
                     '@type': entry.portal_type,
                 }
@@ -49,13 +50,15 @@ class GeverLiveSearchGet(SearchGet):
             self.request.form.update({
                 'SearchableText': search_term + '*',
                 'sort_limit': limit,
-                'path': path
+                'path': path,
+                'metadata_fields': ['Title', 'filename', 'id', 'portal_type']
             })
 
             results = super(GeverLiveSearchGet, self).reply()
             return [
                 {
-                    'title': entry['title'],
+                    'title': entry['Title'],
+                    'filename': entry['filename'],
                     '@id': entry['@id'],
                     '@type': entry['@type'],
                 }

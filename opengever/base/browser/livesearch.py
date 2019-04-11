@@ -60,7 +60,8 @@ class LiveSearchReplyView(BrowserView):
             filters.append(u'path_parent:%s' % escape(self.path))
         params = {
             'fl': [
-                'UID', 'id', 'Title', 'getIcon', 'portal_type', 'path', 'Description'
+                'UID', 'id', 'Title', 'getIcon', 'portal_type',
+                'path', 'Description', 'filename'
             ],
         }
 
