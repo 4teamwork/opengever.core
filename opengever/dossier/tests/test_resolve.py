@@ -40,15 +40,39 @@ def get_resolver_vocabulary():
 
 class ResolveTestHelper(object):
 
-    def resolve(self, dossier, browser):
+    resolved_state = 'dossier-state-resolved'
+    inactive_state = 'dossier-state-inactive'
+
+    def resolve(self, dossier, browser=None):
         return browser.open(dossier,
                             view='transition-resolve',
                             data={'_authenticator': createToken()})
 
-    def reactivate(self, dossier, browser):
+    def reactivate(self, dossier, browser=None):
         return browser.open(dossier,
                             view='transition-reactivate',
                             data={'_authenticator': createToken()})
+
+    def assert_resolved(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to be resolved (state %r). "
+               "Actual state is %r instead." % (
+                   dossier, self.resolved_state, dossier_state))
+        self.assertEquals(self.resolved_state, dossier_state, msg)
+
+    def assert_not_resolved(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to NOT be resolved (NOT in state %r). "
+               "Actual state is %r however." % (
+                   dossier, self.resolved_state, dossier_state))
+        self.assertNotEqual(self.resolved_state, dossier_state, msg)
+
+    def assert_inactive(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to be inactive (state %r). "
+               "Actual state is %r instead." % (
+                   dossier, self.inactive_state, dossier_state))
+        self.assertEquals(self.inactive_state, dossier_state, msg)
 
 
 class TestResolverVocabulary(IntegrationTestCase):
@@ -68,8 +92,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.empty_dossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.empty_dossier))
+        self.assert_resolved(self.empty_dossier)
         self.assertEquals(self.empty_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -83,8 +106,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.subdossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.subdossier))
+        self.assert_resolved(self.subdossier)
         statusmessages.assert_no_error_messages()
         self.assertEquals(
             ['The subdossier has been succesfully resolved.'],
@@ -96,8 +118,7 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.subdossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.subdossier))
+        self.assert_resolved(self.subdossier)
         self.assertEquals(self.subdossier.absolute_url(), browser.url)
         self.assertEquals(['The subdossier has been succesfully resolved.'],
                           info_messages())
@@ -487,8 +508,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertTrue(self.resolvable_dossier.is_open())
-        self.assertFalse(self.resolvable_dossier.is_resolved())
+        self.assert_not_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['not all documents and tasks are stored in a subdossier.'],
@@ -502,8 +522,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertTrue(self.resolvable_dossier.is_open())
-        self.assertFalse(self.resolvable_dossier.is_resolved())
+        self.assert_not_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(['not all documents are checked in'],
                           error_messages())
@@ -521,8 +540,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertTrue(self.resolvable_dossier.is_open())
-        self.assertFalse(self.resolvable_dossier.is_resolved())
+        self.assert_not_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(['not all task are closed'],
                           error_messages())
@@ -536,8 +554,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertFalse(self.resolvable_dossier.is_open())
-        self.assertTrue(self.resolvable_dossier.is_resolved())
+        self.assert_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -554,8 +571,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertTrue(self.resolvable_dossier.is_open())
-        self.assertFalse(self.resolvable_dossier.is_resolved())
+        self.assert_not_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(
             ['The dossier Resolvable Subdossier has a invalid end_date'],
@@ -574,8 +590,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertFalse(self.resolvable_dossier.is_open())
-        self.assertTrue(self.resolvable_dossier.is_resolved())
+        self.assert_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -588,8 +603,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_subdossier, browser)
 
-        self.assertTrue(self.resolvable_subdossier.is_open())
-        self.assertFalse(self.resolvable_subdossier.is_resolved())
+        self.assert_not_resolved(self.resolvable_subdossier)
         self.assertEquals(self.resolvable_subdossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier contains active proposals.'],
                           error_messages())
@@ -609,8 +623,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertFalse(self.resolvable_dossier.is_open())
-        self.assertTrue(self.resolvable_dossier.is_resolved())
+        self.assert_resolved(self.resolvable_dossier)
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
         self.assertEquals(['The dossier has been succesfully resolved.'],
                           info_messages())
@@ -639,10 +652,8 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_dossier))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_subdossier))
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_resolved(self.resolvable_subdossier)
 
     @browsing
     def test_lenient_resolver_skips_document_and_task_filing_check(self, browser):
@@ -664,10 +675,8 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.resolvable_dossier, browser)
 
         self.assertEquals(self.resolvable_dossier.absolute_url(), browser.url)
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_dossier))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_subdossier))
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_resolved(self.resolvable_subdossier)
         self.assertEquals(
             ['The dossier has been succesfully resolved.'], info_messages())
 
@@ -681,10 +690,8 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_dossier))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_subdossier))
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_resolved(self.resolvable_subdossier)
 
     @browsing
     def test_corrects_already_resolved_subdossiers_invalid_end_dates(self, browser):
@@ -717,12 +724,9 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.empty_dossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.empty_dossier))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(subdossier1))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(subdossier2))
+        self.assert_resolved(self.empty_dossier)
+        self.assert_resolved(subdossier1)
+        self.assert_resolved(subdossier2)
         self.assertEquals(date(2016, 7, 1), IDossier(self.empty_dossier).end)
         self.assertEquals(date(2016, 6, 1), IDossier(subdossier1).end)
         self.assertEquals(date(2016, 7, 1), IDossier(subdossier2).end)
@@ -738,10 +742,8 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_dossier))
-        self.assertEquals('dossier-state-inactive',
-                          api.content.get_state(subdossier))
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_inactive(subdossier)
 
     @browsing
     def test_resolving_only_a_subdossier_is_possible(self, browser):
@@ -751,8 +753,7 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
 
         self.assertEquals('dossier-state-active',
                           api.content.get_state(self.resolvable_dossier))
-        self.assertEquals('dossier-state-resolved',
-                          api.content.get_state(self.resolvable_subdossier))
+        self.assert_resolved(self.resolvable_subdossier)
 
 
 class TestResolvingReindexing(IntegrationTestCase, ResolveTestHelper):
