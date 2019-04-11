@@ -5,7 +5,7 @@ Changelog
 2018.5.9 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Fix performance issue with search root exclusion in tabbed view listings. [lgraf, buchi]
 
 
 2018.5.8 (2019-04-01)
