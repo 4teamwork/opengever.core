@@ -4,7 +4,9 @@ from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from plone import api
+from plone.uuid.interfaces import IUUID
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
@@ -128,6 +130,8 @@ class TestScanIn(IntegrationTestCase):
         self.assertEqual(201, browser.status_code)
         dossier = private_folder.objectValues()[0]
         self.assertEqual('Scaneingang', dossier.Title())
+        self.assertIsNotNone(IUUID(dossier))
+        self.assertIsNotNone(obj2brain(dossier).UID)
         doc = dossier.objectValues()[0]
         self.assertEqual('mydocument', doc.Title())
 
