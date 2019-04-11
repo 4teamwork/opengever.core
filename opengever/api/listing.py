@@ -20,6 +20,8 @@ from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
+import Missing
+
 
 DEFAULT_SORT_INDEX = 'modified'
 
@@ -55,6 +57,12 @@ def translated_task_type(obj):
 
 def filesize(obj):
     try:
+        filesize = obj.filesize
+        if filesize != Missing.Value:
+            return filesize
+    except AttributeError:
+        pass
+    try:
         info = IPrimaryFieldInfo(obj.getObject())
     except TypeError:
         return 0
@@ -64,6 +72,12 @@ def filesize(obj):
 
 
 def filename(obj):
+    try:
+        filename = obj.filename
+        if filename != Missing.Value:
+            return filename
+    except AttributeError:
+        pass
     try:
         info = IPrimaryFieldInfo(obj.getObject())
     except TypeError:
@@ -117,8 +131,8 @@ FIELDS = {
     'pdf_url': (None, 'get_preview_pdf_url', DEFAULT_SORT_INDEX),
     'title': ('Title', translated_title, 'sortable_title'),
     'type': ('portal_type', 'PortalType', 'portal_type'),
-    'filesize': (None, filesize, 'filesize'),
-    'filename': (None, filename, 'filename'),
+    'filesize': ('filesize', filesize, 'filesize'),
+    'filename': ('filename', filename, 'filename'),
     'task_type': ('task_type', translated_task_type, 'task_type'),
     'deadline': ('deadline', 'deadline', 'deadline'),
 }

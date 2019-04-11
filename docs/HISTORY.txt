@@ -29,6 +29,7 @@ Changelog
 - Allow non-member contributors to use the REST API. [Rotonen]
 - Add nightly job runner. [njohner]
 - Add document_type index. [njohner]
+- Avoid object lookup for filesize and filename in @listing endpoint. [buchi]
 - Add archival file management view on dossier level. [njohner]
 - Show archival file state on documents overview for managers. [njohner]
 - Fix tests failing due to timezone leading to date shift. [njohner]
