@@ -5,6 +5,7 @@ Changelog
 2019.1.4 (unreleased)
 ---------------------
 
+- Fix performance issue with search root exclusion in tabbed view listings. [lgraf, buchi]
 - Fix creation of scaneingang dossier in the scan-in endpoint. [phgross]
 
 
