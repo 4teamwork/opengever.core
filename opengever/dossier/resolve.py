@@ -38,6 +38,7 @@ NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
 NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
+MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
 
 
 class AlreadyBeingResolved(Exception):
@@ -218,7 +219,7 @@ class DossierResolveView(BrowserView):
 
     def show_being_resolved_msg(self):
         api.portal.show_message(
-            message=_('Dossier is already being resolved'),
+            message=MSG_ALREADY_BEING_RESOLVED,
             request=self.request, type='info')
         return self.redirect(self.context_url)
 
