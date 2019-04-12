@@ -200,11 +200,11 @@ class DossierReactivateView(BrowserView):
     def __call__(self):
         ptool = getToolByName(self, 'plone_utils')
 
-        resolver = get_resolver(self.context)
+        reactivator = Reactivator(self.context)
 
         # check preconditions
-        if resolver.is_reactivate_possible():
-            resolver.reactivate()
+        if reactivator.is_reactivate_possible():
+            reactivator.reactivate()
             ptool.addPortalMessage(_('Dossiers successfully reactivated.'),
                                    type="info")
             self.request.RESPONSE.redirect(self.context.absolute_url())
@@ -269,20 +269,6 @@ class StrictDossierResolver(object):
             raise TypeError
         else:
             Resolver(self.context).resolve_dossier(end_date=end_date)
-
-    def is_reactivate_possible(self):
-        parent = self.context.get_parent_dossier()
-        if parent:
-            wft = getToolByName(self.context, 'portal_workflow')
-            if wft.getInfoFor(parent,
-                              'review_state') not in DOSSIER_STATES_OPEN:
-                return False
-        return True
-
-    def reactivate(self):
-        if not self.is_reactivate_possible():
-            raise TypeError
-        Reactivator(self.context).reactivate_dossier()
 
 
 class AfterResolveJobs(object):
@@ -512,7 +498,16 @@ class Reactivator(object):
         self.context = context
         self.wft = getToolByName(self.context, 'portal_workflow')
 
-    def reactivate_dossier(self):
+    def is_reactivate_possible(self):
+        parent = self.context.get_parent_dossier()
+        if parent:
+            if self.wft.getInfoFor(parent, 'review_state') not in DOSSIER_STATES_OPEN:
+                return False
+        return True
+
+    def reactivate(self):
+        if not self.is_reactivate_possible():
+            raise TypeError
         self._recursive_reactivate(self.context)
 
     def _recursive_reactivate(self, dossier):
