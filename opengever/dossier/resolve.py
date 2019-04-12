@@ -1,6 +1,8 @@
 from datetime import datetime
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
+from opengever.base.transition import ITransitionExtender
+from opengever.base.transition import TransitionExtender
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
@@ -24,6 +26,7 @@ from zope.component import getSiteManager
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import transaction
@@ -56,6 +59,16 @@ class ValidResolverNamesVocabularyFactory(object):
         resolver_adapter_names = sitemanager.adapters.names(
             [IDossierMarker], IDossierResolver)
         return SimpleVocabulary.fromValues(resolver_adapter_names)
+
+
+@implementer(ITransitionExtender)
+@adapter(IDossierMarker, IBrowserRequest)
+class ResolveDossierTransitionExtender(TransitionExtender):
+    """TransitionExtender that gets invoked when resolving dossiers.
+    """
+
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        get_resolver(self.context).after_resolve()
 
 
 class DossierResolveView(BrowserView):
