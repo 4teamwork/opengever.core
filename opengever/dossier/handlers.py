@@ -5,7 +5,6 @@ from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
-from opengever.dossier.resolve import get_resolver
 from opengever.globalindex.handlers.task import sync_task
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.meeting.handlers import ProposalSqlSyncer
@@ -147,10 +146,3 @@ def purge_reference_number_mappings(copied_dossier, event):
     """
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
-
-
-def run_cleanup_jobs(dossier, event):
-    if event.action != 'dossier-transition-resolve':
-        return
-
-    get_resolver(dossier).after_resolve()
