@@ -136,7 +136,7 @@ class DossierResolveView(BrowserView):
             return self.show_invalid_end_dates(titles=invalid_dates)
 
         if resolver.is_archive_form_needed():
-            return self.redirect('transition-archive')
+            return self.redirect('/'.join((self.context_url, 'transition-archive')))
 
         resolver.resolve()
 
