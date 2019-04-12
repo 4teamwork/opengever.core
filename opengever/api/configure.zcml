@@ -21,6 +21,7 @@
   <adapter factory=".document.SerializeDocumentToJson" />
 
   <adapter factory=".mail.DeserializeMailFromJson" />
+  <adapter factory=".workspace.DeserializeWorkspaceFromJson" />
 
   <plone:service
       method="PATCH"
