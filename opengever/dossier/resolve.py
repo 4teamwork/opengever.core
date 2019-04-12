@@ -68,7 +68,7 @@ class ResolveDossierTransitionExtender(TransitionExtender):
     """
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        get_resolver(self.context).after_resolve()
+        AfterResolveJobs(self.context).execute()
 
 
 class DossierResolveView(BrowserView):
@@ -228,10 +228,6 @@ class StrictDossierResolver(object):
     def __init__(self, context):
         self.context = context
 
-    def get_property(self, name):
-        return api.portal.get_registry_record(
-            name, interface=IDossierResolveProperties)
-
     def get_precondition_violations(self):
         """Check whether all preconditions are fulfilled.
 
@@ -274,7 +270,38 @@ class StrictDossierResolver(object):
         else:
             Resolver(self.context).resolve_dossier(end_date=end_date)
 
-    def after_resolve(self):
+    def is_reactivate_possible(self):
+        parent = self.context.get_parent_dossier()
+        if parent:
+            wft = getToolByName(self.context, 'portal_workflow')
+            if wft.getInfoFor(parent,
+                              'review_state') not in DOSSIER_STATES_OPEN:
+                return False
+        return True
+
+    def reactivate(self):
+        if not self.is_reactivate_possible():
+            raise TypeError
+        Reactivator(self.context).reactivate_dossier()
+
+
+class AfterResolveJobs(object):
+    """Tasks that need to be executed after resolving a dossier.
+    """
+
+    def __init__(self, context):
+        self.context = context
+
+    def get_property(self, name):
+        return api.portal.get_registry_record(
+            name, interface=IDossierResolveProperties)
+
+    def contains_tasks(self):
+        tasks = api.content.find(
+            context=self.context, depth=-1, object_provides=ITask)
+        return len(tasks) > 0
+
+    def execute(self):
         """After resolving a dossier, some cleanup jobs have to be executed:
 
         - Remove all shadowed documents.
@@ -290,11 +317,6 @@ class StrictDossierResolver(object):
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
-
-    def contains_tasks(self):
-        tasks = api.content.find(
-            context=self.context, depth=-1, object_provides=ITask)
-        return len(tasks) > 0
 
     def trash_shadowed_docs(self):
         """Trash all documents that are in shadow state (recursive).
@@ -368,11 +390,11 @@ class StrictDossierResolver(object):
                 return
 
             document = CreateDocumentCommand(
-                        self.context, filename, view.get_data(),
-                        title=translate(title, context=self.context.REQUEST),
-                        content_type='application/pdf',
-                        interfaces=[IDossierJournalPDFMarker],
-                        **kwargs).execute()
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf',
+                interfaces=[IDossierJournalPDFMarker],
+                **kwargs).execute()
             document.reindexObject(idxs=['object_provides'])
 
     def create_tasks_listing_pdf(self):
@@ -417,11 +439,11 @@ class StrictDossierResolver(object):
                 return
 
             document = CreateDocumentCommand(
-                        self.context, filename, view.get_data(),
-                        title=translate(title, context=self.context.REQUEST),
-                        content_type='application/pdf',
-                        interfaces=[IDossierTasksPDFMarker],
-                        **kwargs).execute()
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf',
+                interfaces=[IDossierTasksPDFMarker],
+                **kwargs).execute()
             document.reindexObject(idxs=['object_provides'])
 
     def trigger_pdf_conversion(self):
@@ -431,20 +453,6 @@ class StrictDossierResolver(object):
         docs = api.content.find(self.context, object_provides=[IBaseDocument])
         for doc in docs:
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
-
-    def is_reactivate_possible(self):
-        parent = self.context.get_parent_dossier()
-        if parent:
-            wft = getToolByName(self.context, 'portal_workflow')
-            if wft.getInfoFor(parent,
-                              'review_state') not in DOSSIER_STATES_OPEN:
-                return False
-        return True
-
-    def reactivate(self):
-        if not self.is_reactivate_possible():
-            raise TypeError
-        Reactivator(self.context).reactivate_dossier()
 
 
 class LenientDossierResolver(StrictDossierResolver):
