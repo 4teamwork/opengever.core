@@ -207,6 +207,7 @@ class StrictDossierResolver(object):
 
     def __init__(self, context):
         self.context = context
+        self.wft = getToolByName(self.context, 'portal_workflow')
 
     def get_precondition_violations(self):
         """Check whether all preconditions are fulfilled.
@@ -248,7 +249,41 @@ class StrictDossierResolver(object):
         elif self.is_archive_form_needed() and not end_date:
             raise TypeError
         else:
-            Resolver(self.context).resolve_dossier(end_date=end_date)
+            self._recursive_resolve(self.context, end_date)
+
+    def _recursive_resolve(self, dossier, end_date, recursive=False):
+
+        # no end_date is given use the earliest possible
+        if not end_date:
+            end_date = dossier.earliest_possible_end_date()
+
+        if recursive:
+            # check the subdossiers end date
+            # If a subdossier is already resolved, but seems to have an invalid
+            # end date, it's because we changed the resolution logic and rules
+            # over time, and that subdossier's end date has retroactively become
+            # invalid. In this case, we correct the end date according to current
+            # rules and proceed with resolving it.
+            if dossier.is_resolved() and not dossier.has_valid_enddate():
+                IDossier(dossier).end = dossier.earliest_possible_end_date()
+            # if no end date is set or the end_date is invalid, set to the parent
+            # end date. Invalid end_date should normally be prevented by
+            # ResolveConditions._recursive_date_validation, but this correction
+            # would happen for example when resolving a dossier in debug mode.
+            elif not IDossier(dossier).end or not dossier.has_valid_enddate():
+                IDossier(dossier).end = end_date
+        else:
+            # main dossier set the given end_date
+            IDossier(dossier).end = end_date
+        dossier.reindexObject(idxs=['end'])
+
+        for subdossier in dossier.get_subdossiers():
+            self._recursive_resolve(
+                subdossier.getObject(), end_date, recursive=True)
+
+        if self.wft.getInfoFor(dossier,
+                               'review_state') in DOSSIER_STATES_OPEN:
+            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
 class AfterResolveJobs(object):
@@ -426,50 +461,6 @@ class LenientDossierResolver(StrictDossierResolver):
     are filed in subdossiers if the main dossier has subdossiers.
     """
     strict = False
-
-
-class Resolver(object):
-
-    def __init__(self, context):
-        self.context = context
-        self.wft = getToolByName(self.context, 'portal_workflow')
-
-    def resolve_dossier(self, end_date=None):
-        self._recursive_resolve(self.context, end_date)
-
-    def _recursive_resolve(self, dossier, end_date, recursive=False):
-
-        # no end_date is given use the earliest possible
-        if not end_date:
-            end_date = dossier.earliest_possible_end_date()
-
-        if recursive:
-            # check the subdossiers end date
-            # If a subdossier is already resolved, but seems to have an invalid
-            # end date, it's because we changed the resolution logic and rules
-            # over time, and that subdossier's end date has retroactively become
-            # invalid. In this case, we correct the end date according to current
-            # rules and proceed with resolving it.
-            if dossier.is_resolved() and not dossier.has_valid_enddate():
-                IDossier(dossier).end = dossier.earliest_possible_end_date()
-            # if no end date is set or the end_date is invalid, set to the parent
-            # end date. Invalid end_date should normally be prevented by
-            # ResolveConditions._recursive_date_validation, but this correction
-            # would happen for example when resolving a dossier in debug mode.
-            elif not IDossier(dossier).end or not dossier.has_valid_enddate():
-                IDossier(dossier).end = end_date
-        else:
-            # main dossier set the given end_date
-            IDossier(dossier).end = end_date
-        dossier.reindexObject(idxs=['end'])
-
-        for subdossier in dossier.get_subdossiers():
-            self._recursive_resolve(
-                subdossier.getObject(), end_date, recursive=True)
-
-        if self.wft.getInfoFor(dossier,
-                               'review_state') in DOSSIER_STATES_OPEN:
-            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
 class ResolveConditions(object):
