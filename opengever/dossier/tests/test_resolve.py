@@ -29,7 +29,6 @@ from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 import pytz
-import unittest
 
 
 def get_resolver_vocabulary():
@@ -497,10 +496,6 @@ class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveT
         super(TestResolvingDossiersWithFilingNumberSupport, self).setUp()
         applyProfile(self.portal, 'opengever.dossier:filing')
 
-    @unittest.skip(
-        "This test will fail until the redirect to the archive form is fixed "
-        "(made to return an absolute instead of relative URL)"
-    )
     @browsing
     def test_archive_form_is_displayed_for_sites_with_filing_number_support(self, browser):
         self.login(self.secretariat_user, browser)
