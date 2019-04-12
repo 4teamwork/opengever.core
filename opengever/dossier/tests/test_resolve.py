@@ -92,6 +92,69 @@ class ResolveTestHelper(object):
         self.assertEquals(self.inactive_state, dossier_state, msg)
 
 
+class ResolveTestHelperRESTAPI(ResolveTestHelper):
+    """Implementation of the ResolveTestHelper for use with REST API.
+
+    This helper resolves dossiers via REST API calls, and asserts on
+    success / failure by looking at HTTP status codes and JSON content of
+    the response.
+    """
+
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    def resolve(self, dossier, browser):
+        browser.raise_http_errors = False
+        url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        browser.open(
+            url,
+            method='POST',
+            headers=self.api_headers)
+
+    def assert_success(self, dossier, browser, info_msgs=None):
+        self.assertEqual(200, browser.status_code)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        self.assertEquals(expected_url, browser.url)
+        self.assertDictContainsSubset(
+            {u'title': u'dossier-state-resolved',
+             u'comments': u'',
+             u'actor': api.user.get_current().getId(),
+             u'action': u'dossier-transition-resolve',
+             u'review_state': u'dossier-state-resolved'},
+            browser.json)
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error': {
+                u'message': u'',
+                u'errors': error_msgs,
+                u'type': u'PreconditionsViolated'}},
+            browser.json)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        self.assertEquals(expected_url, browser.url)
+
+    def assert_already_resolved(self, dossier, browser):
+        self.assertEquals(400, browser.status_code)
+        self.assertEquals(
+            {u'error':
+                {u'message': u'Dossier has already been resolved.',
+                 u'type': u'Bad Request'}},
+            browser.json)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        self.assertEquals(expected_url, browser.url)
+
+    def assert_already_being_resolved(self, dossier, browser):
+        self.assertEquals(400, browser.status_code)
+        self.assertEquals({
+            u'error': {
+                u'message': u'Dossier is already being resolved',
+                u'type': u'AlreadyBeingResolved'}},
+            browser.json)
+
+
 class TestResolverVocabulary(IntegrationTestCase):
 
     def test_resolver_vocabulary(self):
@@ -144,6 +207,11 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.subdossier, browser)
 
         self.assert_already_resolved(self.subdossier, browser)
+
+
+class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
+
+    pass
 
 
 class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
@@ -425,6 +493,11 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertNotIn(doc2, children['after'])
 
 
+class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobs):
+
+    pass
+
+
 class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
 
     def setUp(self):
@@ -489,6 +562,11 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
             self.assertEquals(0, len(get_queue().queue))
 
 
+class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversion):
+
+    pass
+
+
 class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveTestHelper):
 
     def setUp(self):
@@ -503,6 +581,27 @@ class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveT
         self.assertEquals(
             '{}/transition-archive'.format(self.resolvable_dossier.absolute_url()),
             browser.url)
+
+
+class TestResolvingDossiersWithFilingNumberSupportRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiersWithFilingNumberSupport):  # noqa
+
+    @browsing
+    def test_archive_form_is_displayed_for_sites_with_filing_number_support(self, browser):
+        """Resolving dossiers via REST API with the filing number feature
+        activated is currently not supported.
+        """
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual({
+            u'error': {
+                u'message': u"Can't resolve dossiers via REST API if filing number feature is activated",
+                u'type': u'Bad Request'}},
+            browser.json)
+
+        self.assert_not_resolved(self.resolvable_dossier)
 
 
 class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
@@ -624,6 +723,11 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_dossier)
         self.assert_success(self.resolvable_dossier, browser,
                             ['The dossier has been succesfully resolved.'])
+
+
+class TestResolveConditionsRESTAPI(ResolveTestHelperRESTAPI, TestResolveConditions):
+
+    pass
 
 
 class TestResolving(IntegrationTestCase, ResolveTestHelper):
@@ -751,6 +855,11 @@ class TestResolving(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_subdossier)
 
 
+class TestResolvingRESTAPI(ResolveTestHelperRESTAPI, TestResolving):
+
+    pass
+
+
 class TestResolvingReindexing(IntegrationTestCase, ResolveTestHelper):
 
     @browsing
@@ -764,6 +873,11 @@ class TestResolvingReindexing(IntegrationTestCase, ResolveTestHelper):
         self.assertEqual(enddate.date(), IDossier(self.subsubdossier).end)
         self.assert_index_value(enddate_index_value, 'end', self.subsubdossier)
         self.assert_metadata_value(enddate.date(), 'end', self.subsubdossier)
+
+
+class TestResolvingReindexingRESTAPI(ResolveTestHelperRESTAPI, TestResolvingReindexing):
+
+    pass
 
 
 class TestResolveLocking(TestBylineBase, ResolveTestHelper):
@@ -824,3 +938,8 @@ class TestResolveLocking(TestBylineBase, ResolveTestHelper):
         self.assert_already_being_resolved(self.empty_dossier, browser)
         self.assertEquals('dossier-state-active',
                           api.content.get_state(self.empty_dossier))
+
+
+class TestResolveLockingRESTAPI(ResolveTestHelperRESTAPI, TestResolveLocking):
+
+    pass
