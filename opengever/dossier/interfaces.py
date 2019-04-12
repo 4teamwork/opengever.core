@@ -134,8 +134,10 @@ class IDossierResolver(Interface):
     functionality needed for resolving a dossier.
     """
 
-    def is_resolve_possible():
-        """Check if all preconditions are fulfilled.
+    def get_precondition_violations():
+        """Check whether all preconditions are fulfilled.
+
+        Return a list of errors, or an empty list when resolving is possible.
         """
 
     def are_enddates_valid():
