@@ -6,6 +6,7 @@ Changelog
 
 - Add webaction forms (add and edit) and management view. [njohner]
 - Fix solr error during copy/paste of word document. [njohner]
+- Fix an issue where it was not possible to create workspaces through the restapi. [elioschmutz]
 - Add archival file management view on dossier level. [njohner]
 - Show archival file state on documents overview for managers. [njohner]
 - Fix tests failing due to timezone leading to date shift. [njohner]

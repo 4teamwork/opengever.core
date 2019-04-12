@@ -2,6 +2,8 @@ from AccessControl.interfaces import IRoleManager
 from AccessControl.Permission import Permission
 from Acquisition import aq_base
 from Acquisition import aq_chain
+from Acquisition import aq_parent
+from Acquisition import aq_inner
 from operator import itemgetter
 from plone import api
 
@@ -24,6 +26,25 @@ def is_within_workspace(context):
     """
     # Avoid circular imports
     from opengever.workspace.interfaces import IWorkspace
+
+    if context.getId() not in aq_parent(aq_inner(context)):
+        # Creating a new object through the REST-API will create a temporary
+        # object first. Then it validates all the field values and adds the
+        # new context to the container.
+        #
+        # While validating the schema, the context will be the temporary
+        # workspace instead the container object which is the assumed context.
+        #
+        # This behavior differs to content-creation without the REST-API. So we
+        # have to change the context here if we have a temporary context.
+        #
+        # Unfortunately, there is no other way to detect a temporary object
+        # than checking, if the current object is already added to the parent
+        # object.
+        #
+        # See: https://github.com/plone/plone.restapi/blob/3.7.2/src/plone/restapi/services/content/add.py#L83
+        context = aq_parent(aq_inner(context))
+
     return bool(filter(IWorkspace.providedBy, aq_chain(context)))
 
 
