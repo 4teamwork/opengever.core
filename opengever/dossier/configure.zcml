@@ -93,7 +93,7 @@
   <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="transition-reactivate"
-      class=".resolve.DossierReactivateView"
+      class=".reactivate.DossierReactivateView"
       permission="zope2.View"
       />
 
