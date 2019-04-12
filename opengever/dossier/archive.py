@@ -260,7 +260,7 @@ class ArchiveForm(Form):
 
         # archiving must passed to the resolving view
         resolver = get_resolver(self.context)
-        if resolver.is_resolve_possible():
+        if resolver.get_precondition_violations():
             raise TypeError
         if resolver.are_enddates_valid():
             raise TypeError
