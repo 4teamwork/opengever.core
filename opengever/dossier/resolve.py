@@ -113,7 +113,7 @@ class DossierResolveView(BrowserView):
         resolver = get_resolver(self.context)
 
         # check preconditions
-        errors = resolver.is_resolve_possible()
+        errors = resolver.get_precondition_violations()
         if errors:
             return self.show_errors(errors)
 
@@ -219,9 +219,10 @@ class StrictDossierResolver(object):
         return api.portal.get_registry_record(
             name, interface=IDossierResolveProperties)
 
-    def is_resolve_possible(self):
-        """Check if all preconditions are fulfilled.
-        Return a list of errors, or a empty list when resolving is possible.
+    def get_precondition_violations(self):
+        """Check whether all preconditions are fulfilled.
+
+        Return a list of errors, or an empty list when resolving is possible.
         """
         errors = ResolveConditions(
             self.context, self.strict).check_preconditions()
