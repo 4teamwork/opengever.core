@@ -40,6 +40,27 @@ NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
 
 
+class AlreadyBeingResolved(Exception):
+    """A concurrent attempt at resolving a dossier was made.
+    """
+
+
+class PreconditionsViolated(Exception):
+    """One or more preconditions for resolving a dossier have been violated.
+    """
+
+    def __init__(self, errors):
+        self.errors = errors
+
+
+class InvalidDates(Exception):
+    """One or more dossier dates are invalid.
+    """
+
+    def __init__(self, invalid_dossier_titles):
+        self.invalid_dossier_titles = invalid_dossier_titles
+
+
 def get_resolver(dossier):
     """Return the currently configured dossier-resolver."""
 
@@ -71,19 +92,27 @@ class ResolveDossierTransitionExtender(TransitionExtender):
         AfterResolveJobs(self.context).execute()
 
 
-class DossierResolveView(BrowserView):
+class LockingResolveManager(object):
+    """Recursively resolves a dossier and uses a persistent resolve lock.
 
-    def __call__(self):
-        # Ensure already resolved dossier can't be resolved again
-        if self.is_already_resolved():
-            return self.show_already_resolved_msg()
+    Will raise PreconditionsViolated or InvalidDates exceptions if the
+    necessary preconditions are not satisfied.
 
+    If a persistent lock exists and another resolve attempt is made, an
+    AlreadyBeingResolved exception will be raised.
+    """
+
+    def __init__(self, context):
+        self.context = context
+        self.resolver = get_resolver(self.context)
+
+    def resolve(self):
         resolve_lock = ResolveLock(self.context)
 
         # Check whether a resolve is already in progress
         if resolve_lock.is_locked():
             resolve_lock.log('Concurrent attempt at resolving %s rejected' % self.context)
-            return self.show_being_resolved_msg()
+            raise AlreadyBeingResolved
 
         # No resolve in progress, proceed with resolving this dossier
         # by acquring a lock, resolving, and then releasing the lock
@@ -123,23 +152,48 @@ class DossierResolveView(BrowserView):
             resolve_lock.release(commit=True)
 
     def execute_recursive_resolve(self):
-        resolver = get_resolver(self.context)
-
         # check preconditions
-        errors = resolver.get_precondition_violations()
+        errors = self.resolver.get_precondition_violations()
         if errors:
-            return self.show_errors(errors)
+            raise PreconditionsViolated(errors=errors)
 
         # validate enddates
-        invalid_dates = resolver.are_enddates_valid()
+        invalid_dates = self.resolver.are_enddates_valid()
         if invalid_dates:
-            return self.show_invalid_end_dates(titles=invalid_dates)
+            raise InvalidDates(invalid_dossier_titles=invalid_dates)
 
-        if resolver.is_archive_form_needed():
-            return self.redirect('/'.join((self.context_url, 'transition-archive')))
+        self.resolver.resolve()
 
-        resolver.resolve()
+    def is_archive_form_needed(self):
+        return self.resolver.is_archive_form_needed()
 
+
+class DossierResolveView(BrowserView):
+
+    def __call__(self):
+        # Ensure already resolved dossier can't be resolved again
+        if self.is_already_resolved():
+            return self.show_already_resolved_msg()
+
+        resolve_manager = LockingResolveManager(self.context)
+
+        if resolve_manager.is_archive_form_needed():
+            archive_url = '/'.join((self.context_url, 'transition-archive'))
+            return self.redirect(archive_url)
+
+        try:
+            resolve_manager.resolve()
+
+        except AlreadyBeingResolved:
+            return self.show_being_resolved_msg()
+
+        except PreconditionsViolated as exc:
+            return self.show_errors(exc.errors)
+
+        except InvalidDates as exc:
+            return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
+
+        # Success
         if self.context.is_subdossier():
             return self.show_subdossier_resolved_msg()
 
