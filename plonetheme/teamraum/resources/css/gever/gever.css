@@ -4609,4 +4609,9 @@ a.webaction_button img { height: 18px; vertical-align: middle; margin-right: 4px
 /* @group webactions-menu in personaltool bar */
 #portal-personaltools.actionMenu dd ul li.category-webactions.separator a { border-bottom: 1px solid #e6e6e6; }
 
+/* @group webactions management view*/
+#webactions-list li.webaction { list-style-type: none; }
+#webactions-list li.webaction img { height: 18px; }
+#webactions-list li.webaction hr { margin-top: 10px; }
+
 /*# sourceMappingURL=gever.css.map */

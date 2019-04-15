@@ -58,7 +58,8 @@ class IWebActionSchema(Interface):
     enabled = Bool(
         title=u'Enabled',
         description=u'Whether this webaction is enabled or not',
-        required=False)
+        required=False,
+        missing_value=True)
 
     icon_name = ASCIILine(
         title=u'Icon Name',
@@ -116,7 +117,8 @@ class IWebActionSchema(Interface):
         # Maybe factor out some of the definitions from
         # opengever.base.schemadump.config into vocabularies?
         value_type=Choice(values=GEVER_TYPES),
-        required=False)
+        required=False,
+        missing_value=list())
 
     groups = List(
         title=u'Groups',
@@ -132,7 +134,8 @@ class IWebActionSchema(Interface):
                     u'action is only shown when the user has at least one '
                     u'of those permissions on the respective context.',
         value_type=Choice(values=ACTION_PERMISSIONS),
-        required=False)
+        required=False,
+        missing_value=list())
 
     comment = TextLine(
         title=u'Comment',
@@ -141,8 +144,8 @@ class IWebActionSchema(Interface):
 
     @invariant
     def icon_present_for_display_types_that_need_it(self):
-        display = self['display']
-        has_icon = any(self.get(key) not in ('', None) for key in (ICON_PROPERTIES))
+        display = self.display
+        has_icon = any(getattr(self, key, None) not in ('', None) for key in (ICON_PROPERTIES))
 
         icon_required = ('title-buttons', 'add-menu')
         icon_forbidden = ('actions-menu', 'user-menu')
@@ -158,7 +161,7 @@ class IWebActionSchema(Interface):
 
     @invariant
     def no_more_than_one_icon(self):
-        icons = filter(None, (self.get(key) for key in (ICON_PROPERTIES)))
+        icons = filter(None, (getattr(self, key, None) for key in (ICON_PROPERTIES)))
         if len(icons) > 1:
             raise Invalid(
                 'Icon properties %r are mutually exclusive. '

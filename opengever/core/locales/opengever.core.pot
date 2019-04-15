@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-18 16:29+0000\n"
+"POT-Creation-Date: 2019-04-01 14:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,6 +143,10 @@ msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.inbox.container.xml
 msgid "Inbox Container"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+msgid "Manage Webactions"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.meetingdossier.xml

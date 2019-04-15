@@ -10,6 +10,12 @@ from zope.schema.interfaces import RequiredMissing
 import binascii
 
 
+class SchemaValidationData(dict):
+
+    def __getattr__(self, name):
+        return self.get(name)
+
+
 class Base64DataURI(URI):
     """Field type for a Base64 encoded data URI.
     """
@@ -97,7 +103,7 @@ def get_validation_errors(action_data, schema):
     # invariant raise an AttributeError.
     invariant_errors = []
     try:
-        schema.validateInvariants(action_data, invariant_errors)
+        schema.validateInvariants(SchemaValidationData(action_data), invariant_errors)
     except Invalid:
         # Just collect errors
         pass

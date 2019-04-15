@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2019-04-01 11:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#: ./opengever/webactions/browser/forms.py
+#: ./opengever/webactions/browser/templates/manage_webactions.pt
+msgid "Add new webaction"
+msgstr "Neue Webaktion hinzufügen"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Add webaction"
+msgstr "Webaktion hinzufügen"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: ./opengever/webactions/browser/templates/manage_webactions.pt
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Edit Webaction"
+msgstr "Webaktion bearbeiten"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Edit cancelled"
+msgstr "Bearbeitung abgebrochen"
+
+#: ./opengever/webactions/browser/templates/manage_webactions.pt
+msgid "Manage webactions"
+msgstr "Webaktionen verwalten"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Save"
+msgstr "Speichern"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Webaction added: ${action_id}"
+msgstr "Webaktion hinzugefügt: ${action_id}"
+
+#: ./opengever/webactions/browser/forms.py
+msgid "Webaction creation cancelled."
+msgstr "Webaktion Erstellung abgebrochen"
+
+#: ./opengever/webactions/browser/templates/manage_webactions.pt
+msgid "Webactions"
+msgstr "Webaktionen"
+
+#. Default: "Delete selected webactions"
+#: ./opengever/webactions/browser/templates/manage_webactions.pt
+msgid "label_delete_selected_webactions"
+msgstr "Ausgewählte Webaktionen löschen"

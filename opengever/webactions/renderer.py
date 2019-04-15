@@ -26,9 +26,6 @@ class WebActionsSafeDataGetter(object):
         webactions_dict = provider.get_webactions(self.display)
         return self._pre_formatting(webactions_dict)
 
-    def render_webaction(self, action):
-        raise NotImplementedError
-
     def _pre_formatting(self, webactions_dict):
         return dict((display, map(self._prepare_webaction_data, webactions))
                     for display, webactions in webactions_dict.items())

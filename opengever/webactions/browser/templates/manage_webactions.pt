@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="opengever.webactions">
+
+  <body>
+
+    <div metal:fill-slot="main">
+
+      <metal:core-macro define-macro="main">
+
+        <h1 class="documentFirstHeading" i18n:translate="">Manage webactions</h1>
+
+        <form tal:attributes="action string:${context/absolute_url}/@@manage-webactions" method="POST">
+
+          <h2 i18n:translate="">Webactions</h2>
+
+          <tal:webactions define="webactions view/get_webactions_data">
+            <ul class="webactions" id="webactions-list">
+              <li class="webaction" tal:repeat="webaction webactions">
+                <h4><input type="checkbox" name="selected_webactions:list" tal:attributes="id string:select-${webaction/action_id}; value string:${webaction/action_id}"/>
+                <label tal:content="structure string:${webaction/action_id}. ${webaction/title}" tal:attributes="for string:select-${webaction/action_id}"/></h4>
+                <p tal:repeat="field webaction/other-fields">
+                  <span tal:replace="field"/>: <span tal:replace="structure python:webaction['other-fields'][field]"/>
+                </p>
+                <a class="button" tal:attributes="href webaction/edit_url" i18n:translate="">Edit</a>
+                <hr>
+              </li>
+            </ul>
+          </tal:webactions>
+
+          <a class="button context"
+             tal:attributes="href string:${context/absolute_url}/@@manage-webactions-add" i18n:translate="">
+              Add new webaction
+          </a>
+
+          <input id="delete-webactions" name="action-delete-webactions" class="submit-widget button-field destructive"
+                 value="Delete selected webactions" type="submit"
+                 i18n:attributes="value label_delete_selected_webactions" />
+
+        </form>
+
+      </metal:core-macro>
+    </div>
+
+  </body>
+</html>
