@@ -81,3 +81,28 @@ class WebActionsUserMenuItemsPreparer(BaseWebActionsMenuItemsPreparer):
         if len(actions) > 0:
             actions[-1]['separator'] = 'actionSeparator'
         return actions
+
+
+class WebActionsAddMenuItemsPreparer(WebActionsActionsMenuItemsPreparer):
+
+    display = 'add-menu'
+
+    def prepare_webaction(self, action):
+        klass = "webaction"
+        if action.get("icon_name"):
+            klass = "{} {}".format(klass, action.get("icon_name"))
+
+        return {
+                'title': action["title"],
+                'description': '',
+                'action': action["target_url"],
+                'selected': False,
+                'icon': action.get("icon_data"),
+                'extra': {
+                    # JS event handlers register with an ID selector.
+                    'id': "webaction-" + str(action["action_id"]),
+                    'separator': None,
+                    'class': klass,
+                },
+                'submenu': None,
+               }

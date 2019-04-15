@@ -2933,8 +2933,13 @@ body.meeting-view #watermark-header:after, body.meeting-view #tabbedview-header:
 [class*="contenttype-opengever-"]:before, [class*="contenttype-opengever-"]:hover:before, .contenttype-ftw-mail-mail:before, .contenttype-ftw-mail-mail:hover:before { text-decoration: none; }
 
 /* @group contentmenu icons */
-#plone-contentmenu-factories dd.actionMenuContent a:before { font-family: 'opengever'; content: "x"; display: inline-block; color: #bababa; font-size: 16px; min-width: 22px; }
-#plone-contentmenu-factories dd.actionMenuContent a > span { margin-left: 0; }
+#plone-contentmenu-factories dd.actionMenuContent a:not(.webaction):before { font-family: 'opengever'; content: "x"; display: inline-block; color: #bababa; font-size: 16px; min-width: 22px; }
+#plone-contentmenu-factories dd.actionMenuContent a:not(.webaction) > span { margin-left: 0; }
+
+#plone-contentmenu-factories dd.actionMenuContent a.webaction:before { display: inline-block; font-family: 'Font Awesome 5 Free'; font-weight: 900; font-size: 16px; min-width: 22px; }
+#plone-contentmenu-factories dd.actionMenuContent a.webaction:before > span { margin-left: 0; }
+
+#plone-contentmenu-factories dd.actionMenuContent img { margin-right: 6px; }
 
 .contenttype-opengever-inbox-container:before { content: ""; }
 

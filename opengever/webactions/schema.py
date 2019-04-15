@@ -144,8 +144,8 @@ class IWebActionSchema(Interface):
         display = self['display']
         has_icon = any(self.get(key) not in ('', None) for key in (ICON_PROPERTIES))
 
-        icon_required = ('title-buttons', )
-        icon_forbidden = ('actions-menu', 'add-menu', 'user-menu')
+        icon_required = ('title-buttons', 'add-menu')
+        icon_forbidden = ('actions-menu', 'user-menu')
         icon_optional = ('action-buttons', )  # noqa
 
         if display in icon_forbidden:

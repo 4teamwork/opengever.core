@@ -1,4 +1,4 @@
-from opengever.base.menu import FilteredPostFactoryMenu
+from opengever.base.menu import FilteredPostFactoryMenuWithWebactions
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from zope.component import adapter
@@ -6,7 +6,7 @@ from zope.interface import Interface
 
 
 @adapter(IDossierMarker, Interface)
-class DossierPostFactoryMenu(FilteredPostFactoryMenu):
+class DossierPostFactoryMenu(FilteredPostFactoryMenuWithWebactions):
 
     dossier_types = [u'opengever.dossier.businesscasedossier',
                      u'opengever.private.dossier']

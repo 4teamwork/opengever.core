@@ -84,6 +84,19 @@ class FilteredPostFactoryMenu(object):
         return order_factories(self.context, filtered_factories)
 
 
+class FilteredPostFactoryMenuWithWebactions(FilteredPostFactoryMenu):
+    """Extends the FilteredPostFactoryMenu with webactions having the display
+    attribute set to add-menu.
+    """
+    def __call__(self, factories):
+        factories = super(FilteredPostFactoryMenuWithWebactions, self).__call__(factories)
+        preparer = getMultiAdapter((self.context, self.request),
+                                   IWebActionsMenuItemsPreparer,
+                                   name='add-menu')
+        factories.extend(preparer())
+        return factories
+
+
 @adapter(IPloneSiteRoot, Interface)
 class PloneSitePostFactoryMenu(FilteredPostFactoryMenu):
 

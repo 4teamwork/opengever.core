@@ -521,7 +521,7 @@ body.meeting-view{
 
 /* @group contentmenu icons */
 
-#plone-contentmenu-factories dd.actionMenuContent a {
+#plone-contentmenu-factories dd.actionMenuContent a:not(.webaction) {
   &:before {
     font-family: 'opengever';
     content: "x";
@@ -533,6 +533,21 @@ body.meeting-view{
   > span {
     margin-left: 0;
   }
+}
+
+#plone-contentmenu-factories dd.actionMenuContent a.webaction:before {
+    display: inline-block;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 16px;
+    min-width: 22px;
+  > span {
+    margin-left: 0;
+  }
+}
+
+#plone-contentmenu-factories dd.actionMenuContent img {
+    margin-right: 6px;
 }
 
 .contenttype-opengever-inbox-container:before {content: $inbox;}
