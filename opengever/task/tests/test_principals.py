@@ -7,10 +7,10 @@ class TestTaskPrincipals(IntegrationTestCase):
         self.login(self.regular_user)
 
         self.assertEqual(
-            [u'kathi.barfuss', u'fa_users'], self.task.get_principals())
+            [u'kathi.barfuss', u'fa_inbox_users', u'fa_users'], self.task.get_principals())
 
     def test_does_respect_blocked_role_inheritance(self):
         self.login(self.regular_user)
 
         self.assertEqual(
-            [u'kathi.barfuss'], self.task_in_protected_dossier.get_principals())
+            [u'kathi.barfuss', u'fa_inbox_users'], self.task_in_protected_dossier.get_principals())

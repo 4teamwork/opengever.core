@@ -62,6 +62,8 @@ class TestCommitteeGroupsVocabulary(IntegrationTestCase):
         self.assertItemsEqual(
             [u'fa_users',
              u'fa_inbox_users',
+             u'rk_users',
+             u'rk_inbox_users',
              u'projekt_a',
              u'projekt_b',
              u'projekt_laeaer',

@@ -227,8 +227,8 @@ class TestTaskTextTransformation(IntegrationTestCase):
              'task-state-in-progress',
              'November 1, 2016',
              'No reminder',
-             'Ziegler Robert (robert.ziegler)',
-             u'B\xe4rfuss K\xe4thi (kathi.barfuss)', ''],
+             u'Finanz\xe4mt / Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt / B\xe4rfuss K\xe4thi (kathi.barfuss)', ''],
             table_data)
 
     @browsing

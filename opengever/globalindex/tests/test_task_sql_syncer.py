@@ -13,7 +13,7 @@ class TestTaskSQLSyncer(IntegrationTestCase):
 
     def test_sql_task_is_created_on_plone_object_creation(self):
         self.login(self.regular_user)
-        self.assertEqual(14, Session.query(Task).count())
+        self.assertEqual(15, Session.query(Task).count())
 
         # self.private_task
         task = Session.query(Task).filter(
@@ -59,15 +59,15 @@ class TestTaskSQLSyncer(IntegrationTestCase):
 
     def test_sql_task_is_updated_on_plone_object_update(self):
         self.login(self.regular_user)
-        self.task.responsible_client = 'asd'
+        self.task.responsible_client = 'rk'
         self.task.title = u'G\xf6pf, iz mach mau'
         notify(ObjectModifiedEvent(self.task))
 
-        self.assertEqual(14, Session.query(Task).count())
+        self.assertEqual(15, Session.query(Task).count())
         task = Session.query(Task).filter(
             Task.title == u'G\xf6pf, iz mach mau').one()
 
-        self.assertEqual('asd', task.assigned_org_unit)
+        self.assertEqual('rk', task.assigned_org_unit)
         expected_breadcrumbs = (
             u'Ordnungssystem'
             u' > 1. F\xfchrung'
@@ -99,7 +99,8 @@ class TestTaskSQLSyncer(IntegrationTestCase):
         self.assertEqual(1, task.dossier_sequence_number)
         self.assertIsNone(task.text)
         expected_principals = [
-            get_current_org_unit().users_group.id(), self.regular_user.getId()]
+            get_current_org_unit().users_group.id(), self.regular_user.getId(),
+            get_current_org_unit().inbox_group.id(), u'rk_inbox_users']
         self.assertItemsEqual(expected_principals, task.principals)
         self.assertIsNone(task.predecessor)
 

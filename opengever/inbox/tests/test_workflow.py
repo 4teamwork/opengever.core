@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
@@ -145,11 +146,14 @@ class TestInboxWorkflow(IntegrationTestCase):
         # Editor role is granted to forwarding responsible
         assignment_manager = RoleAssignmentManager(self.forwarding)
         assignments = assignment_manager.storage._storage()
-        self.assertEqual(1, len(assignments))
-        assignment = assignments[0]
-        self.assertEqual(ASSIGNMENT_VIA_TASK, assignment["cause"])
-        self.assertEqual(["Editor"], assignment["roles"])
-        self.assertEqual(self.secretariat_user.getId(), assignment["principal"])
+        self.assertEqual(2, len(assignments))
+        user_assignment, inbox_assignment = assignments
+        self.assertEqual(ASSIGNMENT_VIA_TASK, user_assignment["cause"])
+        self.assertEqual(["Editor"], user_assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), user_assignment["principal"])
+        self.assertEqual(ASSIGNMENT_VIA_TASK_AGENCY, inbox_assignment["cause"])
+        self.assertEqual(["Editor"], inbox_assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), user_assignment["principal"])
 
         # No role assignments on contained objects as they already
         # inherit from the forwarding
@@ -178,11 +182,14 @@ class TestInboxWorkflow(IntegrationTestCase):
 
         assignment_manager = RoleAssignmentManager(self.inbox_forwarding)
         assignments = assignment_manager.storage._storage()
-        self.assertEqual(1, len(assignments))
-        assignment = assignments[0]
-        self.assertEqual(ASSIGNMENT_VIA_TASK, assignment["cause"])
-        self.assertEqual(["Editor"], assignment["roles"])
-        self.assertEqual(self.secretariat_user.getId(), assignment["principal"])
+        self.assertEqual(2, len(assignments))
+        user_assignment, inbox_assignment = assignments
+        self.assertEqual(ASSIGNMENT_VIA_TASK, user_assignment["cause"])
+        self.assertEqual(["Editor"], user_assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), user_assignment["principal"])
+        self.assertEqual(ASSIGNMENT_VIA_TASK_AGENCY, inbox_assignment["cause"])
+        self.assertEqual(["Editor"], inbox_assignment["roles"])
+        self.assertEqual(u'fa_inbox_users', inbox_assignment["principal"])
 
     @browsing
     def test_forwarding_grants_view_permissions(self, browser):

@@ -1160,6 +1160,7 @@ class TestProposal(IntegrationTestCase):
             u'Initialvertrag f\xfcr Bearbeitung',
             u'Initialvertrag f\xfcr Bearbeitung',
             'Personaleintritt',
+            u're: Diskr\xe4te Dinge',
             u'Vertr\xe4ge',
             u'Vertr\xe4gsentwurf',
             u'Vertragsentwurf \xdcberpr\xfcfen',

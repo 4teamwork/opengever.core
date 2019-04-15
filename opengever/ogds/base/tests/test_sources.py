@@ -1002,6 +1002,8 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         expected_groups = [
             u'fa_users',
             u'fa_inbox_users',
+            u'rk_users',
+            u'rk_inbox_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
@@ -1017,6 +1019,8 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
+            u'rk_users',
+            u'rk_inbox_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',

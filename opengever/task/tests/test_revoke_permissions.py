@@ -4,6 +4,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.browser.revoke_permissions import RevokePermissions
@@ -34,7 +35,11 @@ class TestRevokePermissions(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.subtask),
-              'principal': self.regular_user.id}],
+              'principal': self.regular_user.id},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': u'fa_inbox_users'}],
             storage._storage())
 
         RevokePermissions(self.subtask, self.request)()
@@ -46,13 +51,16 @@ class TestRevokePermissions(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.document).storage
         expected_oguids = [Oguid.for_object(task).id for task in (self.task,
-                           self.subtask, self.info_task, self.private_task)]
+                           self.task, self.subtask, self.subtask,
+                           self.info_task, self.info_task, self.private_task,
+                           self.inbox_task)]
         self.assertEqual(expected_oguids,
                          [item.get('reference') for item in storage._storage()])
 
         RevokePermissions(self.subtask, self.request)()
         expected_oguids = [Oguid.for_object(task).id for task in
-                           (self.task, self.info_task, self.private_task)]
+                           (self.task, self.task, self.info_task,
+                            self.info_task, self.private_task, self.inbox_task)]
         self.assertEqual(expected_oguids,
                          [item.get('reference') for item in storage._storage()])
 
@@ -69,7 +77,11 @@ class TestRevokePermissions(IntegrationTestCase):
         expected_assignments = [{'cause': ASSIGNMENT_VIA_TASK,
                                  'roles': ['Reader', 'Editor'],
                                  'reference': Oguid.for_object(self.subtask),
-                                 'principal': self.regular_user.id}]
+                                 'principal': self.regular_user.id},
+                                {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+                                 'roles': ['Reader', 'Editor'],
+                                 'reference': Oguid.for_object(self.subtask),
+                                 'principal': u'fa_inbox_users'}]
 
         document_storage = RoleAssignmentManager(self.proposaldocument).storage
         self.assertEqual(expected_assignments, document_storage._storage())
@@ -191,7 +203,11 @@ class TestRevokePermissionsAction(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.subtask),
-              'principal': self.regular_user.id}],
+              'principal': self.regular_user.id},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': 'fa_inbox_users'}],
             storage._storage())
 
         browser.open(self.subtask)

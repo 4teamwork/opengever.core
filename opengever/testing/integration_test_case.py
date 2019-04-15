@@ -12,6 +12,7 @@ from ftw.testing.mailing import Mailing
 from functools import wraps
 from mock import MagicMock
 from opengever.activity.hooks import insert_notification_defaults
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -21,7 +22,6 @@ from opengever.meeting.wrapper import MeetingWrapper
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import ogds_service
-from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
@@ -670,27 +670,36 @@ class IntegrationTestCase(TestCase):
             body=search_resp, status=200))
         return solr
 
-    def add_additional_org_unit(self):
-        org_unit = create(Builder('org_unit').id("additional")
-               .having(admin_unit=get_current_admin_unit()))
+    def add_additional_org_unit(self, id_=u'gdgs'):
+        return create(Builder('org_unit')
+                      .id(id_)
+                      .with_default_groups()
+                      .having(admin_unit=get_current_admin_unit()))
 
-        # Reset org_unit strategy, we need now a MultipleOrgUnitsStrategy
-        get_current_org_unit()._chosen_strategy = None
-        return OrgUnit.get('additional')
+    def disable_additional_org_units(self, org_unit_ids=None):
+        if org_unit_ids is None:
+            org_unit_ids = ('rk',)
 
-    def add_additional_admin_and_org_unit(self):
+        current_ou = get_current_org_unit()
+        if current_ou in org_unit_ids:
+            raise ValueError
+
+        for ou_id in org_unit_ids:
+            ou = OrgUnit.get(ou_id)
+            create_session().delete(ou)
+
+        current_ou._chosen_strategy = None
+
+    def add_additional_admin_and_org_unit(self, id_=u'gdgs', title=u'Generalsekretari\xe4t'):
         admin_unit = create(Builder('admin_unit')
-                            .having(
-                                title=u'Ratskanzlei',
-                                unit_id=u'rk',
-                                public_url='http://nohost/plone'))
-        create(Builder('org_unit').id("rk")
-               .with_default_groups()
-               .having(admin_unit=admin_unit))
-
-        # Reset org_unit strategy, we need now a MultipleOrgUnitsStrategy
-        get_current_org_unit()._chosen_strategy = None
-        return AdminUnit.get('rk'), OrgUnit.get('rk')
+                            .having(title=title,
+                                    unit_id=id_,
+                                    public_url='http://nohost/plone'))
+        org_unit = create(Builder('org_unit')
+                          .id(id_)
+                          .with_default_groups()
+                          .having(admin_unit=admin_unit))
+        return admin_unit, org_unit
 
     def assert_solr_called(self, solr, text, **kwargs):
         query = (

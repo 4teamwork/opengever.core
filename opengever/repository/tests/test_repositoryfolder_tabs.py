@@ -173,6 +173,7 @@ class TestRepositoryFolderTasksTab(IntegrationTestCase):
             'Dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             'Issued at': '31.08.2016',
             'Issuer': 'Ziegler Robert (robert.ziegler)',
+            'Organisational Unit': u'Finanz\xe4mt',
             'Responsible': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
             'Review state': 'task-state-in-progress',
             'Sequence number': '1',

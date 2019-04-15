@@ -162,7 +162,7 @@ class OpengeverContentFixture(object):
             .as_current_admin_unit()
             )
 
-        self.org_unit = create(
+        self.org_unit_fd = create(
             Builder('org_unit')
             .id('fa')
             .having(
@@ -172,6 +172,16 @@ class OpengeverContentFixture(object):
             .with_default_groups()
             .as_current_org_unit()
             )
+
+        self.org_unit_rk = create(
+            Builder('org_unit')
+            .id('rk')
+            .having(
+                title=u'Ratskanzl\xc3\xa4i',
+                admin_unit=self.admin_unit,
+                )
+            .with_default_groups()
+        )
 
     def create_users(self):
         self.administrator = self.create_user(
@@ -227,7 +237,7 @@ class OpengeverContentFixture(object):
             'secretariat_user',
             u'J\xfcrgen',
             u'K\xf6nig',
-            group=self.org_unit.inbox_group,
+            group=self.org_unit_fd.inbox_group,
             )
 
         self.committee_responsible = self.create_user(
@@ -322,6 +332,26 @@ class OpengeverContentFixture(object):
 
         self._lookup_table['reader_user'] = ('user', plone_user.getId())
 
+        # This user is intended to be used in situations where you need a user
+        # which has only the 'Contributor' role on some context, as granted by
+        # accepting a task
+        firstname = u'James'
+        lastname = u'B\xf6nd'
+
+        builder = (Builder('user').named(firstname, lastname).with_roles([]))
+        builder.update_properties()  # updates builder.userid
+        email = '{}@gever.local'.format(builder.userid)
+        plone_user = create(builder.with_email(email))
+
+        create(
+            Builder('ogds_user')
+            .id(plone_user.getId())
+            .having(firstname=firstname, lastname=lastname, email=email)
+            .assign_to_org_units([self.org_unit_rk])
+        )
+
+        self._lookup_table['foreign_contributor'] = ('user', plone_user.getId())
+
     def load_service_keys(self):
         for filename in ['service_user_generic.public.json']:
             public_key = json.loads(assets.load(filename))
@@ -345,7 +375,7 @@ class OpengeverContentFixture(object):
             .having(
                 title=u'Projekt \xdcberbaung Dorfmatte',
                 group=group_a,
-                org_unit=self.org_unit,
+                org_unit=self.org_unit_fd,
                 )
             )
 
@@ -368,7 +398,7 @@ class OpengeverContentFixture(object):
             .having(
                 title=u'Sekretariat Abteilung XY',
                 group=group_b,
-                org_unit=self.org_unit,
+                org_unit=self.org_unit_fd,
                 )
             )
 
@@ -386,7 +416,7 @@ class OpengeverContentFixture(object):
             .having(
                 title=u'Sekretariat Abteilung Null',
                 group=group_empty,
-                org_unit=self.org_unit,
+                org_unit=self.org_unit_fd,
             )
         )
 
@@ -402,7 +432,7 @@ class OpengeverContentFixture(object):
             ))
 
         self.set_roles(
-            self.root, self.org_unit.users_group_id,
+            self.root, self.org_unit_fd.users_group_id,
             ['Reader', 'Contributor', 'Editor'])
         self.set_roles(
             self.root, self.secretariat_user.getId(),
@@ -466,11 +496,11 @@ class OpengeverContentFixture(object):
             ))
 
         self.set_roles(
-            self.contactfolder, self.org_unit.users_group_id,
+            self.contactfolder, self.org_unit_fd.users_group_id,
             ['Reader'])
 
         self.set_roles(
-            self.contactfolder, self.org_unit.users_group_id,
+            self.contactfolder, self.org_unit_fd.users_group_id,
             ['Reader', 'Contributor', 'Editor'])
 
         self.contactfolder.reindexObjectSecurity()
@@ -512,7 +542,7 @@ class OpengeverContentFixture(object):
             ))
 
         self.set_roles(
-            self.templates, self.org_unit.users_group_id, ['Reader'])
+            self.templates, self.org_unit_fd.users_group_id, ['Reader'])
         self.set_roles(
             self.templates, self.administrator.getId(),
             ['Reader', 'Contributor', 'Editor'])
@@ -667,7 +697,7 @@ class OpengeverContentFixture(object):
             .within(self.templates)
             ))
 
-        self.set_roles(subtemplates, self.org_unit.users_group_id, ['Reader'])
+        self.set_roles(subtemplates, self.org_unit_fd.users_group_id, ['Reader'])
         self.set_roles(subtemplates, self.administrator.getId(),
                        ['Reader', 'Contributor', 'Editor'])
         self.set_roles(subtemplates, self.dossier_responsible.getId(),
@@ -739,7 +769,7 @@ class OpengeverContentFixture(object):
             Builder('ogds_user')
             .id('committee.secretary')
             .having(firstname=u'C\xf6mmittee', lastname='Secretary', email='committee.secretary@example.com')
-            .assign_to_org_units([self.org_unit])
+            .assign_to_org_units([self.org_unit_fd])
             )
 
         self.committee_participant_1 = self.create_committee_membership(
@@ -812,7 +842,7 @@ class OpengeverContentFixture(object):
             .having(
                 id='eingangskorb',
                 responsible_org_unit='fa',
-                inbox_group=self.org_unit.inbox_group,
+                inbox_group=self.org_unit_fd.inbox_group,
                 )
             ))
 
@@ -840,7 +870,7 @@ class OpengeverContentFixture(object):
             .within(self.inbox)
             .titled(u'F\xf6rw\xe4rding')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 )
@@ -1093,7 +1123,7 @@ class OpengeverContentFixture(object):
             .within(self.dossier)
             .titled(u'Vertragsentwurf \xdcberpr\xfcfen')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
@@ -1108,7 +1138,7 @@ class OpengeverContentFixture(object):
             .within(self.task)
             .titled(u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
@@ -1133,7 +1163,7 @@ class OpengeverContentFixture(object):
             .within(self.dossier)
             .titled(u'Personaleintritt')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.regular_user.getId(),
                 task_type='direct-execution',
@@ -1148,7 +1178,7 @@ class OpengeverContentFixture(object):
             .within(sequential_task)
             .titled(u'Mitarbeiter Dossier generieren')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.secretariat_user.getId(),
                 task_type='direct-execution',
@@ -1163,7 +1193,7 @@ class OpengeverContentFixture(object):
             .within(sequential_task)
             .titled(u'Arbeitsplatz vorbereiten')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.secretariat_user.getId(),
                 task_type='direct-execution',
@@ -1178,7 +1208,7 @@ class OpengeverContentFixture(object):
             .within(sequential_task)
             .titled(u'Vorstellungsrunde bei anderen Mitarbeitern')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='direct-execution',
@@ -1198,7 +1228,7 @@ class OpengeverContentFixture(object):
             .within(self.expired_dossier)
             .titled(u'Vertr\xe4ge abschliessen')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
@@ -1213,7 +1243,7 @@ class OpengeverContentFixture(object):
             .within(self.inactive_dossier)
             .titled(u'Status \xdcberpr\xfcfen')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='direct-execution',
@@ -1230,7 +1260,7 @@ class OpengeverContentFixture(object):
                 .titled(u'Programm \xdcberpr\xfcfen')
                 .having(
                     responsible=self.dossier_responsible.getId(),
-                    responsible_client=self.org_unit.id(),
+                    responsible_client=self.org_unit_fd.id(),
                     issuer=self.dossier_responsible.getId(),
                     task_type='correction',
                     deadline=date(2016, 11, 1),
@@ -1244,7 +1274,7 @@ class OpengeverContentFixture(object):
                 .within(meeting_task)
                 .titled(u'H\xf6rsaal reservieren')
                 .having(
-                    responsible_client=self.org_unit.id(),
+                    responsible_client=self.org_unit_fd.id(),
                     responsible=self.dossier_responsible.getId(),
                     issuer=self.dossier_responsible.getId(),
                     deadline=date(2016, 11, 1),
@@ -1259,7 +1289,7 @@ class OpengeverContentFixture(object):
             .within(self.dossier)
             .having(
                 task_type=u'information',
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
             )
             .relate_to(self.document)
@@ -1273,8 +1303,25 @@ class OpengeverContentFixture(object):
                 deadline=date(2020, 1, 1),
                 is_private=True,
                 issuer=self.dossier_responsible.getId(),
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
+                task_type=u'direct-execution',
+                text=u'L\xf6rem ipsum dolor sit amet, consectetur'
+            )
+            .relate_to(self.document)
+            .in_state('task-state-in-progress')
+        ))
+
+        self.register('inbox_task', create(
+            Builder('task')
+            .titled(u're: Diskr\xe4te Dinge')
+            .within(self.dossier)
+            .having(
+                deadline=date(2020, 1, 1),
+                is_private=True,
+                issuer=self.dossier_responsible.getId(),
+                responsible_client=self.org_unit_fd.id(),
+                responsible='inbox:fa',
                 task_type=u'direct-execution',
                 text=u'L\xf6rem ipsum dolor sit amet, consectetur'
             )
@@ -1456,7 +1503,7 @@ class OpengeverContentFixture(object):
             .within(protected_dossier_with_task)
             .titled(u'Ein notwendiges \xdcbel')
             .having(
-                responsible_client=self.org_unit.id(),
+                responsible_client=self.org_unit_fd.id(),
                 responsible=self.regular_user.getId(),
                 issuer=self.dossier_responsible.getId(),
                 task_type='correction',
@@ -1788,7 +1835,7 @@ class OpengeverContentFixture(object):
             Builder('user')
             .named(firstname, lastname)
             .with_roles(*globalroles)
-            .in_groups(self.org_unit.users_group_id)
+            .in_groups(self.org_unit_fd.users_group_id)
             )
 
         builder.update_properties()  # updates builder.userid
@@ -1799,7 +1846,7 @@ class OpengeverContentFixture(object):
             Builder('ogds_user')
             .id(plone_user.getId())
             .having(firstname=firstname, lastname=lastname, email=email)
-            .assign_to_org_units([self.org_unit])
+            .assign_to_org_units([self.org_unit_fd])
             .in_group(group)
             .having(**kwargs)
             )

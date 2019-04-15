@@ -496,6 +496,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             u'Diskr\xe4te Dinge',
             u'Initialvertrag f\xfcr Bearbeitung',
             'Personaleintritt',
+            u're: Diskr\xe4te Dinge',
             u'Vertr\xe4gsentwurf',
             u'Vertragsentwurf \xdcberpr\xfcfen',
             u'Vertragsentw\xfcrfe 2018',

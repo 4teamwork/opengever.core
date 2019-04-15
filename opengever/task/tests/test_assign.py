@@ -6,6 +6,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -108,31 +109,31 @@ class TestAssignTask(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         self.set_workflow_state('task-state-open', self.task)
 
-        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
+        org_unit = self.add_additional_admin_and_org_unit()[1]
 
         create(Builder('ogds_user')
-               .id('james.bond')
-               .having(firstname=u'James', lastname=u'Bond')
+               .id('johnny.english')
+               .having(firstname=u'Johnny', lastname=u'English')
                .assign_to_org_units([org_unit]))
 
-        responsible = u'rk:james.bond'
+        responsible = u'gdgs:johnny.english'
         self.assign_task(responsible, u'Please make that for me.')
 
-        self.assertEquals('james.bond', self.task.responsible)
-        self.assertEquals('rk', self.task.responsible_client)
+        self.assertEquals('johnny.english', self.task.responsible)
+        self.assertEquals('gdgs', self.task.responsible_client)
 
     @browsing
     def test_switching_admin_unit_in_progress_state_is_not_possible(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
+        org_unit = self.add_additional_admin_and_org_unit()[1]
 
         create(Builder('ogds_user')
-               .id('james.bond')
-               .having(firstname=u'James', lastname=u'Bond')
+               .id('johnny.english')
+               .having(firstname=u'Johnny', lastname=u'English')
                .assign_to_org_units([org_unit]))
 
-        responsible = u'rk:james.bond'
+        responsible = u'gdgs:johnny.english'
         self.assign_task(responsible, u'Please make that for me.')
 
         self.assertEquals(
@@ -187,7 +188,11 @@ class TestAssignTask(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'}],
+              'principal': 'jurgen.konig'},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': u'fa_inbox_users'}],
             manager.storage._storage())
 
     @browsing
@@ -203,7 +208,11 @@ class TestAssignTask(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'}],
+              'principal': 'jurgen.konig'},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': u'fa_inbox_users'}],
             manager.storage._storage())
 
         self.assertEqual(self.portal.absolute_url(), browser.url)
@@ -291,7 +300,11 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'}],
+              'principal': 'jurgen.konig'},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': u'fa_inbox_users'}],
             manager.storage._storage())
 
     @browsing
@@ -311,5 +324,9 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
-              'principal': 'jurgen.konig'}],
+              'principal': 'jurgen.konig'},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.successor).id,
+              'principal': u'fa_inbox_users'}],
             manager.storage._storage())

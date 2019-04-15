@@ -18,6 +18,7 @@ class TestTaskListing(IntegrationTestCase):
             u'Personaleintritt',
             u'Vertragsentw\xfcrfe 2018',
             u'Diskr\xe4te Dinge',
+            u're: Diskr\xe4te Dinge',
         ]
         self.assertEquals(expected_tasks, [row.get('Title') for row in table.dicts()])
 
@@ -36,6 +37,7 @@ class TestTaskListing(IntegrationTestCase):
             'Vorstellungsrunde bei anderen Mitarbeitern',
             u'Vertragsentw\xfcrfe 2018',
             u'Diskr\xe4te Dinge',
+            u're: Diskr\xe4te Dinge',
         ]
         self.assertEqual(expected_tasks, [row.get('Title') for row in table.dicts()])
 
