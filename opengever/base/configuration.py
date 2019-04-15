@@ -17,6 +17,7 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.meeting.interfaces import IMeetingSettings
+from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from opengever.officeatwork.interfaces import IOfficeatworkSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
@@ -62,9 +63,16 @@ class GeverSettingsAdpaterV1(object):
         settings['max_repositoryfolder_levels'] = api.portal.get_registry_record('maximum_repository_depth', interface=IRepositoryFolderRecords)  # noqa
         settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
         settings['document_preserved_as_paper_default'] = api.portal.get_registry_record('preserved_as_paper_default', interface=IDocumentSettings)  # noqa
+        settings['nightly_jobs'] = self.get_nightly_jobs_settings()
         settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
         settings['sharing_configuration'] = self.get_sharing_configuration()
         return settings
+
+    def get_nightly_jobs_settings(self):
+        nightly_jobs_settings = {}
+        nightly_jobs_settings['start_time'] = api.portal.get_registry_record('start_time', interface=INightlyJobsSettings).isoformat()  # noqa
+        nightly_jobs_settings['end_time'] = api.portal.get_registry_record('end_time', interface=INightlyJobsSettings).isoformat()  # noqa
+        return nightly_jobs_settings
 
     def get_sharing_configuration(self):
         sharing_configuration = OrderedDict()

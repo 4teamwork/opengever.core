@@ -87,6 +87,9 @@
   <!-- MEETING -->
   <records interface="opengever.meeting.interfaces.IMeetingSettings" />
 
+  <!-- NIGHTLY JOBS -->
+  <records interface="opengever.nightlyjobs.interfaces.INightlyJobsSettings" />
+
   <!-- OFFICEATWORK -->
   <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings" />
 

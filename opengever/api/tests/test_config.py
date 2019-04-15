@@ -128,7 +128,14 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@config',
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
-
-        browser.json.get(u'sharing_configuration')
         self.assertEqual(browser.json.get(u'sharing_configuration'),
                          {u'white_list_prefix': '^.+', u'black_list_prefix': '^$'})
+
+    @browsing
+    def test_config_contains_nightly_job_timewindow_settings(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.portal.absolute_url() + '/@config',
+                     headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'nightly_jobs'),
+                         {u'start_time': u'01:00:00', u'end_time': u'05:00:00'})

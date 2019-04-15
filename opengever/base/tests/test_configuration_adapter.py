@@ -14,6 +14,10 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),
             ('document_preserved_as_paper_default', True),
+            ('nightly_jobs', OrderedDict([
+                ('start_time', u'01:00:00'),
+                ('end_time', u'05:00:00'),
+                ])),
             ('oneoffixx_settings', OrderedDict([
                 ('baseurl', u''),
                 ('fake_sid', u''),
