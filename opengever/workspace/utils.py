@@ -23,6 +23,10 @@ def roles_of_permission(context, permission):
 
 def is_within_workspace(context):
     """ Checks, if the content is a workspace or is within the workspace.
+
+    This function is required for the ogds-vocabularies. If the current context
+    is within a workspace, a special workspace-query hook will be used for
+    extending the query with workspace specific functionality.
     """
     # Avoid circular imports
     from opengever.workspace.interfaces import IWorkspace
