@@ -166,7 +166,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         assignments = assignment_manager.storage._storage()
         self.assertEqual(2, len(assignments))
         assignment = assignments[0]
-        self.assertEqual(1, assignment["cause"])
+        self.assertEqual(ASSIGNMENT_VIA_TASK, assignment["cause"])
         self.assertEqual(["Editor"], assignment["roles"])
         self.assertEqual(self.regular_user.getId(), assignment["principal"])
 
