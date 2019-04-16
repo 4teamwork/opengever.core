@@ -14,6 +14,7 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
+import psutil
 
 
 @adapter(IPloneSiteRoot, IBrowserRequest)
@@ -144,6 +145,30 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.clock.forward(seconds=3 * 3600)
         self.assertFalse(runner.check_in_time_window())
 
+    def test_is_cpu_overloaded(self):
+        """ Hopefully not flaky
+        """
+        self.login(self.manager)
+        runner = NightlyJobRunner()
+
+        runner.CPU_LIMIT = 120
+        self.assertFalse(runner._is_cpu_overladed())
+
+        runner.CPU_LIMIT = - 1
+        self.assertTrue(runner._is_cpu_overladed())
+
+    def test_is_memory_full(self):
+        """ Hopefully not flaky
+        """
+        self.login(self.manager)
+        runner = NightlyJobRunner()
+
+        runner.MEMORY_LIMIT = 0
+        self.assertFalse(runner._is_memory_full())
+
+        runner.MEMORY_LIMIT = 10 * psutil.virtual_memory().total
+        self.assertTrue(runner._is_memory_full())
+
     def test_runner_aborts_when_not_in_time_window(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
@@ -194,3 +219,11 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.assertEqual(expected_message,
                          runner.format_early_abort_message(exception))
 
+    def test_systemoverloaded_early_abort_message(self):
+        self.login(self.manager)
+        runner = NightlyJobRunner()
+        runner.check_system_overloaded = lambda: True
+        exception = runner.execute_pending_jobs()
+        message = runner.format_early_abort_message(exception)
+        self.assertIn("SystemLoadCritical('System overloaded.", message)
+        self.assertIn("document-title executed 0 out of 1 jobs", message)

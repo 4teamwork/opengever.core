@@ -6,6 +6,7 @@ from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from plone import api
 from zope.component import getAdapters
 from zope.globalrequest import getRequest
+import psutil
 import transaction
 
 
@@ -23,7 +24,18 @@ class TimeWindowExceeded(Exception):
 
 
 class SystemLoadCritical(Exception):
-    pass
+
+    message = "System overloaded.\n"\
+              "CPU load: {}; limit: {}"\
+              "Available memory: {}MB; limit: {}MB"
+
+    def __init__(self, cpu_limit, memory_limit):
+        self.cpu_percent = psutil.cpu_percent()
+        self.available_memory = psutil.virtual_memory().available / 1024 / 1024
+        memory_limit = memory_limit / 1024 / 1024
+        message = self.message.format(self.cpu_percent, cpu_limit,
+                                      self.available_memory, memory_limit)
+        super(SystemLoadCritical, self).__init__(message)
 
 
 class NightlyJobRunner(object):
@@ -33,6 +45,9 @@ class NightlyJobRunner(object):
     It will stop execution when not in the defined timeframe or when
     the system load is too high.
     """
+
+    MEMORY_LIMIT = 100 * 1024 *1024
+    CPU_LIMIT = 95
 
     def __init__(self):
         # retrieve window start and end times
@@ -81,15 +96,21 @@ class NightlyJobRunner(object):
         if not self.check_in_time_window():
             raise TimeWindowExceeded(self.window_start, self.window_end)
         if self.check_system_overloaded():
-            raise SystemLoadCritical()
+            raise SystemLoadCritical(self.CPU_LIMIT, self.MEMORY_LIMIT)
 
     def check_in_time_window(self):
         current_time = datetime.now().time()
         current_timedelta = self._positive_timedelta(self.window_start, current_time)
         return current_timedelta < self.window_length
 
+    def _is_cpu_overladed(self):
+        return psutil.cpu_percent() > self.CPU_LIMIT
+
+    def _is_memory_full(self):
+        return psutil.virtual_memory().available < self.MEMORY_LIMIT
+
     def check_system_overloaded(self):
-        return False
+        return (self._is_cpu_overladed() or self._is_memory_full())
 
     def format_early_abort_message(self, exc):
         info = "\n".join("{} executed {} out of {} jobs".format(
