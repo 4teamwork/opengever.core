@@ -25,7 +25,7 @@ class TestTaskSQLSyncer(IntegrationTestCase):
         self.assertEqual(self.dossier_responsible.getId(), task.issuer)
         self.assertTrue(task.is_private)
         self.assertEqual(self.regular_user.getId(), task.responsible)
-        expected_breadcrumbs =(
+        expected_breadcrumbs = (
             u'Ordnungssystem'
             u' > 1. F\xfchrung'
             u' > 1.1. Vertr\xe4ge und Vereinbarungen'
