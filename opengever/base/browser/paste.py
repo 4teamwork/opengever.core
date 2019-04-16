@@ -97,16 +97,32 @@ class PasteClipboardView(BrowserView):
         return self._recursive_rename(copy)
 
     def _recursive_rename(self, obj):
+        """Recursively rename object and its children.
+
+        Children are renamed/moved postorder, i.e. children are renamed before
+        their parents. This is important to avoid race-conditions with the
+        move optimization from ftw.copymovepatches:
+
+        - When moving multiple items plone dispatches the move event to
+          children in an event handler. This event handler is registered
+          earlier than the handler from `ftw.copymovepatches`. Thus it is
+          called before the parent item is "moved" in the catalog by
+          `ftw.copymovepatches`.
+        - The optimization in `ftw.copymovepatches` trips up if one of the
+          children somehow cause their parent to be reindexed while it is
+          moved as the catalog then treats it as a new entry.
+
+        """
         # We update the docproperties only when renaming a document
         # not when renaming the containing dossiers
         if IBaseDocument.providedBy(obj):
             getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
         else:
             getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
-        renamed = api.content.rename(obj, new_id=self.get_new_id(obj))
-        for child in renamed.getFolderContents():
+
+        for child in obj.getFolderContents():
             self._recursive_rename(child.getObject())
-        return renamed
+        return api.content.rename(obj, new_id=self.get_new_id(obj))
 
     def get_new_id(self, obj):
         return INameChooser(self.context).chooseName(None, obj)

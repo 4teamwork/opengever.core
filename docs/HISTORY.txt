@@ -142,6 +142,7 @@ Changelog
 - Fix bug in meeting zip export with documents without files. [njohner]
 - Do not show closed dossiers in the move target autocomplete widget. [Rotonen]
 - Copy local roles depending on assignment cause during copy/paste. [njohner]
+- Potentially fix an issue with duplicated catalog enries during paste. [deiferni]
 - Change wording of info for inactiv close meeting button. [njohner]
 - Avoid truncating committee responsible group token while normalizing. [deiferni]
 - Provide a testserver for GEVER. [jone]
