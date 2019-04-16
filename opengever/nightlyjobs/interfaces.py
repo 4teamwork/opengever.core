@@ -14,3 +14,7 @@ class INightlyJobsSettings(Interface):
         title=u'Nightly jobs window end time',
         description=u'Execution of nightly jobs will only be allowed before this time',
         default=time(5, 0))
+
+
+class INightlyJobProvider(Interface):
+    pass
