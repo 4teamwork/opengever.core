@@ -7,7 +7,6 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.browser.revoke_permissions import RevokePermissions
-from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 from plone import api
