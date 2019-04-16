@@ -777,4 +777,4 @@ class TestDossierReindexShortcut(IntegrationTestCase):
                     u'`{}` allows Contributor to View on `{}` state.'.format(wf_id, state_id))
                 self.assertEqual(
                     0, permission_info['acquired'],
-                    u'{} has acquired View permission on state.'.format(wf_id, state_id))
+                    u'{} has acquired View permission on `{}` state.'.format(wf_id, state_id))
