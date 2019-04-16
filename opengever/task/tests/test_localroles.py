@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.task.task import ITask
@@ -214,7 +215,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.task).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
               'principal': 'kathi.barfuss'}], storage._storage())
@@ -236,7 +237,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.task).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
               'principal': 'kathi.barfuss'}], storage._storage())
@@ -248,7 +249,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
               'principal': 'kathi.barfuss'}], storage._storage())
@@ -395,7 +396,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         ITask(self.task).relatedItems.append(relation)
         notify(ObjectModifiedEvent(self.task))
 
-        expected_assignments = [{'cause': 1,
+        expected_assignments = [{'cause': ASSIGNMENT_VIA_TASK,
                                  'roles': ['Reader', 'Editor'],
                                  'reference': Oguid.for_object(self.task),
                                  'principal': self.regular_user.id}]
@@ -427,7 +428,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         ITask(self.task).relatedItems.append(relation)
         notify(ObjectModifiedEvent(self.task))
 
-        expected_assignments = [{'cause': 1,
+        expected_assignments = [{'cause': ASSIGNMENT_VIA_TASK,
                                  'roles': ['Reader', 'Editor'],
                                  'reference': Oguid.for_object(self.task),
                                  'principal': self.regular_user.id}]
@@ -456,11 +457,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.meeting_dossier).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id},
-             {'cause': 1,
+             {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': self.dossier_responsible.id}],
@@ -492,11 +493,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.meeting_dossier).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id},
-             {'cause': 1,
+             {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': self.dossier_responsible.id}],
@@ -512,7 +513,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Contributor'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id}],
@@ -549,7 +550,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         storage = RoleAssignmentManager(self.subtask).storage
 
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.subtask),
               'principal': self.regular_user.id}],
@@ -585,7 +586,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.subtask).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.subtask),
               'principal': self.regular_user.id}],
@@ -597,7 +598,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.seq_subtask_2).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
               'principal': 'kathi.barfuss'}], storage._storage())
@@ -616,7 +617,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         storage = RoleAssignmentManager(self.seq_subtask_2).storage
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
               'principal': 'kathi.barfuss'}], storage._storage())
@@ -627,7 +628,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.click_on('Save')
 
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
               'principal': 'kathi.barfuss'}], storage._storage())
