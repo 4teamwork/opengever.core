@@ -197,13 +197,13 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
         browser.open(self.dossier, view='manage-role-assignments')
         expected_assignments = [
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {u'url': self.task.absolute_url(), u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, 'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, 'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {
                     u'url': self.subtask.absolute_url(),
@@ -212,25 +212,25 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {u'url': self.sequential_task.absolute_url(), u'title': u'Personaleintritt'},
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {u'url': self.seq_subtask_1.absolute_url(), u'title': u'Mitarbeiter Dossier generieren'},
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {u'url': self.seq_subtask_2.absolute_url(), u'title': u'Arbeitsplatz vorbereiten'},
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {
                     u'url': self.seq_subtask_3.absolute_url(),
@@ -239,7 +239,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-11',
@@ -248,7 +248,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'principal': u'kathi.barfuss',
             },
             {
-                u'cause': {u'id': 1, u'title': u'By task'},
+                u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'By task'},
                 u'roles': [u'Contributor'],
                 u'reference': {
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung'
