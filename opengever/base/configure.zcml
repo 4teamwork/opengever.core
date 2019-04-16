@@ -73,6 +73,8 @@
       for="* opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter factory=".registry_field.persistentFieldAdapter" />
+
   <configure package="collective.quickupload.browser">
     <browser:page
         class="opengever.base.quickupload.OGQuickUploadView"
