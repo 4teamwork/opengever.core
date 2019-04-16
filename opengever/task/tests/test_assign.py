@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.adapters import IResponseContainer
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
@@ -183,7 +184,7 @@ class TestAssignTask(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.task)
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
               'principal': 'jurgen.konig'}],
@@ -199,7 +200,7 @@ class TestAssignTask(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.task)
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
               'principal': 'jurgen.konig'}],
@@ -287,7 +288,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.task)
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
               'principal': 'jurgen.konig'}],
@@ -307,7 +308,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.successor)
         self.assertEqual(
-            [{'cause': 1,
+            [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
               'principal': 'jurgen.konig'}],
