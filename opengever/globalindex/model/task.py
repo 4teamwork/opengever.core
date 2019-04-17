@@ -477,8 +477,9 @@ class TaskQuery(BaseQuery):
             return self
 
         principals = member.getGroupIds() + [member.getId()]
-        return self.join(Task._principals).filter(
-            TaskPrincipal.principal.in_(principals)).distinct()
+        query = self.join(Task._principals).filter(
+            TaskPrincipal.principal.in_(principals))
+        return query
 
     def _extend_with_physical_path(self, query, field, path):
         if is_oracle():

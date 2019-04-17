@@ -139,6 +139,16 @@ class TestTaskQueries(IntegrationTestCase):
         self.login(self.secretariat_user)
         self.assertNotIn(sql_task, Task.query.restrict().all())
 
+    def test_restrict_query_is_distinct(self):
+        """This tests checks that the result set does not return task objects
+        multiple times.
+        """
+
+        self.login(self.regular_user)
+        result = Task.query.restrict().all()
+
+        self.assertEqual(len(result), len(set(result)))
+
     def test_restrict_checks_is_skipped_for_admins(self):
         # Responsible user is able to see
         self.login(self.administrator)
