@@ -176,6 +176,7 @@
 
     <!-- POLICY -->
     <permission name="plone.restapi: Use REST API" acquire="True">
+      <role name="Contributor" />
       <role name="Manager" />
       <role name="Member" />
     </permission>

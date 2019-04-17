@@ -5,7 +5,7 @@ Changelog
 2019.1.5 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Allow non-member contributors to use the REST API. [Rotonen]
 
 
 2019.1.4 (2019-04-11)
