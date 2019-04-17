@@ -517,6 +517,7 @@ Users
 - ``self.committee_responsible``: ``franzi.muller``
 - ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
+- ``self.foreign_contributor``: ``james.bond``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
 - ``self.member_admin``: ``david.meier``
@@ -574,6 +575,7 @@ Objects
         - self.dossier
           - self.document
           - self.draft_proposal
+          - self.inbox_task
           - self.info_task
           - self.mail_eml
           - self.mail_msg

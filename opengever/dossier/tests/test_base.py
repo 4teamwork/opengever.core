@@ -35,7 +35,8 @@ class TestDossierContainer(IntegrationTestCase):
         self.login(self.dossier_responsible)
         create(Builder('dossier').within(self.empty_dossier))
         create(Builder('task').within(self.empty_dossier)
-               .having(responsible=self.regular_user.getId()))
+               .having(responsible=self.regular_user.getId(),
+                       responsible_client=u'fa'))
         self.assertFalse(self.empty_dossier.is_all_supplied())
 
     def test_is_not_all_supplied_with_subdossier_and_mails(self):
@@ -48,7 +49,8 @@ class TestDossierContainer(IntegrationTestCase):
         self.login(self.dossier_responsible)
         subdossier = create(Builder('dossier').within(self.empty_dossier))
         create(Builder('task').within(subdossier)
-               .having(responsible=self.regular_user.getId()))
+               .having(responsible=self.regular_user.getId(),
+                       responsible_client=u'fa'))
         create(Builder('document').within(subdossier))
         self.assertTrue(self.empty_dossier.is_all_supplied())
 

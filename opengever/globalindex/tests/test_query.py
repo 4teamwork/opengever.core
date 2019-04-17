@@ -156,7 +156,8 @@ class TestTaskQueries(IntegrationTestCase):
              self.seq_subtask_2.get_sql_object(),
              self.seq_subtask_3.get_sql_object(),
              self.info_task.get_sql_object(),
-             self.private_task.get_sql_object()],
+             self.private_task.get_sql_object(),
+             self.inbox_task.get_sql_object()],
             Task.query.by_container(self.dossier, get_current_admin_unit()).all())
 
     def test_by_container_handles_similar_paths_exactly(self):

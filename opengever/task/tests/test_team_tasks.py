@@ -162,20 +162,12 @@ class TestTeamTasks(IntegrationTestCase):
     def test_multi_admin_unit_team_task_edit_in_issuer_dossier(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        ra_admin_unit = create(Builder('admin_unit')
-                                .having(title=u'Ratskanzlei',
-                                        unit_id=u'rk',
-                                        public_url='http://nohost/plone'))
-
-        create(Builder('org_unit')
-               .id('rk')
-               .having(title=u'Ratskanzlei', admin_unit=ra_admin_unit)
-               .with_default_groups())
+        self.add_additional_admin_and_org_unit()
 
         ITask(self.task).responsible = u'team:1'
-        ITask(self.task).responsible_client = u'rk'
+        ITask(self.task).responsible_client = u'gdgs'
         self.task.get_sql_object().responsible = u'team:1'
-        self.task.get_sql_object().assigned_org_unit = u'rk'
+        self.task.get_sql_object().assigned_org_unit = u'gdgs'
 
         self.set_workflow_state('task-state-open', self.task)
 

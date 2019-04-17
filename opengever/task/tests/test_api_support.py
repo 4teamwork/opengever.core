@@ -289,17 +289,17 @@ class TestAPITransitions(IntegrationTestCase):
     def test_reassign_admin_unit_change_validation(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        admin_unit, org_unit = self.add_additional_admin_and_org_unit()
+        org_unit = self.add_additional_admin_and_org_unit()[1]
         create(Builder('ogds_user')
-               .id('james.bond')
-               .having(firstname=u'James', lastname=u'Bond')
+               .id('johny.english')
+               .having(firstname=u'Johnny', lastname=u'English')
                .assign_to_org_units([org_unit]))
 
         url = '{}/@workflow/task-transition-reassign'.format(
             self.task.absolute_url())
         data = {'text': 'Robert macht das.',
-                'responsible': 'james.bond',
-                'responsible_client': u'rk'}
+                'responsible': 'johnny.english',
+                'responsible_client': u'gdgs'}
 
         with browser.expect_http_error(400):
             browser.open(url, method='POST',

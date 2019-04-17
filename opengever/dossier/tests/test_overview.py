@@ -26,15 +26,17 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def tested_document(self):
-        # XXX - this needs to be within the 10 latest documents
+        # XXX - This rotates out as we have more than 10 in the fixture
         return self.empty_document
 
     @property
     def tested_task(self):
-        return self.task
+        # XXX - This rotates out as we have more than 5 in the fixture
+        return self.inbox_task
 
     @property
     def tested_subtask(self):
+        # XXX - This rotates out as we have more than 5 in the fixture
         # XXX - not expected, but a quick way around the visibility limit
         return self.private_task
 
@@ -45,23 +47,24 @@ class TestOverview(IntegrationTestCase):
 
     @property
     def task_titles(self):
+        # XXX - These rotate out as we have more than 5 in the fixture
         return [
+            u're: Diskr\xe4te Dinge',
             u'Diskr\xe4te Dinge',
             u'Vertragsentw\xfcrfe 2018',
             u'Personaleintritt',
             u'Mitarbeiter Dossier generieren',
-            u'Vertragsentwurf \xdcberpr\xfcfen',
         ]
 
     @property
     def task_titles_minus_pending(self):
-        # As we have more than 5 tasks, they shift in like this
+        # XXX - These rotate out as we have more than 5 in the fixture
         return [
+            u're: Diskr\xe4te Dinge',
             u'Vertragsentw\xfcrfe 2018',
             u'Personaleintritt',
             u'Mitarbeiter Dossier generieren',
             u'Vertragsentwurf \xdcberpr\xfcfen',
-            u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
         ]
 
     @IntegrationTestCase.clock

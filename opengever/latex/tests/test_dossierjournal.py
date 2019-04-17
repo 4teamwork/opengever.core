@@ -205,6 +205,16 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
             {
                 'action': {
                     'visible': True,
+                    'type': 'Task added',
+                    'title': u'label_task_added',
+                },
+                'comments': '',
+                'actor': 'robert.ziegler',
+                'time': DateTime('2016/08/31 18:27:33 GMT+2'),
+            },
+            {
+                'action': {
+                    'visible': True,
                     'type': 'Document added',
                     'title': u'label_document_added',
                 },

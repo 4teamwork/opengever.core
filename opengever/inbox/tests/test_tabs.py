@@ -54,19 +54,14 @@ class TestAssignedInboxTaskTab(IntegrationTestCase):
     def test_lists_only_tasks_assigned_to_the_current_org_units_inbox(self):
         self.login(self.secretariat_user)
 
-        self.add_additional_org_unit()
-
-        self.inbox_forwarding.responsible = 'inbox:fa'
-        self.inbox_forwarding.sync()
-
         view = self.inbox.restrictedTraverse(
             'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
         self.assertEquals(
-            [self.inbox_forwarding.get_sql_object()], view.contents)
+            [self.inbox_task.get_sql_object()], view.contents)
 
-        select_current_org_unit('additional')
+        select_current_org_unit('rk')
         view.update()
         self.assertEquals([], view.contents)
 
@@ -80,7 +75,8 @@ class TestAssignedInboxTaskTab(IntegrationTestCase):
             'tabbedview_view-{}'.format(self.viewname))
         view.update()
 
-        self.assertEquals([self.task.get_sql_object()], view.contents)
+        self.assertEquals([self.task.get_sql_object(),
+                           self.inbox_task.get_sql_object()], view.contents)
 
 
 class TestIssuedInboxTaskTab(IntegrationTestCase):
