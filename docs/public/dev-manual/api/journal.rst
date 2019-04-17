@@ -50,3 +50,49 @@ Optional:
    .. sourcecode:: http
 
       HTTP/1.1 204 No content
+
+
+Journaleinträge abrufen:
+------------------------
+Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /dossier-1/@journal HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "items": [
+        {
+          "actor_fullname": "zopemaster",
+          "actor_id": "zopemaster",
+          "comments": "Ich bin ein neuer Journaleintrag",
+          "time": "2019-04-15T14:00:48+00:00",
+          "title": "Manueller Eintrag: Telefongespräch"
+        },
+        {
+          "actor_fullname": "zopemaster",
+          "actor_id": "zopemaster",
+          "comments": "Ich bin ein neuer Journaleintrag",
+          "time": "2019-04-15T13:59:21+00:00",
+          "title": "Manueller Eintrag: Telefongespräch"
+        }
+      ],
+      "items_total": 2
+    }
+
+
+.. note::
+        Suchresultate werden **paginiert** wenn die Anzahl Resultate die
+        voreingestellte Seitengrösse (default: 25) überschreitet. Siehe
+        :doc:`batching` zu Details zum Umgang mit paginierten Resultaten.

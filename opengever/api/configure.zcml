@@ -320,4 +320,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@journal"
+      for="ftw.journal.interfaces.IJournalizable"
+      factory=".journal.JournalGet"
+      permission="zope2.View"
+      />
+
 </configure>
