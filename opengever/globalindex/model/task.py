@@ -477,6 +477,16 @@ class TaskQuery(BaseQuery):
             return self
 
         principals = member.getGroupIds() + [member.getId()]
+
+        if is_oracle():
+            # Oracle does not support DISTINCT with SELECTs that have CLOB
+            # type columns. But the task model uses CLOB for the physical_path
+            # and text column. So we need to use a subquery instead.
+            principal_query = self.session.query(
+                TaskPrincipal.task_id).filter(
+                    TaskPrincipal.principal.in_(principals))
+            return self.filter(Task.task_id.in_(principal_query))
+
         return self.join(Task._principals).filter(
             TaskPrincipal.principal.in_(principals)).distinct()
 
