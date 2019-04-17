@@ -195,7 +195,7 @@ class TestOpengeverContentListing(IntegrationTestCase):
                 'Title': 'Vertr\xc3\xa4gsentwurf',
                 'absolute_url': (
                     'http://nohost/plone/ordnungssystem/fuhrung'
-                    '/vertrage-und-vereinbarungen/dossier-1/document-12'
+                    '/vertrage-und-vereinbarungen/dossier-1/document-14'
                     ),
                 },
             )

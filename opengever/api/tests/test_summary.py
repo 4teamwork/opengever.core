@@ -99,7 +99,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
         self.assertEqual(
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
-                u'und-vereinbarungen/dossier-1/document-12',
+                u'und-vereinbarungen/dossier-1/document-14',
                 u'changed': u'2016-08-31T14:07:33+00:00',
                 u'created': u'2016-08-31T14:07:33+00:00',
                 u'creator': u'robert.ziegler',
@@ -123,8 +123,8 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
             summary,
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
-                        u'und-vereinbarungen/dossier-1/document-12',
-                u'reference_number': u'Client1 1.1 / 1 / 12',
+                        u'und-vereinbarungen/dossier-1/document-14',
+                u'reference_number': u'Client1 1.1 / 1 / 14',
             })
 
     @browsing

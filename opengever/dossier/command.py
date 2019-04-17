@@ -1,5 +1,7 @@
 from opengever.base.command import BaseObjectCreatorCommand
 from opengever.base.command import CreateDocumentCommand
+from opengever.base.role_assignments import RoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from plone.dexterity.utils import iterSchemataForType
@@ -16,9 +18,32 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
             title=title)
         self.recipient_data = recipient_data
 
+        # Grab blocking of role inheritance
+        self.block_role_inheritance = getattr(
+            template_doc, '__ac_local_roles_block__', None)
+
+        # Grab the local roles assignations from the template, if any
+        self.role_assignments = None
+        manager = RoleAssignmentManager(template_doc)
+        if manager.has_storage():
+            self.role_assignments = tuple(
+                RoleAssignment(**assignment)
+                for assignment in manager.storage.get_all()
+            )
+
     def execute(self):
         obj = super(CreateDocumentFromTemplateCommand, self).execute()
         DocPropertyWriter(obj, recipient_data=self.recipient_data).initialize()
+
+        # Set blocking of role inheritance based on the template object
+        if self.block_role_inheritance is not None:
+            obj.__ac_local_roles_block__ = self.block_role_inheritance
+
+        # Copy the local roles assignations over from the template
+        if self.role_assignments is not None:
+            manager = RoleAssignmentManager(obj)
+            # Passing an empty iterable in here creates an empty mapping
+            manager.add_or_update_assignments(self.role_assignments)
         return obj
 
 
@@ -32,6 +57,20 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
         self.fields = kw["IOpenGeverBase"]
         del kw["IOpenGeverBase"]
         self.additional_fields = kw
+
+        # Grab blocking of role inheritance
+        self.block_role_inheritance = getattr(
+            template, '__ac_local_roles_block__', None)
+
+        # Grab the local roles assignations from the template, if any
+        self.role_assignments = None
+        manager = RoleAssignmentManager(template)
+        if manager.has_storage():
+            self.role_assignments = tuple(
+                RoleAssignment(**assignment)
+                for assignment in manager.storage.get_all()
+            )
+
         super(CreateDossierFromTemplateCommand, self).__init__(
             context, **self.fields)
 
@@ -47,6 +86,17 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
             for prop_name in self.additional_fields[schema_name]:
                 setattr(behavior, prop_name,
                         self.additional_fields[schema_name][prop_name])
+
+        # Set blocking of role inheritance based on the template object
+        if self.block_role_inheritance is not None:
+            obj.__ac_local_roles_block__ = self.block_role_inheritance
+
+        # Copy the local roles assignations over from the template
+        if self.role_assignments is not None:
+            manager = RoleAssignmentManager(obj)
+            # Passing an empty iterable in here creates an empty mapping
+            manager.add_or_update_assignments(self.role_assignments)
+
         return obj
 
     def _get_additional_attributes(self, template):

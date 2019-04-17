@@ -183,6 +183,10 @@ class RoleAssignmentStorage(object):
 
         return ann[self.key]
 
+    def has_storage(self):
+        ann = IAnnotations(self.context)
+        return self.key in ann.keys()
+
     def get(self, principal, cause, reference):
         for item in self._storage():
             if item['principal'] == principal and item['cause'] == cause:
@@ -190,6 +194,9 @@ class RoleAssignmentStorage(object):
                     return item
                 elif item['reference'] == reference:
                     return item
+
+    def get_all(self):
+        return self._storage()
 
     def clear_by_cause_and_principal(self, cause, principal):
         item = self.get_by_cause_and_principal(cause, principal)
@@ -260,6 +267,9 @@ class RoleAssignmentManager(object):
     def __init__(self, context):
         self.context = context
         self.storage = RoleAssignmentStorage(self.context)
+
+    def has_storage(self):
+        return self.storage.has_storage()
 
     def add_or_update_assignment(self, assignment, reindex=True):
         self.storage.add_or_update(assignment.principal,

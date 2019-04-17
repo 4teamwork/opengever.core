@@ -19,7 +19,7 @@ class TestDocumentByline(TestBylineBase):
         browser.open(self.document)
 
         seq_number = self.get_byline_value_by_label('Sequence Number:')
-        self.assertEquals('12', seq_number.text)
+        self.assertEquals('14', seq_number.text)
 
     @browsing
     def test_document_byline_reference_number(self, browser):
@@ -27,7 +27,7 @@ class TestDocumentByline(TestBylineBase):
         browser.open(self.document)
 
         ref_number = self.get_byline_value_by_label('Reference Number:')
-        self.assertEquals('Client1 1.1 / 1 / 12', ref_number.text)
+        self.assertEquals('Client1 1.1 / 1 / 14', ref_number.text)
 
     @browsing
     def test_document_byline_document_author(self, browser):

@@ -3,6 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -405,17 +407,6 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
     @browsing
     def test_add_recursive_documents_and_subdossiers(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        create(Builder('document')
-               .titled('Document 1')
-               .within(self.subdossiertemplate)
-               .with_dummy_content())
-
-        create(Builder("dossiertemplate")
-               .within(self.subdossiertemplate)
-               .titled(u'Anfragen 2017'))
-
         self.login(self.regular_user, browser=browser)
         browser.open(self.leaf_repofolder)
         factoriesmenu.add('Dossier with template')
@@ -428,17 +419,114 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         self.assertEqual('Bauvorhaben klein', dossier.title)
         self.assertEqual(
-            [u'Anfragen'],
+            [u'Werkst\xe4tte', u'Anfragen'],
             [obj.title for obj in dossier.listFolderContents()],
             "The content of the root-dossier is not correct."
             )
 
-        subdossier = dossier.listFolderContents()[0]
+        subdossier = dossier.listFolderContents()[1]
         self.assertEqual(
-            ['Document 1', u'Anfragen 2017'],
+            [u'Baumsch\xfctze'],
             [obj.title for obj in subdossier.listFolderContents()],
             "The content of the subdossiertemplate is not correct"
         )
+        expected_role_assignments = []
+        role_assignments = RoleAssignmentManager(subdossier).storage._storage()
+        self.assertEqual(expected_role_assignments, role_assignments)
+
+    @browsing
+    def test_unseen_by_user_subdossier_is_not_copied_from_template(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Block local roles inheritance on self.subdossiertemplate
+        self.subdossiertemplate.__ac_local_roles_block__ = True
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        with self.login(self.manager):
+            self.assertEqual(
+                [u'Werkst\xe4tte'],
+                [obj.title for obj in dossier.listFolderContents()],
+                "The content of the root-dossier includes self.subdossiertemplate!"
+            )
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles_block_false(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Explicitly allow local roles inheritance on self.subdossiertemplate
+        self.subdossiertemplate.__ac_local_roles_block__ = False
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        self.assertEqual(
+            [u'Werkst\xe4tte', u'Anfragen'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the subdossiertemplate is not correct!"
+        )
+
+        subdossier = dossier.listFolderContents()[1]
+        self.assertFalse(subdossier.__ac_local_roles_block__)
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles_block_not_set(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+
+        subdossier = browser.context.listFolderContents()[1]
+        self.assertFalse(hasattr(subdossier, '__ac_local_roles_block__'))
+
+    @browsing
+    def test_add_recursive_documents_and_subdossiers_local_roles(self, browser):
+        self.login(self.regular_user, browser)
+
+        RoleAssignmentManager(self.subdossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add('Dossier with template')
+        token = browser.css(
+            'input[name="form.widgets.template"]').first.attrib.get('value')
+        browser.fill({'form.widgets.template': token}).submit()
+        browser.click_on('Save')
+        dossier = browser.context
+
+        self.assertEqual('Bauvorhaben klein', dossier.title)
+        subdossier = dossier.listFolderContents()[1]
+        self.assertEqual(
+            [u'Werkst\xe4tte', u'Anfragen'],
+            [obj.title for obj in dossier.listFolderContents()],
+            "The content of the subdossiertemplate is not correct!"
+        )
+        expected_role_assignments = [{
+            'cause': 3,
+            'reference': None,
+            'roles': ['Reader', 'Contributor', 'Editor'],
+            'principal': 'kathi.barfuss',
+        }]
+        role_assignments = RoleAssignmentManager(subdossier).storage._storage()
+        self.assertEqual(expected_role_assignments, role_assignments)
 
     @browsing
     def test_subdossier_has_same_responsible_as_dossier(self, browser):
@@ -458,7 +546,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         browser.click_on('Save')
 
-        subdossier = browser.context.listFolderContents()[0]
+        subdossier = browser.context.listFolderContents()[1]
 
         self.assertEqual(self.dossier_responsible.getId(), IDossier(subdossier).responsible)
 
@@ -583,41 +671,50 @@ class TestDossierTemplateOverview(IntegrationTestCase):
     @browsing
     def test_document_box_items_are_limited_to_ten_and_sorted_by_sortable_title(self, browser):
         self.login(self.regular_user, browser=browser)
+        browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
 
+        # Test for what we'll bump out of view
+        expected_titles = [u'Baumsch\xfctze', u'Werkst\xe4tte']
+        discovered_titles = browser.css('#documentsBox li:not(.moreLink) a.document_link').text
+        self.assertEqual(2, len(discovered_titles))
+        self.assertSequenceEqual(expected_titles, discovered_titles)
+
+        # Bump the preexisting ones out of view
         for i in range(1, 11):
             create(Builder('document')
                    .within(self.dossiertemplate)
-                   .titled(u'C Document %s' % i))
-
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled(u'A Document'))
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled(u'B Document'))
+                   .titled(u'A Document %s' % i))
 
         browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
-
-        self.assertSequenceEqual(
-            ['A Document', 'B Document', 'C Document 1', 'C Document 2', 'C Document 3',
-             'C Document 4', 'C Document 5', 'C Document 6', 'C Document 7',
-             'C Document 8'],
-            browser.css('#documentsBox li:not(.moreLink) a.document_link').text)
+        expected_titles = [
+            'A Document 1',
+            'A Document 2',
+            'A Document 3',
+            'A Document 4',
+            'A Document 5',
+            'A Document 6',
+            'A Document 7',
+            'A Document 8',
+            'A Document 9',
+            'A Document 10',
+        ]
+        discovered_titles = browser.css('#documentsBox li:not(.moreLink) a.document_link').text
+        self.assertEqual(10, len(discovered_titles))
+        self.assertSequenceEqual(expected_titles, discovered_titles)
 
     @browsing
     def test_documents_in_overview_are_linked(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        document = create(Builder('document')
-                          .within(self.dossiertemplate)
-                          .titled(u'Document 1'))
-
         browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
 
         items = browser.css('#documentsBox li:not(.moreLink) a.document_link')
 
-        self.assertEqual(1, len(items))
-        self.assertEqual(document.absolute_url(), items.first.get('href'))
+        self.assertEqual(2, len(items))
+        self.assertEqual(
+            self.subdossiertemplatedocument.absolute_url(),
+            items.first.get('href'),
+        )
 
 
 class TestDossierTemplateSubdossiers(IntegrationTestCase):
@@ -634,16 +731,12 @@ class TestDossierTemplateSubdossiers(IntegrationTestCase):
 
         create(Builder('dossiertemplate')
                .within(self.dossiertemplate)
-               .titled(u'C Subdossier'))
-
-        create(Builder('dossiertemplate')
-               .within(self.dossiertemplate)
                .titled(u'B Subdossier'))
 
         browser.open(self.dossiertemplate, view=SUBDOSSIERS_TAB)
 
         self.assertEqual(
-            ['AA Subdossier', 'Anfragen', 'B Subdossier', 'C Subdossier'],
+            ['AA Subdossier', 'Anfragen', 'B Subdossier'],
             browser.css('table.listing a.contenttype-opengever-dossier-dossiertemplate').text)
 
     @browsing
@@ -661,27 +754,13 @@ class TestDossierTemplateDocuments(IntegrationTestCase):
 
     features = ('dossiertemplate', 'bumblebee')
 
-    def setUp(self):
-        super(TestDossierTemplateDocuments, self).setUp()
-        self.login(self.regular_user)
-
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled('Document 1'))
-        create(Builder('document')
-               .within(self.dossiertemplate)
-               .titled('Document 3'))
-        create(Builder('document')
-               .within(self.subdossiertemplate)
-               .titled('Document 2'))
-
     @browsing
     def test_show_documents_in_list_view_sorted_alphabetically(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossiertemplate, view=DOCUMENTS_LIST_TAB)
 
         self.assertEqual(
-            ['Document 1', 'Document 2', 'Document 3'],
+            [u'Baumsch\xfctze', u'Werkst\xe4tte'],
             browser.css('table.listing a.icon-document_empty').text)
 
     @browsing
@@ -690,6 +769,6 @@ class TestDossierTemplateDocuments(IntegrationTestCase):
         browser.open(self.dossiertemplate, view=DOCUMENTS_GALLERY_TAB)
 
         self.assertEqual(
-            ['Document 1', 'Document 2', 'Document 3'],
+            [u'Baumsch\xfctze', u'Werkst\xe4tte'],
             [preview.attrib.get('alt') for preview in browser.css(
                 '.preview-listing .file-preview')])

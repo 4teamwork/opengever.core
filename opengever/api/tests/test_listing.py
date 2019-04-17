@@ -51,16 +51,15 @@ class TestListingEndpoint(IntegrationTestCase):
         ))
         view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view, headers={'Accept': 'application/json'})
-
         self.assertEqual(
-            {u'reference': u'Client1 1.1 / 1 / 12',
+            {u'reference': u'Client1 1.1 / 1 / 14',
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
-             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12',
+             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
              u'modified': u'2016-08-31T14:07:33+00:00',
              u'containing_dossier': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'bumblebee_checksum': DOCX_CHECKSUM,
-             u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-12'},
+             u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14'},
             browser.json['items'][-1])
 
     @browsing

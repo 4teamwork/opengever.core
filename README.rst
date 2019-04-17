@@ -620,7 +620,9 @@ Objects
     - self.asset_template
     - self.docprops_template
     - self.dossiertemplate
+      - self.dossiertemplatedocument
       - self.subdossiertemplate
+        - self.subdossiertemplatedocument
     - self.empty_template
     - self.meeting_template
       - self.paragraph_template
