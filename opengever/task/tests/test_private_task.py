@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
-from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.task import is_private_task_feature_enabled
 from opengever.testing import IntegrationTestCase
 import json
@@ -56,8 +57,21 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
         factoriesmenu.add('Task')
 
         self.assertEqual(
-            'hidden',
-            browser.css('#formfield-form-widgets-is_private input').first.type)
+            [],
+            browser.css('#formfield-form-widgets-is_private'))
+
+    @browsing
+    def test_adding_a_task_with_disabled_feature_works(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.visit(self.dossier)
+        factoriesmenu.add('Task')
+        browser.fill({'Title': u'Testaufgabe', 'Task Type': 'For information'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('fa:{}'.format(self.regular_user.id))
+        browser.click_on('Save')
+
+        self.assertEqual(['Item created'], info_messages())
 
     @browsing
     def test_is_private_field_is_hidden_in_edit_form(self, browser):
@@ -66,27 +80,8 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
         browser.visit(self.task, view="edit")
 
         self.assertEqual(
-            'hidden',
-            browser.css('#formfield-form-widgets-is_private input').first.type)
-
-    @browsing
-    def test_cant_create_private_tasks_when_feature_is_inactive(self, browser):
-        self.login(self.dossier_responsible, browser)
-
-        with self.observe_children(self.dossier) as children:
-            browser.open(self.dossier, view='++add++opengever.task.task')
-            browser.fill({'Title': u'I should not be private despite input.',
-                          'Task Type': 'comment',
-                          'form.widgets.is_private:list': 'selected'})
-            form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
-            browser.css('#form-buttons-save').first.click()
-
-        self.assertEqual(['There were some errors.'], error_messages())
-        self.assertEqual(['The private task feature is disabled'],
-                         browser.css('form .error').text)
-        self.assertEqual(0, len(children['added']))
+            [],
+            browser.css('#formfield-form-widgets-is_private'))
 
     @browsing
     def test_cant_create_private_tasks_over_api_when_feature_is_inactive(self, browser):
