@@ -19,7 +19,7 @@ class TestInboxTabbedview(IntegrationTestCase):
             ['', 'Sequence Number', 'Title', 'Document Author',
              'Document Date', 'Modification Date', 'Creation Date',
              'Receipt Date', 'Delivery Date', 'Public Trial',
-             'Reference Number', 'File extension'],
+             'Reference Number', 'File extension', 'Keywords'],
             browser.css('.listing th').text)
 
     @browsing
@@ -32,7 +32,7 @@ class TestInboxTabbedview(IntegrationTestCase):
             ['', 'Sequence Number', 'Title', 'Document Author',
              'Document Date', 'Modification Date', 'Creation Date',
              'Receipt Date', 'Delivery Date', 'Public Trial',
-             'File extension'],
+             'File extension', 'Keywords'],
             browser.css('.listing th').text)
 
     @browsing
