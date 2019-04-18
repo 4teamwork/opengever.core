@@ -162,8 +162,6 @@ class OrgUnitBuilder(SqlObjectBuilder):
     def __init__(self, session):
         super(OrgUnitBuilder, self).__init__(session)
         self.arguments[self.id_argument_name] = u'rr'
-        self.arguments['users_group_id'] = 'foo'
-        self.arguments['inbox_group_id'] = 'bar'
         self._with_inbox_group = False
         self._with_users_group = False
         self._inbox_users = set()
@@ -210,14 +208,19 @@ class OrgUnitBuilder(SqlObjectBuilder):
             unit_id = self.arguments.get(self.id_argument_name)
 
         if self._with_users_group:
-            users_group_id = "{0}_users".format(unit_id)
+            self.arguments.setdefault('users_group_id', "{0}_users".format(unit_id))
             users_group_title = '{0} Users Group'.format(unit_id)
-            self._create_users_group(users_group_id, users_group_title)
+            self._create_users_group(self.arguments['users_group_id'], users_group_title)
 
         if self._with_inbox_group:
-            users_inbox_id = "{0}_inbox_users".format(unit_id)
+            self.arguments.setdefault('inbox_group_id', "{0}_inbox_users".format(unit_id))
             users_inbox_title = '{0} Inbox Users Group'.format(unit_id)
-            self._create_inbox_group(users_inbox_id, users_inbox_title)
+            self._create_inbox_group(self.arguments['inbox_group_id'], users_inbox_title)
+
+        # When the builder is used without creating the groups, e.g. in unit tests,
+        # we simply set a group id (foo/bar) for which no group exists.
+        self.arguments.setdefault('users_group_id', 'foo')
+        self.arguments.setdefault('inbox_group_id', 'bar')
 
     def _create_users_group(self, users_group_id, users_group_title=None):
         create(Builder('group')
