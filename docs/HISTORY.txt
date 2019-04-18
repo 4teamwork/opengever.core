@@ -19,6 +19,7 @@ Changelog
 - Optimise local roles security reindexing in tasks. [Rotonen]
 - Add keywords-filter for document listings. [njohner]
 - Add has_sametype_children metadata column. [njohner]
+- Display the `changed` date instead the `modified` date for meeting-protocols. [elioschmutz]
 - Show dossier from template action also when adding dossier disallowed. [njohner]
 - Improve task restriction query, so that it works also on oracle backends. [phgross]
 - Add restapi @journal endpoint to get journal entries. [elioschmutz]

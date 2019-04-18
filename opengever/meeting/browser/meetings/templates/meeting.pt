@@ -269,7 +269,7 @@
                          i18n:translate="document_last_modified">
                       Modified at
                       <tal:date
-                          replace="python:toLocalizedTime(agendaitem_list_document.getObject().ModificationDate(), long_format=1)"
+                          replace="python:toLocalizedTime(agendaitem_list_document.getObject().changed, long_format=1)"
                           i18n:name="date" />
                     </div>
                   </tal:GENERATED>
@@ -323,7 +323,7 @@
                          i18n:translate="document_last_modified">
                       Modified at
                       <tal:date
-                          replace="python:toLocalizedTime(protocol_document.getObject().ModificationDate(), long_format=1)"
+                          replace="python:toLocalizedTime(protocol_document.getObject().changed, long_format=1)"
                           i18n:name="date" />
                     </div>
                   </tal:GENERATED>
