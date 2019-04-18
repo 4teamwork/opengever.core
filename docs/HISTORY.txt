@@ -7,6 +7,8 @@ Changelog
 - Show dossier from template action also when adding dossier disallowed. [njohner]
 - Improve task restriction query, so that it works also on oracle backends. [phgross]
 - Add restapi @journal endpoint to get journal entries. [elioschmutz]
+- Omit the `revoke_permissions` field instead of only hiding it. [phgross]
+- Fix issue on task creation when is_private feature is disabled. [phgross]
 - Add webaction forms (add and edit) and management view. [njohner]
 - Fix solr error during copy/paste of word document. [njohner]
 - Allow non-member contributors to use the REST API. [Rotonen]

@@ -17,6 +17,7 @@ from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.app.testing import TEST_USER_ID
 from sqlalchemy import desc
 from zope.interface import alsoProvides
@@ -71,6 +72,9 @@ class TestTaskActivites(FunctionalTestCase):
 
     @browsing
     def test_private_task_added(self, browser):
+        api.portal.set_registry_record(
+            'opengever.task.interfaces.ITaskSettings.private_task_feature_enabled',
+            True)
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
                       'Task Type': 'comment',
