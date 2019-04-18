@@ -36,7 +36,7 @@ class TestDossierTemplate(IntegrationTestCase):
 
     features = ('dossiertemplate', )
 
-    def test_templatedosisers_does_not_provide_dossier_interface(self):
+    def test_templatedossiers_does_not_provide_dossier_interface(self):
         self.login(self.administrator)
 
         self.assertFalse(IDossierMarker.providedBy(self.dossiertemplate))
@@ -271,6 +271,28 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
 
         self.assertTrue(api.user.has_permission(
             'opengever.dossier: Add businesscasedossier', obj=self.leaf_repofolder))
+
+        self.assertTrue(
+            self.leaf_repofolder.restrictedTraverse(
+                '@@dossier_with_template/is_available')())
+
+    def test_is_not_available_if_businesscasedossier_disallowed(self):
+        self.login(self.regular_user)
+
+        self.leaf_repofolder.allow_add_businesscase_dossier = False
+
+        self.assertFalse(
+            self.leaf_repofolder.restrictedTraverse(
+                '@@dossier_with_template/is_available')())
+
+    def test_is_available_if_businesscasedossier_disallowed_but_addable_templates_selected(self):
+        self.login(self.regular_user)
+
+        self.leaf_repofolder.allow_add_businesscase_dossier = False
+
+        self.set_related_items(
+            self.leaf_repofolder, [self.dossiertemplate, ],
+            fieldname='addable_dossier_templates')
 
         self.assertTrue(
             self.leaf_repofolder.restrictedTraverse(
