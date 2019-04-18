@@ -665,7 +665,13 @@ class IntegrationTestCase(TestCase):
         if response_file:
             search_resp = assets.load(response_file)
         else:
+            # Make sure status is in header
+            if u'responseHeader' not in response_json:
+                response_json[u'responseHeader'] = {}
+            if 'status' not in response_json[u'responseHeader']:
+                response_json[u'responseHeader']['status'] = 0
             search_resp = json.dumps(response_json)
+
         solr.search = MagicMock(name='search', return_value=SolrResponse(
             body=search_resp, status=200))
         return solr
