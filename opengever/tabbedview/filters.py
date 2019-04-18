@@ -169,7 +169,8 @@ class SubjectFilter(object):
         solr = getUtility(ISolrSearch)
         response = solr.search(
             query="*:*", filters=self._solr_filters(), **self._solr_params())
-
+        if not response.is_ok():
+            return list()
         return self._extract_facets_from_solr_response(response)
 
     def _solr_filters(self):
