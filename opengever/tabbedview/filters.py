@@ -182,7 +182,7 @@ class SubjectFilter(object):
     def _solr_params(self):
         return {
             'facet': True,  # activate facetting
-            'facet.field': 'Subject',  # add factes for this field
+            'facet.field': 'Subject',  # add facets for this field
             'facet.limit': -1,  # do not limit the number of facet-terms
             'rows': 0,  # do not return documents found by the query
             'facet.mincount': 1  # exclude facet-terms with no document

@@ -61,3 +61,34 @@ class TestDocumentListing(IntegrationTestCase):
         self.assertEqual('http://nohost/plone/@@search?Subject=Wichtig',
                          links.first.get("href"))
 
+    @browsing
+    def test_filter_documents_by_subjects(self, browser):
+        self.activate_feature('solr')
+        self.login(self.regular_user, browser=browser)
+
+        self.mock_solr(response_json=self.solr_response('Wichtig', 'Subkeyword'))
+
+        browser.visit(self.dossier, view='tabbedview_view-documents')
+        table = browser.css('.listing').first
+        self.assertLess(3, len(table.rows))
+
+        # self.document and self.subdocument have the 'Wichtig' keyword
+        browser.visit(self.dossier, view='tabbedview_view-documents', data={'subjects': ["Wichtig"]})
+        table = browser.css('.listing').first
+        self.assertEqual(3, len(table.rows))
+        self.assertEqual(['Title', self.document.title, self.subdocument.title],
+                         table.column("Title"))
+
+        # self.subdocument and self.empty_document have the 'Subkeyword' keyword
+        browser.visit(self.dossier, view='tabbedview_view-documents', data={'subjects': ["Subkeyword"]})
+        table = browser.css('.listing').first
+        self.assertEqual(3, len(table.rows))
+        self.assertEqual(['Title', self.subdocument.title, self.empty_document.title],
+                         table.column("Title"))
+
+        # self.subdocument has both the 'Wichtig' and the 'Subkeyword' keyword
+        browser.visit(self.dossier, view='tabbedview_view-documents', data={'subjects': ["Wichtig++Subkeyword"]})
+        table = browser.css('.listing').first
+        self.assertEqual(2, len(table.rows))
+        self.assertEqual(['Title', self.subdocument.title],
+                         table.column("Title"))
