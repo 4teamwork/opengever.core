@@ -1,12 +1,19 @@
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from ftw.journal.interfaces import IAnnotationsJournalizable
+from opengever.base.helpers import display_name
 from opengever.base.vocabulary import voc_term_title
 from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.form import IManualJournalEntry
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from z3c.form.field import Fields
 from zExceptions import BadRequest
+from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
+from zope.i18n import translate
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import RequiredMissing
 
@@ -87,3 +94,40 @@ class JournalPost(Service):
             return True
         except LookupError:
             return False
+
+
+class JournalGet(Service):
+    """Returns a list of batched journal entries:
+
+    GET /repository/dossier-1/@journal HTTP/1.1
+    """
+    def reply(self):
+        result = {}
+        batch = HypermediaBatch(self.request, self._data())
+
+        result['items'] = self._create_items(batch)
+        result['items_total'] = batch.items_total
+        if batch.links:
+            result['batching'] = batch.links
+
+        return result
+
+    def _create_items(self, batch):
+        items = []
+        for entry in batch:
+            action = entry.get('action')
+            item = {}
+            item['title'] = translate(action.get('title'), context=self.request)
+            item['time'] = json_compatible(entry.get('time'))
+            item['actor_id'] = entry.get('actor')
+            item['actor_fullname'] = display_name(entry.get('actor'))
+            item['comments'] = entry.get('comments')
+            items.append(item)
+
+        return items
+
+    def _data(self):
+        annotations = IAnnotations(self.context)
+        items = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+        items.reverse()
+        return items
