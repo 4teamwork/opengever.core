@@ -148,8 +148,6 @@ EXPECTED_TYPES_WITH_RELATIONS = [
     'opengever.meeting.proposaltemplate',
     'opengever.private.dossier',
     'opengever.disposition.disposition',
-    'opengever.workspace.workspace',
-    'opengever.workspace.folder'
 ]
 
 

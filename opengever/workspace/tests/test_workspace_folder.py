@@ -16,7 +16,6 @@ class TestWorkspaceFolder(IntegrationTestCase):
         factoriesmenu.add('WorkspaceFolder')
 
         form = browser.find_form_by_field('Title')
-        form.find_widget('Responsible').fill(self.workspace_member.getId())
         form.fill({'Title': u'Ein Unter\xf6rdnerli'})
         form.save()
 

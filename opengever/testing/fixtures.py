@@ -1963,8 +1963,8 @@ class OpengeverContentFixture(object):
         self.workspace = self.register('workspace', create(
             Builder('workspace')
             .titled(u'A Workspace')
+            .having(description=u'A Workspace description')
             .within(self.workspace_root)
-            .having(responsible=self.workspace_owner.getId())
             ))
 
         RoleAssignmentManager(self.workspace).reset([
@@ -1978,10 +1978,7 @@ class OpengeverContentFixture(object):
 
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder')
-            .having(
-                title_de=u'WS F\xc3lder',
-                title_fr=u'WS fichi\xe9r',
-                )
+            .titled(u'WS F\xc3lder')
             .within(self.workspace)
             ))
 

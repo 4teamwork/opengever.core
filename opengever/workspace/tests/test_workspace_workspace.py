@@ -4,12 +4,10 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
-from opengever.base.browser import edit_public_trial
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
-from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 
 
@@ -22,7 +20,6 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
         factoriesmenu.add('Workspace')
 
         form = browser.find_form_by_field('Title')
-        form.find_widget('Responsible').fill(self.regular_user.getId())
         form.fill({'Title': 'Example Workspace'})
         form.save()
 
@@ -37,6 +34,21 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
               'reference': None,
               'principal': 'gunther.frohlich'}],
             RoleAssignmentManager(workspace).storage._storage())
+
+    @browsing
+    def test_workspace_folder_is_addable_in_workspace(self, browser):
+        self.login(self.workspace_owner, browser)
+        browser.visit(self.workspace)
+        factoriesmenu.add('WorkspaceFolder')
+
+        form = browser.find_form_by_field('Title')
+        form.fill({'Title': 'Example Folder'})
+        form.save()
+
+        assert_no_error_messages(browser)
+        folder = browser.context
+
+        self.assertEquals(u'Example Folder', folder.title)
 
     def test_sequence_number(self):
         self.login(self.workspace_member)
@@ -110,23 +122,3 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(expected, got)
-
-    @browsing
-    def test_workspace_overview_subdossierstructure(self, browser):
-        self.login(self.workspace_owner, browser=browser)
-        browser.visit(self.workspace, view='dossier_navigation.json')
-        self.assertEquals([{u'description': u'',
-                            u'nodes': [],
-                            u'text': u'',
-                            u'uid': IUUID(self.workspace_folder),
-                            u'url': self.workspace_folder.absolute_url()}],
-                          browser.json[0]['nodes'])
-
-    def test_can_access_public_trial_edit_form_for_files_in_workspace(self):
-        self.login(self.workspace_owner)
-
-        document = create(Builder('document').within(self.workspace))
-        self.assertTrue(edit_public_trial.can_access_public_trial_edit_form(self.workspace_owner, document))
-        self.assertTrue(edit_public_trial.can_access_public_trial_edit_form(self.workspace_admin, document))
-        self.assertFalse(edit_public_trial.can_access_public_trial_edit_form(self.workspace_member, document))
-        self.assertFalse(edit_public_trial.can_access_public_trial_edit_form(self.workspace_guest, document))

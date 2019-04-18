@@ -12,6 +12,20 @@
       />
 
   <browser:page
+      for="opengever.workspace.interfaces.IWorkspace"
+      name="tabbedview_view-folders"
+      class=".tabs.WorkspaceFolders"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      name="tabbedview_view-folders"
+      class=".tabs.WorkspaceFolders"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="opengever.workspace.interfaces.IWorkspaceFolder"
       name="tabbed_view"
       class=".tabbed.WorkspaceFolderTabbedView"

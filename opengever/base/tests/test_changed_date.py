@@ -418,7 +418,6 @@ class TestChangedUpdateForWorkspace(TestChangedUpdateBase):
     @browsing
     def test_changed_is_updated_when_metadata_is_changed(self, browser):
         self.login(self.workspace_owner, browser)
-        IDossier(self.workspace).responsible = self.workspace_owner.getUserName()
         with freeze(FREEZING_TIME):
             browser.open(self.workspace, view='edit')
             browser.fill({"Title": 'foo'})
@@ -431,7 +430,6 @@ class TestChangedUpdateForWorkspaceFolder(TestChangedUpdateBase):
     @browsing
     def test_changed_is_updated_when_metadata_is_changed(self, browser):
         self.login(self.workspace_owner, browser)
-        IDossier(self.workspace_folder).responsible = self.workspace_owner.getUserName()
         with freeze(FREEZING_TIME):
             browser.open(self.workspace_folder, view='edit')
             browser.fill({"Title": 'foo'})

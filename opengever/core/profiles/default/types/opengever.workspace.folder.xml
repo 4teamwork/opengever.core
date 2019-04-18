@@ -29,7 +29,6 @@
     <element value="opengever.base.behaviors.base.IOpenGeverBase" />
     <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
     <element value="opengever.workspace.behaviors.namefromtitle.IWorkspaceFolderNameFromTitle" />
-    <element value="opengever.dossier.behaviors.dossier.IDossier" />
     <element value="opengever.mail.behaviors.ISendableDocsContainer" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="opengever.trash.trash.ITrashable" />
