@@ -149,9 +149,9 @@ class TestDossierIndexers(IntegrationTestCase):
         self.subdossier.reindexObject()
 
         self.assertEquals(
-            1,
+            3,
             len(catalog(Subject=u'Subkeyword')),
-            'Expected one item with Keyword "Subkeyword"',
+            'Expected three item with Keyword "Subkeyword"',
             )
 
         self.assertEquals(
