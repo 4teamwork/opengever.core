@@ -40,6 +40,8 @@ Changelog
 - Extend @listing endpoint with `tasks`-listing. [elioschmutz]
 - Add option not to revoke permissions associated with a task when closing it. [njohner]
 - Respect the local roles and the inheritance thereof of dossier templates. [Rotonen]
+- Add restapi @journal endpoint to add journal entries. [elioschmutz]
+- Fix performance issue with search root exclusion in tabbed view listings. [lgraf]
 - Do not list auto-generated documents as recently touched. [njohner]
 - Standardize french and german translation of "attachments" in meetings. [njohner]
 - Do not list resolved tasks as pending in the 'My Tasks' tab. [Rotonen]
