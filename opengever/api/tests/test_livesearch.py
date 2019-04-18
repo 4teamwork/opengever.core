@@ -8,17 +8,29 @@ class TestLivesearchGet(IntegrationTestCase):
     def test_livesearch(self, browser):
         self.login(self.regular_user, browser=browser)
 
+        # dossier
         url = u'{}/@livesearch?q={}'.format(self.portal.absolute_url(),
-                                            self.document.title)
+                                            self.dossier.title)
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
-        self.assertEqual(200, browser.status_code)
-        self.assertGreater(len(browser.json), 0)
+        self.assertEqual(
+            {'@id': self.dossier.absolute_url(),
+             '@type': 'opengever.dossier.businesscasedossier',
+             'title': self.dossier.title,
+             'filename': None},
+            browser.json[0])
 
-        entry = browser.json[0]
-        self.assertIn('title', entry)
-        self.assertIn('@id', entry)
-        self.assertIn('@type', entry)
+        # document
+        url = u'{}/@livesearch?q={}'.format(self.portal.absolute_url(),
+                                            self.proposaldocument.title)
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'title': self.proposaldocument.title,
+             u'@id': self.proposaldocument.absolute_url(),
+             u'@type': u'opengever.document.document',
+             u'filename': self.proposaldocument.file.filename},
+            browser.json[0])
 
     @browsing
     def test_livesearch_limit(self, browser):

@@ -18,6 +18,10 @@ class OGSolrDocument(SolrDocument):
     def containing_dossier(self):
         return self.get('containing_dossier', None)
 
+    @property
+    def filename(self):
+        return self.get('filename', None)
+
 
 class OGSolrContentListing(SolrContentListing):
 
