@@ -277,27 +277,6 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         self.assertIsNotNone(browser.forms.get('form').find_field("Revoke permissions."))
 
     @browsing
-    def test_cant_create_task_with_revoke_permissions_false_when_feature_disabled(self, browser):
-        self.login(self.dossier_responsible, browser)
-
-        with self.observe_children(self.dossier) as children:
-            browser.open(self.dossier, view='++add++opengever.task.task')
-            browser.fill({'Title': u'Cannot change revoke permissions',
-                          'Task Type': 'comment',
-                          'form.widgets.revoke_permissions:list': 'False'})
-
-            form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
-
-            browser.css('#form-buttons-save').first.click()
-
-        self.assertEqual(['There were some errors.'], error_messages())
-        self.assertEqual(['The revoke permissions feature is disabled'],
-                         browser.css('form .error').text)
-        self.assertEqual(0, len(children['added']))
-
-    @browsing
     def test_cant_create_task_over_api_with_revoke_permissions_false_when_feature_disabled(self, browser):
         self.login(self.dossier_responsible, browser)
 

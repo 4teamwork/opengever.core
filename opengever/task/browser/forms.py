@@ -43,6 +43,11 @@ class TaskAddForm(DefaultAddForm):
                 group for group in self.groups if group.__name__ == u'common')
             common_group.fields = common_group.fields.omit('is_private')
 
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('revoke_permissions')
+
     def update(self):
         # put default value for relatedItems into request
         paths = self.request.get('paths', [])
@@ -66,11 +71,6 @@ class TaskAddForm(DefaultAddForm):
             additional_group.widgets['tasktemplate_position'].value = position
 
         additional_group.widgets['tasktemplate_position'].mode = HIDDEN_MODE
-
-        if not is_optional_task_permissions_revoking_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE
 
     def createAndAdd(self, data):
         created = []
@@ -165,6 +165,11 @@ class TaskEditForm(DefaultEditForm):
                 group for group in self.groups if group.__name__ == u'common')
             common_group.fields = common_group.fields.omit('is_private')
 
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('revoke_permissions')
+
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
         Also update the responsible_cliend and responsible user
@@ -199,11 +204,3 @@ class TaskEditForm(DefaultEditForm):
                 (ITask['responsible_client'],
                  data.get('responsible_client')),),
             transition=REASSIGN_TRANSITION, supress_events=True)
-
-    def update(self):
-        super(TaskEditForm, self).update()
-
-        if not is_optional_task_permissions_revoking_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.widgets['revoke_permissions'].mode = HIDDEN_MODE
