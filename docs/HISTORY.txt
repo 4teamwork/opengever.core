@@ -7,6 +7,7 @@ Changelog
 - Implement resolving dossiers recursively via REST API. [lgraf]
 - Allow members to access plone vocabularies through restapi. [elioschmutz]
 - Workspaces do no longer inherit from dossiers. [elioschmutz]
+- Optimise local roles security reindexing in tasks. [Rotonen]
 - Show dossier from template action also when adding dossier disallowed. [njohner]
 - Improve task restriction query, so that it works also on oracle backends. [phgross]
 - Add restapi @journal endpoint to get journal entries. [elioschmutz]

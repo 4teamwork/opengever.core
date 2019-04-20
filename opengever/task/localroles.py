@@ -6,13 +6,13 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import TaskAgencyRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
+from opengever.base.security import reindex_object_security_without_children
 from opengever.document.document import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.handlers.task import sync_task
 from opengever.meeting.proposal import IProposal
 from opengever.ogds.base.utils import get_current_org_unit
 from plone import api
-from Products.CMFCore.CMFCatalogAware import CatalogAware
 
 
 class LocalRolesSetter(object):
@@ -139,7 +139,7 @@ class LocalRolesSetter(object):
             path='/'.join(distinct_parent.getPhysicalPath()))]
 
         for dossier in subdossiers:
-            dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
+            reindex_object_security_without_children(dossier)
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)."""
@@ -216,4 +216,4 @@ class LocalRolesSetter(object):
                       self.inbox_group_id, self.task, reindex=False)
 
         for dossier in subdossiers:
-            dossier.reindexObject(idxs=CatalogAware._cmf_security_indexes)
+            reindex_object_security_without_children(dossier)
