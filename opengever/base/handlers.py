@@ -1,23 +1,19 @@
-from collective.indexing.interfaces import IIndexQueueProcessor
-from collective.indexing.queue import getQueue
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.security import reindex_object_security_without_children
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.task.task import ITask
-from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from Products.CMFCore.CMFCatalogAware import CatalogAware
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
-from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -49,20 +45,7 @@ def object_moved_or_added(context, event):
     # Plone will do it recursively (unnecessarily so).
     changed = update_security_for(context, reindex_security=False)
     if changed:
-        catalog = api.portal.get_tool('portal_catalog')
-        catalog.reindexObject(context, idxs=CatalogAware._cmf_security_indexes,
-                              update_metadata=0)
-
-        # Using catalogs reindexObject does not trigger corresponding solr
-        # reindexing, so we do it manually.
-
-        # Register collective.indexing hook, to make sure solr changes
-        # are realy send to solr. See
-        # collective.indexing.queue.IndexQueue.hook.
-        getQueue().hook()
-
-        processor = getUtility(IIndexQueueProcessor, name='ftw.solr')
-        processor.index(context, CatalogAware._cmf_security_indexes)
+        reindex_object_security_without_children(context)
 
     # There are several indices that need updating when a dossier is moved.
     # first make sure obj was actually moved and not created
