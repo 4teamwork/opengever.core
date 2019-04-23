@@ -68,6 +68,7 @@ Changelog
 - Make sure all workflow IDs are unique. [njohner]
 - Add button to create protocol approval proposal from meeting. [njohner]
 - Add support for filters in listing endpoint. [buchi]
+- Add french translation for documentation chapter 4. [andresoberhaensli]
 
 
 2019.1.4 (2019-04-11)
