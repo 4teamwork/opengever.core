@@ -18,7 +18,7 @@ Les personnalisations peuvent être réinitialisées aux valeurs par défaut GEV
 |img-notification4|
  
 Notifications pour les transmissions, rappels et tâches. 
--------------------------------------------------------
+--------------------------------------------------------
 
 Comme pour les notifications concernant les tâches, il est possible d’ajuster les notifications concernant les transmissions et rappels dans les onglet « Transmissions » et « Rappels » respectivement.
 
