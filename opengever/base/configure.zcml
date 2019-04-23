@@ -356,6 +356,11 @@
       name="sortable_title"
       />
 
+  <adapter
+      factory=".indexes.has_sametype_children"
+      name="has_sametype_children"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
