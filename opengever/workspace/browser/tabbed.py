@@ -5,9 +5,9 @@ from opengever.tabbedview import GeverTabbedView
 class WorkspaceTabbedView(GeverTabbedView):
     """Define the tabs available on a Workspace."""
 
-    overview_tab = {
-        'id': 'overview',
-        'title': _(u'label_overview', default=u'Overview'),
+    folders_tab = {
+        'id': 'folders',
+        'title': _(u'label_folders', default=u'Folders'),
         }
 
     documents_tab = {
@@ -32,7 +32,7 @@ class WorkspaceTabbedView(GeverTabbedView):
 
     def _get_tabs(self):
         return filter(None, [
-            self.overview_tab,
+            self.folders_tab,
             self.documents_tab,
             self.tasks_tab,
             self.trash_tab,

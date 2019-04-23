@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-01-29 16:24+0000\n"
+"POT-Creation-Date: 2019-04-18 10:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,29 +106,24 @@ msgstr ""
 msgid "WorkspaceOwner"
 msgstr ""
 
+#. Default: "Description"
+#: ./opengever/workspace/browser/tabs.py
+msgid "label_description"
+msgstr ""
+
 #. Default: "Documents"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_documents"
 msgstr ""
 
-#. Default: "Responsible"
-#: ./opengever/workspace/browser/tabs.py
-msgid "label_dossier_responsible"
+#. Default: "Folders"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_folders"
 msgstr ""
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_journal"
-msgstr ""
-
-#. Default: "Overview"
-#: ./opengever/workspace/browser/tabbed.py
-msgid "label_overview"
-msgstr ""
-
-#. Default: "Reference Number"
-#: ./opengever/workspace/browser/tabs.py
-msgid "label_reference"
 msgstr ""
 
 #. Default: "Tasks"

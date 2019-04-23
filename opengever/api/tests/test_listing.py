@@ -222,15 +222,15 @@ class TestListingEndpoint(IntegrationTestCase):
         query_string = '&'.join((
             'name=workspaces',
             'columns=title',
-            'columns=responsible_fullname',
+            'columns=description',
         ))
         view = '?'.join(('@listing', query_string))
         browser.open(self.workspace_root, view=view, headers={'Accept': 'application/json'})
 
         self.assertDictEqual(
-            {u'responsible_fullname': u'Fr\xf6hlich G\xfcnther',
-             u'@id': u'http://nohost/plone/workspaces/workspace-1',
-             u'title': u'A Workspace'},
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1',
+             u'title': u'A Workspace',
+             u'description': u'A Workspace description'},
             browser.json['items'][-1])
 
     @browsing

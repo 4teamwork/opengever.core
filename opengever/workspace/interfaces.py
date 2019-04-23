@@ -1,4 +1,4 @@
-from opengever.dossier.behaviors.dossier import IDossierMarker
+from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from zope import schema
 from zope.interface import Interface
 
@@ -7,11 +7,11 @@ class IWorkspaceRoot(Interface):
     """ Marker interface for Workspace Roots """
 
 
-class IWorkspace(IDossierMarker):
+class IWorkspace(Interface, ITabbedviewUploadable):
     """ Marker interface for Workspace """
 
 
-class IWorkspaceFolder(IDossierMarker):
+class IWorkspaceFolder(Interface, ITabbedviewUploadable):
     """ Marker interface for Workspace Folders """
 
 

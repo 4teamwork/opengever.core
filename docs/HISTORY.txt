@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Allow members to access plone vocabularies through restapi. [elioschmutz]
+- Workspaces do no longer inherit from dossiers. [elioschmutz]
 - Show dossier from template action also when adding dossier disallowed. [njohner]
 - Improve task restriction query, so that it works also on oracle backends. [phgross]
 - Add restapi @journal endpoint to get journal entries. [elioschmutz]
