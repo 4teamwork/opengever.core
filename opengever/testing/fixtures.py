@@ -2017,6 +2017,7 @@ class OpengeverContentFixture(object):
         self.workspace_folder = self.register('workspace_folder', create(
             Builder('workspace folder')
             .titled(u'WS F\xc3lder')
+            .having(description=u'A Workspace folder description')
             .within(self.workspace)
             ))
 
