@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Extend @listing endpoint with `workspace_folders`-listing. [elioschmutz]
 - Allow members to access plone vocabularies through restapi. [elioschmutz]
 - Workspaces do no longer inherit from dossiers. [elioschmutz]
 - Show dossier from template action also when adding dossier disallowed. [njohner]
