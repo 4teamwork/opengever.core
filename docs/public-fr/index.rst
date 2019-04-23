@@ -9,7 +9,7 @@ Index:
    chapitre1-overview
    chapitre2-base
    chapitre3-trucs
-   chapitre4-notifications
+   chapitre4-notifications <chapitre4-notifications.rst>
    documents/index
    chapitre7-contacts
    chapitre8-recherches
