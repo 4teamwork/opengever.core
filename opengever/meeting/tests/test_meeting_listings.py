@@ -64,7 +64,7 @@ class TestMeetingListing(IntegrationTestCase):
 
         self.assertEquals(
             '<a href="http://nohost/plone/ordnungssystem/fuhrung/'
-            'vertrage-und-vereinbarungen/dossier-8" '
+            'vertrage-und-vereinbarungen/dossier-10" '
             'title="Sitzungsdossier 9/2017" '
             'class="contenttype-opengever-meeting-meetingdossier"'
             '>Sitzungsdossier 9/2017</a>',

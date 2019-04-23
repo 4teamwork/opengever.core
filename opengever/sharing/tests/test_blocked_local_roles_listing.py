@@ -160,21 +160,21 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         expected_titles = [
             u'1. F\xfchrung - Client1 1',
             u'1.1. Vertr\xe4ge und Vereinbarungen - Client1 1.1',
-            u'Luftsch\xfctze - Client1 1.1 / 9',
-            u'Zu allem \xdcbel - Client1 1.1 / 10',
+            u'Luftsch\xfctze - Client1 1.1 / 10',
+            u'Zu allem \xdcbel - Client1 1.1 / 11',
         ]
         self.assertEqual(expected_titles, browser.css('.blocked-local-roles-link').text)
 
         expected_titles = [
             u'1.1. Vertr\xe4ge und Vereinbarungen - Client1 1.1',
-            u'Luftsch\xfctze - Client1 1.1 / 9',
-            u'Zu allem \xdcbel - Client1 1.1 / 10',
+            u'Luftsch\xfctze - Client1 1.1 / 10',
+            u'Zu allem \xdcbel - Client1 1.1 / 11',
         ]
         self.assertEqual(expected_titles, browser.css('.level1 a').text)
 
         expected_titles = [
-            u'Luftsch\xfctze - Client1 1.1 / 9',
-            u'Zu allem \xdcbel - Client1 1.1 / 10',
+            u'Luftsch\xfctze - Client1 1.1 / 10',
+            u'Zu allem \xdcbel - Client1 1.1 / 11',
         ]
         self.assertEqual(expected_titles, browser.css('.level2 a').text)
         self.assertFalse(browser.css('.level3 a').text)

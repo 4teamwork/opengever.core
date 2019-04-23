@@ -114,7 +114,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers={'Accept': 'application/json'})
         self.assertEqual(200, browser.status_code)
-        self.assertEqual(u'Client1 1.1 / 1 / 28', browser.json.get(u'reference_number'))
+        self.assertEqual(u'Client1 1.1 / 1 / 29', browser.json.get(u'reference_number'))
 
     @browsing
     def test_mail_serialization_contains_bumblebee_checksum(self, browser):

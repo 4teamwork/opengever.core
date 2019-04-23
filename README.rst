@@ -615,6 +615,9 @@ Objects
         - self.protected_dossier_with_task
           - self.protected_document_with_task
           - self.task_in_protected_dossier
+        - self.resolvable_dossier
+          - self.resolvable_subdossier
+            - self.resolvable_document
     - self.empty_repofolder
     - self.inactive_repofolder
   - self.templates

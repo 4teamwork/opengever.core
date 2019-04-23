@@ -1,6 +1,8 @@
 from datetime import datetime
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.security import elevated_privileges
+from opengever.base.transition import ITransitionExtender
+from opengever.base.transition import TransitionExtender
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
@@ -24,6 +26,7 @@ from zope.component import getSiteManager
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import implements
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
 import transaction
@@ -35,6 +38,28 @@ NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
 NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
+MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
+
+
+class AlreadyBeingResolved(Exception):
+    """A concurrent attempt at resolving a dossier was made.
+    """
+
+
+class PreconditionsViolated(Exception):
+    """One or more preconditions for resolving a dossier have been violated.
+    """
+
+    def __init__(self, errors):
+        self.errors = errors
+
+
+class InvalidDates(Exception):
+    """One or more dossier dates are invalid.
+    """
+
+    def __init__(self, invalid_dossier_titles):
+        self.invalid_dossier_titles = invalid_dossier_titles
 
 
 def get_resolver(dossier):
@@ -58,19 +83,37 @@ class ValidResolverNamesVocabularyFactory(object):
         return SimpleVocabulary.fromValues(resolver_adapter_names)
 
 
-class DossierResolveView(BrowserView):
+@implementer(ITransitionExtender)
+@adapter(IDossierMarker, IBrowserRequest)
+class ResolveDossierTransitionExtender(TransitionExtender):
+    """TransitionExtender that gets invoked when resolving dossiers.
+    """
 
-    def __call__(self):
-        # Ensure already resolved dossier can't be resolved again
-        if self.is_already_resolved():
-            return self.show_already_resolved_msg()
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        AfterResolveJobs(self.context).execute()
 
+
+class LockingResolveManager(object):
+    """Recursively resolves a dossier and uses a persistent resolve lock.
+
+    Will raise PreconditionsViolated or InvalidDates exceptions if the
+    necessary preconditions are not satisfied.
+
+    If a persistent lock exists and another resolve attempt is made, an
+    AlreadyBeingResolved exception will be raised.
+    """
+
+    def __init__(self, context):
+        self.context = context
+        self.resolver = get_resolver(self.context)
+
+    def resolve(self):
         resolve_lock = ResolveLock(self.context)
 
         # Check whether a resolve is already in progress
         if resolve_lock.is_locked():
             resolve_lock.log('Concurrent attempt at resolving %s rejected' % self.context)
-            return self.show_being_resolved_msg()
+            raise AlreadyBeingResolved
 
         # No resolve in progress, proceed with resolving this dossier
         # by acquring a lock, resolving, and then releasing the lock
@@ -110,23 +153,48 @@ class DossierResolveView(BrowserView):
             resolve_lock.release(commit=True)
 
     def execute_recursive_resolve(self):
-        resolver = get_resolver(self.context)
-
         # check preconditions
-        errors = resolver.is_resolve_possible()
+        errors = self.resolver.get_precondition_violations()
         if errors:
-            return self.show_errors(errors)
+            raise PreconditionsViolated(errors=errors)
 
         # validate enddates
-        invalid_dates = resolver.are_enddates_valid()
+        invalid_dates = self.resolver.are_enddates_valid()
         if invalid_dates:
-            return self.show_invalid_end_dates(titles=invalid_dates)
+            raise InvalidDates(invalid_dossier_titles=invalid_dates)
 
-        if resolver.is_archive_form_needed():
-            return self.redirect('transition-archive')
+        self.resolver.resolve()
 
-        resolver.resolve()
+    def is_archive_form_needed(self):
+        return self.resolver.is_archive_form_needed()
 
+
+class DossierResolveView(BrowserView):
+
+    def __call__(self):
+        # Ensure already resolved dossier can't be resolved again
+        if self.is_already_resolved():
+            return self.show_already_resolved_msg()
+
+        resolve_manager = LockingResolveManager(self.context)
+
+        if resolve_manager.is_archive_form_needed():
+            archive_url = '/'.join((self.context_url, 'transition-archive'))
+            return self.redirect(archive_url)
+
+        try:
+            resolve_manager.resolve()
+
+        except AlreadyBeingResolved:
+            return self.show_being_resolved_msg()
+
+        except PreconditionsViolated as exc:
+            return self.show_errors(exc.errors)
+
+        except InvalidDates as exc:
+            return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
+
+        # Success
         if self.context.is_subdossier():
             return self.show_subdossier_resolved_msg()
 
@@ -151,7 +219,7 @@ class DossierResolveView(BrowserView):
 
     def show_being_resolved_msg(self):
         api.portal.show_message(
-            message=_('Dossier is already being resolved'),
+            message=MSG_ALREADY_BEING_RESOLVED,
             request=self.request, type='info')
         return self.redirect(self.context_url)
 
@@ -182,26 +250,6 @@ class DossierResolveView(BrowserView):
         return self.redirect(self.context_url)
 
 
-class DossierReactivateView(BrowserView):
-
-    def __call__(self):
-        ptool = getToolByName(self, 'plone_utils')
-
-        resolver = get_resolver(self.context)
-
-        # check preconditions
-        if resolver.is_reactivate_possible():
-            resolver.reactivate()
-            ptool.addPortalMessage(_('Dossiers successfully reactivated.'),
-                                   type="info")
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-        else:
-            ptool.addPortalMessage(
-                _("It isn't possible to reactivate a sub dossier."),
-                type="warning")
-            self.request.RESPONSE.redirect(self.context.absolute_url())
-
-
 @implementer(IDossierResolver)
 @adapter(IDossierMarker)
 class StrictDossierResolver(object):
@@ -214,14 +262,12 @@ class StrictDossierResolver(object):
 
     def __init__(self, context):
         self.context = context
+        self.wft = getToolByName(self.context, 'portal_workflow')
 
-    def get_property(self, name):
-        return api.portal.get_registry_record(
-            name, interface=IDossierResolveProperties)
+    def get_precondition_violations(self):
+        """Check whether all preconditions are fulfilled.
 
-    def is_resolve_possible(self):
-        """Check if all preconditions are fulfilled.
-        Return a list of errors, or a empty list when resolving is possible.
+        Return a list of errors, or an empty list when resolving is possible.
         """
         errors = ResolveConditions(
             self.context, self.strict).check_preconditions()
@@ -258,9 +304,60 @@ class StrictDossierResolver(object):
         elif self.is_archive_form_needed() and not end_date:
             raise TypeError
         else:
-            Resolver(self.context).resolve_dossier(end_date=end_date)
+            self._recursive_resolve(self.context, end_date)
 
-    def after_resolve(self):
+    def _recursive_resolve(self, dossier, end_date, recursive=False):
+
+        # no end_date is given use the earliest possible
+        if not end_date:
+            end_date = dossier.earliest_possible_end_date()
+
+        if recursive:
+            # check the subdossiers end date
+            # If a subdossier is already resolved, but seems to have an invalid
+            # end date, it's because we changed the resolution logic and rules
+            # over time, and that subdossier's end date has retroactively become
+            # invalid. In this case, we correct the end date according to current
+            # rules and proceed with resolving it.
+            if dossier.is_resolved() and not dossier.has_valid_enddate():
+                IDossier(dossier).end = dossier.earliest_possible_end_date()
+            # if no end date is set or the end_date is invalid, set to the parent
+            # end date. Invalid end_date should normally be prevented by
+            # ResolveConditions._recursive_date_validation, but this correction
+            # would happen for example when resolving a dossier in debug mode.
+            elif not IDossier(dossier).end or not dossier.has_valid_enddate():
+                IDossier(dossier).end = end_date
+        else:
+            # main dossier set the given end_date
+            IDossier(dossier).end = end_date
+        dossier.reindexObject(idxs=['end'])
+
+        for subdossier in dossier.get_subdossiers():
+            self._recursive_resolve(
+                subdossier.getObject(), end_date, recursive=True)
+
+        if self.wft.getInfoFor(dossier,
+                               'review_state') in DOSSIER_STATES_OPEN:
+            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
+
+
+class AfterResolveJobs(object):
+    """Tasks that need to be executed after resolving a dossier.
+    """
+
+    def __init__(self, context):
+        self.context = context
+
+    def get_property(self, name):
+        return api.portal.get_registry_record(
+            name, interface=IDossierResolveProperties)
+
+    def contains_tasks(self):
+        tasks = api.content.find(
+            context=self.context, depth=-1, object_provides=ITask)
+        return len(tasks) > 0
+
+    def execute(self):
         """After resolving a dossier, some cleanup jobs have to be executed:
 
         - Remove all shadowed documents.
@@ -276,11 +373,6 @@ class StrictDossierResolver(object):
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
-
-    def contains_tasks(self):
-        tasks = api.content.find(
-            context=self.context, depth=-1, object_provides=ITask)
-        return len(tasks) > 0
 
     def trash_shadowed_docs(self):
         """Trash all documents that are in shadow state (recursive).
@@ -354,11 +446,11 @@ class StrictDossierResolver(object):
                 return
 
             document = CreateDocumentCommand(
-                        self.context, filename, view.get_data(),
-                        title=translate(title, context=self.context.REQUEST),
-                        content_type='application/pdf',
-                        interfaces=[IDossierJournalPDFMarker],
-                        **kwargs).execute()
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf',
+                interfaces=[IDossierJournalPDFMarker],
+                **kwargs).execute()
             document.reindexObject(idxs=['object_provides'])
 
     def create_tasks_listing_pdf(self):
@@ -403,11 +495,11 @@ class StrictDossierResolver(object):
                 return
 
             document = CreateDocumentCommand(
-                        self.context, filename, view.get_data(),
-                        title=translate(title, context=self.context.REQUEST),
-                        content_type='application/pdf',
-                        interfaces=[IDossierTasksPDFMarker],
-                        **kwargs).execute()
+                self.context, filename, view.get_data(),
+                title=translate(title, context=self.context.REQUEST),
+                content_type='application/pdf',
+                interfaces=[IDossierTasksPDFMarker],
+                **kwargs).execute()
             document.reindexObject(idxs=['object_provides'])
 
     def trigger_pdf_conversion(self):
@@ -418,94 +510,12 @@ class StrictDossierResolver(object):
         for doc in docs:
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
 
-    def is_reactivate_possible(self):
-        parent = self.context.get_parent_dossier()
-        if parent:
-            wft = getToolByName(self.context, 'portal_workflow')
-            if wft.getInfoFor(parent,
-                              'review_state') not in DOSSIER_STATES_OPEN:
-                return False
-        return True
-
-    def reactivate(self):
-        if not self.is_reactivate_possible():
-            raise TypeError
-        Reactivator(self.context).reactivate_dossier()
-
 
 class LenientDossierResolver(StrictDossierResolver):
     """The lenient dossier resolver does not enforce that documents and tasks
     are filed in subdossiers if the main dossier has subdossiers.
     """
     strict = False
-
-
-class Resolver(object):
-
-    def __init__(self, context):
-        self.context = context
-        self.wft = getToolByName(self.context, 'portal_workflow')
-
-    def resolve_dossier(self, end_date=None):
-        self._recursive_resolve(self.context, end_date)
-
-    def _recursive_resolve(self, dossier, end_date, recursive=False):
-
-        # no end_date is given use the earliest possible
-        if not end_date:
-            end_date = dossier.earliest_possible_end_date()
-
-        if recursive:
-            # check the subdossiers end date
-            # If a subdossier is already resolved, but seems to have an invalid
-            # end date, it's because we changed the resolution logic and rules
-            # over time, and that subdossier's end date has retroactively become
-            # invalid. In this case, we correct the end date according to current
-            # rules and proceed with resolving it.
-            if dossier.is_resolved() and not dossier.has_valid_enddate():
-                IDossier(dossier).end = dossier.earliest_possible_end_date()
-            # if no end date is set or the end_date is invalid, set to the parent
-            # end date. Invalid end_date should normally be prevented by
-            # ResolveConditions._recursive_date_validation, but this correction
-            # would happen for example when resolving a dossier in debug mode.
-            elif not IDossier(dossier).end or not dossier.has_valid_enddate():
-                IDossier(dossier).end = end_date
-        else:
-            # main dossier set the given end_date
-            IDossier(dossier).end = end_date
-        dossier.reindexObject(idxs=['end'])
-
-        for subdossier in dossier.get_subdossiers():
-            self._recursive_resolve(
-                subdossier.getObject(), end_date, recursive=True)
-
-        if self.wft.getInfoFor(dossier,
-                               'review_state') in DOSSIER_STATES_OPEN:
-            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
-
-
-class Reactivator(object):
-
-    def __init__(self, context):
-        self.context = context
-        self.wft = getToolByName(self.context, 'portal_workflow')
-
-    def reactivate_dossier(self):
-        self._recursive_reactivate(self.context)
-
-    def _recursive_reactivate(self, dossier):
-        for subdossier in dossier.get_subdossiers():
-            self._recursive_reactivate(subdossier.getObject())
-
-        if self.wft.getInfoFor(dossier,
-                               'review_state') == 'dossier-state-resolved':
-
-            self.reset_end_date(dossier)
-            self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
-
-    def reset_end_date(self, dossier):
-        IDossier(dossier).end = None
-        dossier.reindexObject(idxs=['end'])
 
 
 class ResolveConditions(object):

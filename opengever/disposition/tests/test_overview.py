@@ -20,8 +20,8 @@ class TestDispositionOverview(IntegrationTestCase):
         browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['Client1 1.1 / 11 Hannah Baufrau',
-             'Client1 1.1 / 12 Hans Baumann'],
+            ['Client1 1.1 / 12 Hannah Baufrau',
+             'Client1 1.1 / 13 Hans Baumann'],
             browser.css('.dispositions .title').text)
 
     @browsing
@@ -219,7 +219,7 @@ class TestDispositionOverview(IntegrationTestCase):
             ['Resolved Dossiers', 'Archive'],
             resolved_list.css('.label h3').text)
         self.assertEquals(
-            ['Client1 1.1 / 11 Hannah Baufrau'],
+            ['Client1 1.1 / 12 Hannah Baufrau'],
             resolved_list.css('.dispositions h3.title').text)
 
         # inactive
@@ -227,7 +227,7 @@ class TestDispositionOverview(IntegrationTestCase):
             ['Inactive Dossiers', 'Archive'],
             inactive_list.css('.label h3').text)
         self.assertEquals(
-            ['Client1 1.1 / 12 Hans Baumann'],
+            ['Client1 1.1 / 13 Hans Baumann'],
             inactive_list.css('.dispositions h3.title').text)
 
     @browsing
@@ -305,7 +305,7 @@ class TestClosedDispositionOverview(IntegrationTestCase):
         browser.open(self.disposition, view='overview')
 
         self.assertEquals(
-            ['Client1 1.1 / 11', 'Hannah Baufrau', 'Client1 1.1 / 12', 'Hans Baumann'],
+            ['Client1 1.1 / 12', 'Hannah Baufrau', 'Client1 1.1 / 13', 'Hans Baumann'],
             browser.css('h3.title span').text)
 
         self.assertEquals([], browser.css('h3.title a'))

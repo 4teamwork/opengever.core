@@ -215,13 +215,13 @@ class TestHistoryListingInOverview(IntegrationTestCase):
         add = browser.css('div.details ul')[1]
 
         self.assertEquals(
-            ["Client1 1.1 / 11 Hannah Baufrau Don't archive",
-             "Client1 1.1 / 12 Hans Baumann Don't archive"],
+            ["Client1 1.1 / 12 Hannah Baufrau Don't archive",
+             "Client1 1.1 / 13 Hans Baumann Don't archive"],
             appraise.css('li').text)
 
         self.assertEquals(
-            ['Client1 1.1 / 11 Hannah Baufrau Archive',
-             "Client1 1.1 / 12 Hans Baumann Don't archive"],
+            ['Client1 1.1 / 12 Hannah Baufrau Archive',
+             "Client1 1.1 / 13 Hans Baumann Don't archive"],
             add.css('li').text)
 
     @browsing

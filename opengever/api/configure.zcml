@@ -328,4 +328,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@workflow"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".transition.GEVERDossierWorkflowTransition"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
 </configure>

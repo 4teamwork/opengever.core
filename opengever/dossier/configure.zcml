@@ -93,7 +93,7 @@
   <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="transition-reactivate"
-      class=".resolve.DossierReactivateView"
+      class=".reactivate.DossierReactivateView"
       permission="zope2.View"
       />
 
@@ -216,10 +216,9 @@
       handler=".handlers.purge_reference_number_mappings"
       />
 
-  <subscriber
-      for="opengever.dossier.behaviors.dossier.IDossierMarker
-           Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.run_cleanup_jobs"
+  <adapter
+      factory=".resolve.ResolveDossierTransitionExtender"
+      name="dossier-transition-resolve"
       />
 
   <adapter factory=".archive.Archiver" />
