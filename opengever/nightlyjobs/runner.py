@@ -29,12 +29,12 @@ class SystemLoadCritical(Exception):
               "CPU load: {}; limit: {}"\
               "Available memory: {}MB; limit: {}MB"
 
-    def __init__(self, cpu_limit, memory_limit):
-        self.cpu_percent = psutil.cpu_percent()
-        self.available_memory = psutil.virtual_memory().available / 1024 / 1024
-        memory_limit = memory_limit / 1024 / 1024
-        message = self.message.format(self.cpu_percent, cpu_limit,
-                                      self.available_memory, memory_limit)
+    def __init__(self, load, limits):
+        self.load = load
+        self.limits = limits
+        message = self.message.format(load['cpu_percent'], limits['cpu_percent'],
+                                      load['virtual_memory_available'] / 1024 / 1024,
+                                      limits['virtual_memory_available'] / 1024 / 1024)
         super(SystemLoadCritical, self).__init__(message)
 
 
@@ -46,8 +46,8 @@ class NightlyJobRunner(object):
     the system load is too high.
     """
 
-    MEMORY_LIMIT = 100 * 1024 *1024
-    CPU_LIMIT = 95
+    LOAD_LIMITS = {'cpu_percent': 95,
+                   'virtual_memory_available': 100 * 1024 *1024}
 
     def __init__(self):
         # retrieve window start and end times
@@ -84,23 +84,29 @@ class NightlyJobRunner(object):
         now = datetime.now().time()
         if not self.check_in_time_window(now):
             raise TimeWindowExceeded(now, self.window_start, self.window_end)
-        if self.check_system_overloaded():
-            raise SystemLoadCritical(self.CPU_LIMIT, self.MEMORY_LIMIT)
 
+        load = self.get_system_load()
+        if self.check_system_overloaded(load):
+            raise SystemLoadCritical(load, self.LOAD_LIMITS)
 
-    def _is_cpu_overladed(self):
-        return psutil.cpu_percent() > self.CPU_LIMIT
     def check_in_time_window(self, now):
         current_time = timedelta(hours=now.hour, minutes=now.minute)
         if current_time - self.window_start < timedelta():
             current_time += timedelta(hours=24)
         return self.window_start < current_time < self.window_end
 
-    def _is_memory_full(self):
-        return psutil.virtual_memory().available < self.MEMORY_LIMIT
+    def _is_cpu_overladed(self, load):
+        return load['cpu_percent'] > self.LOAD_LIMITS['cpu_percent']
 
-    def check_system_overloaded(self):
-        return (self._is_cpu_overladed() or self._is_memory_full())
+    def _is_memory_full(self, load):
+        return load['virtual_memory_available'] < self.LOAD_LIMITS['virtual_memory_available']
+
+    def get_system_load(self):
+        return {'cpu_percent': psutil.cpu_percent(),
+                'virtual_memory_available': psutil.virtual_memory().available}
+
+    def check_system_overloaded(self, load):
+        return (self._is_cpu_overladed(load) or self._is_memory_full(load))
 
     def format_early_abort_message(self, exc):
         info = "\n".join("{} executed {} out of {} jobs".format(

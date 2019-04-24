@@ -14,7 +14,6 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
-import psutil
 
 
 @adapter(IPloneSiteRoot, IBrowserRequest)
@@ -153,23 +152,23 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.login(self.manager)
         runner = NightlyJobRunner()
 
-        runner.CPU_LIMIT = 120
-        self.assertFalse(runner._is_cpu_overladed())
+        cpu_percent_limit = runner.LOAD_LIMITS['cpu_percent']
+        load = {'cpu_percent': cpu_percent_limit - 1}
+        self.assertFalse(runner._is_cpu_overladed(load))
 
-        runner.CPU_LIMIT = - 1
-        self.assertTrue(runner._is_cpu_overladed())
+        load = {'cpu_percent': cpu_percent_limit + 1}
+        self.assertTrue(runner._is_cpu_overladed(load))
 
     def test_is_memory_full(self):
-        """ Hopefully not flaky
-        """
         self.login(self.manager)
         runner = NightlyJobRunner()
 
-        runner.MEMORY_LIMIT = 0
-        self.assertFalse(runner._is_memory_full())
+        memory_limit = runner.LOAD_LIMITS['virtual_memory_available']
+        load = {'virtual_memory_available': memory_limit + 1}
+        self.assertFalse(runner._is_memory_full(load))
 
-        runner.MEMORY_LIMIT = 10 * psutil.virtual_memory().total
-        self.assertTrue(runner._is_memory_full())
+        load = {'virtual_memory_available': memory_limit - 1}
+        self.assertTrue(runner._is_memory_full(load))
 
     def test_runner_aborts_when_not_in_time_window(self):
         self.login(self.manager)
@@ -184,7 +183,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def test_runner_aborts_when_system_overloaded(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
-        runner.check_system_overloaded = lambda: True
+        runner.check_system_overloaded = lambda load: True
         self.assertEqual(1, runner.njobs_total)
 
         exception = runner.execute_pending_jobs()
@@ -224,7 +223,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def test_systemoverloaded_early_abort_message(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
-        runner.check_system_overloaded = lambda: True
+        runner.check_system_overloaded = lambda load: True
         exception = runner.execute_pending_jobs()
         message = runner.format_early_abort_message(exception)
         self.assertIn("SystemLoadCritical('System overloaded.", message)
