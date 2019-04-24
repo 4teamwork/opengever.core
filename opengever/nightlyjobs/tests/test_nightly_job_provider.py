@@ -16,13 +16,6 @@ from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 
 
-class ModifyTitleJob(NightlyJob):
-
-    def __init__(self, provider_name, uid):
-        self.uid = uid
-        self.provider_name = provider_name
-
-
 class IWantToBeModified(Interface):
     pass
 
@@ -66,7 +59,7 @@ class DocumentTitleModifierJobProvider(object):
 
     def execute_job(self, job, interrupt_if_necessary):
         interrupt_if_necessary()
-        obj = uuidToObject(job.uid)
+        obj = uuidToObject(job.data['uid'])
         obj.title = u'Modified {}'.format(obj.title)
 
 
