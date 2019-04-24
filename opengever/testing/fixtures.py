@@ -994,6 +994,7 @@ class OpengeverContentFixture(object):
                 document_date=datetime(2010, 1, 3),
                 document_type='contract',
                 receipt_date=datetime(2010, 1, 3),
+                keywords=(u'Wichtig', ),
                 )
             .attach_file_containing(
                 bumblebee_asset('example.docx').bytes(),
@@ -1081,6 +1082,7 @@ class OpengeverContentFixture(object):
                 u'tab\xe4lle.xlsx',
             )
             .relate_to([self.document])
+            .having(keywords=(u'Wichtig', u'Subkeyword', ))
         ))
 
         subsubdossier = self.register('subsubdossier', create(
@@ -1107,7 +1109,8 @@ class OpengeverContentFixture(object):
             Builder('document')
             .within(subdossier)
             .titled(u'L\xe4\xe4r')
-            .having(preserved_as_paper=True)
+            .having(preserved_as_paper=True,
+                    keywords=(u'Subkeyword', ))
         ))
 
         self.register('removed_document', create(

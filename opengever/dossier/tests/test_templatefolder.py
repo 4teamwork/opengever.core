@@ -796,6 +796,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Public Trial',
             'Reference Number',
             'File extension',
+            'Keywords',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
@@ -817,6 +818,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Public Trial',
             'Reference Number',
             'File extension',
+            'Keywords',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
@@ -838,6 +840,7 @@ class TestTemplateFolderListings(IntegrationTestCase):
             'Public Trial',
             'Reference Number',
             'File extension',
+            'Keywords',
             ]
 
         self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])

@@ -120,6 +120,8 @@ class Documents(BaseCatalogListingTab):
     """List all documents recursively. Working copies are not listed.
     """
 
+    subject_filter_available = True
+
     types = ['opengever.document.document', 'ftw.mail.mail']
 
     # XXX Can be set back to 'columns' once the changed metadata has been filled on all deployments
@@ -191,6 +193,10 @@ class Documents(BaseCatalogListingTab):
         {'column': 'file_extension',
          'column_title': _(u'label_document_file_extension',
                            default=u'File extension')},
+
+        {'column': 'Subject',
+         'column_title': _(u'label_keywords', default=u'Keywords'),
+         'transform': linked_subjects},
         )
 
     major_actions = [
