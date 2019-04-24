@@ -9,6 +9,10 @@ class MakeTaskResponseChangesPersistent(UpgradeStep):
     """Make task response changes persistent.
     """
 
+    # This upgrade step was retroactively marked as deferrable.
+    # No need to run this upgradestep immediately.
+    deferrable = True
+
     def __call__(self):
         for task in self.objects({'object_provides': ITask.__identifier__},
                                 'Make task responses persistent'):
