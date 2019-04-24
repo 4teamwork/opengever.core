@@ -143,6 +143,9 @@ SOLR_FILTERS = {
     u'workspaces': [
         u'object_provides:opengever.workspace.interfaces.IWorkspace',
     ],
+    u'workspace_folders': [
+        u'object_provides:opengever.workspace.interfaces.IWorkspaceFolder',
+    ],
     u'tasks': [
         u'object_provides:opengever.task.task.ITask',
     ]
@@ -157,6 +160,9 @@ CATALOG_QUERIES = {
     },
     'workspaces': {
         'object_provides': 'opengever.workspace.interfaces.IWorkspace',
+    },
+    'workspace_folders': {
+        'object_provides': 'opengever.workspace.interfaces.IWorkspaceFolder',
     },
     'tasks': {
         'object_provides': 'opengever.task.task.ITask',
