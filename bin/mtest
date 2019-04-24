@@ -8,7 +8,6 @@ from logging import getLogger
 from logging import INFO
 from logging import StreamHandler
 from logging.handlers import MemoryHandler
-from math import ceil
 from multiprocessing import cpu_count
 from multiprocessing import Pool
 from os import access
@@ -104,6 +103,7 @@ def discover_tests(layers=None, modules=None):
     batches = {}
 
     layer = None
+    modulename = None
     classname = None
 
     for line in test_discovery(layers, modules):
@@ -115,12 +115,17 @@ def discover_tests(layers=None, modules=None):
         if layer and line.startswith('  '):
             if '(' in line:
                 classname = re.search(r'.*\((.*)\).*', line).groups()[0]
+                if not modulename or modulename not in classname:
+                    modulename = '.'.join(classname.split('.')[:2])
+
+            # Group discovered tests by layer - module - testclass
+            if not batches[layer].get(modulename):
+                batches[layer][modulename] = {}
 
             # Count discovered tests per testclass
-            if not batches.get(layer).get(classname):
-                batches[layer][classname] = 0
+            batches[layer][modulename][classname] = 0
 
-            batches[layer][classname] += 1
+            batches[layer][modulename][classname] += 1
 
     return batches
 
@@ -156,65 +161,31 @@ def chunks(chunkable, chunksize):
     return output
 
 
-def split(batch):
-    minsize_mapping = {
-        'opengever.core.testing.opengever.core:integration': 200,
-        'opengever.core.testing.opengever.core:functional': 100,
-    }
-
-    maxsplit_mapping = {
-        'opengever.core.testing.opengever.core:integration': 4,
-        'opengever.core.testing.opengever.core:functional': 2,
-    }
-
-    layer = batch.get('layer')
-
-    unsplittable_layer = (
-        layer not in minsize_mapping
-        or
-        layer not in maxsplit_mapping
-    )
-
-    if unsplittable_layer or CONCURRENCY < 2:
-        batch['count'] = sum(batch.get('testclasses').values())
-        del batch['testclasses']
-        return (batch, )
-
-    original_count = batch.get('original_count')
-    chunk_count = ceil(original_count / float(minsize_mapping.get(layer)))
-    chunk_count = min(chunk_count, CONCURRENCY)
-    chunk_count = min(chunk_count, maxsplit_mapping.get(layer))
-    chunksize = original_count / float(chunk_count)
-
-    splinters = []
-    for chunk in chunks(batch.get('testclasses').items(), chunksize):
-        splinters.append({'layer': layer, 'testclasses': dict(chunk), 'original_count': original_count})
-        splinters[-1]['count'] = sum(splinters[-1].get('testclasses').values())
-
-    return tuple(sorted(
-        splinters,
-        key=lambda batch: -batch.get('count'),
-        ))
-
-
 def create_test_run_params(layers=None, modules=None, shuffle=False):
     test_run_params = []
 
-    for layer, testclasses in discover_tests(layers, modules).iteritems():
-        batch = {}
-        batch['layer'] = layer
-        batch['testclasses'] = testclasses
-        batch['original_count'] = sum(testclasses.values())
-        split_batches = split(batch)
-        for i, split_batch in enumerate(split_batches):
-            split_batch['batchinfo'] = '{}/{}'.format(i + 1, len(split_batches))
-            split_batch['shuffle'] = shuffle
-            test_run_params.append(split_batch)
+    for layer, module in discover_tests(layers, modules).iteritems():
+        for modulename, testclasses in module.iteritems():
+            batch = {}
+            batch['layer'] = layer
+            batch['module'] = modulename
+            batch['testclasses'] = tuple(testclasses.keys())
+            batch['count'] = sum(testclasses.values())
+            batch['shuffle'] = shuffle
+            test_run_params.append(batch)
 
-    return tuple(sorted(
-        test_run_params,
-        key=lambda batch: -batch.get('original_count'),
-        ))
+    test_run_params.sort(key=test_layer_sorter)
+    return tuple(test_run_params)
+
+
+def test_layer_sorter(batch):
+    layer = batch['layer']
+    count = -batch['count']
+    if layer == 'opengever.core.testing.opengever.core:functional':
+        return (1, count)
+    elif layer == 'opengever.core.testing.opengever.core:integration':
+        return (2, count)
+    return (3, count)
 
 
 def remove_bytecode_files(directory_path):
@@ -232,12 +203,12 @@ def find_bytecode_files(directory_path):
 
 
 def run_tests(test_run_params):
-    """Run and time 'bin/test --layer layer -m module [-m module]'."""
+    """Run and time 'bin/test --layer layer -t testclass [-t testclass]'."""
     params = ['bin/test']
     params.append('--xml')
 
     layer = test_run_params.get('layer')
-    batchinfo = test_run_params.get('batchinfo')
+    module = test_run_params.get('module')
     testclasses = test_run_params.get('testclasses', ())
     count = test_run_params.get('count')
     shuffle = test_run_params.get('shuffle')
@@ -256,12 +227,12 @@ def run_tests(test_run_params):
     printable_params = ' '.join(["'{}'".format(param) if ' ' in param else param for param in params])
 
     logger.info(
-        "START - %s %s - %d %s",
+        "START - %s - %s - %d %s",
         layer,
-        batchinfo,
+        module,
         count,
         'test' if count == 1 else 'tests',
-        )
+    )
 
     # Explicitly flush to trigger IPC over cPickle
     memory_handler.flush()
@@ -288,13 +259,13 @@ def run_tests(test_run_params):
         }
 
     done_args = (
-        'DONE - %s %s - %d %s in %s',
+        'DONE - %s - %s - %d %s in %s',
         layer,
-        batchinfo,
+        module,
         count,
         'test' if count == 1 else 'tests',
         humanize_time(runtime),
-        )
+    )
 
     if returncode:
         log_output.error('')
