@@ -175,6 +175,13 @@ def create_test_run_params(layers=None, modules=None, shuffle=False):
             test_run_params.append(batch)
 
     test_run_params.sort(key=test_layer_sorter)
+    fixture_generator = {
+        'layer': 'opengever.core.testing.opengever.core:integration',
+        'module': 'Generating fixture',
+        'testclasses': ('opengever.testing.tests.test_dump_fixture_structure.TestDumpFixtureStrutureToReadme',),
+        'count': 1,
+    }
+    test_run_params.insert(0, fixture_generator)
     return tuple(test_run_params)
 
 
@@ -238,8 +245,7 @@ def run_tests(test_run_params):
     memory_handler.flush()
 
     env = environ.copy()
-    # We cannot access cached sqlite fixtures in parallel yet
-    env['GEVER_CACHE_TEST_DB'] = 'false'
+    env['GEVER_CACHE_TEST_DB'] = 'true'
 
     start = time()
 
