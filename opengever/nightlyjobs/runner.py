@@ -12,11 +12,11 @@ import transaction
 
 class TimeWindowExceeded(Exception):
 
-    message = "Time window exceeded. Window: {:%H:%M}-{:%H:%M}. "\
+    message = "Time window exceeded. Window: {}-{}. "\
               "Current time: {:%H:%M}"
 
-    def __init__(self, start, end):
-        self.current_time = datetime.now().time()
+    def __init__(self, now, start, end):
+        self.current_time = now
         self.start = start
         self.end = end
         message = self.message.format(start, end, self.current_time)
@@ -55,24 +55,12 @@ class NightlyJobRunner(object):
             'start_time', interface=INightlyJobsSettings)
         self.window_end = api.portal.get_registry_record(
             'end_time', interface=INightlyJobsSettings)
-        self.window_length = self._positive_timedelta(
-            self.window_start, self.window_end)
 
         # retrieve all providers
         self.job_providers = {name: provider for name, provider
                               in getAdapters([api.portal.get(), getRequest()],
                                              INightlyJobProvider)}
 
-    @staticmethod
-    def _positive_timedelta(time1, time2):
-        """ Returns the positive timedelta between two time objects (time2-time1).
-        This is necessary to correctly handle timedeltas around midnight.
-        """
-        datetime1 = datetime(1900, 1, 1, time1.hour, time1.minute, time1.second)
-        datetime2 = datetime(1900, 1, 1, time2.hour, time2.minute, time2.second)
-        if datetime2 < datetime1:
-            datetime2 += timedelta(1)
-        return datetime2 - datetime1
 
     def get_jobs(self):
         for job_provider in self.job_providers.values():
@@ -93,18 +81,20 @@ class NightlyJobRunner(object):
             transaction.commit()
 
     def interrupt_if_necessary(self):
-        if not self.check_in_time_window():
-            raise TimeWindowExceeded(self.window_start, self.window_end)
+        now = datetime.now().time()
+        if not self.check_in_time_window(now):
+            raise TimeWindowExceeded(now, self.window_start, self.window_end)
         if self.check_system_overloaded():
             raise SystemLoadCritical(self.CPU_LIMIT, self.MEMORY_LIMIT)
 
-    def check_in_time_window(self):
-        current_time = datetime.now().time()
-        current_timedelta = self._positive_timedelta(self.window_start, current_time)
-        return current_timedelta < self.window_length
 
     def _is_cpu_overladed(self):
         return psutil.cpu_percent() > self.CPU_LIMIT
+    def check_in_time_window(self, now):
+        current_time = timedelta(hours=now.hour, minutes=now.minute)
+        if current_time - self.window_start < timedelta():
+            current_time += timedelta(hours=24)
+        return self.window_start < current_time < self.window_end
 
     def _is_memory_full(self):
         return psutil.virtual_memory().available < self.MEMORY_LIMIT

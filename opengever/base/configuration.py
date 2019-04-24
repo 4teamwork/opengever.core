@@ -70,8 +70,8 @@ class GeverSettingsAdpaterV1(object):
 
     def get_nightly_jobs_settings(self):
         nightly_jobs_settings = {}
-        nightly_jobs_settings['start_time'] = api.portal.get_registry_record('start_time', interface=INightlyJobsSettings).isoformat()  # noqa
-        nightly_jobs_settings['end_time'] = api.portal.get_registry_record('end_time', interface=INightlyJobsSettings).isoformat()  # noqa
+        nightly_jobs_settings['start_time'] = str(api.portal.get_registry_record('start_time', interface=INightlyJobsSettings))  # noqa
+        nightly_jobs_settings['end_time'] = str(api.portal.get_registry_record('end_time', interface=INightlyJobsSettings))  # noqa
         return nightly_jobs_settings
 
     def get_sharing_configuration(self):

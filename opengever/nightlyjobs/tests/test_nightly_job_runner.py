@@ -106,44 +106,46 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def test_check_in_time_window(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
-        self.assertEqual(time(1, 0), runner.window_start)
-        self.assertEqual(time(5, 0), runner.window_end)
+        self.assertEqual(timedelta(hours=1), runner.window_start)
+        self.assertEqual(timedelta(hours=5), runner.window_end)
 
         # 22:00
         self.clock.backward(seconds=6 * 3600)
         self.assertEqual(time(22, 0), datetime.now().time())
-        self.assertFalse(runner.check_in_time_window())
+        self.assertFalse(runner.check_in_time_window(datetime.now().time()))
 
         # 2:00
         self.clock.forward(seconds=4 * 3600)
-        self.assertTrue(runner.check_in_time_window())
+        self.assertTrue(runner.check_in_time_window(datetime.now().time()))
 
         # 6:00
         self.clock.forward(seconds=4 * 3600)
-        self.assertFalse(runner.check_in_time_window())
+        self.assertFalse(runner.check_in_time_window(datetime.now().time()))
 
     def test_check_in_time_window_handles_midnight_correctly(self):
         self.login(self.manager)
-        api.portal.set_registry_record('start_time', time(22, 30),
+        api.portal.set_registry_record('start_time', timedelta(hours=22, minutes=30),
+                                       interface=INightlyJobsSettings)
+        api.portal.set_registry_record('end_time', timedelta(hours=29),
                                        interface=INightlyJobsSettings)
         runner = NightlyJobRunner()
 
         # 22:00
         self.clock.backward(seconds=6 * 3600)
         self.assertEqual(time(22, 0), datetime.now().time())
-        self.assertFalse(runner.check_in_time_window())
+        self.assertFalse(runner.check_in_time_window(datetime.now().time()))
 
         # 23:00
         self.clock.forward(seconds=3600)
-        self.assertTrue(runner.check_in_time_window())
+        self.assertTrue(runner.check_in_time_window(datetime.now().time()))
 
         # 3:00
         self.clock.forward(seconds=4 * 3600)
-        self.assertTrue(runner.check_in_time_window())
+        self.assertTrue(runner.check_in_time_window(datetime.now().time()))
 
         # 6:00
         self.clock.forward(seconds=3 * 3600)
-        self.assertFalse(runner.check_in_time_window())
+        self.assertFalse(runner.check_in_time_window(datetime.now().time()))
 
     def test_is_cpu_overloaded(self):
         """ Hopefully not flaky
@@ -211,10 +213,10 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def test_timewindowexceeded_early_abort_message(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
-        runner.check_in_time_window = lambda: False
+        runner.check_in_time_window = lambda now: False
         exception = runner.execute_pending_jobs()
         expected_message = "TimeWindowExceeded('Time window exceeded. "\
-                           "Window: 01:00-05:00. Current time: 04:00',)\n"\
+                           "Window: 1:00:00-5:00:00. Current time: 04:00',)\n"\
                            "document-title executed 0 out of 1 jobs"
         self.assertEqual(expected_message,
                          runner.format_early_abort_message(exception))

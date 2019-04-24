@@ -138,4 +138,4 @@ class TestConfig(IntegrationTestCase):
                      headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'nightly_jobs'),
-                         {u'start_time': u'01:00:00', u'end_time': u'05:00:00'})
+                         {u'start_time': u'1:00:00', u'end_time': u'5:00:00'})
