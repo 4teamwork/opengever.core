@@ -2,12 +2,17 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
+from collective.indexing.interfaces import IIndexQueueProcessor
+from collective.indexing.queue import getQueue
 from contextlib import contextmanager
 from opengever.base.interfaces import IInternalWorkflowTransition
 from plone import api
+from Products.CMFCore.CMFCatalogAware import CatalogAware
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
+from opengever.ogds.base.sources import is_solr_feature_enabled
 
 
 class UnrestrictedUser(BaseUnrestrictedUser):
@@ -18,6 +23,34 @@ class UnrestrictedUser(BaseUnrestrictedUser):
         """Return the ID of the user.
         """
         return self.getUserName()
+
+
+def reindex_object_security_without_children(obj):
+    """Reindex only the security indices of the passed in object.
+
+    Sometimes we know we do not need to also reindex the security of all the
+    child objects, so we can directly go to what the upstream implementation
+    does per object.
+
+    As we're bypassing the normal machinery, likewise we need to do Solr
+    indexing by hand.
+    """
+    catalog = api.portal.get_tool('portal_catalog')
+    security_idxs = CatalogAware._cmf_security_indexes
+
+    catalog.reindexObject(obj, idxs=security_idxs, update_metadata=False)
+
+    if is_solr_feature_enabled():
+        # Using catalogs reindexObject does not trigger corresponding solr
+        # reindexing, so we do it manually.
+
+        # Register collective.indexing hook, to make sure solr changes
+        # are realy send to solr. See
+        # collective.indexing.queue.IndexQueue.hook.
+        getQueue().hook()
+
+        processor = getUtility(IIndexQueueProcessor, name='ftw.solr')
+        processor.index(obj, security_idxs)
 
 
 @contextmanager
