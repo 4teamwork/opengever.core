@@ -13,6 +13,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),
+            ('document_preserved_as_paper_default', True),
             ('oneoffixx_settings', OrderedDict([
                 ('baseurl', u''),
                 ('fake_sid', u''),
