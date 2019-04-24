@@ -1,5 +1,6 @@
 from datetime import datetime
 from datetime import time
+from datetime import timedelta
 from ftw.testing.freezer import FreezedClock
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
@@ -26,13 +27,13 @@ class DossierTitleModifierJobProvider(DocumentTitleModifierJobProvider):
 @adapter(IPloneSiteRoot, IOpengeverBaseLayer)
 class TickingDocumentTitleModifierJobProvider(DocumentTitleModifierJobProvider):
 
-    def initialize(self):
+    def __init__(self, context, request):
+        super(TickingDocumentTitleModifierJobProvider, self).__init__(context, request)
         self.clock = self.request.clock
-        super(TickingDocumentTitleModifierJobProvider, self).initialize()
 
-    def post_job_run(self, job):
+    def run_job(self, job, interrupt_if_necessary):
+        super(TickingDocumentTitleModifierJobProvider, self).run_job(job, interrupt_if_necessary)
         self.clock.forward(seconds=3600)
-        super(TickingDocumentTitleModifierJobProvider, self).post_job_run(job)
 
 
 class TestNightlyJobRunner(IntegrationTestCase):

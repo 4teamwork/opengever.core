@@ -20,4 +20,18 @@ class INightlyJobsSettings(Interface):
 
 
 class INightlyJobProvider(Interface):
-    pass
+    """ This interface should be provided by specific nightly job providers,
+    which should be multiadapters of 'IPloneSiteRoot' and 'IBrowserRequest'.
+    """
+
+    def run_job(job, interrupt_if_necessary):
+        """ This method takes care of executing a given job.
+        """
+
+    def __iter__():
+        """ needs to return an iterable
+        """
+
+    def __len__():
+        """ Number of remaining jobs.
+        """
