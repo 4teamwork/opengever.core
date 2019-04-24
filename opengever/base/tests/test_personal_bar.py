@@ -5,6 +5,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.webactions.storage import get_storage
 from plonetheme.teamraum.testing import TeamraumThemeTestCase
 from Products.CMFCore.utils import getToolByName
+from urllib import urlencode
 import transaction
 
 
@@ -87,9 +88,10 @@ class TestWebactionsInPersonalBar(IntegrationTestCase):
 
         self.assertEqual(['Action 2', 'Action 1'], webactions.text)
 
-        self.assertEqual(
-            map(lambda item: item.get("href"), webactions),
-            ['http://example.org/endpoint2', 'http://example.org/endpoint'])
+        params = urlencode({'context': self.dossier.absolute_url(), 'orgunit': 'fa'})
+        self.assertEqual(map(lambda item: item.get("href"), webactions),
+                         ['http://example.org/endpoint2?{}'.format(params),
+                          'http://example.org/endpoint?{}'.format(params)])
 
     @browsing
     def test_only_webactions_with_display_user_menu_are_shown_in_usermenu(self, browser):

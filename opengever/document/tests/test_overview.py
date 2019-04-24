@@ -7,6 +7,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
 from plone.locking.interfaces import IRefreshableLockable
+from urllib import urlencode
 from zope.component import queryMultiAdapter
 
 
@@ -614,9 +615,11 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         webactions = browser.css('.file-action-buttons a.webaction_button')
         self.assertEqual(['Action 2', u'\xc4ction 1'], webactions.text)
 
-        self.assertEqual(
-            map(lambda item: item.get("href"), webactions),
-            ['http://example.org/endpoint2', 'http://example.org/endpoint'])
+        params = urlencode({'context': self.document.absolute_url(),
+                            'orgunit': 'fa'})
+        self.assertEqual(map(lambda item: item.get("href"), webactions),
+                         ['http://example.org/endpoint2?{}'.format(params),
+                          'http://example.org/endpoint?{}'.format(params)])
 
         self.assertEqual(
             map(lambda item: item.get("class"), webactions),

@@ -5,6 +5,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.webactions.storage import get_storage
 from plone.app.testing import TEST_USER_ID
+from urllib import urlencode
 
 
 class TestActionmenuViewlet(FunctionalTestCase):
@@ -82,9 +83,10 @@ class TestActionmenuViewletWebactions(IntegrationTestCase):
         self.assertEqual(2, len(webactions))
         self.assertEqual(['Action 2', 'Action 1'], webactions.text)
 
-        self.assertEqual(
-            map(lambda item: item.get("href"), webactions),
-            ['http://example.org/endpoint2', 'http://example.org/endpoint'])
+        params = urlencode({'context': self.task.absolute_url(), 'orgunit': 'fa'})
+        self.assertEqual(map(lambda item: item.get("href"), webactions),
+                         ['http://example.org/endpoint2?{}'.format(params),
+                          'http://example.org/endpoint?{}'.format(params)])
 
         self.assertEqual(
             map(lambda item: item.get("class"), webactions),
