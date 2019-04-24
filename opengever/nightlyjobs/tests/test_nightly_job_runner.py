@@ -92,13 +92,13 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.dossier.reindexObject(idxs=["object_provides"])
 
         runner = NightlyJobRunner()
-        self.assertEqual(2, runner.njobs_total)
+        self.assertEqual(2, runner.get_initial_jobs_count())
         document_title = self.document.title
         dossier_title = self.dossier.title
 
         exception = runner.execute_pending_jobs()
         self.assertIsNone(exception)
-        self.assertEqual(2, runner.njobs_executed)
+        self.assertEqual(2, runner.get_executed_jobs_count())
         self.assertEqual(u'Modified {}'.format(document_title), self.document.title)
         self.assertEqual(u'Modified {}'.format(dossier_title), self.dossier.title)
 
@@ -173,22 +173,22 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def test_runner_aborts_when_not_in_time_window(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
-        runner.check_in_time_window = lambda: False
-        self.assertEqual(1, runner.njobs_total)
+        runner.check_in_time_window = lambda now: False
+        self.assertEqual(1, runner.get_initial_jobs_count())
 
         exception = runner.execute_pending_jobs()
         self.assertIsInstance(exception, TimeWindowExceeded)
-        self.assertEqual(0, runner.njobs_executed)
+        self.assertEqual(0, runner.get_executed_jobs_count())
 
     def test_runner_aborts_when_system_overloaded(self):
         self.login(self.manager)
         runner = NightlyJobRunner()
         runner.check_system_overloaded = lambda load: True
-        self.assertEqual(1, runner.njobs_total)
+        self.assertEqual(1, runner.get_initial_jobs_count())
 
         exception = runner.execute_pending_jobs()
         self.assertIsInstance(exception, SystemLoadCritical)
-        self.assertEqual(0, runner.njobs_executed)
+        self.assertEqual(0, runner.get_executed_jobs_count())
 
     def test_runner_respects_time_window(self):
         self.login(self.manager)
@@ -202,12 +202,12 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.subsubdocument.reindexObject(idxs=["object_provides"])
 
         runner = NightlyJobRunner()
-        self.assertEqual(3, runner.njobs_total)
-        self.assertEqual(0, runner.njobs_executed)
+        self.assertEqual(3, runner.get_initial_jobs_count())
+        self.assertEqual(0, runner.get_executed_jobs_count())
 
         exception = runner.execute_pending_jobs()
         self.assertIsInstance(exception, TimeWindowExceeded)
-        self.assertEqual(1, runner.njobs_executed)
+        self.assertEqual(1, runner.get_executed_jobs_count())
 
     def test_timewindowexceeded_early_abort_message(self):
         self.login(self.manager)

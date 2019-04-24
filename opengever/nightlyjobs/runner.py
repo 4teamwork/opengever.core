@@ -61,6 +61,8 @@ class NightlyJobRunner(object):
                               in getAdapters([api.portal.get(), getRequest()],
                                              INightlyJobProvider)}
 
+        self.initial_jobs_count = {name: len(provider) for name, provider
+                                   in self.job_providers.items()}
 
     def get_jobs(self):
         for job_provider in self.job_providers.values():
@@ -110,27 +112,25 @@ class NightlyJobRunner(object):
 
     def format_early_abort_message(self, exc):
         info = "\n".join("{} executed {} out of {} jobs".format(
-            provider.provider_name, provider.njobs_executed, provider.njobs)
-            for provider in self.job_providers.values())
+                            provider.provider_name,
+                            self.get_executed_jobs_count(provider.provider_name),
+                            self.get_initial_jobs_count(provider.provider_name))
+                         for provider in self.job_providers.values())
         return "{}\n{}".format(repr(exc), info)
 
     def log_to_sentry(self, message):
         log_msg_to_sentry(message, request=getRequest())
 
-    @property
-    def njobs_remaining(self):
-        if not self.job_providers:
-            return 0
-        return sum(len(provider) for provider in self.job_providers.values())
+    def get_initial_jobs_count(self, provider_name=None):
+        if not provider_name:
+            return sum(self.initial_jobs_count.values())
+        return self.initial_jobs_count.get(provider_name)
 
-    @property
-    def njobs_total(self):
-        if not self.job_providers:
-            return 0
-        return sum(provider.njobs for provider in self.job_providers.values())
+    def get_remaining_jobs_count(self, provider_name=None):
+        if not provider_name:
+            return sum(len(provider) for provider in self.job_providers.values())
+        return len(self.job_providers[provider_name])
 
-    @property
-    def njobs_executed(self):
-        if not self.job_providers:
-            return 0
-        return sum(provider.njobs_executed for provider in self.job_providers.values())
+    def get_executed_jobs_count(self, provider_name=None):
+        return (self.get_initial_jobs_count(provider_name) -
+                self.get_remaining_jobs_count(provider_name))

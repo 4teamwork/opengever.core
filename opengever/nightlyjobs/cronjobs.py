@@ -18,14 +18,16 @@ def run_nightly_jobs_handler(app, args):
         runner = NightlyJobRunner()
         logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                     runner.job_providers.keys()))
-        logger.info('Number of jobs: {}'.format(runner.njobs_total))
+        logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
 
         exc = runner.execute_pending_jobs()
         if exc:
             logger.info('Early abort')
             logger.info(runner.format_early_abort_message(exc))
-        logger.info('Successfully executed {} jobs'.format(runner.njobs_executed))
-        if runner.njobs_remaining == 0:
+
+        logger.info('Successfully executed {} jobs'.format(runner.get_executed_jobs_count()))
+
+        if runner.get_remaining_jobs_count() == 0:
             logger.info('No jobs remaining')
         else:
-            logger.info('{} jobs remaining'.format(runner.njobs_remaining))
+            logger.info('{} jobs remaining'.format(runner.get_remaining_jobs_count()))
