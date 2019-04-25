@@ -26,7 +26,7 @@ class TimeWindowExceeded(Exception):
 class SystemLoadCritical(Exception):
 
     message = "System overloaded.\n"\
-              "CPU load: {}; limit: {}"\
+              "CPU load: {}; limit: {}\n"\
               "Available memory: {}MB; limit: {}MB"
 
     def __init__(self, load, limits):

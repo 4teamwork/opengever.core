@@ -54,6 +54,19 @@ class TestNightlyJobRunner(IntegrationTestCase):
     def tearDown(self):
         self.clock.__exit__(None, None, None)
 
+    def get_load_controlled_runner(self, cpu_percent=50,
+                                   virtual_memory_available=200 * 1024 * 1024):
+        """ get a runner with controlled system load
+        """
+        runner = NightlyJobRunner()
+
+        def get_system_load():
+            return {'cpu_percent': cpu_percent,
+                    'virtual_memory_available': virtual_memory_available}
+
+        runner.get_system_load = get_system_load
+        return runner
+
     def test_nightly_job_runner_finds_all_registered_providers(self):
         runner = NightlyJobRunner()
         expected = {'document-title': DocumentTitleModifierJobProvider}
@@ -92,7 +105,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         alsoProvides(self.dossier, IWantToBeModified)
         self.dossier.reindexObject(idxs=["object_provides"])
 
-        runner = NightlyJobRunner()
+        runner = self.get_load_controlled_runner()
         self.assertEqual(2, runner.get_initial_jobs_count())
         document_title = self.document.title
         dossier_title = self.dossier.title
@@ -105,7 +118,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_check_in_time_window(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = self.get_load_controlled_runner()
         self.assertEqual(timedelta(hours=1), runner.window_start)
         self.assertEqual(timedelta(hours=5), runner.window_end)
 
@@ -148,8 +161,6 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.assertFalse(runner.check_in_time_window(datetime.now().time()))
 
     def test_is_cpu_overloaded(self):
-        """ Hopefully not flaky
-        """
         self.login(self.manager)
         runner = NightlyJobRunner()
 
@@ -183,8 +194,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_runner_aborts_when_system_overloaded(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
-        runner.check_system_overloaded = lambda load: True
+        runner = self.get_load_controlled_runner(cpu_percent=100)
         self.assertEqual(1, runner.get_initial_jobs_count())
 
         exception = runner.execute_pending_jobs()
@@ -202,7 +212,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.subdocument.reindexObject(idxs=["object_provides"])
         self.subsubdocument.reindexObject(idxs=["object_provides"])
 
-        runner = NightlyJobRunner()
+        runner = self.get_load_controlled_runner()
         self.assertEqual(3, runner.get_initial_jobs_count())
         self.assertEqual(0, runner.get_executed_jobs_count())
 
@@ -212,7 +222,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_timewindowexceeded_early_abort_message(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = self.get_load_controlled_runner()
         runner.check_in_time_window = lambda now: False
         exception = runner.execute_pending_jobs()
         expected_message = "TimeWindowExceeded('Time window exceeded. "\
@@ -223,9 +233,12 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_systemoverloaded_early_abort_message(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = self.get_load_controlled_runner()
         runner.check_system_overloaded = lambda load: True
         exception = runner.execute_pending_jobs()
-        message = runner.format_early_abort_message(exception)
-        self.assertIn("SystemLoadCritical('System overloaded.", message)
-        self.assertIn("document-title executed 0 out of 1 jobs", message)
+        expected_message = "SystemLoadCritical('System overloaded.\\n"\
+                           "CPU load: 50; limit: 95\\n"\
+                           "Available memory: 200MB; limit: 100MB',)\n"\
+                           "document-title executed 0 out of 1 jobs"
+        self.assertEqual(expected_message,
+                         runner.format_early_abort_message(exception))
