@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- NIGHTLY JOBS -->
+  <records interface="opengever.nightlyjobs.interfaces.INightlyJobsSettings" />
+
+</registry>

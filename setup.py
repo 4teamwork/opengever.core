@@ -164,6 +164,7 @@ setup(name='opengever.core',
           'Products.LDAPUserFolder',
           'Products.PloneLDAP',
           'Products.statusmessages',
+          'psutil',
           'python-ldap',
           'pytz',
           'PyXB',
@@ -204,7 +205,7 @@ setup(name='opengever.core',
       send_digest = opengever.activity:send_digest_zopectl_handler
       generate_overdue_notifications = opengever.dossier.cronjobs:generate_overdue_notifications_zopectl_handler
       generate_remind_notifications = opengever.task.reminder.cronjobs:generate_remind_notifications_zopectl_handler
-
+      run_nightly_jobs = opengever.nightlyjobs.cronjobs:run_nightly_jobs_handler
 
       [console_scripts]
       create-policy = opengever.policytemplates.cli:main
