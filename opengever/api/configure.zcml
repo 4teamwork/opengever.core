@@ -340,4 +340,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsGet"
+      permission="zope2.View"
+      />
+
 </configure>

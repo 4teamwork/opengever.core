@@ -33,3 +33,29 @@ PARTICIPATION_ROLES = {
     WORKSPCAE_ADMIN.id: WORKSPCAE_ADMIN,
     WORKSPCAE_MEMBER.id: WORKSPCAE_MEMBER
 }
+
+
+class ParticipationType(object):
+    def __init__(self, id_, title, path_identifier):
+        self.id = id_
+        self.title = title
+        self.path_identifier = path_identifier
+
+    def translated_title(self, request):
+        return translate(self.title, context=request)
+
+    def serialize(self, request):
+        return {
+            'id': self.id,
+            'title': self.translated_title(request)
+        }
+
+TYPE_USER = ParticipationType('user', _('user', default="User"), 'users')
+TYPE_INVITATION = ParticipationType('invitation',
+                                    _('invitation', default="Invitation"),
+                                    'invitations')
+
+PARTICIPATION_TYPES = {
+    TYPE_USER.id: TYPE_USER,
+    TYPE_INVITATION.id: TYPE_INVITATION,
+}

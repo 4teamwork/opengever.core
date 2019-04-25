@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-25 12:07+0000\n"
+"POT-Creation-Date: 2019-04-26 12:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,6 +107,11 @@ msgstr "Membre du team"
 msgid "WorkspaceOwner"
 msgstr "Titulaire"
 
+#. Default: "Invitation"
+#: ./opengever/workspace/participation/__init__.py
+msgid "invitation"
+msgstr ""
+
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_description"
@@ -151,3 +156,8 @@ msgstr "Teamraüme"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
 msgid "title_manage_participation"
 msgstr "Participant de  \"${workspace}\""
+
+#. Default: "User"
+#: ./opengever/workspace/participation/__init__.py
+msgid "user"
+msgstr ""

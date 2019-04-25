@@ -1,0 +1,79 @@
+.. _participation:
+
+Teamraum Beteiligungen
+======================
+
+Der ``@participations`` Endpoint behandelt Teamraum Beteiligungen.
+
+
+Beteiligungen abrufen:
+----------------------
+Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhalts zurück.
+
+Zusätzlich werden alle verfügbaren Rollen im Attribut "roles" zurückgegeben. Dies erleichtert die Darstellung und Verwaltung von Rollen.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /workspace-1/@participations HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "items": [
+        {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/users/max.muster",
+          "@type": "virtual.participations.user",
+          "inviter_fullname": null,
+          "is_editable": false,
+          "participant_fullname": "Max Muster (max.muster)",
+          "readable_role": "Federführung",
+          "role": "WorkspaceOwner",
+          "token": "max.muster",
+          "participation_type": "user",
+          "readable_participation_type": "User",
+        },
+        {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc300",
+          "@type": "virtual.participations.invitation",
+          "inviter_fullname": "Max Muster (max.muster)",
+          "is_editable": true,
+          "participant_fullname": "Petra Fröhlich (petra.frohlich)",
+          "readable_role": "Gast",
+          "role": "WorkspaceGuest",
+          "token": "3a8bfcb1b6294edfb60e2a43717fc300",
+          "participation_type": "invitation",
+          "readable_participation_type": "Invitation",
+        }
+      ],
+      "roles": [
+        {
+          "id": "WorkspaceOwner",
+          "managed": false,
+          "title": "Federführung"
+        },
+        {
+          "id": "WorkspaceAdmin",
+          "managed": true,
+          "title": "Admin"
+        },
+        {
+          "id": "WorkspaceMember",
+          "managed": true,
+          "title": "Teammitglied"
+        },
+        {
+          "id": "WorkspaceGuest",
+          "managed": true,
+          "title": "Gast"
+        }
+      ]
+    }
