@@ -26,15 +26,13 @@ class TimeWindowExceeded(Exception):
 class SystemLoadCritical(Exception):
 
     message = "System overloaded.\n"\
-              "CPU load: {}; limit: {}\n"\
               "Available memory: {}MB; limit: {}MB\n"\
               "Percent memory: {}; limit: {}"
 
     def __init__(self, load, limits):
         self.load = load
         self.limits = limits
-        message = self.message.format(load['cpu_percent'], limits['cpu_percent'],
-                                      load['virtual_memory_available'] / 1024 / 1024,
+        message = self.message.format(load['virtual_memory_available'] / 1024 / 1024,
                                       limits['virtual_memory_available'] / 1024 / 1024,
                                       load['virtual_memory_percent'],
                                       limits['virtual_memory_percent'])
@@ -49,8 +47,7 @@ class NightlyJobRunner(object):
     the system load is too high.
     """
 
-    LOAD_LIMITS = {'cpu_percent': 95,
-                   'virtual_memory_available': 100 * 1024 *1024,
+    LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 *1024,
                    'virtual_memory_percent': 0.95}
 
     def __init__(self):
@@ -101,20 +98,16 @@ class NightlyJobRunner(object):
             current_time += timedelta(hours=24)
         return self.window_start < current_time < self.window_end
 
-    def _is_cpu_overladed(self, load):
-        return load['cpu_percent'] > self.LOAD_LIMITS['cpu_percent']
-
     def _is_memory_full(self, load):
         return (load['virtual_memory_available'] < self.LOAD_LIMITS['virtual_memory_available']
                 or load['virtual_memory_percent'] > self.LOAD_LIMITS['virtual_memory_percent'])
 
     def get_system_load(self):
-        return {'cpu_percent': psutil.cpu_percent(),
-                'virtual_memory_available': psutil.virtual_memory().available,
+        return {'virtual_memory_available': psutil.virtual_memory().available,
                 'virtual_memory_percent': psutil.virtual_memory().percent}
 
     def check_system_overloaded(self, load):
-        return (self._is_cpu_overladed(load) or self._is_memory_full(load))
+        return self._is_memory_full(load)
 
     def format_early_abort_message(self, exc):
         info = "\n".join("{} executed {} out of {} jobs".format(
