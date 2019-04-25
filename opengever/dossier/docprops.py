@@ -1,11 +1,12 @@
 from datetime import datetime
 from datetime import time
 from docx import Document
-from docxcompose.composer import Composer
 from docxcompose.properties import CustomProperties
+from docxcompose.sdt import StructuredDocumentTags
 from ooxml_docprops import is_supported_mimetype
 from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
+from opengever.base.date_time import ulocalized_time
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.vocabulary import voc_term_title
@@ -16,7 +17,9 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDocProperties
 from opengever.dossier.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateFolderProperties
+from opengever.meeting.interfaces import IMeetingSettings
 from opengever.ogds.base.utils import ogds_service
+from plone import api
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import IMemberData
 from Products.CMFCore.utils import getToolByName
@@ -62,6 +65,8 @@ class DocPropertyWriter(object):
         self.recipient_data = recipient_data
         self.document = document
         self.request = self.document.REQUEST
+        self.date_format = api.portal.get_registry_record(
+            "sablon_date_format_string", interface=IMeetingSettings)
 
     def update(self):
         if self.update_doc_properties(only_existing=True):
@@ -103,11 +108,29 @@ class DocPropertyWriter(object):
                     doc.update_properties(properties)
                     changed = True
 
+            doc = Document(tmpfile.path)
+
             if changed:
                 # Update cached properties
-                doc = Document(tmpfile.path)
                 CustomProperties(doc).update_all()
-                Composer(doc).save(tmpfile.path)
+
+            # Update content controls
+            sdts = StructuredDocumentTags(doc)
+            for key, value in properties.items():
+                tags = sdts.tags_by_alias(key)
+                if tags:
+                    if isinstance(value, str):
+                        value = value.decode('utf8')
+                    elif isinstance(value, (int, float)):
+                        value = unicode(value)
+                    elif isinstance(value, datetime):
+                        value = ulocalized_time(
+                            value, self.date_format, self.request)
+                    sdts.set_text(key, value)
+                    changed = True
+
+            if changed:
+                doc.save(tmpfile.path)
 
                 with open(tmpfile.path) as processed_tmpfile:
                     file_data = processed_tmpfile.read()

@@ -1,4 +1,6 @@
 from datetime import datetime
+from docx import Document
+from docxcompose.sdt import StructuredDocumentTags
 from ftw.builder import Builder
 from ftw.builder import create
 from ooxml_docprops import read_properties
@@ -242,6 +244,29 @@ class TestDocPropertyWriter(IntegrationTestCase):
                 additional_recipient_properties,
                 dict(properties),
                 )
+
+    def test_document_with_content_controls_gets_updated(self):
+        self.login(self.regular_user)
+        self.with_asset_file('content_controls.docx')
+
+        prop_writer = DocPropertyWriter(self.document)
+        prop_writer.update_doc_properties(True)
+
+        expected_properties = {
+            'ogg.document.document_date': '03.01.2010',
+            'ogg.document.reference_number': u'Client1 1.1 / 1 / 14',
+            'ogg.document.title': u'Vertr\xe4gsentwurf',
+            'ogg.document.version_number': '0',
+            'ogg.dossier.title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+        }
+
+        content_control_properties = {}
+        with TemporaryDocFile(self.document.file) as tmpfile:
+            doc = Document(tmpfile.path)
+            sdt = StructuredDocumentTags(doc)
+            for key, value in expected_properties.items():
+                content_control_properties[key] = sdt.get_text(key)
+        self.assertEqual(content_control_properties, expected_properties)
 
     def with_asset_file(self, filename):
         self.document.file = NamedBlobFile(
