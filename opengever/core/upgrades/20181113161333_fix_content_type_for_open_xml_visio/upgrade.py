@@ -23,6 +23,15 @@ EXTENSION_TO_MIMETYPE = {
 
     # Office Open XML Visio Stencil (macro-enabled)
     '.vssm': 'application/vnd.ms-visio.stencil.macroEnabled.12',
+
+    # The following two extensions has been merged from the former upgradestep
+    # 20180911140637_fix_contenttype_for_ms_publisher_files
+
+    # MS Publisher
+    '.pub': 'application/x-mspublisher',
+
+    # Windows Metafile (WMF)
+    '.wmf': 'image/x-wmf',
 }
 
 
