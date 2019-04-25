@@ -23,6 +23,15 @@ class TestConfig(IntegrationTestCase):
         self.assertEqual(browser.json.get(u'version'), get_distribution('opengever.core').version)
 
     @browsing
+    def test_config_contains_userinfo(self, browser):
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@config'
+        browser.open(url, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'userid'), u'kathi.barfuss')
+        self.assertEqual(browser.json.get(u'user_fullname'), u'B\xe4rfuss K\xe4thi')
+
+    @browsing
     def test_config_contains_features(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.portal.absolute_url() + '/@config',

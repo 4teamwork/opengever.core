@@ -10,6 +10,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
         expected_configuration = OrderedDict([
             ('@id', 'http://nohost/plone/@config'),
             ('version', get_distribution('opengever.core').version),
+            ('userid', 'kathi.barfuss'),
+            ('user_fullname', 'B\xc3\xa4rfuss K\xc3\xa4thi'),
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),
