@@ -55,14 +55,16 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.clock.__exit__(None, None, None)
 
     def get_load_controlled_runner(self, cpu_percent=50,
-                                   virtual_memory_available=200 * 1024 * 1024):
+                                   virtual_memory_available=200 * 1024 * 1024,
+                                   virtual_memory_percent=0.5):
         """ get a runner with controlled system load
         """
         runner = NightlyJobRunner()
 
         def get_system_load():
             return {'cpu_percent': cpu_percent,
-                    'virtual_memory_available': virtual_memory_available}
+                    'virtual_memory_available': virtual_memory_available,
+                    'virtual_memory_percent': virtual_memory_percent}
 
         runner.get_system_load = get_system_load
         return runner
@@ -176,10 +178,11 @@ class TestNightlyJobRunner(IntegrationTestCase):
         runner = NightlyJobRunner()
 
         memory_limit = runner.LOAD_LIMITS['virtual_memory_available']
-        load = {'virtual_memory_available': memory_limit + 1}
+        load = {'virtual_memory_percent': 0.5}
+        load['virtual_memory_available'] = memory_limit + 1
         self.assertFalse(runner._is_memory_full(load))
 
-        load = {'virtual_memory_available': memory_limit - 1}
+        load['virtual_memory_available'] = memory_limit - 1
         self.assertTrue(runner._is_memory_full(load))
 
     def test_runner_aborts_when_not_in_time_window(self):
@@ -192,9 +195,27 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.assertIsInstance(exception, TimeWindowExceeded)
         self.assertEqual(0, runner.get_executed_jobs_count())
 
-    def test_runner_aborts_when_system_overloaded(self):
+    def test_runner_aborts_when_cpu_percent_too_high(self):
         self.login(self.manager)
         runner = self.get_load_controlled_runner(cpu_percent=100)
+        self.assertEqual(1, runner.get_initial_jobs_count())
+
+        exception = runner.execute_pending_jobs()
+        self.assertIsInstance(exception, SystemLoadCritical)
+        self.assertEqual(0, runner.get_executed_jobs_count())
+
+    def test_runner_aborts_when_available_memory_too_low(self):
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner(virtual_memory_available=0)
+        self.assertEqual(1, runner.get_initial_jobs_count())
+
+        exception = runner.execute_pending_jobs()
+        self.assertIsInstance(exception, SystemLoadCritical)
+        self.assertEqual(0, runner.get_executed_jobs_count())
+
+    def test_runner_aborts_when_percent_memory_too_high(self):
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner(virtual_memory_percent=1.)
         self.assertEqual(1, runner.get_initial_jobs_count())
 
         exception = runner.execute_pending_jobs()
@@ -238,7 +259,8 @@ class TestNightlyJobRunner(IntegrationTestCase):
         exception = runner.execute_pending_jobs()
         expected_message = "SystemLoadCritical('System overloaded.\\n"\
                            "CPU load: 50; limit: 95\\n"\
-                           "Available memory: 200MB; limit: 100MB',)\n"\
+                           "Available memory: 200MB; limit: 100MB\\n"\
+                           "Percent memory: 0.5; limit: 0.95',)\n"\
                            "document-title executed 0 out of 1 jobs"
         self.assertEqual(expected_message,
                          runner.format_early_abort_message(exception))
