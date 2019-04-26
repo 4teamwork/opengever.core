@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Queue each document archival conversion only once in a single request. [njohner]
 - Include preserved_as_paper_default in the @config endpoint and view. [Rotonen]
 - Implement resolving dossiers recursively via REST API. [lgraf]
 - Allow members to access plone vocabularies through restapi. [elioschmutz]

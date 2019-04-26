@@ -523,17 +523,12 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
         get_queue().reset()
         with RequestsSessionMock.installed():
             self.resolve(self.resolvable_dossier, browser)
-
-            # XXX: Queue length should actually be 2 instead of 4 - the one
-            # doc we added just above, and one from the fixture. However,
-            # because StrictDossierResolver.trigger_pdf_conversion() is broken,
-            # it queues documents multiple times.
-            self.assertEquals(4, len(get_queue().queue))
+            self.assertEquals(2, len(get_queue().queue))
             queue_contents = list(get_queue().queue)
             queue_contents.sort(key=itemgetter('url'))
 
             fixture_doc_job = queue_contents[0]
-            additional_doc_job = queue_contents[2]
+            additional_doc_job = queue_contents[1]
 
             self.assertDictContainsSubset(
                 {'callback_url': '{}/archival_file_conversion_callback'.format(
