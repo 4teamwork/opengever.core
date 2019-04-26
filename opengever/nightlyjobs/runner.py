@@ -70,7 +70,12 @@ class NightlyJobRunner(object):
             for job in job_provider:
                 yield job
 
-    def execute_pending_jobs(self):
+    def execute_pending_jobs(self, early_check=True):
+        if early_check:
+            # When invoked from a cron job, we first check that time window
+            # and system load are acceptable. Otherwise cron job is misconfigured.
+            self.interrupt_if_necessary()
+
         for job in self.get_jobs():
             try:
                 self.interrupt_if_necessary()
