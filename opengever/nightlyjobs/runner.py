@@ -48,7 +48,7 @@ class NightlyJobRunner(object):
     """
 
     LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 *1024,
-                   'virtual_memory_percent': 0.95}
+                   'virtual_memory_percent': 95}
 
     def __init__(self):
         # retrieve window start and end times
