@@ -52,7 +52,7 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        activity =  Activity.query.one()
+        activity = Activity.query.one()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(u'New task opened by Test User', activity.summary)
@@ -121,6 +121,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
+        # Ensure task accepted activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
+
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-open-in-progress', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
@@ -140,6 +144,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.login().visit(task, view="addcommentresponse")
         browser.fill({'Response': u'Wird n\xe4chste Woche erledigt.'})
         browser.find('Save').click()
+
+        # Ensure task comment activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-commented', activity.kind)
@@ -179,6 +187,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Ist erledigt.'})
         browser.css('#form-buttons-save').first.click()
 
+        # Ensure task resolution activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
+
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-in-progress-resolved', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
@@ -201,13 +213,16 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({'Response': u'Wird \xfcbersprungen.'})
         browser.css('#form-buttons-save').first.click()
 
+        # Ensure skip task activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
+
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-rejected-skipped', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Skipped by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', activity.summary)
         self.assertEquals(u'Wird \xfcbersprungen.', activity.description)
-
 
     @browsing
     def test_deadline_modified_activity(self, browser):
@@ -224,6 +239,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.fill({
             'New Deadline': '20.03.2016',
             'Response': u'nicht dring\xe4nd'}).save()
+
+        # Ensure modifying deadline activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-transition-modify-deadline', activity.kind)
@@ -254,6 +273,10 @@ class TestTaskActivites(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
+        # Ensure adding subtask activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
+
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)
         self.assertEquals(u'Abkl\xe4rung Fall Meier', activity.title)
@@ -270,6 +293,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.login().open(task, view='++add++opengever.document.document')
         browser.fill({'Title': u'Letter to peter'})
         browser.css('#form-buttons-save').first.click()
+
+        # Ensure adding document activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'transition-add-document', activity.kind)
@@ -291,6 +318,10 @@ class TestTaskActivites(FunctionalTestCase):
         browser.find('Continue').click()
         # fill medatata step and submit
         browser.find('Save').click()
+
+        # Ensure delegating activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
 
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals('task-added', activity.kind)

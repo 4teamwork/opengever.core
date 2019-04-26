@@ -72,8 +72,5 @@ def create_subtask(task, data):
 
             setattr(repr, name, value)
 
-    activity = TaskAddedActivity(subtask, task.REQUEST, task)
-    activity.record()
-
     notify(ObjectModifiedEvent(subtask))
     return subtask
