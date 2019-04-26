@@ -179,25 +179,44 @@ class TestNightlyJobRunner(IntegrationTestCase):
         runner.check_in_time_window = lambda now: False
         self.assertEqual(1, runner.get_initial_jobs_count())
 
-        exception = runner.execute_pending_jobs()
+        exception = runner.execute_pending_jobs(early_check=False)
         self.assertIsInstance(exception, TimeWindowExceeded)
         self.assertEqual(0, runner.get_executed_jobs_count())
+
+    def test_runner_aborts_immediately_when_not_in_time_window(self):
+        # Runner should not even bother collecting jobs when invoked at
+        # the wrong time, and raise an exception that is not caught
+        self.login(self.manager)
+        runner = NightlyJobRunner()
+        runner.check_in_time_window = lambda now: False
+
+        with self.assertRaises(TimeWindowExceeded):
+            runner.execute_pending_jobs()
 
     def test_runner_aborts_when_available_memory_too_low(self):
         self.login(self.manager)
         runner = self.get_load_controlled_runner(virtual_memory_available=0)
         self.assertEqual(1, runner.get_initial_jobs_count())
 
-        exception = runner.execute_pending_jobs()
+        exception = runner.execute_pending_jobs(early_check=False)
         self.assertIsInstance(exception, SystemLoadCritical)
         self.assertEqual(0, runner.get_executed_jobs_count())
+
+    def test_runner_aborts_immediately_when_available_memory_too_low(self):
+        # Runner should not even bother collecting jobs when invoked
+        # during times of high system load, and raise an exception
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner(virtual_memory_available=0)
+
+        with self.assertRaises(SystemLoadCritical):
+            runner.execute_pending_jobs()
 
     def test_runner_aborts_when_percent_memory_too_high(self):
         self.login(self.manager)
         runner = self.get_load_controlled_runner(virtual_memory_percent=100)
         self.assertEqual(1, runner.get_initial_jobs_count())
 
-        exception = runner.execute_pending_jobs()
+        exception = runner.execute_pending_jobs(early_check=False)
         self.assertIsInstance(exception, SystemLoadCritical)
         self.assertEqual(0, runner.get_executed_jobs_count())
 
@@ -224,7 +243,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.login(self.manager)
         runner = self.get_load_controlled_runner()
         runner.check_in_time_window = lambda now: False
-        exception = runner.execute_pending_jobs()
+        exception = runner.execute_pending_jobs(early_check=False)
         expected_message = "TimeWindowExceeded('Time window exceeded. "\
                            "Window: 1:00:00-5:00:00. Current time: 04:00',)\n"\
                            "document-title executed 0 out of 1 jobs"
@@ -235,7 +254,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.login(self.manager)
         runner = self.get_load_controlled_runner()
         runner.check_system_overloaded = lambda load: True
-        exception = runner.execute_pending_jobs()
+        exception = runner.execute_pending_jobs(early_check=False)
         expected_message = "SystemLoadCritical('System overloaded.\\n"\
                            "Available memory: 200MB; limit: 100MB\\n"\
                            "Percent memory: 50; limit: 95',)\n"\
