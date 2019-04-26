@@ -56,7 +56,6 @@ def create_subtask(task, data):
     subtask = createContent('opengever.task.task',
                             id=data['title'],
                             **data)
-    notify(ObjectCreatedEvent(subtask))
     subtask = addContentToContainer(task, subtask,
                                     checkConstraints=True)
 
