@@ -357,4 +357,12 @@
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
+  <plone:service
+      method="POST"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsPost"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
 </configure>

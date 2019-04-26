@@ -1,9 +1,12 @@
 from opengever.workspace.participation import PARTICIPATION_ROLES
 from opengever.workspace.participation import PARTICIPATION_TYPES
 from opengever.workspace.participation import PARTICIPATION_TYPES_BY_PATH_IDENTIFIER
+from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -62,18 +65,21 @@ class ParticipationsGet(Service):
                 ))
 
 
-class ParticipationsDelete(Service):
+class ParticipationTraverseService(Service):
 
     implements(IPublishTraverse)
 
     def __init__(self, context, request):
-        super(ParticipationsDelete, self).__init__(context, request)
+        super(ParticipationTraverseService, self).__init__(context, request)
         self.params = []
 
     def publishTraverse(self, request, name):
         # Consume any path segments after /@participations as parameters
         self.params.append(name)
         return self
+
+
+class ParticipationsDelete(ParticipationTraverseService):
 
     def reply(self):
         path_identifier, token = self.read_params()
@@ -91,3 +97,35 @@ class ParticipationsDelete(Service):
                 "Must supply type and token ID as URL path parameters.")
 
         return self.params[0], self.params[1]
+
+
+class ParticipationsPost(ParticipationTraverseService):
+
+    def reply(self):
+        self.validate_params()
+        data = self.validate_data(json_body(self.request))
+
+        manager = ManageParticipants(self.context, self.request)
+        invitation = manager._add(data.get('userid'), data.get('role'))
+        return participation_item(
+            self.context, self.request,
+            token=invitation['iid'],
+            participation_type=PARTICIPATION_TYPES['invitation'],
+            editable=manager.can_manage_member(),
+            role=invitation['role'],
+            participant_fullname=manager.get_full_user_info(userid=invitation['recipient']),
+            inviter_fullname=manager.get_full_user_info(userid=invitation['inviter'])
+            )
+
+    def validate_params(self):
+        if len(self.params) != 1 or self.params[0] != TYPE_INVITATION.path_identifier:
+            raise NotFound
+
+    def validate_data(self, data):
+        if not data.get('userid'):
+            raise BadRequest('Missing parameter userid')
+
+        if not data.get('role'):
+            raise BadRequest('Missing parameter role')
+
+        return data

@@ -93,7 +93,10 @@ class ManageParticipants(BrowserView):
         CheckAuthenticator(self.request)
         userid = self.request.get('userid', None)
         role = self.request.get('role', None)
+        self._add(userid, role)
+        return self.__call__()
 
+    def _add(self, userid, role):
         if not userid or not role or not self.can_manage_member():
             raise BadRequest('No userid or role provided')
 
@@ -101,9 +104,9 @@ class ManageParticipants(BrowserView):
             raise Unauthorized('No allowed to delegate this permission')
 
         storage = getUtility(IInvitationStorage)
-        storage.add_invitation(self.context, userid,
-                               api.user.get_current().getId(), role)
-        return self.__call__()
+        iid = storage.add_invitation(self.context, userid,
+                                     api.user.get_current().getId(), role)
+        return storage.get_invitation(iid)
 
     def delete(self):
         """A traversable method to delete a pending invitation or local roles.

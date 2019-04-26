@@ -99,3 +99,53 @@ Die URL setzt sich dabei folgendermassen zusammen:
    .. sourcecode:: http
 
       HTTP/1.1 204 No Content
+
+
+Beteiligungen hinzufügen (Benutzer einladen):
+---------------------------------------------
+Eine Beteiligung kann nur über eine Einladung hinzugefügt werden. Der eingeladene Benutzer muss seine Beteiligung erste bestätigen, bevor der Benutzer effektiv berechtigt wird.
+
+Eine Einladung wird durch einen POST request auf den `@participation/invitations` Endpoint erstellt.
+
+
+**Parameter:**
+
+Pflicht:
+
+``userid``: ``String``
+   ID des Benutzers, welcher eingeladen werden soll
+
+``role``: ``String``
+   Eine Arbeitsraum-Rolle
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /workspaces/workspace-1/@participations/invitations/ HTTP/1.1
+       Accept: application/json
+
+       {
+         "userid": "maria.meier",
+         "role": "WorkspaceMember",
+       }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+          "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc301",
+          "@type": "virtual.participations.invitation",
+          "inviter_fullname": "Max Muster (max.muster)",
+          "is_editable": true,
+          "participant_fullname": "Maria Meier (maria.meier)",
+          "readable_role": "Teammitglied",
+          "role": "WorkspaceMember",
+          "token": "3a8bfcb1b6294edfb60e2a43717fc301",
+          "participation_type": "invitation",
+          "readable_participation_type": "Invitation",
+    }
