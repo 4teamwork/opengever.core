@@ -59,3 +59,6 @@ PARTICIPATION_TYPES = {
     TYPE_USER.id: TYPE_USER,
     TYPE_INVITATION.id: TYPE_INVITATION,
 }
+
+PARTICIPATION_TYPES_BY_PATH_IDENTIFIER = {
+    value.path_identifier: value for value in PARTICIPATION_TYPES.values()}

@@ -77,3 +77,25 @@ Zusätzlich werden alle verfügbaren Rollen im Attribut "roles" zurückgegeben. 
         }
       ]
     }
+
+
+Beteiligungen löschen:
+----------------------
+Ein DELETE Request auf die `@id` einer Beteiligung löscht die entsprechnede Beteilungung oder Einladung.
+
+Die URL setzt sich dabei folgendermassen zusammen:
+``gever-url/workspaces/workspace/@participations/{participation_type}/{token}``
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       DELETE /workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc300 HTTP/1.1
+       Accept: application/json
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content

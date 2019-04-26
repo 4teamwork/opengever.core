@@ -117,15 +117,19 @@ class ManageParticipants(BrowserView):
         if not token or not type_:
             raise BadRequest('A token and a type is required')
 
+        self._delete(type_, token)
+        return self.__call__()
+
+    def _delete(self, type_, token):
         if type_ == 'invitation' and self.can_manage_member():
             storage = getUtility(IInvitationStorage)
             storage.remove_invitation(token)
-            return self.__call__()
+            return
 
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_INVITATION, token)
-            return self.__call__()
+            return
         else:
             raise BadRequest('Oh my, something went wrong')
 

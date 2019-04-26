@@ -197,3 +197,107 @@ class TestParticipationGet(IntegrationTestCase):
         self.assertFalse(
             any([item.get('is_editable') for item in response.get('items')]),
             'No entry should be editable because the user has no permission')
+
+
+class TestParticipationDelete(IntegrationTestCase):
+
+    @browsing
+    def test_delete_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(
+            self.workspace, self.regular_user.getId(),
+            self.workspace_admin.getId(), 'WorkspaceGuest')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_token(browser.json.get('items'), iid),
+            'Expect an invitation.')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), iid),
+            'Expect no invitation anymore.')
+
+    @browsing
+    def test_delete_local_role(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNotNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have local roles for the user')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_guest.id),
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertIsNone(
+            get_entry_by_token(browser.json.get('items'), self.workspace_guest.getId()),
+            'Expect to have no local roles anymore for the user')
+
+    @browsing
+    def test_current_user_cannot_remove_its_local_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers(),
+            ).json
+
+    @browsing
+    def test_guest_cannot_use_the_endpoint(self, browser):
+        self.login(self.workspace_guest, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers(),
+            ).json
+
+    @browsing
+    def test_member_cannot_use_the_endpoint(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers(),
+            ).json
