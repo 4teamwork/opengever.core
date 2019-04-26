@@ -196,7 +196,8 @@ class Documents(BaseCatalogListingTab):
 
         {'column': 'Subject',
          'column_title': _(u'label_keywords', default=u'Keywords'),
-         'transform': linked_subjects},
+         'transform': linked_subjects,
+         'sortable': False},
         )
 
     major_actions = [
@@ -297,7 +298,8 @@ class Dossiers(BaseCatalogListingTab):
 
         {'column': 'Subject',
          'column_title': _(u'label_keywords', default=u'Keywords'),
-         'transform': linked_subjects},
+         'transform': linked_subjects,
+         'sortable': False},
         )
 
     search_options = {'is_subdossier': False}
