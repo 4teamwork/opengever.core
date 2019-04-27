@@ -96,6 +96,7 @@ Changelog
 - Do not allow sorting on Keywords in dossier and document listings. [njohner]
 - Also update content controls when updating doc properties. [buchi]
 - Include userid and fullname of current user in @config endpoint. [buchi]
+- Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Include preserved_as_paper_default in the @config endpoint and view. [Rotonen]
 - Pass context and orgunit as parameters to webactions. [njohner]
 - Implement resolving dossiers recursively via REST API. [lgraf]
