@@ -411,3 +411,139 @@ class TestParticipationPost(IntegrationTestCase):
                 data={},
                 headers=http_headers(),
                 )
+
+
+class TestParticipationPatch(IntegrationTestCase):
+
+    @browsing
+    def test_modify_a_users_loca_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals('WorkspaceGuest', entry.get('role'))
+
+        data = json.dumps({'role': 'WorkspaceMember'})
+        browser.open(
+            entry['@id'],
+            method='PATCH',
+            data=data,
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+        self.assertEquals('WorkspaceMember', entry.get('role'))
+
+    @browsing
+    def test_cannot_modify_inexisting_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            data = json.dumps({'role': 'WorkspaceMember'})
+            browser.open(
+                self.workspace.absolute_url() + '/@participations/users/{}'.format(self.regular_user.id),
+                method='PATCH',
+                data=data,
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_can_only_modify_workspace_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
+
+        with browser.expect_http_error(401):
+            data = json.dumps({'role': 'Contributor'})
+            browser.open(
+                entry['@id'],
+                method='PATCH',
+                data=data,
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_modify_role_of_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(
+            self.workspace, self.regular_user.getId(),
+            self.workspace_admin.getId(), 'WorkspaceGuest')
+
+        data = json.dumps({'role': 'WorkspaceAdmin'})
+        browser.open(
+            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            method='PATCH',
+            data=data,
+            headers=http_headers(),
+            )
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        self.assertEquals(
+            'WorkspaceAdmin',
+            get_entry_by_token(browser.json.get('items'), iid).get('role'))
+
+    @browsing
+    def test_do_not_allow_modifying_the_WorkspaceOwnerRole(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_owner.id)
+
+        with browser.expect_http_error(400):
+            data = json.dumps({'role': 'WorkspaceAdmin'})
+            browser.open(
+                entry['@id'],
+                method='PATCH',
+                data=data,
+                headers=http_headers(),
+                )
+
+    @browsing
+    def test_do_not_allow_modifying_the_current_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace.absolute_url() + '/@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_token(browser.json.get('items'), self.workspace_admin.id)
+
+        with browser.expect_http_error(401):
+            data = json.dumps({'role': 'WorkspaceMember'})
+            browser.open(
+                entry['@id'],
+                method='PATCH',
+                data=data,
+                headers=http_headers(),
+                )

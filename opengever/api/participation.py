@@ -129,3 +129,27 @@ class ParticipationsPost(ParticipationTraverseService):
             raise BadRequest('Missing parameter role')
 
         return data
+
+
+class ParticipationsPatch(ParticipationTraverseService):
+
+    def reply(self):
+        participation_type, token = self.read_params()
+        data = self.validate_data(json_body(self.request))
+
+        manager = ManageParticipants(self.context, self.request)
+        manager._modify(token, data.get('role'), participation_type.id)
+        return None
+
+    def read_params(self):
+        if len(self.params) != 2:
+            raise BadRequest(
+                "Must supply type and token ID as URL path parameters.")
+
+        return PARTICIPATION_TYPES_BY_PATH_IDENTIFIER.get(self.params[0]), self.params[1]
+
+    def validate_data(self, data):
+        if not data.get('role'):
+            raise BadRequest('Missing parameter role')
+
+        return data

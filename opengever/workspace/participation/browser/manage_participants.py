@@ -143,12 +143,18 @@ class ManageParticipants(BrowserView):
         token = self.request.get('token', None)
         role = self.request.get('role', None)
         type_ = self.request.get('type', None)
+        self._modify(token, role, type_)
+        return ''
 
+    def _modify(self, token, role, type_):
         if not token or not type_:
             raise BadRequest('No userid or type provided.')
 
         if role not in MANAGED_ROLES:
             raise Unauthorized('Inavlid role provided.')
+
+        if token == api.user.get_current().id:
+            raise Unauthorized('Not allowed to modify the current user.')
 
         if type_ == 'user':
             user_roles = api.user.get_roles(username=token, obj=self.context,
@@ -160,7 +166,7 @@ class ManageParticipants(BrowserView):
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)
-                return ''
+                return True
             else:
                 raise BadRequest('User does not have any local roles')
         elif type_ == 'invitation':

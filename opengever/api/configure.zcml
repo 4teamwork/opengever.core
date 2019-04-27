@@ -365,4 +365,12 @@
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsPatch"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
 </configure>

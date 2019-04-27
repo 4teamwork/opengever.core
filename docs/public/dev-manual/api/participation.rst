@@ -149,3 +149,32 @@ Pflicht:
           "participation_type": "invitation",
           "readable_participation_type": "Invitation",
     }
+
+
+Beteiligungen bearbeiten:
+-------------------------
+Sowohl Beteiligungen wie auch Einladungen können über einen PATCH request auf die jeweilige Ressourece geändert werden.
+
+**Parameter:**
+
+Pflicht:
+
+``role``: ``String``
+   Eine Arbeitsraum-Rolle
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /workspaces/workspace-1/@participations/invitations/3a8bfcb1b6294edfb60e2a43717fc301 HTTP/1.1
+       Accept: application/json
+
+       {
+         "role": "WorkspaceAdmin",
+       }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
