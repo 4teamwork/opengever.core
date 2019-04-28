@@ -10,6 +10,11 @@ import psutil
 import transaction
 
 
+def nightly_jobs_feature_enabled():
+    return api.portal.get_registry_record(
+        'is_feature_enabled', interface=INightlyJobsSettings)
+
+
 class TimeWindowExceeded(Exception):
 
     message = "Time window exceeded. Window: {}-{}. "\

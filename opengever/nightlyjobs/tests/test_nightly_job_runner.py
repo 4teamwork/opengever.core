@@ -38,6 +38,10 @@ class TickingDocumentTitleModifierJobProvider(DocumentTitleModifierJobProvider):
 
 class TestNightlyJobRunner(IntegrationTestCase):
 
+    features = (
+        'nightly-jobs',
+    )
+
     def setUp(self):
         super(TestNightlyJobRunner, self).setUp()
         self.portal = self.layer['portal']

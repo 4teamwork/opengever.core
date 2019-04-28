@@ -1,7 +1,9 @@
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
+from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
 import logging
+
 
 logger = logging.getLogger('opengever.nightlyjobs.cronjobs')
 
@@ -15,19 +17,28 @@ def run_nightly_jobs_handler(app, args):
 
     for plone_site in all_plone_sites(app):
         setup_plone(plone_site)
-        runner = NightlyJobRunner()
-        logger.info('Found {} providers: {}'.format(len(runner.job_providers),
-                                                    runner.job_providers.keys()))
-        logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
+        invoke_nightly_job_runner(plone_site)
 
-        exc = runner.execute_pending_jobs()
-        if exc:
-            logger.info('Early abort')
-            logger.info(runner.format_early_abort_message(exc))
 
-        logger.info('Successfully executed {} jobs'.format(runner.get_executed_jobs_count()))
+def invoke_nightly_job_runner(plone_site):
+    if not nightly_jobs_feature_enabled():
+        logger.info('Nightly jobs feature is not enabled in registry - '
+                    'not running any jobs for %r' % plone_site)
+        return
 
-        if runner.get_remaining_jobs_count() == 0:
-            logger.info('No jobs remaining')
-        else:
-            logger.info('{} jobs remaining'.format(runner.get_remaining_jobs_count()))
+    runner = NightlyJobRunner()
+    logger.info('Found {} providers: {}'.format(len(runner.job_providers),
+                                                runner.job_providers.keys()))
+    logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
+
+    exc = runner.execute_pending_jobs()
+    if exc:
+        logger.info('Early abort')
+        logger.info(runner.format_early_abort_message(exc))
+
+    logger.info('Successfully executed {} jobs'.format(runner.get_executed_jobs_count()))
+
+    if runner.get_remaining_jobs_count() == 0:
+        logger.info('No jobs remaining')
+    else:
+        logger.info('{} jobs remaining'.format(runner.get_remaining_jobs_count()))

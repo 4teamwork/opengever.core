@@ -65,6 +65,7 @@ FEATURE_FLAGS = {
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'gever_ui': 'opengever.base.interfaces.IGeverUI.is_feature_enabled',
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
+    'nightly-jobs': 'opengever.nightlyjobs.interfaces.INightlyJobsSettings.is_feature_enabled',
     'officeconnector-attach': 'opengever.officeconnector.interfaces.'
                               'IOfficeConnectorSettings.attach_to_outlook_enabled',
     'officeconnector-checkout': 'opengever.officeconnector.interfaces.'
