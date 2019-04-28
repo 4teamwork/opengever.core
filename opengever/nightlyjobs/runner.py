@@ -58,12 +58,15 @@ class NightlyJobRunner(object):
             'end_time', interface=INightlyJobsSettings)
 
         # retrieve all providers
-        self.job_providers = {name: provider for name, provider
-                              in getAdapters([api.portal.get(), getRequest()],
-                                             INightlyJobProvider)}
+        self.job_providers = self.get_job_providers()
 
         self.initial_jobs_count = {name: len(provider) for name, provider
                                    in self.job_providers.items()}
+
+    def get_job_providers(self):
+        return {name: provider for name, provider
+                in getAdapters([api.portal.get(), getRequest()],
+                               INightlyJobProvider)}
 
     def execute_pending_jobs(self, early_check=True):
         if early_check:

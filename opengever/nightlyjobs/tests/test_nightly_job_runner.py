@@ -4,9 +4,9 @@ from datetime import timedelta
 from ftw.testing.freezer import FreezedClock
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
-from opengever.nightlyjobs.runner import NightlyJobRunner
 from opengever.nightlyjobs.runner import SystemLoadCritical
 from opengever.nightlyjobs.runner import TimeWindowExceeded
+from opengever.nightlyjobs.testing import TestingNightlyJobRunner
 from opengever.nightlyjobs.tests.test_nightly_job_provider import DocumentTitleModifierJobProvider
 from opengever.nightlyjobs.tests.test_nightly_job_provider import IWantToBeModified
 from opengever.testing import IntegrationTestCase
@@ -59,7 +59,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
                                    virtual_memory_percent=50):
         """ get a runner with controlled system load
         """
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
 
         def get_system_load():
             return {'virtual_memory_available': virtual_memory_available,
@@ -69,7 +69,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         return runner
 
     def test_nightly_job_runner_finds_all_registered_providers(self):
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
         expected = {'document-title': DocumentTitleModifierJobProvider}
 
         self.assertEqual(expected.keys(), runner.job_providers.keys())
@@ -79,7 +79,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.portal.getSiteManager().registerAdapter(DossierTitleModifierJobProvider,
                                                      name='dossier-title')
         expected['dossier-title'] = DossierTitleModifierJobProvider
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
 
         self.assertEqual(expected.keys(), runner.job_providers.keys())
         for name, klass in expected.items():
@@ -92,7 +92,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.request.clock = self.clock
         self.portal.getSiteManager().registerAdapter(TickingDocumentTitleModifierJobProvider,
                                                      name='document-title')
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
         expected = {'document-title': TickingDocumentTitleModifierJobProvider}
 
         self.assertEqual(expected.keys(), runner.job_providers.keys())
@@ -142,7 +142,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
                                        interface=INightlyJobsSettings)
         api.portal.set_registry_record('end_time', timedelta(hours=29),
                                        interface=INightlyJobsSettings)
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
 
         # 22:00
         self.clock.backward(seconds=6 * 3600)
@@ -163,7 +163,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_is_memory_full(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
 
         memory_limit = runner.LOAD_LIMITS['virtual_memory_available']
         load = {'virtual_memory_percent': 50}
@@ -175,7 +175,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def test_runner_aborts_when_not_in_time_window(self):
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
         runner.check_in_time_window = lambda now: False
         self.assertEqual(1, runner.get_initial_jobs_count())
 
@@ -187,7 +187,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
         # Runner should not even bother collecting jobs when invoked at
         # the wrong time, and raise an exception that is not caught
         self.login(self.manager)
-        runner = NightlyJobRunner()
+        runner = TestingNightlyJobRunner()
         runner.check_in_time_window = lambda now: False
 
         with self.assertRaises(TimeWindowExceeded):
