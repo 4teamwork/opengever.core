@@ -347,14 +347,17 @@ class AfterResolveJobs(object):
 
     def __init__(self, context):
         self.context = context
+        self.catalog = api.portal.get_tool('portal_catalog')
 
     def get_property(self, name):
         return api.portal.get_registry_record(
             name, interface=IDossierResolveProperties)
 
     def contains_tasks(self):
-        tasks = api.content.find(
-            context=self.context, depth=-1, object_provides=ITask)
+        path = '/'.join(self.context.getPhysicalPath())
+        tasks = self.catalog.unrestrictedSearchResults(
+            path=path,
+            object_provides=ITask.__identifier__)
         return len(tasks) > 0
 
     def execute(self):
@@ -506,7 +509,10 @@ class AfterResolveJobs(object):
         if not self.get_property('archival_file_conversion_enabled'):
             return
 
-        docs = api.content.find(self.context, object_provides=[IBaseDocument])
+        path = '/'.join(self.context.getPhysicalPath())
+        docs = self.catalog.unrestrictedSearchResults(
+            path=path,
+            object_provides=IBaseDocument.__identifier__)
         for doc in docs:
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
 
