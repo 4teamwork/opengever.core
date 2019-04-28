@@ -1,3 +1,4 @@
+from ftw.bumblebee.config import bumblebee_config
 from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -71,8 +72,16 @@ class ArchivalFileConverter(object):
         IDocumentMetadata(self.document).archival_file_state = None
 
     def get_callback_url(self):
-        return "{}/archival_file_conversion_callback".format(
-            self.document.absolute_url())
+        """Get the URL for the callback to upload the archival PDF to.
+
+        This URL must be accessible by bumblebee, so we must not use the
+        virtual hosting based URL here, because that wouldn't work when
+        using SSH tunnels or nightly jobs run via bin/instance.
+        """
+        base_url = bumblebee_config.internal_plone_url
+        relative_path = '/'.join(self.document.getPhysicalPath()[2:])
+        doc_url = '/'.join([base_url, relative_path])
+        return "{}/archival_file_conversion_callback".format(doc_url)
 
     def store_file(self, data, mimetype='application/pdf'):
         if isinstance(mimetype, unicode):
