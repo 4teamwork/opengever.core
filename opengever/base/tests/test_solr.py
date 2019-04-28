@@ -80,6 +80,7 @@ class TestSolr(IntegrationTestCase):
         CATALOG_ONLY_INDEXES = [
             'Date',
             'Type',
+            'after_resolve_jobs_pending',
             'assigned_client',
             'blocked_local_roles',
             'client_id',

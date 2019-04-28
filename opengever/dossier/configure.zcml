@@ -115,6 +115,11 @@
   <adapter factory=".base.DefaultConstrainTypeDecider" />
 
   <adapter
+      factory=".indexers.after_resolve_jobs_pending_indexer"
+      name="after_resolve_jobs_pending"
+      />
+
+  <adapter
       factory=".indexers.DossierSubjectIndexer"
       name="Subject"
       />

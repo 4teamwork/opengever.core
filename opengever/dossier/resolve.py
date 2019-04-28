@@ -20,6 +20,7 @@ from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getSiteManager
@@ -39,6 +40,8 @@ NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
 MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
+
+AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_pending'
 
 
 class AlreadyBeingResolved(Exception):
@@ -376,6 +379,18 @@ class AfterResolveJobs(object):
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
+        self.set_after_resolve_jobs_pending(False)
+
+    @property
+    def after_resolve_jobs_pending(self):
+        ann = IAnnotations(self.context)
+        return ann.get(AFTER_RESOLVE_JOBS_PENDING_KEY, False)
+
+    def set_after_resolve_jobs_pending(self, value):
+        ann = IAnnotations(self.context)
+        assert isinstance(value, bool)
+        ann[AFTER_RESOLVE_JOBS_PENDING_KEY] = value
+        self.context.reindexObject(idxs=['after_resolve_jobs_pending'])
 
     def trash_shadowed_docs(self):
         """Trash all documents that are in shadow state (recursive).
