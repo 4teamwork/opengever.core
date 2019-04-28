@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-04-28 14:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: opengever.dossier\n"
+
+#: ./opengever/dossier/viewlets/byline.py
+msgid " (after resolve jobs pending)"
+msgstr ""
 
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
@@ -65,7 +69,7 @@ msgstr ""
 msgid "Dossier template"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "Dossiers successfully reactivated."
 msgstr ""
 
@@ -90,7 +94,7 @@ msgstr ""
 msgid "It isn't allowed to add such items there."
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr ""
 

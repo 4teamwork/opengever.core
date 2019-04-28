@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-04-28 14:26+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -15,6 +15,10 @@ msgstr ""
 "Domain: DOMAIN\n"
 "Language: de\n"
 "X-Generator: Weblate 2.13.1\n"
+
+#: ./opengever/dossier/viewlets/byline.py
+msgid " (after resolve jobs pending)"
+msgstr " (nächtliche Abschlussarbeiten ausstehend)"
 
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"
@@ -65,7 +69,7 @@ msgstr "Dossier-Struktur"
 msgid "Dossier template"
 msgstr "Dossiervorlage"
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "Dossiers successfully reactivated."
 msgstr "Das Dossier wurde erfolgreich wieder eröffnet."
 
@@ -90,7 +94,7 @@ msgstr "Die folgenden Objekte konnten nicht kopiert werden: ${failed_objects}. S
 msgid "It isn't allowed to add such items there."
 msgstr "Sie dürfen dieses Objekt nicht an den Zielort verschieben."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr "Es ist nicht möglich das Subdossier wieder zu eröffnen, das Hauptdossier muss wieder eröffnet werden."
 

@@ -3,6 +3,7 @@ from opengever.base.viewlets.byline import BylineBase
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
 from opengever.ogds.base.actor import Actor
 from plone import api
@@ -27,6 +28,9 @@ class BusinessCaseByline(BylineBase):
 
     def is_resolve_locked(self):
         return ResolveLock(self.context).is_locked(recursive=False)
+
+    def after_resolve_jobs_pending(self):
+        return AfterResolveJobs(self.context).after_resolve_jobs_pending
 
     def mailto_link(self):
         """Displays email-address if the IMailInAddressMarker behavior
@@ -56,6 +60,14 @@ class BusinessCaseByline(BylineBase):
         if self.is_resolve_locked():
             wfstate = translate(wfstate, context=getRequest())
             wfstate += translate(_(u' (currently being resolved)'), context=getRequest())
+
+        # Add a debug hint for Managers if a dossier's nightly
+        # AfterResolveJobs haven't been executed yet.
+        is_manager = api.user.get_current().has_role('Manager')
+        if is_manager and self.after_resolve_jobs_pending():
+            wfstate = translate(wfstate, context=getRequest())
+            wfstate += translate(_(u' (after resolve jobs pending)'), context=getRequest())
+
         return wfstate
 
     def get_items(self):
