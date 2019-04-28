@@ -5,7 +5,7 @@ from opengever.nightlyjobs.runner import NightlyJobRunner
 import logging
 
 
-logger = logging.getLogger('opengever.nightlyjobs.cronjobs')
+logger = logging.getLogger('opengever.nightlyjobs')
 
 
 def run_nightly_jobs_handler(app, args):
@@ -26,7 +26,7 @@ def invoke_nightly_job_runner(plone_site):
                     'not running any jobs for %r' % plone_site)
         return
 
-    runner = NightlyJobRunner()
+    runner = NightlyJobRunner(setup_own_task_queue=True)
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                 runner.job_providers.keys()))
     logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
