@@ -65,28 +65,23 @@ class NightlyJobRunner(object):
         self.initial_jobs_count = {name: len(provider) for name, provider
                                    in self.job_providers.items()}
 
-    def get_jobs(self):
-        for job_provider in self.job_providers.values():
-            for job in job_provider:
-                yield job
-
     def execute_pending_jobs(self, early_check=True):
         if early_check:
             # When invoked from a cron job, we first check that time window
             # and system load are acceptable. Otherwise cron job is misconfigured.
             self.interrupt_if_necessary()
 
-        for job in self.get_jobs():
-            try:
-                self.interrupt_if_necessary()
-                provider = self.job_providers.get(job.provider_name)
-                provider.run_job(job, self.interrupt_if_necessary)
-            except (TimeWindowExceeded, SystemLoadCritical) as exc:
-                transaction.abort()
-                message = self.format_early_abort_message(exc)
-                self.log_to_sentry(message)
-                return exc
-            transaction.commit()
+        for provider in self.job_providers.values():
+            for job in provider:
+                try:
+                    self.interrupt_if_necessary()
+                    provider.run_job(job, self.interrupt_if_necessary)
+                except (TimeWindowExceeded, SystemLoadCritical) as exc:
+                    transaction.abort()
+                    message = self.format_early_abort_message(exc)
+                    self.log_to_sentry(message)
+                    return exc
+                transaction.commit()
 
     def interrupt_if_necessary(self):
         now = datetime.now().time()
@@ -116,10 +111,10 @@ class NightlyJobRunner(object):
 
     def format_early_abort_message(self, exc):
         info = "\n".join("{} executed {} out of {} jobs".format(
-                            provider.provider_name,
-                            self.get_executed_jobs_count(provider.provider_name),
-                            self.get_initial_jobs_count(provider.provider_name))
-                         for provider in self.job_providers.values())
+                            provider_name,
+                            self.get_executed_jobs_count(provider_name),
+                            self.get_initial_jobs_count(provider_name))
+                         for provider_name, provider in self.job_providers.items())
         return "{}\n{}".format(repr(exc), info)
 
     def log_to_sentry(self, message):

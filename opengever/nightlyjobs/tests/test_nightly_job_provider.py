@@ -1,5 +1,4 @@
 from opengever.nightlyjobs.interfaces import INightlyJobProvider
-from opengever.nightlyjobs.job_providers import NightlyJob
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -39,7 +38,7 @@ class DocumentTitleModifierJobProvider(object):
         documents = catalog(portal_type=self.portal_type,
                             object_provides=IWantToBeModified.__identifier__,
                             sort_on='path')
-        self._jobs = (NightlyJob(self.provider_name, {'uid': document.UID})
+        self._jobs = ({'uid': document.UID}
                       for document in documents)
         self._njobs = documents.actual_result_count
         self._njobs_executed = 0
@@ -59,7 +58,7 @@ class DocumentTitleModifierJobProvider(object):
 
     def execute_job(self, job, interrupt_if_necessary):
         interrupt_if_necessary()
-        obj = uuidToObject(job.data['uid'])
+        obj = uuidToObject(job['uid'])
         obj.title = u'Modified {}'.format(obj.title)
 
 

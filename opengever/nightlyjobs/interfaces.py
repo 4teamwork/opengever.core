@@ -25,11 +25,21 @@ class INightlyJobProvider(Interface):
     """
 
     def run_job(job, interrupt_if_necessary):
-        """ This method takes care of executing a given job.
+        """This method takes care of executing a given job.
+
+        The `job` will be passed in by the runner, and is always a dictionary
+        of job arguments, as returned by __iter__.
         """
 
     def __iter__():
-        """ needs to return an iterable
+        """Returns an iterator of jobs.
+
+        The individial jobs must be dictionaries with the arguments that
+        uniquely define a job.
+
+        The specific keys in that dictionary are in the domain of the job
+        provider, and it needs be able to make sense of them when those
+        arguments are passed back in to run_job().
         """
 
     def __len__():
