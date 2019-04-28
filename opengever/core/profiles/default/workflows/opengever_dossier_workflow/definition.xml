@@ -41,6 +41,7 @@
       title="dossier-state-active">
     <exit-transition transition_id="dossier-transition-deactivate" />
     <exit-transition transition_id="dossier-transition-resolve" />
+    <exit-transition transition_id="dossier-transition-active-to-pending-resolution" />
     <permission-map
         name="opengever.meeting: Add Proposal"
         acquired="False">
@@ -584,6 +585,172 @@
     </permission-map>
   </state>
   <state
+      state_id="dossier-state-pending-resolution"
+      title="dossier-state-pending-resolution">
+    <exit-transition transition_id="dossier-transition-reactivate" />
+    <exit-transition transition_id="dossier-transition-pending-resolution-to-resolved" />
+    <permission-map
+        name="opengever.meeting: Add Proposal"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.meeting: Add Proposal Comment"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="Access contents information"
+        acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Contributor</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+    <permission-map
+        name="Add portal content"
+        acquired="False">
+    </permission-map>
+    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False"/>
+    <permission-map
+        name="Copy or Move"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Reader</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Delete objects"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="List folder contents"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="Manage properties"
+        acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Contributor</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+    <permission-map
+        name="Modify portal content"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="Remove GEVER content"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="Review portal content"
+        acquired="True">
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Role Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Sharing page: Delegate Contributor role"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Role Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Sharing page: Delegate Editor role"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Role Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Sharing page: Delegate Reader role"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Role Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+    <permission-map
+        name="Sharing page: Delegate Reviewer role"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+      <permission-role>Role Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="View"
+        acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Contributor</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+    <permission-map
+        name="ftw.mail: Add Inbound Mail"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="ftw.mail: Add Mail"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.document: Add document"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.document: Cancel"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.document: Checkin"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.document: Force Checkin"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.document: Checkout"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.dossier: Add businesscasedossier"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.task: Add task"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.task: Add task comment"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.trash: Trash content"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.trash: Untrash content"
+        acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.dossier: Destroy dossier"
+        acquired="False">
+    </permission-map>
+  </state>
+  <state
       state_id="dossier-state-resolved"
       title="dossier-state-resolved">
     <exit-transition transition_id="dossier-transition-reactivate" />
@@ -965,6 +1132,36 @@
         icon="">dossier-transition-reactivate</action>
     <guard>
       <guard-expression>python:('Publisher' in here.portal_membership.getAuthenticatedMember().getRolesInContext(here) or 'Administrator' in here.portal_membership.getAuthenticatedMember().getRolesInContext(here))</guard-expression>
+    </guard>
+  </transition>
+  <transition
+      transition_id="dossier-transition-active-to-pending-resolution"
+      title="Owner queues dossier dossier for nightly resolution"
+      new_state="dossier-state-pending-resolution"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/transition-active-to-pending-resolution"
+        category="workflow"
+        icon="">dossier-transition-active-to-pending-resolution</action>
+    <guard>
+      <guard-permission>Review portal content</guard-permission>
+    </guard>
+  </transition>
+  <transition
+      transition_id="dossier-transition-pending-resolution-to-resolved"
+      title="Dossier is finally resolved (nightly)"
+      new_state="dossier-state-resolved"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/transition-pending-resolution-to-resolve"
+        category="workflow"
+        icon="">dossier-transition-pending-resolution-to-resolved</action>
+    <guard>
+      <guard-permission>Review portal content</guard-permission>
     </guard>
   </transition>
   <transition

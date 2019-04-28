@@ -92,6 +92,20 @@
 
   <browser:page
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-active-to-pending-resolution"
+      class=".resolve.DossierActiveToPendingResolutionView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      name="transition-pending-resolution-to-resolve"
+      class=".resolve.DossierPendingResolutionToResolvedView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
       name="transition-reactivate"
       class=".reactivate.DossierReactivateView"
       permission="zope2.View"
@@ -221,6 +235,11 @@
       name="dossier-transition-resolve"
       />
 
+  <adapter
+      factory=".resolve.ResolveDossierTransitionExtender"
+      name="dossier-transition-pending-resolution-to-resolved"
+      />
+
   <adapter factory=".archive.Archiver" />
 
   <browser:page
@@ -243,6 +262,11 @@
       name="move_items"
       class=".move_items.MoveItemsFormView"
       permission="zope2.View"
+      />
+
+  <adapter
+      factory=".nightly_resolve_job.ResolveDossiersJobProvider"
+      name="resolve-pending-dossiers"
       />
 
 </configure>

@@ -103,8 +103,9 @@ class LockingResolveManager(object):
     AlreadyBeingResolved exception will be raised.
     """
 
-    def __init__(self, context):
+    def __init__(self, context, transition):
         self.context = context
+        self.transition = transition
         self.resolver = get_resolver(self.context)
 
     def resolve(self):
@@ -163,7 +164,7 @@ class LockingResolveManager(object):
         if invalid_dates:
             raise InvalidDates(invalid_dossier_titles=invalid_dates)
 
-        self.resolver.resolve()
+        self.resolver.resolve(transition=self.transition)
 
     def is_archive_form_needed(self):
         return self.resolver.is_archive_form_needed()
@@ -171,12 +172,14 @@ class LockingResolveManager(object):
 
 class DossierResolveView(BrowserView):
 
+    transition = 'dossier-transition-resolve'
+
     def __call__(self):
         # Ensure already resolved dossier can't be resolved again
         if self.is_already_resolved():
             return self.show_already_resolved_msg()
 
-        resolve_manager = LockingResolveManager(self.context)
+        resolve_manager = LockingResolveManager(self.context, self.transition)
 
         if resolve_manager.is_archive_form_needed():
             archive_url = '/'.join((self.context_url, 'transition-archive'))
@@ -250,6 +253,33 @@ class DossierResolveView(BrowserView):
         return self.redirect(self.context_url)
 
 
+class DossierActiveToPendingResolutionView(DossierResolveView):
+
+    transition = 'dossier-transition-active-to-pending-resolution'
+
+
+class DossierPendingResolutionToResolvedView(BrowserView):
+
+    transition = 'dossier-transition-pending-resolution-to-resolved'
+
+    def __call__(self):
+        self.wft = api.portal.get_tool('portal_workflow')
+        self._deep_resolve(self.context)
+
+        api.portal.show_message(
+            message=_('Dossier resolution has been finalized'),
+            request=self.request, type='info')
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+    def _deep_resolve(self, dossier):
+        for subdossier in dossier.get_subdossiers():
+            self._deep_resolve(subdossier.getObject())
+
+        dossier_state = api.content.get_state(obj=dossier)
+        assert dossier_state == 'dossier-state-pending-resolution'
+        self.wft.doActionFor(dossier, self.transition)
+
+
 @implementer(IDossierResolver)
 @adapter(IDossierMarker)
 class StrictDossierResolver(object):
@@ -297,16 +327,16 @@ class StrictDossierResolver(object):
         else:
             return True
 
-    def resolve(self, end_date=None):
+    def resolve(self, transition, end_date=None):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 
         elif self.is_archive_form_needed() and not end_date:
             raise TypeError
         else:
-            self._recursive_resolve(self.context, end_date)
+            self._recursive_resolve(self.context, transition, end_date)
 
-    def _recursive_resolve(self, dossier, end_date, recursive=False):
+    def _recursive_resolve(self, dossier, transition, end_date, recursive=False):
 
         # no end_date is given use the earliest possible
         if not end_date:
@@ -334,11 +364,11 @@ class StrictDossierResolver(object):
 
         for subdossier in dossier.get_subdossiers():
             self._recursive_resolve(
-                subdossier.getObject(), end_date, recursive=True)
+                subdossier.getObject(), transition, end_date, recursive=True)
 
         if self.wft.getInfoFor(dossier,
                                'review_state') in DOSSIER_STATES_OPEN:
-            self.wft.doActionFor(dossier, 'dossier-transition-resolve')
+            self.wft.doActionFor(dossier, transition)
 
 
 class AfterResolveJobs(object):
@@ -367,6 +397,7 @@ class AfterResolveJobs(object):
         - For a main dossier, Generate a PDF listing the tasks.
         """
 
+        print "Executing AfterResolveJobs for %r" % self.context
         self.trash_shadowed_docs()
         self.purge_trash()
         self.create_journal_pdf()

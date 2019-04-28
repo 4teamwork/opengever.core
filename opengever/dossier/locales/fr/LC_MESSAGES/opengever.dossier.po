@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-04-28 12:07+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -56,6 +56,10 @@ msgstr "Ce dossier a déjà été clôturé."
 msgid "Dossier is already being resolved"
 msgstr "Le processus de clôture de ce dossier est déjà en cours."
 
+#: ./opengever/dossier/resolve.py
+msgid "Dossier resolution has been finalized"
+msgstr ""
+
 #: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"
 msgstr "Structure du dossier"
@@ -64,7 +68,7 @@ msgstr "Structure du dossier"
 msgid "Dossier template"
 msgstr "Modèle de dossier"
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "Dossiers successfully reactivated."
 msgstr "Le dossier a été rouvert avec succès."
 
@@ -89,7 +93,7 @@ msgstr "Les objets suivants ne peuvent pas être copiés: ${failed_objects}. Ils
 msgid "It isn't allowed to add such items there."
 msgstr "Cet élément ne peut être déplacé vers cette position."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/reactivate.py
 msgid "It isn't possible to reactivate a sub dossier."
 msgstr "Il n'est pas possible de rouvrir le sous-dossier, le dossier principal doit être ouvert à nouveau."
 

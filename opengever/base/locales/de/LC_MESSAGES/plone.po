@@ -213,6 +213,9 @@ msgstr "Angeboten"
 msgid "dossier-state-resolved"
 msgstr "Abgeschlossen"
 
+msgid "dossier-state-pending-resolution"
+msgstr "Abgeschlossen (*)"
+
 msgid "dossier-transition-activate"
 msgstr "Aktivieren"
 
