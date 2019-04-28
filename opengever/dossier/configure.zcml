@@ -250,4 +250,9 @@
       permission="zope2.View"
       />
 
+  <adapter
+      factory=".nightly_after_resolve_job.ExecuteNightlyAfterResolveJobs"
+      name="execute-after-resolve-jobs"
+      />
+
 </configure>
