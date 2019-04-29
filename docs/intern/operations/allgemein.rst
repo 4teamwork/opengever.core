@@ -91,3 +91,31 @@ Der Cronjob sollte somit in jedem Fall **vor** dem "Daily Digest"-Job ausgeführ
     30 4 * * * /home/zope/server/01-gever.example.org/bin/instance0 generate_overdue_notifications >/dev/null 2>&1
 
 **Hinweise:** Der Job "Benachrichtigung für überfällige Dossiers" muss **für jeden Mandanten** eines Clusters einzeln ausgeführt und eingerichtet werden.
+
+Nightly Jobs
+^^^^^^^^^^^^
+
+Mit Release 2019.2 und höher kann ein Cron-Job für die Ausführung der Nightly
+Jobs eingerichtet werden.
+
+Tatsächlich ausgeführt werden die Jobs dann, wenn auch das Registry-Flag
+``INightlyJobsSettings.is_feature_enabled`` aktiviert ist. Falls das Flag
+nicht aktiviert ist, kann der Cron-Job trotzdem eingerichtet werden - es
+werden dann einfach keine Jobs ausgeführt werden.
+
+Die Uhrzeit für den Cron-Job muss so gewählt werden, dass sie dem in den
+``INightlyJobsSettings`` definierten Zeitfenster entspricht (zwischen
+``start_time`` und ``end_time``).
+
+.. code:: bash
+
+    # Nightly Jobs
+    0 01 * * * /home/zope/server/01-gever.example.org/bin/instance run_nightly_jobs >/dev/null 2>&1
+
+Das Zeitfenster in der Registry wird mittels timedeltas (nicht Uhrzeiten)
+definiert - die Werte können also grösser als ``24:00`` sein. Dies erlaubt es,
+auch Angaben über das Mitternachts-Rollover hinweg ohne Zweideutigkeit
+anzugeben:
+
+``23:00 - 26:00`` würde dementsprechend Start um ``23:00``, und Ende um
+``02:00`` *am nächsten Tag* bedeuten.
