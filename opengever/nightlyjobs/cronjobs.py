@@ -2,6 +2,7 @@ from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
+from plone import api
 import logging
 
 
@@ -20,11 +21,20 @@ def run_nightly_jobs_handler(app, args):
         invoke_nightly_job_runner(plone_site)
 
 
+def setup_language(plone):
+    lang_tool = api.portal.get_tool('portal_languages')
+    lang = lang_tool.getPreferredLanguage()
+    plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
+    plone.REQUEST.setupLocale()
+
+
 def invoke_nightly_job_runner(plone_site):
     if not nightly_jobs_feature_enabled():
         logger.info('Nightly jobs feature is not enabled in registry - '
                     'not running any jobs for %r' % plone_site)
         return
+
+    setup_language(plone_site)
 
     runner = NightlyJobRunner(setup_own_task_queue=True)
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
