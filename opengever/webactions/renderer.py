@@ -1,11 +1,13 @@
 from opengever.base.utils import escape_html
+from opengever.ogds.base.utils import get_current_org_unit
+from opengever.webactions.interfaces import IWebActionsProvider
 from opengever.webactions.interfaces import IWebActionsRenderer
+from urllib import urlencode
 from zope.component import adapter
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from opengever.webactions.interfaces import IWebActionsProvider
-from zope.component import queryMultiAdapter
 
 
 class WebActionsSafeDataGetter(object):
@@ -31,8 +33,16 @@ class WebActionsSafeDataGetter(object):
                     for display, webactions in webactions_dict.items())
 
     def _prepare_webaction_data(self, action):
-        return {key: value if key in self._attributes_not_to_escape else escape_html(value)
+        data = {key: value if key in self._attributes_not_to_escape else escape_html(value)
                 for key, value in action.items()}
+
+        data['target_url'] = "{}?{}".format(
+            data['target_url'], urlencode(self._get_webaction_parameters()))
+        return data
+
+    def _get_webaction_parameters(self):
+        return {'context': self.context.absolute_url(),
+                'orgunit': get_current_org_unit().id()}
 
 
 @implementer(IWebActionsRenderer)

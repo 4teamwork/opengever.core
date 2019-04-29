@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.testing import IntegrationTestCase
 from opengever.webactions.interfaces import IWebActionsRenderer
+from urllib import urlencode
 from zope.component import getMultiAdapter
 
 
@@ -11,12 +12,16 @@ class TestWebActionRendererTitleButtons(IntegrationTestCase):
     icon = 'fa-helicopter'
     adapter_interface = IWebActionsRenderer
 
-    expected_data = [
-        '<a title="Action 1" href="http://example.org/endpoint" '
-        'class="webaction_button fa fa-helicopter"></a>',
+    params = {'context': 'http://nohost/plone/ordnungssystem/fuhrung'
+              '/vertrage-und-vereinbarungen/dossier-1',
+              'orgunit': 'fa'}
 
-        '<a title="Action 2" href="http://example.org/endpoint" '
-        'class="webaction_button fa fa-helicopter"></a>']
+    expected_data = [
+        '<a title="Action 1" href="http://example.org/endpoint?{}" '
+        'class="webaction_button fa fa-helicopter"></a>'.format(urlencode(params)),
+
+        '<a title="Action 2" href="http://example.org/endpoint?{}" '
+        'class="webaction_button fa fa-helicopter"></a>'.format(urlencode(params))]
 
     def setUp(self):
         super(TestWebActionRendererTitleButtons, self).setUp()
@@ -43,11 +48,17 @@ class TestWebActionRendererActionButtons(TestWebActionRendererTitleButtons):
     display = 'action-buttons'
     icon = 'fa-helicopter'
 
-    expected_data = [
-            '<a title="Action 1" href="http://example.org/endpoint" '
-            'class="webaction_button fa fa-helicopter">'
-            '<span class="subMenuTitle actionText">Action 1</span></a>',
+    params = {'context': 'http://nohost/plone/ordnungssystem/fuhrung'
+              '/vertrage-und-vereinbarungen/dossier-1',
+              'orgunit': 'fa'}
 
-            '<a title="Action 2" href="http://example.org/endpoint" '
+    expected_data = [
+            '<a title="Action 1" href="http://example.org/endpoint?{}" '
             'class="webaction_button fa fa-helicopter">'
-            '<span class="subMenuTitle actionText">Action 2</span></a>']
+            '<span class="subMenuTitle actionText">Action 1</span></a>'.format(
+              urlencode(params)),
+
+            '<a title="Action 2" href="http://example.org/endpoint?{}" '
+            'class="webaction_button fa fa-helicopter">'
+            '<span class="subMenuTitle actionText">Action 2</span></a>'.format(
+              urlencode(params))]

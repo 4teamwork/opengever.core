@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+from urllib import urlencode
 
 
 class TestProposalOverview(IntegrationTestCase):
@@ -93,9 +94,11 @@ class TestProposalOverview(IntegrationTestCase):
         webactions = browser.css('.webactions_buttons a.webaction_button')
         self.assertEquals(['Action 2', 'Action 1'], webactions.text)
 
-        self.assertEqual(
-            map(lambda item: item.get("href"), webactions),
-            ['http://example.org/endpoint2', 'http://example.org/endpoint'])
+        params = urlencode({'context': self.submitted_proposal.absolute_url(),
+                            'orgunit': 'fa'})
+        self.assertEqual(map(lambda item: item.get("href"), webactions),
+                         ['http://example.org/endpoint2?{}'.format(params),
+                          'http://example.org/endpoint?{}'.format(params)])
 
         self.assertEqual(
             map(lambda item: item.get("class"), webactions),

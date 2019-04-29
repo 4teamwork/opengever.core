@@ -1,11 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
 from opengever.base.menu import OGCombinedActionsWorkflowMenu
 from opengever.testing import IntegrationTestCase
 from opengever.webactions.storage import get_storage
 from opengever.webactions.tests.test_webactions_provider import TestWebActionBase
-from ftw.contentmenu.menu import FactoriesMenu
+from urllib import urlencode
 
 
 class TestWebActionsTitleButtons(IntegrationTestCase):
@@ -57,8 +58,11 @@ class TestWebActionsTitleButtons(IntegrationTestCase):
         self.assertEqual(len(webactions), 2)
 
         action1, action2 = webactions
-        self.assertEqual('http://example.org/endpoint', action1.get("href"))
-        self.assertEqual('http://example.org/endpoint2', action2.get("href"))
+        params = urlencode({'context': self.dossier.absolute_url(), 'orgunit': 'fa'})
+        self.assertEqual('http://example.org/endpoint?{}'.format(params),
+                         action1.get("href"))
+        self.assertEqual('http://example.org/endpoint2?{}'.format(params),
+                         action2.get("href"))
 
         self.assertEqual(u'\xc4ction 1', action1.get("title"))
         self.assertEqual('Action 2', action2.get("title"))
@@ -267,10 +271,12 @@ class TestWebActionsFactoryMenus(IntegrationTestCase):
             webactions = action_menu.css('.webaction')
 
             action1, action2 = webactions
-
+            params = urlencode({'context': obj.absolute_url(), 'orgunit': 'fa'})
             # check that they point to correct url
-            self.assertEqual('http://example.org/endpoint', action1.get("href"))
-            self.assertEqual('http://example.org/endpoint2', action2.get("href"))
+            self.assertEqual('http://example.org/endpoint?{}'.format(params),
+                             action1.get("href"))
+            self.assertEqual('http://example.org/endpoint2?{}'.format(params),
+                             action2.get("href"))
 
             # check the displayed title
             self.assertEqual(u'\xc4ction 1', action1.text)

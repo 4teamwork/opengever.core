@@ -6,6 +6,7 @@ Changelog
 
 - Queue each document archival conversion only once in a single request. [njohner]
 - Include preserved_as_paper_default in the @config endpoint and view. [Rotonen]
+- Pass context and orgunit as parameters to webactions. [njohner]
 - Implement resolving dossiers recursively via REST API. [lgraf]
 - Allow members to access plone vocabularies through restapi. [elioschmutz]
 - Workspaces do no longer inherit from dossiers. [elioschmutz]
