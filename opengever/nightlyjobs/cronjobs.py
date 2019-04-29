@@ -17,7 +17,7 @@ def run_nightly_jobs_handler(app, args):
     logger.setLevel(logging.INFO)
 
     for plone_site in all_plone_sites(app):
-        setup_plone(plone_site)
+        plone_site = setup_plone(plone_site)
         invoke_nightly_job_runner(plone_site)
 
 
