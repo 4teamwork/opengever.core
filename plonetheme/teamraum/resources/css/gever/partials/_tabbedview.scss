@@ -5,10 +5,23 @@
   }
   #tabbedview-body #selection_container .select2-container,
   #tabbedview-body #message_no_contents .select2-container {
-    margin-left: 1em;
-    .select2-selection {
+
+    margin-left: 1px;
+
+    &.select2-container--default .select2-selection{
+      border: 1px solid transparent;
+      min-height: inherit;
+
+      &:hover {
+        border: 1px solid #aaa;
+      }
+    }
+
+    &.select2-container--focus .select2-selection{
+      border: 1px solid #aaa;
       min-height: inherit;
     }
+
     li {
       margin-top: 0;
       margin-bottom: 0;
