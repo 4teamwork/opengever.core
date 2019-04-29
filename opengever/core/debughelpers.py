@@ -26,11 +26,16 @@ def setup_plone(plone, options=None):
     """Takes care of setting up a request, manager security context and
     setting up the site manager for the given Plone site.
     Returns the Plone site root object.
+
+    This is based on the setup code found in p.recipe.zope2instance.ctl:
+    https://github.com/plone/plone.recipe.zope2instance/blob/
+    02bfb735/src/plone/recipe/zope2instance/ctl.py#L672-L680
     """
     app = plone.restrictedTraverse('/')
 
     # Set up request for debug / bin/instance run mode.
     app = makerequest(app)
+    app.REQUEST['PARENTS'] = [app]
     setRequest(app.REQUEST)
 
     # Get a reference to the Plone site *inside* the request-wrapped app
