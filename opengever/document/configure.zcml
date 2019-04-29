@@ -247,6 +247,11 @@
       />
 
   <adapter
+      factory=".indexers.document_type"
+      name="document_type"
+      />
+
+  <adapter
       factory=".indexers.external_reference"
       name="external_reference"
       />
