@@ -17,3 +17,4 @@ Index:
    chapitre7-contacts
    chapitre8-recherches
    chapitre9-triage
+   chapitre11-boitereception
