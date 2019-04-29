@@ -69,7 +69,11 @@
 
         </span>
       </tal:cond>
-      <tal:subjectFilterWidget replace="structure view/render_subject_filter_widget" />
+      <tal:subjectFilter tal:define="widget view/render_subject_filter_widget" tal:condition="widget">
+        <span>|</span>
+        <span>Schlagworte</span>
+        <tal:subjectFilterWidget replace="structure widget" />
+      </tal:subjectFilter>
       <p id="message_no_contents"
          i18n:translate="label_no_contents"
          i18n:domain="ftw.tabbedview">
