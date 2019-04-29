@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Bump plone.restapi to 3.9.0. [phgross]
 - Improve the styling of the tabbedview keyword filter. [phgross]
 - Queue each document archival conversion only once in a single request. [njohner]
 - Do not fire task delegate activity twice. [njohner]
