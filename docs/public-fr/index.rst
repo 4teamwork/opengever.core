@@ -10,6 +10,7 @@ Index:
    chapitre2-base
    chapitre3-trucs
    chapitre4-notifications
+   chapitre5-favoris
    documents/index
    chapitre7-contacts
    chapitre8-recherches
