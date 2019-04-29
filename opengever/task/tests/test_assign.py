@@ -257,7 +257,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         response = browser.css('.answers .answer')[0]
         self.assertEquals(
             [u'Reassigned from B\xe4rfuss K\xe4thi (kathi.barfuss) to K\xf6nig '
-             u'J\xfcrgen (jurgen.konig) by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
+             u'J\xfcrgen (jurgen.konig)'],
             response.css('h3').text)
         self.assertEquals(
             self.secretariat_user.getId(), self.task.responsible)
@@ -278,7 +278,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         response = browser.css('.answers .answer')[0]
         self.assertEquals(
             [u'Reassigned from B\xe4rfuss K\xe4thi (kathi.barfuss) to K\xf6nig '
-             u'J\xfcrgen (jurgen.konig) by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
+             u'J\xfcrgen (jurgen.konig)'],
             response.css('h3').text)
         self.assertEquals(
             self.secretariat_user.getId(), self.successor.responsible)

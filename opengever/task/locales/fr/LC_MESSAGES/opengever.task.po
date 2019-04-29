@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-04 12:13+0000\n"
+"POT-Creation-Date: 2019-04-29 07:17+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -1014,6 +1014,11 @@ msgstr "Fermé par ${user}"
 msgid "transition_msg_default"
 msgstr "Réponse ajouté"
 
+#. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_delegated_reassign"
+msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${user}"
+
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_modify_deadline"
@@ -1024,10 +1029,10 @@ msgstr "Délai modifié de ${deadline_old} à ${deadline_new} par ${user}"
 msgid "transition_msg_reactivate"
 msgstr "Réactivé par ${user}"
 
-#. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
+#. Default: "Reassigned from ${responsible_old} to ${responsible_new}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_reassign"
-msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new} par ${user}"
+msgstr "Attribué à nouveau de ${responsible_old} à ${responsible_new}"
 
 #. Default: "Refused by ${user}"
 #: ./opengever/task/response_description.py

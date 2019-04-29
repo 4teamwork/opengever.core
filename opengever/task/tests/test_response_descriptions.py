@@ -208,7 +208,7 @@ class TestResponseDescriptions(FunctionalTestCase):
 
         self.assertEqual(
             u'Reassigned from M\xfcller Hans (test_user_1_) to Steiner '
-            u'J\xf6rg (other_user) by M\xfcller Hans (test_user_1_)',
+            u'J\xf6rg (other_user)',
             self.get_latest_answer(browser))
 
     @browsing

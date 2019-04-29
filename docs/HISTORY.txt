@@ -6,6 +6,7 @@ Changelog
 
 - Bump plone.restapi to 3.9.0. [phgross]
 - Improve the styling of the tabbedview keyword filter. [phgross]
+- Adapt task reassign activity message. [njohner]
 - Queue each document archival conversion only once in a single request. [njohner]
 - Do not fire task delegate activity twice. [njohner]
 - Do not allow sorting on Keywords in dossier and document listings. [njohner]
