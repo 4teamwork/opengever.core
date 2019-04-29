@@ -1,19 +1,19 @@
 from opengever.nightlyjobs.interfaces import INightlyJobProvider
-from opengever.nightlyjobs.job_providers import NightlyJob
+from opengever.nightlyjobs.testing import ITestingNightlyJobProvider
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
+from zope.component import getAdapters
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.component import getAdapters
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 
 class IWantToBeModified(Interface):
@@ -24,7 +24,7 @@ class TestException(Exception):
     pass
 
 
-@implementer(INightlyJobProvider)
+@implementer(ITestingNightlyJobProvider)
 @adapter(IPloneSiteRoot, IBrowserRequest)
 class DocumentTitleModifierJobProvider(object):
 
@@ -39,7 +39,7 @@ class DocumentTitleModifierJobProvider(object):
         documents = catalog(portal_type=self.portal_type,
                             object_provides=IWantToBeModified.__identifier__,
                             sort_on='path')
-        self._jobs = (NightlyJob(self.provider_name, {'uid': document.UID})
+        self._jobs = ({'uid': document.UID}
                       for document in documents)
         self._njobs = documents.actual_result_count
         self._njobs_executed = 0
@@ -59,7 +59,7 @@ class DocumentTitleModifierJobProvider(object):
 
     def execute_job(self, job, interrupt_if_necessary):
         interrupt_if_necessary()
-        obj = uuidToObject(job.data['uid'])
+        obj = uuidToObject(job['uid'])
         obj.title = u'Modified {}'.format(obj.title)
 
 
@@ -105,7 +105,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
     def test_job_provider_job_execution(self):
         self.login(self.manager)
         provider = getMultiAdapter([api.portal.get(), getRequest()],
-                                   INightlyJobProvider,
+                                   ITestingNightlyJobProvider,
                                    name='document-title')
 
         document_title = self.document.title
@@ -115,7 +115,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
     def test_job_provider_job_counters(self):
         self.login(self.manager)
         provider = getMultiAdapter([api.portal.get(), getRequest()],
-                                   INightlyJobProvider,
+                                   ITestingNightlyJobProvider,
                                    name='document-title')
         self.assertEqual(3, len(provider))
         self.assertEqual(0, provider._njobs_executed)
@@ -128,7 +128,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
     def test_job_provider_job_execution_interruption(self):
         self.login(self.manager)
         provider = getMultiAdapter([api.portal.get(), getRequest()],
-                                   INightlyJobProvider,
+                                   ITestingNightlyJobProvider,
                                    name='document-title')
 
         document_title = self.document.title

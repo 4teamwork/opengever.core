@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import IntegrationTestCase
+import unittest
 
 
 class TestBlockedLocalRolesListing(IntegrationTestCase):
@@ -151,6 +152,7 @@ class TestBlockedLocalRolesListing(IntegrationTestCase):
         browser.open(self.repository_root, view="tabbedview_view-blocked-local-roles")
         self.assertEqual(u'1. F\xfchrung - Client1 1', browser.css('.blocked-local-roles-listing a').first.text)
 
+    @unittest.skip("This test is currently flaky")
     @browsing
     def test_blocked_role_tab_tree_rendering(self, browser):
         browser.append_request_header('Accept-Language', 'de-ch')
