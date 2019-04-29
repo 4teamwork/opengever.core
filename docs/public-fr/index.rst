@@ -12,6 +12,7 @@ Index:
    chapitre4-notifications
    chapitre5-favoris
    chapitre6-recents
+   dossiers/index
    documents/index
    chapitre7-contacts
    chapitre8-recherches
