@@ -5,7 +5,7 @@ from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
-from opengever.activity.hooks import insert_notification_defaults
+from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -383,98 +383,46 @@ class TestTaskReassignActivity(IntegrationTestCase):
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
 
-
-class TestTaskReassignActivity(FunctionalTestCase):
-
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-
-    def setUp(self):
-        super(TestTaskReassignActivity, self).setUp()
-        insert_notification_defaults(self.portal)
-        Mailing(self.portal).set_up()
-
-        self.dossier = create(Builder('dossier').titled(u'Dossier XY'))
-        self.hugo = create(Builder('ogds_user')
-                           .id('hugo.boss')
-                           .assign_to_org_units([self.org_unit])
-                           .having(firstname=u'Hugo', lastname=u'Boss',
-                                   email='hugo.boss@example.org'))
-
-        create(Builder('ogds_user')
-               .id('peter.meier')
-               .assign_to_org_units([self.org_unit])
-               .having(firstname=u'Peter', lastname=u'Meier'))
-        create(Builder('ogds_user')
-               .id('james.meier')
-               .assign_to_org_units([self.org_unit])
-               .having(firstname=u'James', lastname=u'Meier'))
-
-    def tearDown(self):
-        super(TestTaskReassignActivity, self).tearDown()
-        Mailing(self.layer['portal']).tear_down()
-
-    def add_task(self, browser):
-        browser.login().open(self.dossier, view='++add++opengever.task.task')
-        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
-                      'Text': 'Lorem ipsum'})
-
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':james.meier')
-        form.find_widget('Issuer').fill(u'peter.meier')
-
-        browser.css('#form-buttons-save').first.click()
-        return self.dossier.get('task-1')
-
-    def reassign(self, browser, responsible, response):
-        browser.login().open(self.task)
-        browser.css('#workflow-transition-task-transition-reassign').first.click()
-        browser.fill({'Response': response})
-
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':' + responsible)
-
-        browser.css('#form-buttons-save').first.click()
-
     @browsing
     def test_notifies_old_and_new_responsible(self, browser):
-        self.task = self.add_task(browser)
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
-        self.assertEqual(2, len(activities))
+        self.assertEqual(1, len(activities))
 
         reassign_activity = activities[-1]
+
         self.assertItemsEqual(
-            [u'james.meier', u'peter.meier', u'hugo.boss'],
+            [self.regular_user.getId(), self.meeting_user.getId()],
             [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
-        self.task = self.add_task(browser)
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         resource = notification_center().fetch_resource(self.task)
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
-             (u'peter.meier', TASK_ISSUER_ROLE)],
+            [(u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
     @browsing
     def test_notifies_only_new_responsible_per_mail(self, browser):
-        self.task = self.add_task(browser)
+        self.login(self.meeting_user)
+        process_mail_queue()
         Mailing(self.portal).reset()
 
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
+        process_mail_queue()
+
         self.assertEqual(1, len(Mailing(self.portal).get_messages()))
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
-            'hugo.boss@example.org', get_header(mail, 'To'))
+            'herbert.jager@gever.local', get_header(mail, 'To'))
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
