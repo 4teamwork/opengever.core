@@ -19,3 +19,5 @@ Index:
    chapitre9-triage
    chapitre11-boitereception
    chapitre13-deroulements-standards
+   chapitre14-referentiel
+   app-seances/index.rst
