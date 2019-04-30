@@ -9,7 +9,7 @@ Export
 Deux alternatives pour l’export sont proposées:
 
 1.	Les dossiers peuvent être exportés avec leurs métadonnées au niveau du chiffre de la structure d’organisation (Dossiers et leurs contenus dans le listing des dossiers).
-2.	Les dossiers peuvent être exportés au nouveau dossier sans leurs métadonnées (Uniquement les documents du dossier)
+2.	Les dossiers peuvent être exportés au niveau dossier sans leurs métadonnées (Uniquement les documents du dossier)
 
 
 Import

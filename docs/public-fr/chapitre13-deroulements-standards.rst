@@ -20,7 +20,7 @@ c.  Mandant
 
 d.  Mandataire
 
-e.  Nombre de jours donnés pour la complétion de la tâche
+e.  Nombre de jours donnés pour compléter de la tâche
 
 f.  Présélectionné : Indication si la tâche doit être automatiquement sélectionnée lorsqu’un déroulement standard est déclenché dans un dossier.
 
@@ -28,7 +28,7 @@ f.  Présélectionné : Indication si la tâche doit être automatiquement séle
 
 Déroulements parallèles et séquentiels
 --------------------------------------
-Les déroulements standard et séquentiels se distinguent de la manière suivante : Parallèle signifie que plusieurs tâches peuvent être complétées en même temps. Séquentiel signifie toutes les tâches sont créés dès le début, mais déclenchées l’une après l’autre. Ainsi la tâche suivante n’est activée que lorsque la tâche précédente a été complétée. L’utilisateur peut définir, à l’aide du menu déroulant, quel type de déroulement qui doit être utilisé.
+Les déroulements standard et séquentiels se distinguent de la manière suivante : Parallèle signifie que plusieurs tâches peuvent être complétées en même temps. Séquentiel signifie toutes les tâches sont créés dès le début, mais déclenchées l’une après l’autre. Ainsi la tâche suivante n’est activée que lorsque la tâche précédente a été complétée. L’utilisateur peut définir, à l’aide du menu déroulant, quel type de déroulement doit être utilisé.
 
 Le type de séquence est défini par le créateur du déroulement standard et ne peut pas être modifié lors de l’exécution. Les différences entre les 2 types de déroulements sont couvertes en détails plus loin.
 
@@ -44,7 +44,7 @@ Sélectionnez ensuite le déroulement standard à utiliser, puis cliquez sur *Co
 
 |img-deroulstandard-4|
 
-Les modèles de tâches marquées comme présélectionnés sont déjà inclus. Les tâches requises peuvent être ajoutées/ôtées par l’intermédiaire d’un clic dans la case à cocher.
+Les modèles de tâches marqués comme présélectionnés sont déjà inclus. Les tâches requises peuvent être ajoutées/ôtées par l’intermédiaire d’un clic dans la case à cocher.
 
 |img-deroulstandard-5|
 
@@ -56,7 +56,7 @@ En cliquant sur *Enclencher*, les tâches sélectionnées sont reprises par le d
 
 Lors de l’activation d’un déroulement standard *parallèle*, une tâche principale avec plusieurs sous-tâches est créée. Dans les propriétés de la tâche principale, on peut voir qu’il s’agit d’un déroulement standard parallèle. Si un déroulement standard parallèle est déclenché, toutes les tâches sont automatiquement passées dans l’état « en traitement » et peuvent donc être traitées en même temps.
 
-Lors de l’activation d’un déroulement standard *séquentiel*, une tâche principale avec plusieurs sous-tâches est également créée. Dans les propriétés de la tâche principale, on peut voir qu’il s’agit d’un déroulement standard séquentiel. Lorsqu’un déroulement standard séquentiel est déclenché, la première tâche automatiquement passée dans l’état « ouvert », les tâches subséquentes sont marquées comme « planifiées ». Ces dernières sont donc déjà visibles mais dépendent de la conclusion de la tâche précédente pour être activées.
+Lors de l’activation d’un déroulement standard *séquentiel*, une tâche principale avec plusieurs sous-tâches est également créée. Dans les propriétés de la tâche principale, on peut voir qu’il s’agit d’un déroulement standard séquentiel. Lorsqu’un déroulement standard séquentiel est déclenché, la première tâche est automatiquement passée dans l’état « ouvert », les tâches subséquentes sont marquées comme « planifiées ». Ces dernières sont donc déjà visibles mais dépendent de la conclusion de la tâche précédente pour être activées.
 
 |img-deroulstandard-7|
 

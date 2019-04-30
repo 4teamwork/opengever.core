@@ -1,11 +1,11 @@
 Ouvrir un nouveau dossier
 -------------------------
-Pour ouvrir un nouveau dossier, sélectionnez le numéro de classement sous lequel le dossier doit être saisi dans la structure de classement et cliquez sur *Ajouter -> Dossier*.
+Pour ouvrir un nouveau dossier, sélectionnez le numéro de classement sous lequel le dossier doit être saisi dans la structure de classement et cliquez sur *Ajout d'un élément -> Dossier*.
 
 |img-creernouveaudossier01|
 
 .. note::
-   Un dossier ne peut qu’être ajouté qu’au dernier niveau hiérarchique de la structure de classement (aussi nommé numéro de classement), p. ex. sous 2.1.0, mais pas sous 2.1.
+   Un dossier ne peut être ajouté qu’au dernier niveau hiérarchique de la structure de classement (aussi nommé numéro de classement), p. ex. sous 2.1.0, mais pas sous 2.1.
 
    Tous les éléments dans OneGov GEVER (Documents, emails, sous-dossiers, tâches, etc.) doivent être déposés dans un dossier. Sans dossier, l’utilisation de ces éléments n’est pas possible.
 
@@ -23,7 +23,7 @@ Ci-dessous, une description des différents champs de saisie et onglets.
 
 1. **Titre**: le contenu de l’affaire est à décrire de façon concise et pertinente. Le titre contient les informations-clé d’une affaire. Il doit être choisi de manière à ce qu’un tiers comprenne de quoi il s’agit. En conséquence, l’utilisation d’abréviations est à éviter
 
-2. **Description**: Description détaillée de l’affaire (optionnel). 
+2. **Description**: Description détaillée de l’affaire (optionnel).
    Les informations qui n’entrent plus dans le titre peuvent venir compléter la description. L’espacement se fait essentiellement avec des signes de ponctuation. Les paragraphes et sauts de ligne sont à éviter afin d’assurer un archivage optimal.
    Lors d’une recherche, ce champ de texte est également pris en compte. Seul le titre est toutefois affiché dans la liste de dossiers. Il est donc important que les informations essentielles concernant l’affaire soient incluses dans le titre.
 
@@ -44,7 +44,7 @@ Ci-dessous, une description des différents champs de saisie et onglets.
 
 7. **Référence externe**: Le champ Référence externe peut être utilisé pour des codes externes ou des liens vers de fichiers stockés dans des systèmes tiers
 
-8. **Responsable**: La personne responsable est celle qui a la charge du dossier. La personne responsable doit être membre du mandant courant. Par défaut, c’est l’utilisateur qui ouvre le dossier qui est proposé. Pour saisir une autre personne, saisissez au moins les 3 premiers caractères du nom, prénom ou l’abréviation de cette personne. La bonne personne peut ensuit être choisie dans la liste résultante.
+8. **Responsable**: La personne responsable est celle qui a la charge du dossier. La personne responsable doit être membre du mandant courant. Par défaut, c’est l’utilisateur qui ouvre le dossier qui est proposé. Pour saisir une autre personne, saisissez au moins les 3 premiers caractères du nom, prénom ou l’abréviation de cette personne. La bonne personne peut ensuite être choisie dans la liste résultante.
 
    |img-creernouveaudossier04|
 
@@ -111,9 +111,9 @@ Vue du dossier après sauvegarde
 
    -  *Début*: Date de début du dossier
 
-   -  *Fin*: Date de fin. Est seulement affiche une fois que le champ a été renseigné.
+   -  *Fin*: Date de fin. Est seulement affiché une fois que le champ a été renseigné.
 
-   -  *Numéro courant*: Le numéro assignée au dossier de manière incrémentale. Indépendant du fait qu’il s’agisse d’un dossier ou sous-dossier.
+   -  *Numéro courant*: Le numéro assigné au dossier de manière incrémentale. Indépendant du fait qu’il s’agisse d’un dossier ou sous-dossier.
 
    -  *Numéro de référence*: Le numéro de référence d’un dossier se compose à partir des éléments suivants : Initiales du mandant, Numéro de classement dans la structure d’organisation, No de dossier (incrémental). P. ex : OG 1.1.1 / 1
 

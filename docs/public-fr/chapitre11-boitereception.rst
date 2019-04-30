@@ -49,7 +49,7 @@ Au lieu de la transmission, les actions suivantes peuvent être exécutées : Co
 Attribuer un courrier entrant à un dossier
 ------------------------------------------
 
-Au lieu de la transmission, les actions suivantes peuvent être exécutées : Copier, Transmettre par email, Exporter la sélection, Déplacer dans la corbeille, Exporter comme fichier zip.
+La transmission a généré une tâche à partir du courrier entrant. Celle-ci peut maintenant également être attribuée à un nouveau dossier ou à un dossier existant. En cliquant sur le titre, une nouvelle vue où l'attribution à un dossier peut être faite s'ouvre. Pour celà il faut cliquer sur “Attribuer à un dossier” en bas à gauche.
 
 |img-boitereception7|
 

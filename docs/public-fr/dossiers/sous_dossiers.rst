@@ -4,7 +4,7 @@ Travailler avec des sous-dossiers
 Ouvrir un sous-dossier
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Dans le dossier principal, sélectionnez *Ajouter → Sous-dossier*
+Dans le dossier principal, sélectionnez *Ajout d'un élément → Sous-dossier*
 
 Les pages de saisie de dossiers principaux est sous-dossiers sont identiques (Voir Ouvrir un nouveau dossier **[PLEASE INSERT LINK]**). La personne responsable du dossier est automatiquement reprise du dossier principal, mais peut être modifiée. Même s’il est techniquement possible d’imbriquer un nombre illimité de dossiers, une limite est normalement établie au niveau du numéro de classement.
 

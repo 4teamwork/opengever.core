@@ -36,7 +36,7 @@ Dans OneGov GEVER, il existe 4 rôles par défaut. Seul le rôle Responsable est
 +-------------------------+-----------------------------------------------------------------------------------------------------------------------+
 | *Signature finale*      | Cas particulier de participation.                                                                                     |
 +-------------------------+-----------------------------------------------------------------------------------------------------------------------+
-| *Prise de connaissance* | Pas de participation active au déroulement de l’affaire. Les documents reçus uniquement reçus pour information.       |
+| *Prise de connaissance* | Pas de participation active au déroulement de l’affaire. Les documents reçus uniquement pour information.             |
 +-------------------------+-----------------------------------------------------------------------------------------------------------------------+
 
 .. note::
@@ -44,7 +44,7 @@ Dans OneGov GEVER, il existe 4 rôles par défaut. Seul le rôle Responsable est
    - Les participants additionnels peuvent être membres du même mandant un d’un autre. Les participants externes peuvent également être sélectionnés, pourvu qu’ils aient été saisis sous *Contacts*.
    - Une participation ne donne pas de droits d’accès additionnels au dossier.
 
-Alors que le responsable est directement saisi dans les propriétés du dossier, les autres participations sont ajoutées par l’intermédiaire de *Ajouter → Participation* ou saisis dans l’onglet *Participations*.
+Alors que le responsable est directement saisi dans les propriétés du dossier, les autres participations sont ajoutées par l’intermédiaire de *Ajout d'un élément → Participation* ou saisis dans l’onglet *Participations*.
 
 |img-modifierdossier03|
 
@@ -69,7 +69,7 @@ Une fois toutes les conditions ci-dessus remplies, le dossier peut être fermé 
 
 |img-modifierdossier05|
 
-Après la fermeture du dossier, le système génère automatiquement un PDF contenant l’historique, qui liste toutes les activités du dossier ainsi que les requêtes et tâches qui y ont été créées
+Après la fermeture du dossier, et si cette option est activée, le système génère automatiquement un PDF contenant l’historique, qui liste toutes les activités du dossier ainsi que les requêtes et tâches qui y ont été créées
 
 |img-modifierdossier06|
 
@@ -109,7 +109,7 @@ Les droits sont établis au niveau du numéro de classement de la structure d’
 L’onglet Historique – Qui a fait quoi et quand ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Sous l’onglet Historique se trouve un listing complet de qui a effectué quelles modifications dans le dossier. L’historique assure la traçabilité et ne peut être édité.
+Sous l’onglet *Historique* se trouve un listing complet de qui a effectué quelles modifications dans le dossier. L’historique assure la traçabilité et ne peut être édité.
 
 |img-modifierdossier11|
 

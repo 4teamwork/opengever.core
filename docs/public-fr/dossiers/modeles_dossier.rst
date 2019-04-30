@@ -1,7 +1,7 @@
 Travailler avec des modèles de dossiers
 ---------------------------------------
 
-Les Modèles de dossiers sont particulièrement bien adaptés aux procédures standardisées qui se répètent souvent (p. ex. la demande de permis de construire), où la structure du dossier reste toujours la même. Un point important est qu’une fois créé partir d’un modèle, le dossier en devient indépendant, donc n’a plus de référence au modèle dont il est issu.
+Les Modèles de dossiers sont particulièrement bien adaptés aux procédures standardisées qui se répètent souvent (p. ex. la demande de permis de construire), où la structure du dossier reste toujours la même. Un point important est qu’une fois créé à partir d’un modèle, le dossier en devient indépendant, donc n’a plus de référence au modèle dont il est issu.
 
 Cette fonctionnalité est disponible depuis la version 2017.2.
 
@@ -16,17 +16,18 @@ Un nouveau modèle de dossier peut être ajouté via le menu déroulant « Ajout
 
 Sur l’écran suivant, ces champs peuvent être remplis :
 
--  *Aide pour le choix du titre*: Afin d’assurer une certaine cohérence entre les noms de dossiers du même type, il est possible d’inclure ici des consignes para rapport à sa structure.
+-  *Aide pour le choix du titre*: Afin d’assurer une certaine cohérence entre les noms de dossiers du même type, il est possible d’inclure ici des consignes par rapport à sa structure.
 -  *Titre*: Titre du modèle de dossier
 -  *Description*: Description du type d’utilisation du modèle de dossier
 -  *Mots-clés*: Il est possible d’assigner des mots clés définissant le dossier. Pour cela, il existe 2 options :
--  *Option “Prédéfinition de mots-clés”*:
-    En activant cette option, les mots clés donnés sont automatiquement ajoutés au nouveau dossier créé à partir du modèle.
--  *Option “Restreindre la liste des mots-clés”*:
-    En activant cette option, seuls les mots clés donnés dans la liste peuvent être ajoutés au dossier créé à partir de ce modèle. L’utilisateur ne peut donc pas ajouter des mots clés qui n’ont pas été approuvés au niveau du modèle.
+    -  *Option “Prédéfinition de mots-clés”*:
+       En activant cette option, les mots clés donnés sont automatiquement ajoutés au nouveau dossier créé à partir du modèle.
+    -  *Option “Restreindre la liste des mots-clés”*:
+       En activant cette option, seuls les mots clés donnés dans la liste peuvent être ajoutés au dossier créé à partir de ce modèle. L’utilisateur ne peut donc pas ajouter des mots clés qui n’ont pas été approuvés au niveau du modèle.
+
 -  *Commentaire*: Toutes remarques additionnelles peuvent être ajoutées ici.
 
-En cliquant sur « Sauvegarder », la structure du nouveau modèle de dossier est créée. A partir de ce point, il est utilisable par tous les utilisateurs OneGov GEVER du mandant, pour autant qu’aucune limitation ait été ajoutée (Voir la section « Restrictions sur un modèle de dossier »)
+En cliquant sur « Sauvegarder », la structure du nouveau modèle de dossier est créée. A partir de ce point, il est utilisable par tous les utilisateurs OneGov GEVER du mandant, pour autant qu’aucune limitation n'ait été ajoutée (Voir la section « Restrictions sur un modèle de dossier »)
 
 
 .. note::
