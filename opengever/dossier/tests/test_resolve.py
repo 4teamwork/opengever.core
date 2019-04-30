@@ -509,7 +509,6 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             self.resolve(self.empty_dossier, browser)
         self.assertEquals(1, len(children['added']))
         tasks_pdf, = children['added']
-        tasks_pdf.reindexObject()
         self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
 
         self.reactivate(self.empty_dossier, browser)
@@ -981,7 +980,6 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
 
         self.assertEquals(1, len(children['added']))
         tasks_pdf, = children['added']
-        tasks_pdf.reindexObject()
         self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
 
         # Now reactivate and close the dossier again
