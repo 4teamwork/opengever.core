@@ -115,6 +115,11 @@
   <adapter factory=".base.DefaultConstrainTypeDecider" />
 
   <adapter
+      factory=".indexers.after_resolve_jobs_pending_indexer"
+      name="after_resolve_jobs_pending"
+      />
+
+  <adapter
       factory=".indexers.DossierSubjectIndexer"
       name="Subject"
       />
@@ -243,6 +248,11 @@
       name="move_items"
       class=".move_items.MoveItemsFormView"
       permission="zope2.View"
+      />
+
+  <adapter
+      factory=".nightly_after_resolve_job.ExecuteNightlyAfterResolveJobs"
+      name="execute-after-resolve-jobs"
       />
 
 </configure>

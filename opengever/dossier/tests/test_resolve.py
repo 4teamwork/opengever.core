@@ -18,9 +18,11 @@ from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
-from opengever.ogds.base.utils import get_current_org_unit
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import index_data_for
 from operator import itemgetter
 from plone import api
 from plone.app.testing import applyProfile
@@ -211,11 +213,43 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
 
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
+    """Variant of the above test class to test dossier resolution via RESTAPI.
+    """
 
-    pass
+
+class TestResolvingDossiersNightly(TestResolvingDossiers):
+    """Variant of the above test class to test dossier resolution with the
+    nightly jobs feature enabled.
+    """
+
+    features = ('nightly-jobs', )
 
 
-class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
+class ResolveJobsTestHelper(object):
+    """Helper to assert on the 'after_resolve_jobs_pending' flag's state
+    in situations where after resolve jobs should have been executed.
+    """
+
+    def assert_after_resolve_jobs_pending(self, expected, dossiers):
+        for dossier in dossiers:
+            self.assertEqual(expected, AfterResolveJobs(dossier).after_resolve_jobs_pending)
+            self.assertEqual(expected, index_data_for(dossier)['after_resolve_jobs_pending'])
+
+    def assert_after_resolve_jobs_pending_in_expected_state(self, dossiers):
+        self.assert_after_resolve_jobs_pending(False, dossiers)
+
+
+class NightlyResolveJobsTestHelper(ResolveJobsTestHelper):
+    """Helper to assert on the 'after_resolve_jobs_pending' flag's state
+    in situations where after resolve jobs should NOT have been executed
+    (i.e. when nightly jobs feature is enabled).
+    """
+
+    def assert_after_resolve_jobs_pending_in_expected_state(self, dossiers):
+        self.assert_after_resolve_jobs_pending(True, dossiers)
+
+
+class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHelper):
 
     @browsing
     def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self, browser):
@@ -230,6 +264,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
 
         self.assertIn(doc1, children['after'])
         self.assertNotIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_purge_trashs_recursive(self, browser):
@@ -246,6 +283,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertIn(doc1, children['after'])
         self.assertNotIn(doc2, children['after'])
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
     @browsing
     def test_purging_trashed_documents_is_disabled_by_default(self, browser):
         self.login(self.secretariat_user, browser)
@@ -255,6 +295,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
 
         self.assertIn(doc1, children['after'])
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_adds_journal_pdf_to_main_and_subdossier(self, browser):
@@ -292,6 +335,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertTrue(IDossierJournalPDFMarker.providedBy(sub_journal_pdf))
         self.assertFalse(sub_journal_pdf.preserved_as_paper)
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
     @browsing
     def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
         self.activate_feature('journal-pdf')
@@ -324,6 +370,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
                          "Document date should be earliest possible date")
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
     @browsing
     def test_journal_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
         self.activate_feature('journal-pdf')
@@ -340,6 +389,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
         self.assertEquals(0, len(children['added']))
         self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_adds_tasks_pdf_only_to_main_dossier(self, browser):
@@ -377,6 +429,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
 
         self.assertEquals(0, len(sub_children['added']))
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
     @browsing
     def test_tasks_pdf_is_skipped_for_dossiers_without_tasks(self, browser):
         self.activate_feature('tasks-pdf')
@@ -386,6 +441,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
 
         self.assertEqual(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_sets_tasks_pdf_document_date_to_dossier_end_date(self, browser):
@@ -429,6 +487,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertEqual(date(2016, 3, 15), main_tasks_pdf.document_date,
                          "Document date should be earliest possible date")
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
     @browsing
     def test_tasks_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
         self.activate_feature('tasks-pdf')
@@ -448,7 +509,6 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
         self.assertEquals(1, len(children['added']))
         tasks_pdf, = children['added']
-        tasks_pdf.reindexObject()
         self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
 
         self.reactivate(self.empty_dossier, browser)
@@ -456,6 +516,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
         self.assertEquals(0, len(children['added']))
         self.assertEquals(1, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_tasks_and_journal_pdf_are_disabled_by_default(self, browser):
@@ -465,6 +528,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
             self.resolve(self.empty_dossier, browser)
 
         self.assertEquals(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self, browser):
@@ -478,6 +544,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
 
         self.assertIn(doc1, children['after'])
         self.assertNotIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
 
     @browsing
     def test_shadowed_documents_are_deleted_recursively_when_resolving_a_dossier(self, browser):
@@ -493,10 +562,502 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper):
         self.assertIn(doc1, children['after'])
         self.assertNotIn(doc2, children['after'])
 
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier, subdossier])
+
 
 class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobs):
+    """Variant of the above test class to test dossier resolution via RESTAPI.
+    """
 
-    pass
+
+class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
+    """Variant of the above test class to test dossier resolution with the
+    nightly jobs feature enabled.
+
+    These tests should test that the respective jobs are NOT executed when
+    the nightly jobs feature is enabled, but produce the same result when
+    the nightly job is triggered afterwards.
+
+    They usually follow this pattern:
+    - Resolve one or more dossiers
+    - Assert that none of the work of the AfterResolveJobs has been done yet
+    - Assert that the AfterResolveJobs are flagged as still pending
+    - Run the nightly job(s)
+    - Assert that the AfterResolveJobs work has been done
+    - Assert that the AfterResolveJobs are not flagged as pending any more
+    """
+
+    features = ('nightly-jobs', )
+
+    def interrupt_if_necessary(self):
+        """Stub out the runner's `interrupt_if_necessary` function.
+        """
+
+    def execute_nightly_jobs(self, expected=None):
+        """Run all pending after resolve nightly jobs, and assert on the
+        number of jobs.
+        """
+        nightly_job_provider = ExecuteNightlyAfterResolveJobs(
+            self.portal, self.request)
+
+        jobs = list(nightly_job_provider)
+        if expected:
+            self.assertEqual(expected, len(jobs))
+            self.assertEqual(expected, len(nightly_job_provider))
+
+        for job in jobs:
+            nightly_job_provider.run_job(job, self.interrupt_if_necessary)
+
+    @browsing
+    def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self, browser):
+        self.activate_feature('purge-trash')
+        self.login(self.secretariat_user, browser)
+
+        doc1 = create(Builder('document').within(self.empty_dossier))
+        doc2 = create(Builder('document').within(self.empty_dossier).trashed())
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertIn(doc1, children['after'])
+        self.assertIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+            self.execute_nightly_jobs(expected=1)
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
+
+    @browsing
+    def test_purge_trashs_recursive(self, browser):
+        self.activate_feature('purge-trash')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier').within(self.empty_dossier))
+        doc1 = create(Builder('document').within(subdossier))
+        doc2 = create(Builder('document').within(subdossier).trashed())
+
+        with self.observe_children(subdossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertIn(doc1, children['after'])
+        self.assertIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier, subdossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(subdossier) as children:
+            self.execute_nightly_jobs(expected=2)
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier, subdossier])
+
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
+
+    @browsing
+    def test_adds_journal_pdf_to_main_and_subdossier(self, browser):
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .titled(u'Sub'))
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(main_children['added']))
+        self.assertEquals(0, len(sub_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier, subdossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    self.execute_nightly_jobs(expected=2)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_journal_pdf, = main_children['added']
+        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
+                          main_journal_pdf.title)
+        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
+                          main_journal_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          main_journal_pdf.file.contentType)
+        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
+        self.assertFalse(main_journal_pdf.preserved_as_paper)
+
+        self.assertEquals(1, len(sub_children['added']))
+        sub_journal_pdf, = sub_children['added']
+        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12:00 AM',
+                          sub_journal_pdf.title)
+        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12 00 AM.pdf',
+                          sub_journal_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          sub_journal_pdf.file.contentType)
+        self.assertTrue(IDossierJournalPDFMarker.providedBy(sub_journal_pdf))
+        self.assertFalse(sub_journal_pdf.preserved_as_paper)
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier, subdossier])
+
+    @browsing
+    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
+
+        # Resolve subdossier
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                self.resolve(subdossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(sub_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [subdossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(1, len(sub_children['added']))
+        sub_journal_pdf, = sub_children['added']
+        self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
+                         "End date should be set to dossier end date")
+
+        self.assert_after_resolve_jobs_pending(
+            False, [subdossier])
+
+        # Resolve main dossier
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(main_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 4, 25)):
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_journal_pdf, = main_children['added']
+        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
+                         "End should be earliest possible date")
+        self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
+                         "Document date should be earliest possible date")
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_journal_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
+        self.activate_feature('journal-pdf')
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(1, len(children['added']))
+        journal_pdf, = children['added']
+        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+        # Now reactivate and close the dossier again
+        self.reactivate(self.empty_dossier, browser)
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_adds_tasks_pdf_only_to_main_dossier(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .titled(u'Sub'))
+        create(Builder('task')
+               .within(subdossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(main_children['added']))
+        self.assertEquals(0, len(sub_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier, subdossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as main_children:
+            with self.observe_children(subdossier) as sub_children:
+                with freeze(datetime(2016, 4, 25)):
+                    self.execute_nightly_jobs(expected=2)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_tasks_pdf, = main_children['added']
+        self.assertEquals(u'Task list of dossier An empty dossier, Apr 25, 2016 12:00 AM',
+                          main_tasks_pdf.title)
+        self.assertEquals(u'Task list of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
+                          main_tasks_pdf.file.filename)
+        self.assertEquals(u'application/pdf',
+                          main_tasks_pdf.file.contentType)
+        self.assertTrue(IDossierTasksPDFMarker.providedBy(main_tasks_pdf))
+        self.assertFalse(main_tasks_pdf.preserved_as_paper)
+
+        self.assertEquals(0, len(sub_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier, subdossier])
+
+    @browsing
+    def test_tasks_pdf_is_skipped_for_dossiers_without_tasks(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+            self.execute_nightly_jobs(expected=1)
+
+        self.assertEqual(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_sets_tasks_pdf_document_date_to_dossier_end_date(self, browser):
+        """When the document date is not set to the dossiers end date the
+        subdossier will be left in an inconsistent state. this will make
+        resolving the main dossier impossible.
+        """
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier')
+                            .within(self.empty_dossier)
+                            .having(
+                                start=date(2016, 1, 1),
+                                end=date(2016, 3, 15))
+                            .titled(u'Sub'))
+        create(Builder('task')
+               .within(subdossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
+
+        with self.observe_children(subdossier) as sub_children:
+            with freeze(datetime(2016, 4, 25)):
+                self.resolve(subdossier, browser)
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(0, len(sub_children['added']))
+
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(main_children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as main_children:
+            with freeze(datetime(2016, 9, 1)):
+                self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(1, len(main_children['added']))
+        main_tasks_pdf, = main_children['added']
+        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
+                         "End should be earliest possible date")
+        self.assertEqual(date(2016, 3, 15), main_tasks_pdf.document_date,
+                         "Document date should be earliest possible date")
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_tasks_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .titled(u'Arbeitsentwurf checken')
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-tested-and-closed'))
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+            self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(1, len(children['added']))
+        tasks_pdf, = children['added']
+        self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+        # Now reactivate and close the dossier again
+        self.reactivate(self.empty_dossier, browser)
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(0, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+            self.execute_nightly_jobs(expected=1)
+
+        self.assertEquals(0, len(children['added']))
+        self.assertEquals(1, tasks_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_only_shadowed_documents_are_deleted_when_resolving_a_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        doc1 = create(Builder('document').within(self.empty_dossier))
+        doc2 = create(Builder('document').within(self.empty_dossier).as_shadow_document())
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertIn(doc1, children['after'])
+        self.assertIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(self.empty_dossier) as children:
+            self.execute_nightly_jobs(expected=1)
+
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier])
+
+    @browsing
+    def test_shadowed_documents_are_deleted_recursively_when_resolving_a_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        subdossier = create(Builder('dossier').within(self.empty_dossier))
+        doc1 = create(Builder('document').within(subdossier))
+        doc2 = create(Builder('document').within(subdossier).as_shadow_document())
+
+        with self.observe_children(subdossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        # Nothing happened yet, resolve jobs still flagged as pending
+        self.assertIn(doc1, children['after'])
+        self.assertIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            True, [self.empty_dossier, subdossier])
+
+        # Now run the nightly jobs
+        with self.observe_children(subdossier) as children:
+            self.execute_nightly_jobs(expected=2)
+
+        self.assertIn(doc1, children['after'])
+        self.assertNotIn(doc2, children['after'])
+
+        self.assert_after_resolve_jobs_pending(
+            False, [self.empty_dossier, subdossier])
 
 
 class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):

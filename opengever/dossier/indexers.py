@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
 from opengever.private.dossier import IPrivateDossier
@@ -18,6 +19,12 @@ from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
 from zope.interface import implementer
+
+
+@indexer(IDossierMarker)
+def after_resolve_jobs_pending_indexer(obj):
+    pending = AfterResolveJobs(obj).after_resolve_jobs_pending
+    return pending
 
 
 @indexer(IDossierMarker)

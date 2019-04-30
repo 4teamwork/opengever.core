@@ -1,13 +1,24 @@
+from collective.taskqueue.interfaces import ITaskQueue
+from collective.taskqueue.interfaces import ITaskQueueLayer
+from collective.taskqueue.taskqueue import LocalVolatileTaskQueue
 from datetime import datetime
 from datetime import timedelta
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.nightlyjobs.interfaces import INightlyJobProvider
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from plone import api
+from plone.subrequest import subrequest
 from zope.component import getAdapters
+from zope.component import provideUtility
 from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
+import logging
 import psutil
 import transaction
+
+
+log = logging.getLogger('opengever.nightlyjobs')
 
 
 def nightly_jobs_feature_enabled():
@@ -55,7 +66,7 @@ class NightlyJobRunner(object):
     LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 *1024,
                    'virtual_memory_percent': 95}
 
-    def __init__(self):
+    def __init__(self, setup_own_task_queue=False):
         # retrieve window start and end times
         self.window_start = api.portal.get_registry_record(
             'start_time', interface=INightlyJobsSettings)
@@ -67,6 +78,14 @@ class NightlyJobRunner(object):
 
         self.initial_jobs_count = {name: len(provider) for name, provider
                                    in self.job_providers.items()}
+
+        # The regular task queue from bumblebee isn't available when
+        # invoked as a bin/instance zopectl_cmd or script. For that case,
+        # we need to set up our own queue to catch all queued jobs, and then
+        # process them using plone.subrequest
+        self.setup_own_task_queue = setup_own_task_queue
+        if setup_own_task_queue:
+            self._task_queue = self.setup_task_queue()
 
     def get_job_providers(self):
         return {name: provider for name, provider
@@ -90,6 +109,37 @@ class NightlyJobRunner(object):
                     self.log_to_sentry(message)
                     return exc
                 transaction.commit()
+
+                # If we set up our own task queue, process its jobs.
+                # This must happen after the transaction has been committed.
+                if self.setup_own_task_queue:
+                    self.process_task_queue()
+
+    def setup_task_queue(self):
+        task_queue = LocalVolatileTaskQueue()
+        provideUtility(task_queue, ITaskQueue, name='default')
+        return task_queue
+
+    def process_task_queue(self):
+        queue = self._task_queue.queue
+
+        log.info('Processing %d task queue jobs...' % queue.qsize())
+        request = getRequest()
+        alsoProvides(request, ITaskQueueLayer)
+
+        while not queue.empty():
+            job = queue.get()
+
+            # Process job using plone.subrequest
+            response = subrequest(job['url'])
+            assert response.status == 200
+
+            # XXX: We don't currently handle the user that is supposed to be
+            # authenticated, and the task ID, both of which c.taskqueue
+            # provides in the job.
+
+        noLongerProvides(request, ITaskQueueLayer)
+        log.info('All task queue jobs processed.')
 
     def interrupt_if_necessary(self):
         now = datetime.now().time()

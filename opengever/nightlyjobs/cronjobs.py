@@ -2,10 +2,11 @@ from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
+from plone import api
 import logging
 
 
-logger = logging.getLogger('opengever.nightlyjobs.cronjobs')
+logger = logging.getLogger('opengever.nightlyjobs')
 
 
 def run_nightly_jobs_handler(app, args):
@@ -16,8 +17,15 @@ def run_nightly_jobs_handler(app, args):
     logger.setLevel(logging.INFO)
 
     for plone_site in all_plone_sites(app):
-        setup_plone(plone_site)
+        plone_site = setup_plone(plone_site)
         invoke_nightly_job_runner(plone_site)
+
+
+def setup_language(plone):
+    lang_tool = api.portal.get_tool('portal_languages')
+    lang = lang_tool.getPreferredLanguage()
+    plone.REQUEST.environ['HTTP_ACCEPT_LANGUAGE'] = lang
+    plone.REQUEST.setupLocale()
 
 
 def invoke_nightly_job_runner(plone_site):
@@ -26,7 +34,9 @@ def invoke_nightly_job_runner(plone_site):
                     'not running any jobs for %r' % plone_site)
         return
 
-    runner = NightlyJobRunner()
+    setup_language(plone_site)
+
+    runner = NightlyJobRunner(setup_own_task_queue=True)
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                 runner.job_providers.keys()))
     logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))

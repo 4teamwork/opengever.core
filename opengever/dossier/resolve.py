@@ -16,10 +16,12 @@ from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve_lock import ResolveLock
+from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getSiteManager
@@ -39,6 +41,8 @@ NOT_CLOSED_TASKS = _("not all task are closed")
 NO_START_DATE = _("the dossier start date is missing.")
 MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
 MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
+
+AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_pending'
 
 
 class AlreadyBeingResolved(Exception):
@@ -347,17 +351,20 @@ class AfterResolveJobs(object):
 
     def __init__(self, context):
         self.context = context
+        self.catalog = api.portal.get_tool('portal_catalog')
 
     def get_property(self, name):
         return api.portal.get_registry_record(
             name, interface=IDossierResolveProperties)
 
     def contains_tasks(self):
-        tasks = api.content.find(
-            context=self.context, depth=-1, object_provides=ITask)
+        path = '/'.join(self.context.getPhysicalPath())
+        tasks = self.catalog.unrestrictedSearchResults(
+            path=path,
+            object_provides=ITask.__identifier__)
         return len(tasks) > 0
 
-    def execute(self):
+    def execute(self, nightly_run=False):
         """After resolving a dossier, some cleanup jobs have to be executed:
 
         - Remove all shadowed documents.
@@ -365,7 +372,16 @@ class AfterResolveJobs(object):
         - (Trigger PDF-A conversion).
         - Generate a PDF output of the journal.
         - For a main dossier, Generate a PDF listing the tasks.
+
+        If the feature for nightly jobs is enabled (via registry), we skip
+        these during normal operation during the day (nightly_run=False), and
+        the following night this method will be invoked by a nightly job
+        (with nightly_run=True) to finally perform these jobs.
         """
+        if nightly_jobs_feature_enabled() and not nightly_run:
+            # Defer execution of after resolve jobs to a nightly job
+            self.after_resolve_jobs_pending = True
+            return
 
         self.trash_shadowed_docs()
         self.purge_trash()
@@ -373,6 +389,23 @@ class AfterResolveJobs(object):
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
+        self.after_resolve_jobs_pending = False
+
+    @property
+    def after_resolve_jobs_pending(self):
+        """This flag tracks whether these jobs have already been executed for
+        a resolved dossier, or are still pending (because they have been
+        deferred to a nightly job).
+        """
+        ann = IAnnotations(self.context)
+        return ann.get(AFTER_RESOLVE_JOBS_PENDING_KEY, False)
+
+    @after_resolve_jobs_pending.setter
+    def after_resolve_jobs_pending(self, value):
+        assert isinstance(value, bool)
+        ann = IAnnotations(self.context)
+        ann[AFTER_RESOLVE_JOBS_PENDING_KEY] = value
+        self.context.reindexObject(idxs=['after_resolve_jobs_pending'])
 
     def trash_shadowed_docs(self):
         """Trash all documents that are in shadow state (recursive).
@@ -506,7 +539,10 @@ class AfterResolveJobs(object):
         if not self.get_property('archival_file_conversion_enabled'):
             return
 
-        docs = api.content.find(self.context, object_provides=[IBaseDocument])
+        path = '/'.join(self.context.getPhysicalPath())
+        docs = self.catalog.unrestrictedSearchResults(
+            path=path,
+            object_provides=IBaseDocument.__identifier__)
         for doc in docs:
             ArchivalFileConverter(doc.getObject()).trigger_conversion()
 
