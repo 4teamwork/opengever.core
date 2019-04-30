@@ -60,13 +60,16 @@ class NightlyJobRunner(object):
     It will try to execute all jobs provided by the registered
     nightly job providers (named multiadapters of INightlyJobProvider).
     It will stop execution when not in the defined timeframe or when
-    the system load is too high.
+    the system load is too high, except if force_exectution is set
+    to True
     """
 
     LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 *1024,
                    'virtual_memory_percent': 95}
 
-    def __init__(self, setup_own_task_queue=False):
+    def __init__(self, setup_own_task_queue=False, force_execution=False):
+        self.force_execution = force_execution
+
         # retrieve window start and end times
         self.window_start = api.portal.get_registry_record(
             'start_time', interface=INightlyJobsSettings)
@@ -142,6 +145,8 @@ class NightlyJobRunner(object):
         log.info('All task queue jobs processed.')
 
     def interrupt_if_necessary(self):
+        if self.force_execution:
+            return
         now = datetime.now().time()
         if not self.check_in_time_window(now):
             raise TimeWindowExceeded(now, self.window_start, self.window_end)
