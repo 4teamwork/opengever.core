@@ -14,8 +14,13 @@ class PatchCatalogToFilterTrashedDocs(MonkeyPatch):
 
         def filtered_results(self, REQUEST=None, **kw):
             kw = kw.copy()
-            if 'trashed' not in kw.keys():
+
+            # If no explicit query for 'trashed' present, filter out trashed
+            # documents by default. REQUEST may be old-style ZCatalog query.
+            if not ('trashed' in kw.keys() or
+                    (REQUEST and 'trashed' in REQUEST)):
                 kw['trashed'] = [False, None]
+
             return original_search_results(self, REQUEST, **kw)
 
         self.patch_refs(CatalogTool, 'searchResults', filtered_results)
