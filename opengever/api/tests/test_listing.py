@@ -3,6 +3,10 @@ from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrSearch
 from ftw.testbrowser import browsing
 from mock import Mock
+from opengever.api.listing import filename
+from opengever.api.listing import filesize
+from opengever.base.solr import OGSolrContentListingObject
+from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from zope.component import getUtility
 
@@ -107,6 +111,36 @@ class TestListingEndpoint(IntegrationTestCase):
              u'filesize': self.document.file.size,
              u'filename': u'Vertraegsentwurf.docx'},
             browser.json['items'][-1])
+
+    def test_filesize_accessor_avoids_obj_lookup(self):
+        obj = OGSolrContentListingObject(OGSolrDocument(
+            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filesize": 12345}))
+        obj.getObject = Mock()
+        self.assertEqual(filesize(obj), 12345)
+        self.assertFalse(obj.getObject.called)
+
+    def test_filename_accessor_avoids_obj_lookup(self):
+        obj = OGSolrContentListingObject(OGSolrDocument(
+            {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filename": "Foo.pdf"}))
+        obj.getObject = Mock()
+        self.assertEqual(filename(obj), "Foo.pdf")
+        self.assertFalse(obj.getObject.called)
+
+    def test_filesize_accessor_with_obj_lookup(self):
+        self.login(self.regular_user)
+        obj = OGSolrContentListingObject(OGSolrDocument(
+            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
+        obj.getObject = Mock()
+        obj.getObject.return_value = self.document
+        self.assertEqual(filesize(obj), self.document.file.size)
+        self.assertTrue(obj.getObject.called)
+
+    def test_filename_accessor_with_obj_lookup(self):
+        self.login(self.regular_user)
+        obj = OGSolrContentListingObject(OGSolrDocument(
+            {"UID": "9398dad21bcd49f8a197cd50d10ea778"}))
+        obj.filename = u'Vertraegsentwurf.docx'
+        self.assertEqual(filename(obj), self.document.file.filename)
 
     @browsing
     def test_batching(self, browser):
