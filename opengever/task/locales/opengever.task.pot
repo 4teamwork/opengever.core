@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-04-04 12:13+0000\n"
+"POT-Creation-Date: 2019-04-29 07:17+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -1010,6 +1010,11 @@ msgstr ""
 msgid "transition_msg_default"
 msgstr ""
 
+#. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_msg_delegated_reassign"
+msgstr ""
+
 #. Default: "Deadline modified from ${deadline_old} to ${deadline_new} by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_modify_deadline"
@@ -1020,7 +1025,7 @@ msgstr ""
 msgid "transition_msg_reactivate"
 msgstr ""
 
-#. Default: "Reassigned from ${responsible_old} to ${responsible_new} by ${user}"
+#. Default: "Reassigned from ${responsible_old} to ${responsible_new}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_reassign"
 msgstr ""

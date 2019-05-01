@@ -231,11 +231,19 @@ class Reassign(ResponseDescription):
         change = self.response.get_change('responsible')
         responsible_new = Actor.lookup(change.get('after')).get_link()
         responsible_old = Actor.lookup(change.get('before')).get_link()
+
+        if not change.get('before') == self.response.creator:
+          return _('transition_msg_delegated_reassign',
+                   u'Reassigned from ${responsible_old} to '
+                   u'${responsible_new} by ${user}',
+                   mapping={'user': self.response.creator_link(),
+                            'responsible_new': responsible_new,
+                            'responsible_old': responsible_old})
+
         return _('transition_msg_reassign',
                  u'Reassigned from ${responsible_old} to '
-                 u'${responsible_new} by ${user}',
-                 mapping={'user': self.response.creator_link(),
-                          'responsible_new': responsible_new,
+                 u'${responsible_new}',
+                 mapping={'responsible_new': responsible_new,
                           'responsible_old': responsible_old})
 
     def label(self):

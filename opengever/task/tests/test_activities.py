@@ -5,7 +5,7 @@ from ftw.mail.utils import get_header
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity import notification_center
-from opengever.activity.hooks import insert_notification_defaults
+from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -329,111 +329,100 @@ class TestTaskActivites(FunctionalTestCase):
         self.assertEquals(u'New task opened by Test User', activity.summary)
 
 
-class TestTaskReassignActivity(FunctionalTestCase):
+class TestTaskReassignActivity(IntegrationTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
+    features = ('activity', )
 
-    def setUp(self):
-        super(TestTaskReassignActivity, self).setUp()
-        insert_notification_defaults(self.portal)
-        Mailing(self.portal).set_up()
-
-        self.dossier = create(Builder('dossier').titled(u'Dossier XY'))
-        self.hugo = create(Builder('ogds_user')
-                           .id('hugo.boss')
-                           .assign_to_org_units([self.org_unit])
-                           .having(firstname=u'Hugo', lastname=u'Boss',
-                                   email='hugo.boss@example.org'))
-
-        create(Builder('ogds_user')
-               .id('peter.meier')
-               .assign_to_org_units([self.org_unit])
-               .having(firstname=u'Peter', lastname=u'Meier'))
-        create(Builder('ogds_user')
-               .id('james.meier')
-               .assign_to_org_units([self.org_unit])
-               .having(firstname=u'James', lastname=u'Meier'))
-
-    def tearDown(self):
-        super(TestTaskReassignActivity, self).tearDown()
-        Mailing(self.layer['portal']).tear_down()
-
-    def add_task(self, browser):
-        browser.login().open(self.dossier, view='++add++opengever.task.task')
-        browser.fill({'Title': u'Abkl\xe4rung Fall Meier',
-                      'Task Type': 'comment',
-                      'Text': 'Lorem ipsum'})
-
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':james.meier')
-        form.find_widget('Issuer').fill(u'peter.meier')
-
-        browser.css('#form-buttons-save').first.click()
-        return self.dossier.get('task-1')
-
-    def reassign(self, browser, responsible, response):
-        browser.login().open(self.task)
+    def reassign(self, browser, responsible, response, user=None):
+        if user is None:
+            user = self.manager
+        browser.login(user).open(self.task)
         browser.css('#workflow-transition-task-transition-reassign').first.click()
         browser.fill({'Response': response})
-
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':' + responsible)
-
+        form.find_widget('Responsible').fill('fa:' + responsible.getId())
         browser.css('#form-buttons-save').first.click()
 
     @browsing
     def test_properties(self, browser):
-        self.task = self.add_task(browser)
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
-        self.assertEqual(2, len(activities))
+        self.assertEqual(1, len(activities))
 
         reassign_activity = activities[-1]
+
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
-        self.assertEquals(u'Abkl\xe4rung Fall Meier', reassign_activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/james.meier">Meier James (james.meier)</a> to <a href="http://nohost/plone/@@user-details/hugo.boss">Boss Hugo (hugo.boss)</a> by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>', reassign_activity.summary)
+        self.assertEquals(u'Vertragsentwurf \xdcberpr\xfcfen', reassign_activity.title)
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+                          u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
+                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
+                          u'J\xe4ger Herbert (herbert.jager)</a> by admin (admin)',
+                          reassign_activity.summary)
+        self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
+
+    @browsing
+    def test_reassign_message_does_not_include_user_when_he_is_old_responsible(self, browser):
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user,
+                      u'Bitte Abkl\xe4rungen erledigen.',
+                      self.regular_user)
+
+        activities = Activity.query.all()
+        self.assertEqual(1, len(activities))
+
+        reassign_activity = activities[-1]
+
+        self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
+        self.assertEquals(u'Vertragsentwurf \xdcberpr\xfcfen', reassign_activity.title)
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+                          u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
+                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
+                          u'J\xe4ger Herbert (herbert.jager)</a>',
+                          reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
 
     @browsing
     def test_notifies_old_and_new_responsible(self, browser):
-        self.task = self.add_task(browser)
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
-        self.assertEqual(2, len(activities))
+        self.assertEqual(1, len(activities))
 
         reassign_activity = activities[-1]
+
         self.assertItemsEqual(
-            [u'james.meier', u'peter.meier', u'hugo.boss'],
+            [self.regular_user.getId(), self.meeting_user.getId()],
             [notes.userid for notes in reassign_activity.notifications])
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
-        self.task = self.add_task(browser)
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.login(self.regular_user)
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         resource = notification_center().fetch_resource(self.task)
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'hugo.boss', TASK_RESPONSIBLE_ROLE),
-             (u'peter.meier', TASK_ISSUER_ROLE)],
+            [(u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
     @browsing
     def test_notifies_only_new_responsible_per_mail(self, browser):
-        self.task = self.add_task(browser)
+        self.login(self.meeting_user)
+        process_mail_queue()
         Mailing(self.portal).reset()
 
-        self.reassign(browser, 'hugo.boss', u'Bitte Abkl\xe4rungen erledigen.')
+        self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
+        process_mail_queue()
+
         self.assertEqual(1, len(Mailing(self.portal).get_messages()))
 
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEquals(
-            'hugo.boss@example.org', get_header(mail, 'To'))
+            'herbert.jager@gever.local', get_header(mail, 'To'))
 
 
 class TestSuccesssorHandling(FunctionalTestCase):
