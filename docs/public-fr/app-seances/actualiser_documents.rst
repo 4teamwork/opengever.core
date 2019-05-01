@@ -1,0 +1,4 @@
+Mettre à jour les documents de séance
+-------------------------------------
+
+Il peut arriver qu’une séance, ou plus particulièrement ses documents soient mis à jour (Par exemple ajout d’un point urgent à l’ordre du jour, ou suppression d’un point qui n’est plus d’actualité). En initiant un transfert à l’aide du bouton vert, la nouvelle version (zip exporté depuis la gestion des séances et procès-verbaux) peut venir simplement remplacer la version existante. Les notes créées au niveau séance et points à l’ordre du jour ne sont pas effacées et sont toujours lisibles et éditables par leur créateur. Une notification automatique peut être envoyée aux participants de la séance pour les informer du changement.

@@ -10,7 +10,14 @@ Index:
    chapitre2-base
    chapitre3-trucs
    chapitre4-notifications
+   chapitre5-favoris
+   chapitre6-recents
+   dossiers/index
    documents/index
-   chapitre7-contacts
-   chapitre8-recherches
-   chapitre9-triage
+   chapitre9-contacts
+   chapitre10-recherches
+   chapitre11-boitereception
+   chapitre13-deroulements-standards
+   chapitre14-referentiel
+   app-seances/index.rst
+   chapitre17-triage

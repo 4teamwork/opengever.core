@@ -4,7 +4,7 @@ Le triage
 Dossiers expirés
 ----------------
 
-En OneGove GEVER, le triage de contenus n’est possible qu’au niveau du dossier.
+En OneGov GEVER, le triage de contenus n’est possible qu’au niveau du dossier.
 Seuls les dossiers annulés ou clos dont le délai de conservation est échu peuvent être triés.
 
 La durée de conservation est calculée d’après l’exercice. Voici un exemple:
@@ -46,7 +46,7 @@ de choisir les dossiers, il existe l’action affichage à onglet `offre de tria
 
 Après sa création, l’offre se trouve au statut ``en cours de traitement``
 (``disposition-state-in-progress``). Ce statut permet encore de traiter les
-métadonnées de l’offre ainsi que les dossiers y contenus.
+métadonnées de l’offre ainsi que les dossiers qu'elle contient.
 
 En plus, il est possible d’évaluer l’offre, c’est-à-dire de décider si un dossier
 doit être archivé ou pas. A cet égard GEVER effectue automatiquement une évaluation
@@ -98,7 +98,7 @@ Détruire les dossiers
 
 Le processus de triage est achevé par la destruction des dossiers. Ainsi, tous
 les dossiers contenus dans l’offre (y inclus les dossiers sans valeur archivistique)
-sont détruits, c’est-à-dire supprimés de façon efficace du système GEVER.
+sont détruits, c’est-à-dire effectivement supprimés du système GEVER.
 
 Après la clôture de l’offre, donc après que les dossiers ont été détruits, il est
 en plus possible de télécharger un protocole de suppression généré de façon automatique.
@@ -123,10 +123,10 @@ pour les tâches ou les propositions.
 Liste
 -----
 
-Au niveau du plan de classement, l’onglet supplémentaire `offres` est à
+Au niveau du système de classification, l’onglet supplémentaire `offres` est à
 disposition des utilisateurs ayant le rôle de `gestionnaire des dossiers` ou `d’archiviste`.
-Cet onglet propose une liste avec toutes les offres du plan de classement en question.
-Par défaut, seules les offres actives figurent sur la liste, pourtant les offres
+Cet onglet propose une liste avec toutes les offres du système de classification en question.
+Par défaut, seules les offres actives figurent sur la liste, mais les offres
 clôturées peuvent également être affichées au moyen du filtre de statut `tous`.
 
 |img-triage-5|
@@ -143,9 +143,9 @@ attribué à un cercle d’utilisateurs relativement petit, notamment aux person
 responsables du triage pour le mandant concerné.
 
 Le nouveau rôle `d’archiviste` est attribué globalement aux collaboratrices et
-collaborateurs des archives qui sont autorisés d’évaluer des offres et de les
+collaborateurs des archives qui sont autorisés à évaluer des offres et de les
 verser aux archives de longue durée. Les utilisateurs occupant le rôle d’archiviste
-peuvent accéder tous les dossiers offerts ou archivés, même s’ils ne sont pas attribués
+peuvent accéder à tous les dossiers offerts ou archivés, même s’ils ne sont pas attribués
 au mandant concerné. Ceci permet aux collaborateurs des archives d’examiner les dossiers
 pendant la phase d’évaluation.
 
