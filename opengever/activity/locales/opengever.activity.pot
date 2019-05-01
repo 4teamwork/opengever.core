@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-12-11 10:29+0000\n"
+"POT-Creation-Date: 2019-03-27 15:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,6 +193,11 @@ msgstr ""
 msgid "label_proposals"
 msgstr ""
 
+#. Default: "Mark all notifications as read"
+#: ./opengever/activity/viewlets/notification.pt
+msgid "label_read_all_notifications"
+msgstr ""
+
 #. Default: "Reminders"
 #: ./opengever/activity/browser/settings.py
 msgid "label_reminders"
@@ -204,7 +209,7 @@ msgid "label_tasks"
 msgstr ""
 
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
-#: ./opengever/activity/center.py
+#: ./opengever/activity/error_handling.py
 msgid "msg_error_not_notified"
 msgstr ""
 

@@ -39,6 +39,8 @@ Changelog
 - Include filename in the livesearch endpoint results. [phgross]
 - Prevent tasks from being created as private or switched to private when feature is not enabled. [Rotonen, phgross]
 - Bump ftw.mail to 2.6.0 to get error logging on inbound mail failures. [lgraf]
+- Add the ability to mark all notifications as read from the notifications menu. [Rotonen]
+- Do not mark notifications as read when opening the notifications menu. [Rotonen]
 - Handle complex URLs as titles on journal PDF exports. [Rotonen]
 - Add documentation for documents endpoints (checkin/out, locking, versions) [phgross]
 - Move translation overrides for ftw.mail from og.mail to og.base. [lgraf]

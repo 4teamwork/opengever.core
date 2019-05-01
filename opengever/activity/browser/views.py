@@ -1,8 +1,13 @@
+from datetime import datetime
 from opengever.activity import notification_center
 from opengever.activity.browser import resolve_notification_url
 from opengever.activity.browser.listing import NotificationListingTab
+from opengever.activity.model.activity import Activity
+from opengever.activity.model.notification import Notification
 from plone import api
 from Products.Five import BrowserView
+from sqlalchemy.sql.expression import false
+from sqlalchemy.sql.expression import true
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 import json
 import pytz
@@ -11,17 +16,36 @@ import pytz
 class NotificationView(BrowserView):
 
     def read(self):
-        """Mark the notification passed as request parameter `notification_id`
-        or multiple notification ids as json list via the `notification_ids`
-        parameter as read.
+        """Mark badge notifications from all activities read up to a timestamp.
+
+        Takes in an unixtime timestamp.
+
+        Fetches the IDs for all all unread badge notifications for the current
+        user, which come from activities created at up to the passed in
+        timestamp.
+
+        Marks those notifications as read.
         """
-
-        notification_ids = self.request.get('notification_ids')
-        if not notification_ids:
-            raise Exception('Missing parameter `notification_ids`')
-
+        timestamp = self.request.get('timestamp')
+        if not timestamp:
+            raise Exception('Missing parameter `timestamp`')
+        timestamp = int(timestamp)
+        timestamp = datetime.fromtimestamp(int(timestamp), pytz.UTC)
+        userid = api.user.get_current().getId()
+        notifications = (
+            Notification.query
+            .join(Activity)
+            .filter(
+                Notification.userid == userid,
+                Notification.is_badge == true(),
+                Notification.is_read == false(),
+                Activity.created < timestamp,
+            )
+            .all()
+        )
+        notification_ids = [n.notification_id for n in notifications]
         return notification_center().mark_notifications_as_read(
-            json.loads(notification_ids))
+            notification_ids)
 
     def list(self):
         """Returns a json representation of the current users notifications.

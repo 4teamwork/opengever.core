@@ -2622,8 +2622,6 @@ readers do not read off random characters that represent icons */
 .dropdown-list-item { padding: 6px 8px !important; display: flex !important; justify-content: space-between; border-bottom: 1px solid #e6e6e6; }
 .dropdown-list-item:link:hover { text-decoration: none !important; background-color: #e6e6e6; }
 
-.dropdown-list-footer .dropdown-list-item:link:hover { background-color: white; }
-
 .LSResult .dropdown-list-item { justify-content: normal; }
 
 .LSRow .dropdown-list-item-content { line-height: 22px; display: inline-block; }

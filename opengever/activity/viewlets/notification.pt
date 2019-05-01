@@ -4,7 +4,8 @@
 
   <dl class="dropdown-menu notificationsMenu actionMenu deactivated" id="portal-notifications-selector-menu"
   tal:attributes="data-read-url view/read_url;
-  data-list-url view/list_url"
+  data-list-url view/list_url;
+  data-timestamp view/timestamp"
   tal:define="num_unread view/num_unread">
 
     <dt class="dropdown-menu-header notificationsMenuHeader">
@@ -42,6 +43,11 @@
            tal:attributes="href view/overview_url"
            i18n:translate="label_notifications_overview">
           All Notifications
+        </a>
+        <a class="dropdown-list-item read-all-notifications"
+           tal:attributes="href string:#"
+           i18n:translate="label_read_all_notifications">
+          Mark all notifications as read
         </a>
       </div>
     </dd>
