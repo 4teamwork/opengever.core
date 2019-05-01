@@ -95,6 +95,7 @@ FIELDS = {
     'document_author': ('document_author', 'document_author', 'document_author'),
     'document_date': ('document_date', 'document_date', 'document_date'),
     'end': ('end', 'end', 'end'),
+    'has_sametype_children': ('has_sametype_children', 'has_sametype_children', 'has_sametype_children'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
     'modified': ('modified', 'modified', 'modified'),
     'keywords': ('Subject', 'Subject', 'Subject'),

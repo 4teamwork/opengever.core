@@ -11,6 +11,7 @@
   <column value="reference" />
   <column value="title_de" />
   <column value="title_fr" />
+  <column value="has_sametype_children" />
 
   <!-- CHANGED -->
   <column value="changed" />

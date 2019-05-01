@@ -4,15 +4,17 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import SORTABLE_TITLE_LENGTH
+from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
-from plone.indexer import indexer
 from plone.i18n.normalizer.base import mapUnicode
+from plone.indexer import indexer
+from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.CatalogTool import num_sort_regex
 from Products.CMFPlone.CatalogTool import zero_fill
 from Products.CMFPlone.utils import safe_callable
 from Products.CMFPlone.utils import safe_unicode
 from zope.annotation import IAnnotations
-from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 
 
 @indexer(IDexterityContent)
@@ -80,3 +82,11 @@ def sortable_title(obj):
                 sortabletitle = start + u'...' + end
             return sortabletitle.encode('utf-8')
     return ''
+
+
+@indexer(IFolderish)
+def has_sametype_children(obj):
+    catalog = api.portal.get_tool("portal_catalog")
+    return bool(catalog.unrestrictedSearchResults(
+                    path={'query': obj.absolute_url_path(), 'depth': 1},
+                    portal_type=obj.portal_type))
