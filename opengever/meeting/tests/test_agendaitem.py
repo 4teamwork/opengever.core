@@ -183,6 +183,36 @@ class TestEditAgendaItems(IntegrationTestCase):
         self.assertEqual(update_date, document.changed)
 
     @browsing
+    def test_display_changed_property_as_last_modified_date(self, browser):
+        self.login(self.committee_responsible, browser)
+        model = self.meeting.model
+
+        creation_date = datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)
+        update_date = datetime(2018, 10, 16, 0, 0, tzinfo=pytz.utc)
+
+        def generate_agendaitem_list(meeting):
+            meeting_view = getMultiAdapter(
+                (self.meeting, self.request), name='view')
+            browser.open(meeting_view.url_generate_agendaitem_list())
+
+        # Generate first protocol
+        with freeze(creation_date):
+            generate_agendaitem_list(self.meeting)
+
+        document = model.agendaitem_list_document.resolve_document()
+        document.changed = update_date
+        document.reindexObject(idxs=["changed"])
+
+        self.assertEqual(creation_date, as_utc(document.modified().asdatetime()))
+        self.assertEqual(update_date, document.changed)
+
+        browser.open(self.meeting)
+
+        self.assertEqual(
+            'Modified at Oct 16, 2018 02:00 AM',
+            browser.css('.agenda-item-list-doc .document-modified').first.text)
+
+    @browsing
     def test_when_title_is_missing_returns_json_error(self, browser):
         self.login(self.committee_responsible, browser)
 
