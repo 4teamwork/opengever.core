@@ -10,6 +10,7 @@ from opengever.activity.model import Activity
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.base.model import create_session
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.task.activities import TaskReminderActivity
@@ -401,6 +402,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.login(self.regular_user, browser)
         resource = notification_center().fetch_resource(self.task)
+        create_session().refresh(resource)
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
