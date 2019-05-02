@@ -336,16 +336,16 @@ class TestTaskReassignActivity(IntegrationTestCase):
     def reassign(self, browser, responsible, response, user=None):
         if user is None:
             user = self.manager
-        browser.login(user).open(self.task)
-        browser.css('#workflow-transition-task-transition-reassign').first.click()
-        browser.fill({'Response': response})
-        form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:' + responsible.getId())
-        browser.css('#form-buttons-save').first.click()
+        with self.login(user, browser):
+            browser.open(self.task)
+            browser.css('#workflow-transition-task-transition-reassign').first.click()
+            browser.fill({'Response': response})
+            form = browser.find_form_by_field('Responsible')
+            form.find_widget('Responsible').fill('fa:' + responsible.getId())
+            browser.css('#form-buttons-save').first.click()
 
     @browsing
     def test_properties(self, browser):
-        self.login(self.regular_user)
         self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
@@ -364,7 +364,6 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
     @browsing
     def test_reassign_message_does_not_include_user_when_he_is_old_responsible(self, browser):
-        self.login(self.regular_user)
         self.reassign(browser, self.meeting_user,
                       u'Bitte Abkl\xe4rungen erledigen.',
                       self.regular_user)
@@ -385,7 +384,6 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
     @browsing
     def test_notifies_old_and_new_responsible(self, browser):
-        self.login(self.regular_user)
         self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
         activities = Activity.query.all()
@@ -399,9 +397,9 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
     @browsing
     def test_removes_old_responsible_from_watchers_list(self, browser):
-        self.login(self.regular_user)
         self.reassign(browser, self.meeting_user, u'Bitte Abkl\xe4rungen erledigen.')
 
+        self.login(self.regular_user, browser)
         resource = notification_center().fetch_resource(self.task)
         subscriptions = resource.subscriptions
 
@@ -411,7 +409,6 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
     @browsing
     def test_notifies_only_new_responsible_per_mail(self, browser):
-        self.login(self.meeting_user)
         process_mail_queue()
         Mailing(self.portal).reset()
 
