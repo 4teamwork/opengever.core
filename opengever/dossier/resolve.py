@@ -13,6 +13,7 @@ from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.exceptions import PreconditionsViolated
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve_lock import ResolveLock
@@ -48,14 +49,6 @@ AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_p
 class AlreadyBeingResolved(Exception):
     """A concurrent attempt at resolving a dossier was made.
     """
-
-
-class PreconditionsViolated(Exception):
-    """One or more preconditions for resolving a dossier have been violated.
-    """
-
-    def __init__(self, errors):
-        self.errors = errors
 
 
 class InvalidDates(Exception):

@@ -2,6 +2,7 @@ from datetime import date
 from opengever.base.security import elevated_privileges
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.exceptions import PreconditionsViolated
 from plone import api
 from Products.Five.browser import BrowserView
 
@@ -29,6 +30,10 @@ class DossierDeactivator(object):
         self.context = context
 
     def deactivate(self):
+        errors = self.check_preconditions()
+        if errors:
+            raise PreconditionsViolated(errors=errors)
+
         # recursively deactivate all dossiers
         for subdossier in self.context.get_subdossiers():
             state = api.content.get_state(obj=subdossier.getObject())
@@ -112,12 +117,13 @@ class DossierDeactivateView(BrowserView):
     def __call__(self):
         deactivator = DossierDeactivator(self.context)
 
-        errors = deactivator.check_preconditions()
-        if errors:
-            self.show_errors(errors)
-            self.redirect()
+        try:
+            deactivator.deactivate()
 
-        deactivator.deactivate()
+        except PreconditionsViolated as exc:
+            self.show_errors(exc.errors)
+            return self.redirect()
+
         api.portal.show_message(
             _("The Dossier has been deactivated"), self.request, type='info')
 
