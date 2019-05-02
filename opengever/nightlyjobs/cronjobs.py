@@ -1,4 +1,6 @@
 from ftw.raven.reporter import maybe_report_exception
+from logging.handlers import TimedRotatingFileHandler
+from opengever.base.pathfinder import PathFinder
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
@@ -7,7 +9,11 @@ from plone import api
 from zope.globalrequest import getRequest
 import argparse
 import logging
+import os
 import sys
+
+
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 
 
 def parse_args(argv):
@@ -23,10 +29,20 @@ def parse_args(argv):
 def setup_logger():
     logger = logging.getLogger('opengever.nightlyjobs')
     # Set Zope's default StreamHandler's level to INFO (default is WARNING)
-    # to make sure send_digests()'s output gets logged on console
+    # to make sure nightly job output gets logged on console
     stream_handler = logger.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
+
+    # Add handler that writes to self-rotating file
+    log_dir = PathFinder().var_log
+    file_handler = TimedRotatingFileHandler(
+        os.path.join(log_dir, 'nightly-jobs.log'),
+        when='midnight', backupCount=7)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    logger.addHandler(file_handler)
+
     return logger
 
 
@@ -76,6 +92,9 @@ def register_sentry_except_hook():
 
 
 def invoke_nightly_job_runner(plone_site, force, logger):
+    logger.info('Running nightly jobs...')
+    logger.info('=' * 80)
+
     if not nightly_jobs_feature_enabled() and not force:
         logger.info('Nightly jobs feature is not enabled in registry - '
                     'not running any jobs for %r' % plone_site)
@@ -99,3 +118,4 @@ def invoke_nightly_job_runner(plone_site, force, logger):
         logger.info('No jobs remaining')
     else:
         logger.info('{} jobs remaining'.format(runner.get_remaining_jobs_count()))
+    logger.info('Finished running nightly jobs.')
