@@ -5,6 +5,15 @@ from opengever.dossier.behaviors.dossier import IDossier
 from plone import api
 from Products.Five.browser import BrowserView
 
+NOT_ALL_CHECKED_IN = _(u"The Dossier can't be deactivated, not all contained"
+                       "documents are checked in.")
+
+CONTAINS_ACTIVE_PROPOSAL = _(u"The Dossier can't be deactivated, it contains"
+                             " active proposals.")
+
+CONTAINS_ACTIVE_TASK = _(u"The Dossier can't be deactivated, not all contained"
+                         " tasks are in a closed state.")
+
 
 class DossierDeactivator(object):
     """Recursively deactivate the dossier and its subdossiers.
@@ -16,9 +25,8 @@ class DossierDeactivator(object):
     * The user has no access to some of the subdossiers.
     * The dossier contains active tasks.
     """
-    def __init__(self, context, request):
+    def __init__(self, context):
         self.context = context
-        self.request = request
 
     def deactivate(self):
         # recursively deactivate all dossiers
@@ -39,19 +47,12 @@ class DossierDeactivator(object):
             IDossier(dossier).end = date.today()
 
     def check_preconditions(self):
-        satisfied = True
-
+        errors = []
         if not self.context.is_all_checked_in():
-            api.portal.show_message(
-                _(u"The Dossier can't be deactivated, not all contained"
-                  "documents are checked in."), self.request, type='error')
-            satisfied = False
+            errors.append(NOT_ALL_CHECKED_IN)
 
         if self.context.has_active_proposals():
-            api.portal.show_message(
-                _(u"The Dossier can't be deactivated, it contains active "
-                  "proposals."), self.request, type='error')
-            satisfied = False
+            errors.append(CONTAINS_ACTIVE_PROPOSAL)
 
         # Check for subdossiers the user cannot deactivate
         for subdossier in self.context.get_subdossiers(unrestricted=True):
@@ -98,32 +99,34 @@ class DossierDeactivator(object):
                         u"The Dossier ${dossier} contains a subdossier which can't be deactivated by the user.",
                         mapping=dict(dossier=parent_title),
                     )
-
-                api.portal.show_message(msg, self.request, type='error')
-                satisfied = False
+                errors.append(msg)
 
         if self.context.has_active_tasks():
-            satisfied = False
-            api.portal.show_message(
-                _(u"The Dossier can't be deactivated, not all contained "
-                  "tasks are in a closed state."),
-                self.request, type='error')
+            errors.append(CONTAINS_ACTIVE_TASK)
 
-        return satisfied
+        return errors
 
 
 class DossierDeactivateView(BrowserView):
 
     def __call__(self):
-        deactivator = DossierDeactivator(self.context, self.request)
-        if not deactivator.check_preconditions():
-            return self.redirect()
+        deactivator = DossierDeactivator(self.context)
+
+        errors = deactivator.check_preconditions()
+        if errors:
+            self.show_errors(errors)
+            self.redirect()
 
         deactivator.deactivate()
         api.portal.show_message(
             _("The Dossier has been deactivated"), self.request, type='info')
 
         return self.redirect()
+
+    def show_errors(self, errors):
+        for msg in errors:
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
 
     def redirect(self):
         return self.request.RESPONSE.redirect(self.context.absolute_url())
