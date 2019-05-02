@@ -10,9 +10,6 @@ import logging
 import sys
 
 
-logger = logging.getLogger('opengever.nightlyjobs')
-
-
 def parse_args(argv):
     parser = argparse.ArgumentParser(description='Run nightly jobs')
     parser.add_argument(
@@ -23,15 +20,21 @@ def parse_args(argv):
     return args
 
 
-def run_nightly_jobs_handler(app, args):
-    # Make sure unhandled exceptions get logged to Sentry
-    register_sentry_except_hook()
-
+def setup_logger():
+    logger = logging.getLogger('opengever.nightlyjobs')
     # Set Zope's default StreamHandler's level to INFO (default is WARNING)
     # to make sure send_digests()'s output gets logged on console
     stream_handler = logger.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
+    return logger
+
+
+def run_nightly_jobs_handler(app, args):
+    # Make sure unhandled exceptions get logged to Sentry
+    register_sentry_except_hook()
+
+    logger = setup_logger()
 
     # Discard the first three arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
@@ -41,7 +44,7 @@ def run_nightly_jobs_handler(app, args):
 
     for plone_site in all_plone_sites(app):
         plone_site = setup_plone(plone_site)
-        invoke_nightly_job_runner(plone_site, force)
+        invoke_nightly_job_runner(plone_site, force, logger)
 
 
 def setup_language(plone):
@@ -72,7 +75,7 @@ def register_sentry_except_hook():
     sys.excepthook = sentry_except_hook
 
 
-def invoke_nightly_job_runner(plone_site, force):
+def invoke_nightly_job_runner(plone_site, force, logger):
     if not nightly_jobs_feature_enabled() and not force:
         logger.info('Nightly jobs feature is not enabled in registry - '
                     'not running any jobs for %r' % plone_site)
