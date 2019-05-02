@@ -6,7 +6,7 @@ from plone import api
 from Products.Five.browser import BrowserView
 
 
-class DossierDeactivateView(BrowserView):
+class DossierDeactivator(object):
     """Recursively deactivate the dossier and its subdossiers.
 
     Preconditions:
@@ -16,11 +16,11 @@ class DossierDeactivateView(BrowserView):
     * The user has no access to some of the subdossiers.
     * The dossier contains active tasks.
     """
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
 
-    def __call__(self):
-        if not self.check_preconditions():
-            return self.redirect()
-
+    def deactivate(self):
         # recursively deactivate all dossiers
         for subdossier in self.context.get_subdossiers():
             state = api.content.get_state(obj=subdossier.getObject())
@@ -34,17 +34,9 @@ class DossierDeactivateView(BrowserView):
         api.content.transition(obj=self.context,
                                transition='dossier-transition-deactivate')
 
-        api.portal.show_message(
-            _("The Dossier has been deactivated"), self.request, type='info')
-
-        return self.redirect()
-
     def set_end_date(self, dossier):
         if not IDossier(dossier).end:
             IDossier(dossier).end = date.today()
-
-    def redirect(self):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
 
     def check_preconditions(self):
         satisfied = True
@@ -118,3 +110,20 @@ class DossierDeactivateView(BrowserView):
                 self.request, type='error')
 
         return satisfied
+
+
+class DossierDeactivateView(BrowserView):
+
+    def __call__(self):
+        deactivator = DossierDeactivator(self.context, self.request)
+        if not deactivator.check_preconditions():
+            return self.redirect()
+
+        deactivator.deactivate()
+        api.portal.show_message(
+            _("The Dossier has been deactivated"), self.request, type='info')
+
+        return self.redirect()
+
+    def redirect(self):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
