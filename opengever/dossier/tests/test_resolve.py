@@ -30,6 +30,7 @@ from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
+import logging
 import pytz
 
 
@@ -598,8 +599,11 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
         """Run all pending after resolve nightly jobs, and assert on the
         number of jobs.
         """
+        null_logger = logging.getLogger('opengever.nightlyjobs')
+        null_logger.addHandler(logging.NullHandler())
+
         nightly_job_provider = ExecuteNightlyAfterResolveJobs(
-            self.portal, self.request)
+            self.portal, self.request, null_logger)
 
         jobs = list(nightly_job_provider)
         if expected:

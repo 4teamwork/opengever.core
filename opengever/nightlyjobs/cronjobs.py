@@ -102,7 +102,11 @@ def invoke_nightly_job_runner(plone_site, force, logger):
 
     setup_language(plone_site)
 
-    runner = NightlyJobRunner(setup_own_task_queue=True, force_execution=force)
+    runner = NightlyJobRunner(
+        setup_own_task_queue=True,
+        force_execution=force,
+        logger=logger)
+
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                 runner.job_providers.keys()))
     logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
