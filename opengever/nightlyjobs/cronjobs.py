@@ -5,11 +5,22 @@ from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from plone import api
 from zope.globalrequest import getRequest
+import argparse
 import logging
 import sys
 
 
 logger = logging.getLogger('opengever.nightlyjobs')
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(description='Run nightly jobs')
+    parser.add_argument(
+        '--force', action='store_true',
+        help="Force execution even if outside time window or when load is high")
+
+    args = parser.parse_args(argv)
+    return args
 
 
 def run_nightly_jobs_handler(app, args):
@@ -22,9 +33,15 @@ def run_nightly_jobs_handler(app, args):
     stream_handler.setLevel(logging.INFO)
     logger.setLevel(logging.INFO)
 
+    # Discard the first three arguments, because they're not "actual" arguments
+    # but cruft that we get because of the way bin/instance [zopectl_cmd]
+    # scripts work.
+    args = parse_args(sys.argv[3:])
+    force = args.force
+
     for plone_site in all_plone_sites(app):
         plone_site = setup_plone(plone_site)
-        invoke_nightly_job_runner(plone_site)
+        invoke_nightly_job_runner(plone_site, force)
 
 
 def setup_language(plone):
@@ -55,15 +72,15 @@ def register_sentry_except_hook():
     sys.excepthook = sentry_except_hook
 
 
-def invoke_nightly_job_runner(plone_site):
-    if not nightly_jobs_feature_enabled():
+def invoke_nightly_job_runner(plone_site, force):
+    if not nightly_jobs_feature_enabled() and not force:
         logger.info('Nightly jobs feature is not enabled in registry - '
                     'not running any jobs for %r' % plone_site)
         return
 
     setup_language(plone_site)
 
-    runner = NightlyJobRunner(setup_own_task_queue=True)
+    runner = NightlyJobRunner(setup_own_task_queue=True, force_execution=force)
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                 runner.job_providers.keys()))
     logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))

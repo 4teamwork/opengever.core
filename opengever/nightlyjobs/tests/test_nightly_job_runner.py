@@ -60,10 +60,11 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
     def get_load_controlled_runner(self,
                                    virtual_memory_available=200 * 1024 * 1024,
-                                   virtual_memory_percent=50):
+                                   virtual_memory_percent=50,
+                                   force_execution=False):
         """ get a runner with controlled system load
         """
-        runner = TestingNightlyJobRunner()
+        runner = TestingNightlyJobRunner(force_execution=force_execution)
 
         def get_system_load():
             return {'virtual_memory_available': virtual_memory_available,
@@ -197,6 +198,15 @@ class TestNightlyJobRunner(IntegrationTestCase):
         with self.assertRaises(TimeWindowExceeded):
             runner.execute_pending_jobs()
 
+    def test_runner_ignores_time_window_when_force_execution_true(self):
+        # When force_execution is set to True, the runner should not
+        # abort even when outside the time window
+        self.login(self.manager)
+        runner = TestingNightlyJobRunner(force_execution=True)
+        runner.check_in_time_window = lambda now: False
+
+        runner.execute_pending_jobs()
+
     def test_runner_aborts_when_available_memory_too_low(self):
         self.login(self.manager)
         runner = self.get_load_controlled_runner(virtual_memory_available=0)
@@ -215,6 +225,14 @@ class TestNightlyJobRunner(IntegrationTestCase):
         with self.assertRaises(SystemLoadCritical):
             runner.execute_pending_jobs()
 
+    def test_runner_ignores_memory_too_low_when_force_execution_true(self):
+        # When force_execution is set to True, the runner should not
+        # abort even when available memory is too low
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner(virtual_memory_available=0,
+                                                 force_execution=True)
+        runner.execute_pending_jobs()
+
     def test_runner_aborts_when_percent_memory_too_high(self):
         self.login(self.manager)
         runner = self.get_load_controlled_runner(virtual_memory_percent=100)
@@ -223,6 +241,14 @@ class TestNightlyJobRunner(IntegrationTestCase):
         exception = runner.execute_pending_jobs(early_check=False)
         self.assertIsInstance(exception, SystemLoadCritical)
         self.assertEqual(0, runner.get_executed_jobs_count())
+
+    def test_runner_ignores_percent_memory_when_force_execution_true(self):
+        # When force_execution is set to True, the runner should not
+        # abort even when percent virtual memory is too high
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner(virtual_memory_percent=100,
+                                                 force_execution=True)
+        runner.execute_pending_jobs()
 
     def test_runner_respects_time_window(self):
         self.login(self.manager)
