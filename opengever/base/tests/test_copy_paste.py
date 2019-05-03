@@ -548,24 +548,24 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
 
         self.login(self.administrator, browser=browser)
 
-        browser.open(self.dossier,
-                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.resolvable_dossier,
+                     data=self.make_path_param(self.resolvable_subdossier), view="copy_items")
         browser.open(self.empty_repofolder)
         browser.click_on('Paste')
 
         self.assertItemsEqual(info_messages(),
                               ["Objects from clipboard successfully pasted."])
 
-        manager = RoleAssignmentManager(self.subsubdossier)
+        manager = RoleAssignmentManager(self.resolvable_subdossier)
         manager.add_or_update_assignment(
             assignment_class(self.regular_user.id,
                              ['Reader', 'Editor', 'Contributor']))
-        manager = RoleAssignmentManager(self.subsubdossier)
+        manager = RoleAssignmentManager(self.resolvable_subdossier)
         assignments = manager.get_assignments_by_cause(assignment_type)
         self.assertEqual(1, len(assignments))
 
-        browser.open(self.dossier,
-                     data=self.make_path_param(self.subdossier), view="copy_items")
+        browser.open(self.resolvable_dossier,
+                     data=self.make_path_param(self.resolvable_subdossier), view="copy_items")
         browser.open(self.empty_repofolder)
         browser.click_on('Paste')
 
