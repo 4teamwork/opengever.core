@@ -2,6 +2,7 @@ from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests import RequestsSessionMock
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
@@ -24,6 +25,7 @@ from opengever.dossier.resolve_lock import ResolveLock
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
 from operator import itemgetter
+from operator import methodcaller
 from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
@@ -1070,6 +1072,43 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
         super(TestAutomaticPDFAConversion, self).setUp()
         reset_queue()
 
+    def create_additional_doc(self):
+        doc = create(Builder('document')
+                     .within(self.resolvable_subdossier)
+                     .attach_file_containing(
+                         bumblebee_asset('example.docx').bytes(),
+                         u'example.docx'))
+
+        # Remove the storing job
+        get_queue().reset()
+        return doc
+
+    def assert_queue_contains_jobs_for(self, docs):
+        """Assert that the queue contains conversion jobs for exactly these
+        documents.
+        """
+        # Order both job queue and document list by URL to avoid flakyness
+        queue_contents = list(get_queue().queue)
+        queue_contents.sort(key=itemgetter('url'))
+
+        docs = list(docs)
+        docs.sort(key=methodcaller('absolute_url'))
+
+        self.assertEquals(len(docs), len(queue_contents))
+
+        for doc, job in zip(docs, queue_contents):
+            checksum = IBumblebeeDocument(doc).calculate_checksum()
+            uuid = IUUID(doc)
+            url = doc.absolute_url()
+            path = doc.absolute_url_path()
+            expected_job_data = {
+                'callback_url': '%s/archival_file_conversion_callback' % url,
+                'file_url': 'http://nohost/plone/bumblebee_download?checksum=%s&uuid=%s' % (checksum, uuid),
+                'target_format': 'pdf/a',
+                'url': '%s/bumblebee_trigger_conversion' % path,
+            }
+            self.assertDictContainsSubset(expected_job_data, job)
+
     @browsing
     def test_pdf_conversion_job_is_queued_for_every_document(self, browser):
         self.activate_feature('bumblebee')
@@ -1079,44 +1118,15 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
             'archival_file_conversion_enabled', True,
             interface=IDossierResolveProperties)
 
-        doc1 = create(Builder('document')
-                      .within(self.resolvable_subdossier)
-                      .attach_file_containing(
-                          bumblebee_asset('example.docx').bytes(),
-                          u'example.docx'))
+        doc = self.create_additional_doc()
 
-        get_queue().reset()
         with RequestsSessionMock.installed():
             self.resolve(self.resolvable_dossier, browser)
-            self.assertEquals(2, len(get_queue().queue))
-            queue_contents = list(get_queue().queue)
-            queue_contents.sort(key=itemgetter('url'))
-
-            fixture_doc_job = queue_contents[0]
-            additional_doc_job = queue_contents[1]
-
-            self.assertDictContainsSubset(
-                {'callback_url': '{}/archival_file_conversion_callback'.format(
-                    self.resolvable_document.absolute_url()),
-                 'file_url': 'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'.format(
-                     DOCX_CHECKSUM, IUUID(self.resolvable_document)),
-                 'target_format': 'pdf/a',
-                 'url': '{}/bumblebee_trigger_conversion'.format(self.resolvable_document.absolute_url_path())},
-                fixture_doc_job)
-
-            self.assertDictContainsSubset(
-                {'callback_url': '{}/archival_file_conversion_callback'.format(
-                    doc1.absolute_url()),
-                 'file_url': 'http://nohost/plone/bumblebee_download?checksum={}&uuid={}'.format(
-                     DOCX_CHECKSUM, IUUID(doc1)),
-                 'target_format': 'pdf/a',
-                 'url': '{}/bumblebee_trigger_conversion'.format(doc1.absolute_url_path())},
-                additional_doc_job)
+            self.assert_queue_contains_jobs_for([self.resolvable_document, doc])
 
     @browsing
     def test_pdf_conversion_is_disabled_by_default(self, browser):
         self.login(self.secretariat_user, browser)
-        get_queue().reset()
 
         with RequestsSessionMock.installed():
             self.resolve(self.resolvable_dossier, browser)
