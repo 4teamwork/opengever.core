@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Fix upgrade step adding document_type index to not update the metadata. [njohner]
 - Log nightly job output to a dedicated, self-rotating logfile. [lgraf]
 - Add flag to force execution of nightly jobs. [njohner]
 - Fix task activity tests. [njohner]
