@@ -1,4 +1,6 @@
 from ftw.raven.reporter import maybe_report_exception
+from logging.handlers import TimedRotatingFileHandler
+from opengever.base.pathfinder import PathFinder
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
@@ -7,10 +9,11 @@ from plone import api
 from zope.globalrequest import getRequest
 import argparse
 import logging
+import os
 import sys
 
 
-logger = logging.getLogger('opengever.nightlyjobs')
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 
 
 def parse_args(argv):
@@ -23,15 +26,31 @@ def parse_args(argv):
     return args
 
 
+def setup_logger():
+    logger = logging.getLogger('opengever.nightlyjobs')
+    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
+    # to make sure nightly job output gets logged on console
+    stream_handler = logger.root.handlers[0]
+    stream_handler.setLevel(logging.INFO)
+    logger.setLevel(logging.INFO)
+
+    # Add handler that writes to self-rotating file
+    log_dir = PathFinder().var_log
+    file_handler = TimedRotatingFileHandler(
+        os.path.join(log_dir, 'nightly-jobs.log'),
+        when='midnight', backupCount=7)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    logger.addHandler(file_handler)
+
+    return logger
+
+
 def run_nightly_jobs_handler(app, args):
     # Make sure unhandled exceptions get logged to Sentry
     register_sentry_except_hook()
 
-    # Set Zope's default StreamHandler's level to INFO (default is WARNING)
-    # to make sure send_digests()'s output gets logged on console
-    stream_handler = logger.root.handlers[0]
-    stream_handler.setLevel(logging.INFO)
-    logger.setLevel(logging.INFO)
+    logger = setup_logger()
 
     # Discard the first three arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
@@ -41,7 +60,7 @@ def run_nightly_jobs_handler(app, args):
 
     for plone_site in all_plone_sites(app):
         plone_site = setup_plone(plone_site)
-        invoke_nightly_job_runner(plone_site, force)
+        invoke_nightly_job_runner(plone_site, force, logger)
 
 
 def setup_language(plone):
@@ -72,7 +91,10 @@ def register_sentry_except_hook():
     sys.excepthook = sentry_except_hook
 
 
-def invoke_nightly_job_runner(plone_site, force):
+def invoke_nightly_job_runner(plone_site, force, logger):
+    logger.info('Running nightly jobs...')
+    logger.info('=' * 80)
+
     if not nightly_jobs_feature_enabled() and not force:
         logger.info('Nightly jobs feature is not enabled in registry - '
                     'not running any jobs for %r' % plone_site)
@@ -80,7 +102,11 @@ def invoke_nightly_job_runner(plone_site, force):
 
     setup_language(plone_site)
 
-    runner = NightlyJobRunner(setup_own_task_queue=True, force_execution=force)
+    runner = NightlyJobRunner(
+        setup_own_task_queue=True,
+        force_execution=force,
+        logger=logger)
+
     logger.info('Found {} providers: {}'.format(len(runner.job_providers),
                                                 runner.job_providers.keys()))
     logger.info('Number of jobs: {}'.format(runner.get_initial_jobs_count()))
@@ -96,3 +122,4 @@ def invoke_nightly_job_runner(plone_site, force):
         logger.info('No jobs remaining')
     else:
         logger.info('{} jobs remaining'.format(runner.get_remaining_jobs_count()))
+    logger.info('Finished running nightly jobs.')

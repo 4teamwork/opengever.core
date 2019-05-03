@@ -18,9 +18,6 @@ import psutil
 import transaction
 
 
-log = logging.getLogger('opengever.nightlyjobs')
-
-
 def nightly_jobs_feature_enabled():
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=INightlyJobsSettings)
@@ -64,11 +61,16 @@ class NightlyJobRunner(object):
     to True
     """
 
-    LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 *1024,
+    LOAD_LIMITS = {'virtual_memory_available': 100 * 1024 * 1024,
                    'virtual_memory_percent': 95}
 
-    def __init__(self, setup_own_task_queue=False, force_execution=False):
+    def __init__(self, setup_own_task_queue=False, force_execution=False,
+                 logger=None):
         self.force_execution = force_execution
+
+        if logger is None:
+            logger = logging.getLogger('opengever.nightlyjobs')
+        self.log = logger
 
         # retrieve window start and end times
         self.window_start = api.portal.get_registry_record(
@@ -92,7 +94,7 @@ class NightlyJobRunner(object):
 
     def get_job_providers(self):
         return {name: provider for name, provider
-                in getAdapters([api.portal.get(), getRequest()],
+                in getAdapters([api.portal.get(), getRequest(), self.log],
                                INightlyJobProvider)}
 
     def execute_pending_jobs(self, early_check=True):
@@ -101,7 +103,8 @@ class NightlyJobRunner(object):
             # and system load are acceptable. Otherwise cron job is misconfigured.
             self.interrupt_if_necessary()
 
-        for provider in self.job_providers.values():
+        for provider_name, provider in self.job_providers.items():
+            self.log.info('Executing jobs for provider %r' % provider_name)
             for job in provider:
                 try:
                     self.interrupt_if_necessary()
@@ -126,7 +129,7 @@ class NightlyJobRunner(object):
     def process_task_queue(self):
         queue = self._task_queue.queue
 
-        log.info('Processing %d task queue jobs...' % queue.qsize())
+        self.log.info('Processing %d task queue jobs...' % queue.qsize())
         request = getRequest()
         alsoProvides(request, ITaskQueueLayer)
 
@@ -142,7 +145,7 @@ class NightlyJobRunner(object):
             # provides in the job.
 
         noLongerProvides(request, ITaskQueueLayer)
-        log.info('All task queue jobs processed.')
+        self.log.info('All task queue jobs processed.')
 
     def interrupt_if_necessary(self):
         if self.force_execution:

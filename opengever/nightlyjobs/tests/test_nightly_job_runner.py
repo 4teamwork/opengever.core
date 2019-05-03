@@ -15,20 +15,22 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
+import logging
 
 
-@adapter(IPloneSiteRoot, IBrowserRequest)
+@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
 class DossierTitleModifierJobProvider(DocumentTitleModifierJobProvider):
 
     portal_type = 'opengever.dossier.businesscasedossier'
     provider_name = 'dossier-title'
 
 
-@adapter(IPloneSiteRoot, IOpengeverBaseLayer)
+@adapter(IPloneSiteRoot, IOpengeverBaseLayer, logging.Logger)
 class TickingDocumentTitleModifierJobProvider(DocumentTitleModifierJobProvider):
 
-    def __init__(self, context, request):
-        super(TickingDocumentTitleModifierJobProvider, self).__init__(context, request)
+    def __init__(self, context, request, logger):
+        super(TickingDocumentTitleModifierJobProvider, self).__init__(
+            context, request, logger)
         self.clock = self.request.clock
 
     def run_job(self, job, interrupt_if_necessary):

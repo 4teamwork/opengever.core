@@ -20,5 +20,5 @@ class TestingNightlyJobRunner(NightlyJobRunner):
 
     def get_job_providers(self):
         return {name: provider for name, provider
-                in getAdapters([api.portal.get(), getRequest()],
+                in getAdapters([api.portal.get(), getRequest(), self.log],
                                ITestingNightlyJobProvider)}

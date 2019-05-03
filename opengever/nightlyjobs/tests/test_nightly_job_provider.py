@@ -14,6 +14,7 @@ from zope.interface import Interface
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 from zope.publisher.interfaces.browser import IBrowserRequest
+import logging
 
 
 class IWantToBeModified(Interface):
@@ -25,15 +26,16 @@ class TestException(Exception):
 
 
 @implementer(ITestingNightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest)
+@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
 class DocumentTitleModifierJobProvider(object):
 
     portal_type = 'opengever.document.document'
     provider_name = 'document-title'
 
-    def __init__(self, context, request):
+    def __init__(self, context, request, logger):
         self.context = context
         self.request = request
+        self.logger = logger
 
         catalog = api.portal.get_tool('portal_catalog')
         documents = catalog(portal_type=self.portal_type,
@@ -84,6 +86,8 @@ class TestNightlyJobProvider(IntegrationTestCase):
     def setUp(self):
         super(TestNightlyJobProvider, self).setUp()
         self.portal = self.layer['portal']
+        self.null_logger = logging.getLogger('opengever.nightlyjobs')
+        self.null_logger.addHandler(logging.NullHandler())
 
         self.portal.getSiteManager().registerAdapter(DocumentTitleModifierJobProvider,
                                                      name='document-title')
@@ -104,7 +108,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
 
     def test_job_provider_job_execution(self):
         self.login(self.manager)
-        provider = getMultiAdapter([api.portal.get(), getRequest()],
+        provider = getMultiAdapter([api.portal.get(), getRequest(), self.null_logger],
                                    ITestingNightlyJobProvider,
                                    name='document-title')
 
@@ -114,7 +118,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
 
     def test_job_provider_job_counters(self):
         self.login(self.manager)
-        provider = getMultiAdapter([api.portal.get(), getRequest()],
+        provider = getMultiAdapter([api.portal.get(), getRequest(), self.null_logger],
                                    ITestingNightlyJobProvider,
                                    name='document-title')
         self.assertEqual(3, len(provider))
@@ -127,7 +131,7 @@ class TestNightlyJobProvider(IntegrationTestCase):
 
     def test_job_provider_job_execution_interruption(self):
         self.login(self.manager)
-        provider = getMultiAdapter([api.portal.get(), getRequest()],
+        provider = getMultiAdapter([api.portal.get(), getRequest(), self.null_logger],
                                    ITestingNightlyJobProvider,
                                    name='document-title')
 

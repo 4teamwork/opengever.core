@@ -1,4 +1,3 @@
-from logging import getLogger
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.nightlyjobs.interfaces import INightlyJobProvider
@@ -7,18 +6,19 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
-
-
-logger = getLogger('opengever.dossier.nightly_after_resolve_job')
+import logging
 
 
 @implementer(INightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest)
+@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
 class ExecuteNightlyAfterResolveJobs(object):
 
-    def __init__(self, context, request):
+    def __init__(self, context, request, logger):
+        self.context = context
+        self.request = request
+        self.logger = logger
+
         self.catalog = api.portal.get_tool('portal_catalog')
-        self.portal = api.portal.get()
 
         # Get all dossiers that are resolved, but still have
         # AfterResolveJobs pending
@@ -38,6 +38,6 @@ class ExecuteNightlyAfterResolveJobs(object):
 
     def run_job(self, job, interrupt_if_necessary):
         path = job['path']
-        dossier = self.portal.unrestrictedTraverse(path)
-        logger.info("Running AfterResolve jobs for %r" % dossier)
+        dossier = self.context.unrestrictedTraverse(path)
+        self.logger.info("Running AfterResolve jobs for %r" % dossier)
         AfterResolveJobs(dossier).execute(nightly_run=True)
