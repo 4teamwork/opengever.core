@@ -1138,6 +1138,63 @@ class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomatic
     pass
 
 
+class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
+
+    features = ('nightly-jobs', )
+
+    def interrupt_if_necessary(self):
+        """Stub out the runner's `interrupt_if_necessary` function.
+        """
+
+    def execute_nightly_jobs(self, expected=None):
+        """Run all pending after resolve nightly jobs, and assert on the
+        number of jobs.
+        """
+        null_logger = logging.getLogger('opengever.nightlyjobs')
+        null_logger.addHandler(logging.NullHandler())
+
+        nightly_job_provider = ExecuteNightlyAfterResolveJobs(
+            self.portal, self.request, null_logger)
+
+        jobs = list(nightly_job_provider)
+        if expected:
+            self.assertEqual(expected, len(jobs))
+            self.assertEqual(expected, len(nightly_job_provider))
+
+        for job in jobs:
+            nightly_job_provider.run_job(job, self.interrupt_if_necessary)
+
+    @browsing
+    def test_pdf_conversion_job_is_queued_for_every_document(self, browser):
+        self.activate_feature('bumblebee')
+        self.login(self.secretariat_user, browser)
+
+        api.portal.set_registry_record(
+            'archival_file_conversion_enabled', True,
+            interface=IDossierResolveProperties)
+
+        doc = self.create_additional_doc()
+
+        # Resolving doesn't trigger the AfterResolveJobs yet...
+        self.resolve(self.resolvable_dossier, browser)
+        self.assertEquals(0, len(get_queue().queue))
+
+        with RequestsSessionMock.installed():
+            # ...executing the nightly jobs will.
+            self.execute_nightly_jobs(expected=2)
+            self.assert_queue_contains_jobs_for([self.resolvable_document, doc])
+
+    @browsing
+    def test_pdf_conversion_is_disabled_by_default(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+
+        with RequestsSessionMock.installed():
+            self.execute_nightly_jobs()
+            self.assertEquals(0, len(get_queue().queue))
+
+
 class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveTestHelper):
 
     def setUp(self):
