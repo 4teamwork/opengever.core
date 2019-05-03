@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Trash: Update and reindex modification date when trashing documents. [lgraf]
 - Add file_extension indexer for mails. [phgross]
 - Fix upgrade step adding document_type index to not update the metadata. [njohner]
 - Log nightly job output to a dedicated, self-rotating logfile. [lgraf]

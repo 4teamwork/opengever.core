@@ -1,4 +1,6 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import Trasher
 from plone import api
@@ -77,3 +79,41 @@ class TestSearchEndpoint(IntegrationTestCase):
 
         self.assertEqual([doc_url], catalog_results)
         self.assertEqual([doc_url], api_results)
+
+    @browsing
+    def test_can_sort_trashed_docs_by_modified(self, browser):
+        self.login(self.regular_user, browser)
+
+        with freeze(datetime(2014, 5, 7, 12, 30)) as clock:
+            Trasher(self.subsubdocument).trash()
+            clock.forward(minutes=5)
+
+            Trasher(self.taskdocument).trash()
+            clock.forward(minutes=5)
+
+            Trasher(self.document).trash()
+            clock.forward(minutes=5)
+
+            Trasher(self.subdocument).trash()
+
+        expected_order = [
+            self.subsubdocument.absolute_url(),
+            self.taskdocument.absolute_url(),
+            self.document.absolute_url(),
+            self.subdocument.absolute_url(),
+        ]
+
+        catalog_results = self.search_catalog(
+            self.dossier,
+            dict(sort_on='modified',
+                 portal_type='opengever.document.document',
+                 trashed=True))
+
+        api_results = self.search_restapi(
+            browser, self.dossier,
+            {'sort_on': 'modified',
+             'portal_type': 'opengever.document.document',
+             'trashed:boolean': '1'})
+
+        self.assertEqual(expected_order, catalog_results)
+        self.assertEqual(expected_order, api_results)
