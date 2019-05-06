@@ -13,6 +13,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
+import json
 
 
 class TestDossierDeactivation(IntegrationTestCase):
@@ -139,3 +140,39 @@ class TestDossierDeactivation(IntegrationTestCase):
         expected_msgs = [u"The Dossier 2016 contains a subdossier "
                          u"which can't be deactivated by the user."]
         self.assert_errors(self.subdossier, browser, expected_msgs)
+
+
+class TestDossierDeactivationRESTAPI(TestDossierDeactivation):
+
+    def deactivate(self, dossier, browser, use_editbar=False, payload=None):
+        browser.raise_http_errors = False
+        url = dossier.absolute_url() + '/@workflow/dossier-transition-deactivate'
+        kwargs = {'method': 'POST',
+                  'headers': self.api_headers}
+        if payload is not None:
+            kwargs['data'] = json.dumps(payload)
+        browser.open(url, **kwargs)
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEquals(400, browser.status_code)
+        self.assertEquals(
+            {u'error':
+                {u'message': u'',
+                 u'errors': error_msgs,
+                 u'type': u'PreconditionsViolated'}},
+            browser.json)
+        expected_url = dossier.absolute_url() + \
+            '/@workflow/dossier-transition-deactivate'
+        self.assertEquals(expected_url, browser.url)
+
+    @browsing
+    def test_deactivating_dossier_non_recursively_is_forbidden(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {'include_children': False}
+        self.deactivate(self.empty_dossier, browser, payload=payload)
+        self.assertEqual(
+            {u'error': {
+                u'message': u'Deactivating dossier must always be recursive',
+                u'type': u'Bad Request'}},
+            browser.json)
+        self.assert_workflow_state('dossier-state-active', self.empty_dossier)
