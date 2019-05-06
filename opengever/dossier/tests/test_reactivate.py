@@ -3,7 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
-from ftw.testbrowser.pages.statusmessages import warning_messages
+from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import FunctionalTestCase
 from plone import api
@@ -62,7 +62,7 @@ class TestReactivating(FunctionalTestCase):
 
         self.assertEquals(
             ["It isn't possible to reactivate a sub dossier."],
-            warning_messages())
+            error_messages())
         self.assertEquals('dossier-state-resolved', api.content.get_state(sub))
 
     @browsing

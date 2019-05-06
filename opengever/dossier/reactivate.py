@@ -63,5 +63,5 @@ class DossierReactivateView(BrowserView):
     def show_errors(self, errors):
         for msg in errors:
             api.portal.show_message(
-                message=msg, request=self.request, type='warning')
+                message=msg, request=self.request, type='error')
         return self.redirect()
