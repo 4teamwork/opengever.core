@@ -23,8 +23,6 @@ class Reactivator(object):
         return errors
 
     def reactivate(self):
-        if self.get_precondition_violations():
-            raise TypeError
         self._recursive_reactivate(self.context)
 
     def _recursive_reactivate(self, dossier):
