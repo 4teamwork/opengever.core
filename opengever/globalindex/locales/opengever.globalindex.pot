@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-05-06 08:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgid "label_deadline"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_dossier_title"
+msgid "label_dossier"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
@@ -64,16 +64,16 @@ msgid "label_sequence_number"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_task_title"
-msgstr ""
-
-#: ./opengever/globalindex/browser/report.py
 msgid "label_task_type"
 msgstr ""
 
 #. Default: "Tasks"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_tasks"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_title"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py

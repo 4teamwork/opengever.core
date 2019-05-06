@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-05-06 08:45+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/fr/>\n"
@@ -43,8 +43,8 @@ msgid "label_deadline"
 msgstr "A réaliser jusqu'au"
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_dossier_title"
-msgstr "Titre du dossier"
+msgid "label_dossier"
+msgstr "Dossier"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_issuer"
@@ -63,10 +63,6 @@ msgid "label_sequence_number"
 msgstr "Numéro courant"
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_task_title"
-msgstr "Titre de tâche"
-
-#: ./opengever/globalindex/browser/report.py
 msgid "label_task_type"
 msgstr "Type de mandat"
 
@@ -74,6 +70,10 @@ msgstr "Type de mandat"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_tasks"
 msgstr "Mandats"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_title"
+msgstr "Titre"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "review_state"

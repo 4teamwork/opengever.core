@@ -39,7 +39,7 @@ class TaskReporter(BaseReporterView):
     @property
     def _columns(self):
         return [
-            {'id': 'title', 'title': _('label_task_title')},
+            {'id': 'title', 'title': _('label_title')},
             {'id': 'review_state', 'title': _('review_state'),
              'transform': StringTranslater(
                  self.context.REQUEST, 'plone').translate},
@@ -47,7 +47,7 @@ class TaskReporter(BaseReporterView):
              'number_format': DATE_NUMBER_FORMAT},
             {'id': 'completed', 'title': _('label_completed'),
              'number_format': DATE_NUMBER_FORMAT},
-            {'id': 'containing_dossier', 'title': _('label_dossier_title')},
+            {'id': 'containing_dossier', 'title': _('label_dossier')},
             {'id': 'issuer', 'title': _('label_issuer'),
              'transform': readable_author},
             {'id': 'issuing_org_unit_label',
