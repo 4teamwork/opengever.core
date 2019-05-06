@@ -101,7 +101,8 @@ class Trasher(object):
         notify(UntrashedEvent(self.context))
 
     def reindex(self):
-        self.context.reindexObject(idxs=['trashed', 'object_provides'])
+        self.context.setModificationDate()
+        self.context.reindexObject(idxs=['trashed', 'object_provides', 'modified'])
 
     def verify_is_not_already_trashed(self):
         if ITrashed.providedBy(self.context):

@@ -112,7 +112,7 @@ def obj2brain(obj, unrestricted=False):
 
 def index_data_for(obj):
     catalog = getToolByName(obj, 'portal_catalog')
-    return catalog.getIndexDataForRID(obj2brain(obj).getRID())
+    return catalog.getIndexDataForRID(obj2brain(obj, unrestricted=True).getRID())
 
 
 def set_preferred_language(request, code):
