@@ -55,6 +55,10 @@ class GeverSettingsAdpaterV1(object):
         info = OrderedDict()
         info['@id'] = self.context.absolute_url() + '/@config'
         info['version'] = get_distribution('opengever.core').version
+        user = api.user.get_current()
+        if user.getId():
+            info['userid'] = user.getId()
+            info['user_fullname'] = user.getProperty('fullname')
         return info
 
     def get_settings(self):
