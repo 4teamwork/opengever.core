@@ -83,7 +83,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             self.request.response.setStatus(400)
             return dict(error=dict(
                 type='PreconditionsViolated',
-                errors=e.errors,
+                errors=map(self.translate, e.errors),
                 message=self.translate(str(e))))
 
         except InvalidDates as e:
