@@ -40,7 +40,7 @@ msgstr "Erledigt am"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
-msgstr "Frist"
+msgstr "Zu erledigen bis"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_dossier_title"

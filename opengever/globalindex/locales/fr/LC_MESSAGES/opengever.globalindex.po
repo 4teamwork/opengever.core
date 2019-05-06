@@ -40,7 +40,7 @@ msgstr "Accompli le"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
-msgstr "Délai"
+msgstr "A réaliser jusqu'au"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_dossier_title"
