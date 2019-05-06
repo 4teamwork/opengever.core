@@ -460,7 +460,7 @@ msgstr "Ausgangsdatum"
 
 #: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
-msgstr "Referenznummer"
+msgstr "Aktenzeichen"
 
 #: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
