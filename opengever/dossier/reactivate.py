@@ -1,9 +1,11 @@
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve import PreconditionsViolated
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+
 
 MSG_SUBDOSSIER = _("It isn't possible to reactivate a sub dossier.")
 
@@ -23,6 +25,9 @@ class Reactivator(object):
         return errors
 
     def reactivate(self):
+        errors = self.get_precondition_violations()
+        if errors:
+            raise PreconditionsViolated(errors=errors)
         self._recursive_reactivate(self.context)
 
     def _recursive_reactivate(self, dossier):
@@ -45,12 +50,11 @@ class DossierReactivateView(BrowserView):
     def __call__(self):
         reactivator = Reactivator(self.context)
 
-        # check preconditions
-        errors = reactivator.get_precondition_violations()
-        if errors:
-            return self.show_errors(errors)
+        try:
+            reactivator.reactivate()
+        except PreconditionsViolated as exc:
+            return self.show_errors(exc.errors)
 
-        reactivator.reactivate()
         api.portal.show_message(message=_('Dossiers successfully reactivated.'),
                                 request=self.request, type='info')
         return self.redirect()
