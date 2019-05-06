@@ -19,6 +19,11 @@ class FixDateForTransportedObjects(SQLUpgradeStep):
     """Fix date for transported objects.
     """
 
+    # This upgrade step was retroactively marked as deferrable.
+    # There is no need to fix the dates immediately, there have been broken
+    # for quit a long time.
+    deferrable = True
+
     def migrate(self):
         if not self.has_multiple_admin_units():
             # Transporter is only used on deployments with multiple adminunits,
