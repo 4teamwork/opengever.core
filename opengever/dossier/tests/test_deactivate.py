@@ -35,81 +35,85 @@ class TestDossierDeactivation(IntegrationTestCase):
     @browsing
     def test_fails_with_resolved_subdossier(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.set_workflow_state('dossier-state-resolved', self.subdossier)
-        self.deactivate(self.dossier, browser)
-        self.assert_workflow_state('dossier-state-active', self.dossier)
-        expected_msgs = [u"The Dossier can't be deactivated, it contains "
-                         u"active proposals.",
-                         u"The Dossier can\'t be deactivated, the subdossier"
-                         u" 2016 is already resolved.",
-                         u"The Dossier can't be deactivated, not all contained"
-                         u" tasks are in a closed state."]
-        self.assert_errors(self.dossier, browser, expected_msgs)
+        self.set_workflow_state('dossier-state-resolved', self.resolvable_subdossier)
+        self.deactivate(self.resolvable_dossier, browser)
+        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
+        expected_msgs = [u"The Dossier can\'t be deactivated, the subdossier"
+                         u" Resolvable Subdossier is already resolved."]
+        self.assert_errors(self.resolvable_dossier, browser, expected_msgs)
 
     @browsing
     def test_fails_with_checked_out_documents(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.checkout_document(self.document)
-        self.deactivate(self.dossier, browser)
-        self.assert_workflow_state('dossier-state-active', self.dossier)
+        self.checkout_document(self.resolvable_document)
+        self.deactivate(self.resolvable_dossier, browser)
+        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
         expected_msgs = [u"The Dossier can't be deactivated, not all "
-                         u"containeddocuments are checked in.",
-                         u"The Dossier can't be deactivated, it contains "
-                         u"active proposals.",
-                         u"The Dossier can't be deactivated, not all contained"
-                         u" tasks are in a closed state."]
-        self.assert_errors(self.dossier, browser, expected_msgs)
+                         u"containeddocuments are checked in."]
+        self.assert_errors(self.resolvable_dossier, browser, expected_msgs)
 
     @browsing
     def test_not_possible_with_not_closed_tasks(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.assert_workflow_state('task-state-in-progress', self.task)
-        self.deactivate(self.dossier, browser)
-        self.assert_workflow_state('dossier-state-active', self.dossier)
-        expected_msgs = [u"The Dossier can't be deactivated, it contains "
-                         u"active proposals.",
-                         u"The Dossier can't be deactivated, not all contained"
+        task = create(Builder('task')
+                      .having(responsible_client='fa',
+                              responsible=self.regular_user.getId(),
+                              issuer=self.dossier_responsible.getId())
+                      .within(self.empty_dossier)
+                      .in_state('task-state-in-progress'))
+
+        self.deactivate(self.empty_dossier, browser)
+        self.assert_workflow_state('dossier-state-active', self.empty_dossier)
+        expected_msgs = [u"The Dossier can't be deactivated, not all contained"
                          u" tasks are in a closed state."]
-        self.assert_errors(self.dossier, browser, expected_msgs)
+        self.assert_errors(self.empty_dossier, browser, expected_msgs)
+
+        self.set_workflow_state('task-state-tested-and-closed', task)
+        self.deactivate(self.empty_dossier, browser)
+        self.assert_workflow_state('dossier-state-inactive', self.empty_dossier)
 
     @browsing
     def test_not_possible_with_active_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.assert_workflow_state('proposal-state-active', self.draft_proposal)
-        self.deactivate(self.dossier, browser)
-        self.assert_workflow_state('dossier-state-active', self.dossier)
+        proposal = create(Builder('proposal').within(self.empty_dossier))
+
+        self.deactivate(self.empty_dossier, browser)
+        self.assert_workflow_state('dossier-state-active', self.empty_dossier)
+
         expected_msgs = [u"The Dossier can't be deactivated, it contains "
-                         u"active proposals.",
-                         u"The Dossier can't be deactivated, not all contained"
-                         u" tasks are in a closed state."]
-        self.assert_errors(self.dossier, browser, expected_msgs)
+                         u"active proposals."]
+        self.assert_errors(self.empty_dossier, browser, expected_msgs)
+
+        proposal.execute_transition('pending-cancelled')
+        self.deactivate(self.empty_dossier, browser)
+        self.assert_workflow_state('dossier-state-inactive', self.empty_dossier)
 
     @browsing
     def test_recursively_deactivate_subdossier(self, browser):
         self.login(self.secretariat_user, browser)
-        subdossier = create(Builder('dossier').within(self.empty_dossier))
-        self.deactivate(self.empty_dossier, browser, use_editbar=True)
+        self.deactivate(self.resolvable_dossier, browser, use_editbar=True)
         statusmessages.assert_no_error_messages()
-        self.assert_workflow_state('dossier-state-inactive', self.empty_dossier)
-        self.assert_workflow_state('dossier-state-inactive', subdossier)
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_subdossier)
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
 
     @browsing
     def test_already_inactive_subdossier_will_be_ignored(self, browser):
         self.login(self.secretariat_user, browser)
-        subdossier = create(Builder('dossier').within(self.empty_dossier)
-                            .in_state('dossier-state-inactive'))
-        self.deactivate(self.empty_dossier, browser, use_editbar=True)
+        self.deactivate(self.resolvable_subdossier, browser, use_editbar=True)
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_subdossier)
+
+        self.deactivate(self.resolvable_dossier, browser, use_editbar=True)
         statusmessages.assert_no_error_messages()
-        self.assert_workflow_state('dossier-state-inactive', self.empty_dossier)
-        self.assert_workflow_state('dossier-state-inactive', subdossier)
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_subdossier)
 
     @browsing
     def test_sets_end_date_to_current_date(self, browser):
         self.login(self.secretariat_user, browser)
         with freeze(datetime(2016, 3, 29)):
-            self.deactivate(self.empty_dossier, browser, use_editbar=True)
+            self.deactivate(self.resolvable_dossier, browser, use_editbar=True)
 
-        self.assert_end_date(self.empty_dossier, date(2016, 3, 29))
+        self.assert_end_date(self.resolvable_dossier, date(2016, 3, 29))
 
     @browsing
     def test_subdossiers_the_user_cannot_view_can_also_block_deactivation(self, browser):
