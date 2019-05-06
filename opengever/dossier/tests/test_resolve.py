@@ -5,7 +5,6 @@ from ftw.builder import create
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests import RequestsSessionMock
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
-from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.bumblebee.tests.helpers import get_queue
 from ftw.bumblebee.tests.helpers import reset_queue
 from ftw.testbrowser import browsing
@@ -32,6 +31,7 @@ from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
+import json
 import logging
 import pytz
 
@@ -111,13 +111,16 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
         'Content-Type': 'application/json',
     }
 
-    def resolve(self, dossier, browser):
+    def resolve(self, dossier, browser, payload=None):
         browser.raise_http_errors = False
         url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
+        kwargs = {'method': 'POST',
+                  'headers': self.api_headers}
+        if payload is not None:
+            kwargs['data'] = json.dumps(payload)
         browser.open(
             url,
-            method='POST',
-            headers=self.api_headers)
+            **kwargs)
 
     def assert_success(self, dossier, browser, info_msgs=None):
         self.assertEqual(200, browser.status_code)
@@ -218,6 +221,18 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
     """Variant of the above test class to test dossier resolution via RESTAPI.
     """
+
+    @browsing
+    def test_resolving_dossier_non_recursively_is_forbidden(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {'include_children': False}
+        self.resolve(self.resolvable_dossier, browser, payload=payload)
+        self.assertEqual(
+            {u'error': {
+                u'message': u'Resolving dossier must always be recursive',
+                u'type': u'Bad Request'}},
+            browser.json)
+        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
 
 
 class TestResolvingDossiersNightly(TestResolvingDossiers):
