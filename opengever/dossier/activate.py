@@ -7,27 +7,10 @@ MAIN_DOSSIER_ACTIVE = _("This subdossier can't be activated,"
                         "because the main dossiers is inactive")
 
 
-class DossierActivateView(BrowserView):
-    """View which activates the dossier including its subdossiers."""
+class DossierActivator(object):
 
-    def __call__(self):
-        errors = self.check_preconditions()
-        if errors:
-            self.show_errors(errors)
-            return self.redirect()
-
-        self.activate()
-        api.portal.show_message(_("The Dossier has been activated"),
-                                self.request, type='info')
-        return self.redirect()
-
-    def show_errors(self, errors):
-        for msg in errors:
-            api.portal.show_message(
-                message=msg, request=self.request, type='error')
-
-    def redirect(self):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
+    def __init__(self, context):
+        self.context = context
 
     def check_preconditions(self):
         errors = []
@@ -44,3 +27,27 @@ class DossierActivateView(BrowserView):
 
         # main dossier
         self.context.activate()
+
+
+class DossierActivateView(BrowserView):
+    """View which activates the dossier including its subdossiers."""
+
+    def __call__(self):
+        activator = DossierActivator(self.context)
+        errors = activator.check_preconditions()
+        if errors:
+            self.show_errors(errors)
+            return self.redirect()
+
+        activator.activate()
+        api.portal.show_message(_("The Dossier has been activated"),
+                                self.request, type='info')
+        return self.redirect()
+
+    def show_errors(self, errors):
+        for msg in errors:
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+
+    def redirect(self):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
