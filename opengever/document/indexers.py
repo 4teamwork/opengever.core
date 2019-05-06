@@ -219,8 +219,13 @@ def filename(obj):
     return u''
 
 
-@indexer(IDocumentSchema)
+@indexer(IBaseDocument)
 def file_extension(obj):
+    """file_extension indexer for documents and mails.
+    For document it returns the extension of the file for mails it returns the
+    extension of the original_message file if exists.
+    """
+
     filename = obj.get_filename()
     if filename:
         # We should not rely on the normalization to have happened

@@ -57,3 +57,11 @@ class TestMailIndexers(IntegrationTestCase):
         self.login(self.regular_user)
         extender = getAdapter(self.mail_eml, IDynamicTextIndexExtender, u'IDocumentSchema')
         self.assertEqual('Client1 1.1 / 1 / 29 29', extender())
+
+    def test_file_extension_uses_extension_of_original_message_if_exists(self):
+        self.login(self.regular_user)
+
+        self.assertEqual('.msg',
+                         index_data_for(self.mail_msg).get('file_extension'))
+        self.assertEqual('.eml',
+                         index_data_for(self.mail_eml).get('file_extension'))
