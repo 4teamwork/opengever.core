@@ -50,7 +50,7 @@ class TestDossierDeactivation(IntegrationTestCase):
         self.deactivate(self.resolvable_dossier, browser)
         self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
         expected_msgs = [u"The Dossier can't be deactivated, not all "
-                         u"containeddocuments are checked in."]
+                         u"contained documents are checked in."]
         self.assert_errors(self.resolvable_dossier, browser, expected_msgs)
 
     @browsing

@@ -7,7 +7,7 @@ from plone import api
 from Products.Five.browser import BrowserView
 
 NOT_ALL_CHECKED_IN = _(u"The Dossier can't be deactivated, not all contained"
-                       "documents are checked in.")
+                       " documents are checked in.")
 
 CONTAINS_ACTIVE_PROPOSAL = _(u"The Dossier can't be deactivated, it contains"
                              " active proposals.")
