@@ -79,6 +79,39 @@ Zusätzlich werden alle verfügbaren Rollen im Attribut "roles" zurückgegeben. 
     }
 
 
+Eine einzelne Beteiligung abrufen:
+----------------------------------
+Ein GET Request auf die jeweilige Resource gibt die Beteiligungen oder die Einladungen eines Inhalts zurück.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /workspaces/workspace-1/@participations/users/max.muster HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/users/max.muster",
+      "@type": "virtual.participations.user",
+      "inviter_fullname": null,
+      "is_editable": false,
+      "participant_fullname": "Max Muster (max.muster)",
+      "readable_role": "Federführung",
+      "role": "WorkspaceOwner",
+      "token": "max.muster",
+      "participation_type": "user",
+      "readable_participation_type": "User",
+    }
+
+
 Beteiligungen löschen:
 ----------------------
 Ein DELETE Request auf die `@id` einer Beteiligung löscht die entsprechnede Beteilungung oder Einladung.

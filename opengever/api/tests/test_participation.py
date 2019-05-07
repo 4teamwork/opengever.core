@@ -199,6 +199,60 @@ class TestParticipationGet(IntegrationTestCase):
             any([item.get('is_editable') for item in response.get('items')]),
             'No entry should be editable because the user has no permission')
 
+    @browsing
+    def test_get_single_invitation(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        iid = getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        response = browser.open(
+            self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/invitations/{}'.format(iid),
+                u'@type': u'virtual.participations.invitation',
+                u'is_editable': True,
+                u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
+                u'participant_fullname': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                u'token': iid,
+                u'readable_role': u'Guest',
+                u'role': u'WorkspaceGuest',
+                u'participation_type': u'invitation',
+                u'readable_participation_type': u'Invitation',
+            }, response)
+
+    @browsing
+    def test_get_single_participant(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        response = browser.open(
+            self.workspace.absolute_url() + '/@participations/users/{}'.format(self.workspace_guest.id),
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/users/hans.peter',
+                u'@type': u'virtual.participations.user',
+                u'is_editable': True,
+                u'inviter_fullname': None,
+                u'participant_fullname': u'Peter Hans (hans.peter)',
+                u'token': 'hans.peter',
+                u'readable_role': u'Guest',
+                u'role': u'WorkspaceGuest',
+                u'participation_type': u'user',
+                u'readable_participation_type': u'User',
+            }, response)
+
 
 class TestParticipationDelete(IntegrationTestCase):
 

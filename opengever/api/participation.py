@@ -32,39 +32,6 @@ def participation_item(
     }
 
 
-class ParticipationsGet(Service):
-    """API Endpoint which returns a list of all participants for the current
-    workspace.
-
-    GET workspace/@participations HTTP/1.1
-    """
-
-    def reply(self):
-        result = {}
-        self.extend_with_roles(result)
-        self.extend_with_participations(result)
-        return result
-
-    def extend_with_roles(self, result):
-        result['roles'] = map(lambda role: role.serialize(self.request),
-                              PARTICIPATION_ROLES.values())
-
-    def extend_with_participations(self, result):
-        manager = ManageParticipants(self.context, self.request)
-        participants = manager.get_participants() + manager.get_pending_invitations()
-        result['items'] = []
-        for participant in participants:
-            result['items'].append(participation_item(
-                self.context, self.request,
-                token=participant.get('token'),
-                participation_type=PARTICIPATION_TYPES[participant.get('type_')],
-                editable=participant.get('can_manage'),
-                role=participant.get('roles')[0],
-                participant_fullname=participant.get('name'),
-                inviter_fullname=participant.get('inviter')
-                ))
-
-
 class ParticipationTraverseService(Service):
 
     implements(IPublishTraverse)
@@ -77,6 +44,55 @@ class ParticipationTraverseService(Service):
         # Consume any path segments after /@participations as parameters
         self.params.append(name)
         return self
+
+
+class ParticipationsGet(ParticipationTraverseService):
+    """API Endpoint which returns a list of all participants for the current
+    workspace.
+
+    GET workspace/@participations HTTP/1.1
+    """
+
+    def reply(self):
+        token = self.read_params()
+        if token:
+            return self._participant(token)
+        else:
+            result = {}
+            self.extend_with_roles(result)
+            self.extend_with_participations(result)
+            return result
+
+    def extend_with_roles(self, result):
+        result['roles'] = map(lambda role: role.serialize(self.request),
+                              PARTICIPATION_ROLES.values())
+
+    def extend_with_participations(self, result):
+        result['items'] = list(self._participations())
+
+    def _participations(self):
+        manager = ManageParticipants(self.context, self.request)
+        participants = manager.get_participants() + manager.get_pending_invitations()
+        for participant in participants:
+            yield participation_item(
+                self.context, self.request,
+                token=participant.get('token'),
+                participation_type=PARTICIPATION_TYPES[participant.get('type_')],
+                editable=participant.get('can_manage'),
+                role=participant.get('roles')[0],
+                participant_fullname=participant.get('name'),
+                inviter_fullname=participant.get('inviter')
+                )
+
+    def _participant(self, token):
+        for participant in self._participations():
+            if participant.get('token') == token:
+                return participant
+
+    def read_params(self):
+        if len(self.params) == 2:
+            return self.params[1]
+        return None
 
 
 class ParticipationsDelete(ParticipationTraverseService):
