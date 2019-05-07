@@ -19,7 +19,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -259,7 +259,7 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxFilterTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -368,7 +368,7 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         self.session = requests.Session()
@@ -470,7 +470,7 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
 
     def setUp(self):
         super(TestOneoffixxTemplateFavorites, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -627,7 +627,7 @@ class TestOneoffixxClientGrantScopeDefault(IntegrationTestCase):
     def setUp(self):
         super(TestOneoffixxClientGrantScopeDefault, self).setUp()
         api.portal.set_registry_record(
-            'baseurl', u'mock://nohost', IOneoffixxSettings)
+            'baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record(
             'fake_sid', u'foobar', IOneoffixxSettings)
 
@@ -677,7 +677,7 @@ class TestOneoffixxClientGrantScopeConfig(IntegrationTestCase):
     def setUp(self):
         super(TestOneoffixxClientGrantScopeConfig, self).setUp()
         api.portal.set_registry_record(
-            'baseurl', u'mock://nohost', IOneoffixxSettings)
+            'baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
         api.portal.set_registry_record(
             'fake_sid', u'foobar', IOneoffixxSettings)
         api.portal.set_registry_record(
