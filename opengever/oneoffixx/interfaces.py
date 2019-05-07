@@ -37,3 +37,11 @@ class IOneoffixxSettings(Interface):
         description=u'Quite many of the backend responses are very slow, so we cache them per user. Defaults to 30 days.',
         default=30 * 24 * 60 * 60,
     )
+
+    scope = schema.TextLine(
+        title=u'A scope parameter for API versioning.',
+        description=u'This is their OAuth2 grant scope they use for '
+                    u'versioning the API.',
+        default=u'oo_V1WebApi',
+        required=False,
+    )

@@ -127,6 +127,7 @@ class TestConfig(IntegrationTestCase):
             u'fake_sid': u'',
             u'double_encode_bug': True,
             u'cache_timeout': 2592000,
+            u'scope': u'oo_V1WebApi',
         }
         oneoffixx_settings = browser.json.get('oneoffixx_settings')
         self.assertEqual(expected_oneoffixx_settings, oneoffixx_settings)

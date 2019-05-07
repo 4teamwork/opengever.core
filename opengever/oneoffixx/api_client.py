@@ -157,10 +157,10 @@ class OneoffixxAPIClient(object):
         # case they ever fix it
         if api.portal.get_registry_record('double_encode_bug', interface=IOneoffixxSettings):
             grant_type = urllib.quote_plus(grant_type)
-
         data = {
             'grant_type': grant_type,
-            'scope': 'oo_V1WebApi',
+            'scope': api.portal.get_registry_record(
+                'scope', interface=IOneoffixxSettings),
             'client_id': client_id,
             'client_secret': client_secret,
             'impersonateAs': impersonate_as,

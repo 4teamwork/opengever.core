@@ -6,6 +6,7 @@ from opengever.oneoffixx.exceptions import OneoffixxConfigurationException
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.testing import IntegrationTestCase
 from plone import api
+from urlparse import parse_qs
 from zope.annotation.interfaces import IAnnotations
 import json
 import requests
@@ -617,3 +618,105 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
             expected_options,
             [e.get('title') for e in browser.css('input[type=radio]')],
         )
+
+
+class TestOneoffixxClientGrantScopeDefault(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def setUp(self):
+        super(TestOneoffixxClientGrantScopeDefault, self).setUp()
+        api.portal.set_registry_record(
+            'baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record(
+            'fake_sid', u'foobar', IOneoffixxSettings)
+
+        access_token = {'access_token': 'all_may_enter'}
+
+        session = requests.Session()
+        self.adapter = requests_mock.Adapter()
+        self.adapter.register_uri(
+            'POST', 'mock://nohost/ids/connect/token',
+            text=json.dumps(access_token),
+        )
+        session.mount('mock', self.adapter)
+
+        credentials = {
+            'client_id': 'foo',
+            'client_secret': 'topsecret',
+            'preshared_key': 'horribletruth',
+        }
+
+        self.api_client = OneoffixxAPIClient(session, credentials)
+
+    def tearDown(self):
+        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(
+            OneoffixxAPIClient, None)
+        super(TestOneoffixxClientGrantScopeDefault, self).tearDown()
+
+    def test_oneoffixx_grant(self):
+        expected_credentials = {
+            'client_secret': 'topsecret',
+            'client_id': 'foo',
+            'preshared_key': 'horribletruth',
+        }
+        expected_scope = [u'oo_V1WebApi']
+        self.assertEqual(
+            expected_credentials, self.api_client.get_credentials())
+        self.assertEqual(
+            expected_scope, parse_qs(self.adapter.last_request.text)['scope'])
+
+
+class TestOneoffixxClientGrantScopeConfig(IntegrationTestCase):
+
+    features = ("officeconnector-checkout", "oneoffixx")
+
+    def setUp(self):
+        super(TestOneoffixxClientGrantScopeConfig, self).setUp()
+        api.portal.set_registry_record(
+            'baseurl', u'mock://nohost', IOneoffixxSettings)
+        api.portal.set_registry_record(
+            'fake_sid', u'foobar', IOneoffixxSettings)
+        api.portal.set_registry_record(
+            'scope', u'oo_WebApi', IOneoffixxSettings)
+
+        access_token = {'access_token': 'all_may_enter'}
+
+        session = requests.Session()
+        self.adapter = requests_mock.Adapter()
+        self.adapter.register_uri(
+            'POST', 'mock://nohost/ids/connect/token',
+            text=json.dumps(access_token),
+        )
+        session.mount('mock', self.adapter)
+
+        credentials = {
+            'client_id': 'foo',
+            'client_secret': 'topsecret',
+            'preshared_key': 'horribletruth',
+        }
+
+        self.api_client = OneoffixxAPIClient(session, credentials)
+
+    def tearDown(self):
+        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
+        # Tear down the singleton
+        OneoffixxAPIClient.__metaclass__._instances.pop(
+            OneoffixxAPIClient, None)
+        super(TestOneoffixxClientGrantScopeConfig, self).tearDown()
+
+    def test_oneoffixx_grant(self):
+        expected_credentials = {
+            'client_secret': 'topsecret',
+            'client_id': 'foo',
+            'preshared_key': 'horribletruth',
+        }
+        expected_scope = [u'oo_WebApi']
+        self.assertEqual(
+            expected_credentials, self.api_client.get_credentials())
+        self.assertEqual(
+            expected_scope, parse_qs(self.adapter.last_request.text)['scope'])

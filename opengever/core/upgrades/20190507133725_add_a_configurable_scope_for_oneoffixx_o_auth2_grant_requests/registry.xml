@@ -1,0 +1,3 @@
+<registry>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="scope" />
+</registry>
