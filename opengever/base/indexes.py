@@ -1,3 +1,4 @@
+from Acquisition import aq_base
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import ITranslatedTitle
@@ -86,7 +87,8 @@ def sortable_title(obj):
 
 @indexer(IFolderish)
 def has_sametype_children(obj):
-    catalog = api.portal.get_tool("portal_catalog")
-    return bool(catalog.unrestrictedSearchResults(
-                    path={'query': obj.absolute_url_path(), 'depth': 1},
-                    portal_type=obj.portal_type))
+    # child objects are acquisition wrapped, so any child.portal_type would
+    # return the obj.portal_type if the child object does not have a
+    # portal_type attribute.
+    return any(obj.portal_type == getattr(aq_base(child), "portal_type", None)
+               for child in obj.objectValues())

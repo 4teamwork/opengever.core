@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Fix has_children indexer which lead to duplicate brains. [njohner, phgross]
 - Trash: Update and reindex modification date when trashing documents. [lgraf]
 - Respect tabbedview settings when generating a document excel export. [phgross]
 - Add file_extension indexer for mails. [phgross]
