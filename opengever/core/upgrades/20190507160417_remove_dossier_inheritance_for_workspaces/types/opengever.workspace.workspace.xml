@@ -1,7 +1,7 @@
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.workspace" meta_type="Dexterity FTI" i18n:domain="opengever.core">
 
   <!-- Enabled behaviors -->
-  <property name="behaviors">
+  <property name="behaviors" purge="false">
     <element remove="True" value="opengever.dossier.behaviors.dossier.IDossier" />
   </property>
 
