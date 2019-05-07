@@ -20,40 +20,6 @@ def get_entry_by_token(entries, token):
 class TestParticipationGet(IntegrationTestCase):
 
     @browsing
-    def test_list_all_available_roles(self, browser):
-        self.login(self.workspace_owner, browser)
-
-        response = browser.open(
-            self.workspace.absolute_url() + '/@participations',
-            method='GET',
-            headers=http_headers(),
-        ).json
-
-        self.assertItemsEqual(
-            [
-                {
-                    u'managed': False,
-                    u'id': u'WorkspaceOwner',
-                    u'title': u'Owner'
-                },
-                {
-                    u'managed': True,
-                    u'id': u'WorkspaceAdmin',
-                    u'title': u'Admin'
-                },
-                {
-                    u'managed': True,
-                    u'id': u'WorkspaceMember',
-                    u'title': u'Member'
-                },
-                {
-                    u'managed': True,
-                    u'id': u'WorkspaceGuest',
-                    u'title': u'Guest'
-                }
-            ], response.get('roles'))
-
-    @browsing
     def test_list_all_current_participants_and_invitations(self, browser):
         self.login(self.workspace_owner, browser)
 

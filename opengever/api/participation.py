@@ -59,13 +59,8 @@ class ParticipationsGet(ParticipationTraverseService):
             return self._participant(token)
         else:
             result = {}
-            self.extend_with_roles(result)
             self.extend_with_participations(result)
             return result
-
-    def extend_with_roles(self, result):
-        result['roles'] = map(lambda role: role.serialize(self.request),
-                              PARTICIPATION_ROLES.values())
 
     def extend_with_participations(self, result):
         result['items'] = list(self._participations())

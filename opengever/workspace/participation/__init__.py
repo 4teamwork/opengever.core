@@ -11,12 +11,6 @@ class ParticipationRole(object):
     def translated_title(self, request):
         return translate(self.title, context=request)
 
-    def serialize(self, request):
-        return {
-            'id': self.id,
-            'title': self.translated_title(request),
-            'managed': self.managed
-        }
 
 WORKSPCAE_GUEST = ParticipationRole(
     'WorkspaceGuest', _('WorkspaceGuest', default="Guest"), True)
@@ -44,11 +38,6 @@ class ParticipationType(object):
     def translated_title(self, request):
         return translate(self.title, context=request)
 
-    def serialize(self, request):
-        return {
-            'id': self.id,
-            'title': self.translated_title(request)
-        }
 
 TYPE_USER = ParticipationType('user', _('user', default="User"), 'users')
 TYPE_INVITATION = ParticipationType('invitation',

@@ -10,8 +10,6 @@ Beteiligungen abrufen:
 ----------------------
 Ein GET Request gibt die Beteiligungen sowie die aktiven Einladungen eines Inhalts zurück.
 
-Zusätzlich werden alle verfügbaren Rollen im Attribut "roles" zurückgegeben. Dies erleichtert die Darstellung und Verwaltung von Rollen.
-
 **Beispiel-Request**:
 
    .. sourcecode:: http
@@ -52,28 +50,6 @@ Zusätzlich werden alle verfügbaren Rollen im Attribut "roles" zurückgegeben. 
           "token": "3a8bfcb1b6294edfb60e2a43717fc300",
           "participation_type": "invitation",
           "readable_participation_type": "Invitation",
-        }
-      ],
-      "roles": [
-        {
-          "id": "WorkspaceOwner",
-          "managed": false,
-          "title": "Federführung"
-        },
-        {
-          "id": "WorkspaceAdmin",
-          "managed": true,
-          "title": "Admin"
-        },
-        {
-          "id": "WorkspaceMember",
-          "managed": true,
-          "title": "Teammitglied"
-        },
-        {
-          "id": "WorkspaceGuest",
-          "managed": true,
-          "title": "Gast"
         }
       ]
     }
