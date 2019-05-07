@@ -7,7 +7,9 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.protect import createToken
+import json
 
 
 class TestReactivating(IntegrationTestCase):
@@ -96,3 +98,57 @@ class TestReactivating(IntegrationTestCase):
         self.assertIsNone(IDossier(self.resolvable_dossier).end)
         self.assertIsNone(IDossier(self.resolvable_subdossier).end)
         self.assertIsNone(IDossier(subsub).end)
+
+
+class TestReactivatingRESTAPI(TestReactivating):
+
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
+    def reactivate(self, dossier, browser, payload=None):
+        browser.raise_http_errors = False
+        url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'
+        kwargs = {'method': 'POST',
+                  'headers': self.api_headers}
+        if payload is not None:
+            kwargs['data'] = json.dumps(payload)
+        browser.open(url, **kwargs)
+
+    def assert_success(self, dossier, browser, info_msgs=None):
+        self.assertEqual(200, browser.status_code)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'
+        self.assertEquals(expected_url, browser.url)
+        self.assertDictContainsSubset(
+            {u'title': u'dossier-state-active',
+             u'comments': u'',
+             u'actor': api.user.get_current().getId(),
+             u'action': u'dossier-transition-reactivate',
+             u'review_state': u'dossier-state-active'},
+            browser.json)
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error': {
+                u'message': u'',
+                u'errors': error_msgs,
+                u'type': u'PreconditionsViolated'}},
+            browser.json)
+        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'
+        self.assertEquals(expected_url, browser.url)
+
+    @browsing
+    def test_reactivating_dossier_non_recursively_is_forbidden(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        payload = {'include_children': False}
+        self.reactivate(self.resolvable_dossier, browser, payload=payload)
+
+        self.assertEqual(
+            {u'error': {
+                u'message': u'Reactivating dossier must always be recursive',
+                u'type': u'Bad Request'}},
+            browser.json)
+        self.assert_workflow_state('dossier-state-resolved', self.resolvable_dossier)
