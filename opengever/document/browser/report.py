@@ -1,30 +1,34 @@
-from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import readable_date
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.document import _
 from Products.CMFCore.utils import getToolByName
-from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 
 
-class DocumentReporter(BrowserView):
+class DocumentReporter(BaseReporterView):
     """View that generates an excel spreadsheet with the XLSReporter,
     listing the selected documents (paths in request)
     and their important attributes.
     """
 
-    def get_document_attributes(self):
+    filename = 'document_report.xlsx'
+
+    @property
+    def _columns(self):
         return [
             {'id': 'reference',
              'title': _(u'label_document_reference_number')},
             {'id': 'sequence_number',
              'title': _(u'label_document_sequence_number')},
             {'id': 'Title',
+             'sort_index': 'sortable_title',
              'title': _(u'label_title', default=u'Title')},
             {'id': 'document_author',
              'title': _(u'label_author', default=u'Author'),
+             'sort_index': 'sortable_author',
              'transform': readable_author},
             {'id': 'document_date',
              'title': _(u'label_document_date', default=u'Document Date'),
@@ -66,23 +70,5 @@ class DocumentReporter(BrowserView):
             return self.request.RESPONSE.redirect(return_temp)
 
         documents = self.get_selected_documents()
-
-        # generate the xls data with the XLSReporter
-        reporter = XLSReporter(
-            self.request, self.get_document_attributes(), documents)
-
-        data = reporter()
-        if not data:
-            msg = _(u'Could not generate the report.')
-            IStatusMessage(self.request).addStatusMessage(
-                msg, type='error')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        response = self.request.RESPONSE
-
-        response.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        set_attachment_content_disposition(self.request, "document_report.xlsx")
-
-        return data
+        reporter = XLSReporter(self.request, self.columns(), documents)
+        return self.return_excel(reporter)

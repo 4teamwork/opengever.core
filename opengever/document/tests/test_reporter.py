@@ -1,70 +1,104 @@
-from datetime import date
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.ogds.base.actor import Actor
-from opengever.testing import create_ogds_user
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from openpyxl import load_workbook
-from plone.api.portal import get_localized_time
-from plone.app.testing import TEST_USER_ID
 from tempfile import NamedTemporaryFile
+import json
 
 
-class TestDocumentReporter(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestDocumentReporter, self).setUp()
-        create_ogds_user('max.mustermann',
-                         firstname='Max',
-                         lastname='Mustermann')
-        self.document_date = date(2020, 02, 01)
-        self.receipt_date = date(2020, 02, 02)
-        self.delivery_date = date(2020, 02, 03)
-        self.dossier = create(Builder('dossier').titled(u'Dossier A'))
-        self.document = create(
-            Builder('document')
-            .within(self.dossier)
-            .having(
-                document_author='max.mustermann',
-                document_date=self.document_date,
-                receipt_date=self.receipt_date,
-                delivery_date=self.delivery_date,
-                )
-            .checked_out()
-            )
+class TestDocumentReporter(IntegrationTestCase):
 
     @browsing
     def test_empty_document_report(self, browser):
-        browser.login().open(view='document_report',
-                             data={'paths:list': []})
+        self.login(self.regular_user, browser=browser)
+        browser.open(view='document_report', data={'paths:list': []})
 
         self.assertEquals('Error You have not selected any Items',
                           browser.css('.portalMessage.error').text[0])
 
     @browsing
     def test_document_report(self, browser):
-        browser.login().open(view='document_report',
-                             data={'paths:list': [
-                                   '/'.join(self.document.getPhysicalPath()),
-                                   ]})
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            view='document_report',
+            data=self.make_path_param(self.document, self.mail_eml))
 
         with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
             tmpfile.write(browser.contents)
             tmpfile.flush()
             workbook = load_workbook(tmpfile.name)
 
+        # One title row and two data rows
+        self.assertEquals(3, len(list(workbook.active.rows)))
+
         self.assertSequenceEqual(
-            [
-             u'Client1 / 1 / 1',
-             1L,
-             u'Testdokum\xe4nt',
-             u'Mustermann Max',
-             get_localized_time(self.document_date),
-             get_localized_time(self.receipt_date),
-             get_localized_time(self.delivery_date),
-             Actor.lookup(TEST_USER_ID).get_label(),
+            [u'Client1 1.1 / 1 / 14',
+             14L,
+             u'Vertr\xe4gsentwurf',
+             u'test-user (test_user_1_)',
+             u'Jan 03, 2010',
+             u'Jan 03, 2010',
+             u'Jan 03, 2010',
+             None,
              u'unchecked',
-             u'Dossier A',
-             ],
+             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
             [cell.value for cell in list(workbook.active.rows)[1]])
+
+        self.assertSequenceEqual(
+            [u'Client1 1.1 / 1 / 29',
+             29L,
+             u'Die B\xfcrgschaft',
+             u'Freddy H\xf6lderlin <from@example.org>',
+             u'Jan 01, 1999',
+             u'Aug 31, 2016',
+             None,
+             None,
+             u'unchecked',
+             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
+            [cell.value for cell in list(workbook.active.rows)[2]])
+
+    @browsing
+    def test_respects_column_tabbedview_settings_if_exists(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        grid_state = json.dumps(
+            {u'sort': {u'field': u'sequence_number', u'direction': u'ASC'},
+             u'columns': [
+                 {u'width': 30, u'id': u'path_checkbox'},
+                 {u'width': 110, u'sortable': True, u'id': u'sequence_number'},
+                 {u'width': 200, u'sortable': True, u'id': u'sortable_title'},
+                 {u'width': 110, u'sortable': True, u'id': u'sortable_author'},
+                 {u'width': 110, u'sortable': True, u'id': u'document_date'},
+                 {u'width': 110, u'hidden': True, u'sortable': True, u'id': u'changed'},
+                 {u'width': 110, u'hidden': True, u'sortable': True, u'id': u'created'},
+                 {u'width': 110, u'sortable': True, u'id': u'receipt_date'}, {u'width': 110, u'sortable': True, u'id': u'delivery_date'},
+                 {u'width': 110, u'sortable': True, u'id': u'checked_out'},
+                 {u'width': 110, u'sortable': True, u'hidden': True, u'id': u'public_trial'},
+                 {u'width': 110, u'sortable': True, u'id': u'reference'},
+                 {u'width': 110, u'sortable': True, u'id': u'file_extension'},
+                 {u'width': 110, u'id': u'Subject'},
+                 {u'width': 1, u'hidden': True, u'id': u'dummy'}]})
+
+        data = {'view_name': 'mydocuments',
+                'gridstate': grid_state}
+        browser.open(view='@@tabbed_view/setgridstate', data=data)
+
+        data = self.make_path_param(self.document, self.mail_eml)
+        data['view_name'] = 'mydocuments'
+        browser.open(view='document_report', data=data)
+
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(browser.contents)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        self.assertEquals(
+            [u'label_document_sequence_number',
+             u'Title',
+             u'Author',
+             u'Document Date',
+             u'label_document_receipt_date',
+             u'label_document_delivery_date',
+             u'label_document_checked_out_by',
+             u'label_document_reference_number'],
+            [cell.value for cell in list(workbook.active.rows)[0]])

@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Trash: Update and reindex modification date when trashing documents. [lgraf]
+- Respect tabbedview settings when generating a document excel export. [phgross]
 - Add file_extension indexer for mails. [phgross]
 - Fix upgrade step adding document_type index to not update the metadata. [njohner]
 - Log nightly job output to a dedicated, self-rotating logfile. [lgraf]
