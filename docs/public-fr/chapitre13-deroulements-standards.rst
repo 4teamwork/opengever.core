@@ -36,7 +36,7 @@ Le type de séquence est défini par le créateur du déroulement standard et ne
 Déclencher un déroulement standard
 ----------------------------------
 
-Dans un dossier ou sous-dossier, sélectionnez *Ajout d’un élément→ Ajouter une tâche à partir du modèle*
+Dans un dossier ou sous-dossier, sélectionnez *Ajout d’un élément→ Déclencher un déroulement standard*
 
 |img-deroulstandard-3|
 

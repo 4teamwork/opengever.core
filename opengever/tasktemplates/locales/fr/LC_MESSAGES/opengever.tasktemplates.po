@@ -182,7 +182,7 @@ msgstr "Choix Mandataires"
 #. Default: "Select tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_select_tasktemplatefolder"
-msgstr "Sélectionner le processus standard"
+msgstr "Sélectionner le déroulement standard"
 
 #. Default: "Select tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -213,12 +213,12 @@ msgstr "Sélectionner les modèles de tâches"
 #. Default: "Tasktemplatefolder"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_tasktemplatefolder"
-msgstr "Processus standard"
+msgstr "Déroulement standard"
 
 #. Default: "Tasktemplatefolder selection"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "label_tasktemplatefolder_selection"
-msgstr "Sélectionner le processus standard"
+msgstr "Sélectionner le déroulement standard"
 
 #. Default: "Tasktemplates"
 #: ./opengever/tasktemplates/browser/trigger.py
@@ -257,7 +257,7 @@ msgstr "Toutes les tâches du procédé standard ont été créées."
 #: ./opengever/tasktemplates/browser/form.py
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
-msgstr "Aucun processus standard actif n'est enregistré pour le moment."
+msgstr "Aucun déroulement standard actif n'est enregistré pour le moment."
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py

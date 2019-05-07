@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Concistently use "déroulement standard" for tasktemplates in French. [njohner]
 - Fix has_children indexer which lead to duplicate brains. [njohner, phgross]
 - Trash: Update and reindex modification date when trashing documents. [lgraf]
 - Respect tabbedview settings when generating a document excel export. [phgross]
