@@ -116,6 +116,9 @@ class ParticipationsPost(ParticipationTraverseService):
         self.validate_params()
         data = self.validate_data(json_body(self.request))
 
+        if not self.validate_duplicated_users(data.get('userid')):
+            raise BadRequest("User already participate to this workspace")
+
         manager = ManageParticipants(self.context, self.request)
         invitation = manager._add(data.get('userid'), data.get('role'))
         return participation_item(
@@ -127,6 +130,12 @@ class ParticipationsPost(ParticipationTraverseService):
             participant_fullname=manager.get_full_user_info(userid=invitation['recipient']),
             inviter_fullname=manager.get_full_user_info(userid=invitation['inviter'])
             )
+
+    def validate_duplicated_users(self, userid):
+        manager = ManageParticipants(self.context, self.request)
+        participants = manager.get_participants() + manager.get_pending_invitations()
+        existing_users = filter(lambda p: p.get('userid') == userid, participants)
+        return len(existing_users) == 0
 
     def validate_params(self):
         if len(self.params) != 1 or self.params[0] != TYPE_INVITATION.path_identifier:

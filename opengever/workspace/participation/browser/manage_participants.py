@@ -44,7 +44,8 @@ class ManageParticipants(BrowserView):
                                 MANAGED_ROLES + ['WorkspaceOwner'])),
                             can_manage=self.can_manage_member(member, roles),
                             type_='user',
-                            name=self.get_full_user_info(member=member))
+                            name=self.get_full_user_info(member=member),
+                            userid=userid)
                 entries.append(item)
         return entries
 
@@ -70,7 +71,8 @@ class ManageParticipants(BrowserView):
                             userid=invitation['inviter']),
                         can_manage=self.can_manage_member(),
                         type_='invitation',
-                        token=invitation['iid'])
+                        token=invitation['iid'],
+                        userid=invitation['recipient'])
             entries.append(item)
 
         return entries

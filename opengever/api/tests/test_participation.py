@@ -432,6 +432,19 @@ class TestParticipationPost(IntegrationTestCase):
                 headers=http_headers(),
                 )
 
+    @browsing
+    def test_raise_bad_request_if_adding_existing_user(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        data = json.dumps({'userid': self.workspace_guest.id, 'role': 'WorkspaceMember'})
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@participations/invitations',
+                method='POST',
+                data=data,
+                headers=http_headers(),
+            ).json
+
 
 class TestParticipationPatch(IntegrationTestCase):
 
