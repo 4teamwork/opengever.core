@@ -1,6 +1,15 @@
 Testing
 =======
 
+Local
+-----
+
+In case of amending the fixture for the integration tests, it can sometimes be
+advantageous and quicker to run a local script for validating the changes to
+tests from a fixture change. Such a scenario usually involves severely messy
+and large error outputs from the CI. For such cases, we provide the script
+``bin/amend-fixture``.
+
 Performance analysis
 ====================
 

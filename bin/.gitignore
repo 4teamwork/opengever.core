@@ -1,5 +1,6 @@
 *
 !.gitignore
+!amend-fixture
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
