@@ -46,6 +46,7 @@ Aktuell werden folgende Auflistungen unterstützt:
 - ``dossiers``: Dossiers
 - ``documents``: Dokumente
 - ``workspaces``: Arbeitsräume
+- ``workspace_folders``: Arbeitsraum Ordner
 - ``tasks``: Aufgaben
 
 

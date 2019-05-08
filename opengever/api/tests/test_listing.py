@@ -268,6 +268,23 @@ class TestListingEndpoint(IntegrationTestCase):
             browser.json['items'][-1])
 
     @browsing
+    def test_workspace_folders_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=workspace_folders',
+            'columns=title',
+            'columns=description',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers={'Accept': 'application/json'})
+
+        self.assertDictEqual(
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1/folder-1',
+             u'title': u'WS F\xc3lder',
+             u'description': u'A Workspace folder description'},
+            browser.json['items'][-1])
+
+    @browsing
     def test_tasks_listing(self, browser):
         self.enable_languages()
 
