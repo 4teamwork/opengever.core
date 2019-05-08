@@ -181,3 +181,68 @@ Here is an example run of it being run for one module: ::
   sys     0m10,239s
 
 It will also produce a log file named like ``2019-05-01-testperf.log``.
+
+Profiling
+=========
+
+Profiling a local instance
+--------------------------
+
+Assuming the first python on your ``$PATH`` is the same with which you have
+built out the instance, start the instance with
+``python -m cProfile -o instance.prof bin/instance fg``, do your thing and shut
+the instance down.
+
+The profiling result file ``instance.prof`` will be in your current working
+directory.
+
+Profiling the tests
+-------------------
+
+For profiling the tests, we provide a convenience shell script
+``bin/profile-tests``, which profiles the fixture generation and all the module
+/ layer permutations independent of each other. It modifies the run order of
+the layers to enable the use of the fixture for all the fixturised layers.
+
+The result files will be prefixed with the current date and the git commit hash
+of ``HEAD`` and can be found in ``parts/test/*prof``.
+
+A good starting point for digging into the results is setting the root of your
+view onto the test function, immediately under which are all the tests which
+have gotten run and then zooming in test by test and resetting the zoom to get
+back to the root.
+
+Viewing profiling results
+-------------------------
+
+The results may be browsed by obtaining a profiling result visualizer and
+pointing that at a profiling result file (``.prof``). The modern option with
+easier installability and better usability is SnakeViz_, but as it is
+Tornado_ and browser based, sometimes in the case of very complex and deep
+views, it'll hit the DOM element count limits of modern browsers. Sorting is
+also an exercise in patience and the UX is not the best, but one can make do.
+
+The inherent benefit is the easy installability into a virtualenv by simply
+doing a ``pip install -U setuptools pip snakeviz``. Works in both Python 2 and
+3.
+
+.. _Tornado: https://www.tornadoweb.org/
+.. _SnakeViz: https://jiffyclub.github.io/snakeviz/
+
+In case there are hard limits in regards to the usability of SnakeViz one
+cannot get around, the venerable GUI application RunSnakeRun_ is still
+functional and can still be installed into a Python 2.7 virtualenv via
+``pip install -U setuptools pip SquareMap RunSnakeRun``. It will require a
+``wx`` installation at install time and this can be obtained from homebrew_
+via ``brew install wxmac``.
+
+.. _RunSnakeRun: http://www.vrplumber.com/programming/runsnakerun/
+.. _homebrew: https://brew.sh/
+
+It can also sometimes be advantageous to take a look at the profiling results
+with KCachegrind_. This will require one to convert the ``cProfile`` results to
+a Valgrind_ style calltree with pyprof2calltree_.
+
+.. _KCachegrind: https://kcachegrind.github.io/html/Home.html
+.. _Valgrind: http://www.valgrind.org/
+.. _pyprof2calltree: https://github.com/pwaller/pyprof2calltree

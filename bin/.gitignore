@@ -15,6 +15,7 @@
 !mtest
 !performance-analysis
 !pinchecker
+!profile-tests
 !qa
 !remove-test-cache
 !sass-watcher
