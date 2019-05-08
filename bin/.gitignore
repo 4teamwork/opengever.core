@@ -19,3 +19,4 @@
 !test-cached
 !enable-lfs
 !testserverctl
+!time-layers
