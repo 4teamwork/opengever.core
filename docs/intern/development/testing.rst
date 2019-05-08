@@ -11,6 +11,22 @@ in performance for the better or worse. The results are also used as a basis to
 inform us on how to optimise the parallel running of the tests on our CI
 infrastructure.
 
+We provide a helper script, which runs all of them at once: ::
+
+  $ bin/performance-analysis
+  -- snip --
+  real    191m7.929s
+  user    919m21.400s
+  sys     63m57.496s
+
+It will also provide 4 log files named like: ::
+
+  2019-05-01-layerperf.log
+  2019-05-01-moduleperf.log
+  2019-05-01-classperf.log
+  2019-05-01-testperf.log
+
+
 Measuring test layer performance
 --------------------------------
 

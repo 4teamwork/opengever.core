@@ -11,6 +11,7 @@
 !git-fork-point
 !i18n-build
 !mtest
+!performance-analysis
 !pinchecker
 !qa
 !remove-test-cache
