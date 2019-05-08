@@ -10,6 +10,17 @@ tests from a fixture change. Such a scenario usually involves severely messy
 and large error outputs from the CI. For such cases, we provide the script
 ``bin/amend-fixture``.
 
+CI
+--
+
+We run the tests with our in-repo test runner ``bin/mtest``. It is a Python
+script, which discovers all the tests and splits those up to suitable test run
+chunks. As we also split within a test layer, it unfortunately requires some
+baked in knowledge about what to split up and with what kinds of constraints.
+It can also be used for local test runs and understands the same ``--layer``
+and ``-m`` parameters as ``zope.testrunner`` does and these are used only in
+the test discovery phase of the run.
+
 Performance analysis
 ====================
 
