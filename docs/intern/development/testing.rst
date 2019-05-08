@@ -21,6 +21,102 @@ It can also be used for local test runs and understands the same ``--layer``
 and ``-m`` parameters as ``zope.testrunner`` does and these are used only in
 the test discovery phase of the run.
 
+Nightlies
+---------
+
+We've set up some nightlies by hand on the Jenkins server. They have post build
+actions, which parse the log output of the build and post to a Slack webhook
+based on the outcome. The webhooks are delivered to the ``#jenkins2`` channel.
+
+We do not need to run our layers separate of each other in the nightlies as
+that is how we run our tests normally and when running the performance analysis
+scripts. If in doubt, this can be done at any time by running
+``bin/test -j "$(getconf _NPROCESSORS_ONLN)"``, as ``zope.testrunner``
+parallelises by running the layers separate of each other.
+
+- Sequential_
+
+Runs all of the tests sequentially in order to catch any new layer leaks.
+
+- |sequential-shuffle|_
+
+This is the simplest "hard mode" build. It constantly uncovers many test class
+and test method level leaks.
+
+- |sequential-restapi|_
+
+As more and more of our functionality, other products and the new UI will rely
+on ``plone.restapi`` functionality, we run a sequential build against the
+source checkout master branches of ``plone.rest`` and ``plone.restapi``. This
+is achieved by adding ``plone.rest`` and ``plone.restapi`` into the
+``development-packages`` variable of the ``[buildout]`` section via the
+buildout command line parameters.
+
+``buildout buildout:development-packages+='plone.rest plone.restapi' install test``
+
+- |per-module|_
+
+The purpose of this run is to catch any cross-module leaks against which tests
+could have been built.
+
+- |per-module-shuffle|_
+
+This run mostly acts as an indicator of the test class and method run order
+depencency hotspots as the results it produces are already limited to within a
+module.
+
+- |random-layer-pair|_
+
+The purpose of this run is to catch any leaks which are cleaned up by either
+the setups or teardowns of layers which normally run in-between two layers.
+
+We only run a single randomly chosen pair of layers per night as otherwise the
+run would get unmanageably large per the permutation space available.
+
+- |random-layer-pair-shuffle|_
+
+This run mostly acts as an indicator of the test layer, class and method run
+order depencency hotspots as the results it produces are already limited to
+within a combination of two layers.
+
+- |random-module-pair|_
+
+The purpose of this run is to catch any cross-module leaks against which tests
+could have been built. The choice of two random modules to run together gives
+us, over time, a larger surface to find any leaks we've ended up cleaning by
+side effect or relying on in the tests.
+
+We only run a single randomly chosen pair of modules per night as otherwise the
+run would get unmanageably large per the permutation space available.
+
+- |random-module-pair-shuffle|_
+
+This run mostly acts as an indicator of the test class and method run order
+depencency hotspots as the results it produces are already limited to within a
+combination of two modules.
+
+.. _Sequential: https://jenkins.4teamwork.ch/job/opengever.core%20sequential%20nightly/
+.. _sequential-shuffle: https://jenkins.4teamwork.ch/job/opengever.core%20sequential%20shuffle%20nightly/
+.. |sequential-shuffle| replace:: Sequential shuffle
+
+.. _sequential-restapi: https://jenkins.4teamwork.ch/job/opengever.core%20sequential%20plone.restapi%20master%20nightly/
+.. |sequential-restapi| replace:: Sequential plone.restapi
+
+.. _per-module: https://jenkins.4teamwork.ch/job/opengever.core%20per%20module%20nightly/
+.. |per-module| replace:: Per module
+.. _per-module-shuffle: https://jenkins.4teamwork.ch/job/opengever.core%20per%20module%20shuffle%20nightly/
+.. |per-module-shuffle| replace:: Per module shuffle
+
+.. _random-layer-pair: https://jenkins.4teamwork.ch/job/opengever.core%20random%20layer%20pair%20nightly/
+.. |random-layer-pair| replace:: Random layer pair
+.. _random-layer-pair-shuffle: https://jenkins.4teamwork.ch/job/opengever.core%20random%20layer%20pair%20shuffle%20nightly/
+.. |random-layer-pair-shuffle| replace:: Random layer pair shuffle
+
+.. _random-module-pair: https://jenkins.4teamwork.ch/job/opengever.core%20random%20module%20pair%20nightly/
+.. |random-module-pair| replace:: Random module pair
+.. _random-module-pair-shuffle: https://jenkins.4teamwork.ch/job/opengever.core%20random%20module%20pair%20shuffle%20nightly/
+.. |random-module-pair-shuffle| replace:: Random module pair shuffle
+
 Performance analysis
 ====================
 
