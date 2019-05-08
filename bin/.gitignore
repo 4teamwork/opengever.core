@@ -10,6 +10,7 @@
 !git-changed-xml
 !git-fork-point
 !i18n-build
+!list-modules
 !mtest
 !performance-analysis
 !pinchecker

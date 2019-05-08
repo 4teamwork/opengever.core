@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+for package in opengever plonetheme
+do
+  for module in "$package"/*/
+  do
+    echo "$package"."$(basename "$module")"
+  done
+done
