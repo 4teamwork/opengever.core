@@ -119,3 +119,40 @@ Here is an example run of it being run for one module: ::
   Wallclock: 07 minutes 46 seconds
 
 It will also produce a log file named like ``2019-05-01-classperf.log``.
+
+Measuring test performance per test method
+------------------------------------------
+
+The script to time the test methods is usually used to see if we have any
+disproportionately long running tests. This has been very useful for spotting
+tests where we can save time by using the fixture and porting the test class to
+the fixturised integration test layer and also for spotting any tests where we
+can use the fixtures in a more clever way. A good example of the latter is
+spotting content moving tests being slower than they should be and simply
+having them use different objects from the fixture.
+
+For runtime considerations, this script is implemented differently as a simple
+shell script / pipeline. If we'd use the same method for this as we use for the
+other timing scripts, the time spent on rediscovering the tests once per test
+method would make the runtime unusably long.
+
+If one wants to run a local metrification run of a subset of our tests, one has
+to take a look at ``bin/time-tests`` and adapt it to their needs manually as a
+shell oneliner.
+
+Here is an example run of it being run for one module: ::
+
+  $ time bin/test -m opengever.portlets -vvv 2>/dev/null | grep -E '\([0-9]+\.[0-9]+ s\)' | awk '{print $3, $2, $1}' | tr -d '()' | sort -k1 -n | tee 2019-05-01-testperf.log
+  0.000 opengever.portlets.tree.tests.test_favorites.TestRepositoryFavoritesETagValue test_etag_value_for_anonymous
+  0.016 opengever.portlets.tree.tests.test_favorites.TestRepositoryFavoritesETagValue test_etag_value_invalidates_on_delete_favorite
+  0.022 opengever.portlets.tree.tests.test_favorites.TestRepositoryFavoritesETagValue test_etag_value_invalidates_on_add_favorite
+  0.138 opengever.portlets.tree.tests.test_favorites.TestRepositoryFavoritesETagValue test_etag_is_eqaul_if_nothing_changed
+  0.482 opengever.portlets.tree.tests.test_treeportlet.TestTreePortlet test_favorite_tab_is_rendered_when_favorites_are_enabled
+  0.537 opengever.portlets.tree.tests.test_treeportlet.TestTreePortlet test_favorite_tab_is_not_rendered_when_favorites_are_disabled
+  1.324 opengever.portlets.tree.tests.test_treeportlet.TestTreePortlet test_context_url_data_object_is_absolute_url_of_current_context
+
+  real    0m28,408s
+  user    0m18,103s
+  sys     0m10,239s
+
+It will also produce a log file named like ``2019-05-01-testperf.log``.
