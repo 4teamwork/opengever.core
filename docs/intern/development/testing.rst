@@ -31,5 +31,31 @@ Here is an example run of it being run for two layers: ::
   Total:     09 seconds
   Wallclock: 25 seconds
 
-It will also produce a log file named like
-``2019-05-01-layerperf.log``.
+It will also produce a log file named like ``2019-05-01-layerperf.log``.
+
+Measuring test performance per layer/module
+-------------------------------------------
+
+The script to time the modules per layer is usually used to see where the bulk
+weight of the test runtime is spent and to see if there are any meaningful
+abnormally heavy corners of our stack to tackle. The speed of the modules at
+around the 100% weight mark of the whole test run is a good thing to keep track
+of.
+
+Here is an example run of it being run for two modules: ::
+
+  bin/time-modules-layers -m 'opengever.inbox' -m 'opengever.journal'
+                                              layer               module         cnt               spd                       rt       rt%      cnt%        wt%
+  ============================================================================================================================================================
+                    zope.testrunner.layer.UnitTests      opengever.inbox    16 tests    0.001 s / test               00 seconds     0.00%    11.03%      0.03%
+               opengever.core.testing.ActivityLayer      opengever.inbox    10 tests    3.603 s / test               36 seconds    17.32%     6.90%    251.07%
+  opengever.core.testing.opengever.core:integration      opengever.inbox    35 tests    1.542 s / test               53 seconds    25.94%    24.14%    107.46%
+   opengever.core.testing.opengever.core:functional    opengever.journal    38 tests    1.462 s / test               55 seconds    26.70%    26.21%    101.90%
+   opengever.core.testing.opengever.core:functional      opengever.inbox    46 tests    1.359 s / test    01 minutes 02 seconds    30.04%    31.72%     94.69%
+  ------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Sorted by runtime.
+
+  Total:     03 minutes 28 seconds
+  Wallclock: 02 minutes 53 seconds
+
+It will also produce a log file named like ``2019-05-01-moduleperf.log``.
