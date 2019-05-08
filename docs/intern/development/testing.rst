@@ -59,3 +59,63 @@ Here is an example run of it being run for two modules: ::
   Wallclock: 02 minutes 53 seconds
 
 It will also produce a log file named like ``2019-05-01-moduleperf.log``.
+
+Measuring test performance per test class
+-----------------------------------------
+
+The script to time the test classes is usually used to see if we have any
+disproportionately long running test classes. This is meaningful for our CI
+stack as we split and parallelise the running of the tests on a per test class
+basis with the assumption of similar runtimes per test class on average. Some
+of the problematic-for-splitting test classes have been moved from layer to
+layer or isolated onto their own layer from time to time to fetch a low hanging
+wall clock time saving for the CI test runs.
+
+Here is an example run of it being run for one module: ::
+
+  bin/time-classes -m 'opengever.inbox'
+                                                                     classname         cnt               spd            rt       rt%      cnt%        wt%
+  =======================================================================================================================================================
+               opengever.inbox.tests.test_transitioncontroller.TestRefuseGuard     4 tests    0.000 s / test    00 seconds     0.00%     3.74%      0.02%
+                opengever.inbox.tests.test_transitioncontroller.TestCloseGuard     2 tests    0.001 s / test    00 seconds     0.00%     1.87%      0.04%
+               opengever.inbox.tests.test_transitioncontroller.TestAcceptGuard     4 tests    0.000 s / test    00 seconds     0.00%     3.74%      0.02%
+             opengever.inbox.tests.test_transitioncontroller.TestReassignGuard     2 tests    0.001 s / test    00 seconds     0.00%     1.87%      0.04%
+      opengever.inbox.tests.test_transitioncontroller.TestAssignToDossierGuard     2 tests    0.001 s / test    00 seconds     0.00%     1.87%      0.04%
+       opengever.inbox.tests.test_transitioncontroller.TestReassignRefuseGuard     2 tests    0.001 s / test    00 seconds     0.00%     1.87%      0.04%
+                     opengever.inbox.tests.test_refuse.TestRefusingForwardings     3 tests    0.048 s / test    00 seconds     0.10%     2.80%      3.73%
+                      opengever.inbox.tests.test_tabs.TestAssignedInboxTaskTab     2 tests    0.259 s / test    00 seconds     0.38%     1.87%     20.27%
+                        opengever.inbox.tests.test_tabs.TestIssuedInboxTaskTab     2 tests    0.276 s / test    00 seconds     0.40%     1.87%     21.56%
+  opengever.inbox.tests.test_inbox_bumblebee_gallery.TestInboxBumblebeeGallery     1 tests    0.710 s / test    00 seconds     0.52%     0.93%     55.56%
+                           opengever.inbox.tests.test_tabs.TestInboxTabbedview     3 tests    0.332 s / test    00 seconds     0.73%     2.80%     26.00%
+        opengever.inbox.tests.test_transition_actions.TestReassignRefuseAction     1 tests    1.339 s / test    01 seconds     0.98%     0.93%    104.77%
+       opengever.inbox.tests.test_transition_actions.TestAssignToDossierAction     1 tests    1.369 s / test    01 seconds     1.00%     0.93%    107.12%
+                opengever.inbox.tests.test_transition_actions.TestAcceptAction     1 tests    1.380 s / test    01 seconds     1.01%     0.93%    107.98%
+     opengever.inbox.tests.test_transition_actions.TestReassignToDossierAction     1 tests    1.392 s / test    01 seconds     1.02%     0.93%    108.92%
+                 opengever.inbox.tests.test_transition_actions.TestCloseAction     1 tests    1.401 s / test    01 seconds     1.02%     0.93%    109.62%
+                         opengever.inbox.tests.test_tabs.TestClosedForwardings     1 tests    1.410 s / test    01 seconds     1.03%     0.93%    110.33%
+                opengever.inbox.tests.test_transition_actions.TestRefuseAction     1 tests    1.487 s / test    01 seconds     1.09%     0.93%    116.35%
+                    opengever.inbox.tests.test_yearfolder.TestYearFolderStorer     1 tests    2.301 s / test    02 seconds     1.68%     0.93%    180.05%
+                      opengever.inbox.tests.test_inbox_container.TestInboxView     3 tests    0.804 s / test    02 seconds     1.76%     2.80%     62.94%
+                opengever.inbox.tests.test_move_items.TestMoveItemsWithBrowser     1 tests    2.708 s / test    02 seconds     1.98%     0.93%    211.89%
+                     opengever.inbox.tests.test_accept.TestForwardingAccepting     1 tests    3.063 s / test    03 seconds     2.24%     0.93%    239.67%
+      opengever.inbox.tests.test_activities.TestForwardingActivitesIntegration     1 tests    3.140 s / test    03 seconds     2.30%     0.93%    245.69%
+                 opengever.inbox.tests.test_inbox_container.TestInboxContainer     3 tests    1.172 s / test    03 seconds     2.57%     2.80%     91.71%
+                    opengever.inbox.tests.test_yearfolder.TestYearFolderGetter     4 tests    0.903 s / test    03 seconds     2.64%     3.74%     70.70%
+                                    opengever.inbox.tests.test_inbox.TestInbox     8 tests    0.807 s / test    06 seconds     4.72%     7.48%     63.14%
+         opengever.inbox.tests.test_overview.TestInboxOverviewIssuedInboxTasks     3 tests    2.157 s / test    06 seconds     4.73%     2.80%    168.78%
+       opengever.inbox.tests.test_overview.TestInboxOverviewAssignedInboxTasks     4 tests    1.887 s / test    07 seconds     5.52%     3.74%    147.67%
+                 opengever.inbox.tests.test_refuse.TestRefuseForwardingStoring     5 tests    1.518 s / test    07 seconds     5.55%     4.67%    118.76%
+                     opengever.inbox.tests.test_api_support.TestAPITransitions     5 tests    1.526 s / test    07 seconds     5.58%     4.67%    119.40%
+                  opengever.inbox.tests.test_inbox_assign.TestAssignForwarding     4 tests    2.060 s / test    08 seconds     6.02%     3.74%    161.17%
+                          opengever.inbox.tests.test_forwarding.TestForwarding     8 tests    1.108 s / test    08 seconds     6.48%     7.48%     86.69%
+              opengever.inbox.tests.test_overview.TestInboxOverviewDocumentBox     5 tests    1.773 s / test    08 seconds     6.48%     4.67%    138.70%
+                 opengever.inbox.tests.test_activities.TestForwardingActivites     3 tests    3.101 s / test    09 seconds     6.80%     2.80%    242.67%
+          opengever.inbox.tests.test_activities.TestForwardingReassignActivity     3 tests    4.254 s / test    12 seconds     9.33%     2.80%    332.86%
+                         opengever.inbox.tests.test_workflow.TestInboxWorkflow    11 tests    1.779 s / test    19 seconds    14.31%    10.28%    139.17%
+  -------------------------------------------------------------------------------------------------------------------------------------------------------
+  Sorted by runtime.
+
+  Total:     02 minutes 16 seconds
+  Wallclock: 07 minutes 46 seconds
+
+It will also produce a log file named like ``2019-05-01-classperf.log``.

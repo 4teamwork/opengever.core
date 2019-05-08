@@ -19,5 +19,6 @@
 !test-cached
 !enable-lfs
 !testserverctl
+!time-classes
 !time-layers
 !time-modules-layers
