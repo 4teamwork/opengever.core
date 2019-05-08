@@ -1,8 +1,109 @@
 Testing
 =======
 
-Local
------
+Useful ``zope.testrunner`` flags
+--------------------------------
+
+- ``-D``
+
+Start a post mortem ``pdb`` on a test failure. This is usually too late to
+provide access to anything useful as per how the indirection in the publisher
+works, but can be worth trying out upon completely mysterious test failures.
+
+- ``-1``
+
+Stop on the first error within a doctest. This is mostly useful for upstream
+tests as we do not use doctests.
+
+- ``-x``
+
+Stop the test run on the first error encountered.
+
+- ``--layer layername [--layer layername]``
+
+Discover and run tests from only matching ``.*layername.*``. Match can be
+inverted by prefixing the passed in term with a ``!``.
+
+As ``!`` is meaningful in most shell implementations, a negation will most
+likely need to be single quoted to be treated as a literal shell word as is.
+
+- ``-m modulename [-m modulename]``
+
+Discover and run tests from only matching ``.*modulename.*``. Match can be
+inverted by prefixing the passed in term with a ``!``.
+
+As ``!`` is meaningful in most shell implementations, a negation will most
+likely need to be single quoted to be treated as a literal shell word as is.
+
+- ``-t testmethodname [-t testmethodname]``
+
+Discover and run tests from only matching ``.*testmethodname.*``. Match can be
+inverted by prefixing the passed in term with a ``!``.
+
+As ``!`` is meaningful in most shell implementations, a negation will most
+likely need to be single quoted to be treated as a literal shell word as is.
+
+- ``-j n``
+
+Run up to ``n`` layers in parallel.
+
+- ``--shuffle``
+
+Shuffle the test run order within a testing layer. Prints out the seed used.
+
+- ``--shuffle-seed n``
+
+Shuffle the tests with the seed ``n``.
+
+- ``--list-tests``
+
+List all the tests discovered. Useful for enumerating all the layer names or
+counting the test methods.
+
+- ``-vvv``
+
+Print extra verbose test output, including the test method run order and the
+runtime per test method. This can lose lines in an interactive shell session as
+newer versions of ``zope.testrunner`` have gotten too clever about outputting
+to a shell. One can work around this with a pipe or a shell redirection induced
+buffer.
+
+Tips and tricks for working with ``zope.testrunner``
+----------------------------------------------------
+
+- Run all the ``opengever.task`` tests without running any
+  ``opengever.tasktemplates`` tests and stop on the first error:
+
+``bin/test -x -m opengever.task -m '!opengever.tasktemplates'``
+
+- List all the testing layers:
+
+``bin/test --list-tests 2>/dev/null | grep -E '^Listing' | awk '{print $2}'``
+
+- Count the test methods:
+
+``bin/test --list-tests 2>/dev/null | grep -E '^  ' | wc -l``
+
+- See the test run order and the test method runtimes of a module:
+
+``bin/test -vvv -m opengever.portlets 2>/dev/null | tee build.log``
+
+- A simple shell loop can be good for catching a flaky test:
+
+``while bin/test -D -m opengever.api; do sleep 1; done``
+
+Redirecting ``STDERR`` to ``/dev/null`` is a quick and dirty way to increase
+the readability of a test run output as all the deprecation warnings are logged
+to ``STDERR``.
+
+In case of a test leak, it can sometimes be advantageous to run the tests in an
+``-x -vvv`` mode and see the exact run order of tests leading up to the failure.
+If the problem scope has already been reduced to a just a set of few tens of
+tests, one can start whittling the candidates down one by one by adding
+``-t '!testname'`` parameters to the test run invocation. If the problem set
+cannot be reduced to lower than a few hundred tests, adding a ``--shuffle``
+flag and hoping the failure occurs earlier with a smaller set of tests is a
+good idea.
 
 In case of amending the fixture for the integration tests, it can sometimes be
 advantageous and quicker to run a local script for validating the changes to
