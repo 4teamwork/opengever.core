@@ -18,7 +18,7 @@ msgid "Add response"
 msgstr "Réponse"
 
 msgid "Add task from template"
-msgstr "Ajouter une tâche à partir du modèle"
+msgstr "Déclencher un déroulement standard"
 
 msgid "Attach remote document"
 msgstr "Copie d'un document de votre service"
