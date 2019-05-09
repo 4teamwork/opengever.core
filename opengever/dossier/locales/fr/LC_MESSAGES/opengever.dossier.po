@@ -187,7 +187,7 @@ msgstr "La date de clôture du dossier ${dossier} n'est pas valable."
 
 #: ./opengever/dossier/resolve.py
 msgid "The dossier contains active proposals."
-msgstr "Le dossier contient des propositions actives."
+msgstr "Le dossier contient des requêtes actives."
 
 #: ./opengever/dossier/resolve.py
 msgid "The dossier has been succesfully resolved."
@@ -670,7 +670,7 @@ msgstr "Le numéro de classement est seulement généré lors de la création du
 #. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_inside_proposal"
-msgstr "Le document «${name}» est dans une proposition et ne peut pas être déplacé. Déplacez la proposition."
+msgstr "Le document «${name}» est dans une requête et ne peut pas être déplacé. Déplacez la requête."
 
 #. Default: "Document ${name} is inside a task and therefore not movable. Move the task instead"
 #: ./opengever/dossier/move_items.py
@@ -720,12 +720,12 @@ msgstr "Prédéfinition des mots-clés"
 #. Default: "Proposal Templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_proposal_templates"
-msgstr "Modèles pour la soumission de propositions"
+msgstr "Modèles pour la soumission de requêtes"
 
 #. Default: "Proposals"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_proposals"
-msgstr "Propositions"
+msgstr "Requêtes"
 
 #. Default: "Reading"
 #: ./opengever/dossier/behaviors/protect_dossier.py

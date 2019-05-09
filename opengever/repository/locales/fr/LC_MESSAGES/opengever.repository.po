@@ -177,7 +177,7 @@ msgstr "Sommaire"
 #. Default: "Proposals"
 #: ./opengever/repository/browser/tabbed.py
 msgid "label_proposals"
-msgstr "Propositions"
+msgstr "Requêtes"
 
 #. Default: "Reference Prefix"
 #: ./opengever/repository/behaviors/referenceprefix.py

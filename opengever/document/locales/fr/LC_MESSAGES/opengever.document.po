@@ -206,12 +206,12 @@ msgstr "Vous n'avez sélectionné aucun élément."
 #: ./opengever/document/document.py
 #: ./opengever/document/quick_upload.py
 msgid "error_proposal_document_type"
-msgstr "Les documents de proposition doivent toujours être des fichiers Word. Les autres formats ne sont pas autorisés."
+msgstr "Les documents de requête doivent toujours être des fichiers Word. Les autres formats ne sont pas autorisés."
 
 #. Default: "It's not possible to have no file in proposal documents."
 #: ./opengever/document/document.py
 msgid "error_proposal_no_document"
-msgstr "Un document de proposition sans fichier n'est pas autorisé."
+msgstr "Un document de requête sans fichier n'est pas autorisé."
 
 #. Default: "Either the title or the file is required."
 #: ./opengever/document/document.py
@@ -558,7 +558,7 @@ msgstr "Aperçu"
 #. Default: "Proposal"
 #: ./opengever/document/browser/overview.py
 msgid "label_proposal"
-msgstr "Proposition"
+msgstr "Requête"
 
 #: ./opengever/document/browser/report.py
 msgid "label_public_trial"

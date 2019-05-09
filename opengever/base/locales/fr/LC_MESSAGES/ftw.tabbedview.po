@@ -180,7 +180,7 @@ msgid "process"
 msgstr "Avancement"
 
 msgid "proposals"
-msgstr "Propositions"
+msgstr "Requêtes"
 
 msgid "related_documents"
 msgstr "Documents liés"

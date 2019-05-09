@@ -193,7 +193,7 @@ msgstr "Toutes les notifications"
 #. Default: "Proposals"
 #: ./opengever/activity/browser/settings.py
 msgid "label_proposals"
-msgstr "Propositions"
+msgstr "Requêtes"
 
 #. Default: "Mark all notifications as read"
 #: ./opengever/activity/viewlets/notification.pt
@@ -228,37 +228,37 @@ msgstr "Pièce jointe actualisée"
 #. Default: "Proposal commented"
 #: ./opengever/activity/__init__.py
 msgid "proposal-commented"
-msgstr "Proposition commentée"
+msgstr "Requête commentée"
 
 #. Default: "Proposal decided"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-decide"
-msgstr "Proposition décidée"
+msgstr "Requête décidée"
 
 #. Default: "Proposal pulled"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-pull"
-msgstr "Proposition retirée de l'ordre du jour"
+msgstr "Requête retirée de l'ordre du jour"
 
 #. Default: "Proposal rejected"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-reject"
-msgstr "Proposition rejetée"
+msgstr "Requête rejetée"
 
 #. Default: "Proposal scheduled"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-schedule"
-msgstr "Proposition mise à l'ordre du jour"
+msgstr "Requête mise à l'ordre du jour"
 
 #. Default: "Proposal submitted"
 #: ./opengever/activity/__init__.py
 msgid "proposal-transition-submit"
-msgstr "Proposition soumise"
+msgstr "Requête soumise"
 
 #. Default: "Proposal issuer"
 #: ./opengever/activity/roles.py
 msgid "proposal_issuer"
-msgstr "Auteur de la proposition"
+msgstr "Auteur de la requête"
 
 #. Default: "Records Manager"
 #: ./opengever/activity/roles.py
@@ -283,7 +283,7 @@ msgstr "Activité GEVER"
 #. Default: "Submitted proposal commented"
 #: ./opengever/activity/__init__.py
 msgid "submitted-proposal-commented"
-msgstr "Proposition soumise commentée"
+msgstr "Requête soumise commentée"
 
 #. Default: "Task added"
 #: ./opengever/activity/__init__.py

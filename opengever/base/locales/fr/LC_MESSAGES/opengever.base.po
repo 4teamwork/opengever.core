@@ -268,7 +268,7 @@ msgstr "Date d'élimination"
 #. Default: "Date of submission"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_dateofsubmission"
-msgstr "Date de proposition (des documents)"
+msgstr "Date de requête (des documents)"
 
 #. Default: "An unexpected error has occured"
 #: ./opengever/base/browser/templates/gever-macros.pt

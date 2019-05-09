@@ -116,7 +116,7 @@ Historique
 ----------
 
 Pour chaque offre, un historique est généré et affiché de façon similaire comme
-pour les tâches ou les propositions.
+pour les tâches ou les requêtes.
 
 |img-triage-4|
 

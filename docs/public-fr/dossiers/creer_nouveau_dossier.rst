@@ -123,7 +123,7 @@ Vue du dossier après sauvegarde
 
 3. **Options d’édition**: Plusieurs options pour éditer le dossier sont disponibles au-dessus du titre.
 
-4. **Onglets**: Les contenus relatifs à l’affaire sont stockés sous les différents onglets. L’onglet *Sommaire* est affiché par défaut et liste les contenus les plus récents des onglets *Sous-dossiers*, *Documents*, *Tâches* et *Participants*. De plus, on y trouve le texte du champ « Description », si ce dernier a été rempli. L’onglet *Historique* contient une liste des actions effectuées au niveau du dossier. Sous l’onglet *Info*, il est possible de vérifier les droits d’utilisateurs assignés à ce dossier. L’onglet *Propositions* est uniquement disponible si le module « Gestion de séances et procès-verbaux » a été activé.
+4. **Onglets**: Les contenus relatifs à l’affaire sont stockés sous les différents onglets. L’onglet *Sommaire* est affiché par défaut et liste les contenus les plus récents des onglets *Sous-dossiers*, *Documents*, *Tâches* et *Participants*. De plus, on y trouve le texte du champ « Description », si ce dernier a été rempli. L’onglet *Historique* contient une liste des actions effectuées au niveau du dossier. Sous l’onglet *Info*, il est possible de vérifier les droits d’utilisateurs assignés à ce dossier. L’onglet *Requêtes* est uniquement disponible si le module « Gestion de séances et procès-verbaux » a été activé.
 
 
 .. |img-creernouveaudossier01| image:: ../_static/img/img-creernouveaudossier01.png
