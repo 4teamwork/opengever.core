@@ -69,7 +69,7 @@ msgid "Dossier state changed to dossier-state-offered"
 msgstr "Etat du dossier modifié: Offert"
 
 msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Etat du dossier modifié: Fermé"
+msgstr "Etat du dossier modifié: Clôturé"
 
 msgid "Dossier with template"
 msgstr "Dossier à partir du modèle"
@@ -211,7 +211,7 @@ msgid "dossier-state-offered"
 msgstr "Offert"
 
 msgid "dossier-state-resolved"
-msgstr "Fermé"
+msgstr "Clôturé"
 
 msgid "dossier-transition-activate"
 msgstr "Activer"

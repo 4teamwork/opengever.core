@@ -71,7 +71,7 @@ msgstr "Tâche"
 
 #: ./opengever/task/browser/complete.py
 msgid "The documents were delivered to the issuer and the tasks were completed."
-msgstr "Les documents sont transmis au mandant et les tâches sont fermées."
+msgstr "Les documents sont transmis au mandant et les tâches sont clôturées."
 
 #: ./opengever/task/browser/accept/inbox.py
 msgid "The forwarding has been stored in the local inbox"
@@ -116,11 +116,11 @@ msgstr "Vous n'avez pas été assigné au mandant responsable. Vous ne pouvez tr
 
 #: ./opengever/task/browser/close.py
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
-msgstr "Vos droits ne sont pas suffisants pour ajouter des documents dans le dossier choisi. Le dossier est probablement déjà fermé."
+msgstr "Vos droits ne sont pas suffisants pour ajouter des documents dans le dossier choisi. Le dossier est probablement déjà clôturé."
 
 #: ./opengever/task/browser/accept/existingdossier.py
 msgid "You cannot add tasks in the selected dossier. Either the dossier is closed or you do not have the privileges."
-msgstr "Dans le dossier choisi, vous ne pouvez créer aucune tâche. Soit parce que le dossier est déjà fermé; soit parce que vous n'avez pas les droits suffisants pour effectuer cette tâche."
+msgstr "Dans le dossier choisi, vous ne pouvez créer aucune tâche. Soit parce que le dossier est déjà clôturé; soit parce que vous n'avez pas les droits suffisants pour effectuer cette tâche."
 
 #. Default: "file in existing dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py
@@ -861,12 +861,12 @@ msgstr "Attribuer à un dossier"
 #. Default: "Close task"
 #: ./opengever/task/browser/close.py
 msgid "title_close_task"
-msgstr "Fermer la tâche"
+msgstr "Clôturer la tâche"
 
 #. Default: "Complete task"
 #: ./opengever/task/browser/complete.py
 msgid "title_complete_task"
-msgstr "Accomplir / Fermer la tâche"
+msgstr "Accomplir / Clôturer la tâche"
 
 #. Default: "Delegate task"
 #: ./opengever/task/browser/delegate/main.py
@@ -926,7 +926,7 @@ msgstr "Tâche annulée"
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
-msgstr "Tâche fermée"
+msgstr "Tâche clôturée"
 
 #. Default: "Created by ${user}"
 #: ./opengever/task/viewlets/response.py
@@ -1007,7 +1007,7 @@ msgstr "Annulé par ${user}"
 #. Default: "Closed by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_close"
-msgstr "Fermé par ${user}"
+msgstr "Clôturé par ${user}"
 
 #. Default: "Response added"
 #: ./opengever/task/response_description.py

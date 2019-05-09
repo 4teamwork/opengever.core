@@ -87,7 +87,7 @@ msgstr "Lire les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
-msgstr "Fermer les dossiers"
+msgstr "Clôturer les dossiers"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_editor"

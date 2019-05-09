@@ -31,7 +31,7 @@ msgstr "Conteneur de la boîte de réception"
 #. Default: "Close"
 #: ./opengever/inbox/browser/close.py
 msgid "close"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 #. Default: "Your not allowed to access the inbox of ${current_org_unit}."
 #: ./opengever/inbox/browser/view.py
@@ -114,9 +114,9 @@ msgstr "Envoyer le transfert"
 #. Default: "Close orwarding"
 #: ./opengever/inbox/browser/close.py
 msgid "title_close_forwarding"
-msgstr "Fermer le transfert"
+msgstr "Clôturer le transfert"
 
 #. Default: "Closed ${year}"
 #: ./opengever/inbox/yearfolder.py
 msgid "yearfolder_title"
-msgstr "Fermé ${year}"
+msgstr "Clôturé ${year}"
