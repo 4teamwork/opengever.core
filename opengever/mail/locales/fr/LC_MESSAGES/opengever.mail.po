@@ -248,4 +248,4 @@ msgstr "Destinataire"
 #. Default: "This mail is trashed."
 #: ./opengever/mail/browser/tabbed.py
 msgid "warning_trashed"
-msgstr ""
+msgstr "Ce courriel se trouve dans la corbeille"

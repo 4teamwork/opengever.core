@@ -64,7 +64,7 @@ class TestDossierProposalListing(IntegrationTestCase):
         browser.open(self.dossier, view='tabbedview_view-proposals', data={'proposal_state_filter': 'filter_proposals_all'})
         expected_proposals = [
             {
-                u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
+                u'Commission': u'Rechnungspr\xfcfungskommission',
                 'Etat': 'Soumis',
                 'Mandant': 'Ziegler Robert (robert.ziegler)',
                 u'Num\xe9ro de d\xe9cision': '',
@@ -74,7 +74,7 @@ class TestDossierProposalListing(IntegrationTestCase):
                 'Description': u'F\xfcr weitere Bearbeitung bewilligen',
             },
             {
-                u'Comit\xe9': u'Kommission f\xfcr Verkehr',
+                u'Commission': u'Kommission f\xfcr Verkehr',
                 'Etat': 'En modification',
                 'Mandant': 'Ziegler Robert (robert.ziegler)',
                 u'Num\xe9ro de d\xe9cision': '',
@@ -84,7 +84,7 @@ class TestDossierProposalListing(IntegrationTestCase):
                 'Description': '',
             },
             {
-                u'Comit\xe9': u'Rechnungspr\xfcfungskommission',
+                u'Commission': u'Rechnungspr\xfcfungskommission',
                 'Etat': u'Cl\xf4tur\xe9',
                 'Mandant': 'Ziegler Robert (robert.ziegler)',
                 u'Num\xe9ro de d\xe9cision': '2016 / 1',

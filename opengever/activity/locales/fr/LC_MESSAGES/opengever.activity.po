@@ -198,7 +198,7 @@ msgstr "Requêtes"
 #. Default: "Mark all notifications as read"
 #: ./opengever/activity/viewlets/notification.pt
 msgid "label_read_all_notifications"
-msgstr ""
+msgstr "Marquer toutes les notifications comme lues"
 
 #. Default: "Reminders"
 #: ./opengever/activity/browser/settings.py

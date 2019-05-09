@@ -700,7 +700,7 @@ msgstr "Attention! En ouvrant le document de cette manière, toutes les modific
 #. Default: "This document is trashed."
 #: ./opengever/document/browser/tabbed.py
 msgid "warning_trashed"
-msgstr ""
+msgstr "Ce document se trouve dans la corbeille."
 
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "with comment"

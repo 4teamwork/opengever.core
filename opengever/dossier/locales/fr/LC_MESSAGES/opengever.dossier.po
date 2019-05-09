@@ -18,7 +18,7 @@ msgstr ""
 
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (after resolve jobs pending)"
-msgstr ""
+msgstr " (tâches de clôturation nocturnes en suspens)"
 
 #: ./opengever/dossier/viewlets/byline.py
 msgid " (currently being resolved)"

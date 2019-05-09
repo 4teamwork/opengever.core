@@ -112,7 +112,7 @@ msgstr "Vous n'avez pas l'autorisation pour éditer ces réponses"
 
 #: ./opengever/task/browser/accept/main.py
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
-msgstr "Vous n'avez pas été assigné au mandant responsable. Vous ne pouvez traiter la tâche que dans le dossier du mandant."
+msgstr "Vous n'avez pas été assigné au client responsable. Vous ne pouvez traiter la tâche que dans le dossier du mandant."
 
 #: ./opengever/task/browser/close.py
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
@@ -211,7 +211,7 @@ msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un 
 #. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_admin_unit_change_in_progress_state"
-msgstr ""
+msgstr "Les changements de clients no sont pas autorisés si la tâche ou la transmisison est déjà acceptée."
 
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
 #: ./opengever/task/browser/assign.py
@@ -221,7 +221,7 @@ msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmis
 #. Default: "The private task feature is disabled"
 #: ./opengever/task/task.py
 msgid "error_private_task_feature_is_disabled"
-msgstr ""
+msgstr "La fonctionalité tâches personelles est désactivée"
 
 #. Default: "The revoke permissions feature is disabled"
 #: ./opengever/task/task.py
