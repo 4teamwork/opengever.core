@@ -57,7 +57,7 @@ msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 #: ./opengever/repository/behaviors/responsibleorg.py
 #: ./opengever/repository/repositoryfolder.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Select all additional dossier types which should be addable in this repository folder."
 #: ./opengever/repository/repositoryfolder.py

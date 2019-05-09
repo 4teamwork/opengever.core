@@ -55,7 +55,7 @@ msgstr "Aucun contenu"
 #. Default: "Revert document"
 #: ./opengever/bumblebee/browser/overlay.py
 msgid "label_revert"
-msgstr "Reculer le document"
+msgstr "Restaurer le document"
 
 #. Default: "Reviving the preview is not available for this context."
 #: ./opengever/bumblebee/browser/revive_preview.py

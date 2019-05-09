@@ -177,10 +177,10 @@ msgid "expired"
 msgstr "Expiré"
 
 msgid "important_contact"
-msgstr "En général"
+msgstr "Général"
 
 msgid "issuer"
-msgstr "Attribuer à nouveau"
+msgstr "Attribué par"
 
 msgid "journal"
 msgstr "Historique"
@@ -354,7 +354,7 @@ msgstr "Téléphone professionnel"
 #. Default: "Userid"
 #: ./opengever/tabbedview/browser/users.py
 msgid "label_userstab_userid"
-msgstr "N° d'utilisateur"
+msgstr "Nom d'utilisateur"
 
 msgid "modified"
 msgstr "Date de modification"

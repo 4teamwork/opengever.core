@@ -436,7 +436,7 @@ msgstr "Tous"
 #. Default: "Teams"
 #: ./opengever/contact/browser/tabbed.py
 msgid "label_teams"
-msgstr "Equipes"
+msgstr "Teams"
 
 #. Default: "Title"
 #: ./opengever/contact/browser/tabs.py

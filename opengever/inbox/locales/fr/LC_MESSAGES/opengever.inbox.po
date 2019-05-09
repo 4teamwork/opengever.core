@@ -46,7 +46,7 @@ msgstr "Erreur: Choisissez au minimum un document à transmettre."
 #. Default: "Common"
 #: ./opengever/inbox/inbox.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Forwarding"
 #: ./opengever/inbox/forwarding.py

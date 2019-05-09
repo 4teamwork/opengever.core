@@ -57,7 +57,7 @@ msgstr "Le période de rétention des dossiers sélectionnés n'est pas échue."
 #. Default: "Common"
 #: ./opengever/disposition/disposition.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Action"
 #: ./opengever/disposition/browser/removal_protocol.py

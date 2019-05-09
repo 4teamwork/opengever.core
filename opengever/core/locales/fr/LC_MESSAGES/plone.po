@@ -45,7 +45,7 @@ msgstr "Reactiver"
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "deactivate"
-msgstr "déactiver"
+msgstr "Déactiver"
 
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt

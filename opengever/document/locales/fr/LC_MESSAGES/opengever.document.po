@@ -19,7 +19,7 @@ msgstr ""
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
 msgid "Attach selection"
-msgstr "Envoyer par le programme de messagerie"
+msgstr "Envoyer par programme de messagerie"
 
 #: ./opengever/document/browser/edit.py
 msgid "Can't edit the document at moment, beacuse it's locked."
@@ -98,7 +98,7 @@ msgstr "Ne plus afficher ce message."
 
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
-msgstr "Exporter le choix"
+msgstr "Exporter la sélection"
 
 #: ./opengever/document/checkout/manager.py
 #: ./opengever/document/checkout/revert.py
@@ -228,7 +228,7 @@ msgstr "Fichier d'archivage"
 #: ./opengever/document/behaviors/related_docs.py
 #: ./opengever/document/document.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Keep existing file"
 #: ./opengever/document/widgets/no_download_input.pt
@@ -296,7 +296,7 @@ msgstr "Mots-clés pour la description du document. Ne pas confondre avec le num
 
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_preserved_as_paper"
-msgstr "Conserver sous forme papier"
+msgstr "Conservé sous forme papier"
 
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_preview"
@@ -380,7 +380,7 @@ msgstr "Modifier le fichier d'archivage"
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "label_checked_out"
-msgstr "Avec check-out"
+msgstr "En check-out"
 
 #. Default: "Journal Comment"
 #: ./opengever/document/checkout/checkin.py
@@ -410,7 +410,7 @@ msgstr "Créé"
 #. Default: "creator"
 #: ./opengever/document/browser/overview.py
 msgid "label_creator"
-msgstr "Auteur"
+msgstr "Créé par"
 
 #. Default: "Date"
 #: ./opengever/document/browser/versions_tab.py
@@ -588,7 +588,7 @@ msgstr "Réessayer avec Oneoffixx"
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"
-msgstr "Reculer"
+msgstr "Restaurer"
 
 #. Default: "Save PDF"
 #: ./opengever/document/browser/versions_tab.py

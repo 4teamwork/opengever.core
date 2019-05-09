@@ -67,7 +67,7 @@ msgstr "Commencer la première tâche immédiatement après la création"
 #: ./opengever/tasktemplates/content/tasktemplate.py
 #: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_deadline"
@@ -79,7 +79,7 @@ msgstr "Choix du mandant. Vous pouvez aussi choisir les utilisateurs interactifs
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_preselected"
-msgstr "Ce modèle fait parti du choix standard des procédés standards."
+msgstr "Ce modèle fait partie du choix par défaut dans la séléction de modèles de tâches."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_responsible"

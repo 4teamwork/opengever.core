@@ -79,7 +79,7 @@ msgstr "Modifier le sous-dossier"
 
 #: ./opengever/dossier/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
-msgstr "Exporter le choix"
+msgstr "Exporter la sélection"
 
 #: ./opengever/dossier/move_items.py
 msgid "Failed to copy following objects: ${failed_objects}"
@@ -343,13 +343,13 @@ msgstr "Vous n'avez sélectionné aucun élément."
 #. Default: "Common"
 #: ./opengever/dossier/behaviors/dossier.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Filing"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/behaviors/filing.py
 msgid "fieldset_filing"
-msgstr "Classeur"
+msgstr "Stockage"
 
 #. Default: "Protect"
 #: ./opengever/dossier/behaviors/protect_dossier.py

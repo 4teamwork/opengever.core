@@ -42,7 +42,7 @@ msgstr "sauvegarder"
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py
 msgid "column_Actor"
-msgstr "acteur"
+msgstr "Acteur"
 
 #. Default: "Kind"
 #: ./opengever/activity/browser/listing.py

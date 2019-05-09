@@ -90,7 +90,7 @@ msgstr "Voulez-vous vraiment déposer l'extrait du protocole dans le dossier d'o
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Are you sure, you want to decide this agendaitem?"
-msgstr "Êtes-vous sûr de vouloir clôturer ce point de l'ordre du jour?"
+msgstr "Êtes-vous sûr de vouloir clôturer ce point à l'ordre du jour?"
 
 #: ./opengever/meeting/browser/memberships.py
 msgid "Can't add membership, it overlaps an existing membership from ${date_from} to ${date_to}."
@@ -243,7 +243,7 @@ msgstr "Enlever"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "Unschedule proposal"
-msgstr "Enlever le point de l'ordre du jour"
+msgstr "Enlever le point à l'ordre du jour"
 
 #: ./opengever/meeting/browser/submitdocuments.py
 msgid "Updated with a newer docment version from proposal's dossier."
@@ -288,7 +288,7 @@ msgstr "Télécharger les fichiers docxcompose"
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_decide"
-msgstr "Clôturer un point de l'ordre du jour"
+msgstr "Clôturer un point à l'ordre du jour"
 
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "action_download_document"
@@ -311,7 +311,7 @@ msgstr "Générer l'extrait de protocole"
 #. Default: "Remove agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_remove_agenda_item"
-msgstr "Supprimer le point de l'ordre du jour"
+msgstr "Supprimer le point à l'ordre du jour"
 
 #. Default: "Remove paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -321,7 +321,7 @@ msgstr "Supprimer l'intertitre"
 #. Default: "Rename agenda item"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "action_rename_agenda_item"
-msgstr "Editer le point de l'ordre du jour"
+msgstr "Editer le point à l'ordre du jour"
 
 #. Default: "Rename paragraph"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -355,17 +355,17 @@ msgstr "Actif"
 #: ./opengever/meeting/toc/repository.py
 #: ./opengever/meeting/toc/repository_refnum.py
 msgid "ad_hoc_toc_group_title"
-msgstr "Points de l'ordre du jour sans demande"
+msgstr "Points à l'ordre du jour sans demande"
 
 #. Default: "Cannot decide agenda item: someone else has checked out the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_cannot_decide_document_checked_out"
-msgstr "Le point de l'ordre du jour ne peut pas être clôturé: le document de décision a été extrait par quelqu'un d'autre."
+msgstr "Le point à l'ordre du jour ne peut pas être clôturé: le document de décision a été extrait par quelqu'un d'autre."
 
 #. Default: "Agenda Item decided."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_decided"
-msgstr "Le point de l'ordre du jour a été clôturé."
+msgstr "Le point à l'ordre du jour a été clôturé."
 
 #. Default: "Agenda Item Successfully deleted"
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -375,37 +375,37 @@ msgstr "Le point a été enlevé avec succès de l'ordre du jour."
 #. Default: "Agendaitem has been decided and the meeting has been held."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_meeting_held"
-msgstr "Le point de l'ordre du jour a été clôturé et la séance a eu lieu."
+msgstr "Le point à l'ordre du jour a été clôturé et la séance a eu lieu."
 
 #. Default: "Agenda Item order updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_order_updated"
-msgstr "Les points de l'ordre du jour ont été réarrangés."
+msgstr "Les points à l'ordre du jour ont été réarrangés."
 
 #. Default: "Agenda Item successfully reopened."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_reopened"
-msgstr "Le point de l'ordre du jour a été rouvert."
+msgstr "Le point à l'ordre du jour a été rouvert."
 
 #. Default: "Agenda Item revised successfully."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_revised"
-msgstr "Le point de l'ordre du jour a été révisé avec succès."
+msgstr "Le point à l'ordre du jour a été révisé avec succès."
 
 #. Default: "Agenda Item title must not be empty."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_update_empty_string"
-msgstr "Le titre d'un point de l'ordre du jour ne peut pas être laissé vide."
+msgstr "Le titre d'un point à l'ordre du jour ne peut pas être laissé vide."
 
 #. Default: "Agenda Item title is too long."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_update_too_long_title"
-msgstr "Le titre du point de l'ordre du jour est trop long."
+msgstr "Le titre du point à l'ordre du jour est trop long."
 
 #. Default: "Agenda Item updated."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "agenda_item_updated"
-msgstr "Le point de l'ordre du jour a été mis à jour avec succès."
+msgstr "Le point à l'ordre du jour a été mis à jour avec succès."
 
 #. Default: "All"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -589,7 +589,7 @@ msgstr "Décider"
 #. Default: "Decide Agendaitem"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "decide_agendaitem"
-msgstr "Clôturer un point de l'ordre du jour"
+msgstr "Clôturer un point à l'ordre du jour"
 
 #. Default: "Decided"
 #: ./opengever/meeting/browser/documents/proposalstab.py
@@ -667,7 +667,7 @@ msgstr "Ce texte libre ne doit pas être vide."
 #. Default: "The default ad-hoc agenda item template has to be amongst the allowed ones for this committee."
 #: ./opengever/meeting/committee.py
 msgid "error_default_template_is_in_allowed_templates"
-msgstr "Le modèle pour les points de l'ordre du jour sans demande doit être sélectionné parmis les modèles autorisés."
+msgstr "Le modèle pour les points à l'ordre du jour sans demande doit être sélectionné parmis les modèles autorisés."
 
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
@@ -727,22 +727,22 @@ msgstr "Modèles protocole"
 #. Default: "Alphabetical Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_alphabetical_toc"
-msgstr "Table de matière ${period} ${committee} alphabétique"
+msgstr "Table des matières ${period} ${committee} alphabétique"
 
 #. Default: "Dossier Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_dossier_reference_number_toc"
-msgstr "Table de matière ${period} ${committee} selon Numéro de référence"
+msgstr "Table des matières ${period} ${committee} selon Numéro de référence"
 
 #. Default: "Repository Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_reference_number_toc"
-msgstr "Table de matière ${period} ${committee} selon Numéro de classement"
+msgstr "Table des matières ${period} ${committee} selon Numéro de classement"
 
 #. Default: "Repository Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_repository_toc"
-msgstr "Table de matière ${period} ${committee} selon l'ordre des points"
+msgstr "Table des matières ${period} ${committee} selon l'ordre des points"
 
 #. Default: "Held"
 #: ./opengever/meeting/model/meeting.py
@@ -752,7 +752,7 @@ msgstr "Tenue"
 #. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_ad_hoc_agenda_item_templates"
-msgstr "Choisissez tous les modèles pour les points de l'ordre du jour sans demande autorisés dans ce comité. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
+msgstr "Choisissez tous les modèles pour les points à l'ordre du jour sans demande autorisés dans ce comité. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
 
 #. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
@@ -792,12 +792,12 @@ msgstr "Inactif"
 #. Default: "The agenda item is in an invalid state for this action."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "invalid_agenda_item_state"
-msgstr "Cette action ne peut pas être effectuée dans l'état actuel de ce point de l'ordre du jour."
+msgstr "Cette action ne peut pas être effectuée dans l'état actuel de ce point à l'ordre du jour."
 
 #. Default: "Ad hoc agenda item template"
 #: ./opengever/meeting/committee.py
 msgid "label_ad_hoc_template"
-msgstr "Modèle pour les points de l'ordre du jour sans demande"
+msgstr "Modèle pour les points à l'ordre du jour sans proposition"
 
 #. Default: "Decided"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -808,23 +808,23 @@ msgstr "Clôturé"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_header_template"
-msgstr "Modèle pour l'en-tête d'un point de l'ordre du jour dans le protocole"
+msgstr "Modèle pour l'en-tête d'un point à l'ordre du jour dans le protocole"
 
 #. Default: "Agenda item number"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number"
-msgstr "Numéro du point de l'ordre du jour dans cette séance"
+msgstr "Numéro du point à l'ordre du jour dans cette séance"
 
 #. Default: "Agenda item number (unformatted)"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_agenda_item_number_raw"
-msgstr "Numéro du point de l'ordre du jour dans cette séance (non-formatté)"
+msgstr "Numéro du point à l'ordre du jour dans cette séance (non-formatté)"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_suffix_template"
-msgstr "Modèle pour la partie finale d'un point de l'ordre du jour dans le protocole"
+msgstr "Modèle pour la partie finale d'un point à l'ordre du jour dans le protocole"
 
 #. Default: "Agendaitem list"
 #: ./opengever/meeting/model/meeting.py
@@ -841,7 +841,7 @@ msgstr "Modèle de l'ordre du jour"
 #. Default: "Allowed ad-hoc agenda item templates"
 #: ./opengever/meeting/committee.py
 msgid "label_allowed_ad_hoc_agenda_item_templates"
-msgstr "Modèles pour les points de l'ordre du jour sans demande autorisés"
+msgstr "Modèles pour les points à l'ordre du jour sans proposition autorisés"
 
 #. Default: "Allowed proposal templates"
 #: ./opengever/meeting/committee.py
@@ -888,7 +888,7 @@ msgstr "Annuler la séance"
 #. Default: "The meeting cannot be closed because it has undecided agenda items."
 #: ./opengever/meeting/model/meeting.py
 msgid "label_close_error_has_undecided_agenda_items"
-msgstr "La séance ne peut pas être clôturée avant que tous les points de l'ordre du jour ne soient clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
+msgstr "La séance ne peut pas être clôturée avant que tous les points à l'ordre du jour ne soient clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
 
 #. Default: "Closed meetings"
 #: ./opengever/meeting/browser/committee.py
@@ -1009,42 +1009,42 @@ msgstr "Dossier indisponible"
 #. Default: "download TOC alphabetical"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc"
-msgstr "Table de matière alphabétique"
+msgstr "Table des matières alphabétique"
 
 #. Default: "download TOC json alphabetical"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
-msgstr "Table de matière alphabétique JSON"
+msgstr "Table des matières alphabétique JSON"
 
 #. Default: "download TOC by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_dossier_refnum_toc"
-msgstr "Table de matière selon le Numéro de référence"
+msgstr "Table des matières selon le Numéro de référence"
 
 #. Default: "download TOC json by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_dossier_refnum_toc_json"
-msgstr "Table de matière selon le Numéro de référence JSON"
+msgstr "Table des matières selon le Numéro de référence JSON"
 
 #. Default: "download TOC by repository reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_refnum_toc"
-msgstr "Table de matière selon le Numéro de classement"
+msgstr "Table des matières selon le Numéro de classement"
 
 #. Default: "download TOC json by repository reference number"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_refnum_toc_json"
-msgstr "Table de matière selon le Numéro de classement JSON"
+msgstr "Table des matières selon le Numéro de classement JSON"
 
 #. Default: "download TOC by repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc"
-msgstr "Table de matière selon l'ordre des points"
+msgstr "Table des matières selon l'ordre des points"
 
 #. Default: "download TOC json repository"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_repository_toc_json"
-msgstr "Table de matière selon l'ordre des points JSON"
+msgstr "Table des matières selon l'ordre des points JSON"
 
 #. Default: "Download Zip of original files"
 #: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
@@ -1108,7 +1108,7 @@ msgstr "Extrait du protocole"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_header_template"
-msgstr "Modèle en-tête pour les extraits de protocole"
+msgstr "Modèle pour l'en-tête des extraits de protocole"
 
 #. Default: "Excerpt suffix template"
 #: ./opengever/meeting/committee.py
@@ -1386,7 +1386,7 @@ msgstr "Titre"
 #: ./opengever/meeting/committee.py
 #: ./opengever/meeting/committeecontainer.py
 msgid "label_toc_template"
-msgstr "Modèle de la table de matière"
+msgstr "Modèle de la table des matières"
 
 #. Default: "Toggle attachments"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1406,12 +1406,12 @@ msgstr "Modification d'état ${transition} exécutée"
 #. Default: "Are you sure you want to unschedule this agendaitem?"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "label_unschedule_agenda_item_confirm_text"
-msgstr "Êtes-vous sûr de vouloir enlever ce point de l'ordre du jour?"
+msgstr "Êtes-vous sûr de vouloir enlever ce point à l'ordre du jour?"
 
 #. Default: "Unscheduled proposals"
 #: ./opengever/meeting/browser/committee.py
 msgid "label_unscheduled_proposals"
-msgstr "Propositions imprévues"
+msgstr "Propositions non-agendées"
 
 #. Default: "Upcoming meetings"
 #: ./opengever/meeting/browser/committee.py
@@ -1502,7 +1502,7 @@ msgstr "Vos modifications n'ont pas pu être sauvegardées; le protocole a été
 #. Default: "No ad-hoc agenda-item template has been configured."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "missing_ad_hoc_template"
-msgstr "Aucun modèle n'a pu être trouvé pour un point de l'ordre du jour."
+msgstr "Aucun modèle n'a pu être trouvé pour un point à l'ordre du jour."
 
 #. Default: "Choose a meaningful title to distinguish the created excerpts better."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1532,7 +1532,7 @@ msgstr "Aucun modèle n'est configuré pour l'ordre du jour; l'ordre du jour n'a
 #. Default: "When deciding an agendaitem the agenda list is no longer editable."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_hold_meeting_dialog"
-msgstr "L'ordre du jour ne pourra plus être modifié après la clôture d'un point de l'ordre du jour."
+msgstr "L'ordre du jour ne pourra plus être modifié après la clôture d'un point à l'ordre du jour."
 
 #. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
 #: ./opengever/meeting/model/proposal.py
@@ -1587,7 +1587,7 @@ msgstr "Proposition soumise avec succès."
 #. Default: "The meeting can only be closed when all agenda items are decided."
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "msg_require_all_agenda_items_decided_for_closing"
-msgstr "La séance ne pourra être clôturée que lorsque tous les points de l'ordre du jour seront clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
+msgstr "La séance ne pourra être clôturée que lorsque tous les points à l'ordre du jour seront clôturés et les extraits de protocol générés et déposés comme réponse dans le dossier d'origine de la demande."
 
 #. Default: "Some documents could not be converted to PDF, their original files will be included in the Zip."
 #: ./opengever/meeting/browser/meetings/zipexport.py
@@ -1850,7 +1850,7 @@ msgstr "Texte libre ajouté à l'ordre du jour avec succès."
 #. Default: "Agenda item ${agenda_item_number}"
 #: ./opengever/meeting/zipexport.py
 msgid "title_agenda_item"
-msgstr "Point de l'ordre du jour ${number}"
+msgstr "point à l'ordre du jour ${number}"
 
 #. Default: "Delete proposal"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1870,7 +1870,7 @@ msgstr "Export fichier Zip: ${title}"
 #. Default: "Remove from schedule"
 #: ./opengever/meeting/model/proposal.py
 msgid "un-schedule"
-msgstr "Enlever le point de l'ordre du jour"
+msgstr "Enlever le point à l'ordre du jour"
 
 #. Default: "Add"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1880,17 +1880,17 @@ msgstr "Ajouter"
 #. Default: "Add section header:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_add_section_header"
-msgstr "Insérer l'intertitre:"
+msgstr "Insérer un intertitre:"
 
 #. Default: "Agenda items"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_agenda_items"
-msgstr "Les points de l'ordre du jour"
+msgstr "Les points à l'ordre du jour"
 
 #. Default: "Schedule ad hoc agenda item:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
 msgid "view_label_schedule_ad_hoc"
-msgstr "Insérer le point de l'ordre du jour:"
+msgstr "Insérer le point à l'ordre du jour:"
 
 #. Default: "Schedule proposal:"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
