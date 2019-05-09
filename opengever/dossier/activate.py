@@ -1,4 +1,5 @@
 from opengever.dossier import _
+from opengever.dossier.resolve import PreconditionsViolated
 from plone import api
 from Products.Five.browser import BrowserView
 
@@ -21,6 +22,10 @@ class DossierActivator(object):
         return errors
 
     def activate(self):
+        errors = self.check_preconditions()
+        if errors:
+            raise PreconditionsViolated(errors=errors)
+
         # subdossiers
         for subdossier in self.context.get_subdossiers():
             subdossier.getObject().activate()
@@ -34,12 +39,14 @@ class DossierActivateView(BrowserView):
 
     def __call__(self):
         activator = DossierActivator(self.context)
-        errors = activator.check_preconditions()
-        if errors:
-            self.show_errors(errors)
+
+        try:
+            activator.activate()
+
+        except PreconditionsViolated as exc:
+            self.show_errors(exc.errors)
             return self.redirect()
 
-        activator.activate()
         api.portal.show_message(_("The Dossier has been activated"),
                                 self.request, type='info')
         return self.redirect()
