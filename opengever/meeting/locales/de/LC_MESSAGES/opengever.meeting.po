@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-28 07:21+0000\n"
+"POT-Creation-Date: 2019-05-09 08:18+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -804,7 +804,6 @@ msgstr "Abgeschlossen"
 
 #. Default: "Agenda item header template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_header_template"
 msgstr "Kopfvorlage Traktandum in Protokoll"
 
@@ -820,7 +819,6 @@ msgstr "Nummer des Traktandums in dieser Sitzung (unformattiert)"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_suffix_template"
 msgstr "Schlussteilvorlage Traktandum in Protokoll"
 
@@ -832,7 +830,6 @@ msgstr "Traktandenliste"
 
 #. Default: "Agendaitem list template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Vorlage Traktandenliste"
 
@@ -1104,13 +1101,11 @@ msgstr "Protokollauszug"
 
 #. Default: "Excerpt header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_header_template"
 msgstr "Vorlage Kopf für Protokollauszüge"
 
 #. Default: "Excerpt suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_suffix_template"
 msgstr "Vorlage Schlussteil für Protokollauszüge"
 
@@ -1243,7 +1238,6 @@ msgstr "Weitere Teilnehmende"
 
 #. Default: "Paragraph template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_paragraph_template"
 msgstr "Vorlage für Zwischentitel"
 
@@ -1279,7 +1273,6 @@ msgstr "Protokollgenehmigung"
 
 #. Default: "Protocol header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr "Vorlage Protokollkopf"
 
@@ -1290,7 +1283,6 @@ msgstr "Beginn Seitennummerierung Protokoll"
 
 #. Default: "Protocol suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr "Vorlage Schlussteil des Protokolls"
 
@@ -1382,7 +1374,6 @@ msgstr "Titel"
 
 #. Default: "Table of contents template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_toc_template"
 msgstr "Vorlage Inhaltsverzeichnis"
 
@@ -1658,6 +1649,11 @@ msgstr "In Bearbeitung"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "periods"
 msgstr "Perioden"
+
+#. Default: "Predecessor proposal"
+#: ./opengever/meeting/proposal.py
+msgid "predecessor_proposal_label"
+msgstr "Vorgängiger Antrag"
 
 #. Default: "Document ${title} submitted"
 #: ./opengever/meeting/activity/activities.py

@@ -137,7 +137,7 @@ class IProposal(model.Schema):
 
     mode(predecessor_proposal='hidden')
     predecessor_proposal = RelationChoice(
-        title=u'Predecessor proposal',
+        title=_(u'predecessor_proposal_label', default=u'Predecessor proposal'),
         default=None,
         missing_value=None,
         required=False,

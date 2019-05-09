@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-28 07:21+0000\n"
+"POT-Creation-Date: 2019-05-09 08:18+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -806,7 +806,6 @@ msgstr "Clôturé"
 
 #. Default: "Agenda item header template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_header_template"
 msgstr "Modèle pour l'en-tête d'un point à l'ordre du jour dans le protocole"
 
@@ -822,7 +821,6 @@ msgstr "Numéro du point à l'ordre du jour dans cette séance (non-formatté)"
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_suffix_template"
 msgstr "Modèle pour la partie finale d'un point à l'ordre du jour dans le protocole"
 
@@ -834,7 +832,6 @@ msgstr "Liste des points du jour"
 
 #. Default: "Agendaitem list template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr "Modèle de l'ordre du jour"
 
@@ -1106,13 +1103,11 @@ msgstr "Extrait du protocole"
 
 #. Default: "Excerpt header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_header_template"
 msgstr "Modèle pour l'en-tête des extraits de protocole"
 
 #. Default: "Excerpt suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_suffix_template"
 msgstr "Modèle pour la partie finale des extraits de protocole"
 
@@ -1245,7 +1240,6 @@ msgstr "Autres participants"
 
 #. Default: "Paragraph template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_paragraph_template"
 msgstr "Modèle pour l'intertitre"
 
@@ -1281,7 +1275,6 @@ msgstr "Approbation du procès-verbal"
 
 #. Default: "Protocol header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr "Modèle pour l'en-tête du protocole"
 
@@ -1292,7 +1285,6 @@ msgstr "Début de la numérotation de pages du protocole"
 
 #. Default: "Protocol suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr "Modèle pour la partie finale du protocole"
 
@@ -1384,7 +1376,6 @@ msgstr "Titre"
 
 #. Default: "Table of contents template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_toc_template"
 msgstr "Modèle de la table des matières"
 
@@ -1660,6 +1651,11 @@ msgstr "En modification"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "periods"
 msgstr "Périodes"
+
+#. Default: "Predecessor proposal"
+#: ./opengever/meeting/proposal.py
+msgid "predecessor_proposal_label"
+msgstr "Requête prédécesseur"
 
 #. Default: "Document ${title} submitted"
 #: ./opengever/meeting/activity/activities.py
