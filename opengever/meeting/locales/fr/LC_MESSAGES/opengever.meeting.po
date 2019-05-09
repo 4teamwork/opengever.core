@@ -44,7 +44,7 @@ msgstr "Ajouter une adhésion"
 
 #: ./opengever/meeting/browser/committeeforms.py
 msgid "Add committee"
-msgstr "Ajouter un comité"
+msgstr "Ajouter une commission"
 
 #: ./opengever/meeting/browser/periods.py
 msgid "Add new period"
@@ -490,7 +490,7 @@ msgstr "Clôturé"
 #. Default: "Comittee"
 #: ./opengever/meeting/browser/documents/proposalstab.py
 msgid "column_comittee"
-msgstr "Comité"
+msgstr "Commission"
 
 #. Default: "Date"
 #: ./opengever/meeting/tabs/meetinglisting.py
@@ -611,7 +611,7 @@ msgstr "Le fichier Zip contient un fichier PDF pour chaque document de cette sé
 #. Default: "Automatically configure permissions on the committee for this group."
 #: ./opengever/meeting/committee.py
 msgid "description_group"
-msgstr "Ce groupe peut modifier et consulter le comité."
+msgstr "Ce groupe peut modifier et consulter la commission."
 
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
@@ -752,12 +752,12 @@ msgstr "Tenue"
 #. Default: "Select the ad-hoc agenda item templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_ad_hoc_agenda_item_templates"
-msgstr "Choisissez tous les modèles pour les points à l'ordre du jour sans demande autorisés dans ce comité. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
+msgstr "Choisissez tous les modèles pour les points à l'ordre du jour sans demande autorisés dans cette commission. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
 
 #. Default: "Select the proposal templates allowed for this commitee, or select no templates for allowing all templates."
 #: ./opengever/meeting/committee.py
 msgid "help_allowed_proposal_templates"
-msgstr "Choisissez tous les modèles de proposition autorisés dans ce comité. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
+msgstr "Choisissez tous les modèles de proposition autorisés dans cette commission. Ne choisissez aucun modèle de proposition pour autoriser tous les modèles."
 
 #. Default: "Create a new task the meeting dossier and attach this excerpt."
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -901,24 +901,24 @@ msgstr "Commentaire"
 #. Default: "Committee deactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "label_committe_deactivated"
-msgstr "Comité déactivé avec succès."
+msgstr "Commission déactivé avec succès."
 
 #. Default: "Committee reactivated successfully"
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "label_committe_reactivated"
-msgstr "Comité réactivé avec succès."
+msgstr "Commission réactivé avec succès."
 
 #. Default: "Committee"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/templates/member.pt
 #: ./opengever/meeting/proposal.py
 msgid "label_committee"
-msgstr "Comité"
+msgstr "Commission"
 
 #. Default: "Committeeresponsible"
 #: ./opengever/meeting/committee.py
 msgid "label_committee_responsible"
-msgstr "Responsables de comités"
+msgstr "Responsables de commissions"
 
 #. Default: "Generate Protocol"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -968,7 +968,7 @@ msgstr "Jusqu'à"
 #. Default: "Deactivate committee"
 #: ./opengever/meeting/model/committee.py
 msgid "label_deactivate"
-msgstr "Déactiver le comité"
+msgstr "Déactiver la commission"
 
 #. Default: "Decide"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
@@ -1291,7 +1291,7 @@ msgstr "Modèle pour la partie finale du protocole"
 #. Default: "Reactivate committee"
 #: ./opengever/meeting/model/committee.py
 msgid "label_reactivate"
-msgstr "Réactiver le comité"
+msgstr "Réactiver la commission"
 
 #. Default: "Remove"
 #: ./opengever/meeting/browser/templates/member.pt
@@ -1528,7 +1528,7 @@ msgstr "L'ordre du jour ne pourra plus être modifié après la clôture d'un po
 #. Default: "The selected committeee has been deactivated, the proposal could not been submitted."
 #: ./opengever/meeting/model/proposal.py
 msgid "msg_inactive_committee_selected"
-msgstr "Le comité sélectionné a été désactivé; la proposition n'a pas pu être soumise."
+msgstr "La commission sélectionnée a été désactivé; la proposition n'a pas pu être soumise."
 
 #. Default: "The meeting ${title} has been successfully cancelled."
 #: ./opengever/meeting/model/meeting.py
@@ -1593,7 +1593,7 @@ msgstr "L'objet a été supprimé avec succès."
 #. Default: "There are unscheduled proposals submitted to this committee."
 #: ./opengever/meeting/browser/committeetransitioncontroller.py
 msgid "msg_unscheduled_proposals"
-msgstr "Des propositions qui ne figurent pas sur l'ordre du jour ont été attribuées à ce comité."
+msgstr "Des propositions qui ne figurent pas sur l'ordre du jour ont été attribuées à cette commission."
 
 #. Default: "A Zip file with PDFs for all documents of this meeting is being generated."
 #: ./opengever/meeting/browser/meetings/zipexport.py
