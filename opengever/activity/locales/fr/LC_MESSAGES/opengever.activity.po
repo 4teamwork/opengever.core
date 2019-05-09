@@ -313,12 +313,12 @@ msgstr "tâche déléguée"
 #. Default: "Task resolved"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-in-progress-resolved"
-msgstr "tâche effectuée"
+msgstr "tâche accomplie"
 
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr "tâche close"
+msgstr "tâche clôturée"
 
 #. Default: "Task deadline modified"
 #: ./opengever/activity/__init__.py
@@ -343,12 +343,12 @@ msgstr "tâche refusée"
 #. Default: "Task resolved"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-resolved"
-msgstr "tâche traitée"
+msgstr "tâche accomplie"
 
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-open-tested-and-closed"
-msgstr "tâche close"
+msgstr "tâche clôturée"
 
 #. Default: "Task skipped"
 #: ./opengever/activity/__init__.py
@@ -378,7 +378,7 @@ msgstr "révision de la tâche requise"
 #. Default: "Task closed"
 #: ./opengever/activity/__init__.py
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "tâche close"
+msgstr "tâche clôturée"
 
 #. Default: "Task reopened"
 #: ./opengever/activity/__init__.py

@@ -866,7 +866,7 @@ msgstr "Clôturer la tâche"
 #. Default: "Complete task"
 #: ./opengever/task/browser/complete.py
 msgid "title_complete_task"
-msgstr "Accomplir / Clôturer la tâche"
+msgstr "Accomplir / clôturer la tâche"
 
 #. Default: "Delegate task"
 #: ./opengever/task/browser/delegate/main.py
