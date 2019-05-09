@@ -2,6 +2,7 @@ from opengever.base.stream import TempfileStreamIterator
 from opengever.disposition import _
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from plone import api
+from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
 from Products.Five import BrowserView
 from pyxb.utils.domutils import BindingDOMSupport
@@ -64,11 +65,6 @@ class ECH0160DownloadView(BrowserView):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         sip_package = self.context.get_sip_package()
-        response = self.request.response
-        response.setHeader(
-            "Content-Disposition",
-            'inline; filename="%s.zip"' % self.context.get_sip_name())
-        response.setHeader("Content-type", "application/zip")
-        response.setHeader("Content-Length", sip_package.getSize())
-
+        set_headers(sip_package, self.request.response,
+                    u'{}.zip'.format(self.context.get_sip_name()))
         return stream_data(sip_package)

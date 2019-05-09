@@ -70,5 +70,5 @@ class TestECH0160DownloadView(IntegrationTestCase):
         self.assertEquals(
             'application/zip', browser.headers.get('content-type'))
         self.assertEquals(
-            'inline; filename="SIP_20160611_PLONE_10xy.zip"',
+            "attachment; filename*=UTF-8''SIP_20160611_PLONE_10xy.zip",
             browser.headers.get('content-disposition'))
