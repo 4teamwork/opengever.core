@@ -39,6 +39,20 @@
       />
 
   <browser:page
+      class=".ech0160.ECH0160StoreView"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="ech0160_store"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      class=".ech0160.ECH0160DownloadView"
+      for="opengever.disposition.interfaces.IDisposition"
+      name="ech0160_download"
+      permission="opengever.disposition.DownloadSIPPackage"
+      />
+
+  <browser:page
       class=".overview.DispositionOverview"
       for="opengever.disposition.interfaces.IDisposition"
       name="overview"
