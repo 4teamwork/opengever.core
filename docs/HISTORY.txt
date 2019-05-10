@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Bump docxcompose version to 1.0.1 [njohner]
+- Improve SIP package generation and download. [phgross]
 - Fix qa tests. [lgraf]
 - Disable properties action for teams. [deiferni]
 - Add source vocabularies for workspace invitations and todo responsibles. [njohner]
