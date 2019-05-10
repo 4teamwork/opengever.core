@@ -25,6 +25,28 @@ import plone.protect.interfaces
 
 class GEVERWorkflowTransition(WorkflowTransition):
 
+    def check_action_available(self):
+        actions = self.wftool.listActionInfos(object=self.context)
+        action_ids = [action['id'] for action in actions
+                      if action['category'] == 'workflow']
+
+        if self.transition in action_ids:
+            return None
+
+        return dict(type='Bad Request',
+                    message="Invalid transition '{0}'.\n"
+                            "Valid transitions are:\n"
+                            "{1}".format(self.transition,
+                                         '\n'.join(sorted(action_ids))))
+
+    def reply(self):
+        error = self.check_action_available()
+        if error:
+            self.request.response.setStatus(400)
+            return dict(error=error)
+
+        return super(GEVERWorkflowTransition, self).reply()
+
     def recurse_transition(self, objs, comment, publication_dates,
                            include_children=False):
 
@@ -59,6 +81,10 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
 
     Others, which don't require custom handling, are delegated to the default
     implementation.
+
+    Finally, some transitions are not allowed through the RESTAPI, notably
+    everything that is linked to archiving, as these should only be managed
+    through the offer process.
     """
 
     CUSTOMIZED_TRANSITIONS = ['dossier-transition-resolve',
@@ -67,6 +93,11 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
                               'dossier-transition-reactivate']
 
     def reply(self):
+        error = self.check_action_available()
+        if error:
+            self.request.response.setStatus(400)
+            return dict(error=error)
+
         if self.transition not in self.CUSTOMIZED_TRANSITIONS:
             # Delegate to default implementation
             return super(GEVERDossierWorkflowTransition, self).reply()

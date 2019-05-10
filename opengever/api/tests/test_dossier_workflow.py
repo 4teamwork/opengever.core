@@ -112,7 +112,7 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
             browser.json)
 
     @browsing
-    def test_offer_resolved_via_restapi(self, browser):
+    def test_offer_resolved_via_restapi_is_forbidden(self, browser):
         self.login(self.secretariat_user, browser)
 
         resolve_manager = LockingResolveManager(self.resolvable_dossier)
@@ -120,101 +120,82 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('dossier-state-resolved', self.resolvable_dossier)
 
         self.login(self.records_manager, browser)
+        browser.raise_http_errors = False
+        self.api_transition(
+            self.resolvable_dossier, 'dossier-transition-offer', browser)
 
-        with freeze(datetime(2018, 4, 30)):
-            self.api_transition(
-                self.resolvable_dossier, 'dossier-transition-offer', browser)
-
-        self.assert_state('dossier-state-offered', self.resolvable_dossier)
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(
-            {u'title': u'dossier-state-offered',
-             u'comments': u'',
-             u'actor': u'ramon.flucht',
-             u'time': u'2018-04-29T22:00:00+00:00',
-             u'action': u'dossier-transition-offer',
-             u'review_state': u'dossier-state-offered'},
+        self.assert_state('dossier-state-resolved', self.resolvable_dossier)
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error':
+                {u'message': u"Invalid transition 'dossier-transition-offer'.\nValid transitions are:\n",
+                 u'type': u'Bad Request'}},
             browser.json)
 
     @browsing
-    def test_offered_to_resolved_via_restapi(self, browser):
+    def test_offered_to_resolved_via_restapi_is_forbidden(self, browser):
         self.login(self.records_manager, browser)
         self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
 
-        with freeze(datetime(2018, 4, 30)):
-            self.api_transition(
-                self.offered_dossier_to_archive,
-                'dossier-transition-offered-to-resolved', browser)
+        browser.raise_http_errors = False
+        self.api_transition(self.offered_dossier_to_archive,
+                            'dossier-transition-offered-to-resolved', browser)
 
-        self.assert_state('dossier-state-resolved', self.offered_dossier_to_archive)
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(
-            {u'title': u'dossier-state-resolved',
-             u'comments': u'',
-             u'actor': u'ramon.flucht',
-             u'time': u'2018-04-29T22:00:00+00:00',
-             u'action': u'dossier-transition-offered-to-resolved',
-             u'review_state': u'dossier-state-resolved'},
+        self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error':
+                {u'message': u"Invalid transition 'dossier-transition-offered-to-resolved'.\nValid transitions are:\n",
+                 u'type': u'Bad Request'}},
             browser.json)
 
     @browsing
-    def test_offer_inactive_via_restapi(self, browser):
+    def test_offer_inactive_via_restapi_is_forbidden(self, browser):
         self.login(self.records_manager, browser)
         self.assert_state('dossier-state-inactive', self.inactive_dossier)
 
-        with freeze(datetime(2018, 4, 30)):
-            self.api_transition(
-                self.inactive_dossier, 'dossier-transition-offer', browser)
+        browser.raise_http_errors = False
+        self.api_transition(
+            self.inactive_dossier, 'dossier-transition-offer', browser)
 
-        self.assert_state('dossier-state-offered', self.inactive_dossier)
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(
-            {u'title': u'dossier-state-offered',
-             u'comments': u'',
-             u'actor': u'ramon.flucht',
-             u'time': u'2018-04-29T22:00:00+00:00',
-             u'action': u'dossier-transition-offer',
-             u'review_state': u'dossier-state-offered'},
+        self.assert_state('dossier-state-inactive', self.inactive_dossier)
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error':
+                {u'message': u"Invalid transition 'dossier-transition-offer'.\nValid transitions are:\n",
+                 u'type': u'Bad Request'}},
             browser.json)
 
     @browsing
-    def test_offered_to_inactive_via_restapi(self, browser):
+    def test_offered_to_inactive_via_restapi_is_forbidden(self, browser):
         self.login(self.records_manager, browser)
         self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
 
-        with freeze(datetime(2018, 4, 30)):
-            self.api_transition(
-                self.offered_dossier_to_archive,
-                'dossier-transition-offered-to-inactive', browser)
+        browser.raise_http_errors = False
+        self.api_transition(self.offered_dossier_to_archive,
+                            'dossier-transition-offered-to-inactive', browser)
 
-        self.assert_state('dossier-state-inactive', self.offered_dossier_to_archive)
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(
-            {u'title': u'dossier-state-inactive',
-             u'comments': u'',
-             u'actor': u'ramon.flucht',
-             u'time': u'2018-04-29T22:00:00+00:00',
-             u'action': u'dossier-transition-offered-to-inactive',
-             u'review_state': u'dossier-state-inactive'},
+        self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error':
+                {u'message': u"Invalid transition 'dossier-transition-offered-to-inactive'.\nValid transitions are:\n",
+                 u'type': u'Bad Request'}},
             browser.json)
 
     @browsing
-    def test_archive_offered_via_restapi(self, browser):
+    def test_archive_offered_via_restapi_is_forbidden(self, browser):
         self.login(self.records_manager, browser)
         self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
 
-        with freeze(datetime(2018, 4, 30)):
-            self.api_transition(
-                self.offered_dossier_to_archive,
-                'dossier-transition-archive', browser)
+        browser.raise_http_errors = False
+        self.api_transition(self.offered_dossier_to_archive,
+                            'dossier-transition-archive', browser)
 
-        self.assert_state('dossier-state-archived', self.offered_dossier_to_archive)
-        self.assertEqual(200, browser.status_code)
-        self.assertEquals(
-            {u'title': u'dossier-state-archived',
-             u'comments': u'',
-             u'actor': u'ramon.flucht',
-             u'time': u'2018-04-29T22:00:00+00:00',
-             u'action': u'dossier-transition-archive',
-             u'review_state': u'dossier-state-archived'},
+        self.assert_state('dossier-state-offered', self.offered_dossier_to_archive)
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error':
+                {u'message': u"Invalid transition 'dossier-transition-archive'.\nValid transitions are:\n",
+                 u'type': u'Bad Request'}},
             browser.json)

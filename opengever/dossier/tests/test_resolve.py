@@ -157,7 +157,9 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
         self.assertEquals(400, browser.status_code)
         self.assertEquals(
             {u'error':
-                {u'message': u'Dossier has already been resolved.',
+                {u'message': u"Invalid transition 'dossier-transition-resolve'."
+                             "\nValid transitions are:"
+                             "\ndossier-transition-reactivate",
                  u'type': u'Bad Request'}},
             browser.json)
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
