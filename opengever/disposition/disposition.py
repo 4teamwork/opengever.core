@@ -306,6 +306,9 @@ class Disposition(Container):
     def store_sip_package(self):
         self._sip_package = self.generate_sip_package()
 
+    def remove_sip_package(self):
+        self._sip_package = None
+
     def generate_sip_package(self):
         package = SIPPackage(self)
         zip_file = self.create_zipfile(package)

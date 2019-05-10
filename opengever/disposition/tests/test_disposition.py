@@ -240,3 +240,24 @@ class TestDispositionEditForm(IntegrationTestCase):
         # Download is possible
         self.assertIn(
             'Download disposition package', browser.css('ul.actions li').text)
+
+    @browsing
+    def test_sip_package_is_removed_on_close(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.disposition.store_sip_package()
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+        browser.open(self.disposition, view='overview')
+
+        browser.click_on('disposition-transition-dispose')
+        self.assertTrue(self.disposition.has_sip_package())
+
+        with self.login(self.archivist, browser=browser):
+            browser.open(self.disposition, view='overview')
+            browser.click_on('disposition-transition-archive')
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-close')
+
+        self.assertEquals(['Item state changed.'], info_messages())
+        self.assertFalse(self.disposition.has_sip_package())

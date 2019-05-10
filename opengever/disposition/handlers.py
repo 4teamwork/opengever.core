@@ -16,10 +16,12 @@ def disposition_state_changed(context, event):
 
     if event.action == 'disposition-transition-close':
         context.destroy_dossiers()
+        context.remove_sip_package()
 
     if event.action == 'disposition-transition-appraised-to-closed':
         context.mark_dossiers_as_archived()
         context.destroy_dossiers()
+        context.remove_sip_package()
 
     if event.action == 'disposition-transition-dispose':
         context.store_sip_package()
