@@ -25,13 +25,13 @@ msgstr "Historique"
 #. Default: "Changed by"
 #: ./opengever/journal/tab.py
 msgid "label_actor"
-msgstr "Modifier par"
+msgstr "Modifié par"
 
 #. Default: "Add journal entry"
 #: ./opengever/journal/form.py
 #: ./opengever/journal/templates/journal_selection.pt
 msgid "label_add_journal_entry"
-msgstr "Ajouter une entrée de journal"
+msgstr "Ajouter une entrée à l'historique"
 
 #. Default: "Attachments deleted: ${filenames}"
 #: ./opengever/journal/handlers.py
@@ -292,7 +292,7 @@ msgstr "Tâche modifiée: ${title}"
 #. Default: "Time"
 #: ./opengever/journal/tab.py
 msgid "label_time"
-msgstr "date"
+msgstr "Date"
 
 #. Default: "Title"
 #: ./opengever/journal/tab.py

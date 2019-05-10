@@ -149,7 +149,7 @@ class TestTaskOverview(IntegrationTestCase):
         lang_tool.setDefaultLanguage('fr-ch')
 
         browser.open(self.task, view='tabbedview_view-overview')
-        self.assertIn(['Etat', u'Ferm\xe9'],
+        self.assertIn(['Etat', u'Cl\xf4tur\xe9'],
                       browser.css('table.listing').first.lists())
 
 

@@ -55,7 +55,7 @@ Onglet En général
 
     - Si on connait le titre du document ou une de ses composantes, le texte
       est entré directement dans le champ. Apparait alors la liste déroulante
-      de propositions, liste dans laquelle le document souhaité peut être sélectionné.
+      de requêtes, liste dans laquelle le document souhaité peut être sélectionné.
 
     |img-document-14|
 

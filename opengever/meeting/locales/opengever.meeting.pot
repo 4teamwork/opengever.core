@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-02-28 07:21+0000\n"
+"POT-Creation-Date: 2019-05-09 08:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -803,7 +803,6 @@ msgstr ""
 
 #. Default: "Agenda item header template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_header_template"
 msgstr ""
 
@@ -819,7 +818,6 @@ msgstr ""
 
 #. Default: "Agenda item suffix template for the protocol"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agenda_item_suffix_template"
 msgstr ""
 
@@ -831,7 +829,6 @@ msgstr ""
 
 #. Default: "Agendaitem list template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_agendaitem_list_template"
 msgstr ""
 
@@ -1103,13 +1100,11 @@ msgstr ""
 
 #. Default: "Excerpt header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_header_template"
 msgstr ""
 
 #. Default: "Excerpt suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_excerpt_suffix_template"
 msgstr ""
 
@@ -1242,7 +1237,6 @@ msgstr ""
 
 #. Default: "Paragraph template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_paragraph_template"
 msgstr ""
 
@@ -1278,7 +1272,6 @@ msgstr ""
 
 #. Default: "Protocol header template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_header_template"
 msgstr ""
 
@@ -1289,7 +1282,6 @@ msgstr ""
 
 #. Default: "Protocol suffix template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_protocol_suffix_template"
 msgstr ""
 
@@ -1381,7 +1373,6 @@ msgstr ""
 
 #. Default: "Table of contents template"
 #: ./opengever/meeting/committee.py
-#: ./opengever/meeting/committeecontainer.py
 msgid "label_toc_template"
 msgstr ""
 
@@ -1656,6 +1647,11 @@ msgstr ""
 #. Default: "Periods"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "periods"
+msgstr ""
+
+#. Default: "Predecessor proposal"
+#: ./opengever/meeting/proposal.py
+msgid "predecessor_proposal_label"
 msgstr ""
 
 #. Default: "Document ${title} submitted"

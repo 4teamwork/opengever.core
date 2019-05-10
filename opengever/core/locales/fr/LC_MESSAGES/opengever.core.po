@@ -20,7 +20,7 @@ msgstr "Participant"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Attach selection"
-msgstr "Envoyer par le programme de messagerie"
+msgstr "Envoyer par programme de messagerie"
 
 #: ./opengever/core/profiles/default/types/opengever.dossier.businesscasedossier.xml
 msgid "Business Case Dossier"
@@ -84,7 +84,7 @@ msgstr "Créer une offre d'archivage"
 #: ./opengever/core/upgrades/20180623132731_add_a_create_proposal_action/actions.xml
 #: ./opengever/core/upgrades/20180813145550_create_proposal_unavailable_if_meeting_feature_disabled/actions.xml
 msgid "Create Proposal"
-msgstr "Créer une proposition"
+msgstr "Créer une requête"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Create Task"
@@ -124,7 +124,7 @@ msgstr "Exporter comme fichier ZIP"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Export selection"
-msgstr "Exporter le choix"
+msgstr "Exporter la sélection"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Forward"
@@ -157,7 +157,7 @@ msgstr "Modèle de séance"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Move Items"
-msgstr "Déplacer d'éléments"
+msgstr "Déplacer éléments"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180122154722_add_my_invitation_action/actions.xml
@@ -215,11 +215,11 @@ msgstr "Afficher les métadonnées"
 #. Default: "Proposal"
 #: ./opengever/core/profiles/default/types/opengever.meeting.proposal.xml
 msgid "Proposal"
-msgstr "Proposition"
+msgstr "Requête"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.proposaltemplate.xml
 msgid "Proposal Template"
-msgstr "Modèle de proposition"
+msgstr "Modèle de requête"
 
 #: ./opengever/core/profiles/default/types/opengever.repository.repositoryfolder.xml
 msgid "RepositoryFolder"
@@ -253,7 +253,7 @@ msgstr "Soumettre des pièces jointes additionnelles"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.submittedproposal.xml
 msgid "Submitted Proposal"
-msgstr "Proposition soumise"
+msgstr "Requête soumise"
 
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20180809152739_add_gever_ui_action/actions.xml

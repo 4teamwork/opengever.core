@@ -219,7 +219,7 @@ msgstr "Teams sind nur bei offenen Aufgaben oder Weiterleitungen als Auftragnehm
 #. Default: "The private task feature is disabled"
 #: ./opengever/task/task.py
 msgid "error_private_task_feature_is_disabled"
-msgstr "Die Funktionalität private Aufgaben ist deaktiviert."
+msgstr "Die Funktionalität persönliche Aufgaben ist deaktiviert."
 
 #. Default: "The revoke permissions feature is disabled"
 #: ./opengever/task/task.py

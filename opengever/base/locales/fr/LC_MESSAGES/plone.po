@@ -69,7 +69,7 @@ msgid "Dossier state changed to dossier-state-offered"
 msgstr "Etat du dossier modifié: Offert"
 
 msgid "Dossier state changed to dossier-state-resolved"
-msgstr "Etat du dossier modifié: Fermé"
+msgstr "Etat du dossier modifié: Clôturé"
 
 msgid "Dossier with template"
 msgstr "Dossier à partir du modèle"
@@ -87,7 +87,7 @@ msgid "Meeting"
 msgstr "Séance"
 
 msgid "Membership"
-msgstr "Affiliation"
+msgstr "Adhésion"
 
 msgid "Modify deadline"
 msgstr "Changer le délai"
@@ -211,7 +211,7 @@ msgid "dossier-state-offered"
 msgstr "Offert"
 
 msgid "dossier-state-resolved"
-msgstr "Fermé"
+msgstr "Clôturé"
 
 msgid "dossier-transition-activate"
 msgstr "Activer"
@@ -229,7 +229,7 @@ msgid "dossier-transition-resolve"
 msgstr "Fermer"
 
 msgid "forwarding-state-closed"
-msgstr "Fermé"
+msgstr "Clôturé"
 
 msgid "forwarding-state-open"
 msgstr "Ouvert"
@@ -244,13 +244,13 @@ msgid "forwarding-transition-assign-to-dossier"
 msgstr "Attribuer à un dossier"
 
 msgid "forwarding-transition-close"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "forwarding-transition-reassign"
-msgstr "Attribuer"
+msgstr "Ré-attribuer"
 
 msgid "forwarding-transition-reassign-refused"
-msgstr "Attribuer"
+msgstr "Transmettre"
 
 msgid "forwarding-transition-refuse"
 msgstr "Refuser"
@@ -310,7 +310,7 @@ msgid "task-state-skipped"
 msgstr "Omis"
 
 msgid "task-state-tested-and-closed"
-msgstr "Fermé"
+msgstr "Clôturé"
 
 msgid "task-transition-cancelled-open"
 msgstr "Rouvrir"
@@ -325,7 +325,7 @@ msgid "task-transition-in-progress-resolved"
 msgstr "Accomplir"
 
 msgid "task-transition-in-progress-tested-and-closed"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "task-transition-modify-deadline"
 msgstr "Changer le délai"
@@ -346,7 +346,7 @@ msgid "task-transition-open-resolved"
 msgstr "Accomplir"
 
 msgid "task-transition-open-tested-and-closed"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "task-transition-planned-open"
 msgstr "Ouvrir"
@@ -355,7 +355,7 @@ msgid "task-transition-planned-skipped"
 msgstr "Omettre"
 
 msgid "task-transition-reassign"
-msgstr "Attribuer à nouveau"
+msgstr "Ré-attribuer"
 
 msgid "task-transition-rejected-open"
 msgstr "Rouvrir"
@@ -367,7 +367,7 @@ msgid "task-transition-resolved-in-progress"
 msgstr "Réviser"
 
 msgid "task-transition-resolved-tested-and-closed"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "task-transition-skipped-open"
 msgstr "Rouvrir"

@@ -71,7 +71,7 @@ msgstr "Tâche"
 
 #: ./opengever/task/browser/complete.py
 msgid "The documents were delivered to the issuer and the tasks were completed."
-msgstr "Les documents sont transmis au mandant et les tâches sont fermées."
+msgstr "Les documents sont transmis au mandant et les tâches sont clôturées."
 
 #: ./opengever/task/browser/accept/inbox.py
 msgid "The forwarding has been stored in the local inbox"
@@ -112,15 +112,15 @@ msgstr "Vous n'avez pas l'autorisation pour éditer ces réponses"
 
 #: ./opengever/task/browser/accept/main.py
 msgid "You are not assigned to the responsible client (${client}). You can only process the task in the issuers dossier."
-msgstr "Vous n'avez pas été assigné au mandant responsable. Vous ne pouvez traiter la tâche que dans le dossier du mandant."
+msgstr "Vous n'avez pas été assigné au client responsable. Vous ne pouvez traiter la tâche que dans le dossier du mandant."
 
 #: ./opengever/task/browser/close.py
 msgid "You cannot add documents to the selected dossier. Either the dossier is closed or you do not have the privileges."
-msgstr "Vos droits ne sont pas suffisants pour ajouter des documents dans le dossier choisi. Le dossier est probablement déjà fermé."
+msgstr "Vos droits ne sont pas suffisants pour ajouter des documents dans le dossier choisi. Le dossier est probablement déjà clôturé."
 
 #: ./opengever/task/browser/accept/existingdossier.py
 msgid "You cannot add tasks in the selected dossier. Either the dossier is closed or you do not have the privileges."
-msgstr "Dans le dossier choisi, vous ne pouvez créer aucune tâche. Soit parce que le dossier est déjà fermé; soit parce que vous n'avez pas les droits suffisants pour effectuer cette tâche."
+msgstr "Dans le dossier choisi, vous ne pouvez créer aucune tâche. Soit parce que le dossier est déjà clôturé; soit parce que vous n'avez pas les droits suffisants pour effectuer cette tâche."
 
 #. Default: "file in existing dossier in ${client}"
 #: ./opengever/task/browser/accept/main.py
@@ -211,7 +211,7 @@ msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un 
 #. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
 #: ./opengever/task/browser/assign.py
 msgid "error_no_admin_unit_change_in_progress_state"
-msgstr ""
+msgstr "Les changements de clients no sont pas autorisés si la tâche ou la transmisison est déjà acceptée."
 
 #. Default: "Team responsibles are only allowed if the task or forwarding is open."
 #: ./opengever/task/browser/assign.py
@@ -221,7 +221,7 @@ msgstr "Les équipes ne sont autorisées comme mandataires que pour des transmis
 #. Default: "The private task feature is disabled"
 #: ./opengever/task/task.py
 msgid "error_private_task_feature_is_disabled"
-msgstr ""
+msgstr "La fonctionalité tâches personelles est désactivée"
 
 #. Default: "The revoke permissions feature is disabled"
 #: ./opengever/task/task.py
@@ -251,7 +251,7 @@ msgstr "Avancé"
 #. Default: "Common"
 #: ./opengever/task/task.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Forwarding"
 #: ./opengever/task/helper.py
@@ -500,7 +500,7 @@ msgstr "Coûts estimés (CHF)"
 #. Default: "Expected duration"
 #: ./opengever/task/task.py
 msgid "label_expectedDuration"
-msgstr "Durée estimées (h)"
+msgstr "Durée estimée (h)"
 
 #. Default: "Start with work"
 #: ./opengever/task/task.py
@@ -553,7 +553,7 @@ msgstr "Déroulement en parallèle"
 #. Default: "Dossiertitle"
 #: ./opengever/task/browser/overview.py
 msgid "label_parent_dossier_title"
-msgstr "Titre de la dossier"
+msgstr "Titre du dossier"
 
 #. Default: "Predecessor"
 #: ./opengever/task/task.py
@@ -599,7 +599,7 @@ msgstr "Client responsable"
 #: ./opengever/task/browser/assign.py
 #: ./opengever/task/browser/assign_dossier.py
 msgid "label_response"
-msgstr "Response"
+msgstr "Réponse"
 
 #. Default: "Responsible"
 #: ./opengever/task/activities.py
@@ -814,7 +814,7 @@ msgstr "Enregistrer"
 #: ./opengever/task/browser/accept/main.py
 #: ./opengever/task/browser/accept/newdossier.py
 msgid "step_1"
-msgstr "Premier étape"
+msgstr "Première étape"
 
 #. Default: "Step 2"
 #: ./opengever/task/browser/accept/existingdossier.py
@@ -851,7 +851,7 @@ msgstr "Accepter la tâche"
 #. Default: "Assign task"
 #: ./opengever/task/browser/assign.py
 msgid "title_assign_task"
-msgstr "Attribuer à nouveau"
+msgstr "Ré-attribuer"
 
 #. Default: "Assign to Dossier"
 #: ./opengever/task/browser/assign_dossier.py
@@ -861,12 +861,12 @@ msgstr "Attribuer à un dossier"
 #. Default: "Close task"
 #: ./opengever/task/browser/close.py
 msgid "title_close_task"
-msgstr "Fermer la tâche"
+msgstr "Clôturer la tâche"
 
 #. Default: "Complete task"
 #: ./opengever/task/browser/complete.py
 msgid "title_complete_task"
-msgstr "Accomplir / Fermer la tâche"
+msgstr "Accomplir / clôturer la tâche"
 
 #. Default: "Delegate task"
 #: ./opengever/task/browser/delegate/main.py
@@ -926,7 +926,7 @@ msgstr "Tâche annulée"
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
-msgstr "Tâche fermée"
+msgstr "Tâche clôturée"
 
 #. Default: "Created by ${user}"
 #: ./opengever/task/viewlets/response.py
@@ -1007,7 +1007,7 @@ msgstr "Annulé par ${user}"
 #. Default: "Closed by ${user}"
 #: ./opengever/task/response_description.py
 msgid "transition_msg_close"
-msgstr "Fermé par ${user}"
+msgstr "Clôturé par ${user}"
 
 #. Default: "Response added"
 #: ./opengever/task/response_description.py

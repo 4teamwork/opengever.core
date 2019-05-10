@@ -142,7 +142,7 @@ msgstr "Visibilité"
 #: ./opengever/base/behaviors/base.py
 #: ./opengever/base/behaviors/translated_title.py
 msgid "fieldset_common"
-msgstr "En général"
+msgstr "Général"
 
 #. Default: "Life Cycle"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -156,7 +156,7 @@ msgstr "Valeur archivistique"
 
 #: ./opengever/base/behaviors/classification.py
 msgid "help_classification"
-msgstr "Degré de besoin de protection des documents contre la consultation non-autorisée."
+msgstr "Degré de protection des documents contre la consultation non-autorisée requis."
 
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "help_custody_period"
@@ -176,7 +176,7 @@ msgstr "Date de la requête, requérant, date de la décision, référence vers 
 
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "help_retention_period"
-msgstr "Durée entre la date du document plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives."
+msgstr "Temps entre la date du document le plus récent contenu dans un dossier et la date à partir de laquelle le document n'est plus requis pour les activités administratives."
 
 #. Default: "-- Already removed object --"
 #: ./opengever/base/adapters.py
@@ -268,7 +268,7 @@ msgstr "Date d'élimination"
 #. Default: "Date of submission"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_dateofsubmission"
-msgstr "Date de proposition (des documents)"
+msgstr "Date de requête (des documents)"
 
 #. Default: "An unexpected error has occured"
 #: ./opengever/base/browser/templates/gever-macros.pt

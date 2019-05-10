@@ -106,7 +106,7 @@ msgstr "Titulaire"
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_description"
-msgstr ""
+msgstr "Description"
 
 #. Default: "Documents"
 #: ./opengever/workspace/browser/tabbed.py
@@ -116,7 +116,7 @@ msgstr "Documents"
 #. Default: "Folders"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_folders"
-msgstr ""
+msgstr "Répertoires"
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py

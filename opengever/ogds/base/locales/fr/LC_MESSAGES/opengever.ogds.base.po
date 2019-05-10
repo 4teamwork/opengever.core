@@ -137,7 +137,7 @@ msgstr "Titre"
 #. Default: "Teams"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "label_teams"
-msgstr "Equipes"
+msgstr "Teams"
 
 #. Default: "Title"
 #: ./opengever/ogds/base/browser/team_forms.py

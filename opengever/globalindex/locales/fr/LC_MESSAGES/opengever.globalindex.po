@@ -18,7 +18,7 @@ msgstr ""
 
 #: ./opengever/globalindex/upgrades/profiles/2601/actions.xml
 msgid "Export selection"
-msgstr "Exporter le choix"
+msgstr "Exporter la sélection"
 
 #. Default: "You have not selected any items."
 #: ./opengever/globalindex/browser/report.py
