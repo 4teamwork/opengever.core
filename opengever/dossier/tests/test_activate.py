@@ -2,11 +2,33 @@ from datetime import date
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 
 
 class TestDossierActivation(IntegrationTestCase):
+
+    def activate(self, dossier, browser, use_editbar=False):
+        if use_editbar:
+            browser.open(dossier)
+            editbar.menu_option('Actions', 'dossier-transition-activate').click()
+        else:
+            browser.open(dossier, view='transition-activate',
+                         send_authenticator=True)
+
+    def assert_errors(self, dossier, browser, error_msgs):
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        self.assertEquals(error_msgs, error_messages())
+
+    def assert_end_date(self, dossier, end_date):
+        self.assertEqual(end_date, IDossier(dossier).end)
+
+    def assert_success(self, dossier, browser, info_msgs=None):
+        self.assertEquals(dossier.absolute_url(), browser.url)
+        statusmessages.assert_no_error_messages()
+        self.assertEquals(info_msgs, info_messages())
 
     @browsing
     def test_recursively_activates_subdossier(self, browser):
@@ -19,9 +41,9 @@ class TestDossierActivation(IntegrationTestCase):
             self.subsubdossier,
             )
 
-        browser.open(self.dossier)
-        editbar.menu_option('Actions', 'dossier-transition-activate').click()
-        statusmessages.assert_message('The Dossier has been activated')
+        self.activate(self.dossier, browser, use_editbar=True)
+        self.assert_success(self.dossier, browser,
+                            ['The Dossier has been activated'])
 
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)
@@ -34,10 +56,11 @@ class TestDossierActivation(IntegrationTestCase):
         self.login(self.secretariat_user, browser)
         self.set_workflow_state('dossier-state-inactive',
                                 self.dossier, self.subdossier)
-        browser.open(self.subdossier, view='transition-activate',
-                     send_authenticator=True)
-        statusmessages.assert_message("This subdossier can't be activated,"
-                                      "because the main dossiers is inactive")
+
+        self.activate(self.subdossier, browser)
+        self.assert_errors(self.subdossier, browser,
+                           ["This subdossier can't be activated,"
+                            "because the main dossiers is inactive"])
         self.assert_workflow_state('dossier-state-inactive', self.subdossier)
 
     @browsing
@@ -58,8 +81,8 @@ class TestDossierActivation(IntegrationTestCase):
         self.assertIsNotNone(IDossier(self.subdossier).end)
         self.assertIsNotNone(IDossier(self.subsubdossier).end)
 
-        browser.open(self.dossier)
-        editbar.menu_option('Actions', 'dossier-transition-activate').click()
+        self.activate(self.dossier, browser)
+
         self.assert_workflow_state('dossier-state-active', self.dossier)
         self.assert_workflow_state('dossier-state-active', self.subdossier)
         self.assert_workflow_state('dossier-state-active', self.subsubdossier)
@@ -77,8 +100,7 @@ class TestDossierActivation(IntegrationTestCase):
         self.assert_index_value(enddate_index_value, 'end', self.inactive_dossier)
         self.assert_metadata_value(enddate, 'end', self.inactive_dossier)
 
-        browser.open(self.inactive_dossier)
-        editbar.menu_option('Actions', 'dossier-transition-activate').click()
+        self.activate(self.inactive_dossier, browser, use_editbar=True)
 
         self.assert_index_value('', 'end', self.inactive_dossier)
         self.assert_metadata_value(None, 'end', self.inactive_dossier)
