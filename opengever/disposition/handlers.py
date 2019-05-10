@@ -21,6 +21,9 @@ def disposition_state_changed(context, event):
         context.mark_dossiers_as_archived()
         context.destroy_dossiers()
 
+    if event.action == 'disposition-transition-dispose':
+        context.store_sip_package()
+
     storage = IHistoryStorage(context)
     storage.add(event.action,
                 api.user.get_current().getId(),

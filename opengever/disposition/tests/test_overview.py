@@ -153,14 +153,6 @@ class TestDispositionOverview(IntegrationTestCase):
 
         browser.find('disposition-transition-dispose').click()
 
-        # SIP currently not generated
-        self.assertEquals(['Export appraisal list as excel'],
-                          browser.css('ul.actions li').text)
-
-        # Manually store the sip package
-        self.disposition.store_sip_package()
-        browser.open(self.disposition, view='overview')
-
         self.assertEquals(['Export appraisal list as excel',
                            'Download disposition package'],
                           browser.css('ul.actions li').text)

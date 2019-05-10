@@ -224,3 +224,19 @@ class TestDispositionEditForm(IntegrationTestCase):
             None, ILifeCycle(self.offered_dossier_to_destroy).date_of_submission)
         self.assertEquals(
             date.today(), ILifeCycle(self.expired_dossier).date_of_submission)
+
+    @browsing
+    def test_sip_package_is_genarated_and_stored_on_dispose(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-dispose')
+
+        self.assertEquals(['Item state changed.'], info_messages())
+        self.assertTrue(self.disposition.has_sip_package())
+
+        # Download is possible
+        self.assertIn(
+            'Download disposition package', browser.css('ul.actions li').text)
