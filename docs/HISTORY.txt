@@ -10,6 +10,7 @@ Changelog
 2019.2.2 (2019-05-27)
 ---------------------
 
+- Handle dossier activation through RESTAPI. [njohner]
 - Fix revoke_permission field and validation in the fowarding forms. [phgross]
 - Hide byline for the teams. [phgross]
 - Cleanup/fix oneoffix upgradesteps and make dicstorage upgrades more failsafe. [phgross]
