@@ -4,6 +4,7 @@ Changelog
 2019.3.0 (unreleased)
 ---------------------
 
+- Add CMFEditions modifier that prevents journals from being versioned. [lgraf]
 - Forbid transitions linked to dossier offer process through RESTAPI. [njohner]
 - Only allow dossier transitions that are possible on the main dossier. [njohner]
 - Handle dossier activation through RESTAPI. [njohner]
