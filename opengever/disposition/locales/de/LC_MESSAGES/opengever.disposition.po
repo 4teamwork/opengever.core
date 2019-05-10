@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-19 12:59+0000\n"
+"POT-Creation-Date: 2019-07-25 14:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -272,6 +272,16 @@ msgstr "Angebot abgelehnt durch ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_updated"
 msgstr "Aktualisiert durch ${user}"
+
+#. Default: "No SIP Package generated for this disposition."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_no_sip_package_generated"
+msgstr "Es wurde noch kein SIP Paket generiert für dieses Angebot."
+
+#. Default: "SIP Package generated successfully."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_sip_package_sucessfully_generated"
+msgstr "SIP Paket erfolgreich generiert."
 
 #. Default: "Period"
 #: ./opengever/disposition/browser/templates/overview.pt

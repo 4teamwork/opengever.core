@@ -60,7 +60,7 @@ class ECH0160DownloadView(BrowserView):
     def __call__(self):
         if not self.context.has_sip_package():
             msg = _('msg_no_sip_package_generated',
-                    default=u'No SIP Package generated for this disposition')
+                    default=u'No SIP Package generated for this disposition.')
             api.portal.show_message(msg, request=self.request, type='error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 

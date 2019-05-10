@@ -1,21 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-03-19 12:59+0000\n"
+"POT-Creation-Date: 2019-07-25 14:32+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
-"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-"
-"gever/opengever-disposition/fr/>\n"
-"Language: fr\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2.13.1\n"
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
 
 #: ./opengever/disposition/browser/excel_export.py
 msgid "The report could not been generated."
@@ -275,6 +274,16 @@ msgstr "Offre refusée par ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_updated"
 msgstr "Actualisé par ${user}"
+
+#. Default: "No SIP Package generated for this disposition."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_no_sip_package_generated"
+msgstr ""
+
+#. Default: "SIP Package generated successfully."
+#: ./opengever/disposition/browser/ech0160.py
+msgid "msg_sip_package_sucessfully_generated"
+msgstr ""
 
 #. Default: "Period"
 #: ./opengever/disposition/browser/templates/overview.pt

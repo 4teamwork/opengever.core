@@ -53,7 +53,7 @@ class TestECH0160DownloadView(IntegrationTestCase):
 
         self.set_workflow_state('disposition-state-disposed', self.disposition)
         browser.open(self.disposition, view='ech0160_download')
-        self.assertEquals([u'No SIP Package generated for this disposition'],
+        self.assertEquals([u'No SIP Package generated for this disposition.'],
                           error_messages())
 
     @browsing
