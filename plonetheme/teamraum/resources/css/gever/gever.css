@@ -2679,7 +2679,7 @@ body.feature-word-meeting .template-add-membership #opengever_meeting_meeting .i
 
 input[type='checkbox']:disabled ~ label > span { color: #ccc; }
 
-#form-widgets-IDocumentMetadata-description, #form-widgets-description, #form-widgets-IOpenGeverBase-description, #form-widgets-text, #form-widgets-IDocumentMetadata-description, #form-widgets-IDossier-comments, #form-widgets-other_participants { height: 90px; }
+#form-widgets-IDocumentMetadata-description, #form-widgets-description, #form-widgets-IOpenGeverBase-description, #form-widgets-text, #form-widgets-IDocumentMetadata-description, #form-widgets-IDossier-comments, #form-widgets-other_participants { min-height: 90px; }
 
 body.portaltype-opengever-meeting-committee.template-edit #content-core div.error { background-color: #fdc; border: 1px solid red; padding: 0.5em; margin: 1em 0; }
 

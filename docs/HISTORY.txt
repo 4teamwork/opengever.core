@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Set 90px as a minimum instead of fixed height for description-like widgets. [lgraf]
 - Concistently use "déroulement standard" for tasktemplates in French. [njohner]
 - Update and add missing French translations. [njohner, andresoberhaensli]
 - Fix has_children indexer which lead to duplicate brains. [njohner, phgross]
