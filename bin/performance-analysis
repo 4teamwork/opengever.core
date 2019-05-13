@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+time (
+  bin/time-layers
+  bin/time-modules-layers
+  bin/time-classes
+  bin/time-tests
+)

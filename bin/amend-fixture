@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+echo y | bin/remove-test-cache
+
+modules=()
+while IFS='' read -r module
+do
+  modules+=("$module")
+done < <(bin/list-modules)
+
+for module in "${modules[@]}"
+do
+  reset
+  echo "Running integration tests for $module"
+  echo ''
+
+  moduleparam=(
+    '-m'
+    "$module"
+  )
+
+  # opengever.task also greedy matches opengever.tasktemplate
+  if [ "$module" == 'opengever.task' ]
+  then
+    moduleparam+=('-m')
+    moduleparam+=('!opengever.tasktemplate')
+  fi
+
+  until bin/test -x -1 \
+          --layer 'opengever.core.testing.opengever.core:integration' \
+          "${moduleparam[@]}"
+  do
+    read -r -p 'Fix the failure above and press Enter. ^C to abort.'
+    reset
+  done
+done
+
+reset
+echo ''
+echo 'Success! Tests now pass with the new fixture.'

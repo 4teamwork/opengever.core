@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+date="$(date +'%Y-%m-%d')"
+# This is implemented as a shell pipeline around a sequential bin/test -vvv run
+# Doing this the mtest way would make up for an insanely long runtime
+
+# Tested to work both on macOS Mojave and Centos 7 (bugatti.4teamwork.ch)
+
+# We're not interested in STDERR at all, way too difficult to fish details out
+# All tests which get run have a runtime in seconds in parens
+# We remove all the parens for clarity
+# Reorder and output for readability and sortability: runtime class method
+# Do a columnar numerical sort on the first column
+# Tee output to a logfile, prefixed by current date
+# The output of time is not teed, as that'd add unnecessary complexity here
+time bin/test -vvv 2>/dev/null \
+  | grep -E '\([0-9]+\.[0-9]+ s\)' \
+  | tr -d '()' \
+  | awk '{print $3, $2, $1}' \
+  | sort -k1 -n \
+  | tee "$date"-testperf.log

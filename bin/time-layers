@@ -1,0 +1,328 @@
+#!/usr/bin/env python2.7
+"""A concurrent wrapper for timing zope.testrunner tests for opengever.core."""
+from argparse import ArgumentParser
+from datetime import date
+from logging import DEBUG
+from logging import FileHandler
+from logging import Formatter
+from logging import getLogger
+from logging import INFO
+from logging import StreamHandler
+from multiprocessing import cpu_count
+from multiprocessing import Pool
+from os import devnull
+from os import environ
+from os import killpg
+from os import setpgrp
+from signal import SIGINT
+from signal import SIGKILL
+from signal import signal
+from subprocess import CalledProcessError
+from subprocess import check_output
+from sys import stdout
+from time import time
+import re
+
+
+def parse_arguments():
+    """Parse and return passed in command line arguments."""
+    parser = ArgumentParser(description="Run tests in parallel.")
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="Enable debug logging"
+    )
+    parser.add_argument(
+        "-l", "--layer", help="Greedy match test layer name.", action="append"
+    )
+    return parser.parse_args()
+
+
+def setup_termination():
+    """Set up process group mass infanticide for the runner.
+
+    * Set the group flag so that subprocesses will be in the same group.
+    * Kill the group (including main process) on terminal signal.
+    """
+    setpgrp()
+
+    def terminate(signum, frame):
+        logger.debug("SIGKILL received!")
+        logger.debug("%d, %s", signum, frame)
+        killpg(0, SIGKILL)
+
+    signal(SIGINT, terminate)
+
+
+def setup_logging(debug=False):
+    """Set up a tee-esque logger for the results output."""
+    today = date.today()
+    logfile = "{:04}-{:02}-{:02}-layerperf.log".format(
+        today.year, today.month, today.day
+    )
+
+    teelogger = getLogger("opengever-time-layers")
+    formatter = Formatter("")
+
+    filehandler = FileHandler(logfile, mode="w")
+    filehandler.setFormatter(formatter)
+
+    stdouthandler = StreamHandler(stream=stdout)
+    stdouthandler.setFormatter(formatter)
+
+    if debug:
+        teelogger.setLevel(DEBUG)
+    else:
+        teelogger.setLevel(INFO)
+
+    teelogger.addHandler(filehandler)
+    teelogger.addHandler(stdouthandler)
+
+    return teelogger
+
+
+def humanize_time(seconds):
+    """Humanize a seconds based delta time.
+
+    Only handles time spans up to weeks for simplicity.
+
+    """
+    seconds = abs(seconds)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    days, hours = divmod(hours, 24)
+    weeks, days = divmod(days, 7)
+
+    seconds = int(seconds)
+    minutes = int(minutes)
+    hours = int(hours)
+    days = int(days)
+    weeks = int(weeks)
+
+    output = []
+
+    if weeks:
+        output.append("{:02d} weeks".format(weeks))
+    if days:
+        output.append("{:02d} days".format(days))
+    if hours:
+        output.append("{:02d} hours".format(hours))
+    if minutes:
+        output.append("{:02d} minutes".format(minutes))
+
+    output.append("{:02d} seconds".format(seconds))
+
+    return " ".join(output)
+
+
+def parse_time(time_string):
+    """Parse ``zope.testrunner`` human readable runtimes."""
+    minutes = re.search(r"(\d+) minutes", time_string)
+    if minutes:
+        minutes = int(minutes.groups()[0])
+    else:
+        minutes = 0
+
+    seconds = re.search(r"(\d+\.\d+) seconds", time_string)
+    if seconds:
+        seconds = float(seconds.groups()[0])
+    else:
+        seconds = 0.0
+
+    seconds += minutes * 60
+
+    return seconds
+
+
+def run_tests(test_run_params):
+    """Run and time ``bin/test --layer layer``.
+
+    We parse the actual reported test run time from ``zope.testrunner``
+    in order to exclude the irrelevant duplicated test discovery and layer
+    setup times.
+    """
+    layer = test_run_params["layer"]
+    params = ("bin/test", "--layer", layer)
+    env = environ.copy()
+    try:
+        with open(devnull, "wb") as dn:
+            output = check_output(params, stderr=dn, env=env, universal_newlines=True)
+            failed = False
+    except CalledProcessError as e:
+        output = e.output
+        failed = True
+
+    try:
+        for line in output.splitlines():
+            if line.startswith("  Ran"):
+                count = int(line.split()[1])
+                runtime = parse_time(line.split(" in ")[-1].strip("."))
+                break
+        speed = runtime / count
+        return {
+            "layer": layer,
+            "count": count,
+            "runtime": runtime,
+            "speed": speed,
+            "failed": failed,
+        }
+    except BaseException:
+        return {"layer": layer, "failed": True}
+
+
+def main(layers=None):
+    """Discovers and times tests in parallel via multiprocessing.Pool()."""
+    if layers is None:
+        layers = ()
+        logger.debug("Timing all layers.")
+
+    params = ["bin/test"]
+    for layer in layers:
+        params.append("--layer")
+        params.append(layer)
+        logger.debug("Going to greedy match a layer with: %s.", layer)
+    params.append("--list-tests")
+
+    env = environ.copy()
+    logger.debug("Discovering tests.")
+    start_time = time()
+
+    with open(devnull, "wb") as dn:
+        discovery = check_output(params, stderr=dn, env=env, universal_newlines=True)
+    logger.debug("Discovered tests in %s.", humanize_time(time() - start_time))
+
+    test_run_params = tuple(
+        {"layer": line.split()[1]}
+        for line in discovery.splitlines()
+        if line.startswith("Listing")
+    )
+
+    discovered_layers = tuple(
+        param.get("layer", "Unknown layer") for param in test_run_params
+    )
+    for layer in discovered_layers:
+        logger.debug("Discovered: %s", layer)
+    logger.debug("Discovered %d layers in total.", len(discovered_layers))
+
+    # Counter system congestion and hyperthreading, FWIW
+    concurrency = max(1, cpu_count() // 2 - 1)
+    logger.debug("Timing tests in up to %d processes in parallel.", concurrency)
+    pool = Pool(concurrency)
+
+    logger.debug("Timing layers - this can take a while!")
+    start_time = time()
+    results = sorted(
+        pool.imap_unordered(run_tests, test_run_params),
+        key=lambda result: result.get("runtime", 0.0),
+    )
+
+    pool.terminate()
+    pool.join()
+
+    wallclock = humanize_time(time() - start_time)
+    logger.debug("Done timing layers in %s.", wallclock)
+
+    total_runtime = sum(result.get("runtime", 0.0) for result in results)
+    total_count = sum(result.get("count", 0) for result in results)
+
+    layer_width = max(len(layer) for layer in discovered_layers)
+    count_width = max(len(str(result.get("count", 0))) + 4 for result in results)
+    speed_width = max(
+        len("{:.3f}".format(result.get("speed", 0))) + 4 for result in results
+    )
+    runtime_width = max(
+        len(humanize_time(result.get("runtime", 0.0))) + 4 for result in results
+    )
+
+    header = (
+        "{layer:>{layer_width}}"
+        "{count:>{count_width}}"
+        "{speed:>{speed_width}}"
+        "{runtime:>{runtime_width}}"
+        "{runtime_percentage:>10}"  # 9.2f
+        "{count_percentage:>10}"  # 9.2f
+        "{relative_weight:>11}".format(  # 10.2f
+            layer="layer",
+            count="cnt",
+            speed="spd",
+            runtime="rt",
+            runtime_percentage="rt%",
+            count_percentage="cnt%",
+            relative_weight="wt%",
+            layer_width=layer_width,
+            count_width=count_width + 6,  # Suffix " tests"
+            speed_width=speed_width + 9,  # Suffix " s / test"
+            runtime_width=runtime_width,
+        )
+    )
+    logger.info(header)
+    header_width = len(header)
+    logger.info("=" * header_width)
+
+    for result in results:
+        layer = result.get("layer", "Unknown layer")
+        count = result.get("count", 0)
+        runtime = result.get("runtime", 0.0)
+        speed = result.get("speed", 0.0)
+        runtime = result.get("runtime", 0)
+
+        runtime_percentage = runtime / total_runtime
+        count_percentage = float(count) / float(total_count)
+        try:
+            relative_weight = runtime_percentage / count_percentage
+        except ZeroDivisionError:
+            # Something failed and count thus is 0
+            relative_weight = 0.0
+
+        runtime = humanize_time(runtime)
+        line = (
+            "{layer:>{layer_width}}"
+            "{count:>{count_width}} tests"
+            "{speed:>{speed_width}.3f} s / test"
+            "{runtime:>{runtime_width}}"
+            "{runtime_percentage:9.2f}%"
+            "{count_percentage:>9.2f}%"
+            "{relative_weight:>10.2f}%".format(
+                layer=layer,
+                count=count,
+                speed=speed,
+                runtime=runtime,
+                runtime_percentage=runtime_percentage * 100,
+                count_percentage=count_percentage * 100,
+                relative_weight=relative_weight * 100,
+                layer_width=layer_width,
+                count_width=count_width,
+                speed_width=speed_width,
+                runtime_width=runtime_width,
+            )
+        )
+        logger.info(line)
+
+    total = humanize_time(total_runtime)
+    total_runtime_width = len(total)
+    wallclock_width = len(wallclock)
+    totals_width = max(wallclock_width, total_runtime_width)
+
+    total_line = "Total:     {:>{totals_width}}".format(
+        total, totals_width=totals_width
+    )
+    wallclock_line = "Wallclock: {:>{totals_width}}".format(
+        wallclock, totals_width=totals_width
+    )
+    logger.info("-" * header_width)
+    logger.info("Sorted by runtime.")
+    logger.info("")
+    logger.info(total_line)
+    logger.info(wallclock_line)
+
+    failed_runs = [result for result in results if result.get("failed")]
+    if failed_runs:
+        logger.warn("Test run failures detected - YMMV!")
+    for run in failed_runs:
+        logger.warn("Failures in: %s", run.get("layer", "Unknown layer"))
+
+
+if __name__ == "__main__":
+    # Having the __main__ guard is necessary for multiprocessing.Pool().
+    args = parse_arguments()
+    logger = setup_logging(debug=args.debug)
+    setup_termination()
+    main(layers=args.layer)

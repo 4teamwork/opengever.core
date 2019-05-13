@@ -1,5 +1,6 @@
 *
 !.gitignore
+!amend-fixture
 !cleanup-versions-cfg
 !create-schema-migration
 !create-upgrade
@@ -10,8 +11,11 @@
 !git-changed-xml
 !git-fork-point
 !i18n-build
+!list-modules
 !mtest
+!performance-analysis
 !pinchecker
+!profile-tests
 !qa
 !remove-test-cache
 !sass-watcher
@@ -19,3 +23,7 @@
 !test-cached
 !enable-lfs
 !testserverctl
+!time-classes
+!time-layers
+!time-modules-layers
+!time-tests
