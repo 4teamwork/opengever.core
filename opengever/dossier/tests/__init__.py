@@ -82,7 +82,11 @@ EXPECTED_TASKDOCUMENT_PROPERTIES = {
     'ogg.document.reference_number': 'Client1 1.1 / 1 / 35',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
     'ogg.document.sequence_number': '35',
-    'ogg.document.version_number': 0
+    'ogg.document.version_number': 0,
+    'ogg.document.delivery_date': '',
+    'ogg.document.document_author': '',
+    'ogg.document.document_type': '',
+    'ogg.document.reception_date': '',
 }
 
 EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
@@ -92,7 +96,12 @@ EXPECTED_PROPOSALDOCUMENT_PROPERTIES = {
     'ogg.document.reference_number': 'Client1 1.1 / 1 / 18',
     'ogg.document.document_date': datetime(2016, 8, 31, 0, 0),
     'ogg.document.sequence_number': '18',
-    'ogg.document.version_number': 0
+    'ogg.document.version_number': 0,
+    'ogg.document.delivery_date': '',
+    'ogg.document.document_author': '',
+    'ogg.document.document_type': '',
+    'ogg.document.reception_date': '',
+
 }
 
 EXPECTED_MEETING_PROPERTIES = {

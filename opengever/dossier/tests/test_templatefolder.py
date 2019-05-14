@@ -224,6 +224,10 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             'ogg.document.sequence_number': '41',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
+            'ogg.document.reception_date': None,
+            'ogg.document.delivery_date': None,
+            'ogg.document.document_type': None,
+            'ogg.document.document_author': None,
             'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
             'ogg.dossier.sequence_number': '1',
@@ -283,6 +287,10 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             'ogg.document.sequence_number': '41',
             'ogg.document.title': 'Test Docx',
             'ogg.document.version_number': 0,
+            'ogg.document.reception_date': None,
+            'ogg.document.delivery_date': None,
+            'ogg.document.document_type': None,
+            'ogg.document.document_author': None,
             'ogg.dossier.external_reference': u'qpr-900-9001-\xf7',
             'ogg.dossier.reference_number': 'Client1 1.1 / 1',
             'ogg.dossier.sequence_number': '1',
@@ -332,14 +340,35 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         'ogg.document.sequence_number': '2',
         'ogg.document.title': 'Test Docx',
         'ogg.document.version_number': 0,
+        'ogg.document.delivery_date': None,
+        'ogg.document.document_author': None,
+        'ogg.document.document_type': None,
+        'ogg.document.reception_date': None,
         'ogg.dossier.reference_number': 'Client1 / 1',
         'ogg.dossier.sequence_number': '1',
         'ogg.dossier.title': 'My Dossier',
+        'ogg.dossier.external_reference': None,
         'ogg.user.email': 'test@example.org',
         'ogg.user.firstname': 'User',
         'ogg.user.lastname': 'Test',
         'ogg.user.title': 'Test User',
         'ogg.user.userid': TEST_USER_ID,
+        'ogg.user.address1': None,
+        'ogg.user.address2': None,
+        'ogg.user.city': None,
+        'ogg.user.country': None,
+        'ogg.user.department': None,
+        'ogg.user.department_abbr': None,
+        'ogg.user.description': None,
+        'ogg.user.directorate': None,
+        'ogg.user.directorate_abbr': None,
+        'ogg.user.email2': None,
+        'ogg.user.phone_fax': None,
+        'ogg.user.phone_mobile': None,
+        'ogg.user.phone_office': None,
+        'ogg.user.salutation': None,
+        'ogg.user.url': None,
+        'ogg.user.zip_code': None,
         }
 
     def setUp(self):
@@ -447,6 +476,9 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             'ogg.recipient.email.address': u'foo@example.com',
             'ogg.recipient.phone.number': u'1234 123 123',
             'ogg.recipient.url.url': u'http://www.example.com',
+            'ogg.recipient.contact.description': None,
+            'ogg.recipient.person.academic_title': None,
+            'ogg.recipient.person.salutation': None,
             }
         expected_person_properties.update(self.expected_doc_properties)
 
@@ -535,6 +567,11 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             'ogg.recipient.email.address': u'foo@example.com',
             'ogg.recipient.phone.number': u'1234 123 123',
             'ogg.recipient.url.url': u'http://www.example.com',
+            'ogg.recipient.orgrole.description': None,
+            'ogg.recipient.person.academic_title': None,
+            'ogg.recipient.orgrole.department': None,
+            'ogg.recipient.contact.description': None,
+            'ogg.recipient.person.salutation': None,
             }
         expected_org_role_properties.update(self.expected_doc_properties)
 
@@ -585,6 +622,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             'ogg.recipient.email.address': u'bar@example.com',
             'ogg.recipient.phone.number': u'012 34 56 76',
             'ogg.recipient.url.url': u'http://www.example.com',
+            'ogg.recipient.person.academic_title': None,
         }
         expected_org_role_properties.update(self.expected_doc_properties)
 

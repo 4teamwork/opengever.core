@@ -14,50 +14,90 @@
       <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">
         <Arguments>
           <Interface Name="OneGovGEVER">
-            <Node Id="ogg.document.sequence_number">38</Node>
-            <Node Id="ogg.dossier.sequence_number">1</Node>
-            <Node Id="ogg.user.userid">robert.ziegler</Node>
-            <Node Id="Document.SequenceNumber">38</Node>
-            <Node Id="Document.ReferenceNumber">Client1 1.1 / 1 / 38</Node>
             <Node Id="ogg.dossier.reference_number">Client1 1.1 / 1</Node>
             <Node Id="ogg.user.email">robert.ziegler@gever.local</Node>
-            <Node Id="ogg.document.document_date">Aug 31, 2016</Node>
-            <Node Id="ogg.user.firstname">Robert</Node>
-            <Node Id="ogg.document.title">Schättengarten</Node>
-            <Node Id="ogg.user.title">Ziegler Robert</Node>
+            <Node Id="ogg.document.reception_date"></Node>
+            <Node Id="ogg.user.userid">robert.ziegler</Node>
+            <Node Id="ogg.dossier.sequence_number">1</Node>
+            <Node Id="ogg.document.delivery_date"></Node>
             <Node Id="ogg.document.reference_number">Client1 1.1 / 1 / 38</Node>
+            <Node Id="ogg.user.directorate"></Node>
             <Node Id="ogg.document.version_number">0</Node>
-            <Node Id="ogg.dossier.title">Verträge mit der kantonalen Finanzverwaltung</Node>
+            <Node Id="ogg.user.title">Ziegler Robert</Node>
+            <Node Id="ogg.user.description"></Node>
+            <Node Id="Document.SequenceNumber">38</Node>
+            <Node Id="ogg.user.city"></Node>
+            <Node Id="ogg.user.country"></Node>
+            <Node Id="ogg.user.phone_mobile"></Node>
+            <Node Id="ogg.user.firstname">Robert</Node>
+            <Node Id="ogg.user.email2"></Node>
             <Node Id="Dossier.ReferenceNumber">Client1 1.1 / 1</Node>
+            <Node Id="ogg.document.document_type"></Node>
             <Node Id="User.ID">robert.ziegler</Node>
             <Node Id="Dossier.Title">Verträge mit der kantonalen Finanzverwaltung</Node>
-            <Node Id="ogg.dossier.external_reference">qpr-900-9001-÷</Node>
-            <Node Id="User.FullName">Ziegler Robert</Node>
+            <Node Id="ogg.user.address2"></Node>
+            <Node Id="ogg.user.address1"></Node>
+            <Node Id="ogg.document.sequence_number">38</Node>
+            <Node Id="ogg.document.document_date">Aug 31, 2016</Node>
+            <Node Id="ogg.document.title">Schättengarten</Node>
+            <Node Id="ogg.user.department"></Node>
+            <Node Id="ogg.dossier.title">Verträge mit der kantonalen Finanzverwaltung</Node>
             <Node Id="ogg.user.lastname">Ziegler</Node>
+            <Node Id="ogg.user.phone_office"></Node>
+            <Node Id="ogg.user.url"></Node>
+            <Node Id="ogg.user.salutation"></Node>
+            <Node Id="Document.ReferenceNumber">Client1 1.1 / 1 / 38</Node>
+            <Node Id="ogg.user.department_abbr"></Node>
+            <Node Id="ogg.document.document_author"></Node>
+            <Node Id="ogg.user.phone_fax"></Node>
+            <Node Id="User.FullName">Ziegler Robert</Node>
+            <Node Id="ogg.user.directorate_abbr"></Node>
+            <Node Id="ogg.user.zip_code"></Node>
+            <Node Id="ogg.dossier.external_reference">qpr-900-9001-÷</Node>
           </Interface>
         </Arguments>
       </Function>
       <Function name="MetaData" id="c364b495-7176-4ce2-9f7c-e71f302b8096">
-        <Value key="ogg.document.sequence_number" type="string">38</Value>
-        <Value key="ogg.dossier.sequence_number" type="string">1</Value>
-        <Value key="ogg.user.userid" type="string">robert.ziegler</Value>
-        <Value key="Document.SequenceNumber" type="string">38</Value>
-        <Value key="Document.ReferenceNumber" type="string">Client1 1.1 / 1 / 38</Value>
         <Value key="ogg.dossier.reference_number" type="string">Client1 1.1 / 1</Value>
         <Value key="ogg.user.email" type="string">robert.ziegler@gever.local</Value>
-        <Value key="ogg.document.document_date" type="string">Aug 31, 2016</Value>
-        <Value key="ogg.user.firstname" type="string">Robert</Value>
-        <Value key="ogg.document.title" type="string">Schättengarten</Value>
-        <Value key="ogg.user.title" type="string">Ziegler Robert</Value>
+        <Value key="ogg.document.reception_date" type="string"></Value>
+        <Value key="ogg.user.userid" type="string">robert.ziegler</Value>
+        <Value key="ogg.dossier.sequence_number" type="string">1</Value>
+        <Value key="ogg.document.delivery_date" type="string"></Value>
         <Value key="ogg.document.reference_number" type="string">Client1 1.1 / 1 / 38</Value>
+        <Value key="ogg.user.directorate" type="string"></Value>
         <Value key="ogg.document.version_number" type="string">0</Value>
-        <Value key="ogg.dossier.title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
+        <Value key="ogg.user.title" type="string">Ziegler Robert</Value>
+        <Value key="ogg.user.description" type="string"></Value>
+        <Value key="Document.SequenceNumber" type="string">38</Value>
+        <Value key="ogg.user.city" type="string"></Value>
+        <Value key="ogg.user.country" type="string"></Value>
+        <Value key="ogg.user.phone_mobile" type="string"></Value>
+        <Value key="ogg.user.firstname" type="string">Robert</Value>
+        <Value key="ogg.user.email2" type="string"></Value>
         <Value key="Dossier.ReferenceNumber" type="string">Client1 1.1 / 1</Value>
+        <Value key="ogg.document.document_type" type="string"></Value>
         <Value key="User.ID" type="string">robert.ziegler</Value>
         <Value key="Dossier.Title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
-        <Value key="ogg.dossier.external_reference" type="string">qpr-900-9001-÷</Value>
-        <Value key="User.FullName" type="string">Ziegler Robert</Value>
+        <Value key="ogg.user.address2" type="string"></Value>
+        <Value key="ogg.user.address1" type="string"></Value>
+        <Value key="ogg.document.sequence_number" type="string">38</Value>
+        <Value key="ogg.document.document_date" type="string">Aug 31, 2016</Value>
+        <Value key="ogg.document.title" type="string">Schättengarten</Value>
+        <Value key="ogg.user.department" type="string"></Value>
+        <Value key="ogg.dossier.title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
         <Value key="ogg.user.lastname" type="string">Ziegler</Value>
+        <Value key="ogg.user.phone_office" type="string"></Value>
+        <Value key="ogg.user.url" type="string"></Value>
+        <Value key="ogg.user.salutation" type="string"></Value>
+        <Value key="Document.ReferenceNumber" type="string">Client1 1.1 / 1 / 38</Value>
+        <Value key="ogg.user.department_abbr" type="string"></Value>
+        <Value key="ogg.document.document_author" type="string"></Value>
+        <Value key="ogg.user.phone_fax" type="string"></Value>
+        <Value key="User.FullName" type="string">Ziegler Robert</Value>
+        <Value key="ogg.user.directorate_abbr" type="string"></Value>
+        <Value key="ogg.user.zip_code" type="string"></Value>
+        <Value key="ogg.dossier.external_reference" type="string">qpr-900-9001-÷</Value>
       </Function>
       <Commands>
         <Command Name="DefaultProcess">

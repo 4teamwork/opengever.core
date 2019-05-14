@@ -168,7 +168,7 @@ class DocPropertyProvider(object):
         namespace.
         """
         if value is None:
-            return
+            value = ''
         key = '.'.join(self.NS + (name,))
         properties[key] = value
 

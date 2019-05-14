@@ -61,6 +61,7 @@ Changelog
 - Fix parent-link styling in the userdetails view. [phgross]
 - Use smaller or equal in time window checking for nightly runner. [njohner]
 - Nightly jobs: Also log exceptions to logfile, not just Sentry. [lgraf]
+- Also update empty doc properties. [buchi]
 - Set 90px as a minimum instead of fixed height for description-like widgets. [lgraf]
 - Fix resolving of multi-adminunit tasks. [phgross]
 - Fix the setting of the content-type for Oneoffixx templates. [Rotonen]
