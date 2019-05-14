@@ -11,9 +11,12 @@ import argparse
 import logging
 import os
 import sys
+import traceback
 
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+
+logger = None
 
 
 def parse_args(argv):
@@ -47,6 +50,8 @@ def setup_logger():
 
 
 def run_nightly_jobs_handler(app, args):
+    global logger
+
     # Make sure unhandled exceptions get logged to Sentry
     register_sentry_except_hook()
 
@@ -70,8 +75,8 @@ def setup_language(plone):
     plone.REQUEST.setupLocale()
 
 
-def sentry_except_hook(exc_type, exc, traceback):
-    """Custom excepthook to log unhandled exceptions to Sentry.
+def sentry_except_hook(exc_type, exc, tb):
+    """Custom excepthook to log unhandled exceptions to Sentry and logfile.
 
     We need to install this one ourselves, because ZPublisher isn't in
     play during a bin/instance [zopectl_cmd] script, so we don't get to
@@ -81,10 +86,14 @@ def sentry_except_hook(exc_type, exc, traceback):
     happening) and we get a URL like 'http://foo' reported to Sentry, but
     it should be good enough to at least notice things going wrong.
     """
+    # Log exception to logfile
+    logger.error(''.join(traceback.format_exception(exc_type, exc, tb)))
+
+    # Log exception to sentry
     context = None
     request = getRequest()
-    maybe_report_exception(context, request, exc_type, exc, traceback)
-    return sys.__excepthook__(exc_type, exc, traceback)
+    maybe_report_exception(context, request, exc_type, exc, tb)
+    return sys.__excepthook__(exc_type, exc, tb)
 
 
 def register_sentry_except_hook():
