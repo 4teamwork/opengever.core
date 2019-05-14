@@ -126,10 +126,15 @@ class CompleteSuccessorTaskForm(Form):
         data, errors = self.extractData()
 
         if not errors:
-            response = util.change_task_workflow_state(self.context,
+            # Syncing the workflow change is done during document delivery
+            # (see deliver_documents_and_complete_task) therefore we skip
+            # the workflow syncing.
+            util.change_task_workflow_state(self.context,
                                             data['transition'],
+                                            disable_sync=True,
                                             text=data['text'])
 
+            response = IResponseContainer(self.context)[-1]
             self.deliver_documents_and_complete_task(data, response)
 
             msg = _(u'The documents were delivered to the issuer and the '
@@ -305,10 +310,11 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
             documents.append(doc)
             notify(ObjectAddedEvent(doc))
 
-        # Change workflow state of predecessor task:
+        # This view is only called as the receiving part of a transition
+        # syncing, so no workflow syncing is necessary.
         util.change_task_workflow_state(
             self.context, data['transition'], text=data['text'],
-            added_object=documents)
+            disable_sync=True, added_object=documents)
 
         return ok_response()
 

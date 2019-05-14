@@ -148,12 +148,13 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
     return response
 
 
-def change_task_workflow_state(task, transition, **kwargs):
+def change_task_workflow_state(task, transition, disable_sync=False, **kwargs):
     """Changes the workflow state of the task.
     """
 
     wftool = api.portal.get_tool('portal_workflow')
-    wftool.doActionFor(task, transition, transition_params=kwargs)
+    wftool.doActionFor(
+        task, transition, disable_sync=disable_sync, transition_params=kwargs)
 
 
 def get_documents_of_task(task, include_mails=False):
