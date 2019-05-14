@@ -4,6 +4,7 @@ Changelog
 2019.3.0 (unreleased)
 ---------------------
 
+- Improve error message when trying to delete a referenced document. [njohner]
 - Update documentation for SaaS deployment update. [njohner]
 - Extend task API serialization with responses data. [phgross]
 

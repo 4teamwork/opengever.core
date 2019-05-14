@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-01 14:32+0000\n"
+"POT-Creation-Date: 2019-05-14 08:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,6 +146,7 @@ msgid "Inbox Container"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20190401163048_add_manage_webactions_action/actions.xml
 msgid "Manage Webactions"
 msgstr ""
 
@@ -317,6 +318,15 @@ msgstr ""
 
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147/eCH-0039 Export"
+msgstr ""
+
+msgid "opengever.document.document"
+msgstr ""
+
+msgid "opengever.meeting.proposal"
+msgstr ""
+
+msgid "opengever.task.task"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml

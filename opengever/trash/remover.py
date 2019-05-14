@@ -7,6 +7,8 @@ from zope.component import getUtility
 from zope.component.interfaces import IObjectEvent
 from zope.component.interfaces import ObjectEvent
 from zope.event import notify
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 
@@ -80,12 +82,14 @@ class RemoveConditionsChecker(object):
         if objs_with_backreferences:
             links = []
             for obj in objs_with_backreferences:
-                links.append(u'<a href={}>{}</a>'.format(
-                    obj.absolute_url(), obj.title))
+                type_str = translate(obj.portal_type, 'opengever.core',
+                                     context=getRequest())
+                links.append(u'<a href={}>{}: {}</a>'.format(
+                    obj.absolute_url(), type_str, obj.title))
 
             self.error_msg.append(
                 _(u'msg_document_has_backreferences',
-                  default=u'The document is referred by the document(s) ${links}.',
+                  default=u'The document is referred by ${links}.',
                   mapping={'links': ', '.join(links)}))
 
     def verify_is_trashed(self):
