@@ -7,7 +7,7 @@ External Editor / Office Connector
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Zum Bearbeiten von Dokumenten muss der External Editor oder Office Connector
-installiert werden. Wir empfhelen den Office Connector, da dieser laufend von
+installiert werden. Wir empfehlen den Office Connector, da dieser laufend von
 4teamwork weiterentwickelt und verbessert wird.
 
 Sie können den Office Connector für Windows und Mac `auf der 4teamwork-Website <https://www.4teamwork.ch/office-connector>`_ herunterladen.
