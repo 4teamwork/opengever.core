@@ -17,10 +17,10 @@ Deckblatt oder Geschäftsdetails ausdrucken
 Über *Aktionen* kann das Deckblatt oder die Geschäftsdetails gedruckt
 werden.
 
-Dossier-Eigenschaften anzeigen
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dossier-Metadaten anzeigen
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wählt man die Aktion *Eigenschaften anzeigen*, werden sämtliche
+Wählt man die Aktion *Metadaten anzeigen*, werden sämtliche
 Metadaten des Dossiers angezeigt. Referenzierte Dossiers können von hier
 aus direkt ausgewählt werden.
 
