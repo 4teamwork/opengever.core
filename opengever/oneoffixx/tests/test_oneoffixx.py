@@ -4,6 +4,7 @@ from opengever.oneoffixx.api_client import OneoffixxAPIClient
 from opengever.oneoffixx.exceptions import OneoffixxBackendException
 from opengever.oneoffixx.exceptions import OneoffixxConfigurationException
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
+from opengever.oneoffixx.utils import whitelisted_template_types
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.annotation.interfaces import IAnnotations
@@ -23,7 +24,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
         access_token = {'access_token': 'all_may_enter'}
         template_library = [{'datasources': [{'id': 1}]}]
-        template_word = {
+        self.template_word = {
             'id': '2574d08d-95ea-4639-beab-3103fe4c3bc7',
             'metaTemplateId': '275af32e-bc40-45c2-85b7-afb1c0382653',
             'languages': ['2055'],
@@ -48,7 +49,7 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532be',
                 'localizedName': 'Word templates',
-                'templates': [template_word],
+                'templates': [self.template_word],
             },
             {
                 'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bf',
@@ -128,9 +129,29 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         browser.fill({'Template': node.get("title")})
         browser.find('Save').click()
 
-        self.assertEqual('document-state-shadow',
-                         api.content.get_state(browser.context))
-        self.assertTrue(browser.context.is_shadow_document())
+        document = browser.context
+        self.assertEqual(
+            'document-state-shadow', api.content.get_state(document))
+        self.assertTrue(document.is_shadow_document())
+
+        annotations = IAnnotations(document)
+        self.assertEqual(self.template_word['id'], annotations['template-id'])
+        self.assertEqual(
+            self.template_word['languages'], annotations['languages'])
+        self.assertIn(
+            self.template_word['localizedName'], annotations['filename'])
+        self.assertEqual('3 Example Word file.docx', annotations['filename'])
+        self.assertEqual(
+            'application/vnd.openxmlformats-officedocument.wordprocessingml'
+            '.document',
+            annotations['content-type'],
+        )
+
+        whitelisted_content_types = [
+            template['content-type']
+            for template in whitelisted_template_types.values()
+        ]
+        self.assertIn(annotations['content-type'], whitelisted_content_types)
 
     @browsing
     def test_retry_button_visible_on_shadow_doc(self, browser):

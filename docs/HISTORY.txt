@@ -6,6 +6,7 @@ Changelog
 
 - Set 90px as a minimum instead of fixed height for description-like widgets. [lgraf]
 - Fix resolving of multi-adminunit tasks. [phgross]
+- Fix the setting of the content-type for Oneoffixx templates. [Rotonen]
 - Concistently use "déroulement standard" for tasktemplates in French. [njohner]
 - Update and add missing French translations. [njohner, andresoberhaensli]
 - Fix has_children indexer which lead to duplicate brains. [njohner, phgross]

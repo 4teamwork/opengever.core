@@ -217,7 +217,7 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
             if authorized:
                 if document.is_shadow_document():
                     # Oneoffixx is only used for .docx files in opengever.core
-                    payload['content-type'] = IAnnotations(document).get("content_type")
+                    payload['content-type'] = IAnnotations(document)["content_type"]
                 else:
                     payload['content-type'] = document.get_file().contentType
 
