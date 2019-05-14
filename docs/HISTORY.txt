@@ -11,6 +11,7 @@ Changelog
 - Fix the setting of the content-type for Oneoffixx templates. [Rotonen]
 - Concistently use "déroulement standard" for tasktemplates in French. [njohner]
 - Update and add missing French translations. [njohner, andresoberhaensli]
+- Update favorite-icon after cancel a document checkout. [phgross]
 - Fix has_children indexer which lead to duplicate brains. [njohner, phgross]
 - Add a configurable scope for Oneoffixx OAuth2 grant requests. [Rotonen]
 - Trash: Update and reindex modification date when trashing documents. [lgraf]

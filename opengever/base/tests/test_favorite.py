@@ -218,3 +218,25 @@ class TestHandlers(IntegrationTestCase):
             self.assertEqual('icon-docx', fav_admin.icon_class)
         with self.login(self.regular_user):
             self.assertEqual('icon-docx', fav_user.icon_class)
+
+    def test_icon_class_of_favorites_get_updated_on_checkout_cancel(self):
+        with self.login(self.regular_user):
+            self.checkout_document(self.document)
+
+        self.login(self.administrator)
+
+        fav_admin = create(Builder('favorite')
+                           .for_object(self.document)
+                           .for_user(self.administrator))
+
+        fav_user = create(Builder('favorite')
+                          .for_object(self.document)
+                          .for_user(self.regular_user))
+
+        with self.login(self.regular_user):
+            self.cancel_document_checkout(self.document)
+
+        with self.login(self.administrator):
+            self.assertEqual('icon-docx', fav_admin.icon_class)
+        with self.login(self.regular_user):
+            self.assertEqual('icon-docx', fav_user.icon_class)

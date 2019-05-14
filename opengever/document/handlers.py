@@ -31,6 +31,10 @@ def checked_in(context, event):
     _update_favorites_icon_class(context)
 
 
+def checkout_canceled(context, event):
+    _update_favorites_icon_class(context)
+
+
 def before_documend_checked_in(context, event):
     # Don't prevent checkin by failure to update DocProperties
     _update_docproperties(context, raise_on_error=False)
