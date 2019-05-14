@@ -6,12 +6,10 @@ from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import Trasher
 from plone import api
 from sqlalchemy.exc import IntegrityError
-from zope.component import getMultiAdapter
 
 
 class TestFavoriteModel(IntegrationTestCase):
@@ -166,7 +164,7 @@ class TestHandlers(IntegrationTestCase):
         self.assertEquals(long_title[:CONTENT_TITLE_LENGTH],
                           Favorite.query.get(fav.favorite_id).title)
 
-    def test_icon_class_of_favorites_get_updated_on_checkin_checkout_document(self):
+    def test_icon_class_of_favorites_get_updated_on_checkout(self):
         self.login(self.administrator)
 
         fav_admin = create(Builder('favorite')
@@ -185,15 +183,11 @@ class TestHandlers(IntegrationTestCase):
 
         # Checkout document with regular_user
         with self.login(self.regular_user):
-            manager = getMultiAdapter(
-                (self.document, self.request),
-                ICheckinCheckoutManager)
-            manager.checkout()
+            self.checkout_document(self.document)
 
         # Show checkout-icon for document with administartor
         with self.login(self.administrator):
-            self.assertEqual(
-                'icon-docx is-checked-out', fav_admin.icon_class)
+            self.assertEqual('icon-docx is-checked-out', fav_admin.icon_class)
 
         # Show self-checkout-icon for document with regular user
         with self.login(self.regular_user):
@@ -201,9 +195,23 @@ class TestHandlers(IntegrationTestCase):
                 'icon-docx is-checked-out-by-current-user',
                 fav_user.icon_class)
 
+    def test_icon_class_of_favorites_get_updated_on_checkin(self):
+        with self.login(self.regular_user):
+            self.checkout_document(self.document)
+
+        self.login(self.administrator)
+
+        fav_admin = create(Builder('favorite')
+                           .for_object(self.document)
+                           .for_user(self.administrator))
+
+        fav_user = create(Builder('favorite')
+                          .for_object(self.document)
+                          .for_user(self.regular_user))
+
         # Checkin document again
         with self.login(self.regular_user):
-            manager.checkin()
+            self.checkin_document(self.document)
 
         # Show default document icons
         with self.login(self.administrator):
