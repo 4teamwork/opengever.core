@@ -17,6 +17,7 @@ Index:
    chapitre9-contacts
    chapitre10-recherches
    chapitre11-boitereception
+   taches/index
    chapitre13-deroulements-standards
    chapitre14-referentiel
    app-seances/index.rst
