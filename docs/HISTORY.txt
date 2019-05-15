@@ -4,6 +4,7 @@ Changelog
 2019.2.0 (unreleased)
 ---------------------
 
+- Fix parent-link styling in the userdetails view. [phgross]
 - Use smaller or equal in time window checking for nightly runner. [njohner]
 - Nightly jobs: Also log exceptions to logfile, not just Sentry. [lgraf]
 - Set 90px as a minimum instead of fixed height for description-like widgets. [lgraf]

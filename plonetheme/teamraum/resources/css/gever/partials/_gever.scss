@@ -848,6 +848,12 @@ div.answerType:after {
 /* @group user and team detail */
 body.template-user-details #content,
 .user_details {
+
+  .link-parent {
+    display: block;
+    margin: 1em 0;
+  }
+
   .groups,
   .teams {
     list-style-type: none;
