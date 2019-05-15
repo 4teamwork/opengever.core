@@ -149,6 +149,12 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckoutCanceledEvent"
+      handler=".handlers.checkout_canceled"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectBeforeCheckInEvent"
       handler=".handlers.before_documend_checked_in"
       />
