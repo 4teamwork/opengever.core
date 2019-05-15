@@ -36,7 +36,7 @@ class IOneoffixxSettings(Interface):
         title=u'Oneoffixx backend auth path',
         description=u'A slash separated path for the authentication endpoint.'
                     u' Including leading slash, excluding trailing slash.',
-        default=u'/webapi/api/v1',
+        default=u'/ids/connect/token',
         required=False,
     )
 
@@ -44,7 +44,7 @@ class IOneoffixxSettings(Interface):
         title=u'Oneoffixx backend web service path',
         description=u'A slash separated path for the web service endpoint.'
                     u' Including leading slash, excluding trailing slash.',
-        default=u'/ids/connect/token',
+        default=u'/webapi/api/v1',
         required=False,
     )
 

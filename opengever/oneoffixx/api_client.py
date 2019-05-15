@@ -5,7 +5,6 @@ from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from plone import api
 from plone.memoize import ram
 from time import time
-from urlparse import urlsplit
 from urlparse import urlunsplit
 import json
 import os.path
@@ -107,13 +106,91 @@ class OneoffixxAPIClient(object):
 
         return self.credentials
 
-    def get_oneoffixx_baseurl(self):
-        return api.portal.get_registry_record('baseurl', interface=IOneoffixxSettings)
+    def get_oneoffixx_api_protocol(self):
+        """Return the protocol used by the Oneoffixx API.
 
-    def get_oneoffixx_root_url(self):
-        baseurl = urlsplit(self.get_oneoffixx_baseurl())
-        rooturl = urlunsplit((baseurl.scheme, baseurl.netloc, '', '', ''))
-        return rooturl
+        This is normally HTTP or HTTPS, but as tests can also use mock, we do
+        not want to add any evaluation logic here. It is not expected people
+        ever have to configure this to a non-default setting.
+        """
+        return api.portal.get_registry_record(
+            'protocol', interface=IOneoffixxSettings)
+
+    def get_oneoffixx_api_hostname(self):
+        hostname = api.portal.get_registry_record(
+            'hostname', interface=IOneoffixxSettings)
+        if not hostname:
+            raise OneoffixxConfigurationException(
+                'No Oneoffixx backend hostname configured!')
+        return hostname
+
+    def get_oneoffixx_api_path_prefix(self):
+        path_prefix = api.portal.get_registry_record(
+            'path_prefix', interface=IOneoffixxSettings)
+        if path_prefix:
+            if path_prefix[0] != '/':
+                raise OneoffixxConfigurationException(
+                    'Oneoffixx API path prefix erroneously configured without'
+                    ' a leading slash.'
+                )
+            elif path_prefix[-1] == '/':
+                raise OneoffixxConfigurationException(
+                    'Oneoffixx API path prefix erroneously configured with a'
+                    ' trailing slash.'
+                )
+        return path_prefix
+
+    def get_oneoffixx_api_auth_path(self):
+        auth_path = api.portal.get_registry_record(
+            'auth_path', interface=IOneoffixxSettings)
+        if not auth_path:
+            raise OneoffixxConfigurationException(
+                'No Oneoffixx API auth path configured!')
+        if auth_path[0] != '/':
+            raise OneoffixxConfigurationException(
+                'Oneoffixx API auth path erroneously configured without a'
+                ' leading slash.'
+            )
+        elif auth_path[-1] == '/':
+            raise OneoffixxConfigurationException(
+                'Oneoffixx API auth path erroneously configured with a'
+                ' trailing slash.'
+            )
+        return auth_path
+
+    def get_oneoffixx_api_webservice_path(self):
+        webservice_path = api.portal.get_registry_record(
+            'webservice_path', interface=IOneoffixxSettings)
+        if not webservice_path:
+            raise OneoffixxConfigurationException(
+                'No Oneoffixx API webservice path configured!')
+        if webservice_path[0] != '/':
+            raise OneoffixxConfigurationException(
+                'Oneoffixx API auth path erroneously configured without a'
+                ' leading slash.'
+            )
+        elif webservice_path[-1] == '/':
+            raise OneoffixxConfigurationException(
+                'Oneoffixx API auth path erroneously configured with a'
+                ' trailing slash.'
+            )
+        return webservice_path
+
+    def get_oneoffixx_auth_url(self):
+        protocol = self.get_oneoffixx_api_protocol()
+        hostname = self.get_oneoffixx_api_hostname()
+        prefix = self.get_oneoffixx_api_path_prefix()
+        auth_path = self.get_oneoffixx_api_auth_path()
+        path = u''.join((prefix, auth_path))
+        return urlunsplit((protocol, hostname, path, u'', u''))
+
+    def get_oneoffixx_webservice_url(self):
+        protocol = self.get_oneoffixx_api_protocol()
+        hostname = self.get_oneoffixx_api_hostname()
+        prefix = self.get_oneoffixx_api_path_prefix()
+        auth_path = self.get_oneoffixx_api_webservice_path()
+        path = u''.join((prefix, auth_path))
+        return urlunsplit((protocol, hostname, path, u'', u''))
 
     @ram.cache(oneoffixx_access_token_cachekey)
     def get_oneoffixx_access_token(self):
@@ -123,8 +200,7 @@ class OneoffixxAPIClient(object):
 
         The user id provides us a stable cache key to invalidate with.
         """
-        url = '/'.join((self.get_oneoffixx_root_url(), 'ids', 'connect', 'token', ))
-
+        url = self.get_oneoffixx_auth_url()
         credentials = self.get_credentials()
         try:
             client_id = credentials['client_id']
@@ -194,8 +270,8 @@ class OneoffixxAPIClient(object):
 
     @ram.cache(oneoffixx_templatelibrary_id_cachekey)
     def get_oneoffixx_templatelibrary_id(self):
-        url = '/'.join((self.get_oneoffixx_baseurl(), 'TenantInfo'))
         try:
+            url = u'/'.join((self.get_oneoffixx_webservice_url(), 'TenantInfo'))
             response = self.session.get(url)
             response.raise_for_status()
             templatelibrary_id = response.json()[0].get('datasources')[0].get('id')
@@ -216,11 +292,11 @@ class OneoffixxAPIClient(object):
     @ram.cache(oneoffixx_template_groups_cachekey)
     def get_oneoffixx_template_groups(self):
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
-        url = '/'.join((
-            self.get_oneoffixx_baseurl(),
-            '{}'.format(templatelibrary_id),
-            'TemplateLibrary',
-            'TemplateGroups',
+        url = u'/'.join((
+            self.get_oneoffixx_webservice_url(),
+            u'{}'.format(templatelibrary_id),
+            u'TemplateLibrary',
+            u'TemplateGroups',
         ))
         try:
             response = self.session.get(url)
@@ -239,11 +315,11 @@ class OneoffixxAPIClient(object):
     @ram.cache(oneoffixx_favorites_cachekey)
     def get_oneoffixx_favorites(self):
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
-        url = '/'.join((
-            self.get_oneoffixx_baseurl(),
-            '{}'.format(templatelibrary_id),
-            'TemplateLibrary',
-            'TemplateFavorites',
+        url = u'/'.join((
+            self.get_oneoffixx_webservice_url(),
+            u'{}'.format(templatelibrary_id),
+            u'TemplateLibrary',
+            u'TemplateFavorites',
         ))
         try:
             response = self.session.get(url)

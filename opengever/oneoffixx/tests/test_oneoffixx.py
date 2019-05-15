@@ -20,7 +20,9 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -70,16 +72,16 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         }
         session = requests.Session()
         adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
             text=json.dumps(template_groups),
         )
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
             text=json.dumps(favorites),
         )
         session.mount('mock', adapter)
@@ -93,7 +95,9 @@ class TestCreateDocFromOneoffixxTemplate(IntegrationTestCase):
         OneoffixxAPIClient(session, credentials)
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
@@ -280,7 +284,9 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxFilterTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -303,16 +309,16 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
         favorites = {'id': 'c2ddc01a-befd-4e0d-b15f-f67025f532bd', 'localizedName': 'Favorites', 'templates': []}
         session = requests.Session()
         adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
             text=json.dumps(template_groups),
         )
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
             text=json.dumps(favorites),
         )
         session.mount('mock', adapter)
@@ -326,7 +332,9 @@ class TestCreateDocFromOneoffixxFilterTemplate(IntegrationTestCase):
         OneoffixxAPIClient(session, credentials)
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
@@ -389,7 +397,9 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
 
     def setUp(self):
         super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         self.session = requests.Session()
@@ -403,7 +413,9 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         }
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
@@ -416,21 +428,21 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
         super(TestCreateDocFromOneoffixxBackendFailuresTemplate, self).tearDown()
 
     def test_access_token_bad_return(self):
-        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', status_code=400)
+        self.adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', status_code=400)
         with self.assertRaises(OneoffixxBackendException):
             OneoffixxAPIClient(self.session, self.credentials)
 
     def test_access_token_no_token(self):
         access_token = {}
-        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
+        self.adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
         with self.assertRaises(OneoffixxBackendException):
             OneoffixxAPIClient(self.session, self.credentials)
 
     @browsing
     def test_template_library_bad_return(self, browser):
         access_token = {'access_token': 'all_may_enter'}
-        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
-        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', status_code=400)
+        self.adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
+        self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', status_code=400)
         OneoffixxAPIClient(self.session, self.credentials)
 
         self.login(self.regular_user, browser)
@@ -443,9 +455,9 @@ class TestCreateDocFromOneoffixxBackendFailuresTemplate(IntegrationTestCase):
     def test_template_groups_bad_return(self, browser):
         access_token = {'access_token': 'all_may_enter'}
         template_library = [{'datasources': [{'id': 1}]}]
-        self.adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
-        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
-        self.adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups', status_code=400)
+        self.adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
+        self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        self.adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups', status_code=400)
         OneoffixxAPIClient(self.session, self.credentials)
 
         self.login(self.regular_user, browser)
@@ -491,7 +503,9 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
 
     def setUp(self):
         super(TestOneoffixxTemplateFavorites, self).setUp()
-        api.portal.set_registry_record('baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
@@ -541,16 +555,16 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         }
         session = requests.Session()
         adapter = requests_mock.Adapter()
-        adapter.register_uri('POST', 'mock://nohost/ids/connect/token', text=json.dumps(access_token))
-        adapter.register_uri('GET', 'mock://nohost/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
+        adapter.register_uri('POST', 'mock://nohost/foo/ids/connect/token', text=json.dumps(access_token))
+        adapter.register_uri('GET', 'mock://nohost/foo/webapi/api/v1/TenantInfo', text=json.dumps(template_library))
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateGroups',
             text=json.dumps(template_groups),
         )
         adapter.register_uri(
             'GET',
-            'mock://nohost/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
+            'mock://nohost/foo/webapi/api/v1/1/TemplateLibrary/TemplateFavorites',
             text=json.dumps(favorites),
         )
         session.mount('mock', adapter)
@@ -564,7 +578,9 @@ class TestOneoffixxTemplateFavorites(IntegrationTestCase):
         OneoffixxAPIClient(session, credentials)
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(OneoffixxAPIClient, None)
@@ -647,17 +663,17 @@ class TestOneoffixxClientGrantScopeDefault(IntegrationTestCase):
 
     def setUp(self):
         super(TestOneoffixxClientGrantScopeDefault, self).setUp()
-        api.portal.set_registry_record(
-            'baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
-        api.portal.set_registry_record(
-            'fake_sid', u'foobar', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
 
         session = requests.Session()
         self.adapter = requests_mock.Adapter()
         self.adapter.register_uri(
-            'POST', 'mock://nohost/ids/connect/token',
+            'POST', 'mock://nohost/foo/ids/connect/token',
             text=json.dumps(access_token),
         )
         session.mount('mock', self.adapter)
@@ -671,7 +687,9 @@ class TestOneoffixxClientGrantScopeDefault(IntegrationTestCase):
         self.api_client = OneoffixxAPIClient(session, credentials)
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(
@@ -697,19 +715,18 @@ class TestOneoffixxClientGrantScopeConfig(IntegrationTestCase):
 
     def setUp(self):
         super(TestOneoffixxClientGrantScopeConfig, self).setUp()
-        api.portal.set_registry_record(
-            'baseurl', u'mock://nohost/webapi/api/v1', IOneoffixxSettings)
-        api.portal.set_registry_record(
-            'fake_sid', u'foobar', IOneoffixxSettings)
-        api.portal.set_registry_record(
-            'scope', u'oo_WebApi', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
+        api.portal.set_registry_record('fake_sid', u'foobar', IOneoffixxSettings)
+        api.portal.set_registry_record('scope', u'oo_WebApi', IOneoffixxSettings)
 
         access_token = {'access_token': 'all_may_enter'}
 
         session = requests.Session()
         self.adapter = requests_mock.Adapter()
         self.adapter.register_uri(
-            'POST', 'mock://nohost/ids/connect/token',
+            'POST', 'mock://nohost/foo/ids/connect/token',
             text=json.dumps(access_token),
         )
         session.mount('mock', self.adapter)
@@ -723,7 +740,9 @@ class TestOneoffixxClientGrantScopeConfig(IntegrationTestCase):
         self.api_client = OneoffixxAPIClient(session, credentials)
 
     def tearDown(self):
-        api.portal.set_registry_record('baseurl', u'', IOneoffixxSettings)
+        api.portal.set_registry_record('protocol', u'mock', IOneoffixxSettings)
+        api.portal.set_registry_record('hostname', u'nohost', IOneoffixxSettings)
+        api.portal.set_registry_record('path_prefix', u'/foo', IOneoffixxSettings)
         api.portal.set_registry_record('fake_sid', u'', IOneoffixxSettings)
         # Tear down the singleton
         OneoffixxAPIClient.__metaclass__._instances.pop(
