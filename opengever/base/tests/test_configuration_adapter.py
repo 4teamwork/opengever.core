@@ -25,6 +25,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('fake_sid', u''),
                 ('double_encode_bug', True),
                 ('cache_timeout', 2592000),
+                ('scope', u'oo_V1WebApi'),
             ])),
             ('sharing_configuration', OrderedDict([
                 ('white_list_prefix', u'^.+'),

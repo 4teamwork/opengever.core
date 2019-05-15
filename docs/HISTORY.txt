@@ -12,6 +12,7 @@ Changelog
 - Concistently use "déroulement standard" for tasktemplates in French. [njohner]
 - Update and add missing French translations. [njohner, andresoberhaensli]
 - Fix has_children indexer which lead to duplicate brains. [njohner, phgross]
+- Add a configurable scope for Oneoffixx OAuth2 grant requests. [Rotonen]
 - Trash: Update and reindex modification date when trashing documents. [lgraf]
 - Respect tabbedview settings when generating a document excel export. [phgross]
 - Add file_extension indexer for mails. [phgross]

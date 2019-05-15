@@ -5,6 +5,8 @@ from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from plone import api
 from plone.memoize import ram
 from time import time
+from urlparse import urlsplit
+from urlparse import urlunsplit
 import json
 import os.path
 import requests
@@ -108,6 +110,11 @@ class OneoffixxAPIClient(object):
     def get_oneoffixx_baseurl(self):
         return api.portal.get_registry_record('baseurl', interface=IOneoffixxSettings)
 
+    def get_oneoffixx_root_url(self):
+        baseurl = urlsplit(self.get_oneoffixx_baseurl())
+        rooturl = urlunsplit((baseurl.scheme, baseurl.netloc, '', '', ''))
+        return rooturl
+
     @ram.cache(oneoffixx_access_token_cachekey)
     def get_oneoffixx_access_token(self):
         """Get and blindly persist per user id the access token.
@@ -116,7 +123,7 @@ class OneoffixxAPIClient(object):
 
         The user id provides us a stable cache key to invalidate with.
         """
-        url = '/'.join((self.get_oneoffixx_baseurl(), 'ids/connect/token', ))
+        url = '/'.join((self.get_oneoffixx_root_url(), 'ids', 'connect', 'token', ))
 
         credentials = self.get_credentials()
         try:
@@ -157,10 +164,10 @@ class OneoffixxAPIClient(object):
         # case they ever fix it
         if api.portal.get_registry_record('double_encode_bug', interface=IOneoffixxSettings):
             grant_type = urllib.quote_plus(grant_type)
-
         data = {
             'grant_type': grant_type,
-            'scope': 'oo_V1WebApi',
+            'scope': api.portal.get_registry_record(
+                'scope', interface=IOneoffixxSettings),
             'client_id': client_id,
             'client_secret': client_secret,
             'impersonateAs': impersonate_as,
@@ -187,7 +194,7 @@ class OneoffixxAPIClient(object):
 
     @ram.cache(oneoffixx_templatelibrary_id_cachekey)
     def get_oneoffixx_templatelibrary_id(self):
-        url = '/'.join((self.get_oneoffixx_baseurl(), 'webapi/api/v1/TenantInfo', ))
+        url = '/'.join((self.get_oneoffixx_baseurl(), 'TenantInfo'))
         try:
             response = self.session.get(url)
             response.raise_for_status()
@@ -211,7 +218,9 @@ class OneoffixxAPIClient(object):
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
         url = '/'.join((
             self.get_oneoffixx_baseurl(),
-            'webapi/api/v1/{}/TemplateLibrary/TemplateGroups'.format(templatelibrary_id),
+            '{}'.format(templatelibrary_id),
+            'TemplateLibrary',
+            'TemplateGroups',
         ))
         try:
             response = self.session.get(url)
@@ -232,7 +241,9 @@ class OneoffixxAPIClient(object):
         templatelibrary_id = self.get_oneoffixx_templatelibrary_id()
         url = '/'.join((
             self.get_oneoffixx_baseurl(),
-            'webapi/api/v1/{}/TemplateLibrary/TemplateFavorites'.format(templatelibrary_id),
+            '{}'.format(templatelibrary_id),
+            'TemplateLibrary',
+            'TemplateFavorites',
         ))
         try:
             response = self.session.get(url)
