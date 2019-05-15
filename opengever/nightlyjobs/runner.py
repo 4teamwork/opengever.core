@@ -162,7 +162,7 @@ class NightlyJobRunner(object):
         current_time = timedelta(hours=now.hour, minutes=now.minute)
         if current_time - self.window_start < timedelta():
             current_time += timedelta(hours=24)
-        return self.window_start < current_time < self.window_end
+        return self.window_start <= current_time <= self.window_end
 
     def _is_memory_full(self, load):
         return (load['virtual_memory_available'] < self.LOAD_LIMITS['virtual_memory_available']

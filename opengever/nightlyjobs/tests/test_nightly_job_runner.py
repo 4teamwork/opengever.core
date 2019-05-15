@@ -267,9 +267,11 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.assertEqual(3, runner.get_initial_jobs_count())
         self.assertEqual(0, runner.get_executed_jobs_count())
 
+        # One job gets executed at 4:00 and one just on the window
+        # edge at 5:00, then it raises TimeWindowExceeded
         exception = runner.execute_pending_jobs()
         self.assertIsInstance(exception, TimeWindowExceeded)
-        self.assertEqual(1, runner.get_executed_jobs_count())
+        self.assertEqual(2, runner.get_executed_jobs_count())
 
     def test_timewindowexceeded_early_abort_message(self):
         self.login(self.manager)
