@@ -21,7 +21,6 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('end_time', u'5:00:00'),
                 ])),
             ('oneoffixx_settings', OrderedDict([
-                ('baseurl', u''),
                 ('fake_sid', u''),
                 ('double_encode_bug', True),
                 ('cache_timeout', 2592000),

@@ -10,13 +10,6 @@ class IOneoffixxSettings(Interface):
                     'This feature can only be used if officeconnector is activated',
         default=False)
 
-    baseurl = schema.TextLine(
-        title=u'Oneoffixx backend base URL',
-        description=u'An URL without a trailing slash to the Oneoffixx backend.',
-        default=u'',
-        required=False,
-    )
-
     fake_sid = schema.TextLine(
         title=u'A fake SID for testing Oneoffixx with preshared testing SIDs',
         description=u'A preshared SID for testing. Should be empty for production. '

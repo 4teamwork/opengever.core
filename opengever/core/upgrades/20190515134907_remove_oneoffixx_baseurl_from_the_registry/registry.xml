@@ -1,0 +1,5 @@
+<registry>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="baseurl" delete="True" remove="True" >
+    <required>False</required>
+  </record>
+</registry>

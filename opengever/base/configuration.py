@@ -86,7 +86,6 @@ class GeverSettingsAdpaterV1(object):
 
     def get_oneoffixx_settings(self):
         oneoffixx_settings = OrderedDict()
-        oneoffixx_settings['baseurl'] = api.portal.get_registry_record('baseurl', interface=IOneoffixxSettings)
         oneoffixx_settings['fake_sid'] = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
         oneoffixx_settings['double_encode_bug'] = api.portal.get_registry_record('double_encode_bug', interface=IOneoffixxSettings)  # noqa
         oneoffixx_settings['cache_timeout'] = api.portal.get_registry_record('cache_timeout', interface=IOneoffixxSettings)
