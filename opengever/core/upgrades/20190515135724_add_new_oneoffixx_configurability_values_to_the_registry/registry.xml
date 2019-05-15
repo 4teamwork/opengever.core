@@ -1,0 +1,17 @@
+<registry>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="protocol">
+    <required>False</required>
+  </record>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="hostname">
+    <required>False</required>
+  </record>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="path_prefix">
+    <required>False</required>
+  </record>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="auth_path">
+    <required>False</required>
+  </record>
+  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="webservice_path">
+    <required>False</required>
+  </record>
+</registry>

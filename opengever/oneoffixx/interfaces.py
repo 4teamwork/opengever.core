@@ -10,10 +10,41 @@ class IOneoffixxSettings(Interface):
                     'This feature can only be used if officeconnector is activated',
         default=False)
 
-    baseurl = schema.TextLine(
-        title=u'Oneoffixx backend base URL',
-        description=u'An URL without a trailing slash to the Oneoffixx backend.',
+    protocol = schema.TextLine(
+        title=u'Oneoffixx backend protocol',
+        description=u'Must be set to either http or https.',
+        default=u'https',
+        required=False,
+    )
+
+    hostname = schema.TextLine(
+        title=u'Oneoffixx backend hostname',
+        description=u'FQDN, hostname, IP, or equivalent.',
         default=u'',
+        required=False,
+    )
+
+    path_prefix = schema.TextLine(
+        title=u'Oneoffixx backend path prefix',
+        description=u'A slash separated path prefix for the backend. Including'
+                    u' leading slash, excluding trailing slash.',
+        default=u'',
+        required=False,
+    )
+
+    auth_path = schema.TextLine(
+        title=u'Oneoffixx backend auth path',
+        description=u'A slash separated path for the authentication endpoint.'
+                    u' Including leading slash, excluding trailing slash.',
+        default=u'/ids/connect/token',
+        required=False,
+    )
+
+    webservice_path = schema.TextLine(
+        title=u'Oneoffixx backend web service path',
+        description=u'A slash separated path for the web service endpoint.'
+                    u' Including leading slash, excluding trailing slash.',
+        default=u'/webapi/api/v1',
         required=False,
     )
 

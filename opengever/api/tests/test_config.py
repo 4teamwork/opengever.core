@@ -123,7 +123,6 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@config', headers={'Accept': 'application/json'})
         self.assertEqual(browser.status_code, 200)
         expected_oneoffixx_settings = {
-            u'baseurl': u'',
             u'fake_sid': u'',
             u'double_encode_bug': True,
             u'cache_timeout': 2592000,
