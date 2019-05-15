@@ -10,6 +10,44 @@ class IOneoffixxSettings(Interface):
                     'This feature can only be used if officeconnector is activated',
         default=False)
 
+    protocol = schema.TextLine(
+        title=u'Oneoffixx backend protocol',
+        description=u'Must be set to either http or https.',
+        default=u'https',
+        required=False,
+    )
+
+    hostname = schema.TextLine(
+        title=u'Oneoffixx backend hostname',
+        description=u'FQDN, hostname, IP, or equivalent.',
+        default=u'',
+        required=False,
+    )
+
+    path_prefix = schema.TextLine(
+        title=u'Oneoffixx backend path prefix',
+        description=u'A slash separated path prefix for the backend. Including'
+                    u' leading slash, excluding trailing slash.',
+        default=u'',
+        required=False,
+    )
+
+    auth_path = schema.TextLine(
+        title=u'Oneoffixx backend auth path',
+        description=u'A slash separated path for the authentication endpoint.'
+                    u' Including leading slash, excluding trailing slash.',
+        default=u'/webapi/api/v1',
+        required=False,
+    )
+
+    webservice_path = schema.TextLine(
+        title=u'Oneoffixx backend web service path',
+        description=u'A slash separated path for the web service endpoint.'
+                    u' Including leading slash, excluding trailing slash.',
+        default=u'/ids/connect/token',
+        required=False,
+    )
+
     fake_sid = schema.TextLine(
         title=u'A fake SID for testing Oneoffixx with preshared testing SIDs',
         description=u'A preshared SID for testing. Should be empty for production. '
