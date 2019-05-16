@@ -3,6 +3,8 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
+from opengever.onlyoffice import is_onlyoffice_feature_enabled
+from opengever.onlyoffice.config import SUPPORTED_TYPES
 from opengever.webactions.interfaces import IWebActionsRenderer
 from opengever.wopi.interfaces import IWOPISettings
 from opengever.wopi import is_wopi_feature_enabled
@@ -110,6 +112,16 @@ class ActionButtonRendererMixin(object):
             return False
         basename, extension = os.path.splitext(self.context.file.filename)
         if extension in ['.docx', '.xlsx', '.pptx']:
+            return True
+        return False
+
+    def is_onlyoffice_editable(self):
+        if not self.is_document() or not is_onlyoffice_feature_enabled():
+            return False
+        if not self.context.file:
+            return False
+        basename, extension = os.path.splitext(self.context.file.filename)
+        if extension in SUPPORTED_TYPES:
             return True
         return False
 

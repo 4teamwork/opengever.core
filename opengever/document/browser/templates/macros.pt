@@ -83,6 +83,16 @@
                         </a>
                     </tal:wopi>
 
+
+                    <tal:onlyoffice tal:condition="view/is_onlyoffice_editable">
+                        <a tal:attributes="href string:${context/absolute_url}/onlyoffice_edit"
+                           class="function-edit"
+                           href="#"
+                           i18n:translate="label_edit_with_onlyoffice">
+                                Edit Online with OnlyOffice
+                        </a>
+                    </tal:onlyoffice>
+
                 </tal:oc_editable>
 
                 <tal:oc_uneditable tal:condition="not: office_connector_editable">
