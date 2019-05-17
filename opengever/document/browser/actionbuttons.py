@@ -4,12 +4,15 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.webactions.interfaces import IWebActionsRenderer
+from opengever.wopi.interfaces import IWOPISettings
+from opengever.wopi import is_wopi_feature_enabled
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.protect import createToken
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
+import os.path
 
 
 class ActionButtonRendererMixin(object):
@@ -99,6 +102,16 @@ class ActionButtonRendererMixin(object):
 
     def is_oneoffixx_creatable(self):
         return self.is_document() and self.context.is_oneoffixx_creatable()
+
+    def is_wopi_editable(self):
+        if not self.is_document() or not is_wopi_feature_enabled():
+            return False
+        if not self.context.file:
+            return False
+        basename, extension = os.path.splitext(self.context.file.filename)
+        if extension in ['.docx', '.xlsx', '.pptx']:
+            return True
+        return False
 
     def is_attach_to_email_available(self):
         if not is_officeconnector_attach_feature_enabled():

@@ -1,22 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:i18n="http://namespaces.zope.org/i18n"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="opengever.webactions">
-
-  <browser:page
-      name="wopi"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      class=".wopi.WOPIView"
-      permission="zope.Public"
-      />
-
-	<browser:page
-	    for="opengever.document.document.IDocumentSchema"
-	    name="edit_online"
-	    class=".edit.EditOnlineView"
-	    template="edit.pt"
-	    permission="zope2.View"
-	    />
+    i18n_domain="opengever.wopi">
+    
+  <include package=".browser" />
 
 </configure>

@@ -73,6 +73,16 @@
                             </a>
                         </tal:notcheckedout>
                     </tal:zem_checkout>
+
+                    <tal:wopi tal:condition="view/is_wopi_editable">
+                        <a tal:attributes="href string:${context/absolute_url}/officeonline_edit"
+                           class="function-edit"
+                           href="#"
+                           i18n:translate="label_edit_with_officeonline">
+                            Edit with Office Online
+                        </a>
+                    </tal:wopi>
+
                 </tal:oc_editable>
 
                 <tal:oc_uneditable tal:condition="not: office_connector_editable">
