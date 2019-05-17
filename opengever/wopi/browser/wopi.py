@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager
 from Acquisition import aq_parent
+from base64 import urlsafe_b64decode
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.wopi.token import validate_access_token
 from plone import api
@@ -18,7 +19,6 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 from zope.publisher.interfaces import NotFound
-from base64 import urlsafe_b64decode
 import json
 import logging
 

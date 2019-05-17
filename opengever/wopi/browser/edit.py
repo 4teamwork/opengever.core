@@ -1,11 +1,11 @@
 from AccessControl import getSecurityManager
-from Products.Five.browser import BrowserView
-from zope.component import queryMultiAdapter
-from plone.uuid.interfaces import IUUID
+from base64 import urlsafe_b64encode
 from opengever.wopi.discovery import actions_by_extension
 from opengever.wopi.token import create_access_token
+from plone.uuid.interfaces import IUUID
+from Products.Five.browser import BrowserView
 from time import time
-from base64 import urlsafe_b64encode
+from zope.component import queryMultiAdapter
 
 
 class EditOnlineView(BrowserView):

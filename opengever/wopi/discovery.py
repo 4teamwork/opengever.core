@@ -1,9 +1,10 @@
 from collections import defaultdict
+from opengever.wopi.interfaces import IWOPISettings
+from plone import api
 from xml.etree import cElementTree as ET
 import requests
 
 
-URL = 'https://officeonline.4teamwork.ch/hosting/discovery'
 _ACTIONS = None
 
 
@@ -28,11 +29,13 @@ def etree_to_dict(t):
     return d
 
 
-def actions_by_extension(net_zone='external-https', url=URL):
+def actions_by_extension(net_zone='external-https'):
     global _ACTIONS
     if _ACTIONS:
         return _ACTIONS
 
+    url = api.portal.get_registry_record(
+        name='discovery_url', interface=IWOPISettings)
     resp = requests.get(url)
     tree = ET.XML(resp.text)
     wopi_discovery = etree_to_dict(tree)['wopi-discovery']
