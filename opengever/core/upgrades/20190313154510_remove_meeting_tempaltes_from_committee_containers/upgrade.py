@@ -34,7 +34,7 @@ class RemoveMeetingTempaltesFromCommitteeContainers(UpgradeStep):
         for committee in self.objects(query, message):
             committee_container = committee.get_committee_container()
             for template_name in templates:
-                if not getattr(committee, template_name) and getattr(committee_container, template_name):
+                if not getattr(committee, template_name, None) and getattr(committee_container, template_name, None):
                     template_relation = getattr(committee_container, template_name)
                     template = template_relation.to_object
                     if template:
@@ -49,7 +49,8 @@ class RemoveMeetingTempaltesFromCommitteeContainers(UpgradeStep):
         query = {'object_provides': ICommitteeContainer.__identifier__}
         for committee_container in self.objects(query, message):
             for template_name in templates:
-                template = getattr(committee_container, template_name)
-                if template:
-                    relation_catalog.unindex(template)
-                delattr(committee_container, template_name)
+                if hasattr(committee_container, template_name):
+                    template = getattr(committee_container, template_name)
+                    if template:
+                        relation_catalog.unindex(template)
+                    delattr(committee_container, template_name)
