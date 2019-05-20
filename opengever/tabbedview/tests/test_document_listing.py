@@ -92,3 +92,18 @@ class TestDocumentListing(IntegrationTestCase):
         self.assertEqual(2, len(table.rows))
         self.assertEqual(['Title', self.subdocument.title],
                          table.column("Title"))
+
+    @browsing
+    def test_filters_is_available_on_the_no_content_page(self, browser):
+        self.activate_feature('solr')
+        self.activate_feature('extjs')
+        self.login(self.regular_user, browser=browser)
+
+        self.mock_solr(response_json=self.solr_response('Wichtig', 'secret'))
+
+        browser.visit(self.dossier, view='tabbedview_view-documents',
+                      data={'subjects': ["secret"]})
+
+        self.assertEqual(
+            ['Wichtig', 'secret'],
+            browser.css('select.keyword-widget option').text)
