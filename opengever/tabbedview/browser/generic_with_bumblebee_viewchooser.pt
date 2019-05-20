@@ -65,11 +65,40 @@
   </tal:has_contents>
 
   <tal:extjs condition="view/extjs_enabled">
-    <p style="display:none"
-       id="message_no_contents"
-       i18n:translate="label_no_contents">
-      No contents
-    </p>
+    <tal:START_CUSTOM_______________________________________ />
+    <div id="message_no_contents" class="tabbedview_select" style="display:none"
+        i18n:domain="opengever.tabbedview">
+
+      <tal:cond tal:condition="view/filterlist_available">
+        <span
+              tal:define="filterlist_name python: view.filterlist_name;
+                          filter_id python: view.request.get(filterlist_name)"
+              tal:attributes="id filterlist_name" class="state_filters">
+          <span i18n:translate="" >State</span>
+
+          <a tal:repeat="filter python: view.filterlist.filters()"
+             tal:attributes="id filter/id;
+                             class python: filter.is_active(filter_id) and 'active'"
+             tal:content="filter/label"
+             href="javascript:void(0);"
+             i18n:domain="opengever.tabbedview">
+          </a>
+
+        </span>
+      </tal:cond>
+      <tal:subjectFilter tal:define="widget view/render_subject_filter_widget" tal:condition="widget">
+        <span tal:condition="view/filterlist_available">|</span>
+        <span>Schlagworte</span>
+        <tal:subjectFilterWidget replace="structure widget" />
+      </tal:subjectFilter>
+      <p id="message_no_contents"
+         i18n:translate="label_no_contents"
+         i18n:domain="ftw.tabbedview">
+        No contents
+      </p>
+
+    </div>
+    <tal:END_CUSTOM_______________________________________ />
   </tal:extjs>
 
   <tal:html condition="not:view/extjs_enabled">
