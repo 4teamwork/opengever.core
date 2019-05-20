@@ -18,3 +18,8 @@ It can use |content-controls|_ for injecting values into the documents.
 
 .. _content-controls: https://docs.microsoft.com/en-us/visualstudio/vsto/content-controls
 .. |content-controls| replace:: content controls
+
+Architecture
+------------
+
+The system, as we use it, has 6 moving parts which concern us.
