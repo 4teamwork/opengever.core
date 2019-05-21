@@ -133,3 +133,24 @@ admins can create and edit templates for their organisation.
 
 .. _template-editor: https://docs.oneoffixx.com/docengine/de/subtemplates/
 .. |template-editor| replace:: template editor
+
+Flow
+----
+
+Herein we describe a happy path example data flow starting from OpenGEVER,
+going through Office Connector and Oneoffixx and ending up back in OpenGEVER.
+
+The Oneoffixx API client implemented in OpenGEVER is a per instance / ZEO
+client singleton_. We use a singleton in order to share the same HTTP session
+between all the requests. This, together with aggressive caching, ensures we do
+not end up spamming the Oneoffixx backend or tripping up web application
+firewalls.
+
+.. _singleton: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L59-L74
+
+If we receive a ``401`` response from any of the requests in the api client, we
+refresh_ the access token and try once again. We do not directly authenticate
+users: we only ever do so as a side effect of having failed to fetch something
+from the Oneoffixx backend.
+
+.. _refresh: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L266-L269
