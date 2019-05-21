@@ -176,18 +176,21 @@ class RoleAssignmentStorage(object):
     def __init__(self, context):
         self.context = context
 
+    def _initialize_storage(self):
+        ann = IAnnotations(self.context)
+        ann[self.key] = PersistentList()
+
     def _storage(self):
         ann = IAnnotations(self.context)
-        if self.key not in ann.keys():
-            ann[self.key] = PersistentList()
-
-        return ann[self.key]
+        return ann.get(self.key, frozenset())
 
     def has_storage(self):
+        """Read only"""
         ann = IAnnotations(self.context)
         return self.key in ann.keys()
 
     def get(self, principal, cause, reference):
+        """Read only"""
         for item in self._storage():
             if item['principal'] == principal and item['cause'] == cause:
                 if not reference:
