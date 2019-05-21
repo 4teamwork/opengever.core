@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.2.1 (unreleased)
+2019.2.1 (2019-05-21)
 ---------------------
 
 - Show filters also on no contents page in document listings. [phgross]
