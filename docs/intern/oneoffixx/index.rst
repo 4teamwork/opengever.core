@@ -23,3 +23,21 @@ Architecture
 ------------
 
 The system, as we use it, has 6 moving parts which concern us.
+
+Oneoffixx backend
+^^^^^^^^^^^^^^^^^
+
+From the point of view of the Oneoffixx backend, both OpenGEVER and Office
+Connector are LOB-Apps.
+
+.. image:: ../_static/img/oneoffixx-system-overview-onpremise.png
+
+We need to have whitelisted Office Connector in the backend as a callback
+target for the InvokeProcess_ mechanism.
+
+.. _InvokeProcess: https://docs.oneoffixx.com/connect/de/connect-commands/#invokeprocess
+
+We also need to have created a backend to backend account for the OpenGEVER
+installation. This means we will have a client id, client secret and a
+preshared key we need to use in order to authenticate_ to the backend in order
+to obtain a per user impersonation grant ``urn:oneoffixx:oauth2:impersonate``.
