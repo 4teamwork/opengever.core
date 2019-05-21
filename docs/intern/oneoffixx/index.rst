@@ -60,3 +60,15 @@ development and debugging purposes.
 .. |fake_sid_registry_flag| replace:: registry flag
 
 .. _Products.LDAPUserFolder: https://github.com/4teamwork/Products.LDAPUserFolder
+
+Oneoffixx client
+^^^^^^^^^^^^^^^^
+
+The client needs a configuration file, which points it to the correct backend
+instance. This configuration file will also have a preshared key and a license
+key embedded into it. The user will additionally need to auth into the client
+over an SSO provider.
+
+The client provides access to the per user and per group templates, some of
+which we do not support through OpenGEVER, and additionally offers the
+possibility to flag some of the templates as user favorites.
