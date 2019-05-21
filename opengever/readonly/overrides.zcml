@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.readonly">
 
   <adapter factory=".portlets.readonlyPortletAssignmentSettingsFactory" />
@@ -11,6 +12,15 @@
       provides="ftw.dictstorage.interfaces.IDictStorage"
       for="ftw.dictstorage.interfaces.ISQLAlchemy
            ftw.dictstorage.interfaces.IConfig"
+      />
+
+  <browser:viewlet
+      name="ftw.bumblebee.bumblebee_cookie"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".bumblebee.BumblebeeCookieViewlet"
+      layer="ftw.bumblebee.interfaces.IFtwBumblebeeLayer"
+      for="*"
+      permission="zope2.View"
       />
 
 </configure>

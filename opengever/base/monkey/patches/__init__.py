@@ -18,6 +18,9 @@ from .ldap_userfolder_encoding import PatchLDAPUserFolderEncoding
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
+from .readonly import PatchMembershipToolCreateMemberarea
+from .readonly import PatchMembershipToolSetLoginTimes
+from .readonly import PatchPloneProtectOnUserLogsIn
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -54,3 +57,6 @@ PatchCMFCatalogAwareHandlers()()
 ScrubBoboExceptions()()
 PatchExceptionFormatter()()
 PatchWorkflowTool()()
+PatchMembershipToolSetLoginTimes()()
+PatchMembershipToolCreateMemberarea()()
+PatchPloneProtectOnUserLogsIn()()
