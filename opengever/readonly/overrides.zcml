@@ -6,4 +6,11 @@
 
   <adapter factory=".portlets.readonlyPortletAssignmentSettingsFactory" />
 
+  <adapter
+      factory=".dictstorage.ReadOnlySQLDictStorage"
+      provides="ftw.dictstorage.interfaces.IDictStorage"
+      for="ftw.dictstorage.interfaces.ISQLAlchemy
+           ftw.dictstorage.interfaces.IConfig"
+      />
+
 </configure>
