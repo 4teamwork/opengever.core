@@ -72,3 +72,20 @@ over an SSO provider.
 The client provides access to the per user and per group templates, some of
 which we do not support through OpenGEVER, and additionally offers the
 possibility to flag some of the templates as user favorites.
+
+Office Connector
+^^^^^^^^^^^^^^^^
+
+Office Connector, starting from version 1.8.0, has supported Oneoffixx URLs and
+payloads. Office Connector obtains a |oneoffixx-instruction-xml|_ from the
+freshly created shadow document in OpenGEVER, flushes the file to disk and
+proceeds to do a normal reauth / checkout cycle with the freshly created file
+in place. We originally decided to abuse the redownload prevention logic of the
+reauth cycle in order to have minimised the amount of new logic to have been
+introduced into the implementation.
+
+.. _oneoffixx-instruction-xml: https://docs.oneoffixx.com/connect/de/xml-schema/
+.. |oneoffixx-instruction-xml| replace:: Oneoffixx instruction XML
+
+As we've uncovered and fixed issues over time, a version lower than 1.9.2
+should not be used.
