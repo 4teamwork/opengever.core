@@ -124,3 +124,12 @@ We do not currently inject ContentControls_ into the instruction XML. These
 could get used by a template and could end up in the final document.
 
 .. _ContentControls: https://docs.microsoft.com/en-us/visualstudio/vsto/content-controls
+
+Template editor
+^^^^^^^^^^^^^^^
+
+Oneoffixx ships a separate |template-editor|_ software, with which organisation
+admins can create and edit templates for their organisation.
+
+.. _template-editor: https://docs.oneoffixx.com/docengine/de/subtemplates/
+.. |template-editor| replace:: template editor
