@@ -5,7 +5,7 @@ from xml.etree import cElementTree as ET
 import requests
 
 
-_ACTIONS = None
+_ACTIONS = {}
 
 
 def etree_to_dict(t):
@@ -31,11 +31,12 @@ def etree_to_dict(t):
 
 def actions_by_extension(net_zone='external-https'):
     global _ACTIONS
-    if _ACTIONS:
-        return _ACTIONS
 
     url = api.portal.get_registry_record(
         name='discovery_url', interface=IWOPISettings)
+    if url in _ACTIONS:
+        return _ACTIONS[url]
+
     resp = requests.get(url)
     tree = ET.XML(resp.text)
     wopi_discovery = etree_to_dict(tree)['wopi-discovery']
@@ -62,5 +63,5 @@ def actions_by_extension(net_zone='external-https'):
                         'urlsrc': urlsrc,
                         'favicon_url': favicon_url,
                     }
-    _ACTIONS = actions
-    return _ACTIONS
+    _ACTIONS[url] = actions
+    return _ACTIONS[url]
