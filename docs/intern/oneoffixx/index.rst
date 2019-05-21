@@ -89,3 +89,38 @@ introduced into the implementation.
 
 As we've uncovered and fixed issues over time, a version lower than 1.9.2
 should not be used.
+
+OpenGEVER
+^^^^^^^^^
+
+OpenGEVER has service credentials with which it authenticates to the Oneoffixx
+backend and we trust the LDAP / AD to provide the required per user data in
+order to be able to impersonate each user.
+
+We have a wizard for creating a new document from a Oneoffixx template. This
+wizard impersonates and authenticates the user with the Oneoffixx backend,
+fetches the correct template library for the user, fetches the template groups
+and templates the user has access to and finally fetches the user favorites.
+All of the templates fetched are filtered in regards to the ability to use them
+through OpenGEVER, so we avoid offering the users options they could not
+successfully use. All of the requests to the Oneoffixx backend are cached per
+user. Changing the cache timeout registry setting immediately invalidates all
+existing Oneoffixx caches.
+
+The wizard produces a new document in the shadow state, with the template data
+stored as object annotations. The checkout URL for such a shdow document is
+Oneoffixx specific. There is also a view to render the Oneoffixx instruction
+XML based on the annotations of the document object. Uploading a file to the
+document will make the document exit the shadow state and become just a normal
+document.
+
+The XML currently produces the document metadata and injects the DocProperties_
+into the template by two means. The templates do not use DocProperties and
+these do not end up in the produced file.
+
+.. _DocProperties: https://docs.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.wordprocessing.docproperties
+
+We do not currently inject ContentControls_ into the instruction XML. These
+could get used by a template and could end up in the final document.
+
+.. _ContentControls: https://docs.microsoft.com/en-us/visualstudio/vsto/content-controls
