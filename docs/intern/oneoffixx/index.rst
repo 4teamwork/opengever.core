@@ -41,3 +41,22 @@ We also need to have created a backend to backend account for the OpenGEVER
 installation. This means we will have a client id, client secret and a
 preshared key we need to use in order to authenticate_ to the backend in order
 to obtain a per user impersonation grant ``urn:oneoffixx:oauth2:impersonate``.
+
+Customer AD
+^^^^^^^^^^^
+
+The users in OpenGEVER are identified by a SID_ provided by the customer AD_.
+We have built support into our fork of Products.LDAPUserFolder_ for this. This
+also means that a pure Zope user, such as a Zope admin user, will not have a
+SID.
+
+We provide a site-wide |fake_sid_registry_flag|_ for setting a fake SID for
+development and debugging purposes.
+
+.. _SID: https://docs.microsoft.com/en-us/windows/desktop/secauthz/security-identifiers
+.. _AD: https://docs.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview
+
+.. _fake_sid_registry_flag: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/interfaces.py#L51-L57
+.. |fake_sid_registry_flag| replace:: registry flag
+
+.. _Products.LDAPUserFolder: https://github.com/4teamwork/Products.LDAPUserFolder
