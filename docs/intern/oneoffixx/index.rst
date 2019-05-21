@@ -154,3 +154,54 @@ users: we only ever do so as a side effect of having failed to fetch something
 from the Oneoffixx backend.
 
 .. _refresh: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L266-L269
+
+Backend authentication
+^^^^^^^^^^^^^^^^^^^^^^
+
+The per cluster authentication credentials are stored on the filesystem in
+``"$HOME"/.opengever/oneoffixx/oneoffixx.json``. ::
+
+  {
+    "client_secret": "<password-esque>",
+    "client_id": "<UUIDv4>",
+    "preshared_key": "<password-esque>"
+  }
+
+.. _authenticate: https://docs.oneoffixx.com/concepts/de/authorization/
+
+This gets consumed in a three step process:
+
+1) |find_credentials|_
+2) |read_credentials|_
+3) |validate_credentials|_
+
+.. _find_credentials: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L86-L91
+.. |find_credentials| replace:: Find the credentials file
+
+.. _read_credentials: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L93-L107
+.. |read_credentials| replace:: Parse the credentials file
+
+.. _validate_credentials: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L204-L210
+.. |validate_credentials| replace:: Validate the credentials file
+
+As the process of consuming the file is gone through every time we need to
+authenticate a user, the contents may be modified at runtime without incurring
+any downtime.
+
+Once we have processed the credentials, we fetch the SID of the current user
+from AD and proceed to |acquire_grant|_ and |cache_grant|_ an impersonation
+grant with a per user key in a per user per instance ``plone.memoize.ram`` time
+invalidated cache. We |sign_grant_request|_ and |post_grant_request|_ it as
+``application/x-www-form-urlencoded``.
+
+.. _acquire_grant: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L195-L264
+.. |acquire_grant| replace:: acquire
+
+.. _cache_grant: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L15-L17
+.. |cache_grant| replace:: cache
+
+.. _sign_grant_request: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L229-L234
+.. |sign_grant_request| replace:: sign the grant request
+
+.. _post_grant_request: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L254-L260
+.. |post_grant_request| replace:: post
