@@ -4,7 +4,7 @@ Changelog
 2019.3.0 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Extend task API serialization with responses data. [phgross]
 
 
 2019.2.2 (2019-05-27)
