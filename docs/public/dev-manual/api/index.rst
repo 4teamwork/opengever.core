@@ -24,12 +24,12 @@ Inhalt:
    metadata.rst
    config.rst
    favorite.rst
-   reminder.rst
    notifications.rst
    recently_touched.rst
    preview.rst
    webactions.rst
    tasks.rst
+   reminder.rst
    journal.rst
    examples/index.rst
    docs_changelog.rst
