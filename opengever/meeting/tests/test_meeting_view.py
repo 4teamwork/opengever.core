@@ -7,6 +7,7 @@ from opengever.meeting.tests.pages import meeting_view
 from opengever.testing import IntegrationTestCase
 from opengever.testing.pages import byline
 from plone import api
+from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
 import pytz
 
@@ -302,3 +303,52 @@ class TestMeetingView(IntegrationTestCase):
                          'Insufficient privileges on meeting dossier')
         self.assertEqual(browser.css(".meeting-permission-error-message").first.text,
                          'User does not have permission to edit the meeting dossier:')
+
+    @browsing
+    def test_meeting_view_when_dossier_closed_and_meeting_open(self, browser):
+        self.login(self.manager, browser=browser)
+
+        api.content.transition(obj=self.meeting_subtask, transition="task-transition-resolved-tested-and-closed")
+        api.content.transition(obj=self.meeting_task, transition="task-transition-in-progress-resolved")
+        api.content.transition(obj=self.meeting_task, transition="task-transition-resolved-tested-and-closed")
+        browser.open(self.meeting_dossier, view='transition-resolve', data={'_authenticator': createToken()})
+        self.assertEquals('dossier-state-resolved', api.content.get_state(self.meeting_dossier))
+
+        # Meeting dossier is closed but meeting is open.
+        # User with edit permissions should not see the meeting view
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        self.assertEqual(browser.css(".meeting-permission-error-title").first.text,
+                         'Insufficient privileges on meeting dossier')
+        self.assertEqual(browser.css(".meeting-permission-error-message").first.text,
+                         'User does not have permission to edit the meeting dossier:')
+
+        # User with view permissions should see the meeting view
+        self.login(self.meeting_user, browser=browser)
+        browser.open(self.meeting)
+        self.assertEqual(0, len(browser.css(".meeting-permission-error-title")))
+        self.assertFalse(0, len(browser.css(".meeting-permission-error-error")))
+
+    @browsing
+    def test_meeting_view_when_dossier_closed_and_meeting_closed(self, browser):
+        self.login(self.manager, browser=browser)
+
+        self.meeting.model.close()
+        api.content.transition(obj=self.meeting_subtask, transition="task-transition-resolved-tested-and-closed")
+        api.content.transition(obj=self.meeting_task, transition="task-transition-in-progress-resolved")
+        api.content.transition(obj=self.meeting_task, transition="task-transition-resolved-tested-and-closed")
+        browser.open(self.meeting_dossier, view='transition-resolve', data={'_authenticator': createToken()})
+        self.assertEquals('dossier-state-resolved', api.content.get_state(self.meeting_dossier))
+
+        # Both meeting dossier and meeting are closed.
+        # User with edit permissions should see the meeting view
+        self.login(self.committee_responsible, browser=browser)
+        browser.open(self.meeting)
+        self.assertEqual(0, len(browser.css(".meeting-permission-error-title")))
+        self.assertFalse(0, len(browser.css(".meeting-permission-error-error")))
+
+        # User with view permissions should see the meeting view
+        self.login(self.meeting_user, browser=browser)
+        browser.open(self.meeting)
+        self.assertEqual(0, len(browser.css(".meeting-permission-error-title")))
+        self.assertFalse(0, len(browser.css(".meeting-permission-error-error")))
