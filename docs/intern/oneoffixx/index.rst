@@ -339,3 +339,21 @@ Oneoffixx
 Oneoffixx flushes the file out onto the filesystem, produces a result XML file
 for any post mortem debugging purposes and sends the callback back to Office
 Connector.
+
+Office Connector checkout / reauth cycle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The hash from the callback is used to refetch the checkout URL of the document
+and Office Connector then proceeds with a normal checkout cycle. As the file is
+already there, this will be considered a reauth cycle and the file redownload
+is thus prevented.
+
+1) Fetch the real JWT based on the callback hash
+2) Fetch the checkout payload for the document
+3) Check the document out
+4) Lock the document
+5) Skip the document download
+6) Edit the file
+7) Upload and thus unshadow the file
+8) Unlock the document when done
+9) Prompt the user for a check in comment and check the document in
