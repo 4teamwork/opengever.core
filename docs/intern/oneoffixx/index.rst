@@ -316,3 +316,19 @@ path and file name.
 
 A UI wizard for filling in any missing values will pop up for the user before
 the commands get executed.
+
+Office Connector early cycle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After the OS passes the URL to Office Connector, it proceeds to fetch the
+Oneoffixx payload from the Plone site root by posting the document UUID to the
+Oneoffixx payload endpoint_. This payload contains the instructions on how to
+fetch the Oneoffixx Connect XML instructions for the document.
+
+.. _endpoint: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/officeconnector/service.py#L261-L298
+
+The XML instruction is fetched and an appropriate output path is inserted as a
+``SaveAs`` argument and we 'execute' the XML file with ``os.startfile`` via an
+URL like ``oneoffixx:connector=<path-to-xml>``. We also store the checkout URL
+JWT in Office Connector and replace the JWT in the XML with a random hash so we
+can piece it back together once the callback completes.
