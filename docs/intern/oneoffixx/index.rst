@@ -332,3 +332,10 @@ The XML instruction is fetched and an appropriate output path is inserted as a
 URL like ``oneoffixx:connector=<path-to-xml>``. We also store the checkout URL
 JWT in Office Connector and replace the JWT in the XML with a random hash so we
 can piece it back together once the callback completes.
+
+Oneoffixx
+^^^^^^^^^
+
+Oneoffixx flushes the file out onto the filesystem, produces a result XML file
+for any post mortem debugging purposes and sends the callback back to Office
+Connector.
