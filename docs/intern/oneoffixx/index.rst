@@ -205,3 +205,62 @@ invalidated cache. We |sign_grant_request|_ and |post_grant_request|_ it as
 
 .. _post_grant_request: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L254-L260
 .. |post_grant_request| replace:: post
+
+GEVER Wizard
+^^^^^^^^^^^^
+
+The template selection form is implemented via a ``TableChoice`` field
+depending on a ``Choice`` field. The ``Choice`` field allows the user to select
+a template group to filter the list of templates by and the ``TableChoice``
+field allows the user to select the template to use.
+
+The default template group value of ``--NOVALUE--`` shows all templates. In
+case the user has favorites defined, the default factory injects the favorites
+group as the default choice, which unfortunately provides for some moderately
+clunky UX, as the default from the factory only gets selected over AJAX after
+the form rendering completes.
+
+The ``TableChoice`` template selector also has an ``ftw.keywordwidget`` based
+filter-as-you-type filter for quickly filtering the currently visible set of
+templates. This field gets the focus per default.
+
+Both the list of all templates and the list of template groups are implemented
+as vocabularies built at form render time. The template listing vocabulary
+first builds a list of all templates the Oneoffixx API client returns for the
+current user, and then checks if we need to filter_ them by the chosen template
+group: either by a normal group or by the favorites group.
+
+.. _filter: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/browser/form.py#L66-L94
+
+The template groups vocabulary first grabs all the template groups from the
+Oneoffixx API for the user and then grabs the list of favorites, if any, for
+the current user, and injects_ those as an another template group.
+
+.. _injects: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/browser/form.py#L30-L41
+
+All three fetches from the Oneoffixx backend are cached per user:
+
+1) The list of template groups
+2) The list of templates
+3) The list of favorites
+
+The user is also required to provide a name for the new document.
+
+Upon passing form validation, a document creation command_ kicks in. It sets
+all the required metadata into the object annotations of the freshly created
+document and creates the document in the shadow_ state.
+
+.. _command: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/command.py
+.. _shadow: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/document/document.py#L257-L275
+
+It also sets up a redirection_ via the document redirector, which will fire up
+after the user has been redirected to the newly created shadow document. The
+URL being redirected to is an Office Connector URL, so it is passed onto the OS
+and the user will stay on the document overview page. If Office Connector has
+successfully registered as the default application handling an ``oc:`` URL, the
+OS will pass the URL as a parameter to Office Connector.
+
+.. _redirection: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/document/document.py#L381-L400
+
+There is a fallback button on shadow documents to try again in case of
+transient OS or Office Connector failures.
