@@ -264,3 +264,55 @@ OS will pass the URL as a parameter to Office Connector.
 
 There is a fallback button on shadow documents to try again in case of
 transient OS or Office Connector failures.
+
+GEVER-side XML generation
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A view_ to generate a |oneoffixx-instruction-xml|_ is registered_ for users
+with ``cmf.ModifyPortalContent`` on all
+``opengever.document.behaviors.IBaseDocument``. For documents not in a shadow
+state, we return a ``404`` response with view level logic.
+
+.. _view: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/browser/connect_xml.py
+.. _registered: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/browser/configure.zcml#L20-L25
+
+We generate a batch with one entry in it. This batch is instructed to keep its
+XML file, create a result file on success and also create a result file on
+error.
+
+The singular batch entry is a ``OneOffixxConnect`` instruction. This
+instruction takes the template ID and the language ID as arguments.
+
+We add the DocProperties of the document as ``MetaData``. We also add the
+DocProperties as a named ``CustomInterfaceConnector`` ``OneGovGEVER``. For
+these to end up on the resulting document, the template would need to use them.
+As far as we are aware of, the template editor does not support either.
+Technically it should be possible to produce a template XML, which takes the
+metadata, but we've not experimented with injecting this directly into the
+backend as this'd not be a realistic use scenario.
+
+The ``OneOffixxConnect`` instruction consists of a series of commands_,
+executed in the order they are present in the XML.
+
+.. _commands: https://docs.oneoffixx.com/docfunc/de/overview/
+
+We always do the following:
+
+* ``DefaultProcess``
+   * ``Start: False``
+* ``ConvertToDocument``
+* ``SaveAs``
+   * ``Overwrite: True``
+   * ``CreateFolder: True``
+   * ``AllowUpdateDocumentPart: False``
+   * ``Filename: ''``
+* ``InvokeProcess``
+   * ``Name: 'OfficeConnector'``
+   * ``Arguments: <oc-checkout-url>``
+
+We want it to just save the document to disk and ping Office Connector back
+with a callback when done. Office Connector modifies the XML with the desired
+path and file name.
+
+A UI wizard for filling in any missing values will pop up for the user before
+the commands get executed.
