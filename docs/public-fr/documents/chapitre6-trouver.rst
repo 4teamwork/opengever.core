@@ -2,9 +2,11 @@ Trouver un document avec check-out
 ==================================
 
 Quand vous terminez votre session OneGovGEVER avec Quitter GEVER, le message
-ci-dessous s‘affiche, dans le cas où vous auriez encore des documents dont le check-out
-aurait été fait. En sélectionnant le titre d'un des documents en question, vous serez
+ci-dessous s‘affiche, dans le cas où vous auriez encore des :ref:`documents dont le check-out
+aurait été fait <label-recemment_modifie>`. En sélectionnant le titre d'un des documents en question, vous serez
 directement redirigé vers le document correspondant.
+
+|img-document-30|
 
 Avec la recherche avancée
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,13 +23,11 @@ avec les informations suivantes: Numéro de version, collaborateur / collaboratr
 date des modifications (incl. la date de constitution de la Version initiale),
 commentaire (dans le cas où un commentaire aurait été consigné au moment de la sauvegarde).
 
-|img-document-30|
-
 Actions possibles:
 
 - **Télécharger une copie:** En cliquant sur le fichier, il est rappelé dans son format original
-  (pas en PDF). Précision: A ce moment, un fichier ne peut pas directement être travaillé
-  (mode écriture protégée)! Il peut cependant être par exemple téléchargé.
+  (pas en PDF). Précision: A ce moment, un fichier ne peut pas directement être édité
+  (mode écriture protégée)! Il peut cependant être, par exemple, téléchargé.
 
 - **Aperçu PDF:** En cliquant sur l’aperçu PDF, la version correspondante est affichée en format PDF.
   Condition préalable : Un service de création de PDF externe est disponible et
@@ -40,7 +40,7 @@ Télécharger les versions dans leur format original (sans faire le check-out)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 OneGov GEVER ouvre toujours les documents avec checkin en mode lecture. Si on veut
-travailler le contenu d’un fichier, le check-out de ce dernier doit bien entendu avoir
+éditer le contenu d’un fichier, le check-out de ce dernier doit bien entendu avoir
 été fait. Si on veut toutefois consulter le fichier original (par exemple Word, Excel),
 le sauvegarder sur son bureau ou encore copier le contenu du fichier original, on peut
 télécharger ce fichier depuis l’aperçu des fichiers (version actuelle) ou depuis

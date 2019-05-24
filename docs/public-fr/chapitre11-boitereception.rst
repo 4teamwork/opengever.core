@@ -1,3 +1,4 @@
+.. _label-boite_reception:
 
 Utilisation de la boîte de réception
 ====================================
@@ -5,7 +6,7 @@ Utilisation de la boîte de réception
 Fonctionnalité boîte de réception
 ---------------------------------
 
-Les courriers entrants qui doivent être justifiables au niveau directionnel sont saisis dans la boîte de réception et, de cet endroit, assignés à une personne responsable ou transmis à un autre mandant.
+Les courriers entrants qui doivent être justifiables au niveau directionnel sont saisis dans la boîte de réception et, de cet endroit, assignés à une personne responsable ou transmis à un autre client.
 
 .. note::
    Pour la saisie de courriers entrants, des droit spécifiques sont nécessaires ; par défaut ils sont assignés aux personnes avec les rôles de type *secrétariat* ou *direction*.
@@ -110,13 +111,13 @@ Réattribuer des courriers entrants
 Le courrier entrant est ensuite affiché sous l’onglet *Sommaire → Mes tâches* et peut être traité comme une tâche normale.
 
 
-Courrier entrant couvrant de multiples mandants
------------------------------------------------
+Courrier entrant couvrant de multiples clients
+----------------------------------------------
 
 Saisir le courrier entrant
 """"""""""""""""""""""""""
 
-Consultez la section « Saisir un courrier entrant » **[PLEASE LINK]** pour une procédure détaillée. La marche à suivre reste la même dans la situation où le traitement du courrier entrant se fait pour de multiples mandants.
+Consultez la section `Saisir un courrier entrant`_ pour une procédure détaillée. La marche à suivre reste la même dans la situation où le traitement du courrier entrant se fait pour de multiples clients.
 
 Transférer un courrier entrant
 """"""""""""""""""""""""""""""
@@ -125,19 +126,19 @@ Cochez le courrier entrant à transférer et sélectionnez *Transmettre*.
 
 |img-boitereception24|
 
-Saisissez un titre, le mandant destinataire et la boîte de réception du mandant destinataire.
+Saisissez un titre, le client destinataire et la boîte de réception du client destinataire.
 
 |img-boitereception25|
 
 .. note::
-  Les transmissions entre mandants doivent toujours être adressés à une boîte de réception.
+  Les transmissions entre clients doivent toujours être adressés à une boîte de réception.
 
 Après avoir sauvegardé, le courrier entrant apparaît chez l’expéditeur sous l’onglet *Tâches attribuées*. Chez le destinataire, le courrier entrant apparaît sous l’onglet *Tâches reçues*.
 
-Traiter le courrier entrant provenant d’un autre mandant
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Traiter le courrier entrant provenant d’un autre client
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Le traitement d’un un courrier entrant provenant d’un autre mandant est couvert dans la rubrique Collaboration entre mandants **[PLEASE LINK]**
+Le traitement d’un un courrier entrant provenant d’un autre client est couvert dans la rubrique :ref:`label-cooperation_ic`
 
 
 .. |img-boitereception1| image:: _static/img/img-boitereception01.png

@@ -17,7 +17,9 @@ Index:
    chapitre9-contacts
    chapitre10-recherches
    chapitre11-boitereception
+   taches/index
    chapitre13-deroulements-standards
    chapitre14-referentiel
+   spv/index
    app-seances/index.rst
    chapitre17-triage

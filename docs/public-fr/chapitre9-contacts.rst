@@ -31,14 +31,14 @@ et Prénom, les champs restants peuvent simplement être remplis au besoin.
 Affichage et traitement des contacts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Dans la liste de présentation, les *Noms*, *Prénoms*, *E-mail* 1 et *Téléphone
-professionnel* sont en principe affichés.
+Dans la liste de présentation, les *Noms*, *Prénoms*, *E-mail 1* et
+*Téléphone professionnel* sont en principe affichés.
 
 En cliquant sur un contact, seuls les champs qui ont réellement été remplis s’affichent:
 
 |img-contacts-3|
 
-Si vous devez travailler les données, choisissez *Modifier*.
+Si vous devez éditer les données, choisissez *Modifier*.
 
 Onglet Utilisateur
 ------------------

@@ -64,7 +64,7 @@ Sauvegardez et fermez le fichier après l’avoir travaillé puis enregistrez-le
 Insérer un e-mail en tant que document
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cette variante est détaillée ici.
+Cette variante est détaillée sous la rubrique :ref:`label-importer_email`.
 
 .. |img-document-1| image:: ../_static/img/img-document-1.png
 .. |image43| image:: ../_static/img/image43.png

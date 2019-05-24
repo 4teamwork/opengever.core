@@ -4,7 +4,8 @@ Changelog
 2019.2.2 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Add french translation for spv documentation. [andresoberhaensli, njohner]
+- Add french translation for task documentation. [andresoberhaensli, njohner]
 
 
 2019.2.1 (2019-05-21)

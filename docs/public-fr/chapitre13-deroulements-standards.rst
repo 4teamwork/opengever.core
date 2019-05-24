@@ -1,3 +1,5 @@
+.. _chapitre-deroulement_standard:
+
 Travailler avec des déroulements standard
 =========================================
 
@@ -6,7 +8,7 @@ Qu’est-ce qu’un déroulement standard?
 
 Les séquences de tâches récurrentes (p. ex. Étapes de projet prédéfinies) peuvent être enregistrées dans la section « Modèles ». Ces séquences de tâches prédéfinies sont aussi nommées *déroulements standard*.
 
-La création et modification de déroulements standard est réservée aux utilisateurs ayant un profil qui inclut la gestion de modèles. La plupart du temps, il s’agit des administrateurs. De ce fait, la création de déroulements standard est couverte dans la documentation « Admin ».
+La création et modification de déroulements standard est réservée aux utilisateurs ayant un profil qui inclut la gestion de modèles. La plupart du temps, il s’agit des administrateurs. De ce fait, la création de déroulements standard est couverte dans `la documentation admin <https://docs.onegovgever.ch/admin-manual/standardablauferstellen/>`_ (disponible seulement en Allemand).
 
 |img-deroulstandard-1|
 
@@ -52,7 +54,7 @@ Les modèles de tâches marqués comme présélectionnés sont déjà inclus. Le
 
 |img-deroulstandard-6|
 
-En cliquant sur *Enclencher*, les tâches sélectionnées sont reprises par le dossier. Elles peuvent maintenant être traitées comme convenu (Voir *travailler avec des tâches*). C’est ici que les différences entre une séquence parallèle et séquentielle deviennent visibles, en particulier au niveau de l’état.
+En cliquant sur *Enclencher*, les tâches sélectionnées sont reprises par le dossier. Elles peuvent maintenant être traitées comme convenu (Voir :ref:`chapitre-taches`). C’est ici que les différences entre une séquence parallèle et séquentielle deviennent visibles, en particulier au niveau de l’état.
 
 Lors de l’activation d’un déroulement standard *parallèle*, une tâche principale avec plusieurs sous-tâches est créée. Dans les propriétés de la tâche principale, on peut voir qu’il s’agit d’un déroulement standard parallèle. Si un déroulement standard parallèle est déclenché, toutes les tâches sont automatiquement passées dans l’état « en traitement » et peuvent donc être traitées en même temps.
 
@@ -68,7 +70,7 @@ Points à considérer avec les déroulements standard séquentiels
 
 |img-deroulstandard-8|
 
--   Dans le sommaire des propriétés de la tâche principale d’un déroulement standard, il est possible d’insérer directement une nouvelle tâche dans la liste des tâches existante. Le déroulement standard peut ainsi être complété individuellement. Le formulaire « ajouter une nouvelle tâche » se comporte de la même manière que l’ajout d’une tâche standard et insert automatiquement une nouvelle tâche dans la séquence.
+-   Dans le sommaire des propriétés de la tâche principale d’un déroulement standard, il est possible d’insérer directement une nouvelle tâche dans la liste des tâches existante. Le déroulement standard peut ainsi être complété individuellement. Le formulaire « ajouter une nouvelle tâche » se comporte de la même manière que :ref:`l’ajout d’une tâche standard <label-creer_tache>` et insert automatiquement une nouvelle tâche dans la séquence.
 
 |img-deroulstandard-9|
 

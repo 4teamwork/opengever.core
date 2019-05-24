@@ -40,7 +40,7 @@ Pour plus de sécurité, nous conseillons d’activer l’authentification
 d’un deuxième facteur. Le système vous demandera ensuite, à chaque nouvelle connexion,
 un mot de passe à usage unique que vous générerez à chaque fois au moyen
 d’une application supplémentaire depuis votre smartphone. Vous trouverez
-plus d’informations à ce sujet dans ce `Rapport <https://de.wikipedia.org/wiki/Zwei-Faktor-Authentifizierung>`_.
+plus d’informations à ce sujet dans ce `Rapport <https://fr.wikipedia.org/wiki/Double_authentification>`_.
 Pour l’activation, on peut d’abord tout simplement
 cliquer sur *Activer* depuis la page de portail.
 
@@ -52,8 +52,8 @@ Cela étant fait, on accède à la page du dispositif de l’authentification à
 
 Téléchargez l’application *Google Authenticator* et suivez les consignes d’installation :
 
--	`Pour iOS <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DiOS&hl=de&oco=0>`_
--	`Pour Android <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DAndroid&hl=de>`_
+-	`Pour iOS <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DiOS&hl=fr&oco=0>`_
+-	`Pour Android <https://support.google.com/accounts/answer/1066447?co=GENIE.Platform%3DAndroid&hl=fr>`_
 
 Avec l’application *Google Authenticator*, vous pouvez scanner les QR-codes.
 Pour cela, vous recevez un mot de passage à usage unique, mot de passe qui
@@ -107,14 +107,13 @@ est un module complémentaire et c’est pourquoi il n’est pas non plus visibl
 |img-base-8|
 
 1. Sommaire : celui-ci est la vue par défaut au moment du login et montre tous les dossiers personnels, les documents, les tâches etc. de l’utilisateur.
-2. Sous l‘onglet `Mon référentiel <https://docs.onegovgever.ch/user-manual/meine_ablage/#label-meineablage>`_
-   (disponible uniquement en allemand), chaque utilisateur se voit offrir la possibilité de pouvoir classer et gérer des documents personnels importants dans un domaine privé sur OneGov GEVER.
+2. Sous l‘onglet :ref:`label-mon_referentiel`, chaque utilisateur se voit offrir la possibilité de pouvoir classer et gérer des documents personnels importants dans un domaine privé sur OneGov GEVER.
 3. Système de classification: Via le système de classification, vous pouvez naviguer vers une rubrique où des dossiers et des documents peuvent ensuite être constitués et classés.
-4. Sous l‘onglet `Boîte de réception <https://docs.onegovgever.ch/user-manual/posteingang/#label-eingangskorb>`_
+4. Sous l‘onglet Boîte de réception :ref:`label-boite_reception`
    (disponible uniquement en allemand), des courriers peuvent être répertoriés et transmis.
 5. Sous l’onglet :ref:`Modèles <label-modeles-de-documents>`, vous trouvez tous les modèles de documents standards et vous pouvez en insérer de nouveaux.
 6. L‘onglet :ref:`Contacts <label-contacts>` contient des personnes externes à l’administration (sous-onglet local) et le carnet d’adresses central de tous les collaborateurs de l’administration (sous-onglet utilisateur).
-7. Sous l‘onglet `Sessions <https://docs.onegovgever.ch/user-manual/spv/#label-spv>`_
+7. Sous l‘onglet Sessions :ref:`chapitre-spv`
    (disponible uniquement en allemand), vous trouvez le gestionnaire des séances et des procès-verbaux (SPV).
 
 Fil d’Ariane

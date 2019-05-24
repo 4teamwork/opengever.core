@@ -1,3 +1,5 @@
+.. _label-mon_referentiel:
+
 Mon Référentiel
 ===============
 

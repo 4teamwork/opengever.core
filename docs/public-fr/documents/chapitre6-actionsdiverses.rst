@@ -24,7 +24,7 @@ et choisissez Aperçu PDF dans le Tooltip. De façon optionnelle, on peut ouvrir
 le PDF sans quitter le browser de la page actuelle (niveau du dossier) avec la commande
 Clic droit – Ouvrir un lien dans une nouvelle fenêtre. A partir des documents,
 GEVER produit des fichiers PDF en arrière-plan. De cette façon on peut éviter que
-des documents dont le check-out n’aurait pas été fait d‘être travaillés par inadvertance.
+des documents dont le check-out n’aurait pas été fait ne soient édités par inadvertance.
 
 |img-document-36|
 
@@ -34,7 +34,7 @@ après l’enregistrement, l’aperçu PDF peut éventuellement ne pas être enc
 Le message *PDF pas encore disponible, doit encore être constitué apparaît*.
 
 Dans ce cas, en cliquant sur le fichier, le fichier original est affiché.
-Si le fichier doit être travaillé, le check-out doit de nouveau être fait, sinon
+Si le fichier doit être édité, le check-out doit de nouveau être fait, sinon
 les modifications ne seront pas sauvegardées !
 
 Aperçu des formats de fichier qui peuvent être convertis en PDF (est cependant
@@ -137,6 +137,8 @@ sont également indiqués (aperçu complet avec le curseur de la souris).
 
 Export/Import ZIP
 ~~~~~~~~~~~~~~~~~
+
+.. _label-export-zip-documents:
 
 Export ZIP
 ----------
