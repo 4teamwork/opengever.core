@@ -4,6 +4,7 @@ Changelog
 2019.2.2 (unreleased)
 ---------------------
 
+- Cleanup/fix oneoffix upgradesteps and make dicstorage upgrades more failsafe. [phgross]
 - Add french translation for spv documentation. [andresoberhaensli, njohner]
 - Add french translation for task documentation. [andresoberhaensli, njohner]
 - Allow viewing closed meeting when meeting dossier is closed. [njohner]
