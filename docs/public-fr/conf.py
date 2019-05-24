@@ -123,7 +123,7 @@ html_theme_options = {
     'github_button': False,
     'logo_name': False,
     'logo': 'img/gever_logo.png',
-    'analytics_id': 'UA-7414398-7',
+    'analytics_id': 'UA-7414398-8',
     'fixed_sidebar': False,
     'extra_nav_links': {u'Site du produit': 'https://onegovgever.ch',
                         u'Forum de feedback': 'https://feedback.onegovgever.ch',
