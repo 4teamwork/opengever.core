@@ -6,6 +6,7 @@ Changelog
 
 - Add french translation for spv documentation. [andresoberhaensli, njohner]
 - Add french translation for task documentation. [andresoberhaensli, njohner]
+- Allow viewing closed meeting when meeting dossier is closed. [njohner]
 
 
 2019.2.1 (2019-05-21)

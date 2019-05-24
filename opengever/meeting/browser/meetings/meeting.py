@@ -271,7 +271,8 @@ class MeetingView(BrowserView):
         meeting_dossier = self.model.get_dossier()
         committee = self.model.committee.resolve_committee()
         if (api.user.has_permission('Modify portal content', obj=committee) and not
-                api.user.has_permission('Modify portal content', obj=meeting_dossier)):
+                api.user.has_permission('Modify portal content', obj=meeting_dossier) and not
+                self.model.is_closed()):
             self.error_message = translate(
                 _("no_edit_permissions_on_meeting_dossier",
                   default="User does not have permission to edit the meeting dossier:"),
