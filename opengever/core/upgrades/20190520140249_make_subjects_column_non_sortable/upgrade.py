@@ -1,4 +1,5 @@
 from opengever.core.upgrade import SchemaMigration
+from opengever.base.model import create_session
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 import json
@@ -11,14 +12,14 @@ class MakeSubjectsColumnNonSortable(SchemaMigration):
     def migrate(self):
         _table = table('dictstorage', column("key"), column('value'))
 
-        items = self.connection.execute(_table.select()).fetchall()
+        items = create_session().execute(_table.select()).fetchall()
         for item in items:
             if item.value is None:
                 continue
 
             try:
                 value = json.loads(item.value)
-            except ValueError:
+            except (ValueError, TypeError):
                 # The dictstorage contains non json values, the ldap
                 # syncronisation timestampe for example
                 continue
