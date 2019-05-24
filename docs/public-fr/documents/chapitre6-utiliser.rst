@@ -37,8 +37,8 @@ dans OneGov GEVER et peuvent être sélectionnés au moment de constituer des do
 
 |img-document-47|
 
-Travailler / supprimer les modèles de documents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Editer / supprimer les modèles de documents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Le traitement de modèle après coup fonctionne par analogie au traitement des
 documents normaux. Vous pouvez à tout moment changer les métadonnées (*Modifier

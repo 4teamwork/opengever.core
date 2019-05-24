@@ -38,7 +38,7 @@ En cliquant sur un contact, seuls les champs qui ont réellement été remplis s
 
 |img-contacts-3|
 
-Si vous devez travailler les données, choisissez *Modifier*.
+Si vous devez éditer les données, choisissez *Modifier*.
 
 Onglet Utilisateur
 ------------------

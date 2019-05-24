@@ -1,5 +1,5 @@
-Travailler les documents
-========================
+Editer les documents
+====================
 
 External Editor / Office Connector
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -16,18 +16,18 @@ External Editor pour Windows et ZopeEditManager pour Mac.
 Principes de base
 ~~~~~~~~~~~~~~~~~
 
-Pour pouvoir travailler des documents, le check-out doit avoir été fait. Une fois
+Pour pouvoir éditer des documents, le check-out doit avoir été fait. Une fois
 que le check-out du document a été fait, le document n’est disponible que pour
 le collaborateur ou la collaboratrice qui en a fait le check-out.
 
 On reconnait un document dont le check-out a été fait au statut *En cours de
 traitement* inscrit dans la colonne de la liste des documents.
 
-Travailler uniquement les métadonnées (propriétés)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Editer uniquement les métadonnées (propriétés)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Avec la souris, allez dans la liste des documents sur l’icône du document dont
-vous aimeriez travailler les propriétés (par exemple Titre, Description)
+vous aimeriez éditer les propriétés (par exemple Titre, Description)
 et choisissez l’option Modifier les métadonnées dans la fenêtre Tooltip affichée.
 
 |img-document-20|
@@ -49,7 +49,7 @@ que vous aimeriez éditer et choisissez l’option Faire le check-out / Editer.
 |img-document-22|
 
 Le fichier n’est ouvert que par External Editor / Office Connector avec
-l’application correspondante; il peut ensuite être travaillé. Pendant
+l’application correspondante; il peut ensuite être édité. Pendant
 le traitement, External Editor / Office Connector constitue un fichier
 temporaire qui disparaitra à nouveau après le checkin.
 
@@ -61,7 +61,7 @@ ont été faites ou non, et ce grâce à un message d’information apparaissant
 la fermeture du travail.
 
 **Important:** Un fichier ne peut être ouvert qu'en un seul exemplaire par
-l'utilisateur qui a effectué le check-out pour être travaillé dans l’application
+l'utilisateur qui a effectué le check-out pour être édité dans l’application
 correspondante. Si pendant ce temps on veut ouvrir encore une fois ce même document
 sur l’aperçu des documents dans OneGov GEVER avec l’icône du crayon ou un lien,
 une indication correspondante apparaît alors.
@@ -91,7 +91,7 @@ est envoyé dans le dossier dans lequel le document est classé.
 
 |img-document-25|
 
-Le mail peut ensuite être travaillé au gré du collaborateur, être complété et
+Le mail peut ensuite être édité au gré du collaborateur, être complété et
 être envoyé au destinataire souhaité.
 
 Faire le checkin directement:
@@ -177,10 +177,10 @@ Le traitement avec Adobe pour les fichiers graphiques (Photoshop, Illustrator, I
 avec External Editor fonctionne, certes, mais n’est cependant pas conseillé, étant
 donné que des erreurs ont déjà été constatées. Pour de tels fichiers et pour d’autres
 fichiers qui ne sont pas supportés, ils doivent être suivis selon l’indication ci-après,
-sous `Travailler des documents sans External Editor / Office Connector`_.
+sous `Editer des documents sans External Editor / Office Connector`_.
 
-Travailler des documents sans External Editor / Office Connector
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Editer des documents sans External Editor / Office Connector
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Choisissez l‘action *Faire le check-out*. Après le check-out, cliquez sur *Modifier
 les métadonnées*, le masque du document s’ouvre alors.
@@ -191,7 +191,7 @@ le nouveau fichier est sauvegardé comme la version la plus récente.
 
 |img-document-28|
 
-Cette action est aussi utile quand des fichiers ne peuvent pas être travaillés avec
+Cette action est aussi utile quand des fichiers ne peuvent pas être édités avec
 External Editor ou quand External Editor n’est pas disponible.
 
 Une autre manière de faire est aussi possible:
@@ -206,7 +206,7 @@ Une autre manière de faire est aussi possible:
 
 |img-document-29|
 
-Travaillez le fichier et fermez-le après l’enregistrement des modifications.
+Editez le fichier et fermez-le après l’enregistrement des modifications.
 Pour importer le fichier modifié vers OneGov GEVER, le fichier en question
 peut être tiré vers GEVER via le drag‘n‘drop.
 

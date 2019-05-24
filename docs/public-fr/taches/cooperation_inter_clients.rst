@@ -96,7 +96,7 @@ Dans le dossier du client d’origine, on trouvera aussi une référence à la t
 
 |img-cooperation_inter_mandants-12|
 
-La tâche peut maintenant être traitée dans son propre dossier, en y ajoutant, par Example, de nouveaux documents ou en travaillant sur ceux auxquels la tâche fait référence.
+La tâche peut maintenant être traitée dans son propre dossier, en y ajoutant, par example, de nouveaux documents ou en travaillant sur ceux auxquels la tâche fait référence.
 
 .. note::
    Lorsque le mandataire modifie des documents référencés par le mandant, il fait cela sur des **copies** qui devront être retransmises au mandant à la conclusion de la tâche.

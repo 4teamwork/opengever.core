@@ -20,7 +20,7 @@ de l’utilisateur et utilise ce réglage par défaut pour les listages futurs.
 |img-document-16|
 
 Grâce au survol de la souris, un premier petit aperçu de document apparaît
-et donne la possibilité de travailler les métadonnées du document, d’en faire
+et donne la possibilité d'éditer les métadonnées du document, d’en faire
 le check-out ou encore d’en faire une copie.
 
 |img-document-17|
