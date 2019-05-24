@@ -29,7 +29,7 @@ Soit à partir d'un ou plusieurs documents existants.
 
 |img-saisir_requete-5|
 
-Le champ "Mandant" contient, par défaut, l'utilisateur courant. Il est également possible de saisir une requête pour un autre utilisateur. Dans ce cas, il est à noter que l'utilisateur spécifié dans le champ "Mandant" recevra une notification de requête.
+Le champ "Mandant" contient, par défaut, l'utilisateur courant. Il est également possible de saisir une requête pour un autre utilisateur. Dans ce cas, il est à noter que l'utilisateur spécifié dans le champ "Mandant" recevra une :ref:`notification de requete <label-notifications-requetes>`.
 
 Si la case "modifier après la création" a été cochée (sa valeur par défaut), le document sera ouvert dans Word pour des modification additionnelles.
 

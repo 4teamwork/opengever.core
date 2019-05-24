@@ -1,5 +1,4 @@
 .. _chapitre-spv:
-.. _label-spv:
 
 Gestion des séances et procès-verbaux
 =====================================

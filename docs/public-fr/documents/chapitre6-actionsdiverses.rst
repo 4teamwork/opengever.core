@@ -138,6 +138,8 @@ sont également indiqués (aperçu complet avec le curseur de la souris).
 Export/Import ZIP
 ~~~~~~~~~~~~~~~~~
 
+.. _label-export-zip-documents:
+
 Export ZIP
 ----------
 

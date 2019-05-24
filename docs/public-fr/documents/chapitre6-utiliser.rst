@@ -7,9 +7,7 @@ Modèles de documents
 ~~~~~~~~~~~~~~~~~~~~
 
 La composante de l’application *Modèles* se trouve dans la liste d’aperçu GEVER et
-comprend les menus *Documents* et *Procédures standards* (voir aussi Travailler avec
-les `procédures standards <https://docs.onegovgever.ch/user-manual/standardablaeufe/#kapitel-standardablaeufe>`_
-,disponible uniquement en allemand).
+comprend les menus *Documents* et *Procédures standards* (voir aussi :ref:`chapitre-deroulement_standard`).
 
 |img-document-46|
 

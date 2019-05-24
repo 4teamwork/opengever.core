@@ -1,6 +1,8 @@
 Classer un e-mail en tant que document
 ======================================
 
+.. _label-importer_email:
+
 Importer un e-mail
 ------------------
 

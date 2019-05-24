@@ -73,8 +73,6 @@ de la largeur de la colonne en gardant le bouton de la souris appuyé.
 
 |img-trucs-4|
 
-.. _label-Trier à l'intérieur des colonnes:
-
 Trier à l'intérieur des colonnes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

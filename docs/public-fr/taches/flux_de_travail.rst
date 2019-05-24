@@ -1,3 +1,5 @@
+.. _label-taches-flux-travail:
+
 Aperçu d’un flux de travail typique
 -----------------------------------
 

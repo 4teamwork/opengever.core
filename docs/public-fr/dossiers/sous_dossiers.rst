@@ -6,12 +6,12 @@ Ouvrir un sous-dossier
 
 Dans le dossier principal, sélectionnez *Ajout d'un élément → Sous-dossier*
 
-Les pages de saisie de dossiers principaux est sous-dossiers sont identiques (Voir Ouvrir un nouveau dossier **[PLEASE INSERT LINK]**). La personne responsable du dossier est automatiquement reprise du dossier principal, mais peut être modifiée. Même s’il est techniquement possible d’imbriquer un nombre illimité de dossiers, une limite est normalement établie au niveau du numéro de classement.
+Les pages de saisie de dossiers principaux est sous-dossiers sont identiques (Voir :ref:`label-creer-dossier`). La personne responsable du dossier est automatiquement reprise du dossier principal, mais peut être modifiée. Même s’il est techniquement possible d’imbriquer un nombre illimité de dossiers, une limite est normalement établie au niveau du numéro de classement.
 
 Modifier un sous-dossier
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-La modification d’un sous-dossier se passe d’une manière identique à celle d’un dossier principal (voir modifier un dossier **[PLEASE INSERT LINK]**)
+La modification d’un sous-dossier se passe d’une manière identique à celle d’un dossier principal (voir modifier un dossier :ref:`label-modifier-dossier`)
 
 Fermer un dossier contenant des sous-dossiers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

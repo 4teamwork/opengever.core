@@ -1,3 +1,5 @@
+.. _label-notifications-requetes:
+
 Notifications de requêtes
 --------------------------
 
@@ -17,4 +19,4 @@ Lors des actions suivantes, une notification est envoyée au(x) responsable(s) d
 -   Nouvelles pièces jointes ajoutées à une requête
 -   Mise à jour de pièces jointes d'une requête
 
-Les notifications pour les actions ci-dessus peuvent être ajustés individuellement par chaque utilisateur dans les paramètres de notification. Plus de détails à ce sujet sont disponibles dans le chapitre "Paramètres de notifications".
+Les notifications pour les actions ci-dessus peuvent être ajustés individuellement par chaque utilisateur dans les paramètres de notification. Plus de détails à ce sujet sont disponibles dans le chapitre :ref:`label-notification`.

@@ -1,3 +1,4 @@
+.. _label-boite_reception:
 
 Utilisation de la boîte de réception
 ====================================
@@ -116,7 +117,7 @@ Courrier entrant couvrant de multiples mandants
 Saisir le courrier entrant
 """"""""""""""""""""""""""
 
-Consultez la section « Saisir un courrier entrant » **[PLEASE LINK]** pour une procédure détaillée. La marche à suivre reste la même dans la situation où le traitement du courrier entrant se fait pour de multiples mandants.
+Consultez la section `Saisir un courrier entrant`_ pour une procédure détaillée. La marche à suivre reste la même dans la situation où le traitement du courrier entrant se fait pour de multiples mandants.
 
 Transférer un courrier entrant
 """"""""""""""""""""""""""""""
@@ -137,7 +138,7 @@ Après avoir sauvegardé, le courrier entrant apparaît chez l’expéditeur sou
 Traiter le courrier entrant provenant d’un autre mandant
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Le traitement d’un un courrier entrant provenant d’un autre mandant est couvert dans la rubrique Collaboration entre mandants **[PLEASE LINK]**
+Le traitement d’un un courrier entrant provenant d’un autre mandant est couvert dans la rubrique :ref:`label-cooperation_ic`
 
 
 .. |img-boitereception1| image:: _static/img/img-boitereception01.png

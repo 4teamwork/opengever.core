@@ -1,3 +1,5 @@
+.. _label-modifier-dossier:
+
 Modifier un dossier
 -------------------
 
@@ -127,7 +129,7 @@ Un dossier entier peut être combiné en un seul fichier ZIP et téléchargé de
 
 .. note::
 
-   Il est également possible d’exporter une sélection restreinte de documents sous forme de fichier zip. Vous trouverez les instructions à ce sujet dans le chapitre couvrant l’export au format ZIP **[PLEASE INSERT LINK]**
+   Il est également possible d’exporter une sélection restreinte de documents sous forme de fichier zip. Vous trouverez les instructions à ce sujet dans le chapitre couvrant l’:ref:`label-export-zip-documents`.
 
 .. |img-modifierdossier01| image:: ../_static/img/img-modifierdossier01.png
 .. |img-modifierdossier02| image:: ../_static/img/img-modifierdossier02.png

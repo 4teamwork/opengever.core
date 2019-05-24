@@ -5,11 +5,13 @@ Pour chaque tâche, il est possible de créer un nombre illimité de sous-tâche
 
 |img-creer_sous_tache-01|
 
-Une nouvelle page de création de sous-tâche est ouverte, ressemblant à celle utilisée pour une tâche principale. Pour savoir comment la compléter, référez-vous à Créer une nouvelle tâche **[please link]**
+Une nouvelle page de création de sous-tâche est ouverte, ressemblant à celle utilisée pour une tâche principale. Pour savoir comment la compléter, référez-vous à :ref:`label-creer_tache`.
 
 Après avoir sauvegardé, on se retrouve directement dans la sous-tâche. La tâche principale y est également indiquée:
 
 |img-creer_sous_tache-02|
+
+On retrouve également la sous-tache dans la vue détaillée de la tâche principale (voir :ref:`taches-vue-detaillee`)
 
 .. |img-creer_sous_tache-01| image:: ../_static/img/img-creer_sous_tache-01.png
 .. |img-creer_sous_tache-02| image:: ../_static/img/img-creer_sous_tache-02.png

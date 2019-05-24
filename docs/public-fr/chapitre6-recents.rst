@@ -1,3 +1,5 @@
+.. _label-recemment_modifie:
+
 Documents récents
 =================
 

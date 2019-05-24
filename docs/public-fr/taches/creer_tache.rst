@@ -1,3 +1,5 @@
+.. _label-creer_tache:
+
 Créer une tâche
 ---------------
 
@@ -39,7 +41,7 @@ Onglet Général
 
     .. [#FN1] Aucun retour nécessitant un contrôle n'est attendu du mandataire, ces 2 types de mandats peuvent être fermés directement par le mandataire.
 
-    Plus d'information à ce sujet (p. ex. quels droits sont applicables à quel type de mandat se trouvent dans le chapitre "Flux de travail".
+    Plus d'information à ce sujet (p. ex. quels droits sont applicables à quel type de mandat se trouvent dans le chapitre :ref:`label-taches-flux-travail`.
 
 4. **Mandataire :** L'utilisateur qui doit compléter la tâche.
 

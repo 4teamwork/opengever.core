@@ -1,3 +1,5 @@
+.. _taches-vue-detaillee:
+
 Vue détaillée d'une tâche
 --------------------------
 

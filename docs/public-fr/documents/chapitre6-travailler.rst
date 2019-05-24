@@ -8,7 +8,7 @@ Pour le traitement des documents, External Editor ou Office Connector doivent
 être installés. Nous conseillons Office Connector étant donné qu’il est
 en permanence développé et amélioré par 4teamwork.
 
-Vous pouvez télécharger Office Connector pour Windows et Mac `grâce au lien <https://www.4teamwork.ch/office-connector>`_.
+Vous pouvez télécharger Office Connector pour Windows et Mac `sur le site de 4teamwork <https://www.4teamwork.ch/fr/solutions/office-connector/>`_.
 Là, vous trouverez également les liens de téléchargement
 pour les deux applications qui ne sont plus entretenues,
 External Editor pour Windows et ZopeEditManager pour Mac.
@@ -177,7 +177,7 @@ Le traitement avec Adobe pour les fichiers graphiques (Photoshop, Illustrator, I
 avec External Editor fonctionne, certes, mais n’est cependant pas conseillé, étant
 donné que des erreurs ont déjà été constatées. Pour de tels fichiers et pour d’autres
 fichiers qui ne sont pas supportés, ils doivent être suivis selon l’indication ci-après,
-sous Modifier des documents sans "External Editor" ou "Office Connector".
+sous `Travailler des documents sans External Editor / Office Connector`_.
 
 Travailler des documents sans External Editor / Office Connector
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

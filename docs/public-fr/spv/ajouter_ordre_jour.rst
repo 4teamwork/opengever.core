@@ -1,5 +1,6 @@
 Soumettre une requête
 ---------------------
+
 Après la saisie de la requête, celle-ci peut être soumise à la commission par l’intermédiaire du bouton « Soumettre ». L’état de la requête passe alors de « en modification » à « Soumis ».
 
 |img-ajouter_ordre_jour-01|

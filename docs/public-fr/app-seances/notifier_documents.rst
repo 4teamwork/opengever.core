@@ -10,7 +10,7 @@ Vous pouvez envoyer la notification à tous ou seulement une sélection de parti
 |img-notifier2|
 |img-notifier3|
 
-L’envoi d’un message par email est déclenché à l’aide du bouton «Envoyer». Cette notification contient un lien qui permettra aux participants d’accéder à l’App et ainsi aux documents de la séance. 
+L’envoi d’un message par email est déclenché à l’aide du bouton «Envoyer». Cette notification contient un lien qui permettra aux participants d’accéder à l’App et ainsi aux documents de la séance.
 
 .. |img-notifier1| image:: ../_static/img/img-notifier1.png
 .. |img-notifier2| image:: ../_static/img/img-notifier2.png

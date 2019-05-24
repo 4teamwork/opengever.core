@@ -1,3 +1,6 @@
+
+.. _label-cooperation_ic:
+
 Coopération inter-clients
 --------------------------
 

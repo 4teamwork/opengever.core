@@ -1,3 +1,5 @@
+.. _label-creer-dossier:
+
 Ouvrir un nouveau dossier
 -------------------------
 Pour ouvrir un nouveau dossier, sélectionnez le numéro de classement sous lequel le dossier doit être saisi dans la structure de classement et cliquez sur *Ajout d'un élément -> Dossier*.
