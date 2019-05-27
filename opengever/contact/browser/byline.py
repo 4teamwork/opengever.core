@@ -28,3 +28,12 @@ class ContactByline(BylineBase):
         if self.context.model.is_active:
             return PMF('Yes')
         return PMF('No')
+
+
+class TeamByline(BylineBase):
+    """Hidden byline for TeamWrapper objects.
+    There is no sensible byline data for team objects - so we hide them.
+    """
+
+    def show(self):
+        return False

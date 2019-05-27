@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix revoke_permission field and validation in the fowarding forms. [phgross]
+- Hide byline for the teams. [phgross]
 - Cleanup/fix oneoffix upgradesteps and make dicstorage upgrades more failsafe. [phgross]
 - Add french translation for spv documentation. [andresoberhaensli, njohner]
 - Add french translation for task documentation. [andresoberhaensli, njohner]
