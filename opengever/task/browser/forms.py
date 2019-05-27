@@ -26,6 +26,18 @@ REASSIGN_TRANSITION = 'task-transition-reassign'
 # thus we use an add form hack by injecting the values into the request.
 
 
+def hide_feature_flagged_fields(groups):
+    if not is_private_task_feature_enabled():
+        common_group = next(
+            group for group in groups if group.__name__ == u'common')
+        common_group.fields = common_group.fields.omit('is_private')
+
+    if not is_optional_task_permissions_revoking_enabled():
+        common_group = next(
+            group for group in groups if group.__name__ == u'common')
+        common_group.fields = common_group.fields.omit('revoke_permissions')
+
+
 class TaskAddForm(DefaultAddForm):
 
     def __init__(self, *args, **kwargs):
@@ -38,15 +50,7 @@ class TaskAddForm(DefaultAddForm):
 
     def updateFieldsFromSchemata(self):
         super(TaskAddForm, self).updateFieldsFromSchemata()
-        if not is_private_task_feature_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.fields = common_group.fields.omit('is_private')
-
-        if not is_optional_task_permissions_revoking_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.fields = common_group.fields.omit('revoke_permissions')
+        hide_feature_flagged_fields(self.groups)
 
     def update(self):
         # put default value for relatedItems into request
@@ -160,15 +164,7 @@ class TaskEditForm(DefaultEditForm):
     def updateFieldsFromSchemata(self):
         super(TaskEditForm, self).updateFieldsFromSchemata()
 
-        if not is_private_task_feature_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.fields = common_group.fields.omit('is_private')
-
-        if not is_optional_task_permissions_revoking_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.fields = common_group.fields.omit('revoke_permissions')
+        hide_feature_flagged_fields(self.groups)
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
