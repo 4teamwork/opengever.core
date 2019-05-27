@@ -63,3 +63,16 @@ class TestTeamDetails(IntegrationTestCase):
             ['http://nohost/plone/@@user-details/kathi.barfuss',
              'http://nohost/plone/@@user-details/robert.ziegler'],
             [link.get('href') for link in links])
+
+    @browsing
+    def test_byline_is_not_shown(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        byline_css_selector = '.documentByLine'
+
+        # test-precondition: byline is shown for the contactfolder
+        browser.open(self.contactfolder)
+        self.assertIsNotNone(browser.css(byline_css_selector))
+
+        browser.open(self.contactfolder, view='team-1/view')
+        self.assertEquals([], browser.css(byline_css_selector))

@@ -77,6 +77,14 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="plone.belowcontenttitle.documentbyline"
+      for="opengever.ogds.base.interfaces.ITeam"
+      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
+      class=".byline.TeamByline"
+      permission="zope2.View"
+      />
+
   <browser:page
       name="participations"
       for="opengever.contact.interfaces.IOrganization"
