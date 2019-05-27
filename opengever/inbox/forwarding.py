@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.task import _ as task_mf
 from opengever.task import is_private_task_feature_enabled
+from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.task import ITask
 from opengever.task.task import Task
 from opengever.task.util import update_reponsible_field_data
@@ -168,15 +169,19 @@ class ForwardingAddForm(add.DefaultAddForm):
 
         super(ForwardingAddForm, self).update()
 
-        # Disable is_private field according to the feature flag
-        if not is_private_task_feature_enabled():
-            common_group = next(
-                group for group in self.groups if group.__name__ == u'common')
-            common_group.widgets['is_private'].mode = HIDDEN_MODE
-
     def updateFieldsFromSchemata(self):
         super(ForwardingAddForm, self).updateFieldsFromSchemata()
         _drop_empty_additional_fieldset(self.groups)
+
+        if not is_private_task_feature_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('is_private')
+
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('revoke_permissions')
 
     def createAndAdd(self, data):
         update_reponsible_field_data(data)
@@ -196,6 +201,16 @@ class ForwardingEditForm(DefaultEditForm):
     def updateFieldsFromSchemata(self):
         super(ForwardingEditForm, self).updateFieldsFromSchemata()
         _drop_empty_additional_fieldset(self.groups)
+
+        if not is_private_task_feature_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('is_private')
+
+        if not is_optional_task_permissions_revoking_enabled():
+            common_group = next(
+                group for group in self.groups if group.__name__ == u'common')
+            common_group.fields = common_group.fields.omit('revoke_permissions')
 
     def applyChanges(self, data):
         """Records reassign activity when the responsible has changed.
