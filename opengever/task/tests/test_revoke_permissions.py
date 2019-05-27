@@ -297,6 +297,60 @@ class TestRevokePermissionsFeatureDeactivated(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.dossier, headers=headers, data=data)
 
+    @browsing
+    def test_disabled_revoke_permissions_in_forwarding_add_form(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        browser.open(self.inbox, view='++add++opengever.inbox.forwarding',
+                     data=self.make_path_param(self.inbox_document))
+        self.assertIsNone(
+            browser.forms.get('form').find_field("Revoke permissions."))
+
+        browser.fill({'Title': 'Anfragen'})
+        browser.click_on('Save')
+        self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_enabled_revoke_permissions_in_forwarding_add_form(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        self.activate_feature('optional-task-permissions-revoking')
+
+        browser.open(self.inbox, view='++add++opengever.inbox.forwarding',
+                     data=self.make_path_param(self.inbox_document))
+        self.assertIsNotNone(
+            browser.forms.get('form').find_field("Revoke permissions."))
+
+        browser.fill({'Title': 'Anfragen'})
+        browser.click_on('Save')
+        self.assertEquals(['Item created'], info_messages())
+
+    @browsing
+    def test_disabled_revoke_permissions_in_forwarding_edit_form(self, browser):
+        self.login(self.administrator, browser)
+
+        browser.open(self.inbox_forwarding, view='edit')
+        self.assertIsNone(
+            browser.forms.get('form').find_field("Revoke permissions."))
+
+        browser.fill({'Title': 'Anfragen'})
+        browser.click_on('Save')
+        self.assertEquals(['Changes saved'], info_messages())
+
+    @browsing
+    def test_enabled_revoke_permissions_in_forwarding_edit_form(self, browser):
+        self.login(self.administrator, browser)
+
+        self.activate_feature('optional-task-permissions-revoking')
+
+        browser.open(self.inbox_forwarding, view='edit')
+        self.assertIsNotNone(
+            browser.forms.get('form').find_field("Revoke permissions."))
+
+        browser.fill({'Title': 'Anfragen'})
+        browser.click_on('Save')
+        self.assertEquals(['Changes saved'], info_messages())
+
 
 class TestRevokePermissionsDefault(IntegrationTestCase):
 
