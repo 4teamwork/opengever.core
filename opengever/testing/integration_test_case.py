@@ -97,6 +97,9 @@ FEATURE_METHODS = {
 class IntegrationTestCase(TestCase):
     layer = OPENGEVER_INTEGRATION_TESTING
     features = ()
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'}
 
     def setUp(self):
         super(IntegrationTestCase, self).setUp()

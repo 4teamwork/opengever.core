@@ -316,3 +316,48 @@ Zusätzliche Metadaten:
    .. py:attribute:: text
 
        :Datentyp: ``Text``
+
+
+Aufgabenverlauf
+---------------
+Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter dem Attribut ``responses`` enthalten.
+
+
+**Beispiel-Respones auf ein GET Request**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Accept: application/json
+
+      {
+        "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-5",
+        "@type": "opengever.task.task",
+        "UID": "3a551f6e3b62421da029dfceb71656e6",
+        "items": [],
+        "responses": [
+          {
+            "added_object": null,
+            "changes": [],
+            "creator": "zopemaster",
+            "date": "2019-05-21T13:57:42+00:00",
+            "date_of_completion": null,
+            "relatedItems": [],
+            "reminder_option": null,
+            "text": "Lorem ipsum.",
+            "transition": "task-commented"
+          },
+          {
+            "added_object": null,
+            "changes": [],
+            "creator": "zopemaster",
+            "date": "2019-05-21T14:02:01+00:00",
+            "date_of_completion": null,
+            "relatedItems": [],
+            "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
+            "transition": "task-transition-open-in-progress"
+          },
+        ]
+        "responsible": "david.erni",
+        "...": "...",
+      }
