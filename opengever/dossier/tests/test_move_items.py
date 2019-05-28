@@ -12,7 +12,25 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
 
-class TestMoveItems(IntegrationTestCase):
+class MoveItemsHelper(object):
+
+    def move_items(self, items, source=None, target=None):
+        paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
+        self.request['paths'] = paths
+        self.request['form.widgets.request_paths'] = paths
+        self.request['form.widgets.destination_folder'] = "/".join(
+            target.getPhysicalPath())
+
+        view = source.restrictedTraverse('move_items')
+        form = view.form(source, self.request)
+        form.updateWidgets()
+        form.widgets['destination_folder'].value = target
+        form.widgets['request_paths'].value = paths
+
+        form.handle_submit(form, object)
+
+
+class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
 
     def test_cant_move_items_to_invalid_target(self):
         self.login(self.manager)
@@ -53,6 +71,43 @@ class TestMoveItems(IntegrationTestCase):
         self.assert_does_not_contain(
             self.dossier, [doc_title, subdossier_title])
         self.assert_contains(self.empty_dossier, [doc_title, subdossier_title])
+
+    def test_only_open_items_appear_in_destination_widget(self):
+        self.login(self.dossier_manager)
+
+        self.request['paths'] = '/'.join(self.dossier.getPhysicalPath())
+
+        uids = self.get_uids_from_tree_widget()
+
+        self.assertIn(IUUID(self.empty_dossier), uids,
+                      "Active dossier not found as target in move items")
+
+        self.assertNotIn(IUUID(self.expired_dossier), uids,
+                         "Closed dossier found as target in move items")
+
+    def get_uids_from_tree_widget(self):
+        view = self.branch_repofolder.restrictedTraverse('move_items')
+        form = view.form(self.branch_repofolder, self.request)
+        form.updateWidgets()
+
+        catalog = getToolByName(self.portal, 'portal_catalog')
+        widget = form.widgets['destination_folder']
+        query_result = catalog(widget.bound_source.navigation_tree_query)
+
+        return [item.UID for item in query_result]
+
+    def assert_contains(self, container, items):
+        for item in items:
+            self.assertIn(item,
+                          [a.Title for a in container.getFolderContents()])
+
+    def assert_does_not_contain(self, container, items):
+        for item in items:
+            self.assertNotIn(item,
+                             [a.Title for a in container.getFolderContents()])
+
+
+class TestContainingDossierAndSubdossierIndexWhenMovingItem(IntegrationTestCase, MoveItemsHelper):
 
     def test_indexes_are_updated_when_document_moved_from_dossier_to_dossier(self):
         self.login(self.regular_user)
@@ -308,55 +363,6 @@ class TestMoveItems(IntegrationTestCase):
                                        'containing_subdossier', document)
         self.assert_index_and_metadata(self.dossier.Title(),
                                        'containing_dossier', document)
-
-    def test_only_open_items_appear_in_destination_widget(self):
-        self.login(self.dossier_manager)
-
-        self.request['paths'] = '/'.join(self.dossier.getPhysicalPath())
-
-        uids = self.get_uids_from_tree_widget()
-
-        self.assertIn(IUUID(self.empty_dossier), uids,
-                      "Active dossier not found as target in move items")
-
-        self.assertNotIn(IUUID(self.expired_dossier), uids,
-                         "Closed dossier found as target in move items")
-
-    def get_uids_from_tree_widget(self):
-        view = self.branch_repofolder.restrictedTraverse('move_items')
-        form = view.form(self.branch_repofolder, self.request)
-        form.updateWidgets()
-
-        catalog = getToolByName(self.portal, 'portal_catalog')
-        widget = form.widgets['destination_folder']
-        query_result = catalog(widget.bound_source.navigation_tree_query)
-
-        return [item.UID for item in query_result]
-
-    def move_items(self, items, source=None, target=None):
-        paths = u";;".join(["/".join(i.getPhysicalPath()) for i in items])
-        self.request['paths'] = paths
-        self.request['form.widgets.request_paths'] = paths
-        self.request['form.widgets.destination_folder'] = "/".join(
-            target.getPhysicalPath())
-
-        view = source.restrictedTraverse('move_items')
-        form = view.form(source, self.request)
-        form.updateWidgets()
-        form.widgets['destination_folder'].value = target
-        form.widgets['request_paths'].value = paths
-
-        form.handle_submit(form, object)
-
-    def assert_contains(self, container, items):
-        for item in items:
-            self.assertIn(item,
-                          [a.Title for a in container.getFolderContents()])
-
-    def assert_does_not_contain(self, container, items):
-        for item in items:
-            self.assertNotIn(item,
-                             [a.Title for a in container.getFolderContents()])
 
 
 class TestMoveItemsWithTestbrowser(IntegrationTestCase):
