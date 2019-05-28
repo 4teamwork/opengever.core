@@ -108,6 +108,7 @@ FIELDS = {
     'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
     'document_author': ('document_author', 'document_author', 'document_author'),
     'document_date': ('document_date', 'document_date', 'document_date'),
+    'document_type': ('document_type', 'document_type', 'document_type'),
     'end': ('end', 'end', 'end'),
     'has_sametype_children': ('has_sametype_children', 'has_sametype_children', 'has_sametype_children'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
