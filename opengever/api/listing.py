@@ -133,6 +133,7 @@ FIELDS = {
     'type': ('portal_type', 'PortalType', 'portal_type'),
     'filesize': ('filesize', filesize, 'filesize'),
     'filename': ('filename', filename, 'filename'),
+    'file_extension': ('file_extension', 'file_extension', 'file_extension'),
     'task_type': ('task_type', translated_task_type, 'task_type'),
     'deadline': ('deadline', 'deadline', 'deadline'),
 }

@@ -86,6 +86,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``title``: Titel
 - ``filesize``: Dateigrösse
 - ``filename``: Dateiname
+- ``file_extension``: Datei-Endung
 - ``task_type``: Aufgaben-Typ
 - ``deadline``: Aufgabenfrist
 

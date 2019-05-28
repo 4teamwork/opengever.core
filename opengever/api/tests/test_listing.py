@@ -320,6 +320,27 @@ class TestListingEndpoint(IntegrationTestCase):
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1'},
             item)
 
+    @browsing
+    def test_filter_by_file_extension(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # all documents
+        view = ('@listing?name=documents&'
+                'columns:list=filename&columns:list=start')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        filenames = [item['filename'] for item in browser.json['items']]
+
+        # docx documents only
+        view = ('@listing?name=documents&'
+                'columns:list=filename&columns:list=start'
+                '&filters.file_extension:record:list=.docx')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertNotEqual(len(filenames), len(browser.json['items']))
+        self.assertEqual(
+            [filename for filename in filenames if filename.endswith('.docx')],
+            [item['filename'] for item in browser.json['items']])
+
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
 
@@ -384,3 +405,16 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
             'start:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
             filters,
         )
+
+    @browsing
+    def test_filter_by_file_extension(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=documents&columns:list=title'
+                '&columns:list=start'
+                '&filters.file_extension:record:list=.docx')
+        browser.open(self.repository_root, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(u'file_extension:(.docx)', filters)
