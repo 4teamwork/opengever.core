@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.2.3 (unreleased)
+2019.3.0 (unreleased)
 ---------------------
 
 - Nothing changed yet.
@@ -22,7 +22,7 @@ Changelog
 ---------------------
 
 - Show filters also on no contents page in document listings. [phgross]
-- Make subject column non-sortable in storred dictstorage settings. [flipsi]
+- Make subject column non-sortable in storred dictstorage settings. [phgross]
 
 
 2019.2.0 (2019-05-16)
