@@ -1,8 +1,12 @@
+from copy import deepcopy
+from datetime import datetime
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
@@ -10,6 +14,7 @@ from Products.CMFCore.utils import getToolByName
 from requests_toolbelt.utils import formdata
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import pytz
 
 
 class MoveItemsHelper(object):
@@ -105,6 +110,268 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         for item in items:
             self.assertNotIn(item,
                              [a.Title for a in container.getFolderContents()])
+
+
+class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper):
+
+    MOVE_TIME = datetime(2018, 4, 30, 0, 0, tzinfo=pytz.UTC)
+    ZOPE_MOVE_TIME = DateTime(MOVE_TIME).toZone(DateTime().localZone())
+    ZOPE_MOVE_TIME_STR = '2018-04-30T02:00:00+02:00'
+
+    @browsing
+    def test_move_document_metadata_update(self, browser):
+        self.maxDiff = None
+        self.login(self.regular_user, browser=browser)
+
+        subdocument_metadata = self.get_catalog_metadata(self.subdocument)
+
+        with freeze(self.MOVE_TIME):
+            with self.observe_children(self.empty_dossier) as children:
+                self.move_items((self.subdocument, ),
+                                source=self.subdossier,
+                                target=self.empty_dossier)
+
+        self.assertEqual(1, len(children['added']))
+        moved = children['added'].pop()
+        moved_metadata = self.get_catalog_metadata(moved)
+
+        # We expect some of the metadata to get modified during pasting
+        modified_metadata = {'UID': moved.UID(),
+                             # creator
+                             'listCreators': ('robert.ziegler', 'kathi.barfuss'),
+                             # dates
+                             'start': self.MOVE_TIME.date(),  # acquisition is responsible here
+                             'modified': self.ZOPE_MOVE_TIME,
+                             'ModificationDate': self.ZOPE_MOVE_TIME_STR,
+                             'Date': self.ZOPE_MOVE_TIME_STR,
+                             # containing dossier and subdossier
+                             'reference': 'Client1 1.1 / 4 / 22',
+                             'containing_dossier': self.empty_dossier.Title(),
+                             'containing_subdossier': '',
+                             }
+
+        unchanged_metadata = ['id',
+                              'getId',
+                              'sequence_number',
+                              'Creator',
+                              'created',
+                              'CreationDate',
+                              'changed',
+                              'Title',
+                              'filename',
+                              'Description',
+                              'EffectiveDate',
+                              'ExpirationDate',
+                              'Subject',
+                              'Type',
+                              'assigned_client',
+                              'author_name',
+                              'bumblebee_checksum',
+                              'checked_out',
+                              'cmf_uid',
+                              'commentators',
+                              'contactid',
+                              'css_icon_class',
+                              'date_of_completion',
+                              'deadline',
+                              'delivery_date',
+                              'document_author',
+                              'document_date',
+                              'effective',
+                              'email',
+                              'email2',
+                              'end',
+                              'exclude_from_nav',
+                              'expires',
+                              'file_extension',
+                              'filesize',
+                              'firstname',
+                              'getContentType',
+                              'getIcon',
+                              'getObjSize',
+                              'getRemoteUrl',
+                              'has_sametype_children',
+                              'in_response_to',
+                              'is_folderish',
+                              'is_subtask',
+                              'issuer',
+                              'last_comment_date',
+                              'lastname',
+                              'location',
+                              'meta_type',
+                              'phone_office',
+                              'portal_type',
+                              'predecessor',
+                              'preselected',
+                              'public_trial',
+                              'receipt_date',
+                              'responsible',
+                              'retention_expiration',
+                              'review_state',
+                              'task_type',
+                              'title_de',
+                              'title_fr',
+                              'total_comments',
+                              'trashed']
+
+        # Make sure no metadata key is in both lists of unchanged and modified metadata
+        self.assertTrue(set(unchanged_metadata).isdisjoint(modified_metadata.keys()))
+
+        expected_metadata = deepcopy(modified_metadata)
+        expected_metadata.update({key: subdocument_metadata[key] for key in unchanged_metadata})
+
+        # Make sure that the developer thinks about whether a newly added metadata
+        # column should be modified during copy/paste of a document or not.
+        self.assertItemsEqual(
+            expected_metadata.keys(),
+            subdocument_metadata.keys(),
+            msg="A new metadata column was added, please add it to "
+                "'unchanged_metadata' if it should not be modified during "
+                "copy/paste of a document, or to 'modified_metadata' otherwise")
+
+        self.assertDictEqual(expected_metadata, moved_metadata)
+
+        # Make sure the metadata was up to date
+        # we freeze to the move time to avoid seeing differences in dates
+        # that get modified by indexing (such as modified)
+        with freeze(self.MOVE_TIME):
+            moved.reindexObject()
+        reindexed_moved_metadata = self.get_catalog_metadata(moved)
+
+        # Everything up to date
+        self.assertDictEqual(moved_metadata, reindexed_moved_metadata)
+
+    @browsing
+    def test_move_document_indexdata_update(self, browser):
+        self.maxDiff = None
+        self.login(self.regular_user, browser=browser)
+
+        subdocument_indexdata = self.get_catalog_indexdata(self.subdocument)
+
+        with freeze(self.MOVE_TIME):
+            with self.observe_children(self.empty_dossier) as children:
+                self.move_items((self.subdocument, ),
+                                source=self.subdossier,
+                                target=self.empty_dossier)
+
+        self.assertEqual(1, len(children['added']))
+        moved = children['added'].pop()
+        moved_indexdata = self.get_catalog_indexdata(moved)
+
+        # We expect some of the metadata to get modified during pasting
+        paste_time_index = self.dateindex_value_from_datetime(self.MOVE_TIME)
+        modified_indexdata = {
+            'UID': moved.UID(),
+            'path': moved.absolute_url_path(),
+
+            # dates
+            'modified': paste_time_index,
+            # 'start': paste_time_index,
+
+            # containing dossier and subdossier
+            'containing_dossier': self.empty_dossier.Title(),
+            'containing_subdossier': '',
+            # 'reference': 'Client1 1.1 / 4 / 41', # reference should be updated
+        }
+
+        unchanged_indexdata = ['id',
+                               'getId',
+                               'reference',
+                               'sequence_number',
+                               'is_subdossier',
+                               'Title',
+                               'sortable_title',
+                               'SearchableText',
+                               'changed',
+                               'start',
+                               'Creator',
+                               'Date',
+                               'Description',
+                               'Subject',
+                               'Type',
+                               'after_resolve_jobs_pending',
+                               'allowedRolesAndUsers',
+                               'assigned_client',
+                               'blocked_local_roles',
+                               'checked_out',
+                               'client_id',
+                               'cmf_uid',
+                               'commentators',
+                               'contactid',
+                               'created',
+                               'date_of_completion',
+                               'deadline',
+                               'delivery_date',
+                               'document_author',
+                               'document_date',
+                               'document_type',
+                               'effective',
+                               'effectiveRange',
+                               'email',
+                               'end',
+                               'expires',
+                               'external_reference',
+                               'file_extension',
+                               'filesize',
+                               'firstname',
+                               'getObjPositionInParent',
+                               'getRawRelatedItems',
+                               'in_reply_to',
+                               'is_default_page',
+                               'is_folderish',
+                               'is_subtask',
+                               'issuer',
+                               'lastname',
+                               'meta_type',
+                               'object_provides',
+                               'phone_office',
+                               'portal_type',
+                               'predecessor',
+                               'public_trial',
+                               'receipt_date',
+                               'responsible',
+                               'retention_expiration',
+                               'review_state',
+                               'sortable_author',
+                               'task_type',
+                               'total_comments',
+                               'trashed']
+
+        # Make sure no index is in both lists of unchanged and modified indexdata
+        self.assertTrue(set(unchanged_indexdata).isdisjoint(modified_indexdata.keys()))
+
+        expected_indexdata = deepcopy(modified_indexdata)
+        expected_indexdata.update({key: subdocument_indexdata[key] for key in unchanged_indexdata})
+
+        # Make sure that the developer thinks about whether a newly added
+        # index should be modified during copy/paste of a document or not.
+        self.assertItemsEqual(
+            expected_indexdata.keys(),
+            subdocument_indexdata.keys(),
+            msg="A new index was added, please add it to 'unchanged_indexdata'"
+                " if it should not be modified during copy/paste "
+                "of a document, or to 'modified_indexdata' otherwise")
+
+        self.assertDictEqual(expected_indexdata, moved_indexdata)
+
+        # Make sure the indexdata was up to date
+        # we freeze to the paste time to avoid seeing differences in dates
+        # that get modified by indexing (such as modified)
+        with freeze(self.MOVE_TIME):
+            moved.reindexObject()
+            reindexed_moved_indexdata = self.get_catalog_indexdata(moved)
+
+        # Some index data is not up to date, but does not have to be
+        # such as "is_subdossier".
+        # Other data should be up to date but is not. For example the SearchableText
+        # is not reindexed on purpose for efficiency, but it actually changes
+        # because the reference number changes...
+        not_up_to_date = ['SearchableText', 'is_subdossier', 'reference', 'start', 'Date']
+        for key in not_up_to_date:
+            self.assertNotEqual(moved_indexdata.pop(key),
+                                reindexed_moved_indexdata.pop(key))
+
+        self.assertDictEqual(moved_indexdata, reindexed_moved_indexdata)
 
 
 class TestContainingDossierAndSubdossierIndexWhenMovingItem(IntegrationTestCase, MoveItemsHelper):
