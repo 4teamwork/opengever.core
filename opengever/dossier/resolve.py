@@ -35,6 +35,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 import transaction
 
 
+MAIN_DOSSIER_NOT_ACTIVE = _("Dossier is not active and cannot be resolved.")
 NOT_SUPPLIED_OBJECTS = _(
     "not all documents and tasks are stored in a subdossier.")
 NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
@@ -555,13 +556,15 @@ class ResolveConditions(object):
 
     def check_preconditions(self):
         """Check if all preconditions are fulfilled:
+         - main dossier is in an open state
          - all_supplied
          - all checked in
          - all closed
         """
 
         errors = []
-
+        if not self.context.is_open():
+            errors.append(MAIN_DOSSIER_NOT_ACTIVE)
         if (self.strict
                 and not self.context.is_subdossier()
                 and not self.context.is_all_supplied()):

@@ -1280,6 +1280,17 @@ class TestResolvingDossiersWithFilingNumberSupportRESTAPI(ResolveTestHelperRESTA
 class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
     @browsing
+    def test_resolving_is_cancelled_when_main_dossier_inactive(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        self.set_workflow_state('dossier-state-inactive', self.resolvable_dossier)
+        self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_not_resolved(self.resolvable_dossier)
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ['Dossier is not active and cannot be resolved.'])
+
+    @browsing
     def test_resolving_is_cancelled_when_documents_are_not_filed_correctly(self, browser):
         self.login(self.secretariat_user, browser)
 
