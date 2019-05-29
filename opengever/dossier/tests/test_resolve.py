@@ -47,6 +47,7 @@ class ResolveTestHelper(object):
 
     resolved_state = 'dossier-state-resolved'
     inactive_state = 'dossier-state-inactive'
+    active_state = 'dossier-state-active'
 
     def resolve(self, dossier, browser=None):
         return browser.open(dossier,
@@ -96,6 +97,13 @@ class ResolveTestHelper(object):
                "Actual state is %r instead." % (
                    dossier, self.inactive_state, dossier_state))
         self.assertEquals(self.inactive_state, dossier_state, msg)
+
+    def assert_active(self, dossier):
+        dossier_state = api.content.get_state(dossier)
+        msg = ("Expected dossier %r to be active (state %r). "
+               "Actual state is %r instead." % (
+                   dossier, self.active_state, dossier_state))
+        self.assertEquals(self.active_state, dossier_state, msg)
 
 
 class ResolveTestHelperRESTAPI(ResolveTestHelper):
@@ -216,6 +224,28 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.subdossier, browser)
 
         self.assert_already_resolved(self.subdossier, browser)
+
+    @browsing
+    def test_can_resolve_reactivate_and_resolve_again(self, browser):
+        self.activate_feature('journal-pdf')
+        self.activate_feature('tasks-pdf')
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_resolved(self.resolvable_subdossier)
+        self.assert_success(self.resolvable_dossier, browser,
+                            ['The dossier has been succesfully resolved.'])
+
+        self.reactivate(self.resolvable_dossier, browser)
+        self.assert_active(self.resolvable_dossier)
+        self.assert_active(self.resolvable_subdossier)
+
+        self.resolve(self.resolvable_dossier, browser)
+        self.assert_resolved(self.resolvable_dossier)
+        self.assert_resolved(self.resolvable_subdossier)
+        self.assert_success(self.resolvable_dossier, browser,
+                            ['The dossier has been succesfully resolved.'])
 
 
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
