@@ -1,6 +1,7 @@
 from opengever.base.transition import ITransitionExtender
 from opengever.dossier.activate import DossierActivator
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
+from opengever.dossier.deactivate import DossierDeactivator
 from opengever.dossier.resolve import AlreadyBeingResolved
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
@@ -60,7 +61,8 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
     """
 
     CUSTOMIZED_TRANSITIONS = ['dossier-transition-resolve',
-                              'dossier-transition-activate']
+                              'dossier-transition-activate',
+                              'dossier-transition-deactivate']
 
     def reply(self):
         if self.transition not in self.CUSTOMIZED_TRANSITIONS:
@@ -81,7 +83,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             self.request.response.setStatus(400)
             return dict(error=dict(
                 type='PreconditionsViolated',
-                errors=e.errors,
+                errors=map(self.translate, e.errors),
                 message=self.translate(str(e))))
 
         except InvalidDates as e:
@@ -130,6 +132,8 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             self.resolve_dossier(*args)
         elif self.transition == 'dossier-transition-activate':
             self.activate_dossier(*args)
+        elif self.transition == 'dossier-transition-deactivate':
+            self.deactivate_dossier(*args)
         else:
             raise BadRequest('Unexpected custom transition %r' % self.transition)
 
@@ -161,6 +165,15 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
                 "feature is activated")
 
         resolve_manager.resolve()
+
+    def deactivate_dossier(self, objs, comment, publication_dates,
+                           include_children=False):
+        # Reject explicit attempts to non-recursively deactivate a dossier
+        if not json_body(self.request).get('include_children', True):
+            raise BadRequest('Deactivating dossier must always be recursive')
+
+        deactivator = DossierDeactivator(self.context)
+        deactivator.deactivate()
 
     def get_latest_wf_action(self):
         history = self.wftool.getInfoFor(self.context, "review_history")

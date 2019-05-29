@@ -162,7 +162,7 @@ msgid "The Dossier can't be deactivated, not all contained tasks are in a closed
 msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches non accomplies."
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
+msgid "The Dossier can't be deactivated, not all contained documents are checked in."
 msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui ne sont pas en statut \"checkin\"."
 
 #: ./opengever/dossier/deactivate.py

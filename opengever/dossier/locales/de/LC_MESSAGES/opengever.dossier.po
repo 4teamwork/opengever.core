@@ -164,7 +164,7 @@ msgid "The Dossier can't be deactivated, not all contained tasks are in a closed
 msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind."
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, not all containeddocuments are checked in."
+msgid "The Dossier can't be deactivated, not all contained documents are checked in."
 msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokumente eingecheckt sind."
 
 #: ./opengever/dossier/deactivate.py
