@@ -8,6 +8,7 @@ from Products.Five.browser import BrowserView
 
 
 MSG_SUBDOSSIER = _("It isn't possible to reactivate a sub dossier.")
+MAIN_DOSSIER_NOT_RESOLVED = _("Dossier is not resolved and cannot be reactivated.")
 
 
 class Reactivator(object):
@@ -18,6 +19,8 @@ class Reactivator(object):
 
     def get_precondition_violations(self):
         errors = []
+        if not self.context.is_resolved():
+            errors.append(MAIN_DOSSIER_NOT_RESOLVED)
         parent = self.context.get_parent_dossier()
         if parent:
             if self.wft.getInfoFor(parent, 'review_state') not in DOSSIER_STATES_OPEN:

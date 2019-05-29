@@ -14,13 +14,6 @@ import json
 
 class TestReactivating(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestReactivating, self).setUp()
-        with self.login(self.regular_user):
-            self.set_workflow_state('dossier-state-resolved',
-                                    self.resolvable_dossier,
-                                    self.resolvable_subdossier)
-
     def reactivate(self, dossier, browser):
         return browser.open(dossier,
                             view='transition-reactivate',
@@ -38,16 +31,21 @@ class TestReactivating(IntegrationTestCase):
     @browsing
     def test_reactivating_a_resolved_dossier_succesfully(self, browser):
         self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_subdossier)
 
-        self.reactivate(self.resolvable_dossier, browser)
+        self.reactivate(self.resolvable_subdossier, browser)
 
-        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
-        self.assert_success(self.resolvable_dossier, browser,
+        self.assert_workflow_state('dossier-state-active', self.resolvable_subdossier)
+        self.assert_success(self.resolvable_subdossier, browser,
                             ['Dossiers successfully reactivated.'])
 
     @browsing
     def test_reactivating_a_main_dossier_reactivates_subdossiers_recursively(self, browser):
         self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_dossier,
+                                self.resolvable_subdossier)
         subsub = create(Builder('dossier')
                         .within(self.resolvable_subdossier)
                         .in_state('dossier-state-resolved'))
@@ -59,8 +57,35 @@ class TestReactivating(IntegrationTestCase):
         self.assert_workflow_state('dossier-state-active', subsub)
 
     @browsing
+    def test_cannot_reactivate_an_active_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
+
+        self.reactivate(self.resolvable_dossier, browser)
+
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ["Dossier is not resolved and cannot be reactivated."])
+        self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
+
+    @browsing
+    def test_cannot_reactivate_an_inactive_dossier(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-inactive',
+                                self.resolvable_dossier)
+
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
+        self.reactivate(self.resolvable_dossier, browser)
+
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ["Dossier is not resolved and cannot be reactivated."])
+        self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
+
+    @browsing
     def test_reactivating_a_subdossier_of_a_resolved_dossier_is_not_possible(self, browser):
         self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_dossier,
+                                self.resolvable_subdossier)
 
         self.reactivate(self.resolvable_subdossier, browser)
 
@@ -71,10 +96,13 @@ class TestReactivating(IntegrationTestCase):
 
     @browsing
     def test_resets_end_dates_recursively(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_dossier,
+                                self.resolvable_subdossier)
         end_date = date(2013, 2, 21)
         end_date_index = self.dateindex_value_from_datetime(end_date)
 
-        self.login(self.secretariat_user, browser)
         IDossier(self.resolvable_dossier).end = end_date
         IDossier(self.resolvable_subdossier).end = end_date
         self.resolvable_dossier.reindexObject(idxs=['end'])
@@ -142,6 +170,9 @@ class TestReactivatingRESTAPI(TestReactivating):
     @browsing
     def test_reactivating_dossier_non_recursively_is_forbidden(self, browser):
         self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_dossier,
+                                self.resolvable_subdossier)
 
         payload = {'include_children': False}
         self.reactivate(self.resolvable_dossier, browser, payload=payload)
