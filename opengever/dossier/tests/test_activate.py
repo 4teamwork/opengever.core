@@ -57,13 +57,26 @@ class TestDossierActivation(IntegrationTestCase):
             self, browser):
         self.login(self.secretariat_user, browser)
         self.set_workflow_state('dossier-state-inactive',
-                                self.dossier, self.subdossier)
+                                self.dossier, self.subdossier2)
 
-        self.activate(self.subdossier, browser)
-        self.assert_errors(self.subdossier, browser,
-                           ["This subdossier can't be activated,"
-                            "because the main dossiers is inactive"])
-        self.assert_workflow_state('dossier-state-inactive', self.subdossier)
+        self.activate(self.subdossier2, browser)
+        self.assert_errors(self.subdossier2, browser,
+                           ["This subdossier can't be activated, "
+                            "because the main dossiers is not active"])
+        self.assert_workflow_state('dossier-state-inactive', self.subdossier2)
+
+    @browsing
+    def test_activate_subdossier_is_disallowed_when_main_dossier_is_resolved(
+            self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-inactive', self.subdossier2)
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+
+        self.activate(self.subdossier2, browser)
+        self.assert_errors(self.subdossier2, browser,
+                           ["This subdossier can't be activated, "
+                            "because the main dossiers is not active"])
+        self.assert_workflow_state('dossier-state-inactive', self.subdossier2)
 
     @browsing
     def test_resets_end_dates_recursively(self, browser):

@@ -4,8 +4,8 @@ from plone import api
 from Products.Five.browser import BrowserView
 
 
-MAIN_DOSSIER_ACTIVE = _("This subdossier can't be activated,"
-                        "because the main dossiers is inactive")
+MAIN_DOSSIER_ACTIVE = _("This subdossier can't be activated, "
+                        "because the main dossiers is not active")
 
 
 class DossierActivator(object):
@@ -17,7 +17,7 @@ class DossierActivator(object):
         errors = []
         if self.context.is_subdossier():
             state = api.content.get_state(self.context.get_parent_dossier())
-            if state == 'dossier-state-inactive':
+            if state != 'dossier-state-active':
                 errors.append(MAIN_DOSSIER_ACTIVE)
         return errors
 
