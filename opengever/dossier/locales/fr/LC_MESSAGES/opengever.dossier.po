@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-28 14:26+0000\n"
+"POT-Creation-Date: 2019-05-29 07:53+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -222,8 +222,8 @@ msgid "The subdossier has been succesfully resolved."
 msgstr "Le sous-dossier a été clôturé avec succès."
 
 #: ./opengever/dossier/activate.py
-msgid "This subdossier can't be activated,because the main dossiers is inactive"
-msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier principal a été annulé."
+msgid "This subdossier can't be activated, because the main dossiers is not active"
+msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier principal n'est pas actif."
 
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."

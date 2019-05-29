@@ -1,4 +1,5 @@
 from opengever.base.transition import ITransitionExtender
+from opengever.dossier.activate import DossierActivator
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.resolve import AlreadyBeingResolved
 from opengever.dossier.resolve import InvalidDates
@@ -58,7 +59,8 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
     implementation.
     """
 
-    CUSTOMIZED_TRANSITIONS = ['dossier-transition-resolve']
+    CUSTOMIZED_TRANSITIONS = ['dossier-transition-resolve',
+                              'dossier-transition-activate']
 
     def reply(self):
         if self.transition not in self.CUSTOMIZED_TRANSITIONS:
@@ -126,8 +128,19 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
 
         if self.transition == 'dossier-transition-resolve':
             self.resolve_dossier(*args)
+        elif self.transition == 'dossier-transition-activate':
+            self.activate_dossier(*args)
         else:
             raise BadRequest('Unexpected custom transition %r' % self.transition)
+
+    def activate_dossier(self, objs, comment, publication_dates,
+                         include_children=False):
+        # Reject explicit attempts to non-recursively activate a dossier
+        if not json_body(self.request).get('include_children', True):
+            raise BadRequest('Activating dossier must always be recursive')
+
+        activator = DossierActivator(self.context)
+        activator.activate()
 
     def resolve_dossier(self, objs, comment, publication_dates,
                         include_children=False):

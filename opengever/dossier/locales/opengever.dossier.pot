@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-28 14:26+0000\n"
+"POT-Creation-Date: 2019-05-29 07:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -223,7 +223,7 @@ msgid "The subdossier has been succesfully resolved."
 msgstr ""
 
 #: ./opengever/dossier/activate.py
-msgid "This subdossier can't be activated,because the main dossiers is inactive"
+msgid "This subdossier can't be activated, because the main dossiers is not active"
 msgstr ""
 
 #: ./opengever/dossier/resolve.py
