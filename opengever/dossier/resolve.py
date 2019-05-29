@@ -8,8 +8,6 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
-from opengever.dossier.base import DOSSIER_STATE_RESOLVED
-from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
@@ -203,8 +201,7 @@ class DossierResolveView(BrowserView):
         return self.context.absolute_url()
 
     def is_already_resolved(self):
-        wfstate = api.content.get_state(obj=self.context)
-        return wfstate == DOSSIER_STATE_RESOLVED
+        return self.context.is_resolved()
 
     def redirect(self, url):
         return self.request.RESPONSE.redirect(url)
@@ -334,8 +331,7 @@ class StrictDossierResolver(object):
             self._recursive_resolve(
                 subdossier.getObject(), end_date, recursive=True)
 
-        if self.wft.getInfoFor(dossier,
-                               'review_state') in DOSSIER_STATES_OPEN:
+        if dossier.is_open():
             self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
