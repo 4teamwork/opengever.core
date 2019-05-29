@@ -16,15 +16,6 @@ class GeverLiveSearchGet(SearchGet):
             self.request.form.get('path', '/').lstrip('/'),
         ).rstrip('/')
 
-        # Strip VHM path because plone.restapi SearchHandler will add it
-        vhm_physical_path = '/'.join(
-            self.request.get('VirtualRootPhysicalPath', ''))
-        if vhm_physical_path:
-            if path.startswith(vhm_physical_path):
-                path = path[len(vhm_physical_path):]
-                if not path:
-                    path = '/'
-
         if not search_term:
             return []
 
@@ -47,6 +38,16 @@ class GeverLiveSearchGet(SearchGet):
 
         else:
             del self.request.form['q']
+
+            # Strip VHM path because plone.restapi SearchHandler will add it
+            vhm_physical_path = '/'.join(
+                self.request.get('VirtualRootPhysicalPath', ''))
+            if vhm_physical_path:
+                if path.startswith(vhm_physical_path):
+                    path = path[len(vhm_physical_path):]
+                    if not path:
+                        path = '/'
+
             self.request.form.update({
                 'SearchableText': search_term + '*',
                 'sort_limit': limit,

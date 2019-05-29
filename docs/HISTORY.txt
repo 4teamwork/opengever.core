@@ -11,6 +11,7 @@ Changelog
 - Update documentation for SaaS deployment update. [njohner]
 - Correctly handle dossier reactivation through RESTAPI. [njohner]
 - Extend task API serialization with responses data. [phgross]
+- Fix livesearch endpoint when using Solr. [buchi]
 
 
 2019.2.2 (2019-05-27)
