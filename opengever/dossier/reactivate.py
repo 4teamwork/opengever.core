@@ -1,5 +1,4 @@
 from opengever.dossier import _
-from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.resolve import PreconditionsViolated
 from plone import api
@@ -23,7 +22,7 @@ class Reactivator(object):
             errors.append(MAIN_DOSSIER_NOT_RESOLVED)
         parent = self.context.get_parent_dossier()
         if parent:
-            if self.wft.getInfoFor(parent, 'review_state') not in DOSSIER_STATES_OPEN:
+            if not parent.is_open():
                 errors.append(MSG_SUBDOSSIER)
         return errors
 
