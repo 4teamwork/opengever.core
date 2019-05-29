@@ -2,6 +2,7 @@ from opengever.base.transition import ITransitionExtender
 from opengever.dossier.activate import DossierActivator
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.deactivate import DossierDeactivator
+from opengever.dossier.reactivate import Reactivator
 from opengever.dossier.resolve import AlreadyBeingResolved
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
@@ -62,7 +63,8 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
 
     CUSTOMIZED_TRANSITIONS = ['dossier-transition-resolve',
                               'dossier-transition-activate',
-                              'dossier-transition-deactivate']
+                              'dossier-transition-deactivate',
+                              'dossier-transition-reactivate']
 
     def reply(self):
         if self.transition not in self.CUSTOMIZED_TRANSITIONS:
@@ -134,6 +136,8 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             self.activate_dossier(*args)
         elif self.transition == 'dossier-transition-deactivate':
             self.deactivate_dossier(*args)
+        elif self.transition == 'dossier-transition-reactivate':
+            self.reactivate_dossier(*args)
         else:
             raise BadRequest('Unexpected custom transition %r' % self.transition)
 
@@ -174,6 +178,15 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
 
         deactivator = DossierDeactivator(self.context)
         deactivator.deactivate()
+
+    def reactivate_dossier(self, objs, comment, publication_dates,
+                           include_children=False):
+        # Reject explicit attempts to non-recursively reactivate a dossier
+        if not json_body(self.request).get('include_children', True):
+            raise BadRequest('Reactivating dossier must always be recursive')
+
+        reactivator = Reactivator(self.context)
+        reactivator.reactivate()
 
     def get_latest_wf_action(self):
         history = self.wftool.getInfoFor(self.context, "review_history")
