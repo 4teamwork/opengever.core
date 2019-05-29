@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-04-01 14:32+0000\n"
+"POT-Creation-Date: 2019-05-14 08:01+0000\n"
 "PO-Revision-Date: 2013-03-27 10:44+0100\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -143,6 +143,7 @@ msgid "Inbox Container"
 msgstr "Conteneur de la boîte de réception"
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20190401163048_add_manage_webactions_action/actions.xml
 msgid "Manage Webactions"
 msgstr "Administrer les actions web"
 
@@ -315,6 +316,15 @@ msgstr "Import eCH-0147"
 #: ./opengever/core/upgrades/20170729132649_add_ech0147_import_export_actions/actions.xml
 msgid "eCH-0147/eCH-0039 Export"
 msgstr "Export eCH-0147/eCH-0039"
+
+msgid "opengever.document.document"
+msgstr "Document"
+
+msgid "opengever.meeting.proposal"
+msgstr "Requête"
+
+msgid "opengever.task.task"
+msgstr "Tâche"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "remove"

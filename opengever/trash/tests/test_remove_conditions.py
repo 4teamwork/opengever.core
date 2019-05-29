@@ -40,7 +40,7 @@ class TestRemoveConditionsChecker(IntegrationTestCase):
 
         self.assertFalse(checker.removal_allowed())
         self.assert_error_messages(
-            [u'The document is referred by the document(s) <a href={}>{}</a>.'.format(
+            [u'The document is referred by <a href={}>opengever.document.document: {}</a>.'.format(
                 self.taskdocument.absolute_url(), self.taskdocument.title)],
             checker.error_msg)
 

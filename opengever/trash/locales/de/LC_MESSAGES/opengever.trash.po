@@ -79,10 +79,10 @@ msgstr "Möchten Sie die selektierten Dokumente wirklich löschen?"
 msgid "msg_delete_not_possible"
 msgstr "Die selektierten Dokumente können nicht gelöscht werden."
 
-#. Default: "The document is referred by the document(s) ${links}."
+#. Default: "The document is referred by ${links}."
 #: ./opengever/trash/remover.py
 msgid "msg_document_has_backreferences"
-msgstr "Auf das Dokument existiert noch eine Referenz von Dokument ${links}."
+msgstr "Auf das Dokument existiert noch eine Referenz von ${links}."
 
 #. Default: "The document contains relations."
 #: ./opengever/trash/remover.py
