@@ -166,14 +166,17 @@ class AgendaItem(Base):
             self.description = description
 
     def get_decision_number(self):
-        # Before the meeting is held, agendaitems do not have a decision number
-        # and in that case we do not want to format it with the year prefixed
+        # Before the meeting is held, agendaitems do not have a decision number and
+        # in that case we do not want to format it with the period title prefixed
         if not self.decision_number:
             return None
 
-        period = Period.query.get_current_for_update(self.meeting.committee)
-        year = period.date_from.year
-        return '{} / {}'.format(year, self.decision_number)
+        period = Period.query.get_for_meeting(self.meeting)
+        if not period:
+            return str(self.decision_number)
+
+        title = period.title
+        return '{} / {}'.format(title, self.decision_number)
 
     def get_dossier_reference_number(self):
         if self.has_proposal:
