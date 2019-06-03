@@ -107,7 +107,7 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'filesize': 27413,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                 u'wordprocessingml.document',
-                u'modified': u'2016-08-31T14:07:33+00:00'},
+                u'modified': u'2016-08-31T14:09:33+00:00'},
             summary)
 
     @browsing

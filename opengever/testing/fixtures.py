@@ -3,8 +3,8 @@ from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from contextlib import nested
 from datetime import date
-from DateTime import DateTime
 from datetime import datetime
+from DateTime import DateTime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -21,6 +21,7 @@ from opengever.base.model import create_session
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.document.versioner import Versioner
 from opengever.mail.tests import MAIL_DATA
 from opengever.meeting.proposalhistory import BaseHistoryRecord
 from opengever.officeconnector.helpers import get_auth_plugin
@@ -1000,6 +1001,8 @@ class OpengeverContentFixture(object):
                 bumblebee_asset('example.docx').bytes(),
                 u'vertragsentwurf.docx')
             ))
+        # XXX - this offsets modified by 2h - do we have a timezone issue?
+        Versioner(self.document).create_initial_version()
 
         with self.features('meeting'):
             proposal = self.register('proposal', create(

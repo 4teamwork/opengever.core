@@ -3,15 +3,16 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import STATE_CONVERTED
-from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.document.versioner import Versioner
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_SOURCE_UUID_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import SavePDFDocumentUnder
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
+from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
 from zope.annotation import IAnnotations
 
@@ -105,13 +106,13 @@ class TestSavePDFUnderForm(IntegrationTestCase):
         Versioner(self.document).create_version("")
 
         # when the version is convertable, we get to the form
-        browser.open(self.document, view='save_pdf_under', data={"version_id": "1"})
+        browser.open(self.document, view='save_pdf_under', data={"version_id": "2"})
         self.assertEqual("/".join([self.document.absolute_url(), 'save_pdf_under']),
                          browser.url)
 
         # when the version cannot be converted, we get redirected back to the
         # the source document and an error message is displayed.
-        browser.open(self.document, view='save_pdf_under', data={"version_id": "0"})
+        browser.open(self.document, view='save_pdf_under', data={"version_id": "1"})
         errors = statusmessages.error_messages()
         self.assertEqual(1, len(errors))
         self.assertEqual('This document cannot be converted to PDF.', errors[0])
@@ -120,20 +121,18 @@ class TestSavePDFUnderForm(IntegrationTestCase):
     @browsing
     def test_save_pdf_under_form_handles_retrieving_initial_version(self, browser):
         self.login(self.regular_user, browser)
-        self.document.file.filename = u"test.txt"
-        self.document.file.contentType = "text/plain"
 
         # when the initial version does not yet exist, retrieving version 0
         # is handled and returns the pdf for the current state of the document
-        browser.open(self.document, view='save_pdf_under', data={"version_id": "0"})
-        self.assertEqual("/".join([self.document.absolute_url(), 'save_pdf_under']),
+        browser.open(self.resolvable_document, view='save_pdf_under', data={"version_id": "0"})
+        self.assertEqual("/".join([self.resolvable_document.absolute_url(), 'save_pdf_under']),
                          browser.url)
         version_field = browser.forms.get('form').find_field("form.widgets.version_id")
         self.assertIsNone(version_field.value)
 
         # Once the initial version has been created, we can retrieve version 0
-        Versioner(self.document).create_version("")
-        browser.open(self.document, view='save_pdf_under', data={"version_id": "0"})
+        Versioner(self.resolvable_document).create_version("")
+        browser.open(self.resolvable_document, view='save_pdf_under', data={"version_id": "0"})
         version_field = browser.forms.get('form').find_field("form.widgets.version_id")
         self.assertEqual('0', version_field.value)
 

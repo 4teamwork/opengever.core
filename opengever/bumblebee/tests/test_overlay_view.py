@@ -24,7 +24,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
     @browsing
     def test_bumblebee_overlay_does_not_render_empty_comment(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.document, view='bumblebee-overlay-listing')
+        browser.open(self.empty_document, view='bumblebee-overlay-listing')
         self.assertNotIn('Checkin comment:', browser.css('.metadata .title').text)
 
     @browsing
@@ -37,7 +37,6 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
     @browsing
     def test_bumblebee_overlay_renders_comments_correctly_on_versioned_documents(self, browser):
         self.login(self.regular_user, browser)
-        create_document_version(self.document, version_id=0)
         getMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
         browser.open(
             self.document.absolute_url() + '/@checkin',
@@ -52,7 +51,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
             headers={'Accept': 'application/json', 'Content-Type': 'application/json'},
             )
         browser.open(self.document, view='bumblebee-overlay-document?version_id=0')
-        self.assertIn('Checkin comment: This is Version 0', browser.css('.metadata tr').text)
+        self.assertIn('Checkin comment: Initial version', browser.css('.metadata tr').text)
         browser.open(self.document, view='bumblebee-overlay-document?version_id=1')
         self.assertNotIn('Checkin comment:', browser.css('.metadata .title').text)
         browser.open(self.document, view='bumblebee-overlay-document?version_id=2')
@@ -64,64 +63,28 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
 
         browser.open(self.document, view='bumblebee-overlay-listing')
         download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertNotIn(
-            'version_id',
-            download_link,
-            )
-
-        create_document_version(self.document, version_id=0)
-
-        browser.open(self.document, view='bumblebee-overlay-listing')
-        download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertNotIn(
-            'version_id',
-            download_link,
-            )
+        self.assertNotIn('version_id', download_link)
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-listing?version_id=0',
-            )
+            self.document, view='bumblebee-overlay-listing?version_id=0')
         download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertNotIn(
-            'version_id',
-            download_link,
-            )
+        self.assertNotIn('version_id', download_link)
 
         create_document_version(self.document, version_id=1)
 
         browser.open(self.document, view='bumblebee-overlay-listing')
         download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertNotIn(
-            'version_id',
-            download_link,
-            )
+        self.assertNotIn('version_id', download_link)
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-listing?version_id=0',
-            )
+            self.document, view='bumblebee-overlay-listing?version_id=0')
         download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertIn(
-            'version_id=0',
-            download_link,
-            )
+        self.assertIn('version_id=0', download_link)
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-listing?version_id=1',
-            )
+            self.document, view='bumblebee-overlay-listing?version_id=1')
         download_link = browser.css('#action-download')[0].get('href')
-
-        self.assertNotIn(
-            'version_id',
-            download_link,
-            )
+        self.assertNotIn('version_id', download_link)
 
     @browsing
     def test_open_pdf_in_a_new_window_disabled(self, browser):
@@ -260,15 +223,12 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
     @browsing
     def test_warning_only_rendered_on_old_version(self, browser):
         self.login(self.regular_user, browser)
-        create_document_version(self.document, version_id=0)
 
         browser.open(self.document, view='bumblebee-overlay-document')
         self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-document?version_id=0',
-            )
+            self.document, view='bumblebee-overlay-document?version_id=0')
         self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
 
         create_document_version(self.document, version_id=1)
@@ -277,15 +237,11 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
         self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-document?version_id=1',
-            )
+            self.document, view='bumblebee-overlay-document?version_id=1')
         self.assertFalse(browser.css('.info-viewlets .portalMessage.warning'))
 
         browser.open(
-            self.document,
-            view='bumblebee-overlay-document?version_id=0',
-            )
+            self.document, view='bumblebee-overlay-document?version_id=0')
         self.assertTrue(browser.css('.info-viewlets .portalMessage.warning'))
 
 
@@ -448,8 +404,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
 class TestBumblebeeOverlayViewsWithoutBumblebeeFeature(IntegrationTestCase):
     """Test we can disable Bumblebee."""
 
-    @browsing
-    def test_calling_view_raise_404_if_feature_is_deactivated(self, browser):
+    def test_calling_view_raise_404_if_feature_is_deactivated(self):
         view = BumblebeeOverlayBaseView(None, self.request)
 
         with self.assertRaises(NotFound):

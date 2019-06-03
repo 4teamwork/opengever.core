@@ -15,7 +15,6 @@ from opengever.document.document import UploadValidator
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSettings
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
-from opengever.officeconnector.mimetypes import EDITABLE_TYPES
 from opengever.testing import FunctionalTestCase
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -130,15 +129,14 @@ class TestDocument(IntegrationTestCase):
 
         # Check the original actually has a history
         old_history = self.portal.portal_repository.getHistory(self.document)
-        self.assertEqual(len(old_history), 0)
-        self.checkout_document(self.document)
-        self.checkin_document(self.document)
-        old_history = self.portal.portal_repository.getHistory(self.document)
         self.assertEqual(len(old_history), 1)
 
         cb = self.dossier.manage_copyObjects(self.document.id)
-        self.dossier.manage_pasteObjects(cb)
-        new_doc = self.dossier['copy_of_document-14']
+        with self.observe_children(self.empty_dossier) as children:
+            self.empty_dossier.manage_pasteObjects(cb)
+
+        # XXX - this object has an id of document-14, the same as the source!
+        new_doc = children['after'][-1]
         new_history = self.portal.portal_repository.getHistory(new_doc)
         self.assertEqual(len(new_history), 0)
 
@@ -186,15 +184,15 @@ class TestDocument(IntegrationTestCase):
 
     def test_current_document_version_is_increased(self):
         self.login(self.regular_user)
-        self.assertEqual(None, self.document.get_current_version_id())
-        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
+        self.assertEqual(None, self.resolvable_document.get_current_version_id())
+        self.assertEqual(0, self.resolvable_document.get_current_version_id(missing_as_zero=True))
 
-        self.document.file = NamedBlobFile(data='New', filename=u'test.txt')
-        self.assertEqual(0, self.document.get_current_version_id())
+        self.resolvable_document.file = NamedBlobFile(data='New', filename=u'test.txt')
+        self.assertEqual(0, self.resolvable_document.get_current_version_id())
 
         repository = api.portal.get_tool('portal_repository')
-        repository.save(self.document)
-        self.assertEqual(1, self.document.get_current_version_id())
+        repository.save(self.resolvable_document)
+        self.assertEqual(1, self.resolvable_document.get_current_version_id())
 
     def test_get_parent_dossier_returns_direct_parent_for_dossiers(self):
         self.login(self.regular_user)

@@ -13,7 +13,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_copy_with_overlay_creates_journal_entry(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
-        versioner.create_version('Initial version')
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
@@ -24,7 +23,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_versioned_copy_creates_journal_entries_with_versions_in_title(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
-        versioner.create_version('Initial version')
         versioner.create_version('Some updates.')
         browser.open(self.document, view='tabbedview_view-versions')
         browser.css('a.function-download-copy').first.click()
@@ -39,8 +37,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     @browsing
     def test_download_copy_without_overlay_creates_journal_entry(self, browser):
         self.login(self.regular_user, browser)
-        versioner = Versioner(self.document)
-        versioner.create_version('Initial version.')
         DownloadConfirmationHelper(self.document).deactivate()
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
         browser.find('Download copy').click()
@@ -50,10 +46,10 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_disable_copy_download_overlay(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='tabbed_view/listing', data={'view_name': 'overview'})
-        self.assertEquals(1, len(browser.css('.link-overlay')))
+        self.assertEqual(1, len(browser.css('.link-overlay')))
         browser.css('.function-download-copy.link-overlay').first.click()
         browser.fill({"disable_download_confirmation": "on"}).submit()
-        self.assertEquals(0, len(browser.css('.link-overlay')))
+        self.assertEqual(0, len(browser.css('.link-overlay')))
         self.assertFalse('file_download_confirmation' in browser.contents)
 
     @browsing
@@ -78,7 +74,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
     def test_download_confirmation_view_for_version_download(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
-        versioner.create_version('Initial version')
         versioner.create_version('Some updates.')
         browser.open(self.document, view='file_download_confirmation', data={'version_id': 1})
         self.assertEqual(

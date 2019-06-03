@@ -683,8 +683,6 @@ class TestDocumentOverviewWithMeeting(IntegrationTestCase):
     def test_outdated_document_can_be_updated(self, browser):
         self.login(self.meeting_user, browser)
 
-        # No initial versions anymore, so have to do two versions
-        create_document_version(self.document, 0)
         create_document_version(self.document, 1)
 
         browser.open(self.document, view='tabbedview_view-overview')

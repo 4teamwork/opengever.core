@@ -1,4 +1,3 @@
-from DateTime import DateTime
 from opengever.base import advancedjson
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IDataCollector

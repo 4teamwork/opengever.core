@@ -1,7 +1,5 @@
-from ftw.builder import Builder
-from ftw.builder import create
-from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import iterSchemataForType
 from z3c.relationfield.interfaces import IRelationChoice
@@ -158,70 +156,33 @@ def has_relation_fields(fti):
     for schema in iterSchemataForType(fti):
         for fieldname in schema:
             field = schema[fieldname]
-            if (IRelationChoice.providedBy(field) or
-                IRelationList.providedBy(field)):
+            if (
+                IRelationChoice.providedBy(field)
+                or IRelationList.providedBy(field)
+            ):
                 return True
     return False
+
+
+def get_all_persisted_interfaces():
+    catalog = getUtility(ICatalog)
+
+    persisted_interfaces = []
+    for key in INTERFACE_KEYS:
+        for iface in catalog._name_TO_mapping[key].keys():
+            name = '.'.join([iface.__module__, iface.__name__])
+            if name not in persisted_interfaces:
+                persisted_interfaces.append(name)
+
+    return persisted_interfaces
 
 
 class TestRelationCatalogInterfaces(FunctionalTestCase):
 
     def test_persisted_interfaces_in_zc_relation_catalog(self):
-        root = create(Builder('repository_root').titled(u'Repository'))
-        repo = create(Builder('repository')
-                      .within(root)
-                      .titled(u'Testposition'))
-
-        dossier_a = create(Builder('dossier')
-                           .within(repo))
-        create(Builder('dossier')
-               .within(repo)
-               .having(relatedDossier=[dossier_a]))
-        create(Builder('meeting_dossier')
-               .within(repo)
-               .having(relatedDossier=[dossier_a]))
-        create(Builder('private_dossier')
-               .within(repo)
-               .having(relatedDossier=[dossier_a]))
-
-        dossiertemplate = create(Builder('dossier')
-                                 .having(relatedDossier=[dossier_a]))
-        create(Builder('repository')
-               .having(addable_dossier_templates=[dossiertemplate]))
-
-        document_a = create(Builder('document').within(dossier_a))
-        Versioner(document_a).create_initial_version()
-
-        create(Builder('document').within(dossier_a).relate_to(document_a))
-        create(Builder('proposaltemplate').relate_to(document_a))
-
-        create(Builder('task').within(dossier_a).relate_to([document_a]))
-        create(Builder('forwarding').within(dossier_a).relate_to([document_a]))
-
-        sablontemplate_a = create(Builder('sablontemplate'))
-        sablontemplate_b = create(Builder('sablontemplate')
-                                  .relate_to(sablontemplate_a))
-
-        create(Builder('committee_container')
-               .having(protocol_header_template=sablontemplate_b))
-        committee = create(Builder('committee')
-                           .with_default_period()
-                           .having(protocol_header_template=sablontemplate_b))
-
-        proposal, submittedproposal = create(
-            Builder('proposal')
-            .having(committee=committee.load_model())
-            .within(dossier_a)
-            .relate_to(document_a)
-            .with_submitted())
-
-        dossier_expired = create(Builder('dossier').as_expired())
-        self.grant('Records Manager')
-        create(Builder('disposition').having(dossiers=[dossier_expired]))
-
         self.maxDiff = None
         self.assertItemsEqual(
-            EXPECTED_INTERFACES, self.get_all_persisted_interfaces(),
+            EXPECTED_INTERFACES, get_all_persisted_interfaces(),
             'Seems that a type does newly or no longer provides an interface.'
             ' Make sure if a interface has been removed, that the relation'
             ' catalog is cleaned up and adjust the EXPECTED_INTERFACES list.')
@@ -230,20 +191,8 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
         types_with_relations = filter(
             has_relation_fields, list(api.portal.get_tool('portal_types')))
 
-        self.assertEquals(
+        self.assertEqual(
             EXPECTED_TYPES_WITH_RELATIONS, types_with_relations,
             'A new type with a relation field has been introduced, please'
             ' extend the content setup with this type and adjust the expected'
             ' list EXPECTED_TYPES_WITH_RELATIONS.')
-
-    def get_all_persisted_interfaces(self):
-        catalog = getUtility(ICatalog)
-
-        persisted_interfaces = []
-        for key in INTERFACE_KEYS:
-            for iface in catalog._name_TO_mapping[key].keys():
-                name = '.'.join([iface.__module__, iface.__name__])
-                if name not in persisted_interfaces:
-                    persisted_interfaces.append(name)
-
-        return persisted_interfaces
