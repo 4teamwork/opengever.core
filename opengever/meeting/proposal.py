@@ -677,10 +677,15 @@ class Proposal(ProposalBase):
                 #
                 # As a workaround we reassign the field with a new list if the
                 # relatedItems-attribute has never been assigned before.
-                self.relatedItems = []
+                self.relatedItems = set()
+            elif not isinstance(self.relatedItems, set):
+                self.relatedItems = set(self.relatedItems)
 
-            self.relatedItems.append(
+            # XXX - As this leaks, we circumvent duplication with a set
+            self.relatedItems.add(
                 RelationValue(getUtility(IIntIds).getId(document)))
+
+            self.relatedItems = list(self.relatedItems)
 
         command.execute()
         return command
