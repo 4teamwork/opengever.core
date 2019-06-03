@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Only allow dossier transitions that are possible on the main dossier. [njohner]
+- Prefix agendaitem decision numbers and meeting number by correct period title. [njohner]
 - Handle dossier activation through RESTAPI. [njohner]
 - Improve error message when trying to delete a referenced document. [njohner]
 - Handle dossier deactivation through RESTAPI. [njohner]
