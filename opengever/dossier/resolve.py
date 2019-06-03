@@ -8,8 +8,6 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
-from opengever.dossier.base import DOSSIER_STATE_RESOLVED
-from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
@@ -35,6 +33,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 import transaction
 
 
+MAIN_DOSSIER_NOT_ACTIVE = _("Dossier is not active and cannot be resolved.")
 NOT_SUPPLIED_OBJECTS = _(
     "not all documents and tasks are stored in a subdossier.")
 NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
@@ -202,8 +201,7 @@ class DossierResolveView(BrowserView):
         return self.context.absolute_url()
 
     def is_already_resolved(self):
-        wfstate = api.content.get_state(obj=self.context)
-        return wfstate == DOSSIER_STATE_RESOLVED
+        return self.context.is_resolved()
 
     def redirect(self, url):
         return self.request.RESPONSE.redirect(url)
@@ -333,8 +331,7 @@ class StrictDossierResolver(object):
             self._recursive_resolve(
                 subdossier.getObject(), end_date, recursive=True)
 
-        if self.wft.getInfoFor(dossier,
-                               'review_state') in DOSSIER_STATES_OPEN:
+        if dossier.is_open():
             self.wft.doActionFor(dossier, 'dossier-transition-resolve')
 
 
@@ -555,13 +552,15 @@ class ResolveConditions(object):
 
     def check_preconditions(self):
         """Check if all preconditions are fulfilled:
+         - main dossier is in an open state
          - all_supplied
          - all checked in
          - all closed
         """
 
         errors = []
-
+        if not self.context.is_open():
+            errors.append(MAIN_DOSSIER_NOT_ACTIVE)
         if (self.strict
                 and not self.context.is_subdossier()
                 and not self.context.is_all_supplied()):

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-05-29 07:53+0000\n"
+"POT-Creation-Date: 2019-05-29 14:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,14 @@ msgstr ""
 
 #: ./opengever/dossier/resolve.py
 msgid "Dossier is already being resolved"
+msgstr ""
+
+#: ./opengever/dossier/resolve.py
+msgid "Dossier is not active and cannot be resolved."
+msgstr ""
+
+#: ./opengever/dossier/reactivate.py
+msgid "Dossier is not resolved and cannot be reactivated."
 msgstr ""
 
 #: ./opengever/dossier/browser/templates/overview.pt
@@ -159,11 +167,11 @@ msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgid "The Dossier can't be deactivated, not all contained documents are checked in."
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, not all contained documents are checked in."
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
 msgstr ""
 
 #: ./opengever/dossier/deactivate.py

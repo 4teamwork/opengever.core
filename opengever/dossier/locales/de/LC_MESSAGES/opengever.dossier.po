@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-05-29 07:53+0000\n"
+"POT-Creation-Date: 2019-05-29 14:10+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -60,6 +60,14 @@ msgstr "Dieses Dossier wurde bereits abgeschlossen."
 #: ./opengever/dossier/resolve.py
 msgid "Dossier is already being resolved"
 msgstr "Der Abschlussvorgang für dieses Dossier läuft bereits."
+
+#: ./opengever/dossier/resolve.py
+msgid "Dossier is not active and cannot be resolved."
+msgstr "Dieses Dossier kann nicht abgeschlossen werden, weil es nicht aktiv ist."
+
+#: ./opengever/dossier/reactivate.py
+msgid "Dossier is not resolved and cannot be reactivated."
+msgstr "Dieses Dossier kann nicht wieder eröffnet werden, weil es nicht abgeschlossen ist."
 
 #: ./opengever/dossier/browser/templates/overview.pt
 msgid "Dossier structure"
@@ -160,12 +168,12 @@ msgid "The Dossier can't be deactivated, it contains active proposals."
 msgstr "Das Dossier kann nicht storniert werden, es enthält aktive Anträge."
 
 #: ./opengever/dossier/deactivate.py
-msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
-msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind."
-
-#: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained documents are checked in."
 msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Dokumente eingecheckt sind."
+
+#: ./opengever/dossier/deactivate.py
+msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
+msgstr "Das Dossier kann nicht storniert werden, da nicht alle enthaltenen Aufgaben abgeschlossen sind."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, the subdossier ${dossier} is already resolved."
