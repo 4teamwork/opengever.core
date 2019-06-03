@@ -4,7 +4,7 @@ Changelog
 2019.2.3 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Drop no longer working oneoffixx upgrade. [deiferni]
 
 
 2019.2.2 (2019-05-27)
