@@ -166,9 +166,10 @@ class AgendaItem(Base):
             self.description = description
 
     def get_decision_number(self):
-        # XXX huh? what is this?
+        # Before the meeting is held, agendaitems do not have a decision number
+        # and in that case we do not want to format it with the year prefixed
         if not self.decision_number:
-            return self.decision_number
+            return None
 
         period = Period.query.get_current_for_update(self.meeting.committee)
         year = period.date_from.year
