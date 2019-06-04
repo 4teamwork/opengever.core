@@ -157,64 +157,48 @@ def chunks(chunkable, chunksize):
 
 
 def split(batch):
-    minsize_mapping = {
-        'opengever.core.testing.opengever.core:integration': 200,
-        'opengever.core.testing.opengever.core:functional': 100,
-    }
-
-    maxsplit_mapping = {
-        'opengever.core.testing.opengever.core:integration': 4,
-        'opengever.core.testing.opengever.core:functional': 2,
-    }
-
-    layer = batch.get('layer')
-
-    unsplittable_layer = (
-        layer not in minsize_mapping
-        or
-        layer not in maxsplit_mapping
-    )
-
-    if unsplittable_layer or CONCURRENCY < 2:
-        batch['count'] = sum(batch.get('testclasses').values())
-        del batch['testclasses']
-        return (batch, )
-
-    original_count = batch.get('original_count')
-    chunk_count = ceil(original_count / float(minsize_mapping.get(layer)))
-    chunk_count = min(chunk_count, CONCURRENCY)
-    chunk_count = min(chunk_count, maxsplit_mapping.get(layer))
-    chunksize = original_count / float(chunk_count)
+    chunk_count = LAYERS_TO_SPLIT.get(batch['layers'][0]) or CONCURRENCY
+    chunksize = ceil(batch['count'] / float(chunk_count))
 
     splinters = []
-    for chunk in chunks(batch.get('testclasses').items(), chunksize):
-        splinters.append({'layer': layer, 'testclasses': dict(chunk), 'original_count': original_count})
-        splinters[-1]['count'] = sum(splinters[-1].get('testclasses').values())
+    for chunk in chunks(batch['testclasses'].items(), chunksize):
+        splinters.append({'layers': batch['layers'], 'testclasses': dict(chunk)})
+        splinters[-1]['count'] = sum(splinters[-1]['testclasses'].values())
 
-    return tuple(sorted(
-        splinters,
-        key=lambda batch: -batch.get('count'),
-        ))
+    return tuple(splinters)
 
 
 def create_test_run_params(layers=None, modules=None, shuffle=False):
     test_run_params = []
+    remainder = []
 
-    for layer, testclasses in discover_tests(layers, modules).iteritems():
+    for layer, testclasses in discover_tests(layers, modules).items():
         batch = {}
-        batch['layer'] = layer
+        batch['layers'] = (layer,)
         batch['testclasses'] = testclasses
-        batch['original_count'] = sum(testclasses.values())
-        split_batches = split(batch)
-        for i, split_batch in enumerate(split_batches):
-            split_batch['batchinfo'] = '{}/{}'.format(i + 1, len(split_batches))
-            split_batch['shuffle'] = shuffle
-            test_run_params.append(split_batch)
+        batch['count'] = sum(testclasses.values())
+        if not LAYERS_TO_SPLIT or layer in LAYERS_TO_SPLIT:
+            split_batches = split(batch)
+            splitcount = len(split_batches)
+            for i, split_batch in enumerate(split_batches):
+                split_batch['batchinfo'] = '{}/{}'.format(i + 1, splitcount)
+                split_batch['shuffle'] = shuffle
+                test_run_params.append(split_batch)
+        elif layer in LAYERS_TO_SEPARATE:
+            batch['batchinfo'] = '1/1'
+            test_run_params.append(batch)
+        else:
+            remainder.append(batch)
 
-    return tuple(sorted(
-        test_run_params,
-        key=lambda batch: -batch.get('original_count'),
-        ))
+    # Squash all the unsplit and not separately run layers together
+    test_run_params.append({
+        'displayname': 'remainder',
+        'layers': tuple(layer for layer in batch['layers'] for batch in remainder),
+        'count': sum(batch['count'] for batch in remainder),
+        'batchinfo': '1/1',
+    })
+
+    return tuple(test_run_params)
 
 
 def remove_bytecode_files(directory_path):
@@ -236,18 +220,20 @@ def run_tests(test_run_params):
     params = ['bin/test']
     params.append('--xml')
 
-    layer = test_run_params.get('layer')
+    layers = test_run_params.get('layers', ())
+    displayname = test_run_params.get('displayname') or layers[0]
     batchinfo = test_run_params.get('batchinfo')
     testclasses = test_run_params.get('testclasses', ())
-    count = test_run_params.get('count')
+    count = test_run_params.get('count', 0)
     shuffle = test_run_params.get('shuffle')
 
     if shuffle:
         params.append('--shuffle')
 
-    if layer:
-        params.append('--layer')
-        params.append(layer)
+    if layers:
+        for layer in layers:
+            params.append('--layer')
+            params.append(layer)
 
     for testclass in testclasses:
         params.append('-t')
@@ -256,15 +242,18 @@ def run_tests(test_run_params):
         # when we use the classname to run the tests for that class
         params.append("\\(" + testclass + "\\)")
 
-    printable_params = ' '.join(["'{}'".format(param) if ' ' in param else param for param in params])
+    printable_params = ' '.join([
+        "'{}'".format(param) if ' ' in param else param
+        for param in params
+    ])
 
     logger.info(
         "START - %s %s - %d %s",
-        layer,
+        displayname,
         batchinfo,
         count,
         'test' if count == 1 else 'tests',
-        )
+    )
 
     # Explicitly flush to trigger IPC over cPickle
     memory_handler.flush()
@@ -285,21 +274,31 @@ def run_tests(test_run_params):
     runtime = time() - start
 
     result = {
-        'layer': layer,
+        'displayname': displayname,
         'returncode': returncode,
         'runtime': runtime,
-        }
+    }
 
     done_args = (
         'DONE - %s %s - %d %s in %s',
-        layer,
+        displayname,
         batchinfo,
         count,
         'test' if count == 1 else 'tests',
         humanize_time(runtime),
-        )
+    )
 
     if returncode:
+        log_output.error('')
+        log_output.error(output)
+        log_output.error('')
+        log_output.error('Command line')
+        log_output.error('')
+        log_output.error(printable_params)
+        log_output.error('')
+        # Explicitly flush to trigger IPC over cPickle (and to avoid
+        # carryover-fragment-via-pickling)
+        stdout_handler.flush()
         logger.error(*done_args)
     else:
         logger.info(*done_args)
@@ -307,19 +306,6 @@ def run_tests(test_run_params):
     # Explicitly flush to trigger IPC over cPickle (and to avoid
     # carryover-fragment-via-pickling)
     memory_handler.flush()
-
-    if returncode:
-        log_output.error('')
-        log_output.error('Command line')
-        log_output.error('')
-        log_output.error(printable_params)
-        log_output.error('')
-        log_output.error(output)
-        log_output.error('')
-
-        # Explicitly flush to trigger IPC over cPickle (and to avoid
-        # carryover-fragment-via-pickling)
-        stdout_handler.flush()
 
     return result
 
@@ -358,7 +344,7 @@ def main(layers=None, modules=None, shuffle=False):
     for result in pool.imap_unordered(run_tests, test_run_params):
         runtime += result.get('runtime')
         if result.get('returncode', 1):
-            failed_tests.add(result.get('layer'))
+            failed_tests.add(result.get('displayname'))
 
     pool.close()
     pool.join()
@@ -367,8 +353,8 @@ def main(layers=None, modules=None, shuffle=False):
 
     if error_count:
         logger.error('%d / %d jobs failed.', error_count, job_count)
-        for layer in failed_tests:
-            logger.error('Failures in %s', layer)
+        for displayname in failed_tests:
+            logger.error('Failures in %s', displayname)
 
     logger.info('Aggregate runtime %s.', humanize_time(runtime))
     logger.info('Wallclock runtime %s.', humanize_time(time() - start))
@@ -390,10 +376,14 @@ if __name__ == '__main__':
     BUILDOUT_PATH = path.abspath(path.join(__file__, '..', '..'))
     OPENGEVER_PATH = path.join(BUILDOUT_PATH, 'opengever')
     SOURCE_PATH = path.join(BUILDOUT_PATH, 'src')
+    LAYERS_TO_SEPARATE = ()
+    LAYERS_TO_SPLIT = {}
 
     # CLI arguments
     parser = ArgumentParser(
-        description='Run tests in parallel.',
+        description='Run tests in parallel. Splits all layers per default. If '
+        'separately run or separately split layers are explicitly defined, it '
+        'clumps all unsplit layers into a single batch.',
         )
 
     parser.add_argument(
@@ -423,10 +413,31 @@ if __name__ == '__main__':
         action='append',
         )
 
+    parser.add_argument(
+        '--separate',
+        help='Split this layer off onto its own job.',
+        action='append',
+        )
+
+    parser.add_argument(
+        '--split',
+        help='Split the job of this layer into n concurrent jobs. Format: "layername,n". Implies --separate.',
+        action='append',
+        )
+
     args = parser.parse_args()
 
     if args.jobs:
         CONCURRENCY = int(args.jobs)
+
+    if args.separate:
+        LAYERS_TO_SEPARATE = tuple(args.separate)
+
+    if args.split:
+        LAYERS_TO_SPLIT = dict([
+            arg.split(',')
+            for arg in args.split
+        ])
 
     default_loglevel = INFO
 
