@@ -1,10 +1,10 @@
 from opengever.base.monkey.patching import MonkeyPatch
+from opengever.readonly.utils import gever_is_readonly
 from plone.protect import subscribers
 from Products.PlonePAS.plugins.ufactory import PloneUser
 from Products.PlonePAS.tools.membership import MembershipTool
 from Products.PluggableAuthService.interfaces.events import IUserLoggedInEvent
 from zope.component import adapter
-from zope.component.hooks import getSite
 
 
 class PatchMembershipToolSetLoginTimes(MonkeyPatch):
@@ -12,9 +12,7 @@ class PatchMembershipToolSetLoginTimes(MonkeyPatch):
     def __call__(self):
 
         def setLoginTimes(self):
-            site = getSite()
-            conn = site._p_jar
-            if conn.isReadOnly():
+            if gever_is_readonly():
                 return False
 
             return original_setLoginTimes(self)
@@ -30,9 +28,7 @@ class PatchMembershipToolCreateMemberarea(MonkeyPatch):
     def __call__(self):
 
         def createMemberarea(self):
-            site = getSite()
-            conn = site._p_jar
-            if conn.isReadOnly():
+            if gever_is_readonly():
                 return
 
             return original_createMemberarea(self)
@@ -50,9 +46,7 @@ class PatchPloneProtectOnUserLogsIn(MonkeyPatch):
 
         @adapter(IUserLoggedInEvent)
         def onUserLogsIn(self):
-            site = getSite()
-            conn = site._p_jar
-            if conn.isReadOnly():
+            if gever_is_readonly():
                 return
 
             return original_onUserLogsIn(self)
@@ -71,9 +65,7 @@ class PatchPloneUserGetRolesInContext(MonkeyPatch):
             roles = original_getRolesInContext(self, context)
 
             WHITELISTED = ['Member', 'Authenticated', 'Reader', 'Manager', 'MeetingUser', 'CommitteeMember']
-            site = getSite()
-            conn = site._p_jar
-            if conn.isReadOnly():
+            if gever_is_readonly():
                 roles = [r for r in roles if r in WHITELISTED]
 
             return roles
@@ -90,9 +82,7 @@ class PatchPloneUserAllowed(MonkeyPatch):
 
         def allowed(self, object, object_roles=None):
             WHITELISTED = ['Member', 'Authenticated', 'Reader', 'Manager', 'MeetingUser', 'CommitteeMember']
-            site = getSite()
-            conn = site._p_jar
-            if conn.isReadOnly():
+            if gever_is_readonly():
                 if object_roles is not None:
                     object_roles = [r for r in object_roles if r in WHITELISTED]
 

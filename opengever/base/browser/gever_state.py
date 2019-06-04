@@ -5,6 +5,7 @@ from opengever.base.interfaces import IGeverState
 from opengever.contact.interfaces import IContactFolder
 from opengever.inbox.yearfolder import IYearFolder
 from opengever.ogds.base.interfaces import ITeam
+from opengever.readonly.utils import gever_is_readonly
 from plone.memoize.view import memoize
 from plone.memoize.view import memoize_contextless
 from Products.Five import BrowserView
@@ -34,6 +35,10 @@ class GeverStateView(BrowserView):
     @memoize_contextless
     def cas_server_url(self):
         return get_cas_server_url()
+
+    @memoize_contextless
+    def is_readonly(self):
+        return gever_is_readonly()
 
     @memoize
     def properties_action_available(self):
