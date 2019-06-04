@@ -12,6 +12,11 @@ Changelog
 - Update documentation for SaaS deployment update. [njohner]
 - Correctly handle dossier reactivation through RESTAPI. [njohner]
 - Extend task API serialization with responses data. [phgross]
+
+
+2019.2.3 (2019-06-04)
+---------------------
+
 - Drop no longer working oneoffixx upgrade. [deiferni]
 
 
