@@ -761,7 +761,7 @@ class OpengeverContentFixture(object):
             'committee_president',
             firstname=u'Heidrun',
             lastname=u'Sch\xf6ller',
-            email='h.schoeller@web.de',
+            email='h.schoeller@example.org',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
             )
@@ -778,7 +778,7 @@ class OpengeverContentFixture(object):
             'committee_participant_1',
             firstname=u'Gerda',
             lastname=u'W\xf6lfl',
-            email='g.woelfl@hotmail.com',
+            email='g.woelfl@example.com',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
             )
@@ -788,7 +788,7 @@ class OpengeverContentFixture(object):
             'committee_participant_2',
             firstname=u'Jens',
             lastname=u'Wendler',
-            email='jens-wendler@gmail.com',
+            email='jens-wendler@example.com',
             date_from=datetime(2014, 1, 1),
             date_to=datetime(2016, 12, 31),
             )
@@ -798,7 +798,7 @@ class OpengeverContentFixture(object):
             'inactive_committee_participant',
             firstname=u'Pablo',
             lastname=u'Neruda',
-            email='pablo-neruda@gmail.com',
+            email='pablo-neruda@example.com',
             date_from=datetime(2010, 1, 1),
             date_to=datetime(2014, 12, 31),
             )

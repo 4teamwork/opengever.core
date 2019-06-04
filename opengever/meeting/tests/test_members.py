@@ -26,14 +26,14 @@ class TestMember(IntegrationTestCase):
         self.login(self.meeting_user)
 
         self.assertEqual(
-            u'Sch\xf6ller Heidrun (<a href="mailto:h.schoeller@web.de">h.schoeller@web.de</a>)',
+            u'Sch\xf6ller Heidrun (<a href="mailto:h.schoeller@example.org">h.schoeller@example.org</a>)',
             self.committee_president.model.get_title())
 
     def test_return_unlinked_title_if_desired(self):
         self.login(self.meeting_user)
 
         self.assertEqual(
-            u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
+            u'Sch\xf6ller Heidrun (h.schoeller@example.org)',
             self.committee_president.model.get_title(show_email_as_link=False))
 
     def test_result_is_html_escaped(self):

@@ -430,10 +430,10 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
 
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
-                       email=u'lara.croft@test.ch'))
+                       email=u'lara.croft@example.com'))
         create(Builder('contact')
                .having(firstname=u'Super', lastname=u'M\xe4n',
-                       email='superman@test.ch'))
+                       email='superman@example.com'))
 
         self.source = UsersContactsInboxesSource(self.portal)
 
@@ -475,7 +475,7 @@ class TestUsersContactsInboxesSource(FunctionalTestCase):
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
         self.assertEquals('contact:croft-lara', result[0].token)
         self.assertEquals('contact:croft-lara', result[0].value)
-        self.assertEquals('Croft Lara (lara.croft@test.ch)', result[0].title)
+        self.assertEquals('Croft Lara (lara.croft@example.com)', result[0].title)
 
     def test_search_ogds_users(self):
         self.assertEquals('hugo.boss', self.source.search('Hugo')[0].token)
@@ -729,12 +729,12 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
 
         create(Builder('ogds_user')
                .having(firstname=u'Test', lastname=u'User')
-               .having(email='onlyone@mail.com')
+               .having(email='onlyone@example.com')
                .assign_to_org_units([self.org_unit]))
         create(Builder('ogds_user')
                .id('hugo.boss')
                .having(firstname=u'Hugo', lastname=u'Boss')
-               .having(email='hugos@mail.com', email2='huegeler@mail.com')
+               .having(email='hugos@example.com', email2='huegeler@example.com')
                .assign_to_org_units([self.org_unit]))
 
         create(Builder('ogds_user').id('simon.says')
@@ -743,19 +743,19 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
 
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
-                       email=u'lara.croft@test.ch'))
+                       email=u'lara.croft@example.com'))
         create(Builder('contact')
                .having(firstname=u'Super', lastname=u'M\xe4n',
-                       email='superman@test.ch',
-                       email2='superman@dc.com'))
+                       email='superman@example.com',
+                       email2='superman@example.com'))
 
         self.source = AllEmailContactsAndUsersSource(self.portal)
 
     def test_ogds_users_are_valid(self):
-        self.assertIn('onlyone@mail.com:test_user_1_', self.source)
+        self.assertIn('onlyone@example.com:test_user_1_', self.source)
 
-        self.assertIn('hugos@mail.com:hugo.boss', self.source)
-        self.assertIn('huegeler@mail.com:hugo.boss', self.source)
+        self.assertIn('hugos@example.com:hugo.boss', self.source)
+        self.assertIn('huegeler@example.com:hugo.boss', self.source)
 
     def test_users_from_inactive_orgunits_are_not_valid(self):
         self.assertNotIn('simon.says', self.source)
@@ -767,23 +767,23 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
                          'Expect no result, since the Steueramt is disabled')
 
     def test_invalid_ogds_tokens(self):
-        self.assertNotIn('notthere@mail.com:hugo-boss', self.source)
+        self.assertNotIn('notthere@example.com:hugo-boss', self.source)
         self.assertNotIn('boss-hugo', self.source)
         self.assertNotIn('hugo:boss', self.source)
         self.assertNotIn('hugo.boss', self.source)
-        self.assertNotIn('hugos@mail.com', self.source)
-        self.assertNotIn('lara@mail.com:lara-croft', self.source)
+        self.assertNotIn('hugos@example.com', self.source)
+        self.assertNotIn('lara@example.com:lara-croft', self.source)
 
     def test_contacts_are_valid(self):
-        self.assertIn('lara.croft@test.ch:croft-lara', self.source)
+        self.assertIn('lara.croft@example.com:croft-lara', self.source)
 
-        self.assertIn('superman@test.ch:man-super', self.source)
-        self.assertIn('superman@dc.com:man-super', self.source)
+        self.assertIn('superman@example.com:man-super', self.source)
+        self.assertIn('superman@example.com:man-super', self.source)
 
     def test_invalid_contact_tokens(self):
-        self.assertNotIn('lara.croft@test.ch:lara-croft', self.source)
-        self.assertNotIn('man-super:superman@test.ch', self.source)
-        self.assertNotIn('notthere@dc.com:man-super', self.source)
+        self.assertNotIn('lara.croft@example.com:lara-croft', self.source)
+        self.assertNotIn('man-super:superman@example.com', self.source)
+        self.assertNotIn('notthere@example.com:man-super', self.source)
 
     def test_search_returns_one_entry_for_each_email_address(self):
         ogds_result = self.source.search('Hugo')
@@ -792,14 +792,14 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
             2, len(ogds_result),
             'Expect 2 results, since the user has 2 email addresses')
 
-        self.assertEquals('hugos@mail.com:hugo.boss', ogds_result[0].token)
-        self.assertEquals('hugos@mail.com:hugo.boss', ogds_result[0].value)
-        self.assertEquals('Boss Hugo (hugo.boss, hugos@mail.com)',
+        self.assertEquals('hugos@example.com:hugo.boss', ogds_result[0].token)
+        self.assertEquals('hugos@example.com:hugo.boss', ogds_result[0].value)
+        self.assertEquals('Boss Hugo (hugo.boss, hugos@example.com)',
                           ogds_result[0].title)
 
-        self.assertEquals('huegeler@mail.com:hugo.boss', ogds_result[1].token)
-        self.assertEquals('huegeler@mail.com:hugo.boss', ogds_result[1].value)
-        self.assertEquals('Boss Hugo (hugo.boss, huegeler@mail.com)',
+        self.assertEquals('huegeler@example.com:hugo.boss', ogds_result[1].token)
+        self.assertEquals('huegeler@example.com:hugo.boss', ogds_result[1].value)
+        self.assertEquals('Boss Hugo (hugo.boss, huegeler@example.com)',
                           ogds_result[1].title)
 
         person_result = self.source.search('Super')
@@ -808,14 +808,14 @@ class TestAllEmailContactsAndUsersSource(FunctionalTestCase):
             2, len(person_result),
             'Expect 2 results, since the user has 2 email addresses')
 
-        self.assertEquals('superman@test.ch:man-super', person_result[0].token)
-        self.assertEquals('superman@test.ch:man-super', person_result[0].value)
-        self.assertEquals(u'M\xe4n Super (superman@test.ch)',
+        self.assertEquals('superman@example.com:man-super', person_result[0].token)
+        self.assertEquals('superman@example.com:man-super', person_result[0].value)
+        self.assertEquals(u'M\xe4n Super (superman@example.com)',
                           person_result[0].title)
 
-        self.assertEquals('superman@dc.com:man-super', person_result[1].token)
-        self.assertEquals('superman@dc.com:man-super', person_result[1].value)
-        self.assertEquals(u'M\xe4n Super (superman@dc.com)',
+        self.assertEquals('superman@example.com:man-super', person_result[1].token)
+        self.assertEquals('superman@example.com:man-super', person_result[1].value)
+        self.assertEquals(u'M\xe4n Super (superman@example.com)',
                           person_result[1].title)
 
 
@@ -835,10 +835,10 @@ class TestContactsSource(FunctionalTestCase):
                .assign_to_org_units([self.org_unit]))
         create(Builder('contact')
                .having(firstname=u'Lara', lastname=u'Croft',
-                       email=u'lara.croft@test.ch'))
+                       email=u'lara.croft@example.com'))
         create(Builder('contact')
                .having(firstname=u'Super', lastname=u'M\xe4n',
-                       email='superman@test.ch'))
+                       email='superman@example.com'))
 
         self.source = ContactsSource(self.portal)
 
@@ -856,7 +856,7 @@ class TestContactsSource(FunctionalTestCase):
         term = self.source.getTermByToken('contact:man-super')
         self.assertEquals('contact:man-super', term.token)
         self.assertEquals('contact:man-super', term.value)
-        self.assertEquals(u'M\xe4n Super (superman@test.ch)', term.title)
+        self.assertEquals(u'M\xe4n Super (superman@example.com)', term.title)
 
     def test_search_contacts(self):
         result = self.source.search('Lara')
@@ -864,7 +864,7 @@ class TestContactsSource(FunctionalTestCase):
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
         self.assertEquals('contact:croft-lara', result[0].token)
         self.assertEquals('contact:croft-lara', result[0].value)
-        self.assertEquals('Croft Lara (lara.croft@test.ch)', result[0].title)
+        self.assertEquals('Croft Lara (lara.croft@example.com)', result[0].title)
 
     def test_search_ogds_users_is_empty(self):
         self.assertEquals([], self.source.search('Hugo'))

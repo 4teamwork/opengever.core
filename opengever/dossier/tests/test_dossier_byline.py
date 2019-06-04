@@ -105,8 +105,8 @@ class TestDossierByline(TestDossierBylineBase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier)
 
-        valid_url = "http://google.ch"
-        invalid_url = "google.ch"
+        valid_url = "http://example.com"
+        invalid_url = "example.com"
 
         IDossier(self.dossier).external_reference = invalid_url
         transaction.commit()

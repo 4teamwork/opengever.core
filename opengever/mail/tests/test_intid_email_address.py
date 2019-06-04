@@ -22,7 +22,7 @@ class TestIntIdEmailAddressAdapter(FunctionalTestCase):
 
         self.dossier = create(Builder('dossier'))
 
-        self.mail_domain = u'opengever.4teamwork.ch'
+        self.mail_domain = u'opengever.example.com'
         registry = getUtility(IRegistry)
         mail_settings = registry.forInterface(IMailSettings)
         mail_settings.mail_domain = self.mail_domain

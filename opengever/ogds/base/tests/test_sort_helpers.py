@@ -41,12 +41,12 @@ class TestUserSortDict(FunctionalTestCase):
         create(Builder('contact')
                .having(firstname=u'Lara',
                        lastname=u'Croft',
-                       email=u'lara.croft@test.ch'))
+                       email=u'lara.croft@example.com'))
 
         create(Builder('contact')
                .having(firstname=u'Super',
                        lastname=u'M\xe4n',
-                       email='superman@test.ch'))
+                       email='superman@example.com'))
 
         self.assertEqual(
             {u'albert.peter': u'Peter Albert',

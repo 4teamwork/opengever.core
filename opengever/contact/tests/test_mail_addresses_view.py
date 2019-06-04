@@ -109,7 +109,7 @@ class TestMailAddressesView(FunctionalTestCase):
                .for_contact(self.contact)
                .having(
                    label=u'Business',
-                   address=u"max.muster@foo.com"))
+                   address=u"max.muster@example.org"))
 
         browser.login().visit(self.contactfolder, view='contact-1/mails/list')
 
@@ -124,7 +124,7 @@ class TestMailAddressesView(FunctionalTestCase):
     @browsing
     def test_delete_given_mailaddress(self, browser):
         create(Builder('mailaddress')
-               .having(address=u"max.muster@foo.com")
+               .having(address=u"max.muster@example.com")
                .for_contact(self.contact))
 
         self.assertEqual(1, self.session.query(MailAddress).count())

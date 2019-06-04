@@ -92,16 +92,16 @@ class TestPerson(unittest.TestCase):
         ftw = create(Builder('url')
                      .for_contact(peter)
                      .labeled(u'Info')
-                     .having(url=u'http://www.4teamwork.ch'))
+                     .having(url=u'http://example.com'))
 
         gever = create(Builder('url')
                        .for_contact(peter)
                        .labeled(u'Info')
-                       .having(url=u'http://www.onegovgever.ch'))
+                       .having(url=u'http://example.org'))
 
         self.assertEquals([ftw, gever], peter.urls)
-        self.assertEquals([u'http://www.4teamwork.ch',
-                           u'http://www.onegovgever.ch'],
+        self.assertEquals([u'http://example.com',
+                           u'http://example.org'],
                           [url.url for url in peter.urls])
 
     def test_fullname_is_lastname_and_firstname_separated_with_a_space(self):

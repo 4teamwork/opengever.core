@@ -14,27 +14,27 @@ class TestClusterBaseURL(IntegrationTestCase):
         admin_unit = get_current_admin_unit()
         # For setups with a single admin units, the admin unit's ID is
         # usually omitted from the public_url
-        admin_unit.public_url = 'http://lab.onegovgever.ch'
+        admin_unit.public_url = 'http://lab.example.com'
 
         # In this case, the cluster base URL is equivalent to public_url
         self.assertEquals(
-            'http://lab.onegovgever.ch/', get_cluster_base_url())
+            'http://lab.example.com/', get_cluster_base_url())
 
     def test_is_different_from_public_url_for_multi_admin_unit_setup(self):
         create(Builder('admin_unit')
                .having(title=u'Ratzskanzlei',
                        unit_id=u'rk',
-                       public_url='http://dev.onegovgever.ch/rk'))
+                       public_url='http://dev.example.com/rk'))
 
         admin_unit = get_current_admin_unit()
         # For setups with multiple admin units, an admin unit's public_url
         # ends with the admin unit ID
-        admin_unit.public_url = 'http://dev.onegovgever.ch/{}'.format(
+        admin_unit.public_url = 'http://dev.example.com/{}'.format(
             admin_unit.unit_id)
 
         # Cluster base URL should NOT end with the admin unit ID.
         self.assertEquals(
-            'http://dev.onegovgever.ch/', get_cluster_base_url())
+            'http://dev.example.com/', get_cluster_base_url())
 
 
 class TestCASServerURL(IntegrationTestCase):

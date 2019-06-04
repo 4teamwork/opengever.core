@@ -25,7 +25,7 @@ class FixtureBuilder(object):
             'firstname': u'Hugo',
             'lastname': u'Boss',
             'userid': 'hugo.boss',
-            'email': 'hugo@boss.ch',
+            'email': 'hugo@example.com',
         }
         self._org_unit_args = {
             'title': u'Org Unit 1',
