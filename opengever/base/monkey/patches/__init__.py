@@ -21,6 +21,8 @@ from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
 from .readonly import PatchMembershipToolCreateMemberarea
 from .readonly import PatchMembershipToolSetLoginTimes
 from .readonly import PatchPloneProtectOnUserLogsIn
+from .readonly import PatchPloneUserAllowed
+from .readonly import PatchPloneUserGetRolesInContext
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -60,3 +62,5 @@ PatchWorkflowTool()()
 PatchMembershipToolSetLoginTimes()()
 PatchMembershipToolCreateMemberarea()()
 PatchPloneProtectOnUserLogsIn()()
+PatchPloneUserGetRolesInContext()()
+PatchPloneUserAllowed()()

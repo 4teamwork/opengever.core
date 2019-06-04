@@ -1,5 +1,6 @@
 from opengever.base.monkey.patching import MonkeyPatch
 from plone.protect import subscribers
+from Products.PlonePAS.plugins.ufactory import PloneUser
 from Products.PlonePAS.tools.membership import MembershipTool
 from Products.PluggableAuthService.interfaces.events import IUserLoggedInEvent
 from zope.component import adapter
@@ -60,3 +61,44 @@ class PatchPloneProtectOnUserLogsIn(MonkeyPatch):
         original_onUserLogsIn = subscribers.onUserLogsIn
 
         self.patch_refs(subscribers, 'onUserLogsIn', onUserLogsIn)
+
+
+class PatchPloneUserGetRolesInContext(MonkeyPatch):
+
+    def __call__(self):
+
+        def getRolesInContext(self, context):
+            roles = original_getRolesInContext(self, context)
+
+            WHITELISTED = ['Member', 'Authenticated', 'Reader', 'Manager', 'MeetingUser', 'CommitteeMember']
+            site = getSite()
+            conn = site._p_jar
+            if conn.isReadOnly():
+                roles = [r for r in roles if r in WHITELISTED]
+
+            return roles
+
+        locals()['__patch_refs__'] = False
+        original_getRolesInContext = PloneUser.getRolesInContext
+
+        self.patch_refs(PloneUser, 'getRolesInContext', getRolesInContext)
+
+
+class PatchPloneUserAllowed(MonkeyPatch):
+
+    def __call__(self):
+
+        def allowed(self, object, object_roles=None):
+            WHITELISTED = ['Member', 'Authenticated', 'Reader', 'Manager', 'MeetingUser', 'CommitteeMember']
+            site = getSite()
+            conn = site._p_jar
+            if conn.isReadOnly():
+                if object_roles is not None:
+                    object_roles = [r for r in object_roles if r in WHITELISTED]
+
+            return original_allowed(self, object, object_roles=object_roles)
+
+        locals()['__patch_refs__'] = False
+        original_allowed = PloneUser.allowed
+
+        self.patch_refs(PloneUser, 'allowed', allowed)
