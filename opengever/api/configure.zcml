@@ -14,7 +14,6 @@
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
 
   <adapter factory=".summary.GeverJSONSummarySerializer" />
-  <adapter factory=".fields.ChoiceFieldDeserializer" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
