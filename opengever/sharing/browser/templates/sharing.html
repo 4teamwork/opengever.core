@@ -4,7 +4,7 @@
     <form @submit.prevent="search" class="search-form" v-if="isEditable">
       <input type="text" class="search_box" v-model="principal_search"
              :placeholder="i18n.principal_search_placeholder" />
-      <a class="button" @click="search">{{i18n.label_search}}</a>
+      <a class="button" :class="{ loading: isSearching }" @click="search">{{i18n.label_search}}</a>
     </form>
 
     <table class="sharing-table listing">
