@@ -28,6 +28,9 @@ Ansicht einer vorbereiteten Sitzung:
 3. In diesem Feld kann die Protokollführende Person ausgewählt werden.
 4. Der Beginn der Seitennummerierung kann hier festgelegt werden.
 
+.. note::
+   Der Beginn der Seitennummerierung pro Protokoll wird manuell hinterlegt. Die Sitzungs- und Protokollverwaltung übernimmt die Seitenzahl nicht automatisiert, da die Protokolle nach der Generierung frei nach den individuellen Kundenbedürfnissen bearbeitet werden können. Bei der Eröffnung bzw. der Bearbeitung der nächsten Sitzung muss also die fortlaufende Seitenzahl (letzte Seite Protokoll der vorhergehenden Sitzung + 1) manuell eingetragen werden.
+
 .. |img-spvupdate-20| image:: ../img/media/img-spvupdate-20.png
 .. |img-spvupdate-21| image:: ../img/media/img-spvupdate-21.png
 .. |img-spvupdate-22| image:: ../img/media/img-spvupdate-22.png
