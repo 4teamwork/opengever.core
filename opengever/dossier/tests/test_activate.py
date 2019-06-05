@@ -158,7 +158,7 @@ class TestDossierActivationRESTAPI(TestDossierActivation):
 
     @browsing
     def test_activating_dossier_non_recursively_is_forbidden(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.secretariat_user, browser)
         payload = {'include_children': False}
         self.activate(self.inactive_dossier, browser, payload=payload)
         self.assertEqual(
