@@ -7,6 +7,7 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
+from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -262,6 +263,29 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         self.assertEquals(
             u'http://nohost/plone/@@list_groupmembers?group=group+with+spaces',
             entry['url'])
+
+    @browsing
+    def test_searchs_also_for_group_description_if_configured(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        group = api.group.get('rk_inbox_users')
+        group.setGroupProperties({'description': 'grouptest'})
+
+        browser.open(self.empty_dossier, view='@sharing?search=grouptest',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertNotIn('rk_inbox_users',
+                         [aa.get('id') for aa in browser.json['entries']])
+
+        api.portal.set_registry_record(
+            name='group_title_ldap_attribute',
+            value=u'description', interface=IOGDSSyncConfiguration)
+
+        browser.open(self.empty_dossier, view='@sharing?search=grouptest',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertIn('rk_inbox_users',
+                      [aa.get('id') for aa in browser.json['entries']])
 
 
 class TestRoleAssignmentsGet(IntegrationTestCase):
