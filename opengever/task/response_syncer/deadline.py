@@ -19,6 +19,15 @@ class ModifyDeadlineResponseSyncerSender(BaseResponseSyncerSender):
         kwargs['new_deadline'] = kwargs['new_deadline'].toordinal()
         super(ModifyDeadlineResponseSyncerSender, self).extend_payload(payload, task, **kwargs)
 
+    def get_related_tasks_to_sync(self, transition=''):
+        """Skip forwarding predecessors. Forwarding predecessors are already
+        closed and stored in the yearfolder, and should not be changed.
+        """
+
+        tasks = super(ModifyDeadlineResponseSyncerSender, self).get_related_tasks_to_sync(
+            transition=transition)
+        return [task for task in tasks if not task.is_forwarding]
+
 
 class ModifyDeadlineResponseSyncerReceiver(BaseResponseSyncerReceiver):
     """This view receives a sync-task-modify-deadline-response request from another
