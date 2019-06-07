@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2019-03-07 18:16+0000\n"
+"POT-Creation-Date: 2019-06-07 11:47+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -39,6 +39,7 @@ msgstr ""
 msgid "Show all in this Folder"
 msgstr ""
 
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
 #: ./opengever/tabbedview/browser/generic_with_filters.pt
 #: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "State"
@@ -250,6 +251,8 @@ msgid "label_issuer"
 msgstr ""
 
 #. Default: "Keywords"
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+#: ./opengever/tabbedview/browser/generic_with_filters.pt
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_keywords"
 msgstr ""
@@ -270,6 +273,7 @@ msgid "label_my_proposals"
 msgstr ""
 
 #. Default: "Pending"
+#: ./opengever/tabbedview/browser/personal_overview.py
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "label_pending"
 msgstr ""
@@ -319,9 +323,9 @@ msgstr ""
 msgid "label_subdossier"
 msgstr ""
 
+#: ./opengever/tabbedview/browser/personal_overview.py
 #: ./opengever/tabbedview/browser/tabs.py
 #: ./opengever/tabbedview/browser/tasklisting.py
-#: ./opengever/tabbedview/browser/users.py
 msgid "label_tabbedview_filter_all"
 msgstr ""
 

@@ -30,7 +30,7 @@
     </tal:condition>
     <tal:subjectFilter tal:define="widget view/render_subject_filter_widget" tal:condition="widget">
         <span>|</span>
-        <span>Schlagworte</span>
+        <span i18n:domain="opengever.tabbedview" i18n:translate="label_keywords">Keywords</span>
         <tal:subjectFilterWidget replace="structure widget" />
     </tal:subjectFilter>
 </div>
