@@ -3,11 +3,13 @@ from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
 from ftw.lawgiver.utils import get_specification_for
+from itertools import chain
 from opengever.base import _ as base_mf
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from opengever.sharing import _
@@ -19,6 +21,7 @@ from opengever.sharing.interfaces import IDisabledPermissionCheck
 from opengever.sharing.interfaces import ISharingConfiguration
 from pkg_resources import resource_filename
 from plone import api
+from plone.app.workflow.browser.sharing import merge_search_results
 from plone.app.workflow.browser.sharing import SharingView
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.memoize.instance import clearafter
@@ -359,6 +362,35 @@ class OpengeverSharingView(SharingView):
             return True
 
         return False
+
+    def group_search_results(self):
+        """Customization of the original method to also search on the
+        group description attribute (configured in the plone registry), which
+        is also displayed in the form when available.
+        """
+
+        def search_for_principal(hunter, search_term):
+            group_attribute = api.portal.get_registry_record(
+                name='group_title_ldap_attribute',
+                interface=IOGDSSyncConfiguration)
+
+            fields = ['id', 'title']
+            if group_attribute:
+                fields.append(group_attribute)
+
+            return merge_search_results(
+                chain(*[hunter.searchGroups(**{field: search_term}) for field in fields]), 'groupid')
+
+        def get_principal_by_id(group_id):
+            portal_groups = getToolByName(self.context, 'portal_groups')
+            return portal_groups.getGroupById(group_id)
+
+        def get_principal_title(group, _):
+            return group.getGroupTitleOrName()
+
+        return self._principal_search_results(
+            search_for_principal, get_principal_by_id,
+            get_principal_title, 'group', 'groupid')
 
     def _principal_search_results(self,
                                   search_for_principal,

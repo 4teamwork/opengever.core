@@ -9,6 +9,7 @@ var sharingApp = {
     principal_search: null,
     isEditable: false,
     isSaving: false,
+    isSearching: false,
   },
 
   beforeMount: function () {
@@ -95,6 +96,8 @@ var sharingApp = {
     },
 
     search: function() {
+      this.isSearching = true;
+
       // make sure IE 11 does not cache the fetch request
       var params = { _t: Date.now().toString(), search: this.principal_search };
       if (this.isEditable === false){
@@ -113,6 +116,7 @@ var sharingApp = {
           }));
         this.inherit = response.data['inherit'];
 
+        this.isSearching = false;
       }.bind(this));
     },
 
