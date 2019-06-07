@@ -80,13 +80,13 @@ class TestValidators(MockTestCase):
         self.replay()
 
         validator = AddressValidator(context, request, None, None, None)
-        validator.validate(['hugo.boss@boss.ch', 'James.Bond@007.ch'])
+        validator.validate(['hugo.boss@example.org', 'James.Bond@example.org'])
 
         with self.assertRaises(Invalid):
-            validator.validate(['hugo.boss@boss.ch', 'James.Bond_007.ch'])
+            validator.validate(['hugo.boss@example.com', 'James.Example.com'])
 
         with self.assertRaises(Invalid):
-            validator.validate(['hugo.dskljfch', 'James.Bond_007.ch'])
+            validator.validate(['hugo.dskljfch', 'James.Example.com'])
 
 
 class TestFileOrPaperValidatorInEditForm(FunctionalTestCase):

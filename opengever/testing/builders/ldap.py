@@ -3,12 +3,12 @@ from ftw.builder import builder_registry
 
 USER_TEMPLATE = {
     'displayName': 'Sekretariat1 Mandant1',
-    'email': 'sk1m1@4teamwork.ch',
+    'email': 'sk1m1@example.com',
     'facsimileTelephoneNumber': ['031 305 90 25'],
     'firstname': 'Sekretariat1',
     'fullname': 'Sekretariat1 Mandant1',
     'l': ['Bern'],
-    'labeledURI': ['http://www.4teamwork.ch'],
+    'labeledURI': ['http://example.com'],
     'lastname': 'Mandant1',
     'mobile': ['012 345 6789'],
     'o': ['4teamwork GmbH'],
@@ -46,7 +46,7 @@ class LDAPUserBuilder(object):
         attributes['fullname'] = ' '.join([attributes['firstname'],
                                            attributes['lastname']])
         attributes['displayName'] = attributes['fullname']
-        attributes['email'] = "{}@4teamwork.ch".format(attributes['userid'])
+        attributes['email'] = "{}@example.com".format(attributes['userid'])
 
         # Overlay arguments again to make sure specified values take precedence
         attributes.update(self.arguments)

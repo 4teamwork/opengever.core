@@ -158,18 +158,18 @@ class TestAgendaItemList(IntegrationTestCase):
              u'title': u'ad-hoc'}]
 
         expected_participants = {
-            u'members': [{u'email': u'jens-wendler@gmail.com',
+            u'members': [{u'email': u'jens-wendler@example.com',
                           u'firstname': u'Jens',
                           u'fullname': u'Wendler Jens',
                           u'lastname': u'Wendler',
                           u'role': None},
-                         {u'email': u'g.woelfl@hotmail.com',
+                         {u'email': u'g.woelfl@example.com',
                           u'firstname': u'Gerda',
                           u'fullname': u'W\xf6lfl Gerda',
                           u'lastname': u'W\xf6lfl',
                           u'role': None}],
             u'other': [],
-            u'presidency': {u'email': u'h.schoeller@web.de',
+            u'presidency': {u'email': u'h.schoeller@example.org',
                             u'firstname': u'Heidrun',
                             u'fullname': u'Sch\xf6ller Heidrun',
                             u'lastname': u'Sch\xf6ller',

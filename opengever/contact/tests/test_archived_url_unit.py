@@ -20,7 +20,7 @@ class TestArchivedURL(unittest.TestCase):
         gever = create(Builder('archived_url')
                        .for_contact(fritz)
                        .labeled(u'gever')
-                       .having(url=u'http://www.onegovgever.ch'))
+                       .having(url=u'http://example.org'))
 
         self.assertEquals([home, gever], fritz.archived_urls)
 
@@ -31,11 +31,11 @@ class TestArchivedURL(unittest.TestCase):
         info = create(Builder('archived_url')
                       .for_contact(acme)
                       .labeled(u'ftw')
-                      .having(url=u'http://www.4teamwork.ch'))
+                      .having(url=u'http://example.com'))
 
         gever = create(Builder('archived_url')
                        .for_contact(acme)
                        .labeled(u'gever')
-                       .having(url=u'http://www.onegovgever.ch'))
+                       .having(url=u'http://example.org'))
 
         self.assertEquals([info, gever], acme.archived_urls)

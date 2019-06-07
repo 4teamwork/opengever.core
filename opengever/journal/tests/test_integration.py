@@ -207,7 +207,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_document_revertedtoversion(document)
 
         # Object Sent Document Event
-        notify(DocumentSent(dossier, TEST_USER_ID, 'test@test.ch',
+        notify(DocumentSent(dossier, TEST_USER_ID, 'test@example.com',
                             'test mail', 'Mymessage', [document]))
         self.check_document_sent(dossier, document)
 
@@ -513,7 +513,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
             comment=(
                 'Attachments: <span>'
                 '<a href="{}">{}</a>'
-                '</span> | Receivers: test@test.ch |'
+                '</span> | Receivers: test@example.com |'
                 ' Message: Mymessage'.format(doc.absolute_url(), doc.Title()))
             )
 

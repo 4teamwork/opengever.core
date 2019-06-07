@@ -13,12 +13,12 @@ class TestContactService(FunctionalTestCase):
         lara = create(Builder('contact')
                       .having(firstname=u'Lara',
                               lastname=u'Croft',
-                              email=u'lara.croft@test.ch'))
+                              email=u'lara.croft@example.org'))
 
         superman = create(Builder('contact')
                           .having(firstname=u'Super',
                                   lastname=u'M\xe4n',
-                                  email='superman@test.ch'))
+                                  email='superman@example.org'))
 
         brains = contact_service().all_contact_brains()
         self.assertEquals(

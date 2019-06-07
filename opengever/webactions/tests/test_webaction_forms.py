@@ -41,7 +41,7 @@ class TestWebactionsAddForm(IntegrationTestCase):
 
         browser.open(api.portal.getSite(), view="manage-webactions-add")
         browser.fill({"Title": "Action 1",
-                      "Target URL": "http://test.ch",
+                      "Target URL": "http://example.com",
                       "Order": "5",
                       "Display Location": "action-buttons",
                       "Mode": "self",
@@ -79,7 +79,7 @@ class TestWebactionsAddForm(IntegrationTestCase):
 
         browser.open(api.portal.getSite(), view="manage-webactions-add")
         browser.fill({"Title": "Action 1",
-                      "Target URL": "http://test.ch",
+                      "Target URL": "http://example.com",
                       "Order": "5",
                       "Display Location": "action-buttons",
                       "Mode": "self"})
@@ -104,7 +104,7 @@ class TestWebactionsAddForm(IntegrationTestCase):
 
         browser.open(api.portal.getSite(), view="manage-webactions-add")
         browser.fill({"Title": "Action 1",
-                      "Target URL": "http://test.ch",
+                      "Target URL": "http://example.com",
                       "Order": "5",
                       "Display Location": "title-buttons",
                       "Mode": "self",

@@ -157,7 +157,7 @@ class TestOGDSUpdater(FunctionalTestCase):
         self.assertEquals(u'klaus.r\xfcegg', ogds_user.userid)
         self.assertEquals(u'Klaus', ogds_user.firstname)
         self.assertEquals(u'R\xfcegg', ogds_user.lastname)
-        self.assertEquals(u'klaus.r\xfcegg@4teamwork.ch', ogds_user.email)
+        self.assertEquals(u'klaus.r\xfcegg@example.com', ogds_user.email)
 
         ogds_group = ogds_service().fetch_group(u'f\xfchrung')
         self.assertEquals(u'f\xfchrung', ogds_group.groupid)

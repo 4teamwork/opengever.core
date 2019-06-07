@@ -30,10 +30,10 @@ class TestMessageModel(IntegrationTestCase):
 
     def test_senderid_defaults_to_current_users_email(self):
         member = api.user.get_current()
-        member.setProperties({'email': 'foo@bar.net'})
+        member.setProperties({'email': 'foo@example.com'})
         msg = MessageT1()
         header = msg.header()
-        self.assertEqual(u'foo@bar.net', header.senderId)
+        self.assertEqual(u'foo@example.com', header.senderId)
 
     def test_sending_application_and_version(self):
         msg = MessageT1()

@@ -78,16 +78,16 @@ class TestOrganization(unittest.TestCase):
         info = create(Builder('url')
                       .for_contact(organization)
                       .labeled(u'Info')
-                      .having(url=u'http://www.4teamwork.ch'))
+                      .having(url=u'http://example.org'))
 
         gever = create(Builder('url')
                        .for_contact(organization)
                        .labeled(u'Info')
-                       .having(url=u'http://www.onegovgever.ch'))
+                       .having(url=u'http://example.com'))
 
         self.assertEquals([info, gever], organization.urls)
-        self.assertEquals([u'http://www.4teamwork.ch',
-                           u'http://www.onegovgever.ch'],
+        self.assertEquals([u'http://example.org',
+                           u'http://example.com'],
                           [url.url for url in organization.urls])
 
     def test_title_is_name(self):

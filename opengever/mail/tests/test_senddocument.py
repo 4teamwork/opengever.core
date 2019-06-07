@@ -22,8 +22,8 @@ TEST_FORM_DATA = {
     'as_links': False,
     'message': 'Foo bar',
     'subject': 'Test Subject',
-    'extern_receiver': 'info@4teamwork.ch',
-    'intern_receiver': ['hugo@boss.ch', ]}
+    'extern_receiver': 'info@example.com',
+    'intern_receiver': ['hugo@example.org', ]}
 
 
 class TestSendDocument(FunctionalTestCase):

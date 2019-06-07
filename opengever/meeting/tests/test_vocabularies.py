@@ -40,9 +40,9 @@ class TestCommitteeMemberVocabulary(IntegrationTestCase):
         vocabulary = get_committee_member_vocabulary(self.meeting)
 
         self.assertEqual(
-            [u'Sch\xf6ller Heidrun (h.schoeller@web.de)',
-             u'W\xf6lfl Gerda (g.woelfl@hotmail.com)',
-             u'Wendler Jens (jens-wendler@gmail.com)'],
+            [u'Sch\xf6ller Heidrun (h.schoeller@example.org)',
+             u'W\xf6lfl Gerda (g.woelfl@example.com)',
+             u'Wendler Jens (jens-wendler@example.com)'],
             [term.title for term in vocabulary])
 
     def test_returns_member_as_value(self):
@@ -145,4 +145,3 @@ class TestProposalTemplatesForCommitteeVocabulary(IntegrationTestCase):
              self.ad_hoc_agenda_item_template,
              self.recurring_agenda_item_template],
             [term.value for term in factory(context=self.dossier)])
-
