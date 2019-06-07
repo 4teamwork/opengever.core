@@ -1,0 +1,39 @@
+<p tal:replace="structure here/manage_page_header" omit-tag="">Header</p>
+<p tal:replace="structure here/manage_tabs" omit-tag="">tabs</p>
+
+
+<h2>Add SkipJournals</h2>
+
+<form action="manage_addSkipJournals" method="post">
+
+  <table border="0">
+
+    <tr>
+      <th>
+        Id
+      </th>
+      <td>
+        <input type="text" name="id" value="" size="40"/>
+      </td>
+    </tr>
+
+    <tr>
+      <th>
+        Title
+      </th>
+      <td>
+        <input type="text" name="title" value="" size="40"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <input type="submit" name="submit" value="Add"/>
+      </td>
+    </tr>
+
+  </table>
+
+</form>
+
+<p tal:replace="structure here/manage_page_footer" omit-tag="">Footer</p>
