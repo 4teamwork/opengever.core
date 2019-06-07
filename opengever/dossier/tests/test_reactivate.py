@@ -9,6 +9,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.protect import createToken
+from Products.CMFCore.utils import getToolByName
 import json
 
 
@@ -27,6 +28,9 @@ class TestReactivating(IntegrationTestCase):
         self.assertEquals(dossier.absolute_url(), browser.url)
         statusmessages.assert_no_error_messages()
         self.assertEquals(info_msgs, info_messages())
+
+    def assert_reactivate_transition_invalid(self, dossier, browser):
+        self.assert_errors(dossier, browser, ['Dossier is not resolved and cannot be reactivated.'])
 
     @browsing
     def test_reactivating_a_resolved_dossier_succesfully(self, browser):
@@ -63,8 +67,7 @@ class TestReactivating(IntegrationTestCase):
 
         self.reactivate(self.resolvable_dossier, browser)
 
-        self.assert_errors(self.resolvable_dossier, browser,
-                           ["Dossier is not resolved and cannot be reactivated."])
+        self.assert_reactivate_transition_invalid(self.resolvable_dossier, browser)
         self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
 
     @browsing
@@ -76,8 +79,7 @@ class TestReactivating(IntegrationTestCase):
         self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
         self.reactivate(self.resolvable_dossier, browser)
 
-        self.assert_errors(self.resolvable_dossier, browser,
-                           ["Dossier is not resolved and cannot be reactivated."])
+        self.assert_reactivate_transition_invalid(self.resolvable_dossier, browser)
         self.assert_workflow_state('dossier-state-inactive', self.resolvable_dossier)
 
     @browsing
@@ -166,6 +168,28 @@ class TestReactivatingRESTAPI(TestReactivating):
             browser.json)
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'
         self.assertEquals(expected_url, browser.url)
+
+    def assert_reactivate_transition_invalid(self, dossier, browser):
+        transition = 'dossier-transition-reactivate'
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error': {
+                u'message': self.invalid_transition_message(dossier, transition),
+                u'type': u'Bad Request'}},
+            browser.json)
+        expected_url = '{}/@workflow/{}'.format(dossier.absolute_url(), transition)
+        self.assertEquals(expected_url, browser.url)
+
+    def invalid_transition_message(self, dossier, transition):
+        wftool = getToolByName(dossier, 'portal_workflow')
+        actions = wftool.listActionInfos(object=dossier)
+        action_ids = [action['id'] for action in actions
+                      if action['category'] == 'workflow']
+
+        message = ("Invalid transition '{}'.\n"
+                   "Valid transitions are:\n"
+                   "{}".format(transition, '\n'.join(sorted(action_ids))))
+        return message
 
     @browsing
     def test_reactivating_dossier_non_recursively_is_forbidden(self, browser):

@@ -29,6 +29,7 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.protect import createToken
 from plone.uuid.interfaces import IUUID
+from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 import json
@@ -105,6 +106,10 @@ class ResolveTestHelper(object):
                    dossier, self.active_state, dossier_state))
         self.assertEquals(self.active_state, dossier_state, msg)
 
+    def assert_resolve_transition_invalid(self, dossier, browser):
+        self.assert_errors(dossier, browser,
+                           ['Dossier is not active and cannot be resolved.'])
+
 
 class ResolveTestHelperRESTAPI(ResolveTestHelper):
     """Implementation of the ResolveTestHelper for use with REST API.
@@ -113,11 +118,6 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
     success / failure by looking at HTTP status codes and JSON content of
     the response.
     """
-
-    api_headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    }
 
     def resolve(self, dossier, browser, payload=None):
         browser.raise_http_errors = False
@@ -154,14 +154,7 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
         self.assertEquals(expected_url, browser.url)
 
     def assert_already_resolved(self, dossier, browser):
-        self.assertEquals(400, browser.status_code)
-        self.assertEquals(
-            {u'error':
-                {u'message': u'Dossier has already been resolved.',
-                 u'type': u'Bad Request'}},
-            browser.json)
-        expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
-        self.assertEquals(expected_url, browser.url)
+        self.assert_resolve_transition_invalid(dossier, browser)
 
     def assert_already_being_resolved(self, dossier, browser):
         self.assertEquals(400, browser.status_code)
@@ -170,6 +163,28 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
                 u'message': u'Dossier is already being resolved',
                 u'type': u'AlreadyBeingResolved'}},
             browser.json)
+
+    def assert_resolve_transition_invalid(self, dossier, browser):
+        transition = 'dossier-transition-resolve'
+        self.assertEqual(400, browser.status_code)
+        self.assertEqual(
+            {u'error': {
+                u'message': self.invalid_transition_message(dossier, transition),
+                u'type': u'Bad Request'}},
+            browser.json)
+        expected_url = '{}/@workflow/{}'.format(dossier.absolute_url(), transition)
+        self.assertEquals(expected_url, browser.url)
+
+    def invalid_transition_message(self, dossier, transition):
+        wftool = getToolByName(dossier, 'portal_workflow')
+        actions = wftool.listActionInfos(object=dossier)
+        action_ids = [action['id'] for action in actions
+                      if action['category'] == 'workflow']
+
+        message = ("Invalid transition '{}'.\n"
+                   "Valid transitions are:\n"
+                   "{}".format(transition, '\n'.join(sorted(action_ids))))
+        return message
 
 
 class TestResolverVocabulary(IntegrationTestCase):
@@ -254,7 +269,7 @@ class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossie
 
     @browsing
     def test_resolving_dossier_non_recursively_is_forbidden(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.secretariat_user, browser)
         payload = {'include_children': False}
         self.resolve(self.resolvable_dossier, browser, payload=payload)
         self.assertEqual(
@@ -1287,8 +1302,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.resolvable_dossier, browser)
 
         self.assert_not_resolved(self.resolvable_dossier)
-        self.assert_errors(self.resolvable_dossier, browser,
-                           ['Dossier is not active and cannot be resolved.'])
+        self.assert_resolve_transition_invalid(self.resolvable_dossier, browser)
 
     @browsing
     def test_resolving_is_cancelled_when_documents_are_not_filed_correctly(self, browser):
