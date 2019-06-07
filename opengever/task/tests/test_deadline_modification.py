@@ -1,6 +1,7 @@
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.oguid import Oguid
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.adapters import IResponseContainer
 from opengever.task.interfaces import IDeadlineModifier
@@ -31,7 +32,7 @@ class TestDeadlineModificationForm(IntegrationTestCase):
         ModifyDeadlineResponseSyncerReceiver._check_internal_request = self.org_check
 
     def _change_deadline(self, task, new_deadline, text=u'', browser=default_browser):
-        browser.open(self.task)
+        browser.open(task)
         browser.click_on('task-transition-modify-deadline')
         browser.fill({'New Deadline': new_deadline.strftime('%d.%m.%Y'),
                       'Response': text})
@@ -106,6 +107,23 @@ class TestDeadlineModificationForm(IntegrationTestCase):
             predecessor, datetime.date(2013, 10, 1), 'Lorem Ipsum')
 
         self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))
+
+    @browsing
+    def test_forwarding_predecessors_are_skipped_when_syncing_deadline_modification(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        # Make predecessor (forwarding) <-> successor (task) pair, like
+        # it's created when assigning a forwarding to a dossier.
+        predecessor = self.inbox_forwarding
+        successor = self.seq_subtask_1
+        ISuccessorTaskController(successor).set_predecessor(
+            Oguid.for_object(predecessor).id)
+
+        self._change_deadline(
+            successor, datetime.date(2013, 10, 1), 'Lorem Ipsum')
+
+        self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))
+        self.assertEquals(None, predecessor.deadline)
 
     @browsing
     def test_modify_event_is_fired_but_only_once(self, browser):
