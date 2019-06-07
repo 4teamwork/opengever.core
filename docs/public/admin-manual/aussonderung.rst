@@ -130,7 +130,7 @@ Anträgen dargestellt.
 
 Auflistung
 ----------
-Auf Stufe Ordnungssytem steht für Benutzer mit den Rollen `Records Manager`
+Auf Stufe Ordnungssystem steht für Benutzer mit den Rollen `Records Manager`
 oder `Archivist` ein zusätzlicher Reiter `Angebote` zur Verfügung, welcher alle
 Angebote dieses Ordnungssystems auflistet. Dabei werden standardmässig nur aktive Angebote aufgelistet, mittels dem Statusfilter `Alle` können aber auch abgeschlossene Angebote angezeigt werden.
 

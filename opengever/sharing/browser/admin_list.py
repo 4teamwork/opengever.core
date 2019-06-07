@@ -1,4 +1,6 @@
 from opengever.base.browser.helper import get_css_class
+from opengever.base.interfaces import IReferenceNumberFormatter
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.utils import escape_html
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.interfaces import IRepositoryFolder
@@ -7,6 +9,7 @@ from opengever.sharing.treeifier import Treeify
 from plone import api
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zope.component import queryAdapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
@@ -41,8 +44,14 @@ class BlockedLocalRolesList(BrowserView):
             'blocked_local_roles': True,
             }
 
-        dossier_container_brains = api.content.find(
-            context=self.context, **query_filter)
+        # Get the repository folders sorted by reference number
+        active_formatter = api.portal.get_registry_record(
+            name='formatter', interface=IReferenceNumberSettings)
+        formatter = queryAdapter(api.portal.get(), IReferenceNumberFormatter,
+                                 name=active_formatter)
+        dossier_container_brains = sorted(
+            api.content.find(context=self.context, **query_filter),
+            key=formatter.sorter)
 
         if dossier_container_brains:
             title = escape_html(translate(
