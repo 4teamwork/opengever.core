@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-07 18:16+0000\n"
+"POT-Creation-Date: 2019-06-07 11:47+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tabbedview/fr/>\n"
@@ -40,6 +40,7 @@ msgstr "Résultats par page"
 msgid "Show all in this Folder"
 msgstr "Tout afficher dans ce classeur"
 
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
 #: ./opengever/tabbedview/browser/generic_with_filters.pt
 #: ./opengever/tabbedview/browser/selection_with_filters.pt
 msgid "State"
@@ -251,6 +252,8 @@ msgid "label_issuer"
 msgstr "Mandant"
 
 #. Default: "Keywords"
+#: ./opengever/tabbedview/browser/generic_with_bumblebee_viewchooser.pt
+#: ./opengever/tabbedview/browser/generic_with_filters.pt
 #: ./opengever/tabbedview/browser/tabs.py
 msgid "label_keywords"
 msgstr "Mots-clés"
@@ -271,6 +274,7 @@ msgid "label_my_proposals"
 msgstr "Mes requêtes"
 
 #. Default: "Pending"
+#: ./opengever/tabbedview/browser/personal_overview.py
 #: ./opengever/tabbedview/browser/tasklisting.py
 msgid "label_pending"
 msgstr "En suspens"
@@ -320,9 +324,9 @@ msgstr "Début"
 msgid "label_subdossier"
 msgstr "Sous-dossier"
 
+#: ./opengever/tabbedview/browser/personal_overview.py
 #: ./opengever/tabbedview/browser/tabs.py
 #: ./opengever/tabbedview/browser/tasklisting.py
-#: ./opengever/tabbedview/browser/users.py
 msgid "label_tabbedview_filter_all"
 msgstr "Tous"
 
