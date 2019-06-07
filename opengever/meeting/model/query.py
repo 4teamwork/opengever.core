@@ -259,5 +259,25 @@ class PeriodQuery(BaseQuery):
     def get_current_for_update(self, committee):
         return self.with_for_update().get_current(committee)
 
+    def by_date(self, date):
+        return self.filter(and_(Period.date_from <= date,
+                                Period.date_to >= date))
+
+    def get_for_meeting(self, meeting):
+        """ returns the period matching the committee of meeting and containing
+        the meeting start date. If several periods match these conditions, return
+        the active period if it is among them, otherwise just pick the first match.
+        """
+        query = self.by_date(meeting.start).by_committee(meeting.committee)
+
+        if query.count() == 0:
+            return None
+
+        active = query.active()
+        if active.count() == 1:
+            return active.one()
+
+        return query.first()
+
 
 Period.query_cls = PeriodQuery

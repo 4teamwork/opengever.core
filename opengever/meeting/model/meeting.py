@@ -207,6 +207,19 @@ class Meeting(Base, SQLFormSupport):
 
         self.meeting_number = period.get_next_meeting_sequence_number()
 
+    def get_meeting_number(self):
+        # Before the meeting is held, it will not have a meeting number.
+        # In that case we do not want to format it with the period title prefixed
+        if not self.meeting_number:
+            return None
+
+        period = Period.query.get_for_meeting(self)
+        if not period:
+            return str(self.meeting_number)
+
+        title = period.title
+        return '{} / {}'.format(title, self.meeting_number)
+
     def generate_decision_numbers(self):
         """Generate decision numbers for each agenda item of this meeting.
 

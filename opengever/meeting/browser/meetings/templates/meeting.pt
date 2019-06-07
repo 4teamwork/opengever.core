@@ -17,9 +17,7 @@
               i18n:attributes="title"
               title="Meeting number">
           #
-          <tal:YEAR replace="meeting/start/year" />
-          /
-          <tal:MEETING_NUMBER replace="meeting/meeting_number" />
+          <tal:YEAR replace="meeting/get_meeting_number" />
         </span>
       </h1>
     </div>
