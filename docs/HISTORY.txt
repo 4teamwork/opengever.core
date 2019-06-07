@@ -15,6 +15,7 @@ Changelog
 - Fix bug with resolving a reopened dossier. [njohner]
 - Update documentation for SaaS deployment update. [njohner]
 - Correctly handle dossier reactivation through RESTAPI. [njohner]
+- Extend listing endpoint fields with file_extension and document_type. [phgross]
 - Extend task API serialization with responses data. [phgross]
 
 

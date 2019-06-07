@@ -108,6 +108,7 @@ FIELDS = {
     'delivery_date': ('delivery_date', 'delivery_date', 'delivery_date'),
     'document_author': ('document_author', 'document_author', 'document_author'),
     'document_date': ('document_date', 'document_date', 'document_date'),
+    'document_type': ('document_type', 'document_type', 'document_type'),
     'end': ('end', 'end', 'end'),
     'has_sametype_children': ('has_sametype_children', 'has_sametype_children', 'has_sametype_children'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
@@ -133,6 +134,7 @@ FIELDS = {
     'type': ('portal_type', 'PortalType', 'portal_type'),
     'filesize': ('filesize', filesize, 'filesize'),
     'filename': ('filename', filename, 'filename'),
+    'file_extension': ('file_extension', 'file_extension', 'file_extension'),
     'task_type': ('task_type', translated_task_type, 'task_type'),
     'deadline': ('deadline', 'deadline', 'deadline'),
 }

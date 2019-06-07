@@ -66,6 +66,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``delivery_date``: Ausgangsdatum
 - ``document_author``: Dokumentauthor
 - ``document_date``: Dokumentdatum
+- ``document_type``: Dokumenttyp
 - ``end``: Enddatum des Dossiers
 - ``mimetype``: Mimetype
 - ``modified``: Modifikationsdatum
@@ -86,6 +87,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``title``: Titel
 - ``filesize``: Dateigrösse
 - ``filename``: Dateiname
+- ``file_extension``: Datei-Endung
 - ``task_type``: Aufgaben-Typ
 - ``deadline``: Aufgabenfrist
 
