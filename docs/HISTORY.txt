@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.2.4 (unreleased)
+2019.2.4 (2019-06-07)
 ---------------------
 
 - Do not sync deadline modifications to forwarding predecessors. [phgross]
