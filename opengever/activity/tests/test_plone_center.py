@@ -109,7 +109,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
                       'Task Type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:hugo.boss')
+        form.find_widget('Responsible').fill('hugo.boss')
         form.find_widget('Issuer').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()

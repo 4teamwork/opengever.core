@@ -189,8 +189,7 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
             browser.open(self.task, view='++add++opengever.task.task')
             browser.fill({'Title': 'Subtas', 'Task Type': 'comment'})
             form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
+            form.find_widget('Responsible').fill(self.secretariat_user)
             browser.click_on('Save')
 
         subtask = children['added'].pop()
@@ -206,8 +205,7 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
             browser.open(self.task, view='++add++opengever.task.task')
             browser.fill({'Title': 'Subtas', 'Task Type': 'comment'})
             form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
+            form.find_widget('Responsible').fill(self.secretariat_user)
             browser.click_on('Save')
 
         subtask = children['added'].pop()
@@ -233,8 +231,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
                      view='++add++opengever.task.task?position=1')
         browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            u'fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Save')
 
         oguids = self.sequential_task.get_tasktemplate_order()
@@ -252,8 +249,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
         browser.open(self.sequential_task, view='++add++opengever.task.task')
         browser.fill({'Title': 'Subtask', 'Task Type': 'comment'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            u'fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Save')
 
         oguids = self.sequential_task.get_tasktemplate_order()

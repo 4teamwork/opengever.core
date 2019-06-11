@@ -148,8 +148,7 @@ class TestForwardingReassignActivity(FunctionalTestCase):
         browser.fill({'Response': u'Peter k\xf6nntest du das \xfcbernehmen.'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':' + responsible)
+        form.find_widget('Responsible').fill(responsible)
 
         browser.find('Assign').click()
 

@@ -19,7 +19,7 @@ class TestTaskTemplates(IntegrationTestCase):
              'Deadline in Days': u'10'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:robert.ziegler')
+        form.find_widget('Responsible').fill(self.dossier_responsible)
         form.find_widget('Issuer').fill(u'responsible')
 
         browser.click_on('Save')

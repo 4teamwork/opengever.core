@@ -39,7 +39,7 @@ class TestDelegateTaskForm(IntegrationTestCase):
 
         # step 1
         form = browser.find_form_by_field('Responsibles')
-        form.find_widget('Responsibles').fill('fa:robert.ziegler')
+        form.find_widget('Responsibles').fill(self.dossier_responsible)
         browser.css('#form-buttons-save').first.click()
 
         # step 2
@@ -61,7 +61,7 @@ class TestDelegateTaskForm(IntegrationTestCase):
         browser.open(self.task, view='delegate_recipients')
 
         form = browser.find_form_by_field('Responsibles')
-        form.find_widget('Responsibles').fill('fa:robert.ziegler')
+        form.find_widget('Responsibles').fill(self.dossier_responsible)
         browser.css('#form-buttons-save').first.click()
 
         self.assertEqual(

@@ -201,7 +201,7 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.click_task_button(browser, 'reassign', save_and_reload=False)
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:other_user')
+        form.find_widget('Responsible').fill('other_user')
 
         browser.find('Assign').click()
         self.visit_overview(browser)
