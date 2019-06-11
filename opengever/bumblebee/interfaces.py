@@ -43,7 +43,7 @@ class IBumblebeeOverlay(Interface):
         "Defines which version of the file should be shown."
         "Default: None => the actual file will be shown")
 
-    def get_preview_pdf_url():
+    def preview_pdf_url():
         """Returns an url to an image.
 
         This can be either the url to the bumblebee preview image

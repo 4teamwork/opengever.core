@@ -127,8 +127,8 @@ class TestSearchEndpoint(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         view = (
-            '@search?path={}&metadata_fields=get_preview_pdf_url'
-            '&metadata_fields=get_preview_image_url'.format(
+            '@search?path={}&metadata_fields=preview_pdf_url'
+            '&metadata_fields=preview_image_url'.format(
                 '/'.join(self.document.getPhysicalPath())))
 
         browser.open(self.dossier, view=view, headers=self.api_headers)
@@ -136,19 +136,19 @@ class TestSearchEndpoint(IntegrationTestCase):
         items = browser.json['items']
         self.assertItemsEqual(
             [u'@id', u'@type', u'title', u'description', u'review_state',
-             u'get_preview_image_url', u'get_preview_pdf_url'],
+             u'preview_image_url', u'preview_pdf_url'],
             items[0].keys())
 
         # Use same bumble_id to compare the urls.
-        parsed = urlparse.urlparse(items[0]['get_preview_pdf_url'])
+        parsed = urlparse.urlparse(items[0]['preview_pdf_url'])
         self.request['bid'] = urlparse.parse_qs(parsed.query)['bid'][0]
 
         self.assertEqual(
             get_service_v3().get_representation_url(self.document, 'pdf'),
-            items[0]['get_preview_pdf_url'])
+            items[0]['preview_pdf_url'])
         self.assertEqual(
             get_service_v3().get_representation_url(self.document, 'thumbnail'),
-            items[0]['get_preview_image_url'])
+            items[0]['preview_image_url'])
 
     @browsing
     def test_not_existing_additional_metadata_is_not_filled_but_ignored(self, browser):

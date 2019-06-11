@@ -321,7 +321,7 @@ class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
     def show_preview(self):
         return is_bumblebee_feature_enabled()
 
-    def get_preview_image_url(self):
+    def preview_image_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context, 'image')
 

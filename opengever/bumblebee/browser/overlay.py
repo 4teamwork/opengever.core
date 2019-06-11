@@ -73,7 +73,7 @@ class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
         """A documentish without versions is always the latest version."""
         return True
 
-    def get_preview_pdf_url(self):
+    def preview_pdf_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context, 'preview')
 

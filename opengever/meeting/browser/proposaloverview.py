@@ -64,7 +64,7 @@ class OverviewBase(object):
             and self.context.get_proposal_document() is not None
         )
 
-    def get_preview_image_url(self):
+    def preview_image_url(self):
         return bumblebee.get_service_v3().get_representation_url(
             self.context.get_proposal_document(), 'image')
 

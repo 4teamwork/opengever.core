@@ -93,7 +93,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
 
         return '{}/@@bumblebee-overlay-listing'.format(self.getURL())
 
-    def get_preview_image_url(self):
+    def preview_image_url(self):
         """Return the url to fetch the bumblebee preview thumbnail."""
         if not self.is_bumblebeeable():
             return None
@@ -109,7 +109,7 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return bumblebee.get_service_v3().get_representation_url(
             self.getDataOrigin(), 'preview')
 
-    def get_preview_pdf_url(self):
+    def preview_pdf_url(self):
         """Return the url to fetch the bumblebee preview pdf."""
         if not self.is_bumblebeeable():
             return None

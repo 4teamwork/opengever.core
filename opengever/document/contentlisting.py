@@ -50,7 +50,7 @@ class DocumentContentListingObject(RealContentListingObject):
 
         return '{}/@@bumblebee-overlay-listing'.format(self.getURL())
 
-    def get_preview_image_url(self):
+    def preview_image_url(self):
         """Return the url to fetch the bumblebee preview thumbnail."""
 
         if not self.is_bumblebeeable():

@@ -19,8 +19,8 @@ class GeverBrainSerializer(BrainSerializer):
     # The getter of those attributes must be perfomance ,
     # because its processed for each search result.
     CONTENTLISTING_METADATA = [
-        'get_preview_pdf_url',
-        'get_preview_image_url',
+        'preview_pdf_url',
+        'preview_image_url',
     ]
 
     def __call__(self, metadata_fields=('_all',)):

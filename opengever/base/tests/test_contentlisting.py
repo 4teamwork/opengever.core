@@ -285,14 +285,14 @@ class TestOpengeverContentListingWithDisabledBumblebee(IntegrationTestCase):
             self.obj.get_css_classes(),
             )
 
-    def test_get_preview_image_url(self):
-        self.assertIsNone(self.obj.get_preview_image_url())
+    def test_preview_image_url(self):
+        self.assertIsNone(self.obj.preview_image_url())
 
     def test_get_preview_frame_url(self):
         self.assertIsNone(self.obj.get_preview_frame_url())
 
-    def test_get_preview_pdf_url(self):
-        self.assertIsNone(self.obj.get_preview_pdf_url())
+    def test_preview_pdf_url(self):
+        self.assertIsNone(self.obj.preview_pdf_url())
 
     def test_get_overlay_title(self):
         self.assertIsNone(self.obj.get_overlay_title())
@@ -318,14 +318,14 @@ class TestOpengeverContentListingWithEnabledBumblebee(IntegrationTestCase):
         listing = IContentListingObject(obj2brain(self.dossier))
         self.assertFalse(listing.is_bumblebeeable())
 
-    def test_get_preview_image_url(self):
-        self.assertIsNotNone(self.obj.get_preview_image_url())
+    def test_preview_image_url(self):
+        self.assertIsNotNone(self.obj.preview_image_url())
 
     def test_get_preview_frame_url(self):
         self.assertRegexpMatches(self.obj.get_preview_frame_url(), r'/preview\?')
 
-    def test_get_preview_pdf_url(self):
-        self.assertRegexpMatches(self.obj.get_preview_pdf_url(), r'/pdf\?')
+    def test_preview_pdf_url(self):
+        self.assertRegexpMatches(self.obj.preview_pdf_url(), r'/pdf\?')
 
     def test_get_overlay_title(self):
         self.assertEqual(u'Vertr\xe4gsentwurf', self.obj.get_overlay_title())
