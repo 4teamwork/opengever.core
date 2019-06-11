@@ -251,7 +251,10 @@ def run_tests(test_run_params):
 
     for testclass in testclasses:
         params.append('-t')
-        params.append(testclass)
+        # we include the parenthesis in the classname here, this
+        # essentially leads to exact matching being done later on
+        # when we use the classname to run the tests for that class
+        params.append("\\(" + testclass + "\\)")
 
     printable_params = ' '.join(["'{}'".format(param) if ' ' in param else param for param in params])
 
