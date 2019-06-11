@@ -110,7 +110,14 @@ Die Uhrzeit für den Cron-Job muss so gewählt werden, dass sie dem in den
 .. code:: bash
 
     # Nightly Jobs
-    0 01 * * * /home/zope/server/01-gever.example.org/bin/instance run_nightly_jobs >/dev/null 2>&1
+    0 01 * * * /bin/bash -l -c "/home/zope/server/01-gever.example.org/bin/instance0 run_nightly_jobs >/dev/null 2>&1"
+
+.. warning::
+    Der ``/bin/bash -l -c "<command>"`` wrapper ist nötig damit
+    der Cron-Job mit einer Login-Shell ausgeführt wird (damit die
+    Umgebungsvariablen für den ``zope`` User geladen werden). Dies ist
+    insbesondere relevant damit Umgebungsvariablen wie ``http_proxy``,
+    ``no_proxy`` oder ``RAVEN_DSN`` auch im Cron-Job verfügbar sind.
 
 Das Zeitfenster in der Registry wird mittels timedeltas (nicht Uhrzeiten)
 definiert - die Werte können also grösser als ``24:00`` sein. Dies erlaubt es,
