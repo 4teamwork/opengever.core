@@ -1,9 +1,9 @@
 from datetime import datetime
 from docx import Document
+from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
 from ftw.builder import Builder
 from ftw.builder import create
-from ooxml_docprops import read_properties
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.tests import EXPECTED_DOC_PROPERTIES
@@ -63,7 +63,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
 
     def test_overwrites_properties_of_wrong_type(self):
@@ -76,7 +76,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = dict(read_properties(tmpfile.path))
+            properties = dict(CustomProperties(Document(tmpfile.path)).items())
             self.assertEqual(
                 datetime(2010, 1, 3),
                 properties['ogg.document.document_date'],
@@ -94,7 +94,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
 
         self.assertEqual(1, get_journal_length(self.document))
@@ -129,7 +129,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             'ogg.user.title': 'foobar',
             'ogg.user.userid': 'foobar',
         }
-        properties = dict(property for property in read_properties(assets.path_to_asset(filename)))
+        properties = dict(CustomProperties(Document(assets.path_to_asset(filename))).items())
         self.assertItemsEqual(expected_properties, properties)
 
         self.with_asset_file(filename)
@@ -180,7 +180,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
         }
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = dict(property for property in read_properties(tmpfile.path))
+            properties = dict(CustomProperties(Document(tmpfile.path)).items())
 
         self.assertItemsEqual(expected_properties, properties)
 
@@ -194,7 +194,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             )
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(EXPECTED_DOC_PROPERTIES.items(), properties)
 
     def test_writes_additional_recipient_property_providers(self):
@@ -239,7 +239,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             }
 
         with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertDictContainsSubset(
                 additional_recipient_properties,
                 dict(properties),

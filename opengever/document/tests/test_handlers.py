@@ -1,7 +1,10 @@
 from datetime import datetime
+from docx import Document
+from docx.opc.exceptions import PackageNotFoundError
+from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
-from ooxml_docprops import read_properties
+from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
@@ -10,9 +13,7 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
-from zipfile import BadZipfile
 from zope.component import getMultiAdapter
-from ftw.testbrowser import browsing
 
 
 class TestHandlers(FunctionalTestCase):
@@ -76,46 +77,25 @@ class TestHandlers(FunctionalTestCase):
             ('Document.SequenceNumber', '1'),
             ('Dossier.ReferenceNumber', 'Client1 / 1'),
             ('Dossier.Title', 'Dossier'),
-            ('ogg.document.delivery_date', None),
-            ('ogg.document.document_author', None),
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
-            ('ogg.document.document_type', None),
-            ('ogg.document.reception_date', None),
             ('ogg.document.reference_number', 'Client1 / 1 / 1'),
             ('ogg.document.sequence_number', '1'),
             ('ogg.document.title', 'Document with file'),
             ('ogg.document.version_number', 0),
-            ('ogg.dossier.external_reference', None),
             ('ogg.dossier.reference_number', 'Client1 / 1'),
             ('ogg.dossier.sequence_number', '1'),
             ('ogg.dossier.title', 'Dossier'),
-            ('ogg.user.address1', None),
-            ('ogg.user.address2', None),
-            ('ogg.user.city', None),
-            ('ogg.user.country', None),
-            ('ogg.user.department', None),
-            ('ogg.user.department_abbr', None),
-            ('ogg.user.description', None),
-            ('ogg.user.directorate', None),
-            ('ogg.user.directorate_abbr', None),
             ('ogg.user.email', 'test@example.org'),
-            ('ogg.user.email2', None),
             ('ogg.user.firstname', 'User'),
             ('ogg.user.lastname', 'Test'),
-            ('ogg.user.phone_fax', None),
-            ('ogg.user.phone_mobile', None),
-            ('ogg.user.phone_office', None),
-            ('ogg.user.salutation', None),
             ('ogg.user.title', 'Test User'),
-            ('ogg.user.url', None),
             ('ogg.user.userid', TEST_USER_ID),
-            ('ogg.user.zip_code', None),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(
             self.doc_with_gever_properties)
@@ -133,46 +113,25 @@ class TestHandlers(FunctionalTestCase):
             ('Document.SequenceNumber', '1'),
             ('Dossier.ReferenceNumber', 'Client1 / 1'),
             ('Dossier.Title', 'Dossier'),
-            ('ogg.document.delivery_date', None),
-            ('ogg.document.document_author', None),
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
-            ('ogg.document.document_type', None),
-            ('ogg.document.reception_date', None),
             ('ogg.document.reference_number', 'Client1 / 1 / 1'),
             ('ogg.document.sequence_number', '1'),
             ('ogg.document.title', 'Document with file'),
             ('ogg.document.version_number', 0),
-            ('ogg.dossier.external_reference', None),
             ('ogg.dossier.reference_number', 'Client1 / 1'),
             ('ogg.dossier.sequence_number', '1'),
             ('ogg.dossier.title', 'Dossier'),
-            ('ogg.user.address1', None),
-            ('ogg.user.address2', None),
-            ('ogg.user.city', None),
-            ('ogg.user.country', None),
-            ('ogg.user.department', None),
-            ('ogg.user.department_abbr', None),
-            ('ogg.user.description', None),
-            ('ogg.user.directorate', None),
-            ('ogg.user.directorate_abbr', None),
             ('ogg.user.email', 'test@example.org'),
-            ('ogg.user.email2', None),
             ('ogg.user.firstname', 'User'),
             ('ogg.user.lastname', 'Test'),
-            ('ogg.user.phone_fax', None),
-            ('ogg.user.phone_mobile', None),
-            ('ogg.user.phone_office', None),
-            ('ogg.user.salutation', None),
             ('ogg.user.title', 'Test User'),
-            ('ogg.user.url', None),
             ('ogg.user.userid', TEST_USER_ID),
-            ('ogg.user.zip_code', None),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
 
         self.assert_doc_properties_updated_journal_entry_generated(
@@ -192,46 +151,25 @@ class TestHandlers(FunctionalTestCase):
             ('Document.SequenceNumber', '2'),
             ('Dossier.ReferenceNumber', 'Client1 / 2'),
             ('Dossier.Title', 'Target'),
-            ('ogg.document.delivery_date', None),
-            ('ogg.document.document_author', None),
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
-            ('ogg.document.document_type', None),
-            ('ogg.document.reception_date', None),
             ('ogg.document.reference_number', 'Client1 / 2 / 2'),
             ('ogg.document.sequence_number', '2'),
             ('ogg.document.title', 'copy of Document with file'),
             ('ogg.document.version_number', 0),
-            ('ogg.dossier.external_reference', None),
             ('ogg.dossier.reference_number', 'Client1 / 2'),
             ('ogg.dossier.sequence_number', '2'),
             ('ogg.dossier.title', 'Target'),
-            ('ogg.user.address1', None),
-            ('ogg.user.address2', None),
-            ('ogg.user.city', None),
-            ('ogg.user.country', None),
-            ('ogg.user.department', None),
-            ('ogg.user.department_abbr', None),
-            ('ogg.user.description', None),
-            ('ogg.user.directorate', None),
-            ('ogg.user.directorate_abbr', None),
             ('ogg.user.email', 'test@example.org'),
-            ('ogg.user.email2', None),
             ('ogg.user.firstname', 'User'),
             ('ogg.user.lastname', 'Test'),
-            ('ogg.user.phone_fax', None),
-            ('ogg.user.phone_mobile', None),
-            ('ogg.user.phone_office', None),
-            ('ogg.user.salutation', None),
             ('ogg.user.title', 'Test User'),
-            ('ogg.user.url', None),
             ('ogg.user.userid', TEST_USER_ID),
-            ('ogg.user.zip_code', None),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
 
@@ -250,46 +188,25 @@ class TestHandlers(FunctionalTestCase):
             ('Document.SequenceNumber', '2'),
             ('Dossier.ReferenceNumber', 'Client1 / 2.1'),
             ('Dossier.Title', 'Dossier'),
-            ('ogg.document.delivery_date', None),
-            ('ogg.document.document_author', None),
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
-            ('ogg.document.document_type', None),
-            ('ogg.document.reception_date', None),
             ('ogg.document.reference_number', 'Client1 / 2.1 / 2'),
             ('ogg.document.sequence_number', '2'),
             ('ogg.document.title', 'copy of Document with file'),
             ('ogg.document.version_number', 0),
-            ('ogg.dossier.external_reference', None),
             ('ogg.dossier.reference_number', 'Client1 / 2.1'),
             ('ogg.dossier.sequence_number', '3'),
             ('ogg.dossier.title', 'Dossier'),
-            ('ogg.user.address1', None),
-            ('ogg.user.address2', None),
-            ('ogg.user.city', None),
-            ('ogg.user.country', None),
-            ('ogg.user.department', None),
-            ('ogg.user.department_abbr', None),
-            ('ogg.user.description', None),
-            ('ogg.user.directorate', None),
-            ('ogg.user.directorate_abbr', None),
             ('ogg.user.email', 'test@example.org'),
-            ('ogg.user.email2', None),
             ('ogg.user.firstname', 'User'),
             ('ogg.user.lastname', 'Test'),
-            ('ogg.user.phone_fax', None),
-            ('ogg.user.phone_mobile', None),
-            ('ogg.user.phone_office', None),
-            ('ogg.user.salutation', None),
             ('ogg.user.title', 'Test User'),
-            ('ogg.user.url', None),
             ('ogg.user.userid', TEST_USER_ID),
-            ('ogg.user.zip_code', None),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
 
@@ -306,45 +223,24 @@ class TestHandlers(FunctionalTestCase):
             ('Document.SequenceNumber', '1'),
             ('Dossier.ReferenceNumber', 'Client1 / 2'),
             ('Dossier.Title', 'Target'),
-            ('ogg.document.delivery_date', None),
-            ('ogg.document.document_author', None),
             ('ogg.document.document_date', datetime(2010, 12, 30, 0, 0)),
-            ('ogg.document.document_type', None),
-            ('ogg.document.reception_date', None),
             ('ogg.document.reference_number', 'Client1 / 2 / 1'),
             ('ogg.document.sequence_number', '1'),
             ('ogg.document.title', 'Document with file'),
             ('ogg.document.version_number', 0),
-            ('ogg.dossier.external_reference', None),
             ('ogg.dossier.reference_number', 'Client1 / 2'),
             ('ogg.dossier.sequence_number', '2'),
             ('ogg.dossier.title', 'Target'),
-            ('ogg.user.address1', None),
-            ('ogg.user.address2', None),
-            ('ogg.user.city', None),
-            ('ogg.user.country', None),
-            ('ogg.user.department', None),
-            ('ogg.user.department_abbr', None),
-            ('ogg.user.description', None),
-            ('ogg.user.directorate', None),
-            ('ogg.user.directorate_abbr', None),
             ('ogg.user.email', 'test@example.org'),
-            ('ogg.user.email2', None),
             ('ogg.user.firstname', 'User'),
             ('ogg.user.lastname', 'Test'),
-            ('ogg.user.phone_fax', None),
-            ('ogg.user.phone_mobile', None),
-            ('ogg.user.phone_office', None),
-            ('ogg.user.salutation', None),
             ('ogg.user.title', 'Test User'),
-            ('ogg.user.url', None),
             ('ogg.user.userid', TEST_USER_ID),
-            ('ogg.user.zip_code', None),
             ('User.FullName', 'Test User'),
             ('User.ID', TEST_USER_ID),
         ]
         with TemporaryDocFile(moved_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(moved_doc)
 
@@ -373,7 +269,7 @@ class TestHandlers(FunctionalTestCase):
         self.assertEqual('Invalid DOCX', moved_doc.title)
 
     def test_failure_to_update_docprops_does_block_creation_of_new_doc(self):
-        with self.assertRaises(BadZipfile):
+        with self.assertRaises(PackageNotFoundError):
             create(
                 Builder('document')
                 .within(self.dossier)
@@ -382,6 +278,6 @@ class TestHandlers(FunctionalTestCase):
 
     def test_failure_to_update_docprops_does_block_copying(self):
         invalid_docx = self.create_invalid_docx()
-        with self.assertRaises(BadZipfile):
+        with self.assertRaises(PackageNotFoundError):
             api.content.copy(source=invalid_docx,
                              target=self.target_dossier)

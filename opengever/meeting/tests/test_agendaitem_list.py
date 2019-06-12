@@ -1,11 +1,12 @@
 from datetime import datetime
+from docx import Document
+from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
-from ooxml_docprops import read_properties
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.interfaces import IMeetingSettings
@@ -95,8 +96,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         document = meeting.agendaitem_list_document.oguid.resolve_object()
         with TemporaryDocFile(document.file) as tmpfile:
-            properties = {key: value for (key, value)
-                          in read_properties(tmpfile.path)}
+            properties = dict(CustomProperties(Document(tmpfile.path)).items())
             self.assertEqual(
                 'Sitzungsdossier 9/2017', properties['ogg.dossier.title'])
 
@@ -108,8 +108,7 @@ class TestAgendaItemList(IntegrationTestCase):
 
         document = meeting.agendaitem_list_document.oguid.resolve_object()
         with TemporaryDocFile(document.file) as tmpfile:
-            properties = {key: value for (key, value)
-                          in read_properties(tmpfile.path)}
+            properties = dict(CustomProperties(Document(tmpfile.path)).items())
             self.assertEqual(
                 u'New dossier title', properties['ogg.dossier.title'])
 
