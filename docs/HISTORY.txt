@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Provides support for some additional metadata on the search endpoint. [phgross]
+- Include file_extension in API representation of documents. [phgross]
 - Translate keyword-filter label. [phgross]
 - Support searching on group description in sharing form. [phgross]
 - Add CMFEditions modifier that prevents journals from being versioned. [lgraf]
