@@ -16,6 +16,7 @@ Inhalt:
    notizen.rst
    meta.rst
    oggbundle/index.rst
+   oneoffixx/index.rst
 
 
 Stichwortverzeichnis
