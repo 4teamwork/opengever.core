@@ -10,9 +10,9 @@
   <div class="preview" tal:condition="view/document/is_bumblebeeable">
     <a href="#" class="showroom-reference"
        tal:attributes="data-showroom-id string:showroom-id-${view/document/uuid}">
-      <img tal:attributes="src view/document/get_preview_image_url;
+      <img tal:attributes="src view/document/preview_image_url;
                            alt context/title;
-                           data-bumblebee-src view/document/get_preview_image_url;
+                           data-bumblebee-src view/document/preview_image_url;
                            data-bumblebee-checksum  view/get_bumblebee_checksum"
            width="200" class="file-preview bumblebee-thumbnail" />
       <span i18n:domain="opengever.document" i18n:translate="label_open_document_preview">Open document preview</span>

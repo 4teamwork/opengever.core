@@ -41,7 +41,7 @@ class TestGetPreviewPdfUrl(IntegrationTestCase):
         adapter = getMultiAdapter((self.empty_document, self.request), IBumblebeeOverlay)
         self.assertEqual(
             'http://nohost/plone/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg',
-            adapter.get_preview_pdf_url(),
+            adapter.preview_pdf_url(),
             )
 
 

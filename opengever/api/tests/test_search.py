@@ -1,10 +1,12 @@
 from datetime import datetime
+from ftw.bumblebee import get_service_v3
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import Trasher
 from plone import api
 from urllib import urlencode
+import urlparse
 
 
 class TestSearchEndpoint(IntegrationTestCase):
@@ -117,3 +119,52 @@ class TestSearchEndpoint(IntegrationTestCase):
 
         self.assertEqual(expected_order, catalog_results)
         self.assertEqual(expected_order, api_results)
+
+    @browsing
+    def test_supports_additional_metadata_from_contentlisting_object(self, browser):
+        self.activate_feature('bumblebee')
+
+        self.login(self.regular_user, browser)
+
+        view = (
+            '@search?path={}&metadata_fields=preview_pdf_url'
+            '&metadata_fields=preview_image_url'.format(
+                '/'.join(self.document.getPhysicalPath())))
+
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        items = browser.json['items']
+        self.assertItemsEqual(
+            [u'@id', u'@type', u'title', u'description', u'review_state',
+             u'preview_image_url', u'preview_pdf_url'],
+            items[0].keys())
+
+        # Use same bumble_id to compare the urls.
+        parsed = urlparse.urlparse(items[0]['preview_pdf_url'])
+        self.request['bid'] = urlparse.parse_qs(parsed.query)['bid'][0]
+
+        self.assertEqual(
+            get_service_v3().get_representation_url(self.document, 'pdf'),
+            items[0]['preview_pdf_url'])
+        self.assertEqual(
+            get_service_v3().get_representation_url(self.document, 'thumbnail'),
+            items[0]['preview_image_url'])
+
+    @browsing
+    def test_not_existing_additional_metadata_is_not_filled_but_ignored(self, browser):
+        self.activate_feature('bumblebee')
+
+        self.login(self.regular_user, browser)
+
+        # Regular search
+        view = '@search?portal_type=opengever.document.document'
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        number_of_documents = len(browser.json['items'])
+
+        # With the unsupported metadata field get_breadcrumbs
+        view = '{}&metadata_fields=get_breadcrumbs'.format(view)
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        self.assertEqual(number_of_documents,  len(browser.json['items']))
+        self.assertIsNone(browser.json['items'][0]['get_breadcrumbs'])

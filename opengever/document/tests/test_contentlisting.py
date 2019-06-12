@@ -46,7 +46,7 @@ class TestDocumentContentListingObject(FunctionalTestCase):
     def test_preview_image_url_is_none_when_bumblebee_is_disabled(self):
         document = create(Builder('document'))
         self.assertIsNone(
-            IContentListingObject(document).get_preview_image_url())
+            IContentListingObject(document).preview_image_url())
 
     def test_overlay_url_is_none_when_bumblebee_is_disabled(self):
         document = create(Builder('document'))
@@ -96,7 +96,7 @@ class TestDocumentContentListingObjectWithBumblebee(FunctionalTestCase):
 
     def test_preview_image_url_is_representation_url(self):
         document = create(Builder('document').with_dummy_content())
-        url = IContentListingObject(document).get_preview_image_url()
+        url = IContentListingObject(document).preview_image_url()
         self.assertTrue(
             url.startswith('http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/'))
 
