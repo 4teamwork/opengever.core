@@ -225,9 +225,4 @@ def file_extension(obj):
     For document it returns the extension of the file for mails it returns the
     extension of the original_message file if exists.
     """
-
-    filename = obj.get_filename()
-    if filename:
-        # We should not rely on the normalization to have happened
-        return os.path.splitext(filename)[-1].lower()
-    return u''
+    return obj.get_file_extension()

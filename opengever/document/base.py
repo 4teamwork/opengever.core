@@ -20,6 +20,7 @@ from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import logging
+import os
 
 
 LOG = logging.getLogger('opengever.document')
@@ -123,6 +124,16 @@ class BaseDocumentMixin(object):
 
     def get_filename(self):
         raise NotImplementedError
+
+    def get_file_extension(self):
+        """For document it returns the extension of the file for mails it
+        returns the extension of the original_message file if exists.
+        """
+        filename = self.get_filename()
+        if filename:
+            # We should not rely on the normalization to have happened
+            return os.path.splitext(filename)[-1].lower()
+        return u''
 
     def get_file(self):
         raise NotImplementedError
