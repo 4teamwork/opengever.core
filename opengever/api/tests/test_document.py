@@ -36,6 +36,18 @@ class TestDocumentSerializer(IntegrationTestCase):
             u'http://bumblebee/YnVtYmxlYmVl/api/v3/resource/local/51d6317494e'
             u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/thumbnail')
 
+    @browsing
+    def test_document_serialization_contains_file_extension(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual('.docx', browser.json.get(u'file_extension'))
+
+        browser.open(self.mail_msg, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual('.msg', browser.json.get(u'file_extension'))
+
 
 class TestDocumentPatch(IntegrationTestCase):
 
