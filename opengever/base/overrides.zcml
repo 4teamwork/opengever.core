@@ -58,4 +58,9 @@
       for="Products.CMFCore.interfaces.IContentish"
       />
 
+  <utility
+      factory=".avatar.GeverDefaultAvatarGenerator"
+      provides="ftw.avatar.interfaces.IAvatarGenerator"
+      />
+
 </configure>
