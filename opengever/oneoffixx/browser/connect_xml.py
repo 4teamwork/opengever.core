@@ -122,7 +122,10 @@ class OneoffixxConnectXml(BrowserView):
         interface = etree.SubElement(arguments, "Interface")
         interface.set("Name", "OneGovGEVER")
 
-        for key, value in self.document_properties.items():
+        for key in sorted(self.document_properties.keys()):
+            value = self.document_properties[key]
+            if value is None:
+                continue
             node = etree.SubElement(interface, "Node")
             node.set("Id", key)
             if key in ('ogg.document.document_date',):
@@ -139,7 +142,10 @@ class OneoffixxConnectXml(BrowserView):
         function.set("name", "MetaData")
         function.set("id", "c364b495-7176-4ce2-9f7c-e71f302b8096")
 
-        for key, value in self.document_properties.items():
+        for key in sorted(self.document_properties.keys()):
+            value = self.document_properties[key]
+            if value is None:
+                continue
             node = etree.SubElement(function, "Value")
             node.set("key", key)
             node.set("type", "string")
