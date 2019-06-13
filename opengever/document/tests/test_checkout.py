@@ -331,7 +331,8 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         # We cannot freeze time due to the test browser being threaded
         oc_url = create_oc_url(
             self.doc1.REQUEST, self.doc1, {'action': 'checkout'})
-        decoded_oc_url = jwt.decode(oc_url.split(':')[-1], verify=False)
+        decoded_oc_url = jwt.decode(
+            oc_url.split(':')[-1], verify=False, algorithms=('HS256',))
 
         redirector_js = browser.login().open(
             self.doc1,
@@ -347,7 +348,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
 
         parsed_oc_url = tokens_from_js[0]
         decoded_parsed_oc_url = jwt.decode(
-            parsed_oc_url.split(':')[-1], verify=False)
+            parsed_oc_url.split(':')[-1], verify=False, algorithms=('HS256',))
 
         # Take out the timestamps
         del decoded_oc_url['exp']
@@ -367,7 +368,8 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
         # We cannot freeze time due to the test browser being threaded
         oc_url = create_oc_url(
             self.doc1.REQUEST, self.doc1, {'action': 'checkout'})
-        decoded_oc_url = jwt.decode(oc_url.split(':')[-1], verify=False)
+        decoded_oc_url = jwt.decode(
+            oc_url.split(':')[-1], verify=False, algorithms=('HS256',))
 
         redirector_js = browser.login().open(
             self.doc1,
@@ -383,7 +385,7 @@ class TestCheckinCheckoutManager(FunctionalTestCase):
 
         parsed_oc_url = tokens_from_js[0]
         decoded_parsed_oc_url = jwt.decode(
-            parsed_oc_url.split(':')[-1], verify=False)
+            parsed_oc_url.split(':')[-1], verify=False, algorithms=('HS256',))
 
         # Take out the timestamps
         del decoded_oc_url['exp']
