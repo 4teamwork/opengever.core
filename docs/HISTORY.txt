@@ -17,6 +17,8 @@ Changelog
 - Update Creator, created and Date when copy/pasting an object. [njohner]
 - Docs: Add tasks to documented content types. [lgraf]
 - Add per user configuration to activate notifications for own actions. [njohner]
+- Update ftw.solr to version 2.5.0 which allows near realtime searching. [buchi]
+- Update Solr to version 8.1.1. [buchi]
 
 
 2019.3.0 (2019-06-17)

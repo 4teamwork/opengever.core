@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>7.3.1</luceneMatchVersion>
+  <luceneMatchVersion>8.1.1</luceneMatchVersion>
 
   <!-- <lib/> directives can be used to instruct Solr to load any Jars
        identified and use them to resolve any "plugins" specified in
@@ -85,7 +85,9 @@
   <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-langid-\d.*\.jar" />
 
   <lib dir="${solr.install.dir:../../../..}/contrib/velocity/lib" regex=".*\.jar" />
-  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-velocity-\d.*\.jar" /> -->
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-velocity-\d.*\.jar" />
+  <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-ltr-\d.*\.jar" /> -->
+
   <!-- an exact 'path' can be used instead of a 'dir' to specify a
        specific jar file.  This will cause a serious error to be logged
        if it can't be loaded.
@@ -370,12 +372,17 @@
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   <query>
 
-    <!-- Maximum number of clauses in each BooleanQuery,  an exception
-         is thrown if exceeded.  It is safe to increase or remove this setting,
-         since it is purely an arbitrary limit to try and catch user errors where
-         large boolean queries may not be the best implementation choice.
+    <!-- Maximum number of clauses allowed when parsing a boolean query string.
+         
+         This limit only impacts boolean queries specified by a user as part of a query string,
+         and provides per-collection controls on how complex user specified boolean queries can
+         be.  Query strings that specify more clauses then this will result in an error.
+         
+         If this per-collection limit is greater then the global `maxBooleanClauses` limit
+         specified in `solr.xml`, it will have no effect, as that setting also limits the size
+         of user specified boolean queries.
       -->
-    <maxBooleanClauses>1024</maxBooleanClauses>
+    <maxBooleanClauses>${solr.max.booleanClauses:1024}</maxBooleanClauses>
 
     <!-- Solr Internal Query Caches
 
@@ -803,8 +810,8 @@
       <str name="lowernames">false</str>
       <str name="xpath">/xhtml:html/xhtml:body//text()</str>
       <str name="fmap.content">SearchableText</str>
-      <bool name="ignoreTikaException">true</bool>
       <str name="uprefix">ignored_</str>
+      <bool name="ignoreTikaException">true</bool>
     </lst>
   </requestHandler>
 
