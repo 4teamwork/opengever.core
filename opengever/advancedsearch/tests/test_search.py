@@ -243,7 +243,7 @@ class TestQueryStrings(IntegrationTestCase):
                       'form.widgets.dossier_review_state:list': 'dossier-state-active'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(self.regular_user.id)
+        form.find_widget('Responsible').fill(self.regular_user, auto_org_unit=False)
         browser.css('#form-buttons-button_search').first.click()
 
         self.assertBrowserUrlContainsSearchParams(browser, [

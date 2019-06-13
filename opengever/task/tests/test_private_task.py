@@ -68,7 +68,7 @@ class TestPrivateTaskDeactivatedIntegration(IntegrationTestCase):
         factoriesmenu.add('Task')
         browser.fill({'Title': u'Testaufgabe', 'Task Type': 'For information'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.regular_user.id))
+        form.find_widget('Responsible').fill(self.regular_user)
         browser.click_on('Save')
 
         self.assertEqual(['Item created'], info_messages())

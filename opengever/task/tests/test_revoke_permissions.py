@@ -367,8 +367,7 @@ class TestRevokePermissionsDefault(IntegrationTestCase):
                           'Task Type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
+            form.find_widget('Responsible').fill(self.secretariat_user)
 
             browser.css('#form-buttons-save').first.click()
 
@@ -412,8 +411,7 @@ class TestRevokePermissionsDefault(IntegrationTestCase):
                           'Task Type': 'comment'})
 
             form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill(
-                'fa:{}'.format(self.secretariat_user.getId()))
+            form.find_widget('Responsible').fill(self.secretariat_user)
 
             browser.css('#form-buttons-save').first.click()
 

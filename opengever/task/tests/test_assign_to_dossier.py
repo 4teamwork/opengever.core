@@ -60,7 +60,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
                       'Issuer': 'inbox:org-unit-1'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 
@@ -105,7 +105,7 @@ class TestAssignForwardignToDossier(FunctionalTestCase):
                       'Issuer': 'inbox:org-unit-1'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill(TEST_USER_ID)
 
         browser.css('#form-buttons-save').first.click()
 

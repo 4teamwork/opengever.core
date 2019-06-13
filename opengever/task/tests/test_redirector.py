@@ -20,7 +20,7 @@ class TestTaskRedirector(FunctionalTestCase):
                       'Task Type': 'direct-execution'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill(TEST_USER_ID)
 
         browser.click_on('Save')
 
@@ -43,7 +43,7 @@ class TestTaskRedirector(FunctionalTestCase):
                       'Task Type': 'direct-execution'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('org-unit-1:' + TEST_USER_ID)
+        form.find_widget('Responsible').fill(TEST_USER_ID)
 
         browser.click_on('Save')
 

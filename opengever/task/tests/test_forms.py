@@ -58,7 +58,7 @@ class TestTaskEditForm(IntegrationTestCase):
         browser.open(self.task, view='edit')
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.find('Save').click()
 
         browser.open(self.task, view='tabbedview_view-overview')
@@ -83,7 +83,7 @@ class TestTaskEditForm(IntegrationTestCase):
 
         browser.open(self.task, view='edit')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user.id)
         browser.find('Save').click()
 
         activity = Activity.query.order_by(Activity.created.desc()).first()
@@ -103,7 +103,7 @@ class TestTaskEditForm(IntegrationTestCase):
         browser.open(self.task, view='edit')
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user.id)
         browser.find('Save').click()
 
         events = get_recorded_events()

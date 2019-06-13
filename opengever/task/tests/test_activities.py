@@ -49,7 +49,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+        form.find_widget('Responsible').fill('hugo.boss')
 
         browser.css('#form-buttons-save').first.click()
 
@@ -83,7 +83,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+        form.find_widget('Responsible').fill('hugo.boss')
 
         browser.css('#form-buttons-save').first.click()
 
@@ -98,7 +98,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(self.org_unit.id() + ':hugo.boss')
+        form.find_widget('Responsible').fill('hugo.boss')
         browser.css('#form-buttons-save').first.click()
 
         center = notification_center()
@@ -268,8 +268,7 @@ class TestTaskActivites(FunctionalTestCase):
                       'Text': 'Lorem ipsum'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            self.org_unit.id() + ':hugo.boss')
+        form.find_widget('Responsible').fill('hugo.boss')
         form.find_widget('Issuer').fill(u'hugo.boss')
 
         browser.css('#form-buttons-save').first.click()
@@ -342,7 +341,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
             browser.css('#workflow-transition-task-transition-reassign').first.click()
             browser.fill({'Response': response})
             form = browser.find_form_by_field('Responsible')
-            form.find_widget('Responsible').fill('fa:' + responsible.getId())
+            form.find_widget('Responsible').fill(responsible)
             browser.css('#form-buttons-save').first.click()
 
     @browsing

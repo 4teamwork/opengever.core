@@ -258,7 +258,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.open(self.task, view='tabbedview_view-overview')
         browser.click_on('task-transition-reassign')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.fill({'Response': 'For you'})
         browser.click_on('Assign')
 
@@ -289,7 +289,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.open(self.task, view='tabbedview_view-overview')
         browser.click_on('task-transition-reassign')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.id))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.fill({'Response': 'For you'})
         browser.click_on('Assign')
 
@@ -767,9 +767,8 @@ class TestLocalRolesReindexing(IntegrationTestCase):
         browser.click_on('task-transition-reassign')
 
         # Reassign
-        responsible = 'fa:{}'.format(self.dossier_responsible.id)
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(responsible)
+        form.find_widget('Responsible').fill(self.dossier_responsible)
         browser.click_on('Assign')
 
         old_principal = 'user:{}'.format(self.secretariat_user.id)

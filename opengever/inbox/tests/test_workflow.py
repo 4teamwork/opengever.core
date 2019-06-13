@@ -177,7 +177,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         browser.open(self.inbox_forwarding)
         browser.click_on('forwarding-transition-reassign')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.secretariat_user.getId()))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Assign')
 
         assignment_manager = RoleAssignmentManager(self.inbox_forwarding)
@@ -213,7 +213,7 @@ class TestInboxWorkflow(IntegrationTestCase):
         browser.open(self.inbox_forwarding)
         browser.click_on('forwarding-transition-reassign')
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill('fa:{}'.format(self.meeting_user.getId()))
+        form.find_widget('Responsible').fill(self.meeting_user)
         browser.click_on('Assign')
 
         self.assertNotIn("user:{}".format(self.regular_user),

@@ -258,7 +258,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
         field_name = u'Responsible \xabUser Accounts erstellen.\xbb'
         form = browser.find_form_by_field(field_name)
-        form.find_widget(field_name).fill('fa:jurgen.konig')
+        form.find_widget(field_name).fill(self.secretariat_user)
         browser.click_on('Trigger')
 
         self.assertEquals(['tasks created'], info_messages())

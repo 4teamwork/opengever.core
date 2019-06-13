@@ -115,7 +115,7 @@ class TestHasSameTypeChildren(IntegrationTestCase):
                       'Task Type': 'direct-execution'})
         form = browser.find_form_by_field('Issuer')
         form.find_widget('Issuer').fill(self.regular_user.id)
-        form.find_widget('Responsible').fill('fa:' + self.regular_user.id)
+        form.find_widget('Responsible').fill(self.regular_user)
         browser.click_on('Save')
 
         self.assert_metadata_value(True, 'has_sametype_children',

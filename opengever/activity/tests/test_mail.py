@@ -44,13 +44,11 @@ class TestEmailNotification(IntegrationTestCase):
         browser.fill({'Title': 'Test Task', 'Task Type': 'comment'})
         if description is not None:
             browser.fill({"Text": description})
-        # XXX - we cannot yet fixturize SQL objects so we have to hardcode here
-        org_unit_id = u'fa'
         form = browser.find_form_by_field('Responsible')
-        responsible_id = u':'.join((org_unit_id, self.regular_user.id, ))
-        form.find_widget('Responsible').fill(responsible_id)
+        form.find_widget('Responsible').fill(self.regular_user)
         if inbox:
             # XXX - How to get the correct id from the fixtured objects?
+            org_unit_id = u'fa'
             inbox_id = u':'.join(('inbox', org_unit_id, ))
             form.find_widget('Issuer').fill(inbox_id)
         browser.css('#form-buttons-save').first.click()
@@ -116,9 +114,8 @@ class TestEmailNotification(IntegrationTestCase):
         task = self.dossier.objectValues()[-1]
         data = {'form.widgets.transition': 'task-transition-reassign'}
         browser.open(task, data, view='assign-task')
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(responsible)
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.click_on('Assign')
         process_mail_queue()
 

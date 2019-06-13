@@ -24,9 +24,7 @@ class TestAssignTask(IntegrationTestCase):
     @browsing
     def test_do_nothing_when_responsible_has_not_changed(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        responsible = 'fa:{}'.format(self.regular_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
+        self.assign_task(self.regular_user, u'Thats a job for you.')
 
         self.assertEquals(self.task.absolute_url(), browser.url.strip('/'))
         self.assertEquals(['No changes: same responsible selected'],
@@ -62,9 +60,7 @@ class TestAssignTask(IntegrationTestCase):
     @browsing
     def test_updates_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
 
         self.assertEquals(self.secretariat_user.getId(),
                           self.task.responsible)
@@ -83,17 +79,13 @@ class TestAssignTask(IntegrationTestCase):
 
         self.assertIsNotNone(task_reminder.get_reminder(self.task))
 
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
-
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
         self.assertIsNone(task_reminder.get_reminder(self.task))
 
     @browsing
     def test_adds_an_corresponding_response(self, browser):
         self.login(self.regular_user, browser=browser)
-
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Please make that for me.')
+        self.assign_task(self.secretariat_user, u'Please make that for me.')
 
         response = IResponseContainer(self.task)[-1]
         self.assertEquals(
@@ -116,8 +108,7 @@ class TestAssignTask(IntegrationTestCase):
                .having(firstname=u'Johnny', lastname=u'English')
                .assign_to_org_units([org_unit]))
 
-        responsible = u'gdgs:johnny.english'
-        self.assign_task(responsible, u'Please make that for me.')
+        self.assign_task(u'gdgs:johnny.english', u'Please make that for me.')
 
         self.assertEquals('johnny.english', self.task.responsible)
         self.assertEquals('gdgs', self.task.responsible_client)
@@ -133,8 +124,7 @@ class TestAssignTask(IntegrationTestCase):
                .having(firstname=u'Johnny', lastname=u'English')
                .assign_to_org_units([org_unit]))
 
-        responsible = u'gdgs:johnny.english'
-        self.assign_task(responsible, u'Please make that for me.')
+        self.assign_task(u'gdgs:johnny.english', u'Please make that for me.')
 
         self.assertEquals(
             [u'Admin unit changes are not allowed if the task or forwarding is'
@@ -168,8 +158,7 @@ class TestAssignTask(IntegrationTestCase):
         register_event_recorder(IObjectModifiedEvent)
 
         self.login(self.regular_user, browser=browser)
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
 
         events = get_recorded_events()
 
@@ -180,8 +169,7 @@ class TestAssignTask(IntegrationTestCase):
     def test_revokes_permission_for_former_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
 
         manager = RoleAssignmentManager(self.task)
         self.assertEqual(
@@ -200,8 +188,7 @@ class TestAssignTask(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         api.content.disable_roles_acquisition(obj=self.dossier)
-        responsible = 'fa:{}'.format(self.secretariat_user.getId())
-        self.assign_task(responsible, u'Thats a job for you.')
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
 
         manager = RoleAssignmentManager(self.task)
         self.assertEqual(
@@ -249,8 +236,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            'fa:{}'.format(self.secretariat_user.getId()))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.find('Assign').click()
 
         browser.open(self.task, view='tabbedview_view-overview')
@@ -270,8 +256,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            'fa:{}'.format(self.secretariat_user.getId()))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.find('Assign').click()
 
         browser.open(self.successor, view='tabbedview_view-overview')
@@ -291,8 +276,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            'fa:{}'.format(self.secretariat_user.getId()))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.find('Assign').click()
 
         manager = RoleAssignmentManager(self.task)
@@ -315,8 +299,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
         browser.find('task-transition-reassign').click()
         browser.fill({'Response': u'Bitte \xfcbernehmen Sie, Danke!'})
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(
-            'fa:{}'.format(self.secretariat_user.getId()))
+        form.find_widget('Responsible').fill(self.secretariat_user)
         browser.find('Assign').click()
 
         manager = RoleAssignmentManager(self.successor)

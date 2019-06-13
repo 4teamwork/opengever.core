@@ -127,7 +127,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                       'Task Type': 'To comment'})
 
         form = browser.find_form_by_field('Responsible')
-        form.find_widget('Responsible').fill(self.get_org_unit().id() + ':' + TEST_USER_ID)
+        form.find_widget('Responsible').fill(TEST_USER_ID)
         browser.find('Save').click()
 
         browser.open('http://nohost/plone/repository/dossier-1/task-1')
