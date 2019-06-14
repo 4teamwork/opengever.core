@@ -4,6 +4,7 @@ Changelog
 2019.3.0 (unreleased)
 ---------------------
 
+- Fix encoding issue in OGDSUpdater's error logging. [lgraf]
 - Provides support for some additional metadata on the search endpoint. [phgross]
 - Include file_extension in API representation of documents. [phgross]
 - Translate keyword-filter label. [phgross]

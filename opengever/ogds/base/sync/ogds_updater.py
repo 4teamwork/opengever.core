@@ -23,10 +23,10 @@ import os
 import time
 
 
-NO_UID_MSG = u"User '{}' has no 'uid' attribute."
-NO_UID_AD_MSG = u"User '{}' has none of the attributes {} - skipping."
-USER_NOT_FOUND_LDAP = u"Referenced user {} not found in LDAP, ignoring!"
-USER_NOT_FOUND_SQL = u"Referenced user {} not found in SQL, ignoring!"
+NO_UID_MSG = u"User {!r} has no 'uid' attribute."
+NO_UID_AD_MSG = u"User {!r} has none of the attributes {!r} - skipping."
+USER_NOT_FOUND_LDAP = u"Referenced user {!r} not found in LDAP, ignoring!"
+USER_NOT_FOUND_SQL = u"Referenced user {!r} not found in SQL, ignoring!"
 
 AD_UID_KEYS = [u'userid', u'sAMAccountName', u'windows_login_name']
 
