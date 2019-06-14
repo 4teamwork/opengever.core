@@ -1,12 +1,13 @@
 from datetime import date
 from datetime import datetime
+from docx import Document
+from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testing import freeze
-from ooxml_docprops import read_properties
 from opengever.contact.interfaces import IContactSettings
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
@@ -163,7 +164,8 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         self.assertEquals(u'Test Docx.docx', document.file.filename)
 
         with TemporaryDocFile(document.file) as tmpfile:
-            self.assertItemsEqual([], read_properties(tmpfile.path))
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual([], properties)
 
     @browsing
     def test_templates_without_a_file_are_not_listed(self, browser):
@@ -252,9 +254,10 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             }
 
         with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(
                 expected_doc_properties.items() + [('Test', 'Peter')],
-                read_properties(tmpfile.path))
+                properties)
         self.assert_doc_properties_updated_journal_entry_generated(document, self.regular_user)
 
     @browsing
@@ -311,9 +314,10 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             }
 
         with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(
                 expected_doc_properties.items(),
-                read_properties(tmpfile.path))
+                properties)
         self.assert_doc_properties_updated_journal_entry_generated(document, self.regular_user)
 
 
@@ -451,7 +455,8 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         expected_person_properties.update(self.expected_doc_properties)
 
         with TemporaryDocFile(document.file) as tmpfile:
-            self.assertItemsEqual(expected_person_properties.items(), read_properties(tmpfile.path))
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_person_properties.items(), properties)
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
@@ -539,7 +544,8 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         expected_org_role_properties.update(self.expected_doc_properties)
 
         with TemporaryDocFile(document.file) as tmpfile:
-            self.assertItemsEqual(expected_org_role_properties.items(), read_properties(tmpfile.path))
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_org_role_properties.items(), properties)
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
@@ -589,7 +595,8 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         expected_org_role_properties.update(self.expected_doc_properties)
 
         with TemporaryDocFile(document.file) as tmpfile:
-            self.assertItemsEqual(expected_org_role_properties.items(), read_properties(tmpfile.path))
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_org_role_properties.items(), properties)
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
 

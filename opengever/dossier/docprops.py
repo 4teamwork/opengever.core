@@ -3,8 +3,6 @@ from datetime import time
 from docx import Document
 from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
-from ooxml_docprops import is_supported_mimetype
-from ooxml_docprops.properties import OOXMLDocument
 from opengever import journal
 from opengever.base.date_time import ulocalized_time
 from opengever.base.interfaces import IReferenceNumber
@@ -99,16 +97,23 @@ class DocPropertyWriter(object):
         with TemporaryDocFile(self.document.file) as tmpfile:
             changed = False
 
-            with OOXMLDocument(tmpfile.path, force=True) as doc:
-                if only_existing:
-                    if doc.has_any_property(properties.keys()):
-                        doc.update_properties(properties)
-                        changed = True
-                else:
-                    doc.update_properties(properties)
-                    changed = True
-
             doc = Document(tmpfile.path)
+
+            props = CustomProperties(doc)
+
+            if not only_existing or any(key in props for key in properties.keys()):
+                for key, value in properties.items():
+                    # Docproperties must have a value.
+                    # In case of None we delete the property an set it's cached
+                    # value to empty string. We keep the field in the document
+                    # as the property may get a value in a later update.
+                    if value is None:
+                        if key in props:
+                            del props[key]
+                        props.update(key, u'')
+                    else:
+                        props[key] = value
+                    changed = True
 
             if changed:
                 # Update cached properties
@@ -126,6 +131,8 @@ class DocPropertyWriter(object):
                     elif isinstance(value, datetime):
                         value = ulocalized_time(
                             value, self.date_format, self.request)
+                    elif value is None:
+                        value = u''
                     sdts.set_text(key, value)
                     changed = True
 
@@ -144,7 +151,9 @@ class DocPropertyWriter(object):
         return self.document.file is not None
 
     def is_supported_file(self):
-        return is_supported_mimetype(self.document.file.contentType)
+        return self.document.file.contentType in [
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ]
 
 
 @implementer(IDocPropertyProvider)
@@ -167,8 +176,6 @@ class DocPropertyProvider(object):
         If a namespace (NS) has been configured prefixes keys with that
         namespace.
         """
-        if value is None:
-            return
         key = '.'.join(self.NS + (name,))
         properties[key] = value
 

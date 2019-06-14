@@ -1,7 +1,8 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from ooxml_docprops import read_properties
+from docx import Document
+from docxcompose.properties import CustomProperties
 from opengever.dossier.docprops import TemporaryDocFile
 from opengever.task.browser.accept.utils import get_current_yearfolder
 from opengever.task.interfaces import IYearfolderStorer
@@ -82,5 +83,5 @@ class TestYearFolderStorer(FunctionalTestCase):
         IYearfolderStorer(forwarding).store_in_yearfolder()
 
         with TemporaryDocFile(doc.file) as tmpfile:
-            properties = dict(read_properties(tmpfile.path))
+            properties = dict(CustomProperties(Document(tmpfile.path)).items())
             self.assertEqual(TEST_USER_ID, properties.get('ogg.user.userid'))

@@ -1,7 +1,10 @@
 from datetime import datetime
+from docx import Document
+from docx.opc.exceptions import PackageNotFoundError
+from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
-from ooxml_docprops import read_properties
+from ftw.testbrowser import browsing
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.docprops import DocPropertyWriter
 from opengever.dossier.docprops import TemporaryDocFile
@@ -10,9 +13,7 @@ from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
-from zipfile import BadZipfile
 from zope.component import getMultiAdapter
-from ftw.testbrowser import browsing
 
 
 class TestHandlers(FunctionalTestCase):
@@ -94,7 +95,7 @@ class TestHandlers(FunctionalTestCase):
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(
             self.doc_with_gever_properties)
@@ -130,7 +131,7 @@ class TestHandlers(FunctionalTestCase):
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
 
         self.assert_doc_properties_updated_journal_entry_generated(
@@ -168,7 +169,7 @@ class TestHandlers(FunctionalTestCase):
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
 
@@ -205,7 +206,7 @@ class TestHandlers(FunctionalTestCase):
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(copied_doc)
 
@@ -239,7 +240,7 @@ class TestHandlers(FunctionalTestCase):
             ('User.ID', TEST_USER_ID),
         ]
         with TemporaryDocFile(moved_doc.file) as tmpfile:
-            properties = read_properties(tmpfile.path)
+            properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_doc_properties, properties)
         self.assert_doc_properties_updated_journal_entry_generated(moved_doc)
 
@@ -268,7 +269,7 @@ class TestHandlers(FunctionalTestCase):
         self.assertEqual('Invalid DOCX', moved_doc.title)
 
     def test_failure_to_update_docprops_does_block_creation_of_new_doc(self):
-        with self.assertRaises(BadZipfile):
+        with self.assertRaises(PackageNotFoundError):
             create(
                 Builder('document')
                 .within(self.dossier)
@@ -277,6 +278,6 @@ class TestHandlers(FunctionalTestCase):
 
     def test_failure_to_update_docprops_does_block_copying(self):
         invalid_docx = self.create_invalid_docx()
-        with self.assertRaises(BadZipfile):
+        with self.assertRaises(PackageNotFoundError):
             api.content.copy(source=invalid_docx,
                              target=self.target_dossier)

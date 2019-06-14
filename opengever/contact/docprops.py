@@ -13,8 +13,6 @@ class PrefixableDocPropertyProvider(object):
 
     def _add_property(self, properties, kind, name, value):
         """Add single property to collection of properties."""
-        if not value:
-            return
         key = '.'.join((self.NS_APP, self.prefix, kind, name))
         properties[key] = value
 
