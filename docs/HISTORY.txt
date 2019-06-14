@@ -22,6 +22,7 @@ Changelog
 - Correctly handle dossier reactivation through RESTAPI. [njohner]
 - Extend listing endpoint fields with file_extension and document_type. [phgross]
 - Extend task API serialization with responses data. [phgross]
+- Fix livesearch endpoint when using Solr. [buchi]
 
 
 2019.2.4 (2019-06-07)
