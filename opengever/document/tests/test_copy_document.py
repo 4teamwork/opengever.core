@@ -204,6 +204,9 @@ class TestCopyDocuments(IntegrationTestCase):
             'reference': 'Client1 1.1 / 4 / 41',
             'sequence_number': 41,
 
+            # creator
+            'Creator': self.regular_user.id,
+
             # title and serchable text
             'Title': ['copy', 'of', 'ubersicht', 'der', 'vertrage', 'von', u'2016'],
             'sortable_title': 'copy of ubersicht der vertrage von 2016',
@@ -223,8 +226,7 @@ class TestCopyDocuments(IntegrationTestCase):
             'is_subdossier': 0,  # acquisition is responsible here
         }
 
-        unchanged_indexdata = ['Creator',
-                               'Date',
+        unchanged_indexdata = ['Date',
                                'Description',
                                'Subject',
                                'Type',
