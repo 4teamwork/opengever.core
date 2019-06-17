@@ -9,80 +9,103 @@
   <div class="panes">
     {{#each tabs}}
     <div id="tab-{{tabId}}">
-      <table class="listing notifications-settings-form">
-        <thead>
-          <tr>
-            <th>%(label_activity)s</th>
-            <th><span class="badge-title">%(label_badge)s</span></th>
-            <th><span class="mail-title">%(label_mail)s</span></th>
-            <th><span class="digest-title">%(label_daily_digest)s</span></th>
-            <th class="actions-column"></th>
+      {{#if configurations}}
+        <ul class="notifications-configurations-form" >
+          {{#each configurations}}
+            <li class="{{#if changed}}settings-changed{{/if}}">
+              {{#if value}}
+                <input type="checkbox" class="config-trigger" name="config" id="config-{{id}}" value="{{id}}" checked="checked"/>
+                {{else}}
+                <input type="checkbox" class="config-trigger" name="config" id="config-{{id}}" value="{{id}}" />
+              {{/if}}
+              <label for="config-{{id}}">{{title}}</label>
+
+              <a href="" class="action save-config">%(btn_save)s</a>
+              <a href="" class="action cancel-config">%(btn_cancel)s</a>
+              {{#equals setting_type "personal"}}
+              <a href="" class="action reset-config">%(btn_reset)s</a>
+              {{/equals}}
+              <div class="formHelp">{{{help_text}}}</div>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      {{#if activities}}
+        <table class="listing notifications-settings-form">
+          <thead>
+            <tr>
+              <th>%(label_activity)s</th>
+              <th><span class="badge-title">%(label_badge)s</span></th>
+              <th><span class="mail-title">%(label_mail)s</span></th>
+              <th><span class="digest-title">%(label_daily_digest)s</span></th>
+              <th class="actions-column"></th>
+            </tr>
+          </thead>
+
+          {{#each activities}}
+
+          <tr class="{{#if changed}}settings-changed{{/if}} {{setting_type}}" data-kind="{{kind}}">
+            <td class="notification-settings-kind">
+              <span class="{{css_class}}">{{kind_title}}</span>
+            </td>
+
+            <td>
+              <ul class="badge" >
+                {{#each badge}}
+                <li>
+                  {{#if this}}
+                  <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" checked="checked"/>
+                  {{else}}
+                  <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" />
+                  {{/if}}
+                  <label for="{{../kind}}-badge-{{@key}}">{{translate @key}}</label>
+                </li>
+                {{/each}}
+              </ul>
+            </td>
+
+            <td>
+              <ul class="mail" >
+                {{#each mail}}
+                <li>
+                  {{#if this}}
+                  <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" checked="checked"/>
+                  {{else}}
+                  <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" />
+                  {{/if}}
+                  <label for="{{../kind}}-mail-{{@key}}">{{translate @key}}</label>
+                </li>
+                {{/each}}
+              </ul>
+            </td>
+
+            <td>
+              <ul class="digest" >
+                {{#each digest}}
+                <li>
+                  {{#if this}}
+                  <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" checked="checked"/>
+                  {{else}}
+                  <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" />
+                  {{/if}}
+                  <label for="{{../kind}}-digest-{{@key}}">{{translate @key}}</label>
+                </li>
+                {{/each}}
+              </ul>
+            </td>
+
+            <td>
+              <a href="" class="action save-setting">%(btn_save)s</a>
+              <a href="" class="action cancel-setting">%(btn_cancel)s</a>
+              {{#equals setting_type "personal"}}
+              <a href="" class="action reset-setting">%(btn_reset)s</a>
+              {{/equals}}
+
+            </td>
           </tr>
-        </thead>
-
-        {{#each activities}}
-
-        <tr class="{{#if changed}}settings-changed{{/if}} {{setting_type}}" data-kind="{{kind}}">
-          <td class="notification-settings-kind">
-            <span class="{{css_class}}">{{kind_title}}</span>
-          </td>
-
-          <td>
-            <ul class="badge" >
-              {{#each badge}}
-              <li>
-                {{#if this}}
-                <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" checked="checked"/>
-                {{else}}
-                <input type="checkbox" class="settings-trigger" name="badge" id="{{../kind}}-badge-{{@key}}" value="{{@key}}" />
-                {{/if}}
-                <label for="{{../kind}}-badge-{{@key}}">{{translate @key}}</label>
-              </li>
-              {{/each}}
-            </ul>
-          </td>
-
-          <td>
-            <ul class="mail" >
-              {{#each mail}}
-              <li>
-                {{#if this}}
-                <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" checked="checked"/>
-                {{else}}
-                <input type="checkbox" class="settings-trigger" name="mail" id="{{../kind}}-mail-{{@key}}" value="{{@key}}" />
-                {{/if}}
-                <label for="{{../kind}}-mail-{{@key}}">{{translate @key}}</label>
-              </li>
-              {{/each}}
-            </ul>
-          </td>
-
-          <td>
-            <ul class="digest" >
-              {{#each digest}}
-              <li>
-                {{#if this}}
-                <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" checked="checked"/>
-                {{else}}
-                <input type="checkbox" class="settings-trigger" name="digest" id="{{../kind}}-digest-{{@key}}" value="{{@key}}" />
-                {{/if}}
-                <label for="{{../kind}}-digest-{{@key}}">{{translate @key}}</label>
-              </li>
-              {{/each}}
-            </ul>
-          </td>
-
-          <td>
-            <a href="" class="action save-setting">%(btn_save)s</a>
-            <a href="" class="action cancel-setting">%(btn_cancel)s</a>
-            {{#equals setting_type "personal"}}
-            <a href="" class="action reset-setting">%(btn_reset)s</a>
-            {{/equals}}
-
-          </td>
-        </tr>
-        {{/each}}
-      </table>
+          {{/each}}
+        </table>
+      {{/if}}
     </div>
     {{/each}}
   </div>

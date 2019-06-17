@@ -16,6 +16,7 @@ from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import create_session
 from opengever.base.response import JSONResponse
 from opengever.meeting import is_meeting_feature_enabled
+from opengever.ogds.models.user import User
 from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api
@@ -98,6 +99,9 @@ ACTIVITY_GROUPS = [
      ]},
 ]
 
+GLOBAL_CONFIGURATIONS = [
+    {'id': 'notify_own_actions'}
+]
 
 ALIASES = {
     'task-transition-in-progress-tested-and-closed': (
@@ -131,6 +135,22 @@ class NotificationSettings(BrowserView):
 
     user_settings = None
     defaults = None
+
+    def save_configuration(self):
+        """Save global configuration change
+        """
+        userid = api.user.get_current().getId()
+        user = User.query.filter_by(userid=userid).one()
+
+        config_name = self.request.form['config_name']
+        value = self.request.form['value']
+
+        # Make sure that config_name is a column of the User model.
+        error_msg = "Notification configuration has to be a column on User"
+        assert config_name in User.__table__.columns, error_msg
+
+        setattr(user, config_name, value)
+        return JSONResponse(self.request).proceed().dump()
 
     def save(self):
         """Save setting change
@@ -169,6 +189,22 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
+    def reset_configuration(self):
+        """Reset a personal configuration
+        """
+        userid = api.user.get_current().getId()
+        user = User.query.filter_by(userid=userid).one()
+
+        config_name = self.request.form['config_name']
+        default = self.get_default_configuration(config_name)
+
+        # Make sure that config_name is a column of the User model.
+        error_msg = "Notification configuration has to be a column on User"
+        assert config_name in User.__table__.columns, error_msg
+
+        setattr(user, config_name, default)
+        return JSONResponse(self.request).proceed().dump()
+
     def list(self):
         """Returns settings for the current user.
         """
@@ -187,8 +223,29 @@ class NotificationSettings(BrowserView):
                 activities.append(
                     self.add_values(kind, item, group.get('roles')))
 
+        configurations = []
+        for config in GLOBAL_CONFIGURATIONS:
+            title = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['title'],
+                              context=self.request)
+            help_text = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['help_text'],
+                                  context=self.request)
+            value = self.get_user_configuration(config.get('id'))
+            default = self.get_default_configuration(config.get('id'))
+            if value == default:
+                setting_type = 'default'
+            else:
+                setting_type = 'personal'
+
+            configurations.append({'id': config.get('id'),
+                                   'title': title,
+                                   'help_text': help_text,
+                                   'value': value,
+                                   'setting_type': setting_type
+                                   })
+
         return JSONResponse(self.request).data(
             activities=activities,
+            configurations=configurations,
             translations=self.get_role_translations()).dump()
 
     def get_role_translations(self):
@@ -205,6 +262,14 @@ class NotificationSettings(BrowserView):
 
     def dispatchers(self):
         return notification_center().dispatchers
+
+    def get_user_configuration(self, config_name):
+        userid = api.user.get_current().getId()
+        user = User.query.filter_by(userid=userid).one()
+        return getattr(user, config_name)
+
+    def get_default_configuration(self, config_name):
+        return getattr(User, config_name).default.arg
 
     def get_user_settings(self):
         userid = api.user.get_current().getId()
@@ -289,9 +354,20 @@ class NotificationSettingsForm(BrowserView):
         return '{}/notification-settings/save'.format(
             api.portal.get().absolute_url())
 
+    def save_configuration_url(self):
+        return '{}/notification-settings/save_configuration'.format(
+            api.portal.get().absolute_url())
+
     def reset_url(self):
         return '{}/notification-settings/reset'.format(
             api.portal.get().absolute_url())
+
+    def reset_configuration_url(self):
+        return '{}/notification-settings/reset_configuration'.format(
+            api.portal.get().absolute_url())
+
+    def tab_title_general(self):
+        return _('label_general', default=u'General')
 
     def tab_title_task(self):
         return _('label_tasks', default=u'Tasks')

@@ -51,6 +51,9 @@ class User(Base):
 
     import_stamp = Column(String(26))
 
+    # Notification configurations
+    notify_own_actions = Column(Boolean, default=False)
+
     def __init__(self, userid, **kwargs):
         self.userid = userid
         super(User, self).__init__(**kwargs)

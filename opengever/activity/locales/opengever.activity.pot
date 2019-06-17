@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-27 15:19+0000\n"
+"POT-Creation-Date: 2019-06-19 12:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,6 +172,11 @@ msgstr ""
 msgid "label_forwardings"
 msgstr ""
 
+#. Default: "General"
+#: ./opengever/activity/browser/settings.py
+msgid "label_general"
+msgstr ""
+
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
@@ -211,6 +216,16 @@ msgstr ""
 #. Default: "A problem has occurred during the notification creation. Notification could not or only partially produced."
 #: ./opengever/activity/error_handling.py
 msgid "msg_error_not_notified"
+msgstr ""
+
+#. Default: "By default notifications are suppressed when the recipient is the user who performed the action. Please note that, notwithstanding this setting, notifications only get generated for combinations of actions and roles for which the user has activated the notifications"
+#: ./opengever/activity/__init__.py
+msgid "notify_own_actions_help"
+msgstr ""
+
+#. Default: "Enable notifications for own actions"
+#: ./opengever/activity/__init__.py
+msgid "notify_own_actions_title"
 msgstr ""
 
 #. Default: "Additional documents submitted"

@@ -166,6 +166,17 @@ ACTIVITY_TRANSLATIONS = {
     'dossier-overdue': _(
         'dossier-overdue',
         default=u'Overdue dossier'),
+    'notify_own_actions': {
+        'title': _('notify_own_actions_title',
+                   default=u'Enable notifications for own actions'),
+        'help_text': _('notify_own_actions_help',
+                   default=u'By default notifications are suppressed when the '
+                             'recipient is the user who performed the action. '
+                             'Please note that, notwithstanding this setting, '
+                             'notifications only get generated for combinations '
+                             'of actions and roles for which the user has '
+                             'activated the notifications')
+         }
 }
 
 # TODO: There are too many places where the activites are defined:
