@@ -364,3 +364,61 @@ class TestArchiveForm(IntegrationTestCase):
         statusmessages.assert_message('The filing number has been given.')
         self.assertEquals('Hauptmandant-Government-2017-1',
                           IFilingNumber(self.empty_dossier).filing_no)
+
+    @browsing
+    def test_precondition_violation_raises_error_already_on_resolve_view(self, browser):
+        """Make sure the resolve view catches failing preconditions before
+        even redirecting to archive form.
+        """
+        self.login(self.secretariat_user, browser)
+
+        # Create open task to violate one of the preconditions for resolving
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-open'))
+
+        # Resolve view will redirect to archive form if filing number feature
+        # is enabled. But it should first check preconditions.
+        browser.open(self.empty_dossier, view='transition-resolve')
+
+        self.assert_workflow_state(
+            'dossier-state-active', self.empty_dossier)
+        self.assertEqual(['not all task are closed'],
+                         statusmessages.error_messages())
+        self.assertEqual(self.empty_dossier.absolute_url(), browser.url)
+
+    @browsing
+    def test_precondition_violation_raises_error_on_archive_form(self, browser):
+        """Preconditions also need to be validated and handled correctly if
+        the user directly invokes the transition-archive form.
+        """
+        self.login(self.secretariat_user, browser)
+
+        # Create open task to violate one of the preconditions for resolving
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-open'))
+
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and set filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-active', self.empty_dossier)
+        self.assertEqual(['not all task are closed'],
+                         statusmessages.error_messages())
+        self.assertEquals(None,
+                          IFilingNumber(self.empty_dossier).filing_no)
