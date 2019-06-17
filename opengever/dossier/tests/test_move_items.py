@@ -266,6 +266,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
 
             # dates
             'modified': paste_time_index,
+            'Date': paste_time_index,
             # 'start': paste_time_index,
 
             # containing dossier and subdossier
@@ -285,7 +286,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'changed',
                                'start',
                                'Creator',
-                               'Date',
                                'Description',
                                'Subject',
                                'Type',
@@ -366,7 +366,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         # Other data should be up to date but is not. For example the SearchableText
         # is not reindexed on purpose for efficiency, but it actually changes
         # because the reference number changes...
-        not_up_to_date = ['SearchableText', 'is_subdossier', 'reference', 'start', 'Date']
+        not_up_to_date = ['SearchableText', 'is_subdossier', 'reference', 'start']
         for key in not_up_to_date:
             self.assertNotEqual(moved_indexdata.pop(key),
                                 reindexed_moved_indexdata.pop(key))

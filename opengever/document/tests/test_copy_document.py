@@ -219,6 +219,7 @@ class TestCopyDocuments(IntegrationTestCase):
             'modified': paste_time_index,
             'start': paste_time_index,
             'created': paste_time_index,
+            'Date': paste_time_index,
 
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
@@ -226,8 +227,7 @@ class TestCopyDocuments(IntegrationTestCase):
             'is_subdossier': 0,  # acquisition is responsible here
         }
 
-        unchanged_indexdata = ['Date',
-                               'Description',
+        unchanged_indexdata = ['Description',
                                'Subject',
                                'Type',
                                'after_resolve_jobs_pending',
