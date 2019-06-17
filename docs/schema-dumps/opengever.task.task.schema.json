@@ -24,12 +24,12 @@
             "description": "W\u00e4hlen Sie den Auftragstyp",
             "_zope_schema_type": "Choice",
             "enum": [
-                "information",
-                "direct-execution",
-                "report",
                 "approval",
+                "comment",
                 "correction",
-                "comment"
+                "direct-execution",
+                "information",
+                "report"
             ]
         },
         "responsible_client": {

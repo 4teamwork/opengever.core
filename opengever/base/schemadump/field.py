@@ -156,6 +156,12 @@ class FieldDumper(object):
             if isinstance(wrapped_vocab, VdexVocabulary):
                 order_significant = wrapped_vocab.vdex.isOrderSignificant()
 
+            # XXX: The getTaskTypeVocabulary() factory destroys the reference
+            # to the underlying VDEX vocabulary by incorrectly wrapping it.
+            # Therefore the detection for order significance doesn't work.
+            if field.vocabulary and getattr(field.vocabulary, '__name__', '') == 'getTaskTypeVocabulary':  # noqa
+                order_significant = False
+
             # Build list of terms
             if vocabulary is not None:
                 terms = [t.value for t in vocabulary._terms]
