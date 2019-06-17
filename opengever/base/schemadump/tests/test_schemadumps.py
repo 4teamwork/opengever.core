@@ -31,9 +31,13 @@ class TestCheckedInSchemaDumpsAreUpToDate(IntegrationTestCase):
             with open(dump_path) as dump_file:
                 existing_schema = json.load(dump_file)
 
+            # Shove schema through dump / load in order to get rid of
+            # OrderedDicts and get better diffability
+            current_schema = json.loads(json.dumps(current_schema.serialize()))
+
             self.assertDictEqual(
                 existing_schema,
-                current_schema.serialize(),
+                current_schema,
                 '\n\nError: JSON schema dumps for %s have changed '
                 '(see diff  above), please run bin/instance dump_schemas and '
                 'commit the modified schema files together with '
