@@ -156,43 +156,25 @@ class LockingResolveManager(object):
         return self.resolver.is_archive_form_needed()
 
 
-class DossierResolveView(BrowserView):
+class DossierResolutionStatusmessageMixin(object):
+    """Mixin class to construct status messages and trigger redirects
 
-    def __call__(self):
-        # Ensure already resolved dossier can't be resolved again
-        if self.is_already_resolved():
-            return self.show_already_resolved_msg()
+    for dossier resolution errors.
 
-        resolve_manager = LockingResolveManager(self.context)
+    This class handles producing these status messages in a classic view
+    (as opposed to the REST API, where errors are serialized as JSON).
 
-        if resolve_manager.is_archive_form_needed():
-            archive_url = '/'.join((self.context_url, 'transition-archive'))
-            return self.redirect(archive_url)
+    It takes care of:
+    - Constructing the translated message(s)
+    - Determining the context URL to redirect to
+    - Redirecting to that context
 
-        try:
-            resolve_manager.resolve()
-
-        except AlreadyBeingResolved:
-            return self.show_being_resolved_msg()
-
-        except PreconditionsViolated as exc:
-            return self.show_errors(exc.errors)
-
-        except InvalidDates as exc:
-            return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
-
-        # Success
-        if self.context.is_subdossier():
-            return self.show_subdossier_resolved_msg()
-
-        return self.show_dossier_resolved_msg()
+    It is used by the DossierResolveView.
+    """
 
     @property
     def context_url(self):
         return self.context.absolute_url()
-
-    def is_already_resolved(self):
-        return self.context.is_resolved()
 
     def redirect(self, url):
         return self.request.RESPONSE.redirect(url)
@@ -234,6 +216,41 @@ class DossierResolveView(BrowserView):
             message=_('The dossier has been succesfully resolved.'),
             request=self.request, type='info')
         return self.redirect(self.context_url)
+
+
+class DossierResolveView(BrowserView, DossierResolutionStatusmessageMixin):
+
+    def __call__(self):
+        # Ensure already resolved dossier can't be resolved again
+        if self.is_already_resolved():
+            return self.show_already_resolved_msg()
+
+        resolve_manager = LockingResolveManager(self.context)
+
+        if resolve_manager.is_archive_form_needed():
+            archive_url = '/'.join((self.context_url, 'transition-archive'))
+            return self.redirect(archive_url)
+
+        try:
+            resolve_manager.resolve()
+
+        except AlreadyBeingResolved:
+            return self.show_being_resolved_msg()
+
+        except PreconditionsViolated as exc:
+            return self.show_errors(exc.errors)
+
+        except InvalidDates as exc:
+            return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
+
+        # Success
+        if self.context.is_subdossier():
+            return self.show_subdossier_resolved_msg()
+
+        return self.show_dossier_resolved_msg()
+
+    def is_already_resolved(self):
+        return self.context.is_resolved()
 
 
 @implementer(IDossierResolver)
