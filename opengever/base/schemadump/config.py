@@ -8,6 +8,7 @@ GEVER_TYPES = [
     'opengever.document.document',
     'ftw.mail.mail',
     'opengever.contact.contact',
+    'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
 ]
@@ -72,8 +73,9 @@ VOCAB_OVERRIDES = {
         'responsible': u'<G\xfcltige User-ID>',
     },
     'opengever.task.task.ITask': {
-        'issuer': u'<G\xfcltige User-ID>',
-        'responsible': u'<G\xfcltige User-ID>',
+        'issuer': u'<User-ID eines g\xfcltigen Auftraggebers>',
+        'responsible': u'<User-ID eines g\xfcltigen Auftragnehmers>',
+        'responsible_client': u'<G\xfcltige Org-Unit-ID>',
     },
 }
 
@@ -89,7 +91,12 @@ DEFAULT_OVERRIDES = {
             u'<H\xf6chste auf dieser Ebene vergebene Nummer + 1>',
     },
     'opengever.task.task.ITask': {
-        'deadline': u'<Aktuelles Datum>',
+        'deadline': u'<Aktuelles Datum + 5 Tage> '
+                    u':small-comment:`(konfigurierbarer Default)`',
+        'responsible_client': u'<Kein Default> '
+                              u':small-comment:`(Obwohl dieses Feld im User-Interface '
+                              u'nicht erscheint (vom System automatisch gesetzt wird), '
+                              u'muss es \xfcber die REST API angegeben werden)`',
     },
 }
 

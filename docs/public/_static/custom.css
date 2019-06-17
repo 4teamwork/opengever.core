@@ -65,6 +65,19 @@ blockquote {
     background-repeat: no-repeat;
     padding-left: 2.5em;
     padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    min-height: 38px;
+}
+
+#schemas .small-comment {
+    font-style: italic;
+    font-size: small;
+}
+
+#schemas .small-comment::before {
+    /* Insert a CSS line break before the small comment */
+    display: block;
+    content: "\A";
 }
 
 #schemas #ordnungssystem > h3 {
@@ -89,6 +102,10 @@ blockquote {
 
 #schemas #kontakt > h3 {
     background-image: url('img/contact.png');
+}
+
+#schemas #aufgabe > h3 {
+    background-image: url('img/task.png');
 }
 
 

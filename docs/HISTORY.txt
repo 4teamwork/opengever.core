@@ -4,7 +4,7 @@ Changelog
 2019.3.1 (unreleased)
 ---------------------
 
-- Nothing changed yet.
+- Docs: Add tasks to documented content types. [lgraf]
 
 
 2019.3.0 (2019-06-17)
