@@ -5,6 +5,27 @@ Changelog
 ---------------------
 
 - Nothing changed yet.
+- Archiving form: Make sure dossier resolution preconditions are validated and handled. [lgraf]
+- Fix encoding issue in OGDSUpdater's error logging. [lgraf]
+- Provides support for some additional metadata on the search endpoint. [phgross]
+- Include file_extension in API representation of documents. [phgross]
+- Translate keyword-filter label. [phgross]
+- Support searching on group description in sharing form. [phgross]
+- Add CMFEditions modifier that prevents journals from being versioned. [lgraf]
+- Forbid transitions linked to dossier offer process through RESTAPI. [njohner]
+- Add an ftw.tesbrowser widget for filling responsible(s) in the tests. [Rotonen]
+- Only allow dossier transitions that are possible on the main dossier. [njohner]
+- Prefix agendaitem decision numbers and meeting number by correct period title. [njohner]
+- Handle dossier activation through RESTAPI. [njohner]
+- Sort BlockedLocalRolesList on reference number. [njohner]
+- Improve error message when trying to delete a referenced document. [njohner]
+- Handle dossier deactivation through RESTAPI. [njohner]
+- Fix bug with resolving a reopened dossier. [njohner]
+- Update documentation for SaaS deployment update. [njohner]
+- Correctly handle dossier reactivation through RESTAPI. [njohner]
+- Extend listing endpoint fields with file_extension and document_type. [phgross]
+- Extend task API serialization with responses data. [phgross]
+- Fix livesearch endpoint when using Solr. [buchi]
 
 
 2019.2.4 (2019-06-07)
