@@ -5,7 +5,10 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.interfaces import IDossierArchiver
+from opengever.dossier.resolve import DossierResolutionStatusmessageMixin
 from opengever.dossier.resolve import get_resolver
+from opengever.dossier.resolve import InvalidDates
+from opengever.dossier.resolve import PreconditionsViolated
 from opengever.ogds.base.utils import get_current_admin_unit
 from persistent.dict import PersistentDict
 from plone.supermodel import model
@@ -218,7 +221,7 @@ class IArchiveFormSchema(model.Schema):
                         all fields are required."))
 
 
-class ArchiveForm(Form):
+class ArchiveForm(Form, DossierResolutionStatusmessageMixin):
 
     label = _(u'heading_archive_form', u'Archive Dossier')
     fields = field.Fields(IArchiveFormSchema)
@@ -258,12 +261,16 @@ class ArchiveForm(Form):
                 _("The filing number has been given."), type="info")
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
-        # archiving must passed to the resolving view
+        # Validate resolving preconditions
         resolver = get_resolver(self.context)
-        if resolver.get_precondition_violations():
-            raise TypeError
-        if resolver.are_enddates_valid():
-            raise TypeError
+        try:
+            resolver.raise_on_failed_preconditions()
+
+        except PreconditionsViolated as exc:
+            return self.show_errors(exc.errors)
+
+        except InvalidDates as exc:
+            return self.show_invalid_end_dates(titles=exc.invalid_dossier_titles)
 
         if action == METHOD_RESOLVING_AND_FILING:
             IDossierArchiver(self.context).archive(filing_prefix, filing_year)
