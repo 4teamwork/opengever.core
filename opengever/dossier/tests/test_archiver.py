@@ -391,3 +391,34 @@ class TestArchiveForm(IntegrationTestCase):
         self.assertEqual(['not all task are closed'],
                          statusmessages.error_messages())
         self.assertEqual(self.empty_dossier.absolute_url(), browser.url)
+
+    @browsing
+    def test_precondition_violation_raises_error_on_archive_form(self, browser):
+        """Preconditions also need to be validated and handled correctly if
+        the user directly invokes the transition-archive form.
+        """
+        self.login(self.secretariat_user, browser)
+
+        # Create open task to violate one of the preconditions for resolving
+        create(Builder('task')
+               .within(self.empty_dossier)
+               .having(responsible_client='fa',
+                       responsible=self.regular_user.getId(),
+                       issuer=self.dossier_responsible.getId(),
+                       task_type='correction',
+                       deadline=date(2016, 11, 1))
+               .in_state('task-state-open'))
+
+        browser.open(self.empty_dossier, view='transition-archive')
+
+        browser.fill({'filing prefix': 'Government',
+                      'filing Year': u'2017',
+                      'Action': 'resolve and set filing no'})
+        browser.click_on('Archive')
+
+        self.assert_workflow_state(
+            'dossier-state-active', self.empty_dossier)
+        self.assertEqual(['not all task are closed'],
+                         statusmessages.error_messages())
+        self.assertEquals(None,
+                          IFilingNumber(self.empty_dossier).filing_no)
