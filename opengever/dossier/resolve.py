@@ -149,16 +149,7 @@ class LockingResolveManager(object):
             resolve_lock.release(commit=True)
 
     def execute_recursive_resolve(self):
-        # check preconditions
-        errors = self.resolver.get_precondition_violations()
-        if errors:
-            raise PreconditionsViolated(errors=errors)
-
-        # validate enddates
-        invalid_dates = self.resolver.are_enddates_valid()
-        if invalid_dates:
-            raise InvalidDates(invalid_dossier_titles=invalid_dates)
-
+        self.resolver.raise_on_failed_preconditions()
         self.resolver.resolve()
 
     def is_archive_form_needed(self):
@@ -270,6 +261,19 @@ class StrictDossierResolver(object):
         if not errors:
             self.preconditions_fulfilled = True
         return errors
+
+    def raise_on_failed_preconditions(self):
+        """Verify preconditions, and raise respective exceptions if violated.
+        """
+        # check preconditions
+        errors = self.get_precondition_violations()
+        if errors:
+            raise PreconditionsViolated(errors=errors)
+
+        # validate enddates
+        invalid_dates = self.are_enddates_valid()
+        if invalid_dates:
+            raise InvalidDates(invalid_dossier_titles=invalid_dates)
 
     def are_enddates_valid(self):
         """Check if the end dates of dossiers and subdossiers are valid.
