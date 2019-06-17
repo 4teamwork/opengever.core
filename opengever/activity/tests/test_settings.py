@@ -14,7 +14,7 @@ class TestListSettings(IntegrationTestCase):
     features = ('activity', )
 
     @browsing
-    def test_list_all_settings_expect_aliased_objects(self, browser):
+    def test_list_all_settings_except_aliased_objects(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='notification-settings/list')
 
