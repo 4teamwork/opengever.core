@@ -147,7 +147,9 @@ class TestCopyDocuments(IntegrationTestCase):
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
-        self.assertTrue(set(unchanged_metadata).isdisjoint(modified_metadata.keys()))
+        self.assertTrue(set(unchanged_metadata).isdisjoint(modified_metadata.keys()),
+                        msg="Make sure no key is in both lists of "
+                            "unchanged and modified metadata")
 
         expected_metadata = deepcopy(modified_metadata)
         expected_metadata.update({key: original_metadata[key] for key in unchanged_metadata})
@@ -171,7 +173,9 @@ class TestCopyDocuments(IntegrationTestCase):
         reindexed_copy_metadata = self.get_catalog_metadata(copy)
 
         # Everything is up to date
-        self.assertDictEqual(copy_metadata, reindexed_copy_metadata)
+        self.assertDictEqual(copy_metadata, reindexed_copy_metadata,
+                             msg="Some metadata was not up to date after "
+                                 "a copy/paste operation")
 
     @browsing
     def test_document_copy_indexdata(self, browser):
@@ -278,7 +282,9 @@ class TestCopyDocuments(IntegrationTestCase):
                                'trashed']
 
         # Make sure no index is in both lists of unchanged and modified indexdata
-        self.assertTrue(set(unchanged_indexdata).isdisjoint(modified_indexdata.keys()))
+        self.assertTrue(set(unchanged_indexdata).isdisjoint(modified_indexdata.keys()),
+                        msg="Make sure no key is in both lists of "
+                            "unchanged and modified metadata")
 
         expected_indexdata = deepcopy(modified_indexdata)
         expected_indexdata.update({key: original_indexdata[key] for key in unchanged_indexdata})
@@ -302,4 +308,6 @@ class TestCopyDocuments(IntegrationTestCase):
         reindexed_copy_indexdata = self.get_catalog_indexdata(copy)
 
         # Everything is up to date
-        self.assertDictEqual(copy_indexdata, reindexed_copy_indexdata)
+        self.assertDictEqual(copy_indexdata, reindexed_copy_indexdata,
+                             msg="Some indexdata was not up to date after "
+                                 "a copy/paste operation")

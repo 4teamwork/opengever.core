@@ -215,7 +215,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                               'trashed']
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
-        self.assertTrue(set(unchanged_metadata).isdisjoint(modified_metadata.keys()))
+        self.assertTrue(set(unchanged_metadata).isdisjoint(modified_metadata.keys()),
+                        msg="Make sure no key is in both lists of "
+                            "unchanged and modified metadata")
 
         expected_metadata = deepcopy(modified_metadata)
         expected_metadata.update({key: subdocument_metadata[key] for key in unchanged_metadata})
@@ -239,7 +241,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         reindexed_moved_metadata = self.get_catalog_metadata(moved)
 
         # Everything up to date
-        self.assertDictEqual(moved_metadata, reindexed_moved_metadata)
+        self.assertDictEqual(moved_metadata, reindexed_moved_metadata,
+                             msg="Some metadata was not up to date after "
+                                 "a move operation")
 
     @browsing
     def test_move_document_indexdata_update(self, browser):
@@ -338,7 +342,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                'trashed']
 
         # Make sure no index is in both lists of unchanged and modified indexdata
-        self.assertTrue(set(unchanged_indexdata).isdisjoint(modified_indexdata.keys()))
+        self.assertTrue(set(unchanged_indexdata).isdisjoint(modified_indexdata.keys()),
+                        msg="Make sure no key is in both lists of "
+                            "unchanged and modified indexdata")
 
         expected_indexdata = deepcopy(modified_indexdata)
         expected_indexdata.update({key: subdocument_indexdata[key] for key in unchanged_indexdata})
@@ -371,7 +377,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
             self.assertNotEqual(moved_indexdata.pop(key),
                                 reindexed_moved_indexdata.pop(key))
 
-        self.assertDictEqual(moved_indexdata, reindexed_moved_indexdata)
+        self.assertDictEqual(moved_indexdata, reindexed_moved_indexdata,
+                             msg="Some indexdata was not up to date after "
+                                 "a move operation")
 
 
 class TestContainingDossierAndSubdossierIndexWhenMovingItem(IntegrationTestCase, MoveItemsHelper):
