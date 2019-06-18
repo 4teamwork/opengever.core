@@ -1,0 +1,163 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Aufgabe",
+    "additionalProperties": false,
+    "properties": {
+        "title": {
+            "type": "string",
+            "title": "Titel",
+            "maxLength": 256,
+            "description": "Der Name der Aufgabe",
+            "_zope_schema_type": "TextLine"
+        },
+        "issuer": {
+            "type": "string",
+            "title": "Auftraggeber",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<User-ID eines g\u00fcltigen Auftraggebers>"
+        },
+        "task_type": {
+            "type": "string",
+            "title": "Auftragstyp",
+            "description": "W\u00e4hlen Sie den Auftragstyp",
+            "_zope_schema_type": "Choice",
+            "enum": [
+                "approval",
+                "comment",
+                "correction",
+                "direct-execution",
+                "information",
+                "report"
+            ]
+        },
+        "responsible_client": {
+            "type": "string",
+            "title": "Mandant des Auftragnehmers",
+            "description": "W\u00e4hlen Sie zuerst den Mandanten des Auftragnehmers, anschliessend den Auftragnehmer.",
+            "_zope_schema_type": "Choice",
+            "default": "<Kein Default> :small-comment:`(Obwohl dieses Feld im User-Interface nicht erscheint (vom System automatisch gesetzt wird), muss es \u00fcber die REST API angegeben werden)`",
+            "_vocabulary": "<G\u00fcltige Org-Unit-ID>"
+        },
+        "responsible": {
+            "type": "string",
+            "title": "Auftragnehmer",
+            "description": "W\u00e4hlen Sie die verantwortlichen Personen aus.",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<User-ID eines g\u00fcltigen Auftragnehmers>"
+        },
+        "is_private": {
+            "type": "boolean",
+            "title": "Pers\u00f6nliche Aufgabe",
+            "description": "Eingangskorb-Stellvertreter Berechtigung f\u00fcr diese Aufgabe deaktivieren",
+            "_zope_schema_type": "Bool",
+            "default": false
+        },
+        "revoke_permissions": {
+            "type": "boolean",
+            "title": "Berechtigungen nach Abschluss entziehen",
+            "description": "Berechtigungen f\u00fcr den Auftragnehmer und dessen Stellvertretung nach Abschluss oder Neuzuweisung der Aufgabe entziehen.",
+            "_zope_schema_type": "Bool",
+            "default": true
+        },
+        "deadline": {
+            "type": "string",
+            "title": "Zu erledigen bis",
+            "format": "date",
+            "description": "Tragen Sie ein Datum ein, bis wann die Aufgabe erledigt werden muss",
+            "_zope_schema_type": "Date",
+            "default": "<Aktuelles Datum + 5 Tage> :small-comment:`(konfigurierbarer Default)`"
+        },
+        "date_of_completion": {
+            "type": "string",
+            "title": "Erledigungsdatum",
+            "format": "date",
+            "description": "Das Datum an dem die Aufgabe beendet wurde",
+            "_zope_schema_type": "Date"
+        },
+        "text": {
+            "type": "string",
+            "title": "Beschreibung",
+            "description": "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein",
+            "_zope_schema_type": "Text"
+        },
+        "relatedItems": {
+            "type": "array",
+            "title": "Verweise",
+            "description": "",
+            "_zope_schema_type": "RelationList",
+            "default": []
+        },
+        "expectedStartOfWork": {
+            "type": "string",
+            "title": "Beginn der Arbeit",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
+        "expectedDuration": {
+            "type": "number",
+            "title": "Gesch\u00e4tzte Dauer (h)",
+            "description": "Dauer in h",
+            "_zope_schema_type": "Float"
+        },
+        "expectedCost": {
+            "type": "number",
+            "title": "Gesch\u00e4tzte Kosten (CHF)",
+            "description": "Kosten in CHF",
+            "_zope_schema_type": "Float"
+        },
+        "effectiveDuration": {
+            "type": "number",
+            "title": "Effektive Dauer (h)",
+            "description": "Dauer in h",
+            "_zope_schema_type": "Float"
+        },
+        "effectiveCost": {
+            "type": "number",
+            "title": "Effektive Kosten (CHF)",
+            "description": "Kosten in CHF",
+            "_zope_schema_type": "Float"
+        },
+        "predecessor": {
+            "type": "string",
+            "title": "Vorg\u00e4nger",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        }
+    },
+    "required": [
+        "title",
+        "issuer",
+        "task_type",
+        "responsible"
+    ],
+    "field_order": [
+        "title",
+        "issuer",
+        "task_type",
+        "responsible_client",
+        "responsible",
+        "is_private",
+        "revoke_permissions",
+        "deadline",
+        "date_of_completion",
+        "text",
+        "relatedItems",
+        "expectedStartOfWork",
+        "expectedDuration",
+        "expectedCost",
+        "effectiveDuration",
+        "effectiveCost",
+        "predecessor",
+        "changed"
+    ]
+}
