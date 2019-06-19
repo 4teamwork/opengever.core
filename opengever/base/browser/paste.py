@@ -91,6 +91,7 @@ class PasteClipboardView(BrowserView):
             copied_obj = self.context[new_id]
             # XXX - ensure the new object is listed as created by the paster
             copied_obj.creators = (api.user.get_current().id, )
+            copied_obj.reindexObject(idxs=["Creator"])
             self.rename_object(copied_obj)
 
     def rename_object(self, copy):

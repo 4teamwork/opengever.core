@@ -19,6 +19,12 @@ from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.sqlalchemy.datamanager import mark_changed
+from DateTime import DateTime
+
+
+def object_copied(context, event):
+    context.creation_date = DateTime()
+    context.reindexObject(idxs=('created',))
 
 
 def object_moved_or_added(context, event):

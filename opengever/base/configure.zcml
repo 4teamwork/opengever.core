@@ -263,6 +263,12 @@
       />
 
   <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.IObjectCopiedEvent"
+      handler=".handlers.object_copied"
+      />
+
+  <subscriber
       for="ZPublisher.interfaces.IPubAfterTraversal"
       handler=".subscribers.disallow_anonymous_views_on_site_root"
       />
