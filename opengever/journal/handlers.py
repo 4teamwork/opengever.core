@@ -367,8 +367,7 @@ def document_modified(context, event):
             else:
                 metadata_changed = True
 
-    if context.REQUEST.get('form.widgets.file.action',
-                           u'nochange') == u'nochange':
+    if context.REQUEST.get('form.widgets.file.action') == u'nochange':
         file_changed = False
 
     if not file_changed and not metadata_changed and not public_trial_changed:
