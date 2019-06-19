@@ -6,6 +6,7 @@ Changelog
 
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]
+- Update Creator, created and Date when copy/pasting an object. [njohner]
 - Docs: Add tasks to documented content types. [lgraf]
 
 
