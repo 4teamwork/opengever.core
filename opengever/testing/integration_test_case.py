@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.flamegraph import flamegraph
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.mail.mail import IMail
 from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrSearch
@@ -44,6 +45,7 @@ from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from sqlalchemy.sql.expression import desc
 from z3c.relationfield.relation import RelationValue
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -748,3 +750,6 @@ class IntegrationTestCase(TestCase):
 
     def assert_provides(self, obj, interface=None):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
+
+    def journal_entries(self, obj):
+        return IAnnotations(obj).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
