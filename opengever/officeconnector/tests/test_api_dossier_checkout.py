@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from hashlib import sha256
 from opengever.document.document import Document
+from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
@@ -393,6 +394,10 @@ class TestOfficeconnectorDossierAPIWithCheckoutWithRESTAPI(TestOfficeconnectorDo
 
         with open(path_to_asset('addendum.docx')) as f:
             self.upload_document_via_api(browser, raw_token, payloads[0], self.document, f)
+
+        most_recent_journal_entry = self.journal_entries(self.document)[-1]
+        self.assertEqual(DOCUMENT_MODIIFED_ACTION,
+                         most_recent_journal_entry['action']['type'])
 
         new_checksum = sha256(self.download_document(browser, raw_token, payloads[0])).hexdigest()
         self.assertNotEqual(new_checksum, original_checksum)
