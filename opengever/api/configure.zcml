@@ -9,6 +9,7 @@
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
   <include package="opengever.webactions" file="permissions.zcml" />
+  <include package="opengever.workspace" file="permissions.zcml" />
 
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
@@ -338,6 +339,38 @@
       factory=".transition.GEVERDossierWorkflowTransition"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsDelete"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="POST"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsPost"
+      permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@participations"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".participation.ParticipationsPatch"
+      permission="plone.DelegateWorkspaceAdminRole"
       />
 
 </configure>

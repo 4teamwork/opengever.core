@@ -19,4 +19,9 @@
       handler=".subscribers.assign_owner_role_on_creation"
       />
 
+  <utility
+      factory=".vocabularies.RolesVocabulary"
+      name="opengever.workspace.RolesVocabulary"
+      />
+
 </configure>

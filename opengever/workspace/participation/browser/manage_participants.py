@@ -44,7 +44,8 @@ class ManageParticipants(BrowserView):
                                 MANAGED_ROLES + ['WorkspaceOwner'])),
                             can_manage=self.can_manage_member(member, roles),
                             type_='user',
-                            name=self.get_full_user_info(member=member))
+                            name=self.get_full_user_info(member=member),
+                            userid=userid)
                 entries.append(item)
         return entries
 
@@ -70,7 +71,8 @@ class ManageParticipants(BrowserView):
                             userid=invitation['inviter']),
                         can_manage=self.can_manage_member(),
                         type_='invitation',
-                        token=invitation['iid'])
+                        token=invitation['iid'],
+                        userid=invitation['recipient'])
             entries.append(item)
 
         return entries
@@ -93,7 +95,10 @@ class ManageParticipants(BrowserView):
         CheckAuthenticator(self.request)
         userid = self.request.get('userid', None)
         role = self.request.get('role', None)
+        self._add(userid, role)
+        return self.__call__()
 
+    def _add(self, userid, role):
         if not userid or not role or not self.can_manage_member():
             raise BadRequest('No userid or role provided')
 
@@ -101,9 +106,9 @@ class ManageParticipants(BrowserView):
             raise Unauthorized('No allowed to delegate this permission')
 
         storage = getUtility(IInvitationStorage)
-        storage.add_invitation(self.context, userid,
-                               api.user.get_current().getId(), role)
-        return self.__call__()
+        iid = storage.add_invitation(self.context, userid,
+                                     api.user.get_current().getId(), role)
+        return storage.get_invitation(iid)
 
     def delete(self):
         """A traversable method to delete a pending invitation or local roles.
@@ -117,15 +122,19 @@ class ManageParticipants(BrowserView):
         if not token or not type_:
             raise BadRequest('A token and a type is required')
 
+        self._delete(type_, token)
+        return self.__call__()
+
+    def _delete(self, type_, token):
         if type_ == 'invitation' and self.can_manage_member():
             storage = getUtility(IInvitationStorage)
             storage.remove_invitation(token)
-            return self.__call__()
+            return
 
         elif type_ == 'user' and self.can_manage_member(api.user.get(userid=token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_INVITATION, token)
-            return self.__call__()
+            return
         else:
             raise BadRequest('Oh my, something went wrong')
 
@@ -136,12 +145,18 @@ class ManageParticipants(BrowserView):
         token = self.request.get('token', None)
         role = self.request.get('role', None)
         type_ = self.request.get('type', None)
+        self._modify(token, role, type_)
+        return ''
 
+    def _modify(self, token, role, type_):
         if not token or not type_:
             raise BadRequest('No userid or type provided.')
 
         if role not in MANAGED_ROLES:
             raise Unauthorized('Inavlid role provided.')
+
+        if token == api.user.get_current().id:
+            raise Unauthorized('Not allowed to modify the current user.')
 
         if type_ == 'user':
             user_roles = api.user.get_roles(username=token, obj=self.context,
@@ -153,7 +168,7 @@ class ManageParticipants(BrowserView):
                 self.context.setModificationDate()
                 self.context.reindexObject(idxs=['modified'])
                 self.request.RESPONSE.setStatus(204)
-                return ''
+                return True
             else:
                 raise BadRequest('User does not have any local roles')
         elif type_ == 'invitation':

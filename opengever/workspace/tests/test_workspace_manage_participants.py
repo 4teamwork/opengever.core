@@ -33,22 +33,26 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'name': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
                  u'roles': [u'WorkspaceMember'],
                  u'type_': u'user',
-                 u'token': u'beatrice.schrodinger'},
+                 u'token': u'beatrice.schrodinger',
+                 u'userid': u'beatrice.schrodinger'},
                 {u'can_manage': False,
                  u'name': u'Hugentobler Fridolin (fridolin.hugentobler)',
                  u'roles': [u'WorkspaceAdmin'],
                  u'type_': u'user',
-                 u'token': u'fridolin.hugentobler'},
+                 u'token': u'fridolin.hugentobler',
+                 u'userid': u'fridolin.hugentobler'},
                 {u'can_manage': False,
                  u'name': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
                  u'roles': [u'WorkspaceOwner'],
                  u'type_': u'user',
-                 u'token': u'gunther.frohlich'},
+                 u'token': u'gunther.frohlich',
+                 u'userid': u'gunther.frohlich'},
                 {u'can_manage': True,
                  u'name': u'Peter Hans (hans.peter)',
                  u'roles': [u'WorkspaceGuest'],
                  u'type_': u'user',
-                 u'token': u'hans.peter'},
+                 u'token': u'hans.peter',
+                 u'userid': u'hans.peter'},
             ],
             browser.json
         )
@@ -91,13 +95,15 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
                  u'token': u'fridolin.hugentobler',
                  u'type_': u'user',
                  u'roles': [u'WorkspaceOwner'],
-                 u'name': u'Hugentobler Fridolin (fridolin.hugentobler)'},
+                 u'name': u'Hugentobler Fridolin (fridolin.hugentobler)',
+                 u'userid': u'fridolin.hugentobler'},
                 {u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
                  u'roles': [u'WorkspacesGuest'],
                  u'can_manage': True,
                  u'token': iid,
                  u'type_': u'invitation',
-                 u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler)'}
+                 u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler)',
+                 u'userid': u'kathi.barfuss'}
             ],
             browser.json)
 
@@ -125,7 +131,8 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
              u'inviter': u'Hugentobler Fridolin (fridolin.hugentobler)',
              u'name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
              u'roles': [u'WorkspaceGuest'],
-             u'type_': u'invitation'},
+             u'type_': u'invitation',
+             u'userid': u'kathi.barfuss'},
             invitations_in_response[0])
 
     @browsing

@@ -54,6 +54,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.tasktemplates.active_tasktemplatefolders',
     'opengever.tasktemplates.ResponsibleOrgUnitVocabulary',
     'opengever.tasktemplates.tasktemplates',
+    'opengever.workspace.RolesVocabulary',
     'plone.app.content.ValidAddableTypes',
     'plone.app.controlpanel.WickedPortalTypes',
     'plone.app.discussion.vocabularies.CaptchaVocabulary',

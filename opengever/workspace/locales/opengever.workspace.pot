@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-18 10:43+0000\n"
+"POT-Creation-Date: 2019-04-26 12:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,20 +90,29 @@ msgstr ""
 msgid "Workspace"
 msgstr ""
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Admin"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceAdmin"
 msgstr ""
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Guest"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceGuest"
 msgstr ""
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Member"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceMember"
 msgstr ""
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Owner"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceOwner"
+msgstr ""
+
+#. Default: "Invitation"
+#: ./opengever/workspace/participation/__init__.py
+msgid "invitation"
 msgstr ""
 
 #. Default: "Description"
@@ -149,4 +158,9 @@ msgstr ""
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
 msgid "title_manage_participation"
+msgstr ""
+
+#. Default: "User"
+#: ./opengever/workspace/participation/__init__.py
+msgid "user"
 msgstr ""

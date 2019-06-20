@@ -1,6 +1,7 @@
 from ftw.keywordwidget import _ as KWMF
 from opengever.base.handlebars import get_handlebars_template
 from opengever.workspace import _
+from opengever.workspace.participation import PARTICIPATION_ROLES
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
@@ -30,10 +31,10 @@ class ParticipantsView(BrowserView):
             'label_loading_more': translate(KWMF('Load more results...'), context=self.request),
             'label_tooshort_prefix': translate(KWMF('Please enter '), context=self.request),
             'label_tooshort_postfix': translate(KWMF(' or more characters'), context=self.request),
-            'workspaceguest': translate(_('WorkspaceGuest'), context=self.request),
-            'workspacemember': translate(_('WorkspaceMember'), context=self.request),
-            'workspaceadmin': translate(_('WorkspaceAdmin'), context=self.request),
-            'workspaceowner': translate(_('WorkspaceOwner'), context=self.request),
+            'workspaceguest': PARTICIPATION_ROLES.get('WorkspaceGuest').translated_title(self.request),
+            'workspacemember': PARTICIPATION_ROLES.get('WorkspaceMember').translated_title(self.request),
+            'workspaceadmin': PARTICIPATION_ROLES.get('WorkspaceAdmin').translated_title(self.request),
+            'workspaceowner': PARTICIPATION_ROLES.get('WorkspaceOwner').translated_title(self.request),
             'user': translate(_('User'), context=self.request),
             'type': translate(_('Type'), context=self.request),
             'role': translate(_('Rolle'), context=self.request),

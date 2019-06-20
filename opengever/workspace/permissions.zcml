@@ -8,4 +8,6 @@
 
   <permission id="opengever.workspace.AddWorkspaceFolder" title="opengever.workspace: Add WorkspaceFolder" />
 
+  <permission id="plone.DelegateWorkspaceAdminRole" title="Sharing page: Delegate WorkspaceAdmin role" />
+
 </configure>

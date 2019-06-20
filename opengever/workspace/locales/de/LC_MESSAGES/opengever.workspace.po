@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-18 10:43+0000\n"
+"POT-Creation-Date: 2019-04-26 12:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,21 +87,30 @@ msgstr "Benutzer"
 msgid "Workspace"
 msgstr "Teamraum"
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Admin"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceAdmin"
 msgstr "Admin"
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Guest"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceGuest"
 msgstr "Gast"
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Member"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceMember"
 msgstr "Teammitglied"
 
-#: ./opengever/workspace/participation/browser/participants_view.py
+#. Default: "Owner"
+#: ./opengever/workspace/participation/__init__.py
 msgid "WorkspaceOwner"
 msgstr "Federführung"
+
+#. Default: "Invitation"
+#: ./opengever/workspace/participation/__init__.py
+msgid "invitation"
+msgstr "Einladung"
 
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
@@ -147,3 +156,8 @@ msgstr "Teamräume"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
 msgid "title_manage_participation"
 msgstr "Teilnehmer von  \"${workspace}\""
+
+#. Default: "User"
+#: ./opengever/workspace/participation/__init__.py
+msgid "user"
+msgstr "Benutzer"

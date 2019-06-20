@@ -31,6 +31,7 @@ Inhalt:
    tasks.rst
    reminder.rst
    journal.rst
+   participation.rst
    examples/index.rst
    docs_changelog.rst
 
