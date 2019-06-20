@@ -67,7 +67,6 @@ class TestOverview(IntegrationTestCase):
             u'Vertragsentwurf \xdcberpr\xfcfen',
         ]
 
-    @IntegrationTestCase.clock
     @browsing
     def test_description_box_is_web_intelligent_formatted_and_xss_safe(self, browser):
         self.login(self.regular_user, browser)

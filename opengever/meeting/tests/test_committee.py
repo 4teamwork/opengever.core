@@ -9,7 +9,6 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.base.oguid import Oguid
 from opengever.meeting.model import Committee
 from opengever.testing import IntegrationTestCase
-from operator import methodcaller
 from plone.uuid.interfaces import IUUID
 
 
@@ -416,33 +415,37 @@ class TestCommitteeWorkflow(IntegrationTestCase):
         Therefore we test the appearance of all fields.
         """
 
-        fields = ['Title',
-                  'Committeeresponsible',
-                  'Linked repository folder',
-                  'Agendaitem list template',
-                  'Table of contents template',
-                  'Allowed proposal templates',
-                  'Allowed ad-hoc agenda item templates',
-                  'Ad hoc agenda item template',
-                  'Protocol header template',
-                  'Paragraph template',
-                  'Agenda item header template for the protocol',
-                  'Agenda item suffix template for the protocol',
-                  'Protocol suffix template',
-                  'Excerpt header template',
-                  'Excerpt suffix template']
+        expected_field_names = [
+            'Title',
+            'Committeeresponsible',
+            'Linked repository folder',
+            'Agendaitem list template',
+            'Table of contents template',
+            'Allowed proposal templates',
+            'Allowed ad-hoc agenda item templates',
+            'Ad hoc agenda item template',
+            'Protocol header template',
+            'Paragraph template',
+            'Agenda item header template for the protocol',
+            'Agenda item suffix template for the protocol',
+            'Protocol suffix template',
+            'Excerpt header template',
+            'Excerpt suffix template',
+        ]
 
         with self.login(self.administrator, browser):
             browser.open(self.committee_container)
             factoriesmenu.add('Committee')
-            self.assertEquals(
-                fields,
-                map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > fieldset > div.field > label')))
+            discovered_field_names = [
+                node.text
+                for node in browser.css('form#form > fieldset > div.field > label')
+            ]
+            self.assertEqual(expected_field_names, discovered_field_names)
 
         with self.login(self.committee_responsible, browser):
             browser.open(self.committee, view='edit')
-            self.assertEquals(
-                fields,
-                map(methodcaller('normalized_text', recursive=False),
-                    browser.css('form#form > fieldset > div.field > label')))
+            discovered_field_names = [
+                node.text
+                for node in browser.css('form#form > fieldset > div.field > label')
+            ]
+            self.assertEqual(expected_field_names, discovered_field_names)
