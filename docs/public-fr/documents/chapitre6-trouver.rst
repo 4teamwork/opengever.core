@@ -1,12 +1,7 @@
 Trouver un document avec check-out
 ==================================
 
-Quand vous terminez votre session OneGovGEVER avec Quitter GEVER, le message
-ci-dessous s‘affiche, dans le cas où vous auriez encore des :ref:`documents dont le check-out
-aurait été fait <label-recemment_modifie>`. En sélectionnant le titre d'un des documents en question, vous serez
-directement redirigé vers le document correspondant.
-
-|img-document-30|
+Les documents en check-out sont visibles dans le menu :ref:`label-recemment_modifie` et leur nombre est indiqué par un compteur orange.
 
 Avec la recherche avancée
 ~~~~~~~~~~~~~~~~~~~~~~~~~

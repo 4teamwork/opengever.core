@@ -17,7 +17,7 @@ Actions possibles:
   Condition préalable : Un service de création de PDF externe est disponible et
   est configuré dans OneGov GEVER.
 
-- **Reculer:** L’action Reculer fait remonter une version antérieure à la place de
+- **Reculer:** L’action *Reculer* restore une version antérieure à la place de
   la version actuelle.
 
 Télécharger les versions dans leur format original (sans faire le check-out)
@@ -28,7 +28,7 @@ OneGov GEVER ouvre toujours les documents avec checkin en mode lecture. Si on ve
 été fait. Si on veut toutefois consulter le fichier original (par exemple Word, Excel),
 le sauvegarder sur son bureau ou encore copier le contenu du fichier original, on peut
 télécharger ce fichier depuis l’aperçu des fichiers (version actuelle) ou depuis
-Versions (toutes les versions) en cliquant sur Télécharger une copie.
+Versions (toutes les versions) en cliquant sur *Télécharger une copie*.
 
 |img-document-31|
 
@@ -36,7 +36,7 @@ Procédé et possibilités au moment du téléchargement des versions:
 
 - Ouvrir les versions avec le symbole [+] (le check-out du document ne doit pas avoir été fait)
 
-- Cliquer sur l’option Télécharger une copie sous la version la plus récente
+- Cliquer sur l’option *Télécharger une copie* sous la version la plus récente
   ou sous une version antérieure (voir la capture d’écran plus haut).
 
 - Selon le browser web, une fenêtre de dialogue contenant les options suivantes apparaît:
