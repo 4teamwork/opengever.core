@@ -580,3 +580,42 @@ class TestParticipationPatch(IntegrationTestCase):
                 data=data,
                 headers=http_headers(),
                 )
+
+
+class TestMyInvitationsGet(IntegrationTestCase):
+
+    @browsing
+    def test_list_all_my_invitations(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        iid = getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.reader_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        response = browser.open(
+            self.portal.absolute_url() + '/@my-workspace-invitations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/@workspace-invitations/{}'.format(iid),
+                    u'@type': u'virtual.participations.invitation',
+                    u'accept': u'http://nohost/plone/@workspace-invitations/{}/accept'.format(iid),
+                    u'decline': u'http://nohost/plone/@workspace-invitations/{}/decline'.format(iid),
+                    u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
+                    u'title': u'A Workspace'
+                }
+            ], response.get('items'))

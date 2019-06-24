@@ -4,6 +4,7 @@ Changelog
 2019.3.1 (unreleased)
 ---------------------
 
+- Add GET restapi endpint @my-workspace-invitations. [elioschmutz]
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]
 - Docs: Add tasks to documented content types. [lgraf]

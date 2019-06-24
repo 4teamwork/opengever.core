@@ -373,4 +373,12 @@
       permission="plone.DelegateWorkspaceAdminRole"
       />
 
+  <plone:service
+      method="GET"
+      name="@my-workspace-invitations"
+      for="*"
+      factory=".participation.MyInvitationsGet"
+      permission="zope2.View"
+      />
+
 </configure>

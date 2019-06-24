@@ -3,6 +3,7 @@ from opengever.workspace.participation import PARTICIPATION_TYPES
 from opengever.workspace.participation import PARTICIPATION_TYPES_BY_PATH_IDENTIFIER
 from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
@@ -173,3 +174,31 @@ class ParticipationsPatch(ParticipationTraverseService):
             raise BadRequest('Missing parameter role')
 
         return data
+
+
+class MyInvitationsGet(Service):
+    """API Endpoint which returns a list of all invitations for the current user
+
+    GET /@my-workspace-invitations HTTP/1.1
+    """
+
+    def reply(self):
+        result = {}
+        items = []
+        invitations = MyWorkspaceInvitations(self.context, self.request).get_invitations()
+
+        for invitation in invitations:
+            base_url = '{}/@workspace-invitations/{}'.format(
+                self.context.absolute_url(),
+                invitation.get('iid'))
+            items.append({
+                '@id': base_url,
+                '@type': 'virtual.participations.{}'.format(TYPE_INVITATION.id),
+                'accept': '{}/accept'.format(base_url),
+                'decline': '{}/decline'.format(base_url),
+                'title': invitation.get('target_title'),
+                'inviter_fullname': invitation.get('inviter'),
+                })
+
+        result['items'] = items
+        return result
