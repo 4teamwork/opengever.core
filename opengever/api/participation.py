@@ -4,10 +4,15 @@ from opengever.workspace.participation import PARTICIPATION_TYPES_BY_PATH_IDENTI
 from opengever.workspace.participation import TYPE_INVITATION
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspace.participation.browser.my_invitations import MyWorkspaceInvitations
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -198,7 +203,49 @@ class MyInvitationsGet(Service):
                 'decline': '{}/decline'.format(base_url),
                 'title': invitation.get('target_title'),
                 'inviter_fullname': invitation.get('inviter'),
+                'created': json_compatible(invitation.get('created')),
                 })
 
         result['items'] = items
         return result
+
+
+class InvitationsPost(ParticipationTraverseService):
+    """API Endpoint for accepting or declining invitations.
+
+    POST /@workspace-invitations/{invitation_id}/{action} HTTP/1.1
+    """
+    available_actions = ['decline', 'accept']
+
+    def reply(self):
+        iid, action = self.read_params()
+
+        if action not in self.available_actions:
+            raise NotFound
+
+        my_invitations_manager = MyWorkspaceInvitations(self.context, self.request)
+        invitation = my_invitations_manager._get_invitation(iid)
+
+        if not invitation:
+            raise BadRequest(
+                "There is no invitation for the current user with "
+                "the id: ".format(iid))
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        if action == 'decline':
+            my_invitations_manager._decline(invitation)
+            return self.request.response.setStatus(204)
+
+        if action == 'accept':
+            target = my_invitations_manager._accept(invitation)
+            return getMultiAdapter(
+                (target, self.request),ISerializeToJson)(include_items=False)
+
+    def read_params(self):
+        if len(self.params) != 2:
+            raise BadRequest(
+                "Must supply an invitation ID and an action (accept/decline)")
+
+        return self.params[0], self.params[1]

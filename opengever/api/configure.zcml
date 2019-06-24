@@ -381,4 +381,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@workspace-invitations"
+      for="*"
+      factory=".participation.InvitationsPost"
+      permission="zope2.View"
+      />
+
 </configure>

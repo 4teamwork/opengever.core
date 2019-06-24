@@ -45,7 +45,9 @@ class MyWorkspaceInvitations(BrowserView):
                                          user=api.user.get(entry['inviter']))
                 yield {'inviter': inviter.get_label(),
                        'target_title': target_title,
-                       'iid': entry['iid']}
+                       'iid': entry['iid'],
+                       'created': entry['created'],
+                       }
 
     def get_invitation_and_validate_payload(self):
         iid = self.request.get('iid', None)
@@ -53,10 +55,20 @@ class MyWorkspaceInvitations(BrowserView):
         if iid is None:
             raise BadRequest('No iid given')
 
-        invitation = self.storage().get_invitation(iid)
-        if api.user.get_current().getId() != invitation['recipient']:
+        invitation = self._get_invitation(iid)
+        if not invitation:
             raise BadRequest('Wrong invitation')
 
+        return self._get_invitation(iid)
+
+    def _get_invitation(self, iid):
+        try:
+            invitation = self.storage().get_invitation(iid)
+        except KeyError:
+            return None
+
+        if api.user.get_current().getId() != invitation['recipient']:
+            return None
         return invitation
 
     def accept(self):
@@ -64,6 +76,10 @@ class MyWorkspaceInvitations(BrowserView):
         to the workspace.
         """
         invitation = self.get_invitation_and_validate_payload()
+        target = self._accept(invitation)
+        return self.request.RESPONSE.redirect(target.absolute_url())
+
+    def _accept(self, invitation):
         with elevated_privileges():
             target = uuidToObject(invitation['target_uuid'])
 
@@ -72,12 +88,15 @@ class MyWorkspaceInvitations(BrowserView):
             RoleAssignmentManager(target).add_or_update_assignment(assignment)
             self.storage().remove_invitation(invitation['iid'])
 
-        return self.request.RESPONSE.redirect(target.absolute_url())
+        return target
 
     def decline(self):
         """Decline invitaion by deleting the invitation from the storage.
         """
         invitation = self.get_invitation_and_validate_payload()
-        self.storage().remove_invitation(invitation['iid'])
+        self._decline(invitation)
         return self.request.RESPONSE.redirect(
             self.context.absolute_url() + '/' + self.__name__)
+
+    def _decline(self, invitation):
+        self.storage().remove_invitation(invitation.get('iid'))
