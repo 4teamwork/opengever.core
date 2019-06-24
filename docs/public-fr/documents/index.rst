@@ -11,6 +11,7 @@ Index:
    chapitre6-metadonnees
    chapitre6-consulter
    chapitre6-travailler
+   chapitre6-versions
    chapitre6-trouver
    chapitre6-actionsdiverses
    chapitre6-utiliser
