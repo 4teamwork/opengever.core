@@ -163,6 +163,13 @@
             "description": "",
             "_zope_schema_type": "Bool",
             "default": false
+        },
+        "notify_inbox_actions": {
+            "type": "boolean",
+            "title": "notify_inbox_actions",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": true
         }
     },
     "required": [
@@ -191,6 +198,7 @@
         "city",
         "country",
         "import_stamp",
-        "notify_own_actions"
+        "notify_own_actions",
+        "notify_inbox_actions"
     ]
 }

@@ -100,7 +100,8 @@ ACTIVITY_GROUPS = [
 ]
 
 GLOBAL_CONFIGURATIONS = [
-    {'id': 'notify_own_actions'}
+    {'id': 'notify_own_actions'},
+    {'id': 'notify_inbox_actions'}
 ]
 
 ALIASES = {

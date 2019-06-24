@@ -9,7 +9,8 @@ from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 import json
 
-DEFAULT_CONFIGURATIONS = [{"id": "notify_own_actions", "value": False}]
+DEFAULT_CONFIGURATIONS = [{"id": "notify_own_actions", "value": False},
+                          {"id": "notify_inbox_actions", "value": True}]
 
 
 class TestListSettings(IntegrationTestCase):
@@ -246,6 +247,19 @@ class TestSaveConfigurations(IntegrationTestCase):
 
         self.assertTrue(user.notify_own_actions)
 
+    @browsing
+    def test_save_notify_inbox_action_configuration(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        user = User.query.filter_by(userid=self.regular_user.id).first()
+        self.assertTrue(user.notify_inbox_actions)
+
+        browser.open(self.portal,
+                     view='notification-settings/save_configuration',
+                     data={'config_name': 'notify_inbox_actions', 'value': 'false'})
+
+        self.assertFalse(user.notify_inbox_actions)
+
 
 class TestResetConfiguration(IntegrationTestCase):
 
@@ -263,3 +277,16 @@ class TestResetConfiguration(IntegrationTestCase):
                      data={'config_name': 'notify_own_actions'})
 
         self.assertFalse(user.notify_own_actions)
+
+    @browsing
+    def test_reset_notify_inbox_action_configuration(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        user = User.query.filter_by(userid=self.regular_user.id).first()
+        user.notify_inbox_actions = False
+
+        browser.open(self.portal,
+                     view='notification-settings/reset_configuration',
+                     data={'config_name': 'notify_inbox_actions'})
+
+        self.assertTrue(user.notify_inbox_actions)

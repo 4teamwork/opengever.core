@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-19 12:19+0000\n"
+"POT-Creation-Date: 2019-06-24 12:11+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -219,6 +219,16 @@ msgstr "Tâches"
 #: ./opengever/activity/error_handling.py
 msgid "msg_error_not_notified"
 msgstr "Un problème a apparu pendant la création de la notification. La notification n’a pas pu être produite ou seulement partiellement."
+
+#. Default: "Some notifications are sent to all users of an inbox. This option allows these users to activateor deactivate such notifications."
+#: ./opengever/activity/__init__.py
+msgid "notify_inbox_actions_help"
+msgstr "Certaines notifications sont émises pour tous les utilisateurs de la boîte de récéption. Avec cette option, les utilisateurs concernés peuvent choisir d'activer ou de désactiver ce type de notifications."
+
+#. Default: "Enable notifications for inbox actions"
+#: ./opengever/activity/__init__.py
+msgid "notify_inbox_actions_title"
+msgstr "Activer les notifications pour la boîte de réception"
 
 #. Default: "By default notifications are suppressed when the recipient is the user who performed the action. Please note that, notwithstanding this setting, notifications only get generated for combinations of actions and roles for which the user has activated the notifications"
 #: ./opengever/activity/__init__.py

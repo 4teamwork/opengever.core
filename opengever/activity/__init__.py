@@ -176,6 +176,14 @@ ACTIVITY_TRANSLATIONS = {
                              'notifications only get generated for combinations '
                              'of actions and roles for which the user has '
                              'activated the notifications')
+         },
+    'notify_inbox_actions': {
+        'title': _('notify_inbox_actions_title',
+                   default=u'Enable notifications for inbox actions'),
+        'help_text': _('notify_inbox_actions_help',
+                   default=u'Some notifications are sent to all users of an '
+                            'inbox. This option allows these users to activate'
+                            'or deactivate such notifications.')
          }
 }
 

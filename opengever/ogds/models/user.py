@@ -53,6 +53,7 @@ class User(Base):
 
     # Notification configurations
     notify_own_actions = Column(Boolean, default=False)
+    notify_inbox_actions = Column(Boolean, default=True)
 
     def __init__(self, userid, **kwargs):
         self.userid = userid
