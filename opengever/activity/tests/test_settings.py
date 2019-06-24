@@ -242,7 +242,7 @@ class TestSaveConfigurations(IntegrationTestCase):
 
         browser.open(self.portal,
                      view='notification-settings/save_configuration',
-                     data={'config_name': 'notify_own_actions', 'value': True})
+                     data={'config_name': 'notify_own_actions', 'value': 'true'})
 
         self.assertTrue(user.notify_own_actions)
 

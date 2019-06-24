@@ -143,7 +143,7 @@ class NotificationSettings(BrowserView):
         user = User.query.filter_by(userid=userid).one()
 
         config_name = self.request.form['config_name']
-        value = self.request.form['value']
+        value = json.loads(self.request.form['value'])
 
         # Make sure that config_name is a column of the User model.
         error_msg = "Notification configuration has to be a column on User"
