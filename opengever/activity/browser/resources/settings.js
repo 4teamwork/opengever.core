@@ -139,7 +139,7 @@
     };
 
     this.save_config = function(target, event) {
-      var checkbox = target.parents('ul').find('input:checkbox')[0];
+      var checkbox = target.siblings('input:checkbox')[0];
       return this.request($('#notification-settings-form').data('save-configuration-url'), {
         method: "POST",
         data: { config_name: checkbox.value,
@@ -177,7 +177,7 @@
     };
 
     this.reset_config= function(target, event){
-      var checkbox = target.parents('ul').find('input:checkbox')[0];
+      var checkbox = target.siblings('input:checkbox')[0];
       return this.request($('#notification-settings-form').data('reset-configuration-url'), {
         method: "POST",
         data: { config_name: checkbox.value}
@@ -192,7 +192,7 @@
     };
 
     this.cancel_config = function(target, event){
-      var checkbox = target.parents('ul').find('input:checkbox')[0];
+      var checkbox = target.siblings('input:checkbox')[0];
       configurations[checkbox.value].changed = false;
     };
 
