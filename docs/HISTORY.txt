@@ -5,10 +5,12 @@ Changelog
 ---------------------
 
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
+- Add per user configuration to deactivate inbox notifications. [njohner]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]
 - Update Creator, created and Date when copy/pasting an object. [njohner]
 - Docs: Add tasks to documented content types. [lgraf]
 - Add per user configuration to activate notifications for own actions. [njohner]
+
 
 2019.3.0 (2019-06-17)
 ---------------------

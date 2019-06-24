@@ -31,3 +31,19 @@ class TestWatcher(FunctionalTestCase):
         watcher = create(Builder('watcher').having(actorid=u'inbox:fd'))
         self.assertEqual(['hugo.boss', 'peter.michel'],
                          watcher.get_user_ids())
+
+    def test_get_user_ids_for_inbox_watcher_ignores_users_with_inbox_notifications_disabled(self):
+        hugo = create(Builder('ogds_user').id(u'hugo.boss'))
+        peter = create(Builder('ogds_user').id(u'peter.michel')
+                       .having(notify_inbox_actions=False))
+        james = create(Builder('ogds_user').id(u'james.bond'))
+
+        create(Builder('admin_unit').id('fd'))
+        create(Builder('org_unit')
+               .id('fd')
+               .having(admin_unit_id='fd')
+               .assign_users([hugo, peter, james]))
+
+        watcher = create(Builder('watcher').having(actorid=u'inbox:fd'))
+        self.assertEqual(['hugo.boss', 'james.bond'],
+                         watcher.get_user_ids())
