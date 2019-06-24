@@ -57,6 +57,22 @@ ul.notifications-configurations-form {
     margin-left: 10px;
     max-width: 45em;
   }
+
+  a.save-config:before {
+    @extend .fas;
+    @extend .fa-check;
+  }
+
+  a.reset-config:before {
+    @extend .fas;
+    @extend .fa-trash-alt;
+  }
+
+  a.cancel-config:before {
+    @extend .fas;
+    @extend .fa-times;
+  }
+
 }
 
 .notifications-settings-form,
@@ -92,7 +108,7 @@ ul.notifications-configurations-form {
     vertical-align: middle;
   }
 
-  .notification-settings-kind span{
+  .notification-settings-kind span {
     font-weight: bold;
 
     &:before {
