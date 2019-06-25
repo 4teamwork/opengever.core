@@ -26,6 +26,14 @@
     this.changed = false;
   }
 
+  function ConfigItem(data) {
+    this.id = data.id;
+    this.title = data.title;
+    this.help_text = data.help_text;
+    this.value = data.value;
+    this.setting_type = data.setting_type;
+    this.changed = false;
+  }
 
   function SettingsFormController(options) {
     global.Controller.call(
@@ -38,6 +46,7 @@
     };
 
     var activities;
+    var configurations;
     var currentTab = 0;
 
     this.render = function(data) {
@@ -57,9 +66,27 @@
         });
       }
 
+      if (configurations) {
+        // Rendering after update
+        data.configurations.forEach(function(config_item) {
+          if (!configurations[config_item.id].changed) {
+            configurations[config_item.id] = new ConfigItem(config_item);
+          }
+        });
+      } else {
+        // Initial rendering
+        configurations = {};
+        data.configurations.forEach(function(config_item) {
+          configurations[config_item.id] = new ConfigItem(config_item);
+        });
+      }
+
       var values = Object.keys(activities).map(function(e) { return activities[e]});
 
       var tabs = [
+        {tabId: 'general',
+         tabTitle: this.getDataAttribute('tab-title-general'),
+         configurations: configurations},
         {tabId: 'tasks',
          tabTitle: this.getDataAttribute('tab-title-task'),
          activities: this.filterActivitiesByType(values, 'task')},
@@ -111,6 +138,17 @@
       this.initTabs();
     };
 
+    this.save_config = function(target, event) {
+      var checkbox = target.siblings('input:checkbox')[0];
+      return this.request($('#notification-settings-form').data('save-configuration-url'), {
+        method: "POST",
+        data: { config_name: checkbox.value,
+                value: checkbox.checked}
+      }).done(function() {
+        configurations[checkbox.value].changed = false;
+      });
+    };
+
     this.save_setting = function(target, event) {
       var row = target.parents('tr');
       var mail = row.find("ul.mail input:checkbox:checked").map(function(){ return $(this).val(); }).get();
@@ -138,9 +176,24 @@
       });
     };
 
+    this.reset_config= function(target, event){
+      var checkbox = target.siblings('input:checkbox')[0];
+      return this.request($('#notification-settings-form').data('reset-configuration-url'), {
+        method: "POST",
+        data: { config_name: checkbox.value}
+      }).done(function() {
+        configurations[checkbox.value].changed = false;
+      });
+    };
+
     this.cancel_setting = function(target, event){
       var row = target.parents('tr');
       activities[row.data('kind')].changed = false;
+    };
+
+    this.cancel_config = function(target, event){
+      var checkbox = target.siblings('input:checkbox')[0];
+      configurations[checkbox.value].changed = false;
     };
 
     this.refresh = function() {
@@ -150,12 +203,18 @@
 
     this.track_settings_changes = function(target) {
       var row = activities[target.parents('tr').data().kind];
-
       row.changed = true;
       var name = target.attr('name');
       var value = target.val();
 
       row[name][value] = target.prop('checked');
+      this.refresh();
+    };
+
+    this.track_config_changes = function(target) {
+      var config = configurations[target.context.value];
+      config.changed = true;
+      config.value = target.prop('checked');
       this.refresh();
     };
 
@@ -170,8 +229,24 @@
       },
       {
         method: "click",
+        target: ".save-config",
+        callback: this.save_config,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
         target: ".reset-setting",
         callback: this.reset_setting,
+        options: {
+          update: true
+        }
+      },
+      {
+        method: "click",
+        target: ".reset-config",
+        callback: this.reset_config,
         options: {
           update: true
         }
@@ -184,11 +259,24 @@
           update: true
         }
       },
-
+      {
+        method: "click",
+        target: ".cancel-config",
+        callback: this.cancel_config,
+        options: {
+          update: true
+        }
+      },
       {
         method: "change",
         target: ".settings-trigger",
         callback: this.track_settings_changes
+      },
+
+      {
+        method: "change",
+        target: ".config-trigger",
+        callback: this.track_config_changes
       }
     ];
 

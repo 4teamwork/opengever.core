@@ -39,7 +39,44 @@
   }
 }
 
-.notifications-settings-form {
+ul.notifications-configurations-form {
+  display: inline-block;
+
+  input {
+    margin-top: 20px;
+    margin-left: 10px;
+  }
+
+  label {
+    font-weight: bold;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+
+  .formHelp {
+    margin-left: 10px;
+    max-width: 45em;
+  }
+
+  a.save-config:before {
+    @extend .fas;
+    @extend .fa-check;
+  }
+
+  a.reset-config:before {
+    @extend .fas;
+    @extend .fa-trash-alt;
+  }
+
+  a.cancel-config:before {
+    @extend .fas;
+    @extend .fa-times;
+  }
+
+}
+
+.notifications-settings-form,
+.notifications-configurations-form {
 
   .actions-column {
     width: 450px;
@@ -57,6 +94,7 @@
     padding-right: 5px;
   }
 
+  li.settings-changed,
   .settings-changed td,
   .settings-changed:nth-child(even) td {
     background-color: #fce9e3;
@@ -70,7 +108,7 @@
     vertical-align: middle;
   }
 
-  .notification-settings-kind span{
+  .notification-settings-kind span {
     font-weight: bold;
 
     &:before {
@@ -121,13 +159,17 @@
   }
 
   .save-setting,
-  .cancel-setting {
+  .cancel-setting,
+  .save-config,
+  .cancel-config {
     display: none;
   }
 
   .settings-changed {
     .save-setting,
-    .cancel-setting {
+    .cancel-setting,
+    .save-config,
+    .cancel-config {
       display: inline-block;
     }
   }

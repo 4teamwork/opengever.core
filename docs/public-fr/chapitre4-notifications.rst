@@ -39,6 +39,11 @@ Pour créer une notification pour un dossier en souffrance, 2 étapes doivent ê
 
 |img-notification7|
 
+Paramètres généraux de notifications
+------------------------------------
+Sous l'onglet "Général" se trouvent les paramètres de notifications globaux.
+Vous pourrez y configurer si vous voulez recevoir des notifications pour vos propres actions. Vous pourrez également y configurer si, en tant que membre d'un groupe de boîte de réception, vous voulez recevoir les notifications qui sont envoyées a tous les membres d'une boîte de réception.
+
 .. |img-notification1| image:: _static/img/img-notification1.png
 .. |img-notification2| image:: _static/img/img-notification2.png
 .. |img-notification3| image:: _static/img/img-notification3.png

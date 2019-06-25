@@ -35,7 +35,7 @@
       name="notification-settings"
       class=".settings.NotificationSettings"
       permission="zope2.View"
-      allowed_attributes="list save reset"
+      allowed_attributes="list save reset save_configuration reset_configuration"
       />
 
   <browser:page

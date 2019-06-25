@@ -6,6 +6,7 @@ from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import UnicodeCoercingText
+from opengever.ogds.models.user import User
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -37,15 +38,20 @@ class Activity(Base, Translatable):
 
     def create_notifications(self):
         """Create a notification for every resource watcher.
-        Don't create a notification for the activity's actor, he had create the
-        activity, therefore a notification is unecessary or disruptive.
+        For the activity's actor, who has created the activity, a notification
+        is usually unnecessary or disruptive. We therefore only create a
+        notification for the activity's actor if he has enabled the
+        notify_own_actions'setting.
         """
 
         notifications = []
         for userid in self.get_users_for_watchers():
-            if not self.is_current_user(userid):
-                notifications.append(
-                    Notification(userid=userid, activity=self))
+            if (self.is_current_user(userid) and not
+                    self.user_wants_own_action_notifications(userid)):
+                continue
+
+            notifications.append(
+                Notification(userid=userid, activity=self))
 
         return notifications
 
@@ -64,6 +70,10 @@ class Activity(Base, Translatable):
 
     def is_current_user(self, user_id):
         return user_id == self.actor_id
+
+    def user_wants_own_action_notifications(self, userid):
+        user = User.query.filter_by(userid=userid).one()
+        return user.notify_own_actions
 
 
 class ActivityTranslation(translation_base(Activity)):

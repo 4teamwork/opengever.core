@@ -13,6 +13,7 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
+from opengever.ogds.models.user import User
 from sqlalchemy.exc import IntegrityError
 import transaction
 import unittest
@@ -261,9 +262,14 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals(resource_a, notification.activity.resource)
         self.assertFalse(notification.is_read)
 
-    def test_does_not_create_an_notification_for_the_actor(self):
+    def test_does_not_create_notification_for_actor_if_notify_own_actions_disabled(self):
+        create(Builder('ogds_user').id('peter'))
         peter = create(Builder('watcher').having(actorid='peter'))
+        create(Builder('ogds_user').id('hugo'))
         hugo = create(Builder('watcher').having(actorid='hugo'))
+
+        user = User.query.filter_by(userid='peter').first()
+        self.assertFalse(user.notify_own_actions)
 
         create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 
@@ -278,6 +284,29 @@ class TestAddActivity(ActivityTestCase):
 
         self.assertEquals(1, Notification.query.by_user('hugo').count())
         self.assertEquals(0, Notification.query.by_user('peter').count())
+
+    def test_creates_notification_for_actor_if_notify_own_actions_enabled(self):
+        create(Builder('ogds_user').id('peter'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+        create(Builder('ogds_user').id('hugo'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+
+        user = User.query.filter_by(userid='peter').first()
+        user.notify_own_actions = True
+
+        create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
+
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'TASK_ADDED',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task accepted'},
+            {'en': 'Task bla added by Peter'},
+            'peter',
+            {'en': None})
+
+        self.assertEquals(1, Notification.query.by_user('hugo').count())
+        self.assertEquals(1, Notification.query.by_user('peter').count())
 
 
 class TestNotificationHandling(ActivityTestCase):
