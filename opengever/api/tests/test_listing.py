@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from mock import Mock
 from opengever.api.listing import filename
 from opengever.api.listing import filesize
+from opengever.api.listing import get_path_depth
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
@@ -385,6 +386,27 @@ class TestListingEndpoint(IntegrationTestCase):
         self.assertEqual(self.document.absolute_url(), item['@id'])
         self.assertEqual(self.document.title, item['title'])
 
+    @browsing
+    def test_filter_by_depth(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # all subdossiers
+        view = '@listing?name=dossiers&columns:list=title'
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        number_of_subdossiers = len(browser.json['items'])
+
+        # subdossiers limited to depth 1
+        view = ('@listing?name=dossiers&'
+                'columns:list=title'
+                '&depth=1')
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        self.assertTrue(number_of_subdossiers > len(browser.json['items']))
+        self.assertEqual(2, len(browser.json['items']))
+        self.assertItemsEqual(
+            [u'2015', u'2016'],
+            [item['title'] for item in browser.json['items']])
+
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
 
@@ -491,3 +513,19 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
         filters = self.conn.search.call_args[0][0]['filter']
         self.assertIn(u'document_type:(contract)', filters)
+
+    @browsing
+    def test_filter_by_depth(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # Guard assertion - we expect self.dossier to be on level 5
+        self.assertEqual(5, get_path_depth(self.dossier))
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=start'
+                '&depth=1')
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(u'path_depth:[* TO 6]', filters)
