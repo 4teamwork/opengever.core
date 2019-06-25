@@ -23,6 +23,7 @@
   <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeTaskResponseToJson" />
+  <adapter factory=".workspace.SerializeWorkspaceToJson" />
 
   <adapter factory=".mail.DeserializeMailFromJson" />
 
