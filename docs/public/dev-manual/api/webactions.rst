@@ -77,7 +77,6 @@ Erstellen (POST)
       }
 
 .. table::
-    :widths: 25 75
 
     +------------------+------------------------------------------------------------------+
     | Status Code      | Beschreibung                                                     |
@@ -137,7 +136,6 @@ Auslesen (GET)
       }
 
 .. table::
-    :widths: 25 75
 
     +------------------+------------------------------------------------------------------+
     | Status Code      | Beschreibung                                                     |
@@ -205,7 +203,6 @@ Auflisten (GET)
       }
 
 .. table::
-    :widths: 25 75
 
     +------------------+------------------------------------------------------------------+
     | Status Code      | Beschreibung                                                     |
@@ -247,7 +244,6 @@ Aktualisieren (PATCH)
       Content-Type: application/json
 
 .. table::
-    :widths: 25 75
 
     +------------------+------------------------------------------------------------------+
     | Status Code      | Beschreibung                                                     |
@@ -288,7 +284,6 @@ Löschen (DELETE)
       Content-Type: application/json
 
 .. table::
-    :widths: 25 75
 
     +------------------+------------------------------------------------------------------+
     | Status Code      | Beschreibung                                                     |
