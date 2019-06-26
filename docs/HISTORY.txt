@@ -8,6 +8,7 @@ Changelog
 - Add GET restapi endpint @my-workspace-invitations. [elioschmutz]
 - Allow range queries on deadline in listing endpoint. [njohner]
 - Update and improve documentation for checked-out documents. [phgross, njohner]
+- Add fields available in listing endpoint for each type to documentation. [njohner]
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Add per user configuration to deactivate inbox notifications. [njohner]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]
