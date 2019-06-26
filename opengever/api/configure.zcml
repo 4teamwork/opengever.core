@@ -23,6 +23,7 @@
   <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeTaskResponseToJson" />
+  <adapter factory=".workspace.SerializeWorkspaceToJson" />
 
   <adapter factory=".mail.DeserializeMailFromJson" />
 
@@ -371,6 +372,22 @@
       for="opengever.workspace.interfaces.IWorkspace"
       factory=".participation.ParticipationsPatch"
       permission="plone.DelegateWorkspaceAdminRole"
+      />
+
+  <plone:service
+      method="GET"
+      name="@my-workspace-invitations"
+      for="*"
+      factory=".participation.MyInvitationsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@workspace-invitations"
+      for="*"
+      factory=".participation.InvitationsPost"
+      permission="zope2.View"
       />
 
 </configure>

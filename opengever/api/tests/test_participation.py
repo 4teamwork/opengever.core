@@ -1,6 +1,9 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
+from zExceptions import Unauthorized
 from zope.component import getUtility
 import json
 
@@ -580,3 +583,191 @@ class TestParticipationPatch(IntegrationTestCase):
                 data=data,
                 headers=http_headers(),
                 )
+
+
+class TestMyInvitationsGet(IntegrationTestCase):
+
+    @browsing
+    def test_list_all_my_invitations(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        with freeze(datetime(2018, 4, 30, 10, 30)):
+            iid = getUtility(IInvitationStorage).add_invitation(
+                self.workspace,
+                self.regular_user.getId(),
+                self.workspace_owner.getId(),
+                'WorkspaceGuest')
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.reader_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        response = browser.open(
+            self.portal.absolute_url() + '/@my-workspace-invitations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/@workspace-invitations/{}'.format(iid),
+                    u'@type': u'virtual.participations.invitation',
+                    u'accept': u'http://nohost/plone/@workspace-invitations/{}/accept'.format(iid),
+                    u'created': u'2018-04-30T10:30:00+00:00',
+                    u'decline': u'http://nohost/plone/@workspace-invitations/{}/decline'.format(iid),
+                    u'inviter_fullname': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
+                    u'title': u'A Workspace'
+                }
+            ], response.get('items'))
+
+
+class TestInvitationsPOST(IntegrationTestCase):
+
+    def get_my_invitations(self, browser):
+        return browser.open(
+            self.portal.absolute_url() + '/@my-workspace-invitations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+    @browsing
+    def test_accept_invitation(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        with self.assertRaises(Unauthorized):
+            browser.visit(self.workspace)
+
+        my_invitations = self.get_my_invitations(browser)
+
+        # Accept first invitation
+        json_workspace = browser.open(
+            my_invitations.get('items')[0].get('accept'),
+            method='POST',
+            headers=http_headers()).json
+
+        my_invitations = self.get_my_invitations(browser)
+        self.assertEqual([], my_invitations.get('items'))
+
+        self.assertEqual(200, browser.visit(json_workspace['@id']).status_code)
+
+    @browsing
+    def test_decline_invitation(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        with self.assertRaises(Unauthorized):
+            browser.visit(self.workspace)
+
+        my_invitations = self.get_my_invitations(browser)
+
+        # Decline first invitation
+        browser.open(
+            my_invitations.get('items')[0].get('decline'),
+            method='POST',
+            headers=http_headers()).json
+
+        my_invitations = self.get_my_invitations(browser)
+        self.assertEqual([], my_invitations.get('items'))
+
+        with self.assertRaises(Unauthorized):
+            browser.visit(self.workspace)
+
+    @browsing
+    def test_disallow_accept_invitation_of_other_user(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        my_invitations = self.get_my_invitations(browser)
+        accept_link = my_invitations.get('items')[0].get('accept')
+
+        self.login(self.workspace_owner, browser)
+
+        # Accept invitation of regular-user
+        with browser.expect_http_error(400):
+            browser.open(
+                accept_link,
+                method='POST',
+                headers=http_headers()).json
+
+        self.login(self.regular_user, browser)
+        my_invitations = self.get_my_invitations(browser)
+        self.assertEqual(1, len(my_invitations.get('items')))
+
+    @browsing
+    def test_disallow_decline_invitation_of_other_user(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        my_invitations = self.get_my_invitations(browser)
+        accept_link = my_invitations.get('items')[0].get('decline')
+
+        self.login(self.workspace_owner, browser)
+
+        # Decline invitation of regular-user
+        with browser.expect_http_error(400):
+            browser.open(
+                accept_link,
+                method='POST',
+                headers=http_headers()).json
+
+        self.login(self.regular_user, browser)
+        my_invitations = self.get_my_invitations(browser)
+        self.assertEqual(1, len(my_invitations.get('items')))
+
+    @browsing
+    def test_raise_404_for_unknown_action(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            self.regular_user.getId(),
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        my_invitations = self.get_my_invitations(browser)
+        accept_link = my_invitations.get('items')[0].get('decline')
+
+        self.login(self.workspace_owner, browser)
+
+        # Decline invitation of regular-user
+        with browser.expect_http_error(404):
+            browser.open(
+                accept_link + 'unknown',
+                method='POST',
+                headers=http_headers()).json

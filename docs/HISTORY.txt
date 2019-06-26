@@ -4,6 +4,8 @@ Changelog
 2019.3.1 (unreleased)
 ---------------------
 
+- Add POST restapi endpint @mworkspace-invitations/{id}/{action}. [elioschmutz]
+- Add GET restapi endpint @my-workspace-invitations. [elioschmutz]
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Add per user configuration to deactivate inbox notifications. [njohner]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]

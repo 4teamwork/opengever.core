@@ -71,7 +71,7 @@ class TestMyInvitationsView(IntegrationTestCase):
     def test_cannot_accept_invalid_invitation(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        with browser.expect_http_error(503):
+        with browser.expect_http_error(400):
             browser.open(self.workspace_root.absolute_url() + '/my-invitations/accept',
                          data={'iid': 'someinvalidiid',
                                '_authenticator': createToken()})
@@ -115,7 +115,7 @@ class TestMyInvitationsView(IntegrationTestCase):
     def test_cannot_decline_invalid_invitation(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        with browser.expect_http_error(503):
+        with browser.expect_http_error(400):
             browser.open(self.workspace_root.absolute_url() + '/my-invitations/decline',
                          data={'iid': 'someinvalidiid',
                                '_authenticator': createToken()})
