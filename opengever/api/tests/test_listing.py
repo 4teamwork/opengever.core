@@ -251,6 +251,28 @@ class TestListingEndpoint(IntegrationTestCase):
         self.assertEqual('2016-01-01', start_dates[0])
 
     @browsing
+    def test_filter_by_deadline(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=tasks&columns:list=title&columns:list=deadline'
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json'})
+
+        items = browser.json['items']
+        self.assertTrue(
+            len(items) > 1,
+            msg="There should be several tasks in the listing before filtering")
+
+        view = '{}&filters.deadline:record=2016-08-01TO2016-10-01'.format(view)
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json'})
+
+        items = browser.json['items']
+        deadlines = list(set(map(lambda x: x['deadline'], items)))
+        self.assertEqual(1, len(deadlines))
+        self.assertEqual('2016-09-05', deadlines[0])
+
+    @browsing
     def test_workspaces_listing(self, browser):
         self.login(self.workspace_member, browser=browser)
         query_string = '&'.join((
@@ -425,6 +447,22 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         filters = self.conn.search.call_args[0][0]['filter']
         self.assertIn(
             'start:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
+            filters,
+        )
+
+    @browsing
+    def test_filter_by_deadline(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=tasks&columns:list=title'
+                '&columns:list=deadline'
+                '&filters.deadline:record=2016-01-01TO2016-01-01')
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json'})
+
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(
+            'deadline:([2016-01-01T00:00:00.000Z TO 2016-01-01T23:59:59.000Z])',
             filters,
         )
 

@@ -148,6 +148,7 @@ DATE_INDEXES = set([
     'modified',
     'receipt_date',
     'start',
+    'deadline',
 ])
 
 SOLR_FILTERS = {
