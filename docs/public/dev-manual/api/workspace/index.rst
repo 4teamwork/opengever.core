@@ -10,5 +10,6 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    :maxdepth: 1
 
    workspace_invitations
+   participation
 
 .. disqus::
