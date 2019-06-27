@@ -216,6 +216,7 @@ class Listing(Service):
         term = self.request.form.get('search', '').strip()
         columns = self.request.form.get('columns', [])
         filters = self.request.form.get('filters', {})
+        facets = self.request.form.get('facets', [])
         if not isinstance(filters, record):
             filters = {}
 
@@ -228,11 +229,13 @@ class Listing(Service):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         if settings.use_solr:
-            items = self.solr_results(
-                name, term, columns, start, rows, sort_on, sort_order, filters, depth)
+            items, facet_counts = self.solr_results(
+                name, term, columns, start, rows, sort_on, sort_order, filters,
+                depth, facets)
         else:
             items = self.catalog_results(
                 name, term, start, rows, sort_on, sort_order, filters, depth)
+            facet_counts = {}
 
         batch = HypermediaBatch(self.request, items)
         res = {}
@@ -247,6 +250,8 @@ class Listing(Service):
         for item in items[start:start + rows]:
             res['items'].append(create_list_item(item, columns))
 
+        if facet_counts:
+            res['facets'] = facet_counts
         return res
 
     def catalog_results(self, name, term, start, rows, sort_on, sort_order,
@@ -306,7 +311,7 @@ class Listing(Service):
             return {'query': [date_from, date_to], 'range': 'minmax'}
 
     def solr_results(self, name, term, columns, start, rows, sort_on,
-                     sort_order, filters, depth):
+                     sort_order, filters, depth, facets):
 
         if name not in SOLR_FILTERS:
             return []
@@ -357,24 +362,40 @@ class Listing(Service):
             'q.op': 'AND',
         }
 
+        facet_fields = filter(None, map(self.field_name_to_index, facets))
+        if facet_fields:
+            params["facet"] = "true"
+            params["facet.mincount"] = 1
+            params["facet.field"] = facet_fields
+
         solr = getUtility(ISolrSearch)
         resp = solr.search(
             query=query, filters=filter_queries, start=start, rows=rows,
             sort=sort, **params)
-        return LazyMap(
-            OGSolrDocument,
-            start * [None] + resp.docs,
-            actual_result_count=resp.num_found,
-        )
+
+        # We map the index names back to the field names for the facets
+        facet_counts = {}
+        for field in facets:
+            index_name = self.field_name_to_index(field)
+            if index_name is None or index_name not in resp.facets:
+                continue
+            facet_counts[field] = resp.facets[index_name]
+
+        return (LazyMap(OGSolrDocument,
+                        start * [None] + resp.docs,
+                        actual_result_count=resp.num_found,),
+                facet_counts)
+
+    @staticmethod
+    def field_name_to_index(field):
+        if field in FIELDS:
+            return FIELDS[field][0]
+        return None
 
     def solr_field_list(self, columns):
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
-        for col in columns:
-            if col in FIELDS:
-                field = FIELDS[col][0]
-                if field is not None:
-                    fl.append(field)
+        fl.extend(filter(None, map(self.field_name_to_index, columns)))
         return fl
 
     def solr_daterange_filter(self, value):

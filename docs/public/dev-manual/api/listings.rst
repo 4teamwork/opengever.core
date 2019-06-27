@@ -205,6 +205,7 @@ Optionale Parameter:
   - ``1``: Nur die unmittelbaren children unterhalb des Kontexts
   - ``2``: Unmittelbare children, und deren direkte children
   - etc.
+- ``facets``: Für diese Felder auch die Facetten Wertebereichen liefern.
 
 
 **Beispiel: Sortierung nach Änderungsdatum, neuste Dokumente zuerst:**
@@ -228,4 +229,11 @@ Optionale Parameter:
   .. sourcecode:: http
 
     GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&sort_on=modified&filters.start:record:=2018-08-20TO2018-09-20 HTTP/1.1
+    Accept: application/json
+
+**Beispiel: Werte-Bereiche von Ersteller auch liefern**
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&facets:list=creator HTTP/1.1
     Accept: application/json

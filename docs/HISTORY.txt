@@ -7,6 +7,7 @@ Changelog
 - Avoid reindexing 'created' during IObjectCopiedEvent to fix copy & pasting with Solr. [lgraf]
 - @listing endpoint: Add support for filtering by relative path depth. [lgraf]
 - Update plone.restapi to latest release. [phgross]
+- Add optional facet values and counts search to listing endpoint. [njohner]
 - Add POST restapi endpint @mworkspace-invitations/{id}/{action}. [elioschmutz]
 - Add GET restapi endpint @my-workspace-invitations. [elioschmutz]
 - Allow range queries on deadline in listing endpoint. [njohner]
