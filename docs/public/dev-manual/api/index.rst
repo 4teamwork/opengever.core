@@ -32,6 +32,7 @@ Inhalt:
    reminder.rst
    journal.rst
    participation.rst
+   workspace/index
    examples/index.rst
    docs_changelog.rst
 
