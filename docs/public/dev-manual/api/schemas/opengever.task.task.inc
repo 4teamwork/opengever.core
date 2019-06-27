@@ -31,7 +31,7 @@
        :Pflichtfeld: Ja :required:`(*)`
        
        :Beschreibung: Wählen Sie den Auftragstyp
-       :Wertebereich: ["information", "direct-execution", "report", "approval", "correction", "comment"]
+       :Wertebereich: ["approval", "comment", "correction", "direct-execution", "information", "report"]
 
 
    .. py:attribute:: responsible_client
