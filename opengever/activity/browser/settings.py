@@ -141,7 +141,11 @@ class NotificationSettings(BrowserView):
         """Save global configuration change
         """
         userid = api.user.get_current().getId()
-        user = User.query.filter_by(userid=userid).one()
+        user = User.query.filter_by(userid=userid).one_or_none()
+        if user is None:
+            # User with no entry in the ogds, probably zopemaster.
+            msg = "Cannot save configuration for this user as he is not in the ogds"
+            return JSONResponse(self.request).error(msg).proceed().dump()
 
         config_name = self.request.form['config_name']
         value = json.loads(self.request.form['value'])
@@ -266,7 +270,10 @@ class NotificationSettings(BrowserView):
 
     def get_user_configuration(self, config_name):
         userid = api.user.get_current().getId()
-        user = User.query.filter_by(userid=userid).one()
+        user = User.query.filter_by(userid=userid).one_or_none()
+        if user is None:
+            # User with no entry in the ogds, probably zopemaster.
+            return self.get_default_configuration(config_name)
         return getattr(user, config_name)
 
     def get_default_configuration(self, config_name):

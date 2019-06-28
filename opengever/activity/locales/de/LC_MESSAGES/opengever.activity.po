@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-24 12:11+0000\n"
+"POT-Creation-Date: 2019-06-28 06:53+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,25 +218,25 @@ msgstr "Aufgaben"
 msgid "msg_error_not_notified"
 msgstr "Während dem Erzeugen der Benachrichtigung ist ein Fehler aufgetreten. Die Benachrichtigung wurde deshalb nicht oder nur zum Teil ausgelöst."
 
-#. Default: "Some notifications are sent to all users of an inbox. This option allows these users to activateor deactivate such notifications."
+#. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
 #: ./opengever/activity/__init__.py
 msgid "notify_inbox_actions_help"
-msgstr "Gewisse Benachrichtigungen werden an alle Benutzer vom Eingangskorb gesendet. Mit dieser Option können die betroffenen Benutzer diese Art von Benachrichtigungen aktivieren oder deaktivieren."
+msgstr "Alle Benachrichtigungen aufgrund von Eingangskorbberechtigung aktivieren bzw. deaktivieren."
 
 #. Default: "Enable notifications for inbox actions"
 #: ./opengever/activity/__init__.py
 msgid "notify_inbox_actions_title"
 msgstr "Benachrichtigungen für Eingangskorb aktivieren"
 
-#. Default: "By default notifications are suppressed when the recipient is the user who performed the action. Please note that, notwithstanding this setting, notifications only get generated for combinations of actions and roles for which the user has activated the notifications"
+#. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
 #: ./opengever/activity/__init__.py
 msgid "notify_own_actions_help"
-msgstr "Standardmässig werden keine Benachrichtigungen ausgelöst, wenn der Empfänger der Benachrichtigung identisch ist mit der Person, welche die Aktion ausgeführt hat. Mit dieser neuen Option kann die Benachrichtigung ausdrücklich zugelassen werden.<br/>Bitte beachten Sie, dass Ihre persönlich vorgenommenen Benachrichtigungseinstellungen pro einzelne Aktion aber nach wie vor angewendet werden. Mit anderen Worten: Sie persönlich erhalten keine Benachrichtigung, wenn Sie die entsprechende Checkbox (zB Aufgabe abgeschlossen) deaktiviert haben."
+msgstr "Standardmässig werden für selbst ausgeführte Aktionen keine Benachrichtigungen ausgelöst. Mit dieser Option kann dieses Verhalten verändert werden. Persönlich vorgenommene Benachrichtigungseinstellungen pro Aktionstyp gelten dabei nach wie vor."
 
 #. Default: "Enable notifications for own actions"
 #: ./opengever/activity/__init__.py
 msgid "notify_own_actions_title"
-msgstr "Benachrichtigung für eigene Aktionen zulassen"
+msgstr "Benachrichtigung für eigene Aktionen aktivieren"
 
 #. Default: "Additional documents submitted"
 #: ./opengever/activity/__init__.py

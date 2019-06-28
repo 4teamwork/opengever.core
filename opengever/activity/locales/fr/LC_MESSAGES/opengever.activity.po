@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-24 12:11+0000\n"
+"POT-Creation-Date: 2019-06-28 06:53+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -220,25 +220,25 @@ msgstr "Tâches"
 msgid "msg_error_not_notified"
 msgstr "Un problème a apparu pendant la création de la notification. La notification n’a pas pu être produite ou seulement partiellement."
 
-#. Default: "Some notifications are sent to all users of an inbox. This option allows these users to activateor deactivate such notifications."
+#. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
 #: ./opengever/activity/__init__.py
 msgid "notify_inbox_actions_help"
-msgstr "Certaines notifications sont émises pour tous les utilisateurs de la boîte de récéption. Avec cette option, les utilisateurs concernés peuvent choisir d'activer ou de désactiver ce type de notifications."
+msgstr "Activer, respectivement désactiver, toutes les notifications dues à vos autorisations sur une boîte de réception"
 
 #. Default: "Enable notifications for inbox actions"
 #: ./opengever/activity/__init__.py
 msgid "notify_inbox_actions_title"
 msgstr "Activer les notifications pour la boîte de réception"
 
-#. Default: "By default notifications are suppressed when the recipient is the user who performed the action. Please note that, notwithstanding this setting, notifications only get generated for combinations of actions and roles for which the user has activated the notifications"
+#. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
 #: ./opengever/activity/__init__.py
 msgid "notify_own_actions_help"
-msgstr "Normalement aucune notification n'est émise pour une action si le destinataire est identique à la personne qui vient d'exécuter cette action. Cette option permet d'expressément autoriser ces notifications.<br/>Veuillez noter que vos paramètres de notifications personnels par action s'appliquent indépendamment de cette option. En d'autres termes: vous, personellement, ne recevrez pas de notifications pour un évènement (par exemple une tâche clôturée), si vous n'avez pas activé les notifications pour cet évènement (par exemple case à cocher 'tâche clôturée')"
+msgstr "Normalement aucune notification n'est émise pour vos propres actions. Cette option permet de modifier ce comportement. Les paramètres personnels de notifications pour chaque type d'action sont néanmoins toujours appliqués."
 
 #. Default: "Enable notifications for own actions"
 #: ./opengever/activity/__init__.py
 msgid "notify_own_actions_title"
-msgstr "Autoriser les notifications pour ses propres actions"
+msgstr "Activer les notifications pour ses propres actions"
 
 #. Default: "Additional documents submitted"
 #: ./opengever/activity/__init__.py

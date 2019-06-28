@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-24 12:11+0000\n"
+"POT-Creation-Date: 2019-06-28 06:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,7 +218,7 @@ msgstr ""
 msgid "msg_error_not_notified"
 msgstr ""
 
-#. Default: "Some notifications are sent to all users of an inbox. This option allows these users to activateor deactivate such notifications."
+#. Default: "Activate, respectively deactivate, all notifications due to your inbox permissions."
 #: ./opengever/activity/__init__.py
 msgid "notify_inbox_actions_help"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "notify_inbox_actions_title"
 msgstr ""
 
-#. Default: "By default notifications are suppressed when the recipient is the user who performed the action. Please note that, notwithstanding this setting, notifications only get generated for combinations of actions and roles for which the user has activated the notifications"
+#. Default: "By default no notifications are emitted for a users'own actions. This option allows to modify this behavior. Notwithstanding this configuration, user notification settings for each action type will get applied anyway."
 #: ./opengever/activity/__init__.py
 msgid "notify_own_actions_help"
 msgstr ""
