@@ -13,6 +13,7 @@ Changelog
 - Bump sablon to 0.3.1 and nokogiri to 1.9.1. [deiferni]
 - Add restapi @participations endpoint to handle participations. [elioschmutz]
 - Add per user configuration to deactivate inbox notifications. [njohner]
+- Add linguistic index on task principal column for oracle backends. [phgross]
 - Register ChoiceFieldDeserializer using overrides instead of configure ZCML. [lgraf]
 - Update Creator, created and Date when copy/pasting an object. [njohner]
 - Docs: Add tasks to documented content types. [lgraf]
