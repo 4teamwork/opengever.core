@@ -10,8 +10,10 @@
   <include package=".browser" />
   <include package=".behaviors" />
   <include package=".participation" />
+
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
+  <adapter factory=".workspace_todo.ToDoNameChooser" />
 
   <subscriber
       for="opengever.workspace.interfaces.IWorkspace

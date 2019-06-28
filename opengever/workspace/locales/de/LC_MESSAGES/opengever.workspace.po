@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-26 12:32+0000\n"
+"POT-Creation-Date: 2019-07-01 07:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,6 +112,17 @@ msgstr "Federführung"
 msgid "invitation"
 msgstr "Einladung"
 
+#. Default: "Completed"
+#: ./opengever/workspace/workspace_todo.py
+msgid "label_completed"
+msgstr "Erledigt"
+
+#. Default: "Deadline"
+#: ./opengever/workspace/browser/tabs.py
+#: ./opengever/workspace/workspace_todo.py
+msgid "label_deadline"
+msgstr "Zu erledigen bis"
+
 #. Default: "Description"
 #: ./opengever/workspace/browser/tabs.py
 msgid "label_description"
@@ -132,15 +143,27 @@ msgstr "Ordner"
 msgid "label_journal"
 msgstr "Journal"
 
-#. Default: "Tasks"
-#: ./opengever/workspace/browser/tabbed.py
-msgid "label_tasks"
-msgstr "Aufgaben"
+#. Default: "Responsible"
+#: ./opengever/workspace/browser/tabs.py
+#: ./opengever/workspace/workspace_todo.py
+msgid "label_responsible"
+msgstr "Verantwortlich"
+
+#. Default: "Text"
+#: ./opengever/workspace/workspace_todo.py
+msgid "label_text"
+msgstr "Text"
 
 #. Default: "Title"
 #: ./opengever/workspace/browser/tabs.py
+#: ./opengever/workspace/workspace_todo.py
 msgid "label_title"
 msgstr "Titel"
+
+#. Default: "ToDo"
+#: ./opengever/workspace/browser/tabbed.py
+msgid "label_todo"
+msgstr "ToDo"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py

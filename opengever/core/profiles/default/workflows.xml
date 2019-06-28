@@ -161,6 +161,8 @@
       <bound-workflow workflow_id="opengever_workspace_folder" />
     </type>
 
+    <type type_id="opengever.workspace.todo" />
+
   </bindings>
 
 </object>

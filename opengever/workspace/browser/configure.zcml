@@ -48,4 +48,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="*"
+      name="tabbedview_view-todos"
+      class=".tabs.Todos"
+      permission="zope2.View"
+      />
+
 </configure>
