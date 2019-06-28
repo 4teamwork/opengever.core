@@ -170,20 +170,18 @@ ACTIVITY_TRANSLATIONS = {
         'title': _('notify_own_actions_title',
                    default=u'Enable notifications for own actions'),
         'help_text': _('notify_own_actions_help',
-                   default=u'By default notifications are suppressed when the '
-                             'recipient is the user who performed the action. '
-                             'Please note that, notwithstanding this setting, '
-                             'notifications only get generated for combinations '
-                             'of actions and roles for which the user has '
-                             'activated the notifications')
+                   default=u'By default no notifications are emitted for a '
+                            'users\'own actions. This option allows to modify '
+                            'this behavior. Notwithstanding this configuration, '
+                            'user notification settings for each action type '
+                            'will get applied anyway.')
          },
     'notify_inbox_actions': {
         'title': _('notify_inbox_actions_title',
                    default=u'Enable notifications for inbox actions'),
         'help_text': _('notify_inbox_actions_help',
-                   default=u'Some notifications are sent to all users of an '
-                            'inbox. This option allows these users to activate'
-                            'or deactivate such notifications.')
+                   default=u'Activate, respectively deactivate, all '
+                            'notifications due to your inbox permissions.')
          }
 }
 
