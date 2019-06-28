@@ -352,7 +352,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         self.assertEquals(TEST_USER_ID, task.responsible)
 
     def test_updates_responsible_if_new_value_is_given(self):
-        create(Builder('ogds_user').id('hugo.boss'))
+        hugo = create(Builder('ogds_user').id('hugo.boss'))
         task = create(Builder('task')
                       .in_state('task-state-open')
                       .having(responsible_client='org-unit-1'))
@@ -360,10 +360,10 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         self.prepare_request(task, text=u'I am done!',
                              transition='task-transition-reassign',
                              responsible='hugo.boss',
-                             responsible_client='afi')
+                             responsible_client='org-unit-1')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('afi', task.responsible_client)
+        self.assertEquals('org-unit-1', task.responsible_client)
         self.assertEquals('hugo.boss', task.responsible)
 
     def test_remove_task_reminder_of_old_responsible(self):
@@ -385,7 +385,8 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
 
         self.prepare_request(task, text=u'I am done!',
                              transition='task-transition-reassign',
-                             responsible='james.bond')
+                             responsible='james.bond',
+                             responsible_client='org-unit-1')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
         self.assertIsNone(task_reminder.get_reminder(task, 'hugo.boss'))
