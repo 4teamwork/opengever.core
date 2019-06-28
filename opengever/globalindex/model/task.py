@@ -1,4 +1,6 @@
 from datetime import date
+from sqlalchemy import event
+from opengever.base.model import create_session
 from DateTime import DateTime as ZopeDateTime
 from opengever.base.model import Base
 from opengever.base.model import is_oracle
@@ -24,6 +26,7 @@ from sqlalchemy import Date
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy import func
+from sqlalchemy import Index
 from sqlalchemy import Integer
 from sqlalchemy import or_
 from sqlalchemy import String
@@ -613,3 +616,13 @@ class TaskPrincipal(Base):
 
     def __repr__(self):
         return "<TaskPrincipal %s for %s>" % (self.principal, str(self.task))
+
+
+@event.listens_for(TaskPrincipal.__table__, 'after_create')
+def create_principals_index(target, connection, **kw):
+    if is_oracle():
+        task_principals_ix = Index(
+            'task_principals_ix',
+            func.nlssort(TaskPrincipal.principal, 'NLS_SORT=GERMAN_CI'))
+
+        task_principals_ix.create(create_session().bind)
