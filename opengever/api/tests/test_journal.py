@@ -90,7 +90,7 @@ class TestJournalPost(IntegrationTestCase):
                 self.dossier.absolute_url(),
                 self.document.absolute_url()]}
 
-        with browser.expect_http_error(400):
+        with browser.expect_http_error(500):
             browser.open(
                 self.dossier.absolute_url() + '/@journal',
                 data=json.dumps(payload),
@@ -98,16 +98,9 @@ class TestJournalPost(IntegrationTestCase):
                 headers=http_headers(),
             )
 
-        bad_document_urls = [
-            "https://not-existing",
-            "http://nohost/plone/not-existing",
-            self.dossier.absolute_url()
-        ]
-
         self.assertEqual(
-            {"message": "Could not lookup the following documents: {}".format(
-                ', '.join(bad_document_urls)),
-             "type": "BadRequest"},
+            {u'message': u'Could not resolve object for UID=https://not-existing',
+             u'type': u'ValueError'},
             browser.json)
 
 
@@ -211,4 +204,3 @@ class TestJournalGet(IntegrationTestCase):
             'time': u'2017-10-16T00:00:00+00:00',
             'title': u'Manual entry: Information'
             }, response.get('items')[0])
-
