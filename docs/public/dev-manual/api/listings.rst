@@ -200,6 +200,11 @@ Optionale Parameter:
 - ``search``: Filterung nach einem beliebigen Suchbegriff
 - ``columns``: Liste der Felder, die zurückgegeben werden sollen.
 - ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
+- ``depth``: Limitierung der maximalen Pfadtiefe (relativ zum Kontext):
+
+  - ``1``: Nur die unmittelbaren children unterhalb des Kontexts
+  - ``2``: Unmittelbare children, und deren direkte children
+  - etc.
 
 
 **Beispiel: Sortierung nach Änderungsdatum, neuste Dokumente zuerst:**

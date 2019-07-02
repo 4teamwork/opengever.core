@@ -115,6 +115,7 @@
     <field name="id" type="string" indexed="true" stored="false" />
     <field name="modified" type="pdate" indexed="true" stored="false" />
     <field name="path" type="string" indexed="true" stored="false" />
+    <field name="path_depth" type="pint" indexed="true" stored="false" />
     <field name="path_parent" type="descendent_path" indexed="true" stored="true" />
     <field name="portal_type" type="string" indexed="true" stored="false" />
     <field name="review_state" type="string" indexed="true" stored="false" />

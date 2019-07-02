@@ -93,6 +93,11 @@ def relative_path(brain):
     return '/'.join(content_path[portal_path_length:])
 
 
+def get_path_depth(context):
+    # This mirrors the implementation in ftw.solr
+    return len(context.getPhysicalPath()) - 1
+
+
 # Mapping of field name -> (index, accessor, sort index)
 FIELDS = {
     'bumblebee_checksum': (None, 'bumblebee_checksum', DEFAULT_SORT_INDEX),
@@ -214,14 +219,20 @@ class Listing(Service):
         if not isinstance(filters, record):
             filters = {}
 
+        depth = self.request.form.get('depth', -1)
+        try:
+            depth = int(depth)
+        except ValueError:
+            depth = -1
+
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         if settings.use_solr:
             items = self.solr_results(
-                name, term, columns, start, rows, sort_on, sort_order, filters)
+                name, term, columns, start, rows, sort_on, sort_order, filters, depth)
         else:
             items = self.catalog_results(
-                name, term, start, rows, sort_on, sort_order, filters)
+                name, term, start, rows, sort_on, sort_order, filters, depth)
 
         batch = HypermediaBatch(self.request, items)
         res = {}
@@ -239,7 +250,7 @@ class Listing(Service):
         return res
 
     def catalog_results(self, name, term, start, rows, sort_on, sort_order,
-                        filters):
+                        filters, depth):
         if name not in CATALOG_QUERIES:
             return []
 
@@ -247,7 +258,7 @@ class Listing(Service):
         query.update({
             'path': {
                 'query': '/'.join(self.context.getPhysicalPath()),
-                'depth': -1,
+                'depth': depth,
                 'exclude_root': 1,
             },
             'sort_on': sort_on,
@@ -295,7 +306,7 @@ class Listing(Service):
             return {'query': [date_from, date_to], 'range': 'minmax'}
 
     def solr_results(self, name, term, columns, start, rows, sort_on,
-                     sort_order, filters):
+                     sort_order, filters, depth):
 
         if name not in SOLR_FILTERS:
             return []
@@ -315,6 +326,11 @@ class Listing(Service):
         filter_queries.extend(SOLR_FILTERS[name])
         filter_queries.append(u'path_parent:{}'.format(escape(
             '/'.join(self.context.getPhysicalPath()))))
+
+        if depth > 0:
+            context_depth = get_path_depth(self.context)
+            max_path_depth = context_depth + depth
+            filter_queries.append(u'path_depth:[* TO {}]'.format(max_path_depth))
 
         for key, value in filters.items():
             if key not in FIELDS:
