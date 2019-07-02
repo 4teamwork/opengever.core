@@ -10,6 +10,7 @@
   <include package=".browser" />
   <include package=".behaviors" />
   <include package=".participation" />
+  <include package=".todos" />
 
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
