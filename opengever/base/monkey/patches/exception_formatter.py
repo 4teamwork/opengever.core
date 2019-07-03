@@ -10,14 +10,36 @@ class PatchExceptionFormatter(MonkeyPatch):
     """
 
     def __call__(self):
+        from AccessControl import getSecurityManager
         from App.config import getConfiguration
-        from plone import api
         from ZODB.DemoStorage import DemoStorage
+        from zope.globalrequest import getRequest
+
+        def get_app_from_request():
+            """Grab a reference to the zope app from the current request."""
+
+            request = getRequest()
+            if not request:
+                return None
+
+            parents = request.get('PARENTS', None)
+            if not parents:
+                return None
+
+            return parents[-1]
 
         def formatException(self, etype, value, tb, limit=None):
-            portal = api.portal.get()
-            user_is_manager = api.user.has_permission("Manage Portal", obj=portal)
-            in_a_test = isinstance(portal._p_jar.db().storage, DemoStorage)
+            # try to figure out if we would like to print out the whole trace.
+
+            app = get_app_from_request()
+            if app:
+                security_manager = getSecurityManager()
+                user_is_manager = security_manager.checkPermission(
+                    "Manage portal", app)
+                in_a_test = isinstance(app._p_jar.db().storage, DemoStorage)
+            else:
+                user_is_manager = False
+                in_a_test = False
 
             config = getConfiguration()
             debug_mode = getattr(config, "debug_mode", False)
