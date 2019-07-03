@@ -9,6 +9,7 @@ from opengever.api.listing import get_path_depth
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
+from unittest import skip
 from zope.component import getUtility
 
 
@@ -544,3 +545,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
                         msg="facet=true is needed to get facet counts back")
         self.assertEqual(1, params['facet.mincount'])
         self.assertEqual(['start'], params['facet.field'])
+
+    @skip("Just a reminder to test that facets also return translated labels")
+    def test_facet_labels(self):
+        pass

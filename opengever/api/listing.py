@@ -1,12 +1,15 @@
+from collective.elephantvocabulary import wrap_vocabulary
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.base.helpers import display_name
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
+from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.task.helper import task_type_helper
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -19,9 +22,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
+from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from ZPublisher.HTTPRequest import record
 import Missing
-
 
 DEFAULT_SORT_INDEX = 'modified'
 
@@ -195,6 +200,34 @@ CATALOG_QUERIES = {
 }
 
 
+def translate_document_type(document_type):
+    portal = getSite()
+    voc = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.'
+                                        'IDocumentType.document_types')(portal)
+    try:
+        term = voc.getTerm(document_type)
+    except LookupError:
+        return document_type
+    else:
+        return term.title
+
+
+def translate_task_type(task_type):
+    return task_type_value_helper(task_type)
+
+
+FACET_TRANSFORMS = {
+    'responsible': display_name,
+    'review_state': lambda state: translate(state, domain='plone',
+                                            context=getRequest()),
+    'document_type': translate_document_type,
+    'task_type': translate_task_type,
+    'checked_out': display_name,
+}
+
+
 class Listing(Service):
     """List of content items"""
 
@@ -250,8 +283,16 @@ class Listing(Service):
         for item in items[start:start + rows]:
             res['items'].append(create_list_item(item, columns))
 
+        facets = dict((field, dict((facet, {"count": count}) for facet, count in facets.items())) for field, facets in facet_counts.items())
         if facet_counts:
+            for field, facets in facet_counts.items():
+                transform = FACET_TRANSFORMS.get(field)
+                for facet, count in facets.items():
+                    facets[facet] = {"count": count}
+                    if transform:
+                        facets[facet]['label'] = transform(facet)
             res['facets'] = facet_counts
+
         return res
 
     def catalog_results(self, name, term, start, rows, sort_on, sort_order,
