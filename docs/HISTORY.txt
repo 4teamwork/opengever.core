@@ -4,6 +4,7 @@ Changelog
 2019.3.1 (unreleased)
 ---------------------
 
+- Remove unwanted disabling of csrf protection in @workspace-invitations endpoint [elioschmutz]
 - @listing endpoint: Add support for filtering by relative path depth. [lgraf]
 - Add POST restapi endpint @mworkspace-invitations/{id}/{action}. [elioschmutz]
 - Add GET restapi endpint @my-workspace-invitations. [elioschmutz]

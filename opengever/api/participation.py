@@ -231,9 +231,6 @@ class InvitationsPost(ParticipationTraverseService):
                 "There is no invitation for the current user with "
                 "the id: ".format(iid))
 
-        # Disable CSRF protection
-        alsoProvides(self.request, IDisableCSRFProtection)
-
         if action == 'decline':
             my_invitations_manager._decline(invitation)
             return self.request.response.setStatus(204)
