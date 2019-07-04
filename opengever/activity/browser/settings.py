@@ -175,7 +175,12 @@ class NotificationSettings(BrowserView):
             kinds = (kind, )
 
         for kind in kinds:
-            setting = self.get_or_create_setting(kind)
+            try:
+                setting = self.get_or_create_setting(kind)
+            except InvalidUser:
+                # User with no entry in the ogds, probably zopemaster.
+                msg = "Cannot save setting for this user as he is not in the ogds"
+                return JSONResponse(self.request).error(msg).proceed().dump()
             setting.mail_notification_roles = mail
             setting.badge_notification_roles = badge
             setting.digest_notification_roles = digest
@@ -302,6 +307,7 @@ class NotificationSettings(BrowserView):
     def get_or_create_setting(self, kind):
         setting = self.get_setting(kind)
         if not setting:
+            self.assert_user_in_ogds()
             setting = NotificationSetting(
                 kind=kind, userid=api.user.get_current().getId())
             create_session().add(setting)
