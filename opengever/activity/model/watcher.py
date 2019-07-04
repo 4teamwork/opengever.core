@@ -2,6 +2,7 @@ from opengever.base.model import Base
 from opengever.base.model import USER_ID_LENGTH
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.models.user_settings import UserSettings
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -34,6 +35,7 @@ class Watcher(Base):
         if actor_lookup.is_inbox() or actor_lookup.is_team():
             return [user.userid for user in
                     Actor.lookup(self.actorid).representatives()
-                    if user.notify_inbox_actions]
+                    if UserSettings.get_setting_for_user(
+                        user.userid, 'notify_inbox_actions')]
 
         return [self.actorid]
