@@ -26,9 +26,9 @@
       <div id="notification-settings-form"
            tal:attributes="data-list-url view/list_url;
                            data-save-url view/save_url;
-                           data-save-configuration-url view/save_configuration_url;
+                           data-save-user-setting-url view/save_user_setting_url;
                            data-reset-url view/reset_url;
-                           data-reset-configuration-url view/reset_configuration_url;
+                           data-reset-user-setting-url view/reset_user_setting_url;
                            data-tab-title-general view/tab_title_general;
                            data-tab-title-task view/tab_title_task;
                            data-tab-title-dossiers view/tab_title_dossiers;

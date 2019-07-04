@@ -143,7 +143,7 @@ class NotificationSettings(BrowserView):
     user_settings = None
     defaults = None
 
-    def save_configuration(self):
+    def save_user_setting(self):
         """Save global configuration change
         """
         try:
@@ -198,7 +198,7 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
-    def reset_configuration(self):
+    def reset_user_setting(self):
         """Reset a personal configuration
         """
         config_name = self.request.form['config_name']
@@ -361,16 +361,16 @@ class NotificationSettingsForm(BrowserView):
         return '{}/notification-settings/save'.format(
             api.portal.get().absolute_url())
 
-    def save_configuration_url(self):
-        return '{}/notification-settings/save_configuration'.format(
+    def save_user_setting_url(self):
+        return '{}/notification-settings/save_user_setting'.format(
             api.portal.get().absolute_url())
 
     def reset_url(self):
         return '{}/notification-settings/reset'.format(
             api.portal.get().absolute_url())
 
-    def reset_configuration_url(self):
-        return '{}/notification-settings/reset_configuration'.format(
+    def reset_user_setting_url(self):
+        return '{}/notification-settings/reset_user_setting'.format(
             api.portal.get().absolute_url())
 
     def tab_title_general(self):

@@ -230,12 +230,12 @@ class TestResetSetting(IntegrationTestCase):
         self.assertEquals(0, query.count())
 
 
-class TestSaveConfigurations(IntegrationTestCase):
+class TestSaveUserSetting(IntegrationTestCase):
 
     features = ('activity', )
 
     @browsing
-    def test_save_notify_own_action_configuration(self, browser):
+    def test_save_notify_own_action_user_setting(self, browser):
         self.login(self.regular_user, browser=browser)
 
         config = UserSettings.get_setting_for_user(
@@ -243,7 +243,7 @@ class TestSaveConfigurations(IntegrationTestCase):
         self.assertFalse(config)
 
         browser.open(self.portal,
-                     view='notification-settings/save_configuration',
+                     view='notification-settings/save_user_setting',
                      data={'config_name': 'notify_own_actions', 'value': 'true'})
 
         config = UserSettings.get_setting_for_user(
@@ -251,7 +251,7 @@ class TestSaveConfigurations(IntegrationTestCase):
         self.assertTrue(config)
 
     @browsing
-    def test_save_notify_inbox_action_configuration(self, browser):
+    def test_save_notify_inbox_action_user_setting(self, browser):
         self.login(self.regular_user, browser=browser)
 
         config = UserSettings.get_setting_for_user(
@@ -259,7 +259,7 @@ class TestSaveConfigurations(IntegrationTestCase):
         self.assertTrue(config)
 
         browser.open(self.portal,
-                     view='notification-settings/save_configuration',
+                     view='notification-settings/save_user_setting',
                      data={'config_name': 'notify_inbox_actions', 'value': 'false'})
 
         config = UserSettings.get_setting_for_user(
@@ -267,12 +267,12 @@ class TestSaveConfigurations(IntegrationTestCase):
         self.assertFalse(config)
 
 
-class TestResetConfiguration(IntegrationTestCase):
+class TestResetUserSetting(IntegrationTestCase):
 
     features = ('activity', )
 
     @browsing
-    def test_reset_notify_own_action_configuration(self, browser):
+    def test_reset_notify_own_action_user_setting(self, browser):
         self.login(self.regular_user, browser=browser)
 
         UserSettings.save_setting_for_user(
@@ -282,14 +282,14 @@ class TestResetConfiguration(IntegrationTestCase):
             self.regular_user.id, 'notify_own_actions'))
 
         browser.open(self.portal,
-                     view='notification-settings/reset_configuration',
+                     view='notification-settings/reset_user_setting',
                      data={'config_name': 'notify_own_actions'})
 
         self.assertFalse(UserSettings.get_setting_for_user(
             self.regular_user.id, 'notify_own_actions'))
 
     @browsing
-    def test_reset_notify_inbox_action_configuration(self, browser):
+    def test_reset_notify_inbox_action_user_setting(self, browser):
         self.login(self.regular_user, browser=browser)
 
         UserSettings.save_setting_for_user(
@@ -299,7 +299,7 @@ class TestResetConfiguration(IntegrationTestCase):
             self.regular_user.id, 'notify_inbox_actions'))
 
         browser.open(self.portal,
-                     view='notification-settings/reset_configuration',
+                     view='notification-settings/reset_user_setting',
                      data={'config_name': 'notify_inbox_actions'})
 
         self.assertTrue(UserSettings.get_setting_for_user(
