@@ -159,6 +159,15 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
     def checked_out_fullname(self):
         return display_name(self._brain.checked_out)
 
+    def creator(self):
+        return self._brain.Creator
+
+    def reference_number(self):
+        return self._brain.reference
+
+    def mimetype(self):
+        return self._brain.getContentType
+
     def _render_simplelink(self):
         self.context = self
         return self.simple_link_template(self, self.request)
