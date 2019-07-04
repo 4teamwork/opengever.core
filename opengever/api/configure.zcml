@@ -15,7 +15,6 @@
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
 
   <adapter factory=".summary.GeverJSONSummarySerializer" />
-  <adapter factory=".catalog.GeverBrainSerializer" />
 
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
