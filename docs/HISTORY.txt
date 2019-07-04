@@ -6,6 +6,7 @@ Changelog
 
 - @listing endpoint: Exclude searchroot from Solr results. [lgraf]
 - Avoid reindexing 'created' during IObjectCopiedEvent to fix copy & pasting with Solr. [lgraf]
+- Allow Readers, Member and Managers to access users information for all users. [phgross]
 - @listing endpoint: Add support for filtering by relative path depth. [lgraf]
 - Update plone.restapi to latest release. [phgross]
 - Add optional facet values and counts search to listing endpoint. [njohner]
