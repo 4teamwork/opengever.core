@@ -58,7 +58,7 @@ class GeverLiveSearchGet(SearchGet):
             results = super(GeverLiveSearchGet, self).reply()
             return [
                 {
-                    'title': entry['Title'],
+                    'title': entry['title'],
                     'filename': entry['filename'],
                     '@id': entry['@id'],
                     '@type': entry['@type'],
