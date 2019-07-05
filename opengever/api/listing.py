@@ -1,12 +1,15 @@
+from collective.elephantvocabulary import wrap_vocabulary
 from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.base.helpers import display_name
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrDocument
 from opengever.base.utils import get_preferred_language_code
+from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.task.helper import task_type_helper
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
@@ -19,9 +22,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
 from zope.component import getUtility
+from zope.component.hooks import getSite
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from ZPublisher.HTTPRequest import record
 import Missing
-
 
 DEFAULT_SORT_INDEX = 'modified'
 
@@ -195,6 +200,34 @@ CATALOG_QUERIES = {
 }
 
 
+def translate_document_type(document_type):
+    portal = getSite()
+    voc = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.'
+                                        'IDocumentType.document_types')(portal)
+    try:
+        term = voc.getTerm(document_type)
+    except LookupError:
+        return document_type
+    else:
+        return term.title
+
+
+def translate_task_type(task_type):
+    return task_type_value_helper(task_type)
+
+
+FACET_TRANSFORMS = {
+    'responsible': display_name,
+    'review_state': lambda state: translate(state, domain='plone',
+                                            context=getRequest()),
+    'document_type': translate_document_type,
+    'task_type': translate_task_type,
+    'checked_out': display_name,
+}
+
+
 class Listing(Service):
     """List of content items"""
 
@@ -216,6 +249,7 @@ class Listing(Service):
         term = self.request.form.get('search', '').strip()
         columns = self.request.form.get('columns', [])
         filters = self.request.form.get('filters', {})
+        facets = self.request.form.get('facets', [])
         if not isinstance(filters, record):
             filters = {}
 
@@ -228,11 +262,13 @@ class Listing(Service):
         registry = getUtility(IRegistry)
         settings = registry.forInterface(ISearchSettings)
         if settings.use_solr:
-            items = self.solr_results(
-                name, term, columns, start, rows, sort_on, sort_order, filters, depth)
+            items, facet_counts = self.solr_results(
+                name, term, columns, start, rows, sort_on, sort_order, filters,
+                depth, facets)
         else:
             items = self.catalog_results(
                 name, term, start, rows, sort_on, sort_order, filters, depth)
+            facet_counts = {}
 
         batch = HypermediaBatch(self.request, items)
         res = {}
@@ -246,6 +282,16 @@ class Listing(Service):
         res['items'] = []
         for item in items[start:start + rows]:
             res['items'].append(create_list_item(item, columns))
+
+        facets = dict((field, dict((facet, {"count": count}) for facet, count in facets.items())) for field, facets in facet_counts.items())
+        if facet_counts:
+            for field, facets in facet_counts.items():
+                transform = FACET_TRANSFORMS.get(field)
+                for facet, count in facets.items():
+                    facets[facet] = {"count": count}
+                    if transform:
+                        facets[facet]['label'] = transform(facet)
+            res['facets'] = facet_counts
 
         return res
 
@@ -306,7 +352,7 @@ class Listing(Service):
             return {'query': [date_from, date_to], 'range': 'minmax'}
 
     def solr_results(self, name, term, columns, start, rows, sort_on,
-                     sort_order, filters, depth):
+                     sort_order, filters, depth, facets):
 
         if name not in SOLR_FILTERS:
             return []
@@ -357,24 +403,40 @@ class Listing(Service):
             'q.op': 'AND',
         }
 
+        facet_fields = filter(None, map(self.field_name_to_index, facets))
+        if facet_fields:
+            params["facet"] = "true"
+            params["facet.mincount"] = 1
+            params["facet.field"] = facet_fields
+
         solr = getUtility(ISolrSearch)
         resp = solr.search(
             query=query, filters=filter_queries, start=start, rows=rows,
             sort=sort, **params)
-        return LazyMap(
-            OGSolrDocument,
-            start * [None] + resp.docs,
-            actual_result_count=resp.num_found,
-        )
+
+        # We map the index names back to the field names for the facets
+        facet_counts = {}
+        for field in facets:
+            index_name = self.field_name_to_index(field)
+            if index_name is None or index_name not in resp.facets:
+                continue
+            facet_counts[field] = resp.facets[index_name]
+
+        return (LazyMap(OGSolrDocument,
+                        start * [None] + resp.docs,
+                        actual_result_count=resp.num_found,),
+                facet_counts)
+
+    @staticmethod
+    def field_name_to_index(field):
+        if field in FIELDS:
+            return FIELDS[field][0]
+        return None
 
     def solr_field_list(self, columns):
         fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
               'bumblebee_checksum']
-        for col in columns:
-            if col in FIELDS:
-                field = FIELDS[col][0]
-                if field is not None:
-                    fl.append(field)
+        fl.extend(filter(None, map(self.field_name_to_index, columns)))
         return fl
 
     def solr_daterange_filter(self, value):
