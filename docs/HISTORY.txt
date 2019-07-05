@@ -4,6 +4,7 @@ Changelog
 2019.4.0 (unreleased)
 ---------------------
 
+- Add POST @todolist rest-endpoint to add todolists and todos in lists for workspaces. [elioshmutz]
 - Fix upgrade step that adds linguistic index for task principal. [lgraf]
 - @listing endpoint: Exclude searchroot from Solr results. [lgraf]
 - Avoid reindexing 'created' during IObjectCopiedEvent to fix copy & pasting with Solr. [lgraf]

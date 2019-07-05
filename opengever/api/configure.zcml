@@ -396,4 +396,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@todolist"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".workspace_todo_list.ToDoListPost"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
