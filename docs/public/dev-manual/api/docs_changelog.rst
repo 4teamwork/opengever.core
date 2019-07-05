@@ -5,6 +5,13 @@ Changelog
 
 Im Folgenden sind (substantielle) Änderungen an der Dokumentation aufgeführt.
 
+
+2019-06-04
+----------
+
+- Kapitel "Auflistungen" aktualisiert, nicht mehr unterstützer Paramter ``items.fl`` mit ``metadata_fields`` ergänzt
+
+
 2019-03-13
 ----------
 

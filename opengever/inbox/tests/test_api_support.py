@@ -88,6 +88,8 @@ class TestAPITransitions(IntegrationTestCase):
     @browsing
     def test_reassign_forwarding(self, browser):
         self.login(self.administrator, browser=browser)
+
+        # self.add_additional_org_unit()
         url = '{}/@workflow/forwarding-transition-reassign'.format(
             self.inbox_forwarding.absolute_url())
 
@@ -99,14 +101,16 @@ class TestAPITransitions(IntegrationTestCase):
 
         # working
         data = {'text': 'Robert macht das.',
-                'responsible': self.dossier_responsible.id,
-                'responsible_client': u'fa'}
+                'responsible': 'james.bond',
+                'responsible_client': u'rk'}
         browser.open(url, method='POST',
                      data=json.dumps(data), headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
-        self.assertEqual(self.dossier_responsible.id,
+        self.assertEqual('james.bond',
                          self.inbox_forwarding.responsible)
+        self.assertEqual('rk',
+                         self.inbox_forwarding.responsible_client)
         self.assertEqual('forwarding-state-open',
                          api.content.get_state(self.inbox_forwarding))
 

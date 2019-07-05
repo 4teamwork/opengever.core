@@ -90,16 +90,21 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
     @browsing
     def test_summary_with_custom_field_list(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(
-            self.dossier.absolute_url() +
-            '?items.fl=filesize,filename,modified,created,mimetype,creator,changed',
-            headers={'Accept': 'application/json'})
 
+        url = ('{}?metadata_fields=filesize&metadata_fields=filename&'
+               'metadata_fields=modified&metadata_fields=created&'
+               'metadata_fields=mimetype&metadata_fields=creator&'
+               'metadata_fields=changed'.format(self.dossier.absolute_url()))
+
+        browser.open(url, headers={'Accept': 'application/json'})
         summary = browser.json['items'][0]
+
         self.assertEqual(
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
                 u'und-vereinbarungen/dossier-1/document-14',
+                u'@type': u'opengever.document.document',
+                u'title': u'Vertr\xe4gsentwurf',
                 u'changed': u'2016-08-31T14:07:33+00:00',
                 u'created': u'2016-08-31T14:07:33+00:00',
                 u'creator': u'robert.ziegler',
@@ -107,6 +112,8 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
                 u'filesize': 27413,
                 u'mimetype': u'application/vnd.openxmlformats-officedocument.'
                 u'wordprocessingml.document',
+                u'description': u'Wichtige Vertr\xe4ge',
+                u'review_state': u'document-state-draft',
                 u'modified': u'2016-08-31T14:07:33+00:00'},
             summary)
 
@@ -115,15 +122,18 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
         self.login(self.regular_user, browser)
         browser.open(
             self.dossier.absolute_url() +
-            '?items.fl=reference_number',
+            '?metadata_fields=reference_number',
             headers={'Accept': 'application/json'})
 
         summary = browser.json['items'][0]
         self.assertEqual(
             summary,
             {
-                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
-                        u'und-vereinbarungen/dossier-1/document-14',
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
+                u'@type': u'opengever.document.document',
+                u'description': u'Wichtige Vertr\xe4ge',
+                u'review_state': u'document-state-draft',
+                u'title': u'Vertr\xe4gsentwurf',
                 u'reference_number': u'Client1 1.1 / 1 / 14',
             })
 
@@ -134,12 +144,16 @@ class TestGeverJSONSummarySerializer(IntegrationTestCase):
         self.task.text = u'Sample description'
 
         browser.open(self.dossier.absolute_url() +
-                     '?items.fl=filename,filesize',
+                     '?metadata_fields:list=filename&metadata_fields:list=filesize',
                      headers={'Accept': 'application/json'})
 
         summary = browser.json['items'][9]
         self.assertEqual(
             {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
              'vertrage-und-vereinbarungen/dossier-1/task-1',
+             u'@type': u'opengever.task.task',
+             u'description': u'',
+             u'review_state': u'task-state-in-progress',
+             u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
              u'filename': None,
-             u'filesize': 0}, summary)
+             u'filesize': None}, summary)

@@ -4,8 +4,10 @@ from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.transition import ITransitionExtender
 from opengever.inbox import _
 from opengever.inbox.forwarding import IForwarding
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.task import _ as task_mf
 from opengever.task.browser.accept.utils import _copy_documents_from_forwarding
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.task.interfaces import ISuccessorTaskController
@@ -19,6 +21,7 @@ from opengever.task.util import add_simple_response
 from plone.dexterity.utils import createContentInContainer
 from plone.supermodel.model import Schema
 from z3c.relationfield.schema import RelationChoice
+from zope import schema
 from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -119,7 +122,24 @@ class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExt
         return task
 
 
+class INewForwardingResponsibleSchema(Schema):
+    responsible = schema.Choice(
+        title=task_mf(u"label_responsible", default=u"Responsible"),
+        description=task_mf(u"help_responsible", default=""),
+        source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
+        required=True,
+        )
+
+    responsible_client = schema.Choice(
+        title=task_mf(u'label_resonsible_client', default=u'Responsible Client'),
+        description=task_mf(u'help_responsible_client', default=u''),
+        vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
+        required=True)
+
+
 @implementer(ITransitionExtender)
 @adapter(IForwarding, IBrowserRequest)
 class ForwardingReassignTransitionExtender(ReassignTransitionExtender):
     """Transition extender for forwarding reassign transition."""
+
+    schemas = [IResponse, INewForwardingResponsibleSchema]

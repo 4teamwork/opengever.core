@@ -149,22 +149,3 @@ class TestSearchEndpoint(IntegrationTestCase):
         self.assertEqual(
             get_service_v3().get_representation_url(self.document, 'thumbnail'),
             items[0]['preview_image_url'])
-
-    @browsing
-    def test_not_existing_additional_metadata_is_not_filled_but_ignored(self, browser):
-        self.activate_feature('bumblebee')
-
-        self.login(self.regular_user, browser)
-
-        # Regular search
-        view = '@search?portal_type=opengever.document.document'
-        browser.open(self.dossier, view=view, headers=self.api_headers)
-
-        number_of_documents = len(browser.json['items'])
-
-        # With the unsupported metadata field get_breadcrumbs
-        view = '{}&metadata_fields=get_breadcrumbs'.format(view)
-        browser.open(self.dossier, view=view, headers=self.api_headers)
-
-        self.assertEqual(number_of_documents,  len(browser.json['items']))
-        self.assertIsNone(browser.json['items'][0]['get_breadcrumbs'])
