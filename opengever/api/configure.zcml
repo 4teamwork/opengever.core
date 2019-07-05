@@ -404,4 +404,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="DELETE"
+      name="@todolist"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".workspace_todo_list.ToDoListDelete"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -78,3 +78,51 @@ class ToDoListPost(ToDoListTraverseService):
         if len(self.params) == 1:
             return self.params[0]
         return None
+
+
+class ToDoListDelete(ToDoListTraverseService):
+    """API-Endpoint to remove todo-lists or todos from a list.
+
+    DELETE workspace/@todolist/{list-id} HTTP/1.1
+    DELETE workspace/@todolist/{list-id}/{todo-id} HTTP/1.1
+    """
+    def reply(self):
+        todo_list_id, todo_uid = self.read_params()
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        if todo_uid:
+            self.handle_delete_todo_from_list(todo_uid)
+        self.handle_delete_todo_list(todo_list_id)
+
+        self.request.response.setStatus(204)
+        return None
+
+    def handle_delete_todo_list(self, todo_list_id):
+        storage = ToDoListStorage(self.context)
+
+        if todo_list_id not in storage._todo_lists_by_id:
+            raise NotFound("The given todo_list_id does not exist")
+
+        if storage._todo_lists_by_id.get(todo_list_id).get('todo_uids'):
+            raise BadRequest("Removing a todo_list with assigned todos is not allowed")
+        storage.remove_todo_list_by_id(todo_list_id)
+
+    def handle_delete_todo_from_list(self, todo_uid):
+        storage = ToDoListStorage(self.context)
+
+        if todo_uid not in storage._todos_by_uid:
+            raise NotFound("The given todo_uid does not exist in any list")
+
+        storage.remove_todo_from_current_list(todo_uid)
+
+    def read_params(self):
+        if len(self.params) == 2:
+            return self.params[0], self.params[1]
+
+        if len(self.params) == 1:
+            return self.params[0], None
+
+        raise BadRequest(
+            "Must supply list-id or a list-id and a todo-uid as URL path parameters.")
