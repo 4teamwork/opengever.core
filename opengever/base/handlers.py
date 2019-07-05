@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.date_time import utcnow_tz_aware
@@ -19,12 +20,14 @@ from zope.event import notify
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.sqlalchemy.datamanager import mark_changed
-from DateTime import DateTime
+
+
+reindex_after_copy = ['created']
 
 
 def object_copied(context, event):
     context.creation_date = DateTime()
-    context.reindexObject(idxs=('created',))
+    context._v_object_has_been_copied = True
 
 
 def object_moved_or_added(context, event):
@@ -34,6 +37,13 @@ def object_moved_or_added(context, event):
         # be tracked anyway.
         if should_track_touches(context):
             notify(ObjectTouchedEvent(context))
+
+        # If an object has been copy & pasted, we need to reindex some fields.
+        # The IObjectCopiedEvent is too early to do that though, because at
+        # that point the object doesn't have a full AQ chain yet. We therefore
+        # just mark it during IObjectCopiedEvent, and do the reindexing here.
+        if getattr(context, '_v_object_has_been_copied', False):
+            context.reindexObject(idxs=reindex_after_copy)
 
     if IObjectRemovedEvent.providedBy(event):
         return
