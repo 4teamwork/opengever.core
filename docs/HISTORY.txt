@@ -4,6 +4,7 @@ Changelog
 2019.4.0 (unreleased)
 ---------------------
 
+- @listing endpoint: Exclude searchroot from Solr results. [lgraf]
 - Avoid reindexing 'created' during IObjectCopiedEvent to fix copy & pasting with Solr. [lgraf]
 - @listing endpoint: Add support for filtering by relative path depth. [lgraf]
 - Update plone.restapi to latest release. [phgross]

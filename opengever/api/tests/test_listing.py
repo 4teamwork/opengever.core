@@ -9,6 +9,7 @@ from opengever.api.listing import get_path_depth
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from unittest import skip
 from zope.component import getUtility
 
@@ -549,3 +550,28 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     @skip("Just a reminder to test that facets also return translated labels")
     def test_facet_labels(self):
         pass
+
+    @browsing
+    def test_excludes_searchroot(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=dossiers'
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json'})
+
+        context_uid = IUUID(self.dossier)
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertIn(u'-UID:%s' % context_uid, filters)
+
+    @browsing
+    def test_excluding_searchroot_doesnt_trip_on_objs_without_uuid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=dossiers'
+        browser.open(self.portal, view=view,
+                     headers={'Accept': 'application/json'})
+
+        portal_uid = IUUID(self.portal, None)
+        self.assertIsNone(portal_uid)
+        filters = self.conn.search.call_args[0][0]['filter']
+        self.assertNotIn(u'-UID:%s' % portal_uid, filters)
