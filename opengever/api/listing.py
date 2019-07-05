@@ -18,6 +18,7 @@ from plone.restapi.batching import HypermediaBatch
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from Products.ZCatalog.Lazy import LazyMap
 from Products.ZCTextIndex.ParseTree import ParseError
@@ -367,6 +368,12 @@ class Listing(Service):
             query = u' AND '.join(term_queries)
 
         filter_queries = []
+
+        # Exclude searchroot
+        context_uid = IUUID(self.context, None)
+        if context_uid:
+            filter_queries.append(u'-UID:%s' % context_uid)
+
         if 'trashed' not in filters:
             filter_queries.append(u'trashed:false')
         filter_queries.extend(SOLR_FILTERS[name])
