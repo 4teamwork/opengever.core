@@ -203,3 +203,40 @@ class TestWorkspaceToDoListDelete(IntegrationTestCase):
                 headers=self.api_headers,
             )
         self.assertEqual(1, len(storage.list()))
+
+
+class TestWorkspaceToDoListPatch(IntegrationTestCase):
+
+    @browsing
+    def test_change_title_of_todo_list(self, browser):
+        self.login(self.workspace_owner, browser)
+        storage = ToDoListStorage(self.workspace)
+
+        todo_list_id = browser.open(
+            self.workspace.absolute_url() + '/@todolist',
+            method='POST',
+            headers=self.api_headers,
+            data=json.dumps({'title': u'01 - Gener\xe4l'}),
+        ).json.get('list_id')
+
+        browser.open(
+            self.workspace.absolute_url() + '/@todolist/{}'.format(todo_list_id),
+            method='PATCH',
+            data=json.dumps({'title': u'02 - Server'}),
+            headers=self.api_headers,
+        )
+
+        self.assertEqual('02 - Server',
+                         storage._get_todo_list_by_id(todo_list_id).get('title'))
+
+    @browsing
+    def test_title_is_required(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace.absolute_url() + '/@todolist',
+                method='POST',
+                headers=self.api_headers,
+                data=json.dumps({'title': u''}),
+            ).json.get('list_id')

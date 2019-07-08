@@ -412,4 +412,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@todolist"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".workspace_todo_list.ToDoListPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -126,3 +126,40 @@ class ToDoListDelete(ToDoListTraverseService):
 
         raise BadRequest(
             "Must supply list-id or a list-id and a todo-uid as URL path parameters.")
+
+
+class ToDoListPatch(ToDoListTraverseService):
+    """API-Endpoint to update the title of a todo-list.
+
+    PATCH workspace/@todolist/{list-id} HTTP/1.1
+    {
+        "title": 'New title'
+    }
+    """
+    def reply(self):
+        data = json_body(self.request)
+        todo_list_id = self.read_params()
+
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        return json_compatible(self.handle_update_todo_list(todo_list_id, data))
+
+    def handle_update_todo_list(self, todo_list_id, data):
+        title = data.get('title')
+
+        if not title:
+            raise BadRequest("The request body requires the 'title' attribute.")
+
+        storage = ToDoListStorage(self.context)
+        if todo_list_id not in storage._todo_lists_by_id:
+            raise NotFound("The given todo_list_id does not exist")
+
+        return storage.rename_todo_list(todo_list_id, title)
+
+    def read_params(self):
+        if len(self.params) == 1:
+            return self.params[0]
+
+        raise BadRequest(
+            "Must supply list-id as URL path parameters.")
