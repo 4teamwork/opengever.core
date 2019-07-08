@@ -140,7 +140,7 @@
 
     this.save_config = function(target, event) {
       var checkbox = target.siblings('input:checkbox')[0];
-      return this.request($('#notification-settings-form').data('save-configuration-url'), {
+      return this.request($('#notification-settings-form').data('save-user-setting-url'), {
         method: "POST",
         data: { config_name: checkbox.value,
                 value: checkbox.checked}
@@ -178,7 +178,7 @@
 
     this.reset_config= function(target, event){
       var checkbox = target.siblings('input:checkbox')[0];
-      return this.request($('#notification-settings-form').data('reset-configuration-url'), {
+      return this.request($('#notification-settings-form').data('reset-user-setting-url'), {
         method: "POST",
         data: { config_name: checkbox.value}
       }).done(function() {

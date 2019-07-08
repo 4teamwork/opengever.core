@@ -37,6 +37,7 @@ tables = [
     'org_units',
     'teams',
     'users',
+    'user_settings',
 ]
 
 

@@ -13,7 +13,7 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
 from opengever.base.oguid import Oguid
-from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from sqlalchemy.exc import IntegrityError
 import transaction
 import unittest
@@ -268,8 +268,8 @@ class TestAddActivity(ActivityTestCase):
         create(Builder('ogds_user').id('hugo'))
         hugo = create(Builder('watcher').having(actorid='hugo'))
 
-        user = User.query.filter_by(userid='peter').first()
-        self.assertFalse(user.notify_own_actions)
+        self.assertFalse(UserSettings.get_setting_for_user(
+            'peter', 'notify_own_actions'))
 
         create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 
@@ -291,8 +291,8 @@ class TestAddActivity(ActivityTestCase):
         create(Builder('ogds_user').id('hugo'))
         hugo = create(Builder('watcher').having(actorid='hugo'))
 
-        user = User.query.filter_by(userid='peter').first()
-        user.notify_own_actions = True
+        UserSettings.save_setting_for_user(
+            'peter', 'notify_own_actions', True)
 
         create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
 

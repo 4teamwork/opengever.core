@@ -6,7 +6,7 @@ from opengever.base.model import SUPPORTED_LOCALES
 from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import UnicodeCoercingText
-from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
@@ -72,8 +72,8 @@ class Activity(Base, Translatable):
         return user_id == self.actor_id
 
     def user_wants_own_action_notifications(self, userid):
-        user = User.query.filter_by(userid=userid).one()
-        return user.notify_own_actions
+        return UserSettings.get_setting_for_user(
+            userid, 'notify_own_actions')
 
 
 class ActivityTranslation(translation_base(Activity)):

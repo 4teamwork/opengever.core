@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import FunctionalTestCase
 
 
@@ -34,9 +35,10 @@ class TestWatcher(FunctionalTestCase):
 
     def test_get_user_ids_for_inbox_watcher_ignores_users_with_inbox_notifications_disabled(self):
         hugo = create(Builder('ogds_user').id(u'hugo.boss'))
-        peter = create(Builder('ogds_user').id(u'peter.michel')
-                       .having(notify_inbox_actions=False))
+        peter = create(Builder('ogds_user').id(u'peter.michel'))
         james = create(Builder('ogds_user').id(u'james.bond'))
+
+        UserSettings.save_setting_for_user(peter.userid, 'notify_inbox_actions', False)
 
         create(Builder('admin_unit').id('fd'))
         create(Builder('org_unit')

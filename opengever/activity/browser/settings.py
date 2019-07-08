@@ -2,6 +2,7 @@ from opengever.activity import _
 from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
@@ -130,6 +131,11 @@ ALIASES = {
 }
 
 
+class InvalidUser(Exception):
+    """User not found in the OGDS.
+    """
+
+
 class NotificationSettings(BrowserView):
     """Settings-form endpoints.
     """
@@ -137,12 +143,12 @@ class NotificationSettings(BrowserView):
     user_settings = None
     defaults = None
 
-    def save_configuration(self):
+    def save_user_setting(self):
         """Save global configuration change
         """
-        userid = api.user.get_current().getId()
-        user = User.query.filter_by(userid=userid).one_or_none()
-        if user is None:
+        try:
+            self.assert_user_in_ogds()
+        except InvalidUser:
             # User with no entry in the ogds, probably zopemaster.
             msg = "Cannot save configuration for this user as he is not in the ogds"
             return JSONResponse(self.request).error(msg).proceed().dump()
@@ -150,11 +156,9 @@ class NotificationSettings(BrowserView):
         config_name = self.request.form['config_name']
         value = json.loads(self.request.form['value'])
 
-        # Make sure that config_name is a column of the User model.
-        error_msg = "Notification configuration has to be a column on User"
-        assert config_name in User.__table__.columns, error_msg
+        UserSettings.save_setting_for_user(
+            api.user.get_current().getId(), config_name, value)
 
-        setattr(user, config_name, value)
         return JSONResponse(self.request).proceed().dump()
 
     def save(self):
@@ -171,7 +175,12 @@ class NotificationSettings(BrowserView):
             kinds = (kind, )
 
         for kind in kinds:
-            setting = self.get_or_create_setting(kind)
+            try:
+                setting = self.get_or_create_setting(kind)
+            except InvalidUser:
+                # User with no entry in the ogds, probably zopemaster.
+                msg = "Cannot save setting for this user as he is not in the ogds"
+                return JSONResponse(self.request).error(msg).proceed().dump()
             setting.mail_notification_roles = mail
             setting.badge_notification_roles = badge
             setting.digest_notification_roles = digest
@@ -194,20 +203,14 @@ class NotificationSettings(BrowserView):
 
         return JSONResponse(self.request).proceed().dump()
 
-    def reset_configuration(self):
+    def reset_user_setting(self):
         """Reset a personal configuration
         """
-        userid = api.user.get_current().getId()
-        user = User.query.filter_by(userid=userid).one()
-
         config_name = self.request.form['config_name']
-        default = self.get_default_configuration(config_name)
+        default = self.get_default_setting_value(config_name)
 
-        # Make sure that config_name is a column of the User model.
-        error_msg = "Notification configuration has to be a column on User"
-        assert config_name in User.__table__.columns, error_msg
-
-        setattr(user, config_name, default)
+        UserSettings.save_setting_for_user(
+            api.user.get_current().getId(), config_name, default)
         return JSONResponse(self.request).proceed().dump()
 
     def list(self):
@@ -234,8 +237,11 @@ class NotificationSettings(BrowserView):
                               context=self.request)
             help_text = translate(ACTIVITY_TRANSLATIONS[config.get('id')]['help_text'],
                                   context=self.request)
-            value = self.get_user_configuration(config.get('id'))
-            default = self.get_default_configuration(config.get('id'))
+
+            default = self.get_default_setting_value(config.get('id'))
+            value = UserSettings.get_setting_for_user(
+                api.user.get_current().getId(), config.get('id'))
+
             if value == default:
                 setting_type = 'default'
             else:
@@ -268,16 +274,14 @@ class NotificationSettings(BrowserView):
     def dispatchers(self):
         return notification_center().dispatchers
 
-    def get_user_configuration(self, config_name):
+    def get_default_setting_value(self, setting_name):
+        return getattr(UserSettings, setting_name).default.arg
+
+    def assert_user_in_ogds(self):
         userid = api.user.get_current().getId()
         user = User.query.filter_by(userid=userid).one_or_none()
         if user is None:
-            # User with no entry in the ogds, probably zopemaster.
-            return self.get_default_configuration(config_name)
-        return getattr(user, config_name)
-
-    def get_default_configuration(self, config_name):
-        return getattr(User, config_name).default.arg
+            raise InvalidUser
 
     def get_user_settings(self):
         userid = api.user.get_current().getId()
@@ -303,6 +307,7 @@ class NotificationSettings(BrowserView):
     def get_or_create_setting(self, kind):
         setting = self.get_setting(kind)
         if not setting:
+            self.assert_user_in_ogds()
             setting = NotificationSetting(
                 kind=kind, userid=api.user.get_current().getId())
             create_session().add(setting)
@@ -362,16 +367,16 @@ class NotificationSettingsForm(BrowserView):
         return '{}/notification-settings/save'.format(
             api.portal.get().absolute_url())
 
-    def save_configuration_url(self):
-        return '{}/notification-settings/save_configuration'.format(
+    def save_user_setting_url(self):
+        return '{}/notification-settings/save_user_setting'.format(
             api.portal.get().absolute_url())
 
     def reset_url(self):
         return '{}/notification-settings/reset'.format(
             api.portal.get().absolute_url())
 
-    def reset_configuration_url(self):
-        return '{}/notification-settings/reset_configuration'.format(
+    def reset_user_setting_url(self):
+        return '{}/notification-settings/reset_user_setting'.format(
             api.portal.get().absolute_url())
 
     def tab_title_general(self):

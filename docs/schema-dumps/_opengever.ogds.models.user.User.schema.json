@@ -156,20 +156,6 @@
             "maxLength": 26,
             "description": "",
             "_zope_schema_type": "Text"
-        },
-        "notify_own_actions": {
-            "type": "boolean",
-            "title": "notify_own_actions",
-            "description": "",
-            "_zope_schema_type": "Bool",
-            "default": false
-        },
-        "notify_inbox_actions": {
-            "type": "boolean",
-            "title": "notify_inbox_actions",
-            "description": "",
-            "_zope_schema_type": "Bool",
-            "default": true
         }
     },
     "required": [
@@ -197,8 +183,6 @@
         "zip_code",
         "city",
         "country",
-        "import_stamp",
-        "notify_own_actions",
-        "notify_inbox_actions"
+        "import_stamp"
     ]
 }
