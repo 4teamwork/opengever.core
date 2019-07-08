@@ -4,13 +4,17 @@ from ftw.builder import session
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
+from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.core.solr_testing import SolrReplicationAPIClient
+from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import OpengeverFixture
 from opengever.testing.helpers import incrementing_intids
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
+from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
 import imp
 import os
@@ -18,8 +22,33 @@ import pytz
 import transaction
 
 
+SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
+SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
+
+
 class TestserverLayer(OpengeverFixture):
     defaultBases = (COMPONENT_REGISTRY_ISOLATION,)
+
+    def setUpZope(self, app, configurationContext):
+        SolrServer.get_instance().configure(SOLR_PORT, SOLR_CORE).start()
+        import collective.indexing.monkey  # noqa
+        import ftw.solr.patches  # noqa
+
+        super(TestserverLayer, self).setUpZope(app, configurationContext)
+
+        # Solr must be started before registering the connection since ftw.solr
+        # will get the schema from solr and cache it.
+        SolrServer.get_instance().await_ready()
+        xmlconfig.string(
+            '<configure xmlns:solr="http://namespaces.plone.org/solr">'
+            '  <solr:connection host="localhost"'
+            '                   port="{SOLR_PORT}"'
+            '                   base="/solr/{SOLR_CORE}" />'
+            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            context=configurationContext)
+
+        # Clear solr from potential artefacts of the previous run.
+        SolrReplicationAPIClient.get_instance().clear()
 
     def setUpPloneSite(self, portal):
         session.current_session = session.BuilderSession()
@@ -31,11 +60,18 @@ class TestserverLayer(OpengeverFixture):
         portal.portal_languages.use_combined_language_codes = True
         portal.portal_languages.addSupportedLanguage('de-ch')
 
+        api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
+
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
         self.get_fixture_class()()
         print 'Finished installing fixture.'
         setRequest(None)
+
+        # Commit before creating the solr backup, since collective.indexing
+        # flushes on commit.
+        transaction.commit()
+        SolrReplicationAPIClient.get_instance().create_backup('fixture')
 
     def setupLanguageTool(self, portal):
         lang_tool = api.portal.get_tool('portal_languages')
@@ -85,9 +121,11 @@ class TestServerFunctionalTesting(FunctionalTesting):
         self.context_manager = self.isolation()
         self.context_manager.__enter__()
         transaction.commit()
+        SolrReplicationAPIClient.get_instance().await_restored()
 
     def testTearDown(self):
         self.context_manager.__exit__(None, None, None)
+        SolrReplicationAPIClient.get_instance().restore_backup('fixture')
         super(TestServerFunctionalTesting, self).testTearDown()
 
 

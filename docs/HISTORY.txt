@@ -68,6 +68,7 @@ Changelog
 - Update plone.restapi to latest release. [phgross]
 - Add optional facet values and counts search to listing endpoint. [njohner]
 - Add POST restapi endpint @mworkspace-invitations/{id}/{action}. [elioschmutz]
+- Add Solr support to testserver. [jone]
 - Add GET restapi endpint @my-workspace-invitations. [elioschmutz]
 - Allow range queries on deadline in listing endpoint. [njohner]
 - Update and improve documentation for checked-out documents. [phgross, njohner]
