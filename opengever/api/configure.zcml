@@ -420,4 +420,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@todos"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".workspace_todos.ToDosGet"
+      permission="zope2.View"
+      />
+
 </configure>
