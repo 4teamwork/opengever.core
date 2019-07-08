@@ -387,4 +387,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@users"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".users.GeverUsersGet"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
 </configure>

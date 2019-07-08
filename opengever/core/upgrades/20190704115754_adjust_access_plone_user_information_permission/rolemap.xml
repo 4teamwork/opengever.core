@@ -1,0 +1,9 @@
+<rolemap>
+  <permissions>
+    <permission name="plone.restapi: Access Plone user information" acquire="True">
+      <role name="Manager" />
+      <role name="Member" />
+      <role name="Reader" />
+    </permission>
+  </permissions>
+</rolemap>
