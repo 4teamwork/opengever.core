@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Fix upgrade step that adds linguistic index for task principal. [lgraf]
+- Add ftw.catalogdoctor to dependencies. [deiferni]
 - @listing endpoint: Exclude searchroot from Solr results. [lgraf]
 - Avoid reindexing 'created' during IObjectCopiedEvent to fix copy & pasting with Solr. [lgraf]
 - Allow Readers, Member and Managers to access users information for all users. [phgross]
