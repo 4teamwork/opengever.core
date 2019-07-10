@@ -1,3 +1,4 @@
+from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.workspace import _
@@ -14,10 +15,12 @@ from zope.interface import provider
 @provider(IFormFieldProvider)
 class IToDoSchema(model.Schema):
 
+    dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u'label_title', default='Title'),
         required=True)
 
+    dexteritytextindexer.searchable('text')
     text = schema.Text(
         title=_(u'label_text', default='Text'),
         required=False)

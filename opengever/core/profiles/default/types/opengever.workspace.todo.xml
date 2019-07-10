@@ -20,7 +20,8 @@
 
   <!-- enabled behaviors -->
   <property name="behaviors">
-    </property>
+    <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+  </property>
 
   <!-- View information -->
   <property name="immediate_view">view</property>
