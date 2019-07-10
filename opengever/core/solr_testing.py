@@ -79,6 +79,7 @@ class SolrServer(object):
                 print '... waiting for solr ({})'.format(index)
             time.sleep(interval)
 
+        self.print_tail()
         raise ValueError('Timeout ({}s) while waiting for solr.'.format(timeout))
 
     def print_tail(self, max_lines=100):

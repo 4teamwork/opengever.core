@@ -8,6 +8,7 @@ from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
+from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OpengeverFixture
 from opengever.testing.helpers import incrementing_intids
 from plone import api
@@ -61,6 +62,7 @@ class TestserverLayer(OpengeverFixture):
         portal.portal_languages.addSupportedLanguage('de-ch')
 
         api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
+        activate_bumblebee_feature()
 
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
