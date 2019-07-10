@@ -102,6 +102,13 @@ class TestserverSelftest(object):
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},
                 {item['path']: item['UID'] for item in browser.json})
 
+            # Make sure the bumblebee checksum is available:
+            browser.open(self.plone_url + '@solrsearch?fq=id:document-1&fl=id,bumblebee_checksum')
+            self.assertEqual(
+                [{'bumblebee_checksum': '9fb7bce1d9bc0eb51d26ea7018ad41f542851ed75cb21e33e04b65a7f9757028',
+                  'id': 'document-1'}],
+                browser.json)
+
             self.testserverctl('zodb_teardown')
 
     def testserverctl(self, *args):
