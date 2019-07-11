@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
@@ -143,9 +141,6 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
     @browsing
     def test_security_edit_todo_action(self, browser):
-        with self.login(self.workspace_admin):
-            todo = create(Builder('todo').within(self.workspace).titled(u'The Todo'))
-
         expected = {self.workspace_owner: True,
                     self.workspace_admin: True,
                     self.workspace_member: True,
@@ -155,7 +150,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
         for user in expected.keys():
             locals()['__traceback_info__'] = user
             with self.login(user, browser):
-                browser.open(todo)
+                browser.open(self.todo)
                 got[user] = editbar.visible() and 'Edit' in editbar.contentviews()
 
         self.maxDiff = None
