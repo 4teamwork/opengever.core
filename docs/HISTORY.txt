@@ -4,6 +4,7 @@ Changelog
 2019.4.0 (unreleased)
 ---------------------
 
+- Add teamraum todo content-type. [elioschmutz]
 - Fix upgrade step that adds linguistic index for task principal. [lgraf]
 - Add ftw.catalogdoctor to dependencies. [deiferni]
 - Fix exception formatter patch when there is no plone site. [deiferni]

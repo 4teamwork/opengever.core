@@ -634,3 +634,10 @@ class WorkspaceFolderBuilder(DexterityBuilder):
 
 
 builder_registry.register('workspace folder', WorkspaceFolderBuilder)
+
+
+class ToDoBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.todo'
+
+
+builder_registry.register('todo', ToDoBuilder)

@@ -1,0 +1,11 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+  <object name="opengever_workspace_todo" meta_type="Workflow" />
+
+  <bindings>
+    <type type_id="opengever.workspace.todo">
+      <bound-workflow workflow_id="opengever_workspace_todo" />
+    </type>
+  </bindings>
+
+</object>

@@ -122,3 +122,41 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(expected, got)
+
+    @browsing
+    def test_security_add_todos(self, browser):
+        expected = {self.workspace_owner: True,
+                    self.workspace_admin: True,
+                    self.workspace_member: True,
+                    self.workspace_guest: False}
+
+        got = {}
+        for user in expected.keys():
+            locals()['__traceback_info__'] = user
+            with self.login(user, browser):
+                browser.open(self.workspace)
+                got[user] = factoriesmenu.visible() \
+                    and 'ToDo' in factoriesmenu.addable_types()
+
+        self.maxDiff = None
+        self.assertEquals(expected, got)
+
+    @browsing
+    def test_security_edit_todo_action(self, browser):
+        with self.login(self.workspace_admin):
+            todo = create(Builder('todo').within(self.workspace).titled(u'The Todo'))
+
+        expected = {self.workspace_owner: True,
+                    self.workspace_admin: True,
+                    self.workspace_member: True,
+                    self.workspace_guest: False}
+
+        got = {}
+        for user in expected.keys():
+            locals()['__traceback_info__'] = user
+            with self.login(user, browser):
+                browser.open(todo)
+                got[user] = editbar.visible() and 'Edit' in editbar.contentviews()
+
+        self.maxDiff = None
+        self.assertEquals(expected, got)

@@ -30,6 +30,7 @@
   <object name="opengever_workspace" meta_type="Workflow" />
   <object name="opengever_workspace_folder" meta_type="Workflow" />
   <object name="opengever_workspace_root" meta_type="Workflow" />
+  <object name="opengever_workspace_todo" meta_type="Workflow" />
 
   <bindings>
 
@@ -159,6 +160,10 @@
 
     <type type_id="opengever.workspace.folder">
       <bound-workflow workflow_id="opengever_workspace_folder" />
+    </type>
+
+    <type type_id="opengever.workspace.todo">
+      <bound-workflow workflow_id="opengever_workspace_todo" />
     </type>
 
   </bindings>

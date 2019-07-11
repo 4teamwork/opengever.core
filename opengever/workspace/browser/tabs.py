@@ -1,6 +1,6 @@
+from opengever.tabbedview import BaseCatalogListingTab
 from opengever.tabbedview.helper import linked
 from opengever.workspace import _
-from opengever.tabbedview import BaseCatalogListingTab
 
 
 class Workspaces(BaseCatalogListingTab):

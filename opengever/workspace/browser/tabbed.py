@@ -15,9 +15,9 @@ class WorkspaceTabbedView(GeverTabbedView):
         'title': _(u'label_documents', default=u'Documents'),
         }
 
-    tasks_tab = {
-        'id': 'tasks',
-        'title': _(u'label_tasks', default=u'Tasks'),
+    todo_tab = {
+        'id': 'todos',
+        'title': _(u'label_todo', default=u'ToDo'),
         }
 
     trash_tab = {
@@ -34,7 +34,7 @@ class WorkspaceTabbedView(GeverTabbedView):
         return filter(None, [
             self.folders_tab,
             self.documents_tab,
-            self.tasks_tab,
+            self.todo_tab,
             self.trash_tab,
             self.journal_tab,
 
