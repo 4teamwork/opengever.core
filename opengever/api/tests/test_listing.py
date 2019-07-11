@@ -409,6 +409,46 @@ class TestListingEndpoint(IntegrationTestCase):
             [u'2015', u'2016'],
             [item['title'] for item in browser.json['items']])
 
+    @browsing
+    def test_todos_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=todos',
+            'columns=title',
+            'columns=responsible',
+            'columns=deadline',
+            'columns=completed',
+            'sort_on=deadline',
+            'sort_order=ascending',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.workspace, view=view, headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/opengever-workspace.todo',
+                    u'completed': False,
+                    u'deadline': u'2016-09-01',
+                    u'responsible': None,
+                    u'title': u'Fix user login'
+                },
+                {
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/opengever-workspace-2.todo',
+                    u'completed': True,
+                    u'deadline': u'2016-09-02',
+                    u'responsible': u'beatrice.schrodinger',
+                    u'title': u'Cleanup installation'},
+                {
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/opengever-workspace-1.todo',
+                    u'completed': False,
+                    u'deadline': u'2016-12-01',
+                    u'responsible': u'beatrice.schrodinger',
+                    u'title': u'Go live'
+                },
+            ],
+            browser.json['items'])
+
 
 class TestListingEndpointWithSolr(IntegrationTestCase):
 
