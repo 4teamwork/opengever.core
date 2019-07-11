@@ -1,3 +1,6 @@
+# Avoid import error for Products.Archetypes.BaseBTreeFolder
+from Products.Archetypes import atapi  # noqa
+from collective.indexing.monkey import unpatch as unpatch_collective_indexing
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from ftw.solr.interfaces import ISolrConnectionManager
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
@@ -79,6 +82,9 @@ def import_oggbundle(app, args):
             raise Exception(
                 "Solr isn't running, but solr reindexing is enabled. "
                 "Skipping solr reindexing via `--skip-solr`.")
+
+    if not solr_enabled:
+        unpatch_collective_indexing()
 
     with DisabledLDAP(plone):
         transmogrifier(u'opengever.bundle.oggbundle')
