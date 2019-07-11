@@ -107,8 +107,6 @@ darzustellen, kann ``metadata_fields=_all`` verwendet werden.
    ``preview_pdf_url``, bei welchen es sich nicht um eigentliche Metadaten
    handelt, zur Verfügung.
 
-.. disqus::
-
 
 Solr Suche
 ----------
@@ -153,3 +151,6 @@ Weitere optionale Parameter:
 - ``start``: Das erste zurückzugebende Element
 - ``rows``: Die maximale Anzahl der zurückzugebenden Elemente
 - ``sort``: Sortierung nach einem indexierten Feld
+
+
+.. disqus::
