@@ -9,6 +9,7 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
+from ftw.bumblebee.interfaces import IBumblebeeUserSaltStore
 from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
@@ -1888,6 +1889,11 @@ class OpengeverContentFixture(object):
             .in_group(group)
             .having(**kwargs)
             )
+
+        # Use a static bumblebee user salt so that access tokens are predictable
+        # when the time is frozen.
+        store = IBumblebeeUserSaltStore(api.portal.get())
+        store._get_storage()[plone_user.getId()] = 'static-salt-for-{}'.format(plone_user.getId())
 
         self._lookup_table[attrname] = ('user', plone_user.getId())
         return plone_user
