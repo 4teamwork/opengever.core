@@ -36,3 +36,41 @@ class TempMonkeyPatch(object):
         """Restore the original value to the target object's attribute.
         """
         self.restore()
+
+
+def patch_collective_indexing():
+    """During tests, patch collective.indexing's IndexQueue so that it
+    doesn't defer (re)indexing to the end of the transaction, but instead
+    executes these operations immediately (by always processing the queue).
+
+    This allows us to still have c.indexing active during tests, to make use
+    of it's pluggable IndexQueueProcessor mechanism (used to integrate Solr),
+    but not have the negative side effects from deferred indexing.
+    """
+    from collective.indexing.queue import IndexQueue
+    from collective.indexing.queue import processQueue
+
+    orig_index = IndexQueue.index
+
+    def index(self, obj, attributes=None):
+        result = orig_index(self, obj, attributes=attributes)
+        processQueue()
+        return result
+
+    orig_reindex = IndexQueue.reindex
+
+    def reindex(self, obj, attributes=None):
+        result = orig_reindex(self, obj, attributes=attributes)
+        processQueue()
+        return result
+
+    orig_unindex = IndexQueue.unindex
+
+    def unindex(self, obj):
+        result = orig_unindex(self, obj)
+        processQueue()
+        return result
+
+    IndexQueue.index = index
+    IndexQueue.reindex = reindex
+    IndexQueue.unindex = unindex
