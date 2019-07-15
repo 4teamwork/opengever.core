@@ -220,7 +220,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                 },
                 'comments': '',
                 'actor': 'robert.ziegler',
-                'time': DateTime('2016/08/31 20:05:33 GMT+2'),
+                'time': DateTime('2016/08/31 20:11:33 GMT+2'),
             },
         ]
         self.assertEqual(expected_journal, dossier_journal.get_journal_data())

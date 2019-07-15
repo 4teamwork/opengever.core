@@ -90,6 +90,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'opengever_committee_workflow--STATUS--inactive',
             'opengever_workspace--STATUS--active',
             'opengever_workspace_folder--STATUS--active',
+            'opengever_workspace_todo--STATUS--active',
             'proposal-state-active',
             'proposal-state-submitted',
             'repositoryfolder-state-active',

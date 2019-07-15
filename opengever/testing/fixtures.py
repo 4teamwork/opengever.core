@@ -135,6 +135,8 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(18):
             with self.login(self.workspace_owner):
                 self.create_workspace()
+                self.create_todos()
+
             with self.login(self.dossier_responsible):
                 self.create_shadow_document()
                 self.create_protected_dossiers()
@@ -2018,6 +2020,38 @@ class OpengeverContentFixture(object):
             Builder('workspace folder')
             .titled(u'WS F\xc3lder')
             .having(description=u'A Workspace folder description')
+            .within(self.workspace)
+            ))
+
+    def create_todos(self):
+        self.todo = self.register('todo', create(
+            Builder('todo')
+            .titled(u'Fix user login')
+            .having(
+                text=u"Authentication is no longer possible.",
+                deadline=date(2016, 9, 1),
+                completed=False)
+            .within(self.workspace)
+            ))
+
+        self.assigned_todo = self.register('assigned_todo', create(
+            Builder('todo')
+            .titled(u'Go live')
+            .having(
+                deadline=date(2016, 12, 1),
+                responsible=self.workspace_member.getId(),
+                completed=False)
+            .within(self.workspace)
+            ))
+
+        self.completed_todo = self.register('completed_todo', create(
+            Builder('todo')
+            .titled(u'Cleanup installation')
+            .having(
+                text=u"Do some cleanups",
+                deadline=date(2016, 9, 2),
+                responsible=self.workspace_member.getId(),
+                completed=True)
             .within(self.workspace)
             ))
 

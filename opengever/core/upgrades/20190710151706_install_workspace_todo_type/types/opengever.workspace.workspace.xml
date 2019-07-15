@@ -1,0 +1,8 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.workspace" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <property name="allowed_content_types" purge="False">
+    <element value="opengever.task.task" remove="True"/>
+    <element value="opengever.workspace.todo" />
+  </property>
+
+</object>

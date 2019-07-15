@@ -10,7 +10,7 @@
   <property name="allowed_content_types">
     <element value="opengever.document.document" />
     <element value="ftw.mail.mail" />
-    <element value="opengever.task.task" />
+    <element value="opengever.workspace.todo" />
     <element value="opengever.workspace.folder" />
   </property>
 

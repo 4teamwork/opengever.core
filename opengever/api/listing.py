@@ -178,6 +178,9 @@ SOLR_FILTERS = {
     ],
     u'tasks': [
         u'object_provides:opengever.task.task.ITask',
+    ],
+    u'todos': [
+        u'object_provides:opengever.workspace.interfaces.IToDo',
     ]
 }
 
@@ -196,6 +199,9 @@ CATALOG_QUERIES = {
     },
     'tasks': {
         'object_provides': 'opengever.task.task.ITask',
+    },
+    'todos': {
+        'object_provides': 'opengever.workspace.interfaces.IToDo',
     }
 
 }
