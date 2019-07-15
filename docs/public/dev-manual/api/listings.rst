@@ -229,7 +229,7 @@ Optionale Parameter:
 
   .. sourcecode:: http
 
-    GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&sort_on=modified&filters.start:record:=2018-08-20TO2018-09-20 HTTP/1.1
+    GET /ordnungssystem/fuehrung/dossier-23/@listing?name=documents&sort_on=modified&filters.start:record=2018-08-20TO2018-09-20 HTTP/1.1
     Accept: application/json
 
 **Beispiel: Werte-Bereiche von Ersteller auch liefern**
