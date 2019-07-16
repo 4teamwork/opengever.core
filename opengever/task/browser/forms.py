@@ -98,7 +98,7 @@ class TaskAddForm(DefaultAddForm):
 
         # Set tasktemplate order and move to planned state if it's part
         # of a sequential process
-        if IFromSequentialTasktemplate.providedBy(self.context):
+        if ITask.providedBy(self.context) and self.context.is_sequential_main_task():
             position = data['tasktemplate_position']
             if not position:
                 position = len(self.context.get_tasktemplate_order())

@@ -5,6 +5,8 @@ from ftw.testbrowser import browsing
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from ftw.testbrowser.pages import factoriesmenu
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.interface import alsoProvides
@@ -259,3 +261,27 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
              u'Vorstellungsrunde bei anderen Mitarbeitern',
              u'Subtask'],
             [oguid.resolve_object().title for oguid in oguids])
+
+
+class TestAddingSubtaskToSequentialSubtask(IntegrationTestCase):
+
+    @browsing
+    def test_subsubtask_is_not_part_of_sequential_process(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+
+        # Add a subtask
+        browser.open(self.seq_subtask_1)
+        factoriesmenu.add('Subtask')
+        browser.fill({'Title': 'Vertiefte Recherche',
+                      'Task Type': 'For direct execution'})
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.regular_user)
+        browser.click_on('Save')
+
+        self.assertEquals(['Item created'], info_messages())
+        self.assertEquals(1, len(self.seq_subtask_1.objectValues()))
+
+        subsubtask = self.seq_subtask_1.objectValues()[0]
+        self.assertFalse(subsubtask.is_from_sequential_tasktemplate)
+        self.assertIsNone(self.seq_subtask_1.get_tasktemplate_order())

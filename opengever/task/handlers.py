@@ -115,7 +115,7 @@ def set_initial_state(task, event):
 
     parent = aq_parent(aq_inner(task))
     if ITask.providedBy(parent) \
-       and IFromSequentialTasktemplate.providedBy(parent):
+       and parent.is_sequential_main_task():
 
         task.set_to_planned_state()
 
