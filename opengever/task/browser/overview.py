@@ -151,7 +151,7 @@ class Overview(BrowserView, GeverTabMixin):
         """Returns all subtasks. On sequential process tasks, it returns
         the subtask in the process order.
         """
-        if self.context.is_from_sequential_tasktemplate:
+        if self.context.is_sequential_main_task():
             oguids = self.context.get_tasktemplate_order()
             if not oguids:
                 return []
