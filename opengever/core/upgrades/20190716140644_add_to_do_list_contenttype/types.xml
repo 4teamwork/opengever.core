@@ -1,0 +1,6 @@
+<object name="portal_types" meta_type="Plone Types Tool">
+
+  <!-- WORKSPACE -->
+  <object name="opengever.workspace.todolist" meta_type="Dexterity FTI" />
+
+</object>

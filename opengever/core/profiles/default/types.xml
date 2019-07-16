@@ -59,6 +59,7 @@
   <object name="opengever.workspace.workspace" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.folder" meta_type="Dexterity FTI" />
   <object name="opengever.workspace.todo" meta_type="Dexterity FTI" />
+  <object name="opengever.workspace.todolist" meta_type="Dexterity FTI" />
 
   <!-- POLICY -->
   <object name="Plone Site" meta_type="Factory-based Type Information with dynamic views" />
