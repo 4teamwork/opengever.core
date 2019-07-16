@@ -12,6 +12,7 @@
   <include package=".participation" />
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
+  <adapter factory=".sequence.TodoListSequenceNumberGenerator" />
 
   <subscriber
       for="opengever.workspace.interfaces.IWorkspace

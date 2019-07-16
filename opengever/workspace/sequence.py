@@ -1,6 +1,7 @@
 from opengever.base.sequence import DefaultSequenceNumberGenerator
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
+from opengever.workspace.todolist import IToDoListSchema
 from zope.component import adapter
 
 
@@ -18,3 +19,11 @@ class WorkspaceFolderSequenceNumberGenerator(DefaultSequenceNumberGenerator):
     """
 
     key = 'WorkspaceFolderSequenceNumberGenerator'
+
+
+@adapter(IToDoListSchema)
+class TodoListSequenceNumberGenerator(DefaultSequenceNumberGenerator):
+    """Sequence Number generator for todolist, which uses a global counter.
+    """
+
+    key = 'ToDoListSequenceNumberGenerator'
