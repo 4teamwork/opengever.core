@@ -641,9 +641,11 @@ Objects
       - self.tasktemplate
   - self.workspace_root
     - self.workspace
-      - self.assigned_todo
-      - self.completed_todo
       - self.todo
+      - self.todolist_general
+      - self.todolist_introduction
+        - self.assigned_todo
+        - self.completed_todo
       - self.workspace_folder
 
 .. </fixture:objects>

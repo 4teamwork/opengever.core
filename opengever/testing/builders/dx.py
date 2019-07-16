@@ -641,3 +641,10 @@ class ToDoBuilder(DexterityBuilder):
 
 
 builder_registry.register('todo', ToDoBuilder)
+
+
+class ToDoListBuilder(DexterityBuilder):
+    portal_type = 'opengever.workspace.todolist'
+
+
+builder_registry.register('todolist', ToDoListBuilder)
