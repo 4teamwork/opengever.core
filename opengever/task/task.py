@@ -398,6 +398,11 @@ class Task(Container):
         """
         return IFromSequentialTasktemplate.providedBy(self)
 
+    def is_sequential_main_task(self):
+        """If the task is the main task of a sequential process.
+        """
+        return self.is_from_sequential_tasktemplate and not self.get_is_subtask()
+
     @property
     def is_in_final_state(self):
         current_state = api.content.get_state(self)

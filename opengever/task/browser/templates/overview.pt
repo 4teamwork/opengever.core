@@ -70,12 +70,13 @@
 
       <!-- subtasks box -->
       <div id="sub_taskBox" class="box"
-           tal:define="is_sequential context/is_from_sequential_tasktemplate">
+           tal:define="is_sequential_main_task context/is_sequential_main_task;
+                       is_main_task not: context/get_is_subtask">
 
         <!-- regular subtasks -->
-        <tal:condition tal:condition="python: sub_tasks and not is_sequential">
+        <tal:condition tal:condition="python: sub_tasks and not is_sequential_main_task">
           <h2 i18n:translate="label_sub_task">Sub tasks</h2>
-          <span class="sequence_type" tal:condition="context/is_from_tasktemplate"
+          <span class="sequence_type" tal:condition="is_main_task"
                 tal:content="view/get_sequence_type_label"/>
           <div tal:attributes="class string:task-container ${view/get_sequence_type}">
             <div class="task-list">
@@ -87,9 +88,9 @@
         </tal:condition>
 
         <!-- sequential subtasks -->
-        <tal:condition tal:condition="python: sub_tasks and is_sequential">
+        <tal:condition tal:condition="python: sub_tasks and is_sequential_main_task">
           <h2 i18n:translate="label_sub_task">Sub tasks</h2>
-          <span class="sequence_type" tal:condition="context/is_from_tasktemplate"
+          <span class="sequence_type" tal:condition="is_sequential_main_task"
                 tal:content="view/get_sequence_type_label"/>
           <div tal:attributes="class string:task-container ${view/get_sequence_type}">
             <div class="task-sequence-line-container">

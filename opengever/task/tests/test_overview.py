@@ -205,6 +205,35 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             [subtask_3.title],
             browser.css('#sequence_taskBox .next_task .task').text)
 
+    @browsing
+    def test_subtask_of_sequential_tasks_are_listed_as_regular_subtasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.set_workflow_state('task-state-in-progress', self.seq_subtask_1)
+        subsubtask = create(Builder('task')
+                            .within(self.seq_subtask_1)
+                            .titled(u'Recherche Kapitel 1-4 verfeinern')
+                            .having(responsible_client='fa',
+                                    responsible=self.regular_user.id,
+                                    issuer=self.regular_user.id,
+                                    task_type='direct-execution',
+                                    deadline=date(2016, 11, 1)))
+
+        browser.open(self.seq_subtask_1, view='tabbedview_view-overview')
+        self.assertEquals(['Recherche Kapitel 1-4 verfeinern'],
+                          browser.css('#sub_taskBox .task a').text)
+        self.assertEquals([],
+                          browser.css('#sub_taskBox .task-sequence-line'))
+
+        # Testing the oposite on a sequential task to validate test assertions
+        browser.open(self.sequential_task, view='tabbedview_view-overview')
+        self.assertEquals(['Mitarbeiter Dossier generieren',
+                           'Arbeitsplatz vorbereiten',
+                           'Vorstellungsrunde bei anderen Mitarbeitern'],
+                          browser.css('#sub_taskBox .task a').text)
+        self.assertEquals(
+            1, len(browser.css('#sub_taskBox .task-sequence-line')))
+
 
 class TestTaskTextTransformation(IntegrationTestCase):
 
