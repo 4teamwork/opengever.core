@@ -7,6 +7,7 @@ Changelog
 - Fix qa tests. [lgraf]
 - Disable properties action for teams. [deiferni]
 - Enable c.indexing during tests, but patch it to not defer operations. [lgraf]
+- Add teamraum todolist content-type. [phgross]
 - Add teamraum todo content-type. [elioschmutz]
 - Fix creation and handling for subtasks of sequential tasks. [phgross]
 - Disable collective.indexing during bundle import. [buchi]
