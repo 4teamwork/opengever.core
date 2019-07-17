@@ -148,7 +148,11 @@
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Delete objects" acquired="False">
+      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+      <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Edit comments" acquired="False">
       <permission-role>Administrator</permission-role>
