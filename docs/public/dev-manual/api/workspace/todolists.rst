@@ -3,7 +3,7 @@
 ToDo Listen
 ===========
 
-ToDo Listen dienen als Gruppierungsmöglicheiten für ToDos. Sie können via REST Operationen :ref:`operations` erstellt, gelesen, bearbeitet und gelöscht werden. Beim Löschen gilt es zu beachten das nur leere Listen gelöscht werden können.
+ToDo Listen dienen als Gruppierungsmöglichkeiten für ToDos. Sie können via REST Operationen :ref:`operations` erstellt, gelesen, bearbeitet und gelöscht werden. Beim Löschen gilt es zu beachten, dass nur leere Listen gelöscht werden können.
 
 Reihenfolge
 -----------
@@ -87,3 +87,29 @@ Es wird empfohlen den key ``subset_ids`` zu verwenden um nur die Reihenfolgen ei
    .. sourcecode:: http
 
       HTTP/1.1 204 No content
+
+
+ToDos in Liste verschieben
+--------------------------
+Um einzelne ToDos zu verschieben, senden sie eine POST Request an den ``@move`` Endpoint des Zielobjekts. Im Request-Body muss unter dem Key ``source`` das zu verschiebende Objekt definiert sein, dieses kann via URL, Pfad, UID oder intid angegeben werden.
+
+**Beispiel-Request**:
+
+
+   .. sourcecode:: http
+
+      POST workspaces/workspace-1/todolist-4/@move HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+        "source": "http://nohost/plone/workspaces/workspace-3/todo-1323"
+      }
+
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK

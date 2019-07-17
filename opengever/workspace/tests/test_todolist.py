@@ -164,3 +164,80 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
             ['folder-1', u'todolist-2', u'todolist-3',
              'opengever-workspace.todo', u'todolist-1', u'todolist-4'],
             self.workspace.objectIds())
+
+    @browsing
+    def test_only_order_change_is_allowed_for_workspace_member(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.workspace)
+        # Updating title is not allowed
+        data = {'title': 'New workspace title'}
+        with browser.expect_http_error(401):
+            browser.open(self.workspace, method='PATCH',
+                         headers=self.api_headers, data=json.dumps(data))
+
+        # Updating title and order is not allowed
+        data = {
+            'title': 'New workspace title',
+            'ordering': {
+                'obj_id': 'todolist-1',
+                'delta': '1',
+                'subset_ids': ['todolist-1', 'todolist-2']}}
+        with browser.expect_http_error(401):
+            browser.open(self.workspace, method='PATCH',
+                         headers=self.api_headers, data=json.dumps(data))
+
+        # Only updating the order is allowed
+        data = {
+            'ordering': {
+                'obj_id': 'todolist-1',
+                'delta': '1',
+                'subset_ids': ['todolist-1', 'todolist-2']}}
+        browser.open(self.workspace, method='PATCH',
+                     headers=self.api_headers, data=json.dumps(data))
+
+        self.assertEqual(204, browser.status_code)
+
+    @browsing
+    def test_workspace_guest_is_not_allowed_to_update_order(self, browser):
+        self.login(self.workspace_guest, browser)
+
+        data = {
+            'ordering': {
+                'obj_id': 'todolist-1',
+                'delta': '1',
+                'subset_ids': ['todolist-1', 'todolist-2']}}
+
+        with browser.expect_http_error(401):
+            browser.open(self.workspace, method='PATCH',
+                         headers=self.api_headers, data=json.dumps(data))
+
+    @browsing
+    def test_move_todo_into_a_todolist(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.assertEqual(0, len(self.todolist_general.objectValues()))
+
+        data = {'source': self.todo.absolute_url()}
+        browser.open('{}/@move'.format(self.todolist_general.absolute_url()),
+                     method='POST', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            ['Fix user login'],
+            [obj.title for obj in self.todolist_general.objectValues()])
+
+    @browsing
+    def test_move_todo_from_one_todolist_to_another(self, browser):
+        self.login(self.workspace_member, browser)
+
+        data = {'source': self.assigned_todo.absolute_url()}
+        browser.open('{}/@move'.format(self.todolist_general.absolute_url()),
+                     method='POST', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            ['Go live'],
+            [obj.title for obj in self.todolist_general.objectValues()])
