@@ -267,6 +267,41 @@ msgstr "Le rôle d'utilisateur de Teamräume rend l'onglet «Teamräume» visibl
 msgid "opengever_workspace_root--STATUS--active"
 msgstr "Actif"
 
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceOwner"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--STATUS--active"
+msgstr ""
+
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
