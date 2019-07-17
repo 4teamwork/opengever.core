@@ -133,3 +133,34 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertNotIn(list_id, self.workspace.objectIds())
+
+    @browsing
+    def test_change_order_via_api(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        create(Builder('todolist')
+               .titled(u'Konzeptphase')
+               .within(self.workspace))
+        create(Builder('todolist')
+               .titled(u'Dokumentationen')
+               .within(self.workspace))
+
+        self.assertEqual(
+            ['folder-1', u'todolist-1', u'todolist-2',
+             'opengever-workspace.todo', u'todolist-3', u'todolist-4'],
+            self.workspace.objectIds())
+
+        # change order
+        data = {
+            'ordering': {
+                'obj_id': 'todolist-1',
+                'delta': '2',
+                'subset_ids': ['todolist-1', 'todolist-2', 'todolist-3',
+                               'todolist-4']}}
+        browser.open(self.workspace, method='PATCH',
+                     headers=self.api_headers, data=json.dumps(data))
+
+        self.assertEqual(
+            ['folder-1', u'todolist-2', u'todolist-3',
+             'opengever-workspace.todo', u'todolist-1', u'todolist-4'],
+            self.workspace.objectIds())
