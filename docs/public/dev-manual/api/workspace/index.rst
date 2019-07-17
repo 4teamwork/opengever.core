@@ -12,5 +12,6 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    workspace_invitations
    participation
    todos
+   todolists
 
 .. disqus::

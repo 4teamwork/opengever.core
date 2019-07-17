@@ -7,6 +7,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from zope.component import getUtility
+import json
 
 
 class TestToDoList(IntegrationTestCase):
@@ -66,3 +67,54 @@ class TestToDoList(IntegrationTestCase):
 
         todolist = create(Builder('todolist').titled(u'Konzeptphase'))
         self.assertEqual('todolist-3', todolist.id)
+
+
+class TestAPISupportForTodoLists(IntegrationTestCase):
+
+    @browsing
+    def test_create(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(
+            self.workspace, method='POST', headers=self.api_headers,
+            data=json.dumps({'title': 'Allgemeine Projektinformationen',
+                             '@type': 'opengever.workspace.todolist'}))
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual('Allgemeine Projektinformationen',
+                         browser.json['title'])
+        self.assertEqual('todolist-3', browser.json['id'])
+
+    @browsing
+    def test_read(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.todolist_general, method='GET',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Allgemeine Informationen', browser.json['title'])
+        self.assertEqual(u'opengever.workspace.todolist',
+                         browser.json['@type'])
+        self.assertEqual(u'opengever_workspace_todolist--STATUS--active',
+                         browser.json['review_state'])
+
+    @browsing
+    def test_update(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.todolist_general, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'title': u'\xfcberarbeitungsphase'}))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(u'\xfcberarbeitungsphase',
+                         self.todolist_general.title)
+
+    @browsing
+    def test_delete(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.todolist_general, method='DELETE',
+                     headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
