@@ -111,10 +111,25 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
                          self.todolist_general.title)
 
     @browsing
-    def test_delete(self, browser):
+    def test_deletion_is_only_possible_for_empty_lists(self, browser):
         self.login(self.workspace_member, browser)
+
+        # Not empty
+        with browser.expect_http_error(500):
+            browser.open(self.todolist_introduction, method='DELETE',
+                         headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': u'The todolist is not empty, therefore deletion is not allowed.',
+             u'type': u'ValueError'},
+            browser.json)
+
+        # empty
+        list_id = self.todolist_general.id
+        self.assertIn(list_id, self.workspace.objectIds())
 
         browser.open(self.todolist_general, method='DELETE',
                      headers=self.api_headers)
 
         self.assertEqual(204, browser.status_code)
+        self.assertNotIn(list_id, self.workspace.objectIds())

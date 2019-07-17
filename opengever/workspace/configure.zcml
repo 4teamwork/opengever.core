@@ -20,6 +20,12 @@
       handler=".subscribers.assign_owner_role_on_creation"
       />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IToDoList
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".subscribers.check_delete_preconditions"
+      />
+
   <utility
       factory=".vocabularies.RolesVocabulary"
       name="opengever.workspace.RolesVocabulary"
