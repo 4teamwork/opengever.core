@@ -4,6 +4,7 @@ Changelog
 2019.4.0 (unreleased)
 ---------------------
 
+- Disable properties action for teams. [deiferni]
 - Enable c.indexing during tests, but patch it to not defer operations. [lgraf]
 - Add teamraum todo content-type. [elioschmutz]
 - Fix creation and handling for subtasks of sequential tasks. [phgross]

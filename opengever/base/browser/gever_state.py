@@ -4,6 +4,7 @@ from opengever.base.casauth import get_gever_portal_url
 from opengever.base.interfaces import IGeverState
 from opengever.contact.interfaces import IContactFolder
 from opengever.inbox.yearfolder import IYearFolder
+from opengever.ogds.base.interfaces import ITeam
 from plone.memoize.view import memoize
 from plone.memoize.view import memoize_contextless
 from Products.Five import BrowserView
@@ -18,6 +19,7 @@ class GeverStateView(BrowserView):
 
     types_without_properties_action = (
         IContactFolder,
+        ITeam,
         IYearFolder,
     )
 
