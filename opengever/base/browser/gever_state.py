@@ -16,6 +16,11 @@ class GeverStateView(BrowserView):
     """
     implements(IGeverState)
 
+    types_without_properties_action = (
+        IContactFolder,
+        IYearFolder,
+    )
+
     @memoize_contextless
     def cluster_base_url(self):
         return get_cluster_base_url()
@@ -35,8 +40,8 @@ class GeverStateView(BrowserView):
            plone_view.isPortalOrPortalDefaultPage():
             return False
 
-        if IContactFolder.providedBy(self.context) \
-           or IYearFolder.providedBy(self.context):
+        if any(iface.providedBy(self.context)
+               for iface in self.types_without_properties_action):
             return False
 
         return True
