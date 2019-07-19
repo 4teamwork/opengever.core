@@ -21,6 +21,8 @@
   <!-- enabled behaviors -->
   <property name="behaviors">
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
+    <element value="opengever.workspace.behaviors.namefromtitle.IToDoNameFromTitle" />
+    <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
   </property>
 
   <!-- View information -->

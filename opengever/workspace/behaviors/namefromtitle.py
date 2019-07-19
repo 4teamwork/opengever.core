@@ -43,3 +43,18 @@ class ToDoListNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IToDoListNameFromTitle)
 
     format = u'todolist-%i'
+
+
+class IToDoNameFromTitle(INameFromTitle):
+    """Behavior interface for ToDoNameFromTitle.
+    """
+
+
+class ToDoNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
+    """ The ID of a workspace ToDo should be 'todo-{sequence number}'.
+
+    format = u'todo-%i'
+    """
+    implements(IToDoNameFromTitle)
+
+    format = u'todo-%i'

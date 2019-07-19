@@ -147,7 +147,7 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
 
         self.assertEqual(
             ['folder-1', u'todolist-1', u'todolist-2',
-             'opengever-workspace.todo', u'todolist-3', u'todolist-4'],
+             'todo-1', u'todolist-3', u'todolist-4'],
             self.workspace.objectIds())
 
         # change order
@@ -162,7 +162,7 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
 
         self.assertEqual(
             ['folder-1', u'todolist-2', u'todolist-3',
-             'opengever-workspace.todo', u'todolist-1', u'todolist-4'],
+             'todo-1', u'todolist-1', u'todolist-4'],
             self.workspace.objectIds())
 
     @browsing
