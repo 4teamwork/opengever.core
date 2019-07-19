@@ -28,6 +28,12 @@
       handler=".subscribers.check_delete_preconditions"
       />
 
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           OFS.interfaces.IObjectWillBeAddedEvent"
+      handler=".subscribers.check_todo_add_preconditions"
+      />
+
   <utility
       factory=".vocabularies.RolesVocabulary"
       name="opengever.workspace.RolesVocabulary"

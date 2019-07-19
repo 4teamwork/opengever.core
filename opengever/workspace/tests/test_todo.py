@@ -3,7 +3,9 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
+import opengever.workspace.subscribers
 
 
 class TestToDo(IntegrationTestCase):
@@ -25,6 +27,31 @@ class TestToDo(IntegrationTestCase):
         self.assertItemsEqual(
             ['fix', 'user', 'login', 'authentication', 'is', 'no', 'longer', 'possible'],
             index_data_for(self.todo).get('SearchableText'))
+
+    @browsing
+    def test_todo_number_hard_limit(self, browser):
+        self.login(self.workspace_member, browser)
+
+        catalog = api.portal.get_tool("portal_catalog")
+        todos = catalog.unrestrictedSearchResults(
+                    path=self.workspace.absolute_url_path(),
+                    portal_type='opengever.workspace.todo')
+        opengever.workspace.subscribers.TODO_NUMBER_LIMIT = len(todos) + 1
+
+        browser.visit(self.workspace)
+        factoriesmenu.add('ToDo')
+        form = browser.find_form_by_field('Title')
+        form.fill({'Title': u'Ein ToDo'})
+        form.save()
+
+        assert_no_error_messages(browser)
+
+        browser.visit(self.workspace)
+        factoriesmenu.add('ToDo')
+        form = browser.find_form_by_field('Title')
+        form.fill({'Title': u'Ein anderes ToDo'})
+        with browser.expect_http_error(500):
+            form.save()
 
 
 class TestAPISupportForTodo(IntegrationTestCase):
