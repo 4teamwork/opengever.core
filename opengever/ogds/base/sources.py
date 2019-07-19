@@ -60,13 +60,13 @@ class BaseQuerySoure(object):
         return len(self.terms)
 
     def search(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTermByToken(self, token):
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class BaseMultipleSourcesQuerySource(BaseQuerySoure):
@@ -84,7 +84,7 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
 
         @return: List of classes implementing the IQuerySource interface.
         """
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
         term = None
@@ -748,7 +748,7 @@ class BaseSQLModelSource(BaseQuerySoure):
     @property
     def base_query(self):
         """"""
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
         obj = self.model_class.get(value)
