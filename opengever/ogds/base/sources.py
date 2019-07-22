@@ -15,7 +15,6 @@ from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.workspace.utils import get_workspace_user_ids
-from opengever.workspace.utils import is_within_workspace
 from plone import api
 from sqlalchemy import func
 from sqlalchemy import orm
@@ -150,9 +149,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         `only_users` flag is enabled.
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
-        query = create_session().query(*models)
-        query = self._extend_query_with_workspace_filter(query)
-        return query
+        return create_session().query(*models)
 
     @property
     def search_query(self):
@@ -178,7 +175,6 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
 
-        query = self._extend_query_with_workspace_filter(query)
         return query
 
     def getTerm(self, value):
@@ -294,16 +290,6 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         for team in query:
             self.terms.insert(0, self.getTerm(team.actor_id()))
-
-    def _extend_query_with_workspace_filter(self, query):
-        if is_within_workspace(self.context):
-            userids = list(get_workspace_user_ids(self.context))
-            if userids:
-                query = query.filter(User.userid.in_(userids))
-            else:
-                # Avoid filter for a empty list.
-                query = query.filter(sql.false())
-        return query
 
     def get_client_id(self):
         """Tries to get the client from the request. If no client is found None
