@@ -136,6 +136,16 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
             invitations_in_response[0])
 
     @browsing
+    def test_cannot_add_invitiation_for_user_already_member(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(self.workspace.absolute_url() + '/manage-participants/add',
+                         data={'userid': self.workspace_guest.getId(),
+                               'role': 'WorkspaceGuest',
+                               '_authenticator': createToken()})
+
+    @browsing
     def test_can_only_add_invitations_with_Workspace_related_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
         with browser.expect_http_error(403):
@@ -275,28 +285,32 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
     def test_search_for_users(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
-        for number in range(20):
-            create(Builder('ogds_user')
-                   .assign_to_org_units([get_current_org_unit()])
-                   .having(firstname='Hans-{}'.format(str(number)),
-                           lastname='Muster')
-                   .id('hans.muster{}'.format(str(number))))
-
+        # beatrice.schrodinger is already a workspace member and cannot be invited
+        self.assertEqual('beatrice.schrodinger', self.workspace_member.id)
         browser.open(self.workspace.absolute_url() + '/manage-participants/search',
                      data={'q': 'beatrice'})
+        self.assertEquals(0, browser.json['total_count'])
 
+        browser.open(self.workspace.absolute_url() + '/manage-participants/search',
+                     data={'q': 'kathi'})
         self.assertEquals(
             {u'total_count': 1,
              u'pagination': {u'more': False},
              u'page': 1,
-             u'results': [
-                 {u'text': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
-                  u'_resultId': u'beatrice.schrodinger',
-                  u'id': u'beatrice.schrodinger'}]},
+             u'results': [{u'_resultId': u'kathi.barfuss',
+                           u'id': u'kathi.barfuss',
+                           u'text': u'B\xe4rfuss K\xe4thi (kathi.barfuss)'}]},
             browser.json)
 
+        for number in range(20):
+            create(Builder('ogds_user')
+                   .assign_to_org_units([get_current_org_unit()])
+                   .having(firstname='Kathi-{}'.format(str(number)),
+                           lastname='Muster')
+                   .id('hans.muster{}'.format(str(number))))
+
         browser.open(self.workspace.absolute_url() + '/manage-participants/search',
-                     data={'q': 'hans'})
+                     data={'q': 'kathi'})
 
         self.assertEquals(21, browser.json['total_count'])
         self.assertEquals({u'more': True}, browser.json['pagination'])

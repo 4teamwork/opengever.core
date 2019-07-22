@@ -56,13 +56,13 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
         results = source.search('peter.meier')
         self.assertEqual(0, len(results))
 
-    def test_users_with_local_roles_are_valid(self):
+    def test_users_with_local_roles_are_invalid(self):
         self.login(self.workspace_admin)
         source = PotentialWorkspaceMembersSource(self.workspace)
-        self.assertIn(self.workspace_guest.id, source)
-        self.assertIn(self.workspace_member.id, source)
-        self.assertIn(self.workspace_admin.id, source)
-        self.assertIn(self.workspace_owner.id, source)
+        self.assertNotIn(self.workspace_guest.id, source)
+        self.assertNotIn(self.workspace_member.id, source)
+        self.assertNotIn(self.workspace_admin.id, source)
+        self.assertNotIn(self.workspace_owner.id, source)
 
     def test_users_with_local_roles_are_not_found_by_search(self):
         self.login(self.workspace_admin)

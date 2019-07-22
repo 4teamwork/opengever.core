@@ -562,8 +562,15 @@ class AssignedUsersSourceBinder(object):
 
 class PotentialWorkspaceMembersSource(AssignedUsersSource):
     """Vocabulary of all users assigned to the current admin unit not yet
-    members of the current workspace
+    members of the current workspace.
+    This is also used for checking whether a user can be added to a workspace,
+    the base_query therefore also needs to filter out actual members
     """
+
+    @property
+    def base_query(self):
+        query = super(PotentialWorkspaceMembersSource, self).base_query
+        return self._extend_query_with_workspace_filter(query)
 
     @property
     def search_query(self):
