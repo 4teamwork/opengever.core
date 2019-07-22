@@ -1,6 +1,6 @@
 from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from opengever.ogds.base.sources import AllUsersSourceBinder
+from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
 from plone.autoform import directives as form
@@ -28,7 +28,7 @@ class IToDoSchema(model.Schema):
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_('label_responsible', default='Responsible'),
-        source=AllUsersSourceBinder(),
+        source=ActualWorkspaceMembersSourceBinder(),
         required=False,
     )
 

@@ -1,26 +1,88 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.todo import IToDoSchema
 from plone import api
+from zope.schema import getSchemaValidationErrors
 import json
 import opengever.workspace.subscribers
 
 
 class TestToDo(IntegrationTestCase):
 
+    def create_to_do(self, browser, workspace, title, responsible=None):
+        browser.visit(workspace)
+        factoriesmenu.add('ToDo')
+
+        with self.observe_children(self.workspace) as children:
+            form = browser.find_form_by_field('Title')
+            form.fill({'Title': title})
+            if responsible:
+                form.find_widget('Responsible').fill(responsible,
+                                                     auto_org_unit=False)
+            form.save()
+
+        if not len(children.get("added")) == 1:
+            return None
+
+        return children.get("added").pop()
+
     @browsing
     def test_todo_is_addable_in_workspace(self, browser):
         self.login(self.workspace_member, browser)
-        browser.visit(self.workspace)
-        factoriesmenu.add('ToDo')
-
-        form = browser.find_form_by_field('Title')
-        form.fill({'Title': u'Ein ToDo'})
-        form.save()
+        todo = self.create_to_do(browser, self.workspace, u'Ein ToDo')
 
         assert_no_error_messages(browser)
+        self.assertIsNotNone(todo)
+
+    @browsing
+    def test_only_actual_workspace_users_can_be_set_as_responsibles(self, browser):
+        self.login(self.workspace_member, browser)
+        todo = self.create_to_do(browser, self.workspace, u'Ein ToDo',
+                                 self.regular_user.id)
+
+        # invalid userids are silently replaced by the default value in
+        # the keyword widget, see z3c.form.widget.SequenceWidget.extract
+        assert_no_error_messages(browser)
+        self.assertIsNotNone(todo)
+        self.assertIsNone(todo.responsible)
+
+        RoleAssignmentManager(self.workspace).add_or_update(
+            self.regular_user.id, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
+        self.workspace.reindexObjectSecurity()
+
+        todo = self.create_to_do(browser, self.workspace, u'Ein ToDo',
+                                 self.regular_user.id)
+        assert_no_error_messages(browser)
+        self.assertIsNotNone(todo)
+        self.assertIsNotNone(todo.responsible)
+        self.assertEqual(self.regular_user.id, todo.responsible)
+
+    @browsing
+    def test_reponsible_remains_valid_after_local_roles_removed(self, browser):
+        self.login(self.workspace_member, browser)
+
+        RoleAssignmentManager(self.workspace).add_or_update(
+            self.regular_user.id, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
+        self.workspace.reindexObjectSecurity()
+
+        todo = self.create_to_do(browser, self.workspace, u'Ein ToDo',
+                                 self.regular_user.id)
+
+        self.assertIsNotNone(todo)
+        self.assertEqual(self.regular_user.id, todo.responsible)
+        self.assertEqual([], getSchemaValidationErrors(IToDoSchema, todo))
+
+        RoleAssignmentManager(self.workspace).clear_by_cause_and_principal(
+            ASSIGNMENT_VIA_INVITATION, self.regular_user.id)
+        self.workspace.reindexObjectSecurity()
+
+        getSchemaValidationErrors(IToDoSchema, todo)
+        self.assertEqual([], getSchemaValidationErrors(IToDoSchema, todo))
 
     def test_searchable_text(self):
         self.login(self.workspace_admin)
