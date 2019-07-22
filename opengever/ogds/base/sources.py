@@ -1,6 +1,7 @@
 from ftw.solr.interfaces import ISolrSearch
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.contact import IContact
 from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
@@ -10,7 +11,6 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
-from opengever.base.query import extend_query_with_textfilter
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
@@ -572,6 +572,53 @@ class AssignedUsersSourceBinder(object):
 
     def __call__(self, context):
         return AssignedUsersSource(context)
+
+
+class PotentialWorkspaceMembersSource(AssignedUsersSource):
+    """Vocabulary of all users assigned to the current admin unit not yet
+    members of the current workspace
+    """
+
+    @property
+    def search_query(self):
+        query = super(PotentialWorkspaceMembersSource, self).search_query
+        return self._extend_query_with_workspace_filter(query)
+
+    def _extend_query_with_workspace_filter(self, query):
+        userids = list(get_workspace_user_ids(self.context))
+        # Avoid filter for an empty list.
+        if userids:
+            query = query.filter(User.userid.notin_(userids))
+        return query
+
+
+@implementer(IContextSourceBinder)
+class PotentialWorkspaceMembersSourceBinder(object):
+
+    def __call__(self, context):
+        return PotentialWorkspaceMembersSource(context)
+
+
+class ActualWorkspaceMembersSource(PotentialWorkspaceMembersSource):
+    """Vocabulary of all users assigned to the current admin unit and
+    members of the current workspace
+    """
+
+    def _extend_query_with_workspace_filter(self, query):
+        userids = list(get_workspace_user_ids(self.context))
+        if userids:
+            query = query.filter(User.userid.in_(userids))
+        else:
+            # Avoid filter for an empty list.
+            query = query.filter(sql.false())
+        return query
+
+
+@implementer(IContextSourceBinder)
+class ActualWorkspaceMembersSourceBinder(object):
+
+    def __call__(self, context):
+        return ActualWorkspaceMembersSource(context)
 
 
 class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
