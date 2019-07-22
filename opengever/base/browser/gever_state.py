@@ -4,6 +4,7 @@ from opengever.base.casauth import get_gever_portal_url
 from opengever.base.interfaces import IGeverState
 from opengever.contact.interfaces import IContactFolder
 from opengever.inbox.yearfolder import IYearFolder
+from opengever.ogds.base.interfaces import ITeam
 from plone.memoize.view import memoize
 from plone.memoize.view import memoize_contextless
 from Products.Five import BrowserView
@@ -15,6 +16,12 @@ class GeverStateView(BrowserView):
     or TAL expressions, similar to Plone's portal_state view.
     """
     implements(IGeverState)
+
+    types_without_properties_action = (
+        IContactFolder,
+        ITeam,
+        IYearFolder,
+    )
 
     @memoize_contextless
     def cluster_base_url(self):
@@ -35,8 +42,8 @@ class GeverStateView(BrowserView):
            plone_view.isPortalOrPortalDefaultPage():
             return False
 
-        if IContactFolder.providedBy(self.context) \
-           or IYearFolder.providedBy(self.context):
+        if any(iface.providedBy(self.context)
+               for iface in self.types_without_properties_action):
             return False
 
         return True

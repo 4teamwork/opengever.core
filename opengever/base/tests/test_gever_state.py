@@ -70,3 +70,12 @@ class TestGeverStateView(IntegrationTestCase):
         self.assertNotIn(
             'Properties',
             browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
+
+    @browsing
+    def test_properties_action_not_available_for_teams(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.contactfolder, view='team-1/view')
+        self.assertNotIn(
+            'Properties',
+            browser.css('#plone-contentmenu-actions .actionMenuContent a').text)
