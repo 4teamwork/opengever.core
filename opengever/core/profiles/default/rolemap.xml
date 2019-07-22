@@ -309,6 +309,10 @@
       <role name="Manager" />
     </permission>
 
+    <permission name="opengever.workspace: Update Content Order" acquire="True">
+      <role name="Manager" />
+    </permission>
+
     <permission name="plone.restapi: Access Plone vocabularies" acquire="True">
       <role name="Contributor" />
       <role name="Manager" />

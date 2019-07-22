@@ -136,7 +136,7 @@ class TestAPISupportForTodoLists(IntegrationTestCase):
 
     @browsing
     def test_change_order_via_api(self, browser):
-        self.login(self.workspace_admin, browser)
+        self.login(self.workspace_member, browser)
 
         create(Builder('todolist')
                .titled(u'Konzeptphase')

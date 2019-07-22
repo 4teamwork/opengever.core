@@ -10,4 +10,6 @@
 
   <permission id="plone.DelegateWorkspaceAdminRole" title="Sharing page: Delegate WorkspaceAdmin role" />
 
+  <permission id="opengever.workspace.UpdateContentOrder" title="opengever.workspace: Update Content Order" />
+
 </configure>
