@@ -591,10 +591,18 @@ class PotentialWorkspaceMembersSourceBinder(object):
         return PotentialWorkspaceMembersSource(context)
 
 
-class ActualWorkspaceMembersSource(PotentialWorkspaceMembersSource):
+class ActualWorkspaceMembersSource(AssignedUsersSource):
     """Vocabulary of all users assigned to the current admin unit and
-    members of the current workspace
+    members of the current workspace.
+    The base query is not overwritten here, as this is used as source
+    for ToDo responsibles, which should remain valid even when a user's
+    permissions on a workspace are revoked (invitation deleted).
     """
+
+    @property
+    def search_query(self):
+        query = super(ActualWorkspaceMembersSource, self).search_query
+        return self._extend_query_with_workspace_filter(query)
 
     def _extend_query_with_workspace_filter(self, query):
         userids = list(get_workspace_user_ids(self.context))
