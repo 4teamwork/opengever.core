@@ -5,7 +5,6 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import traverse
 from plone import api
 from plone.app.transmogrifier.reindexobject import ReindexObjectSection
-from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.interface import classProvides, implements
 import logging
@@ -19,8 +18,6 @@ except ImportError:
 
 logger = logging.getLogger('opengever.setup.reindexobject')
 
-SKIP_SOLR_KEY = 'skip_solr'
-
 
 class GeverReindexObjectSection(ReindexObjectSection):
     classProvides(ISectionBlueprint)
@@ -31,9 +28,6 @@ class GeverReindexObjectSection(ReindexObjectSection):
     def __init__(self, transmogrifier, name, options, previous):
         super(GeverReindexObjectSection, self).__init__(
             transmogrifier, name, options, previous)
-
-        self.skip_solr = IAnnotations(transmogrifier).get(
-            SKIP_SOLR_KEY, True)
 
     @property
     def solr_enabled(self):
@@ -74,7 +68,7 @@ class GeverReindexObjectSection(ReindexObjectSection):
                 self.portal_catalog.reindexObject(ob)
 
             # solr reindexing
-            if not self.skip_solr and self.solr_enabled:
+            if self.solr_enabled:
                 # Register collective.indexing hook, to make sure solr changes
                 # are realy send to solr. See
                 # collective.indexing.queue.IndexQueue.hook.

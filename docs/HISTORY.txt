@@ -8,6 +8,7 @@ Changelog
 - Enable c.indexing during tests, but patch it to not defer operations. [lgraf]
 - Add teamraum todo content-type. [elioschmutz]
 - Fix creation and handling for subtasks of sequential tasks. [phgross]
+- Disable collective.indexing during bundle import. [buchi]
 - Fix upgrade step that adds linguistic index for task principal. [lgraf]
 - Add ftw.catalogdoctor to dependencies. [deiferni]
 - Fix exception formatter patch when there is no plone site. [deiferni]
