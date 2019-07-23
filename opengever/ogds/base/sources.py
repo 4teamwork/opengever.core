@@ -178,7 +178,6 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         return query
 
     def getTerm(self, value):
-
         data = value.split(':', 1)
         if len(data) == 2:
             orgunit_id, userid = data
@@ -489,7 +488,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
             user = self.base_query.filter(User.userid == value).one()
         except orm.exc.NoResultFound:
             raise LookupError(
-                'No row was user was found with userid: {}'.format(value))
+                'No row was found with userid: {}'.format(value))
 
         token = value
         title = u'{} ({})'.format(user.fullname(),
