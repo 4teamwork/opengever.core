@@ -30,6 +30,9 @@ lint () {
                         | tr ' ' '\n' \
                         | grep -vE "($excludes)" \
                     ))
+                else
+                    # No specific linter config -> no excludes
+                    unexcluded_changed_files=$changed_files
 
                 fi
 
