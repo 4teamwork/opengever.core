@@ -236,6 +236,10 @@
                    "
       />
 
+  <!-- Ignore only relevant in workspace workflow-->
+  <lawgiver:ignore
+      permissions="opengever.workspace: Update Content Order"
+      />
 
   <lawgiver:workflow name="opengever_committeecontainer_workflow">
     <lawgiver:ignore
@@ -297,6 +301,12 @@
         action_group="add"
         permissions="opengever.workspace: Add WorkspaceFolder"
         />
+
+    <lawgiver:map_permissions
+        action_group="update_order"
+        permissions="opengever.workspace: Update Content Order"
+        />
+
   </lawgiver:workflow>
 
   <lawgiver:workflow name="opengever_workspace_folder">
@@ -313,6 +323,15 @@
         action_group="add"
         permissions="opengever.workspace: Add WorkspaceFolder"
         />
+  </lawgiver:workflow>
+
+  <lawgiver:workflow name="opengever_workspace_todolist">
+
+    <lawgiver:map_permissions
+        action_group="delete"
+        permissions="Delete objects"
+        />
+
   </lawgiver:workflow>
 
   <!-- Should be ignored, permission is only granted to manager and admin on site root -->

@@ -30,3 +30,16 @@ class WorkspaceFolderNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
     implements(IWorkspaceFolderNameFromTitle)
 
     format = u'folder-%i'
+
+
+class IToDoListNameFromTitle(INameFromTitle):
+    """Behavior interface for ToDoListNameFromTitle.
+    """
+
+
+class ToDoListNameFromTitle(dossiernamefromtitle.DossierNameFromTitle):
+    """The ID of a todolist should be 'todolist-{sequence number}'.
+    """
+    implements(IToDoListNameFromTitle)
+
+    format = u'todolist-%i'

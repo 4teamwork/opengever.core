@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dc-workflow workflow_id="opengever_workspace" title="Workspace workflow" description="" initial_state="opengever_workspace--STATUS--active" state_variable="review_state" manager_bypass="True">
+<dc-workflow workflow_id="opengever_workspace_todolist" title="Workspace todolist workflow" description="" initial_state="opengever_workspace_todolist--STATUS--active" state_variable="review_state" manager_bypass="True">
   <permission>Access contents information</permission>
   <permission>Add portal content</permission>
   <permission>CMFEditions: Access previous versions</permission>
@@ -27,9 +27,13 @@
   <permission>Poi: Upload attachment</permission>
   <permission>Portlets: Manage portlets</permission>
   <permission>Sharing page: Delegate Administrator role</permission>
+  <permission>Sharing page: Delegate CommitteeAdministrator role</permission>
+  <permission>Sharing page: Delegate CommitteeMember role</permission>
+  <permission>Sharing page: Delegate CommitteeResponsible role</permission>
   <permission>Sharing page: Delegate Contributor role</permission>
   <permission>Sharing page: Delegate DossierManager role</permission>
   <permission>Sharing page: Delegate Editor role</permission>
+  <permission>Sharing page: Delegate MeetingUser role</permission>
   <permission>Sharing page: Delegate Publisher role</permission>
   <permission>Sharing page: Delegate Reader role</permission>
   <permission>Sharing page: Delegate Reviewer role</permission>
@@ -85,11 +89,10 @@
   <permission>opengever.task: Edit task</permission>
   <permission>opengever.trash: Trash content</permission>
   <permission>opengever.trash: Untrash content</permission>
-  <permission>opengever.workspace: Add WorkspaceFolder</permission>
-  <permission>opengever.workspace: Update Content Order</permission>
+  <permission>opengever.workspace: Add Workspace</permission>
   <permission>plone.portlet.collection: Add collection portlet</permission>
   <permission>plone.portlet.static: Add static portlet</permission>
-  <state state_id="opengever_workspace--STATUS--active" title="Active">
+  <state state_id="opengever_workspace_todolist--STATUS--active" title="Active">
     <permission-map name="Access contents information" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -117,39 +120,45 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Checkout to location" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Save new version" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Change local roles" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Delete objects" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
-    </permission-map>
-    <permission-map name="Delete objects" acquired="False">
-      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Edit comments" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Edit date of cassation" acquired="False"/>
@@ -157,6 +166,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="List folder contents" acquired="False">
@@ -166,6 +176,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
@@ -175,6 +186,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Modify view template" acquired="False">
@@ -184,97 +196,117 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue assignment" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue severity" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue state" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue tags" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue target release" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Modify issue watchers" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Poi: Upload attachment" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate Administrator role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate Contributor role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate Editor role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False">
-      <permission-role>Administrator</permission-role>
+    <permission-map name="Sharing page: Delegate Administrator role" acquired="False">
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeAdministrator role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeMember role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate CommitteeResponsible role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Contributor role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate DossierManager role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Editor role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate MeetingUser role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Publisher role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Reader role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate Reviewer role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate WorkspaceAdmin role" acquired="False">
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspaceGuest role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspaceMember role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate WorkspaceOwner role" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
-    <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
-    <permission-map name="Sharing page: Delegate roles" acquired="False">
-      <permission-role>Administrator</permission-role>
+    <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False">
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map name="Sharing page: Delegate roles" acquired="False">
+      <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Take ownership" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="View" acquired="False">
       <permission-role>Administrator</permission-role>
@@ -290,6 +322,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="ftw.mail: Add Inbound Mail" acquired="False">
@@ -303,12 +336,14 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="iterate : Check out content" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.contact: Add contact" acquired="False">
@@ -332,6 +367,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
@@ -340,6 +376,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Add document" acquired="False">
@@ -353,24 +390,28 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkin" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Checkout" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Force Checkin" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
@@ -495,19 +536,14 @@
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>
     </permission-map>
     <permission-map name="opengever.trash: Trash content" acquired="False"/>
     <permission-map name="opengever.trash: Untrash content" acquired="False"/>
-    <permission-map name="opengever.workspace: Add WorkspaceFolder" acquired="False">
+    <permission-map name="opengever.workspace: Add Workspace" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
-      <permission-role>WorkspaceOwner</permission-role>
-    </permission-map>
-    <permission-map name="opengever.workspace: Update Content Order" acquired="False">
-      <permission-role>Administrator</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
       <permission-role>WorkspaceOwner</permission-role>

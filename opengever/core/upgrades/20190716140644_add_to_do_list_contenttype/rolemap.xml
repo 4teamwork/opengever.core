@@ -1,0 +1,11 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="opengever.workspace: Update Content Order" acquire="True">
+      <role name="Manager" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

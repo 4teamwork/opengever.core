@@ -2024,6 +2024,19 @@ class OpengeverContentFixture(object):
             ))
 
     def create_todos(self):
+        self.todolist_general = self.register('todolist_general', create(
+            Builder('todolist')
+            .titled(u'Allgemeine Informationen')
+            .within(self.workspace)
+        ))
+
+        self.todolist_introduction = self.register(
+            'todolist_introduction', create(
+                Builder('todolist')
+                .titled(u'Projekteinf\xfchrung')
+                .within(self.workspace)
+            ))
+
         self.todo = self.register('todo', create(
             Builder('todo')
             .titled(u'Fix user login')
@@ -2041,7 +2054,7 @@ class OpengeverContentFixture(object):
                 deadline=date(2016, 12, 1),
                 responsible=self.workspace_member.getId(),
                 completed=False)
-            .within(self.workspace)
+            .within(self.todolist_introduction)
             ))
 
         self.completed_todo = self.register('completed_todo', create(
@@ -2052,8 +2065,8 @@ class OpengeverContentFixture(object):
                 deadline=date(2016, 9, 2),
                 responsible=self.workspace_member.getId(),
                 completed=True)
-            .within(self.workspace)
-            ))
+            .within(self.todolist_introduction)
+        ))
 
     @contextmanager
     def login(self, user):

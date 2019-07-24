@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-06-28 11:22+0000\n"
+"POT-Creation-Date: 2019-07-17 08:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,8 +281,13 @@ msgid "Template Folder"
 msgstr ""
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.todo.xml
-#: ./opengever/core/upgrades/20190628125241_install_workspace_todo_type/types/opengever.workspace.todo.xml
+#: ./opengever/core/upgrades/20190710151706_install_workspace_todo_type/types/opengever.workspace.todo.xml
 msgid "ToDo"
+msgstr ""
+
+#: ./opengever/core/profiles/default/types/opengever.workspace.todolist.xml
+#: ./opengever/core/upgrades/20190716140644_add_to_do_list_contenttype/types/opengever.workspace.todolist.xml
+msgid "ToDo list"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml

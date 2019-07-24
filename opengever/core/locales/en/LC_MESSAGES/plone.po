@@ -248,6 +248,41 @@ msgstr "Anyone who uses the workspace module is a workspace user. Workspace user
 msgid "opengever_workspace_root--STATUS--active"
 msgstr "Active"
 
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Administrator"
+msgstr "admin"
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Manager"
+msgstr "systems administrator"
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceAdmin"
+msgstr "workspace admin"
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceGuest"
+msgstr "workspace guest"
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
+msgstr "workspace member"
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceOwner"
+msgstr "workspace owner"
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--STATUS--active"
+msgstr "Active"
+
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"

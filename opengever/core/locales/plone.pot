@@ -18,9 +18,25 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+msgid "DossierManager"
+msgstr ""
+
+#. Default: "Download Excel"
+#: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
+msgid "Download Excel"
+msgstr ""
+
+#. Default: "Fill meeting template"
+#: opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
+msgid "Fill meeting template"
+msgstr ""
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "Inactive"
+msgstr ""
+
+msgid "Publisher"
 msgstr ""
 
 #. Default: "deactivate"
@@ -248,37 +264,54 @@ msgstr ""
 msgid "opengever_workspace_root--STATUS--active"
 msgstr ""
 
+#. Default: "admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Administrator"
+msgstr ""
+
+#. Default: "systems administrator"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--Manager"
+msgstr ""
+
+#. Default: "workspace admin"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceAdmin"
+msgstr ""
+
+#. Default: "workspace guest"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceGuest"
+msgstr ""
+
+#. Default: "workspace member"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceMember"
+msgstr ""
+
+#. Default: "workspace owner"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--ROLE--WorkspaceOwner"
+msgstr ""
+
+#. Default: "Active"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt
+msgid "opengever_workspace_todolist--STATUS--active"
+msgstr ""
+
 #. Default: "reactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 msgid "reactivate"
 msgstr ""
 
-#. Default: "Download Excel"
-#: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
-msgid "Download Excel"
-msgstr ""
-
-#. Default: "Fill meeting template"
-#: opengever/core/profiles/default/types/opengever.meeting.sablontemplate.xml
-msgid "Fill meeting template"
-msgstr ""
-
-
-
-msgid "title_can_view"
+msgid "title_can_add"
 msgstr ""
 
 msgid "title_can_edit"
 msgstr ""
 
-msgid "title_can_add"
-msgstr ""
-
 msgid "title_can_review"
 msgstr ""
 
-msgid "Publisher"
-msgstr ""
-
-msgid "DossierManager"
+msgid "title_can_view"
 msgstr ""

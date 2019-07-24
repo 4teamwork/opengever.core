@@ -1,4 +1,4 @@
-[Workspace workflow]
+[Workspace todolist workflow]
 Role mapping:
   workspace guest => WorkspaceGuest
   workspace member => WorkspaceMember
@@ -7,43 +7,22 @@ Role mapping:
   admin => Administrator
   systems administrator => Manager
 
-workspace guest role description:
-  A workspace guest has read access to the content but cannot change anything.
-
-workspace member role description:
-  Workspace members can read and modify all contents of the workspace.
-
-workspace admin role description:
-  Workspace admins can manage the team as well as read and modify all contents.
-
-workspace owner role description:
-  The workspace owner is the responsible person for this workspace.
-
-
-Visible roles:
-  workspace guest
-  workspace member
-  workspace admin
-  workspace owner
-
-
 General:
   A workspace member can perform the same actions as a workspace guest.
   A workspace admin can perform the same actions as a workspace member.
   A workspace owner can perform the same actions as a workspace admin.
-  An admin can always perform the same actions as a workspace owner.
+  An admin can perform the same actions as a workspace owner.
 
   A systems administrator can always add.
   A systems administrator can always view.
   A systems administrator can always edit.
+  A systems administrator can always delete.
   A systems administrator can always manage security.
   A systems administrator can always use the developer tools.
-
 
 Initial Status: Active
 Status Active:
   A workspace guest can view.
   A workspace member can add.
-  A workspace member can update_order.
-  A workspace admin can edit.
-  A workspace admin can manage security.
+  A workspace member can edit.
+  A workspace member can delete.

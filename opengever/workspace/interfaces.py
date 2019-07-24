@@ -25,3 +25,7 @@ class IWorkspaceSettings(Interface):
 
 class IToDo(Interface):
     """ Marker interface for ToDos """
+
+
+class IToDoList(Interface):
+    """ Marker interface for ToDo lists"""

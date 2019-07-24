@@ -20,4 +20,11 @@
       for="opengever.workspace.interfaces.IWorkspaceFolder"
       />
 
+  <plone:behavior
+      title="todolist name from title"
+      provides=".namefromtitle.IToDoListNameFromTitle"
+      factory=".namefromtitle.ToDoListNameFromTitle"
+      for="opengever.workspace.interfaces.IToDoList"
+      />
+
 </configure>

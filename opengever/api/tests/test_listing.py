@@ -431,22 +431,19 @@ class TestListingEndpoint(IntegrationTestCase):
                     u'completed': False,
                     u'deadline': u'2016-09-01',
                     u'responsible': None,
-                    u'title': u'Fix user login'
-                },
+                    u'title': u'Fix user login'},
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/opengever-workspace-2.todo',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/opengever-workspace-1.todo',
                     u'completed': True,
                     u'deadline': u'2016-09-02',
                     u'responsible': u'beatrice.schrodinger',
                     u'title': u'Cleanup installation'},
                 {
-                    u'@id': u'http://nohost/plone/workspaces/workspace-1/opengever-workspace-1.todo',
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2/opengever-workspace.todo',
                     u'completed': False,
                     u'deadline': u'2016-12-01',
                     u'responsible': u'beatrice.schrodinger',
-                    u'title': u'Go live'
-                },
-            ],
+                    u'title': u'Go live'}],
             browser.json['items'])
 
 
