@@ -4,6 +4,7 @@ Changelog
 2019.2.6 (unreleased)
 ---------------------
 
+- Bump docxcompose version to 1.0.1 [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
