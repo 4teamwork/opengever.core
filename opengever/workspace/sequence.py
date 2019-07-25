@@ -1,4 +1,5 @@
 from opengever.base.sequence import DefaultSequenceNumberGenerator
+from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.todolist import IToDoListSchema
@@ -27,3 +28,11 @@ class TodoListSequenceNumberGenerator(DefaultSequenceNumberGenerator):
     """
 
     key = 'ToDoListSequenceNumberGenerator'
+
+
+@adapter(IToDo)
+class TodoSequenceNumberGenerator(DefaultSequenceNumberGenerator):
+    """Sequence Number generator for ToDo, which uses a global counter.
+    """
+
+    key = 'ToDoSequenceNumberGenerator'

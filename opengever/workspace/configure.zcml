@@ -14,6 +14,7 @@
   <adapter factory=".sequence.WorkspaceSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceFolderSequenceNumberGenerator" />
   <adapter factory=".sequence.TodoListSequenceNumberGenerator" />
+  <adapter factory=".sequence.TodoSequenceNumberGenerator" />
 
   <subscriber
       for="opengever.workspace.interfaces.IWorkspace
@@ -25,6 +26,12 @@
       for="opengever.workspace.interfaces.IToDoList
            OFS.interfaces.IObjectWillBeRemovedEvent"
       handler=".subscribers.check_delete_preconditions"
+      />
+
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           OFS.interfaces.IObjectWillBeAddedEvent"
+      handler=".subscribers.check_todo_add_preconditions"
       />
 
   <utility

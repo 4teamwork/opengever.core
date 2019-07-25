@@ -562,14 +562,24 @@ class TestAssignedUsersSource(FunctionalTestCase):
         self.assertEquals(u'hugo.boss', result[0].value)
         self.assertEquals(u'User Test (hugo.boss)', result[0].title)
 
-    def test_only_users_of_the_current_admin_unit_are_valid(self):
-
+    def test_users_of_all_admin_unit_are_valid(self):
         self.assertIn('hugo.boss', self.source)
         self.assertIn('peter.muster', self.source)
         self.assertIn('jamie.lannister', self.source)
         self.assertIn(TEST_USER_ID, self.source)
+        # User from other admin_unit is also valid
+        self.assertIn('peter.meier', self.source)
 
-    def test_users_from_inactive_orgunits_are_not_valid_but_not_found_by_search(self):
+    def test_only_users_of_current_admin_unit_are_found_by_search(self):
+        results = self.source.search("hugo.boss")
+        self.assertEqual(1, len(results))
+        self.assertEqual('hugo.boss', results[0].value)
+
+        # User from other admin_unit cannot be found
+        results = self.source.search('peter.meier')
+        self.assertEqual(0, len(results))
+
+    def test_users_from_inactive_orgunits_are_valid_but_not_found_by_search(self):
         self.assertIn('simon.says', self.source)
         self.assertEquals([], self.source.search('simon'))
 
@@ -589,7 +599,7 @@ class TestAssignedUsersSource(FunctionalTestCase):
                .assign_to_org_units([self.org_unit]))
 
         self.assertFalse(self.source.search('Doe'),
-                         'Expect no user, since peter.muster is inactive')
+                         'Expect no user, since john.doe is inactive')
 
 
 class TestAllUsersSource(FunctionalTestCase):

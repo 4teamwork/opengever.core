@@ -6,6 +6,8 @@ Changelog
 
 - Fix qa tests. [lgraf]
 - Disable properties action for teams. [deiferni]
+- Add source vocabularies for workspace invitations and todo responsibles. [njohner]
+- Add hard limit for number of todos in single workspace. [njohner]
 - Enable c.indexing during tests, but patch it to not defer operations. [lgraf]
 - Add teamraum todolist content-type. [phgross]
 - Add teamraum todo content-type. [elioschmutz]

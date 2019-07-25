@@ -1,6 +1,8 @@
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zExceptions import Forbidden
 
 
 def assign_owner_role_on_creation(workspace, event):
@@ -23,3 +25,22 @@ def check_delete_preconditions(todolist, event):
     if len(todolist.objectValues()):
         raise ValueError(
             'The todolist is not empty, therefore deletion is not allowed.')
+
+
+class ForbiddenByToDoLimit(Forbidden):
+    """Hard limit for the number of ToDos allowed in a
+    workspace has been reached."""
+
+
+TODO_NUMBER_LIMIT = 500
+
+
+def check_todo_add_preconditions(todo, event):
+    """We set a hard limit on the number of todos in a workspace
+    """
+    catalog = api.portal.get_tool("portal_catalog")
+    todos = catalog.unrestrictedSearchResults(
+                path=event.newParent.absolute_url_path(),
+                portal_type=todo.portal_type)
+    if len(todos) >= TODO_NUMBER_LIMIT:
+        raise ForbiddenByToDoLimit()

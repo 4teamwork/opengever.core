@@ -2,7 +2,7 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import InvitationRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.base.actor import PloneUserActor
-from opengever.ogds.base.sources import AllUsersSource
+from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone import api
 from plone.app.workflow.interfaces import ISharingPageRole
@@ -105,6 +105,9 @@ class ManageParticipants(BrowserView):
         if role not in MANAGED_ROLES and not self.user_has_permission(role):
             raise Unauthorized('No allowed to delegate this permission')
 
+        if userid not in self.get_user_source():
+            raise BadRequest('User cannot be added to workspace')
+
         storage = getUtility(IInvitationStorage)
         iid = storage.add_invitation(self.context, userid,
                                      api.user.get_current().getId(), role)
@@ -186,7 +189,7 @@ class ManageParticipants(BrowserView):
         if not query:
             return json.dumps({})
 
-        source = AllUsersSource(api.portal.get())
+        source = self.get_user_source()
         batch = Batch.fromPagenumber(items=source.search(query),
                                      pagesize=pagesize,
                                      pagenumber=page)
@@ -204,3 +207,6 @@ class ManageParticipants(BrowserView):
                 'pagination': {'more': (page * pagesize) < len(batch)}
             }
         )
+
+    def get_user_source(self):
+        return PotentialWorkspaceMembersSource(self.context)

@@ -1,6 +1,7 @@
 from ftw.solr.interfaces import ISolrSearch
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.contact import IContact
 from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
@@ -10,12 +11,10 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
-from opengever.base.query import extend_query_with_textfilter
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.workspace.utils import get_workspace_user_ids
-from opengever.workspace.utils import is_within_workspace
 from plone import api
 from sqlalchemy import func
 from sqlalchemy import orm
@@ -60,13 +59,13 @@ class BaseQuerySoure(object):
         return len(self.terms)
 
     def search(self):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTermByToken(self, token):
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class BaseMultipleSourcesQuerySource(BaseQuerySoure):
@@ -84,7 +83,7 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
 
         @return: List of classes implementing the IQuerySource interface.
         """
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
         term = None
@@ -150,9 +149,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         `only_users` flag is enabled.
         """
         models = (User, ) if self.only_users else (User, OrgUnit)
-        query = create_session().query(*models)
-        query = self._extend_query_with_workspace_filter(query)
-        return query
+        return create_session().query(*models)
 
     @property
     def search_query(self):
@@ -178,11 +175,9 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         if self.only_current_orgunit:
             query = query.filter(OrgUnit.unit_id == self.client_id)
 
-        query = self._extend_query_with_workspace_filter(query)
         return query
 
     def getTerm(self, value):
-
         data = value.split(':', 1)
         if len(data) == 2:
             orgunit_id, userid = data
@@ -294,16 +289,6 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
 
         for team in query:
             self.terms.insert(0, self.getTerm(team.actor_id()))
-
-    def _extend_query_with_workspace_filter(self, query):
-        if is_within_workspace(self.context):
-            userids = list(get_workspace_user_ids(self.context))
-            if userids:
-                query = query.filter(User.userid.in_(userids))
-            else:
-                # Avoid filter for a empty list.
-                query = query.filter(sql.false())
-        return query
 
     def get_client_id(self):
         """Tries to get the client from the request. If no client is found None
@@ -503,7 +488,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
             user = self.base_query.filter(User.userid == value).one()
         except orm.exc.NoResultFound:
             raise LookupError(
-                'No row was user was found with userid: {}'.format(value))
+                'No row was found with userid: {}'.format(value))
 
         token = value
         title = u'{} ({})'.format(user.fullname(),
@@ -572,6 +557,68 @@ class AssignedUsersSourceBinder(object):
 
     def __call__(self, context):
         return AssignedUsersSource(context)
+
+
+class PotentialWorkspaceMembersSource(AssignedUsersSource):
+    """Vocabulary of all users assigned to the current admin unit not yet
+    members of the current workspace.
+    This is also used for checking whether a user can be added to a workspace,
+    the base_query therefore also needs to filter out actual members
+    """
+
+    @property
+    def base_query(self):
+        query = super(PotentialWorkspaceMembersSource, self).base_query
+        return self._extend_query_with_workspace_filter(query)
+
+    @property
+    def search_query(self):
+        query = super(PotentialWorkspaceMembersSource, self).search_query
+        return self._extend_query_with_workspace_filter(query)
+
+    def _extend_query_with_workspace_filter(self, query):
+        userids = list(get_workspace_user_ids(self.context))
+        # Avoid filter for an empty list.
+        if userids:
+            query = query.filter(User.userid.notin_(userids))
+        return query
+
+
+@implementer(IContextSourceBinder)
+class PotentialWorkspaceMembersSourceBinder(object):
+
+    def __call__(self, context):
+        return PotentialWorkspaceMembersSource(context)
+
+
+class ActualWorkspaceMembersSource(AssignedUsersSource):
+    """Vocabulary of all users assigned to the current admin unit and
+    members of the current workspace.
+    The base query is not overwritten here, as this is used as source
+    for ToDo responsibles, which should remain valid even when a user's
+    permissions on a workspace are revoked (invitation deleted).
+    """
+
+    @property
+    def search_query(self):
+        query = super(ActualWorkspaceMembersSource, self).search_query
+        return self._extend_query_with_workspace_filter(query)
+
+    def _extend_query_with_workspace_filter(self, query):
+        userids = list(get_workspace_user_ids(self.context))
+        if userids:
+            query = query.filter(User.userid.in_(userids))
+        else:
+            # Avoid filter for an empty list.
+            query = query.filter(sql.false())
+        return query
+
+
+@implementer(IContextSourceBinder)
+class ActualWorkspaceMembersSourceBinder(object):
+
+    def __call__(self, context):
+        return ActualWorkspaceMembersSource(context)
 
 
 class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
@@ -748,7 +795,7 @@ class BaseSQLModelSource(BaseQuerySoure):
     @property
     def base_query(self):
         """"""
-        raise NotImplemented
+        raise NotImplementedError()
 
     def getTerm(self, value):
         obj = self.model_class.get(value)

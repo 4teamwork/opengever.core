@@ -1,0 +1,9 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.workspace.todo" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- enabled behaviors -->
+  <property name="behaviors" purge="False">
+    <element value="opengever.workspace.behaviors.namefromtitle.IToDoNameFromTitle" />
+    <element value="opengever.base.behaviors.sequence.ISequenceNumberBehavior" />
+  </property>
+
+</object>
