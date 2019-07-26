@@ -13,6 +13,7 @@ from plone.namedfile.utils import stream_data
 from plone.protect.utils import addTokenToUrl
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.event import notify
@@ -63,6 +64,11 @@ class DocumentishDownload(Download):
 class DownloadConfirmation(BrowserView):
     """Download Confirmation View, allways displayed in a overlay."""
 
+    template = ViewPageTemplateFile('templates/downloadconfirmation.pt')
+
+    def __call__(self):
+        return self.template()
+
     def download_url(self):
         if self.request.get('version_id'):
             return '%s/download_file_version?version_id=%s' % (
@@ -72,6 +78,8 @@ class DownloadConfirmation(BrowserView):
             return '%s/download' % (self.context.absolute_url())
 
     def download_available(self):
+        """ check whether download is available.
+        """
         return self.context.file is not None
 
     def msg_no_file_available(self):

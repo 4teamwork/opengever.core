@@ -16,6 +16,17 @@
   <!-- FILE ACTIONS used to list available actions through the actions endpoint-->
   <object name="file_actions" meta_type="CMF Action Category">
 
+    <object name="download" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Download copy</property>
+      <property name="description" i18n:translate="" />
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.restrictedTraverse('@@plone_interface_info').provides('opengever.document.behaviors.IBaseDocument') and object.restrictedTraverse('file_download_confirmation/download_available')</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
   <!-- SITE ACTIONS -->
