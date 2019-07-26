@@ -45,6 +45,8 @@ class TestNotificationsGet(IntegrationTestCase):
 
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/3',
+              u'actor_id': u'nicole.kohler',
+              u'actor_label': u'Kohler Nicole',
               u'created': u'2018-10-16T00:00:00+00:00',
               u'label': u'Task opened',
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=3',
@@ -53,6 +55,8 @@ class TestNotificationsGet(IntegrationTestCase):
               u'summary': u'New task opened by Ziegler Robert',
               u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
              {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
+              u'actor_id': u'nicole.kohler',
+              u'actor_label': u'Kohler Nicole',
               u'created': u'2017-10-16T00:00:00+00:00',
               u'label': u'Task opened',
               u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
@@ -115,6 +119,8 @@ class TestNotificationsGet(IntegrationTestCase):
 
         self.assertEquals(
             {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
+             u'actor_id': u'robert.ziegler',
+             u'actor_label': u'Ziegler Robert',
              u'created': u'2017-10-16T00:00:00+00:00',
              u'label': u'Task opened',
              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
