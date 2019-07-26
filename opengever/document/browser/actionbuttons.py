@@ -222,7 +222,7 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
         return self._get_checkin_url(with_comment=True)
 
     def _get_checkin_url(self, with_comment=False):
-        if not self._is_checkin_allowed():
+        if not self.is_checkin_allowed():
             return None
 
         if with_comment:
