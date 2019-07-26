@@ -31,6 +31,9 @@ class FileActionAvailabilityChecker(object):
     def is_versioned(self):
         return self.request.get('version_id') is not None
 
+    def is_checked_out(self):
+        return self.context.is_checked_out()
+
     def is_checkout_and_edit_available(self):
         """Check whether the current user is allowed to checkout the document
         """
@@ -59,6 +62,15 @@ class FileActionAvailabilityChecker(object):
                 self.is_checkout_and_edit_available() and
                 self.is_office_connector_editable() and
                 not is_officeconnector_checkout_feature_enabled())
+
+    def is_checkout_action_available(self):
+        """Check whether simple checkout action is available
+        """
+        return (self.is_document() and
+                self.has_file() and
+                self.is_checkout_and_edit_available() and
+                not self.is_office_connector_editable() and
+                not self.is_checked_out())
 
 
 class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
@@ -154,9 +166,6 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
             return True
 
         return not self.is_checked_out_by_another_user()
-
-    def is_checked_out(self):
-        return self.context.is_checked_out()
 
     def is_checked_out_by_another_user(self):
         manager = queryMultiAdapter(
