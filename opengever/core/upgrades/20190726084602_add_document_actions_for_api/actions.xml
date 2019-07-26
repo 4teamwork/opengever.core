@@ -14,6 +14,15 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="officeconnector_checkout_url" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Checkout and edit with office connector</property>
+      <property name="available_expr">object/file_actions_availability/is_oc_direct_checkout_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 </object>

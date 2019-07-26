@@ -4,6 +4,7 @@ from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
+from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
@@ -18,6 +19,37 @@ class FileActionAvailabilityChecker(object):
     """Mixin containing the methods to check whether certain
     actions should be available on a document.
     """
+
+    def is_document(self):
+        """Check that the current context is a document or an E-mail"""
+        return IBaseDocument.providedBy(self.context)
+
+    def has_file(self):
+        """Check whether the context has a file"""
+        return self.context.has_file()
+
+    def is_versioned(self):
+        return self.request.get('version_id') is not None
+
+    def is_checkout_and_edit_available(self):
+        """Check whether the current user is allowed to checkout the document
+        """
+        if self.is_versioned():
+            return False
+        return self.context.is_checkout_and_edit_available()
+
+    def is_office_connector_editable(self):
+        """Check whether the filetype is supported by office connector"""
+        return self.context.is_office_connector_editable()
+
+    def is_oc_direct_checkout_action_available(self):
+        """Check whether the new office connector checkout action is available
+        """
+        return (self.is_document() and
+                self.has_file() and
+                self.is_checkout_and_edit_available() and
+                self.is_office_connector_editable() and
+                is_officeconnector_checkout_feature_enabled())
 
 
 class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
@@ -56,17 +88,6 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
             'Modify portal content',
             obj=self.context,
             )
-
-    def is_versioned(self):
-        return self.request.get('version_id') is not None
-
-    def is_office_connector_editable(self):
-        return self.context.is_office_connector_editable()
-
-    def is_checkout_and_edit_available(self):
-        if self.is_versioned():
-            return False
-        return self.context.is_checkout_and_edit_available()
 
     def is_download_copy_available(self):
         """Disable downloading copies when the document is checked out by an
@@ -221,4 +242,3 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
         renderer = getMultiAdapter((self.context, self.request),
                                    IWebActionsRenderer, name='action-buttons')
         return renderer()
-

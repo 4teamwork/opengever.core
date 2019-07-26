@@ -11,6 +11,9 @@ class TestCheckoutAPI(IntegrationTestCase):
                      method='GET', headers=self.api_headers)
         expected_file_actions = [
             {u'title': u'Download copy', u'id': u'download', u'icon': u''},
+            {u'icon': u'',
+             u'id': u'officeconnector_checkout_url',
+             u'title': u'Checkout and edit with office connector'},
             ]
         listed_file_actions = browser.json['file_actions']
         self.assertEqual(expected_file_actions, listed_file_actions)
