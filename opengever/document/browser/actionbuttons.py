@@ -1,4 +1,5 @@
 from opengever.document import _
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -7,9 +8,21 @@ from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.protect import createToken
+from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
+
+
+class FileActionAvailabilityChecker(object):
+    """Mixin containing the methods to check whether certain
+    actions should be available on a document.
+    """
+
+
+class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
+    """View used to check the availability of file actions
+    """
 
 
 class ActionButtonRendererMixin(object):
@@ -208,3 +221,4 @@ class ActionButtonRendererMixin(object):
         renderer = getMultiAdapter((self.context, self.request),
                                    IWebActionsRenderer, name='action-buttons')
         return renderer()
+

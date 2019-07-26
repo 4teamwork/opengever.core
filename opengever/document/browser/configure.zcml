@@ -133,4 +133,11 @@
       class=".report.DocumentReporter"
       permission="zope2.View"
       />
+
+  <browser:page
+      for="*"
+      name="file_actions_availability"
+      class=".actionbuttons.FileActionAvailabilityCheckerView"
+      permission="zope2.View"
+      />
 </configure>
