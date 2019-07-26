@@ -13,7 +13,20 @@ class TestCheckoutAPI(IntegrationTestCase):
             {u'title': u'Download copy', u'id': u'download', u'icon': u''},
             {u'icon': u'',
              u'id': u'officeconnector_checkout_url',
-             u'title': u'Checkout and edit with office connector'},
+             u'title': u'Checkout and edit'},
+            ]
+        listed_file_actions = browser.json['file_actions']
+        self.assertEqual(expected_file_actions, listed_file_actions)
+
+    @browsing
+    def test_zem_checkout_available_if_oc_checkout_deactivated(self, browser):
+        self.deactivate_feature('officeconnector-checkout')
+        self.login(self.regular_user, browser)
+        browser.open(self.document.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        expected_file_actions = [
+            {u'title': u'Download copy', u'id': u'download', u'icon': u''},
+            {u'icon': u'', u'id': u'zem_checkout', u'title': u'Checkout and edit'}
             ]
         listed_file_actions = browser.json['file_actions']
         self.assertEqual(expected_file_actions, listed_file_actions)

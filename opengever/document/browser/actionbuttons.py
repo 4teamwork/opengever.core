@@ -51,6 +51,15 @@ class FileActionAvailabilityChecker(object):
                 self.is_office_connector_editable() and
                 is_officeconnector_checkout_feature_enabled())
 
+    def is_oc_zem_checkout_action_available(self):
+        """Check whether the old style zem office connector checkout action
+        is available"""
+        return (self.is_document() and
+                self.has_file() and
+                self.is_checkout_and_edit_available() and
+                self.is_office_connector_editable() and
+                not is_officeconnector_checkout_feature_enabled())
+
 
 class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
     """View used to check the availability of file actions
