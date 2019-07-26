@@ -25,7 +25,7 @@ class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityCheck
     """
 
 
-class ActionButtonRendererMixin(object):
+class ActionButtonRendererMixin(FileActionAvailabilityChecker):
     """Mixin for views that render action buttons."""
 
     is_overview_tab = False
