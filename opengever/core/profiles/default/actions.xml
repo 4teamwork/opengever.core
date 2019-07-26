@@ -13,6 +13,10 @@
 
   </object>
 
+  <!-- FILE ACTIONS used to list available actions through the actions endpoint-->
+  <object name="file_actions" meta_type="CMF Action Category">
+
+  </object>
 
   <!-- SITE ACTIONS -->
   <object name="site_actions" meta_type="CMF Action Category">

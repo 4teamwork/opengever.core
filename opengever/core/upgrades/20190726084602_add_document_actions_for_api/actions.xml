@@ -1,0 +1,8 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- FILE ACTIONS used to list available actions through the actions endpoint-->
+  <object name="file_actions" meta_type="CMF Action Category">
+
+  </object>
+
+</object>
