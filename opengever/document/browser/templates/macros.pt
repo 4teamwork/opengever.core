@@ -28,7 +28,7 @@
             office_connector_editable view/is_office_connector_editable;
             copy_download_available view/is_download_copy_available;
             attach_to_email_available view/is_attach_to_email_available;
-            is_checkin_allowed view/_is_checkin_allowed;
+            is_checkin_allowed view/is_checkin_allowed;
             is_cancel_allowed view/is_checkout_cancel_available;
             new_external_edit_enabled context/@@officeconnector_settings/is_checkout_enabled">
 

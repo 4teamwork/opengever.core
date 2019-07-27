@@ -45,6 +45,19 @@ class FileActionAvailabilityChecker(object):
         """Check whether the filetype is supported by office connector"""
         return self.context.is_office_connector_editable()
 
+    def is_checkin_allowed(self):
+        manager = queryMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        if not manager:
+            # This is probably a mail
+            return False
+
+        return manager.is_checkin_allowed()
+
+    def is_locked(self):
+        return IRefreshableLockable(self.context).locked()
+
     def is_oc_direct_checkout_action_available(self):
         """Check whether the new office connector checkout action is available
         """
@@ -72,6 +85,12 @@ class FileActionAvailabilityChecker(object):
                 not self.is_office_connector_editable() and
                 not self.is_checked_out())
 
+    def is_checkin_without_comment_available(self):
+        return (self.is_document() and
+                self.has_file() and
+                self.is_checkin_allowed() and
+                not self.is_locked())
+
 
 class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
     """View used to check the availability of file actions
@@ -93,9 +112,6 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
             return False
 
         return True
-
-    def is_locked(self):
-        return IRefreshableLockable(self.context).locked()
 
     def is_edit_metadata_available(self):
         # XXX object orient me, the object should know some of this stuff
@@ -215,16 +231,6 @@ class ActionButtonRendererMixin(FileActionAvailabilityChecker):
             self.context.absolute_url(),
             checkin_view,
             createToken())
-
-    def _is_checkin_allowed(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        if not manager:
-            # This is probably a mail
-            return False
-
-        return manager.is_checkin_allowed()
 
     def is_checkout_cancel_available(self):
         manager = queryMultiAdapter(
