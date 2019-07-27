@@ -47,7 +47,7 @@ class TestCheckoutAPI(IntegrationTestCase):
         self.assertEqual(expected_file_actions, listed_file_actions)
 
     @browsing
-    def test_checkin_without_comment_available_if_checked_out_by_current_user(self, browser):
+    def test_checkin_available_if_checked_out_by_current_user(self, browser):
         self.login(self.regular_user, browser)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
@@ -57,9 +57,36 @@ class TestCheckoutAPI(IntegrationTestCase):
         expected_file_actions = [
             {u'title': u'Download copy', u'id': u'download', u'icon': u''},
             {u'title': u'Checkout and edit', u'id': u'officeconnector_checkout_url', u'icon': u''},
-            {u'title': u'Checkin without comment', u'id': u'checkin_without_comment', u'icon': u''}
+            {u'title': u'Checkin without comment', u'id': u'checkin_without_comment', u'icon': u''},
+            {u'title': u'Checkin with comment', u'id': u'checkin_with_comment', u'icon': u''}
             ]
 
+        listed_file_actions = browser.json['file_actions']
+        self.assertEqual(expected_file_actions, listed_file_actions)
+
+    @browsing
+    def test_checkin_only_available_for_managers_if_checked_out_by_other_user(self, browser):
+        self.login(self.regular_user, browser)
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        self.login(self.manager, browser)
+        browser.open(self.document.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        expected_file_actions = [
+            {u'title': u'Download copy', u'id': u'download', u'icon': u''},
+            {u'title': u'Checkin without comment', u'id': u'checkin_without_comment', u'icon': u''},
+            {u'title': u'Checkin with comment', u'id': u'checkin_with_comment', u'icon': u''}
+            ]
+        listed_file_actions = browser.json['file_actions']
+        self.assertEqual(expected_file_actions, listed_file_actions)
+
+        self.login(self.dossier_manager, browser)
+        browser.open(self.document.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        expected_file_actions = [
+            {u'title': u'Download copy', u'id': u'download', u'icon': u''}]
         listed_file_actions = browser.json['file_actions']
         self.assertEqual(expected_file_actions, listed_file_actions)
 

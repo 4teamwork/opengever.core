@@ -85,10 +85,13 @@ class FileActionAvailabilityChecker(object):
                 not self.is_office_connector_editable() and
                 not self.is_checked_out())
 
-    def is_checkin_without_comment_available(self):
+    def is_checkin_with_comment_available(self):
         return (self.is_document() and
                 self.has_file() and
-                self.is_checkin_allowed() and
+                self.is_checkin_allowed())
+
+    def is_checkin_without_comment_available(self):
+        return (self.is_checkin_with_comment_available() and
                 not self.is_locked())
 
 
