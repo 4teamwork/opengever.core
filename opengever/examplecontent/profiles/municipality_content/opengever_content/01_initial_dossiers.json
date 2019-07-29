@@ -194,5 +194,26 @@
         "description": "<script>alert('evil');</script>"
       }
     ]
+  },
+
+  {
+    "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/dossier-9",
+    "_type": "opengever.dossier.businesscasedossier",
+    "responsible": "philippe.gross",
+    "title": "Dossier zum Aussondern",
+    "start": "2000-1-1",
+    "end": "2001-1-1",
+    "description": "Dossier bei dem die Aufbewahrungsfrist schon abgelaufen ist",
+    "_transitions": "dossier-transition-resolve",
+    "_children": [
+      {
+        "_id": "document-9",
+        "_type": "opengever.document.document",
+        "title": "Dokument zum Aussondern",
+        "file:file": "files/subdossier.docx",
+        "document_date": "2010-1-2",
+        "modified": "2010-1-2"
+      }
+    ]
   }
 ]
