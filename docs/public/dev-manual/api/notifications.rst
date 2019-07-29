@@ -31,6 +31,8 @@ Mittels eines GET-Request können Benachrichtigungen des Benutzers abgefragt wer
       [
           {
               "@id": "http://nohost/plone/@notifications/kathi.barfuss/3",
+              "actor_id": "robert.ziegler",
+              "actor_label": "Ziegler Robert",
               "created": "2018-10-16T00:00:00+00:00",
               "label": "Task opened",
               "link": "http://nohost/plone/@@resolve_notification?notification_id=3",
@@ -41,6 +43,8 @@ Mittels eines GET-Request können Benachrichtigungen des Benutzers abgefragt wer
           },
           {
               "@id": "http://nohost/plone/@notifications/kathi.barfuss/1",
+              "actor_id": "robert.ziegler",
+              "actor_label": "Ziegler Robert",
               "created": "2017-10-16T00:00:00+00:00",
               "label": "Task opened",
               "link": "http://nohost/plone/@@resolve_notification?notification_id=1",
@@ -74,6 +78,8 @@ Eine einzelne Benarchrichtigung kann durch hinzufügen der Benachrichtigungs-ID 
 
       {
           "@id": "http://nohost/plone/@notifications/kathi.barfuss/3",
+          "actor_id": "robert.ziegler",
+          "actor_label": "Ziegler Robert",
           "created": "2018-10-16T00:00:00+00:00",
           "label": "Task opened",
           "link": "http://nohost/plone/@@resolve_notification?notification_id=3",
