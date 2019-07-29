@@ -29,7 +29,7 @@ logger = None
 def parse_args(argv):
     parser = argparse.ArgumentParser(description='Run nightly jobs')
     parser.add_argument(
-        '--force', action='store_true',
+        '-f', '--force', action='store_true',
         help="Force execution even if outside time window or when load is high")
 
     args = parser.parse_args(argv)
