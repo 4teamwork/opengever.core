@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
+from DateTime import DateTime
 from opengever.activity import notification_center
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -11,6 +12,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.interfaces import IHistoryStorage
@@ -18,16 +20,23 @@ from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
+from path import Path
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
 from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
+from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
+from pyxb.utils.domutils import BindingDOMSupport
+from tempfile import TemporaryFile
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import Unauthorized
+from zipfile import ZIP_DEFLATED
+from zipfile import ZipFile
 from zope import schema
+from zope.annotation import IAnnotations
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -35,7 +44,7 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
-
+import os
 
 DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
 
@@ -293,3 +302,38 @@ class Disposition(Container):
                 archivists.append(principal)
 
         return archivists
+
+    def store_sip_package(self):
+        self._sip_package = self.generate_sip_package()
+
+    def remove_sip_package(self):
+        self._sip_package = None
+
+    def generate_sip_package(self):
+        package = SIPPackage(self)
+        zip_file = self.create_zipfile(package)
+        zip_file.seek(0)
+        return NamedBlobFile(zip_file.read(), contentType='application/zip')
+
+    def create_zipfile(self, package):
+        tmpfile = TemporaryFile()
+        BindingDOMSupport.SetDefaultNamespace(u'http://bar.admin.ch/arelda/v4')
+        with ZipFile(tmpfile, 'w', ZIP_DEFLATED, True) as zipfile:
+            package.write_to_zipfile(zipfile)
+
+        return tmpfile
+
+    def has_sip_package(self):
+        return bool(self.get_sip_package())
+
+    def get_sip_package(self):
+        return getattr(self, '_sip_package', None)
+
+    def get_sip_name(self):
+        name = u'SIP_{}_{}'.format(
+            DateTime().strftime('%Y%m%d'),
+            api.portal.get().getId().upper())
+        if self.transfer_number:
+            name = u'{}_{}'.format(name, self.transfer_number)
+
+        return name

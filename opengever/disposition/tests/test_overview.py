@@ -152,11 +152,13 @@ class TestDispositionOverview(IntegrationTestCase):
                           browser.css('ul.actions li').text)
 
         browser.find('disposition-transition-dispose').click()
+
         self.assertEquals(['Export appraisal list as excel',
                            'Download disposition package'],
                           browser.css('ul.actions li').text)
+
         self.assertEquals(
-            os.path.join(self.disposition.absolute_url(), 'ech0160_export'),
+            os.path.join(self.disposition.absolute_url(), 'ech0160_download'),
             browser.find('Download disposition package').get('href'))
         self.assertEquals(
             os.path.join(self.disposition.absolute_url(), 'download_excel'),
