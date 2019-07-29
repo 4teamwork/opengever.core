@@ -4,6 +4,7 @@ Changelog
 2019.4.0 (unreleased)
 ---------------------
 
+- Nightly jobs: Don't require ftw.raven when running locally [lgraf]
 - Include actor_id and actor_label in @notifications endpoint responses. [lgraf]
 - Bump docxcompose version to 1.0.1 [njohner]
 - Improve SIP package generation and download. [phgross]

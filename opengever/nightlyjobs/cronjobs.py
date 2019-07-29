@@ -1,4 +1,3 @@
-from ftw.raven.reporter import maybe_report_exception
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.pathfinder import PathFinder
 from opengever.core.debughelpers import all_plone_sites
@@ -12,6 +11,14 @@ import logging
 import os
 import sys
 import traceback
+
+
+try:
+    from ftw.raven.reporter import maybe_report_exception
+except ImportError:
+    # Local development, ftw.raven may not be present
+    def maybe_report_exception(context, request, exc_type, exc, traceback):
+        pass
 
 
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
