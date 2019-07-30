@@ -5,13 +5,19 @@ from plone.memoize import ram
 from zope.globalrequest import getRequest
 
 
-def hostname_cache_key(m):
+def hostname_cache_key(m, *args, **kwargs):
     return get_hostname(getRequest())
 
 
 @ram.cache(hostname_cache_key)
-def get_contactfolder_url():
-    result = api.content.find(object_provides=IContactFolder)
+def get_contactfolder_url(elevate_privileges=False):
+    if elevate_privileges:
+        from opengever.base.security import elevated_privileges
+        with elevated_privileges():
+            result = api.content.find(object_provides=IContactFolder)
+    else:
+        result = api.content.find(object_provides=IContactFolder)
+
     if not result:
         raise Exception('Contactfolder is missing, GEVER deployment was not '
                         'correctly set up.')

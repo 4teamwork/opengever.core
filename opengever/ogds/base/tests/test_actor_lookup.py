@@ -55,6 +55,14 @@ class TestActorLookup(IntegrationTestCase):
             u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
             actor.get_link())
 
+    def test_team_profile_url_for_foreign_user(self):
+        self.login(self.foreign_contributor)
+        actor = Actor.lookup('team:1')
+        self.assertEqual(
+            u'<a href="http://nohost/plone/kontakte/team-1/view">'
+            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
+            actor.get_link())
+
     def test_user_actor_ogds_user(self):
         actor = Actor.lookup('jurgen.konig')
 

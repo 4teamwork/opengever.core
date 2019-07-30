@@ -212,7 +212,7 @@ class TeamActor(Actor):
 
     def get_profile_url(self):
         return '{}/team-{}/view'.format(
-            get_contactfolder_url(), self.team.team_id)
+            get_contactfolder_url(elevate_privileges=True), self.team.team_id)
 
     def corresponds_to(self, user):
         return user in self.team.group.users

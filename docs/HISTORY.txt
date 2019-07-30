@@ -6,6 +6,7 @@ Changelog
 
 - Nightly jobs: Add short -f option as alias for --force. [lgraf]
 - Nightly jobs: Don't require ftw.raven when running locally [lgraf]
+- Fix team actor profile_url for foreign users. [phgross]
 - Include actor_id and actor_label in @notifications endpoint responses. [lgraf]
 - Bump docxcompose version to 1.0.1 [njohner]
 - Improve SIP package generation and download. [phgross]
