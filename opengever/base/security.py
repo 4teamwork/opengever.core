@@ -5,6 +5,7 @@ from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
 from collective.indexing.interfaces import IIndexQueueProcessor
 from collective.indexing.queue import getQueue
 from contextlib import contextmanager
+from opengever.base import is_solr_feature_enabled
 from opengever.base.interfaces import IInternalWorkflowTransition
 from plone import api
 from Products.CMFCore.CMFCatalogAware import CatalogAware
@@ -12,7 +13,6 @@ from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
-from opengever.ogds.base.sources import is_solr_feature_enabled
 
 
 class UnrestrictedUser(BaseUnrestrictedUser):

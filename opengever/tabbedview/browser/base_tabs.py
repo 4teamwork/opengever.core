@@ -3,7 +3,6 @@ from opengever.base.behaviors.classification import translated_public_trial_term
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.ogds.base.sort_helpers import SortHelpers
-from opengever.ogds.base.sources import is_solr_feature_enabled
 from opengever.tabbedview.browser.listing import CatalogListingView
 from opengever.tabbedview.browser.listing import ListingView
 from opengever.tabbedview.filters import SubjectFilter

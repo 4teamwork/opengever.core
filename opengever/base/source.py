@@ -4,7 +4,7 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from ftw.solr.query import make_query
 from opengever.base import interfaces
-from opengever.ogds.base.sources import is_solr_feature_enabled
+from opengever.base import is_solr_feature_enabled
 from plone.formwidget.contenttree import ObjPathSourceBinder
 from plone.formwidget.contenttree.source import CustomFilter
 from plone.formwidget.contenttree.source import ObjPathSource

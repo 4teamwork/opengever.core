@@ -1,5 +1,5 @@
 from ftw.solr.interfaces import ISolrSearch
-from opengever.base.interfaces import ISearchSettings
+from opengever.base import is_solr_feature_enabled
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.contact import IContact
@@ -28,11 +28,6 @@ from zope.interface import implementer
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 import re
-
-
-def is_solr_feature_enabled():
-    return api.portal.get_registry_record(
-        'use_solr', interface=ISearchSettings)
 
 
 @implementer(IQuerySource)
