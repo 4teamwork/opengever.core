@@ -1,6 +1,6 @@
-from ftw.raven.reporter import maybe_report_exception
 from logging.handlers import TimedRotatingFileHandler
 from opengever.base.pathfinder import PathFinder
+from opengever.base.sentry import maybe_report_exception
 from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
@@ -22,7 +22,7 @@ logger = None
 def parse_args(argv):
     parser = argparse.ArgumentParser(description='Run nightly jobs')
     parser.add_argument(
-        '--force', action='store_true',
+        '-f', '--force', action='store_true',
         help="Force execution even if outside time window or when load is high")
 
     args = parser.parse_args(argv)

@@ -1,3 +1,4 @@
+from opengever.base.sentry import maybe_report_exception
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -11,20 +12,10 @@ from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 import json
 import os.path
-import pkg_resources
 import sys
 import traceback
 import urllib
 import urllib2
-
-
-try:
-    pkg_resources.get_distribution('ftw.raven')
-    from ftw.raven.reporter import maybe_report_exception
-except pkg_resources.DistributionNotFound:
-    HAS_RAVEN = False
-else:
-    HAS_RAVEN = True
 
 
 class RemoteRequestFailed(Exception):
@@ -195,9 +186,8 @@ def tracebackify(*args, **kwargs):
                                                     "text/x.traceback")
                     e_type, e_value, tb = sys.exc_info()
 
-                    if HAS_RAVEN:
-                        maybe_report_exception(self.context, self.request,
-                                               e_type, e_value, tb)
+                    maybe_report_exception(self.context, self.request,
+                                           e_type, e_value, tb)
 
                     return ''.join(traceback.format_exception(e_type, e_value,
                                                               tb))

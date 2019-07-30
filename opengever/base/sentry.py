@@ -1,18 +1,29 @@
 from contextlib import contextmanager
 from zope.globalrequest import getRequest
 import logging
+import pkg_resources
 
+# Conditional imports to ease local development (without ftw.raven)
 try:
+    pkg_resources.get_distribution('ftw.raven')
+
+except pkg_resources.DistributionNotFound:
+    FTW_RAVEN_AVAILABLE = False
+
+    def maybe_report_exception(*args, **kwargs):
+        """Noop function that gets used during local development.
+        """
+        pass
+else:
+    FTW_RAVEN_AVAILABLE = True
     from ftw.raven.client import get_raven_client
     from ftw.raven.reporter import get_default_tags
     from ftw.raven.reporter import get_release
+    from ftw.raven.reporter import maybe_report_exception  # noqa
     from ftw.raven.reporter import prepare_extra_infos
     from ftw.raven.reporter import prepare_modules_infos
     from ftw.raven.reporter import prepare_request_infos
     from ftw.raven.reporter import prepare_user_infos
-    FTW_RAVEN_AVAILABLE = True
-except ImportError:
-    FTW_RAVEN_AVAILABLE = False
 
 
 log = logging.getLogger('opengever.base.sentry')
