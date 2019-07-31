@@ -189,6 +189,12 @@ class BaseDocumentMixin(object):
     def is_shadow_document(self):
         return False
 
+    def is_checkin_allowed(self):
+        return False
+
+    def is_locked(self):
+        return False
+
 
 def mimetype_lookup(mtr, contenttype):
     """Reimplemented as case insensitive from Products.MimetypesRegistry."""

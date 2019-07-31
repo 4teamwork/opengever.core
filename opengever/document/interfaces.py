@@ -134,3 +134,56 @@ class IDocumentSavedAsPDFMarker(Interface):
     """Marker Interface for documents that are copies of another document
     in PDF format. Such documents contain the Source document and version
     in their annotations."""
+
+
+class IFileActions(Interface):
+    """Knows availability of specific ations from the `file_actions` category.
+    """
+
+    def is_edit_metadata_action_available():
+        """Return whether the action to edit metadata is available."""
+
+    def is_any_checkout_or_edit_available():
+        """Return wheter any of the checkout or edit actions are available."""
+
+    def is_oc_direct_checkout_action_available():
+        """Return whether OfficeConnector direct checkout action is available.
+        """
+
+    def is_oc_direct_edit_action_available():
+        """Return whether OfficeConnector direct edit action is available.
+        """
+
+    def is_oc_zem_checkout_action_available():
+        """Return whether deprecated ZEM OfficeConnector checkout action
+        is available.
+        """
+
+    def is_oc_zem_edit_action_available():
+        """Return whether deprecated ZEM OfficeConnector edit action
+        is available.
+        """
+
+    def is_oc_unsupported_file_checkout_action_available():
+        """Return whether checkout action for unsupported OfficeConnector
+        types is available."""
+
+    def is_checkin_without_comment_available():
+        """Return whether checkin without comment action is available.
+        """
+
+    def is_checkin_with_comment_available():
+        """Return whether checkin with comment action is available.
+        """
+
+    def is_cancel_checkout_action_available():
+        """Return whether cancel checkout action is available."""
+
+    def is_download_copy_action_available():
+        """Return download copy action is available."""
+
+    def is_attach_to_email_action_available():
+        """Return whether attach to email action is available."""
+
+    def is_oneoffixx_retry_action_available():
+        """Return whether oneoffixx retry action is available."""

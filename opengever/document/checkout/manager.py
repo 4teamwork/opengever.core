@@ -43,6 +43,9 @@ class CheckinCheckoutManager(object):
         """
         return self.annotations.get(CHECKIN_CHECKOUT_ANNOTATIONS_KEY, None)
 
+    def is_checked_out_by_another_user(self):
+        return bool(self.get_checked_out_by()) and not self.is_checked_out_by_current_user()
+
     def is_checked_out_by_current_user(self):
         return self.get_checked_out_by() == api.user.get_current().getId()
 

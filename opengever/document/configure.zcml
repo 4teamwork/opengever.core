@@ -320,4 +320,7 @@
 
   <adapter factory=".document.UploadValidator" />
 
+  <adapter factory=".fileactions.BaseDocumentFileActions" />
+  <adapter factory=".fileactions.DocumentFileActions" />
+
 </configure>
