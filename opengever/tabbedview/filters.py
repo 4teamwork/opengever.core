@@ -3,8 +3,8 @@ from collections import OrderedDict
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.base import is_solr_feature_enabled
 from opengever.globalindex.model.task import Task
-from opengever.ogds.base.sources import is_solr_feature_enabled
 from opengever.tabbedview import _
 from Products.CMFDiffTool.utils import safe_utf8
 from Products.CMFPlone.utils import safe_unicode
