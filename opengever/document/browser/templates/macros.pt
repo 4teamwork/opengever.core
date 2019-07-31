@@ -3,10 +3,10 @@
     <div class="file-action-buttons">
 
         <tal:edit_metadata_link tal:condition="view/is_edit_metadata_link_visible"
-                tal:define="edit_metadata_available view/is_edit_metadata_available">
+                tal:define="edit_metadata_available view/is_edit_metadata_action_available">
             <tal:edit_metadata tal:condition="edit_metadata_available">
                 <a class="function-edit-metadata"
-                    tal:attributes="href string:${view/get_url}/edit_checker"
+                    tal:attributes="href string:${context/absolute_url}/edit_checker"
                     i18n:domain="plone"
                     i18n:translate="">
                     Edit metadata
@@ -22,171 +22,157 @@
             </tal:not_edit_metadata>
         </tal:edit_metadata_link>
 
-        <tal:file tal:condition="context/has_file"
-            tal:define="checked_out view/is_checked_out;
-            checkout_and_edit_available view/is_checkout_and_edit_available;
-            office_connector_editable view/is_office_connector_editable;
-            copy_download_available view/is_download_copy_available;
-            attach_to_email_available view/is_attach_to_email_available;
-            is_checkin_allowed view/is_checkin_allowed;
-            is_cancel_allowed view/is_checkout_cancel_available;
-            new_external_edit_enabled context/@@officeconnector_settings/is_checkout_enabled">
-
-            <tal:checkout_and_edit_enabled tal:condition="checkout_and_edit_available">
-                <tal:oc_editable tal:condition="office_connector_editable">
-                    <tal:oc_checkout tal:condition="new_external_edit_enabled">
-                        <tal:checkedout tal:condition="checked_out">
-                            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
-                                               data-document-url context/absolute_url"
-                                class="function-edit oc-checkout"
-                                href="#"
-                                i18n:translate="label_edit">
-                                Edit
-                            </a>
-                        </tal:checkedout>
-                        <tal:notcheckedout tal:condition="not: checked_out">
-                            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
-                                               data-document-url context/absolute_url"
-                                class="function-edit oc-checkout"
-                                href="#"
-                                i18n:translate="label_checkout_and_edit">
-                                Checkout and edit
-                            </a>
-                        </tal:notcheckedout>
-                    </tal:oc_checkout>
-
-                    <tal:zem_checkout tal:condition="not: new_external_edit_enabled">
-                        <tal:checkedout tal:condition="checked_out">
-                            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
-                                class="function-edit"
-                                href="#"
-                                i18n:translate="label_edit">
-                                Edit
-                            </a>
-                        </tal:checkedout>
-                        <tal:notcheckedout tal:condition="not: checked_out">
-                            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
-                                class="function-edit"
-                                href="#"
-                                i18n:translate="label_checkout_and_edit">
-                                Checkout and edit
-                            </a>
-                        </tal:notcheckedout>
-                    </tal:zem_checkout>
-                </tal:oc_editable>
-
-                <tal:oc_uneditable tal:condition="not: office_connector_editable">
-                    <tal:checkedout tal:condition="checked_out">
-                        <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Edit"
-                        i18n:attributes="title oc_unsupported_message" i18n:translate="label_edit">
-                            Edit
-                        </span>
-                    </tal:checkedout>
-                    <tal:notcheckedout tal:condition="not: checked_out">
-                        <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Checkout and edit"
-                        i18n:attributes="title oc_unsupported_message" i18n:translate="label_checkout_and_edit">
-                            Checkout and edit
-                        </span>
-                        <a tal:attributes="href string:${context/absolute_url}/@@checkout_documents?_authenticator=${context/@@authenticator/token}"
-                            class="function-edit"
-                            href="#"
-                            i18n:translate="label_checkout">
-                            Checkout
-                        </a>
-                    </tal:notcheckedout>
-                </tal:oc_uneditable>
-            </tal:checkout_and_edit_enabled>
-
-            <tal:checkout_and_edit_disabled tal:condition="not: checkout_and_edit_available">
-                <span class="function-edit-inactive discreet"
-                    i18n:translate="label_checkout_and_edit">
-                    Checkout and edit
-                </span>
-            </tal:checkout_and_edit_disabled>
-
-            <tal:checked_out tal:condition="is_checkin_allowed">
-              <tal:checkin_without_comment tal:condition="not: view/is_locked">
-                <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
-                    Checkin without comment
-                </a>
-              </tal:checkin_without_comment>
-              <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin" i18n:translate="">
-                  Checkin with comment
-              </a>
-            </tal:checked_out>
-
-            <tal:check_out_cancel tal:condition="is_cancel_allowed">
-                <span tal:replace="structure view/get_checkout_cancel_tag"></span>
-            </tal:check_out_cancel>
-
-            <tal:download_copy_enabled tal:condition="copy_download_available">
-                <span tal:replace="structure view/get_download_copy_tag"></span>
-            </tal:download_copy_enabled>
-
-            <tal:download_copy_disabled tal:condition="not: copy_download_available">
-                <span class="function-download-copy-inactive modal discreet"
-                    i18n:translate="label_download_copy">
-                    Download copy
-                </span>
-            </tal:download_copy_disabled>
-
-            <tal:attach_feature_enabled tal:condition="context/@@officeconnector_settings/is_attach_enabled">
-
-              <tal:oc_attach_to_email_available tal:condition="attach_to_email_available">
-                  <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
-                      class="function-attach"
-                      href="#"
-                      i18n:translate="label_attach_to_email">
-                      Attach to email
-                  </a>
-              </tal:oc_attach_to_email_available>
-
-              <tal:oc_attach_to_email_inactive tal:condition="not: attach_to_email_available">
-                  <span class="function-attach-inactive modal discreet"
-                      i18n:translate="label_attach_to_email">
-                      Attach to email
-                  </span>
-              </tal:oc_attach_to_email_inactive>
-
-            </tal:attach_feature_enabled>
-
-            <tal:overlay tal:condition="view/overlay">
-                <tal:open_as_pdf
-                    tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
-                    tal:condition="nocall: link">
-                    <a tal:attributes="href link; target target | nothing; class string:function-pdf-preview"
-                        i18n:translate="label_open_document_as_pdf">
-                        Open as PDF
-                    </a>
-                </tal:open_as_pdf>
-                <tal:revert
-                    tal:define="link view/overlay/get_revert_link"
-                    tal:condition="nocall: link"
-                    tal:content="structure link">
-                </tal:revert>
-            </tal:overlay>
-
-        </tal:file>
-
-        <tal:details_view tal:define="link context/absolute_url" tal:condition="view/is_detail_view_link_available">
-            <a class="function-view-details"
-                tal:attributes="href link"
-                i18n:translate="label_open_detail_view">Open detail view
+        <tal:direct_checkout_oc tal:condition="view/is_oc_direct_checkout_action_available">
+            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
+                               data-document-url context/absolute_url"
+                class="function-edit oc-checkout"
+                href="#"
+                i18n:translate="label_checkout_and_edit">
+                Checkout and edit
             </a>
-        </tal:details_view>
+        </tal:direct_checkout_oc>
 
-        <tal:oneoffixx tal:define="link context/absolute_url" tal:condition="view/is_oneoffixx_creatable">
-          <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_oneoffixx_url');
-                             data-document-url context/absolute_url"
-              class="function-revert oc-checkout"
-              href="#"
-              i18n:translate="label_retry_oneoffixx">
-              Oneoffixx retry
+        <tal:direct_edit_oc tal:condition="view/is_oc_direct_edit_action_available">
+            <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_checkout_url');;;
+                               data-document-url context/absolute_url"
+                class="function-edit oc-checkout"
+                href="#"
+                i18n:translate="label_edit">
+                Edit
+            </a>
+        </tal:direct_edit_oc>
+
+        <tal:zem_checkout_oc tal:condition="view/is_oc_zem_checkout_action_available">
+            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
+                class="function-edit"
+                href="#"
+                i18n:translate="label_checkout_and_edit">
+                Checkout and edit
+            </a>
+        </tal:zem_checkout_oc>
+
+        <tal:zem_edit_oc tal:condition="view/is_oc_zem_edit_action_available">
+            <a tal:attributes="href string:${context/absolute_url}/editing_document?_authenticator=${context/@@authenticator/token}"
+                class="function-edit"
+                href="#"
+                i18n:translate="label_edit">
+                Edit
+            </a>
+        </tal:zem_edit_oc>
+
+        <tal:oc_unsupported_checkout tal:condition="view/is_oc_unsupported_file_checkout_action_available">
+            <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Checkout and edit"
+            i18n:attributes="title oc_unsupported_message" i18n:translate="label_checkout_and_edit">
+                Checkout and edit
+            </span>
+            <a tal:attributes="href string:${context/absolute_url}/@@checkout_documents?_authenticator=${context/@@authenticator/token}"
+                class="function-edit"
+                href="#"
+                i18n:translate="label_checkout">
+                Checkout
+            </a>
+        </tal:oc_unsupported_checkout>
+
+        <tal:oc_unsupported_edit_discreet tal:condition="view/is_oc_unsupported_file_edit_action_available">
+            <span class="fa-exclamation-triangle-after function-edit-inactive discreet" title="Office connector unsupported type" value="Edit"
+            i18n:attributes="title oc_unsupported_message" i18n:translate="label_edit">
+                Edit
+            </span>
+        </tal:oc_unsupported_edit_discreet>
+
+        <tal:checkout_and_edit_discreet tal:condition="not: view/is_any_checkout_or_edit_available">
+            <span class="function-edit-inactive discreet"
+                i18n:translate="label_checkout_and_edit">
+                Checkout and edit
+            </span>
+        </tal:checkout_and_edit_discreet>
+
+        <tal:checkin_without_comment tal:condition="view/is_checkin_without_comment_available">
+          <a tal:attributes="href view/get_checkin_without_comment_url; class string:function-checkin" i18n:translate="">
+              Checkin without comment
           </a>
-        </tal:oneoffixx>
-        <tal:block repeat="subMenuItem view/get_webaction_items">
-            <a tal:replace="structure subMenuItem" />
-        </tal:block>
+        </tal:checkin_without_comment>
+
+        <tal:checkin_with_comment tal:condition="view/is_checkin_with_comment_available">
+          <a tal:attributes="href view/get_checkin_with_comment_url; class string:function-checkin" i18n:translate="">
+              Checkin with comment
+          </a>
+        </tal:checkin_with_comment>
+
+        <tal:check_out_cancel tal:condition="view/is_cancel_checkout_action_available">
+          <a id="action-cancel-checkout" class="link-overlay modal function-revert"
+             tal:attributes="href view/get_cancel_checkout_url" i18n:translate="">
+              Cancel checkout
+          </a>
+        </tal:check_out_cancel>
+
+        <tal:download_copy_enabled tal:condition="view/is_download_copy_action_available">
+            <span tal:replace="structure view/render_download_copy_link"></span>
+        </tal:download_copy_enabled>
+
+        <tal:download_copy_discreet tal:condition="not: view/is_download_copy_action_available">
+            <span class="function-download-copy-inactive modal discreet"
+                i18n:translate="label_download_copy">
+                Download copy
+            </span>
+        </tal:download_copy_discreet>
+
+        <tal:attach_feature_enabled tal:condition="context/@@officeconnector_settings/is_attach_enabled">
+
+          <tal:oc_attach_to_email_available tal:condition="view/is_attach_to_email_action_available">
+              <a tal:attributes="href string:javascript:officeConnectorAttach('${context/absolute_url}/officeconnector_attach_url');;"
+                  class="function-attach"
+                  href="#"
+                  i18n:translate="label_attach_to_email">
+                  Attach to email
+              </a>
+          </tal:oc_attach_to_email_available>
+
+          <tal:oc_attach_to_email_inactive tal:condition="not: view/is_attach_to_email_action_available">
+              <span class="function-attach-inactive modal discreet"
+                  i18n:translate="label_attach_to_email">
+                  Attach to email
+              </span>
+          </tal:oc_attach_to_email_inactive>
+
+      </tal:attach_feature_enabled>
+
+      <tal:overlay tal:condition="view/overlay">
+          <tal:open_as_pdf
+              tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
+              tal:condition="nocall: link">
+              <a tal:attributes="href link; target target | nothing; class string:function-pdf-preview"
+                  i18n:translate="label_open_document_as_pdf">
+                  Open as PDF
+              </a>
+          </tal:open_as_pdf>
+          <tal:revert
+              tal:define="link view/overlay/get_revert_link"
+              tal:condition="nocall: link"
+              tal:content="structure link">
+          </tal:revert>
+      </tal:overlay>
+
+      <tal:details_view tal:define="link context/absolute_url" tal:condition="view/is_detail_view_link_available">
+          <a class="function-view-details"
+              tal:attributes="href link"
+              i18n:translate="label_open_detail_view">Open detail view
+          </a>
+      </tal:details_view>
+
+      <tal:oneoffixx tal:define="link context/absolute_url" tal:condition="view/is_oneoffixx_retry_action_available">
+        <a tal:attributes="href string:javascript:officeConnectorCheckout('${context/absolute_url}/officeconnector_oneoffixx_url');
+                           data-document-url context/absolute_url"
+            class="function-revert oc-checkout"
+            href="#"
+            i18n:translate="label_retry_oneoffixx">
+            Oneoffixx retry
+        </a>
+      </tal:oneoffixx>
+
+      <tal:block repeat="subMenuItem view/get_webaction_items">
+          <a tal:replace="structure subMenuItem" />
+      </tal:block>
     </div>
 
     <tal:nofile tal:condition="not:context/has_file">
