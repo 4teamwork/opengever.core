@@ -6,6 +6,7 @@ from zope.component import getMultiAdapter
 
 class TestFileActionsGet(IntegrationTestCase):
 
+    features = ('bumblebee',)
     maxDiff = None
 
     def get_file_actions(self, browser, context):
@@ -26,6 +27,9 @@ class TestFileActionsGet(IntegrationTestCase):
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
              u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -43,6 +47,9 @@ class TestFileActionsGet(IntegrationTestCase):
              u'icon': u''},
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
              u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
@@ -92,6 +99,9 @@ class TestFileActionsGet(IntegrationTestCase):
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
              u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
 
         self.assertEqual(expected_file_actions,
@@ -123,6 +133,9 @@ class TestFileActionsGet(IntegrationTestCase):
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
              u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
 
         self.assertEqual(expected_file_actions,
@@ -146,12 +159,18 @@ class TestFileActionsGet(IntegrationTestCase):
             {u'id': u'cancel_checkout',
              u'title': u'Cancel checkout',
              u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
         self.assertEqual(expected_manager_file_actions,
                          self.get_file_actions(browser, self.document))
 
         self.login(self.dossier_manager, browser)
         expected_dossier_manager_file_actions = [
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
         self.assertEqual(expected_dossier_manager_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -165,6 +184,9 @@ class TestFileActionsGet(IntegrationTestCase):
              u'icon': u''},
             {u'id': u'attach_to_email',
              u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
              u'icon': u''},
             ]
 
@@ -182,6 +204,9 @@ class TestFileActionsGet(IntegrationTestCase):
             {u'id': u'download_copy',
              u'title': u'Download copy',
              u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
@@ -197,3 +222,21 @@ class TestFileActionsGet(IntegrationTestCase):
             ]
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.shadow_document))
+
+    @browsing
+    def test_open_as_pdf_not_available_if_bumblebee_disabled(self, browser):
+        self.deactivate_feature('bumblebee')
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'oc_direct_checkout',
+             u'title': u'Checkout and edit',
+             u'icon': u''},
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            ]
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.document))

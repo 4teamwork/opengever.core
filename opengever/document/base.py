@@ -167,7 +167,7 @@ class BaseDocumentMixin(object):
         """
         mtr = getToolByName(self, 'mimetypes_registry', None)
 
-        field = self.file
+        field = self.get_file()
         if not field or not field.getSize():
             # there is no file
             return False

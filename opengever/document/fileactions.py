@@ -1,4 +1,5 @@
 from ftw.bumblebee.mimetypes import is_mimetype_supported
+from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -67,6 +68,12 @@ class BaseDocumentFileActions(object):
         return False
 
     def is_open_as_pdf_action_available(self):
+        if not is_bumblebee_feature_enabled():
+            return False
+
+        if not self.context.has_file():
+            return False
+
         mime_type_item = self.context.get_mimetype()
         if not mime_type_item:
             return False

@@ -105,6 +105,15 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="open_as_pdf" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_open_document_as_pdf">Open as PDF</property>
+      <property name="available_expr">object/@@file_actions_availability/is_open_as_pdf_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 </object>
