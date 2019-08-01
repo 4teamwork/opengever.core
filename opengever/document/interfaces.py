@@ -187,3 +187,6 @@ class IFileActions(Interface):
 
     def is_oneoffixx_retry_action_available():
         """Return whether oneoffixx retry action is available."""
+
+    def is_open_as_pdf_action_available():
+        """Return whether the open aos pdf action is available."""

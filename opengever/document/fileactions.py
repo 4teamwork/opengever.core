@@ -1,3 +1,4 @@
+from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -64,6 +65,13 @@ class BaseDocumentFileActions(object):
 
     def is_oneoffixx_retry_action_available(self):
         return False
+
+    def is_open_as_pdf_action_available(self):
+        mime_type_item = self.context.get_mimetype()
+        if not mime_type_item:
+            return False
+
+        return is_mimetype_supported(mime_type_item[0])
 
 
 @implementer(IFileActions)

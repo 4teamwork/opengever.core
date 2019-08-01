@@ -66,6 +66,9 @@ class FileActionAvailabilityMixin(object):
     def is_oneoffixx_retry_action_available(self):
         return self.ifileactions.is_oneoffixx_retry_action_available()
 
+    def is_open_as_pdf_action_available(self):
+        return self.ifileactions.is_open_as_pdf_action_available()
+
 
 class FileActionAvailabilityView(BrowserView, FileActionAvailabilityMixin):
     """View that exposes file action availaibility."""
