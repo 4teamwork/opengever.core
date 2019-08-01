@@ -137,7 +137,7 @@
   <browser:page
       for="*"
       name="file_actions_availability"
-      class=".actionbuttons.FileActionAvailabilityCheckerView"
+      class=".actionbuttons.FileActionAvailabilityView"
       permission="zope2.View"
       />
 </configure>

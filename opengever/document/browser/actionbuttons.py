@@ -1,14 +1,17 @@
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import IFileActions
+from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone.protect import createToken
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 
 
-class FileActionAvailabilityChecker(object):
-    """Mixin containing the methods to check whether certain
-    actions should be available on a document.
+class FileActionAvailabilityMixin(object):
+    """Mixin that delegates availability checks to an IFileActions adapter.
+
+    Returns whether an action is available. An action which is not available
+    cannot be performed by the model in its current state.
     """
     @property
     def ifileactions(self):
@@ -64,34 +67,72 @@ class FileActionAvailabilityChecker(object):
         return self.ifileactions.is_oneoffixx_retry_action_available()
 
 
-class FileActionAvailabilityCheckerView(BrowserView, FileActionAvailabilityChecker):
-    """View used to check the availability of file actions
+class FileActionAvailabilityView(BrowserView, FileActionAvailabilityMixin):
+    """View that exposes file action availaibility."""
+
+
+class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
+    """Mixin to render the `file_action_buttons` macro.
+
+    Adds the notion of visibility to certain actions. Also decides about
+    visibility of other non -action elements in the macro.
+    If an action is visible it must always be available. The view can decide
+    to make an available action invisible however.
+
     """
-
-
-class ActionButtonRendererMixin(FileActionAvailabilityChecker):
-    """Mixin for views that render action buttons."""
-
     is_overview_tab = False
     is_on_detail_view = False
     overlay = None
 
-    def is_oc_unsupported_file_edit_action_available(self):
+    def is_oc_unsupported_file_discreet_edit_visible(self):
         return (self.ifileactions.is_any_checkout_or_edit_available()
                 and not self.context.is_office_connector_editable()
                 and self.context.is_checked_out())
 
-    def is_edit_metadata_link_visible(self):
+    def is_discreet_no_file_hint_visible(self):
+        return not self.context.has_file()
+
+    def is_edit_metadata_action_visible(self):
         if self.is_overview_tab:
             return False
 
-        if self.is_versioned():
-            return False
+        return self.is_edit_metadata_action_available()
 
-        return True
-
-    def is_detail_view_link_available(self):
+    def is_detail_view_link_visible(self):
         return not self.is_on_detail_view
+
+    def is_attach_to_email_action_set_visible(self):
+        """Only show the actions if the feature is enabled."""
+
+        return is_officeconnector_attach_feature_enabled()
+
+    def get_oc_direct_checkout_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_checkout_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_attach_to_email_url(self):
+        return (
+            u"javascript:officeConnectorAttach("
+            "'{}/officeconnector_attach_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_oneoffixx_retry_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_oneoffixx_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_zem_checkout_url(self):
+        return u'{}/editing_document?_authenticator={}'.format(
+            self.context.absolute_url(),
+            createToken())
+
+    def get_checkout_url(self):
+        return "{}/@@checkout_documents?_authenticator={}".format(
+            self.context.absolute_url(),
+            createToken())
 
     def render_download_copy_link(self):
         """Returns the DownloadConfirmationHelper tag containing

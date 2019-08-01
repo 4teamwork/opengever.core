@@ -1,9 +1,9 @@
 from ftw.bumblebee.interfaces import IBumblebeeDocument
-from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
+from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
 from plone.app.contentlisting.interfaces import IContentListingObject
 
 
-class TooltipView(ActionButtonRendererMixin):
+class TooltipView(VisibleActionButtonRendererMixin):
     """File tooltip"""
 
     def __init__(self, context, request):

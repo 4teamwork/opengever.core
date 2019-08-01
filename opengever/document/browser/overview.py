@@ -11,7 +11,7 @@ from opengever.document import _
 from opengever.document.archival_file import ARCHIVAL_FILE_STATE_MAPPING
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.browser import archival_file_form
-from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
+from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.meeting import is_meeting_feature_enabled
@@ -136,7 +136,7 @@ class TemplateRow(CustomRow):
         return self.renderer(self.view)
 
 
-class Overview(DefaultView, GeverTabMixin, ActionButtonRendererMixin):
+class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
     """File details overview.
     """
 

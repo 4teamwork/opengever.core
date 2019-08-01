@@ -85,9 +85,9 @@ class DocumentFileActions(BaseDocumentFileActions):
 
         return (
             super(DocumentFileActions, self).is_edit_metadata_action_available()
+            and not self.is_versioned()
             and not manager.is_locked()
-            and not manager.is_checked_out_by_another_user()
-            )
+            and not manager.is_checked_out_by_another_user())
 
     def is_oc_direct_checkout_action_available(self):
         return (self.is_any_checkout_or_edit_available()
@@ -152,8 +152,7 @@ class DocumentFileActions(BaseDocumentFileActions):
 
         return (
             super(DocumentFileActions, self).is_attach_to_email_action_available()
-            and not manager.is_checked_out_by_another_user()
-            )
+            and not manager.is_checked_out_by_another_user())
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()

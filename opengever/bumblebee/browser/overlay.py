@@ -13,7 +13,7 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document import _ as document_mf
-from opengever.document.browser.actionbuttons import ActionButtonRendererMixin
+from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
 from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
@@ -45,7 +45,7 @@ import os
 
 @implementer(IBumblebeeOverlay)
 @adapter(IDocumentSchema, Interface)
-class BumblebeeBaseDocumentOverlay(ActionButtonRendererMixin):
+class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
     """Bumblebee overlay for base documents.
     """
 
@@ -282,7 +282,7 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
         return ''
 
 
-class BumblebeeOverlayBaseView(BrowserView, ActionButtonRendererMixin):
+class BumblebeeOverlayBaseView(BrowserView, VisibleActionButtonRendererMixin):
     """Baseview for the bumblebeeoverlay.
     """
 
