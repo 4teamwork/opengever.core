@@ -13,3 +13,6 @@ class TooltipView(VisibleActionButtonRendererMixin):
 
     def get_bumblebee_checksum(self):
         return IBumblebeeDocument(self.context).get_checksum()
+
+    def is_detail_view_link_visible(self):
+        return True

@@ -11,7 +11,7 @@
             </a>
         </tal:edit_metadata>
 
-        <tal:edit_metadata_discreet tal:condition="not: view/is_edit_metadata_action_visible">
+        <tal:edit_metadata_discreet tal:condition="view/is_discreet_edit_metadata_action_visible">
             <span class="function-edit-metadata-inactive discreet"
                 i18n:domain="plone"
                 i18n:translate="">

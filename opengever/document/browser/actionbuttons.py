@@ -80,8 +80,6 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
     to make an available action invisible however.
 
     """
-    is_overview_tab = False
-    is_on_detail_view = False
     overlay = None
 
     def is_oc_unsupported_file_discreet_edit_visible(self):
@@ -93,13 +91,13 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
         return not self.context.has_file()
 
     def is_edit_metadata_action_visible(self):
-        if self.is_overview_tab:
-            return False
-
         return self.is_edit_metadata_action_available()
 
+    def is_discreet_edit_metadata_action_visible(self):
+        return not self.is_edit_metadata_action_visible()
+
     def is_detail_view_link_visible(self):
-        return not self.is_on_detail_view
+        return False
 
     def is_attach_to_email_action_set_visible(self):
         """Only show the actions if the feature is enabled."""

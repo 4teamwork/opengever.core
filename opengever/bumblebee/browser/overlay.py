@@ -333,9 +333,10 @@ class BumblebeeOverlayListingView(BumblebeeOverlayBaseView):
     i.e. documents-tab, search-view, overview-tab
     """
 
+    def is_detail_view_link_visible(self):
+        return True
+
 
 class BumblebeeOverlayDocumentView(BumblebeeOverlayBaseView):
     """Bumblebeeoverlay called from the document itself.
     """
-
-    is_on_detail_view = True
