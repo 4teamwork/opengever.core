@@ -1,7 +1,6 @@
 from Acquisition import aq_parent
 from ftw import bumblebee
 from ftw.bumblebee.interfaces import IBumblebeeDocument
-from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -10,7 +9,6 @@ from opengever.base.utils import to_html_xweb_intelligent
 from opengever.bumblebee import _
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
-from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document import _ as document_mf
 from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
@@ -29,7 +27,6 @@ from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
-from urllib import quote
 from zExceptions import NotFound
 from zope.component import adapter
 from zope.component import getAdapter
@@ -40,7 +37,6 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
-import os
 
 
 @implementer(IBumblebeeOverlay)
@@ -71,6 +67,9 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
 
     def is_latest_version(self):
         """A documentish without versions is always the latest version."""
+        return True
+
+    def is_open_as_pdf_action_visible(self):
         return True
 
     def preview_pdf_url(self):
@@ -146,14 +145,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
             include_token=True
             )
 
-    def get_open_as_pdf_url(self):
-        mimetypeitem = self.context.get_mimetype()
-        if not mimetypeitem or not is_mimetype_supported(mimetypeitem[0]):
-            return None
-
-        return u'{}/bumblebee-open-pdf?filename={}'.format(
-            self.context.absolute_url(), quote(self._get_pdf_filename()))
-
     def render_checked_out_viewlet(self):
         viewlet = CheckedOutViewlet(self.context, self.request, None, None)
         viewlet.update()
@@ -168,14 +159,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
         if self.is_versioned():
             return self._get_revert_link()
         return None
-
-    def _get_pdf_filename(self):
-        if not self.has_file():
-            # Bumblebee will use a placeholder filename
-            return None
-
-        filename = os.path.splitext(self.get_file().filename)[0]
-        return u'{}.pdf'.format(filename)
 
     def _is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
@@ -198,10 +181,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
             url, _(u'label_revert', default=u'Revert document'),
             css_class='standalone function-revert')
 
-    def should_open_in_new_window(self):
-        return api.portal.get_registry_record(
-            'open_pdf_in_a_new_window', interface=IGeverBumblebeeSettings)
-
 
 @adapter(IOGMailMarker, Interface)
 class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
@@ -216,11 +195,6 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
     def is_latest_version(self):
         """Mails are not versionable."""
         return True
-
-    def get_open_as_pdf_url(self):
-        return u'{}/bumblebee-open-pdf?filename={}'.format(
-            self.context.absolute_url(),
-            quote(self._get_pdf_filename().encode('utf-8')))
 
     def get_checkout_url(self):
         return None
@@ -257,10 +231,10 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     def is_latest_version(self):
         return self.version_id == self.context.get_current_version_id()
 
-    def get_checkout_url(self):
-        return None
+    def is_open_as_pdf_action_visible(self):
+        return False
 
-    def get_open_as_pdf_url(self):
+    def get_checkout_url(self):
         return None
 
     def get_checkin_without_comment_url(self):
@@ -285,6 +259,11 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
 class BumblebeeOverlayBaseView(BrowserView, VisibleActionButtonRendererMixin):
     """Baseview for the bumblebeeoverlay.
     """
+
+    def is_open_as_pdf_action_visible(self):
+        return (
+            self.is_open_as_pdf_action_available()
+            and self.overlay.is_open_as_pdf_action_visible())
 
     def __call__(self):
         if not is_bumblebee_feature_enabled():

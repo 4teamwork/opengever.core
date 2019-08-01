@@ -95,12 +95,6 @@ class IBumblebeeOverlay(Interface):
         Returns None if its not possible to download a copy.
         """
 
-    def get_open_as_pdf_url():
-        """Returns the url to open the file as a pdf representation.
-
-        If there is no pdf-representation, it returns None
-        """
-
     def get_edit_metadata_url():
         """Returns the url to edit the metadata of the current object.
         """

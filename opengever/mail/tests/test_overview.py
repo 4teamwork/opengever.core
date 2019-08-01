@@ -1,5 +1,37 @@
+from ftw.mail.mail import IMail
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+
+
+class TestGetOpenAsPdfURL(IntegrationTestCase):
+
+    features = ('bumblebee', )
+
+    def test_returns_none_for_unsupported_mail_conversion(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.mail_eml, self.request)
+        expected_url = (
+            'http://nohost/plone/ordnungssystem/fuhrung'
+            '/vertrage-und-vereinbarungen/dossier-1/document-29'
+            '/bumblebee-open-pdf?filename=Die%20Buergschaft.pdf'
+            )
+
+        self.assertEqual(expected_url, view.get_open_as_pdf_url())
+
+    def test_handles_non_ascii_characters_in_filename(self):
+        self.login(self.regular_user)
+        IMail(self.mail_eml).message.filename = u'GEVER - \xdcbernahme.msg'
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.mail_eml, self.request)
+
+        expected_url = (
+            u'http://nohost/plone/ordnungssystem/fuhrung'
+            u'/vertrage-und-vereinbarungen/dossier-1/document-29'
+            u'/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf'
+            )
+
+        self.assertEqual(expected_url, view.get_open_as_pdf_url())
 
 
 class TestMailOverview(IntegrationTestCase):

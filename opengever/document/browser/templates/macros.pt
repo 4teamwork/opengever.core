@@ -139,15 +139,18 @@
 
       </tal:attach_feature_enabled>
 
+      <tal:open_as_pdf
+          tal:define="target python: '_blank' if view.should_pdfs_open_in_new_window() else None"
+          tal:condition="view/is_open_as_pdf_action_visible">
+          <a class="function-pdf-preview"
+              tal:attributes="href view/get_open_as_pdf_url;
+                              target target | nothing;"
+              i18n:translate="label_open_document_as_pdf">
+              Open as PDF
+          </a>
+      </tal:open_as_pdf>
+
       <tal:overlay tal:condition="view/overlay">
-          <tal:open_as_pdf
-              tal:define="link view/overlay/get_open_as_pdf_url; target python: '_blank' if view.overlay.should_open_in_new_window() else None"
-              tal:condition="nocall: link">
-              <a tal:attributes="href link; target target | nothing; class string:function-pdf-preview"
-                  i18n:translate="label_open_document_as_pdf">
-                  Open as PDF
-              </a>
-          </tal:open_as_pdf>
           <tal:revert
               tal:define="link view/overlay/get_revert_link"
               tal:condition="nocall: link"

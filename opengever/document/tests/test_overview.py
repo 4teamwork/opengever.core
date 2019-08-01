@@ -6,9 +6,67 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
+from plone import api
 from plone.locking.interfaces import IRefreshableLockable
+from plone.namedfile.file import NamedBlobFile
 from urllib import urlencode
 from zope.component import queryMultiAdapter
+
+
+class TestGetOpenAsPdfURL(IntegrationTestCase):
+    """Test the integrity of generated bumblebee links."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_returns_pdf_url_as_string(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.assertEqual(
+            '{}/bumblebee-open-pdf?filename=Vertraegsentwurf.pdf'.format(
+                self.document.absolute_url()),
+            view.get_open_as_pdf_url())
+
+    def test_returns_none_if_no_mimetype_is_available(self):
+        self.login(self.regular_user)
+        self.document.file.contentType = u'foo/bar'
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.assertIsNone(view.get_open_as_pdf_url())
+
+    def test_returns_none_if_mimetype_is_not_supported(self):
+        self.login(self.regular_user)
+        self.document.file = NamedBlobFile(
+            data=u'T\xc3\xa4stfil\xc3\xa9',
+            contentType='test/notsupported',
+            filename=u'test.notsupported')
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.assertIsNone(view.get_open_as_pdf_url())
+
+
+class TestGetPdfFilename(IntegrationTestCase):
+    """Test we generate bumblebee filenames correctly."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_changes_filename_extension_to_pdf_and_returns_filename(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.document.file.filename = u'Vertr\xe4ge Wichtig.docx'
+        self.assertEqual(u'Vertr\xe4ge Wichtig.pdf', view._get_pdf_filename())
+
+    def test_appends_pdf_if_missing_extension(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.document.file.filename = u'Vertr\xe4ge Wichtig'
+        self.assertEqual(u'Vertr\xe4ge Wichtig.pdf', view._get_pdf_filename())
 
 
 class TestDocumentOverviewVanilla(IntegrationTestCase):

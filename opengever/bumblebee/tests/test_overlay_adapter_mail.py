@@ -56,36 +56,6 @@ class TestGetFile(IntegrationTestCase):
         self.assertEqual(self.mail_eml.message, adapter.get_file())
 
 
-class TestGetOpenAsPdfLink(IntegrationTestCase):
-
-    features = ('bumblebee', )
-
-    def test_returns_none_for_unsupported_mail_conversion(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
-
-        expected_url = (
-            'http://nohost/plone/ordnungssystem/fuhrung'
-            '/vertrage-und-vereinbarungen/dossier-1/document-29'
-            '/bumblebee-open-pdf?filename=Die%20Buergschaft.pdf'
-            )
-
-        self.assertEqual(expected_url, adapter.get_open_as_pdf_url())
-
-    def test_handles_non_ascii_characters_in_filename(self):
-        self.login(self.regular_user)
-        IMail(self.mail_eml).message.filename = u'GEVER - \xdcbernahme.msg'
-        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
-
-        expected_url = (
-            u'http://nohost/plone/ordnungssystem/fuhrung'
-            u'/vertrage-und-vereinbarungen/dossier-1/document-29'
-            u'/bumblebee-open-pdf?filename=GEVER%20-%20%C3%9Cbernahme.pdf'
-            )
-
-        self.assertEqual(expected_url, adapter.get_open_as_pdf_url())
-
-
 class TestGetCheckoutUrl(IntegrationTestCase):
 
     features = ('bumblebee', )

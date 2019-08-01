@@ -6,7 +6,6 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.testing import IntegrationTestCase
 from plone.locking.interfaces import IRefreshableLockable
-from plone.namedfile.file import NamedBlobFile
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.interface import alsoProvides
@@ -43,56 +42,6 @@ class TestGetPreviewPdfUrl(IntegrationTestCase):
             'http://nohost/plone/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg',
             adapter.preview_pdf_url(),
             )
-
-
-class TestGetOpenAsPdfLink(IntegrationTestCase):
-    """Test the integrity of generated bumblebee links."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_pdf_url_as_string(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertEqual(
-            '{}/bumblebee-open-pdf?filename=Vertraegsentwurf.pdf'.format(self.document.absolute_url()),
-            adapter.get_open_as_pdf_url(),
-            )
-
-    def test_returns_none_if_no_mimetype_is_available(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.empty_document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_open_as_pdf_url())
-
-    def test_returns_none_if_mimetype_is_not_supported(self):
-        self.login(self.regular_user)
-        self.document.file = NamedBlobFile(
-            data=u'T\xc3\xa4stfil\xc3\xa9',
-            contentType='test/notsupported',
-            filename=u'test.notsupported',
-            )
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_open_as_pdf_url())
-
-
-class TestGetPdfFilename(IntegrationTestCase):
-    """Test we generate bumblebee filenames correctly."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_changes_filename_extension_to_pdf_and_returns_filename(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertEqual('Vertraegsentwurf.docx', self.document.file.filename)
-        self.assertEqual('Vertraegsentwurf.pdf', adapter._get_pdf_filename())
-
-    def test_returns_none_if_no_file_is_given(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.empty_document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter._get_pdf_filename())
 
 
 class TestGetFileSize(IntegrationTestCase):

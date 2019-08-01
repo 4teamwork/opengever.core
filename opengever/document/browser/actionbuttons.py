@@ -1,10 +1,14 @@
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.webactions.interfaces import IWebActionsRenderer
+from plone import api
 from plone.protect import createToken
 from Products.Five.browser import BrowserView
+from urllib import quote
 from zope.component import getMultiAdapter
+import os
 
 
 class FileActionAvailabilityMixin(object):
@@ -107,6 +111,9 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
 
         return is_officeconnector_attach_feature_enabled()
 
+    def is_open_as_pdf_action_visible(self):
+        return False
+
     def get_oc_direct_checkout_url(self):
         return (
             u"javascript:officeConnectorCheckout("
@@ -134,6 +141,23 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
         return "{}/@@checkout_documents?_authenticator={}".format(
             self.context.absolute_url(),
             createToken())
+
+    def get_open_as_pdf_url(self):
+        if not self.is_open_as_pdf_action_available():
+            return None
+
+        return u'{}/bumblebee-open-pdf?filename={}'.format(
+            self.context.absolute_url(),
+            quote(self._get_pdf_filename().encode('utf-8')))
+
+    def _get_pdf_filename(self):
+        filename = os.path.splitext(self.context.get_file().filename)[0]
+        return u'{}.pdf'.format(filename)
+
+    def should_pdfs_open_in_new_window(self):
+        return api.portal.get_registry_record(
+            'open_pdf_in_a_new_window',
+            interface=IGeverBumblebeeSettings)
 
     def render_download_copy_link(self):
         """Returns the DownloadConfirmationHelper tag containing
