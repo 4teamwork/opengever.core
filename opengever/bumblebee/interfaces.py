@@ -83,12 +83,6 @@ class IBumblebeeOverlay(Interface):
         If there is no reference number it returns None
         """
 
-    def get_download_copy_link():
-        """Returns the html-link to download a copy of the file.
-
-        Returns None if its not possible to download a copy.
-        """
-
     def get_edit_metadata_url():
         """Returns the url to edit the metadata of the current object.
         """

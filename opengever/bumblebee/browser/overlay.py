@@ -115,20 +115,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
     def get_filename(self):
         return self.get_file().filename if self.has_file() else None
 
-    def get_download_copy_link(self):
-        # Because of cyclic dependencies, we can not import
-        # DownloadConfirmationHelper in the top of the file.
-        from opengever.document.browser.download import DownloadConfirmationHelper  # noqa
-
-        if not self.has_file():
-            return None
-
-        dc_helper = DownloadConfirmationHelper(self.context)
-        return dc_helper.get_html_tag(
-            additional_classes=['function-download-copy'],
-            include_token=True
-            )
-
     def render_checked_out_viewlet(self):
         viewlet = CheckedOutViewlet(self.context, self.request, None, None)
         viewlet.update()
@@ -169,19 +155,6 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
 
     def get_checkin_with_comment_url(self):
         return None
-
-    def get_download_copy_link(self):
-        href = u"{}/download?_authenticator={}".format(
-            self.context.absolute_url(),
-            self.context.restrictedTraverse('@@authenticator').token())
-
-        return u'<a href="{}" class="{}">{}</a>'.format(
-            href,
-            'function-download-copy',
-            translate('label_download_copy',
-                      default="Download copy",
-                      domain='opengever.document',
-                      context=self.request))
 
 
 @adapter(IDocumentSchema, IVersionedContextMarker)

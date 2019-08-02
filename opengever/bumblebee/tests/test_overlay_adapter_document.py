@@ -141,26 +141,6 @@ class TestGetReferenceNumber(IntegrationTestCase):
         self.assertEqual(IReferenceNumber(self.document).get_number(), adapter.get_reference_number())
 
 
-class TestGetDownloadCopyLink(IntegrationTestCase):
-    """Test we correctly generate the document download link."""
-
-    features = (
-        'bumblebee',
-        )
-
-    @browsing
-    def test_returns_download_copy_link_as_html_link(self, browser):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        browser.open_html(adapter.get_download_copy_link())
-        self.assertEqual('Download copy', browser.css('a').first.text)
-
-    def test_returns_none_if_no_document_is_available(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.empty_document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_download_copy_link())
-
-
 class TestGetEditMetadataLink(IntegrationTestCase):
     """Test we correctly generate the document edit metadata link."""
 
