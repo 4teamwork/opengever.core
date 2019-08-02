@@ -54,14 +54,3 @@ class TestGetFile(IntegrationTestCase):
         adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
 
         self.assertEqual(self.mail_eml.message, adapter.get_file())
-
-
-class TestGetCheckinWithCommentUrl(IntegrationTestCase):
-
-    features = ('bumblebee', )
-
-    def test_returns_none_because_its_not_possible_to_checkin_emails(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
-
-        self.assertIsNone(adapter.get_checkin_with_comment_url())

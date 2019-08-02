@@ -143,6 +143,30 @@ class TestGetCheckinWithoutCommentURL(IntegrationTestCase):
             view.get_checkin_without_comment_url().startswith(expected_url))
 
 
+class TestGetCheckinWithCommentURL(IntegrationTestCase):
+    """Test we correctly generate a checkin with comment link."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_returns_none_when_document_is_not_checked_out(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.assertIsNone(view.get_checkin_with_comment_url())
+
+    def test_returns_checkin_with_comment_url_as_string(self):
+        self.login(self.regular_user)
+        self.checkout_document(self.document)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        expected_url = '{}/@@checkin_document?_authenticator='.format(
+            self.document.absolute_url())
+        self.assertTrue(
+            view.get_checkin_with_comment_url().startswith(expected_url))
+
+
 class TestDocumentOverviewVanilla(IntegrationTestCase):
 
     features = (

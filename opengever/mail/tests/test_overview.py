@@ -46,6 +46,17 @@ class TestGetOpenAsPdfURL(IntegrationTestCase):
         self.assertEqual(expected_url, view.get_open_as_pdf_url())
 
 
+class TestGetCheckinWithCommentURL(IntegrationTestCase):
+
+    features = ('bumblebee', )
+
+    def test_returns_none_because_its_not_possible_to_checkin_emails(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.mail_eml, self.request)
+        self.assertIsNone(view.get_checkin_with_comment_url())
+
+
 class TestMailOverview(IntegrationTestCase):
 
     @browsing

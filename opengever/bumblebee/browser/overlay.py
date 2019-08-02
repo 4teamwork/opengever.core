@@ -143,9 +143,6 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
         """Mails are not versionable."""
         return True
 
-    def get_checkin_with_comment_url(self):
-        return None
-
 
 @adapter(IDocumentSchema, IVersionedContextMarker)
 class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
@@ -161,9 +158,6 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
 
     def is_open_as_pdf_action_visible(self):
         return False
-
-    def get_checkin_with_comment_url(self):
-        return None
 
     def render_checked_out_viewlet(self):
         return ''
