@@ -13,7 +13,6 @@ from opengever.document import _ as document_mf
 from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.info import GeverLockInfoViewlet
 from opengever.mail import _ as mail_mf
@@ -28,7 +27,6 @@ from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
@@ -36,7 +34,7 @@ from zope.interface import Interface
 
 @implementer(IBumblebeeOverlay)
 @adapter(IDocumentSchema, Interface)
-class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
+class BumblebeeBaseDocumentOverlay(object):
     """Bumblebee overlay for base documents.
     """
 
@@ -101,6 +99,12 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
     def get_description(self):
         return to_html_xweb_intelligent(self.context.description)
 
+    def has_file(self):
+        return self.context.has_file()
+
+    def get_file(self):
+        return self.context.get_file()
+
     def get_file_size(self):
         """Return the filesize in KB."""
         return self.get_file().getSize() / 1024 if self.has_file() else None
@@ -117,16 +121,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
         viewlet = GeverLockInfoViewlet(self.context, self.request, None, None)
         viewlet.update()
         return viewlet.render()
-
-    def _is_checkout_and_edit_available(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        userid = manager.get_checked_out_by()
-
-        if not userid:
-            return manager.is_checkout_allowed()
-        return userid == api.user.get_current().getId()
 
 
 @adapter(IOGMailMarker, Interface)

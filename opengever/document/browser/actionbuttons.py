@@ -24,16 +24,6 @@ class FileActionAvailabilityMixin(object):
     def is_edit_metadata_action_available(self):
         return self.ifileactions.is_edit_metadata_action_available()
 
-    def has_file(self):
-        """Check whether the context has a file"""
-        return self.context.has_file()
-
-    def is_versioned(self):
-        return self.request.get('version_id') is not None
-
-    def is_checked_out(self):
-        return self.context.is_checked_out()
-
     def is_any_checkout_or_edit_available(self):
         return self.ifileactions.is_any_checkout_or_edit_available()
 
@@ -210,9 +200,6 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
     def get_cancel_checkout_url(self):
         return u'{}/@@cancel_document_checkout_confirmation'.format(
             self.context.absolute_url())
-
-    def get_file(self):
-        return self.context.get_file()
 
     def get_revert_to_version_url(self):
         url = u'{}/revert-file-to-version?version_id={}'.format(

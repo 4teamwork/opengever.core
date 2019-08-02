@@ -106,7 +106,3 @@ class IBumblebeeOverlay(Interface):
 
         Returns html.
         """
-
-    def is_versioned():
-        """Returns True if the context is a versioned context.
-        """

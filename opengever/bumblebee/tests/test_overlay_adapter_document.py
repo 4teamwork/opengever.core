@@ -3,12 +3,10 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.bumblebee.browser.overlay import BumblebeeBaseDocumentOverlay
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
-from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.testing import IntegrationTestCase
 from plone.locking.interfaces import IRefreshableLockable
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.interface import alsoProvides
 from zope.interface.verify import verifyClass
 
 
