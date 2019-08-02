@@ -73,6 +73,9 @@ class FileActionAvailabilityMixin(object):
     def is_open_as_pdf_action_available(self):
         return self.ifileactions.is_open_as_pdf_action_available()
 
+    def is_revert_to_version_action_available(self):
+        return self.ifileactions.is_revert_to_version_action_available()
+
 
 class FileActionAvailabilityView(BrowserView, FileActionAvailabilityMixin):
     """View that exposes file action availaibility."""

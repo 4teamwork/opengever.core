@@ -80,13 +80,17 @@ class BaseDocumentFileActions(object):
 
         return is_mimetype_supported(mime_type_item[0])
 
+    def is_revert_to_version_action_available(self):
+        return False
+
 
 @implementer(IFileActions)
 @adapter(IDocumentSchema, Interface)
 class DocumentFileActions(BaseDocumentFileActions):
 
     def is_versioned(self):
-        return self.request.get('version_id') is not None
+        version_id = self.request.get('version_id', '')
+        return version_id.isdigit()
 
     def is_any_checkout_or_edit_available(self):
         return (
@@ -171,3 +175,12 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()
+
+    def is_revert_to_version_action_available(self):
+        manager = getMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        return (self.is_versioned()
+                and self.context.has_file()
+                and not self.context.is_checked_out()
+                and manager.is_checkout_allowed())

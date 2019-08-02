@@ -190,3 +190,6 @@ class IFileActions(Interface):
 
     def is_open_as_pdf_action_available():
         """Return whether the open aos pdf action is available."""
+
+    def is_revert_to_version_action_available():
+        """Return whether the revert to version action is available."""
