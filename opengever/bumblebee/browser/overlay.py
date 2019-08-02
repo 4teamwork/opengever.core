@@ -118,14 +118,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
     def get_filename(self):
         return self.get_file().filename if self.has_file() else None
 
-    def get_checkout_url(self):
-        if not self.has_file() or not self._is_checkout_and_edit_available():
-            return None
-
-        return u'{}/editing_document?_authenticator={}'.format(
-            self.context.absolute_url(),
-            createToken())
-
     def get_download_copy_link(self):
         # Because of cyclic dependencies, we can not import
         # DownloadConfirmationHelper in the top of the file.
@@ -175,9 +167,6 @@ class BumblebeeMailOverlay(BumblebeeBaseDocumentOverlay):
         """Mails are not versionable."""
         return True
 
-    def get_checkout_url(self):
-        return None
-
     def get_checkin_without_comment_url(self):
         return None
 
@@ -212,9 +201,6 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
 
     def is_open_as_pdf_action_visible(self):
         return False
-
-    def get_checkout_url(self):
-        return None
 
     def get_checkin_without_comment_url(self):
         return None

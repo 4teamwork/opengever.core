@@ -83,12 +83,6 @@ class IBumblebeeOverlay(Interface):
         If there is no reference number it returns None
         """
 
-    def get_checkout_url():
-        """Returns the url to checkout the file.
-
-        Returns None if it's not possible to checkout the file.
-        """
-
     def get_download_copy_link():
         """Returns the html-link to download a copy of the file.
 

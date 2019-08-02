@@ -141,30 +141,6 @@ class TestGetReferenceNumber(IntegrationTestCase):
         self.assertEqual(IReferenceNumber(self.document).get_number(), adapter.get_reference_number())
 
 
-class TestGetCheckoutLink(IntegrationTestCase):
-    """Test we correctly generate the document checkout link."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_checkout_and_edit_url(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        expected_url = '{}/editing_document?_authenticator='.format(self.document.absolute_url())
-        self.assertTrue(adapter.get_checkout_url().startswith(expected_url))
-
-    def test_returns_none_if_no_document_is_available_to_checkout(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.empty_document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_checkout_url())
-
-    def test_returns_none_if_user_is_not_allowed_to_edit(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.proposaldocument, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_checkout_url())
-
-
 class TestGetDownloadCopyLink(IntegrationTestCase):
     """Test we correctly generate the document download link."""
 

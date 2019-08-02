@@ -56,17 +56,6 @@ class TestGetFile(IntegrationTestCase):
         self.assertEqual(self.mail_eml.message, adapter.get_file())
 
 
-class TestGetCheckoutUrl(IntegrationTestCase):
-
-    features = ('bumblebee', )
-
-    def test_returns_none_because_its_not_possible_to_checkout_emails(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.mail_eml, self.request), IBumblebeeOverlay)
-
-        self.assertIsNone(adapter.get_checkout_url())
-
-
 class TestGetCheckinWithoutCommentUrl(IntegrationTestCase):
 
     features = ('bumblebee', )

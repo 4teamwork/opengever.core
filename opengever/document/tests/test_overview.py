@@ -69,6 +69,40 @@ class TestGetPdfFilename(IntegrationTestCase):
         self.assertEqual(u'Vertr\xe4ge Wichtig.pdf', view._get_pdf_filename())
 
 
+class TestGetCheckoutURL(IntegrationTestCase):
+    """Test we correctly generate the document checkout urls."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_get_oc_zem_checkout_url(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        expected_url = '{}/editing_document?_authenticator='.format(
+            self.document.absolute_url())
+        self.assertTrue(view.get_oc_zem_checkout_url().startswith(expected_url))
+
+    def test_get_checkout_url(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        expected_url = '{}/@@checkout_documents?_authenticator='.format(
+            self.document.absolute_url())
+        self.assertTrue(view.get_checkout_url().startswith(expected_url))
+
+    def test_get_oc_direct_checkout_url(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        expected_url = (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_checkout_url'"
+            ");".format(self.document.absolute_url()))
+        self.assertEqual(expected_url, view.get_oc_direct_checkout_url())
+
+
 class TestDocumentOverviewVanilla(IntegrationTestCase):
 
     features = (
