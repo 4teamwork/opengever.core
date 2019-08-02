@@ -83,12 +83,6 @@ class IBumblebeeOverlay(Interface):
         If there is no reference number it returns None
         """
 
-    def get_checkin_without_comment_url():
-        """Returns the url to checkin the file.
-
-        Returns None if it's not possible to checkin the file.
-        """
-
     def get_checkin_with_comment_url():
         """Returns the url to checkin the file with a comment.
 

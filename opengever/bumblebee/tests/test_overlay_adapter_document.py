@@ -177,26 +177,6 @@ class TestGetFile(IntegrationTestCase):
         self.assertEqual(self.document.file, adapter.get_file())
 
 
-class TestGetCheckinWithoutCommentUrl(IntegrationTestCase):
-    """Test we correctly generate a checkin without comment link."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_none_when_document_is_not_checked_out(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_checkin_without_comment_url())
-
-    def test_returns_checkin_without_comment_url_as_string(self):
-        self.login(self.regular_user)
-        self.checkout_document(self.document)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        expected_url = '{}/@@checkin_without_comment?_authenticator='.format(self.document.absolute_url())
-        self.assertTrue(adapter.get_checkin_without_comment_url().startswith(expected_url))
-
-
 class TestGetCheckinWithCommentUrl(IntegrationTestCase):
     """Test we correctly generate a checkin with comment link."""
 

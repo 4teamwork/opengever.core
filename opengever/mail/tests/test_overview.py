@@ -1,6 +1,18 @@
 from ftw.mail.mail import IMail
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
+from plone import api
+
+
+class TestGetCheckinWithoutCommentURL(IntegrationTestCase):
+
+    features = ('bumblebee', )
+
+    def test_returns_none_because_its_not_possible_to_checkin_emails(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.mail_eml, self.request)
+        self.assertIsNone(view.get_checkin_without_comment_url())
 
 
 class TestGetOpenAsPdfURL(IntegrationTestCase):
