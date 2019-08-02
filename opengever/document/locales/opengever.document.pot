@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-04-08 11:37+0000\n"
+"POT-Creation-Date: 2019-08-02 12:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Can't edit the document at moment, beacuse it's locked."
 msgstr ""
 
-#: ./opengever/document/browser/actionbuttons.py
+#: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/checkout/cancel.py
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 msgid "Cancel checkout"
@@ -78,10 +78,6 @@ msgstr ""
 
 #: ./opengever/document/checkout/checkout.py
 msgid "Could not check out object: ${title}, it is not a document."
-msgstr ""
-
-#: ./opengever/document/browser/report.py
-msgid "Could not generate the report."
 msgstr ""
 
 #: ./opengever/document/browser/overview.py
@@ -588,6 +584,11 @@ msgstr ""
 #. Default: "Revert"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_revert"
+msgstr ""
+
+#. Default: "Revert document"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_revert_document"
 msgstr ""
 
 #. Default: "Save PDF"

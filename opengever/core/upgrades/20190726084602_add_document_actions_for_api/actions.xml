@@ -115,7 +115,7 @@
     </object>
 
     <object name="revert_to_version" meta_type="CMF Action" i18n:domain="opengever.document">
-      <property name="title" i18n:translate="label_revert">Revert document</property>
+      <property name="title" i18n:translate="label_revert_document">Revert document</property>
       <property name="available_expr">object/@@file_actions_availability/is_revert_to_version_action_available</property>
       <property name="permissions">
         <element value="View" />

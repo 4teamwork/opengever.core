@@ -153,7 +153,7 @@
       <tal:revert_to_version tal:condition="view/is_revert_to_version_action_available">
           <a class="standalone function-revert"
               tal:attributes="href view/get_revert_to_version_url"
-              i18n:translate="label_revert">
+              i18n:translate="label_revert_document">
               Revert document
           </a>
       </tal:revert_to_version>
