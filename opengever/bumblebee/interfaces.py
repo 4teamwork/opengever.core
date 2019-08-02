@@ -93,10 +93,6 @@ class IBumblebeeOverlay(Interface):
         """Returns the url to edit the metadata of the current object.
         """
 
-    def get_detail_view_url():
-        """Returns the url to the base-view of the current object.
-        """
-
     def get_checkin_without_comment_url():
         """Returns the url to checkin the file.
 

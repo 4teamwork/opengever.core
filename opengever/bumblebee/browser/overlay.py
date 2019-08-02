@@ -102,9 +102,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
 
         return u'{}/edit'.format(self.context.absolute_url())
 
-    def get_detail_view_url(self):
-        return self.context.absolute_url()
-
     def get_title(self):
         return self.context.title
 
@@ -209,9 +206,6 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
         return None
 
     def get_edit_metadata_url(self):
-        return None
-
-    def get_detail_view_url(self):
         return None
 
     def render_checked_out_viewlet(self):
