@@ -4,7 +4,7 @@
 
         <tal:edit_metadata tal:condition="view/is_edit_metadata_action_visible">
             <a class="function-edit-metadata"
-                tal:attributes="href string:${context/absolute_url}/edit_checker"
+                tal:attributes="href view/get_edit_metadata_url"
                 i18n:domain="plone"
                 i18n:translate="">
                 Edit metadata

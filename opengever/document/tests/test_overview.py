@@ -103,6 +103,22 @@ class TestGetCheckoutURL(IntegrationTestCase):
         self.assertEqual(expected_url, view.get_oc_direct_checkout_url())
 
 
+class TestGetEditMetadataURL(IntegrationTestCase):
+    """Test we correctly generate the document edit metadata link."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_returns_edit_metadata_url(self):
+        self.login(self.regular_user)
+        view = api.content.get_view('tabbedview_view-overview',
+                                    self.document, self.request)
+        self.assertEqual(
+            '{}/edit_checker'.format(self.document.absolute_url()),
+            view.get_edit_metadata_url())
+
+
 class TestDocumentOverviewVanilla(IntegrationTestCase):
 
     features = (

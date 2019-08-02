@@ -90,6 +90,9 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
     to make an available action invisible however.
 
     """
+    def get_edit_metadata_url(self):
+        return u'{}/edit_checker'.format(self.context.absolute_url())
+
     def is_oc_unsupported_file_discreet_edit_visible(self):
         return (self.ifileactions.is_any_checkout_or_edit_available()
                 and not self.context.is_office_connector_editable()

@@ -95,13 +95,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
     def get_reference_number(self):
         return getAdapter(self.context, IReferenceNumber).get_number()
 
-    def get_edit_metadata_url(self):
-        if not api.user.has_permission(
-                'Modify portal content', obj=self.context):
-            return None
-
-        return u'{}/edit'.format(self.context.absolute_url())
-
     def get_title(self):
         return self.context.title
 
@@ -176,9 +169,6 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
         return None
 
     def get_checkin_with_comment_url(self):
-        return None
-
-    def get_edit_metadata_url(self):
         return None
 
     def render_checked_out_viewlet(self):

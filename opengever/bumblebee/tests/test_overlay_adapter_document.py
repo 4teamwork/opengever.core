@@ -141,24 +141,6 @@ class TestGetReferenceNumber(IntegrationTestCase):
         self.assertEqual(IReferenceNumber(self.document).get_number(), adapter.get_reference_number())
 
 
-class TestGetEditMetadataLink(IntegrationTestCase):
-    """Test we correctly generate the document edit metadata link."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_edit_metadata_url(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertEqual('{}/edit'.format(self.document.absolute_url()), adapter.get_edit_metadata_url())
-
-    def test_returns_none_if_user_is_not_allowed_to_edit(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.proposaldocument, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_edit_metadata_url())
-
-
 class TestHasFile(IntegrationTestCase):
     """Test we correctly detect if a document has a file."""
 
