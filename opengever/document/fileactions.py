@@ -24,6 +24,9 @@ class BaseDocumentFileActions(object):
         self.context = context
         self.request = request
 
+    def is_versioned(self):
+        return False
+
     def is_edit_metadata_action_available(self):
         return api.user.has_permission(
             'Modify portal content',
@@ -90,7 +93,16 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_versioned(self):
         version_id = self.request.get('version_id', '')
-        return version_id.isdigit()
+
+        if isinstance(version_id, basestring):
+            return version_id.isdigit()
+
+        try:
+            int(version_id)
+        except ValueError:
+            return False
+        else:
+            return True
 
     def is_any_checkout_or_edit_available(self):
         return (

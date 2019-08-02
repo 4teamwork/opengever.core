@@ -218,28 +218,3 @@ class TestRenderCheckedOutViewlet(IntegrationTestCase):
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
         browser.open_html(adapter.render_checked_out_viewlet())
         self.assertEqual(1, len(browser.css('.portalMessage')))
-
-
-class TestIsVersionedContext(IntegrationTestCase):
-    """Test if we correctly detect if we're on a versioned document or not."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_false_if_no_version_id_is_given(self):
-        self.login(self.regular_user)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertFalse(adapter.is_versioned())
-
-    def test_returns_true_if_version_id_is_a_string(self):
-        self.login(self.regular_user)
-        self.request['version_id'] = '0'
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertTrue(adapter.is_versioned())
-
-    def test_returns_true_if_version_id_is_a_number(self):
-        self.login(self.regular_user)
-        self.request['version_id'] = 123
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertTrue(adapter.is_versioned())
