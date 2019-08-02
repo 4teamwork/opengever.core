@@ -5,6 +5,7 @@ from opengever.officeconnector.helpers import is_officeconnector_attach_feature_
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
 from plone.protect import createToken
+from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from urllib import quote
 from zope.component import getMultiAdapter
@@ -90,8 +91,6 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
     to make an available action invisible however.
 
     """
-    overlay = None
-
     def is_oc_unsupported_file_discreet_edit_visible(self):
         return (self.ifileactions.is_any_checkout_or_edit_available()
                 and not self.context.is_office_connector_editable()
@@ -216,6 +215,12 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
 
     def get_file(self):
         return self.context.get_file()
+
+    def get_revert_to_version_url(self):
+        url = u'{}/revert-file-to-version?version_id={}'.format(
+            self.context.absolute_url(),
+            self.request.get('version_id'))
+        return addTokenToUrl(url)
 
     def get_webaction_items(self):
         renderer = getMultiAdapter((self.context, self.request),

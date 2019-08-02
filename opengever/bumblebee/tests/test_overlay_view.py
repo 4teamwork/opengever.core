@@ -3,8 +3,26 @@ from opengever.bumblebee.browser.overlay import BumblebeeOverlayBaseView
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
+from plone import api
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
+
+
+class TestGetRevertUrl(IntegrationTestCase):
+    """Test we generate proper document version revert links."""
+
+    features = (
+        'bumblebee',
+        )
+
+    def test_returns_revert_url_as_string(self):
+        self.login(self.regular_user)
+        # We need to do both in order to fake a real request here
+        self.request['version_id'] = 3
+        view = api.content.get_view('bumblebee-overlay-document',
+                                    self.document, self.request)
+        self.assertIn('revert-file-to-version?version_id=3',
+                      view.get_revert_to_version_url())
 
 
 class TestBumblebeeOverlayListing(IntegrationTestCase):

@@ -150,13 +150,13 @@
           </a>
       </tal:open_as_pdf>
 
-      <tal:overlay tal:condition="view/overlay">
-          <tal:revert
-              tal:define="link view/overlay/get_revert_link"
-              tal:condition="nocall: link"
-              tal:content="structure link">
-          </tal:revert>
-      </tal:overlay>
+      <tal:revert_to_version tal:condition="view/is_revert_to_version_action_available">
+          <a class="standalone function-revert"
+              tal:attributes="href view/get_revert_to_version_url"
+              i18n:translate="label_revert">
+              Revert document
+          </a>
+      </tal:revert_to_version>
 
       <tal:details_view  tal:condition="view/is_detail_view_link_visible">
           <a class="function-view-details"

@@ -6,13 +6,11 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.protect import unprotected_write
 from opengever.base.utils import to_html_xweb_intelligent
-from opengever.bumblebee import _
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document import _ as document_mf
 from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
-from opengever.document.browser.versions_tab import translate_link
 from opengever.document.checkout.viewlets import CheckedOutViewlet
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -23,8 +21,6 @@ from opengever.mail.mail import IOGMailMarker
 from opengever.ogds.base.actor import Actor
 from opengever.trash.trash import ITrashed
 from plone import api
-from plone.protect import createToken
-from plone.protect.utils import addTokenToUrl
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
 from zExceptions import NotFound
@@ -33,7 +29,6 @@ from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
-from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
@@ -155,11 +150,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
         viewlet.update()
         return viewlet.render()
 
-    def get_revert_link(self):
-        if self.is_versioned():
-            return self._get_revert_link()
-        return None
-
     def _is_checkout_and_edit_available(self):
         manager = queryMultiAdapter(
             (self.context, self.request), ICheckinCheckoutManager)
@@ -169,17 +159,6 @@ class BumblebeeBaseDocumentOverlay(VisibleActionButtonRendererMixin):
         if not userid:
             return manager.is_checkout_allowed()
         return userid == api.user.get_current().getId()
-
-    def _get_revert_link(self):
-        url = u'{}/revert-file-to-version?version_id={}'.format(
-            self.context.absolute_url(),
-            self.version_id)
-
-        url = addTokenToUrl(url)
-
-        return translate_link(
-            url, _(u'label_revert', default=u'Revert document'),
-            css_class='standalone function-revert')
 
 
 @adapter(IOGMailMarker, Interface)

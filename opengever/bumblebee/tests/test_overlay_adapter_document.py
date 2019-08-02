@@ -347,26 +347,3 @@ class TestIsVersionedContext(IntegrationTestCase):
         self.request['version_id'] = 123
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
         self.assertTrue(adapter.is_versioned())
-
-
-class TestGetRevertUrl(IntegrationTestCase):
-    """Test we generate proper document version revert links."""
-
-    features = (
-        'bumblebee',
-        )
-
-    def test_returns_revert_url_as_string(self):
-        self.login(self.regular_user)
-        alsoProvides(self.request, IVersionedContextMarker)
-        # We need to do both in order to fake a real request here
-        self.request['version_id'] = 3
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        adapter.version_id = 3
-        self.assertIn('revert-file-to-version?version_id=3', adapter.get_revert_link())
-
-    def test_returns_none_if_context_is_not_a_versioned_context(self):
-        self.login(self.regular_user)
-        alsoProvides(self.request, IVersionedContextMarker)
-        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertIsNone(adapter.get_revert_link())

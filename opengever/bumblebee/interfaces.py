@@ -139,10 +139,6 @@ class IBumblebeeOverlay(Interface):
         Returns html.
         """
 
-    def get_revert_link():
-        """Returns the url to retrieve the document.
-        """
-
     def is_versioned():
         """Returns True if the context is a versioned context.
         """
