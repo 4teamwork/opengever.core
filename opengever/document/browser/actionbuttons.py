@@ -4,7 +4,6 @@ from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
-from plone.protect import createToken
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from urllib import quote
@@ -135,14 +134,12 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
             ");".format(self.context.absolute_url()))
 
     def get_oc_zem_checkout_url(self):
-        return u'{}/editing_document?_authenticator={}'.format(
-            self.context.absolute_url(),
-            createToken())
+        url = u'{}/editing_document'.format(self.context.absolute_url())
+        return addTokenToUrl(url)
 
     def get_checkout_url(self):
-        return "{}/@@checkout_documents?_authenticator={}".format(
-            self.context.absolute_url(),
-            createToken())
+        url = "{}/@@checkout_documents".format(self.context.absolute_url())
+        return addTokenToUrl(url)
 
     def get_open_as_pdf_url(self):
         if not self.is_open_as_pdf_action_available():
@@ -204,10 +201,8 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
         else:
             checkin_view = u'@@checkin_without_comment'
 
-        return u"{}/{}?_authenticator={}".format(
-            self.context.absolute_url(),
-            checkin_view,
-            createToken())
+        url = u"{}/{}".format(self.context.absolute_url(), checkin_view)
+        return addTokenToUrl(url)
 
     def get_cancel_checkout_url(self):
         return u'{}/@@cancel_document_checkout_confirmation'.format(
