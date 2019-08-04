@@ -216,12 +216,12 @@ class TestHistoryListingInOverview(IntegrationTestCase):
 
         self.assertEquals(
             ["Client1 1.1 / 12 Hannah Baufrau Don't archive",
-             "Client1 1.1 / 13 Hans Baumann Don't archive"],
+             "Client1 1.1 / 14 Hans Baumann Don't archive"],
             appraise.css('li').text)
 
         self.assertEquals(
             ['Client1 1.1 / 12 Hannah Baufrau Archive',
-             "Client1 1.1 / 13 Hans Baumann Don't archive"],
+             "Client1 1.1 / 14 Hans Baumann Don't archive"],
             add.css('li').text)
 
     @browsing

@@ -146,6 +146,7 @@ class OpengeverContentFixture(object):
                 self.create_offered_dossiers()
             with self.login(self.records_manager):
                 self.create_disposition()
+                self.create_disposition_with_sip()
 
     def __call__(self):
         return self._lookup_table
@@ -1399,6 +1400,19 @@ class OpengeverContentFixture(object):
             .in_state('dossier-state-resolved')
             ))
 
+        self.offered_dossier_for_sip = self.register('offered_dossier_for_sip', create(
+            Builder('dossier')
+            .within(self.repofolder00)
+            .titled(u'Dossier for SIP')
+            .having(
+                start=date(1997, 1, 1),
+                end=date(1997, 1, 31),
+                responsible=self.dossier_responsible.getId(),
+                archival_value=ARCHIVAL_VALUE_WORTHY,
+                )
+            .in_state('dossier-state-resolved')
+            ))
+
         self.offered_dossier_to_destroy = self.register('offered_dossier_to_destroy', create(
             Builder('dossier')
             .within(self.repofolder00)
@@ -1421,6 +1435,18 @@ class OpengeverContentFixture(object):
             .having(dossiers=[self.offered_dossier_to_archive,
                               self.offered_dossier_to_destroy])
             .within(self.repofolder00)))
+
+    @staticuid()
+    def create_disposition_with_sip(self):
+        self.disposition_with_sip = self.register('disposition_with_sip', create(
+            Builder('disposition')
+            .titled(u'Angebot 30.12.1997')
+            .having(dossiers=[self.offered_dossier_for_sip])
+            .in_state('disposition-state-appraised')
+            .within(self.repofolder00)))
+
+        api.content.transition(self.disposition_with_sip,
+                               transition='disposition-transition-dispose')
 
     @staticuid()
     def create_shadow_document(self):

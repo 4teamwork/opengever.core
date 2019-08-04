@@ -572,6 +572,7 @@ Objects
         - self.closed_meeting_dossier
         - self.decided_meeting_dossier
         - self.disposition
+        - self.disposition_with_sip
         - self.dossier
           - self.document
           - self.draft_proposal
@@ -608,6 +609,7 @@ Objects
           - self.meeting_document
           - self.meeting_task
             - self.meeting_subtask
+        - self.offered_dossier_for_sip
         - self.offered_dossier_to_archive
         - self.offered_dossier_to_destroy
         - self.protected_dossier
