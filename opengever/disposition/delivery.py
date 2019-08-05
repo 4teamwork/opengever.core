@@ -74,6 +74,12 @@ class DeliveryScheduler(object):
                 self.logger.info("Scheduling delivery for transport: '%s'" % name)
                 statuses[name] = STATUS_SCHEDULED
 
+    def is_scheduled_for_delivery(self):
+        """Whether the disposition is scheduled for delivery with any transport.
+        """
+        statuses = self.get_statuses()
+        return any(s == STATUS_SCHEDULED for s in statuses.values())
+
     def is_scheduled_for_delivery_with(self, name):
         """Determine wheter this disposition is scheduled for delivery with
         transport `name`.

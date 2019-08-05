@@ -12,6 +12,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IDuringDossierDestruction
@@ -311,6 +312,12 @@ class Disposition(Container):
         zip_file = self.create_zipfile(package)
         zip_file.seek(0)
         return NamedBlobFile(zip_file.read(), contentType='application/zip')
+
+    def schedule_sip_for_delivery(self):
+        DeliveryScheduler(self).schedule_delivery()
+
+    def is_scheduled_for_delivery(self):
+        return DeliveryScheduler(self).is_scheduled_for_delivery()
 
     def create_zipfile(self, package):
         tmpfile = TemporaryFile()

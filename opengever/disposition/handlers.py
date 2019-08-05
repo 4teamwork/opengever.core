@@ -25,6 +25,7 @@ def disposition_state_changed(context, event):
 
     if event.action == 'disposition-transition-dispose':
         context.store_sip_package()
+        context.schedule_sip_for_delivery()
 
     storage = IHistoryStorage(context)
     storage.add(event.action,
