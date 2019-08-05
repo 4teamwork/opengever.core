@@ -20,6 +20,11 @@
   <adapter factory=".history.HistoryStorage" />
   <adapter factory=".validators.OfferedDossiersValidator" />
 
+  <adapter
+      factory=".delivery.FilesystemTransport"
+      name="filesystem"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.disposition"

@@ -1,3 +1,4 @@
+from zope import schema
 from zope.interface import Interface
 
 
@@ -49,5 +50,18 @@ class ISIPTransport(Interface):
 
         Only enabled transports will be invoked for scheduled deliveries, and
         a delivery will also only be scheduled for a particular transport if
-        that transport is active that the time of SIP generation.
+        that transport is active at the time of SIP generation.
         """
+
+
+class IFilesystemTransportSettings(Interface):
+
+    enabled = schema.Bool(
+        title=u'Enabled',
+        description=u'Whether FilesystemTransport is enabled or not.',
+        default=False)
+
+    destination_directory = schema.TextLine(
+        title=u'Destination directory',
+        description=u'Directory into which SIP packages should be delivered.',
+        default=u'')
