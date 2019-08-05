@@ -4,6 +4,7 @@ from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
 from opengever.document.versioner import Versioner
+from operator import attrgetter
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
@@ -12,6 +13,7 @@ from zope.component.hooks import getSite
 from zope.intid.interfaces import IIntIds
 from zope.security.management import endInteraction
 from zope.security.management import newInteraction
+import logging
 import pytz
 import transaction
 
@@ -181,3 +183,34 @@ def fake_interaction():
         yield
     finally:
         endInteraction()
+
+
+class CapturingLogHandler(logging.NullHandler):
+    """Log handler that just captures logged records in a list.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(CapturingLogHandler, self).__init__(*args, **kwargs)
+        self._records = []
+
+    def handle(self, record):
+        self._records.append(record)
+
+    @property
+    def records(self):
+        return self._records
+
+    @property
+    def msgs(self):
+        return map(attrgetter('msg'), self._records)
+
+    def pop_records(self):
+        records = self._records
+        self._records = []
+        return records
+
+    def pop_msgs(self):
+        return map(attrgetter('msg'), self.pop_records())
+
+    def clear(self):
+        self._records = []
