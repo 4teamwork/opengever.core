@@ -20,7 +20,6 @@ from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from path import Path
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
@@ -37,14 +36,12 @@ from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
 from zope import schema
 from zope.annotation import IAnnotations
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
-import os
 
 DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
 
