@@ -334,3 +334,6 @@ class Disposition(Container):
             name = u'{}_{}'.format(name, self.transfer_number)
 
         return name
+
+    def get_sip_filename(self):
+        return u'{}.zip'.format(self.get_sip_name())
