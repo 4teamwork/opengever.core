@@ -25,6 +25,11 @@
       name="filesystem"
       />
 
+  <adapter
+      factory=".nightly_jobs.NightlySIPDelivery"
+      name="deliver-sip-packages"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.disposition"
