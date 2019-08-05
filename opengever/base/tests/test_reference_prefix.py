@@ -75,4 +75,4 @@ class TestReferencePrefixAdapter(IntegrationTestCase):
         dossier = create(Builder('dossier').within(self.leaf_repofolder))
 
         self.assertEquals(u'235', self.adapter.get_next_number(repository))
-        self.assertEquals(u'14', self.adapter.get_next_number(dossier))
+        self.assertEquals(u'15', self.adapter.get_next_number(dossier))

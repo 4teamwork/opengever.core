@@ -50,17 +50,21 @@ class TestDispositionListing(IntegrationTestCase):
         browser.open(self.repository_root, view='tabbedview_view-dispositions')
         self.assertEquals(
             [{'': '',
-              'Sequence Number': '2',
-              'Title': 'Angebot FD 1.2.2003',
-              'Review state': 'disposition-state-appraised'},
-             {'': '',
+              'Review state': 'disposition-state-appraised',
               'Sequence Number': '3',
-              'Title': 'Angebot FD 1.2.1995',
-              'Review state': 'disposition-state-disposed'},
+              'Title': 'Angebot FD 1.2.2003'},
+             {'': '',
+              'Review state': 'disposition-state-disposed',
+              'Sequence Number': '4',
+              'Title': 'Angebot FD 1.2.1995'},
              {'': '',
               'Review state': 'disposition-state-in-progress',
               'Sequence Number': '1',
-              'Title': 'Angebot 31.8.2016'}],
+              'Title': 'Angebot 31.8.2016'},
+             {'': '',
+              'Review state': 'disposition-state-disposed',
+              'Sequence Number': '2',
+              'Title': 'Angebot 30.12.1997'}],
             browser.css('.listing').first.dicts())
 
     @browsing
@@ -95,18 +99,21 @@ class TestDispositionListing(IntegrationTestCase):
         self.disposition.setTitle("In Progress")
         self.disposition.reindexObject()
 
+        self.disposition_with_sip.setTitle("Disposed")
+        self.disposition_with_sip.reindexObject()
+
         browser.open(self.leaf_repofolder, view='tabbedview_view-dispositions')
         rows = browser.css('.listing').first.dicts()
 
         self.assertItemsEqual(
-            ['In Progress', 'Appraised', 'Disposed', 'Disposed'],
+            ['In Progress', 'Appraised', 'Disposed', 'Disposed', 'Disposed'],
             [row.get('Title') for row in rows])
 
         browser.open(self.leaf_repofolder, view='tabbedview_view-dispositions',
                      data={'disposition_state_filter': 'filter_all'})
         rows = browser.css('.listing').first.dicts()
         self.assertItemsEqual(
-            ['In Progress', 'Appraised', 'Disposed', 'Disposed', 'Closed'],
+            ['In Progress', 'Appraised', 'Disposed', 'Disposed', 'Disposed', 'Closed'],
             [row.get('Title') for row in rows])
 
 
@@ -146,7 +153,7 @@ class TestDestroyedDossierListing(BaseLatexListingTest):
         self.assert_row_values(
             ['Client1 1.1 / 12', 'Hannah Baufrau', 'Yes'], rows[0])
         self.assert_row_values(
-            ['Client1 1.1 / 13', 'Hans Baumann', 'No'], rows[1])
+            ['Client1 1.1 / 14', 'Hans Baumann', 'No'], rows[1])
 
 
 class TestDispositionHistoryListing(BaseLatexListingTest):
@@ -177,7 +184,7 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
             ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'disposition-transition-dispose'],
             ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'disposition-transition-appraise'],
             ['Nov 01, 2016 11:00 AM', 'Flucht Ramon (ramon.flucht)', 'Disposition edited'],
-            ['Aug 31, 2016 07:05 PM', 'Flucht Ramon (ramon.flucht)', 'Disposition added']]
+            ['Aug 31, 2016 07:07 PM', 'Flucht Ramon (ramon.flucht)', 'Disposition added']]
 
         for row, expected_row in zip(rows, expected_rows):
             self.assert_row_values(expected_row, row)

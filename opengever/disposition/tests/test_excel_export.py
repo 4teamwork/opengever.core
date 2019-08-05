@@ -50,7 +50,7 @@ class TestDispositionExcelExport(IntegrationTestCase):
                 [cell.value for cell in rows[1]])
 
             self.assertEquals(
-                [u'Client1 1.1 / 13', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
+                [u'Client1 1.1 / 14', u'Hans Baumann', datetime(2000, 1, 1, 0, 0),
                  datetime(2000, 1, 15, 0, 0), u'unchecked',
                  u'not archival worthy', u'In Absprache mit ARCH.',
                  u'not archival worthy'],

@@ -25,7 +25,8 @@ class TestDisposition(IntegrationTestCase):
         self.login(self.records_manager)
         disposition = create(Builder('disposition'))
         self.assertEquals('disposition-1', self.disposition.getId())
-        self.assertEquals('disposition-2', disposition.getId())
+        self.assertEquals('disposition-2', self.disposition_with_sip.getId())
+        self.assertEquals('disposition-3', disposition.getId())
 
     @browsing
     def test_title_is_prefilled_with_default_suggestion(self, browser):
