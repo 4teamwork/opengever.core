@@ -1,7 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
-from zope.component import getMultiAdapter
 
 
 class TestFileActionsGet(IntegrationTestCase):
@@ -76,9 +74,7 @@ class TestFileActionsGet(IntegrationTestCase):
     @browsing
     def test_checkin_available_if_checked_out_by_current_user(self, browser):
         self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
+        self.checkout_document(self.document)
 
         expected_file_actions = [
             {u'id': u'oc_direct_edit',
@@ -110,9 +106,7 @@ class TestFileActionsGet(IntegrationTestCase):
     @browsing
     def test_checkin_available_if_checked_out_by_current_user_oc_checkout_deactivated(self, browser):
         self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
+        self.checkout_document(self.document)
 
         expected_file_actions = [
             {u'id': u'oc_direct_edit',
@@ -144,9 +138,7 @@ class TestFileActionsGet(IntegrationTestCase):
     @browsing
     def test_checkin_only_available_for_managers_if_checked_out_by_other_user(self, browser):
         self.login(self.regular_user, browser)
-        manager = getMultiAdapter((self.document, self.request),
-                                  ICheckinCheckoutManager)
-        manager.checkout()
+        self.checkout_document(self.document)
 
         self.login(self.manager, browser)
         expected_manager_file_actions = [
