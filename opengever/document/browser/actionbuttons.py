@@ -1,73 +1,157 @@
-from opengever.document import _
+from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.document.browser.download import DownloadConfirmationHelper
-from opengever.document.document import IDocumentSchema
-from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.webactions.interfaces import IWebActionsRenderer
 from plone import api
-from plone.locking.interfaces import IRefreshableLockable
-from plone.protect import createToken
+from plone.protect.utils import addTokenToUrl
+from Products.Five.browser import BrowserView
+from urllib import quote
 from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter
-from zope.i18n import translate
+import os
 
 
-class ActionButtonRendererMixin(object):
-    """Mixin for views that render action buttons."""
+class FileActionAvailabilityMixin(object):
+    """Mixin that delegates availability checks to an IFileActions adapter.
 
-    is_overview_tab = False
-    is_on_detail_view = False
-    overlay = None
+    Returns whether an action is available. An action which is not available
+    cannot be performed by the model in its current state.
+    """
+    @property
+    def ifileactions(self):
+        return getMultiAdapter((self.context, self.request), IFileActions)
 
-    def is_edit_metadata_link_visible(self):
-        if self.is_overview_tab:
-            return False
+    def is_edit_metadata_action_available(self):
+        return self.ifileactions.is_edit_metadata_action_available()
 
-        if self.is_versioned():
-            return False
+    def is_any_checkout_or_edit_available(self):
+        return self.ifileactions.is_any_checkout_or_edit_available()
 
-        return True
+    def is_oc_direct_edit_action_available(self):
+        return self.ifileactions.is_oc_direct_edit_action_available()
 
-    def is_locked(self):
-        return IRefreshableLockable(self.context).locked()
+    def is_oc_direct_checkout_action_available(self):
+        return self.ifileactions.is_oc_direct_checkout_action_available()
 
-    def is_edit_metadata_available(self):
-        # XXX object orient me, the object should know some of this stuff
-        if self.is_checked_out_by_another_user():
-            return False
+    def is_oc_zem_checkout_action_available(self):
+        return self.ifileactions.is_oc_zem_checkout_action_available()
 
-        if self.is_locked():
-            return False
+    def is_oc_zem_edit_action_available(self):
+        return self.ifileactions.is_oc_zem_edit_action_available()
 
-        return api.user.has_permission(
-            'Modify portal content',
-            obj=self.context,
-            )
+    def is_oc_unsupported_file_checkout_action_available(self):
+        return self.ifileactions.is_oc_unsupported_file_checkout_action_available()
 
-    def is_versioned(self):
-        return self.request.get('version_id') is not None
+    def is_checkin_without_comment_available(self):
+        return self.ifileactions.is_checkin_without_comment_available()
 
-    def is_office_connector_editable(self):
-        return self.context.is_office_connector_editable()
+    def is_checkin_with_comment_available(self):
+        return self.ifileactions.is_checkin_with_comment_available()
 
-    def is_checkout_and_edit_available(self):
-        if self.is_versioned():
-            return False
-        return self.context.is_checkout_and_edit_available()
+    def is_cancel_checkout_action_available(self):
+        return self.ifileactions.is_cancel_checkout_action_available()
 
-    def is_download_copy_available(self):
-        """Disable downloading copies when the document is checked out by an
-        another user.
-        """
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-        if manager is None:
-            # This is probably a mail
-            return True
+    def is_download_copy_action_available(self):
+        return self.ifileactions.is_download_copy_action_available()
 
-        return not self.is_checked_out_by_another_user()
+    def is_attach_to_email_action_available(self):
+        return self.ifileactions.is_attach_to_email_action_available()
 
-    def get_download_copy_tag(self):
+    def is_oneoffixx_retry_action_available(self):
+        return self.ifileactions.is_oneoffixx_retry_action_available()
+
+    def is_open_as_pdf_action_available(self):
+        return self.ifileactions.is_open_as_pdf_action_available()
+
+    def is_revert_to_version_action_available(self):
+        return self.ifileactions.is_revert_to_version_action_available()
+
+
+class FileActionAvailabilityView(BrowserView, FileActionAvailabilityMixin):
+    """View that exposes file action availaibility."""
+
+
+class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
+    """Mixin to render the `file_action_buttons` macro.
+
+    Adds the notion of visibility to certain actions. Also decides about
+    visibility of other non -action elements in the macro.
+    If an action is visible it must always be available. The view can decide
+    to make an available action invisible however.
+
+    """
+    def get_edit_metadata_url(self):
+        return u'{}/edit_checker'.format(self.context.absolute_url())
+
+    def is_oc_unsupported_file_discreet_edit_visible(self):
+        return (self.ifileactions.is_any_checkout_or_edit_available()
+                and not self.context.is_office_connector_editable()
+                and self.context.is_checked_out())
+
+    def is_discreet_no_file_hint_visible(self):
+        return not self.context.has_file()
+
+    def is_edit_metadata_action_visible(self):
+        return self.is_edit_metadata_action_available()
+
+    def is_discreet_edit_metadata_action_visible(self):
+        return not self.is_edit_metadata_action_visible()
+
+    def is_detail_view_link_visible(self):
+        return False
+
+    def is_attach_to_email_action_set_visible(self):
+        """Only show the actions if the feature is enabled."""
+
+        return is_officeconnector_attach_feature_enabled()
+
+    def is_open_as_pdf_action_visible(self):
+        return False
+
+    def get_oc_direct_checkout_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_checkout_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_attach_to_email_url(self):
+        return (
+            u"javascript:officeConnectorAttach("
+            "'{}/officeconnector_attach_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_oneoffixx_retry_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_oneoffixx_url'"
+            ");".format(self.context.absolute_url()))
+
+    def get_oc_zem_checkout_url(self):
+        url = u'{}/editing_document'.format(self.context.absolute_url())
+        return addTokenToUrl(url)
+
+    def get_checkout_url(self):
+        url = "{}/@@checkout_documents".format(self.context.absolute_url())
+        return addTokenToUrl(url)
+
+    def get_open_as_pdf_url(self):
+        if not self.is_open_as_pdf_action_available():
+            return None
+
+        return u'{}/bumblebee-open-pdf?filename={}'.format(
+            self.context.absolute_url(),
+            quote(self._get_pdf_filename().encode('utf-8')))
+
+    def _get_pdf_filename(self):
+        filename = os.path.splitext(self.context.get_file().filename)[0]
+        return u'{}.pdf'.format(filename)
+
+    def should_pdfs_open_in_new_window(self):
+        return api.portal.get_registry_record(
+            'open_pdf_in_a_new_window',
+            interface=IGeverBumblebeeSettings)
+
+    def render_download_copy_link(self):
         """Returns the DownloadConfirmationHelper tag containing
         the donwload link. For mails, containing an original_message, the tag
         links to the orginal message download view.
@@ -94,115 +178,34 @@ class ActionButtonRendererMixin(object):
 
         return dc_helper.get_html_tag(**kwargs)
 
-    def is_document(self):
-        return IDocumentSchema.providedBy(self.context)
-
-    def is_oneoffixx_creatable(self):
-        return self.is_document() and self.context.is_oneoffixx_creatable()
-
-    def is_attach_to_email_available(self):
-        if not is_officeconnector_attach_feature_enabled():
-            return False
-
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-        if manager is None:
-            # This is probably a mail
-            return True
-
-        return not self.is_checked_out_by_another_user()
-
-    def is_checked_out(self):
-        return self.context.is_checked_out()
-
-    def is_checked_out_by_another_user(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        if not manager:
-            return False
-
-        checked_out_by = manager.get_checked_out_by()
-        if not checked_out_by:
-            return False
-
-        return checked_out_by != api.user.get_current().getId()
-
-    def is_checked_out_by_current_user(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-        if manager is None:
-            # This is probably a mail
-            return False
-
-        return manager.is_checked_out_by_current_user()
-
-    def is_detail_view_link_available(self):
-        return not self.is_on_detail_view
-
     def get_checkin_without_comment_url(self):
-        if not self.has_file():
+        if not self.is_checkin_without_comment_available():
             return None
         return self._get_checkin_url(with_comment=False)
 
     def get_checkin_with_comment_url(self):
-        if not self.has_file():
+        if not self.is_checkin_with_comment_available():
             return None
         return self._get_checkin_url(with_comment=True)
 
     def _get_checkin_url(self, with_comment=False):
-        if not self._is_checkin_allowed():
-            return None
-
         if with_comment:
             checkin_view = u'@@checkin_document'
         else:
             checkin_view = u'@@checkin_without_comment'
 
-        return u"{}/{}?_authenticator={}".format(
-            self.context.absolute_url(),
-            checkin_view,
-            createToken())
+        url = u"{}/{}".format(self.context.absolute_url(), checkin_view)
+        return addTokenToUrl(url)
 
-    def _is_checkin_allowed(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        if not manager:
-            # This is probably a mail
-            return False
-
-        return manager.is_checkin_allowed()
-
-    def is_checkout_cancel_available(self):
-        manager = queryMultiAdapter(
-            (self.context, self.request), ICheckinCheckoutManager)
-
-        if not manager:
-            return False
-
-        return manager.is_cancel_allowed()
-
-    def get_checkout_cancel_tag(self):
-        if not self.has_file() or not self.is_checkout_cancel_available():
-            return None
-        clazz = 'link-overlay modal function-revert'
-        url = u'{}/@@cancel_document_checkout_confirmation'.format(
+    def get_cancel_checkout_url(self):
+        return u'{}/@@cancel_document_checkout_confirmation'.format(
             self.context.absolute_url())
-        label = translate(_(u'Cancel checkout'),
-                          context=self.request).encode('utf-8')
-        return ('<a href="{0}" '
-                'id="action-cancel-checkout" '
-                'class="{1}">{2}</a>').format(url, clazz, label)
 
-    def has_file(self):
-        return self.context.has_file()
-
-    def get_file(self):
-        return self.context.get_file()
-
-    def get_url(self):
-        return self.context.absolute_url()
+    def get_revert_to_version_url(self):
+        url = u'{}/revert-file-to-version?version_id={}'.format(
+            self.context.absolute_url(),
+            self.request.get('version_id'))
+        return addTokenToUrl(url)
 
     def get_webaction_items(self):
         renderer = getMultiAdapter((self.context, self.request),

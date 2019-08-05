@@ -83,44 +83,6 @@ class IBumblebeeOverlay(Interface):
         If there is no reference number it returns None
         """
 
-    def get_checkout_url():
-        """Returns the url to checkout the file.
-
-        Returns None if it's not possible to checkout the file.
-        """
-
-    def get_download_copy_link():
-        """Returns the html-link to download a copy of the file.
-
-        Returns None if its not possible to download a copy.
-        """
-
-    def get_open_as_pdf_url():
-        """Returns the url to open the file as a pdf representation.
-
-        If there is no pdf-representation, it returns None
-        """
-
-    def get_edit_metadata_url():
-        """Returns the url to edit the metadata of the current object.
-        """
-
-    def get_detail_view_url():
-        """Returns the url to the base-view of the current object.
-        """
-
-    def get_checkin_without_comment_url():
-        """Returns the url to checkin the file.
-
-        Returns None if it's not possible to checkin the file.
-        """
-
-    def get_checkin_with_comment_url():
-        """Returns the url to checkin the file with a comment.
-
-        Returns None if it's not possible to checkin the file.
-        """
-
     def has_file():
         """Returns True if the object contains a file.
 
@@ -143,12 +105,4 @@ class IBumblebeeOverlay(Interface):
         """Renders the lock info viewlet.
 
         Returns html.
-        """
-
-    def get_revert_link():
-        """Returns the url to retrieve the document.
-        """
-
-    def is_versioned():
-        """Returns True if the context is a versioned context.
         """

@@ -304,6 +304,16 @@ class Document(Item, BaseDocumentMixin):
 
         return manager.is_checkout_allowed()
 
+    def is_checkin_allowed(self):
+        manager = queryMultiAdapter(
+            (self, self.REQUEST), ICheckinCheckoutManager)
+        return manager.is_checkin_allowed()
+
+    def is_locked(self):
+        manager = queryMultiAdapter(
+            (self, self.REQUEST), ICheckinCheckoutManager)
+        return manager.is_locked()
+
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
 

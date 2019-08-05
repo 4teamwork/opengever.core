@@ -1,0 +1,128 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- FILE ACTIONS used to list available actions through the actions endpoint-->
+  <object name="file_actions" meta_type="CMF Action Category">
+
+    <object name="oc_direct_checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_checkout_and_edit">Checkout and edit</property>
+      <property name="available_expr">object/@@file_actions_availability/is_oc_direct_checkout_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="oc_direct_edit" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_edit">Edit</property>
+      <property name="available_expr">object/@@file_actions_availability/is_oc_direct_edit_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="oc_zem_checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_checkout_and_edit">Checkout and edit</property>
+      <property name="available_expr">object/@@file_actions_availability/is_oc_zem_checkout_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="oc_zem_edit" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_edit">Edit</property>
+      <property name="available_expr">object/@@file_actions_availability/is_oc_zem_edit_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="oc_unsupported_file_checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_checkout">Checkout</property>
+      <property name="available_expr">object/@@file_actions_availability/is_oc_unsupported_file_checkout_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkin_without_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Checkin without comment</property>
+      <property name="available_expr">object/@@file_actions_availability/is_checkin_without_comment_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="checkin_with_comment" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Checkin with comment</property>
+      <property name="available_expr">object/@@file_actions_availability/is_checkin_with_comment_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="cancel_checkout" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Cancel checkout</property>
+      <property name="available_expr">object/@@file_actions_availability/is_cancel_checkout_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="download_copy" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Download copy</property>
+      <property name="description" i18n:translate="label_download_copy" />
+      <property name="available_expr">object/@@file_actions_availability/is_download_copy_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="attach_to_email" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Attach to email</property>
+      <property name="description" i18n:translate="label_attach_to_email" />
+      <property name="available_expr">object/@@file_actions_availability/is_attach_to_email_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="oneoffixx_retry" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="">Oneoffixx retry</property>
+      <property name="description" i18n:translate="label_retry_oneoffixx" />
+      <property name="available_expr">object/@@file_actions_availability/is_oneoffixx_retry_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="open_as_pdf" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_open_document_as_pdf">Open as PDF</property>
+      <property name="available_expr">object/@@file_actions_availability/is_open_as_pdf_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="revert_to_version" meta_type="CMF Action" i18n:domain="opengever.document">
+      <property name="title" i18n:translate="label_revert_document">Revert document</property>
+      <property name="available_expr">object/@@file_actions_availability/is_revert_to_version_action_available</property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>

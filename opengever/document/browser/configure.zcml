@@ -14,10 +14,10 @@
 
   <browser:page
       name="file_download_confirmation"
-      for="opengever.document.document.IDocumentSchema"
+      for="opengever.document.behaviors.IBaseDocument"
       class=".download.DownloadConfirmation"
-      template="templates/downloadconfirmation.pt"
       permission="zope2.View"
+      allowed_attributes="download_available"
       />
 
   <browser:page
@@ -131,6 +131,13 @@
       for="*"
       name="document_report"
       class=".report.DocumentReporter"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="file_actions_availability"
+      class=".actionbuttons.FileActionAvailabilityView"
       permission="zope2.View"
       />
 </configure>

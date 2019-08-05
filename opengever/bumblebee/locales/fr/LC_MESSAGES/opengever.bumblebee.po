@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-28 13:31+0000\n"
+"POT-Creation-Date: 2019-08-02 12:46+0000\n"
 "PO-Revision-Date: 2017-10-16 16:28+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,11 +51,6 @@ msgstr "Montre plus"
 #: ./opengever/bumblebee/browser/templates/preview_listing.pt
 msgid "label_no_contents"
 msgstr "Aucun contenu"
-
-#. Default: "Revert document"
-#: ./opengever/bumblebee/browser/overlay.py
-msgid "label_revert"
-msgstr "Restaurer le document"
 
 #. Default: "Reviving the preview is not available for this context."
 #: ./opengever/bumblebee/browser/revive_preview.py

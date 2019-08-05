@@ -167,7 +167,7 @@ class BaseDocumentMixin(object):
         """
         mtr = getToolByName(self, 'mimetypes_registry', None)
 
-        field = self.file
+        field = self.get_file()
         if not field or not field.getSize():
             # there is no file
             return False
@@ -187,6 +187,12 @@ class BaseDocumentMixin(object):
         return mimetypeitem
 
     def is_shadow_document(self):
+        return False
+
+    def is_checkin_allowed(self):
+        return False
+
+    def is_locked(self):
         return False
 
 
