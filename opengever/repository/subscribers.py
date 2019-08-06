@@ -1,5 +1,7 @@
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from zExceptions import Forbidden
 from zope.container.interfaces import IContainerModifiedEvent
 
 
@@ -25,3 +27,14 @@ def update_reference_prefixes(obj, event):
             path='/'.join(obj.getPhysicalPath()))
         for child in children:
             child.getObject().reindexObject(idxs=['reference'])
+
+
+def check_delete_preconditions(repository, event):
+    """It's not allowed to delete repository folders or the repository root
+    """
+
+    # Ignore plone site deletions
+    if IPloneSiteRoot.providedBy(event.object):
+        return
+
+    raise Forbidden('Deleting repository folders and roots is not allowed')
