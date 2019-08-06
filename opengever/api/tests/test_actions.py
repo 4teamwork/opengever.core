@@ -13,6 +13,65 @@ class FileActionsTestBase(IntegrationTestCase):
         return browser.json['file_actions']
 
 
+class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions_for_plone_site(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.portal))
+
+    @browsing
+    def test_available_file_actions_for_repository_root(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.repository_root))
+
+    @browsing
+    def test_available_file_actions_for_repository_folder(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.branch_repofolder))
+
+    @browsing
+    def test_available_file_actions_for_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.dossier))
+
+    @browsing
+    def test_available_file_actions_for_task(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.task))
+
+    @browsing
+    def test_available_file_actions_for_workspace_root(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.workspace_root))
+
+    @browsing
+    def test_available_file_actions_for_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.workspace))
+
+
 class TestFileActionsGetForMails(FileActionsTestBase):
 
     @browsing
