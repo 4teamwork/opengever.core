@@ -13,6 +13,23 @@ from zExceptions import Unauthorized
 
 class TestRepositoryDeleter(IntegrationTestCase):
 
+    @browsing
+    def test_deletion_is_only_allowed_through_deleter(self, browser):
+        self.login(self.manager, browser)
+        repo_physical_path = self.empty_repofolder.getPhysicalPath()
+
+        browser.open(self.empty_repofolder, view='delete_confirmation')
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.click_on("Delete")
+
+        with self.observe_children(self.repository_root) as children:
+            browser.open(self.empty_repofolder, view='delete_repository')
+            browser.click_on("Delete")
+        self.assertEqual(1, len(children["removed"]))
+        removed = children["removed"].pop()
+        self.assertEqual(repo_physical_path, removed.getPhysicalPath())
+
     def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
         self.login(self.administrator)
         self.assertTrue(self.branch_repofolder.objectIds(),

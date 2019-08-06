@@ -25,3 +25,9 @@ class IRepositoryFolderRecords(Interface):
     show_proposals_tab = schema.Bool(
         title=u'Show proposals tab on repository folder',
         default=True)
+
+
+class IDuringRepositoryDeletion(Interface):
+    """Request layer to indicate that repository is being deleted
+    using the RepositoryDeleter.
+    """

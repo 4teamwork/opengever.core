@@ -2,9 +2,12 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.base.adapters import ReferenceNumberPrefixAdpater
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.repository.interfaces import IDuringRepositoryDeletion
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.i18n import translate
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 
 class TestReferencePrefixManager(IntegrationTestCase):
@@ -41,7 +44,11 @@ class TestReferencePrefixManager(IntegrationTestCase):
     @browsing
     def test_manager_handles_deleted_repositories_correctly(self, browser):
         self.login(self.administrator, browser)
+
+        alsoProvides(self.request, IDuringRepositoryDeletion)
         api.content.delete(obj=self.leaf_repofolder)
+        noLongerProvides(self.request, IDuringRepositoryDeletion)
+
         browser.open(self.branch_repofolder, view='referenceprefix_manager')
         self.assertEquals(
             [['1', '-- Already removed object --', 'Unlock'],

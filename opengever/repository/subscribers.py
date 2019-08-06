@@ -1,3 +1,4 @@
+from opengever.repository.interfaces import IDuringRepositoryDeletion
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -35,6 +36,10 @@ def check_delete_preconditions(repository, event):
 
     # Ignore plone site deletions
     if IPloneSiteRoot.providedBy(event.object):
+        return
+
+    # Allow deletion done through the RepositoryDeleter
+    if IDuringRepositoryDeletion.providedBy(event.object.REQUEST):
         return
 
     raise Forbidden('Deleting repository folders and roots is not allowed')
