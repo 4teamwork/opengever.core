@@ -11,7 +11,65 @@ from plone import api
 from zExceptions import Unauthorized
 
 
+class TestRepositoryRootDeletion(IntegrationTestCase):
+
+    def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
+        self.login(self.administrator)
+        self.assertTrue(self.repository_root.objectIds(),
+                        'Precondition: Assumed repofolder to have children.')
+        self.assertFalse(RepositoryDeleter(self.repository_root)
+                         .is_deletion_allowed())
+
+    def test_deletion_is_allowed_when_root_is_empty(self):
+        self.login(self.administrator)
+        empty_root = create(
+            Builder('repository_root')
+            .with_tree_portlet()
+            .having(title_de=u'empty', title_fr=u'empty'))
+
+        self.assertFalse(empty_root.objectIds(),
+                         'Precondition: Assumed reporoot to have no children.')
+        self.assertTrue(RepositoryDeleter(empty_root)
+                        .is_deletion_allowed())
+
+    @browsing
+    def test_deletion_is_not_allowed_through_delete_confirmation_view(self, browser):
+        self.login(self.manager, browser)
+        empty_root = create(
+            Builder('repository_root')
+            .with_tree_portlet()
+            .having(title_de=u'empty', title_fr=u'empty'))
+
+        browser.open(empty_root, view='delete_confirmation')
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.click_on("Delete")
+
+    @browsing
+    def test_delete_repository_view_is_not_available(self, browser):
+        self.login(self.administrator, browser)
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.repository_root, view='delete_repository')
+
+
 class TestRepositoryDeleter(IntegrationTestCase):
+
+    @browsing
+    def test_deletion_is_only_allowed_through_deleter(self, browser):
+        self.login(self.manager, browser)
+        repo_physical_path = self.empty_repofolder.getPhysicalPath()
+
+        browser.open(self.empty_repofolder, view='delete_confirmation')
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.click_on("Delete")
+
+        with self.observe_children(self.repository_root) as children:
+            browser.open(self.empty_repofolder, view='delete_repository')
+            browser.click_on("Delete")
+        self.assertEqual(1, len(children["removed"]))
+        removed = children["removed"].pop()
+        self.assertEqual(repo_physical_path, removed.getPhysicalPath())
 
     def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
         self.login(self.administrator)

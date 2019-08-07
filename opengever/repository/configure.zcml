@@ -57,6 +57,18 @@
       handler=".handlers.reindex_blocked_local_roles"
       />
 
+  <subscriber
+      for="opengever.repository.repositoryroot.IRepositoryRoot
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".subscribers.check_delete_preconditions"
+      />
+
+  <subscriber
+      for="opengever.repository.interfaces.IRepositoryFolder
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".subscribers.check_delete_preconditions"
+      />
+
   <!-- Register locales translations -->
   <i18n:registerTranslations directory="locales" />
 
