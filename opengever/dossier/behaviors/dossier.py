@@ -2,6 +2,7 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
+from ftw.keywordwidget.vocabularies import KeywordSearchableAndAddableSourceBinder
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
@@ -52,12 +53,12 @@ class IDossier(model.Schema):
         ],
     )
 
-    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True)
+    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True, async=True)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
         value_type=ChoicePlus(
-            vocabulary='plone.app.vocabularies.Keywords'
+            source=KeywordSearchableAndAddableSourceBinder()
         ),
         required=False,
         missing_value=(),
