@@ -8,6 +8,7 @@ from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
 from urllib import quote
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 import os
 
 
@@ -19,52 +20,18 @@ class FileActionAvailabilityMixin(object):
     """
     @property
     def ifileactions(self):
-        return getMultiAdapter((self.context, self.request), IFileActions)
+        return queryMultiAdapter((self.context, self.request), IFileActions)
 
-    def is_edit_metadata_action_available(self):
-        return self.ifileactions.is_edit_metadata_action_available()
-
-    def is_any_checkout_or_edit_available(self):
-        return self.ifileactions.is_any_checkout_or_edit_available()
-
-    def is_oc_direct_edit_action_available(self):
-        return self.ifileactions.is_oc_direct_edit_action_available()
-
-    def is_oc_direct_checkout_action_available(self):
-        return self.ifileactions.is_oc_direct_checkout_action_available()
-
-    def is_oc_zem_checkout_action_available(self):
-        return self.ifileactions.is_oc_zem_checkout_action_available()
-
-    def is_oc_zem_edit_action_available(self):
-        return self.ifileactions.is_oc_zem_edit_action_available()
-
-    def is_oc_unsupported_file_checkout_action_available(self):
-        return self.ifileactions.is_oc_unsupported_file_checkout_action_available()
-
-    def is_checkin_without_comment_available(self):
-        return self.ifileactions.is_checkin_without_comment_available()
-
-    def is_checkin_with_comment_available(self):
-        return self.ifileactions.is_checkin_with_comment_available()
-
-    def is_cancel_checkout_action_available(self):
-        return self.ifileactions.is_cancel_checkout_action_available()
-
-    def is_download_copy_action_available(self):
-        return self.ifileactions.is_download_copy_action_available()
-
-    def is_attach_to_email_action_available(self):
-        return self.ifileactions.is_attach_to_email_action_available()
-
-    def is_oneoffixx_retry_action_available(self):
-        return self.ifileactions.is_oneoffixx_retry_action_available()
-
-    def is_open_as_pdf_action_available(self):
-        return self.ifileactions.is_open_as_pdf_action_available()
-
-    def is_revert_to_version_action_available(self):
-        return self.ifileactions.is_revert_to_version_action_available()
+    def __getattr__(self, name):
+        """We overwrite this method which will only be called if the given
+        attribute is not present on the derived class. In that case we get
+        it from the IFileActions adapter if there is one registered for the
+        context.
+        """
+        if name not in IFileActions:
+            raise AttributeError
+        # We return a lambda here, as IFileActions only defines methods
+        return getattr(self.ifileactions, name, lambda: False)
 
 
 class FileActionAvailabilityView(BrowserView, FileActionAvailabilityMixin):
@@ -84,7 +51,7 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
         return u'{}/edit_checker'.format(self.context.absolute_url())
 
     def is_oc_unsupported_file_discreet_edit_visible(self):
-        return (self.ifileactions.is_any_checkout_or_edit_available()
+        return (self.is_any_checkout_or_edit_available()
                 and not self.context.is_office_connector_editable()
                 and self.context.is_checked_out())
 

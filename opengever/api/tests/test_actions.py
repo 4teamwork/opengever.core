@@ -2,7 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 
 
-class TestFileActionsGet(IntegrationTestCase):
+class FileActionsTestBase(IntegrationTestCase):
 
     features = ('bumblebee',)
     maxDiff = None
@@ -12,8 +12,91 @@ class TestFileActionsGet(IntegrationTestCase):
                      method='GET', headers=self.api_headers)
         return browser.json['file_actions']
 
+
+class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
+
     @browsing
-    def test_available_file_actions_for_document(self, browser):
+    def test_available_file_actions_for_plone_site(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.portal))
+
+    @browsing
+    def test_available_file_actions_for_repository_root(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.repository_root))
+
+    @browsing
+    def test_available_file_actions_for_repository_folder(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.branch_repofolder))
+
+    @browsing
+    def test_available_file_actions_for_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.dossier))
+
+    @browsing
+    def test_available_file_actions_for_task(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.task))
+
+    @browsing
+    def test_available_file_actions_for_workspace_root(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.workspace_root))
+
+    @browsing
+    def test_available_file_actions_for_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        expected_file_actions = []
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.workspace))
+
+
+class TestFileActionsGetForMails(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions(self, browser):
+        self.login(self.regular_user, browser)
+        expected_file_actions = [
+            {u'id': u'download_copy',
+             u'title': u'Download copy',
+             u'icon': u''},
+            {u'id': u'attach_to_email',
+             u'title': u'Attach to email',
+             u'icon': u''},
+            {u'id': u'open_as_pdf',
+             u'title': u'Open as PDF',
+             u'icon': u''},
+            ]
+
+        self.assertEqual(expected_file_actions,
+                         self.get_file_actions(browser, self.mail_eml))
+
+
+class TestFileActionsGetForDocuments(FileActionsTestBase):
+
+    @browsing
+    def test_available_file_actions(self, browser):
         self.login(self.regular_user, browser)
         expected_file_actions = [
             {u'id': u'oc_direct_checkout',
@@ -166,24 +249,6 @@ class TestFileActionsGet(IntegrationTestCase):
             ]
         self.assertEqual(expected_dossier_manager_file_actions,
                          self.get_file_actions(browser, self.document))
-
-    @browsing
-    def test_available_file_actions_for_mail(self, browser):
-        self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            ]
-
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.mail_eml))
 
     @browsing
     def test_attach_not_available_if_feature_disabled(self, browser):
