@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-08 08:41+0000\n"
+"POT-Creation-Date: 2019-08-08 15:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -225,6 +225,11 @@ msgstr ""
 #. Default: "Save"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_save"
+msgstr ""
+
+#. Default: "SIP Filename"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_sip_filename"
 msgstr ""
 
 #. Default: "Time"

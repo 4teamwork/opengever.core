@@ -49,12 +49,16 @@
 
             <div class="metadata">
               <h3 class="metadata" i18n:translate="label_metadata">Metadata</h3>
-              <div>
 
+              <div>
                 <span class="label" i18n:translate="label_transfer_number">Transfer number</span>
                 <span id="transfer-number-value" tal:content="context/transfer_number"></span>
                 <a href="#" class="edit edit_transfer_number" tal:condition="view/is_transfer_number_editable" i18n:translate="label_edit">Edit</a>
+              </div>
 
+              <div>
+                <span class="label" i18n:translate="label_sip_filename">SIP Filename</span>
+                <span tal:content="context/get_sip_filename"></span>
               </div>
 
             </div>

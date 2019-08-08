@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-08 08:41+0000\n"
+"POT-Creation-Date: 2019-08-08 15:06+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -225,6 +225,11 @@ msgstr "Etat"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_save"
 msgstr "Enregistrer"
+
+#. Default: "SIP Filename"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_sip_filename"
+msgstr ""
 
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py
