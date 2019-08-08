@@ -11,6 +11,7 @@ from opengever.disposition.testing import LogCapturingTestCase
 from opengever.disposition.testing import TestFilesystemTransportBase
 from opengever.testing import IntegrationTestCase
 from os.path import join as pjoin
+from zope.component import getSiteManager
 from zope.interface.verify import verifyObject
 import os
 
@@ -27,15 +28,8 @@ class TestDeliveryScheduler(LogCapturingTestCase):
             scheduler.schedule_delivery()
             self.captured_log.clear()
 
-    def register_transport(self, cls, name):
-        self.layer['load_zcml_string']("""
-            <configure xmlns="http://namespaces.zope.org/zope">
-                <adapter
-                     name="%s"
-                     factory="%s.%s"
-                     />
-            </configure>
-        """ % (name, self.__module__, cls.__name__))
+    def register_transport(self, factory, name):
+        getSiteManager().registerAdapter(factory, name=name)
 
     def test_schedules_for_transports_with_no_delivery_attempt_yet(self):
         self.login(self.records_manager)
