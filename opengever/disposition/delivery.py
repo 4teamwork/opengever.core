@@ -66,20 +66,24 @@ class DeliveryScheduler(object):
         Otherwise, the SIP will be scheduled for delivery only for (enabled)
         transports that have not made a delivery attempt yet.
         """
-        statuses = self.get_statuses(create_if_missing=True)
         for name, transport in self.get_transports():
             # Only schedule for enabled transports
             if not transport.is_enabled():
                 self.logger.info("Skip: Transport '%s' is disabled" % name)
                 continue
 
-            current_status = statuses.get(name)
+            self.schedule_delivery_with(name, force=force)
 
-            # Only schedule if no delivery was attempted yet
-            # (Except when forcefully rescheduling)
-            if force or current_status is None:
-                self.logger.info("Scheduling delivery for transport: '%s'" % name)
-                statuses[name] = STATUS_SCHEDULED
+    def schedule_delivery_with(self, name, force=False):
+        """Schedule SIP for delivery with a particular transport.
+        """
+        statuses = self.get_statuses(create_if_missing=True)
+        current_status = statuses.get(name)
+
+        # Only schedule if no delivery was attempted yet
+        # (Except when forcefully rescheduling)
+        if force or current_status is None:
+            self.mark_delivery_scheduled(name)
 
     def is_scheduled_for_delivery(self):
         """Whether the disposition is scheduled for delivery with any transport.
@@ -137,6 +141,11 @@ class DeliveryScheduler(object):
             ISIPTransport
         )
         return sorted(transports)
+
+    def mark_delivery_scheduled(self, name):
+        self.logger.info("Scheduling delivery for transport: '%s'" % name)
+        statuses = self.get_statuses(create_if_missing=True)
+        statuses[name] = STATUS_SCHEDULED
 
     def mark_delivery_success(self, name):
         """Mark the delivery as successful with the transport `name`.
