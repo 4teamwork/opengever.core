@@ -4,7 +4,7 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Bump ftw.tabbedview version to 4.1.3 [njohner]
 
 
 2019.4.0rc1 (2019-08-08)
