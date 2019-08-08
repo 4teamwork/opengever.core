@@ -148,7 +148,7 @@ msgid "disposition-state-closed"
 msgstr "Clôturé"
 
 msgid "disposition-state-disposed"
-msgstr "Livré"
+msgstr ""
 
 msgid "disposition-state-in-progress"
 msgstr "En cours"
