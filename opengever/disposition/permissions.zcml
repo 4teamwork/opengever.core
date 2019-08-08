@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.disposition">
+
+  <permission id="opengever.disposition.AddDisposition" title="opengever.disposition: Add disposition" />
+
+  <permission id="opengever.disposition.DownloadSIPPackage" title="opengever.disposition: Download SIP Package" />
+
+  <permission id="opengever.disposition.EditTransferNumber" title="opengever.disposition: Edit transfer number" />
+
+</configure>
