@@ -1,4 +1,5 @@
 from opengever.base.sentry import maybe_report_exception
+from opengever.disposition import _
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import ISIPTransport
@@ -27,6 +28,12 @@ TRANSPORT_STATUSES_KEY = 'opengever.disposition.delivery.transport_statuses'
 STATUS_SCHEDULED = 'status_scheduled'
 STATUS_SUCCESS = 'status_success'
 STATUS_FAILED = 'status_failed'
+
+DELIVERY_STATUS_LABELS = {
+    STATUS_SCHEDULED: _(u'label_delivery_status_scheduled', default=u'Scheduled for delivery'),
+    STATUS_SUCCESS: _(u'label_delivery_status_success', default=u'Delivered successfully'),
+    STATUS_FAILED: _(u'label_delivery_status_failed', default=u'Delivery failed'),
+}
 
 
 class DeliveryScheduler(object):

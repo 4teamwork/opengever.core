@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-05 20:56+0000\n"
+"POT-Creation-Date: 2019-08-08 08:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,6 +95,21 @@ msgstr "Abbrechen"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_delivery_status"
 msgstr "Ablieferungsstatus"
+
+#. Default: "Delivery failed"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_failed"
+msgstr "Zustellung fehlgeschlagen"
+
+#. Default: "Scheduled for delivery"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_scheduled"
+msgstr "Zustellung geplant"
+
+#. Default: "Delivered successfully"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_success"
+msgstr "Erfolgreich zugestellt"
 
 #. Default: "Details:"
 #: ./opengever/disposition/browser/templates/overview.pt

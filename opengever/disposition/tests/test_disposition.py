@@ -312,5 +312,5 @@ class TestDispositionDelivery(IntegrationTestCase):
 
         tbl_delivery_status = browser.css('#delivery-status').first
         self.assertEqual(
-            [['filesystem', 'status_scheduled']],
+            [['filesystem', 'Scheduled for delivery']],
             tbl_delivery_status.lists())

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-05 20:56+0000\n"
+"POT-Creation-Date: 2019-08-08 08:41+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -96,6 +96,21 @@ msgstr "Annuler"
 #. Default: "Delivery Status"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_delivery_status"
+msgstr ""
+
+#. Default: "Delivery failed"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_failed"
+msgstr ""
+
+#. Default: "Scheduled for delivery"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_scheduled"
+msgstr ""
+
+#. Default: "Delivered successfully"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_success"
 msgstr ""
 
 #. Default: "Details:"
