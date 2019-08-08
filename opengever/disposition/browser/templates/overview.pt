@@ -38,9 +38,9 @@
 
             <tal:deliverystatus tal:condition="python:view.get_current_state() == 'disposition-state-disposed'">
                 <h3 class="metadata" i18n:translate="label_delivery_status">Delivery Status</h3>
-                <table class="listing" id="delivery-status">
-                    <tr tal:repeat="status_info python:view.get_delivery_status_infos()">
-                        <td><a tal:content="status_info/name" /></td>
+                <table class="listing" id="delivery-status" tal:define="status_infos view/get_delivery_status_infos">
+                    <tr tal:repeat="status_info status_infos">
+                        <td tal:condition="python: len(status_infos) > 1" tal:content="status_info/name" />
                         <td tal:content="status_info/status"/>
                     </tr>
                 </table>

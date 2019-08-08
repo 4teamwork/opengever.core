@@ -10,12 +10,14 @@ from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.delivery import IFilesystemTransportSettings
+from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2paths
 from plone import api
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
+from zope.component import getSiteManager
 from zope.component import getUtility
 
 OFFERED_STATE = 'dossier-state-offered'
@@ -312,5 +314,23 @@ class TestDispositionDelivery(IntegrationTestCase):
 
         tbl_delivery_status = browser.css('#delivery-status').first
         self.assertEqual(
-            [['filesystem', 'Scheduled for delivery']],
+            [['Scheduled for delivery']],
+            tbl_delivery_status.lists())
+
+    @browsing
+    def test_delivery_status_is_displayed_per_transport_for_multiple_transports(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+
+        getSiteManager().registerAdapter(EnabledTransport, name='enabled-transport')
+        self.enable_filesystem_transport()
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-dispose')
+
+        tbl_delivery_status = browser.css('#delivery-status').first
+        self.assertEqual(
+            [['enabled-transport', 'Scheduled for delivery'],
+             ['filesystem', 'Scheduled for delivery']],
             tbl_delivery_status.lists())
