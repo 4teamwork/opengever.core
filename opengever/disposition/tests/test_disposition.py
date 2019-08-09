@@ -10,6 +10,7 @@ from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.delivery import IFilesystemTransportSettings
+from opengever.disposition.delivery import STATUS_SCHEDULED
 from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
@@ -287,16 +288,16 @@ class TestDispositionDelivery(IntegrationTestCase):
 
         self.enable_filesystem_transport()
         scheduler = DeliveryScheduler(self.disposition)
-        statuses = scheduler.get_statuses()
 
         self.assertFalse(scheduler.is_scheduled_for_delivery())
-        self.assertEqual({}, statuses)
+        self.assertEqual({}, scheduler.get_statuses())
 
         browser.open(self.disposition, view='overview')
         browser.click_on('disposition-transition-dispose')
 
         self.assertTrue(scheduler.is_scheduled_for_delivery())
-        self.assertEqual({}, statuses)
+        self.assertEqual({u'filesystem': STATUS_SCHEDULED},
+                          scheduler.get_statuses())
 
         self.assertEquals(['Item state changed.'], info_messages())
         self.assertTrue(self.disposition.has_sip_package())
