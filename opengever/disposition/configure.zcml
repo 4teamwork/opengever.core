@@ -7,11 +7,7 @@
 
   <i18n:registerTranslations directory="locales" />
 
-  <permission id="opengever.disposition.AddDisposition" title="opengever.disposition: Add disposition" />
-
-  <permission id="opengever.disposition.DownloadSIPPackage" title="opengever.disposition: Download SIP Package" />
-
-  <permission id="opengever.disposition.EditTransferNumber" title="opengever.disposition: Edit transfer number" />
+  <include file="permissions.zcml" />
 
   <include package=".browser" />
   <include package=".viewlets" />
@@ -19,6 +15,16 @@
   <adapter factory=".appraisal.Appraisal" />
   <adapter factory=".history.HistoryStorage" />
   <adapter factory=".validators.OfferedDossiersValidator" />
+
+  <adapter
+      factory=".delivery.FilesystemTransport"
+      name="filesystem"
+      />
+
+  <adapter
+      factory=".nightly_jobs.NightlySIPDelivery"
+      name="deliver-sip-packages"
+      />
 
   <genericsetup:registerProfile
       name="default"

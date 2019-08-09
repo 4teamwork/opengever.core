@@ -12,6 +12,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IDuringDossierDestruction
@@ -20,7 +21,6 @@ from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
-from path import Path
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
@@ -37,14 +37,12 @@ from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
 from zope import schema
 from zope.annotation import IAnnotations
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
-import os
 
 DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
 
@@ -315,6 +313,12 @@ class Disposition(Container):
         zip_file.seek(0)
         return NamedBlobFile(zip_file.read(), contentType='application/zip')
 
+    def schedule_sip_for_delivery(self):
+        DeliveryScheduler(self).schedule_delivery()
+
+    def is_scheduled_for_delivery(self):
+        return DeliveryScheduler(self).is_scheduled_for_delivery()
+
     def create_zipfile(self, package):
         tmpfile = TemporaryFile()
         BindingDOMSupport.SetDefaultNamespace(u'http://bar.admin.ch/arelda/v4')
@@ -337,3 +341,6 @@ class Disposition(Container):
             name = u'{}_{}'.format(name, self.transfer_number)
 
         return name
+
+    def get_sip_filename(self):
+        return u'{}.zip'.format(self.get_sip_name())

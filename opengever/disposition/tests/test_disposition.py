@@ -4,15 +4,22 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.disposition.delivery import DeliveryScheduler
+from opengever.disposition.delivery import IFilesystemTransportSettings
+from opengever.disposition.delivery import STATUS_SCHEDULED
+from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2paths
 from plone import api
 from plone.protect import createToken
+from plone.registry.interfaces import IRegistry
+from zope.component import getSiteManager
+from zope.component import getUtility
 
 OFFERED_STATE = 'dossier-state-offered'
 RESOLVED_STATE = 'dossier-state-resolved'
@@ -262,3 +269,69 @@ class TestDispositionEditForm(IntegrationTestCase):
 
         self.assertEquals(['Item state changed.'], info_messages())
         self.assertFalse(self.disposition.has_sip_package())
+
+
+class TestDispositionDelivery(IntegrationTestCase):
+
+    def enable_filesystem_transport(self):
+        # Enable FilesystemTransport
+        registry = getUtility(IRegistry)
+        settings = registry.forInterface(IFilesystemTransportSettings)
+        settings.enabled = True
+        settings.destination_directory = u'/tmp/will-not-be-used'
+
+    @browsing
+    def test_sip_package_is_scheduled_for_delivery_on_dispose(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+
+        self.enable_filesystem_transport()
+        scheduler = DeliveryScheduler(self.disposition)
+
+        self.assertFalse(scheduler.is_scheduled_for_delivery())
+        self.assertEqual({}, scheduler.get_statuses())
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-dispose')
+
+        self.assertTrue(scheduler.is_scheduled_for_delivery())
+        self.assertEqual({u'filesystem': STATUS_SCHEDULED},
+                          scheduler.get_statuses())
+
+        self.assertEquals(['Item state changed.'], info_messages())
+        self.assertTrue(self.disposition.has_sip_package())
+
+    @browsing
+    def test_delivery_status_is_displayed(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+
+        self.enable_filesystem_transport()
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-dispose')
+
+        tbl_delivery_status = browser.css('#delivery-status').first
+        self.assertEqual(
+            [['Scheduled for delivery']],
+            tbl_delivery_status.lists())
+
+    @browsing
+    def test_delivery_status_is_displayed_per_transport_for_multiple_transports(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+
+        getSiteManager().registerAdapter(EnabledTransport, name='enabled-transport')
+        self.enable_filesystem_transport()
+
+        browser.open(self.disposition, view='overview')
+        browser.click_on('disposition-transition-dispose')
+
+        tbl_delivery_status = browser.css('#delivery-status').first
+        self.assertEqual(
+            [['enabled-transport', 'Scheduled for delivery'],
+             ['filesystem', 'Scheduled for delivery']],
+            tbl_delivery_status.lists())

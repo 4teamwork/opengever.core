@@ -65,6 +65,6 @@ class ECH0160DownloadView(BrowserView):
             return self.request.RESPONSE.redirect(self.context.absolute_url())
 
         sip_package = self.context.get_sip_package()
-        set_headers(sip_package, self.request.response,
-                    u'{}.zip'.format(self.context.get_sip_name()))
+        filename = self.context.get_sip_filename()
+        set_headers(sip_package, self.request.response, filename)
         return stream_data(sip_package)

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-07-25 14:32+0000\n"
+"POT-Creation-Date: 2019-08-08 15:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,6 +90,26 @@ msgstr "Archiviert"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_cancel"
 msgstr "Abbrechen"
+
+#. Default: "Delivery Status"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_delivery_status"
+msgstr "Ablieferungsstatus"
+
+#. Default: "Delivery failed"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_failed"
+msgstr "Zustellung fehlgeschlagen"
+
+#. Default: "Scheduled for delivery"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_scheduled"
+msgstr "Zustellung geplant"
+
+#. Default: "Delivered successfully"
+#: ./opengever/disposition/delivery.py
+msgid "label_delivery_status_success"
+msgstr "Erfolgreich zugestellt"
 
 #. Default: "Details:"
 #: ./opengever/disposition/browser/templates/overview.pt
@@ -203,6 +223,11 @@ msgstr "Status"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "label_save"
 msgstr "Speichern"
+
+#. Default: "SIP Filename"
+#: ./opengever/disposition/browser/templates/overview.pt
+msgid "label_sip_filename"
+msgstr "SIP Dateiname"
 
 #. Default: "Time"
 #: ./opengever/disposition/browser/removal_protocol.py

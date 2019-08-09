@@ -60,6 +60,9 @@
     <value>{"dayOfWeekStart": 1, "scrollMonth": false, "scrollTime": false, "scrollInput": false}</value>
   </record>
 
+  <!-- DISPOSITION -->
+  <records interface="opengever.disposition.interfaces.IFilesystemTransportSettings" />
+
   <!-- DOCUMENT -->
   <records interface="opengever.document.interfaces.IDocumentType" />
   <records interface="opengever.document.interfaces.IDocumentSettings" />

@@ -89,6 +89,11 @@ Aktion ``Ablieferungspaket herunterladen`` zur Verfügung, welches den eCH-0160
 Export für die enthaltenen Dossiers mit einer positiven Bewertung zum Download
 anbietet.
 
+Wenn in GEVER ein Ablieferungsmechanismus aktiviert und
+konfiguriert wurde (durch 4teamwork), kann das Ablieferungspaket auch direkt
+durch einen nächtlichen Job in ein definiertes Verzeichnis oder ein gemountetes
+Share abgelegt werden.
+
 Enthält eine Angebot nur Dossier die nicht ans Archiv abgeliefert werden müssen, so können die Schritte 3 und 4 übersprungen werden und die Dossiers direkt ausgesondert und das Angebot abgeschlossen werden.
 
 
