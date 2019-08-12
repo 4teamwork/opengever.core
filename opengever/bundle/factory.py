@@ -14,8 +14,6 @@ import os
 from collections import namedtuple
 
 
-DEFAULT_RESPONSIBLE = 'lukas.graf'
-
 # List of fnmatch() patterns to specify which "documents" to ignore
 IGNORES = ['*.DS_Store', '*.msg', '*.dll', '*.exe']
 
@@ -88,7 +86,7 @@ class FilesystemWalker(object):
 
 class OGGBundleItemCreator(object):
 
-    def __init__(self, repo_depth, responsible, user_group):
+    def __init__(self, responsible, repo_depth=3, user_group=None):
         self.repo_depth = repo_depth
         self.responsible = responsible
         self.user_group = user_group
@@ -188,13 +186,14 @@ class BundleFactory(object):
         self.target_dir = args.target_dir
         self.repo_nesting_depth = args.repo_nesting_depth
         self.users_group = args.users_group
+        self.dossier_responsible = args.dossier_responsible
 
         self.repofolder_paths = []
         self.items = []
 
-        self.item_creator = OGGBundleItemCreator(self.repo_nesting_depth,
-                                                 DEFAULT_RESPONSIBLE,
-                                                 self.users_group)
+        self.item_creator = OGGBundleItemCreator(self.dossier_responsible,
+                                                 self.repo_nesting_depth,
+                                                 user_group=self.users_group)
 
     @property
     def bundle_name(self):
@@ -251,7 +250,11 @@ def parse_args():
 
     parser.add_argument(
         '--users-group', type=str,
-        help='Users group to grant local roles on reporoot to',
+        help='Users group to grant local roles on reporoot to')
+
+    parser.add_argument(
+        '--dossier-responsible', type=str,
+        help='User used as responsible for all dossiers',
         required=True)
 
     args = parser.parse_args()
