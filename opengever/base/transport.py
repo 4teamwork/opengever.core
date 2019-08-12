@@ -4,6 +4,9 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
+from opengever.task.reminder import TASK_REMINDER_OPTIONS
+from opengever.task.reminder.reminder import TaskReminder
+from opengever.task.task import ITask
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
@@ -344,3 +347,21 @@ class DublinCoreMetaDataCollector(object):
 
         self.context.creation_date = DateTime.DateTime(
             data.get('created'))
+
+
+@implementer(IDataCollector)
+@adapter(ITask)
+class ResponsibleTaskRemindersDataCollector(object):
+    """This data collector stores task reminders of all potential resopnsibles.
+    """
+
+    def __init__(self, context):
+        self.context = context
+
+    def extract(self):
+        return TaskReminder().get_reminders_of_potential_responsibles(self.context)
+
+    def insert(self, data):
+        for userid, option_tpye in data.items():
+            option = TASK_REMINDER_OPTIONS[option_tpye]
+            TaskReminder().set_reminder(self.context, option, user_id=userid)

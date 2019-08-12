@@ -50,6 +50,18 @@ class TaskReminder(object):
         return {actor: TASK_REMINDER_OPTIONS.get(value)
                 for actor, value in storage.items()}
 
+    def get_reminders_of_potential_responsibles(self, obj):
+        """Get reminders of all responsible representatives.
+        """
+        representatives = [actor.userid for actor in
+                           obj.get_responsible_actor().representatives()]
+
+        data = {}
+        for userid, reminder in self.get_reminders(obj).items():
+            if userid in representatives:
+                data[userid] = reminder.option_type
+        return data
+
     def get_sql_reminder(self, obj, user_id=None):
         """Get the sql-reminder for the given object for a specific user or
         for the current logged in user.

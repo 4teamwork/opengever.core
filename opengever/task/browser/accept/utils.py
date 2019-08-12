@@ -14,6 +14,7 @@ from opengever.task.adapters import IResponseContainer
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
+from opengever.task.reminder.reminder import TaskReminder
 from opengever.task.task import ITask
 from opengever.task.transporter import IResponseTransporter
 from opengever.task.util import change_task_workflow_state
@@ -260,6 +261,11 @@ class AcceptTaskWorkflowTransitionView(BrowserView):
 
         center = notification_center()
         center.remove_task_responsible(self.context, self.context.responsible)
+
+        # Remove task reminders of potential responsibles
+        reminders = TaskReminder().get_reminders_of_potential_responsibles(self.context)
+        for userid in reminders.keys():
+            TaskReminder().clear_reminder(self.context, user_id=userid)
 
         accept_task_with_response(self.context, text,
                                   successor_oguid=successor_oguid)
