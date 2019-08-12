@@ -10,6 +10,7 @@ Changelog
 2019.4.0rc1 (2019-08-08)
 ------------------------
 
+- Bump ftw.bumblebee to 3.7.3 to get fix for indexing checksum in ftw.solr. [lgraf]
 - Implement SIP delivery via FilesystemTransport. [lgraf]
 - Disallow deleting repository folders and roots except from the RepositoryDeleter. [njohner]
 - Expose document actions in @actions endpoint in separate file_actions category. [njohner, deiferni]
