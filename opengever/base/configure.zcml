@@ -232,6 +232,11 @@
       name="dublin-core"
       />
 
+  <adapter
+      factory=".transport.ResponsibleTaskRemindersDataCollector"
+      name="task-reminders"
+      />
+
   <subscriber
       for="plone.app.lockingbehavior.behaviors.ILocking
            plone.dexterity.interfaces.IEditBegunEvent"

@@ -7,6 +7,7 @@ from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
+from opengever.base.interfaces import IDataCollector
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import TASK_REMINDER_BEGINNING_OF_WEEK
 from opengever.task.reminder import TASK_REMINDER_ONE_DAY_BEFORE
@@ -14,6 +15,7 @@ from opengever.task.reminder import TASK_REMINDER_ONE_WEEK_BEFORE
 from opengever.task.reminder import TASK_REMINDER_SAME_DAY
 from opengever.task.reminder.reminder import TaskReminder
 from opengever.testing import IntegrationTestCase
+from zope.component import getAdapter
 import json
 import pytz
 
@@ -276,3 +278,47 @@ class TestTaskReminderSelector(IntegrationTestCase):
     def _get_init_state(self, browser):
         return json.loads(
             browser.css('#task-reminder-selector').first.get('data-state'))
+
+
+class TestTaskReminderTransport(IntegrationTestCase):
+
+    def test_extract_all_task_reminders_for_all_responsible_representatives(self):
+        self.login(self.regular_user)
+
+        task_reminder = TaskReminder()
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_ONE_DAY_BEFORE, user_id=self.regular_user.id)
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_ONE_DAY_BEFORE, user_id=self.dossier_responsible.id)
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_ONE_DAY_BEFORE, user_id=self.secretariat_user.id)
+
+        # single user
+        collector = getAdapter(self.task, IDataCollector, name='task-reminders')
+        self.assertEqual(
+            {self.regular_user.id: TASK_REMINDER_ONE_DAY_BEFORE.option_type},
+            collector.extract())
+
+        # inbox group
+        self.task.responsible = 'inbox:fa'
+        collector = getAdapter(self.task, IDataCollector, name='task-reminders')
+        self.assertEqual(
+            {self.secretariat_user.id: TASK_REMINDER_ONE_DAY_BEFORE.option_type},
+            collector.extract())
+
+    def test_transport_reminders(self):
+        self.login(self.regular_user)
+
+        task_reminder = TaskReminder()
+        task_reminder.set_reminder(
+            self.task, TASK_REMINDER_ONE_DAY_BEFORE, user_id=self.regular_user.id)
+
+        collector = getAdapter(self.task, IDataCollector, name='task-reminders')
+        data = collector.extract()
+
+        self.assertEqual({}, TaskReminder().get_reminders(self.subtask))
+        collector = getAdapter(self.subtask, IDataCollector, name='task-reminders')
+        collector.insert(data)
+        self.assertEqual(
+            {self.regular_user.id: TASK_REMINDER_ONE_DAY_BEFORE},
+            TaskReminder().get_reminders(self.subtask))
