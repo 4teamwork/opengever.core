@@ -17,7 +17,7 @@ from collections import namedtuple
 DEFAULT_RESPONSIBLE = 'lukas.graf'
 
 # List of fnmatch() patterns to specify which "documents" to ignore
-IGNORES = ['*.DS_Store']
+IGNORES = ['*.DS_Store', '*.msg', '*.dll', '*.exe']
 
 
 DirectoryNode = namedtuple('Node', ['path', 'guid', 'parent_guid', 'level'])
