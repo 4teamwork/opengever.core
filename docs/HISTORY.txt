@@ -17,6 +17,7 @@ Changelog
 
 - Bump ftw.bumblebee to 3.7.3 to get fix for indexing checksum in ftw.solr. [lgraf]
 - Implement SIP delivery via FilesystemTransport. [lgraf]
+- Display keywords in Mail overview. [njohner]
 - Use async mode of keyword widgets for document and dossier keywords. [njohner]
 - Disallow deleting repository folders and roots except from the RepositoryDeleter. [njohner]
 - Expose document actions in @actions endpoint in separate file_actions category. [njohner, deiferni]

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-27 14:11+0000\n"
+"POT-Creation-Date: 2019-08-14 16:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,6 +176,11 @@ msgstr ""
 #. Default: "Journal initialized"
 #: ./opengever/mail/upgrades/to3406.py
 msgid "label_journal_initialized"
+msgstr ""
+
+#. Default: "Keywords"
+#: ./opengever/mail/browser/mail.py
+msgid "label_keywords"
 msgstr ""
 
 #. Default: "Message"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-27 14:11+0000\n"
+"POT-Creation-Date: 2019-08-14 16:05+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -176,6 +176,11 @@ msgstr "Journal"
 #: ./opengever/mail/upgrades/to3406.py
 msgid "label_journal_initialized"
 msgstr "Dokument migriert"
+
+#. Default: "Keywords"
+#: ./opengever/mail/browser/mail.py
+msgid "label_keywords"
+msgstr "Schlagwörter"
 
 #. Default: "Message"
 #: ./opengever/mail/browser/send_document.py
