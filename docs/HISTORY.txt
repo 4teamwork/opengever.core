@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
+- Fix workspace participation restapi to handle new payload format for post and patch requests due to the new plone.restapi. [elioschmutz]
 - Update workflow security for opengever_workspace workflow to fix permission on existing workspaces. [elioschmutz]
 - Move task reminders of responsibles to the successor, when accepting a multi admin unit task. [phgross]
 - Bump ftw.tabbedview version to 4.1.3 [njohner]

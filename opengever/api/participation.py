@@ -121,12 +121,13 @@ class ParticipationsPost(ParticipationTraverseService):
     def reply(self):
         self.validate_params()
         data = self.validate_data(json_body(self.request))
-
-        if not self.validate_duplicated_users(data.get('userid')):
+        userid = data.get('user').get('token')
+        role = data.get('role').get('token')
+        if not self.validate_duplicated_users(userid):
             raise BadRequest("User already participate to this workspace")
 
         manager = ManageParticipants(self.context, self.request)
-        invitation = manager._add(data.get('userid'), data.get('role'))
+        invitation = manager._add(userid, role)
         return participation_item(
             self.context, self.request,
             token=invitation['iid'],
@@ -148,7 +149,7 @@ class ParticipationsPost(ParticipationTraverseService):
             raise NotFound
 
     def validate_data(self, data):
-        if not data.get('userid'):
+        if not data.get('user'):
             raise BadRequest('Missing parameter userid')
 
         if not data.get('role'):
@@ -164,7 +165,7 @@ class ParticipationsPatch(ParticipationTraverseService):
         data = self.validate_data(json_body(self.request))
 
         manager = ManageParticipants(self.context, self.request)
-        manager._modify(token, data.get('role'), participation_type.id)
+        manager._modify(token, data.get('role').get('token'), participation_type.id)
         return None
 
     def read_params(self):
