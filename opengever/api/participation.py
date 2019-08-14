@@ -242,7 +242,7 @@ class InvitationsPost(ParticipationTraverseService):
         if action == 'accept':
             target = my_invitations_manager._accept(invitation)
             return getMultiAdapter(
-                (target, self.request),ISerializeToJson)(include_items=False)
+                (target, self.request), ISerializeToJson)(include_items=False)
 
     def read_params(self):
         if len(self.params) != 2:
