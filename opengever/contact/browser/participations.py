@@ -1,5 +1,5 @@
 from ftw.tabbedview.interfaces import ITabbedView
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.contact import _
 from opengever.contact.models import Participation
 from opengever.tabbedview import GeverTabMixin

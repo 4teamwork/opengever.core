@@ -1,4 +1,4 @@
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.dossier import _
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from Products.Five import BrowserView

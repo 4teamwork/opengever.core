@@ -1,4 +1,4 @@
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.disposition import IDisposition
