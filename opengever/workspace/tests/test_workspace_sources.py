@@ -171,3 +171,13 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
 
         results = source.search(self.workspace_guest.id)
         self.assertEqual(0, len(results))
+
+    def test_title_is_fullname_only(self):
+        self.login(self.workspace_admin)
+        source = ActualWorkspaceMembersSource(self.workspace)
+
+        term = source.search('beatrice')[0]
+
+        self.assertEqual(self.workspace_member.id, term.token)
+        self.assertEqual(self.workspace_member.id, term.value)
+        self.assertEqual(u'Schr\xf6dinger B\xe9atrice', term.title)
