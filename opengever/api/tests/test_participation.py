@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone.restapi.serializer.converters import json_compatible
 from zExceptions import Unauthorized
 from zope.component import getUtility
 import json
@@ -343,7 +344,10 @@ class TestParticipationPost(IntegrationTestCase):
             get_entry_by_token(browser.json.get('items'), self.regular_user.id),
             'Regular user should not be a participant of this workspace.')
 
-        data = json.dumps({'userid': self.regular_user.id, 'role': 'WorkspaceGuest'})
+        data = json.dumps(json_compatible({
+            'user': {'token': self.regular_user.id},
+            'role': {'token': 'WorkspaceGuest'}
+        }))
         item = browser.open(
             self.workspace.absolute_url() + '/@participations/invitations',
             method='POST',
@@ -383,7 +387,10 @@ class TestParticipationPost(IntegrationTestCase):
     def test_can_only_add_invitations_with_Workspace_related_roles(self, browser):
         self.login(self.workspace_admin, browser=browser)
         with browser.expect_http_error(401):
-            data = json.dumps({'userid': self.regular_user.id, 'role': 'Reader'})
+            data = json.dumps(json_compatible({
+                'user': {'token': self.regular_user.id},
+                'role': {'token': 'Reader'}
+            }))
             browser.open(
                 self.workspace.absolute_url() + '/@participations/invitations',
                 method='POST',
@@ -392,7 +399,10 @@ class TestParticipationPost(IntegrationTestCase):
                 )
 
         with browser.expect_http_error(500):
-            data = json.dumps({'userid': self.regular_user.id, 'role': 'Site Administrator'})
+            data = json.dumps(json_compatible({
+                'user': {'token': self.regular_user.id},
+                'role': {'token': 'Site Administrator'}
+            }))
             browser.open(
                 self.workspace.absolute_url() + '/@participations/invitations',
                 method='POST',
@@ -404,7 +414,10 @@ class TestParticipationPost(IntegrationTestCase):
     def test_member_cannot_use_post_endpoint(self, browser):
         self.login(self.workspace_member, browser=browser)
         with browser.expect_http_error(401):
-            data = json.dumps({'userid': self.regular_user.id, 'role': 'WorkspaceAdmin'})
+            data = json.dumps(json_compatible({
+                'user': {'token': self.regular_user.id},
+                'role': {'token': 'WorkspaceAdmin'}
+            }))
             browser.open(
                 self.workspace.absolute_url() + '/@participations/invitations',
                 method='POST',
@@ -416,7 +429,10 @@ class TestParticipationPost(IntegrationTestCase):
     def test_guest_cannot_use_post_endpoint(self, browser):
         self.login(self.workspace_guest, browser=browser)
         with browser.expect_http_error(401):
-            data = json.dumps({'userid': self.regular_user.id, 'role': 'WorkspaceAdmin'})
+            data = json.dumps(json_compatible({
+                'user': {'token': self.regular_user.id},
+                'role': {'token': 'WorkspaceAdmin'}
+            }))
             browser.open(
                 self.workspace.absolute_url() + '/@participations/invitations',
                 method='POST',
@@ -438,8 +454,10 @@ class TestParticipationPost(IntegrationTestCase):
     @browsing
     def test_raise_bad_request_if_adding_existing_user(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        data = json.dumps({'userid': self.workspace_guest.id, 'role': 'WorkspaceMember'})
-
+        data = json.dumps(json_compatible({
+            'user': {'token': self.workspace_guest.id},
+            'role': {'token': 'WorkspaceMember'}
+        }))
         with browser.expect_http_error(400):
             browser.open(
                 self.workspace.absolute_url() + '/@participations/invitations',
@@ -464,7 +482,9 @@ class TestParticipationPatch(IntegrationTestCase):
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
         self.assertEquals('WorkspaceGuest', entry.get('role'))
 
-        data = json.dumps({'role': 'WorkspaceMember'})
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceMember'}
+        }))
         browser.open(
             entry['@id'],
             method='PATCH',
@@ -486,7 +506,9 @@ class TestParticipationPatch(IntegrationTestCase):
         self.login(self.workspace_admin, browser=browser)
 
         with browser.expect_http_error(400):
-            data = json.dumps({'role': 'WorkspaceMember'})
+            data = json.dumps(json_compatible({
+                'role': {'token': 'WorkspaceMember'}
+            }))
             browser.open(
                 self.workspace.absolute_url() + '/@participations/users/{}'.format(self.regular_user.id),
                 method='PATCH',
@@ -507,7 +529,10 @@ class TestParticipationPatch(IntegrationTestCase):
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_guest.id)
 
         with browser.expect_http_error(401):
-            data = json.dumps({'role': 'Contributor'})
+            data = json.dumps(json_compatible({
+                'role': {'token': 'Contributor'}
+            }))
+
             browser.open(
                 entry['@id'],
                 method='PATCH',
@@ -524,7 +549,10 @@ class TestParticipationPatch(IntegrationTestCase):
             self.workspace, self.regular_user.getId(),
             self.workspace_admin.getId(), 'WorkspaceGuest')
 
-        data = json.dumps({'role': 'WorkspaceAdmin'})
+        data = json.dumps(json_compatible({
+            'role': {'token': 'WorkspaceAdmin'}
+        }))
+
         browser.open(
             self.workspace.absolute_url() + '/@participations/invitations/{}'.format(iid),
             method='PATCH',
@@ -555,7 +583,10 @@ class TestParticipationPatch(IntegrationTestCase):
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_owner.id)
 
         with browser.expect_http_error(400):
-            data = json.dumps({'role': 'WorkspaceAdmin'})
+            data = json.dumps(json_compatible({
+                'role': {'token': 'WorkspaceAdmin'}
+            }))
+
             browser.open(
                 entry['@id'],
                 method='PATCH',
@@ -576,7 +607,10 @@ class TestParticipationPatch(IntegrationTestCase):
         entry = get_entry_by_token(browser.json.get('items'), self.workspace_admin.id)
 
         with browser.expect_http_error(401):
-            data = json.dumps({'role': 'WorkspaceMember'})
+            data = json.dumps(json_compatible({
+                'role': {'token': 'WorkspaceMember'}
+            }))
+
             browser.open(
                 entry['@id'],
                 method='PATCH',
