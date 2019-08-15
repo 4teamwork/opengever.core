@@ -11,6 +11,11 @@ from zope.interface import implements
 from zope.interface import Interface
 
 
+class IResponseSupported(Interface):
+    """Marker interface for response support.
+    """
+
+
 class IResponseContainer(Interface):
     """Response storage adapter.
     """
@@ -23,7 +28,7 @@ class IResponseContainer(Interface):
 
 
 @implementer(IResponseContainer)
-@adapter(Interface)
+@adapter(IResponseSupported)
 class ResponseContainer(object):
     """Response storage adapter.
     """
