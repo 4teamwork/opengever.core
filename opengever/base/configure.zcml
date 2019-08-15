@@ -397,4 +397,6 @@
       permission="zope.Public"
       />
 
+  <adapter factory=".response.ResponseContainer" />
+
 </configure>
