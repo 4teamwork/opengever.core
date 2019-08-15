@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Update workflow security for opengever_workspace workflow to fix permission on existing workspaces. [elioschmutz]
+- Remove userid from the users fullname in all teamraum sources. [phgross]
 - Move task reminders of responsibles to the successor, when accepting a multi admin unit task. [phgross]
 - Bump ftw.tabbedview version to 4.1.3 [njohner]
 

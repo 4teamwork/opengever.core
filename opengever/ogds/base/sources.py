@@ -608,6 +608,17 @@ class ActualWorkspaceMembersSource(AssignedUsersSource):
             query = query.filter(sql.false())
         return query
 
+    def getTerm(self, value):
+        """We only need the user fullname as title without the userid in
+        brackets.
+        """
+        try:
+            user = self.base_query.filter(User.userid == value).one()
+        except orm.exc.NoResultFound:
+            raise LookupError(
+                'No row was found with userid: {}'.format(value))
+        return SimpleTerm(value, value, user.fullname())
+
 
 @implementer(IContextSourceBinder)
 class ActualWorkspaceMembersSourceBinder(object):
