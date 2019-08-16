@@ -22,6 +22,11 @@
       />
 
   <adapter
+      factory=".transports.FTPSTransport"
+      name="ftps"
+      />
+
+  <adapter
       factory=".nightly_jobs.NightlySIPDelivery"
       name="deliver-sip-packages"
       />

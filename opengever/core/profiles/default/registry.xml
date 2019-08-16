@@ -62,6 +62,7 @@
 
   <!-- DISPOSITION -->
   <records interface="opengever.disposition.interfaces.IFilesystemTransportSettings" />
+  <records interface="opengever.disposition.interfaces.IFTPSTransportSettings" />
 
   <!-- DOCUMENT -->
   <records interface="opengever.document.interfaces.IDocumentType" />

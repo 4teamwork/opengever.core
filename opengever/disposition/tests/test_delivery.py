@@ -96,6 +96,7 @@ class TestDeliveryScheduler(LogCapturingTestCase):
 
         self.assertEqual([
             u"Skip: Transport 'filesystem' is disabled",
+            u"Skip: Transport 'ftps' is disabled",
             u"Skip: Transport 't-disabled' is disabled",
             u"Delivering using transport 't-enabled'",
             u"Successful delivery using transport 't-enabled'"],
@@ -141,7 +142,8 @@ class TestFilesystemTransport(TestFilesystemTransportBase):
         self.assertEqual([
             u"Delivering using transport 'filesystem'",
             u"Transported %r to %r" % (self.sip_filename, self.dst_path),
-            u"Successful delivery using transport 'filesystem'"],
+            u"Successful delivery using transport 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
         self.assertEqual([self.sip_filename], os.listdir(self.tempdir))
@@ -162,7 +164,8 @@ class TestFilesystemTransport(TestFilesystemTransportBase):
         self.assertEqual([
             u"Delivering using transport 'filesystem'",
             u"Transported %r to %r" % (self.sip_filename, self.dst_path),
-            u"Successful delivery using transport 'filesystem'"],
+            u"Successful delivery using transport 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
         self.assertTrue(os.path.isfile(self.dst_path))
@@ -171,7 +174,8 @@ class TestFilesystemTransport(TestFilesystemTransportBase):
         scheduler.deliver()
 
         self.assertEqual([
-            u"Skip: Not scheduled for delivery with transport 'filesystem'"],
+            u"Skip: Not scheduled for delivery with transport 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
         self.assertFalse(os.path.isfile(self.dst_path))
@@ -188,12 +192,14 @@ class TestFilesystemTransport(TestFilesystemTransportBase):
         self.assertEqual([
             u"Delivering using transport 'filesystem'",
             u"Transported %r to %r" % (self.sip_filename, self.dst_path),
-            u"Successful delivery using transport 'filesystem'"],
+            u"Successful delivery using transport 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
         scheduler.schedule_delivery(force=True)
         self.assertEqual([
-            u"Scheduling delivery for transport: 'filesystem'"],
+            u"Scheduling delivery for transport: 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
         scheduler.deliver()
@@ -202,7 +208,8 @@ class TestFilesystemTransport(TestFilesystemTransportBase):
             u"Delivering using transport 'filesystem'",
             u'Overwriting existing file %s' % dst_path,
             u"Transported %r to %r" % (self.sip_filename, self.dst_path),
-            u"Successful delivery using transport 'filesystem'"],
+            u"Successful delivery using transport 'filesystem'",
+            u"Skip: Transport 'ftps' is disabled"],
             self.captured_log.pop_msgs())
 
 

@@ -65,3 +65,11 @@ class IFilesystemTransportSettings(Interface):
         title=u'Destination directory',
         description=u'Directory into which SIP packages should be delivered.',
         default=u'')
+
+
+class IFTPSTransportSettings(Interface):
+
+    enabled = schema.Bool(
+        title=u'Enabled',
+        description=u'Whether FTPSTransport is enabled or not.',
+        default=False)
