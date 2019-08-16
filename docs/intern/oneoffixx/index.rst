@@ -155,6 +155,9 @@ from the Oneoffixx backend.
 
 .. _refresh: https://github.com/4teamwork/opengever.core/blob/2019.2.1/opengever/oneoffixx/api_client.py#L266-L269
 
+
+.. _OneOffixCredentials:
+
 Backend authentication
 ^^^^^^^^^^^^^^^^^^^^^^
 
