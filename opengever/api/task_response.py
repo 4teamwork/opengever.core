@@ -14,7 +14,7 @@ from zope.schema.interfaces import IField
 
 @adapter(IField, IResponse, Interface)
 @implementer(IFieldSerializer)
-class ResponseDefaultFieldSerializer(object):
+class TaskResponseDefaultFieldSerializer(object):
 
     def __init__(self, field, context, request):
         self.context = context
