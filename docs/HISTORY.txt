@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
+- Fix an issue where it was no longer possible to modify a workspace as a workspace owner. [elioschmutz]
 - Fix workspace participation restapi to handle new payload format for post and patch requests due to the new plone.restapi. [elioschmutz]
 - Update workflow security for opengever_workspace workflow to fix permission on existing workspaces. [elioschmutz]
 - Remove userid from the users fullname in all teamraum sources. [phgross]
