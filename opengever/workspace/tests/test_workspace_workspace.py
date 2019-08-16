@@ -7,6 +7,7 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from zope.component import getUtility
+import json
 
 
 class TestWorkspaceWorkspace(IntegrationTestCase):
@@ -155,3 +156,27 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.maxDiff = None
         self.assertEquals(expected, got)
+
+
+class TestWorkspaceWorkspaceAPI(IntegrationTestCase):
+
+    @browsing
+    def test_update(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        browser.open(self.workspace, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'title': u'\xfcberarbeitungsphase'}))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(u'\xfcberarbeitungsphase',
+                         self.workspace.title)
+
+    @browsing
+    def test_update_as_member_is_not_allowed(self, browser):
+        self.login(self.workspace_member, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.workspace, method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({'title': u'\xfcberarbeitungsphase'}))
