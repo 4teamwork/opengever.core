@@ -86,16 +86,20 @@ class FilesystemWalker(object):
 
 class OGGBundleItemCreator(object):
 
-    def __init__(self, responsible, repo_depth=-1, user_group=None):
+    def __init__(self, responsible, repo_depth=-1, user_group=None, import_reference=None):
         self.repo_depth = repo_depth
         self.responsible = responsible
         self.user_group = user_group
+        self.import_reference = import_reference
 
     def __call__(self, node):
         if not self.isdir(node):
             return OGGBundleDocument(node)
-        elif node.level == 0 and not self.content_only:
-            return OGGBundleRepoRoot(node, self.user_group)
+        elif node.level == 0:
+            if not self.content_only:
+                return OGGBundleRepoRoot(node, self.user_group)
+            else:
+                return OGGBundleDossier(node, self.responsible, self.import_reference)
         elif node.level <= self.repo_depth and not self.content_only:
             return OGGBundleRepoFolder(node)
         else:
@@ -165,10 +169,12 @@ class OGGBundleDossier(OGGBundleItemBase):
     item_type = 'dossier'
     review_state = 'dossier-state-active'
 
-    def __init__(self, node, responsible):
+    def __init__(self, node, responsible, parent_reference=None):
         super(OGGBundleDossier, self).__init__(node)
         self._data['parent_guid'] = self.node.parent_guid
         self._data['responsible'] = responsible
+        if parent_reference is not None:
+            self._data['parent_reference'] = parent_reference
 
 
 class OGGBundleDocument(OGGBundleItemBase):
@@ -192,12 +198,20 @@ class BundleFactory(object):
         self.users_group = args.users_group
         self.dossier_responsible = args.dossier_responsible
 
+        self.import_reference = []
+        if args.import_repository_reference is not None:
+            self.import_reference.append(args.import_repository_reference)
+        if args.import_dossier_reference is not None:
+            self.import_reference.append(args.import_dossier_reference)
+
         self.repofolder_paths = []
         self.items = []
 
-        self.item_creator = OGGBundleItemCreator(self.dossier_responsible,
-                                                 self.repo_nesting_depth,
-                                                 user_group=self.users_group)
+        self.item_creator = OGGBundleItemCreator(
+            self.dossier_responsible,
+            repo_depth=self.repo_nesting_depth,
+            user_group=self.users_group,
+            import_reference=self.import_reference)
 
     @property
     def bundle_name(self):
@@ -255,6 +269,23 @@ def parse_args():
         ' documents).')
 
     parser.add_argument(
+        '--import-repository-reference', type=int, nargs="*",
+        help='Reference position of repository into which this bundle will be '
+             'imported, in the form of space separated integers. For example\n'
+             '--import-repository-reference 1 3 5 corresponds to repository '
+             'with reference number 1.3.5')
+
+    parser.add_argument(
+        '--import-dossier-reference', type=int, nargs="*",
+        help='Reference position of dossier into which this bundle will be '
+             'imported, in the form of space separated integers.'
+             '--import-repository-reference has to be specified in order '
+             'to specify --import-dossier-reference. For example\n'
+             '--import-repository-reference 1 3 5 --import-dossier-reference 472 9\n'
+             'corresponds to subdossier with reference number 1.3.5 / 472.9'
+             '(Position 1.3.5, Dossier 472, Subdossier 9)')
+
+    parser.add_argument(
         '--users-group', type=str,
         help='Users group to grant local roles on reporoot to')
 
@@ -274,6 +305,23 @@ def parse_args():
         target_dir = pjoin(var_dir, 'bundles')
         mkdir_p(target_dir)
         args.target_dir = target_dir
+
+    if args.repo_nesting_depth == -1 and args.import_repository_reference is None:
+        raise parser.error(
+            "When generating a partial bundle (repo-nesting-dept = -1), "
+            "a position into which the bundle will be imported has "
+            "to be specified")
+
+    if args.repo_nesting_depth != -1 and args.import_repository_reference is not None:
+        raise parser.error(
+            "Partial bundles can only contain contentish items, not "
+            "repository folders or roots.")
+
+    if args.import_dossier_reference is not None and args.import_repository_reference is None:
+        raise parser.error(
+            "Can only specify import-dossier-reference if "
+            "import-repository-reference has been specified")
+
     return args
 
 
