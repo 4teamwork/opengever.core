@@ -9,8 +9,8 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition.delivery import DeliveryScheduler
-from opengever.disposition.delivery import IFilesystemTransportSettings
 from opengever.disposition.delivery import STATUS_SCHEDULED
+from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase

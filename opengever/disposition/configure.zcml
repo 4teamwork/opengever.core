@@ -17,7 +17,7 @@
   <adapter factory=".validators.OfferedDossiersValidator" />
 
   <adapter
-      factory=".delivery.FilesystemTransport"
+      factory=".transports.FilesystemTransport"
       name="filesystem"
       />
 
