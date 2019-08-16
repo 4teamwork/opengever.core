@@ -2,11 +2,11 @@ from collective.elephantvocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
-from ftw.keywordwidget.vocabularies import KeywordSearchableAndAddableSourceBinder
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
+from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform import directives as form
@@ -58,7 +58,7 @@ class IDossier(model.Schema):
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
         value_type=ChoicePlus(
-            source=KeywordSearchableAndAddableSourceBinder()
+            source=KeywordAddableRestrictableSourceBinder()
         ),
         required=False,
         missing_value=(),
