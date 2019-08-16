@@ -8,6 +8,7 @@ from zope.component import getAdapters
 from zope.globalrequest import getRequest
 import logging
 import sys
+import traceback
 
 
 TRANSPORT_STATUSES_KEY = 'opengever.disposition.delivery.transport_statuses'
@@ -107,9 +108,10 @@ class DeliveryScheduler(object):
                 raise
 
             except Exception as exc:
-                self.logger.info("Delivery with transport '%s' failed: %r" % (name, exc))
+                self.logger.warn("Delivery with transport '%s' failed: %r" % (name, exc))
                 self.mark_delivery_failure(name)
                 e_type, e_value, tb = sys.exc_info()
+                self.logger.error('Traceback:\n' + ''.join(traceback.format_tb(tb)))
                 maybe_report_exception(self.disposition, getRequest(), e_type, e_value, tb)
 
     def get_statuses(self, create_if_missing=False):
