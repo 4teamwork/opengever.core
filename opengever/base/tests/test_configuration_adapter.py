@@ -34,6 +34,8 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('activity', False),
                 ('archival_file_conversion', False),
                 ('contacts', False),
+                ('disposition_transport_filesystem', False),
+                ('disposition_transport_ftps', False),
                 ('doc_properties', False),
                 ('dossier_templates', False),
                 ('ech0147_export', False),

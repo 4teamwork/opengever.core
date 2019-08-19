@@ -43,6 +43,8 @@ class TestConfig(IntegrationTestCase):
                 u'activity': False,
                 u'archival_file_conversion': False,
                 u'contacts': False,
+                u'disposition_transport_filesystem': False,
+                u'disposition_transport_ftps': False,
                 u'doc_properties': False,
                 u'dossier_templates': False,
                 u'ech0147_export': False,

@@ -10,6 +10,8 @@ from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
 from opengever.contact.interfaces import IContactSettings
+from opengever.disposition.interfaces import IFilesystemTransportSettings
+from opengever.disposition.interfaces import IFTPSTransportSettings
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
@@ -97,6 +99,8 @@ class GeverSettingsAdpaterV1(object):
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
+        features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
+        features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
