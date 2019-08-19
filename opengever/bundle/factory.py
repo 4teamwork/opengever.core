@@ -24,13 +24,14 @@ FileNode = namedtuple('Node', ['path', 'guid', 'parent_guid'])
 
 class FilesystemWalker(object):
 
-    def __init__(self, top, followlinks=False):
+    def __init__(self, top, followlinks=False, skip_top=False):
         self.top = top
         self.followlinks = followlinks
+        self.skip_top = skip_top
 
     def __iter__(self):
         return self.walk(
-            self.top, followlinks=self.followlinks)
+            self.top, followlinks=self.followlinks, skip_container=self.skip_top)
 
     def make_guid(self, path):
         """Create a unique, but human readable GUID, like
@@ -46,17 +47,21 @@ class FilesystemWalker(object):
         return guid
 
     def walk(self, top, followlinks=False, level=0,
-             parent_guid=None, repo_depth=3):
+             parent_guid=None, repo_depth=3, skip_container=False):
         """Custom implementation of os.walk that keeps track of nesting level.
         """
         names = listdir(top)
 
         # Folderish item
-        container = DirectoryNode(path=top,
-                                  guid=self.make_guid(top),
-                                  parent_guid=parent_guid,
-                                  level=level)
-        yield container
+        if not skip_container:
+            container = DirectoryNode(path=top,
+                                      guid=self.make_guid(top),
+                                      parent_guid=parent_guid,
+                                      level=level)
+            yield container
+            level += 1
+        else:
+            container = None
 
         dirs = []
         for name in names:
@@ -72,25 +77,26 @@ class FilesystemWalker(object):
                 # Non-folderish item (i.e. document)
                 node = FileNode(path=path,
                                 guid=self.make_guid(path),
-                                parent_guid=container.guid)
+                                parent_guid=getattr(container, "guid", None))
                 yield node
 
         for name in dirs:
             new_path = pjoin(top, name)
             if followlinks or not islink(new_path):
                 for node in self.walk(
-                        new_path, followlinks, level=level + 1,
-                        parent_guid=container.guid):
+                        new_path, followlinks, level=level,
+                        parent_guid=getattr(container, "guid", None)):
                     yield node
 
 
 class OGGBundleItemCreator(object):
 
-    def __init__(self, responsible, repo_depth=-1, user_group=None, import_reference=None):
+    def __init__(self, responsible, repo_depth=-1, user_group=None, import_reference=None, content_only=False):
         self.repo_depth = repo_depth
         self.responsible = responsible
         self.user_group = user_group
         self.import_reference = import_reference
+        self.content_only = content_only
 
     def __call__(self, node):
         if not self.isdir(node):
@@ -108,10 +114,6 @@ class OGGBundleItemCreator(object):
     @staticmethod
     def isdir(node):
         return isinstance(node, DirectoryNode)
-
-    @property
-    def content_only(self):
-        return self.repo_depth == -1
 
 
 class OGGBundleItemBase(object):
@@ -204,6 +206,11 @@ class BundleFactory(object):
         if args.import_dossier_reference is not None:
             self.import_reference.append(args.import_dossier_reference)
 
+        # When repo_nesting_depth is set to -1, we create a partial bundle with
+        # only content (no reporoot and repofolder). In that case we also skip
+        # the root dossier (we do not include it as a dossier in the bundle)
+        self.partial_bundle = self.repo_nesting_depth == -1
+
         self.repofolder_paths = []
         self.items = []
 
@@ -211,7 +218,8 @@ class BundleFactory(object):
             self.dossier_responsible,
             repo_depth=self.repo_nesting_depth,
             user_group=self.users_group,
-            import_reference=self.import_reference)
+            import_reference=self.import_reference,
+            content_only=self.partial_bundle)
 
     @property
     def bundle_name(self):
@@ -230,7 +238,9 @@ class BundleFactory(object):
             'document': [],
         }
 
-        walker = FilesystemWalker(self.source_dir, followlinks=True)
+        walker = FilesystemWalker(self.source_dir,
+                                  followlinks=True,
+                                  skip_top=self.partial_bundle)
         for node in walker:
             item = self.item_creator(node)
             items[item.item_type].append(item.as_dict())
