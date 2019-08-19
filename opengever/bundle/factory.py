@@ -252,7 +252,7 @@ def get_var_dir():
         return var
 
 
-def parse_args():
+def get_parser():
     parser = argparse.ArgumentParser(
         description='Create OGGBundle from directory structure')
     parser.add_argument(
@@ -293,6 +293,12 @@ def parse_args():
         '--dossier-responsible', type=str,
         help='User used as responsible for all dossiers',
         required=True)
+
+    return parser
+
+
+def parse_args():
+    parser = get_parser()
 
     args = parser.parse_args()
 
