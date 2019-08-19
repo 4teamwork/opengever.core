@@ -47,7 +47,7 @@ class FilesystemWalker(object):
         return guid
 
     def walk(self, top, followlinks=False, level=0,
-             parent_guid=None, repo_depth=3, skip_container=False):
+             parent_guid=None, skip_container=False):
         """Custom implementation of os.walk that keeps track of nesting level.
         """
         names = listdir(top)
