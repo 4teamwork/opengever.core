@@ -96,9 +96,22 @@ class TestOggBundlePipeline(IntegrationTestCase):
         # * in position 1.1 / 1 (self.dossier): document: Mail in bestehendem Examplecontent Dossier
 
         root = self.assert_repo_root_created()
-        folder_staff = self.assert_repo_folders_created(root)
-        dossier_peter = self.assert_dossiers_created(folder_staff)
-        self.assert_documents_created(dossier_peter)
+        folder_organisation = self.assert_organization_folder_created(root)
+        self.assert_processes_folder_created(folder_organisation)
+        folder_staff = self.assert_staff_folder_created(folder_organisation)
+
+        self.assert_dossier_peter_schneider_created(folder_staff)
+        self.assert_dossier_vreni_created(folder_staff)
+        dossier_peter = self.assert_dossier_hanspeter_created(folder_staff)
+
+        self.assert_document_1_created(dossier_peter)
+        self.assert_document_2_created(dossier_peter)
+        self.assert_mail_1_created(dossier_peter)
+        self.assert_mail_2_created(dossier_peter)
+        self.assert_document_5_created(dossier_peter)
+        self.assert_document_6_created()
+        self.assert_mail_3_created()
+
         self.assert_report_data_collected(bundle)
 
     def assert_repo_root_created(self):
@@ -114,11 +127,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(root)[BUNDLE_GUID_KEY],
             index_data_for(root)[GUID_INDEX_NAME])
         return root
-
-    def assert_repo_folders_created(self, root):
-        folder_organisation = self.assert_organization_folder_created(root)
-        self.assert_processes_folder_created(folder_organisation)
-        return self.assert_staff_folder_created(folder_organisation)
 
     def assert_organization_folder_created(self, root):
         folder_organisation = root.get('organisation')
@@ -306,11 +314,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         return folder_staff
 
-    def assert_dossiers_created(self, parent):
-        self.assert_dossier_peter_schneider_created(parent)
-        self.assert_dossier_vreni_created(parent)
-        return self.assert_dossier_hanspeter_created(parent)
-
     def assert_dossier_peter_schneider_created(self, parent):
         dossier_peter = parent.get('dossier-21')
         self.assertEqual(
@@ -408,14 +411,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         return dossier_peter
 
-    def assert_documents_created(self, parent):
-        self.assert_document_1_created(parent)
-        self.assert_document_2_created(parent)
-        self.assert_mail_1_created(parent)
-        self.assert_mail_2_created(parent)
-        self.assert_document_5_created(parent)
-        self.assert_document_6_created()
-        self.assert_mail_3_created()
 
     def assert_document_1_created(self, parent):
         document_1 = parent.objectValues()[0]
