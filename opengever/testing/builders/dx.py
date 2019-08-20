@@ -25,7 +25,6 @@ from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.interface import alsoProvides
-from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent import ObjectCreatedEvent
 
 
@@ -132,12 +131,6 @@ class DocumentBuilder(DexterityBuilder):
     def as_shadow_document(self):
         self._is_shadow = True
         return self
-
-    def create_object(self):
-        obj = super(DocumentBuilder, self).create_object()
-        # Trigger bumblebee checksum creation:
-        notify(ObjectAddedEvent(obj))
-        return obj
 
     def after_create(self, obj):
         if self._checked_out:
