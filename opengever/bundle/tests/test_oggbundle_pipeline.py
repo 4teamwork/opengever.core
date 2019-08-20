@@ -73,6 +73,28 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         # test content creation
         # XXX use separate test-cases based on a layer
+
+        # The structure of the imported bundle is as follows
+        # * reporoot: Ordnungssystem
+        #     * repofolder: Organisation
+        #         * repofolder: Personal
+        #             * dossier: Dossier Peter Schneider
+        #             * dossier: Hanspeter Muller
+        #                 * document: Bewerbung Hanspeter Muller
+        #                 * document: Entlassung Hanspeter Muller
+        #                 * document: Ein Mail
+        #                 * document: Mail without title
+        #                 * document: Document referenced via UNC-Path
+        #                 * document: Nonexistent document referenced via UNC-Path with Umlaut
+        #         * repofolder: Organigramm, Prozesse
+        #
+        # Some more elements get imported in existing positions from the
+        # the fixture. Where they will be imported can change when elements
+        # are added in the fixture.
+        # * in position 1.1 (self.leaf_repofolder): dossier: Dossier in bestehendem Examplecontent Repository
+        # * in position 1.1 / 1 (self.dossier): document: Dokument in bestehendem Examplecontent Dossier
+        # * in position 1.1 / 1 (self.dossier): document: Mail in bestehendem Examplecontent Dossier
+
         root = self.assert_repo_root_created()
         folder_staff = self.assert_repo_folders_created(root)
         dossier_peter = self.assert_dossiers_created(folder_staff)
