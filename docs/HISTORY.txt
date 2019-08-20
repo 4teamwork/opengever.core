@@ -4,6 +4,8 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
+- Display keywords in Mail overview. [njohner]
+- Bump ftw.keywordwidget to 2.1.0 to use async mode of keyword widgets for document and dossier keywords. [njohner]
 - Fix an issue where it was no longer possible to modify a workspace as a workspace owner. [elioschmutz]
 - Fix workspace participation restapi to handle new payload format for post and patch requests due to the new plone.restapi. [elioschmutz]
 - Update workflow security for opengever_workspace workflow to fix permission on existing workspaces. [elioschmutz]
@@ -17,8 +19,6 @@ Changelog
 
 - Bump ftw.bumblebee to 3.7.3 to get fix for indexing checksum in ftw.solr. [lgraf]
 - Implement SIP delivery via FilesystemTransport. [lgraf]
-- Display keywords in Mail overview. [njohner]
-- Use async mode of keyword widgets for document and dossier keywords. [njohner]
 - Disallow deleting repository folders and roots except from the RepositoryDeleter. [njohner]
 - Expose document actions in @actions endpoint in separate file_actions category. [njohner, deiferni]
 - Nightly jobs: Add short -f option as alias for --force. [lgraf]
