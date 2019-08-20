@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
+- Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
 - Implement FTPSTransport for uploading SIPs to FTPS server. [lgraf]
 - Display keywords in Mail overview. [njohner]
 - Bump ftw.keywordwidget to 2.1.0 to use async mode of keyword widgets for document and dossier keywords. [njohner]
