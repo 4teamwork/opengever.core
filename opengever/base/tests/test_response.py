@@ -35,8 +35,8 @@ class TestResponseContainer(IntegrationTestCase):
         container = IResponseContainer(self.todo)
         container.add(response)
 
-        self.assertEqual([response],
-                         annotations[ResponseContainer.ANNOTATION_KEY])
+        storage = annotations[ResponseContainer.ANNOTATION_KEY]
+        self.assertEqual([response], list(storage.values()))
 
     def test_add_expects_response_objects(self):
         self.login(self.workspace_member)
@@ -48,8 +48,10 @@ class TestResponseContainer(IntegrationTestCase):
         container = IResponseContainer(self.todo)
         container.add(response)
 
-        self.assertEqual([response],
-                         annotations[ResponseContainer.ANNOTATION_KEY])
+        storage = annotations[ResponseContainer.ANNOTATION_KEY]
+        self.assertEqual(
+            [response],
+            [response for response in storage.values()])
 
     def test_list_returns_response_in_add_order(self):
         self.login(self.workspace_member)

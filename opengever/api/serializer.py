@@ -25,10 +25,11 @@ def extend_with_relative_path(result, context):
 
 def extend_with_responses(result, context, request):
     if IResponseSupported.providedBy(context):
-        responses = IResponseContainer(context).list()
-        result['responses'] = [
-            getMultiAdapter((response, request), ISerializeToJson)()
-            for response in responses]
+        result['responses'] = []
+        for _id, response in IResponseContainer(context).items():
+            serializer = getMultiAdapter((response, request), ISerializeToJson)
+            result['responses'].append(
+                serializer(container=context, response_id=_id))
 
 
 @adapter(IDexterityContent, IOpengeverBaseLayer)

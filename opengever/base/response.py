@@ -1,3 +1,4 @@
+from BTrees.LOBTree import LOBTree
 from datetime import datetime
 from opengever.base import _
 from persistent import Persistent
@@ -9,6 +10,7 @@ from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+import time
 
 
 class IResponseSupported(Interface):
@@ -24,7 +26,10 @@ class IResponseContainer(Interface):
         """Add the given response to the container list."""
 
     def list(self):
-        """Returns a list of all response."""
+        """Returns a list of all responses."""
+
+    def items(self):
+        """Returns a list of (id, response object) pairs of all responses."""
 
 
 @implementer(IResponseContainer)
@@ -39,21 +44,45 @@ class ResponseContainer(object):
         self.context = context
 
     def add(self, response):
-        self.storage(create_if_missing=True).append(response)
+        storage = self._storage(create_if_missing=True)
+        response_id = long(time.time() * 1e6)
+        while response_id in storage:
+            response_id += 1
 
-    def storage(self, create_if_missing=False):
+        storage[response_id] = response
+
+    def _storage(self, create_if_missing=False):
         ann = IAnnotations(self.context)
         if self.ANNOTATION_KEY not in ann.keys() and create_if_missing:
-            ann[self.ANNOTATION_KEY] = PersistentList()
+            ann[self.ANNOTATION_KEY] = LOBTree()
 
         return ann.get(self.ANNOTATION_KEY, None)
 
     def list(self):
-        storage = self.storage()
+        storage = self._storage()
         if not storage:
             return []
 
-        return storage
+        return list(storage.values())
+
+    def items(self):
+        storage = self._storage()
+        if not storage:
+            return []
+
+        return list(storage.items())
+
+    def __contains__(self, key):
+        storage = self._storage()
+        if not storage:
+            return False
+
+        return long(key) in self._storage()
+
+    def __getitem__(self, key):
+        """Get an item by its key
+        """
+        return self._storage()[long(key)]
 
 
 class IResponse(Interface):
@@ -78,7 +107,7 @@ class IResponse(Interface):
 
 class Response(Persistent):
     """A persistent lightweight object which represents a single response.
-    Addable to the response container of pone objects, for example to
+    Addable to the response container of plone objects, for example to
     workspace todo's.
     """
 
