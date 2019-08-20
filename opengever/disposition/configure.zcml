@@ -17,8 +17,13 @@
   <adapter factory=".validators.OfferedDossiersValidator" />
 
   <adapter
-      factory=".delivery.FilesystemTransport"
+      factory=".transports.FilesystemTransport"
       name="filesystem"
+      />
+
+  <adapter
+      factory=".transports.FTPSTransport"
+      name="ftps"
       />
 
   <adapter

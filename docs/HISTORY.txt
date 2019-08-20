@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc2 (unreleased)
 ------------------------
 
+- Implement FTPSTransport for uploading SIPs to FTPS server. [lgraf]
 - Display keywords in Mail overview. [njohner]
 - Bump ftw.keywordwidget to 2.1.0 to use async mode of keyword widgets for document and dossier keywords. [njohner]
 - Fix an issue where it was no longer possible to modify a workspace as a workspace owner. [elioschmutz]

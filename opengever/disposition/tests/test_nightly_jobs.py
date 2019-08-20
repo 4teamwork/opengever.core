@@ -75,7 +75,10 @@ class TestNightlyDelivery(TestFilesystemTransportBase):
                 "Transported %r to %r" % (self.sip_filename, self.dst_path)),
 
             ('opengever.disposition.delivery',
-                "Successful delivery using transport 'filesystem'")
+                "Successful delivery using transport 'filesystem'"),
+
+            ('opengever.disposition.delivery',
+                "Skip: Transport 'ftps' is disabled"),
         ]
 
         self.assertEqual(expected, logrecords,

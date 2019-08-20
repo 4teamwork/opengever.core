@@ -1,26 +1,14 @@
 from opengever.base.sentry import maybe_report_exception
 from opengever.disposition import _
-from opengever.disposition.interfaces import IDisposition
-from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import ISIPTransport
-from os.path import abspath
-from os.path import expanduser
-from os.path import join as pjoin
 from persistent.mapping import PersistentMapping
-from plone.registry.interfaces import IRegistry
 from ZODB.POSException import ConflictError
 from zope.annotation import IAnnotations
-from zope.component import adapter
 from zope.component import getAdapters
-from zope.component import getUtility
 from zope.globalrequest import getRequest
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
 import logging
-import os
-import shutil
-import stat
 import sys
+import traceback
 
 
 TRANSPORT_STATUSES_KEY = 'opengever.disposition.delivery.transport_statuses'
@@ -120,9 +108,10 @@ class DeliveryScheduler(object):
                 raise
 
             except Exception as exc:
-                self.logger.info("Delivery with transport '%s' failed: %r" % (name, exc))
+                self.logger.warn("Delivery with transport '%s' failed: %r" % (name, exc))
                 self.mark_delivery_failure(name)
                 e_type, e_value, tb = sys.exc_info()
+                self.logger.error('Traceback:\n' + ''.join(traceback.format_tb(tb)))
                 maybe_report_exception(self.disposition, getRequest(), e_type, e_value, tb)
 
     def get_statuses(self, create_if_missing=False):
@@ -158,62 +147,3 @@ class DeliveryScheduler(object):
         """
         statuses = self.get_statuses(create_if_missing=True)
         statuses[name] = STATUS_FAILED
-
-
-class BaseTransport(object):
-    """Base class for Transports that sets up proper logging.
-    """
-
-    def __init__(self, disposition, request, parent_logger):
-        self.disposition = disposition
-        self.request = request
-        self.parent_logger = parent_logger
-
-        self.log = logging.getLogger(self.__class__.__name__)
-        self.log.setLevel(logging.INFO)
-        self.log.parent = parent_logger
-
-
-@implementer(ISIPTransport)
-@adapter(IDisposition, IBrowserRequest, logging.Logger)
-class FilesystemTransport(BaseTransport):
-    """Transport that copies the SIP to a filesystem location specified by
-    the IFilesystemTransportSettings.destination_directory registry entry.
-    """
-
-    def deliver(self):
-        """Delivers the SIP by copying it to the destination_directory.
-        """
-        destination_dir = self._get_destination_directory()
-        assert os.path.isdir(destination_dir)
-        sip = self.disposition.get_sip_package()
-
-        blob_path = sip._blob.committed()
-        filename = self.disposition.get_sip_filename()
-        destination_path = pjoin(destination_dir, filename)
-
-        if os.path.isfile(destination_path):
-            self.log.warn("Overwriting existing file %s" % destination_path)
-
-        shutil.copy2(blob_path, destination_path)
-
-        # Make delivered file writable for owner
-        st = os.stat(destination_path)
-        os.chmod(destination_path, st.st_mode | stat.S_IWUSR)
-
-        self.log.info("Transported %r to %r" % (filename, destination_path))
-
-    def is_enabled(self):
-        settings = self._get_settings()
-        return settings.enabled
-
-    def _get_destination_directory(self):
-        settings = self._get_settings()
-        destination_dir = settings.destination_directory
-        destination_dir = abspath(expanduser(destination_dir.strip()))
-        return destination_dir
-
-    def _get_settings(self):
-        registry = getUtility(IRegistry)
-        settings = registry.forInterface(IFilesystemTransportSettings)
-        return settings

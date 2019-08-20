@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- DISPOSITION -->
+  <records interface="opengever.disposition.interfaces.IFTPSTransportSettings" />
+
+</registry>
