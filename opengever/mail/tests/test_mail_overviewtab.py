@@ -31,6 +31,7 @@ class TestOverview(FunctionalTestCase):
                   ['Author', get_author_by_email(mail)],
                   ['creator', 'Test User (test_user_1_)'],
                   ['Description', ''],
+                  ['Keywords', ''],
                   ['Foreign Reference', ''],
                   ['Message',
                    u'Mehrere Anhaenge.eml \u2014 32 KB '

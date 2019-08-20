@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.mail.behaviors import ISendableDocsContainer
 from opengever.testing import IntegrationTestCase
 from Products.CMFCore.utils import getToolByName
@@ -158,9 +159,13 @@ class TestDossier(IntegrationTestCase):
         new.text = u'New Item\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
+        self.assertItemsEqual(('Finanzverwaltung', 'New Item',
+                               u'N\xf6i 3', u'Vertr\xe4ge'),
+                              IDossier(self.dossier).keywords)
+
         browser.visit(self.dossier, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
-        self.assertTupleEqual(('Finanzverwaltung', 'New Item',
+        self.assertItemsEqual(('Finanzverwaltung', 'New Item',
                                'N=C3=B6i 3', 'Vertr=C3=A4ge'),
                               tuple(keywords.value))
 

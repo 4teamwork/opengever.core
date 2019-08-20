@@ -93,6 +93,8 @@ class OverviewTab(MailAttachmentsMixin, Overview):
             CustomRow(self.render_creator_link,
                       label=ogdmf('label_creator', default='creator')),
             WebIntelligentFieldRow('IDocumentMetadata.description'),
+            TemplateRow(self.keywords_template,
+                        label=_(u'label_keywords', default=u'Keywords')),
             FieldRow('IDocumentMetadata.foreign_reference'),
             TemplateRow(self.file_template,
                         label=_('label_org_message', default='Message')),

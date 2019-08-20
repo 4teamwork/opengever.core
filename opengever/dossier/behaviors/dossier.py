@@ -6,6 +6,7 @@ from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
+from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from opengever.dossier.widget import referenceNumberWidgetFactory
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform import directives as form
@@ -52,12 +53,12 @@ class IDossier(model.Schema):
         ],
     )
 
-    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True)
+    form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True, async=True)
     keywords = schema.Tuple(
         title=_(u'label_keywords', default=u'Keywords'),
         description=_(u'help_keywords', default=u''),
         value_type=ChoicePlus(
-            vocabulary='plone.app.vocabularies.Keywords'
+            source=KeywordAddableRestrictableSourceBinder()
         ),
         required=False,
         missing_value=(),

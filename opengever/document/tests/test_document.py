@@ -10,6 +10,7 @@ from ftw.testing import freeze
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.document import UploadValidator
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -190,9 +191,12 @@ class TestDocument(IntegrationTestCase):
         new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
+        self.assertItemsEqual(('New Item 2', 'NewItem1', u'N\xf6i 3'),
+                              IDocumentMetadata(self.subsubdocument).keywords)
+
         browser.open(self.subsubdocument, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
-        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'), tuple(keywords.value))
+        self.assertItemsEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'), tuple(keywords.value))
 
     def test_fixtured_document_is_office_connector_editable_per_default(self):
         self.login(self.regular_user)

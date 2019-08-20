@@ -1,4 +1,5 @@
 from AccessControl import getSecurityManager
+from ftw.keywordwidget.widget import KeywordWidget
 from ftw.table import helper
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.browser.wizard import BaseWizardStepForm
@@ -16,8 +17,10 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.behaviors import IRestrictAddableDossierTemplates
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from opengever.dossier.dossiertemplate.dossiertemplate import TEMPLATABLE_FIELDS
+from opengever.dossier.vocabularies import IRestrictKeywords
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
+from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.dexterity.i18n import MessageFactory as PDMF
 from plone.dexterity.interfaces import IDexterityContainer
@@ -30,6 +33,7 @@ from z3c.form.interfaces import IDataConverter
 from zExceptions import Unauthorized
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.interface import alsoProvides
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -174,6 +178,26 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
         class WrappedForm(CreateDossierMixin, BaseWizardStepForm, parent_form_class):
             step_name = 'add-dossier-from-template'
 
+            def updateFields(self):
+                super(WrappedForm, self).updateFields()
+                template_obj = get_saved_template_obj(self.context)
+
+                if template_obj and template_obj.restrict_keywords:
+                    # The vocabulary should only contain the terms from the
+                    # template. This is indicated to the source with the
+                    # IRestrictKeywords interface and the allowed keywords
+                    # are stored on the request. We also need to set the widget
+                    # in the synchronous mode, as otherwise keyword searches
+                    # will anonymously reinitialise a new source with no way of
+                    # accessing the IWizardDataStorage and hence the template.
+                    alsoProvides(self.request, IRestrictKeywords)
+                    self.request.allowed_keywords = IDossier(template_obj).keywords
+
+                    self.groups[0].fields['IDossier.keywords'].widgetFactory["input"] = ParameterizedWidget(
+                        KeywordWidget,
+                        async=False
+                    )
+
             def update(self):
                 """Update the widget-values of the dossier add-form
                 with the values of the selected dossiertemplate values.
@@ -237,13 +261,6 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                     select2_config = json.loads(widget.config_json)
                     select2_config['tags'] = False
                     widget.config_json = json.dumps(select2_config)
-
-                    # The vocabular should only contain the terms from
-                    # the template.
-                    terms = filter(
-                        lambda term: term.token in widget.value,
-                        widget.terms.terms._terms)
-                    widget.terms.terms = SimpleVocabulary(terms)
 
                 if not template_obj.predefined_keywords:
                     widget.value = ()

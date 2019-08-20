@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.testing import IntegrationTestCase
 
 
@@ -16,7 +17,10 @@ class TestMail(IntegrationTestCase):
         new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
+        self.assertItemsEqual(('New Item 2', 'NewItem1', u'N\xf6i 3'),
+                              IDocumentMetadata(self.mail_eml).keywords)
+
         browser.visit(self.mail_eml, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
-        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
+        self.assertItemsEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))

@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.meeting.command import MIME_DOCX
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -39,9 +40,12 @@ class TestSablonTemplateView(FunctionalTestCase):
         new.text = u'NewItem1\nNew Item 2\nN\xf6i 3'
         browser.find_button_by_label('Save').click()
 
+        self.assertItemsEqual(('New Item 2', 'NewItem1', u'N\xf6i 3'),
+                              IDocumentMetadata(self.sablon_template).keywords)
+
         browser.visit(self.sablon_template, view='edit')
         keywords = browser.find_field_by_text(u'Keywords')
-        self.assertTupleEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
+        self.assertItemsEqual(('New Item 2', 'NewItem1', 'N=C3=B6i 3'),
                               tuple(keywords.value))
 
 
