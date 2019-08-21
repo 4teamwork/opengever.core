@@ -398,4 +398,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponseGet"
+      permission="zope2.View"
+      />
+
 </configure>
