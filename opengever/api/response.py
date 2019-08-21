@@ -46,7 +46,7 @@ class SerializeResponseToJson(SerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
         response_url = '{}/@responses/{}'.format(
-            kwargs['container'].absolute_url(), kwargs['response_id'])
+            kwargs['container'].absolute_url(), self.context.response_id)
 
         result = {'@id': response_url}
         for name, field in getFields(IResponse).items():
@@ -91,8 +91,7 @@ class ResponseGet(Service):
 
         response = response_container[self._get_response_id]
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
-        return serializer(
-            container=self.context, response_id=self._get_response_id)
+        return serializer(container=self.context)
 
 
 class ResponsePost(Service):
@@ -111,7 +110,7 @@ class ResponsePost(Service):
         self.request.response.setHeader("Location", self.context.absolute_url())
 
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
-        return serializer(container=self.context, response_id=response_id)
+        return serializer(container=self.context)
 
 
 @implementer(IPublishTraverse)

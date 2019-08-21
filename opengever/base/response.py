@@ -52,6 +52,7 @@ class ResponseContainer(object):
         while response_id in storage:
             response_id += 1
 
+        response.response_id = response_id
         storage[response_id] = response
         return response_id
 
@@ -93,6 +94,11 @@ class IResponse(Interface):
     """Interface and schema for the response object, an object added to
     plone content objects."""
 
+    response_id = schema.Int(
+        title=_(u'label_response_id', default=u'Response ID'),
+        required=True
+    )
+
     created = schema.Date(
         title=_(u'label_created', default=u'Created'),
         required=True
@@ -118,6 +124,7 @@ class Response(Persistent):
     implements(IResponse)
 
     def __init__(self, text):
+        self.response_id = None
         self.text = text
         self.created = datetime.now()
         self.creator = api.user.get_current().id

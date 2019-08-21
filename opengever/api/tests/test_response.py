@@ -38,12 +38,14 @@ class TestResponseGETSerialization(IntegrationTestCase):
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
+              'response_id': 1481272800000000,
               u'created': u'2016-12-09T09:40:00',
               u'creator': {
                   u'token': self.workspace_member.id,
                   u'title': u'Schr\xf6dinger B\xe9atrice'},
               u'text': u'Ich bin hier anderer Meinung!'},
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
+              'response_id': 1482564180000000,
               u'created': u'2016-12-24T08:23:00',
               u'creator': {
                   u'token': self.workspace_admin.id,
@@ -75,6 +77,7 @@ class TestResponseGET(IntegrationTestCase):
 
         self.assertEquals(
             {u'@id': url,
+             'response_id': 1481272800000000,
              u'created': u'2016-12-09T09:40:00',
              u'creator': {
                  u'token': self.workspace_member.id,
@@ -112,6 +115,7 @@ class TestResponsePost(IntegrationTestCase):
         self.assertEquals(201, browser.status_code)
         self.assertEquals(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
+             'response_id': 1481272800000000,
              u'created': u'2016-12-09T09:40:00',
              u'creator': {
                  u'token': self.workspace_member.id,

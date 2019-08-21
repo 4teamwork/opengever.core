@@ -23,6 +23,8 @@
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".serializer.long_converter" />
+
 
   <adapter factory=".mail.DeserializeMailFromJson" />
 
