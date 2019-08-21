@@ -1,12 +1,12 @@
 from opengever.dossier.interfaces import IDocPropertyProvider
-from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import IBaseProposal
 from zope.component import adapter
 from zope.i18n import translate
 from zope.interface import implementer
 
 
 @implementer(IDocPropertyProvider)
-@adapter(IProposal)
+@adapter(IBaseProposal)
 class ProposalDocPropertyProvider(object):
 
     def __init__(self, context):

@@ -80,7 +80,7 @@ def save_reference_number_prefix(obj, event):
     # And also proposals
     proposals = catalog({
         'path': '/'.join(obj.getPhysicalPath()),
-        'object_provides': 'opengever.meeting.proposal.IProposal',
+        'object_provides': ['opengever.meeting.proposal.IBaseProposal'],
         'depth': -1})
     for proposal in proposals:
         ProposalSqlSyncer(proposal.getObject(), None).sync()

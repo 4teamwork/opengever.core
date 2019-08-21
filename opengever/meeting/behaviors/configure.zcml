@@ -27,7 +27,7 @@
       description=""
       provides="opengever.meeting.behaviors.namefromtitle.IProposalNameFromTitle"
       factory=".namefromtitle.ProposalNameFromTitle"
-      for="opengever.meeting.proposal.IProposal"
+      for="opengever.meeting.proposal.IBaseProposal"
       />
 
   <plone:behavior

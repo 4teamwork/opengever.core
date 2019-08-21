@@ -92,7 +92,7 @@
       />
 
   <adapter
-      for=".proposal.IProposal"
+      for=".proposal.IBaseProposal"
       provides=".interfaces.IHistory"
       factory=".proposalhistory.ProposalHistory"
       />
@@ -177,19 +177,19 @@
       />
 
   <subscriber
-      for="opengever.meeting.proposal.IProposal
+      for="opengever.meeting.proposal.IBaseProposal
            zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler=".handlers.delete_copied_proposal"
       />
 
   <subscriber
-      for="opengever.meeting.proposal.IProposal
+      for="opengever.meeting.proposal.IBaseProposal
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
       handler=".handlers.sync_moved_proposal"
       />
 
   <subscriber
-      for="opengever.meeting.proposal.IProposal
+      for="opengever.meeting.proposal.IBaseProposal
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.sync_proposal"
       />

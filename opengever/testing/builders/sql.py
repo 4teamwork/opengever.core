@@ -38,7 +38,7 @@ from opengever.meeting.model import Proposal as ProposalModel
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.model.generateddocument import GeneratedProtocol
 from opengever.meeting.model.submitteddocument import SubmittedDocument
-from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposal import Proposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
@@ -459,7 +459,7 @@ class MeetingBuilder(TransparentModelLoader, SqlObjectBuilder):
 
     def scheduled_proposals(self, proposals):
         for proposal in proposals:
-            if IProposal.providedBy(proposal):
+            if ISubmittedProposal.providedBy(proposal):
                 self._scheduled_proposals.append(proposal.load_model())
             else:
                 self._scheduled_proposals.append(proposal)
