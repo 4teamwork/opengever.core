@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-08-23 12:03+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -251,9 +251,15 @@ msgid "label_confirm_action"
 msgstr "Confirmer l'action"
 
 #. Default: "Created"
+#: ./opengever/base/response.py
 #: ./opengever/base/viewlets/byline.py
 msgid "label_created"
 msgstr "Créé le"
+
+#. Default: "Creator"
+#: ./opengever/base/response.py
+msgid "label_creator"
+msgstr ""
 
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -340,6 +346,11 @@ msgstr "Justification pour le retrait du statut public"
 msgid "label_recently_touched"
 msgstr "Modifié récemment"
 
+#. Default: "Response ID"
+#: ./opengever/base/response.py
+msgid "label_response_id"
+msgstr ""
+
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period"
@@ -359,6 +370,11 @@ msgstr "Recherche"
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "label_severity_error"
 msgstr "Erreur"
+
+#. Default: "Text"
+#: ./opengever/base/response.py
+msgid "label_text"
+msgstr ""
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py
@@ -404,17 +420,17 @@ msgstr "Enregistrement créé"
 
 #. Default: "Error"
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_error"
 msgstr "Erreur"
 
 #. Default: "Information"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_info"
 msgstr "Information"
 
 #. Default: "Warning"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_warning"
 msgstr "Avertissement"
 
