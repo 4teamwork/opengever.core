@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2019.4.0rc2 (unreleased)
+2019.4.0rc2 (2019-08-21)
 ------------------------
 
 - Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
