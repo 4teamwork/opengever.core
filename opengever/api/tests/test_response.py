@@ -121,3 +121,50 @@ class TestResponsePost(IntegrationTestCase):
 
         self.assertEquals(
             {u'message': u'text', u'type': u'RequiredMissing'}, browser.json)
+
+
+class TestResponsePatch(IntegrationTestCase):
+
+    @browsing
+    def test_edit_a_response_requires_edit_permission(self, browser):
+        self.login(self.workspace_guest, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            IResponseContainer(self.todo).add(Response('Test'))
+
+        with browser.expect_http_error(401):
+            url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+            browser.open(url, method="PATCH", headers=self.api_headers,
+                         data=json.dumps({'text': 'test'}))
+
+    @browsing
+    def test_edit_a_response_sucessful(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            IResponseContainer(self.todo).add(Response('Test'))
+
+        url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+        browser.open(url, method="PATCH", headers=self.api_headers,
+                     data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+
+        responses = IResponseContainer(self.todo).list()
+        self.assertEquals(1, len(responses))
+        self.assertEquals(u'Angebot \xfcberpr\xfcft', responses[0].text)
+
+        self.assertEquals(204, browser.status_code)
+
+    @browsing
+    def test_data_is_validated(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            IResponseContainer(self.todo).add(Response('Test'))
+
+        with browser.expect_http_error(500):
+            url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+            browser.open(url, method="PATCH", headers=self.api_headers)
+
+        self.assertEquals(
+            {u'message': u'text', u'type': u'RequiredMissing'}, browser.json)
+        self.assertEquals('Test', IResponseContainer(self.todo).list()[0].text)

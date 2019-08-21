@@ -414,4 +414,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponsePatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

@@ -106,3 +106,39 @@ class ResponsePost(Service):
 
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
         return serializer(container=self.context, response_id=response_id)
+
+
+@implementer(IPublishTraverse)
+class ResponsePatch(Service):
+    """Edit a response.
+    """
+
+    def __init__(self, context, request):
+        super(ResponsePatch, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@responses as parameters
+        self.params.append(name)
+        return self
+
+    @property
+    def _get_response_id(self):
+        if len(self.params) != 1:
+            raise Exception("Must supply exactly one parameter (user id)")
+        return self.params[0]
+
+    def reply(self):
+        response_container = IResponseContainer(self.context)
+        if self._get_response_id not in response_container:
+            raise NotFound
+
+        response = response_container[self._get_response_id]
+
+        data = json_body(self.request)
+        text = data.get('text')
+        IResponse['text'].validate(text)
+        response.text = text
+
+        self.request.response.setStatus(204)
+        self.request.response.setHeader("Location", self.context.absolute_url())
