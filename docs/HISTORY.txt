@@ -16,6 +16,7 @@ Changelog
 - Bump ftw.keywordwidget to 2.1.0 to use async mode of keyword widgets for document and dossier keywords. [njohner]
 - Fix an issue where it was no longer possible to modify a workspace as a workspace owner. [elioschmutz]
 - Fix workspace participation restapi to handle new payload format for post and patch requests due to the new plone.restapi. [elioschmutz]
+- Add response support for ToDos. [phgross]
 - Update workflow security for opengever_workspace workflow to fix permission on existing workspaces. [elioschmutz]
 - Remove userid from the users fullname in all teamraum sources. [phgross]
 - Move task reminders of responsibles to the successor, when accepting a multi admin unit task. [phgross]
