@@ -139,7 +139,13 @@ class DocumentBuilder(DexterityBuilder):
     def create_object(self):
         obj = super(DocumentBuilder, self).create_object()
         # Trigger bumblebee checksum creation:
-        notify(ObjectAddedEvent(obj))
+        # Store modification date, reindex the object (which overwrites the modification date),
+        # then set the modification date and reindex yet again without overwriting the modification
+        # date. Similar to `catalog_reindex_objects` in ftw/upgrade/step.py.
+        modification_date = obj.modified()
+        obj.reindexObject()
+        obj.setModificationDate(modification_date)
+        obj.reindexObject(idxs=['modified'])
         return obj
 
     def after_create(self, obj):
