@@ -32,19 +32,23 @@ class TestResponseGETSerialization(IntegrationTestCase):
 
         with freeze(datetime(2016, 12, 24, 8, 23)):
             with self.login(self.workspace_admin):
-                response = Response(u'Ok, Fanke f\xfcr dein Feedback')
+                response = Response(u'Ok, Danke f\xfcr dein Feedback')
                 IResponseContainer(self.todo).add(response)
 
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
               u'created': u'2016-12-09T09:40:00',
-              u'creator': self.workspace_member.id,
+              u'creator': {
+                  u'token': self.workspace_member.id,
+                  u'title': u'Schr\xf6dinger B\xe9atrice'},
               u'text': u'Ich bin hier anderer Meinung!'},
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
               u'created': u'2016-12-24T08:23:00',
-              u'creator': self.workspace_admin.id,
-              u'text': u'Ok, Fanke f\xfcr dein Feedback'}],
+              u'creator': {
+                  u'token': self.workspace_admin.id,
+                  u'title': u'Hugentobler Fridolin'},
+              u'text': u'Ok, Danke f\xfcr dein Feedback'}],
             browser.json['responses'])
 
 
@@ -72,7 +76,9 @@ class TestResponseGET(IntegrationTestCase):
         self.assertEquals(
             {u'@id': url,
              u'created': u'2016-12-09T09:40:00',
-             u'creator': self.workspace_member.id,
+             u'creator': {
+                 u'token': self.workspace_member.id,
+                 u'title': u'Schr\xf6dinger B\xe9atrice'},
              u'text': u'Ich bin hier anderer Meinung!'},
             browser.json)
 
@@ -107,7 +113,9 @@ class TestResponsePost(IntegrationTestCase):
         self.assertEquals(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
              u'created': u'2016-12-09T09:40:00',
-             u'creator': self.workspace_member.id,
+             u'creator': {
+                 u'token': self.workspace_member.id,
+                 u'title': u'Schr\xf6dinger B\xe9atrice'},
              u'text': u'Angebot \xfcberpr\xfcft'},
             browser.json)
 

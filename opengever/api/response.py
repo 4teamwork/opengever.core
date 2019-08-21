@@ -2,6 +2,7 @@ from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.base.response import ResponseContainer
+from opengever.ogds.base.actor import Actor
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
@@ -54,6 +55,11 @@ class SerializeResponseToJson(SerializeFolderToJson):
             value = serializer()
             result[json_compatible(name)] = value
 
+        # Provide token and title for the creator
+        result['creator'] = {
+            'token': self.context.creator,
+            'title': Actor.lookup(self.context.creator).get_label(with_principal=False)
+        }
         return result
 
 
