@@ -31,6 +31,22 @@ FROZEN_NOW = datetime(2016, 12, 20, 9, 40)
 
 class TestOggBundlePipeline(IntegrationTestCase):
 
+    def find_by_title(self, parent, title):
+        matching_children = [child for child in parent.objectValues()
+                             if getattr(child, "title", None) == title]
+        for child in parent.objectValues():
+            object_title = getattr(child, "title", None)
+            if object_title == title:
+                return child
+
+        self.assertTrue(
+            matching_children,
+            msg="did not find object with title: {}".format(title))
+        self.assertEqual(
+            1, len(matching_children),
+            msg="found more than one object with title: {}".format(title))
+        return matching_children[0]
+
     def test_oggbundle_transmogrifier(self):
         # this is a bit hackish, but since builders currently don't work in
         # layer setup/teardown and isolation of database content is ensured
@@ -316,7 +332,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
         return leaf_repofolder
 
     def assert_empty_dossier_created(self, parent):
-        dossier = parent.get('dossier-21')
+        dossier = self.find_by_title(parent, "Dossier Peter Schneider")
+
         self.assertEqual(
             u'Vreni Meier ist ein Tausendsassa',
             IDossier(dossier).comments)
@@ -328,13 +345,15 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual('dossier-state-active',
                          api.content.get_state(dossier))
         self.assertEqual(date(2010, 11, 11), IDossier(dossier).start)
-        self.assertEqual(u'Dossier Peter Schneider', dossier.title)
         self.assertEqual(
             IAnnotations(dossier)[BUNDLE_GUID_KEY],
             index_data_for(dossier)[GUID_INDEX_NAME])
 
     def assert_dossier2_created(self):
-        dossier = self.leaf_repofolder.get('dossier-23')
+        dossier = self.find_by_title(
+            self.leaf_repofolder,
+            u'Dossier in bestehendem Examplecontent Repository')
+
         self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
                          IDossier(dossier).comments)
         self.assertEqual(tuple(), IDossier(dossier).keywords)
@@ -344,13 +363,12 @@ class TestOggBundlePipeline(IntegrationTestCase):
                          api.content.get_state(dossier))
         self.assertEqual(date(2010, 11, 11), IDossier(dossier).start)
         self.assertEqual(
-            u'Dossier in bestehendem Examplecontent Repository', dossier.title)
-        self.assertEqual(
             IAnnotations(dossier)[BUNDLE_GUID_KEY],
             index_data_for(dossier)[GUID_INDEX_NAME])
 
     def assert_dossier_created(self, parent):
-        dossier = parent.get('dossier-22')
+        dossier = self.find_by_title(parent, u'Hanspeter M\xfcller')
+
         self.assertEqual(
             u'archival worthy',
             ILifeCycle(dossier).archival_value)
@@ -396,10 +414,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'dossier-state-resolved',
             api.content.get_state(dossier))
 
-        self.assertEqual(
-            u'Hanspeter M\xfcller',
-            dossier.title)
-
         self.assertDictContainsSubset(
             {'admin_users':
                 ['Contributor', 'Publisher', 'Reviewer', 'Editor', 'Reader']},
@@ -413,7 +427,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         return dossier
 
     def assert_document1_created(self, parent):
-        document1 = parent.objectValues()[0]
+        document1 = self.find_by_title(parent, u'Bewerbung Hanspeter M\xfcller')
 
         self.assertTrue(document1.digitally_available)
         self.assertIsNotNone(document1.file)
@@ -437,14 +451,11 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'document-state-draft',
             api.content.get_state(document1))
         self.assertEqual(
-            u'Bewerbung Hanspeter M\xfcller',
-            document1.title)
-        self.assertEqual(
             IAnnotations(document1)[BUNDLE_GUID_KEY],
             index_data_for(document1)[GUID_INDEX_NAME])
 
     def assert_document2_created(self, parent):
-        document2 = parent.objectValues()[1]
+        document2 = self.find_by_title(parent, u'Entlassung Hanspeter M\xfcller')
 
         self.assertTrue(document2.digitally_available)
         self.assertIsNotNone(document2.file)
@@ -480,14 +491,11 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'document-state-draft',
             api.content.get_state(document2))
         self.assertEqual(
-            u'Entlassung Hanspeter M\xfcller',
-            document2.title)
-        self.assertEqual(
             IAnnotations(document2)[BUNDLE_GUID_KEY],
             index_data_for(document2)[GUID_INDEX_NAME])
 
     def assert_document3_created(self, parent):
-        document3 = parent.objectValues()[4]
+        document3 = self.find_by_title(parent, u'Document referenced via UNC-Path')
 
         self.assertTrue(document3.digitally_available)
         self.assertIsNotNone(document3.file)
@@ -497,14 +505,12 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'document-state-draft',
             api.content.get_state(document3))
         self.assertEqual(
-            u'Document referenced via UNC-Path',
-            document3.title)
-        self.assertEqual(
             IAnnotations(document3)[BUNDLE_GUID_KEY],
             index_data_for(document3)[GUID_INDEX_NAME])
 
     def assert_document4_created(self, parent):
-        document4 = parent.objectValues()[-1]
+        document4 = self.find_by_title(
+            parent, u'Nonexistent document referenced via UNC-Path with Umlaut')
 
         self.assertFalse(document4.digitally_available)
         self.assertIsNone(document4.file)
@@ -513,28 +519,24 @@ class TestOggBundlePipeline(IntegrationTestCase):
             'document-state-draft',
             api.content.get_state(document4))
         self.assertEqual(
-            u'Nonexistent document referenced via UNC-Path with Umlaut',
-            document4.title)
-        self.assertEqual(
             IAnnotations(document4)[BUNDLE_GUID_KEY],
             index_data_for(document4)[GUID_INDEX_NAME])
 
     def assert_document5_created(self):
-        document5 = self.dossier.objectValues()[-2]
+        document5 = self.find_by_title(
+            self.dossier, u'Dokument in bestehendem Examplecontent Dossier')
 
         self.assertTrue(document5.digitally_available)
         self.assertIsNotNone(document5.file)
         self.assertEqual(22198, len(document5.file.data))
         self.assertEqual(
             'document-state-draft', api.content.get_state(document5))
-        self.assertEqual(u'Dokument in bestehendem Examplecontent Dossier',
-                         document5.title)
         self.assertEqual(
             IAnnotations(document5)[BUNDLE_GUID_KEY],
             index_data_for(document5)[GUID_INDEX_NAME])
 
     def assert_mail1_created(self, parent):
-        mail = parent.objectValues()[2]
+        mail = self.find_by_title(parent, u'Ein Mail')
 
         self.assertTrue(mail.digitally_available)
         self.assertIsNotNone(mail.message)
@@ -568,29 +570,24 @@ class TestOggBundlePipeline(IntegrationTestCase):
             api.content.get_state(mail))
 
         self.assertEqual(
-            u'Ein Mail',
-            mail.title)
-        self.assertEqual(
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
 
     def assert_mail2_created(self, parent):
-        mail = parent.objectValues()[3]
+        mail = self.find_by_title(parent, u'Lorem Ipsum')
 
         self.assertIsNotNone(mail.message)
         self.assertEqual(920, len(mail.message.data))
-        self.assertEqual(u'Lorem Ipsum', mail.title)
         self.assertEqual(
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
 
     def assert_mail3_created(self):
-        mail = self.dossier.objectValues()[-1]
+        mail = self.find_by_title(
+            self.dossier, u'Mail in bestehendem Examplecontent Dossier')
 
         self.assertIsNotNone(mail.message)
         self.assertEqual(920, len(mail.message.data))
-        self.assertEqual(
-            u'Mail in bestehendem Examplecontent Dossier', mail.title)
         self.assertEqual(
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
