@@ -109,6 +109,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assert_mail1_created(dossier)
         self.assert_mail2_created(dossier)
         self.assert_document3_created(dossier)
+        self.assert_document4_created(dossier)
         self.assert_document5_created()
         self.assert_mail3_created()
 
@@ -501,6 +502,22 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             IAnnotations(document3)[BUNDLE_GUID_KEY],
             index_data_for(document3)[GUID_INDEX_NAME])
+
+    def assert_document4_created(self, parent):
+        document4 = parent.objectValues()[-1]
+
+        self.assertFalse(document4.digitally_available)
+        self.assertIsNone(document4.file)
+
+        self.assertEqual(
+            'document-state-draft',
+            api.content.get_state(document4))
+        self.assertEqual(
+            u'Nonexistent document referenced via UNC-Path with Umlaut',
+            document4.title)
+        self.assertEqual(
+            IAnnotations(document4)[BUNDLE_GUID_KEY],
+            index_data_for(document4)[GUID_INDEX_NAME])
 
     def assert_document5_created(self):
         document5 = self.dossier.objectValues()[-2]
