@@ -26,6 +26,7 @@ GEVER-Mandanten abgefragt werden.
           "features": {
               "activity": true,
               "archival_file_conversion": false,
+              "changed_for_end_date": true,
               "contacts": false,
               "doc_properties": true,
               "dossier_templates": true,
