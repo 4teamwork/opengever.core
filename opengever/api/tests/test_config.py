@@ -42,6 +42,7 @@ class TestConfig(IntegrationTestCase):
             {
                 u'activity': False,
                 u'archival_file_conversion': False,
+                u'changed_for_end_date': True,
                 u'contacts': False,
                 u'doc_properties': False,
                 u'dossier_templates': False,

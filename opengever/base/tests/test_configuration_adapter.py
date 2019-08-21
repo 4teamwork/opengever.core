@@ -33,6 +33,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),
+                ('changed_for_end_date', True),
                 ('contacts', False),
                 ('doc_properties', False),
                 ('dossier_templates', False),
