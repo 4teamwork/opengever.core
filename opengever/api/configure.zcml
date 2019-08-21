@@ -406,4 +406,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponsePost"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

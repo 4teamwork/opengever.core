@@ -50,6 +50,7 @@ class ResponseContainer(object):
             response_id += 1
 
         storage[response_id] = response
+        return response_id
 
     def _storage(self, create_if_missing=False):
         ann = IAnnotations(self.context)

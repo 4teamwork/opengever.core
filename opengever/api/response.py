@@ -1,5 +1,8 @@
 from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
+from opengever.base.response import ResponseContainer
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
@@ -84,3 +87,22 @@ class ResponseGet(Service):
         serializer = getMultiAdapter((response, self.request), ISerializeToJson)
         return serializer(
             container=self.context, response_id=self._get_response_id)
+
+
+class ResponsePost(Service):
+    """Add a Response to the current context.
+    """
+
+    def reply(self):
+        data = json_body(self.request)
+
+        text = data.get('text')
+        IResponse['text'].validate(text)
+        response = Response(text)
+        response_id = ResponseContainer(self.context).add(response)
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader("Location", self.context.absolute_url())
+
+        serializer = getMultiAdapter((response, self.request), ISerializeToJson)
+        return serializer(container=self.context, response_id=response_id)
