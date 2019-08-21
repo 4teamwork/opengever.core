@@ -76,45 +76,45 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         # The structure of the imported bundle is as follows
         # * reporoot: Ordnungssystem
-        #     * repofolder: Organisation
-        #         * repofolder: Personal
-        #             * dossier: Dossier Peter Schneider
+        #     * branch_repofolder: Organisation
+        #         * leaf_repofolder: Personal
+        #             * empty_dossier: Dossier Peter Schneider
         #             * dossier: Hanspeter Muller
-        #                 * document: Bewerbung Hanspeter Muller
-        #                 * document: Entlassung Hanspeter Muller
-        #                 * document: Ein Mail
-        #                 * document: Mail without title
-        #                 * document: Document referenced via UNC-Path
-        #                 * document: Nonexistent document referenced via UNC-Path with Umlaut
-        #         * repofolder: Organigramm, Prozesse
+        #                 * document1: Bewerbung Hanspeter Muller
+        #                 * document2: Entlassung Hanspeter Muller
+        #                 * mail1: Ein Mail
+        #                 * mail2: Mail without title
+        #                 * document3: Document referenced via UNC-Path
+        #                 * document4: Nonexistent document referenced via UNC-Path with Umlaut
+        #         * empty_repofolder: Organigramm, Prozesse
         #
         # Some more elements get imported in existing positions from the
         # the fixture. Where they will be imported can change when elements
         # are added in the fixture.
-        # * in position 1.1 (self.leaf_repofolder): dossier: Dossier in bestehendem Examplecontent Repository
-        # * in position 1.1 / 1 (self.dossier): document: Dokument in bestehendem Examplecontent Dossier
-        # * in position 1.1 / 1 (self.dossier): document: Mail in bestehendem Examplecontent Dossier
+        # * dossier2 (in position 1.1, i.e. self.leaf_repofolder): Dossier in bestehendem Examplecontent Repository
+        # * document5 (in position 1.1 / 1 i.e. self.dossier): Dokument in bestehendem Examplecontent Dossier
+        # * mail3 (in position 1.1 / 1 i.e. self.dossier): : Mail in bestehendem Examplecontent Dossier
 
-        root = self.assert_repo_root_created()
-        folder_organisation = self.assert_organization_folder_created(root)
-        self.assert_processes_folder_created(folder_organisation)
-        folder_staff = self.assert_staff_folder_created(folder_organisation)
+        reporoot = self.assert_reporoot_created()
+        branch_repofolder = self.assert_organization_folder_created(reporoot)
+        self.assert_empty_repofolder_created(branch_repofolder)
+        leaf_repofolder = self.assert_leaf_repofolder_created(branch_repofolder)
 
-        self.assert_dossier_peter_schneider_created(folder_staff)
-        self.assert_dossier_vreni_created(folder_staff)
-        dossier_peter = self.assert_dossier_hanspeter_created(folder_staff)
+        self.assert_empty_dossier_created(leaf_repofolder)
+        self.assert_dossier2_created()
+        dossier = self.assert_dossier_created(leaf_repofolder)
 
-        self.assert_document_1_created(dossier_peter)
-        self.assert_document_2_created(dossier_peter)
-        self.assert_mail_1_created(dossier_peter)
-        self.assert_mail_2_created(dossier_peter)
-        self.assert_document_5_created(dossier_peter)
-        self.assert_document_6_created()
-        self.assert_mail_3_created()
+        self.assert_document1_created(dossier)
+        self.assert_document2_created(dossier)
+        self.assert_mail1_created(dossier)
+        self.assert_mail2_created(dossier)
+        self.assert_document3_created(dossier)
+        self.assert_document5_created()
+        self.assert_mail3_created()
 
         self.assert_report_data_collected(bundle)
 
-    def assert_repo_root_created(self):
+    def assert_reporoot_created(self):
         root = self.portal.get('ordnungssystem-1')
         self.assertEqual('Ordnungssystem', root.Title())
         self.assertEqual(u'Ordnungssystem', root.title_de)
@@ -198,7 +198,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             index_data_for(folder_organisation)[GUID_INDEX_NAME])
         return folder_organisation
 
-    def assert_processes_folder_created(self, parent):
+    def assert_empty_repofolder_created(self, parent):
         folder_process = parent.get('organigramm-prozesse')
         self.assertEqual('0.0. Organigramm, Prozesse', folder_process.Title())
         self.assertEqual(u'Organigramm, Prozesse', folder_process.title_de)
@@ -247,92 +247,92 @@ class TestOggBundlePipeline(IntegrationTestCase):
             index_data_for(folder_process)[GUID_INDEX_NAME])
         return folder_process
 
-    def assert_staff_folder_created(self, parent):
-        folder_staff = parent.get('personal')
-        self.assertEqual('0.3. Personal', folder_staff.Title())
-        self.assertEqual(u'Personal', folder_staff.title_de)
-        self.assertIsNone(folder_staff.title_fr)
-        self.assertEqual('personal', folder_staff.getId())
+    def assert_leaf_repofolder_created(self, parent):
+        leaf_repofolder = parent.get('personal')
+        self.assertEqual('0.3. Personal', leaf_repofolder.Title())
+        self.assertEqual(u'Personal', leaf_repofolder.title_de)
+        self.assertIsNone(leaf_repofolder.title_fr)
+        self.assertEqual('personal', leaf_repofolder.getId())
         self.assertEqual(
             u'prompt',
-            ILifeCycle(folder_staff).archival_value)
+            ILifeCycle(leaf_repofolder).archival_value)
         self.assertEqual(
             u'confidential',
-            IClassification(folder_staff).classification)
+            IClassification(leaf_repofolder).classification)
         self.assertEqual(
             100,
-            ILifeCycle(folder_staff).custody_period)
+            ILifeCycle(leaf_repofolder).custody_period)
         self.assertEqual(
             u'',
-            folder_staff.description)
+            leaf_repofolder.description)
         self.assertEqual(
             u'',
-            folder_staff.former_reference)
+            leaf_repofolder.former_reference)
         self.assertEqual(
             u'privacy_layer_yes',
-            IClassification(folder_staff).privacy_layer)
+            IClassification(leaf_repofolder).privacy_layer)
         self.assertEqual(
             u'private',
-            IClassification(folder_staff).public_trial)
+            IClassification(leaf_repofolder).public_trial)
         self.assertEqual(
             u'Enth\xe4lt vertrauliche Personaldossiers.',
-            IClassification(folder_staff).public_trial_statement)
+            IClassification(leaf_repofolder).public_trial_statement)
         self.assertEqual(
             "3",
-            IReferenceNumberPrefix(folder_staff).reference_number_prefix)
+            IReferenceNumberPrefix(leaf_repofolder).reference_number_prefix)
         self.assertEqual(
             u'',
-            folder_staff.referenced_activity)
+            leaf_repofolder.referenced_activity)
         self.assertEqual(
             10,
-            ILifeCycle(folder_staff).retention_period)
+            ILifeCycle(leaf_repofolder).retention_period)
         self.assertEqual(
             u'',
-            ILifeCycle(folder_staff).retention_period_annotation)
+            ILifeCycle(leaf_repofolder).retention_period_annotation)
         self.assertEqual(
             date(2005, 1, 1),
-            folder_staff.valid_from)
+            leaf_repofolder.valid_from)
         self.assertEqual(
             date(2050, 1, 1),
-            folder_staff.valid_until)
+            leaf_repofolder.valid_until)
         self.assertEqual(
             'repositoryfolder-state-active',
-            api.content.get_state(folder_staff))
-        self.assertIsNone(getattr(folder_staff, 'guid', None))
-        self.assertIsNone(getattr(folder_staff, 'parent_guid', None))
+            api.content.get_state(leaf_repofolder))
+        self.assertIsNone(getattr(leaf_repofolder, 'guid', None))
+        self.assertIsNone(getattr(leaf_repofolder, 'parent_guid', None))
         self.assertEqual(
-            IAnnotations(folder_staff)[BUNDLE_GUID_KEY],
-            index_data_for(folder_staff)[GUID_INDEX_NAME])
+            IAnnotations(leaf_repofolder)[BUNDLE_GUID_KEY],
+            index_data_for(leaf_repofolder)[GUID_INDEX_NAME])
 
         self.assertDictContainsSubset(
             {'privileged_users':
              ['Contributor', 'Reviewer', 'Editor', 'Reader'],
              'admin_users':
              ['Publisher']},
-            folder_staff.__ac_local_roles__)
-        self.assertTrue(folder_staff.__ac_local_roles_block__)
+            leaf_repofolder.__ac_local_roles__)
+        self.assertTrue(leaf_repofolder.__ac_local_roles_block__)
 
-        return folder_staff
+        return leaf_repofolder
 
-    def assert_dossier_peter_schneider_created(self, parent):
-        dossier_peter = parent.get('dossier-21')
+    def assert_empty_dossier_created(self, parent):
+        dossier = parent.get('dossier-21')
         self.assertEqual(
             u'Vreni Meier ist ein Tausendsassa',
-            IDossier(dossier_peter).comments)
-        self.assertEqual(tuple(), IDossier(dossier_peter).keywords)
+            IDossier(dossier).comments)
+        self.assertEqual(tuple(), IDossier(dossier).keywords)
         self.assertEqual(
-            'Client1 0.3 / 1', IReferenceNumber(dossier_peter).get_number())
-        self.assertEqual([], IDossier(dossier_peter).relatedDossier)
-        self.assertEqual(u'lukas.graf', IDossier(dossier_peter).responsible)
+            'Client1 0.3 / 1', IReferenceNumber(dossier).get_number())
+        self.assertEqual([], IDossier(dossier).relatedDossier)
+        self.assertEqual(u'lukas.graf', IDossier(dossier).responsible)
         self.assertEqual('dossier-state-active',
-                         api.content.get_state(dossier_peter))
-        self.assertEqual(date(2010, 11, 11), IDossier(dossier_peter).start)
-        self.assertEqual(u'Dossier Peter Schneider', dossier_peter.title)
+                         api.content.get_state(dossier))
+        self.assertEqual(date(2010, 11, 11), IDossier(dossier).start)
+        self.assertEqual(u'Dossier Peter Schneider', dossier.title)
         self.assertEqual(
-            IAnnotations(dossier_peter)[BUNDLE_GUID_KEY],
-            index_data_for(dossier_peter)[GUID_INDEX_NAME])
+            IAnnotations(dossier)[BUNDLE_GUID_KEY],
+            index_data_for(dossier)[GUID_INDEX_NAME])
 
-    def assert_dossier_vreni_created(self, parent):
+    def assert_dossier2_created(self):
         dossier = self.leaf_repofolder.get('dossier-23')
         self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
                          IDossier(dossier).comments)
@@ -348,176 +348,175 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(dossier)[BUNDLE_GUID_KEY],
             index_data_for(dossier)[GUID_INDEX_NAME])
 
-    def assert_dossier_hanspeter_created(self, parent):
-        dossier_peter = parent.get('dossier-22')
+    def assert_dossier_created(self, parent):
+        dossier = parent.get('dossier-22')
         self.assertEqual(
             u'archival worthy',
-            ILifeCycle(dossier_peter).archival_value)
+            ILifeCycle(dossier).archival_value)
         self.assertEqual(
             u'Beinhaltet Informationen zum Verfahren',
-            ILifeCycle(dossier_peter).archival_value_annotation)
+            ILifeCycle(dossier).archival_value_annotation)
         self.assertEqual(
             u'classified',
-            IClassification(dossier_peter).classification)
+            IClassification(dossier).classification)
         self.assertEqual(
             150,
-            ILifeCycle(dossier_peter).custody_period)
+            ILifeCycle(dossier).custody_period)
         self.assertEqual(
             u'Wir haben Hanspeter M\xfcller in einem Verfahren entlassen.',
-            dossier_peter.description)
+            dossier.description)
         self.assertEqual(
             date(2007, 1, 1),
-            IDossier(dossier_peter).start)
+            IDossier(dossier).start)
         self.assertEqual(
             date(2011, 1, 6),
-            IDossier(dossier_peter).end)
+            IDossier(dossier).end)
         self.assertEqual(
             tuple(),
-            IDossier(dossier_peter).keywords)
+            IDossier(dossier).keywords)
         self.assertEqual(
             u'privacy_layer_yes',
-            IClassification(dossier_peter).privacy_layer)
+            IClassification(dossier).privacy_layer)
         self.assertEqual(
-            'Client1 0.3 / 7', IReferenceNumber(dossier_peter).get_number())
+            'Client1 0.3 / 7', IReferenceNumber(dossier).get_number())
         self.assertEqual(
             [],
-            IDossier(dossier_peter).relatedDossier)
+            IDossier(dossier).relatedDossier)
         self.assertEqual(
             u'lukas.graf',
-            IDossier(dossier_peter).responsible)
+            IDossier(dossier).responsible)
         self.assertEqual(
             5,
-            ILifeCycle(dossier_peter).retention_period)
+            ILifeCycle(dossier).retention_period)
         self.assertIsNone(
-            ILifeCycle(dossier_peter).retention_period_annotation)
+            ILifeCycle(dossier).retention_period_annotation)
 
         self.assertEqual(
             'dossier-state-resolved',
-            api.content.get_state(dossier_peter))
+            api.content.get_state(dossier))
 
         self.assertEqual(
             u'Hanspeter M\xfcller',
-            dossier_peter.title)
+            dossier.title)
 
         self.assertDictContainsSubset(
             {'admin_users':
                 ['Contributor', 'Publisher', 'Reviewer', 'Editor', 'Reader']},
-            dossier_peter.__ac_local_roles__)
-        self.assertTrue(dossier_peter.__ac_local_roles_block__)
+            dossier.__ac_local_roles__)
+        self.assertTrue(dossier.__ac_local_roles_block__)
 
         self.assertEqual(
-            IAnnotations(dossier_peter)[BUNDLE_GUID_KEY],
-            index_data_for(dossier_peter)[GUID_INDEX_NAME])
+            IAnnotations(dossier)[BUNDLE_GUID_KEY],
+            index_data_for(dossier)[GUID_INDEX_NAME])
 
-        return dossier_peter
+        return dossier
 
+    def assert_document1_created(self, parent):
+        document1 = parent.objectValues()[0]
 
-    def assert_document_1_created(self, parent):
-        document_1 = parent.objectValues()[0]
-
-        self.assertTrue(document_1.digitally_available)
-        self.assertIsNotNone(document_1.file)
-        self.assertEqual(22198, len(document_1.file.data))
+        self.assertTrue(document1.digitally_available)
+        self.assertIsNotNone(document1.file)
+        self.assertEqual(22198, len(document1.file.data))
 
         self.assertEqual(
             u'david.erni',
-            document_1.document_author)
+            document1.document_author)
         self.assertEqual(
             date(2007, 1, 1),
-            document_1.document_date)
+            document1.document_date)
         self.assertEqual(
             tuple(),
-            document_1.keywords)
+            document1.keywords)
         self.assertTrue(
-            document_1.preserved_as_paper)
+            document1.preserved_as_paper)
         self.assertEqual(
             [],
-            document_1.relatedItems)
+            document1.relatedItems)
         self.assertEqual(
             'document-state-draft',
-            api.content.get_state(document_1))
+            api.content.get_state(document1))
         self.assertEqual(
             u'Bewerbung Hanspeter M\xfcller',
-            document_1.title)
+            document1.title)
         self.assertEqual(
-            IAnnotations(document_1)[BUNDLE_GUID_KEY],
-            index_data_for(document_1)[GUID_INDEX_NAME])
+            IAnnotations(document1)[BUNDLE_GUID_KEY],
+            index_data_for(document1)[GUID_INDEX_NAME])
 
-    def assert_document_2_created(self, parent):
-        document_2 = parent.objectValues()[1]
+    def assert_document2_created(self, parent):
+        document2 = parent.objectValues()[1]
 
-        self.assertTrue(document_2.digitally_available)
-        self.assertIsNotNone(document_2.file)
-        self.assertEqual(22198, len(document_2.file.data))
+        self.assertTrue(document2.digitally_available)
+        self.assertIsNotNone(document2.file)
+        self.assertEqual(22198, len(document2.file.data))
 
         self.assertEqual(
             u'david.erni',
-            document_2.document_author)
+            document2.document_author)
         self.assertEqual(
             date(2011, 1, 1),
-            document_2.document_date)
+            document2.document_date)
         self.assertEqual(
             u'directive',
-            document_2.document_type)
+            document2.document_type)
         self.assertEqual(
             tuple(),
-            document_2.keywords)
+            document2.keywords)
         self.assertTrue(
-            document_2.preserved_as_paper)
+            document2.preserved_as_paper)
         self.assertEqual(
             u'private',
-            IClassification(document_2).public_trial)
+            IClassification(document2).public_trial)
         self.assertEqual(
             u'Enth\xe4lt private Daten',
-            IClassification(document_2).public_trial_statement)
+            IClassification(document2).public_trial_statement)
         self.assertEqual(
             date(2011, 1, 1),
-            document_2.receipt_date)
+            document2.receipt_date)
         self.assertEqual(
             [],
-            document_2.relatedItems)
+            document2.relatedItems)
         self.assertEqual(
             'document-state-draft',
-            api.content.get_state(document_2))
+            api.content.get_state(document2))
         self.assertEqual(
             u'Entlassung Hanspeter M\xfcller',
-            document_2.title)
+            document2.title)
         self.assertEqual(
-            IAnnotations(document_2)[BUNDLE_GUID_KEY],
-            index_data_for(document_2)[GUID_INDEX_NAME])
+            IAnnotations(document2)[BUNDLE_GUID_KEY],
+            index_data_for(document2)[GUID_INDEX_NAME])
 
-    def assert_document_5_created(self, parent):
-        document_5 = parent.objectValues()[4]
+    def assert_document3_created(self, parent):
+        document3 = parent.objectValues()[4]
 
-        self.assertTrue(document_5.digitally_available)
-        self.assertIsNotNone(document_5.file)
-        self.assertEqual(24390, len(document_5.file.data))
+        self.assertTrue(document3.digitally_available)
+        self.assertIsNotNone(document3.file)
+        self.assertEqual(24390, len(document3.file.data))
 
         self.assertEqual(
             'document-state-draft',
-            api.content.get_state(document_5))
+            api.content.get_state(document3))
         self.assertEqual(
             u'Document referenced via UNC-Path',
-            document_5.title)
+            document3.title)
         self.assertEqual(
-            IAnnotations(document_5)[BUNDLE_GUID_KEY],
-            index_data_for(document_5)[GUID_INDEX_NAME])
+            IAnnotations(document3)[BUNDLE_GUID_KEY],
+            index_data_for(document3)[GUID_INDEX_NAME])
 
-    def assert_document_6_created(self):
-        document_6 = self.dossier.objectValues()[-2]
+    def assert_document5_created(self):
+        document5 = self.dossier.objectValues()[-2]
 
-        self.assertTrue(document_6.digitally_available)
-        self.assertIsNotNone(document_6.file)
-        self.assertEqual(22198, len(document_6.file.data))
+        self.assertTrue(document5.digitally_available)
+        self.assertIsNotNone(document5.file)
+        self.assertEqual(22198, len(document5.file.data))
         self.assertEqual(
-            'document-state-draft', api.content.get_state(document_6))
+            'document-state-draft', api.content.get_state(document5))
         self.assertEqual(u'Dokument in bestehendem Examplecontent Dossier',
-                         document_6.title)
+                         document5.title)
         self.assertEqual(
-            IAnnotations(document_6)[BUNDLE_GUID_KEY],
-            index_data_for(document_6)[GUID_INDEX_NAME])
+            IAnnotations(document5)[BUNDLE_GUID_KEY],
+            index_data_for(document5)[GUID_INDEX_NAME])
 
-    def assert_mail_1_created(self, parent):
+    def assert_mail1_created(self, parent):
         mail = parent.objectValues()[2]
 
         self.assertTrue(mail.digitally_available)
@@ -558,7 +557,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
 
-    def assert_mail_2_created(self, parent):
+    def assert_mail2_created(self, parent):
         mail = parent.objectValues()[3]
 
         self.assertIsNotNone(mail.message)
@@ -568,7 +567,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
 
-    def assert_mail_3_created(self):
+    def assert_mail3_created(self):
         mail = self.dossier.objectValues()[-1]
 
         self.assertIsNotNone(mail.message)
