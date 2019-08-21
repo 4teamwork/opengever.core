@@ -45,6 +45,9 @@ class ResponseContainer(object):
 
     def add(self, response):
         storage = self._storage(create_if_missing=True)
+        if not IResponse.providedBy(response):
+            raise ValueError('Only Response objects are allowed to add')
+
         response_id = long(time.time() * 1e6)
         while response_id in storage:
             response_id += 1

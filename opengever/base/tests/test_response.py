@@ -44,14 +44,12 @@ class TestResponseContainer(IntegrationTestCase):
         annotations = IAnnotations(self.todo)
         self.assertNotIn(ResponseContainer.ANNOTATION_KEY, annotations.keys())
 
-        response = Response('Bitte weiter abklaeren.')
         container = IResponseContainer(self.todo)
-        container.add(response)
+        with self.assertRaises(ValueError):
+            container.add(object())
 
         storage = annotations[ResponseContainer.ANNOTATION_KEY]
-        self.assertEqual(
-            [response],
-            [response for response in storage.values()])
+        self.assertEqual([], list(storage.keys()))
 
     def test_list_returns_response_in_add_order(self):
         self.login(self.workspace_member)
@@ -59,7 +57,7 @@ class TestResponseContainer(IntegrationTestCase):
 
         container = IResponseContainer(self.todo)
 
-        responses = [Response('1.'), Response('2.'), Response('3.')]
+        responses = [Response('2.'), Response('3.'), Response('1.')]
         [container.add(response) for response in responses]
         self.assertEqual(responses, container.list())
 
