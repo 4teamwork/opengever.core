@@ -173,6 +173,7 @@ class TestProposal(IntegrationTestCase):
              ['Attachments', u'Vertr\xe4gsentwurf'],
              ['Excerpt', '']],
             browser.css('table.listing').first.lists())
+        self.assertEqual(u'en', proposal.language)
         self.assertEqual(self.document, proposal.relatedItems[0].to_object)
 
         model = proposal.load_model()

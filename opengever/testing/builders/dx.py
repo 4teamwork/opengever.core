@@ -472,6 +472,7 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def after_create(self, obj):
         self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
         self.model_arguments['issuer'] = TEST_USER_ID
+        self.model_arguments['language'] = self.arguments['language']
         model = obj.create_model(self.model_arguments, self.container)
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)

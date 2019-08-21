@@ -273,6 +273,7 @@ SUBMITTED_PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'',
+    'language': 'en',
 }
 SUBMITTED_PROPOSAL_MISSING_VALUES = {
     'date_of_submission': None,

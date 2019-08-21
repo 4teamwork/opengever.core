@@ -274,7 +274,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             'title': safe_unicode(predecessor.Title()),
             'committee': [unicode(
                 predecessor.get_committee().load_model().committee_id)],
-            'language': predecessor.load_model().language,
+            'language': predecessor.language,
             'relatedItems': related_items_paths}
 
         for name, value in defaults.items():

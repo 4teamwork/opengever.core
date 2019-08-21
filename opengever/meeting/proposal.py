@@ -76,12 +76,6 @@ class IProposalModel(Interface):
         source='opengever.meeting.ActiveCommitteeVocabulary',
         required=True)
 
-    language = schema.Choice(
-        title=_('language', default=u'Language'),
-        source='opengever.meeting.LanguagesVocabulary',
-        required=True,
-        defaultFactory=get_preferred_language_code)
-
 
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
@@ -120,6 +114,12 @@ class IBaseProposal(model.Schema):
         missing_value=None,
         required=False,
         )
+
+    language = schema.Choice(
+        title=_('language', default=u'Language'),
+        source='opengever.meeting.LanguagesVocabulary',
+        required=True,
+        defaultFactory=get_preferred_language_code)
 
 
 class IProposal(IBaseProposal):
@@ -574,10 +574,10 @@ class Proposal(ProposalBase):
     def get_containing_dossier(self):
         return get_containing_dossier(self)
 
-    def get_repository_folder_title(self, language):
+    def get_repository_folder_title(self):
         main_dossier = self.get_containing_dossier().get_main_dossier()
         repository_folder = aq_parent(aq_inner(main_dossier))
-        return repository_folder.Title(language=language,
+        return repository_folder.Title(language=self.language,
                                        prefix_with_reference_number=False)
 
     def update_model_create_arguments(self, data, context):
@@ -587,21 +587,20 @@ class Proposal(ProposalBase):
         reference_number = IReferenceNumber(
             context.get_main_dossier()).get_number()
 
-        language = data.get('language')
         repository_folder_title = safe_unicode(
-            aq_wrapped_self.get_repository_folder_title(language))
+            aq_wrapped_self.get_repository_folder_title())
 
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
                          dossier_reference_number=reference_number,
                          repository_folder_title=repository_folder_title,
-                         issuer=self.issuer))
+                         issuer=self.issuer,
+                         language=self.language))
         return data
 
     def update_model(self, data):
-        language = data.get('language')
         data['repository_folder_title'] = safe_unicode(
-            self.get_repository_folder_title(language))
+            self.get_repository_folder_title())
         return super(Proposal, self).update_model(data)
 
     def sync_model(self, proposal_model=None):
@@ -609,9 +608,9 @@ class Proposal(ProposalBase):
 
         reference_number = IReferenceNumber(
             self.get_containing_dossier().get_main_dossier()).get_number()
-        repository_folder_title = safe_unicode(self.get_repository_folder_title(
-            proposal_model.language))
+        repository_folder_title = safe_unicode(self.get_repository_folder_title())
 
+        proposal_model.language = self.language
         proposal_model.physical_path = self.get_physical_path()
         proposal_model.dossier_reference_number = reference_number
         proposal_model.repository_folder_title = repository_folder_title
