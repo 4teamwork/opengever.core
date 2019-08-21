@@ -5,6 +5,7 @@ Changelog
 ------------------------
 
 - Include original files in ech0160 SIP export even when archival_file exists. [njohner]
+- Add filename and checked_out fields to recently-touched endpoint. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 

@@ -75,6 +75,8 @@ class RecentlyTouchedGet(Service):
                 "last_touched": brain.modified.ISO8601(),
                 "target_url": brain.getURL(),
                 "title": brain.Title,
+                "filename": brain.filename,
+                "checked_out": brain.checked_out,
             }
             entries.append(data)
         return entries
@@ -129,6 +131,8 @@ class RecentlyTouchedGet(Service):
                 "last_touched": entry['last_touched'].isoformat(),
                 "target_url": brain.getURL(),
                 "title": brain.Title,
+                "filename": brain.filename,
+                "checked_out": brain.checked_out,
             }
             entries.append(data)
 

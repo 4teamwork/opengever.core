@@ -41,7 +41,9 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                  'icon_class': 'icon-docx',
                  'last_touched': '2018-04-30T00:00:00',
                  'target_url': self.document.absolute_url(),
-                 'title': u'Vertr\xe4gsentwurf'}]},
+                 'title': u'Vertr\xe4gsentwurf',
+                 'filename': u'Vertraegsentwurf.docx',
+                 'checked_out': ''}]},
             browser.json)
 
     @browsing
@@ -65,8 +67,43 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'target_url': self.document.absolute_url(),
-                'title': u'Vertr\xe4gsentwurf'}],
+                'title': u'Vertr\xe4gsentwurf',
+                'filename': u'Vertraegsentwurf.docx',
+                'checked_out': self.regular_user.getId()}],
              'recently_touched': []},
+            browser.json)
+
+    @browsing
+    def test_lists_docs_checked_out_by_other_user_correctly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self._clear_recently_touched_log(self.regular_user.getId())
+
+        with freeze(datetime(2018, 4, 30)):
+            manager = queryMultiAdapter(
+                (self.document, self.request), ICheckinCheckoutManager)
+            manager.checkout()
+            manager.checkin()
+
+        with self.login(self.secretariat_user, browser=browser):
+            manager = queryMultiAdapter(
+                (self.document, self.request), ICheckinCheckoutManager)
+            manager.checkout()
+
+        url = '%s/@recently-touched/%s' % (
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(
+            {'checked_out': [],
+             'recently_touched': [{
+                'icon_class': 'icon-docx is-checked-out',
+                'last_touched': '2018-04-30T00:00:00',
+                'target_url': self.document.absolute_url(),
+                'title': u'Vertr\xe4gsentwurf',
+                'filename': u'Vertraegsentwurf.docx',
+                'checked_out': self.secretariat_user.getId()}]},
             browser.json)
 
     @browsing
@@ -95,7 +132,9 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                 'icon_class': 'icon-docx is-checked-out-by-current-user',
                 'last_touched': '2018-04-30T00:00:00+02:00',
                 'target_url': self.document.absolute_url(),
-                'title': u'Vertr\xe4gsentwurf'}],
+                'title': u'Vertr\xe4gsentwurf',
+                'filename': u'Vertraegsentwurf.docx',
+                'checked_out': self.regular_user.getId()}],
              'recently_touched': []},
             browser.json)
 

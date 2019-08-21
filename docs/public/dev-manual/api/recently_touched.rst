@@ -49,21 +49,27 @@ zwei separaten Listen:
             "icon_class": "icon-dokument_word is-checked-out-by-current-user",
             "last_touched": "2018-05-31T15:40:23+02:00",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-197",
-            "title": "Datenschutzrichtlinien Muster AG"
+            "title": "Datenschutzrichtlinien Muster AG",
+            "filename": "Datenschutzrichtlinien Muster AG.docx",
+            "checked_out": "peter.muster"
           },
           {
             "icon_class": "icon-dokument_excel is-checked-out-by-current-user",
             "last_touched": "2018-05-31T15:40:01+02:00",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-191",
-            "title": "Bilanz Muster AG 2018"
+            "title": "Bilanz Muster AG 2018",
+            "filename": "Bilanz Muster AG 2018.xlsx",
+            "checked_out": "peter.muster"
           }
         ],
         "recently_touched": [
           {
-            "icon_class": "icon-dokument_powerpoint",
+            "icon_class": "icon-dokument_powerpoint is-checked-out",
             "last_touched": "2018-05-31T15:35:38.607793",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-229",
-            "title": "Pra\u0308sentation - Firmenprofil Muster AG"
+            "title": "Pra\u0308sentation - Firmenprofil Muster AG",
+            "filename": "Praesentation - Firmenprofil Muster AG.ppt",
+            "checked_out": "anderer.user"
           },
           {
             "...": ""
@@ -73,6 +79,8 @@ zwei separaten Listen:
             "last_touched": "2018-05-31T15:34:42.442729",
             "target_url": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-236",
             "title": "Anfrage Drei"
+            "filename": "Anfrage Drei.docx",
+            "checked_out": ""
           }
         ]
       }
