@@ -24,13 +24,13 @@ class TestCommitteeVocabularies(IntegrationTestCase):
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.ActiveCommitteeVocabulary')
         self.assertItemsEqual(
-            [unicode(Oguid.for_object(self.empty_committee)),
-             unicode(Oguid.for_object(self.committee))],
+            [Oguid.for_object(self.empty_committee).id,
+             Oguid.for_object(self.committee).id],
             [term.value for term in factory(context=None)])
 
         self.empty_committee.load_model().deactivate()
         self.assertItemsEqual(
-            [unicode(Oguid.for_object(self.committee))],
+            [Oguid.for_object(self.committee).id],
             [term.value for term in factory(context=None)])
 
 

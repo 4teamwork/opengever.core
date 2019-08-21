@@ -970,7 +970,7 @@ class TestProposal(IntegrationTestCase):
             self.proposal.Title().decode('utf-8'),
             browser.find('Title').value)
         self.assertEquals(
-            str(self.proposal.get_committee().load_model().committee_id),
+            str(self.proposal.get_committee().load_model().oguid),
             browser.find('Committee').value)
 
         expected_attachements = [rel.to_path for rel in self.proposal.relatedItems]
@@ -1040,7 +1040,7 @@ class TestProposal(IntegrationTestCase):
         self.assertEquals(u'Approve protocol ' + self.meeting.get_title(),
                           browser.find('Title').value)
 
-        self.assertEquals(str(self.meeting.model.committee_id),
+        self.assertEquals(str(self.meeting.model.committee.oguid),
                           browser.find('Committee').value)
 
         protocol_document = self.meeting.model.protocol_document.resolve_document()

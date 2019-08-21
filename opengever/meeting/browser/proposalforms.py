@@ -206,7 +206,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             return super(ProposalAddForm, self).updateFields()
         finally:
             if self.schema is IAddProposal:
-                move(self, 'proposal_template', after='committee')
+                move(self, 'proposal_template', after='committee_oguid')
                 move(self, 'proposal_document_type', before='proposal_template')
                 move(self, 'proposal_document', before='proposal_template')
                 move(self, 'edit_after_creation', after='proposal_template')
@@ -237,7 +237,7 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
                           context=self.request)
         defaults = {
             'title': u"{} {}".format(title, safe_unicode(meeting.title)),
-            'committee': [unicode(meeting.committee_id)],
+            'committee_oguid': [unicode(meeting.committee.oguid)],
             'relatedItems': related_items_paths}
 
         for name, value in defaults.items():
@@ -272,8 +272,8 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         defaults = {
             'predecessor_proposal': '/'.join(predecessor.getPhysicalPath()),
             'title': safe_unicode(predecessor.Title()),
-            'committee': [unicode(
-                predecessor.get_committee().load_model().committee_id)],
+            'committee_oguid': [unicode(
+                predecessor.committee_oguid)],
             'language': predecessor.language,
             'relatedItems': related_items_paths}
 

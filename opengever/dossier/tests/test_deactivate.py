@@ -75,8 +75,11 @@ class TestDossierDeactivation(IntegrationTestCase):
 
     @browsing
     def test_not_possible_with_active_proposals(self, browser):
+        self.login(self.committee_responsible, browser)
+        proposal = create(Builder('proposal').within(self.empty_dossier)
+                                             .having(committee=self.committee))
+
         self.login(self.dossier_responsible, browser)
-        proposal = create(Builder('proposal').within(self.empty_dossier))
 
         self.deactivate(self.empty_dossier, browser)
         self.assert_workflow_state('dossier-state-active', self.empty_dossier)
