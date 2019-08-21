@@ -231,6 +231,14 @@ class IDossierResolveProperties(Interface):
         default='strict'
     )
 
+    use_changed_for_end_date = schema.Bool(
+        title=u"Use the 'changed' date for earliest possible end date",
+        description=u'When True, changed will be used in the calculation of '
+        'the earliest possible end date. If set to False, the document_date '
+        'will be used instead.',
+        default=True
+    )
+
 
 """
 These two interfaces have been moved and renamed to

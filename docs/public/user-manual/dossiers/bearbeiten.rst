@@ -81,7 +81,8 @@ Vor dem Abschluss müssen zudem folgende Abschlussregeln beachtet werden:
 - Falls das Dossier Subdossiers enthält, so müssen alle Inhalte in Subdossiers abgelegt sein. Diese Regel kann bei Bedarf via Konfigurationsoption deaktiviert werden.
 
 Weiter muss das Abschlussdatum beachtet werden. Dieses muss mind. das letzte
-Bearbeitungs-Datum des zuletzt bearbeiteten Dokumentes haben. Beim
+Bearbeitungs-Datum (oder Dokument-Datum, gemäss Konfigurationsoption der GEVER Installation)
+des zuletzt bearbeiteten Dokumentes haben. Beim
 Dossier-Abschluss wird dies vom System überprüft. Wurde beispielsweise
 bei der Dossier-Erstellung bereits ein Datum gewählt, dass jedoch vor dem
 zuletzt bearbeiteten Dokument liegt, zeigt OneGov GEVER einen Fehler an und das

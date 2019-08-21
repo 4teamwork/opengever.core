@@ -4,7 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
-- Nothing changed yet.
+- Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
 2019.4.0rc2 (2019-08-21)

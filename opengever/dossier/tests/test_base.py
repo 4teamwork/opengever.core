@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
@@ -292,7 +293,7 @@ class TestDateCalculations(IntegrationTestCase):
         self.assertIsNone(IDossier(self.empty_dossier).end)
         self.assertTrue(self.empty_dossier.has_valid_enddate())
 
-    def test_dossier_end_can_be_later_than_document_date(self):
+    def test_dossier_end_can_be_later_than_document_modification_date(self):
         self.login(self.dossier_responsible)
         IDossier(self.dossier).end = date(2020, 2, 2)
         IChanged(self.document).changed = datetime(2020, 1, 1, tzinfo=pytz.utc)
@@ -306,7 +307,7 @@ class TestDateCalculations(IntegrationTestCase):
         self.document.reindexObject(idxs=['changed'])
         self.assertTrue(self.dossier.has_valid_enddate())
 
-    def test_dossier_end_cannot_be_earlier_to_document_date(self):
+    def test_dossier_end_cannot_be_earlier_to_document_modification_date(self):
         self.login(self.dossier_responsible)
         IDossier(self.dossier).end = date(2020, 1, 1)
         IChanged(self.document).changed = datetime(2020, 2, 2, tzinfo=pytz.utc)
@@ -371,3 +372,50 @@ class TestDateCalculations(IntegrationTestCase):
 
         self.assertSequenceEqual([], map(self.brain_to_object, restricted_subdossiers))
         self.assertSequenceEqual([self.subsubdossier], map(self.brain_to_object, unrestricted_subdossiers))
+
+
+class TestDateCalculationsUsingDocumentDate(IntegrationTestCase):
+
+    features = ('!changed_for_end_date', )
+
+    def test_earliest_possible_is_latest_of_dossiers_end_dates_and_document_dates(self):
+        self.login(self.dossier_responsible)
+
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        IDossier(self.subdossier).end = date(2020, 2, 2)
+        self.subdossier.reindexObject(idxs=['end'])
+        self.assertEquals(date(2020, 2, 2), self.dossier.earliest_possible_end_date())
+
+        IDocumentMetadata(self.document).document_date = date(2020, 3, 3)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertEquals(date(2020, 3, 3), self.dossier.earliest_possible_end_date())
+
+    def test_earliest_possible_is_latest_document_date(self):
+        self.login(self.dossier_responsible)
+        IDocumentMetadata(self.document).document_date = date(2021, 1, 22)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertEquals(date(2021, 1, 22),
+                          self.dossier.earliest_possible_end_date())
+
+    def test_dossier_end_can_be_later_than_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 2, 2)
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertTrue(self.dossier.has_valid_enddate())
+
+    def test_dossier_end_can_be_equal_to_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        IDocumentMetadata(self.document).document_date = date(2020, 1, 1)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertTrue(self.dossier.has_valid_enddate())
+
+    def test_dossier_end_cannot_be_earlier_to_document_date(self):
+        self.login(self.dossier_responsible)
+        IDossier(self.dossier).end = date(2020, 1, 1)
+        IDocumentMetadata(self.document).document_date = date(2020, 2, 2)
+        self.document.reindexObject(idxs=['document_date'])
+        self.assertFalse(self.dossier.has_valid_enddate())
+

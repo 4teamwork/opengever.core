@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.utils import truncate_ellipsis
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import Proposal
@@ -321,9 +322,17 @@ class DossierContainer(Container):
 
     def earliest_possible_end_date(self):
         """The earliest possible end-date must be later than all document
-        last modification dates (except the dossier journal pdf) and all
-        dossier start and end dates.
+        last modification or document dates (except the dossier journal pdf)
+        and all dossier start and end dates.
         """
+
+        use_changed = api.portal.get_registry_record(
+            'use_changed_for_end_date', IDossierResolveProperties)
+        if use_changed:
+            date_name = 'changed'
+        else:
+            date_name = 'document_date'
+
         dates = []
         catalog = getToolByName(self, 'portal_catalog')
 
@@ -360,7 +369,7 @@ class DossierContainer(Container):
                                  document_brains)
 
         for document_brain in filtered_brains:
-            dates.append(document_brain.changed)
+            dates.append(getattr(document_brain, date_name))
 
         dates = filter(None, dates)
         dates = map(self._convert_to_date, dates)

@@ -8,6 +8,7 @@ from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.base.behaviors.changed import IChanged
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
 from opengever.dossier.archive import EnddateValidator
 from opengever.dossier.archive import get_filing_actions
@@ -252,6 +253,23 @@ class TestArchiveFormDefaults(IntegrationTestCase):
 
         IChanged(self.subdocument).changed = datetime(2021, 1, 2, tzinfo=pytz.utc)
         self.subdocument.reindexObject(idxs=['changed'])
+        browser.open(self.dossier, view='transition-archive')
+        self.assertEqual(date(2021, 1, 2),
+                         self._get_form_date(browser, 'dossier_enddate'))
+
+    @browsing
+    def test_enddate_may_be_latest_document_date(self, browser):
+        """When a document's date is greater than the dossier end date and the
+        use_changed_for_end_date feature is deactivated, use the document's date.
+        """
+        self.deactivate_feature('changed_for_end_date')
+
+        self.login(self.dossier_responsible, browser)
+        IDossier(self.dossier).end = date(2021, 1, 1)
+        self.dossier.reindexObject(idxs=['end'])
+
+        IDocumentMetadata(self.subdocument).document_date = date(2021, 1, 2)
+        self.subdocument.reindexObject(idxs=['document_date'])
         browser.open(self.dossier, view='transition-archive')
         self.assertEqual(date(2021, 1, 2),
                          self._get_form_date(browser, 'dossier_enddate'))
