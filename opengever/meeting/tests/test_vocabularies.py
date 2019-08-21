@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.oguid import Oguid
 from opengever.meeting.vocabulary import get_committee_member_vocabulary
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
@@ -23,13 +24,13 @@ class TestCommitteeVocabularies(IntegrationTestCase):
         factory = getUtility(IVocabularyFactory,
                              name='opengever.meeting.ActiveCommitteeVocabulary')
         self.assertItemsEqual(
-            [self.empty_committee.load_model(),
-             self.committee.load_model()],
+            [unicode(Oguid.for_object(self.empty_committee)),
+             unicode(Oguid.for_object(self.committee))],
             [term.value for term in factory(context=None)])
 
         self.empty_committee.load_model().deactivate()
         self.assertItemsEqual(
-            [self.committee.load_model()],
+            [unicode(Oguid.for_object(self.committee))],
             [term.value for term in factory(context=None)])
 
 
