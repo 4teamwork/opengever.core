@@ -266,6 +266,20 @@ PROPOSAL_MISSING_VALUES = {
 }
 
 
+SUBMITTED_PROPOSAL_REQUIREDS = {
+    'issuer': u'herbert.jager',
+}
+SUBMITTED_PROPOSAL_DEFAULTS = {
+    'changed': FROZEN_NOW,
+    'description': u'',
+    'title': u'',
+}
+SUBMITTED_PROPOSAL_MISSING_VALUES = {
+    'date_of_submission': None,
+    'excerpts': [],
+}
+
+
 PRIVATEFOLDER_REQUIREDS = {
 }
 PRIVATEFOLDER_DEFAULTS = {
@@ -1333,6 +1347,62 @@ class TestProposalDefaults(TestDefaultsBase):
         expected = self.get_z3c_form_defaults()
 
         self.assertDictEqual(expected, persisted_values)
+
+
+class TestSubmittedProposalDefaults(TestDefaultsBase):
+    """Test submitted proposals come with expected default values.
+
+    Submitted proposals are never created separately via a form but always
+    automatically by the system. Thus we skip/omit some browser api related
+    tests and test creation as manager.
+    """
+    portal_type = 'opengever.meeting.submittedproposal'
+
+    requireds = SUBMITTED_PROPOSAL_REQUIREDS
+    type_defaults = SUBMITTED_PROPOSAL_DEFAULTS
+    missing_values = SUBMITTED_PROPOSAL_MISSING_VALUES
+
+    features = ('meeting', )
+
+    def test_create_content_in_container(self):
+        self.login(self.manager)
+
+        with freeze(FROZEN_NOW):
+            proposal = createContentInContainer(
+                self.committee,
+                'opengever.meeting.submittedproposal',
+                issuer=SUBMITTED_PROPOSAL_REQUIREDS['issuer'],
+            )
+
+        persisted_values = get_persisted_values_for_obj(proposal)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def test_invoke_factory(self):
+        self.login(self.manager)
+
+        with freeze(FROZEN_NOW):
+            new_id = self.committee.invokeFactory(
+                'opengever.meeting.submittedproposal',
+                'submittedproposal-999',
+                issuer=SUBMITTED_PROPOSAL_REQUIREDS['issuer'],
+            )
+        proposal = self.committee[new_id]
+
+        persisted_values = get_persisted_values_for_obj(proposal)
+        expected = self.get_type_defaults()
+
+        self.assertDictEqual(expected, persisted_values)
+
+    def get_obj_of_own_type(self):
+        pass
+
+    def test_z3c_form_defaults_cover_all_schema_fields(self):
+        pass
+
+    def test_widgets_render_missing_values(self):
+        pass
 
 
 class TestPrivateFolderDefaults(TestDefaultsBase):

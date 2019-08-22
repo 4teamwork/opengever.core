@@ -10,7 +10,7 @@ from opengever.base.security import reindex_object_security_without_children
 from opengever.document.document import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.handlers.task import sync_task
-from opengever.meeting.proposal import IProposal
+from opengever.meeting.proposal import IBaseProposal
 from opengever.ogds.base.utils import get_current_org_unit
 from plone import api
 
@@ -135,7 +135,7 @@ class LocalRolesSetter(object):
         catalog = api.portal.get_tool('portal_catalog')
         subdossiers = [brain.getObject() for brain in catalog(
             object_provides=[IDossierMarker.__identifier__,
-                             IProposal.__identifier__],
+                             IBaseProposal.__identifier__],
             path='/'.join(distinct_parent.getPhysicalPath()))]
 
         for dossier in subdossiers:
@@ -205,7 +205,7 @@ class LocalRolesSetter(object):
         catalog = api.portal.get_tool('portal_catalog')
         subdossiers = [brain.getObject() for brain in catalog(
             object_provides=[IDossierMarker.__identifier__,
-                             IProposal.__identifier__],
+                             IBaseProposal.__identifier__],
             path='/'.join(distinct_parent.getPhysicalPath()))]
 
         manager = RoleAssignmentManager(distinct_parent)

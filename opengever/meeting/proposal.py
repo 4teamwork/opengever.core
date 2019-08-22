@@ -87,8 +87,7 @@ class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
 
 
-class IProposal(model.Schema):
-    """Proposal Proxy Object Schema Interface"""
+class IBaseProposal(model.Schema):
 
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
@@ -105,6 +104,26 @@ class IProposal(model.Schema):
         missing_value=u'',
         default=u'',
         )
+
+    widget('issuer', KeywordFieldWidget, async=True)
+    issuer = schema.Choice(
+        title=_(u"label_issuer", default="Issuer"),
+        source=AssignedUsersSourceBinder(),
+        required=True,
+    )
+
+    omitted('date_of_submission')
+    date_of_submission = schema.Date(
+        description=_('label_date_of_submission',
+                      default='Date of submission'),
+        default=None,
+        missing_value=None,
+        required=False,
+        )
+
+
+class IProposal(IBaseProposal):
+    """Proposal Proxy Object Schema Interface"""
 
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
@@ -128,13 +147,6 @@ class IProposal(model.Schema):
         required=False,
         )
 
-    widget('issuer', KeywordFieldWidget, async=True)
-    issuer = schema.Choice(
-        title=_(u"label_issuer", default="Issuer"),
-        source=AssignedUsersSourceBinder(),
-        required=True,
-    )
-
     mode(predecessor_proposal='hidden')
     predecessor_proposal = RelationChoice(
         title=_(u'predecessor_proposal_label', default=u'Predecessor proposal'),
@@ -144,17 +156,8 @@ class IProposal(model.Schema):
         source=SolrObjPathSourceBinder(portal_type='opengever.meeting.proposal')
         )
 
-    omitted('date_of_submission')
-    date_of_submission = schema.Date(
-        description=_('label_date_of_submission',
-                      default='Date of submission'),
-        default=None,
-        missing_value=None,
-        required=False,
-        )
 
-
-class ISubmittedProposal(IProposal):
+class ISubmittedProposal(IBaseProposal):
 
     excerpts = RelationList(
         title=_(u'label_excerpts', default=u'Excerpts'),
@@ -228,27 +231,6 @@ class ProposalBase(ModelContainer):
              'value': model.get_decision_number(),
              'is_html': True},
         ])
-
-        if self.predecessor_proposal and self.predecessor_proposal.to_object:
-            predecessor_model = self.predecessor_proposal.to_object.load_model()
-            attributes.append({
-                'label': _('label_predecessor', default=u'Predecessor'),
-                'value': predecessor_model.get_link(),
-                'is_html': True})
-
-        catalog = getUtility(ICatalog)
-        doc_id = getUtility(IIntIds).getId(aq_inner(self))
-        successor_html_items = []
-        for relation in catalog.findRelations({
-                'to_id': doc_id,
-                'from_attribute': 'predecessor_proposal'}):
-            successor_html_items.append(u'<li>{}</li>'.format(
-                relation.from_object.load_model().get_link()))
-        if successor_html_items:
-            attributes.append({
-                'label': _('label_successors', default=u'Successors'),
-                'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
-                'is_html': True})
 
         return attributes
 
@@ -714,3 +696,29 @@ class Proposal(ProposalBase):
         self.date_of_submission = None
         api.content.transition(obj=self,
                                transition='proposal-transition-reject')
+
+    def get_overview_attributes(self):
+        data = super(Proposal, self).get_overview_attributes()
+
+        if self.predecessor_proposal and self.predecessor_proposal.to_object:
+            predecessor_model = self.predecessor_proposal.to_object.load_model()
+            data.append({
+                'label': _('label_predecessor', default=u'Predecessor'),
+                'value': predecessor_model.get_link(),
+                'is_html': True})
+
+        catalog = getUtility(ICatalog)
+        doc_id = getUtility(IIntIds).getId(aq_inner(self))
+        successor_html_items = []
+        for relation in catalog.findRelations({
+                'to_id': doc_id,
+                'from_attribute': 'predecessor_proposal'}):
+            successor_html_items.append(u'<li>{}</li>'.format(
+                relation.from_object.load_model().get_link()))
+        if successor_html_items:
+            data.append({
+                'label': _('label_successors', default=u'Successors'),
+                'value': u'<ul>{}</ul>'.format(''.join(successor_html_items)),
+                'is_html': True})
+
+        return data

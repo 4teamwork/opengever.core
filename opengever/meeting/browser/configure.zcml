@@ -182,7 +182,7 @@
       />
 
   <browser:page
-      for="opengever.meeting.proposal.IProposal"
+      for="opengever.meeting.proposal.IBaseProposal"
       name="receive-proposal-history"
       class=".receiveproposalhistory.ReceiveProposalHistory"
       permission="zope2.View"
@@ -409,14 +409,14 @@
   <browser:page
       name="addtransitioncomment"
       class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
-      for="opengever.meeting.proposal.IProposal"
+      for="opengever.meeting.proposal.IBaseProposal"
       permission="cmf.AddPortalContent"
       />
 
   <browser:page
       name="addcomment"
       class="opengever.meeting.proposal_transition_comment.ProposalCommentAddFormView"
-      for="opengever.meeting.proposal.IProposal"
+      for="opengever.meeting.proposal.IBaseProposal"
       permission="cmf.AddPortalContent"
       />
 
