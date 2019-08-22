@@ -361,9 +361,8 @@ class InboxContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
 builder_registry.register('inbox_container', InboxContainerBuilder)
 
 
-class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
+class ProposalBuilder(DexterityBuilder):
     portal_type = 'opengever.meeting.proposal'
-    auto_loaded_models = ('committee', )
 
     def __init__(self, session):
         super(ProposalBuilder, self).__init__(session)
@@ -380,9 +379,12 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
         return self
 
     def before_create(self):
-        if ICommittee.providedBy(self.container):
-            if 'committee' not in self.arguments:
-                self.argumets['committee'] = self.container
+        if 'committee' in self.arguments:
+            committee = self.arguments.pop('committee')
+            if ICommittee.providedBy(committee):
+                self.arguments['committee_oguid'] = Oguid.for_object(committee).id
+            else:
+                self.arguments['committee_oguid'] = committee.oguid.id
 
         super(ProposalBuilder, self).before_create()
 
@@ -445,10 +447,9 @@ class ProposalBuilder(TransparentModelLoader, DexterityBuilder):
 builder_registry.register('proposal', ProposalBuilder)
 
 
-class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
+class SubmittedProposalBuilder(DexterityBuilder):
 
     portal_type = 'opengever.meeting.submittedproposal'
-    auto_loaded_models = ('committee',)
 
     def __init__(self, session):
         super(SubmittedProposalBuilder, self).__init__(session)
@@ -472,6 +473,8 @@ class SubmittedProposalBuilder(TransparentModelLoader, DexterityBuilder):
     def after_create(self, obj):
         self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
         self.model_arguments['issuer'] = TEST_USER_ID
+        self.model_arguments['language'] = self.arguments['language']
+        self.model_arguments['committee'] = self.container.load_model()
         model = obj.create_model(self.model_arguments, self.container)
         obj.sync_model(proposal_model=model)
         super(SubmittedProposalBuilder, self).after_create(obj)

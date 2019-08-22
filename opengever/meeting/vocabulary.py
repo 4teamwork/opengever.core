@@ -17,7 +17,11 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 @implementer(IVocabularyFactory)
 class CommitteeVocabulary(object):
+    """Vocabulary with all committees.
 
+    Contains committees as term values.  Is currently used to set a meeting's
+    committee.
+    """
     def __call__(self, context):
         return SimpleVocabulary([
             SimpleTerm(value=committee,
@@ -30,7 +34,20 @@ class CommitteeVocabulary(object):
         return Committee.query.order_by('title').all()
 
 
-class ActiveCommitteeVocabulary(CommitteeVocabulary):
+@implementer(IVocabularyFactory)
+class ActiveCommitteeVocabulary(object):
+    """Vocabulary with all active committees.
+
+    Contains committee OGUID as term values. Is currently used to set a
+    proposal's committee.
+    """
+    def __call__(self, context):
+        return SimpleVocabulary([
+            SimpleTerm(value=unicode(committee.oguid),
+                       token=str(committee.oguid),
+                       title=committee.title)
+            for committee in self.get_committees()
+        ])
 
     def get_committees(self):
         return Committee.query.active().order_by('title').all()

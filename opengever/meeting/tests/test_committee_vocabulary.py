@@ -6,11 +6,18 @@ from opengever.testing import IntegrationTestCase
 
 class TestCommitteeVocabulary(IntegrationTestCase):
 
-    def test_get_committees_returns_list_sorted_by_title(self):
-        for simple_vocabulary in (CommitteeVocabulary(), ActiveCommitteeVocabulary(), ):
-            titles_from_vocabulary = [term.title for term in simple_vocabulary(context=None)]
-            unsorted_titles = [committee.title for committee in Committee.query.all()]
-            sorted_titles = [u'Kommission f\xfcr Verkehr', u'Rechnungspr\xfcfungskommission']
+    def test_committees_vocabulary_returns_list_sorted_by_title(self):
+        titles_from_vocabulary = [term.title for term in CommitteeVocabulary()(context=None)]
+        unsorted_titles = [committee.title for committee in Committee.query.all()]
+        sorted_titles = [u'Kommission f\xfcr Verkehr', u'Rechnungspr\xfcfungskommission']
 
-            self.assertNotEquals(unsorted_titles, titles_from_vocabulary)
-            self.assertEquals(sorted_titles, titles_from_vocabulary)
+        self.assertNotEquals(unsorted_titles, titles_from_vocabulary)
+        self.assertEquals(sorted_titles, titles_from_vocabulary)
+
+    def test_active_committees_vocabulary_returns_list_sorted_by_title(self):
+        titles_from_vocabulary = [term.title for term in ActiveCommitteeVocabulary()(context=None)]
+        unsorted_titles = [committee.title for committee in Committee.query.all()]
+        sorted_titles = [u'Kommission f\xfcr Verkehr', u'Rechnungspr\xfcfungskommission']
+
+        self.assertNotEquals(unsorted_titles, titles_from_vocabulary)
+        self.assertEquals(sorted_titles, titles_from_vocabulary)

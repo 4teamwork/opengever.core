@@ -12,6 +12,7 @@ Changelog
 
 - Introduce `IBaseProposal` class, `ISubmittedProposal` no longer inherits from `IProposal`. [deiferni]
 - Bump ftw.solr to 2.6.0 to get fix for metadata getting overwritten by extract handler. [lgraf]
+- Move remaining proposal model fields to plone content type. [deiferni]
 - Implement FTPSTransport for uploading SIPs to FTPS server. [lgraf]
 - Display keywords in Mail overview. [njohner]
 - Bump ftw.keywordwidget to 2.1.0 to use async mode of keyword widgets for document and dossier keywords. [njohner]

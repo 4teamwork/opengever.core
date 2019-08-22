@@ -9,6 +9,7 @@ from ftw.testing import freeze
 from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
+from opengever.base.oguid import Oguid
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import fake_interaction
@@ -25,6 +26,7 @@ from zope.schema import getFieldsInOrder
 from zope.schema import List
 import json
 import textwrap
+
 
 # changed is timezone aware, so we need a timezone aware FROZEN_NOW, but dates
 # in GEVER are timezone naive, so to avoid this test failing when timezone
@@ -249,11 +251,13 @@ CONTACT_MISSING_VALUES = {
 
 PROPOSAL_REQUIREDS = {
     'issuer': u'herbert.jager',
+    'committee_oguid': u'fd:1337',
 }
 PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'Containing Dossier Title',
+    'language': 'en',
 }
 PROPOSAL_FORM_DEFAULTS = {
     'description': u''
@@ -273,6 +277,7 @@ SUBMITTED_PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,
     'description': u'',
     'title': u'',
+    'language': 'en',
 }
 SUBMITTED_PROPOSAL_MISSING_VALUES = {
     'date_of_submission': None,
@@ -1307,6 +1312,7 @@ class TestProposalDefaults(TestDefaultsBase):
                 self.dossier,
                 'opengever.meeting.proposal',
                 issuer=PROPOSAL_REQUIREDS['issuer'],
+                committee_oguid=PROPOSAL_REQUIREDS['committee_oguid'],
             )
 
         persisted_values = get_persisted_values_for_obj(proposal)
@@ -1322,6 +1328,7 @@ class TestProposalDefaults(TestDefaultsBase):
                 'opengever.meeting.proposal',
                 'proposal-999',
                 issuer=PROPOSAL_REQUIREDS['issuer'],
+                committee_oguid=PROPOSAL_REQUIREDS['committee_oguid'],
             )
         proposal = self.dossier[new_id]
 
@@ -1345,6 +1352,7 @@ class TestProposalDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(proposal)
         expected = self.get_z3c_form_defaults()
+        expected['committee_oguid'] = Oguid.for_object(self.committee).id
 
         self.assertDictEqual(expected, persisted_values)
 

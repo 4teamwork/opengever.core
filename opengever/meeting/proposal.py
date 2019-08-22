@@ -27,6 +27,7 @@ from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
+from opengever.meeting.model import Committee
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.actor import Actor
@@ -71,17 +72,6 @@ def default_title(context):
 class IProposalModel(Interface):
     """Proposal model schema interface."""
 
-    committee = schema.Choice(
-        title=_('label_committee', default=u'Committee'),
-        source='opengever.meeting.ActiveCommitteeVocabulary',
-        required=True)
-
-    language = schema.Choice(
-        title=_('language', default=u'Language'),
-        source='opengever.meeting.LanguagesVocabulary',
-        required=True,
-        defaultFactory=get_preferred_language_code)
-
 
 class ISubmittedProposalModel(Interface):
     """Submitted proposal model schema interface."""
@@ -121,9 +111,20 @@ class IBaseProposal(model.Schema):
         required=False,
         )
 
+    language = schema.Choice(
+        title=_('language', default=u'Language'),
+        source='opengever.meeting.LanguagesVocabulary',
+        required=True,
+        defaultFactory=get_preferred_language_code)
+
 
 class IProposal(IBaseProposal):
     """Proposal Proxy Object Schema Interface"""
+
+    committee_oguid = schema.Choice(
+        title=_('label_committee', default=u'Committee'),
+        source='opengever.meeting.ActiveCommitteeVocabulary',
+        required=True)
 
     relatedItems = RelationList(
         title=_(u'label_attachments', default=u'Attachments'),
@@ -568,16 +569,15 @@ class Proposal(ProposalBase):
         return self.load_model().resolve_excerpt_document()
 
     def get_committee(self):
-        committee_model = self.load_model().committee
-        return committee_model.oguid.resolve_object()
+        return Oguid.parse(self.committee_oguid).resolve_object()
 
     def get_containing_dossier(self):
         return get_containing_dossier(self)
 
-    def get_repository_folder_title(self, language):
+    def get_repository_folder_title(self):
         main_dossier = self.get_containing_dossier().get_main_dossier()
         repository_folder = aq_parent(aq_inner(main_dossier))
-        return repository_folder.Title(language=language,
+        return repository_folder.Title(language=self.language,
                                        prefix_with_reference_number=False)
 
     def update_model_create_arguments(self, data, context):
@@ -587,21 +587,24 @@ class Proposal(ProposalBase):
         reference_number = IReferenceNumber(
             context.get_main_dossier()).get_number()
 
-        language = data.get('language')
         repository_folder_title = safe_unicode(
-            aq_wrapped_self.get_repository_folder_title(language))
+            aq_wrapped_self.get_repository_folder_title())
+
+        committee_model = Committee.get_one(
+            oguid=Oguid.parse(self.committee_oguid))
 
         data.update(dict(workflow_state=workflow_state,
                          physical_path=aq_wrapped_self.get_physical_path(),
                          dossier_reference_number=reference_number,
                          repository_folder_title=repository_folder_title,
-                         issuer=self.issuer))
+                         committee=committee_model,
+                         issuer=self.issuer,
+                         language=self.language))
         return data
 
     def update_model(self, data):
-        language = data.get('language')
         data['repository_folder_title'] = safe_unicode(
-            self.get_repository_folder_title(language))
+            self.get_repository_folder_title())
         return super(Proposal, self).update_model(data)
 
     def sync_model(self, proposal_model=None):
@@ -609,9 +612,11 @@ class Proposal(ProposalBase):
 
         reference_number = IReferenceNumber(
             self.get_containing_dossier().get_main_dossier()).get_number()
-        repository_folder_title = safe_unicode(self.get_repository_folder_title(
-            proposal_model.language))
+        repository_folder_title = safe_unicode(self.get_repository_folder_title())
 
+        proposal_model.committee = Committee.get_one(
+            oguid=Oguid.parse(self.committee_oguid))
+        proposal_model.language = self.language
         proposal_model.physical_path = self.get_physical_path()
         proposal_model.dossier_reference_number = reference_number
         proposal_model.repository_folder_title = repository_folder_title
