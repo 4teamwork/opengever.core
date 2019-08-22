@@ -10,16 +10,15 @@ from opengever.meeting.activity.watchers import change_watcher_on_proposal_edite
 from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import IProposal
-from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform import directives as form
-from plone.dexterity.browser import edit
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
@@ -43,11 +42,13 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-class ProposalEditForm(ModelProxyEditForm,
-                       edit.DefaultEditForm):
+class ProposalEditForm(DefaultEditForm):
 
-    fields = field.Fields(Proposal.model_schema, ignoreContext=True)
-    content_type = Proposal
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+
+        return super(ProposalEditForm, self).render()
 
     def updateFields(self):
         super(ProposalEditForm, self).updateFields()
@@ -72,8 +73,7 @@ class ProposalEditForm(ModelProxyEditForm,
         return super(ProposalEditForm, self).applyChanges(data)
 
 
-class SubmittedProposalEditForm(ModelProxyEditForm,
-                                edit.DefaultEditForm):
+class SubmittedProposalEditForm(ModelProxyEditForm, DefaultEditForm):
 
     fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
     content_type = SubmittedProposal
