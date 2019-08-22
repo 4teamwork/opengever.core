@@ -20,7 +20,6 @@ from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
-from opengever.testing.model import TransparentModelLoader
 from opengever.trash.trash import ITrashable
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -369,7 +368,6 @@ class ProposalBuilder(DexterityBuilder):
         self.arguments = {'title': 'Fooo',
                           'language': TranslatedTitle.FALLBACK_LANGUAGE,
                           'issuer': TEST_USER_ID}
-        self.model_arguments = None
         self._transition = None
         self._proposal_file_data = assets.load('empty.docx')
         self._also_return_submitted_proposal = False
@@ -388,11 +386,7 @@ class ProposalBuilder(DexterityBuilder):
 
         super(ProposalBuilder, self).before_create()
 
-        self.arguments, self.model_arguments = Proposal.partition_data(
-            self.arguments)
-
     def after_create(self, obj):
-        obj.create_model(self.model_arguments, self.container)
         obj.create_proposal_document(
             title=obj.title_or_id(),
             filename=u'proposal_document.docx',
