@@ -8,6 +8,7 @@ from opengever.disposition.ech0160.model import ContentRootFolder
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import Dossier
 from opengever.disposition.ech0160.model import File
+from opengever.disposition.ech0160.model import Folder
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
 from opengever.dossier.behaviors.dossier import IDossier
@@ -343,6 +344,27 @@ class TestFolderAndFileModel(IntegrationTestCase):
         self.assertEquals(self.inactive_document.get_filename(), inactive_document_model.filename)
         self.assertEquals(self.inactive_document.file._blob.committed(), inactive_document_model.filepath)
 
+    def test_document_references_file_and_archival_file(self):
+        self.toc = ContentRootFolder('FAKE_PATH')
+        self.toc.next_file = 3239
+
+        self.login(self.regular_user)
+
+        dossier = Dossier(self.expired_dossier)
+        self.assertEqual(1, len(dossier.documents))
+        document = dossier.documents.values()[0]
+
+        folder = Folder(self.toc, dossier, 'FAKE_PATH')
+
+        self.assertEqual(2, len(folder.files))
+        self.assertItemsEqual([self.expired_document.file.filename,
+                               self.expired_document.archival_file.filename],
+                              [file.filename for file in folder.files])
+
+        self.assertEqual(2, len(document.file_refs))
+        self.assertItemsEqual([file.id for file in folder.files],
+                              document.file_refs)
+
 
 class TestFileModel(IntegrationTestCase):
 
@@ -351,35 +373,20 @@ class TestFileModel(IntegrationTestCase):
         self.toc = ContentRootFolder('FAKE_PATH')
         self.toc.next_file = 3239
 
-    def test_uses_documents_archival_file_if_exist(self):
-        self.login(self.regular_user)
-
-        model = File(self.toc, Document(self.expired_document))
-
-        self.assertEquals(u'test.pdf', model.filename)
-        self.assertEquals(self.expired_document.archival_file._blob.committed(),
-                          model.filepath)
-
-    def test_represents_documents_file_if_no_archival_file_exist(self):
-        self.login(self.regular_user)
-
-        model = File(self.toc, Document(self.document))
-
-        self.assertEquals(u'Vertraegsentwurf.docx', model.filename)
-        self.assertEquals(self.document.file._blob.committed(), model.filepath)
-
     def test_named_next_file_number_prefixed_with_p(self):
         self.login(self.regular_user)
 
-        model = File(self.toc, Document(self.document))
+        model = File(self.toc, Document(self.document), self.document.file)
         self.assertEquals('p003239.docx', model.name)
-        model = File(self.toc, Document(self.expired_document))
+        model = File(self.toc, Document(self.expired_document),
+                     self.expired_document.archival_file)
         self.assertEquals('p003240.pdf', model.name)
 
     def test_pruefsumme_is_a_md5_hash(self):
         self.login(self.regular_user)
 
-        model = File(self.toc, Document(self.expired_document))
+        model = File(self.toc, Document(self.expired_document),
+                     self.expired_document.archival_file)
 
         _hash = hashlib.md5()
         _hash.update('TEST')

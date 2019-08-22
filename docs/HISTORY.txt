@@ -4,6 +4,7 @@ Changelog
 2019.4.0rc3 (unreleased)
 ------------------------
 
+- Include original files in ech0160 SIP export even when archival_file exists. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 

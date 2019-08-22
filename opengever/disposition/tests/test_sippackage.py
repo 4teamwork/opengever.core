@@ -124,5 +124,6 @@ class TestSIPPackage(FunctionalTestCase):
                  'SIP_20160611_PLONE_10xy/header/xsd/zusatzDaten.xsd',
                  'SIP_20160611_PLONE_10xy/content/d000001/p000001.doc',
                  'SIP_20160611_PLONE_10xy/content/d000002/p000002.pdf',
+                 'SIP_20160611_PLONE_10xy/content/d000002/p000003.doc',
                  'SIP_20160611_PLONE_10xy/header/metadata.xml'],
                 zip_file.namelist())
