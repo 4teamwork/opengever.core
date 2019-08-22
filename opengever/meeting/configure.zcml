@@ -194,6 +194,12 @@
       handler=".handlers.sync_proposal"
       />
 
+  <subscriber
+      for="opengever.meeting.proposal.IProposal
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.sync_proposal"
+      />
+
   <adapter factory=".committee.RepositoryfolderValidator" />
 
 </configure>

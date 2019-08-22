@@ -5,13 +5,13 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.portlets import block_context_portlet_inheritance
 from opengever.base.security import elevated_privileges
-from opengever.base.sqlsyncer import SqlSyncer
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from opengever.setup.interfaces import IDuringSetup
 from zc.relation.interfaces import ICatalog
@@ -103,12 +103,6 @@ def delete_copied_proposal(copied_proposal, event):
     with elevated_privileges():
         container = aq_parent(copied_proposal)
         container._delObject(copied_proposal.id, suppress_events=True)
-
-
-class ProposalSqlSyncer(SqlSyncer):
-
-    def sync_with_sql(self):
-        self.obj.sync_model()
 
 
 def sync_moved_proposal(obj, event):

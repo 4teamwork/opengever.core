@@ -17,6 +17,7 @@ from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
 from opengever.ogds.base.utils import ogds_service
 from plone import api
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
@@ -178,6 +179,35 @@ class Proposal(Base):
 
     def __repr__(self):
         return "<Proposal {}@{}>".format(self.int_id, self.admin_unit_id)
+
+    @classmethod
+    def create_from(cls, proposal):
+        workflow_state = proposal.workflow.default_state.name
+
+        model = cls(oguid=Oguid.for_object(proposal),
+                    workflow_state=workflow_state,
+                    physical_path=proposal.get_physical_path())
+        model.sync_with_proposal(proposal)
+        return model
+
+    def sync_with_proposal(self, proposal):
+        from opengever.meeting.model.committee import Committee
+
+        reference_number = proposal.get_main_dossier_reference_number()
+        repository_folder_title = safe_unicode(
+            proposal.get_repository_folder_title())
+        committee = Committee.get_one(
+            oguid=Oguid.parse(proposal.committee_oguid))
+
+        self.committee = committee
+        self.language = proposal.language
+        self.physical_path = proposal.get_physical_path()
+        self.dossier_reference_number = reference_number
+        self.repository_folder_title = repository_folder_title
+        self.title = proposal.title
+        self.issuer = proposal.issuer
+        self.description = proposal.description
+        self.date_of_submission = proposal.date_of_submission
 
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)

@@ -25,12 +25,17 @@ class ProposalDocPropertyProvider(object):
                                         context=self.context.REQUEST),
         }
 
-        agenda_item = proposal.load_model().agenda_item
-        if agenda_item:
-            properties['decision_number'] = agenda_item.get_decision_number()
-            properties['agenda_item_number'] = agenda_item.formatted_number
-            properties['agenda_item_number_raw'] = agenda_item.item_number
+        model = proposal.load_model()
+        if not model:
+            return properties
 
+        agenda_item = model.agenda_item
+        if not agenda_item:
+            return properties
+
+        properties['decision_number'] = agenda_item.get_decision_number()
+        properties['agenda_item_number'] = agenda_item.formatted_number
+        properties['agenda_item_number_raw'] = agenda_item.item_number
         return properties
 
     def get_properties(self):

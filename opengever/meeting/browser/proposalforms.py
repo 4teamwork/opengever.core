@@ -1,12 +1,14 @@
 from ftw.table import helper
+from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
-from opengever.meeting.form import ModelProxyAddForm
 from opengever.meeting.form import ModelProxyEditForm
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import IProposal
 from opengever.meeting.proposal import Proposal
 from opengever.meeting.proposal import SubmittedProposal
@@ -28,11 +30,12 @@ from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
+from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 from zope.interface import Invalid
 from zope.interface import invariant
-from zope.i18n import translate
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 from zope.schema import Choice
@@ -174,14 +177,18 @@ class IAddProposal(IProposal):
                     ))
 
 
-class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
-    content_type = Proposal
-    fields = field.Fields(Proposal.model_schema)
+class ProposalAddForm(DefaultAddForm):
+
     allow_prefill_from_GET_request = True
 
     def __init__(self, *args, **kwargs):
         super(ProposalAddForm, self).__init__(*args, **kwargs)
         self.instance_schema = IAddProposal
+
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+        return super(ProposalAddForm, self).render()
 
     @property
     def schema(self):
@@ -309,6 +316,13 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
             self.checkout_and_external_edit(proposal_doc)
 
         add_watcher_on_proposal_created(proposal)
+        IHistory(proposal).append_record(u'created')
+        if proposal.predecessor_proposal is not None:
+            predecessor = proposal.predecessor_proposal.to_object
+            IHistory(predecessor).append_record(
+                u'successor_created',
+                successor_oguid=Oguid.for_object(proposal).id)
+
         return proposal
 
     def checkout_and_external_edit(self, document):
