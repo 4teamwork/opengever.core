@@ -4,6 +4,18 @@ from opengever.document.behaviors import IBaseDocument
 from plone import api
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
+from zope.container.interfaces import IContainer
+
+
+def is_or_contains_any_checked_out_document(obj):
+    if IBaseDocument.providedBy(obj):
+        return obj.is_checked_out()
+    if not IContainer.providedBy(obj):
+        return False
+    catalog = api.portal.get_tool("portal_catalog")
+    results = catalog(path=obj.absolute_url_path(),
+                      portal_type="opengever.document.document")
+    return any(brain.checked_out for brain in results)
 
 
 class CopyItemsFormView(layout.FormWrapper):
@@ -24,7 +36,7 @@ class CopyItemsFormView(layout.FormWrapper):
             api.portal.show_message(
                 message=msg, request=self.request, type='error')
             return self.redirect()
-        if self.is_any_checked_out(objs):
+        if any(is_or_contains_any_checked_out_document(obj) for obj in objs):
             msg = _(u'error_checked_out_cannot_be_copied',
                     default=u"Checked out documents cannot be copied.")
             api.portal.show_message(
@@ -56,9 +68,6 @@ class CopyItemsFormView(layout.FormWrapper):
 
         return objs
 
-    def is_any_checked_out(self, objs):
-        return any(IBaseDocument.providedBy(obj) and obj.is_checked_out() for obj in objs)
-
     def are_copyable(self, objs):
         return all(obj.cb_isCopyable() for obj in objs)
 
@@ -70,7 +79,7 @@ class CopyItemView(BrowserView):
             msg = _(u'error_not_copyable',
                     default=u"The item you selected cannot be copied.")
             msg_type = 'error'
-        elif IBaseDocument.providedBy(self.context) and self.context.is_checked_out():
+        elif is_or_contains_any_checked_out_document(self.context):
             msg = _(u'error_checked_out_cannot_be_copied',
                     default=u"Checked out documents cannot be copied.")
             msg_type = 'error'
