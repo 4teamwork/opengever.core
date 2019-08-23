@@ -15,6 +15,7 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
         from cgi import escape
         from OFS.CopySupport import absattr
         from OFS.CopySupport import CopyError
+        from opengever.document.behaviors import IBaseDocument
         from ZODB.POSException import ConflictError
 
         def _verifyObjectPaste(self, object, validate_src=1):
@@ -31,6 +32,11 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
             # existing context, such as checking an object during an import
             # (the object will not yet have been connected to the acquisition
             # heirarchy).
+            #
+            # We also make sure that we are not pasting a checked-out document
+
+            if IBaseDocument.providedBy(object) and object.is_checked_out():
+                raise CopyError('Checked out documents cannot be copied.')
 
             if not hasattr(object, 'meta_type'):
                 raise CopyError(MessageDialog(

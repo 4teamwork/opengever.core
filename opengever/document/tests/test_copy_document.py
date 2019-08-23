@@ -3,6 +3,7 @@ from datetime import datetime
 from DateTime import DateTime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from OFS.CopySupport import CopyError
 from opengever.testing import IntegrationTestCase
 from plone import api
 import pytz
@@ -47,6 +48,12 @@ class TestCopyDocuments(IntegrationTestCase):
         new_doc = self.dossier['copy_of_document-14']
         new_history = self.portal.portal_repository.getHistory(new_doc)
         self.assertEqual(len(new_history), 0)
+
+    def test_copying_a_checked_out_document_is_forbidden(self):
+        self.login(self.regular_user)
+        self.checkout_document(self.document)
+        with self.assertRaises(CopyError):
+            api.content.copy(source=self.document, target=self.subdossier)
 
     @browsing
     def test_document_copy_metadata(self, browser):
