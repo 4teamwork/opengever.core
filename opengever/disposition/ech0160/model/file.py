@@ -7,10 +7,10 @@ import os.path
 class File(object):
     """eCH-0160 dateiSIP"""
 
-    def __init__(self, toc, document):
-        self.file = document.obj.archival_file or document.obj.file
+    def __init__(self, toc, document, file):
+        self.file = file
         self.id = u'_{}'.format(binascii.hexlify(self.file._p_oid))
-        document.file_ref = self.id
+        document.file_refs.append(self.id)
         self.document = document
         self.filename = self.file.filename
         self.filepath = self.file._blob.committed()

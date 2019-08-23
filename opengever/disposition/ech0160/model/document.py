@@ -9,7 +9,7 @@ class Document(object):
 
     def __init__(self, obj):
         self.obj = obj
-        self.file_ref = None
+        self.file_refs = []
 
     def binding(self):
         dokument = arelda.dokumentGeverSIP(id=u'_{}'.format(self.obj.UID()))
@@ -38,7 +38,7 @@ class Document(object):
 
         set_classification_attributes(dokument, self.obj)
 
-        if self.file_ref:
-            dokument.dateiRef.append(self.file_ref)
+        for file_ref in self.file_refs:
+            dokument.dateiRef.append(file_ref)
 
         return dokument
