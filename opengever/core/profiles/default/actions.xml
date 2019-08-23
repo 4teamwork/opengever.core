@@ -540,7 +540,7 @@
       <property name="description" i18n:translate="" />
       <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/copy_item</property>
       <property name="icon_expr" />
-      <property name="available_expr">python:object.restrictedTraverse('@@plone_interface_info').provides('opengever.document.behaviors.IBaseDocument')</property>
+      <property name="available_expr">python:object.restrictedTraverse('@@plone_interface_info').provides('opengever.document.behaviors.IBaseDocument') and not object.is_checked_out()</property>
       <property name="permissions">
         <element value="Copy or Move" />
       </property>
