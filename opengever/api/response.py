@@ -1,7 +1,6 @@
 from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
-from opengever.base.response import ResponseContainer
 from opengever.ogds.base.actor import Actor
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
@@ -104,7 +103,7 @@ class ResponsePost(Service):
         text = data.get('text')
         IResponse['text'].validate(text)
         response = Response(text)
-        response_id = ResponseContainer(self.context).add(response)
+        IResponseContainer(self.context).add(response)
 
         self.request.response.setStatus(201)
         self.request.response.setHeader("Location", self.context.absolute_url())
