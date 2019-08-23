@@ -2,7 +2,6 @@ from opengever.activity import _
 from opengever.activity import ACTIVITIES_ICONS
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity import notification_center
-from opengever.ogds.models.user_settings import UserSettings
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.model.settings import NotificationSetting
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
@@ -14,10 +13,11 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.handlebars import prepare_handlebars_template
+from opengever.base.json_response import JSONResponse
 from opengever.base.model import create_session
-from opengever.base.response import JSONResponse
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.ogds.models.user import User
+from opengever.ogds.models.user_settings import UserSettings
 from opengever.task.response_description import ResponseDescription
 from path import Path
 from plone import api

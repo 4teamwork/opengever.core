@@ -1,5 +1,5 @@
 from functools import wraps
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.model.membership import Membership
 from Products.Five.browser import BrowserView

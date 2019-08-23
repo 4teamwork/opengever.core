@@ -18,9 +18,13 @@
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
   <adapter factory=".task.SerializeTaskToJson" />
-  <adapter factory=".response.ResponseDefaultFieldSerializer" />
-  <adapter factory=".response.SerializeTaskResponseToJson" />
+  <adapter factory=".task_response.TaskResponseDefaultFieldSerializer" />
+  <adapter factory=".task_response.SerializeTaskResponseToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
+  <adapter factory=".response.ResponseDefaultFieldSerializer" />
+  <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".serializer.long_converter" />
+
 
   <adapter factory=".mail.DeserializeMailFromJson" />
 
@@ -394,6 +398,30 @@
       factory=".users.GeverUsersGet"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponseGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponsePost"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponsePatch"
+      permission="cmf.ModifyPortalContent"
       />
 
 </configure>

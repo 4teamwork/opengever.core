@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.response import IResponseSupported
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import index_data_for
@@ -120,6 +121,11 @@ class TestToDo(IntegrationTestCase):
         form.fill({'Title': u'Ein anderes ToDo'})
         with browser.expect_http_error(500):
             form.save()
+
+    def test_todo_supports_responses(self):
+        self.login(self.workspace_member)
+
+        IResponseSupported.providedBy(self.todo)
 
 
 class TestAPISupportForTodo(IntegrationTestCase):

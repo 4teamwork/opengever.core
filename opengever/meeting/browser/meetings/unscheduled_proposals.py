@@ -1,4 +1,4 @@
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.meeting import _
 from opengever.meeting.model import Proposal
 from Products.Five.browser import BrowserView

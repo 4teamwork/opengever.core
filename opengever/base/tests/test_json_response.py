@@ -1,5 +1,5 @@
 from opengever.base import _
-from opengever.base.response import JSONResponse
+from opengever.base.json_response import JSONResponse
 from opengever.testing import IntegrationTestCase
 import json
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-08-23 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -249,8 +249,14 @@ msgid "label_confirm_action"
 msgstr ""
 
 #. Default: "Created"
+#: ./opengever/base/response.py
 #: ./opengever/base/viewlets/byline.py
 msgid "label_created"
+msgstr ""
+
+#. Default: "Creator"
+#: ./opengever/base/response.py
+msgid "label_creator"
 msgstr ""
 
 #. Default: "Custody period (years)"
@@ -338,6 +344,11 @@ msgstr ""
 msgid "label_recently_touched"
 msgstr ""
 
+#. Default: "Response ID"
+#: ./opengever/base/response.py
+msgid "label_response_id"
+msgstr ""
+
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period"
@@ -356,6 +367,11 @@ msgstr ""
 #. Default: "Error"
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "label_severity_error"
+msgstr ""
+
+#. Default: "Text"
+#: ./opengever/base/response.py
+msgid "label_text"
 msgstr ""
 
 #. Default: "Title"
@@ -401,17 +417,17 @@ msgstr ""
 
 #. Default: "Error"
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_error"
 msgstr ""
 
 #. Default: "Information"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_info"
 msgstr ""
 
 #. Default: "Warning"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_warning"
 msgstr ""
 

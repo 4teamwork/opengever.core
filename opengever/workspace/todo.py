@@ -1,5 +1,6 @@
 from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.response import IResponseSupported
 from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
@@ -43,4 +44,4 @@ class IToDoSchema(model.Schema):
 
 
 class ToDo(Container):
-    implements(IToDo)
+    implements(IToDo, IResponseSupported)

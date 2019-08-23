@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-14 14:01+0000\n"
+"POT-Creation-Date: 2019-08-23 12:03+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -252,9 +252,15 @@ msgid "label_confirm_action"
 msgstr "Aktion bestätigen"
 
 #. Default: "Created"
+#: ./opengever/base/response.py
 #: ./opengever/base/viewlets/byline.py
 msgid "label_created"
 msgstr "Erstellt am"
+
+#. Default: "Creator"
+#: ./opengever/base/response.py
+msgid "label_creator"
+msgstr "Ersteller"
 
 #. Default: "Custody period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
@@ -341,6 +347,11 @@ msgstr "Bearbeitungsinformation"
 msgid "label_recently_touched"
 msgstr "Kürzlich bearbeitet"
 
+#. Default: "Response ID"
+#: ./opengever/base/response.py
+msgid "label_response_id"
+msgstr "Antwort ID"
+
 #. Default: "Retention period (years)"
 #: ./opengever/base/behaviors/lifecycle.py
 msgid "label_retention_period"
@@ -360,6 +371,11 @@ msgstr "Suche"
 #: ./opengever/base/browser/templates/gever-macros.pt
 msgid "label_severity_error"
 msgstr "Fehler"
+
+#. Default: "Text"
+#: ./opengever/base/response.py
+msgid "label_text"
+msgstr "Text"
 
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py
@@ -405,17 +421,17 @@ msgstr "Eintrag erzeugt"
 
 #. Default: "Error"
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_error"
 msgstr "Fehler"
 
 #. Default: "Information"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_info"
 msgstr "Information"
 
 #. Default: "Warning"
-#: ./opengever/base/response.py
+#: ./opengever/base/json_response.py
 msgid "message_title_warning"
 msgstr "Warnung"
 

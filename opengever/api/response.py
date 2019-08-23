@@ -1,13 +1,21 @@
-from opengever.task.adapters import IResponse
-from opengever.task.response import ITaskTransitionResponseFormSchema
+from opengever.base.response import IResponse
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
+from opengever.base.response import ResponseContainer
+from opengever.ogds.base.actor import Actor
+from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
+from plone.restapi.services import Service
+from zExceptions import NotFound
 from zope.component import adapter
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.publisher.interfaces import IPublishTraverse
 from zope.schema import getFields
 from zope.schema.interfaces import IField
 
@@ -30,32 +38,112 @@ class ResponseDefaultFieldSerializer(object):
 
 @implementer(ISerializeToJson)
 @adapter(IResponse, Interface)
-class SerializeTaskResponseToJson(SerializeFolderToJson):
-
-    # The `reminder_option` is not stored on the response object, but the
-    # field only controls the reminder of the task.
-    SKIPPED_FIELDS = ['reminder_option']
+class SerializeResponseToJson(SerializeFolderToJson):
 
     def __init__(self, context, request):
         self.context = context
         self.request = request
 
     def __call__(self, *args, **kwargs):
-        result = {
-            'date': json_compatible(self.context.date),
-            'creator': json_compatible(self.context.creator),
-            'added_object': json_compatible(self.context.added_object),
-            'changes': json_compatible(self.context.changes),
-        }
+        response_url = '{}/@responses/{}'.format(
+            kwargs['container'].absolute_url(), self.context.response_id)
 
-        # Add attributes from the response schema
-        for name, field in getFields(ITaskTransitionResponseFormSchema).items():
-            if name in self.SKIPPED_FIELDS:
-                continue
-
+        result = {'@id': response_url}
+        for name, field in getFields(IResponse).items():
             serializer = queryMultiAdapter(
                 (field, self.context, self.request), IFieldSerializer)
             value = serializer()
             result[json_compatible(name)] = value
 
+        # Provide token and title for the creator
+        result['creator'] = {
+            'token': self.context.creator,
+            'title': Actor.lookup(self.context.creator).get_label(with_principal=False)
+        }
         return result
+
+
+@implementer(IPublishTraverse)
+class ResponseGet(Service):
+    """Representation of a single response.
+    """
+
+    def __init__(self, context, request):
+        super(ResponseGet, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@responses as parameters
+        self.params.append(name)
+        return self
+
+    @property
+    def _get_response_id(self):
+        if len(self.params) != 1:
+            raise Exception(
+                "Must supply exactly one parameter (the response id)")
+        return self.params[0]
+
+    def reply(self):
+        response_container = IResponseContainer(self.context)
+        if self._get_response_id not in response_container:
+            raise NotFound
+
+        response = response_container[self._get_response_id]
+        serializer = getMultiAdapter((response, self.request), ISerializeToJson)
+        return serializer(container=self.context)
+
+
+class ResponsePost(Service):
+    """Add a Response to the current context.
+    """
+
+    def reply(self):
+        data = json_body(self.request)
+
+        text = data.get('text')
+        IResponse['text'].validate(text)
+        response = Response(text)
+        response_id = ResponseContainer(self.context).add(response)
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader("Location", self.context.absolute_url())
+
+        serializer = getMultiAdapter((response, self.request), ISerializeToJson)
+        return serializer(container=self.context)
+
+
+@implementer(IPublishTraverse)
+class ResponsePatch(Service):
+    """Edit a response.
+    """
+
+    def __init__(self, context, request):
+        super(ResponsePatch, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@responses as parameters
+        self.params.append(name)
+        return self
+
+    @property
+    def _get_response_id(self):
+        if len(self.params) != 1:
+            raise Exception("Must supply exactly one parameter (user id)")
+        return self.params[0]
+
+    def reply(self):
+        response_container = IResponseContainer(self.context)
+        if self._get_response_id not in response_container:
+            raise NotFound
+
+        response = response_container[self._get_response_id]
+
+        data = json_body(self.request)
+        text = data.get('text')
+        IResponse['text'].validate(text)
+        response.text = text
+
+        self.request.response.setStatus(204)
+        self.request.response.setHeader("Location", self.context.absolute_url())

@@ -1,113 +1,130 @@
-import json
-from zope.i18n import translate
+from BTrees.LOBTree import LOBTree
+from datetime import datetime
 from opengever.base import _
+from persistent import Persistent
+from persistent.list import PersistentList
+from plone import api
+from zope import schema
+from zope.annotation import IAnnotations
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import implements
+from zope.interface import Interface
+import time
 
 
-class JSONResponse(object):
+class IResponseSupported(Interface):
+    """Marker interface for response support.
     """
-    This class allows to generate a GEVER wide standardized JSON Response.
-    JSONResponse can create messages or custom data. To get the client to
-    know if something went wrong the response can get ended up with remain
-    or proceed flags.
-    JSONResponse is used as a builder.
-    The client side implementation is done in
-    opengever.base.browser.resources.MessageFactory
+
+
+class IResponseContainer(Interface):
+    """Response storage adapter.
     """
 
-    def __init__(self, request):
-        self.request = request
-        self.response = {}
-        self.status = None
+    def add(self, response):
+        """Add the given response to the container list."""
 
-    def info(self, message):
-        """
-        Append a standardized info message with given message.
-        """
-        message = {
-            'messageClass': 'info',
-            'messageTitle': translate(_('message_title_info',
-                                        default=u"Information"),
-                                      context=self.request),
-            'message': translate(message, context=self.request),
-        }
-        self.response['messages'] = self.response.get('messages', []) + [message]
-        return self
+    def list(self):
+        """Returns a list of all responses."""
 
-    def warning(self, message):
-        """
-        Append a standardized warning message with given message.
-        """
-        message = {
-            'messageClass': 'warning',
-            'messageTitle': translate(_('message_title_warning',
-                                        default=u"Warning"),
-                                      context=self.request),
-            'message': translate(message, context=self.request),
-        }
-        self.response['messages'] = self.response.get('messages', []) + [message]
-        return self
+    def items(self):
+        """Returns a list of (id, response object) pairs of all responses."""
 
-    def error(self, message, status=None):
-        """
-        Append a standardized error message with given message.
-        """
-        self.status = status
 
-        message = {
-            'messageClass': 'error',
-            'messageTitle': translate(_('message_title_error',
-                                        default=u"Error"),
-                                      context=self.request),
-            'message': translate(message, context=self.request),
-        }
-        self.response['messages'] = self.response.get('messages', []) + [message]
-        return self
+@implementer(IResponseContainer)
+@adapter(IResponseSupported)
+class ResponseContainer(object):
+    """Response storage adapter.
+    """
 
-    def data(self, **kwargs):
-        """
-        Append custom data as kwargs.
-        """
-        assert 'messages' not in kwargs, 'key message is not allowed for JSON responses'
-        assert 'proceed' not in kwargs, 'key proceed is not allowed for JSON responses'
-        self.response.update(kwargs)
-        return self
+    ANNOTATION_KEY = 'opengever.base.responses'
 
-    def redirect(self, redirect_url):
-        """
-        Define redirect_url
-        """
-        self.response['redirectUrl'] = redirect_url
-        return self
+    def __init__(self, context):
+        self.context = context
 
-    def proceed(self):
-        """
-        Set the proceed flag to True to say the client that everthing went okay.
-        """
-        self.response['proceed'] = True
-        return self
+    def add(self, response):
+        storage = self._storage(create_if_missing=True)
+        if not IResponse.providedBy(response):
+            raise ValueError('Only Response objects are allowed to add')
 
-    def remain(self):
+        response_id = long(time.time() * 1e6)
+        while response_id in storage:
+            response_id += 1
+
+        response.response_id = response_id
+        storage[response_id] = response
+        return response_id
+
+    def _storage(self, create_if_missing=False):
+        ann = IAnnotations(self.context)
+        if self.ANNOTATION_KEY not in ann.keys() and create_if_missing:
+            ann[self.ANNOTATION_KEY] = LOBTree()
+
+        return ann.get(self.ANNOTATION_KEY, None)
+
+    def list(self):
+        storage = self._storage()
+        if not storage:
+            return []
+
+        return list(storage.values())
+
+    def items(self):
+        storage = self._storage()
+        if not storage:
+            return []
+
+        return list(storage.items())
+
+    def __contains__(self, key):
+        storage = self._storage()
+        if not storage:
+            return False
+
+        return long(key) in self._storage()
+
+    def __getitem__(self, key):
+        """Get an item by its key
         """
-        Set the proceed flag to False to say the client that something went wrong.
-        """
-        self.response['proceed'] = False
-        return self
+        return self._storage()[long(key)]
 
-    def dump(self, no_cache=True):
-        """Return a JSON string for use as response, set response headers.
 
-        The dump method sets the response headers.
-        It expects that excatly this payload is returned in the response.
-        By default, no-caching headers are set on the response.
-        This can be disabled by setting ``no_cache`` to ``False``.
-        """
-        if self.status:
-            self.request.response.setStatus(self.status)
+class IResponse(Interface):
+    """Interface and schema for the response object, an object added to
+    plone content objects."""
 
-        if no_cache:
-            self.request.response.setHeader("Cache-Control", "no-store")
-            self.request.response.setHeader("Pragma", "no-cache")
-            self.request.response.setHeader("Expires", "0")
+    response_id = schema.Int(
+        title=_(u'label_response_id', default=u'Response ID'),
+        required=True
+    )
 
-        self.request.response.setHeader("Content-type", "application/json")
-        return json.dumps(self.response)
+    created = schema.Date(
+        title=_(u'label_created', default=u'Created'),
+        required=True
+    )
+
+    creator = schema.TextLine(
+        title=_(u'label_creator', default=u'Creator'),
+        required=True
+    )
+
+    text = schema.Text(
+        title=_(u'label_text', default=u'Text'),
+        required=True
+    )
+
+
+class Response(Persistent):
+    """A persistent lightweight object which represents a single response.
+    Addable to the response container of plone objects, for example to
+    workspace todo's.
+    """
+
+    implements(IResponse)
+
+    def __init__(self, text):
+        self.response_id = None
+        self.text = text
+        self.created = datetime.now()
+        self.creator = api.user.get_current().id
