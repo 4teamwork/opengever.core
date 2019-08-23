@@ -39,6 +39,19 @@ class TestCopyItems(IntegrationTestCase):
         self.assertEqual(self.dossier.absolute_url(), browser.url)
         self.assertEqual(['Selected objects successfully copied.'], info_messages())
 
+    @browsing
+    def test_cannot_copy_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.checkout_document(self.document)
+        data = self.make_path_param(self.document, self.mail_eml)
+        browser.open(self.dossier, data=data, view='copy_items')
+
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
+        self.assertEqual([], info_messages())
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
+
 
 class TestCopyItem(IntegrationTestCase):
 
@@ -50,6 +63,17 @@ class TestCopyItem(IntegrationTestCase):
         self.assertEqual(self.document.absolute_url(), browser.url)
         self.assertEqual(['Selected objects successfully copied.'],
                          info_messages())
+
+    @browsing
+    def test_cannot_copy_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.checkout_document(self.document)
+        browser.open(self.document, view='copy_item')
+
+        self.assertEqual(self.document.absolute_url(), browser.url)
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
 
     @browsing
     def test_statusmessage_if_paste_document_success(self, browser):

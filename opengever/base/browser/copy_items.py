@@ -1,5 +1,6 @@
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
+from opengever.document.behaviors import IBaseDocument
 from plone import api
 from plone.z3cform import layout
 from Products.Five.browser import BrowserView
@@ -20,6 +21,12 @@ class CopyItemsFormView(layout.FormWrapper):
         if not self.are_copyable(objs):
             msg = _(u'error_not_copyable',
                     default=u"The item you selected cannot be copied.")
+            api.portal.show_message(
+                message=msg, request=self.request, type='error')
+            return self.redirect()
+        if self.is_any_checked_out(objs):
+            msg = _(u'error_checked_out_cannot_be_copied',
+                    default=u"Checked out documents cannot be copied.")
             api.portal.show_message(
                 message=msg, request=self.request, type='error')
             return self.redirect()
@@ -49,6 +56,9 @@ class CopyItemsFormView(layout.FormWrapper):
 
         return objs
 
+    def is_any_checked_out(self, objs):
+        return any(IBaseDocument.providedBy(obj) and obj.is_checked_out() for obj in objs)
+
     def are_copyable(self, objs):
         return all(obj.cb_isCopyable() for obj in objs)
 
@@ -56,16 +66,19 @@ class CopyItemsFormView(layout.FormWrapper):
 class CopyItemView(BrowserView):
 
     def __call__(self):
-        if self.context.cb_isCopyable():
+        if not self.context.cb_isCopyable():
+            msg = _(u'error_not_copyable',
+                    default=u"The item you selected cannot be copied.")
+            msg_type = 'error'
+        elif IBaseDocument.providedBy(self.context) and self.context.is_checked_out():
+            msg = _(u'error_checked_out_cannot_be_copied',
+                    default=u"Checked out documents cannot be copied.")
+            msg_type = 'error'
+        else:
             Clipboard(self.request).set_objs([self.context])
             msg = _(u'msg_successfuly_copied',
                     default=u"Selected objects successfully copied.")
             msg_type = 'info'
-        else:
-            msg = _(u'error_not_copyable',
-                    default=u"The item you selected cannot be copied.")
-            msg_type = 'error'
-
         api.portal.show_message(
             message=msg, request=self.request, type=msg_type)
 

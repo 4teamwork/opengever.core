@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-23 12:03+0000\n"
+"POT-Creation-Date: 2019-08-23 13:27+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -122,6 +122,11 @@ msgstr "Nous nous excusons pour la gêne occasionnée, mais la page à laquelle 
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
 msgstr "Si ce problème subsiste, veuillez contacter le responsable de l'application, s'il vous plaît."
+
+#. Default: "Checked out documents cannot be copied."
+#: ./opengever/base/browser/copy_items.py
+msgid "error_checked_out_cannot_be_copied"
+msgstr "Les documents en checkout ne peuvent pas être copiés."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py
