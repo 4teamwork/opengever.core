@@ -8,6 +8,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.services import Service
+from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -101,7 +102,10 @@ class ResponsePost(Service):
         data = json_body(self.request)
 
         text = data.get('text')
-        IResponse['text'].validate(text)
+
+        if not text:
+            raise BadRequest("Property 'text' is required")
+
         response = Response(text)
         IResponseContainer(self.context).add(response)
 
@@ -141,7 +145,10 @@ class ResponsePatch(Service):
 
         data = json_body(self.request)
         text = data.get('text')
-        IResponse['text'].validate(text)
+
+        if not text:
+            raise BadRequest("Property 'text' is required")
+
         response.text = text
 
         self.request.response.setStatus(204)

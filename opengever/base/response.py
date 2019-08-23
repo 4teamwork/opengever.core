@@ -2,6 +2,7 @@ from BTrees.LOBTree import LOBTree
 from datetime import datetime
 from opengever.base import _
 from persistent import Persistent
+from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
 from zope import schema
@@ -111,8 +112,13 @@ class IResponse(Interface):
 
     text = schema.Text(
         title=_(u'label_text', default=u'Text'),
-        required=True
+        required=False,
     )
+
+    changes = schema.List(
+        title=_(u'label_changes', default=u'Changes'),
+        required=False,
+        value_type=schema.Dict())
 
 
 class Response(Persistent):
@@ -123,8 +129,16 @@ class Response(Persistent):
 
     implements(IResponse)
 
-    def __init__(self, text):
+    def __init__(self, text=''):
         self.response_id = None
         self.text = text
         self.created = datetime.now()
         self.creator = api.user.get_current().id
+        self.changes = PersistentList()
+
+    def add_change(self, field_id, before, after):
+        self.changes.append(PersistentDict(
+            field_id=field_id,
+            before=before,
+            after=after
+        ))
