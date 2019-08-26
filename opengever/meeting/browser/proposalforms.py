@@ -1,13 +1,10 @@
 from ftw.table import helper
-from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting import is_meeting_feature_enabled
-from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
-from opengever.meeting.interfaces import IHistory
 from opengever.meeting.proposal import IProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
@@ -310,14 +307,6 @@ class ProposalAddForm(DefaultAddForm):
         )
         if edit_after_creation:
             self.checkout_and_external_edit(proposal_doc)
-
-        add_watcher_on_proposal_created(proposal)
-        IHistory(proposal).append_record(u'created')
-        if proposal.predecessor_proposal is not None:
-            predecessor = proposal.predecessor_proposal.to_object
-            IHistory(predecessor).append_record(
-                u'successor_created',
-                successor_oguid=Oguid.for_object(proposal).id)
 
         return proposal
 

@@ -185,25 +185,25 @@
   <subscriber
       for="opengever.meeting.proposal.IBaseProposal
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
-      handler=".handlers.sync_moved_proposal"
+      handler=".handlers.proposal_moved"
       />
 
   <subscriber
       for="opengever.meeting.proposal.IProposal
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".handlers.sync_proposal"
+      handler=".handlers.proposal_modified"
       />
 
   <subscriber
       for="opengever.meeting.proposal.IProposal
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".handlers.sync_proposal"
+      handler=".handlers.proposal_added"
       />
 
   <subscriber
       for="opengever.meeting.proposal.ISubmittedProposal
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".handlers.sync_submitted_proposal"
+      handler=".handlers.submitted_proposal_modified"
       />
 
   <adapter factory=".committee.RepositoryfolderValidator" />
