@@ -728,7 +728,6 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         document_portal_actions = [
             'Edit metadata',
             u'Actions \u25bc',
-            'Copy Item',
             'Properties',
             u'Checkin \u25bc',
             'with comment',

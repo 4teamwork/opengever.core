@@ -39,6 +39,36 @@ class TestCopyItems(IntegrationTestCase):
         self.assertEqual(self.dossier.absolute_url(), browser.url)
         self.assertEqual(['Selected objects successfully copied.'], info_messages())
 
+    @browsing
+    def test_cannot_copy_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.checkout_document(self.document)
+        data = self.make_path_param(self.document, self.mail_eml)
+        browser.open(self.dossier, data=data, view='copy_items')
+
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
+        self.assertEqual([], info_messages())
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
+
+    @browsing
+    def test_cannot_copy_dossier_containing_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        data = self.make_path_param(self.empty_dossier, self.dossier)
+
+        browser.open(self.leaf_repofolder, data=data, view='copy_items')
+        self.assertEqual(self.leaf_repofolder.absolute_url(), browser.url)
+        self.assertEqual(['Selected objects successfully copied.'], info_messages())
+        self.assertEqual([], error_messages())
+
+        self.checkout_document(self.document)
+        browser.open(self.leaf_repofolder, data=data, view='copy_items')
+        self.assertEqual(self.leaf_repofolder.absolute_url(), browser.url)
+        self.assertEqual([], info_messages())
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
+
 
 class TestCopyItem(IntegrationTestCase):
 
@@ -50,6 +80,35 @@ class TestCopyItem(IntegrationTestCase):
         self.assertEqual(self.document.absolute_url(), browser.url)
         self.assertEqual(['Selected objects successfully copied.'],
                          info_messages())
+
+    @browsing
+    def test_cannot_copy_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.checkout_document(self.document)
+        browser.open(self.document, view='copy_item')
+
+        self.assertEqual(self.document.absolute_url(), browser.url)
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
+
+    @browsing
+    def test_cannot_copy_dossier_containing_checked_out_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier, view='copy_item')
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
+        self.assertEqual(['Selected objects successfully copied.'],
+                         info_messages())
+        self.assertEqual([], error_messages())
+
+        self.checkout_document(self.document)
+        browser.open(self.dossier, view='copy_item')
+
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
+        self.assertEqual([], info_messages())
+        self.assertEqual(['Checked out documents cannot be copied.'],
+                         error_messages())
 
     @browsing
     def test_statusmessage_if_paste_document_success(self, browser):

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-23 12:03+0000\n"
+"POT-Creation-Date: 2019-08-23 13:27+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -121,6 +121,11 @@ msgstr "Entschuldigung, aber die Webseite die Sie versucht haben zu erreichen is
 #: ./opengever/base/browser/templates/error.pt
 msgid "description_site_error_site_admin"
 msgstr "Bitte kontaktieren Sie die fachapplikationsverantwortliche Person, wenn dieses Problem längerfristig besteht."
+
+#. Default: "Checked out documents cannot be copied."
+#: ./opengever/base/browser/copy_items.py
+msgid "error_checked_out_cannot_be_copied"
+msgstr "Ausgecheckte Dokumente können nicht kopiert werden."
 
 #. Default: "You have not selected any Items."
 #: ./opengever/base/browser/copy_items.py

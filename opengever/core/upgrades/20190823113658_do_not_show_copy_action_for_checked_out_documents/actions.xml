@@ -1,0 +1,20 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- OBJECT BUTTONS -->
+  <object name="object_buttons" meta_type="CMF Action Category">
+
+    <object name="copy_item" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Copy Item</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/copy_item</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.restrictedTraverse('@@plone_interface_info').provides('opengever.document.behaviors.IBaseDocument') and not object.is_checked_out()</property>
+      <property name="permissions">
+        <element value="Copy or Move" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>
