@@ -323,7 +323,7 @@ class ProposalBase(object):
         return model.is_submitted()
 
 
-class SubmittedProposal(ProposalBase, ModelContainer):
+class SubmittedProposal(ModelContainer, ProposalBase):
     """Proxy for a proposal in queue with a committee."""
 
     content_schema = ISubmittedProposal
@@ -509,7 +509,7 @@ class SubmittedProposal(ProposalBase, ModelContainer):
         return values
 
 
-class Proposal(ProposalBase, Container):
+class Proposal(Container, ProposalBase):
     """Act as proxy for the proposal stored in the database.
 
     """
