@@ -12,8 +12,6 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.meeting.model import Period
-from opengever.meeting.proposal import Proposal
-from opengever.meeting.proposal import SubmittedProposal
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.tasktemplates import INTERACTIVE_USERS
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -402,14 +400,11 @@ class ProposalBuilder(DexterityBuilder):
     def create(self):
         proposal = super(ProposalBuilder, self).create()
 
-        submitted_proposal = self._traverse_submitted_proposal(proposal)
-        if submitted_proposal:
-            submitted_proposal.sync_model()
+        if self._also_return_submitted_proposal:
+            submitted_proposal = self._traverse_submitted_proposal(proposal)
+            return proposal, submitted_proposal
 
-        if not self._also_return_submitted_proposal:
-            return proposal
-
-        return proposal, submitted_proposal
+        return proposal
 
     def relate_to(self, *documents):
         return self.having(relatedItems=documents)
@@ -439,42 +434,6 @@ class ProposalBuilder(DexterityBuilder):
 
 
 builder_registry.register('proposal', ProposalBuilder)
-
-
-class SubmittedProposalBuilder(DexterityBuilder):
-
-    portal_type = 'opengever.meeting.submittedproposal'
-
-    def __init__(self, session):
-        super(SubmittedProposalBuilder, self).__init__(session)
-        self.arguments = {'title': 'Fooo',
-                          'language': TranslatedTitle.FALLBACK_LANGUAGE,
-                          'physical_path': 'i-am-a-fake',
-                          'workflow_state': 'invalid',
-                          'dossier_reference_number': '123',
-                          'repository_folder_title': 'repo',
-                          'issuer': TEST_USER_ID}
-        self.model_arguments = None
-
-    def before_create(self):
-        super(SubmittedProposalBuilder, self).before_create()
-
-        # hackishly create the proposal model when creating the submitted
-        # proposal. This is only for testing and not done so in production.
-        self.arguments, self.model_arguments = SubmittedProposal.partition_data(
-            self.arguments)
-
-    def after_create(self, obj):
-        self.model_arguments['submitted_oguid'] = Oguid.for_object(obj)
-        self.model_arguments['issuer'] = TEST_USER_ID
-        self.model_arguments['language'] = self.arguments['language']
-        self.model_arguments['committee'] = self.container.load_model()
-        model = obj.create_model(self.model_arguments, self.container)
-        obj.sync_model(proposal_model=model)
-        super(SubmittedProposalBuilder, self).after_create(obj)
-
-
-builder_registry.register('submitted_proposal', SubmittedProposalBuilder)
 
 
 class CommitteeContainerBuilder(TranslatedTitleBuilderMixin, DexterityBuilder):
