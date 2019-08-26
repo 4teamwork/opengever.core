@@ -399,4 +399,7 @@
 
   <adapter factory=".response.ResponseContainer" />
 
+  <adapter factory=".response.NullChangesTracker" />
+  <adapter factory=".response.AutoResponseChangesTracker" />
+
 </configure>

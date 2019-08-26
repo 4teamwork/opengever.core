@@ -1,16 +1,21 @@
 from BTrees.LOBTree import LOBTree
+from contextlib import contextmanager
 from datetime import datetime
 from opengever.base import _
 from persistent import Persistent
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.dexterity.utils import iterSchemata
+from plone.restapi.interfaces import IFieldSerializer
 from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import adapter
+from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
+from zope.schema import getFields
 import time
 
 
@@ -142,3 +147,84 @@ class Response(Persistent):
             before=before,
             after=after
         ))
+
+
+class IChangesTracker(Interface):
+    """Adapter interface to handle changes-tracking of an object.
+    """
+
+    def track_changes(tracking_field_named):
+        """Contextmanager to track changes on the listed field names
+        """
+
+
+@implementer(IChangesTracker)
+@adapter(Interface, Interface)
+class NullChangesTracker(object):
+    def __init__(self, *args, **kwargs):
+        pass
+
+    @contextmanager
+    def track_changes(self, *args, **kwargs):
+        yield
+
+
+@implementer(IChangesTracker)
+@adapter(IResponseSupported, Interface)
+class AutoResponseChangesTracker(object):
+    """Contextmanager to track changes made on an object and autogenerating
+    a response-object with the changes.
+    """
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.state_before = {}
+        self.changes = {}
+        self.tracking_field_names = []
+
+    @contextmanager
+    def track_changes(self, tracking_field_names):
+        self._start_tracking(tracking_field_names)
+        yield self
+        self._end_tracking()
+
+    def _start_tracking(self, tracking_field_names):
+        self.tracking_field_names = tracking_field_names
+        self.state_before = {}
+        self.changes = {}
+
+        for name, value in self._field_items():
+            self.state_before[name] = value
+
+    def _end_tracking(self):
+        for name, value in self._field_items():
+            value_before = self.state_before.get(name)
+            value_after = value
+            if value_after == value_before:
+                continue
+
+            self.changes[name] = (value_before, value_after)
+        self._generate_response_object()
+
+    def _generate_response_object(self):
+        if not self.changes:
+            return None
+
+        response = Response()
+        for key, value in self.changes.items():
+            response.add_change(key, *value)
+
+        IResponseContainer(self.context).add(response)
+        return response
+
+    def _field_items(self):
+        for context_schema in iterSchemata(self.context):
+            for name, field in getFields(context_schema).items():
+                if name not in self.tracking_field_names:
+                    continue
+
+                serializer = queryMultiAdapter(
+                    (field, self.context, self.request), IFieldSerializer)
+
+                yield name, serializer()
