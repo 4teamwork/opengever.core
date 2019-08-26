@@ -39,7 +39,6 @@ from zope.i18n import translate
 import json
 import re
 
-
 ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',
@@ -221,14 +220,21 @@ class OpengeverSharingView(SharingView):
 
     def get_detail_view_url(self, item):
         """Returns the url to the detail view for users or group.
+
+        We do not use item['type'] to determine whether it is a group or a user,
+        as this was determined from the acl_users which wrongly identifies
+        inactive groups (groups that were deleted from the LDAP) as users.
+        Instead we check using the ogds service.
         """
-        if item.get('type') == 'group':
+        if ogds_service().fetch_group(item['id']):
             return '{}/@@list_groupmembers?{}'.format(
                 api.portal.get().absolute_url(),
                 urlencode({'group': item['id']}))
-        else:
+        elif ogds_service().fetch_user(item['id']):
             return '{}/@@user-details-plain/{}'.format(
                 api.portal.get().absolute_url(), item['id'])
+        else:
+            return None
 
     def extend_with_assignment_infos(self, item, manager):
         local_roles = {role['id']: False for role in self.roles()}

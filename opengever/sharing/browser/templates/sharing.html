@@ -14,9 +14,13 @@
       </tr>
       <tr v-for="entry in entries" :key="entry.id">
         <td>
-          <a class="principal link-overlay"
+          <a v-if="!!entry.url"
+             class="principal link-overlay"
              :class="entry.type"
              :href="entry.url">{{entry.title}}</a>
+          <span v-else
+             class="principal"
+             :class="entry.type">{{entry.title}}</span>
           <a class="assignments_info_button"
              v-bind:class="{ folded: entry.assignments}"
              @click="toggle_assignments(entry)"
