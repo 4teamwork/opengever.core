@@ -453,3 +453,14 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
 
     .. literalinclude:: ../../../../opengever/bundle/schemas/reporoots.schema.json
        :language: json
+
+
+========================
+Generieren von OGGBundle
+========================
+
+Mit ``bin/bundle-factory`` kann ein ``OGGBundle`` von einem Datenverzeichnis generiert werden.
+
+-  Wenn ``--repo-nesting-depth`` gesetzt ist, wird das Skript ein ``OGGBundle`` für ein komplettes ``Ordnungssystem`` generieren. In diesem Fall wird das ``source_dir`` im ``OGGBundle`` als ein ``reporoot`` abgebildet, und alle Verzeichnisse welche eine Verschachtelungstiefe geringer als ``--repo-nesting-depth`` haben werden als ``repofolders`` abgebildet. Andere Verzeichnisse als ``dossiers`` und Dateien als ``documents``.
+
+- Wenn ``--repo-nesting-depth`` nicht gesetzt ist (``--repo-nesting-depth=-1``), dann generiert das Skript ein ``OGGBundle`` für einen partiellen Import. In diesem Fall wird das ``source_dir`` im ``OGGBundle`` nicht abgebildet, alle enthaltenen Verzeichnisse werden als ``dossiers`` abgebildet und Dateien als ``documents``. Die Ordnungsposition oder das Dossier in welches das ``OGGBundle`` importiert werden soll, muss man mit ``--import-repository-references`` und optional ``--import-dossier-reference`` spezifizieren.
