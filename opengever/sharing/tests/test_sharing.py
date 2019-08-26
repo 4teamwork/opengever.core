@@ -247,6 +247,9 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         group_id = 'group with spaces'
+        create(Builder('ogds_group')
+               .having(groupid=group_id))
+
         create(Builder('group')
                .with_groupid(group_id)
                .having(title='Group with sapces'))
@@ -262,6 +265,28 @@ class TestOpengeverSharingIntegration(IntegrationTestCase):
                  if entry['id'] == u'group with spaces'][0]
         self.assertEquals(
             u'http://nohost/plone/@@list_groupmembers?group=group+with+spaces',
+            entry['url'])
+
+    @browsing
+    def test_sharing_view_handles_inactive_group(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        group_id = 'inactive group'
+        create(Builder('ogds_group')
+               .having(groupid=group_id, active=False, title='Inactive group'))
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(
+            TaskRoleAssignment(group_id, ['Reader'], self.task))
+
+        browser.open(self.empty_dossier, view='@sharing',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        entry = [entry for entry in browser.json['entries']
+                 if entry['id'] == u'inactive group'][0]
+
+        self.assertEquals(
+            u'http://nohost/plone/@@list_groupmembers?group=inactive+group',
             entry['url'])
 
     @browsing
