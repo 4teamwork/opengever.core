@@ -25,7 +25,7 @@
   <adapter factory=".response.SerializeResponseToJson" />
   <adapter factory=".serializer.long_converter" />
 
-
+  <adapter factory=".deserializer.GeverDeserializeToJson" />
   <adapter factory=".mail.DeserializeMailFromJson" />
 
   <plone:service

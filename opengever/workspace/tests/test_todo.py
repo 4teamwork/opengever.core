@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -163,6 +164,32 @@ class TestAPISupportForTodo(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertEqual(u'\xc4 new login', self.todo.title)
+
+    @browsing
+    def test_update_adds_response_object_with_changes(self, browser):
+        self.login(self.workspace_member, browser)
+
+        responses = IResponseContainer(self.todo).list()
+        self.assertEqual(0, len(responses))
+
+        browser.open(self.todo, method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({'title': u'\xc4 new login'}))
+
+        responses = IResponseContainer(self.todo).list()
+        self.assertEqual(1, len(responses))
+
+        last_response = responses[-1]
+        self.assertEqual('', last_response.text)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': 'title',
+                    'before': u'Fix user login',
+                    'after': u'\xc4 new login'
+                }
+            ],
+            last_response.changes)
 
     @browsing
     def test_deletion_is_only_possible_for_managers(self, browser):
