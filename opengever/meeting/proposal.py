@@ -381,16 +381,6 @@ class SubmittedProposal(ProposalBase, ModelContainer):
         url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
 
-    def sync_model(self, proposal_model=None):
-        proposal_model = proposal_model or self.load_model()
-
-        proposal_model.submitted_oguid = Oguid.for_object(self)
-        proposal_model.submitted_physical_path = self.get_physical_path()
-        proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
-        proposal_model.submitted_title = self.title
-        proposal_model.submitted_description = self.description
-        proposal_model.date_of_submission = self.date_of_submission
-
     def load_model(self):
         oguid = Oguid.for_object(self)
         if oguid is None:

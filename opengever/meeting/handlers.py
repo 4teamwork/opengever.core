@@ -12,6 +12,7 @@ from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
 from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
+from opengever.meeting.proposalsqlsyncer import SubmittedProposalSqlSyncer
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from opengever.setup.interfaces import IDuringSetup
 from zc.relation.interfaces import ICatalog
@@ -122,6 +123,13 @@ def sync_proposal(obj, event):
         return
 
     ProposalSqlSyncer(obj, event).sync()
+
+
+def sync_submitted_proposal(obj, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
+    SubmittedProposalSqlSyncer(obj, event).sync()
 
 
 def configure_committee_container_portlets(container, event):

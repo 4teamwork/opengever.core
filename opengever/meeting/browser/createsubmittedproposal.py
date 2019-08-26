@@ -23,10 +23,11 @@ class CreateSubmittedProposal(BrowserView):
         data = encode_after_json(json.loads(jsondata))
         committee = Oguid.parse(data['committee_oguid']).resolve_object()
         proposal_oguid = Oguid.parse(data['proposal_oguid'])
-        proposal = meeting_service().fetch_proposal_by_oguid(proposal_oguid)
+        proposal_model = meeting_service().fetch_proposal_by_oguid(proposal_oguid)
 
         with elevated_privileges():
-            submitted_proposal = SubmittedProposal.create(proposal, committee)
+            submitted_proposal = SubmittedProposal.create(
+                proposal_model, committee)
 
             # XXX use Transporter API?
             collector = getMultiAdapter((submitted_proposal,), IDataCollector,
@@ -38,7 +39,8 @@ class CreateSubmittedProposal(BrowserView):
             submitted_proposal.date_of_submission = date.today()
 
             # sync data to proposal after inserting field data
-            submitted_proposal.sync_model(proposal_model=proposal)
+            proposal_model.submitted_oguid = Oguid.for_object(submitted_proposal)
+            proposal_model.sync_with_submitted_proposal(submitted_proposal)
 
             submitted_proposal.create_proposal_document(
                 title=data['title'],

@@ -15,6 +15,7 @@ from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import ogds_service
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
@@ -191,6 +192,8 @@ class Proposal(Base):
         return model
 
     def sync_with_proposal(self, proposal):
+        """Sync self with a plone proposal instance."""
+
         from opengever.meeting.model.committee import Committee
 
         reference_number = proposal.get_main_dossier_reference_number()
@@ -208,6 +211,16 @@ class Proposal(Base):
         self.issuer = proposal.issuer
         self.description = proposal.description
         self.date_of_submission = proposal.date_of_submission
+
+    def sync_with_submitted_proposal(self, submitted_proposal):
+        """Sync self with a plone submitted proposal instance."""
+
+        self.submitted_oguid = Oguid.for_object(submitted_proposal)
+        self.submitted_physical_path = submitted_proposal.get_physical_path()
+        self.submitted_admin_unit_id = get_current_admin_unit().id()
+        self.submitted_title = submitted_proposal.title
+        self.submitted_description = submitted_proposal.description
+        self.date_of_submission = submitted_proposal.date_of_submission
 
     def get_state(self):
         return self.workflow.get_state(self.workflow_state)
