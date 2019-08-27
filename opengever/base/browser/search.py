@@ -14,6 +14,7 @@ from plone.app.search.browser import Search
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_unicode
+from Products.PythonScripts.standard import url_quote_plus
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
@@ -267,3 +268,7 @@ class OpengeverSearch(Search):
             query['Subject'] = safe_unicode(query['Subject'])
 
         return query
+
+    @property
+    def quoted_searchable_text(self):
+        return url_quote_plus(self.request.form.get('SearchableText', ''))
