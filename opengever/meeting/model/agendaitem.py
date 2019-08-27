@@ -131,7 +131,7 @@ class AgendaItem(Base):
         return '{}.'.format(self.item_number)
 
     def get_title(self, include_number=False, formatted=False):
-        title = (self.submitted_proposal.title if self.has_proposal else self.title)
+        title = (self.proposal.submitted_title if self.has_proposal else self.title)
 
         if include_number and self.item_number:
             if formatted:
@@ -147,12 +147,12 @@ class AgendaItem(Base):
     def set_title(self, title):
         if self.has_proposal:
             self.submitted_proposal.title = title
-            self.submitted_proposal.sync_model()
+            self.proposal.sync_with_submitted_proposal(self.submitted_proposal)
         else:
             self.title = title
 
     def get_description(self):
-        return (self.submitted_proposal.description if self.has_proposal
+        return (self.proposal.submitted_description if self.has_proposal
                 else self.description) or None
 
     def get_description_html(self):

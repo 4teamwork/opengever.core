@@ -35,6 +35,10 @@ from zope.component import getUtility
 
 class TestProposalViewsDisabled(IntegrationTestCase):
 
+    features = (
+        '!meeting',
+    )
+
     @browsing
     def test_add_form_is_disabled(self, browser):
         self.login(self.manager, browser)

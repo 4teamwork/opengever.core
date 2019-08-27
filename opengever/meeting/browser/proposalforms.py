@@ -3,36 +3,32 @@ from opengever.base.schema import TableChoice
 from opengever.base.source import DossierPathSourceBinder
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
-from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.activity.watchers import change_watcher_on_proposal_edited
-from opengever.meeting.form import ModelProxyAddForm
-from opengever.meeting.form import ModelProxyEditForm
 from opengever.meeting.proposal import IProposal
-from opengever.meeting.proposal import Proposal
-from opengever.meeting.proposal import SubmittedProposal
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.autoform import directives as form
-from plone.dexterity.browser import edit
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
+from plone.dexterity.browser.edit import DefaultEditForm
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.z3cform.fieldsets.utils import move
 from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.utils import safe_unicode
-from z3c.form import field
 from z3c.form.browser import radio
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import INPUT_MODE
 from z3c.relationfield.schema import RelationChoice
+from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 from zope.interface import Invalid
 from zope.interface import invariant
-from zope.i18n import translate
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.schema import Bool
 from zope.schema import Choice
@@ -40,11 +36,13 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-class ProposalEditForm(ModelProxyEditForm,
-                       edit.DefaultEditForm):
+class ProposalEditForm(DefaultEditForm):
 
-    fields = field.Fields(Proposal.model_schema, ignoreContext=True)
-    content_type = Proposal
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+
+        return super(ProposalEditForm, self).render()
 
     def updateFields(self):
         super(ProposalEditForm, self).updateFields()
@@ -69,11 +67,16 @@ class ProposalEditForm(ModelProxyEditForm,
         return super(ProposalEditForm, self).applyChanges(data)
 
 
-class SubmittedProposalEditForm(ModelProxyEditForm,
-                                edit.DefaultEditForm):
+class SubmittedProposalEditForm(DefaultEditForm):
 
-    fields = field.Fields(SubmittedProposal.model_schema, ignoreContext=True)
-    content_type = SubmittedProposal
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+
+        if not self.context.is_editable():
+            raise Unauthorized
+
+        return super(SubmittedProposalEditForm, self).render()
 
     def updateFields(self):
         super(SubmittedProposalEditForm, self).updateFields()
@@ -82,14 +85,7 @@ class SubmittedProposalEditForm(ModelProxyEditForm,
     def updateWidgets(self):
         super(SubmittedProposalEditForm, self).updateWidgets()
         self.widgets['excerpts'].mode = HIDDEN_MODE
-
-        if self.context.get_state() is not self.context.load_model().STATE_PENDING:
-            self.widgets['issuer'].mode = HIDDEN_MODE
-
-    def applyChanges(self, data):
-        super(SubmittedProposalEditForm, self).applyChanges(data)
-        self.context.sync_model()
-        return True
+        self.widgets['issuer'].mode = HIDDEN_MODE
 
 
 class IAddProposal(IProposal):
@@ -174,14 +170,18 @@ class IAddProposal(IProposal):
                     ))
 
 
-class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
-    content_type = Proposal
-    fields = field.Fields(Proposal.model_schema)
+class ProposalAddForm(DefaultAddForm):
+
     allow_prefill_from_GET_request = True
 
     def __init__(self, *args, **kwargs):
         super(ProposalAddForm, self).__init__(*args, **kwargs)
         self.instance_schema = IAddProposal
+
+    def render(self):
+        if not is_meeting_feature_enabled():
+            raise Unauthorized
+        return super(ProposalAddForm, self).render()
 
     @property
     def schema(self):
@@ -308,7 +308,6 @@ class ProposalAddForm(ModelProxyAddForm, DefaultAddForm):
         if edit_after_creation:
             self.checkout_and_external_edit(proposal_doc)
 
-        add_watcher_on_proposal_created(proposal)
         return proposal
 
     def checkout_and_external_edit(self, document):

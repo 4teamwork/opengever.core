@@ -27,7 +27,6 @@ from opengever.meeting.command import RejectProposalCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
 from opengever.meeting.interfaces import IHistory
-from opengever.meeting.model import Committee
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.ogds.base.actor import Actor
@@ -40,9 +39,9 @@ from plone.app.uuid.utils import uuidToObject
 from plone.autoform.directives import mode
 from plone.autoform.directives import omitted
 from plone.autoform.directives import widget
+from plone.dexterity.content import Container
 from plone.supermodel import model
 from plone.uuid.interfaces import IUUID
-from Products.CMFPlone.utils import safe_unicode
 from z3c.relationfield.event import addRelations
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
@@ -177,7 +176,7 @@ class ISubmittedProposal(IBaseProposal):
         required=False)
 
 
-class ProposalBase(ModelContainer):
+class ProposalBase(object):
 
     workflow = None
 
@@ -251,7 +250,11 @@ class ProposalBase(ModelContainer):
         return self.workflow.get_transitions(self.get_state())
 
     def get_state(self):
-        return self.load_model().get_state()
+        model = self.load_model()
+        if model:
+            return model.get_state()
+
+        return self.workflow.default_state
 
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name="portal_url")
@@ -320,7 +323,7 @@ class ProposalBase(ModelContainer):
         return model.is_submitted()
 
 
-class SubmittedProposal(ProposalBase):
+class SubmittedProposal(ModelContainer, ProposalBase):
     """Proxy for a proposal in queue with a committee."""
 
     content_schema = ISubmittedProposal
@@ -377,19 +380,6 @@ class SubmittedProposal(ProposalBase):
     def get_physical_path(self):
         url_tool = api.portal.get_tool(name="portal_url")
         return '/'.join(url_tool.getRelativeContentPath(self))
-
-    def load_proposal(self, oguid):
-        return ProposalModel.query.get_by_oguid(oguid)
-
-    def sync_model(self, proposal_model=None):
-        proposal_model = proposal_model or self.load_model()
-
-        proposal_model.submitted_oguid = Oguid.for_object(self)
-        proposal_model.submitted_physical_path = self.get_physical_path()
-        proposal_model.submitted_admin_unit_id = get_current_admin_unit().id()
-        proposal_model.submitted_title = self.title
-        proposal_model.submitted_description = self.description
-        proposal_model.date_of_submission = self.date_of_submission
 
     def load_model(self):
         oguid = Oguid.for_object(self)
@@ -519,33 +509,26 @@ class SubmittedProposal(ProposalBase):
         return values
 
 
-class Proposal(ProposalBase):
+class Proposal(Container, ProposalBase):
     """Act as proxy for the proposal stored in the database.
 
     """
-    content_schema = IProposal
-    model_schema = IProposalModel
-    model_class = ProposalModel
-
-    implements(content_schema)
+    implements(IProposal)
 
     workflow = ProposalModel.workflow.with_visible_transitions(
         ['pending-submitted', 'pending-cancelled', 'cancelled-pending'])
+
+    def load_model(self):
+        oguid = Oguid.for_object(self)
+        if oguid is None:
+            return None
+        return ProposalModel.query.get_by_oguid(oguid)
 
     def get_sync_admin_unit_id(self):
         return self.load_model().submitted_admin_unit_id
 
     def get_sync_target_path(self):
         return self.load_model().submitted_physical_path
-
-    def _after_model_created(self, model_instance):
-        IHistory(self).append_record(u'created')
-
-        if self.predecessor_proposal is not None:
-            predecessor = self.predecessor_proposal.to_object
-            IHistory(predecessor).append_record(
-                u'successor_created',
-                successor_oguid=Oguid.for_object(self).id)
 
     def is_editable(self):
         """A proposal in a dossier is only editable while not submitted.
@@ -580,50 +563,8 @@ class Proposal(ProposalBase):
         return repository_folder.Title(language=self.language,
                                        prefix_with_reference_number=False)
 
-    def update_model_create_arguments(self, data, context):
-        aq_wrapped_self = self.__of__(context)
-
-        workflow_state = self.workflow.default_state.name
-        reference_number = IReferenceNumber(
-            context.get_main_dossier()).get_number()
-
-        repository_folder_title = safe_unicode(
-            aq_wrapped_self.get_repository_folder_title())
-
-        committee_model = Committee.get_one(
-            oguid=Oguid.parse(self.committee_oguid))
-
-        data.update(dict(workflow_state=workflow_state,
-                         physical_path=aq_wrapped_self.get_physical_path(),
-                         dossier_reference_number=reference_number,
-                         repository_folder_title=repository_folder_title,
-                         committee=committee_model,
-                         issuer=self.issuer,
-                         language=self.language))
-        return data
-
-    def update_model(self, data):
-        data['repository_folder_title'] = safe_unicode(
-            self.get_repository_folder_title())
-        return super(Proposal, self).update_model(data)
-
-    def sync_model(self, proposal_model=None):
-        proposal_model = proposal_model or self.load_model()
-
-        reference_number = IReferenceNumber(
-            self.get_containing_dossier().get_main_dossier()).get_number()
-        repository_folder_title = safe_unicode(self.get_repository_folder_title())
-
-        proposal_model.committee = Committee.get_one(
-            oguid=Oguid.parse(self.committee_oguid))
-        proposal_model.language = self.language
-        proposal_model.physical_path = self.get_physical_path()
-        proposal_model.dossier_reference_number = reference_number
-        proposal_model.repository_folder_title = repository_folder_title
-        proposal_model.title = self.title
-        proposal_model.issuer = self.issuer
-        proposal_model.description = self.description
-        proposal_model.date_of_submission = self.date_of_submission
+    def get_main_dossier_reference_number(self):
+        return IReferenceNumber(self.get_main_dossier()).get_number()
 
     def is_submit_additional_documents_allowed(self):
         return self.load_model().is_submit_additional_documents_allowed()

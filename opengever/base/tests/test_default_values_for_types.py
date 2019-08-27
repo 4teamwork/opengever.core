@@ -251,7 +251,8 @@ CONTACT_MISSING_VALUES = {
 
 PROPOSAL_REQUIREDS = {
     'issuer': u'herbert.jager',
-    'committee_oguid': u'fd:1337',
+    # the oguid should be stable due to `time_based_intids`
+    'committee_oguid': u'plone:1009313300',
 }
 PROPOSAL_DEFAULTS = {
     'changed': FROZEN_NOW,

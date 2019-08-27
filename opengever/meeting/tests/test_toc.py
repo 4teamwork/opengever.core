@@ -10,6 +10,7 @@ from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_MEETING_LAYER
 from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.interfaces import IMeetingSettings
+from opengever.meeting.model import Proposal
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
@@ -260,33 +261,43 @@ class TestAlphabeticalTOC(FunctionalTestCase):
             start=pytz.UTC.localize(datetime(2011, 1, 1, 0, 0)),
             protocol_start_page_number=99))
 
-        proposal1_1 = create(Builder('submitted_proposal').having(
-            title=u'proposal 1',
+        proposal1_1 = create(Builder('proposal_model').having(
+            submitted_title=u'proposal 1',
+            committee=self.committee_model,
+            workflow_state=Proposal.STATE_DECIDED.name,
             repository_folder_title=u'\xc4 Business',
             dossier_reference_number='1.1.4 / 1',
-            int_id=1).within(self.committee))
-        proposal1_2 = create(Builder('submitted_proposal').having(
-            title=u'\xc4a proposal',
+            int_id=1))
+        proposal1_2 = create(Builder('proposal_model').having(
+            submitted_title=u'\xc4a proposal',
+            committee=self.committee_model,
+            workflow_state=Proposal.STATE_DECIDED.name,
             repository_folder_title=u'\xc4 Business',
             dossier_reference_number='1.1.4 / 2',
-            int_id=2).within(self.committee))
-        proposal1_3 = create(Builder('submitted_proposal').having(
-            title=u'aa proposal',
+            int_id=2))
+        proposal1_3 = create(Builder('proposal_model').having(
+            submitted_title=u'aa proposal',
+            committee=self.committee_model,
+            workflow_state=Proposal.STATE_DECIDED.name,
             repository_folder_title=u'\xc4 Business',
             dossier_reference_number='1.1.4 / 1',
-            int_id=5).within(self.committee))
+            int_id=5))
 
-        proposal2_1 = create(Builder('submitted_proposal').having(
-            title=u'Proposal 3',
+        proposal2_1 = create(Builder('proposal_model').having(
+            submitted_title=u'Proposal 3',
+            committee=self.committee_model,
+            workflow_state=Proposal.STATE_DECIDED.name,
             repository_folder_title='A Business',
             dossier_reference_number='10.1.4 / 1',
-            int_id=3).within(self.committee))
-        proposal2_2 = create(Builder('submitted_proposal').having(
-            title=u'Anything goes',
-            description=u'Really, Anything.',
+            int_id=3))
+        proposal2_2 = create(Builder('proposal_model').having(
+            submitted_title=u'Anything goes',
+            committee=self.committee_model,
+            workflow_state=Proposal.STATE_DECIDED.name,
+            submitted_description=u'Really, Anything.',
             repository_folder_title='Other Stuff',
             dossier_reference_number='3.1.4 / 77',
-            int_id=4).within(self.committee))
+            int_id=4))
 
         create(Builder('agenda_item').having(
             meeting=self.meeting_before,

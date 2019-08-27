@@ -5,13 +5,16 @@ from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.portlets import block_context_portlet_inheritance
 from opengever.base.security import elevated_privileges
-from opengever.base.sqlsyncer import SqlSyncer
+from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
 from opengever.meeting.command import UpdateExcerptInDossierCommand
+from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.excerpt import Excerpt
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.meeting.proposalsqlsyncer import ProposalSqlSyncer
+from opengever.meeting.proposalsqlsyncer import SubmittedProposalSqlSyncer
 from opengever.meeting.sablontemplate import sablon_template_is_valid
 from opengever.setup.interfaces import IDuringSetup
 from zc.relation.interfaces import ICatalog
@@ -105,13 +108,7 @@ def delete_copied_proposal(copied_proposal, event):
         container._delObject(copied_proposal.id, suppress_events=True)
 
 
-class ProposalSqlSyncer(SqlSyncer):
-
-    def sync_with_sql(self):
-        self.obj.sync_model()
-
-
-def sync_moved_proposal(obj, event):
+def proposal_moved(obj, event):
     # Skip automatically renamed objects during copy & paste process.
     if ICopyPasteRequestLayer.providedBy(getRequest()):
         return
@@ -123,11 +120,30 @@ def sync_moved_proposal(obj, event):
     ProposalSqlSyncer(obj, event).sync()
 
 
-def sync_proposal(obj, event):
+def proposal_added(obj, event):
+    add_watcher_on_proposal_created(obj)
+    IHistory(obj).append_record(u'created')
+    if obj.predecessor_proposal is not None:
+        predecessor = obj.predecessor_proposal.to_object
+        IHistory(predecessor).append_record(
+            u'successor_created',
+            successor_oguid=Oguid.for_object(obj).id)
+
+    ProposalSqlSyncer(obj, event).sync()
+
+
+def proposal_modified(obj, event):
     if IContainerModifiedEvent.providedBy(event):
         return
 
     ProposalSqlSyncer(obj, event).sync()
+
+
+def submitted_proposal_modified(obj, event):
+    if IContainerModifiedEvent.providedBy(event):
+        return
+
+    SubmittedProposalSqlSyncer(obj, event).sync()
 
 
 def configure_committee_container_portlets(container, event):
