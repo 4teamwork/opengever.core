@@ -7,6 +7,6 @@ INDEXES = (
     ('assigned_client', "KeywordIndex"),
     ('client_id', "KeywordIndex"),
     ('sequence_number', 'FieldIndex'),
-    ('is_subtask', 'FieldIndex'),
+    ('is_subtask', 'BooleanIndex'),
     ('predecessor', 'FieldIndex'),
 )
