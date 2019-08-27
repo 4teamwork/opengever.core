@@ -56,6 +56,17 @@ class TestOpengeverSearch(IntegrationTestCase):
         self.assertNotIn('OR', prefill)
         self.assertNotIn('NOT', prefill)
 
+    @browsing
+    def test_advanced_search_link_is_url_encoded(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=M\xc3\xbcller and {co)')
+
+        advanced_search = browser.find("Advanced Search")
+        expected_url = (self.portal.absolute_url() +
+                        '/advanced_search?SearchableText=M%C3%BCller+and+%7Bco%29')
+
+        self.assertEqual(expected_url, advanced_search.get("href"))
+
 
 class TestBumblebeePreview(IntegrationTestCase):
 
@@ -316,3 +327,14 @@ class TestSolrSearch(IntegrationTestCase):
             '<a class="dropdown-list-item LSRow" href="@@search?SearchableText=test&amp;path=/plone">Show all items</a>',
             all_items_link.outerHTML,
             )
+
+    @browsing
+    def test_advanced_search_link_is_url_encoded(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.portal, view='@@search?SearchableText=M\xc3\xbcller and {co)')
+
+        advanced_search = browser.find("Advanced Search")
+        expected_url = (self.portal.absolute_url() +
+                        '/advanced_search?SearchableText=M%C3%BCller+and+%7Bco%29')
+
+        self.assertEqual(expected_url, advanced_search.get("href"))

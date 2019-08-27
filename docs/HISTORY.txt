@@ -5,6 +5,7 @@ Changelog
 ---------------------
 
 - Bump docxcompose version to 1.0.1 [njohner]
+- Handle special characters in link to advanced search. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
