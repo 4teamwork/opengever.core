@@ -1,14 +1,11 @@
 from datetime import datetime
 from ftw.testing import freeze
 from opengever.base.response import AutoResponseChangesTracker
-from opengever.base.response import IChangesTracker
 from opengever.base.response import IResponseContainer
-from opengever.base.response import NullChangesTracker
 from opengever.base.response import Response
 from opengever.base.response import ResponseContainer
 from opengever.testing import IntegrationTestCase
 from zope.annotation import IAnnotations
-from zope.component import getMultiAdapter
 
 
 class TestResponse(IntegrationTestCase):
@@ -72,32 +69,17 @@ class TestResponseContainer(IntegrationTestCase):
             ResponseContainer.ANNOTATION_KEY, IAnnotations(self.todo).keys())
 
 
-class TestNullChangesTracker(IntegrationTestCase):
-    def test_do_not_fail_as_a_contextmanager(self):
-        self.login(self.regular_user)
-        changes_tracker = getMultiAdapter((self.dossier, self.request), IChangesTracker)
-
-        with changes_tracker.track_changes(['title']):
-            self.dossier.title = 'after'
-
-    def test_is_default_adapter(self):
-        self.login(self.regular_user)
-        changes_tracker = getMultiAdapter((self.dossier, self.request), IChangesTracker)
-
-        self.assertIsInstance(changes_tracker, NullChangesTracker)
-
-
 class TestAutoResponseChangesTracker(IntegrationTestCase):
     def test_adapter_for_IResponseSupported_objects(self):
         self.login(self.workspace_member)
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
 
         self.assertIsInstance(changes_tracker, AutoResponseChangesTracker)
 
     def test_tracks_changes_of_an_object(self):
         self.login(self.workspace_member)
         self.todo.title = u'before'
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title']):
             self.todo.title = u'James B\xc3\xb6nd'
 
@@ -107,7 +89,7 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
         self.login(self.workspace_member)
         self.todo.title = u'before'
         self.todo.responsible = self.workspace_member.getId()
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title', 'responsible']):
             self.todo.title = u'after'
             self.todo.responsible = self.workspace_admin.getId()
@@ -126,7 +108,7 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
         self.login(self.workspace_member)
         self.todo.title = u'before'
 
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title']):
             self.todo.title = u'before'
 
@@ -136,7 +118,7 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
         self.login(self.workspace_member)
         self.todo.title = u'before'
 
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['responsible']):
             self.todo.title = u'after'
 
@@ -147,7 +129,7 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
         self.todo.title = u'before'
         self.todo.responsible = self.workspace_member.getId()
 
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title', 'responsible']):
             self.todo.title = u'after'
             self.todo.responsible = self.workspace_admin.getId()
@@ -170,7 +152,7 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
     def test_do_not_create_a_response_object_if_there_are_no_changes(self):
         self.login(self.workspace_member)
 
-        changes_tracker = getMultiAdapter((self.todo, self.request), IChangesTracker)
+        changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title']):
             pass
 

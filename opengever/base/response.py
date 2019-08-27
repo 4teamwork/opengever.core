@@ -149,28 +149,6 @@ class Response(Persistent):
         ))
 
 
-class IChangesTracker(Interface):
-    """Adapter interface to handle changes-tracking of an object.
-    """
-
-    def track_changes(tracking_field_named):
-        """Contextmanager to track changes on the listed field names
-        """
-
-
-@implementer(IChangesTracker)
-@adapter(Interface, Interface)
-class NullChangesTracker(object):
-    def __init__(self, *args, **kwargs):
-        pass
-
-    @contextmanager
-    def track_changes(self, *args, **kwargs):
-        yield
-
-
-@implementer(IChangesTracker)
-@adapter(IResponseSupported, Interface)
 class AutoResponseChangesTracker(object):
     """Contextmanager to track changes made on an object and autogenerating
     a response-object with the changes.
