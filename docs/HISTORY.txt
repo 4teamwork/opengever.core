@@ -4,6 +4,7 @@ Changelog
 2019.3.2 (unreleased)
 ---------------------
 
+- Handle special characters in link to advanced search. [njohner]
 - Add new registry field to switch between changed and document_date for dossier end date calculation. [njohner]
 
 
