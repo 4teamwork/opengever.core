@@ -127,6 +127,8 @@ FIELDS = {
     'filesize': ('filesize', filesize, 'filesize'),
     'has_sametype_children': ('has_sametype_children', 'has_sametype_children',
                               'has_sametype_children'),
+    'is_subdossier': ('is_subdossier', 'is_subdossier', 'is_subdossier'),
+    'is_subtask': ('is_subtask', 'is_subtask', 'is_subtask'),
     'issuer_fullname': ('issuer', 'issuer_fullname', 'issuer'),
     'keywords': ('Subject', 'Subject', 'Subject'),
     'mimetype': ('getContentType', 'getContentType', 'mimetype'),
