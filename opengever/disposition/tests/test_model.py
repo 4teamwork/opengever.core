@@ -12,6 +12,7 @@ from opengever.disposition.ech0160.model import Folder
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import IntegrationTestCase
 from plone import api
 import hashlib
@@ -364,6 +365,30 @@ class TestFolderAndFileModel(IntegrationTestCase):
         self.assertEqual(2, len(document.file_refs))
         self.assertItemsEqual([file.id for file in folder.files],
                               document.file_refs)
+
+    def test_black_listed_archival_files_are_ignored(self):
+        self.toc = ContentRootFolder('FAKE_PATH')
+        self.toc.next_file = 3239
+
+        self.login(self.regular_user)
+
+        # Blacklist word files
+        api.portal.set_registry_record(
+            name='archival_file_conversion_blacklist',
+            value=['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                   'application/msword'],
+            interface=IDossierResolveProperties)
+
+        dossier = Dossier(self.expired_dossier)
+        self.assertEqual(1, len(dossier.documents))
+
+        document = dossier.documents.values()[0]
+        folder = Folder(self.toc, dossier, 'FAKE_PATH')
+
+        self.assertEqual(1, len(folder.files))
+        self.assertItemsEqual([self.expired_document.file.filename],
+                              [file.filename for file in folder.files])
+        self.assertEqual(1, len(document.file_refs))
 
 
 class TestFileModel(IntegrationTestCase):

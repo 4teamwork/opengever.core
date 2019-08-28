@@ -209,7 +209,7 @@ class BaseDocumentMixin(object):
         if not black_listed_types or not self.has_file():
             return False
 
-        return self.get_file().contentType in black_listed_types
+        return self.get_file().contentType.lower() in black_listed_types
 
 
 def mimetype_lookup(mtr, contenttype):
