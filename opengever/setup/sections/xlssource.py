@@ -8,10 +8,11 @@ import os
 import xlrd
 
 
-PRIVACY_LAYER_MAPPING = {u"Enthält schützenswerte Personendaten":
-                         'privacy_layer_yes',
-                         u"Keine Datenschutzstufe": 'privacy_layer_no',
-                         }
+PRIVACY_LAYER_MAPPING = {
+    u"Enthält schützenswerte Personendaten": 'privacy_layer_yes',
+    u'Ja': 'privacy_layer_yes',
+    u"Keine Datenschutzstufe": 'privacy_layer_no',
+    u"Nein": 'privacy_layer_no'}
 
 CLASSIFICATION_MAPPING = {u"Nicht klassifiziert": 'unprotected',
                           u"Vertraulich": 'confidential',

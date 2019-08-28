@@ -132,7 +132,7 @@
         },
         "privacy_layer": {
             "type": "string",
-            "title": "Datenschutzstufe",
+            "title": "Datenschutz",
             "description": "Markierung, die angibt, ob die Unterlagen besonders sch\u00fctzenswerte Personendaten oder Pers\u00f6nlichkeitsprofile gem\u00e4ss Datenschutzrecht enthalten.",
             "_zope_schema_type": "Choice",
             "default": "privacy_layer_no",

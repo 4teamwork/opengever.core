@@ -335,7 +335,7 @@ msgstr "Übersicht"
 #. Default: "Privacy layer"
 #: ./opengever/base/behaviors/classification.py
 msgid "label_privacy_layer"
-msgstr "Datenschutzstufe"
+msgstr "Datenschutz"
 
 #. Default: "Public Trial"
 #: ./opengever/base/behaviors/classification.py
@@ -483,12 +483,12 @@ msgstr "Nicht archivwürdig"
 #. Default ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_no"
-msgstr "Keine Datenschutzstufe"
+msgstr "Nein"
 
 #. Default: ""
 #: opengever/repository/classification.py
 msgid "privacy_layer_yes"
-msgstr "Enthält schützenswerte Personendaten"
+msgstr "Ja"
 
 #. Default: "private"
 #: opengever/repository/classification.py
