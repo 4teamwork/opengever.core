@@ -75,6 +75,8 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``filesize``: Dateigrösse
 - ``has_sametype_children``: Ob es Objekte vom selben Inhaltstyp enthält.
 - ``issuer_fullname``: Auftraggeber (Anzeigename)
+- ``is_subdossier``: Ob das Dossier ein Subdossier ist.
+- ``is_sutask``: Ob die Aufgabe eine Unteraufgabe ist.
 - ``keywords``: Schlagwörter
 - ``mimetype``: Mimetype
 - ``modified``: Modifikationsdatum
@@ -147,6 +149,10 @@ siehe Tabelle:
     |``has_sametype_children`` |   nein   |    ja   |      ja      |         ja         |   ja    |  nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+
     |``issuer_fullname``       |   nein   |   nein  |     nein     |        nein        |   ja    |  nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+
+    |``is_subdossier``         |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+
+    |``is_subtask``            |   nein   |   nein  |     nein     |        nein        |   ja    |  nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+
     |``keywords``              |    ja    |    ja   |     nein     |        nein        |  nein   |  nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+
