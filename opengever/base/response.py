@@ -100,6 +100,11 @@ class IResponse(Interface):
     """Interface and schema for the response object, an object added to
     plone content objects."""
 
+    response_type = schema.TextLine(
+        title=_(u'label_response_type', default=u'Response type'),
+        required=True
+    )
+
     response_id = schema.Int(
         title=_(u'label_response_id', default=u'Response ID'),
         required=True
@@ -134,6 +139,8 @@ class Response(Persistent):
 
     implements(IResponse)
 
+    response_type = 'default'
+
     def __init__(self, text=''):
         self.response_id = None
         self.text = text
@@ -147,6 +154,14 @@ class Response(Persistent):
             before=before,
             after=after
         ))
+
+
+class CommentResponse(Response):
+    response_type = 'comment'
+
+
+class SchemaFieldChangeResponse(Response):
+    response_type = 'schema_field'
 
 
 class AutoResponseChangesTracker(object):
@@ -189,7 +204,7 @@ class AutoResponseChangesTracker(object):
         if not self.changes:
             return None
 
-        response = Response()
+        response = SchemaFieldChangeResponse()
         for key, value in self.changes.items():
             response.add_change(key, *value)
 

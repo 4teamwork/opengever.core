@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-08-27 05:55+0000\n"
+"POT-Creation-Date: 2019-08-28 14:24+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -359,6 +359,11 @@ msgstr "Modifié récemment"
 #. Default: "Response ID"
 #: ./opengever/base/response.py
 msgid "label_response_id"
+msgstr ""
+
+#. Default: "Response type"
+#: ./opengever/base/response.py
+msgid "label_response_type"
 msgstr ""
 
 #. Default: "Retention period (years)"

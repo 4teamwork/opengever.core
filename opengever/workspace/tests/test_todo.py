@@ -181,6 +181,7 @@ class TestAPISupportForTodo(IntegrationTestCase):
 
         last_response = responses[-1]
         self.assertEqual('', last_response.text)
+        self.assertEqual('schema_field', last_response.response_type)
         self.assertItemsEqual(
             [
                 {

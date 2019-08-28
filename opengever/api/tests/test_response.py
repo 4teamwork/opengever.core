@@ -40,6 +40,7 @@ class TestResponseGETSerialization(IntegrationTestCase):
         self.assertEquals(
             [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
               'response_id': 1481272800000000,
+              u'response_type': u'default',
               u'created': u'2016-12-09T09:40:00',
               u'changes': [],
               u'creator': {
@@ -48,6 +49,7 @@ class TestResponseGETSerialization(IntegrationTestCase):
               u'text': u'Ich bin hier anderer Meinung!'},
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1482564180000000',
               'response_id': 1482564180000000,
+              u'response_type': u'default',
               u'created': u'2016-12-24T08:23:00',
               u'changes': [
                   {
@@ -87,6 +89,7 @@ class TestResponseGET(IntegrationTestCase):
         self.assertEquals(
             {u'@id': url,
              'response_id': 1481272800000000,
+             u'response_type': u'default',
              u'created': u'2016-12-09T09:40:00',
              u'changes': [],
              u'creator': {
@@ -126,6 +129,7 @@ class TestResponsePost(IntegrationTestCase):
         self.assertEquals(
             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
              'response_id': 1481272800000000,
+             'response_type': 'comment',
              u'created': u'2016-12-09T09:40:00',
              u'changes': [],
              u'creator': {
