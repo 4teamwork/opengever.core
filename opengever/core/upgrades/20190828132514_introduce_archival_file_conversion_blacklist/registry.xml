@@ -1,0 +1,3 @@
+<registry>
+  <records interface="opengever.dossier.interfaces.IDossierResolveProperties" />
+</registry>

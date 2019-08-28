@@ -33,6 +33,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('features', OrderedDict([
                 ('activity', False),
                 ('archival_file_conversion', False),
+                ('archival_file_conversion_blacklist', []),
                 ('changed_for_end_date', True),
                 ('contacts', False),
                 ('disposition_transport_filesystem', False),

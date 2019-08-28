@@ -98,6 +98,7 @@ class GeverSettingsAdpaterV1(object):
         features = OrderedDict()
         features['activity'] = api.portal.get_registry_record('is_feature_enabled', interface=IActivitySettings)
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
+        features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa
         features['changed_for_end_date'] = api.portal.get_registry_record('use_changed_for_end_date', interface=IDossierResolveProperties)  # noqa
         features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
