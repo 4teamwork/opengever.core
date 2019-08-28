@@ -97,7 +97,11 @@ class WebIntelligentFieldRow(FieldRow):
 
     def get_content(self):
         widget = self.view.w[self.field]
-        content = to_html_xweb_intelligent(widget.value)
+
+        if not widget.field.get(self._view.context):
+            content = ''
+        else:
+            content = to_html_xweb_intelligent(widget.value)
         return '<div id="{}" class="{}">{}</div>'.format(widget.id, widget.klass, content)
 
 
