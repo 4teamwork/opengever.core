@@ -2,8 +2,6 @@ from ftw.bumblebee.config import bumblebee_config
 from ftw.bumblebee.config import PROCESSING_QUEUE
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from opengever.document.behaviors.metadata import IDocumentMetadata
-from opengever.dossier.interfaces import IDossierResolveProperties
-from plone import api
 from plone.namedfile.file import NamedBlobFile
 from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
@@ -37,7 +35,7 @@ class ArchivalFileConverter(object):
         self.document_intid = getUtility(IIntIds).getId(self.document)
 
     def trigger_conversion(self):
-        if self.is_mimetype_blacklisted():
+        if self.document.is_archival_file_conversion_skipped():
             self.set_state(STATE_FAILED_PERMANENTLY)
             return
 
@@ -48,16 +46,6 @@ class ArchivalFileConverter(object):
             return
 
         self.queue_conversion()
-
-    def is_mimetype_blacklisted(self):
-        black_listed_types = api.portal.get_registry_record(
-            name='archival_file_conversion_blacklist',
-            interface=IDossierResolveProperties)
-
-        if not black_listed_types:
-            return False
-
-        return self.document.get_file().contentType in black_listed_types
 
     def queue_conversion(self):
         self.set_state(STATE_CONVERTING)
