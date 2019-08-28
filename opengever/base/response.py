@@ -164,6 +164,10 @@ class SchemaFieldChangeResponse(Response):
     response_type = 'schema_field'
 
 
+class MoveResponse(Response):
+    response_type = 'move'
+
+
 class AutoResponseChangesTracker(object):
     """Contextmanager to track changes made on an object and autogenerating
     a response-object with the changes.

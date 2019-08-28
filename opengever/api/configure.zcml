@@ -424,4 +424,20 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="POST"
+      name="@move"
+      for="opengever.workspace.interfaces.IToDoList"
+      factory=".todo.ToDoMove"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@move"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".todo.ToDoMove"
+      permission="zope2.View"
+      />
+
 </configure>

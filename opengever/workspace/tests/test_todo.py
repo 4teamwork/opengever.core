@@ -211,3 +211,50 @@ class TestAPISupportForTodo(IntegrationTestCase):
         browser.open(self.todo, method='DELETE', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
         self.assertNotIn(todo_id, self.workspace.objectIds())
+
+    @browsing
+    def test_move_todo_adds_response_object_with_changes(self, browser):
+        self.login(self.workspace_member, browser)
+
+        def move_todo(todo, target):
+            todo_id = todo.getId()
+            data = {'source': todo.absolute_url()}
+            browser.open('{}/@move'.format(target.absolute_url()),
+                         method='POST', headers=self.api_headers,
+                         data=json.dumps(data))
+
+            return IResponseContainer(todo).list()[-1], target[todo_id]
+
+        response, todo = move_todo(self.todo, self.todolist_general)
+        self.assertEqual('move', response.response_type)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'',
+                    'after': u'Allgemeine Informationen'
+                }
+            ],
+            response.changes)
+
+        response, todo = move_todo(todo, self.todolist_introduction)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'Allgemeine Informationen',
+                    'after': u'Projekteinf\xfchrung'
+                }
+            ],
+            response.changes)
+
+        response, todo = move_todo(todo, self.workspace)
+        self.assertItemsEqual(
+            [
+                {
+                    'field_id': '',
+                    'before': u'Projekteinf\xfchrung',
+                    'after': u''
+                }
+            ],
+            response.changes)
