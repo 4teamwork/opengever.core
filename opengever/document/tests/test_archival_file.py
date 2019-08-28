@@ -1,10 +1,14 @@
+from ftw.bumblebee.tests.helpers import get_queue
 from ftw.testbrowser import browsing
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.archival_file import STATE_CONVERTED
 from opengever.document.archival_file import STATE_CONVERTING
+from opengever.document.archival_file import STATE_FAILED_PERMANENTLY
 from opengever.document.archival_file import STATE_MANUALLY_PROVIDED
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestArchivalFile(IntegrationTestCase):
@@ -66,6 +70,21 @@ class TestArchivalFile(IntegrationTestCase):
                           IDocumentMetadata(self.test_document).archival_file_state)
         self.assertEquals('ARCH TEST',
                           IDocumentMetadata(self.test_document).archival_file.data)
+
+    def test_trigger_conversion_skip_blacklisted_files(self):
+        self.login(self.regular_user)
+
+        api.portal.set_registry_record(
+            name='archival_file_conversion_blacklist',
+            value=['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                   'message/rfc822'],
+            interface=IDossierResolveProperties)
+
+        ArchivalFileConverter(self.test_document).trigger_conversion()
+
+        self.assertEquals(0, len(get_queue().queue))
+        self.assertEquals(STATE_FAILED_PERMANENTLY,
+                          IDocumentMetadata(self.test_document).archival_file_state)
 
     def test_store_file_sets_state_to_converted(self):
         self.login(self.regular_user)
