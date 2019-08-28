@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
 from opengever.task.task import ITask
@@ -40,8 +38,7 @@ def sequence_number(obj):
 def is_subtask(obj):
     """ is_subtask indexer
     """
-    parent = aq_parent(aq_inner(obj))
-    return ITask.providedBy(parent)
+    return obj.get_is_subtask()
 
 
 @implementer(dexteritytextindexer.IDynamicTextIndexExtender)
