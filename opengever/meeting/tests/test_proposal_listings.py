@@ -133,7 +133,7 @@ class TestDossierProposalListing(IntegrationTestCase):
     def test_default_filter_hides_cancelled_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
+        browser.click_on("proposal-transition-cancel")
         browser.click_on("Confirm")
         browser.open(self.dossier, view='tabbedview_view-proposals')
         self.assertEqual([SUBMITTED_PROPOSAL], proposal_dicts(browser))
@@ -142,7 +142,7 @@ class TestDossierProposalListing(IntegrationTestCase):
     def test_all_filter_shows_all_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
+        browser.click_on("proposal-transition-cancel")
         browser.click_on("Confirm")
         browser.open(self.dossier, view='tabbedview_view-proposals', data={'proposal_state_filter': 'filter_proposals_all'})
         cancelled_proposal = DRAFT_PROPOSAL.copy()
@@ -216,7 +216,7 @@ class TestMyProposals(IntegrationTestCase):
     def test_all_filter_shows_all_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
+        browser.click_on("proposal-transition-cancel")
         browser.click_on("Confirm")
         browser.open(view='tabbedview_view-myproposals', data={'proposal_state_filter': 'filter_proposals_all'})
         cancelled_proposal = DRAFT_PROPOSAL.copy()
@@ -278,7 +278,7 @@ class TestSubmittedProposals(IntegrationTestCase):
     def test_submitted_proposal_all_filter_shows_all_proposals(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
+        browser.click_on("proposal-transition-cancel")
         browser.click_on("Confirm")
         self.login(self.committee_responsible, browser)
         browser.open(

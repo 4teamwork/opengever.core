@@ -413,10 +413,6 @@ class ProposalBuilder(DexterityBuilder):
         self._transition = 'pending-submitted'
         return self
 
-    def as_cancelled(self):
-        self._transition = 'pending-cancelled'
-        return self
-
     def with_submitted(self):
         """Will return proposal and submitted proposal after creating."""
 

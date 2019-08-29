@@ -142,7 +142,7 @@ class TestIntegrationProposalHistory(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.open_overview(browser, self.draft_proposal)
         # cancel proposal
-        browser.click_on("Cancel")
+        browser.click_on("proposal-transition-cancel")
         browser.fill({'Comment': u'Unn\xf6tig'}).submit()
 
         self.assert_proposal_history_records(

@@ -694,7 +694,7 @@ class TestProposal(IntegrationTestCase):
         self.assert_workflow_state('proposal-state-active', self.draft_proposal)
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')
-        browser.click_on('Cancel')
+        browser.click_on("proposal-transition-cancel")
         browser.click_on("Confirm")
 
         statusmessages.assert_no_error_messages()
@@ -706,7 +706,7 @@ class TestProposal(IntegrationTestCase):
     @browsing
     def test_proposal_can_be_reactivated(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.draft_proposal.execute_transition('pending-cancelled')
+        api.content.transition(self.draft_proposal, 'proposal-transition-cancel')
         self.assertEqual(Proposal.STATE_CANCELLED, self.draft_proposal.get_state())
 
         browser.open(self.draft_proposal, view='tabbedview_view-overview')

@@ -66,17 +66,6 @@ class Reject(Transition):
         api.portal.show_message(msg, request=getRequest(), type='info')
 
 
-class Cancel(Transition):
-
-    def execute(self, obj, model, text=None, **kwargs):
-        super(Cancel, self).execute(obj, model)
-        model.cancel(text=text)
-
-        msg = _(u'msg_proposal_cancelled',
-                default=u'Proposal cancelled successfully.')
-        api.portal.show_message(msg, request=getRequest(), type='info')
-
-
 class Reactivate(Transition):
 
     def execute(self, obj, model, text=None, **kwargs):
@@ -172,8 +161,6 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
-        Cancel('pending', 'cancelled',
-               title=_('cancel', default='Cancel')),
         Reactivate('cancelled', 'pending',
                    title=_('reactivate', default='Reactivate')),
         ])
@@ -394,9 +381,6 @@ class Proposal(Base):
     def reopen(self, agenda_item):
         assert self.is_decided()
         IHistory(self.resolve_submitted_proposal()).append_record(u'reopened')
-
-    def cancel(self, text=None):
-        IHistory(self.resolve_proposal()).append_record(u'cancelled', text=text)
 
     def reactivate(self, text=None):
         IHistory(self.resolve_proposal()).append_record(u'reactivated', text=text)
