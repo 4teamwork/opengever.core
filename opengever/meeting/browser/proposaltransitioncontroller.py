@@ -84,7 +84,8 @@ class ProposalTransitionController(BrowserView):
     @guard('proposal-transition-cancel')
     def cancel_guard(self):
         return (
-            api.user.has_permission('Modify portal content', obj=self.context)
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
             and not self.context.contains_checked_out_documents()
         )
 
