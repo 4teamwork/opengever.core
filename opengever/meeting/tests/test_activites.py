@@ -345,7 +345,7 @@ class TestMeetingActivities(IntegrationTestCase):
 
     def execute_transition(self, obj, transition, browser, comment=''):
         browser.visit(
-            obj, view="addtransitioncomment?form.widgets.transition={}".format(
+            obj, view="addtransitioncomment_sql?form.widgets.transition={}".format(
                 transition))
         if comment:
             browser.fill({'Comment': comment})

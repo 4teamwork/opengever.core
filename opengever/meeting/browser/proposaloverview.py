@@ -6,7 +6,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.meeting.interfaces import IHistory
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.proposal import ISubmittedProposal
-from opengever.meeting.proposal_transition_comment import ProposalTransitionCommentAddForm
+from opengever.meeting.proposal_transition_comment import ProposalTransitionCommentAddFormSQL
 from opengever.tabbedview import GeverTabMixin
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.dexterity.browser import view
@@ -20,7 +20,7 @@ class OverviewBase(object):
         return self.context.get_transitions()
 
     def transition_url(self, transition):
-        return ProposalTransitionCommentAddForm.url_for(self.context, transition.name)
+        return ProposalTransitionCommentAddFormSQL.url_for(self.context, transition.name)
 
     def is_comment_allowed(self):
         return self.context.can_comment()

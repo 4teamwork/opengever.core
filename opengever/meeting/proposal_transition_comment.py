@@ -13,9 +13,9 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope import schema
+from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
-from zope.i18n import translate
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -32,7 +32,7 @@ def get_transition_vocab(context):
     return SimpleVocabulary(transitions)
 
 
-class IProposalTransitionCommentFormSchema(Interface):
+class IProposalTransitionCommentFormSchemaSQL(Interface):
     """Schema-interface class for the proposal transition comment form
     """
     transition = schema.Choice(
@@ -47,17 +47,17 @@ class IProposalTransitionCommentFormSchema(Interface):
         )
 
 
-class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
+class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
 
     allow_prefill_from_GET_request = True  # XXX
 
-    fields = field.Fields(IProposalTransitionCommentFormSchema)
+    fields = field.Fields(IProposalTransitionCommentFormSchemaSQL)
     # keep widget for converters (even though field is hidden)
     fields['transition'].widgetFactory = radio.RadioFieldWidget
 
     @classmethod
     def url_for(cls, context, transition):
-        return '%s/addtransitioncomment?form.widgets.transition=%s' % (
+        return '%s/addtransitioncomment_sql?form.widgets.transition=%s' % (
             context.absolute_url(),
             transition)
 
@@ -112,11 +112,11 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         return self._transition
 
     def updateWidgets(self):
-        super(ProposalTransitionCommentAddForm, self).updateWidgets()
+        super(ProposalTransitionCommentAddFormSQL, self).updateWidgets()
         self.widgets['transition'].mode = HIDDEN_MODE
 
     def updateActions(self):
-        super(ProposalTransitionCommentAddForm, self).updateActions()
+        super(ProposalTransitionCommentAddFormSQL, self).updateActions()
         self.actions["save"].addClass("context")
 
     @button.buttonAndHandler(_(u'button_confirm', default='Confirm'),
@@ -137,9 +137,9 @@ class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
         return self.request.RESPONSE.redirect('.')
 
 
-class ProposalTransitionCommentAddFormView(layout.FormWrapper):
+class ProposalTransitionCommentAddFormViewSQL(layout.FormWrapper):
 
-    form = ProposalTransitionCommentAddForm
+    form = ProposalTransitionCommentAddFormSQL
 
 
 class IProposalCommentFormSchema(Interface):

@@ -407,8 +407,8 @@
       />
 
   <browser:page
-      name="addtransitioncomment"
-      class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
+      name="addtransitioncomment_sql"
+      class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormViewSQL"
       for="opengever.meeting.proposal.IBaseProposal"
       permission="cmf.AddPortalContent"
       />
