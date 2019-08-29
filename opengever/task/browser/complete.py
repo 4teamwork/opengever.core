@@ -177,9 +177,6 @@ class CompleteSuccessorTaskForm(Form):
         documents and containing the entered response text.
         """
 
-        # add documents to the response
-        response.added_object = PersistentList()
-
         predecessor = Task.query.by_oguid(self.context.predecessor)
 
         transporter = Transporter()
@@ -221,7 +218,7 @@ class CompleteSuccessorTaskForm(Form):
 
                 else:
                     # add entry to the response for this document
-                    response.added_object.append(RelationValue(int(doc_intid)))
+                    response.added_objects.append(RelationValue(int(doc_intid)))
             else:
                 # append only the relation on the response
                 doc._v__is_relation = True
@@ -310,7 +307,7 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
         # syncing, so no workflow syncing is necessary.
         util.change_task_workflow_state(
             self.context, data['transition'], text=data['text'],
-            disable_sync=True, added_object=documents)
+            disable_sync=True, added_objects=documents)
 
         return ok_response()
 

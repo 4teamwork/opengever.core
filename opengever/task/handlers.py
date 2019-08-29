@@ -61,7 +61,7 @@ def create_subtask_response(context, event):
             transition = 'transition-add-document'
 
         # add a response with a link to the object
-        add_simple_response(parent, added_object=context,
+        add_simple_response(parent, added_objects=[context],
                             transition=transition)
 
 

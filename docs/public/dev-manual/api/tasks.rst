@@ -339,7 +339,7 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
           {
             "response_id": 1
             "response_type": "default"
-            "added_object": null,
+            "added_objects": [],
             "changes": [],
             "creator": "zopemaster",
             "created": "2019-05-21T13:57:42+00:00",
@@ -352,7 +352,7 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
           {
             "response_id": 2
             "response_type": "default"
-            "added_object": null,
+            "added_objects": [],
             "changes": [],
             "creator": "zopemaster",
             "created": "2019-05-21T14:02:01+00:00",

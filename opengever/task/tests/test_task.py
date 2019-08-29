@@ -204,7 +204,7 @@ class TestTaskIntegration(FunctionalTestCase):
                          .titled('maintask'))
 
         response = IResponseContainer(maintask)[-1]
-        self.assertEquals(intids.getId(subtask), response.added_object.to_id)
+        self.assertEquals(intids.getId(subtask), response.added_objects[0].to_id)
         self.assertEquals('transition-add-subtask', response.transition)
 
     def test_adding_a_subtask_via_remote_request_does_not_add_response_to_main_task(self):
@@ -234,7 +234,7 @@ class TestTaskIntegration(FunctionalTestCase):
                           .titled('Letter to Peter'))
 
         response = IResponseContainer(maintask)[-1]
-        self.assertEquals(intids.getId(document), response.added_object.to_id)
+        self.assertEquals(intids.getId(document), response.added_objects[0].to_id)
         self.assertEquals('transition-add-document', response.transition)
 
     @browsing

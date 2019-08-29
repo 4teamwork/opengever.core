@@ -13,11 +13,11 @@ class TestTaskSerialization(IntegrationTestCase):
         responses = browser.json['responses']
         self.assertEquals(2, len(responses))
         self.assertEquals(
-            {u'added_object': {u'@id': self.subtask.absolute_url(),
-                               u'@type': u'opengever.task.task',
-                               u'description': u'',
-                               u'review_state': u'task-state-resolved',
-                               u'title': self.subtask.title},
+            {u'added_objects': [{u'@id': self.subtask.absolute_url(),
+                                 u'@type': u'opengever.task.task',
+                                 u'description': u'',
+                                 u'review_state': u'task-state-resolved',
+                                 u'title': self.subtask.title}],
              u'changes': [],
              u'creator': self.dossier_responsible.id,
              u'date': json_compatible(self.subtask.created()),
@@ -65,12 +65,12 @@ class TestTaskSerialization(IntegrationTestCase):
             self.inbox_forwarding, method="GET", headers=self.api_headers)
 
         self.assertEquals(
-            [{u'added_object': {
+            [{u'added_objects': [{
                 u'@id': u'http://nohost/plone/eingangskorb/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
                 u'description': u'',
                 u'review_state': u'document-state-draft',
-                u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'},
+                u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],
               u'changes': [],
               u'creator': u'nicole.kohler',
               u'date': u'2016-08-31T10:07:33+00:00',

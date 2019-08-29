@@ -148,7 +148,7 @@ class IResponse(Interface):
     changes = schema.List(required=False, value_type=schema.Dict())
 
     # Relations to added objects
-    added_object = RelationList(required=False)
+    added_objects = RelationList(required=False)
 
     # OGUID releation to a successor
     successor_oguid = schema.TextLine(required=False)
@@ -186,7 +186,7 @@ class Response(Persistent):
         self.transition = ''
         self.mimetype = ''
         self.changes = PersistentList()
-        self.added_object = PersistentList()
+        self.added_objects = PersistentList()
         self.related_items = PersistentList()
 
     def add_change(self, field_id, before, after, field_title=''):

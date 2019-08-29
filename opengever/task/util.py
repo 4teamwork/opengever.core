@@ -92,13 +92,13 @@ def get_task_type_title(task_type, language):
                 return vdex_term['value']
 
 
-def add_simple_response(task, text='', field_changes=None, added_object=None,
+def add_simple_response(task, text='', field_changes=None, added_objects=None,
                         successor_oguid=None, supress_events=False,
                         supress_activity=False, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
-    `added_object`: an object which was added to the task
+    `added_objects`: objects which were added to the task
     `successor_oguid`: an OGUID to a (remote) object which was referenced.
     """
 
@@ -118,20 +118,11 @@ def add_simple_response(task, text='', field_changes=None, added_object=None,
                     new_value,
                     field_title=field.title)
 
-    if added_object:
+    if added_objects:
         intids = getUtility(IIntIds)
-
-        if isinstance(added_object, types.ListType) or \
-                isinstance(added_object, types.TupleType) or \
-                isinstance(added_object, types.GeneratorType):
-            response.added_object = PersistentList()
-            for obj in added_object:
-                iid = intids.getId(obj)
-                response.added_object.append(RelationValue(iid))
-
-        else:
-            iid = intids.getId(added_object)
-            response.added_object = RelationValue(iid)
+        for obj in added_objects:
+            iid = intids.getId(obj)
+            response.added_objects.append(RelationValue(iid))
 
     if successor_oguid:
         response.successor_oguid = successor_oguid
