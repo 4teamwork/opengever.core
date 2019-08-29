@@ -427,4 +427,12 @@
       permission="cmf.AddPortalContent"
       />
 
+  <browser:page
+      name="proposal_transition_controller"
+      for="opengever.meeting.proposal.IProposal"
+      class=".proposaltransitioncontroller.ProposalTransitionController"
+      permission="zope2.View"
+      allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
+      />
+
 </configure>
