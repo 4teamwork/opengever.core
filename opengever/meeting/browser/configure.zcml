@@ -407,6 +407,13 @@
       />
 
   <browser:page
+      name="addtransitioncomment"
+      class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormView"
+      for="opengever.meeting.proposal.IProposal"
+      permission="cmf.AddPortalContent"
+      />
+
+  <browser:page
       name="addtransitioncomment_sql"
       class="opengever.meeting.proposal_transition_comment.ProposalTransitionCommentAddFormViewSQL"
       for="opengever.meeting.proposal.IBaseProposal"

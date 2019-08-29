@@ -1,6 +1,8 @@
+from AccessControl.users import nobody
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.meeting import _
+from opengever.meeting.vocabulary import get_proposal_transitions_vocabulary
 from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
@@ -32,6 +34,21 @@ def get_transition_vocab(context):
     return SimpleVocabulary(transitions)
 
 
+class IProposalTransitionCommentFormSchema(Interface):
+    """Schema-interface class for the proposal transition comment form
+    """
+    transition = schema.Choice(
+        title=_("label_transition", default="Transition"),
+        source=get_proposal_transitions_vocabulary,
+        required=True,
+        )
+
+    text = schema.Text(
+        title=_('label_comment', default="Comment"),
+        required=False,
+        )
+
+
 class IProposalTransitionCommentFormSchemaSQL(Interface):
     """Schema-interface class for the proposal transition comment form
     """
@@ -45,6 +62,72 @@ class IProposalTransitionCommentFormSchemaSQL(Interface):
         title=_('label_comment', default="Comment"),
         required=False,
         )
+
+
+class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
+
+    allow_prefill_from_GET_request = True  # XXX
+
+    fields = field.Fields(IProposalTransitionCommentFormSchema)
+    # keep widget for converters (even though field is hidden)
+    fields['transition'].widgetFactory = radio.RadioFieldWidget
+
+    @button.buttonAndHandler(_(u'button_confirm', default='Confirm'),
+                             name='save')
+    def handleSubmit(self, action):
+        data, errors = self.extractData()
+        if errors:
+            return
+        comment = data.get('text')
+
+        wftool = api.portal.get_tool('portal_workflow')
+        wftool.doActionFor(self.context, self.transition,
+                           comment=comment, transition_params=data)
+        return self.redirect()
+
+    @button.buttonAndHandler(_(u'button_cancel', default='Cancel'),
+                             name='cancel', )
+    def handleCancel(self, action):
+        return self.request.RESPONSE.redirect('.')
+
+    def updateWidgets(self):
+        super(ProposalTransitionCommentAddForm, self).updateWidgets()
+        self.widgets['transition'].mode = HIDDEN_MODE
+
+    def updateActions(self):
+        super(ProposalTransitionCommentAddForm, self).updateActions()
+        self.actions["save"].addClass("context")
+
+    @property
+    def transition(self):
+        # Ignore unauthorized requests (called by the contenttree widget)
+        if api.user.get_current() == nobody:
+            return
+
+        if not hasattr(self, '_transition'):
+            self._transition = self.request.get('form.widgets.transition',
+                                                self.request.get('transition'))
+            if not self._transition:
+                raise BadRequest("A transition is required")
+        return self._transition
+
+    @property
+    def label(self):
+        label = self.context.Title().decode('utf-8')
+        transition = translate(self.transition, domain='plone',
+                               context=self.request)
+        return u'{}: {}'.format(label, transition)
+
+    def redirect(self):
+        url = self.context.absolute_url()
+        response = self.request.RESPONSE
+        if response.status != 302:  # only redirect if not already redirecting
+            return response.redirect(url)
+
+
+class ProposalTransitionCommentAddFormView(layout.FormWrapper):
+
+    form = ProposalTransitionCommentAddForm
 
 
 class ProposalTransitionCommentAddFormSQL(form.AddForm, AutoExtensibleForm):
